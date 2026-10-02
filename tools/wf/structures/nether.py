@@ -1,241 +1,1545 @@
-"""Nether structures. The Nether has a roof, so placement uses absolute heights."""
-import math
+"""Nether structures. The Nether has a roof, so placement uses absolute heights (lava sea at y=31).
 
+Every builder works around blueprint y=0 = main floor; foundations dip below it into the lava, and
+each StructureDef's start height is chosen so that floor lands at a sensible absolute altitude
+(the template's lowest block is placed at the start height).
+"""
+import math
+import random
+
+from .. import arch
+from ..arch import FACE_VEC, OPPOSITE, Palette, _pos, fill_pal, slab, stair
 from ..blueprint import with_props
 from ..defs import Piece, StructureDef, register
-from ..parts import LOOT, MOB, MOD
+from ..parts import LOOT, MOB, MOD, leaves
 
 NETHER = ["#minecraft:is_nether"]
 
+# ------------------------------------------------------------------ materials
+EB = "wayfarers:ember_bricks"
+EBS = "wayfarers:ember_brick_stairs"
+EBSL = "wayfarers:ember_brick_slab"
+EBW = "wayfarers:ember_brick_wall"
+LAMP = "wayfarers:ember_lamp"
+GILD = "wayfarers:gilded_trim"
+PBB = "polished_blackstone_bricks"
+CPBB = "cracked_polished_blackstone_bricks"
+PBBS = "polished_blackstone_brick_stairs"
+PBBSL = "polished_blackstone_brick_slab"
+PBBW = "polished_blackstone_brick_wall"
+PB = "polished_blackstone"
+PBS = "polished_blackstone_stairs"
+PBSL = "polished_blackstone_slab"
+PBW = "polished_blackstone_wall"
+CHIS = "chiseled_polished_blackstone"
+BS = "blackstone_stairs"
+PBAS = "polished_basalt[axis=y]"
+GBS = "gilded_blackstone"
+
+EMBER = Palette({EB: 6, PBB: 3, CPBB: 1}, seed=11, scale=2.5)
+BLACK = Palette({PBB: 5, CPBB: 1, "blackstone": 2, PB: 1}, seed=12, scale=2.5)
+BASALT = Palette({PBAS: 3, "smooth_basalt": 1}, seed=13, scale=2.0)
+ROCK = Palette({"basalt[axis=y]": 4, "blackstone": 4, "magma_block": 1, "smooth_basalt": 1}, seed=14, scale=3.5)
+FLOOR = Palette({PB: 4, PBB: 3, GBS: 0.15}, seed=15, scale=1.5)
+
+
+# ------------------------------------------------------------------ geometry helpers
+def ring_cells(cx, cz, R, inner=0.6):
+    """Cells of the outermost ring of a disk of radius R (gap-free: disk(R) = disk(R-1) + ring(R))."""
+    out = []
+    for x in range(cx - R - 1, cx + R + 2):
+        for z in range(cz - R - 1, cz + R + 2):
+            d = math.hypot(x - cx, z - cz)
+            if R - inner < d <= R + 0.4:
+                out.append((x, z))
+    return out
+
+
+def toward(cx, cz, x, z):
+    """Horizontal direction from (x, z) toward the centre."""
+    dx, dz = cx - x, cz - z
+    if abs(dx) >= abs(dz):
+        return "east" if dx > 0 else "west"
+    return "south" if dz > 0 else "north"
+
+
+_NOISE = {}
+
+
+def noise2(x, z, scale=6.0, seed=0):
+    """Smooth 2D value noise in 0..1."""
+    if (scale, seed) not in _NOISE:
+        _NOISE[(scale, seed)] = Palette({"stone": 1}, seed=seed, scale=scale)
+    return _NOISE[(scale, seed)]._noise(x, 0, z)
+
+
+def rock_island(bp, rx, rz, edge_r, *, depth=14, slope=1.3, spread=12, seed=0, pillars=24, pal=None,
+                cx=0, cz=0, top_y=-1):
+    """Rugged rock base around a rounded-rectangle core (half sizes rx, rz): flat top at y=-1 inside,
+    slopes down and tapers outside, with basalt columns jutting from the flanks."""
+    pal = pal or ROCK
+    rng = random.Random(seed)
+    tops = {}
+    for x in range(cx - rx - spread, cx + rx + spread + 1):
+        for z in range(cz - rz - spread, cz + rz + spread + 1):
+            ex = max(0, abs(x - cx) - (rx - edge_r))
+            ez = max(0, abs(z - cz) - (rz - edge_r))
+            d = math.hypot(ex, ez) - edge_r  # <= 0 inside the core
+            n = noise2(x, z, 5.0, seed)
+            if d <= 0:
+                top, bottom = top_y, -depth
+            else:
+                top = top_y - int(d * slope + n * 3.5)
+                bottom = -depth + int(d * 0.7)
+                if top < bottom or d > spread:
+                    continue
+            for y in range(bottom, top + 1):
+                bp.set(x, y, z, pal.pick(x, y, z), keep=True)
+            tops[(x, z)] = top
+    flank = [p for p, t in tops.items() if t < -2]
+    rng.shuffle(flank)
+    for (x, z) in flank[:pillars]:
+        h = rng.randint(2, 8)
+        for y in range(tops[(x, z)] + 1, tops[(x, z)] + 1 + h):
+            bp.set(x, y, z, "basalt[axis=y]" if rng.random() < 0.7 else PBAS, keep=True)
+        if rng.random() < 0.3:
+            bp.set(x, tops[(x, z)] + 1 + h, z, "magma_block", keep=True)
+    return tops
+
+
+def lavafall(bp, x, z, y_top, y_pool):
+    """Source at y_top (keep its sides enclosed), falling lava down to a source at y_pool."""
+    bp.set(x, y_top, z, "lava[level=0]")
+    for y in range(y_pool + 1, y_top):
+        bp.set(x, y, z, "lava[level=8]")
+    bp.set(x, y_pool, z, "lava[level=0]")
+
+
+def pinnacle(bp, x, y, z, h=3, tip="lightning_rod[facing=up,powered=false,waterlogged=false]"):
+    bp.set(x, y, z, CHIS)
+    for k in range(1, h):
+        bp.set(x, y + k, z, PBBW)
+    bp.set(x, y + h, z, tip)
+
+
+def brazier(bp, x, y, z, soul=False, big=False):
+    """Standing brazier whose base sits at y."""
+    fire = "soul_campfire" if soul else "campfire"
+    fire += "[facing=north,lit=true,signal_fire=false,waterlogged=false]"
+    if big:
+        bp.set(x, y, z, CHIS)
+        bp.set(x, y + 1, z, PBBW)
+        bp.set(x, y + 2, z, GBS)
+        for d, (dx, dz) in (("north", (0, -1)), ("south", (0, 1)), ("east", (1, 0)), ("west", (-1, 0))):
+            bp.set(x + dx, y + 2, z + dz, stair(PBBS, d, "top"))
+            bp.set(x + dx, y + 3, z + dz, fire)
+        bp.set(x, y + 3, z, "magma_block")
+        bp.set(x, y + 4, z, fire)
+        return
+    bp.set(x, y, z, PBBW)
+    bp.set(x, y + 1, z, GBS)
+    bp.set(x, y + 2, z, fire)
+
+
+def chandelier(bp, x, y, z, soul=False, drop=2):
+    """Black iron chandelier hanging from the ceiling block above y."""
+    bp.chain(x, y - drop + 1, z, y)
+    c = y - drop
+    bp.set(x, c, z, GILD)
+    bp.set(x, c - 1, z, LAMP)
+    for dx, dz in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+        bp.set(x + dx, c, z + dz, PBBW)
+        bp.set(x + 2 * dx, c, z + 2 * dz, PBBW)
+        bp.lantern(x + 2 * dx, c - 1, z + 2 * dz, hanging=True, soul=soul)
+        bp.set(x + 2 * dx, c + 1, z + 2 * dz, "candle[candles=3,lit=true,waterlogged=false]")
+
+
+def spike(bp, cx, cz, y, r, block="blackstone", stairs=BS, steep=3, round_=True, band=GILD,
+          tip=True, lamps=True):
+    """Sharp cone/pyramid roof: each ring is `steep` tall, gilded band on the first ring."""
+    yy, rr, i = y, r, 0
+    while rr >= 1:
+        for k in range(steep):
+            for x in range(cx - rr - 1, cx + rr + 2):
+                for z in range(cz - rr - 1, cz + rr + 2):
+                    d = math.hypot(x - cx, z - cz) if round_ else max(abs(x - cx), abs(z - cz))
+                    if d > rr + 0.35:
+                        continue
+                    edge = d > rr - 0.75
+                    if edge and k == steep - 1:
+                        bp.set(x, yy, z, stair(stairs, toward(cx, cz, x, z)))
+                    elif edge and lamps and i == 1 and k == 0 and (x == cx or z == cz):
+                        bp.set(x, yy, z, LAMP)
+                    elif edge:
+                        bp.set(x, yy, z, band if (band and i == 0 and k == 0) else block)
+                    elif k == 0:
+                        bp.set(x, yy, z, block)
+            yy += 1
+        rr -= 1
+        i += 1
+    bp.set(cx, yy, cz, block)
+    bp.set(cx, yy + 1, cz, LAMP)
+    if tip:
+        bp.set(cx, yy + 2, cz, PBBW)
+        bp.set(cx, yy + 3, cz, "lightning_rod[facing=up,powered=false,waterlogged=false]")
+        return yy + 3
+    return yy + 1
+
+
+def round_tower(bp, cx, cz, y0, h, r, wall=EMBER, *, base=-8, roof="spike", steep=3, solid=False,
+                band=GILD, rib=PBAS, floor=PB, floors_every=8, slit_seed=0, roof_block="blackstone",
+                roof_stairs=BS, ladder=True, crown_lamps=True, ribs=8):
+    """Monumental round tower: battered base, basalt ribs, gilded bands, glowing slits, corbelled
+    machicolated crown with crenels and an optional spike roof. Returns the top y."""
+    top = y0 + h
+    for y in range(y0 + base, top + 1):
+        rr = r + 1 if y < y0 + 3 else r
+        for x in range(cx - rr - 1, cx + rr + 2):
+            for z in range(cz - rr - 1, cz + rr + 2):
+                d = math.hypot(x - cx, z - cz)
+                if d <= rr + 0.4:
+                    if solid or d > rr - 0.8 or y <= y0:
+                        bp.set(x, y, z, wall.pick(x, y, z))
+                    else:
+                        bp.set(x, y, z, "air")
+    for (x, z) in ring_cells(cx, cz, r + 1):
+        bp.set(x, y0 + 3, z, stair(PBBS, toward(cx, cz, x, z)))
+    # ribs (protruding basalt pilasters) running up into the crown corbels
+    for k in range(ribs):
+        a = math.radians(360 / ribs * k + 180 / ribs)
+        x, z = cx + round(math.cos(a) * (r + 1)), cz + round(math.sin(a) * (r + 1))
+        for y in range(y0 + 3, top):
+            bp.set(x, y, z, rib)
+        bp.set(x, y0 + 3, z, CHIS)
+    # gilded bands and glowing slits
+    for by in range(y0 + 8, top - 3, 8):
+        for (x, z) in ring_cells(cx, cz, r):
+            bp.set(x, by, z, band)
+    rng = random.Random(slit_seed)
+    for i, sy in enumerate(range(y0 + 4, top - 4, 8)):
+        off = rng.uniform(0, 90)
+        for q in range(4):
+            a = math.radians(off + 90 * q + i * 25)
+            x, z = cx + round(math.cos(a) * r), cz + round(math.sin(a) * r)
+            for dy in range(3):
+                bp.set(x, sy + dy, z, LAMP if solid else "orange_stained_glass_pane")
+            if not solid:
+                ix, iz = cx + round(math.cos(a) * (r - 1)), cz + round(math.sin(a) * (r - 1))
+                bp.set(ix, sy, iz, "air")
+    if not solid:
+        bp.disk(cx, y0, cz, r - 1, floor)
+        for fy in range(y0 + floors_every, top - 1, floors_every):
+            bp.disk(cx, fy, cz, r - 1, floor)
+            bp.lantern(cx, fy - 1, cz, hanging=True)
+        if ladder:
+            bp.ladder(cx, y0 + 1, cz - r + 1, top + 1, "south")
+    # crown: two corbel courses, platform, parapet with merlons
+    for (x, z) in ring_cells(cx, cz, r + 1):
+        bp.set(x, top - 1, z, stair(PBBS, toward(cx, cz, x, z), "top"))
+        bp.set(x, top, z, BLACK.pick(x, top, z))
+    for (x, z) in ring_cells(cx, cz, r + 2):
+        bp.set(x, top, z, stair(PBBS, toward(cx, cz, x, z), "top"))
+    bp.disk(cx, top + 1, cz, r + 2, PBB)
+    if not solid:
+        bp.disk(cx, top + 1, cz, r - 1, floor)
+        if ladder:
+            bp.set(cx, top + 1, cz - r + 1, "ladder[facing=south,waterlogged=false]")
+    cells = sorted(ring_cells(cx, cz, r + 2), key=lambda p: math.atan2(p[1] - cz, p[0] - cx))
+    for i, (x, z) in enumerate(cells):
+        bp.set(x, top + 2, z, EMBER.pick(x, top + 2, z))
+        if i % 3 != 2:
+            bp.set(x, top + 3, z, PBB)
+            bp.set(x, top + 4, z, slab(PBBSL))
+        elif crown_lamps and i % 6 == 2:
+            bp.set(x, top + 2, z, LAMP)
+    if roof == "spike":
+        bp.disk(cx, top + 2, cz, r, roof_block)
+        return spike(bp, cx, cz, top + 3, r, roof_block, roof_stairs, steep=steep)
+    return top + 4
+
+
+def sq_tower(bp, x0, z0, x1, z1, y0, h, wall=EMBER, *, base=-8, roof="spike", steep=3, solid=False,
+             band=GILD, quoin=BASALT, floor=PB, floors_every=8, roof_block="blackstone", roof_stairs=BS,
+             slits=True):
+    """Square tower with 2x2 corner piers, gilded bands, glowing slits, corbelled crown, spike roof."""
+    top = y0 + h
+    for y in range(y0 + base, top + 1):
+        for x in range(x0, x1 + 1):
+            for z in range(z0, z1 + 1):
+                edge = x in (x0, x1) or z in (z0, z1)
+                if solid or edge or y <= y0:
+                    bp.set(x, y, z, wall.pick(x, y, z))
+                else:
+                    bp.set(x, y, z, "air")
+    # battered plinth
+    for x in range(x0 - 1, x1 + 2):
+        for z in range(z0 - 1, z1 + 2):
+            if x in (x0 - 1, x1 + 1) or z in (z0 - 1, z1 + 1):
+                for y in range(y0 + base, y0 + 2):
+                    bp.set(x, y, z, BLACK.pick(x, y, z))
+                f = "south" if z == z0 - 1 else "north" if z == z1 + 1 else "east" if x == x0 - 1 else "west"
+                bp.set(x, y0 + 2, z, stair(PBBS, f))
+    # corner piers
+    for (cx, sx) in ((x0, -1), (x1, 1)):
+        for (cz, sz) in ((z0, -1), (z1, 1)):
+            for y in range(y0 + base, top - 1):
+                for (px, pz) in ((cx, cz), (cx + sx, cz), (cx, cz + sz), (cx + sx, cz + sz)):
+                    bp.set(px, y, pz, quoin.pick(px, y, pz))
+    # bands + slits
+    for by in range(y0 + 8, top - 3, 8):
+        for x in range(x0, x1 + 1):
+            for z in (z0, z1):
+                bp.set(x, by, z, band)
+        for z in range(z0, z1 + 1):
+            for x in (x0, x1):
+                bp.set(x, by, z, band)
+    mx, mz = (x0 + x1) // 2, (z0 + z1) // 2
+    if slits:
+        for sy in range(y0 + 4, top - 4, 8):
+            for (x, z) in ((mx, z0), (mx, z1), (x0, mz), (x1, mz)):
+                for dy in range(3):
+                    bp.set(x, sy + dy, z, LAMP if solid else "orange_stained_glass_pane")
+    if not solid:
+        for fy in range(y0 + floors_every, top - 1, floors_every):
+            bp.fill(x0 + 1, fy, z0 + 1, x1 - 1, fy, z1 - 1, floor)
+            bp.lantern(mx, fy - 1, mz, hanging=True)
+        bp.ladder(x0 + 1, y0 + 1, z0 + 1, top + 1, "south")
+    # crown
+    for k, (o, half) in enumerate(((1, "top"), (2, "top"))):
+        yy = top - 2 + k
+        for x in range(x0 - o, x1 + o + 1):
+            for z in range(z0 - o, z1 + o + 1):
+                if x in (x0 - o, x1 + o) or z in (z0 - o, z1 + o):
+                    f = "south" if z == z0 - o else "north" if z == z1 + o else "east" if x == x0 - o else "west"
+                    bp.set(x, yy, z, stair(PBBS, f, half))
+        for x in range(x0 - o + 1, x1 + o):
+            for z in range(z0 - o + 1, z1 + o):
+                if x in (x0 - o + 1, x1 + o - 1) or z in (z0 - o + 1, z1 + o - 1):
+                    bp.set(x, yy, z, BLACK.pick(x, yy, z))
+    bp.fill(x0 - 2, top + 1, z0 - 2, x1 + 2, top + 1, z1 + 2, PBB)
+    i = 0
+    for x in range(x0 - 2, x1 + 3):
+        for z in range(z0 - 2, z1 + 3):
+            if x in (x0 - 2, x1 + 2) or z in (z0 - 2, z1 + 2):
+                bp.set(x, top + 2, z, EMBER.pick(x, top + 2, z))
+                corner = x in (x0 - 2, x1 + 2) and z in (z0 - 2, z1 + 2)
+                if corner:
+                    pinnacle(bp, x, top + 3, z, 3)
+                elif (x + z) % 3 != 0:
+                    bp.set(x, top + 3, z, PBB)
+                    bp.set(x, top + 4, z, slab(PBBSL))
+                elif (x + z) % 6 == 0:
+                    bp.set(x, top + 2, z, LAMP)
+                i += 1
+    if roof == "spike":
+        r = (x1 - x0) // 2
+        bp.fill(x0, top + 2, z0, x1, top + 2, z1, roof_block)
+        return spike(bp, mx, mz, top + 3, r, roof_block, roof_stairs, steep=steep, round_=False)
+    return top + 4
+
+
+def curtain(bp, face, line, u0, u1, h, *, thick=3, wall=EMBER, base=-8, bay=7, falls=(), skip=None):
+    """Curtain wall whose outer face is the plane `line`, facing `face`; thickness extends inward.
+    Battered plinth, basalt buttresses, gilded string course, glowing slits, corbelled parapet with
+    merlons, wall-walk. `falls` = u positions of lavafalls pouring out of the wall into the moat."""
+    inward = OPPOSITE[face]
+    for u in range(u0, u1 + 1):
+        if skip and skip(u):
+            continue
+        for t in range(thick):
+            x, z = _pos(face, line, u, -t)
+            for y in range(base, h + 1):
+                bp.set(x, y, z, wall.pick(x, y, z))
+        x, z = _pos(face, line, u, 1)
+        for y in range(base, 3):
+            bp.set(x, y, z, BLACK.pick(x, y, z))
+        bp.set(x, 3, z, stair(PBBS, inward))
+        bp.set(x, h - 1, z, stair(PBBS, inward, "top"))
+        bp.set(x, h, z, BLACK.pick(x, h, z))
+        bp.set(x, h + 1, z, EMBER.pick(x, h + 1, z))
+        if (u - u0) % 3 != 2:
+            bp.set(x, h + 2, z, PBB)
+            bp.set(x, h + 3, z, slab(PBBSL))
+        elif (u - u0) % 6 == 2:
+            bp.set(x, h + 1, z, LAMP)
+        fx, fz = _pos(face, line, u, 0)
+        bp.set(fx, h - 4, fz, GILD)
+                # wall-walk + inner rail
+        ix, iz = _pos(face, line, u, -(thick - 1) - 1)
+        bp.set(ix, h + 1, iz, PBBW)
+        for t in range(thick):
+            wx, wz = _pos(face, line, u, -t)
+            bp.set(wx, h, wz, PB)
+    # buttresses + slits
+    for u in range(u0 + 3, u1 - 2, bay):
+        if skip and skip(u):
+            continue
+        for y in range(base, h - 1):
+            x, z = _pos(face, line, u, 1)
+            bp.set(x, y, z, BASALT.pick(x, y, z))
+        for y in range(base, 8):
+            x, z = _pos(face, line, u, 2)
+            bp.set(x, y, z, BASALT.pick(x, y, z))
+        x, z = _pos(face, line, u, 2)
+        bp.set(x, 8, z, stair(PBBS, inward))
+        x, z = _pos(face, line, u, 1)
+        bp.set(x, h - 7, z, LAMP)
+        # slit in the middle of the next bay
+        su = u + bay // 2 + 1
+        if su < u1 - 1 and not (skip and skip(su)):
+            sx, sz = _pos(face, line, su, 0)
+            for y in range(h - 11, h - 8):
+                bp.set(sx, y, sz, LAMP)
+    for u in falls:
+        fx, fz = _pos(face, line, u, 0)
+        lavafall(bp, fx, fz, h - 3, -1)
+        ox, oz = _pos(face, line, u, 1)
+        for y in range(0, 4):
+            bp.set(ox, y, oz, "air")
+        bp.set(ox, -1, oz, "lava[level=0]")
+        # gargoyle spout above the fall
+        bp.set(ox, h - 3, oz, stair(PBBS, inward, "top"))
+        bp.set(ox, h - 2, oz, GBS)
+
 
 # ============================================================ Basalt fortress
+# Black citadel on a rock island: lava moat, curtain walls with lavafalls, four great corner towers
+# (the north-west one taller), mid-wall towers, a twin-towered gatehouse with portcullis and
+# drawbridge, courtyard with lava basins, barracks and blaze forge, and a three-storey keep with
+# corner turrets and a central spire tower. Floor (y=0) sits ~y38-40 absolute.
+F_WALL = 28      # outer face of the curtain walls
+F_H = 20         # curtain wall height (wall-walk level)
+MOAT = (30, 35)  # lava moat ring (Chebyshev distance)
+
+
+def _fortress_ground(bp):
+    for x in range(-MOAT[1] - 2, MOAT[1] + 3):
+        for z in range(-MOAT[1] - 2, MOAT[1] + 3):
+            e = max(abs(x), abs(z))
+            for y in range(-12, 0):
+                bp.set(x, y, z, ROCK.pick(x, y, z))
+            if MOAT[0] <= e <= MOAT[1]:
+                bp.set(x, -1, z, "lava[level=0]")
+                for y in range(0, 4):
+                    bp.set(x, y, z, "air")
+            elif e < MOAT[0]:
+                bp.set(x, 0, z, FLOOR.pick(x, 0, z))
+            else:
+                bp.set(x, 0, z, BLACK.pick(x, 0, z))
+                if e == MOAT[1] + 1:
+                    bp.set(x, 1, z, PBBW if (x + z) % 8 else GBS)
+    rock_island(bp, MOAT[1] + 2, MOAT[1] + 2, 8, depth=14, slope=1.2, spread=12, seed=3, pillars=40)
+    # braziers along the outer bank
+    for k in range(-30, 31, 10):
+        for (x, z) in ((k, MOAT[1] + 2), (k, -MOAT[1] - 2), (MOAT[1] + 2, k), (-MOAT[1] - 2, k)):
+            if abs(k) > 4 or z <= 0:
+                brazier(bp, x, 1, z)
+
+
+def _keep(bp):
+    x0, x1, z0, z1 = -12, 12, -20, 0
+    # raised plinth
+    for x in range(x0 - 2, x1 + 3):
+        for z in range(z0 - 2, z1 + 3):
+            bp.set(x, 0, z, BLACK.pick(x, 0, z))
+            if x in (x0 - 2, x1 + 2) or z in (z0 - 2, z1 + 2):
+                f = "south" if z == z0 - 2 else "north" if z == z1 + 2 else "east" if x == x0 - 2 else "west"
+                bp.set(x, 1, z, stair(PBBS, OPPOSITE[f]))
+            else:
+                bp.set(x, 1, z, PBB)
+    floors = [1, 10, 19]
+    top = 28
+    bp.clear(x0 + 1, 2, z0 + 1, x1 - 1, top - 1, z1 - 1)
+    for face, line, u0, u1 in (("south", z1, x0, x1), ("north", z0, x0, x1), ("east", x1, z0, z1),
+                               ("west", x0, z0, z1)):
+        arch.facade(bp, face, line, u0, u1, 1, top, EMBER, PBAS, pilaster_every=4, window_h=5, window_y=2,
+                    plinth=PBB, plinth_stairs=PBBS, cornice_stairs=PBBS, glass="orange_stained_glass_pane",
+                    sill=PBBS, floors=floors, floor_band=GILD)
+    for fy in floors:
+        fill_pal(bp, x0 + 1, fy, z0 + 1, x1 - 1, fy, z1 - 1, FLOOR)
+    bp.fill(x0 + 1, top, z0 + 1, x1 - 1, top, z1 - 1, PBB)
+    # entrance
+    arch.arch_door(bp, "south", z1, 0, 1, width=5, height=6, trim=CHIS, stairs=PBBS)
+    bp.fill(-2, 6, z1, 2, 7, z1, "iron_bars")
+    bp.fill(-2, 6, z1, 2, 6, z1, "air")
+    bp.set(0, 9, z1 + 1, LAMP)
+    for dx in (-4, 4):
+        bp.set(dx, 6, z1 + 1, "red_wall_banner[facing=south]")
+    # corner turrets
+    for (tx, tz) in ((x0, z0), (x1, z0), (x0, z1), (x1, z1)):
+        round_tower(bp, tx, tz, 0, 34, 3, base=-2, solid=True, steep=3, ribs=4, slit_seed=tx * 3 + tz)
+    # roof + central spire tower
+    arch.steep_roof(bp, x0, z0, x1, z1, top + 1, PBBS, axis="x", overhang=1, steep=1, fill=PBB, under=PBBS,
+                    ridge=GILD, dormers=3, dormer_stairs=PBBS, dormer_wall=EB)
+    round_tower(bp, 0, -10, top, 24, 5, base=0, steep=3, slit_seed=99)
+    # lavafalls from the front turrets into basins
+    for sx in (-1, 1):
+        tx = sx * 12
+        lavafall(bp, tx, 3, 30, 0)
+        bp.set(tx, 31, 4, stair(PBBS, "north", "top"))
+        bp.set(tx, 32, 4, GBS)
+        for x in range(min(sx * 6, sx * 14), max(sx * 6, sx * 14) + 1):
+            for z in range(3, 15):
+                rim = x in (sx * 6, sx * 14) or z in (3, 14)
+                if (x, z) == (tx, 3):
+                    continue
+                for y in range(1, 4):
+                    bp.set(x, y, z, "air")
+                if rim:
+                    bp.set(x, 0, z, PBB)
+                    bp.set(x, 1, z, PBBW if (x + z) % 4 else GILD)
+                else:
+                    bp.set(x, 0, z, "lava[level=0]")
+                    bp.set(x, -1, z, "magma_block")
+        # obelisk rising from the basin
+        ox = sx * 10
+        for y in range(0, 7):
+            bp.set(ox, y, 9, BASALT.pick(ox, y, 9))
+        bp.set(ox, 3, 9, GILD)
+        bp.set(ox, 7, 9, GILD)
+        bp.set(ox, 8, 9, LAMP)
+        pinnacle(bp, ox, 9, 9, 2)
+    # ---------------- interiors
+    # great hall (y=1..9): columns, lava troughs, throne, chandeliers
+    for z in (-16, -12, -8, -4):
+        for x in (-6, 6):
+            bp.fill(x, 2, z, x, 9, z, PBAS)
+            bp.set(x, 2, z, CHIS)
+            bp.set(x, 9, z, GILD)
+            for d, (dx, dz) in (("west", (1, 0)), ("east", (-1, 0)), ("north", (0, 1)), ("south", (0, -1))):
+                bp.set(x + dx, 9, z + dz, stair(PBBS, d, "top"))
+    for x in (-9, 9):
+        for z in range(-17, -2):
+            bp.set(x, 1, z, "lava[level=0]")
+            bp.set(x, 0, z, "magma_block")
+            bp.set(x, 2, z, "iron_bars")
+    for z in range(-17, -1):
+        bp.set(0, 1, z, "red_nether_bricks")
+        bp.set(-1, 1, z, GBS if z % 3 == 0 else PB)
+        bp.set(1, 1, z, GBS if z % 3 == 0 else PB)
+    bp.fill(-3, 2, -19, 3, 2, -17, GBS)
+    bp.fill(-2, 3, -19, 2, 3, -18, PB)
+    bp.set(0, 4, -18, stair(PBBS, "south"))
+    bp.fill(0, 4, -19, 0, 7, -19, "gold_block")
+    bp.set(0, 8, -19, LAMP)
+    bp.set(-1, 4, -18, stair(PBBS, "east", "top"))
+    bp.set(1, 4, -18, stair(PBBS, "west", "top"))
+    for dx in (-3, 3):
+        brazier(bp, dx, 3, -18)
+        bp.set(dx, 7, -19, "red_wall_banner[facing=south]")
+    for z in (-14, -7):
+        chandelier(bp, 0, 9, z, drop=2)
+    bp.chest(-10, 2, -1, "north", LOOT + "basalt_fortress")
+    bp.spawner(0, 2, -10, MOB["basalt_guard"])
+    # stairs to the upper floors
+    arch.stair_run(bp, 10, 2, -2, "north", 9, 1, PBBS, fill=PBB, clear=3)
+    arch.stair_run(bp, -10, 11, -17, "south", 9, 1, PBBS, fill=PBB, clear=3)
+    # armory / barracks floor (y=10)
+    for x in range(-8, 9, 2):
+        bp.entity(x, 11, -19, {"id": "minecraft:armor_stand", "Rotation": [0.0, 0.0]})
+    for x in (-7, -4, 4, 7):
+        bp.bed(x, 11, -4, "north", "red")
+        bp.barrel(x + 1, 11, -3, "up")
+    bp.set(-3, 11, -12, "anvil[facing=east]")
+    bp.set(-3, 11, -11, "grindstone[face=floor,facing=east]")
+    bp.set(3, 11, -12, "smithing_table")
+    bp.chest(11, 11, -19, "west", LOOT + "basalt_fortress")
+    for z in (-15, -6):
+        chandelier(bp, 0, 18, z, drop=2)
+    # treasury / war room (y=19)
+    bp.fill(-3, 20, -12, 3, 20, -8, "crimson_planks")
+    bp.set(0, 21, -10, "cartography_table")
+    for x, z in ((-8, -18), (8, -18), (-8, -3), (8, -3)):
+        bp.set(x, 20, z, "gold_block")
+        bp.set(x, 21, z, "candle[candles=4,lit=true,waterlogged=false]")
+    bp.fill(-2, 20, -19, 2, 20, -19, GBS)
+    bp.chest(0, 21, -19, "south", LOOT + "basalt_fortress_keep")
+    bp.set(-2, 21, -19, "gold_block")
+    bp.set(2, 21, -19, "gold_block")
+    bp.spawner(0, 20, -15, MOB["basalt_guard"])
+    for z in (-15, -6):
+        chandelier(bp, 0, 27, z, drop=3, soul=True)
+    # secret vault under the hall: a cracked slab in the north-west corner hides a ladder
+    bp.set(-11, 1, -19, CPBB)
+    bp.clear(-11, -6, -19, -11, 0, -19)
+    bp.ladder(-11, -6, -18, 0, "south")
+    bp.room(-11, -7, -19, -3, -2, -13, PBB, floor=PB, ceiling=PBB)
+    bp.set(-11, -2, -19, "air")
+    bp.chest(-7, -6, -18, "south", LOOT + "basalt_fortress_keep")
+    bp.fill(-5, -6, -18, -4, -6, -18, "gold_block")
+    bp.set(-9, -6, -14, "soul_lantern[hanging=false,waterlogged=false]")
+    bp.spawner(-7, -6, -15, "minecraft:blaze")
+
+
+def _gatehouse(bp):
+    zf = 31
+    # flanking towers
+    for tx0 in (-15, 7):
+        sq_tower(bp, tx0, 22, tx0 + 8, zf, 0, 32, base=-6, steep=3)
+    # gate block, one step proud of the towers
+    fill_pal(bp, -6, -6, 22, 6, 25, zf + 1, EMBER)
+    for x in range(-6, 7):
+        bp.set(x, 24, zf + 2, stair(PBBS, "north", "top"))
+        bp.set(x, 25, zf + 2, BLACK.pick(x, 25, zf + 2))
+        bp.set(x, 26, zf + 2, PBB if x % 2 else LAMP)
+        bp.set(x, 27, zf + 2, slab(PBBSL) if x % 2 else "air")
+        bp.set(x, 1, zf + 2, stair(PBBS, "north"))
+    for x in (-6, 6):
+        for y in range(0, 25):
+            bp.set(x, y, zf + 2, BASALT.pick(x, y, zf + 2))
+        pinnacle(bp, x, 26, zf + 2, 3)
+    # pointed arch passage (7 wide, 11 tall) with stepped archivolt
+    rows = [(y, 3) for y in range(1, 9)] + [(9, 2), (10, 1), (11, 0)]
+    for (y, hw) in rows:
+        bp.clear(-hw, y, 21, hw, y, zf + 2)
+    for z in (zf + 2, 22):
+        for (y, hw) in rows:
+            if y >= 9:
+                bp.set(-hw - 1, y, z, stair(PBBS, "east", "top"))
+                bp.set(hw + 1, y, z, stair(PBBS, "west", "top"))
+    for (y, hw) in rows:
+        if y < 9:
+            bp.set(-hw - 1, y, zf + 2, CHIS)
+            bp.set(hw + 1, y, zf + 2, CHIS)
+        bp.set(-hw - 2, y, zf + 2, GILD)
+        bp.set(hw + 2, y, zf + 2, GILD)
+    bp.set(0, 12, zf + 2, GILD)
+    bp.set(-1, 12, zf + 2, GILD)
+    bp.set(1, 12, zf + 2, GILD)
+    bp.set(0, 13, zf + 2, LAMP)
+    # portcullis (half raised) and its chains
+    for (y, hw) in rows:
+        if y >= 6:
+            bp.fill(-hw, y, 29, hw, y, 29, "iron_bars")
+    for x in (-2, 2):
+        bp.chain(x, 9, 26, 10)
+    bp.lantern(0, 10, 25, hanging=True)
+    for z in range(21, zf + 3):
+        for x in range(-3, 4):
+            bp.set(x, 0, z, GBS if x == 0 else PBB)
+    # crest above the gate
+    bp.fill(-3, 15, zf + 2, 3, 22, zf + 2, GILD)
+    bp.fill(-2, 16, zf + 2, 2, 21, zf + 2, CHIS)
+    for y in (17, 19, 20):
+        bp.set(0, y, zf + 2, GBS)
+    for (x, y) in ((0, 16), (0, 21), (-2, 18), (0, 18), (2, 18)):
+        bp.set(x, y, zf + 2, LAMP)
+    for x in range(-3, 4):
+        bp.set(x, 14, zf + 3, stair(PBBS, "north", "top"))
+    for x in (-11, 11):
+        bp.set(x, 17, zf + 1, "red_wall_banner[facing=south]")
+    # drawbridge over the moat with its chains
+    for z in range(zf + 3, MOAT[1] + 2):
+        for x in range(-3, 4):
+            bp.set(x, 0, z, "dark_oak_planks" if abs(x) < 3 else PBAS)
+            bp.set(x, 1, z, "air")
+        bp.set(-4, 0, z, stair(PBBS, "east", "top"))
+        bp.set(4, 0, z, stair(PBBS, "west", "top"))
+    for x in (-3, 3):
+        bp.line((x, 1, MOAT[1] + 1), (x, 13, zf + 3), "iron_chain[axis=y,waterlogged=false]")
+    brazier(bp, -5, 1, MOAT[1] + 2, big=True)
+    brazier(bp, 5, 1, MOAT[1] + 2, big=True)
+    # guard rooms in the gate towers
+    bp.chest(14, 1, 23, "west", LOOT + "basalt_fortress")
+    bp.set(8, 1, 30, "barrel[facing=up,open=false]")
+    bp.set(-14, 1, 30, "barrel[facing=up,open=false]")
+    for tx in (7, -7):
+        bp.clear(tx, 1, 25, tx, 3, 26)
+
+
+def _lean_hall(bp, x0, x1, z0, z1, door_face, kind):
+    """Courtyard building (barracks / forge) with a steep blackstone roof."""
+    bp.clear(x0 + 1, 1, z0 + 1, x1 - 1, 8, z1 - 1)
+    face = door_face
+    line = x1 if face == "east" else x0
+    arch.facade(bp, face, line, z0, z1, 0, 8, EMBER, PBAS, pilaster_every=4, window_h=3, window_y=2,
+                plinth=PBB, plinth_stairs=PBBS, cornice_stairs=PBBS, glass="orange_stained_glass_pane", sill=PBBS)
+    for z in (z0, z1):
+        fill_pal(bp, x0, 0, z, x1, 8, z, EMBER)
+    fill_pal(bp, x0 + 1, 0, z0 + 1, x1 - 1, 0, z1 - 1, FLOOR)
+    arch.steep_roof(bp, x0, z0, x1, z1, 9, BS, axis="z", overhang=1, steep=2, fill=PBB, under=PBBS, ridge=GILD)
+    mid = (z0 + z1) // 2
+    arch.arch_door(bp, face, line, mid, 0, width=3, height=4, trim=CHIS, stairs=PBBS)
+    inner_x = x1 - 1 if face == "west" else x0 + 1
+    if kind == "barracks":
+        for z in range(z0 + 2, z1 - 1, 3):
+            if abs(z - mid) > 1:
+                bp.bed(x0 + 1 if face == "east" else x1 - 2, 1, z, "east", "red")
+        bp.chest(x0 + 1 if face == "east" else x1 - 1, 1, z0 + 1, "south", LOOT + "basalt_fortress")
+        for z in (z0 + 4, z1 - 4):
+            bp.lantern((x0 + x1) // 2, 8, z, hanging=True)
+    else:
+        for z in range(z0 + 2, z1 - 1, 2):
+            if abs(z - mid) > 1:
+                bp.set(inner_x, 1, z, "blast_furnace[facing=%s,lit=true]" % face)
+        bp.set((x0 + x1) // 2, 1, z0 + 2, "anvil[facing=north]")
+        bp.set((x0 + x1) // 2, 1, z1 - 2, "lava_cauldron")
+        bp.spawner((x0 + x1) // 2, 1, mid - 3, "minecraft:blaze")
+        # chimney
+        cxh = x0 + 1 if face == "east" else x1 - 2
+        fill_pal(bp, cxh, 1, z1 - 3, cxh + 1, 22, z1 - 2, EMBER)
+        bp.fill(cxh, 23, z1 - 3, cxh + 1, 23, z1 - 2, GILD)
+        bp.set(cxh, 23, z1 - 3, "campfire[facing=north,lit=true,signal_fire=true,waterlogged=false]")
+        bp.set(cxh + 1, 23, z1 - 2, "campfire[facing=north,lit=true,signal_fire=true,waterlogged=false]")
+        for z in (z0 + 4, z1 - 6):
+            bp.lantern((x0 + x1) // 2, 8, z, hanging=True)
+
+
 def basalt_fortress(bp):
-    S = 26
-    bp.fill(0, -6, 0, S, -1, S, "basalt[axis=y]", keep=True)
-    bp.fill(0, 0, 0, S, 0, S, "polished_blackstone_bricks")
-    # curtain walls with battlements
-    bp.walls(0, 1, 0, S, 8, S, "polished_blackstone_bricks")
-    bp.clear(1, 1, 1, S - 1, 8, S - 1)
-    for i in range(0, S + 1, 2):
-        for (x, z) in ((i, 0), (i, S), (0, i), (S, i)):
-            bp.set(x, 9, z, "polished_blackstone_brick_wall")
-    for i in range(1, S):
-        for (x, z) in ((i, 1), (i, S - 1), (1, i), (S - 1, i)):
-            bp.set(x, 8, z, "polished_blackstone_slab[type=bottom,waterlogged=false]")
-    # corner towers
-    for cx, cz in ((0, 0), (S, 0), (0, S), (S, S)):
-        bp.fill(cx - 2, -4, cz - 2, cx + 2, 13, cz + 2, "polished_basalt[axis=y]")
-        bp.clear(cx - 1, 1, cz - 1, cx + 1, 12, cz + 1)
-        for dx, dz in ((-2, -2), (2, -2), (-2, 2), (2, 2), (0, -2), (0, 2), (-2, 0), (2, 0)):
-            bp.set(cx + dx, 14, cz + dz, "blackstone_wall")
-        bp.fill(cx - 1, 13, cz - 1, cx + 1, 13, cz + 1, "polished_blackstone")
-        bp.set(cx, 15, cz, "magma_block")
-        bp.set(cx, 16, cz, "fire")
-        bp.fill(cx - 2, 4, cz, cx + 2, 5, cz, "iron_bars")
-        bp.fill(cx, 4, cz - 2, cx, 5, cz + 2, "iron_bars")
-        bp.fill(cx, 4, cz, cx, 5, cz, "air")
-    # gatehouse
-    g = S // 2
-    bp.clear(g - 2, 1, S, g + 2, 6, S)
-    bp.fill(g - 3, 1, S + 1, g - 3, 10, S + 1, "polished_basalt[axis=y]")
-    bp.fill(g + 3, 1, S + 1, g + 3, 10, S + 1, "polished_basalt[axis=y]")
-    bp.fill(g - 3, 7, S, g + 3, 10, S + 1, "polished_blackstone_bricks")
-    bp.set(g, 8, S + 1, "gilded_blackstone")
-    for x in range(g - 2, g + 3):
-        bp.set(x, 6, S, "iron_chain[axis=y,waterlogged=false]")
-    # keep in the centre
-    k0, k1 = 7, S - 7
-    bp.room(k0, 0, k0, k1, 14, k1, "nether_bricks", floor="polished_blackstone", ceiling="nether_bricks")
-    bp.fill(k0, 7, k0, k1, 7, k1, "nether_bricks")
-    bp.clear(k0 + 1, 7, k0 + 1, k0 + 2, 7, k0 + 2)
-    for i in range(6):
-        bp.stairs(k0 + 1, 1 + i, k1 - 1 - i, "nether_brick_stairs", "north")
-    bp.clear(k0 + 1, 7, k1 - 6, k0 + 1, 7, k1 - 1)
-    g2 = (k0 + k1) // 2
-    bp.clear(g2 - 1, 1, k1, g2 + 1, 4, k1)
-    bp.fill(g2 - 1, 1, k1, g2 + 1, 4, k1, "air")
-    for x in (k0, k1):
-        for y in (3, 10):
-            bp.fill(x, y, g2 - 1, x, y + 1, g2 + 1, "iron_bars")
-    bp.chest(g2, 1, k0 + 1, "south", LOOT + "basalt_fortress")
-    bp.chest(g2, 8, k0 + 1, "south", LOOT + "basalt_fortress_keep")
-    bp.set(g2 - 2, 8, k0 + 1, "gilded_blackstone")
-    bp.set(g2 + 2, 8, k0 + 1, "gilded_blackstone")
-    bp.spawner(g2, 1, g2, "minecraft:blaze")
-    bp.spawner(g2, 8, g2, MOB["basalt_guard"])
-    for x, z in ((k0 + 2, k0 + 2), (k1 - 2, k0 + 2), (k0 + 2, k1 - 2), (k1 - 2, k1 - 2)):
-        bp.lantern(x, 6, z, hanging=True, soul=True)
-        bp.lantern(x, 13, z, hanging=True, soul=True)
-    bp.pyramid_roof(k0, k0, k1, k1, 15, "blackstone_stairs", overhang=1)
-    # courtyard: lava moat and braziers
-    for x in range(2, S - 1):
-        for z in range(2, S - 1):
-            if (x in (5, S - 5) or z in (5, S - 5)) and k0 - 2 <= x <= k1 + 2 and k0 - 2 <= z <= k1 + 2:
-                bp.set(x, 0, z, "lava")
-    for x in (g2 - 1, g2, g2 + 1):
-        bp.set(x, 0, S - 5, "polished_blackstone_bricks")
-    for x, z in ((3, 3), (S - 3, 3), (3, S - 3), (S - 3, S - 3)):
-        bp.set(x, 1, z, "soul_campfire[lit=true,signal_fire=false,waterlogged=false,facing=north]")
-        bp.set(x, 0, z, "soul_soil")
+    _fortress_ground(bp)
+    # courtyard causeway from the gate to the keep
+    for z in range(2, 22):
+        for x in range(-3, 4):
+            bp.set(x, 0, z, GBS if (x == 0 and z % 2 == 0) else PBB if abs(x) < 3 else CHIS)
+    # curtain walls (south one is interrupted by the gatehouse)
+    curtain(bp, "south", F_WALL, -F_WALL, F_WALL, F_H, falls=(-20, 20), skip=lambda u: abs(u) <= 15)
+    curtain(bp, "north", -F_WALL, -F_WALL, F_WALL, F_H, falls=(-12, 12))
+    curtain(bp, "east", F_WALL, -F_WALL, F_WALL, F_H, falls=(-14, 14))
+    curtain(bp, "west", -F_WALL, -F_WALL, F_WALL, F_H, falls=(-14, 14))
+    # mid-wall towers on east and west
+    for sx in (-1, 1):
+        round_tower(bp, sx * F_WALL, 0, 0, 26, 4, base=-8, roof="crenels", slit_seed=sx)
+        brazier(bp, sx * F_WALL, 28, 0, big=True)
+    # corner towers (north-west is the great donjon)
+    for (sx, sz, h, st) in ((-1, -1, 48, 4), (1, -1, 40, 3), (-1, 1, 36, 3), (1, 1, 42, 3)):
+        round_tower(bp, sx * F_WALL, sz * F_WALL, 0, h, 6, base=-12, steep=st, slit_seed=sx * 7 + sz)
+    _gatehouse(bp)
+    # stair up to the west wall-walk
+    arch.stair_run(bp, -20, 1, -25, "east", 20, 1, PBBS, fill=PBB, clear=3)
+    _keep(bp)
+    _lean_hall(bp, -25, -17, 4, 22, "east", "barracks")
+    _lean_hall(bp, 17, 25, 4, 22, "west", "forge")
+    # courtyard braziers
+    for z in (6, 12, 18):
+        for x in (-4, 4):
+            brazier(bp, x, 1, z)
 
 
 register(StructureDef(
     "basalt_fortress", "nether", ["basalt_deltas", "nether_wastes", "soul_sand_valley"],
     [Piece("fortress", basalt_fortress)], spacing=26, separation=9, step="surface_structures",
-    adaptation="beard_box", height=("uniform", 34, 62),
+    adaptation="beard_box", height=("uniform", 22, 24),
+    spawns=[("wayfarers:basalt_guard", 10, 1, 2), ("minecraft:wither_skeleton", 6, 1, 2)],
     title_fr="Forteresse de basalte", title_en="Basalt Fortress"))
 
 
+
+
 # ============================================================ Chain bridge over the lava sea
+# Two colossal gate towers (twin piers joined by a pointed gate arch and a high crenellated gallery)
+# stand on rock islands in the lava sea; a 60-block suspension span hangs between them on doubled
+# iron-chain cables with hangers every two blocks, back-stayed to massive anchor blocks.
+# Blueprint y=0 is the deck; the lava sea surface is y=-13 and the template bottom y=-24, so the
+# absolute start height 20 puts the deck at y44.
+CB_L = 68        # distance between the two gate towers' centres
+CB_SEA = -13     # lava sea level relative to the deck
+
+
+def giant_chain(bp, x, pts, link=6, mat="polished_basalt[axis=z]", trim=GILD):
+    """Chain of giant interlocking links following a curve given as one (z, y) per z. Links alternate
+    between the vertical plane (rails above/below the curve) and the horizontal plane (rails beside it)."""
+    zs = [p[0] for p in pts]
+    cy = dict(pts)
+    lo, hi = min(zs), max(zs)
+
+    def put(xx, yy, zz, spec):
+        bp.set(xx, yy, zz, spec)
+
+    s0, k = lo, 0
+    while s0 < hi:
+        s1 = min(hi, s0 + link - 1)
+        vertical = k % 2 == 0
+        for z in range(s0, s1 + 1):
+            y = cy[z]
+            end = z in (s0, s1)
+            if vertical:
+                offs = [(0, -1), (0, 0), (0, 1)] if end else [(0, -1), (0, 1)]
+            else:
+                offs = [(-1, 0), (0, 0), (1, 0)] if end else [(-1, 0), (1, 0)]
+            for dx, dy in offs:
+                put(x + dx, y + dy, z, trim if (end and dx == 0 and dy == 0) else mat)
+            if z < s1:
+                y2 = cy[z + 1]
+                for (dx, dy) in ((0, -1), (0, 1)) if vertical else ((-1, 0), (1, 0)):
+                    a_, b_ = sorted((y + dy, y2 + dy))
+                    for yy in range(a_ + 1, b_):
+                        put(x + dx, yy, z, mat.replace("axis=z", "axis=y"))
+        s0 += link - 2
+        k += 1
+
+
+def _gate_tower(bp, zc, back, h=47, steep=3):
+    """Twin piers at x=+-5..13 around the deck with a gate arch and high gallery. back = -1/+1:
+    the side facing away from the span (approach stairs + backstay anchors)."""
+    for sx in (-1, 1):
+        x0, x1 = (5, 13) if sx > 0 else (-13, -5)
+        sq_tower(bp, x0, zc - 4, x1, zc + 4, CB_SEA + 1, h, base=-12, solid=True, steep=steep)
+        # cutwaters: pointed buttresses in the lava, up- and down-stream
+        for d in (-1, 1):
+            for k in range(1, 5):
+                for y in range(-24, CB_SEA + 6 - k):
+                    for xx in range(x0 + k - 1, x1 - k + 2):
+                        bp.set(xx, y, zc + d * (4 + k), BLACK.pick(xx, y, zc + d * (4 + k)))
+                for xx in range(x0 + k - 1, x1 - k + 2):
+                    bp.set(xx, CB_SEA + 6 - k, zc + d * (4 + k), stair(PBBS, "north" if d > 0 else "south"))
+        # lavafall from the outer face into a basin on the island
+        fx = sx * 13
+        lavafall(bp, fx, zc, 22, CB_SEA + 1)
+        bp.set(fx + sx, 23, zc, GBS)
+        bp.set(fx + sx, 22, zc, stair(PBBS, "west" if sx > 0 else "east", "top"))
+        for xx in (fx + sx, fx + 2 * sx):
+            for zz in (zc - 1, zc, zc + 1):
+                bp.set(xx, CB_SEA + 1, zz, "lava[level=0]")
+                bp.set(xx, CB_SEA + 2, zz, "air")
+    # gate passage between the piers
+    bp.clear(-4, 1, zc - 4, 4, 9, zc + 4)
+    # pointed gate arch with gilded archivolt
+    for z in range(zc - 3, zc + 4):
+        fill_pal(bp, -4, 10, z, 4, 16, z, EMBER)
+        for (y, hw) in ((9, 2), (10, 1)):
+            for x in range(-hw, hw + 1):
+                bp.set(x, y + 1, z, "air")
+            bp.set(-hw - 1, y + 1, z, stair(PBBS, "east", "top"))
+            bp.set(hw + 1, y + 1, z, stair(PBBS, "west", "top"))
+        bp.set(0, 12, z, stair(PBBS, "north", "top") if z == zc - 3 else GILD if z in (zc - 3, zc + 3) else PBB)
+    for z in (zc - 4, zc + 4):
+        for x in range(-4, 5):
+            bp.set(x, 16, z, stair(PBBS, "north" if z > zc else "south", "top"))
+            bp.set(x, 17, z, EMBER.pick(x, 17, z))
+            bp.set(x, 18, z, PBB if x % 2 else LAMP)
+        for (y, hw) in ((9, 3), (10, 2), (11, 1), (12, 0)):
+            bp.set(-hw - 1, y, z, GILD)
+            bp.set(hw + 1, y, z, GILD)
+        bp.set(0, 14, z, LAMP)
+        bp.set(0, 13, z, GBS)
+        bp.set(0, 15, z, GBS)
+    fill_pal(bp, -4, 17, zc - 3, 4, 17, zc + 3, BLACK)
+    # high gallery joining the piers (open arcade with crenels)
+    fill_pal(bp, -4, 27, zc - 3, 4, 28, zc + 3, EMBER)
+    for x in range(-4, 5):
+        bp.set(x, 26, zc - 3, stair(PBBS, "north", "top"))
+        bp.set(x, 26, zc + 3, stair(PBBS, "south", "top"))
+        for z in (zc - 3, zc + 3):
+            bp.set(x, 29, z, EMBER.pick(x, 29, z))
+            if x % 2 == 0:
+                bp.set(x, 30, z, PBB)
+                bp.set(x, 31, z, slab(PBBSL))
+            else:
+                bp.set(x, 29, z, LAMP if x in (-1, 1) else PBB)
+    for z in range(zc - 2, zc + 3):
+        bp.set(-4, 29, z, PBBW)
+        bp.set(4, 29, z, PBBW)
+    bp.set(0, 25, zc, "iron_chain[axis=y,waterlogged=false]")
+    bp.set(0, 26, zc, "iron_chain[axis=y,waterlogged=false]")
+    bp.lantern(0, 24, zc, hanging=True)
+    bp.chain(0, 15, zc, 16)
+    chandelier(bp, 0, 16, zc, drop=3)
+    # deck through the gate
+    for z in range(zc - 4, zc + 5):
+        for x in range(-4, 5):
+            bp.set(x, 0, z, GBS if (x == 0 and z % 2 == 0) else PBB)
+    # guard room inside the east pier (door from the passage)
+    bp.clear(7, 1, zc - 2, 11, 5, zc + 2)
+    fill_pal(bp, 7, 0, zc - 2, 11, 0, zc + 2, FLOOR)
+    bp.clear(5, 1, zc, 6, 3, zc)
+    bp.lantern(9, 5, zc, hanging=True)
+    bp.chest(11, 1, zc + (2 if back < 0 else -2), "west", LOOT + "chain_bridge")
+    bp.barrel(11, 1, zc, "west")
+    bp.set(7, 1, zc - 2 * back, "barrel[facing=up,open=false]")
+    bp.set(10, 1, zc - 2 * back, "anvil[facing=north]")
+    # approach: stairs down to the island behind the tower, flanked by braziers
+    zs = zc + back * 5
+    for i in range(12):
+        z = zs + back * i
+        for x in range(-3, 4):
+            bp.set(x, -i, z, stair(PBBS, "north" if back < 0 else "south"))
+            for y in range(CB_SEA - 2, -i):
+                bp.set(x, y, z, BLACK.pick(x, y, z))
+        for x in (-4, 4):
+            for y in range(CB_SEA - 2, -i + 1):
+                bp.set(x, y, z, BLACK.pick(x, y, z))
+            bp.set(x, -i + 1, z, PBBW)
+            if i % 4 == 0:
+                bp.set(x, -i + 1, z, LAMP)
+    for x in (-5, 5):
+        brazier(bp, x, 1, zs, big=True)
+    # backstay anchors on the island
+    za = zc + back * 15
+    for sx in (-1, 1):
+        ax = sx * 6
+        fill_pal(bp, ax - 1, CB_SEA - 4, za - 1, ax + 1, CB_SEA + 3, za + 1, BLACK)
+        bp.fill(ax - 1, CB_SEA + 3, za - 1, ax + 1, CB_SEA + 3, za + 1, GILD)
+        bp.set(ax, CB_SEA + 4, za, CHIS)
+        bp.set(ax, CB_SEA + 5, za, LAMP)
+    return zs
+
+
 def chain_bridge(bp):
-    L = 44
-    by = 34  # deck height above the template bottom; with start height 8 the deck sits ~y41
-    for pz in (0, L):
-        bp.blob(0, 0, pz, 5, 6, 5, "basalt[axis=y]", noise=0.4)
-        bp.fill(-3, 0, pz - 3, 3, by + 10, pz + 3, "polished_basalt[axis=y]")
-        bp.fill(-2, by + 1, pz - 2, 2, by + 9, pz + 2, "air")
-        bp.fill(-3, by + 11, pz - 3, 3, by + 11, pz + 3, "polished_blackstone_bricks")
-        for dx, dz in ((-3, -3), (3, -3), (-3, 3), (3, 3)):
-            bp.set(dx, by + 12, pz + dz, "blackstone_wall")
-            bp.set(dx, by + 13, pz + dz, "soul_lantern[hanging=false,waterlogged=false]")
-        bp.fill(-1, by + 1, pz - 3, 1, by + 4, pz + 3, "air")
-        bp.fill(-3, by + 1, pz - 1, 3, by + 4, pz + 1, "air")
-        bp.fill(-2, by, pz - 2, 2, by, pz + 2, "polished_blackstone")
-    # deck
-    for z in range(3, L - 2):
-        sag = round(3 * math.sin(math.pi * (z - 3) / (L - 6)))
-        y = by - sag
-        for x in range(-1, 2):
-            bp.set(x, y, z, "crimson_planks" if x == 0 else "crimson_slab[type=top,waterlogged=false]")
-        bp.set(-2, y + 1, z, "crimson_fence")
-        bp.set(2, y + 1, z, "crimson_fence")
-        bp.set(-2, y, z, "crimson_slab[type=top,waterlogged=false]")
-        bp.set(2, y, z, "crimson_slab[type=top,waterlogged=false]")
-        # suspension chains up to the main cables
-        cable = by + 10 - round(9 * math.sin(math.pi * (z - 3) / (L - 6)))
-        for x in (-2, 2):
-            bp.set(x, cable, z, "iron_chain[axis=z,waterlogged=false]")
-            if z % 3 == 0:
-                for yy in range(y + 2, cable):
+    zm = CB_L // 2
+    # rock islands carrying the towers
+    for zc, seed in ((0, 5), (CB_L, 6)):
+        rock_island(bp, 15, 14, 7, depth=24, slope=1.0, spread=5, seed=seed, pillars=14, cz=zc,
+                    top_y=CB_SEA + 1)
+    backs = {}
+    for zc, back, h, st in ((0, -1, 47, 3), (CB_L, 1, 53, 4)):
+        backs[zc] = _gate_tower(bp, zc, back, h, st)
+    # the deck: blackstone curbs, crimson planking, ember lamps in the railing, girders below
+    for z in range(5, CB_L - 4):
+        for x in range(-4, 5):
+            bp.set(x, 0, z, PBB if abs(x) == 4 else "dark_oak_planks" if z % 4 == 0 else "spruce_planks")
+        bp.set(-5, 0, z, stair(PBBS, "east", "top"))
+        bp.set(5, 0, z, stair(PBBS, "west", "top"))
+        for x in (-4, 4):
+            bp.set(x, 1, z, LAMP if z % 6 == 0 else PBBW)
+        if z % 4 == 0:
+            for x in range(-4, 5):
+                bp.set(x, -1, z, stair(PBBS, "north", "top") if abs(x) < 4 else PBBW)
+            bp.set(-4, -2, z, PBBW)
+            bp.set(4, -2, z, PBBW)
+        if z % 8 == 4:
+            bp.set(0, -1, z, LAMP)
+            for x in (-4, 4):
+                drop = 2 + (z // 8) % 3
+                bp.chain(x, -1 - drop, z, -3)
+                bp.lantern(x, -2 - drop, z, hanging=True)
+    # main cables: giant chains from the gallery of one tower, sagging to mid-span, up to the other
+    half = (CB_L - 10) / 2
+    top_y, low_y = 29, 4
+    for x in (-4, 4):
+        pts = []
+        for z in range(5, CB_L - 4):
+            t = (z - zm) / half
+            pts.append((z, round(low_y + (top_y - low_y) * t * t)))
+        giant_chain(bp, x, pts)
+        for (z, y) in pts:
+            if z % 2 == 1 and y > 5:
+                for yy in range(2, y - 1):
                     bp.set(x, yy, z, "iron_chain[axis=y,waterlogged=false]")
-        if z % 9 == 0:
-            bp.lantern(2, y + 2, z)
-    mid = L // 2
-    bp.chest(1, by - 3 + 1, mid, "west", LOOT + "chain_bridge")
+            if z % 6 == 3 and 8 < y:
+                bp.lantern(x, y - 2, z, hanging=True)
+        # backstays: giant chains from the galleries down to the anchors on the islands
+        for zc, back in ((0, -1), (CB_L, 1)):
+            za = zc + back * 15
+            z_from = zc + back * 5
+            bpts = []
+            for z in range(min(z_from, za), max(z_from, za) + 1):
+                t = abs(z - z_from) / abs(za - z_from)
+                bpts.append((z, round(29 + (CB_SEA + 6 - 29) * t)))
+            giant_chain(bp, x + (2 if x > 0 else -2), bpts, link=5)
+        # saddles where the cables cross the towers
+        for zc in (0, CB_L):
+            for z in range(zc - 4, zc + 5):
+                bp.set(x, 29, z, GILD)
+                bp.set(x, 30, z, PBAS.replace("axis=y", "axis=z"))
+    # mid-span: a gibbet cage hangs under the deck with a forgotten chest
+    for y in (-1, -2, -3):
+        bp.set(0, y, zm, "iron_chain[axis=y,waterlogged=false]")
+    bp.fill(-1, -7, zm - 1, 1, -4, zm + 1, "iron_bars")
+    bp.fill(-1, -8, zm - 1, 1, -8, zm + 1, PBB)
+    bp.fill(-1, -4, zm - 1, 1, -4, zm + 1, PBB)
+    bp.clear(0, -7, zm, 0, -5, zm)
+    bp.chest(0, -7, zm, "north", LOOT + "chain_bridge")
+    bp.set(0, -9, zm, LAMP)
+    # mid-span lookout with braziers
+    for sx in (-1, 1):
+        bp.set(sx * 6, 0, zm, stair(PBBS, "west" if sx > 0 else "east", "top"))
+        brazier(bp, sx * 5, 1, zm, big=False)
 
 
 register(StructureDef(
     "chain_bridge", "nether", ["nether_wastes", "basalt_deltas", "crimson_forest", "soul_sand_valley"],
     [Piece("bridge", chain_bridge)], spacing=22, separation=7, adaptation="none",
-    height=("absolute", 8), processors="none",
+    height=("absolute", 20), processors="none",
     title_fr="Pont de chaînes suspendu", title_en="Chain Bridge"))
 
 
 # ============================================================ Piglin sanctuary (crimson forest)
+# A four-tier golden ziggurat of blackstone: gilded cornices, gold-capped corner piers with braziers,
+# lava cascading from tier to tier, a grand staircase to the summit where a 22-block golden piglin
+# idol raises its sword. Inside: a pillared treasure sanctum; under the summit, a hidden vault.
+# Giant crimson fungi with weeping vines frame the temple.
+ZIG = [(22, 0, 6), (17, 6, 6), (12, 12, 6), (8, 18, 4)]   # (half size, base y, height)
+GOLD = Palette({"gold_block": 3, "raw_gold_block": 2}, seed=21, scale=2.0)
+TEMPLE = Palette({PBB: 4, "blackstone": 2, CPBB: 1, GBS: 1}, seed=22, scale=2.5)
+NETHER_GROUND = Palette({"netherrack": 5, "blackstone": 2, "nether_wart_block": 0.5}, seed=23, scale=3.0)
+
+
+def giant_fungus(bp, x, y, z, h, cap_r, seed=0, kind="crimson"):
+    """Huge nether fungus: thick leaning stem with buttress roots, a domed cap with a drooping lip,
+    shroomlights under the cap and vines (weeping for crimson) hanging from the rim."""
+    rng = random.Random(seed)
+    stem = f"{kind}_stem[axis=y]"
+    hyph = f"{kind}_hyphae[axis=y]"
+    wart = "nether_wart_block" if kind == "crimson" else "warped_wart_block"
+    lean_a = rng.uniform(0, 2 * math.pi)
+    lean = rng.uniform(1.0, 2.5)
+    cx, cz = x, z
+    for i in range(-3, h):
+        t = max(0, i) / h
+        cx = x + round(math.cos(lean_a) * lean * t * t)
+        cz = z + round(math.sin(lean_a) * lean * t * t)
+        r = 1.6 if i < h * 0.3 else 1.2
+        for dx in range(-2, 3):
+            for dz in range(-2, 3):
+                if math.hypot(dx, dz) <= r:
+                    bp.set(cx + dx, y + i, cz + dz, stem if abs(dx) + abs(dz) < 2 else hyph)
+    for k in range(5):
+        a = 2 * math.pi * k / 5 + rng.uniform(-0.3, 0.3)
+        for j in range(1, 5):
+            rx, rz = x + round(math.cos(a) * (1 + j)), z + round(math.sin(a) * (1 + j))
+            bp.set(rx, y + 1 - j, rz, hyph)
+            bp.set(rx, y - j, rz, hyph)
+    top = y + h
+    H = max(3.0, cap_r * 0.5)
+    for dx in range(-cap_r - 2, cap_r + 3):
+        for dz in range(-cap_r - 2, cap_r + 3):
+            d = math.hypot(dx, dz)
+            R = cap_r + (noise2(cx + dx, cz + dz, 3.0, seed) - 0.5) * 2.4
+            if d > R:
+                continue
+            t = H * math.sqrt(max(0.0, 1 - (d / R) ** 2))
+            ytop = top + round(t)
+            lip = 3 if d > R - 1.6 else 1
+            for yy in range(ytop - lip, ytop + 1):
+                bp.set(cx + dx, yy, cz + dz, wart)
+            if lip == 1 and rng.random() < 0.08:
+                bp.set(cx + dx, ytop - 1, cz + dz, "shroomlight")
+            if d > R - 1.6 and rng.random() < 0.35:
+                ln = rng.randint(1, 6)
+                for k in range(ln):
+                    yy = ytop - 4 - k
+                    if kind == "crimson":
+                        bp.set(cx + dx, yy, cz + dz, "weeping_vines_plant" if k < ln - 1 else "weeping_vines[age=25]",
+                               keep=True)
+                    elif k < 2:
+                        bp.set(cx + dx, yy, cz + dz, "shroomlight" if k == 1 else wart, keep=True)
+    for _ in range(cap_r):
+        a = rng.uniform(0, 2 * math.pi)
+        r = rng.uniform(2, cap_r - 1.5)
+        bp.set(cx + round(math.cos(a) * r), top - 1, cz + round(math.sin(a) * r), "shroomlight")
+
+
+def zig_tier(bp, half, y0, h, seed=0):
+    """One ziggurat tier: solid core, battered plinth, pilasters with gold capitals, gilded cornice,
+    gold-capped corner piers carrying braziers."""
+    fill_pal(bp, -half, y0, -half, half, y0 + h - 1, half, TEMPLE)
+    top = y0 + h - 1
+    for face in ("north", "south", "east", "west"):
+        for u in range(-half, half + 1):
+            x, z = _pos(face, half if face in ("south", "east") else -half, u, 1)
+            inward = OPPOSITE[face]
+            bp.set(x, y0, z, stair(PBBS, inward))
+            bp.set(x, top, z, stair(PBBS, inward, "top"))
+            ex, ez = _pos(face, half if face in ("south", "east") else -half, u, 0)
+            bp.set(ex, top, ez, GILD)
+            if u % 4 == 0 and abs(u) < half - 1:
+                for y in range(y0, top):
+                    bp.set(x, y, z, PBAS)
+                bp.set(x, top - 1, z, "gold_block")
+                bp.set(x, y0, z, CHIS)
+            elif u % 4 == 2 and abs(u) < half - 1 and h >= 5:
+                bp.set(ex, y0 + h // 2, ez, CHIS)
+                bp.set(ex, y0 + h // 2 - 1, ez, GBS)
+    for sx in (-1, 1):
+        for sz in (-1, 1):
+            cx, cz = sx * (half + 1), sz * (half + 1)
+            for y in range(y0, top + 2):
+                for dx in (0, -sx):
+                    for dz in (0, -sz):
+                        bp.set(cx + dx, y, cz + dz, GOLD.pick(cx + dx, y, cz + dz) if y > top - 1 else PBAS)
+            brazier(bp, cx, top + 2, cz, big=True)
+
+
+def piglin_idol(bp, B, zc=-4):
+    """Golden piglin statue (~32 tall) facing south, feet at y=B, torso centred on z=zc."""
+    # legs, boots with gilded cuffs
+    for (lx0, lx1) in ((-4, -1), (1, 4)):
+        fill_pal(bp, lx0, B, zc - 2, lx1, B + 8, zc + 1, GOLD)
+        bp.fill(lx0, B, zc + 2, lx1, B + 1, zc + 2, "raw_gold_block")
+        bp.fill(lx0, B + 2, zc - 2, lx1, B + 2, zc + 2, GBS)
+    # belt and red loincloth
+    bp.fill(-4, B + 9, zc - 2, 4, B + 9, zc + 2, GBS)
+    bp.fill(-1, B + 4, zc + 2, 1, B + 8, zc + 2, "red_wool")
+    bp.set(0, B + 9, zc + 3, LAMP)
+    # torso with a strap
+    fill_pal(bp, -4, B + 10, zc - 2, 4, B + 18, zc + 2, GOLD)
+    for i in range(9):
+        bp.set(-4 + i, B + 10 + i, zc + 2, GBS)
+    # shoulders / arms: left hanging, right holding a sword raised before the face
+    fill_pal(bp, -7, B + 10, zc - 1, -5, B + 18, zc + 1, GOLD)
+    bp.fill(-7, B + 10, zc - 1, -5, B + 10, zc + 1, "raw_gold_block")
+    bp.fill(-7, B + 18, zc - 1, -5, B + 18, zc + 1, GBS)
+    # right arm resting on a great sword planted point-down beside the statue
+    fill_pal(bp, 5, B + 13, zc - 1, 7, B + 18, zc + 1, GOLD)
+    bp.fill(5, B + 18, zc - 1, 7, B + 18, zc + 1, GBS)
+    fill_pal(bp, 8, B + 14, zc - 1, 9, B + 16, zc + 1, Palette({"raw_gold_block": 1}))
+    for y in range(B - 3, B + 11):
+        bp.set(9, y, zc - 1, PBAS)
+        bp.set(9, y, zc + 1, PBAS)
+        bp.set(9, y, zc, "obsidian" if y % 4 else LAMP)
+    bp.fill(9, B + 11, zc - 3, 9, B + 11, zc + 3, GBS)
+    bp.set(9, B + 11, zc - 3, "gold_block")
+    bp.set(9, B + 11, zc + 3, "gold_block")
+    bp.set(9, B + 12, zc, GBS)
+    bp.set(9, B + 13, zc, GBS)
+    # head: wide, with a big snout, nostrils, tusks, angry brow, glowing eyes, drooping ears
+    fill_pal(bp, -5, B + 19, zc - 4, 5, B + 26, zc + 3, GOLD)
+    fill_pal(bp, -2, B + 19, zc + 4, 2, B + 21, zc + 5, Palette({"raw_gold_block": 1}))
+    for nx in (-1, 1):
+        bp.set(nx, B + 20, zc + 5, "blackstone")
+    for tx in (-3, 3):
+        bp.set(tx, B + 19, zc + 4, "bone_block[axis=y]")
+        bp.set(tx, B + 20, zc + 4, "bone_block[axis=y]")
+    for ex in (-4, -3, -2, 2, 3, 4):
+        bp.set(ex, B + 24, zc + 3, GBS)
+    for ex in (-3, 3):
+        bp.set(ex, B + 23, zc + 3, LAMP)
+    for ex in (-2, 2):
+        bp.set(ex, B + 23, zc + 3, "blackstone")
+    for sx in (-1, 1):
+        for (dx, y0, y1) in ((6, B + 22, B + 26), (7, B + 20, B + 23), (8, B + 19, B + 20)):
+            for z in (zc - 2, zc - 1, zc):
+                bp.fill(sx * dx, y0, z, sx * dx, y1, z, "raw_gold_block")
+    # red cape down the back, gold-hemmed, flaring at the bottom
+    for y in range(B + 3, B + 19):
+        zz = zc - 3 if y > B + 9 else zc - 4
+        w = 4 if y > B + 9 else 5
+        for x in range(-w, w + 1):
+            hem = abs(x) == w or y == B + 3
+            bp.set(x, y, zz, GILD if hem else "red_wool")
+        if y <= B + 9:
+            for x in range(-w + 1, w):
+                bp.set(x, y, zc - 3, "red_wool")
+    # spiked crown
+    for x in range(-5, 6):
+        for z in range(zc - 4, zc + 4):
+            if x in (-5, 5) or z in (zc - 4, zc + 3):
+                bp.set(x, B + 27, z, GBS if (x + z) % 2 else "gold_block")
+                if (x + z) % 2 == 0:
+                    bp.set(x, B + 28, z, GILD)
+                    if abs(x) == 5 and z in (zc - 4, zc + 3) or (z == zc + 3 and x == 0):
+                        bp.set(x, B + 29, z, LAMP)
+
+
 def piglin_sanctuary(bp):
-    R = 12
-    bp.disk(0, -1, 0, R + 1, "blackstone")
-    bp.disk(0, 0, 0, R, "polished_blackstone_bricks")
-    bp.disk(0, 0, 0, R - 3, "crimson_nylium")
-    # ring of gilded pillars with gold caps
-    for a in range(0, 360, 30):
-        x, z = round(math.cos(math.radians(a)) * R), round(math.sin(math.radians(a)) * R)
-        bp.fill(x, 1, z, x, 7, z, "polished_blackstone_bricks")
-        bp.set(x, 4, z, "gilded_blackstone")
-        bp.set(x, 8, z, "gold_block" if a % 60 == 0 else "shroomlight")
-    # central golden idol
-    bp.fill(-2, 1, -2, 2, 1, 2, "polished_blackstone")
-    bp.fill(-1, 2, -1, 1, 2, 1, "gilded_blackstone")
-    bp.fill(0, 3, 0, 0, 6, 0, "gold_block")
-    bp.set(-1, 5, 0, "gold_block")
-    bp.set(1, 5, 0, "gold_block")
-    bp.set(0, 7, 0, "piglin_head[rotation=8]")
-    for x, z in ((-2, -2), (2, -2), (-2, 2), (2, 2)):
-        bp.set(x, 2, z, "soul_campfire[lit=true,signal_fire=false,waterlogged=false,facing=north]")
-    # offering chests and treasure piles
-    bp.chest(0, 1, -4, "south", LOOT + "piglin_sanctuary")
-    bp.chest(0, 1, 4, "north", LOOT + "piglin_sanctuary")
-    for _ in range(14):
-        x, z = bp.rng.randint(-R + 4, R - 4), bp.rng.randint(-R + 4, R - 4)
-        if 3 < math.hypot(x, z) < R - 3:
-            bp.set(x, 1, z, bp.rng.choice(["crimson_fungus", "crimson_roots", "crimson_roots", "gold_block"]))
-    # huge fungi framing the shrine
-    for (fx, fz) in ((-R - 4, -3), (R + 4, 4)):
-        bp.fill(fx, -2, fz, fx, 11, fz, "crimson_stem[axis=y]")
-        bp.blob(fx, 13, fz, 5, 3, 5, "nether_wart_block", noise=0.3)
-        for _ in range(8):
-            bp.set(fx + bp.rng.randint(-4, 4), 11, fz + bp.rng.randint(-4, 4), "shroomlight")
-        for _ in range(10):
-            vx, vz = fx + bp.rng.randint(-4, 4), fz + bp.rng.randint(-4, 4)
-            for k in range(bp.rng.randint(1, 4)):
-                bp.set(vx, 10 - k, vz, "weeping_vines_plant" if k < 3 else "weeping_vines[age=20]")
-    bp.spawner(6, 1, -6, "minecraft:piglin")
+    # ground: netherrack apron with crimson nylium, rooted into the terrain
+    rock_island(bp, 30, 30, 10, depth=8, slope=1.2, spread=6, seed=9, pillars=0, pal=NETHER_GROUND)
+    for x in range(-34, 35):
+        for z in range(-34, 35):
+            if bp.get(x, -1, z) and not bp.get(x, 0, z):
+                bp.set(x, -1, z, "crimson_nylium")
+    rng = random.Random(4)
+    for x in range(-33, 34):
+        for z in range(-33, 34):
+            if max(abs(x), abs(z)) > 25 and bp.get(x, -1, z) == "minecraft:crimson_nylium":
+                r = rng.random()
+                if r < 0.10:
+                    bp.set(x, 0, z, "crimson_roots")
+                elif r < 0.13:
+                    bp.set(x, 0, z, "crimson_fungus")
+                elif r < 0.15:
+                    bp.set(x, 0, z, "nether_sprouts")
+    # paved court around the base
+    for x in range(-26, 27):
+        for z in range(-26, 27):
+            if max(abs(x), abs(z)) <= 26:
+                bp.set(x, -1, z, GBS if (x + z) % 9 == 0 else FLOOR.pick(x, -1, z))
+                for y in range(0, 3):
+                    bp.set(x, y, z, "air")
+    # lava channel around the base, bridged at the doors and the stairs
+    for x in range(-25, 26):
+        for z in range(-25, 26):
+            if 24 <= max(abs(x), abs(z)) <= 25 and not (abs(x) <= 5 and z > 0) and not abs(z) <= 2:
+                bp.set(x, -1, z, "lava[level=0]")
+                bp.set(x, -2, z, "magma_block")
+    # the tiers
+    for i, (half, y0, h) in enumerate(ZIG):
+        zig_tier(bp, half, y0, h, seed=i)
+    summit = ZIG[-1][1] + ZIG[-1][2]   # walking level on the summit
+    # lava cascades down the east and west faces of the upper tiers into gilded basins
+    for sx in (-1, 1):
+        for i in (1, 2):
+            half, y0, h = ZIG[i]
+            lhalf = ZIG[i - 1][0]
+            xf = sx * half
+            src_y = y0 + h - 2
+            for z in (-1, 0, 1):
+                lavafall(bp, xf, z, src_y, y0 - 1)
+            bp.fill(xf + sx, src_y, -1, xf + sx, src_y, 1, stair(PBBS, "west" if sx > 0 else "east", "top"))
+            bp.fill(xf + sx, src_y + 1, -1, xf + sx, src_y + 1, 1, GBS)
+            for x in range(min(xf + sx, sx * (lhalf - 1)), max(xf + sx, sx * (lhalf - 1)) + 1):
+                for z in range(-3, 4):
+                    rim = abs(z) == 3 or x == sx * (lhalf - 1)
+                    bp.set(x, y0 - 1, z, GBS if rim else "lava[level=0]")
+                    if rim:
+                        bp.set(x, y0, z, PBBW if (x + z) % 2 else GILD)
+    # grand staircase on the south face, with balustrades, gold posts and braziers
+    arch.stair_run(bp, -4, 0, 29, "north", summit, 9, PBBS, clear=5)
+    for i in range(summit):
+        z = 29 - i
+        for x in range(-4, 5):
+            for y in range(-1, i):
+                bp.set(x, y, z, TEMPLE.pick(x, y, z), keep=True)
+            if x == 0 and i % 3 == 0:
+                bp.set(x, i, z, stair("polished_blackstone_stairs", "north"))
+        for x in (-5, 5):
+            for y in range(-1, i + 1):
+                bp.set(x, y, z, TEMPLE.pick(x, y, z))
+            bp.set(x, i + 1, z, "gold_block" if i % 4 == 0 else PBBW)
+            if i % 8 == 0:
+                brazier(bp, x, i + 2, z)
+    # summit: pedestal, idol, altar, obelisks
+    ys = summit
+    fill_pal(bp, -8, ys, -8, 8, ys + 1, 1, TEMPLE)
+    fill_pal(bp, -6, ys + 2, -8, 6, ys + 4, 0, TEMPLE)
+    for x in range(-8, 9):
+        bp.set(x, ys + 1, 1, GILD)
+        bp.set(x, ys, 2, stair(PBBS, "north"))
+    for x in range(-6, 7):
+        bp.set(x, ys + 4, 0, GILD)
+        bp.set(x, ys + 2, 1, stair(PBBS, "north"))
+    for z in range(-8, 2):
+        bp.set(-8, ys + 1, z, GILD)
+        bp.set(8, ys + 1, z, GILD)
+    for z in range(-8, 1):
+        bp.set(-6, ys + 4, z, GILD)
+        bp.set(6, ys + 4, z, GILD)
+    for x in (-5, 5):
+        bp.set(x, ys + 3, 1, LAMP)
+    piglin_idol(bp, ys + 5, zc=-4)
+    bp.fill(-3, ys, 5, 3, ys, 6, GBS)
+    bp.fill(-2, ys + 1, 5, 2, ys + 1, 5, "gold_block")
+    bp.chest(0, ys + 1, 6, "south", LOOT + "piglin_sanctuary")
+    bp.set(-2, ys + 2, 5, "candle[candles=4,lit=true,waterlogged=false]")
+    bp.set(2, ys + 2, 5, "candle[candles=4,lit=true,waterlogged=false]")
+    for sx in (-1, 1):
+        ox = sx * 7
+        for y in range(ys, ys + 9):
+            bp.set(ox, y, 7, GOLD.pick(ox, y, 7) if y % 3 == 0 else PBAS)
+        bp.set(ox, ys + 9, 7, LAMP)
+        pinnacle(bp, ox, ys + 10, 7, 2)
+    # ---------------- sanctum inside the lowest tier (doors east and west)
+    bp.clear(-11, 0, -11, 11, 9, 11)
+    fill_pal(bp, -11, -1, -11, 11, -1, 11, FLOOR)
+    bp.fill(-11, 10, -11, 11, 10, 11, PBB)
+    for x in (-7, -2, 2, 7):
+        for z in (-7, -2, 2, 7):
+            if abs(x) == 7 or abs(z) == 7:
+                bp.fill(x, 0, z, x, 9, z, PBAS)
+                bp.set(x, 9, z, "gold_block")
+                bp.set(x, 0, z, CHIS)
+    for sx in (-1, 1):
+        bp.clear(sx * 12, 0, -1, sx * 26, 3, 1)
+        for x in range(12, 24):
+            bp.set(sx * x, -1, 0, GBS)
+            bp.set(sx * x, -1, -1, PB)
+            bp.set(sx * x, -1, 1, PB)
+        for z in (-2, 2):
+            bp.fill(sx * 23, 0, z, sx * 23, 4, z, "gold_block")
+        bp.fill(sx * 23, 4, -1, sx * 23, 4, 1, GILD)
+        bp.set(sx * 23, 4, 0, LAMP)
+        bp.lantern(sx * 17, 3, 0, hanging=True)
+    # gold hoard and offerings
+    bp.fill(-3, 0, -3, 3, 0, 3, "gold_block")
+    bp.fill(-2, 1, -2, 2, 1, 2, GBS)
+    bp.fill(-1, 2, -1, 1, 2, 1, "gold_block")
+    bp.set(0, 3, 0, LAMP)
+    for (x, z) in ((-9, -9), (9, -9), (-9, 9), (9, 9)):
+        bp.set(x, 0, z, "gold_block")
+        bp.set(x, 1, z, "raw_gold_block")
+        bp.set(x, 2, z, "candle[candles=4,lit=true,waterlogged=false]")
+    bp.chest(-10, 0, 0, "east", LOOT + "piglin_sanctuary")
+    bp.chest(10, 0, -9, "west", LOOT + "piglin_sanctuary")
+    bp.spawner(0, 0, -6, "minecraft:piglin")
+    for (x, z) in ((-5, 5), (5, 5), (-5, -5), (5, -5)):
+        chandelier(bp, x, 9, z, drop=2)
+    # hidden vault inside the third tier, reached by a ladder under a cracked slab on the summit
+    bp.set(6, ys - 1, -6, CPBB)
+    bp.clear(6, 13, -6, 6, ys - 2, -6)
+    bp.ladder(6, 14, -5, ys - 2, "south")
+    bp.room(2, 13, -9, 8, 17, -3, PBB, floor=GBS, ceiling=PBB)
+    bp.clear(6, 17, -6, 6, 17, -6)
+    bp.chest(3, 14, -8, "south", LOOT + "piglin_sanctuary")
+    bp.fill(4, 14, -8, 5, 14, -8, "gold_block")
+    bp.set(3, 14, -4, "soul_lantern[hanging=false,waterlogged=false]")
+    # giant crimson fungi framing the temple
+    for (fx, fz, h, r, sd) in ((-30, -24, 24, 9, 1), (29, -28, 20, 8, 2), (-29, 27, 18, 7, 3),
+                               (31, 24, 26, 9, 4), (14, -32, 12, 5, 5), (-16, 33, 11, 5, 6)):
+        giant_fungus(bp, fx, 0, fz, h, r, seed=sd)
+    # braziers around the court
+    for k in (-18, -9, 9, 18):
+        for (x, z) in ((k, 26), (k, -26), (26, k), (-26, k)):
+            brazier(bp, x, 0, z)
 
 
 register(StructureDef(
     "piglin_sanctuary", "nether", ["crimson_forest", "nether_wastes"],
     [Piece("sanctuary", piglin_sanctuary)], spacing=24, separation=8, adaptation="beard_box",
-    height=("uniform", 32, 70), processors="aging",
+    height=("uniform", 30, 50), processors="aging",
     title_fr="Sanctuaire piglin", title_en="Piglin Sanctuary"))
 
 
 # ============================================================ Lava foundry
+# An industrial foundry on a stilted deck above the lava sea: a long brick casting hall under a
+# green-copper sawtooth roof, a smelting line of blast furnaces, hanging crucibles (one pouring
+# into the casting channel), a round blast-furnace tower, three tall brick chimneys, copper pipes
+# with glowing bulbs, a cargo dock with a jib crane and a smugglers' cache under the pier.
+# Blueprint y=0 is the deck (absolute y40): stilts reach down to y=-16 into the lava sea (y=-9).
+LF_SEA = -9
+NBRICK = Palette({"nether_bricks": 5, "red_nether_bricks": 2, "cracked_nether_bricks": 1}, seed=31, scale=2.5)
+CLAY = Palette({"bricks": 5, "nether_bricks": 1}, seed=32, scale=2.0)
+CU = "waxed_weathered_cut_copper"
+CUS = "waxed_weathered_cut_copper_stairs"
+CUSL = "waxed_weathered_cut_copper_slab"
+PIPE = "waxed_exposed_copper"
+BULB = "waxed_copper_bulb[lit=true,powered=false]"
+
+
+def pipe(bp, pts, bulbs=6):
+    """Copper pipe through axis-aligned waypoints, with glowing bulbs at intervals and at joints."""
+    n = 0
+    for (a, b) in zip(pts, pts[1:]):
+        (x0, y0, z0), (x1, y1, z1) = a, b
+        steps = max(abs(x1 - x0), abs(y1 - y0), abs(z1 - z0))
+        for i in range(steps + 1):
+            x = x0 + (x1 - x0) * i // max(1, steps)
+            y = y0 + (y1 - y0) * i // max(1, steps)
+            z = z0 + (z1 - z0) * i // max(1, steps)
+            bp.set(x, y, z, BULB if (n % bulbs == 0 and n) else PIPE)
+            n += 1
+        bp.set(*b, "waxed_copper_grate[waterlogged=false]")
+
+
+def chimney(bp, cx, cz, h, seed=0):
+    """Tall square brick chimney: plinth, banded shaft with copper ties, corbelled crown, smoke."""
+    fill_pal(bp, cx - 3, -1, cz - 3, cx + 3, 3, cz + 3, NBRICK)
+    for x in range(cx - 3, cx + 4):
+        for z in range(cz - 3, cz + 4):
+            if max(abs(x - cx), abs(z - cz)) == 3:
+                bp.set(x, 4, z, stair("nether_brick_stairs", toward(cx, cz, x, z)))
+    for y in range(4, h + 1):
+        for x in range(cx - 2, cx + 3):
+            for z in range(cz - 2, cz + 3):
+                edge = max(abs(x - cx), abs(z - cz)) == 2
+                if edge:
+                    band = y % 7 == 0
+                    bp.set(x, y, z, "nether_bricks" if band else CLAY.pick(x, y, z))
+                else:
+                    bp.set(x, y, z, "air")
+        if y % 7 == 3:
+            for x in range(cx - 3, cx + 4):
+                for z in range(cz - 3, cz + 4):
+                    if max(abs(x - cx), abs(z - cz)) == 3 and (x == cx or z == cz):
+                        bp.set(x, y, z, BULB if y % 14 == 3 else CU)
+    for x in range(cx - 3, cx + 4):
+        for z in range(cz - 3, cz + 4):
+            if max(abs(x - cx), abs(z - cz)) == 3:
+                bp.set(x, h - 1, z, stair("brick_stairs", toward(cx, cz, x, z), "top"))
+                bp.set(x, h, z, "nether_bricks")
+                bp.set(x, h + 1, z, "nether_brick_fence" if (x + z) % 2 else "nether_bricks")
+    bp.set(cx, h - 1, cz, "magma_block")
+    for dx, dz in ((0, 0), (1, 0), (0, 1), (-1, 0), (0, -1)):
+        bp.set(cx + dx, h, cz + dz, "campfire[facing=north,lit=true,signal_fire=true,waterlogged=false]")
+    bp.set(cx, h - 2, cz, LAMP)
+
+
+def crucible(bp, cx, y, cz, pour=None):
+    """Hanging 5x5 crucible full of lava, chained to the gantry above. pour = side direction of a
+    spout that empties into the channel below."""
+    bp.fill(cx - 1, y, cz - 1, cx + 1, y, cz + 1, PBB)
+    for x in range(cx - 2, cx + 3):
+        for z in range(cz - 2, cz + 3):
+            if max(abs(x - cx), abs(z - cz)) == 2:
+                bp.set(x, y + 1, z, "iron_block" if (x + z) % 2 else PBB)
+                bp.set(x, y + 2, z, PBB)
+            else:
+                bp.set(x, y + 1, z, "lava[level=0]")
+                bp.set(x, y + 2, z, "lava[level=0]")
+    for x, z in ((cx - 2, cz - 2), (cx + 2, cz - 2), (cx - 2, cz + 2), (cx + 2, cz + 2)):
+        bp.chain(x, y + 3, z, 12)
+    bp.set(cx, y - 1, cz, LAMP)
+    if pour:
+        dx, dz = FACE_VEC[pour]
+        bp.set(cx + 2 * dx, y + 2, cz + 2 * dz, "lava[level=0]")
+        lavafall(bp, cx + 3 * dx, cz + 3 * dz, y + 2, 0)
+
+
 def lava_foundry(bp):
-    W, D = 24, 18
-    bp.fill(0, 0, 0, W, 4, D, "nether_bricks")  # foundations standing in the lava sea
-    for x in range(0, W + 1, 6):
-        for z in (0, D):
-            bp.fill(x, -6, z, x, 0, z, "nether_bricks")
-    bp.room(0, 5, 0, W, 14, D, "nether_bricks", floor="polished_blackstone", ceiling="red_nether_bricks")
-    bp.gable_roof(0, 0, W, D, 15, "red_nether_brick_stairs", ridge_axis="x", overhang=1, fill="nether_bricks")
-    # smelting line: hoppers, furnaces, cauldron of lava
-    for x in range(3, W - 2, 3):
-        bp.set(x, 6, 3, "blast_furnace[facing=south,lit=true]")
-        bp.set(x, 7, 3, "hopper[enabled=true,facing=down]")
-        bp.set(x + 1, 6, 3, "lava_cauldron")
-    bp.fill(3, 6, D - 3, W - 3, 6, D - 3, "magma_block")
-    for x in range(3, W - 2, 4):
-        bp.set(x, 7, D - 3, "anvil[facing=east]")
-    # molten channel through the hall
-    bp.fill(1, 5, D // 2, W - 1, 5, D // 2, "lava")
-    for x in range(1, W):
-        bp.set(x, 6, D // 2 - 1, "nether_brick_fence")
-        bp.set(x, 6, D // 2 + 1, "nether_brick_fence")
-    for x in (W // 3, 2 * W // 3):
-        bp.fill(x, 5, D // 2, x, 5, D // 2, "polished_blackstone")
-        bp.set(x, 6, D // 2 - 1, "air")
-        bp.set(x, 6, D // 2 + 1, "air")
-    # chimneys
-    for x in (4, W - 4):
-        bp.fill(x, 15, D // 2 - 4, x + 1, 24, D // 2 - 3, "bricks")
-        bp.fill(x, 24, D // 2 - 4, x + 1, 24, D // 2 - 3, "air")
-        bp.set(x, 23, D // 2 - 4, "campfire[lit=true,signal_fire=true,waterlogged=false,facing=north]")
-    # windows, doors, loot
-    for x in range(3, W - 1, 4):
-        for z in (0, D):
-            bp.fill(x, 8, z, x + 1, 10, z, "iron_bars")
-    bp.clear(0, 6, D // 2 - 3, 0, 8, D // 2 - 2)
-    bp.clear(W, 6, D // 2 + 2, W, 8, D // 2 + 3)
-    bp.chest(W - 1, 6, 1, "west", LOOT + "lava_foundry")
-    bp.chest(1, 6, D - 1, "east", LOOT + "lava_foundry")
-    bp.fill(W - 3, 6, D - 1, W - 1, 6, D - 1, "gold_block")
-    bp.fill(W - 3, 7, D - 1, W - 2, 7, D - 1, "iron_block")
-    bp.spawner(W // 2, 6, 5, "minecraft:magma_cube")
-    for x in range(4, W, 6):
-        bp.lantern(x, 13, D // 2, hanging=True)
-    # docks
-    for z in (D // 2 - 3, D // 2 - 2):
-        for x in range(-6, 0):
-            bp.set(x, 5, z, "crimson_planks")
-    for z in (D // 2 + 2, D // 2 + 3):
-        for x in range(W + 1, W + 7):
-            bp.set(x, 5, z, "warped_planks")
+    # ---------------- stilted deck over the lava sea
+    deck = set()
+    for x in range(-30, 25):
+        for z in range(-22, 15):
+            deck.add((x, z))
+    for x in range(-6, 7):
+        for z in range(15, 36):
+            deck.add((x, z))
+    for x in range(25, 30):
+        for z in range(-14, 2):
+            deck.add((x, z))
+    for (x, z) in deck:
+        bp.set(x, 0, z, "spruce_planks" if (x // 3 + z) % 5 else "dark_oak_planks")
+        if x % 3 == 0 or z % 3 == 0:
+            bp.set(x, -1, z, "nether_bricks")
+    for (x, z) in deck:
+        edge = any((x + dx, z + dz) not in deck for dx, dz in ((1, 0), (-1, 0), (0, 1), (0, -1)))
+        if edge:
+            bp.set(x, 0, z, "nether_bricks")
+            bp.set(x, 1, z, "nether_brick_fence")
+            if (x + z) % 8 == 0:
+                bp.set(x, 1, z, "nether_bricks")
+                bp.set(x, 2, z, "lantern[hanging=false,waterlogged=false]")
+        if x % 6 == 0 and z % 6 == 0 or edge and (x + z) % 6 == 0:
+            for y in range(-16, 0):
+                bp.set(x, y, z, NBRICK.pick(x, y, z))
+            bp.set(x, LF_SEA + 1, z, "nether_bricks")
+            for d, (ddx, ddz) in (("east", (1, 0)), ("west", (-1, 0)), ("south", (0, 1)), ("north", (0, -1))):
+                if (x + ddx, z + ddz) in deck:
+                    bp.set(x + ddx, -2, z + ddz, stair("nether_brick_stairs", OPPOSITE[d], "top"))
+            # cross bracing towards the next stilt
+            if (x + 6, z) in deck and x % 6 == 0 and z % 6 == 0:
+                for i in range(1, 6):
+                    bp.set(x + i, -2 - abs(3 - i), z, "nether_brick_fence")
+            if (x, z + 6) in deck and x % 6 == 0 and z % 6 == 0:
+                for i in range(1, 6):
+                    bp.set(x, -2 - abs(3 - i), z + i, "nether_brick_fence")
+    # ---------------- main casting hall
+    x0, x1, z0, z1 = -26, 6, -12, 12
+    H = 14
+    bp.clear(x0 + 1, 1, z0 + 1, x1 - 1, H + 8, z1 - 1)
+    for face, line, u0, u1 in (("south", z1, x0, x1), ("north", z0, x0, x1), ("east", x1, z0, z1),
+                               ("west", x0, z0, z1)):
+        arch.facade(bp, face, line, u0, u1, 0, H, NBRICK, PBAS, pilaster_every=4, window_h=6, window_y=3,
+                    plinth=PBB, plinth_stairs=PBBS, cornice_stairs="nether_brick_stairs",
+                    glass="orange_stained_glass_pane", sill="nether_brick_stairs")
+    fill_pal(bp, x0 + 1, 0, z0 + 1, x1 - 1, 0, z1 - 1, FLOOR)
+    # sawtooth copper roof: teeth rise towards +x, glazed vertical faces
+    for a in range(x0, x1, 8):
+        for i in range(8):
+            x = a + i
+            if x > x1:
+                break
+            y = H + 1 + min(i, 6)
+            for z in range(z0 - 1, z1 + 2):
+                if i < 7:
+                    bp.set(x, y, z, stair(CUS, "east"))
+                else:
+                    for yy in range(H + 1, H + 8):
+                        bp.set(x, yy, z, "orange_stained_glass" if z0 < z < z1 else CU)
+                    bp.set(x, H + 8, z, slab(CUSL))
+            for z in (z0, z1):
+                for yy in range(H + 1, y):
+                    bp.set(x, yy, z, NBRICK.pick(x, yy, z))
+    # gantry beam + crucibles over the casting channel
+    for x in range(x0 + 1, x1):
+        bp.set(x, 13, -3, PBB)
+        bp.set(x, 13, -4, stair(PBBS, "south", "top"))
+        bp.set(x, 13, -2, stair(PBBS, "north", "top"))
+    for x in range(x0 + 1, x1):
+        bp.set(x, 0, 0, "lava[level=0]")
+        bp.set(x, -1, 0, "magma_block")
+        bp.set(x, 1, -1, PBBW if x % 4 else LAMP)
+        bp.set(x, 1, 1, PBBW if x % 4 else LAMP)
+        if x % 3 == 0:
+            bp.set(x, 0, 2, "iron_block" if x % 6 else "gold_block")
+    crucible(bp, -16, 6, -3, pour="south")
+    crucible(bp, -4, 7, -3)
+    # smelting line along the north wall
+    for x in range(x0 + 2, x1 - 1, 2):
+        bp.set(x, 1, z0 + 1, "blast_furnace[facing=south,lit=true]")
+        bp.set(x, 2, z0 + 1, "hopper[enabled=true,facing=down]")
+        bp.set(x + 1, 1, z0 + 1, "lava_cauldron" if x % 4 else "smoker[facing=south,lit=true]")
+    pipe(bp, [(x0 + 2, 4, z0 + 1), (x1 - 2, 4, z0 + 1)], bulbs=4)
+    # anvils and work tables along the south wall
+    for x in range(x0 + 3, x1 - 2, 5):
+        bp.set(x, 1, z1 - 2, "anvil[facing=east]")
+        bp.set(x + 1, 1, z1 - 2, "smithing_table")
+        bp.set(x + 2, 1, z1 - 2, "grindstone[face=floor,facing=north]")
+    bp.chest(x1 - 2, 1, z1 - 1, "north", LOOT + "lava_foundry")
+    bp.barrel(x0 + 1, 1, z1 - 1, "up", LOOT + "lava_foundry")
+    bp.spawner(-10, 1, 6, "minecraft:magma_cube")
+    for x in (-20, -10, 0):
+        bp.lantern(x, 12, 6, hanging=True)
+        bp.chain(x, 13, 6, 14)
+    # big doors
+    arch.arch_door(bp, "south", z1, -10, 0, width=5, height=7, trim=PBAS, stairs=PBBS)
+    arch.arch_door(bp, "east", x1, 0, 0, width=3, height=5, trim=PBAS, stairs=PBBS)
+    # ---------------- blast-furnace tower
+    tx, tz = 16, -8
+    round_tower(bp, tx, tz, 0, 22, 5, wall=CLAY, base=-16, roof="crenels", band="nether_bricks",
+                rib="nether_bricks", slit_seed=3, floors_every=7)
+    bp.disk(tx, 23, tz, 4, "lava[level=0]")
+    bp.disk(tx, 22, tz, 4, PBB)
+    for y in range(1, 6):
+        bp.set(tx - 5, y, tz, "air")
+    for (dy, dz) in ((2, -1), (2, 1)):
+        bp.set(tx - 5, 1 + dy, tz + dz, LAMP)
+    # spout pouring from the tower crown down to a basin by the hall
+    bp.set(tx - 7, 24, tz, GBS)
+    bp.set(tx - 7, 23, tz, stair(PBBS, "east", "top"))
+    lavafall(bp, tx - 7, tz, 22, 0)
+    bp.set(tx - 7, 22, tz, "lava[level=0]")
+    for z in (tz - 1, tz + 1):
+        bp.set(tx - 7, 1, z, PBBW)
+    bp.set(tx - 7, -1, tz, "magma_block")
+    pipe(bp, [(tx - 5, 10, tz + 3), (x1 + 1, 10, tz + 3), (x1 + 1, 10, -2)], bulbs=3)
+    pipe(bp, [(tx + 3, 4, tz + 5), (tx + 3, 4, 10), (x1 + 2, 4, 10)], bulbs=3)
+    # ---------------- chimneys behind the hall
+    for (cx, h, sd) in ((-20, 38, 1), (-8, 46, 2), (4, 34, 3)):
+        chimney(bp, cx, -17, h, seed=sd)
+        pipe(bp, [(cx, 8, -14), (cx, 8, -13)], bulbs=9)
+    # ---------------- cargo dock with a jib crane
+    for z in range(15, 36, 4):
+        for x in (-6, 6):
+            bp.set(x, 1, z, "nether_bricks")
+            bp.set(x, 2, z, "iron_chain[axis=y,waterlogged=false]")
+    for (x, z) in ((-3, 18), (-2, 18), (-3, 19), (3, 20), (2, 21), (3, 22)):
+        bp.barrel(x, 1, z, "up")
+    bp.barrel(-3, 2, 18, "up", LOOT + "lava_foundry")
+    bp.set(2, 1, 17, "coal_block")
+    bp.set(2, 2, 17, "coal_block")
+    bp.set(-2, 1, 22, "magma_block")
+    mx, mz = 3, 31
+    fill_pal(bp, mx - 1, 0, mz - 1, mx + 1, 26, mz + 1, NBRICK)
+    for y in range(2, 26, 4):
+        for (dx, dz) in ((-1, -1), (1, -1), (-1, 1), (1, 1)):
+            bp.set(mx + dx, y, mz + dz, PBAS)
+    bp.fill(mx - 2, 26, mz - 1, mx + 6, 27, mz + 1, PBB)
+    bp.fill(mx + 4, 23, mz - 1, mx + 6, 25, mz + 1, "iron_block")
+    for x in range(mx - 2, mx - 25, -1):
+        bp.set(x, 27, mz, PBB)
+        bp.set(x, 26, mz, PBBW if x % 3 else "nether_bricks")
+        if (mx - x) % 3 == 0:
+            bp.line((x, 27, mz), (mx, 31, mz), "iron_chain[axis=y,waterlogged=false]")
+    bp.set(mx, 31, mz, LAMP)
+    bp.set(mx, 32, mz, "lightning_rod[facing=up,powered=false,waterlogged=false]")
+    hx = mx - 22
+    bp.chain(hx, 10, mz, 25)
+    bp.fill(hx - 1, 8, mz - 1, hx + 1, 9, mz + 1, "barrel[facing=up,open=false]")
+    bp.fill(hx - 1, 7, mz - 1, hx + 1, 7, mz + 1, PBB)
+    bp.lantern(hx, 6, mz, hanging=True)
+    # smugglers' cache hanging under the pier, reached through a hatch
+    bp.set(0, 0, 27, "iron_trapdoor[facing=north,half=top,open=false,powered=false,waterlogged=false]")
+    bp.ladder(0, -4, 26, -1, "south")
+    bp.room(-3, -6, 24, 3, -1, 30, "nether_bricks", floor=PBB)
+    bp.set(0, -1, 26, "ladder[facing=south,waterlogged=false]")
+    bp.set(0, -1, 27, "iron_trapdoor[facing=north,half=top,open=false,powered=false,waterlogged=false]")
+    bp.set(0, 0, 27, "air")
+    bp.chest(-2, -5, 29, "east", LOOT + "lava_foundry")
+    bp.set(2, -5, 29, "gold_block")
+    bp.lantern(0, -2, 28, hanging=True)
+    bp.set(0, -7, 27, LAMP)
+    # ore yard on the east platform
+    for (x, z) in ((27, -12), (28, -10), (26, -6), (28, -3)):
+        bp.set(x, 1, z, "nether_gold_ore")
+        bp.set(x, 2, z, "nether_gold_ore" if (x + z) % 2 else "magma_block")
+    brazier(bp, 27, 1, 0)
+    brazier(bp, 27, 1, -14)
 
 
 register(StructureDef(
     "lava_foundry", "nether", ["nether_wastes", "basalt_deltas", "crimson_forest", "warped_forest"],
     [Piece("foundry", lava_foundry)], spacing=24, separation=8, adaptation="none",
-    height=("absolute", 27), processors="aging",
+    height=("absolute", 24), processors="aging",
     title_fr="Fonderie de lave", title_en="Lava Foundry"))
 
 

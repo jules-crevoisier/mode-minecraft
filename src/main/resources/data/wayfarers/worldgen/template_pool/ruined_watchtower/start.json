@@ -16,7 +16,7 @@
         "element_type": "minecraft:single_pool_element",
         "location": "wayfarers:ruined_watchtower/tower_intact",
         "projection": "rigid",
-        "processors": "wayfarers:ruin"
+        "processors": "wayfarers:aging"
       }
     }
   ]
