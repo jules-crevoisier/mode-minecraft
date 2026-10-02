@@ -324,7 +324,8 @@ class Blueprint:
 
     def spawner(self, x, y, z, entity):
         data = {
-            "SpawnData": {"entity": {"id": nbt.String(entity)}},
+            # empty custom rules = any light level, so lit rooms still get their encounter
+            "SpawnData": {"entity": {"id": nbt.String(entity)}, "custom_spawn_rules": nbt.Compound({})},
             "Delay": nbt.Short(20),
             "MinSpawnDelay": nbt.Short(200),
             "MaxSpawnDelay": nbt.Short(600),

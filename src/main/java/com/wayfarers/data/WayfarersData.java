@@ -123,8 +123,9 @@ public final class WayfarersData extends SavedData {
     }
 
     // ------------------------------------------------------------------ shared quests
-    public boolean markQuest(Identifier advancement) {
-        boolean added = quests.add(advancement.toString());
+    /** Records one criterion ("namespace:path#criterion") reached by anyone; false if already known. */
+    public boolean markCriterion(Identifier advancement, String criterion) {
+        boolean added = quests.add(advancement + "#" + criterion);
         if (added) {
             setDirty();
         }

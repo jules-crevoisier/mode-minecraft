@@ -1,6 +1,7 @@
 package com.wayfarers.item;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
@@ -20,6 +21,9 @@ public class TooltipBlockItem extends BlockItem {
     public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display,
                                 Consumer<Component> builder, TooltipFlag flag) {
         super.appendHoverText(stack, context, display, builder, flag);
-        builder.accept(Component.translatable(getBlock().getDescriptionId() + ".desc").withStyle(ChatFormatting.GRAY));
+        String key = getBlock().getDescriptionId() + ".desc";
+        if (Language.getInstance().has(key)) {
+            builder.accept(Component.translatable(key).withStyle(ChatFormatting.GRAY));
+        }
     }
 }

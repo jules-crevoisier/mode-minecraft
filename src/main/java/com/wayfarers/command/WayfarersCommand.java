@@ -192,7 +192,7 @@ public final class WayfarersCommand {
                 continue;
             }
             if (complete) {
-                data.markQuest(holder.id());
+                holder.value().criteria().keySet().forEach(c -> data.markCriterion(holder.id(), c));
             }
             for (ServerPlayer player : server.getPlayerList().getPlayers()) {
                 for (String criterion : holder.value().criteria().keySet()) {

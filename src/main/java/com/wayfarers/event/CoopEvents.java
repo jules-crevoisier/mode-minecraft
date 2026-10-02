@@ -14,8 +14,8 @@ import net.minecraftforge.event.entity.player.AdvancementEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 
 /**
- * Co-op glue: every Wayfarers quest earned by one player is granted to everybody (now and
- * when others log in later), and new players receive the Atlas plus a short welcome.
+ * Co-op glue: every Wayfarers quest step reached by one player is granted to everybody (now
+ * and when others log in later), and new players receive the Atlas plus a short welcome.
  */
 public final class CoopEvents {
     private static boolean sharing;
@@ -23,24 +23,32 @@ public final class CoopEvents {
     private CoopEvents() {}
 
     public static void register() {
-        AdvancementEvent.AdvancementEarnEvent.BUS.addListener(CoopEvents::onAdvancement);
+        AdvancementEvent.AdvancementProgressEvent.BUS.addListener(CoopEvents::onProgress);
         PlayerEvent.PlayerLoggedInEvent.BUS.addListener(CoopEvents::onLogin);
     }
 
-    private static void onAdvancement(AdvancementEvent.AdvancementEarnEvent event) {
+    /** Shares every single criterion, so partial progress (e.g. "visit every structure") is pooled. */
+    private static void onProgress(AdvancementEvent.AdvancementProgressEvent event) {
         AdvancementHolder holder = event.getAdvancement();
-        if (sharing || !(event.getEntity() instanceof ServerPlayer earner)
+        if (sharing || event.getProgressType() != AdvancementEvent.AdvancementProgressEvent.ProgressType.GRANT
+                || !(event.getEntity() instanceof ServerPlayer earner)
                 || !holder.id().getNamespace().equals(Wayfarers.MODID) || holder.id().getPath().equals("root")) {
             return;
         }
         MinecraftServer server = earner.level().getServer();
-        if (!WayfarersData.get(server).markQuest(holder.id())) {
+        if (!WayfarersData.get(server).markCriterion(holder.id(), event.getCriterionName())) {
             return;
         }
+        boolean completed = event.getAdvancementProgress().isDone();
         sharing = true;
         try {
             for (ServerPlayer other : server.getPlayerList().getPlayers()) {
-                if (other != earner && grant(other, holder)) {
+                if (other == earner) {
+                    continue;
+                }
+                boolean wasDone = other.getAdvancements().getOrStartProgress(holder).isDone();
+                other.getAdvancements().award(holder, event.getCriterionName());
+                if (completed && !wasDone && other.getAdvancements().getOrStartProgress(holder).isDone()) {
                     other.sendSystemMessage(Component.translatable("message.wayfarers.shared", earner.getDisplayName(),
                             holder.value().display().map(d -> d.getTitle()).orElse(Component.literal(holder.id().toString())))
                             .withStyle(ChatFormatting.DARK_AQUA));
@@ -51,14 +59,6 @@ public final class CoopEvents {
         }
     }
 
-    private static boolean grant(ServerPlayer player, AdvancementHolder holder) {
-        boolean any = false;
-        for (String criterion : holder.value().criteria().keySet()) {
-            any |= player.getAdvancements().award(holder, criterion);
-        }
-        return any;
-    }
-
     private static void onLogin(PlayerEvent.PlayerLoggedInEvent event) {
         if (!(event.getEntity() instanceof ServerPlayer player)) {
             return;
@@ -67,10 +67,14 @@ public final class CoopEvents {
         WayfarersData data = WayfarersData.get(server);
         sharing = true;
         try {
-            for (String id : data.quests()) {
-                AdvancementHolder holder = server.getAdvancements().get(Identifier.parse(id));
+            for (String entry : data.quests()) {
+                int hash = entry.indexOf('#');
+                if (hash < 0) {
+                    continue;
+                }
+                AdvancementHolder holder = server.getAdvancements().get(Identifier.parse(entry.substring(0, hash)));
                 if (holder != null) {
-                    grant(player, holder);
+                    player.getAdvancements().award(holder, entry.substring(hash + 1));
                 }
             }
         } finally {

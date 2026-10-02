@@ -30,7 +30,10 @@ def item_definition(item_id, model):
 def block_models(bid, kind):
     t = f"{NS}:block/"
     if kind == "cube":
-        write(f"models/block/{bid}.json", {"parent": "minecraft:block/cube_all", "textures": {"all": t + bid}})
+        model = {"parent": "minecraft:block/cube_all", "textures": {"all": t + bid}}
+        if bid == "sealed_bars":
+            model["render_type"] = "minecraft:cutout"
+        write(f"models/block/{bid}.json", model)
     elif kind == "column":
         write(f"models/block/{bid}.json", {"parent": "minecraft:block/cube_column",
                                            "textures": {"end": t + bid + "_top", "side": t + bid + "_side"}})
