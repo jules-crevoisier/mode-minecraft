@@ -36,8 +36,10 @@ and say "wow" from a distance. These rules are mandatory.
 
   Mix them with vanilla blocks: deepslate, tuff bricks, calcite, copper, dark oak, mud bricks,
   blackstone, purpur, prismarine, quartz…
-- Note: templates are stored as 1.20.1, so only vanilla blocks that existed in 1.20.1 are allowed
-  (no tuff bricks, chiseled copper, crafter, pale oak, resin…). `validate.py` enforces it.
+- Templates are stored with the 26.2 data version: every modern vanilla block is allowed (tuff
+  bricks, polished tuff, chiseled copper, copper bulbs/grates, pale oak, resin bricks, mud bricks,
+  cherry, bamboo mosaic…). Use 26.x names (`iron_chain`, `short_grass`). `validate.py` checks
+  every id/state against 26.1 data.
 - Lighting everywhere (lanterns on chains, rune lamps, ember lamps, candles, end rods,
   sea lanterns) — dark corners only where monsters should lurk.
 

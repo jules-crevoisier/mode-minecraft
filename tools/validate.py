@@ -19,7 +19,7 @@ ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 RES = os.path.join(ROOT, "src", "main", "resources")
 DATA = os.path.join(RES, "data")
 ASSETS = os.path.join(RES, "assets")
-MC_TEMPLATE = json.load(open(os.path.join(ROOT, "tools", "data", "mc_1.20.json")))
+MC_TEMPLATE = json.load(open(os.path.join(ROOT, "tools", "data", "mc_26.1.json")))
 MC_GAME = json.load(open(os.path.join(ROOT, "tools", "data", "mc_26.1.json")))
 VANILLA_BIOME_TAGS = {
     "is_overworld", "is_nether", "is_end", "is_ocean", "is_deep_ocean", "is_beach", "is_river", "is_mountain",
@@ -68,6 +68,15 @@ def check_templates():
             if ns == "wayfarers":
                 if mod_blocks and name not in mod_blocks:
                     err(f"{rel}: unknown mod block {entry['Name']}")
+                analog = ("stone_brick_stairs" if name.endswith("_stairs") else "stone_brick_slab"
+                          if name.endswith("_slab") else "stone_brick_wall" if name.endswith("_wall") else None)
+                if name in ("grave", "guild_terminal"):
+                    analog = "furnace"
+                states = MC_TEMPLATE["blocks"].get(analog, {}) if analog else {}
+                for k, v in props.items():
+                    if k not in states or (k != "facing" and v not in states[k]) or \
+                            (k == "facing" and v not in ("north", "south", "east", "west")):
+                        err(f"{rel}: {name}[{k}={v}] invalid")
                 continue
             states = MC_TEMPLATE["blocks"].get(name)
             if states is None:

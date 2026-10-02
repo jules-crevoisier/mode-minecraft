@@ -10,7 +10,13 @@ import com.wayfarers.entity.VoidStalker;
 import com.wayfarers.entity.VoidWarden;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.SpawnPlacementTypes;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
+import net.minecraftforge.event.entity.SpawnPlacementRegisterEvent;
+
+import java.util.List;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -47,6 +53,18 @@ public final class ModEntities {
         event.put(VOID_STALKER.get(), VoidStalker.attributes().build());
         event.put(DROWNED_WARDEN.get(), DrownedWarden.attributes().build());
         event.put(VOID_WARDEN.get(), VoidWarden.attributes().build());
+    }
+
+    /** Natural/structure spawning rules: on the ground, in the dark, like vanilla monsters. */
+    public static void registerSpawnPlacements(SpawnPlacementRegisterEvent event) {
+        for (EntityType<? extends Monster> type : List.of(RUIN_WALKER.get(), MAP_WRAITH.get(), BASALT_GUARD.get(), VOID_STALKER.get())) {
+            register(event, type);
+        }
+    }
+
+    private static <T extends Monster> void register(SpawnPlacementRegisterEvent event, EntityType<T> type) {
+        event.register(type, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                Monster::checkMonsterSpawnRules, SpawnPlacementRegisterEvent.Operation.REPLACE);
     }
 
     private ModEntities() {}

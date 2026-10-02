@@ -2,7 +2,9 @@ package com.wayfarers;
 
 import com.mojang.logging.LogUtils;
 import com.wayfarers.command.WayfarersCommand;
+import com.wayfarers.config.WayfarersConfig;
 import com.wayfarers.event.CoopEvents;
+import com.wayfarers.event.DangerEvents;
 import com.wayfarers.event.EquipmentEvents;
 import com.wayfarers.event.GraveEvents;
 import com.wayfarers.generated.ModDecor;
@@ -16,6 +18,8 @@ import net.minecraft.resources.Identifier;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
+import net.minecraftforge.event.entity.SpawnPlacementRegisterEvent;
+import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.eventbus.api.bus.BusGroup;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -50,6 +54,9 @@ public final class Wayfarers {
         CoopEvents.register();
         GraveEvents.register();
         EquipmentEvents.register();
+        DangerEvents.register();
+        SpawnPlacementRegisterEvent.BUS.addListener(ModEntities::registerSpawnPlacements);
+        context.registerConfig(ModConfig.Type.COMMON, WayfarersConfig.SPEC);
 
         if (FMLEnvironment.dist == Dist.CLIENT) {
             com.wayfarers.client.WayfarersClient.init(modBus);

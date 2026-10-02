@@ -11,9 +11,9 @@ import random
 
 from . import nbt
 
-# Structure templates are stored with the 1.20.1 data version; the game runs
-# them through DataFixerUpper on load, so they upgrade cleanly to newer versions.
-DATA_VERSION = 3465
+# Structure templates are stored with the 26.2 data version (4903) so modern blocks
+# (tuff bricks, copper, pale oak, resin...) are available; names follow 26.x.
+DATA_VERSION = 4903
 
 DIRS = {
     "north": (0, 0, -1),
@@ -348,7 +348,7 @@ class Blueprint:
 
     def chain(self, x, y0, z, y1):
         for y in range(y0, y1 + 1):
-            self.set(x, y, z, with_props("chain", axis="y", waterlogged=False))
+            self.set(x, y, z, with_props("iron_chain", axis="y", waterlogged=False))
 
     def stairs(self, x, y, z, spec, facing, half="bottom"):
         self.set(x, y, z, with_props(spec, facing=facing, half=half, shape="straight", waterlogged=False))

@@ -1,6 +1,10 @@
 package com.wayfarers.block;
 
+import com.wayfarers.Wayfarers;
 import com.wayfarers.entity.BossZombie;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import com.wayfarers.registry.ModEntities;
 import com.wayfarers.registry.ModItems;
 import net.minecraft.ChatFormatting;
@@ -70,6 +74,16 @@ public class AltarBlock extends Block {
         entity.snapTo(pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 3.5, 180.0F, 0.0F);
         entity.finalizeSpawn(serverLevel, serverLevel.getCurrentDifficultyAt(pos), EntitySpawnReason.TRIGGERED, null);
         entity.setTarget(player);
+        // co-op scaling: +60% health per extra player in the arena
+        int players = serverLevel.getEntitiesOfClass(Player.class, new AABB(pos).inflate(48), p -> !p.isSpectator()).size();
+        if (players > 1) {
+            AttributeInstance health = entity.getAttribute(Attributes.MAX_HEALTH);
+            if (health != null) {
+                health.addPermanentModifier(new AttributeModifier(Wayfarers.id("coop_health"), 0.6 * (players - 1),
+                        AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+                entity.setHealth(entity.getMaxHealth());
+            }
+        }
         serverLevel.addFreshEntity(entity);
         if (!player.getAbilities().instabuild) {
             stack.shrink(1);
