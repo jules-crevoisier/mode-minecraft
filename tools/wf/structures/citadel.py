@@ -345,38 +345,38 @@ def arena(bp):
             elif d <= R + 2.0:
                 for y in range(0, DRUM + 1):
                     bp.set(x, y, z, HULL.pick(x, y, z) if d > R + 1.0 or y in (0, 1, DRUM) else HULL.pick(x, y, z))
-    # dome (springs at DRUM) with ribs, glass panels and an oculus
-    Rd = R + 0.5
-    for x in range(ax - R - 3, ax + R + 4):
-        for z in range(az - R - 3, az + R + 4):
-            for y in range(DRUM + 1, DRUM + R + 4):
-                d = math.sqrt((x - ax) ** 2 + (y - DRUM) ** 2 + (z - az) ** 2)
-                if d <= Rd:
+    # pointed (ogival) dome springing from the drum: 16 ribs, a glass belt, a ring of sea
+    # lanterns and a glazed oculus under the lantern
+    Rd, T = R + 0.5, 2.6
+    rise_in = pointed(0, Rd)
+    for x in range(ax - R - 4, ax + R + 5):
+        for z in range(az - R - 4, az + R + 5):
+            rho = math.hypot(x - ax, z - az)
+            hin, hout = pointed(rho, Rd), pointed(rho, Rd + T)
+            if hout is None:
+                continue
+            ang = math.atan2(z - az, x - ax) % (math.pi / 8)
+            rib = min(ang, math.pi / 8 - ang) * max(rho, 1) < 0.95
+            for y in range(DRUM + 1, DRUM + int(hout) + 1):
+                dy = y - DRUM
+                if hin is not None and dy <= hin:
                     bp.set(x, y, z, "air")
-                elif d <= Rd + 1.5:
-                    ang = math.degrees(math.atan2(z - az, x - ax)) % 360
-                    elev = math.degrees(math.asin(min(1.0, (y - DRUM) / d)))
-                    rib = min(ang % 22.5, 22.5 - ang % 22.5) < 2.6 * (1 + elev / 60)
-                    if elev > 76:
-                        b = GLASS if elev > 82 else TRIM
-                    elif elev < 7:
-                        b = LB
-                    elif rib:
-                        b = TRIM
-                    elif 50 <= elev < 56:
-                        b = SEA if d > Rd + 0.9 else TRIM
-                    elif 10 < elev < 48:
-                        b = GLASS
-                    else:
-                        b = "prismarine_bricks"
-                    bp.set(x, y, z, b)
-    # outer skin of the dome: stairs along the ribs for a crisp silhouette, lantern on top
-    top = DRUM + R + 2
-    for x in range(ax - 3, ax + 4):
-        for z in range(az - 3, az + 4):
-            d = math.hypot(x - ax, z - az)
-            if d <= 3.4:
-                bp.set(x, top, z, TRIM if d > 2.4 else GLASS)
+                    continue
+                f = dy / rise_in
+                if rho < 2.3:
+                    b = GLASS
+                elif f < 0.1:
+                    b = LB
+                elif rib:
+                    b = TRIM
+                elif 0.66 <= f < 0.72:
+                    b = SEA
+                elif 0.12 < f < 0.62:
+                    b = GLASS
+                else:
+                    b = "prismarine_bricks"
+                bp.set(x, y, z, b)
+    top = DRUM + int(pointed(0, Rd + T))
     for k in range(8):
         a = math.radians(k * 45 + 22.5)
         x, z = ax + round(math.cos(a) * 3.2), az + round(math.sin(a) * 3.2)
