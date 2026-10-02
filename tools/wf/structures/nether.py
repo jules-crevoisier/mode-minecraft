@@ -42,7 +42,7 @@ def basalt_fortress(bp):
     bp.fill(g - 3, 7, S, g + 3, 10, S + 1, "polished_blackstone_bricks")
     bp.set(g, 8, S + 1, "gilded_blackstone")
     for x in range(g - 2, g + 3):
-        bp.set(x, 6, S, "chain[axis=y,waterlogged=false]")
+        bp.set(x, 6, S, "iron_chain[axis=y,waterlogged=false]")
     # keep in the centre
     k0, k1 = 7, S - 7
     bp.room(k0, 0, k0, k1, 14, k1, "nether_bricks", floor="polished_blackstone", ceiling="nether_bricks")
@@ -114,10 +114,10 @@ def chain_bridge(bp):
         # suspension chains up to the main cables
         cable = by + 10 - round(9 * math.sin(math.pi * (z - 3) / (L - 6)))
         for x in (-2, 2):
-            bp.set(x, cable, z, "chain[axis=z,waterlogged=false]")
+            bp.set(x, cable, z, "iron_chain[axis=z,waterlogged=false]")
             if z % 3 == 0:
                 for yy in range(y + 2, cable):
-                    bp.set(x, yy, z, "chain[axis=y,waterlogged=false]")
+                    bp.set(x, yy, z, "iron_chain[axis=y,waterlogged=false]")
         if z % 9 == 0:
             bp.lantern(2, y + 2, z)
     mid = L // 2
