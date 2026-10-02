@@ -1480,17 +1480,22 @@ def _keel(z):
     return 0.0
 
 
-def sail(m, x0, x1, y0, y1, z, rng, billow=2.0, tatter=0.12, wool="magenta_wool"):
-    """Billowing sail hanging under a yard: bulges toward +z, ragged lower edge, holes."""
+def sail(m, x0, x1, y0, y1, z, billow=2.0, torn=0, holes=()):
+    """A continuous two-layer sail hanging under a yard at y1 + 1: billows toward +z, magenta with
+    purple vertical stripes. `torn` cuts the lower corners diagonally; `holes` are clean (x, y)
+    2x2 rips."""
+    rip = {(hx + dx, hy + dy) for hx, hy in holes for dx in (0, 1) for dy in (0, 1)}
     for x in range(x0, x1 + 1):
-        ragged = y0 + (rng.randint(0, 3) if rng.random() < 0.5 else 0)
-        for y in range(ragged, y1 + 1):
-            u = (x - x0) / max(1, x1 - x0)
-            v = (y - y0) / max(1, y1 - y0)
-            dz = round(billow * math.sin(math.pi * u) * math.sin(math.pi * (0.25 + 0.75 * v)))
-            if rng.random() < tatter:
+        u = (x - x0) / max(1, x1 - x0)
+        cut = max(0, torn - min(x - x0, x1 - x))
+        for y in range(y0 + cut, y1 + 1):
+            if (x, y) in rip:
                 continue
-            m.set(x, y, z + dz, wool if rng.random() > 0.08 else "purple_wool")
+            v = (y - y0) / max(1, y1 - y0)
+            dz = round(billow * math.sin(math.pi * u) ** 0.7 * math.sin(math.pi * (0.2 + 0.8 * v)) ** 0.6)
+            wool = "purple_wool" if (x - x0) % 4 == 2 else "magenta_wool"
+            m.set(x, y, z + dz, wool)
+            m.set(x, y, z + dz + 1, wool)
 
 
 def ship_model(rng):
@@ -1509,9 +1514,9 @@ def ship_model(rng):
                     for dx, dy, dz in ((1, 0, 0), (-1, 0, 0), (0, -1, 0), (0, 0, 1), (0, 0, -1)))
         if y == DECK:
             edge = (x + 1, y, z) not in inside or (x - 1, y, z) not in inside
-            m.set(x, y, z, VB if edge else ("purpur_pillar[axis=z]" if x % 3 else PUR))
-        elif shell:
-            m.set(x, y, z, VB if y <= 3 else "purpur_pillar[axis=z]" if y == 4 else PUR)
+            m.set(x, y, z, VB if edge else "purpur_pillar[axis=z]")
+        elif shell:  # plank bands: void-brick bottom, purpur strake, purpur sides, dark wale
+            m.set(x, y, z, VB if y <= 3 or y == DECK - 1 else "purpur_pillar[axis=z]" if y == 4 else PUR)
         else:
             m.set(x, y, z, "air")
         if y == 3 and not shell:
@@ -1527,7 +1532,11 @@ def ship_model(rng):
             if z % 6 == 3:
                 m.set(x, DECK + 3, z, ROD_UP)
             if z % 4 == 1 and 4 < z < 50:
-                m.set(x, 6, z, "magenta_stained_glass" if z % 8 == 1 else STAR)
+                m.set(x, 6, z, STAR if z % 8 == 5 else "magenta_stained_glass")
+        for x, f in ((min(row) - 1, "east"), (max(row) + 1, "west")):  # gunwale cap + rubbing strake
+            m.set(x, DECK + 1, z, stair(VB_ST, f, "top"))
+            if z > 2:
+                m.set(x, 4, z, stair(VB_ST, f, "top"))
     # stern castle (captain's cabin) z 0..11, poop deck at DECK + 5
     P = DECK + 5
     for z in range(0, 12):
@@ -1588,16 +1597,14 @@ def ship_model(rng):
     yard(26, 23, 10)
     yard(26, 32, 8)
     yard(26, 40, 5)
-    sail(m, -9, 9, 13, 22, 27, rng, 3.0, tatter=0.1)
-    sail(m, -7, 7, 25, 31, 27, rng, 2.0)
-    sail(m, -4, 4, 34, 39, 27, rng, 1.0)
+    sail(m, -9, 9, 13, 22, 27, 3.0, torn=2, holes=((-5, 15), (4, 18)))
+    sail(m, -7, 7, 25, 31, 27, 2.0, torn=1)
+    sail(m, -4, 4, 34, 39, 27, 1.0)
     m.set(0, 45, 26, STAR)
     m.set(0, 46, 26, ROD_UP)
-    for x in (-10, 10):  # stays from the main top down to the rails
-        m.line((0, 43, 26), (x // 10 * 6, DECK + 3, 20), "iron_chain[axis=y,waterlogged=false]")
     mast(8, P, P + 14)                        # mizzen, snapped
     yard(8, P + 9, 5)
-    sail(m, -4, 4, P + 3, P + 8, 9, rng, 1.5, tatter=0.3)
+    sail(m, -4, 4, P + 3, P + 8, 9, 1.5, torn=2, holes=((1, P + 4),))
     for y in range(P + 12, P + 15):
         if rng.random() < 0.5:
             m.set(0, y, 8, "air")
@@ -1605,7 +1612,7 @@ def ship_model(rng):
     m.set(0, 27, 40, "air")
     m.set(0, 26, 40, slab(PUR_SL))
     yard(40, 21, 8)
-    sail(m, -7, 7, 12, 20, 41, rng, 2.5, tatter=0.3)
+    sail(m, -7, 7, 12, 20, 41, 2.5, torn=3, holes=((-3, 15), (2, 13)))
     m.line((1, DECK + 1, 42), (-14, DECK - 4, 50), "purpur_pillar[axis=x]")
     for k in (-3, -2, -1, 1, 2, 3):  # its tangled yard and a draped sail
         m.set(-7 + k, DECK - 1, 46 + (k // 2), "purpur_pillar[axis=z]")
@@ -1691,7 +1698,7 @@ def ship_model(rng):
 def void_ship(bp):
     rng = random.Random(41)
     m = ship_model(rng)
-    roll, pitch = math.radians(13), math.radians(9)
+    roll, pitch = math.radians(6), math.radians(8)
     cr, sr, cp, sp = math.cos(roll), math.sin(roll), math.cos(pitch), math.sin(pitch)
     piv = (0.0, 4.0, 29.0)
 
@@ -1718,6 +1725,12 @@ def void_ship(bp):
                 b = m.blocks.get((round(lx), round(ly), round(lz)))
                 if b:
                     bp.blocks[(X, Y, Z)] = b
+    # forward pass: thin sheets (sails, rails) keep every block, no resampling holes
+    for (x, y, z), b in m.blocks.items():
+        if b[0] != "minecraft:air":
+            X, Y, Z = (round(c) for c in fwd(x, y, z))
+            if (X, Y, Z) not in bp.blocks:
+                bp.blocks[(X, Y, Z)] = b
 
     # --- the rock the ship ploughed into (it fills around the hull, never inside it)
     cols = merge_cols(rock_lobe(-3, 2, 31, 17, 15, 17, 401, spikes=9),
@@ -1759,39 +1772,39 @@ register(StructureDef(
 
 
 # ================================================================== Void Warden's nest (End mini-boss lair)
-def claw(bp, a, r0, h, reach, lean, base_r, pal, tip="crying_obsidian"):
-    """Colossal curved claw/rib rooted at angle a, radius r0: rises, bulges out, then hooks over
-    the arena. Tapering obsidian body with crying-obsidian veins and an end-rod tip."""
+def claw(bp, a, r0, h, reach, base_r, body="obsidian", vein="crying_obsidian"):
+    """Colossal curved claw rooted at angle a, radius r0: rises, bows outward, then hooks over the
+    arena. A smooth solid obsidian body tapering to a point, a continuous crying-obsidian vein along
+    its inner edge (studded with starlight) and an end-rod tip."""
+    n = int(h * 8)
+    ca, sa = math.cos(a), math.sin(a)
     pts = []
-    n = int(h * 6)
     for i in range(n + 1):
         t = i / n
-        r = r0 + 2.5 * math.sin(math.pi * t * 0.7) - reach * t ** 1.9
-        ang = a + lean * t
+        r = r0 + 2.0 * math.sin(math.pi * t * 0.7) - reach * t ** 1.9
         y = h * math.sin(t * math.pi / 2) ** 1.1
-        rr = base_r * (1 - t) ** 0.9 + 0.62
-        pts.append((math.cos(ang) * r, y, math.sin(ang) * r, rr, t))
+        rr = 0.75 + (base_r - 0.75) * (1 - t) ** 1.2
+        pts.append((ca * r, y, sa * r, rr, t))
     for (px, py, pz, rr, t) in pts:
         R = int(rr) + 1
         for x in range(round(px) - R, round(px) + R + 1):
             for y in range(round(py) - R, round(py) + R + 1):
                 for z in range(round(pz) - R, round(pz) + R + 1):
                     if (x - px) ** 2 + (y - py) ** 2 + (z - pz) ** 2 <= rr * rr:
-                        bp.set(x, y, z, tip if t > 0.9 else pal.pick(x, y, z))
+                        bp.set(x, y, z, body)
+    # the vein: the arena-facing surface line (the curve's inner side, i.e. toward the axis and down)
+    for i, (px, py, pz, rr, t) in enumerate(pts[:-1]):
+        nx, ny, nz = pts[i + 1][0] - px, pts[i + 1][1] - py, pts[i + 1][2] - pz
+        ln = math.sqrt(nx * nx + ny * ny + nz * nz) or 1
+        # inward normal: radial-in vector made perpendicular to the tangent
+        ix, iy, iz = -ca, 0.0, -sa
+        dot = (ix * nx + iy * ny + iz * nz) / ln
+        ix, iy, iz = ix - dot * nx / ln, iy - dot * ny / ln, iz - dot * nz / ln
+        il = math.sqrt(ix * ix + iy * iy + iz * iz) or 1
+        q = (round(px + ix / il * (rr - 0.3)), round(py + iy / il * (rr - 0.3)), round(pz + iz / il * (rr - 0.3)))
+        bp.set(*q, STAR if t > 0.1 and i % 40 == 20 else vein)
     px, py, pz, _, _ = pts[-1]
     bp.set(round(px), round(py) - 1, round(pz), ROD_DOWN)
-    # glowing veins: starlight studs on the inner (arena-facing) side
-    for i in range(int(0.08 * n), int(0.85 * n), max(1, n // 9)):
-        px, py, pz, rr, t = pts[i]
-        d = math.hypot(px, pz) or 1
-        bp.set(round(px - px / d * rr * 0.9), round(py), round(pz - pz / d * rr * 0.9), STAR)
-    # knuckle spurs along the outer (convex) side
-    for t0 in (0.3, 0.55):
-        px, py, pz, rr, _ = pts[int(t0 * n)]
-        dx, dz = math.cos(a + lean * t0), math.sin(a + lean * t0)
-        for k in range(1, 4):
-            bp.set(round(px + dx * (rr + k)), round(py + k * 0.7), round(pz + dz * (rr + k)),
-                   "crying_obsidian" if k == 3 else "obsidian")
     return pts
 
 
@@ -1801,9 +1814,6 @@ def void_nest(bp):
     # --- rocks: the lair rock (dark, heavy) and the approach islet to the south
     main = rock_lobe(0, -1, 0, 27, 26, 28, 501, spikes=11)
     build_rock(bp, main, 502, deco=1.3)
-    for (x, z), (b, t) in main.items():  # obsidian crust on the rock top around the arena
-        if math.hypot(x, z) > AR + 1.5 and rng.random() < 0.45:
-            bp.set(x, t, z, "obsidian" if rng.random() < 0.8 else "crying_obsidian")
     app = rock(bp, 0, -2, 41, 7, 6, 12, 503, spikes=3, deco=1.2)
 
     # --- arena floor: void bricks with purpur and end-stone rings, obsidian spokes, starlight studs
@@ -1825,7 +1835,7 @@ def void_nest(bp):
         d = math.hypot(x, z)
         if AR + 0.4 < d:
             bp.set(x, 0, z, VB)
-            bp.set(x, 1, z, ESB if d < AR + 3.5 else "obsidian")
+            bp.set(x, 1, z, ESB if d < AR + 3.5 else VB if d < AR + 5.5 else "obsidian")
     for (x, z) in ring_pts(0, 0, AR + 1):
         bp.set(x, 1, z, stair(VB_ST, OPPOSITE[face_in(x, z, 0, 0)]))
 
@@ -1849,16 +1859,15 @@ def void_nest(bp):
     bp.set(0, 26, 0, ROD_DOWN)
 
     # --- the ring of colossal claws (taller behind the altar, in the north)
-    pal = Palette({"obsidian": 6, VB: 2, "crying_obsidian": 1}, seed=5, scale=2.2)
     n = 10
     for k in range(n):
         a = 2 * math.pi * k / n
         north = max(0.0, -math.sin(a))
-        h = 24 + 12 * north + rng.uniform(-2, 2)
-        claw(bp, a, AR + 5, h, 15 + 3 * north, 0.28, 1.9 + 0.5 * north, pal)
-        for (x, z) in ring_pts(round(math.cos(a) * (AR + 5)), round(math.sin(a) * (AR + 5)), 3.6, 2.4):
+        claw(bp, a, AR + 5, 26 + 10 * north, 15 + 2 * north, 2.2 + 0.4 * north)
+        cx, cz = round(math.cos(a) * (AR + 5)), round(math.sin(a) * (AR + 5))
+        for (x, z) in ring_pts(cx, cz, 4):  # a clean sloped collar where each claw grips the rock
             if math.hypot(x, z) > AR + 1.5:
-                bp.set(x, 1, z, "crying_obsidian" if rng.random() < 0.3 else "obsidian")
+                bp.set(x, 2, z, stair(VB_ST, face_in(x, z, cx, cz)))
     # starlight braziers between the claws
     for k in range(n):
         a = 2 * math.pi * (k + 0.5) / n

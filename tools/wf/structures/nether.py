@@ -1311,36 +1311,32 @@ def pipe(bp, pts, bulbs=6):
 
 
 def chimney(bp, cx, cz, h, seed=0):
-    """Tall square brick chimney: plinth, banded shaft with copper ties, corbelled crown, smoke."""
-    fill_pal(bp, cx - 3, -1, cz - 3, cx + 3, 3, cz + 3, NBRICK)
-    for x in range(cx - 3, cx + 4):
-        for z in range(cz - 3, cz + 4):
-            if max(abs(x - cx), abs(z - cz)) == 3:
+    """Tall round brick chimney tapering from r=3 to r=2: plinth, banded shaft with copper ties
+    and glowing bulbs, corbelled crown, smoke."""
+    fill_pal(bp, cx - 4, -1, cz - 4, cx + 4, 3, cz + 4, NBRICK)
+    for x in range(cx - 4, cx + 5):
+        for z in range(cz - 4, cz + 5):
+            if max(abs(x - cx), abs(z - cz)) == 4:
                 bp.set(x, 4, z, stair("nether_brick_stairs", toward(cx, cz, x, z)))
+    step = int(h * 0.55)
     for y in range(4, h + 1):
-        for x in range(cx - 2, cx + 3):
-            for z in range(cz - 2, cz + 3):
-                edge = max(abs(x - cx), abs(z - cz)) == 2
-                if edge:
-                    band = y % 7 == 0
-                    bp.set(x, y, z, "nether_bricks" if band else CLAY.pick(x, y, z))
-                else:
-                    bp.set(x, y, z, "air")
+        r = 3 if y < step else 2
+        bp.disk(cx, y, cz, r - 1, "air")
+        for (x, z) in ring_cells(cx, cz, r, inner=0.8):
+            bp.set(x, y, z, "nether_bricks" if y % 7 == 0 else CLAY.pick(x, y, z))
         if y % 7 == 3:
-            for x in range(cx - 3, cx + 4):
-                for z in range(cz - 3, cz + 4):
-                    if max(abs(x - cx), abs(z - cz)) == 3 and (x == cx or z == cz):
-                        bp.set(x, y, z, BULB if y % 14 == 3 else CU)
-    for x in range(cx - 3, cx + 4):
-        for z in range(cz - 3, cz + 4):
-            if max(abs(x - cx), abs(z - cz)) == 3:
-                bp.set(x, h - 1, z, stair("brick_stairs", toward(cx, cz, x, z), "top"))
-                bp.set(x, h, z, "nether_bricks")
-                bp.set(x, h + 1, z, "nether_brick_fence" if (x + z) % 2 else "nether_bricks")
+            for (x, z) in ring_cells(cx, cz, r + 1):
+                if x == cx or z == cz:
+                    bp.set(x, y, z, BULB if y % 14 == 3 else CU)
+    for (x, z) in ring_cells(cx, cz, 3):
+        bp.set(x, step, z, stair("brick_stairs", toward(cx, cz, x, z)))
+    for (x, z) in ring_cells(cx, cz, 3):
+        bp.set(x, h - 1, z, stair("brick_stairs", toward(cx, cz, x, z), "top"))
+        bp.set(x, h, z, "nether_bricks")
+        bp.set(x, h + 1, z, "nether_brick_fence" if (x + z) % 2 else "nether_bricks")
     bp.set(cx, h - 1, cz, "magma_block")
     for dx, dz in ((0, 0), (1, 0), (0, 1), (-1, 0), (0, -1)):
         bp.set(cx + dx, h, cz + dz, "campfire[facing=north,lit=true,signal_fire=true,waterlogged=false]")
-    bp.set(cx, h - 2, cz, LAMP)
 
 
 def crucible(bp, cx, y, cz, pour=None):
@@ -1412,22 +1408,21 @@ def lava_foundry(bp):
                     plinth=PBB, plinth_stairs=PBBS, cornice_stairs="nether_brick_stairs",
                     glass="orange_stained_glass_pane", sill="nether_brick_stairs")
     fill_pal(bp, x0 + 1, 0, z0 + 1, x1 - 1, 0, z1 - 1, FLOOR)
-    # sawtooth copper roof: teeth rise towards +x, glazed vertical faces
+    # sawtooth copper roof: glazed vertical faces look west, copper slopes fall towards +x
     for a in range(x0, x1, 8):
         for i in range(8):
             x = a + i
             if x > x1:
                 break
-            y = H + 1 + min(i, 6)
             for z in range(z0 - 1, z1 + 2):
-                if i < 7:
-                    bp.set(x, y, z, stair(CUS, "east"))
-                else:
+                if i == 0:
                     for yy in range(H + 1, H + 8):
                         bp.set(x, yy, z, "orange_stained_glass" if z0 < z < z1 else CU)
                     bp.set(x, H + 8, z, slab(CUSL))
+                else:
+                    bp.set(x, H + 8 - i, z, stair(CUS, "west"))
             for z in (z0, z1):
-                for yy in range(H + 1, y):
+                for yy in range(H + 1, H + 8 - i):
                     bp.set(x, yy, z, NBRICK.pick(x, yy, z))
     # gantry beam + crucibles over the casting channel
     for x in range(x0 + 1, x1):
@@ -1441,13 +1436,33 @@ def lava_foundry(bp):
         bp.set(x, 1, 1, PBBW if x % 4 else LAMP)
         if x % 3 == 0:
             bp.set(x, 0, 2, "iron_block" if x % 6 else "gold_block")
+    # slag chute: the channel leaves the hall and pours off the deck into the lava sea
+    for x in range(-31, x0 + 1):
+        bp.set(x, 0, 0, "lava[level=0]")
+        bp.set(x, -1, 0, "magma_block")
+        for y in (1, 2):
+            bp.set(x, y, 0, "air")
+        if x < x0:
+            bp.set(x, 1, -1, PBBW if x % 3 else LAMP)
+            bp.set(x, 1, 1, PBBW if x % 3 else LAMP)
+            bp.set(x, 0, -1, "nether_bricks")
+            bp.set(x, 0, 1, "nether_bricks")
+    bp.set(-31, -1, 0, "nether_bricks")
+    bp.set(-31, 0, -1, "nether_bricks")
+    bp.set(-31, 0, 1, "nether_bricks")
+    bp.set(-31, 1, 0, "air")
+    lavafall(bp, -32, 0, 0, LF_SEA)
+    bp.set(-32, 0, -1, "nether_bricks")
+    bp.set(-32, 0, 1, "nether_bricks")
+    bp.set(-32, -1, -1, stair(PBBS, "south", "top"))
+    bp.set(-32, -1, 1, stair(PBBS, "north", "top"))
     crucible(bp, -16, 6, -3, pour="south")
     crucible(bp, -4, 7, -3)
     # smelting line along the north wall
     for x in range(x0 + 2, x1 - 1, 2):
         bp.set(x, 1, z0 + 1, "blast_furnace[facing=south,lit=true]")
         bp.set(x, 2, z0 + 1, "hopper[enabled=true,facing=down]")
-        bp.set(x + 1, 1, z0 + 1, "lava_cauldron" if x % 4 else "smoker[facing=south,lit=true]")
+        bp.set(x + 1, 1, z0 + 1, "magma_block" if x % 4 else "smoker[facing=south,lit=true]")
     pipe(bp, [(x0 + 2, 4, z0 + 1), (x1 - 2, 4, z0 + 1)], bulbs=4)
     # anvils and work tables along the south wall
     for x in range(x0 + 3, x1 - 2, 5):
@@ -1461,7 +1476,13 @@ def lava_foundry(bp):
         bp.lantern(x, 12, 6, hanging=True)
         bp.chain(x, 13, 6, 14)
     # big doors
-    arch.arch_door(bp, "south", z1, -10, 0, width=5, height=7, trim=PBAS, stairs=PBBS)
+    arch.arch_door(bp, "south", z1, -2, 0, width=5, height=7, trim=PBAS, stairs=PBBS)
+    # ore-cart rails from the dock into the hall
+    for z in range(3, 35):
+        bp.set(-2, 1, z, "rail[shape=north_south,waterlogged=false]")
+        bp.set(-2, 0, z, "nether_bricks")
+    bp.entity(-2, 1, 24, {"id": "minecraft:chest_minecart", "LootTable": LOOT + "lava_foundry"})
+    bp.entity(-2, 1, 9, {"id": "minecraft:minecart"})
     arch.arch_door(bp, "east", x1, 0, 0, width=3, height=5, trim=PBAS, stairs=PBBS)
     # ---------------- blast-furnace tower
     tx, tz = 16, -8
@@ -1504,7 +1525,8 @@ def lava_foundry(bp):
         for (dx, dz) in ((-1, -1), (1, -1), (-1, 1), (1, 1)):
             bp.set(mx + dx, y, mz + dz, PBAS)
     bp.fill(mx - 2, 26, mz - 1, mx + 6, 27, mz + 1, PBB)
-    bp.fill(mx + 4, 23, mz - 1, mx + 6, 25, mz + 1, "iron_block")
+    fill_pal(bp, mx + 4, 23, mz - 1, mx + 6, 25, mz + 1, BLACK)
+    bp.fill(mx + 4, 24, mz - 1, mx + 6, 24, mz + 1, GILD)
     for x in range(mx - 2, mx - 25, -1):
         bp.set(x, 27, mz, PBB)
         bp.set(x, 26, mz, PBBW if x % 3 else "nether_bricks")
@@ -1528,6 +1550,32 @@ def lava_foundry(bp):
     bp.set(2, -5, 29, "gold_block")
     bp.lantern(0, -2, 28, hanging=True)
     bp.set(0, -7, 27, LAMP)
+    # foreman's office / ingot store on the east deck, under a copper gable
+    ox0, ox1, oz0, oz1 = 12, 22, 3, 12
+    bp.clear(ox0 + 1, 1, oz0 + 1, ox1 - 1, 9, oz1 - 1)
+    for face, line, u0, u1 in (("south", oz1, ox0, ox1), ("north", oz0, ox0, ox1), ("east", ox1, oz0, oz1),
+                               ("west", ox0, oz0, oz1)):
+        arch.facade(bp, face, line, u0, u1, 0, 9, NBRICK, PBAS, pilaster_every=5, window_h=2, window_y=2,
+                    floors=[0, 5], floor_band="nether_bricks", plinth=PBB, plinth_stairs=PBBS,
+                    cornice_stairs="nether_brick_stairs", glass="orange_stained_glass_pane",
+                    sill="nether_brick_stairs")
+    fill_pal(bp, ox0 + 1, 0, oz0 + 1, ox1 - 1, 0, oz1 - 1, FLOOR)
+    bp.fill(ox0 + 1, 5, oz0 + 1, ox1 - 1, 5, oz1 - 1, "spruce_planks")
+    arch.steep_roof(bp, ox0, oz0, ox1, oz1, 10, CUS, axis="x", overhang=1, steep=1, fill="nether_bricks",
+                    under="nether_brick_stairs", ridge=slab(CUSL), dormers=1, dormer_stairs=CUS,
+                    dormer_wall="nether_bricks")
+    arch.arch_door(bp, "south", oz1, 17, 0, width=1, height=3, trim=PBAS, stairs=PBBS)
+    bp.door(17, 1, oz1, "south", "crimson")
+    arch.stair_run(bp, ox1 - 1, 1, oz1 - 1, "north", 4, 1, "spruce_stairs", clear=3)
+    for x in range(ox0 + 1, ox1 - 1, 2):
+        bp.set(x, 1, oz0 + 1, "iron_block" if x % 4 == 1 else "gold_block")
+        bp.barrel(x + 1, 1, oz0 + 1, "up")
+    bp.set(ox0 + 2, 6, oz0 + 2, "cartography_table")
+    bp.set(ox0 + 3, 6, oz0 + 2, "lectern[facing=south,has_book=false,powered=false]")
+    bp.bed(ox0 + 2, 6, oz1 - 3, "south", "red")
+    bp.chest(ox0 + 4, 6, oz1 - 1, "north", LOOT + "lava_foundry")
+    bp.lantern(17, 4, 7, hanging=True)
+    bp.lantern(17, 9, 7, hanging=True)
     # ore yard on the east platform
     for (x, z) in ((27, -12), (28, -10), (26, -6), (28, -3)):
         bp.set(x, 1, z, "nether_gold_ore")

@@ -1874,3 +1874,343 @@ register(StructureDef(
     [Piece("library", library)], spacing=34, separation=12,
     spawns=[("wayfarers:map_wraith", 10, 1, 2)],
     title_fr="Bibliothèque oubliée", title_en="Forgotten Library"))
+
+
+# ================================================================== COASTAL LIGHTHOUSE
+def lighthouse(bp):
+    rock = Palette({"stone": 5, "andesite": 3, "tuff": 2, "cobblestone": 1, "diorite": 1, "mossy_cobblestone": 1},
+                   seed=301, scale=3.5)
+    SB = Palette({"stone_bricks": 5, "cracked_stone_bricks": 1, "mossy_stone_bricks": 2, "andesite": 1}, seed=302)
+    WHITE = Palette({"calcite": 4, "polished_diorite": 1}, seed=303)
+    RED = Palette({"red_terracotta": 4, "bricks": 1}, seed=304)
+    CO = ("waxed_cut_copper", "waxed_cut_copper_stairs", "waxed_cut_copper_slab")
+    TOP = 10                                   # plateau height of the rocky cape
+    rng = random.Random(5)
+
+    # ---------------------------------------------------------- the sea, the beach and the rocky cape
+    for x in range(-30, 34):
+        for z in range(-18, 32):
+            sea = z > 4 - (x + 30) * 0.12 + math.sin(x * 0.3) * 1.5 or x < -20 + math.cos(z * 0.4) * 2
+            if sea:
+                depth = 3 + int(min(4, max(0, (z - 8) * 0.25)))
+                bp.set(x, -depth - 1, z, "sand" if (x + z) % 5 else "gravel")
+                for y in range(-depth, 0):
+                    bp.set(x, y, z, "water")
+                if rng.random() < 0.12:
+                    bp.set(x, -depth, z, "seagrass")
+                elif rng.random() < 0.03 and depth > 2:
+                    for k in range(depth - 1):
+                        bp.set(x, -depth + k, z, "kelp_plant" if k < depth - 2 else "kelp[age=20]")
+            else:
+                bp.set(x, 0, z, "sand" if x > 12 or z > -6 else "grass_block[snowy=false]")
+                bp.set(x, -1, z, "sand")
+    ccx, ccz, crx, crz = 0, -2, 20, 14
+    for x in range(ccx - crx - 3, ccx + crx + 4):
+        for z in range(ccz - crz - 3, ccz + crz + 4):
+            d = math.hypot((x - ccx) / crx, (z - ccz) / crz)
+            n = math.sin(x * 0.45) * 0.07 + math.cos(z * 0.5 + 1) * 0.07 + math.sin((x + z) * 0.9) * 0.04
+            dd = d + n
+            if dd > 1.0:
+                continue
+            fall = max(0.0, (dd - 0.62) / 0.38)
+            h = TOP - int(round((fall ** 1.6) * (TOP + 2)))
+            for y in range(-6, h + 1):
+                bp.set(x, y, z, rock.pick(x, y, z))
+            if h >= TOP - 1:
+                bp.set(x, h, z, "grass_block[snowy=false]" if (x * 7 + z) % 9 else "coarse_dirt")
+            elif h > 1 and rng.random() < 0.3:
+                bp.set(x, h, z, "moss_block")
+    # sea stacks and boulders
+    for (x, z, r, hh) in ((-24, 14, 3, 8), (-17, 22, 2, 4), (22, 22, 2, 3), (-26, -6, 2, 5)):
+        for y in range(-6, hh + 1):
+            t = (y + 6) / (hh + 6)
+            rr = r * (1.15 - 0.6 * t)
+            for dx in range(-r - 1, r + 2):
+                for dz in range(-r - 1, r + 2):
+                    if math.hypot(dx * 1.1, dz) <= rr + rng.uniform(-0.4, 0.4):
+                        bp.set(x + dx, y, z + dz, rock.pick(x + dx, y, z + dz))
+        bp.set(x, hh + 1, z, "moss_block")
+
+    # ---------------------------------------------------------- the lighthouse
+    LX, LZ = -4, -3
+    y0 = TOP
+    for x in range(LX - 9, LX + 10):
+        for z in range(LZ - 9, LZ + 10):
+            d = _dist(x - LX, z - LZ, "octagon")
+            if d <= 8.3:
+                for y in range(y0 - 3, y0 + 1):
+                    bp.set(x, y, z, SB.pick(x, y, z))
+            if 7.3 < d <= 8.3:
+                bp.set(x, y0 + 1, z, stp("stone_brick_stairs", _face_to(LX, LZ, x, z)))
+    SH0, SH1 = y0 + 9, y0 + 37          # shaft (tapered, banded)
+
+    def rad(y):
+        return 6.0 if y < SH0 else 5.4 - (y - SH0) * 1.6 / (SH1 - SH0)
+    for y in range(y0 + 1, SH1 + 1):
+        r = rad(y)
+        for x in range(LX - 7, LX + 8):
+            for z in range(LZ - 7, LZ + 8):
+                d = math.hypot(x - LX, z - LZ)
+                if d <= r + 0.4:
+                    if d > r - 0.9:
+                        if y < SH0:
+                            b = SB.pick(x, y, z)
+                        else:
+                            b = (RED if ((y - SH0) // 4) % 2 else WHITE).pick(x, y, z)
+                        bp.set(x, y, z, b)
+                    else:
+                        bp.set(x, y, z, "air")
+    for (x, z) in round_ring(LX, LZ, 7):
+        bp.set(x, SH0, z, stp("stone_brick_stairs", OPPOSITE[_face_to(LX, LZ, x, z)], "top"))
+    bp.disk(LX, y0, LZ, 5, "polished_andesite")
+    # central newel + spiral stair of slabs up to the watch room
+    for y in range(y0 + 1, SH1 - 3):
+        bp.set(LX, y, LZ, "stone_bricks")
+    ring = []
+    for x in range(LX - 2, LX + 3):
+        for z in range(LZ - 2, LZ + 3):
+            if max(abs(x - LX), abs(z - LZ)) == 2:
+                ring.append((x, z))
+    ring.sort(key=lambda p: math.atan2(p[1] - LZ, p[0] - LX))
+    i = 0
+    for y in range(y0 + 1, SH1 - 3):
+        for half in ("bottom", "top"):
+            x, z = ring[i % len(ring)]
+            bp.slab(x, y, z, "stone_brick_slab", half)
+            i += 1
+    for y in range(y0 + 4, SH1 - 3, 6):
+        bp.chain(LX + 1, y + 2, LZ + 1, y + 3) if False else None
+        bp.lantern(LX, y + 3, LZ + 1) if False else None
+        bp.set(LX + 1, y, LZ, "lantern[hanging=false,waterlogged=false]") if False else None
+    for k, y in enumerate(range(y0 + 5, SH1 - 3, 4)):
+        a = math.radians(k * 75 + 40)
+        r = rad(y)
+        x, z = LX + round(math.cos(a) * r), LZ + round(math.sin(a) * r)
+        bp.set(x, y, z, "glass_pane")
+        bp.set(x, y + 1, z, "glass_pane")
+        bp.set(LX + round(math.cos(a) * (r - 1)), y + 2, LZ + round(math.sin(a) * (r - 1)), "air") if False else None
+    for y in range(y0 + 3, SH1 - 3, 7):
+        bp.set(LX + 1, y, LZ, "wall_torch[facing=east]")
+    # entrance (south) with arch and steps
+    A.arch_door(bp, "south", LZ + 6, LX, y0, width=1, height=2, trim="chiseled_stone_bricks", stairs="stone_brick_stairs")
+    for dz in (5, 6):
+        bp.set(LX, y0 + 1, LZ + dz, "air")
+        bp.set(LX, y0 + 2, LZ + dz, "air")
+    bp.door(LX, y0 + 1, LZ + 6, "south", "spruce")
+    wall_lamp(bp, "south", LZ + 6, LX - 2, y0 + 3, "stone_brick_stairs")
+    wall_lamp(bp, "south", LZ + 6, LX + 2, y0 + 3, "stone_brick_stairs")
+    # watch room at the top of the shaft
+    WR = SH1 - 3
+    bp.disk(LX, WR, LZ, 3, "spruce_planks")
+    bp.ladder(LX, WR + 1, LZ - 3, SH1 + 1, "south")
+    bp.set(LX, WR, LZ - 3, "ladder[facing=south,waterlogged=false]")
+    bp.set(LX, WR - 1, LZ - 3, "ladder[facing=south,waterlogged=false]")
+    bp.set(LX - 1, WR - 1, LZ - 2, "air")
+    bp.chest(LX + 2, WR + 1, LZ, "west", LOOT + "lighthouse")
+    bp.set(LX - 2, WR + 1, LZ, "cartography_table")
+    bp.set(LX, WR + 1, LZ + 2, "spyglass" if False else "lectern[facing=north,has_book=false,powered=false]")
+    for (x, z) in ((LX, LZ + 4), (LX + 4, LZ), (LX - 4, LZ)):
+        bp.set(x, WR + 2, z, "glass_pane")
+        bp.set(x, WR + 3, z, "glass_pane")
+    # gallery on corbels, iron railing
+    G = SH1 + 1
+    for rr_ in (4, 5):
+        for (x, z) in round_ring(LX, LZ, rr_):
+            if math.hypot(x - LX, z - LZ) > rr_ - 0.5:
+                bp.set(x, SH1 - (5 - rr_), z, stp("polished_andesite_stairs", OPPOSITE[_face_to(LX, LZ, x, z)], "top"))
+    bp.disk(LX, G, LZ, 5, "polished_andesite")
+    bp.disk(LX, G + 1, LZ, 5, "iron_bars", hollow=True)
+    # lamp room: copper mullions, glass, a blazing core
+    for y in range(G + 1, G + 6):
+        for (x, z) in round_ring(LX, LZ, 3):
+            a = math.degrees(math.atan2(z - LZ, x - LX)) % 45
+            bp.set(x, y, z, "waxed_cut_copper" if (a < 8 or a > 37) else "glass_pane")
+    bp.disk(LX, G + 1, LZ, 2, "air")
+    for y in range(G + 2, G + 6):
+        bp.disk(LX, y, LZ, 2, "air")
+    bp.set(LX, G + 1, LZ, "sea_lantern")
+    bp.set(LX, G + 2, LZ, "glowstone")
+    bp.set(LX, G + 3, LZ, "sea_lantern")
+    for (dx, dz) in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+        bp.set(LX + dx, G + 2, LZ + dz, "sea_lantern")
+        bp.set(LX + dx, G + 3, LZ + dz, "end_rod[facing=%s]" % {(1, 0): "east", (-1, 0): "west", (0, 1): "south",
+                                                                 (0, -1): "north"}[(dx, dz)])
+    bp.set(LX, G + 4, LZ, "copper_bulb[lit=true,powered=false]")
+    bp.set(LX, G, LZ - 3, "ladder[facing=south,waterlogged=false]")
+    bp.set(LX, G + 1, LZ - 3, "air")
+    bp.set(LX, G + 2, LZ - 3, "air")
+    bp.disk(LX, G + 6, LZ, 3, CO[0])
+    for (x, z) in round_ring(LX, LZ, 4):
+        if math.hypot(x - LX, z - LZ) > 3.5:
+            bp.set(x, G + 6, z, stp(CO[1], OPPOSITE[_face_to(LX, LZ, x, z)], "top"))
+    A.dome(bp, LX, G + 6, LZ, 3, Palette({CO[0]: 3, "waxed_copper_block": 1}, seed=3), ribs=None, oculus=False)
+    bp.set(LX, G + 10, LZ, CO[0])
+    bp.set(LX, G + 11, LZ, "waxed_copper_grate")
+    bp.set(LX, G + 12, LZ, "lightning_rod[facing=up,powered=false,waterlogged=false]")
+
+    # ---------------------------------------------------------- keeper's cottage
+    kx0, kx1, kz0, kz1 = 7, 16, -11, -4
+    plaster = Palette({"calcite": 3, "white_terracotta": 1}, seed=7)
+    pave(bp, kx0, kz0, kx1, kz1, TOP, Palette({"spruce_planks": 3, "stripped_spruce_wood": 1}, seed=2))
+    bp.clear(kx0 + 1, TOP + 1, kz0 + 1, kx1 - 1, TOP + 8, kz1 - 1)
+    for face, line, a, b in (("south", kz1, kx0, kx1), ("north", kz0, kx0, kx1), ("east", kx1, kz0, kz1),
+                             ("west", kx0, kz0, kz1)):
+        A.facade(bp, face, line, a, b, TOP, TOP + 4, SB, "stone_bricks", pilaster_every=3, window_y=2, window_h=2,
+                 plinth=Palette({"cobblestone": 2, "mossy_cobblestone": 1}), plinth_stairs="cobblestone_stairs",
+                 arched=False, sill="spruce_trapdoor" if False else None)
+    timber_storey(bp, kx0, kz0, kx1, kz1, TOP + 5, TOP + 8, "spruce_log", plaster, wood="spruce", post_every=3,
+                  faces=("south", "north"))
+    bp.fill(kx0 + 1, TOP + 5, kz0 + 1, kx1 - 1, TOP + 5, kz1 - 1, "spruce_planks")
+    for face, line, a, b in (("east", kx1, kz0, kz1), ("west", kx0, kz0, kz1)):
+        for u in range(a, b + 1):
+            for y in range(TOP + 5, TOP + 9):
+                pset(bp, face, line, u, 0, y, plaster)
+    kr = roof(bp, kx0, kz0, kx1, kz1, TOP + 9, ROOF["slate"], axis="x", overhang=1, steep=1.25, gable=plaster,
+              under="spruce_stairs")
+    for x in (kx0, kx1):
+        bp.set(x, TOP + 10, (kz0 + kz1) // 2, "glass_pane")
+        bp.set(x, TOP + 11, (kz0 + kz1) // 2, "glass_pane")
+    dormer(bp, "south", kz1, 12, TOP + 9, ROOF["slate"], plaster, trim="spruce_log[axis=y]")
+    A.arch_door(bp, "south", kz1, 9, TOP, width=1, height=2, trim="spruce_log[axis=y]", stairs="spruce_stairs")
+    bp.door(9, TOP + 1, kz1, "south", "spruce")
+    bp.set(9, TOP, kz1 + 1, "stone_brick_stairs[facing=north,half=bottom]")
+    A.fill_pal(bp, kx1 - 2, TOP + 1, kz0 - 1, kx1 - 1, kr + 2, kz0, SB)
+    bp.set(kx1 - 2, kr + 2, kz0, "campfire[lit=true,signal_fire=false,waterlogged=false,facing=north]")
+    bp.set(kx1 - 2, TOP + 1, kz0 + 1, "campfire[lit=true,signal_fire=false,waterlogged=false,facing=south]")
+    bp.set(kx1 - 1, TOP + 1, kz0 + 1, "smoker[facing=south,lit=true]")
+    bp.set(kx1 - 3, TOP + 1, kz0 + 1, "barrel[facing=up,open=false]")
+    bp.table(12, TOP + 1, -7, "spruce_pressure_plate", "spruce_fence")
+    bp.stairs(11, TOP + 1, -7, "spruce_stairs", "east")
+    bp.stairs(13, TOP + 1, -7, "spruce_stairs", "west")
+    bp.chest(kx0 + 1, TOP + 1, kz0 + 1, "south", LOOT + "lighthouse")
+    bp.set(kx0 + 1, TOP + 1, kz1 - 1, "bookshelf")
+    bp.set(kx0 + 1, TOP + 2, kz1 - 1, "potted_blue_orchid" if False else "flower_pot")
+    bp.lantern(12, TOP + 4, -7, hanging=True)
+    bp.bed(kx1 - 2, TOP + 6, kz1 - 2, "north", "light_blue")
+    bp.set(kx1 - 1, TOP + 6, kz1 - 1, "barrel[facing=up,open=false]")
+    bp.set(kx0 + 1, TOP + 6, kz0 + 1, "chiseled_bookshelf[facing=south,slot_0_occupied=true,slot_1_occupied=false,"
+           "slot_2_occupied=true,slot_3_occupied=false,slot_4_occupied=false,slot_5_occupied=true]")
+    for i in range(4):
+        bp.stairs(kx0 + 2 + i, TOP + 1 + i, kz0 + 1, "spruce_stairs", "east")
+    bp.fill(kx0 + 2, TOP + 5, kz0 + 1, kx0 + 5, TOP + 5, kz0 + 1, "air")
+    bp.lantern(12, TOP + 8, -7, hanging=True)
+    # lean-to net shed on the east side
+    for z in range(kz0 + 1, kz1):
+        bp.set(kx1 + 3, TOP + 1, z, "spruce_fence") if z in (kz0 + 1, kz1 - 1) else None
+        bp.set(kx1 + 3, TOP + 2, z, "spruce_fence") if z in (kz0 + 1, kz1 - 1) else None
+    lean_to(bp, "east", kx1 + 3, kz0, kz1, TOP + 3, 3, ROOF["spruce"])
+    bp.barrel(kx1 + 1, TOP + 1, kz0 + 2, "up")
+    bp.barrel(kx1 + 2, TOP + 1, kz0 + 2, "up")
+    bp.set(kx1 + 1, TOP + 1, kz0 + 4, "cobweb")
+
+    # ---------------------------------------------------------- waystone, garden, lamps on the plateau
+    wx, wz = 10, 1
+    for (x, z) in round_ring(wx, wz, 2):
+        bp.set(x, TOP + 1, z, stp("stone_brick_stairs", _face_to(wx, wz, x, z)))
+    bp.disk(wx, TOP + 1, wz, 1, "chiseled_stone_bricks")
+    bp.set(wx, TOP + 2, wz, MOD["waystone"])
+    for (x, z) in ((wx - 3, wz - 2), (wx + 3, wz + 2)):
+        lamp_post(bp, x, TOP + 1, z, post="spruce_fence", h=3)
+    for x in range(1, 6):
+        bp.set(x, TOP, -9, "farmland[moisture=7]")
+        bp.set(x, TOP + 1, -9, "wheat[age=7]")
+        bp.set(x, TOP + 1, -10, "spruce_fence")
+    bp.set(0, TOP + 1, -9, "composter[level=4]")
+    for (x, z) in ((3, -6), (16, 0)):
+        bp.set(x, TOP + 1, z, "spruce_fence")
+        bp.set(x, TOP + 2, z, "spruce_fence")
+    for z in range(-5, 0):
+        bp.set(3 + (z + 5) * 3 // 1 if False else 3, TOP + 3, z, "spruce_fence") if False else None
+    path_line(bp, [(LX, LZ + 8), (LX, 6), (8, 6), (8, 4)], TOP, Palette({"gravel": 2, "coarse_dirt": 1}), width=2, seed=4)
+    path_line(bp, [(8, 4), (9, -3)], TOP, Palette({"gravel": 2, "coarse_dirt": 1}), width=2, seed=5)
+
+    # ---------------------------------------------------------- stairs carved into the cliff, harbour, boat
+    A.stair_run(bp, 7, 1, 15, "north", TOP, 2, "stone_brick_stairs", fill="stone_bricks", clear=4)
+    for k in range(TOP):
+        z = 15 - k
+        for x in (6, 9):
+            if (bp.get(x, k + 1, z) in (None, "minecraft:air", "minecraft:water")):
+                bp.set(x, k + 1, z, "stone_brick_wall")
+                for y in range(-3, k + 1):
+                    bp.set(x, y, z, SB.pick(x, y, z), keep=True)
+    lamp_post(bp, 6, 2, 13, post="stone_brick_wall", h=1)
+    lamp_post(bp, 9, TOP - 3, 9, post="stone_brick_wall", h=1)
+    # dock
+    for z in range(16, 30):
+        for x in range(5, 11):
+            bp.set(x, 0, z, "spruce_planks" if (x + z) % 4 else "stripped_spruce_log[axis=z]")
+        if z % 4 == 0:
+            for x in (5, 10):
+                for y in range(-6, 2):
+                    bp.set(x, y, z, "spruce_log[axis=y]")
+    for x in range(5, 11):
+        bp.set(x, 0, 15, "stone_bricks")
+        bp.set(x, 0, 16, "stone_bricks")
+    for (x, z) in ((5, 28), (10, 28), (10, 20)):
+        bp.lantern(x, 2, z)
+    bp.barrel(6, 1, 26, "up", LOOT + "lighthouse")
+    bp.barrel(6, 1, 25, "up")
+    bp.set(7, 1, 26, "barrel[facing=north,open=false]")
+    bp.set(9, 1, 18, "cauldron")
+    bp.set(6, 1, 19, "hay_block[axis=z]") if False else None
+    # moored sloop
+    bx = 13
+    for z in range(18, 28):
+        taper = 1 if z in (18, 27) else 0
+        bp.set(bx, -2, z, "dark_oak_planks")
+        for x in range(bx - 1 + taper, bx + 2 - taper):
+            bp.set(x, -1, z, "spruce_planks")
+        if not taper:
+            bp.set(bx - 1, 0, z, "dark_oak_slab[type=bottom,waterlogged=false]" if 19 < z < 26 else "spruce_planks")
+            bp.set(bx + 1, 0, z, "dark_oak_slab[type=bottom,waterlogged=false]" if 19 < z < 26 else "spruce_planks")
+        bp.set(bx, -1, z, "spruce_planks")
+    bp.set(bx, 0, 17, stp("spruce_stairs", "north"))
+    bp.set(bx, 0, 28, stp("spruce_stairs", "south"))
+    bp.set(bx, -1, 17, stp("spruce_stairs", "north", "top"))
+    bp.set(bx, -1, 28, stp("spruce_stairs", "south", "top"))
+    for y in range(0, 10):
+        bp.set(bx, y, 22, "spruce_fence")
+    for y in range(2, 9):
+        for z in range(23, 23 + max(0, (9 - y) * 4 // 7) + 1):
+            bp.set(bx, y, z, "white_wool")
+    for y in range(3, 8):
+        bp.set(bx, y, 21, "white_wool") if y < 7 else None
+    bp.set(bx, 10, 22, "red_banner[rotation=4]") if False else bp.set(bx, 10, 22, "spruce_fence")
+    bp.set(bx, 0, 25, "barrel[facing=up,open=false]")
+    bp.set(bx, 0, 20, "chest[facing=north,type=single,waterlogged=false]")
+    bp.set(11, 1, 22, "spruce_fence")
+
+    # ---------------------------------------------------------- smugglers' sea cave (secret)
+    for x in range(-22, -12):
+        for z in range(-2, 4):
+            for y in range(-1, 3):
+                if math.hypot((x + 17) / 5, (y - 1) / 2.6) <= 1.0 and abs(z - 1) <= 2:
+                    bp.set(x, y, z, "water" if y < 0 else "air")
+    for x in range(-15, -12):
+        for z in range(-1, 4):
+            bp.set(x, 0, z, "spruce_planks")
+            for y in range(1, 3):
+                bp.set(x, y, z, "air")
+    bp.chest(-13, 1, 3, "west", LOOT + "lighthouse")
+    bp.barrel(-13, 1, -1, "up")
+    bp.barrel(-14, 1, -1, "up")
+    bp.set(-13, 3, 1, "lantern[hanging=true,waterlogged=false]")
+    bp.set(-13, 4, 1, "iron_chain[axis=y,waterlogged=false]") if bp.get(-13, 4, 1) else None
+
+    # ---------------------------------------------------------- vegetation and weathering
+    A.landscape(bp, -20, -16, 20, 10, TOP + 1, density=0.35, seed=7,
+                flowers=("short_grass", "fern", "dandelion", "oxeye_daisy", "azure_bluet", "cornflower"))
+    for (x, z) in ((-14, -10), (14, 4), (-10, 6)):
+        A.bush(bp, x, TOP + 1, z, "oak_leaves" if x > 0 else "azalea_leaves")
+    for (x, z) in ((24, -4), (27, 6), (19, 9)):
+        bp.set(x, 1, z, "dead_bush" if x % 2 else "short_dry_grass")
+    for x in range(20, 24):
+        bp.set(x, 1, 2, "stripped_oak_log[axis=x]")  # driftwood
+    A.moss_on(bp, ((-30, -6, -18), (34, TOP + 30, 32)), chance=0.12, seed=9)
+    A.vines_on(bp, ((-30, -2, -18), (34, TOP, 32)), chance=0.05, seed=3, max_len=4)
+
+
+register(StructureDef(
+    "coastal_lighthouse", "overworld", ["beach", "stony_shore", "snowy_beach"],
+    [Piece("lighthouse", lighthouse)], spacing=28, separation=10, processors="aging",
+    title_fr="Phare côtier", title_en="Coastal Lighthouse"))
