@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "wayfarers:void_observatory",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 114537889,
+    "spacing": 20,
+    "separation": 6
+  }
+}

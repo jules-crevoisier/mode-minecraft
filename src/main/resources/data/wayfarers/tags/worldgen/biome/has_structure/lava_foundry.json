@@ -1,0 +1,21 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "minecraft:nether_wastes",
+      "required": false
+    },
+    {
+      "id": "minecraft:basalt_deltas",
+      "required": false
+    },
+    {
+      "id": "minecraft:crimson_forest",
+      "required": false
+    },
+    {
+      "id": "minecraft:warped_forest",
+      "required": false
+    }
+  ]
+}

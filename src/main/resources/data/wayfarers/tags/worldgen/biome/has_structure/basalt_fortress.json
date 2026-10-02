@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "minecraft:basalt_deltas",
+      "required": false
+    },
+    {
+      "id": "minecraft:nether_wastes",
+      "required": false
+    },
+    {
+      "id": "minecraft:soul_sand_valley",
+      "required": false
+    }
+  ]
+}

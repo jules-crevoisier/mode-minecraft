@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "minecraft:deep_dark",
+      "required": false
+    },
+    {
+      "id": "minecraft:dripstone_caves",
+      "required": false
+    },
+    {
+      "id": "minecraft:lush_caves",
+      "required": false
+    }
+  ]
+}
