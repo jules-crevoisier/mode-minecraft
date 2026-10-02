@@ -31,22 +31,6 @@
         ]
       }
     },
-    "ruined_watchtower": {
-      "trigger": "minecraft:location",
-      "conditions": {
-        "player": [
-          {
-            "condition": "minecraft:entity_properties",
-            "entity": "this",
-            "predicate": {
-              "location": {
-                "structures": "wayfarers:ruined_watchtower"
-              }
-            }
-          }
-        ]
-      }
-    },
     "mountain_monastery": {
       "trigger": "minecraft:location",
       "conditions": {
@@ -57,86 +41,6 @@
             "predicate": {
               "location": {
                 "structures": "wayfarers:mountain_monastery"
-              }
-            }
-          }
-        ]
-      }
-    },
-    "desert_oasis": {
-      "trigger": "minecraft:location",
-      "conditions": {
-        "player": [
-          {
-            "condition": "minecraft:entity_properties",
-            "entity": "this",
-            "predicate": {
-              "location": {
-                "structures": "wayfarers:desert_oasis"
-              }
-            }
-          }
-        ]
-      }
-    },
-    "sunken_temple": {
-      "trigger": "minecraft:location",
-      "conditions": {
-        "player": [
-          {
-            "condition": "minecraft:entity_properties",
-            "entity": "this",
-            "predicate": {
-              "location": {
-                "structures": "wayfarers:sunken_temple"
-              }
-            }
-          }
-        ]
-      }
-    },
-    "witch_huts": {
-      "trigger": "minecraft:location",
-      "conditions": {
-        "player": [
-          {
-            "condition": "minecraft:entity_properties",
-            "entity": "this",
-            "predicate": {
-              "location": {
-                "structures": "wayfarers:witch_huts"
-              }
-            }
-          }
-        ]
-      }
-    },
-    "giant_tree": {
-      "trigger": "minecraft:location",
-      "conditions": {
-        "player": [
-          {
-            "condition": "minecraft:entity_properties",
-            "entity": "this",
-            "predicate": {
-              "location": {
-                "structures": "wayfarers:giant_tree"
-              }
-            }
-          }
-        ]
-      }
-    },
-    "sky_island": {
-      "trigger": "minecraft:location",
-      "conditions": {
-        "player": [
-          {
-            "condition": "minecraft:entity_properties",
-            "entity": "this",
-            "predicate": {
-              "location": {
-                "structures": "wayfarers:sky_island"
               }
             }
           }
@@ -159,38 +63,6 @@
         ]
       }
     },
-    "dwarven_mine": {
-      "trigger": "minecraft:location",
-      "conditions": {
-        "player": [
-          {
-            "condition": "minecraft:entity_properties",
-            "entity": "this",
-            "predicate": {
-              "location": {
-                "structures": "wayfarers:dwarven_mine"
-              }
-            }
-          }
-        ]
-      }
-    },
-    "bandit_camp": {
-      "trigger": "minecraft:location",
-      "conditions": {
-        "player": [
-          {
-            "condition": "minecraft:entity_properties",
-            "entity": "this",
-            "predicate": {
-              "location": {
-                "structures": "wayfarers:bandit_camp"
-              }
-            }
-          }
-        ]
-      }
-    },
     "coastal_lighthouse": {
       "trigger": "minecraft:location",
       "conditions": {
@@ -201,6 +73,70 @@
             "predicate": {
               "location": {
                 "structures": "wayfarers:coastal_lighthouse"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "giant_tree": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "wayfarers:giant_tree"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "desert_oasis": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "wayfarers:desert_oasis"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "witch_huts": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "wayfarers:witch_huts"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "sky_island": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "wayfarers:sky_island"
               }
             }
           }
@@ -223,7 +159,7 @@
         ]
       }
     },
-    "ice_observatory": {
+    "ruined_watchtower": {
       "trigger": "minecraft:location",
       "conditions": {
         "player": [
@@ -232,7 +168,23 @@
             "entity": "this",
             "predicate": {
               "location": {
-                "structures": "wayfarers:ice_observatory"
+                "structures": "wayfarers:ruined_watchtower"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "bandit_camp": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "wayfarers:bandit_camp"
               }
             }
           }
@@ -255,6 +207,22 @@
         ]
       }
     },
+    "ice_observatory": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "wayfarers:ice_observatory"
+              }
+            }
+          }
+        ]
+      }
+    },
     "galleon_wreck": {
       "trigger": "minecraft:location",
       "conditions": {
@@ -265,6 +233,38 @@
             "predicate": {
               "location": {
                 "structures": "wayfarers:galleon_wreck"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "sunken_temple": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "wayfarers:sunken_temple"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "dwarven_mine": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "wayfarers:dwarven_mine"
               }
             }
           }
@@ -313,6 +313,22 @@
             "predicate": {
               "location": {
                 "structures": "wayfarers:sealed_lab"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "sunken_citadel": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "wayfarers:sunken_citadel"
               }
             }
           }
@@ -489,22 +505,6 @@
             "predicate": {
               "location": {
                 "structures": "wayfarers:void_nest"
-              }
-            }
-          }
-        ]
-      }
-    },
-    "sunken_citadel": {
-      "trigger": "minecraft:location",
-      "conditions": {
-        "player": [
-          {
-            "condition": "minecraft:entity_properties",
-            "entity": "this",
-            "predicate": {
-              "location": {
-                "structures": "wayfarers:sunken_citadel"
               }
             }
           }

@@ -10,20 +10,20 @@
     "first_steps/explorer_armor"
   ],
   "explorer": [
-    "explorer/ruined_watchtower",
     "explorer/mountain_monastery",
-    "explorer/desert_oasis",
-    "explorer/sunken_temple",
-    "explorer/witch_huts",
-    "explorer/giant_tree",
-    "explorer/sky_island",
     "explorer/forgotten_library",
-    "explorer/bandit_camp",
     "explorer/coastal_lighthouse",
+    "explorer/giant_tree",
+    "explorer/desert_oasis",
+    "explorer/witch_huts",
+    "explorer/sky_island",
     "explorer/jungle_ziggurat",
-    "explorer/ice_observatory",
+    "explorer/ruined_watchtower",
+    "explorer/bandit_camp",
     "explorer/rune_circle",
+    "explorer/ice_observatory",
     "explorer/galleon_wreck",
+    "explorer/sunken_temple",
     "explorer/master_cartographer"
   ],
   "depths": [

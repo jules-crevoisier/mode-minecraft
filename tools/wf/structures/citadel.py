@@ -21,7 +21,7 @@ in barrels.
 import math
 import random
 
-from ..arch import Palette, stair, slab
+from ..arch import Palette, stair
 from ..defs import Piece, StructureDef, register
 from ..parts import LOOT, MOD
 

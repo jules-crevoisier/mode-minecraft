@@ -10,7 +10,7 @@
 import math
 import random
 
-from ..arch import Palette, stair, slab
+from ..arch import Palette, stair
 from ..defs import Piece, StructureDef, register
 from ..parts import LOOT, MOB
 
@@ -291,7 +291,6 @@ def dwarf_statue(bp, cx, cz, base_y, face, outer):
 
 
 def dwarven_forge(bp):
-    rng = random.Random(9)
     X0, X1, Z = FX0, FX1, FZ
     # ---------------------------------------------------------------- hall shell
     bp.fill(-3, -3, -Z - 3, X1 + 3, 0, Z + 3, "deepslate_tiles")
@@ -1071,7 +1070,6 @@ def crystal_grotto(bp):
             y = 6 + (-9 - x) // 3
             if _geode_r(x, y, z) >= 15:
                 continue
-            edge = z in (-8, 8) or x == -9
             if x == -9:
                 bp.set(x, y, z, stair("waxed_weathered_cut_copper_stairs", "west"))
                 bp.set(x, y - 1, z, stair("waxed_oxidized_cut_copper_stairs", "east", "top"))

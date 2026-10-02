@@ -44,14 +44,21 @@
 
 ### Les structures (31)
 
-Les aperçus isométriques de chaque structure sont dans [`docs/structures/`](docs/structures).
+Ce sont des constructions monumentales : 50 à 100 blocs de large, avec des tours qui montent jusqu'à 70 blocs et des intérieurs meublés. Les aperçus isométriques de chaque structure sont dans [`docs/structures/`](docs/structures).
+
+| | | |
+|---|---|---|
+| ![Forteresse de basalte](docs/structures/basalt_fortress.png) | ![Monastère des cimes](docs/structures/mountain_monastery.png) | ![Île céleste](docs/structures/sky_island.png) |
+| Forteresse de basalte | Monastère des cimes | Île céleste |
+| ![Avant-poste de la Guilde](docs/structures/guild_outpost.png) | ![Sanctuaire piglin](docs/structures/piglin_sanctuary.png) | ![Arbre-monde](docs/structures/giant_tree.png) |
+| Avant-poste de la Guilde | Sanctuaire piglin | Arbre-monde |
 
 | Dimension | Structures |
 |---|---|
-| **Surface** | Avant-poste de la Guilde (3 variantes, avec une pierre de voyage) · Tour de guet en ruine · Monastère des cimes (cloître, clocher, bibliothèque) · Oasis du désert et son tombeau caché (archéologie) · Temple englouti (conduit à activer) · Huttes des sorcières sur pilotis · Arbre-monde creux (30 blocs, 3 étages) · Île céleste (spire d'accès, minerais) · Bibliothèque oubliée (salle secrète derrière les étagères) · Mine naine abandonnée (puits de 32 blocs, 4 galeries) · Campement de bandits · Phare côtier · Ziggourat de la jungle · Observatoire polaire · Cercle de pierres runiques (crypte sous l'autel) · Épave de galion |
-| **Souterrain** | Forge naine · Grotte de cristal (géode géante) · Laboratoire scellé (Deep Dark) |
-| **Grande structure** | **Citadelle engloutie** : un donjon étanche au fond de l'océan profond, avec une tour qui dépasse des vagues, 6 salles à thème reliées par des tunnels de verre, l'arène du boss et une salle du trésor scellée. Elle existe en 3 variantes. |
-| **Nether** | Forteresse de basalte · Pont de chaînes suspendu au-dessus de la mer de lave · Sanctuaire piglin · Fonderie de lave · Tour des âmes · Marché piglin |
+| **Surface** | **Avant-poste de la Guilde** : 3 variantes, rempart, châtelet, grande salle, tour des cartes de 46 blocs, pierre de voyage. · **Tour de guet** : une version en ruine, dont le sommet s'est effondré, et une version intacte avec flèche ; cave secrète. · **Monastère des cimes** : église gothique à arcs-boutants, clocher de 46 blocs, cloître, bibliothèque, crypte secrète. · **Oasis du désert** : caravansérail à coupoles et minarets, bazar, colosse de pharaon à moitié enseveli, tombeau caché (archéologie). · **Temple englouti** : sanctuaire à coupole, obélisques, conduit actif, caveau secret. · **Huttes des sorcières** : maisons tordues sur pilotis, tour au toit en chapeau de sorcière, cercle rituel. · **Arbre-monde** : tronc creux de 15 blocs, 3 terrasses à cabanes, ponts de corde, nid de vigie. · **Île céleste** : temple de quartz à 40 blocs du sol, îlots reliés par des ponts, cascades, escalier en spirale. · **Bibliothèque oubliée** : nef gothique, tours jumelles, rotonde effondrée, cabinet secret. · **Mine naine** : chevalement de 20 blocs, village à flanc de colline, 4 galeries, salle forte scellée. · **Campement de bandits** : palissade, tours de guet, tente du chef. · **Phare côtier** : phare de 52 blocs sur un cap, quai, grotte marine. · **Ziggourat de la jungle** : 8 gradins, têtes de serpent à plumes, jeu de balle, tombeau secret. · **Observatoire polaire** : dôme de neige, télescope de cuivre, laboratoire en sous-sol. · **Cercle runique** : trilithes de 13 blocs, crypte sous l'autel. · **Épave de galion** : 3 ponts, château arrière, mât brisé au fond de l'eau. |
+| **Souterrain** | **Forge naine** : salle de 63×31 blocs à piliers de lithite, statues de rois nains de 25 blocs, chutes de lave, chambre forte. · **Grotte de cristal** : géode géante avec gouffre, flèches de cristal, atelier de taille, ponts. · **Laboratoire scellé** : sas, salle de contrôle en dôme, 8 cellules de confinement, dont une brèche de sculk. |
+| **Grande structure** | **Citadelle engloutie** : cathédrale gothique de prismarine au fond de l'océan. Elle comprend une tour de 76 blocs qui sort de l'eau, une nef et 6 salles à thème reliées par des tunnels de verre, une arène du boss sous un dôme de 40 blocs, et une salle du trésor scellée. Elle existe en 3 variantes. |
+| **Nether** | **Forteresse de basalte** : citadelle noire de 89 blocs, douves de lave, tours de 48 blocs, pont-levis, donjon. · **Pont de chaînes** : tablier de 60 blocs suspendu à des maillons géants entre deux tours-portes. · **Sanctuaire piglin** : ziggourat surmontée d'une idole d'or de 34 blocs. · **Fonderie de lave** : usine sur pilotis, cheminées, creusets, grue. · **Tour des âmes** : tour de 72 blocs enlacée de contreforts d'os. · **Marché piglin** : bazar fortifié, auvents rayés, tour centrale, marchands piglins. |
 | **End** (îles extérieures) | Observatoire du vide · Jardin flottant de chorus · Archive de l'End · Épave du vide · Nid du Gardien du vide |
 
 Chaque structure a :
