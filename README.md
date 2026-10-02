@@ -6,7 +6,9 @@
 - **une quête en 5 chapitres partagée par tout le serveur**, qui fait découvrir le monde étape par étape ;
 - des **outils de confort** pour passer moins de temps à ranger et plus de temps à explorer : pierres de voyage, coffre de tri, terminal de guilde, tombes, sac à dos, aimant ;
 - **8 armes à capacité**, **2 outils de zone**, **3 ensembles d'armure** ;
-- **4 créatures** et **2 boss**.
+- **4 créatures** et **2 boss** ;
+- **15 blocs de construction exclusifs** (briques de la Guilde, tuiles de toit, lampes runiques, briques de braise, briques du vide…), utilisés dans les structures et fabricables ;
+- **une vraie difficulté** : plus on s'éloigne du spawn, plus les monstres sont forts, avec des monstres d'élite et des lunes de sang.
 
 | Cible | Version |
 |---|---|
@@ -144,6 +146,53 @@ Les deux boss se réveillent en déposant une offrande sur leur autel :
 |---|---|
 | Gardien englouti | Fragment de carte |
 | Gardien du vide | Éclat du vide |
+
+### Difficulté : le monde devient dangereux
+
+Le **niveau de danger** dépend de l'endroit où un monstre apparaît. Il s'affiche dans la barre d'action quand il change.
+
+| Source | Effet sur le niveau |
+|---|---|
+| Distance au spawn | +1 tous les 900 blocs |
+| Nether | Les distances comptent ×8, et +2 |
+| End | +3 |
+| Sous y = 0 | +1 |
+| Lune de sang | +2 |
+
+- **Effet par niveau** : +15 % de vie et +12 % de dégâts pour chaque monstre. Le niveau est plafonné à 7, « Légendaire ».
+- **Monstres d'élite** :
+  - Leur nom est doré. Ils ont +100 % de vie, +50 % de dégâts, plus de vitesse et résistent au recul.
+  - Leur chance d'apparition est de 3 % de base, plus 2 % par niveau de danger.
+  - Ils lâchent le matériau de la dimension, des émeraudes, de l'expérience et parfois un parchemin de rappel.
+- **Lune de sang** :
+  - Elle arrive toutes les 7 nuits dans la Surface.
+  - Le danger augmente et les élites sont 3 fois plus fréquents. Mieux vaut avoir une base solide.
+- **Monstres dans les structures** : les grandes structures continuent de faire apparaître leurs gardiens dans le noir, comme les forteresses vanilla. Les générateurs fonctionnent même dans les pièces éclairées.
+- **Boss** : leur vie augmente de 60 % par joueur supplémentaire présent dans un rayon de 48 blocs.
+
+Tout se règle dans `config/wayfarers-common.toml` :
+
+| Option | Défaut |
+|---|---|
+| `danger.enabled` | `true` |
+| `danger.blocksPerLevel` | `900` |
+| `danger.maxLevel` | `7` |
+| `danger.healthPerLevel` | `0.15` |
+| `danger.damagePerLevel` | `0.12` |
+| `elite.baseChance` | `0.03` |
+| `bloodMoon.enabled` | `true` |
+| `bloodMoon.interval` | `7` |
+
+### Blocs de construction exclusifs
+
+Les structures sont bâties avec des blocs propres au mod, qu'on peut aussi utiliser pour construire sa base. Ils se trouvent dans l'onglet créatif, et chaque famille de briques a ses escaliers, dalles et murets.
+
+| Thème | Blocs |
+|---|---|
+| Guilde (Surface) | Briques de la Guilde (normales, moussues, fissurées) · Pierre de la Guilde polie et gravée · Tuiles d'azur, de terre cuite et d'ardoise · Lampe runique |
+| Profondeurs | Briques de lithite · Bloc de cristal de lithite (lumineux) |
+| Nether | Briques de braise · Lampe de braise · Frise dorée |
+| End | Briques du vide · Bloc de lumière stellaire |
 
 ---
 
