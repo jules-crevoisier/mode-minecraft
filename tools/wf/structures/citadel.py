@@ -559,6 +559,17 @@ def tower(bp):
         for y in range(BASE_H + 4 + (k % 2) * 6, SHAFT_TOP - 4, 12):
             for dy in range(3):
                 bp.set(wx, y + dy, wz, GLASS)
+    # flying buttresses from the corner pinnacles of the base up to the shaft
+    for sx in (-1, 1):
+        for sz in (-1, 1):
+            for k, y in ((6, BASE_H + 4), (5, BASE_H + 6), (4, BASE_H + 8)):
+                x, z = cx + sx * k, cz + sz * k
+                bp.set(x, y, z, TRIM)
+                bp.set(x, y - 1, z, stair(TRIM_S, "east" if sx < 0 else "west", "top"))
+                bp.set(x, y + 1, z, "prismarine_bricks")
+            for y in range(BASE_H + 1, BASE_H + 4):
+                bp.set(cx + sx * 7, y, cz + sz * 7, TRIM)
+            pinnacle(bp, cx + sx * 7, BASE_H + 4, cz + sz * 7, 2)
     # corbelled gallery under the cabin
     for x in range(cx - 8, cx + 9):
         for z in range(cz - 8, cz + 9):
