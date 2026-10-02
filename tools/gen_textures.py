@@ -301,21 +301,8 @@ def humanoid_skin(w, h, skin, cloth, accent, eyes, seed, hat=None):
 
 
 def mob_textures():
-    # every mob uses the vanilla humanoid (zombie-sized) model, so all skins share the 64x64 layout
-    return {
-        "entity/ruin_walker": humanoid_skin(64, 64, (120, 124, 104), (88, 96, 78), (150, 120, 60),
-                                            (180, 240, 120), 1, hat=(96, 110, 70)),
-        "entity/map_wraith": humanoid_skin(64, 64, (226, 214, 170), (196, 176, 120), (90, 70, 40),
-                                           (40, 30, 20), 6, hat=(240, 230, 200)),
-        "entity/basalt_guard": humanoid_skin(64, 64, (66, 64, 70), (40, 38, 44), (230, 110, 40),
-                                             (255, 140, 40), 2, hat=(52, 50, 56)),
-        "entity/void_stalker": humanoid_skin(64, 64, (40, 20, 60), (28, 12, 44), (190, 110, 240),
-                                             (230, 130, 255), 4),
-        "entity/drowned_warden": humanoid_skin(64, 64, (60, 140, 136), (32, 90, 96), (240, 210, 90),
-                                               (160, 255, 240), 3, hat=(40, 110, 110)),
-        "entity/void_warden": humanoid_skin(64, 64, (18, 8, 30), (30, 14, 50), (250, 120, 255),
-                                            (255, 90, 255), 5, hat=(60, 20, 90)),
-    }
+    from wf import skins
+    return {f"entity/{name}": fn() for name, fn in skins.SKINS.items()}
 
 
 def main():
