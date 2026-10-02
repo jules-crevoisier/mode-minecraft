@@ -7,11 +7,7 @@ from .. import arch
 from ..arch import Palette, slab, stair
 from ..blueprint import with_props
 from ..defs import Piece, StructureDef, register
-from ..parts import LOOT, MOB, MOD, leaves
-
-TEMPERATE = ["#minecraft:is_forest", "plains", "sunflower_plains", "meadow", "#minecraft:is_taiga",
-             "savanna", "cherry_grove"]
-
+from ..parts import LOOT, MOB, MOD
 
 # ============================================================ shared helpers
 def _card(dx, dz):
@@ -429,6 +425,13 @@ def giant_tree(v):
                 hy = round(my) - 2
                 bp.chain(mx, hy - 1, mz, hy)
                 bp.lantern(mx, hy - 2, mz, hanging=True)
+        # limbs start inside the bark: keep the hollow stairwell clear of their wood
+        for y in range(1, TOP):
+            inner = _trunk_base(y) - 1.8
+            for x in range(-8, 9):
+                for z in range(-8, 9):
+                    if math.hypot(x, z) <= inner and bp.get(x, y, z) == f"minecraft:{v['wood']}":
+                        bp.set(x, y, z, "air")
         # central leader up to the crow's nest
         for y in range(TOP - 2, 77):
             for x in range(-1, 2):
@@ -634,6 +637,13 @@ def giant_tree(v):
             bp.lantern(x, 81, z)
         bp.set(0, 78, 0, "bell[attachment=floor,facing=north,powered=false]")
 
+        # keep the head of the spiral stair free where it reaches the crown deck
+        for x in range(-2, 3):
+            for z in range(-2, 3):
+                if max(abs(x), abs(z)) == 2:
+                    for y in (TOP + 1, TOP + 2):
+                        if bp.get(x, y, z) not in (None, "minecraft:ladder"):
+                            bp.remove(x, y, z)
         # vines and hanging moss under the canopy
         _hang_under(bp, ((-32, 30, -32), (32, 80, 32)), 0.07, v["seed"], v["hang"], on=("_leaves",))
         arch.vines_on(bp, ((-12, 2, -12), (12, 46, 12)), chance=0.025, seed=v["seed"], max_len=7)
@@ -1242,9 +1252,12 @@ def oasis(bp):
             bp.fill(x, y - 1, z, x, y + 4, z, "cut_sandstone")
         if i % 4 == 1:
             bp.lantern(SX + 1, y + 3, z, hanging=True)
-    bp.room(SX - 1, TY - 1, -36, SX + 2, TY + 3, -34, "cut_sandstone", floor="sandstone", ceiling="cut_sandstone")
-    bp.stairs(SX, TY, -36, "sandstone_stairs", "north")
-    bp.stairs(SX + 1, TY, -36, "sandstone_stairs", "north")
+    for x in (SX, SX + 1):                  # landing before the chamber door
+        bp.set(x, TY - 1, -35, "sandstone")
+        bp.clear(x, TY, -35, x, TY + 2, -35)
+        bp.set(x, TY + 3, -35, "cut_sandstone")
+    for x in (SX - 1, SX + 2):
+        bp.fill(x, TY - 1, -35, x, TY + 3, -35, "cut_sandstone")
     # burial chamber
     C0X, C1X, C0Z, C1Z = -10, 10, -34, -16
     bp.room(C0X, TY - 1, C0Z, C1X, TY + 8, C1Z, "sandstone", floor="orange_terracotta", ceiling="cut_sandstone")
@@ -1297,95 +1310,358 @@ register(StructureDef(
     spacing=26, separation=9, title_fr="Oasis et tombeau", title_en="Desert Oasis"))
 
 
-# ============================================================ Swamp witch huts
-def stilt_hut(bp, x0, z0, w, d, floor_y, wood, roof, contents):
+# ============================================================ Swamp witch hamlet
+MUD = Palette({"mud_bricks": 4, "packed_mud": 2, "mud": 1}, seed=31, scale=2.0)
+SLATE, SLATE_S = "wayfarers:slate_roof_tiles", "wayfarers:slate_roof_tile_stairs"
+
+
+def _stilts(bp, x0, z0, x1, z1, fy, seed):
+    """Mangrove-log stilts with flaring prop roots under a hut floor."""
+    rng = random.Random(seed)
+    xs = sorted({x0, x1, (x0 + x1) // 2})
+    zs = sorted({z0, z1})
+    for x in xs:
+        for z in zs:
+            bp.fill(x, -3, z, x, fy - 1, z, "mangrove_log[axis=y]")
+            for dx, dz in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                h = rng.randint(0, 2)
+                for y in range(-2, h + 1):
+                    bp.set(x + dx, y, z + dz, "mangrove_roots[waterlogged=false]" if y >= 0 else
+                           "muddy_mangrove_roots[axis=y]", keep=True)
+            for dx, dz in ((2, 0), (-2, 0), (0, 2), (0, -2)):
+                if rng.random() < 0.5:
+                    bp.set(x + dx, -1, z + dz, "muddy_mangrove_roots[axis=y]", keep=True)
+                    bp.set(x + dx, 0, z + dz, "mangrove_roots[waterlogged=false]", keep=True)
+
+
+def _witch_hut(bp, x0, z0, w, d, fy, door, seed, wood="dark_oak", roof=(SLATE_S, SLATE), interior=None,
+               loot=None, chimney=True, extra_doors=()):
+    """Crooked stilt hut: mud-brick lower walls, jettied plank upper walls, steep sagging roof,
+    a leaning chimney, porch on the door side."""
+    rng = random.Random(seed)
     x1, z1 = x0 + w - 1, z0 + d - 1
-    for x, z in ((x0, z0), (x1, z0), (x0, z1), (x1, z1)):
-        bp.fill(x, -5, z, x, floor_y - 1, z, "mangrove_log[axis=y]" if wood == "mangrove" else f"{wood}_log[axis=y]")
-    bp.room(x0, floor_y, z0, x1, floor_y + 4, z1, f"{wood}_planks", floor=f"{wood}_planks")
-    bp.gable_roof(x0, z0, x1, z1, floor_y + 5, f"{roof}_stairs", ridge_axis="x", overhang=1,
-                  fill=f"{wood}_planks")
-    bp.fill(x0 + 1, floor_y + 5, z0 + 1, x1 - 1, floor_y + 5, z1 - 1, "air")
-    bp.fill(x0 + 2, floor_y + 2, z0, x0 + 2, floor_y + 3, z0, "glass_pane")
-    bp.fill(x1 - 2, floor_y + 2, z1, x1 - 2, floor_y + 3, z1, "glass_pane")
-    contents(bp, x0, z0, x1, z1, floor_y)
+    planks = f"{wood}_planks"
+    frame = f"stripped_{wood}_log"
+    _stilts(bp, x0, z0, x1, z1, fy, seed)
+    bp.fill(x0, fy, z0, x1, fy, z1, planks)
+    bp.clear(x0 + 1, fy + 1, z0 + 1, x1 - 1, fy + 12, z1 - 1)
+    # lower walls: mud bricks
+    for y in (fy + 1, fy + 2):
+        for x in range(x0, x1 + 1):
+            for z in (z0, z1):
+                bp.set(x, y, z, MUD.pick(x, y, z))
+        for z in range(z0, z1 + 1):
+            for x in (x0, x1):
+                bp.set(x, y, z, MUD.pick(x, y, z))
+    # jettied upper walls (one block wider along z), carried on upside-down stairs
+    uz0, uz1 = z0 - 1, z1 + 1
+    for x in range(x0, x1 + 1):
+        bp.set(x, fy + 2, uz0, stair(f"{wood}_stairs", "south", "top"))
+        bp.set(x, fy + 2, uz1, stair(f"{wood}_stairs", "north", "top"))
+    for y in range(fy + 3, fy + 6):
+        for x in range(x0, x1 + 1):
+            for z in (uz0, uz1):
+                bp.set(x, y, z, planks)
+        for z in range(uz0, uz1 + 1):
+            for x in (x0, x1):
+                bp.set(x, y, z, planks)
+    bp.fill(x0 + 1, fy + 3, uz0 + 1, x1 - 1, fy + 3, uz0 + 1, "air")
+    bp.fill(x0 + 1, fy + 3, uz1 - 1, x1 - 1, fy + 3, uz1 - 1, "air")
+    bp.clear(x0 + 1, fy + 3, uz0 + 1, x1 - 1, fy + 12, uz1 - 1)
+    for x in range(x0 + 1, x1):
+        bp.set(x, fy + 2, uz0 + 1, planks)   # floor of the jetty bays
+        bp.set(x, fy + 2, uz1 - 1, planks)
+    for x, z in ((x0, uz0), (x1, uz0), (x0, uz1), (x1, uz1)):
+        bp.fill(x, fy + 3, z, x, fy + 5, z, with_props(frame, axis="y"))
+    for x in range(x0, x1 + 1):
+        bp.set(x, fy + 6, uz0, with_props(frame, axis="x"))
+        bp.set(x, fy + 6, uz1, with_props(frame, axis="x"))
+    # windows with mushroom pots on the sills
+    for x in range(x0 + 2, x1 - 1, 3):
+        for z, f in ((uz0, "north"), (uz1, "south")):
+            bp.fill(x, fy + 4, z, x, fy + 4, z, "glass_pane")
+            ox, oz = arch.FACE_VEC[f]
+            bp.set(x, fy + 3, z + oz, stair(f"{wood}_stairs", arch.OPPOSITE[f], "top"))
+            bp.set(x, fy + 4, z + oz, rng.choice(["potted_red_mushroom", "potted_brown_mushroom", "potted_fern",
+                                                   "potted_dead_bush"]))
+    for z in range((uz0 + uz1) // 2 - 1, (uz0 + uz1) // 2 + 1):
+        bp.set(x0, fy + 4, z, "glass_pane")
+        bp.set(x1, fy + 4, z, "glass_pane")
+    # steep roof, sagging in the middle, with moss patches
+    ry = _gable(bp, x0, uz0, x1, uz1, fy + 7, roof[0], roof[1], planks, axis="x", overhang=1, steep=2,
+                under=f"{wood}_stairs")
+    mid = (x0 + x1) // 2
+    for (x, y, z), b in list(bp.blocks.items()):
+        if y >= fy + 7 and x0 - 1 <= x <= x1 + 1 and uz0 - 1 <= z <= uz1 + 1 and "roof_tile" in b[0]:
+            if abs(x - mid) <= 1 and y == ry - 1 and "slab" in b[0]:
+                bp.remove(x, y, z)                  # the sagging ridge
+            elif rng.random() < 0.08 and "stairs" not in b[0]:
+                bp.set(x, y, z, "moss_block")
+    # door + porch
+    dx_, dz_ = {"north": (mid, z0), "south": (mid, z1), "west": (x0, (z0 + z1) // 2),
+                "east": (x1, (z0 + z1) // 2)}[door]
+    for (dd, (ddx, ddz)) in [(door, (dx_, dz_))] + list(extra_doors):
+        bp.door(ddx, fy + 1, ddz, dd, wood)
+        ox, oz = arch.FACE_VEC[dd]
+        if dd in ("north", "south"):        # no corbel over the doorway: the jetty becomes a porch roof
+            for s_ in (-1, 0, 1):
+                bp.set(ddx + s_, fy + 2, ddz + oz, "air")
+        for k in (1, 2):
+            for s_ in (-1, 0, 1):
+                px, pz = (ddx + s_, ddz + oz * k) if dd in ("north", "south") else (ddx + ox * k, ddz + s_)
+                bp.set(px, fy, pz, planks)
+        px, pz = (ddx + 2, ddz + oz) if dd in ("north", "south") else (ddx + ox, ddz + 2)
+        bp.fill(px, fy + 1, pz, px, fy + 2, pz, f"{wood}_fence")
+        bp.lantern(px, fy + 3, pz, soul=True)
+    if chimney:
+        cx, cz = x1 - 1, z0 + 1
+        for y in range(fy + 1, ry + 3):
+            off = 1 if y > ry - 1 else 0
+            bp.set(cx + off, y, cz, MUD.pick(cx, y, cz))
+        bp.set(cx, fy + 1, cz, "campfire[facing=west,lit=true,signal_fire=false,waterlogged=false]")
+        bp.set(cx + 1, ry + 3, cz, "campfire[facing=north,lit=true,signal_fire=false,waterlogged=false]")
+    bp.chain(mid, fy + 7, (z0 + z1) // 2, fy + 8)
+    bp.lantern(mid, fy + 6, (z0 + z1) // 2, hanging=True, soul=True)
+    # interior
+    ix0, iz0, ix1, iz1 = x0 + 1, z0 + 1, x1 - 1, z1 - 1
+    if interior == "brewery":
+        bp.set(ix0, fy + 1, iz0, "cauldron")
+        bp.set(ix0 + 1, fy + 1, iz0, "brewing_stand[has_bottle_0=true,has_bottle_1=false,has_bottle_2=true]")
+        bp.set(ix0 + 2, fy + 1, iz0, "cauldron")
+        bp.set(ix1, fy + 1, iz1, "crafting_table")
+        for x in range(ix0, ix1 + 1):
+            bp.set(x, fy + 3, iz1 + 1, slab("spruce_slab", "top"))
+            bp.set(x, fy + 4, iz1 + 1, rng.choice(["potted_red_mushroom", "potted_brown_mushroom",
+                                                    "potted_fern", "potted_dead_bush", "candle[candles=2,lit=true,waterlogged=false]"]))
+    elif interior == "hermit":
+        bp.bed(ix0 + 1, fy + 1, iz1, "west", "purple")
+        bp.set(ix1, fy + 1, iz0, "lectern[facing=west,has_book=false,powered=false]")
+        bp.bookshelf_wall(ix0, fy + 1, iz0, ix0 + 1, fy + 2, iz0, 0.25)
+        bp.set(ix1, fy + 1, iz1, "composter[level=6]")
+    if loot:
+        bp.chest(ix1, fy + 1, (iz0 + iz1) // 2, "west", loot)
+    arch.vines_on(bp, ((x0 - 2, fy - 3, uz0 - 2), (x1 + 2, ry + 1, uz1 + 2)), chance=0.07, seed=seed, max_len=4)
+    return ry
 
 
-def hang_vines(bp, x0, x1, z0, z1, min_y, count):
-    """Drape vines down the outside of walls (vine attaches to the block it hangs from)."""
-    tops = {}
-    for (x, y, z), b in bp.blocks.items():
-        if b[0] != "minecraft:air" and y > tops.get((x, z), -999):
-            tops[(x, z)] = y
-    for _ in range(count):
-        x, z = bp.rng.randint(x0, x1), bp.rng.randint(z0, z1)
-        top = tops.get((x, z))
-        if top is None or top <= min_y:
-            continue
-        for d, (dx, dz) in (("north", (0, -1)), ("south", (0, 1)), ("east", (1, 0)), ("west", (-1, 0))):
-            if not bp.get(x + dx, top - 1, z + dz):
-                attach = {"north": "south", "south": "north", "east": "west", "west": "east"}[d]
-                for k in range(1, bp.rng.randint(3, 6)):
-                    if bp.get(x + dx, top - k, z + dz):
-                        break
-                    bp.set(x + dx, top - k, z + dz, f"vine[{attach}=true]")
-                break
+def _crooked_tower(bp, x0, z0, fy, seed):
+    """Three leaning storeys (mud, plank, plank) under a floppy witch-hat roof."""
+    rng = random.Random(seed)
+    W = 6
+    offs = [(0, 0), (1, 0), (1, -1)]
+    _stilts(bp, x0, z0, x0 + W - 1, z0 + W - 1, fy, seed)
+    top = fy
+    for k, (ox, oz) in enumerate(offs):
+        bx0, bz0 = x0 + ox, z0 + oz
+        bx1, bz1 = bx0 + W - 1, bz0 + W - 1
+        y0 = fy + k * 5
+        bp.fill(bx0, y0, bz0, bx1, y0, bz1, "dark_oak_planks")
+        bp.clear(bx0 + 1, y0 + 1, bz0 + 1, bx1 - 1, y0 + 4, bz1 - 1)
+        for y in range(y0 + 1, y0 + 5):
+            for x in range(bx0, bx1 + 1):
+                for z in range(bz0, bz1 + 1):
+                    if x in (bx0, bx1) or z in (bz0, bz1):
+                        corner = x in (bx0, bx1) and z in (bz0, bz1)
+                        bp.set(x, y, z, "stripped_dark_oak_log[axis=y]" if corner else
+                               (MUD.pick(x, y, z) if k == 0 else "spruce_planks" if k == 1 else "dark_oak_planks"))
+        for (x, z) in ((bx0 + 2, bz0), (bx1, bz0 + 3), (bx0, bz1 - 2), (bx1 - 2, bz1)):
+            bp.set(x, y0 + 2 + (k % 2), z, "glass_pane")
+        top = y0 + 5
+    # inner post with a ladder through all storeys
+    px, pz = x0 + 3, z0 + 3
+    bp.fill(px, fy + 1, pz + 1, px, top - 1, pz + 1, "dark_oak_log[axis=y]")
+    bp.ladder(px, fy + 1, pz, top - 1, "north")
+    for k in range(1, 3):
+        bp.set(px, fy + k * 5, pz, "ladder[facing=north,waterlogged=false]")
+    # witch hat
+    hx, hz = x0 + 1 + 3, z0 - 1 + 3
+    bp.fill(x0 + 1, top, z0 - 1, x0 + 6, top, z0 + 4, "dark_oak_planks")
+    apex = arch.spire(bp, hx, hz, top, 4, SLATE, SLATE_S, steep=3, finial=None)
+    for i, (dx, dy) in enumerate(((1, 0), (1, 1), (2, 1), (3, 1))):
+        bp.set(hx + dx, apex - 1 + dy, hz, SLATE if i < 3 else "wayfarers:slate_roof_tile_slab[type=bottom,waterlogged=false]")
+    bp.set(hx + 3, apex - 1, hz, "soul_lantern[hanging=true,waterlogged=false]")
+    for a in range(0, 360, 10):          # hat brim
+        x = hx + round(math.cos(math.radians(a)) * 5.4)
+        z = hz + round(math.sin(math.radians(a)) * 5.4)
+        if bp.get(x, top, z) is None:
+            bp.set(x, top, z, stair(SLATE_S, _card(hx - x, hz - z), "top"))
+    # door + porch (west)
+    bp.door(x0, fy + 1, z0 + 2, "west", "dark_oak")
+    for z in range(z0 + 1, z0 + 4):
+        for x in (x0 - 1, x0 - 2):
+            bp.set(x, fy, z, "dark_oak_planks")
+    bp.fill(x0 - 2, fy + 1, z0 + 4, x0 - 2, fy + 2, z0 + 4, "dark_oak_fence")
+    bp.lantern(x0 - 2, fy + 3, z0 + 4, soul=True)
+    # contents: the witch's den below (spawner in the dark), study above
+    bp.spawner(x0 + 2, fy + 1, z0 + 4, "minecraft:witch")
+    bp.set(x0 + 4, fy + 1, z0 + 1, "cauldron")
+    bp.set(x0 + 1, fy + 1, z0 + 1, "brewing_stand[has_bottle_0=true,has_bottle_1=true,has_bottle_2=false]")
+    bp.bookshelf_wall(x0 + 2, fy + 6, z0 + 1, x0 + 5, fy + 7, z0 + 1, 0.2)
+    bp.bed(x0 + 2, fy + 6, z0 + 4, "east", "purple")
+    bp.lantern(x0 + 4, fy + 9, z0 + 2, hanging=True, soul=True)
+    bp.barrel(x0 + 2, fy + 11, z0 + 2, "up", LOOT + "witch_hut")
+    bp.set(x0 + 5, fy + 11, z0 + 1, "lectern[facing=west,has_book=false,powered=false]")
+    bp.set(x0 + 5, fy + 11, z0 + 3, "enchanting_table")
+    bp.set(x0 + 4, fy + 11, z0 + 3, "candle[candles=4,lit=true,waterlogged=false]")
+    arch.vines_on(bp, ((x0 - 2, fy - 3, z0 - 3), (x0 + W + 2, top, z0 + W + 1)), chance=0.08, seed=seed, max_len=5)
+
+
+def _mangrove(bp, x, z, h, seed):
+    rng = random.Random(seed)
+    for y in range(2, h):
+        bp.set(x, y, z, "mangrove_log[axis=y]")
+    for k in range(5):
+        a = 2 * math.pi * k / 5 + rng.uniform(-0.3, 0.3)
+        ex, ez = x + round(math.cos(a) * 3), z + round(math.sin(a) * 3)
+        bp.line((x, 3, z), (ex, -1, ez), "mangrove_roots[waterlogged=false]")
+        bp.set(ex, -2, ez, "muddy_mangrove_roots[axis=y]")
+    lv = Palette({_lvs("mangrove_leaves"): 4, _lvs("azalea_leaves"): 1}, seed=seed)
+    _cluster(bp, x, h + 1, z, 4, 2, 4, lv, seed=seed, glow="shroomlight", glow_chance=0.05)
+    _cluster(bp, x + rng.randint(-2, 2), h + 3, z + rng.randint(-2, 2), 3, 2, 3, lv, seed=seed + 1)
 
 
 def witch_huts(bp):
-    def brewery(bp, x0, z0, x1, z1, fy):
-        bp.set(x0 + 1, fy + 1, z0 + 1, "cauldron")
-        bp.set(x0 + 2, fy + 1, z0 + 1, "brewing_stand[has_bottle_0=true,has_bottle_1=false,has_bottle_2=true]")
-        bp.set(x1 - 1, fy + 1, z0 + 1, "crafting_table")
-        for x in range(x0 + 1, x1):
-            bp.set(x, fy + 3, z1 - 1, bp.rng.choice(["potted_red_mushroom", "potted_brown_mushroom",
-                                                      "potted_fern", "potted_dead_bush"]))
-            bp.set(x, fy + 2, z1 - 1, f"spruce_slab[type=top,waterlogged=false]")
-        bp.chest(x1 - 1, fy + 1, z1 - 1, "west", LOOT + "witch_hut")
-        bp.lantern((x0 + x1) // 2, fy + 4, (z0 + z1) // 2, hanging=True, soul=True)
+    rng = random.Random(13)
+    # ---------------------------------------------------------------- the bog: shallow water, mud banks, islets
+    for x in range(-27, 28):
+        for z in range(-27, 29):
+            d = math.hypot(x, z * 0.95)
+            if d > 26 + 2 * math.sin(math.atan2(z, x) * 5):
+                continue
+            n = math.sin(x * 0.35) * math.cos(z * 0.3) + 0.5 * math.sin(x * 0.11 + z * 0.17)
+            if n > 0.55:
+                bp.set(x, 0, z, rng.choice(["mud", "grass_block[snowy=false]", "moss_block", "mud"]))
+                bp.set(x, -1, z, "mud")
+                if rng.random() < 0.18:
+                    bp.set(x, 1, z, rng.choice(["firefly_bush", "fern", "short_grass", "brown_mushroom",
+                                                "red_mushroom", "moss_carpet"]))
+            else:
+                bp.set(x, 0, z, "water[level=0]")
+                bp.set(x, -1, z, "water[level=0]" if n < 0.2 else "mud")
+                if rng.random() < 0.11:
+                    bp.set(x, 1, z, "lily_pad")
+                elif rng.random() < 0.01:
+                    bp.set(x, -1, z, rng.choice(["verdant_froglight[axis=y]", "pearlescent_froglight[axis=y]",
+                                                 "ochre_froglight[axis=y]"]))
+            bp.set(x, -2, z, "mud")
+            bp.set(x, -3, z, "clay" if (x + z) % 3 else "mud")
 
-    def library(bp, x0, z0, x1, z1, fy):
-        bp.bookshelf_wall(x0 + 1, fy + 1, z0 + 1, x1 - 1, fy + 2, z0 + 1, 0.2)
-        bp.set(x1 - 1, fy + 1, z1 - 1, "lectern[facing=west,has_book=false,powered=false]")
-        bp.bed(x0 + 1, fy + 1, z1 - 2, "south", "purple")
-        bp.barrel(x0 + 2, fy + 1, z1 - 1, "up", LOOT + "witch_hut")
-        bp.lantern((x0 + x1) // 2, fy + 4, (z0 + z1) // 2, hanging=True, soul=True)
-        bp.spawner(x1 - 2, fy - 3, (z0 + z1) // 2, "minecraft:witch")
-        bp.fill(x1 - 3, fy - 4, (z0 + z1) // 2 - 1, x1 - 1, fy - 4, (z0 + z1) // 2 + 1, "mud_bricks")
+    # ---------------------------------------------------------------- ritual island with the giant cauldron
+    for x in range(-8, 9):
+        for z in range(-8, 9):
+            d = math.hypot(x, z)
+            if d <= 7.3 + 0.6 * math.sin(math.atan2(z, x) * 3):
+                bp.set(x, 0, z, "podzol[snowy=false]" if d < 4.5 else rng.choice(["mud", "moss_block", "grass_block[snowy=false]"]))
+                bp.set(x, -1, z, "mud")
+                bp.clear(x, 1, z, x, 1, z)
+    for k in range(9):                    # standing stones, one fallen
+        a = 2 * math.pi * k / 9
+        x, z = round(math.cos(a) * 6), round(math.sin(a) * 6)
+        if k == 4:
+            bp.fill(x, 1, z, x + 2, 1, z, "mossy_cobblestone")
+            continue
+        h = 2 + (k % 3)
+        for y in range(1, h + 1):
+            bp.set(x, y, z, rng.choice(["mossy_cobblestone", "cobbled_deepslate", "tuff", "mossy_cobblestone"]))
+        bp.set(x, h + 1, z, "skeleton_skull[powered=false,rotation=%d]" % ((k * 2 + 8) % 16) if k % 3 == 0
+               else "candle[candles=3,lit=true,waterlogged=false]")
+    pot = Palette({"polished_deepslate": 3, "deepslate_tiles": 2, "polished_blackstone": 1}, seed=32)
+    for (x, z) in ((2, 2), (-2, 2), (2, -2), (-2, -2)):
+        bp.set(x, 1, z, "polished_deepslate_wall")
+    for (x, z) in ((0, 0), (1, 0), (-1, 0), (0, 1), (0, -1)):
+        bp.set(x, 1, z, "soul_campfire[facing=north,lit=true,signal_fire=false,waterlogged=false]")
+    for y, r in ((2, 2.6), (3, 3.5), (4, 4.0), (5, 4.1), (6, 3.7), (7, 3.3)):   # bulging pot
+        for x in range(-5, 6):
+            for z in range(-5, 6):
+                d = math.hypot(x, z)
+                if y == 2 and d <= r:
+                    bp.set(x, y, z, pot.pick(x, y, z))
+                elif r - 1.1 < d <= r:
+                    bp.set(x, y, z, pot.pick(x, y, z))
+                elif d <= r - 1.1:
+                    bp.set(x, y, z, "water[level=0]")
+    for a_ in range(0, 360, 8):                     # rolled rim
+        x, z = round(math.cos(math.radians(a_)) * 3.6), round(math.sin(math.radians(a_)) * 3.6)
+        bp.set(x, 8, z, stair("polished_deepslate_stairs", _card(-x, -z), "bottom"))
+    bp.disk(0, 2, 0, 1, "verdant_froglight[axis=y]")
+    bp.set(1, 8, -1, "lily_pad")
+    bp.line((1, 7, 1), (4, 11, 3), "stripped_mangrove_log[axis=y]")
+    for (x, z) in ((-4, 0), (4, 0)):              # handles
+        bp.set(x * 5 // 4, 6, z, "iron_chain[axis=x,waterlogged=false]")
+    # cauldron gear around the circle
+    for (x, z) in ((4, -3), (-4, 3)):
+        bp.set(x, 1, z, "brewing_stand[has_bottle_0=true,has_bottle_1=true,has_bottle_2=true]")
+    bp.set(-3, 1, -4, "cauldron")
+    bp.set(3, 1, 4, "cauldron")
 
-    fy = 3
-    stilt_hut(bp, 0, 0, 9, 7, fy, "spruce", "dark_oak", brewery)
-    stilt_hut(bp, 14, 4, 8, 7, fy + 1, "mangrove", "mangrove", library)
-    # rope bridge
-    for x in range(9, 14):
-        y = fy if x < 12 else fy + 1
-        bp.set(x, y, 4, "spruce_slab[type=top,waterlogged=false]")
-        bp.set(x, y, 5, "spruce_slab[type=top,waterlogged=false]")
-        bp.set(x, y + 1, 3, "spruce_fence")
-        bp.set(x, y + 1, 6, "spruce_fence")
-    bp.clear(8, fy + 1, 4, 8, fy + 2, 5)
-    bp.clear(14, fy + 2, 5, 14, fy + 3, 6)
-    # entrance ladder + dock
-    bp.clear(4, fy + 1, 6, 4, fy + 2, 6)
-    bp.door(4, fy + 1, 6, "south", "spruce")
-    for z in range(7, 12):
-        bp.set(4, fy, z, "spruce_planks")
-        bp.set(3, fy, z, "spruce_slab[type=top,waterlogged=false]")
-        bp.set(5, fy, z, "spruce_slab[type=top,waterlogged=false]")
-    for y in range(-3, fy):
-        bp.set(4, y, 12, "spruce_log[axis=y]")
-        if y >= 0:
-            bp.set(4, y, 11, "ladder[facing=north,waterlogged=false]")
-    bp.lantern(5, fy + 1, 11)
-    # vines and swampy details
-    hang_vines(bp, -1, 22, -1, 12, fy, 20)
+    # ---------------------------------------------------------------- huts
+    _witch_hut(bp, -17, -13, 9, 6, 3, "south", 1, interior="brewery", loot=LOOT + "witch_hut",
+               extra_doors=(("east", (-9, -10)),))
+    _crooked_tower(bp, 9, -15, 4, 2)
+    _witch_hut(bp, -16, 10, 7, 5, 3, "north", 3, wood="mangrove", roof=("dark_oak_stairs", "dark_oak_planks"),
+               interior="hermit", chimney=False)
+    _witch_hut(bp, 16, -2, 6, 5, 2, "west", 4, wood="spruce", interior=None, chimney=True)
+    # mushroom garden in the shed
+    for x in range(18, 21):
+        for z in range(-1, 2):
+            bp.set(x, 2, z, "podzol[snowy=false]")
+            if (x + z) % 2:
+                bp.set(x, 3, z, rng.choice(["red_mushroom", "brown_mushroom"]))
+    bp.barrel(17, 3, -1, "up")
+    # lean-to woodshed against the brewery's west wall
+    for z in range(-12, -8):
+        for k, x in enumerate((-20, -19, -18)):
+            bp.set(x, 6 - k // 2 + (1 if k == 2 else 0), z, stair("dark_oak_stairs", "east"))
+            bp.set(x, 3, z, "dark_oak_planks")
+        bp.set(-19, 4, z, "barrel[facing=north,open=false]" if z % 2 else "oak_log[axis=x]")
+        bp.set(-19, 5, z, "oak_log[axis=x]" if z % 2 else "air")
+    for z in (-12, -9):
+        bp.fill(-20, 4, z, -20, 5, z, "dark_oak_fence")
+        bp.fill(-20, -2, z, -20, 2, z, "mangrove_log[axis=y]")
+    # secret: the hermit's floor hides a trapdoor down a root ladder into a sunken mud cellar
+    bp.set(-14, 3, 12, "mangrove_trapdoor[facing=north,half=top,open=false,powered=false,waterlogged=false]")
+    bp.set(-14, 4, 12, "purple_carpet")
+    bp.room(-17, -7, 9, -11, -1, 15, "mud_bricks", floor="packed_mud", ceiling="mud_bricks")
+    bp.fill(-14, 0, 12, -14, 2, 12, "air")
+    for y in range(0, 3):
+        for (x, z) in ((-15, 12), (-13, 12), (-14, 11), (-14, 13)):
+            bp.set(x, y, z, "mangrove_roots[waterlogged=false]" if y > 0 else "mud_bricks")
+    bp.ladder(-14, -6, 12, 2, "north")
+    bp.fill(-14, -6, 13, -14, 2, 13, "mud_bricks")
+    bp.chest(-16, -6, 10, "south", LOOT + "witch_hut")
+    bp.set(-12, -6, 10, "brewing_stand[has_bottle_0=false,has_bottle_1=true,has_bottle_2=true]")
+    bp.set(-16, -6, 14, "skeleton_skull[powered=false,rotation=6]")
+    for x in (-16, -15, -13, -12):
+        bp.set(x, -5, 15 - 1, "potted_brown_mushroom" if x % 2 else "potted_crimson_fungus")
+    bp.lantern(-14, -2, 11, hanging=True, soul=True)
+
+    # ---------------------------------------------------------------- boardwalks and rope bridges
+    BW = dict(width=1, rail="fence", posts=4, clear_leaves=False, under=False, piles="mangrove_log[axis=y]",
+              soul=True, gaps=0.08)
+    _bridge(bp, (0, 0, 27), (0, 0, 8), "spruce", sag=0, seed=1, **BW)                 # arrival from the south
+    _bridge(bp, (-6, 0, -4), (-13, 3, -6), "spruce", sag=0, seed=2, **BW)            # to the brewery porch
+    _bridge(bp, (7, 0, -3), (7, 4, -12), "spruce", sag=0, seed=3, **BW)              # to the tower porch
+    _bridge(bp, (6, 0, 1), (14, 2, 0), "spruce", sag=0, seed=4, **BW)                # to the shed
+    _bridge(bp, (-6, 0, 4), (-13, 3, 7), "spruce", sag=0, seed=5, **BW)              # to the hermit
+    _bridge(bp, (-7, 3, -10), (7, 4, -12), "mangrove", sag=2, width=1, posts=4, clear_leaves=False, soul=True,
+            seed=6)                                                                   # rope bridge, brewery -> tower
+
+    # ---------------------------------------------------------------- trees, lanterns, hanging moss
+    for (x, z, h, sd) in ((-22, -2, 9, 1), (20, 13, 10, 2), (-4, -21, 8, 3), (-2, 22, 7, 4), (22, -20, 8, 5),
+                          (-22, 21, 8, 6), (10, 21, 6, 7)):
+        _mangrove(bp, x, z, h, sd)
+    for (x, z) in ((-3, 11), (4, -9), (-9, 2), (11, 0)):
+        bp.fill(x, -2, z, x, 4, z, "mangrove_log[axis=y]")
+        bp.set(x + 1, 4, z, "mangrove_fence")
+        bp.lantern(x + 1, 3, z, hanging=True, soul=True)
+    _hang_under(bp, ((-30, 2, -30), (30, 40, 30)), 0.10, 7, ("moss", "moss", "vine"),
+                on=("_leaves", "_planks", "roof_tile"))
 
 
 register(StructureDef(
     "witch_huts", "overworld", ["swamp", "mangrove_swamp"], [Piece("huts", witch_huts)],
     spacing=24, separation=8, adaptation="none", processors="none",
     title_fr="Huttes des sorcières", title_en="Swamp Witch Huts"))
-
 
 
 # ============================================================ Sky archipelago
@@ -1493,6 +1769,8 @@ def _helix_stair(bp, cx, cz, y0, y1, r, end, stairs, under, rail, lamp_every=9, 
             bp.clear(x, y + 1, z, x, y + 3, z)
             pos = (x, y, z)
         x, z = cx + round(math.cos(a) * (r + 2)), cz + round(math.sin(a) * (r + 2))
+        if (bp.get(x, y, z) or "").endswith("_stairs") or (bp.get(x, y + 1, z) or "").endswith("_stairs"):
+            continue
         if bp.get(x, y + 1, z) in (None, "minecraft:air"):
             bp.set(x, y, z, under)
             bp.set(x, y + 1, z, rail)

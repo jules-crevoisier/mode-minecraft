@@ -9,9 +9,8 @@ import random
 
 from .. import arch
 from ..arch import FACE_VEC, OPPOSITE, Palette, _pos, fill_pal, slab, stair
-from ..blueprint import with_props
 from ..defs import Piece, StructureDef, register
-from ..parts import LOOT, MOB, MOD, leaves
+from ..parts import LOOT, MOB, MOD
 
 NETHER = ["#minecraft:is_nether"]
 
@@ -317,7 +316,6 @@ def sq_tower(bp, x0, z0, x1, z1, y0, h, wall=EMBER, *, base=-8, roof="spike", st
                 if x in (x0 - o + 1, x1 + o - 1) or z in (z0 - o + 1, z1 + o - 1):
                     bp.set(x, yy, z, BLACK.pick(x, yy, z))
     bp.fill(x0 - 2, top + 1, z0 - 2, x1 + 2, top + 1, z1 + 2, PBB)
-    i = 0
     for x in range(x0 - 2, x1 + 3):
         for z in range(z0 - 2, z1 + 3):
             if x in (x0 - 2, x1 + 2) or z in (z0 - 2, z1 + 2):
@@ -330,7 +328,6 @@ def sq_tower(bp, x0, z0, x1, z1, y0, h, wall=EMBER, *, base=-8, roof="spike", st
                     bp.set(x, top + 4, z, slab(PBBSL))
                 elif (x + z) % 6 == 0:
                     bp.set(x, top + 2, z, LAMP)
-                i += 1
     if roof == "spike":
         r = (x1 - x0) // 2
         bp.fill(x0, top + 2, z0, x1, top + 2, z1, roof_block)
@@ -878,11 +875,10 @@ def chain_bridge(bp):
     zm = CB_L // 2
     # rock islands carrying the towers
     for zc, seed in ((0, 5), (CB_L, 6)):
-        rock_island(bp, 15, 14, 7, depth=24, slope=1.0, spread=5, seed=seed, pillars=14, cz=zc,
+        rock_island(bp, 15, 13, 7, depth=24, slope=1.2, spread=3, seed=seed, pillars=14, cz=zc,
                     top_y=CB_SEA + 1)
-    backs = {}
     for zc, back, h, st in ((0, -1, 47, 3), (CB_L, 1, 53, 4)):
-        backs[zc] = _gate_tower(bp, zc, back, h, st)
+        _gate_tower(bp, zc, back, h, st)
     # the deck: blackstone curbs, crimson planking, ember lamps in the railing, girders below
     for z in range(5, CB_L - 4):
         for x in range(-4, 5):
@@ -1940,7 +1936,7 @@ def festoon(bp, axis, sign, r0, r1, y0, y1, sag=4):
         t = i / n
         y = round(y0 + (y1 - y0) * t - sag * 4 * t * (1 - t))
         pts.append((r0 + i, y))
-    for (r, y), (r2, y2) in zip(pts, pts[1:]):
+    for (r, y), (_, y2) in zip(pts, pts[1:]):
         x, z = (sign * r, 0) if axis == "x" else (0, sign * r)
         lo, hi = sorted((y, y2))
         if hi > lo:

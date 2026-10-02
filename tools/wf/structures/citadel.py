@@ -25,8 +25,7 @@ from ..arch import Palette, stair, slab
 from ..defs import Piece, StructureDef, register
 from ..parts import LOOT, MOD
 
-HULL = Palette({"prismarine_bricks": 6, "prismarine": 3, "dark_prismarine": 1}, seed=3, scale=2.2)
-DOME = Palette({"prismarine_bricks": 3, "prismarine": 2}, seed=5, scale=1.8)
+HULL = Palette({"prismarine_bricks": 8, "prismarine": 3}, seed=3, scale=1.6)
 TRIM = "dark_prismarine"
 TRIM_S = "dark_prismarine_stairs"
 BRICK_S = "prismarine_brick_stairs"
@@ -38,7 +37,7 @@ AIR = "minecraft:air"
 
 ARENA = (0, -8)       # centre of the domed arena
 AR = 14               # arena interior radius
-DRUM = 14             # drum height (dome springs here)
+DRUM = 20             # drum height (dome springs here)
 
 
 def pointed(u, a, k=1.5):
@@ -83,7 +82,7 @@ def spire(bp, cx, cz, y, r, finial=True):
 
 
 # ------------------------------------------------------------------ gothic hall
-def hall_shell(bp, x0, z0, x1, z1, hw, axis, flying=False, rose=(True, True), lit_ridge=True):
+def hall_shell(bp, x0, z0, x1, z1, hw, axis, flying=False, rose=(True, True), lit_ridge=True, avoid=()):
     """Gothic hall on outer walls x0..x1 / z0..z1; ridge along `axis`. Interior floor y=0,
     walls to hw, pointed vault inside, steep dark prismarine roof outside, lancet windows,
     stepped buttresses with pinnacles (detached flying buttresses when flying=True)."""
@@ -101,6 +100,10 @@ def hall_shell(bp, x0, z0, x1, z1, hw, axis, flying=False, rose=(True, True), li
         return (a, v) if axis == "z" else (v, a)
 
     bays = list(range(v_lo + 2, v_hi - 1, 4))
+
+    def clear_of(a, v):
+        x, z = P(a, v)
+        return not any(r[0] <= x <= r[2] and r[1] <= z <= r[3] for r in avoid)
     # ---------------- masonry, vault and roof, column by column
     for a in range(a_lo - 1, a_hi + 2):
         e = min(a - (a_lo - 1), (a_hi + 1) - a)
@@ -119,8 +122,11 @@ def hall_shell(bp, x0, z0, x1, z1, hw, axis, flying=False, rose=(True, True), li
                     bp.set(x, top - 1, z, stair(TRIM_S, {"east": "west", "west": "east", "south": "north",
                                                          "north": "south"}[f], "top"))
                 else:
-                    for y in range(base, top + 1):
-                        bp.set(x, y, z, TRIM if y == top else HULL.pick(x, y, z))
+                    # barge course over the gable: just the roof skin, with a shadow stair below
+                    bp.set(x, top, z, TRIM)
+                    toward = ("south" if v == v_lo - 1 else "north") if axis == "z" else \
+                        ("east" if v == v_lo - 1 else "west")
+                    bp.set(x, top - 1, z, stair(TRIM_S, toward, "top"))
                     if not is_ridge:
                         f = (("east" if a < ac else "west") if axis == "z" else ("south" if a < ac else "north"))
                         bp.set(x, top + 1, z, stair(TRIM_S, f))
@@ -187,6 +193,8 @@ def hall_shell(bp, x0, z0, x1, z1, hw, axis, flying=False, rose=(True, True), li
             bp.set(x, hw - 1, z, GLASS)
     for v in bays:
         for a, out in ((a_lo, -1), (a_hi, 1)):
+            if not clear_of(a + out, v):
+                continue
             for d in (1, 2):
                 x, z = P(a + out * d, v)
                 h = hw + 1 if d == 1 else hw - 4
@@ -235,6 +243,31 @@ def hall_shell(bp, x0, z0, x1, z1, hw, axis, flying=False, rose=(True, True), li
                 x, z = P(a, v)
                 if d <= 3.6:
                     bp.set(x, y, z, LC if d < 0.8 else TRIM if (abs(u) < 0.6 or abs(y - ry) < 0.6 or 2.6 < d) else GLASS)
+    # ---------------- roof: dormers on both slopes and a fleche on the ridge
+    ridge_top = base + 2 * centre_e
+    for vm in lancets[1::2]:
+        for side in (-1, 1):
+            e = 3
+            a = (a_lo - 1 + e) if side < 0 else (a_hi + 1 - e)
+            y0 = base + 2 * e + 1
+            for dv in (-1, 0, 1):
+                x, z = P(a, vm + dv)
+                for y in range(y0, y0 + 3):
+                    bp.set(x, y, z, TRIM if dv else (GLASS if y < y0 + 2 else TRIM))
+                if dv:
+                    f = ("south" if dv < 0 else "north") if axis == "z" else ("east" if dv < 0 else "west")
+                    bp.set(x, y0 + 3, z, stair(TRIM_S, f))
+                else:
+                    bp.set(x, y0 + 3, z, TRIM)
+                    bp.set(x, y0 + 4, z, "prismarine_wall")
+    vm = (v_lo + v_hi) // 2
+    for a in range(a_lo - 1, a_hi + 2):
+        if min(a - (a_lo - 1), (a_hi + 1) - a) == centre_e:
+            x, z = P(a, vm)
+            for y in range(ridge_top + 1, ridge_top + 4):
+                bp.set(x, y, z, TRIM if y < ridge_top + 3 else SEA)
+            spire(bp, x, z, ridge_top + 4, 1)
+            break
     return bays
 
 
@@ -323,15 +356,19 @@ def arena(bp):
                 elif d <= Rd + 1.5:
                     ang = math.degrees(math.atan2(z - az, x - ax)) % 360
                     elev = math.degrees(math.asin(min(1.0, (y - DRUM) / d)))
-                    rib = min(ang % 30, 30 - ang % 30) < 3.2 * (1 + elev / 90)
-                    if elev > 74:
-                        b = GLASS if elev > 80 else TRIM
+                    rib = min(ang % 22.5, 22.5 - ang % 22.5) < 2.6 * (1 + elev / 60)
+                    if elev > 76:
+                        b = GLASS if elev > 82 else TRIM
+                    elif elev < 7:
+                        b = LB
                     elif rib:
                         b = TRIM
-                    elif 14 < elev < 56:
-                        b = GLASS if d <= Rd + 1.0 else DOME.pick(x, y, z)
+                    elif 50 <= elev < 56:
+                        b = SEA if d > Rd + 0.9 else TRIM
+                    elif 10 < elev < 48:
+                        b = GLASS
                     else:
-                        b = DOME.pick(x, y, z)
+                        b = "prismarine_bricks"
                     bp.set(x, y, z, b)
     # outer skin of the dome: stairs along the ribs for a crisp silhouette, lantern on top
     top = DRUM + R + 2
@@ -342,16 +379,17 @@ def arena(bp):
                 bp.set(x, top, z, TRIM if d > 2.4 else GLASS)
     for k in range(8):
         a = math.radians(k * 45 + 22.5)
-        x, z = ax + round(math.cos(a) * 2.6), az + round(math.sin(a) * 2.6)
-        for y in range(top + 1, top + 5):
+        x, z = ax + round(math.cos(a) * 3.2), az + round(math.sin(a) * 3.2)
+        for y in range(top + 1, top + 7):
             bp.set(x, y, z, TRIM)
-    for x in range(ax - 2, ax + 3):
-        for z in range(az - 2, az + 3):
-            if math.hypot(x - ax, z - az) <= 2.3:
-                for y in range(top + 1, top + 5):
+        pinnacle(bp, x, top + 7, z, 1)
+    for x in range(ax - 3, ax + 4):
+        for z in range(az - 3, az + 4):
+            if math.hypot(x - ax, z - az) <= 3.0:
+                for y in range(top + 1, top + 7):
                     if bp.get(x, y, z) is None:
-                        bp.set(x, y, z, SEA if y == top + 2 else GLASS)
-    spire(bp, ax, az, top + 5, 3)
+                        bp.set(x, y, z, SEA if y in (top + 2, top + 5) and math.hypot(x - ax, z - az) < 1.5 else GLASS)
+    spire(bp, ax, az, top + 7, 4)
     # drum: 16 inner pilasters with lithite bands, lancet windows between them
     for k in range(16):
         a = math.radians(k * 22.5)
@@ -398,10 +436,10 @@ def arena(bp):
                 for y in range(-1, 19):
                     bp.set(px, y, pz, TRIM if r == 21 else HULL.pick(px, y, pz))
         px, pz = ax + round(ux * 21), az + round(uz * 21)
-        pinnacle(bp, px, 19, pz, 4)
-        # arch from the pier to the drum top
-        for r in range(17, 21):
-            y = 19 - round((21 - r) * 0.5) + (1 if r < 18 else 0)
+        pinnacle(bp, px, 19, pz, 5)
+        # flying arch from the pier head up to the top of the drum
+        for r in range(16, 21):
+            y = DRUM + 1 - int((r - 16) * 0.6)
             qx, qz = ax + round(ux * r), az + round(uz * r)
             bp.set(qx, y, qz, TRIM)
             bp.set(qx, y + 1, qz, "prismarine_bricks")
@@ -415,7 +453,7 @@ def arena(bp):
 def vault(bp):
     """Treasure vault north of the arena, behind the sealed bars."""
     x0, z0, x1, z1 = -7, -39, 7, -26
-    hall_shell(bp, x0, z0, x1, z1, 7, "x", rose=(False, False))
+    hall_shell(bp, x0, z0, x1, z1, 8, "x", rose=(False, False), avoid=((-4, -27, 4, -20),))
     cx = 0
     for x in range(x0 + 2, x1 - 1, 2):
         bp.barrel(x, 1, z0 + 1, "south", LOOT + "citadel_vault" if x % 4 == 1 else None)
@@ -508,8 +546,7 @@ def tower(bp):
             for z in range(cz - r - 1, cz + r + 2):
                 d = math.hypot(x - cx, z - cz)
                 if d <= 4.5:
-                    if y > BASE_H:
-                        bp.set(x, y, z, "air")
+                    bp.set(x, y, z, "air")
                 elif d <= r + 0.5:
                     bp.set(x, y, z, LB if y % 8 == 0 else HULL.pick(x, y, z))
     for k in range(8):   # shaft pilasters and slit windows
@@ -565,11 +602,11 @@ def tower(bp):
                 continue
             k = int((math.degrees(math.atan2(z - cz, x - cx)) % 360) // 22.5)
             y = 1 + k
-            while y < cab:
+            while y <= cab - 2:
                 bp.set(x, y, z, "prismarine_bricks" if d > 3 else TRIM)
                 y += 16
-            # opening in the cabin floor over the last turn of the stair
-            if cab - 1 - 4 <= (1 + k + 16 * ((cab - 2 - k) // 16)) <= cab - 1:
+            # opening in the cabin floor over the last steps of the stair
+            if cab - 5 <= y - 16 <= cab - 2:
                 bp.set(x, SHAFT_TOP, z, "air")
     # doorway into the nave (north face) and a guard post at the foot of the stair
     for x in range(-2, 3):
@@ -632,7 +669,7 @@ def library(bp, x0, z0, x1, z1, hw, rng):
         bp.set(x, 1, z, "lectern[facing=north,has_book=false,powered=false]")
     for x in range(cx - 1, cx + 2):
         for z in (cz - 1, cz + 1):
-            bp.set(x, 0, z, "cyan_carpet" if False else LB)
+            bp.set(x, 0, z, LB)
     bp.barrel(x1 - 1, 1, z1 - 1, "up", LOOT + "citadel_library")
     bp.set(cx, hw - 1, cz, SEA)
 
@@ -741,7 +778,10 @@ def garden(bp, x0, z0, x1, z1, hw, rng):
         for y in range(top - 4, top):
             bp.set(x, y, z, "cave_vines_plant[berries=true]" if y > top - 4 else "cave_vines[age=20,berries=true]")
         bp.set(x, top, z, "shroomlight")
-    bp.set(cx, hw + 2, cz, "spore_blossom")
+    y = hw
+    while bp.get(cx, y + 1, cz) == AIR:
+        y += 1
+    bp.set(cx, y, cz, "spore_blossom")
     bp.barrel(x1 - 1, 1, z1 - 1, "up", LOOT + "citadel_common")
 
 
@@ -782,9 +822,9 @@ THEMES = [armory, library, aquarium, prison, garden, shrine]
 
 # halls: (x0, z0, x1, z1, wall height, ridge axis)
 HALLS = {
-    "W1": (-34, 8, -20, 26, 10, "z"), "E1": (20, 8, 34, 26, 10, "z"),
-    "W2": (-38, -19, -24, -1, 11, "z"), "E2": (24, -19, 38, -1, 11, "z"),
-    "W3": (-31, -38, -17, -24, 9, "x"), "E3": (17, -38, 31, -24, 9, "x"),
+    "W1": (-34, 8, -20, 26, 12, "z"), "E1": (20, 8, 34, 26, 12, "z"),
+    "W2": (-38, -19, -24, -1, 13, "z"), "E2": (24, -19, 38, -1, 13, "z"),
+    "W3": (-31, -38, -17, -24, 11, "x"), "E3": (17, -38, 31, -24, 11, "x"),
 }
 TUNNELS = [  # (p0, p1, axis)
     ((-21, 17), (-6, 17), "x"), ((6, 17), (21, 17), "x"),                # nave <-> W1 / E1
@@ -792,6 +832,23 @@ TUNNELS = [  # (p0, p1, axis)
     ((-27, -25), (-27, -18), "z"), ((27, -25), (27, -18), "z"),          # W2 <-> W3, E2 <-> E3
     ((-25, -10), (-12, -10), "x"), ((12, -10), (25, -10), "x"),          # W2 / E2 <-> arena
 ]
+
+# tunnel corridors (with a margin) where halls must not grow buttresses
+AVOID = tuple((min(p0[0], p1[0]), p0[1] - 3, max(p0[0], p1[0]), p0[1] + 3) if ax == "x" else
+              (p0[0] - 3, min(p0[1], p1[1]), p0[0] + 3, max(p0[1], p1[1])) for p0, p1, ax in TUNNELS)
+
+
+def _inner(p0, p1, axis):
+    """Tunnel span strictly between the walls it joins (outside every hall and the drum)."""
+    i = 0 if axis == "x" else 1
+    lo, hi = sorted((p0[i], p1[i]))
+    lo, hi = lo + 2, hi - 2
+    ax, az = ARENA
+    while math.hypot(*((lo - ax, p0[1] - az) if axis == "x" else (p0[0] - ax, lo - az))) <= AR + 2.5:
+        lo += 1
+    while math.hypot(*((hi - ax, p0[1] - az) if axis == "x" else (p0[0] - ax, hi - az))) <= AR + 2.5:
+        hi -= 1
+    return ((lo, p0[1]), (hi, p0[1])) if axis == "x" else ((p0[0], lo), (p0[0], hi))
 
 
 def citadel(variant):
@@ -802,19 +859,21 @@ def citadel(variant):
         for p0, p1, axis in TUNNELS:
             glass_tunnel(bp, p0, p1, axis)
         # the nave, tall with flying buttresses, opening on the tower and the arena
-        hall_shell(bp, -7, 7, 7, 27, 14, "z", flying=True, rose=(False, False))
+        hall_shell(bp, -7, 7, 7, 27, 16, "z", flying=True, rose=(False, False), avoid=AVOID)
         themes = THEMES[:]
         rng.shuffle(themes)
         for theme, key in zip(themes, ["W1", "E1", "W2", "E2", "W3", "E3"]):
             x0, z0, x1, z1, hw, axis = HALLS[key]
-            hall_shell(bp, x0, z0, x1, z1, hw, axis)
+            hall_shell(bp, x0, z0, x1, z1, hw, axis, avoid=AVOID)
             theme(bp, x0 + 1, z0 + 1, x1 - 1, z1 - 1, hw, rng)
         arena(bp)
         vault(bp)
         vault_passage(bp)
         tower(bp)
         nave_interior(bp)
+        # restore the tunnels' glass between the walls, then open every doorway
         for p0, p1, axis in TUNNELS:
+            glass_tunnel(bp, *_inner(p0, p1, axis), axis)
             carve_tunnel(bp, p0, p1, axis)
         # nave <-> arena portal through the drum
         for z in range(4, 9):
