@@ -10,7 +10,7 @@ from .. import arch
 from ..arch import Palette, slab, stair
 from ..blueprint import OPPOSITE, Blueprint, family, with_props
 from ..defs import Piece, StructureDef, register
-from ..parts import LOOT, MOB, MOD, leaves
+from ..parts import LOOT, MOB, MOD
 
 FLOWERS = ["short_grass", "short_grass", "short_grass", "fern", "poppy", "dandelion", "oxeye_daisy",
            "azure_bluet", "cornflower", "bush", "leaf_litter[facing=north,segment_amount=3]"]
@@ -855,6 +855,9 @@ def bandit_camp(bp):
         for z in range(-12, -8):
             if bp.get(x, 1, z) in (None, "minecraft:air", "minecraft:brown_carpet"):
                 bp.set(x, 1, z, "red_carpet")
+    # secret: the chief's personal stash, buried under the rug
+    bp.chest(-1, 0, -12, "south", LOOT + "bandit_camp")
+    bp.set(-1, -1, -12, "dirt")
     arch.hanging_lantern(bp, 0, 5, -11, chain=1)
     bp.lantern(-3, 1, -7)
     bp.lantern(3, 1, -7)
@@ -893,26 +896,25 @@ def bandit_camp(bp):
     bp.set(10, 4, 11, "iron_bars")
     bp.set(10, 3, 11, "iron_trapdoor[facing=north,half=top,open=false,powered=false,waterlogged=false]")
 
-    # ---- loot pile of stolen goods (north-east, by the leader's tent)
-    bp.chest(8, 1, -14, "south", LOOT + "bandit_camp")
-    for x, z in ((7, -14), (9, -14), (7, -13), (9, -12), (10, -13)):
+    # ---- loot pile of stolen goods (north-east, by the leader's tent) under a canvas lean-to
+    lx, lz = 7, -12
+    bp.chest(lx + 1, 1, lz, "south", LOOT + "bandit_camp")
+    for x, z in ((lx, lz), (lx + 2, lz), (lx, lz + 1), (lx + 2, lz + 2), (lx + 3, lz + 1)):
         bp.barrel(x, 1, z, "up")
-    bp.set(9, 2, -14, "barrel[facing=north,open=false]")
-    bp.set(8, 1, -12, "hay_block[axis=x]")
-    bp.set(8, 2, -13, "decorated_pot[facing=south,waterlogged=false,cracked=true]")
-    bp.set(10, 1, -12, "gold_block")
-    bp.set(7, 2, -14, "raw_iron_block")
-    # canvas lean-to over the stash
-    for x in range(6, 12):
-        bp.set(x, 4, -15, "brown_wool")
-        bp.set(x, 3, -11, slab("spruce_slab", "top"))
-    for x in (6, 11):
+    bp.set(lx + 2, 2, lz, "barrel[facing=north,open=false]")
+    bp.set(lx + 1, 1, lz + 2, "hay_block[axis=x]")
+    bp.set(lx + 1, 2, lz + 1, "decorated_pot[facing=south,waterlogged=false,cracked=true]")
+    bp.set(lx + 3, 1, lz + 2, "gold_block")
+    bp.set(lx, 2, lz, "raw_iron_block")
+    for x in range(lx - 1, lx + 5):
+        bp.set(x, 4, lz - 1, "brown_wool")
+        bp.set(x, 4, lz, "brown_wool")
+        bp.set(x, 4, lz + 1, "brown_wool")
+        bp.set(x, 3, lz + 2, "brown_wool")
+        bp.set(x, 3, lz + 3, slab("spruce_slab", "top"))
+    for x in (lx - 1, lx + 4):
         for y in (1, 2):
-            bp.set(x, y, -11, "spruce_fence")
-    for x in range(6, 12):
-        bp.set(x, 4, -14, "brown_wool")
-        bp.set(x, 4, -13, "brown_wool")
-        bp.set(x, 3, -12, "brown_wool")
+            bp.set(x, y, lz + 3, "spruce_fence")
 
     # ---- stolen cart (south-west, inside the gate)
     _bc_wagon(bp, -12, 7, rng)
@@ -958,19 +960,11 @@ def bandit_camp(bp):
     bp.set(4, 1, 7, "cauldron")
     bp.set(9, 1, 6, "barrel[facing=up,open=false]")
     arch.hanging_lantern(bp, 6, 6, 6, chain=1)
-    # stable lean-to (north-west) with hay
-    for x in range(-15, -9):
-        bp.set(x, 4, -15, slab("spruce_slab", "top"))
-        bp.set(x, 3, -14, stair("spruce_stairs", "south"))
-    for x in (-15, -10):
-        for y in (1, 2):
-            bp.set(x, y, -14, "spruce_fence")
-    for x, z in ((-14, -15), (-13, -15), (-12, -14), (-11, -15)):
+    # hay stack and feed trough by the cart
+    for x, z in ((-14, 5), (-15, 5), (-14, 4)):
         bp.set(x, 1, z, "hay_block[axis=y]")
-    bp.set(-13, 2, -15, "hay_block[axis=x]")
-    for x in range(-15, -9):
-        bp.set(x, 1, -12, "spruce_fence")
-    bp.set(-12, 1, -12, "spruce_fence_gate[facing=south,in_wall=false,open=false,powered=false]")
+    bp.set(-14, 2, 5, "hay_block[axis=x]")
+    bp.set(-9, 1, 13, "composter[level=4]")
     # cheval-de-frise: crossed sharpened stakes outside the gate
     for x in (-9, -6, 6, 9):
         z = gz + 3
@@ -2254,100 +2248,484 @@ register(StructureDef(
     title_fr="Temple englouti", title_en="Sunken Temple"))
 
 
-from ..parts import banner_pole, crate_stack, garden, lamp_post, palm, path, round_tower, timber_house, tree  # noqa
+# ============================================================ 7. Dwarven mine (hillside settlement + galleries)
+DM_STONE = Palette({"stone_bricks": 4, "cobblestone": 2, "andesite": 1, "cracked_stone_bricks": 1}, seed=71, scale=2.5)
+DM_ROCK = Palette({"stone": 5, "andesite": 2, "tuff": 2, "cobblestone": 1}, seed=72, scale=3)
+DM_ROOF = "wayfarers:crimson_roof_tile_stairs"
+DM_UP = 4            # upper terrace height
+SHAFT = (0, -10)     # shaft centre (x, z)
+DEPTH = 32           # hall floor at y = -DEPTH
+ORES = ["iron_ore", "iron_ore", "coal_ore", "coal_ore", "copper_ore", "gold_ore", "redstone_ore", "lapis_ore",
+        "diamond_ore", "emerald_ore"]
 
 
-# ============================================================ Abandoned dwarven mine
-def dwarven_mine(bp):
-    # surface: headframe over the shaft + workshop shed
-    bp.fill(-3, 0, -3, 3, 0, 3, "spruce_planks")
-    for x, z in ((-2, -2), (2, -2), (-2, 2), (2, 2)):
-        bp.fill(x, 1, z, x, 12, z, "spruce_log[axis=y]")
-    for y in (6, 12):
-        for x in range(-2, 3):
-            bp.set(x, y, -2, "spruce_log[axis=x]")
-            bp.set(x, y, 2, "spruce_log[axis=x]")
-        for z in range(-1, 2):
-            bp.set(-2, y, z, "spruce_log[axis=z]")
-            bp.set(2, y, z, "spruce_log[axis=z]")
-    bp.fill(-2, 13, 0, 2, 13, 0, "spruce_log[axis=x]")
-    bp.set(0, 14, 0, "grindstone[face=floor,facing=north]")
-    bp.chain(0, 4, 0, 12)
-    bp.set(0, 3, 0, "iron_block")
-    bp.pyramid_roof(-2, -2, 2, 2, 14, "spruce_stairs", overhang=0)
-    # shaft
-    depth = 32
-    bp.clear(-1, -depth, -1, 1, 0, 1)
-    for y in range(-depth, 1):
-        for x, z in ((-2, -1), (-2, 0), (-2, 1), (2, -1), (2, 0), (2, 1), (-1, -2), (0, -2), (1, -2),
-                     (-1, 2), (0, 2), (1, 2)):
-            bp.set(x, y, z, "spruce_planks" if y % 6 else "spruce_log[axis=y]", keep=True)
-    bp.fill(-1, 0, -1, 1, 0, 1, "air")
-    bp.ladder(0, -depth + 1, -1, 0, "south")
-    bp.fill(-1, 1, 1, 1, 1, 1, "spruce_fence")
-    for y in range(-depth + 4, 0, 8):
-        bp.lantern(1, y, 1)
-        bp.set(1, y - 1, 1, "spruce_slab[type=top,waterlogged=false]")
-    # shed
-    bp.room(5, 0, -4, 12, 5, 3, "spruce_planks", floor="cobblestone")
-    bp.gable_roof(5, -4, 12, 3, 6, "dark_oak_stairs", ridge_axis="x", overhang=1, fill="spruce_planks")
-    bp.clear(5, 1, -1, 5, 2, -1)
-    bp.door(5, 1, -1, "west", "spruce")
-    bp.set(11, 1, -3, "blast_furnace[facing=south,lit=false]")
-    bp.set(10, 1, -3, "smithing_table")
-    bp.set(9, 1, -3, "anvil[facing=east]")
-    bp.chest(11, 1, 2, "north", LOOT + "dwarven_mine")
-    bp.barrel(7, 1, 2, "up")
-    # underground hall + tunnels
-    hy = -depth
-    bp.room(-6, hy - 1, -6, 6, hy + 5, 6, "deepslate_bricks", floor="polished_deepslate",
-            ceiling="deepslate_tiles")
-    bp.clear(-1, hy + 5, -1, 1, hy + 5, 1)
-    bp.fill(-1, hy, -2, 1, hy + 4, -2, "spruce_planks")  # backing for the ladder
-    bp.ladder(0, hy, -1, hy + 5, "south")
-    for x, z in ((-4, -4), (4, -4), (-4, 4), (4, 4)):
-        bp.fill(x, hy, z, x, hy + 4, z, "spruce_log[axis=y]")
-        bp.lantern(x, hy + 4, z + (1 if z < 0 else -1), hanging=True)
-    bp.chest(-5, hy, 0, "east", LOOT + "dwarven_mine")
-    bp.set(5, hy, -2, "anvil[facing=north]")
-    bp.set(5, hy, 2, "blast_furnace[facing=west,lit=false]")
-    bp.set(-5, hy, -5, "crafting_table")
-    ores = ["iron_ore", "deepslate_iron_ore", "deepslate_gold_ore", "deepslate_redstone_ore",
-            "deepslate_lapis_ore", "coal_ore", "deepslate_diamond_ore", "deepslate_emerald_ore"]
-    for (dx, dz, axis) in ((1, 0, "x"), (-1, 0, "x"), (0, 1, "z"), (0, -1, "z")):
-        length = 22
-        for k in range(7, 7 + length):
-            cx, cz = dx * k, dz * k
+def _dm_timber_house(bp, x0, z0, w, d, floors, rng, roof_axis="x"):
+    """Stone ground floor + timber-framed upper floor(s) with packed-mud infill and a terracotta roof."""
+    x1, z1 = x0 + w - 1, z0 + d - 1
+    bp.fill(x0, -4, z0, x1, -1, z1, "cobblestone", keep=True)
+    top = 4 * floors
+    for y in range(0, top + 1):
+        for x in range(x0, x1 + 1):
+            for z in range(z0, z1 + 1):
+                edge = x in (x0, x1) or z in (z0, z1)
+                corner = x in (x0, x1) and z in (z0, z1)
+                if y == 0 or y % 4 == 0:
+                    bp.set(x, y, z, ("spruce_planks" if y else "cobblestone") if not edge else
+                           (DM_STONE.pick(x, y, z) if y == 0 else log("dark_oak_log", "x" if z in (z0, z1) else "z")))
+                elif y < 4:
+                    bp.set(x, y, z, (DM_STONE.pick(x, y, z) if not corner else "polished_andesite") if edge else "air")
+                elif edge:
+                    post = corner or (z in (z0, z1) and (x - x0) % 3 == 0) or (x in (x0, x1) and (z - z0) % 3 == 0)
+                    brace = (y % 4 == 2) and not post
+                    bp.set(x, y, z, log("dark_oak_log") if post else ("packed_mud" if not brace else
+                                                                     log("stripped_dark_oak_log", "x" if z in (z0, z1) else "z")))
+                else:
+                    bp.set(x, y, z, "air")
+    # jettied overhang: corbels under the first timber floor
+    for x in range(x0, x1 + 1):
+        bp.set(x, 3, z0 - 1, stair("spruce_stairs", "south", "top"))
+        bp.set(x, 3, z1 + 1, stair("spruce_stairs", "north", "top"))
+    # windows (ground: framed stone; upper: shuttered)
+    for x in range(x0 + 2, x1 - 1, 3):
+        for z, f in ((z0, "north"), (z1, "south")):
+            bp.set(x, 2, z, "glass_pane")
+            for fy in range(4, top, 4):
+                bp.set(x, fy + 2, z, "glass_pane")
+                bp.set(x + 1 if x + 1 < x1 else x, fy + 2, z, "glass_pane")
+                oz = -1 if f == "north" else 1
+                bp.set(x, fy + 1, z + oz, stair("spruce_stairs", OPPOSITE[f], "top"))
+    for z in range(z0 + 2, z1 - 1, 3):
+        for x in (x0, x1):
+            bp.set(x, 2, z, "glass_pane")
+            for fy in range(4, top, 4):
+                bp.set(x, fy + 2, z, "glass_pane")
+    ridge = arch.steep_roof(bp, x0, z0, x1, z1, top + 1, DM_ROOF, axis=roof_axis, overhang=1, steep=1,
+                            fill="spruce_planks", under="dark_oak_stairs",
+                            ridge=slab("wayfarers:crimson_roof_tile_slab"),
+                            dormers=1 if (w if roof_axis == "x" else d) >= 9 else 0, dormer_stairs=DM_ROOF,
+                            dormer_wall="spruce_planks")
+    return top, ridge
+
+
+def _dm_gallery(bp, hy, start, direction, length, rng, end_loot=True, vault=False):
+    """Timbered mine gallery: 3 wide, 3 tall, rails, posts and caps every 4, lanterns, ore veins."""
+    dx, dz = {"east": (1, 0), "west": (-1, 0), "south": (0, 1), "north": (0, -1)}[direction]
+    px, pz = -dz, dx
+    sx, sz = start
+    axis = "x" if dx else "z"
+    shape = "east_west" if dx else "north_south"
+    for k in range(length):
+        cx, cz = sx + dx * k, sz + dz * k
+        # rock shell (visible in cut views, seals caves), then the void
+        for w in range(-2, 3):
+            for y in range(hy - 1, hy + 4):
+                x, z = cx + px * w, cz + pz * w
+                bp.set(x, y, z, DM_ROCK.pick(x, y, z), keep=True)
+        for w in (-1, 0, 1):
+            x, z = cx + px * w, cz + pz * w
+            for y in range(hy, hy + 3):
+                bp.set(x, y, z, "air")
+            bp.set(x, hy - 1, z, rng.choice(["gravel", "cobbled_deepslate", "stone", "andesite"]))
+        bp.set(cx, hy, cz, f"rail[shape={shape},waterlogged=false]")
+        if k % 4 == 0:
+            for w in (-1, 1):
+                x, z = cx + px * w, cz + pz * w
+                bp.set(x, hy, z, log("spruce_log"))
+                bp.set(x, hy + 1, z, log("spruce_log"))
             for w in (-1, 0, 1):
-                tx, tz = (cx, cz + w) if axis == "x" else (cx + w, cz)
-                bp.clear(tx, hy, tz, tx, hy + 2, tz)
-                bp.set(tx, hy - 1, tz, "gravel" if bp.rng.random() < 0.5 else "cobbled_deepslate")
-            shape = "east_west" if axis == "x" else "north_south"
-            bp.set(cx, hy, cz, f"rail[shape={shape},waterlogged=false]")
-            if k % 4 == 0:
-                for w in (-1, 1):
-                    tx, tz = (cx, cz + w) if axis == "x" else (cx + w, cz)
-                    bp.fill(tx, hy, tz, tx, hy + 1, tz, "spruce_fence")
-                for w in (-1, 0, 1):
-                    tx, tz = (cx, cz + w) if axis == "x" else (cx + w, cz)
-                    bp.set(tx, hy + 2, tz, "spruce_planks")
-                if k % 8 == 0:
-                    tx, tz = (cx, cz - 1) if axis == "x" else (cx - 1, cz)
-                    bp.lantern(tx, hy + 1, tz)  # standing on the fence post below
-            # ore veins in the walls
-            for w in (-2, 2):
-                tx, tz = (cx, cz + w) if axis == "x" else (cx + w, cz)
-                for y in range(hy, hy + 3):
-                    if bp.rng.random() < 0.12:
-                        bp.set(tx, y, tz, bp.rng.choice(ores))
-            if bp.rng.random() < 0.1:
-                tx, tz = (cx, cz + 1) if axis == "x" else (cx + 1, cz)
-                bp.set(tx, hy + 2, tz, "cobweb")
-        ex, ez = dx * (7 + length), dz * (7 + length)
-        toward_hall = {(1, 0): "west", (-1, 0): "east", (0, 1): "north", (0, -1): "south"}[(dx, dz)]
-        bp.chest(ex - dx, hy, ez - dz, toward_hall, LOOT + "dwarven_mine")
-    bp.spawner(0, hy, 18, "minecraft:cave_spider")
-    bp.spawner(-18, hy, 0, MOB["ruin_walker"])
+                x, z = cx + px * w, cz + pz * w
+                bp.set(x, hy + 2, z, log("spruce_log", "z" if axis == "x" else "x"))
+            if k % 8 == 0:
+                bp.lantern(cx, hy + 1, cz, hanging=True)
+                bp.set(cx, hy + 2, cz, log("spruce_log", "z" if axis == "x" else "x"))
+        elif k % 4 in (1, 3):
+            for w in (-1, 1):
+                x, z = cx + px * w, cz + pz * w
+                f = _toward(-px * w, -pz * w)
+                bp.set(x, hy + 2, z, stair("spruce_stairs", OPPOSITE[f], "top"))
+        # ore veins: small clusters in the walls and ceiling
+        if rng.random() < 0.35:
+            ore = rng.choice(ORES)
+            w = rng.choice((-2, 2))
+            for _ in range(rng.randint(2, 4)):
+                x = cx + px * w + dx * rng.randint(0, 1)
+                z = cz + pz * w + dz * rng.randint(0, 1)
+                bp.set(x, hy + rng.randint(0, 2), z, ore)
+        if rng.random() < 0.08:
+            bp.set(cx + px, hy + 2, cz + pz, "cobweb")
+        if rng.random() < 0.05:
+            bp.set(cx - px * 2, hy + 1, cz - pz * 2, "wayfarers:lithite_block")
+    # side alcove with a collapsed section and an ore pile near the end
+    ax, az = sx + dx * (length // 2) + px * 2, sz + dz * (length // 2) + pz * 2
+    for y in range(hy, hy + 2):
+        bp.set(ax, y, az, "air")
+        bp.set(ax + dx, y, az + dz, "air")
+    bp.set(ax, hy, az, "raw_iron_block" if rng.random() < 0.5 else "coal_block")
+    bp.set(ax + dx, hy, az + dz, "barrel[facing=up,open=false]")
+    ex, ez = sx + dx * (length - 1), sz + dz * (length - 1)
+    for w in (-1, 0, 1):
+        x, z = ex + px * w, ez + pz * w
+        bp.set(x, hy, z, "gravel")
+        bp.set(x, hy + 1, z, "gravel" if w else "air")
+    if vault:
+        # secret: dig through the collapse to find the foreman's sealed strongroom
+        for k in range(1, 5):
+            for w in (-1, 0, 1):
+                for y in range(hy - 1, hy + 4):
+                    x, z = ex + dx * k + px * w, ez + dz * k + pz * w
+                    if k == 4 or y in (hy - 1, hy + 3) or abs(w) == 1 and k in (1, 4):
+                        bp.set(x, y, z, "deepslate_bricks")
+                    elif k > 1:
+                        bp.set(x, y, z, "air")
+                    else:
+                        bp.set(x, y, z, "gravel")
+        vx, vz = ex + dx * 2, ez + dz * 2
+        bp.set(vx + px, hy, vz + pz, "wayfarers:lithite_block")
+        bp.set(vx - px, hy, vz - pz, "raw_gold_block")
+        bp.chest(vx + dx, hy, vz + dz, _toward(-dx, -dz), LOOT + "dwarven_mine")
+        bp.lantern(vx, hy + 2, vz, hanging=True)
+        bp.set(vx, hy + 3, vz, "deepslate_bricks")
+    elif end_loot:
+        bx, bz = ex - dx * 2 + px, ez - dz * 2 + pz
+        bp.chest(bx, hy, bz, _toward(-dx, -dz), LOOT + "dwarven_mine")
+    bp.entity(sx + dx * 6, hy, sz + dz * 6, {"id": "minecraft:chest_minecart" if direction == "north"
+                                             else "minecraft:minecart"})
+    return ex, ez
+
+
+def dwarven_mine(bp):
+    rng = random.Random(73)
+    sxx, szz = SHAFT
+    # ---- the hillside: one heightmap for the upper terrace and the slope rising behind it,
+    # falling away on the sides and at the back so it blends into any terrain
+    hill_top = Palette({"grass_block[snowy=false]": 8, "stone": 2, "coarse_dirt": 1, "andesite": 1}, seed=75, scale=4.5)
+    yard = Palette({"coarse_dirt": 3, "gravel": 2, "dirt_path": 2, "packed_mud": 1}, seed=76, scale=2)
+    for x in range(-34, 35):
+        for z in range(-44, -3):
+            core = DM_UP
+            if z <= -13:
+                core += 15 * math.sin(math.pi * min(1.0, (-12 - z) / 30)) * max(0.0, 1 - (x / 31) ** 2)
+                core += math.sin(x * 0.4) * 1.0 + math.cos(z * 0.5) * 0.7
+            fall = max(0, abs(x) - 24) * 1.1 + max(0, -36 - z) * 1.3
+            h = round(core - fall)
+            if h < 0:
+                continue
+            is_yard = z >= -17 and abs(x) <= 24 and h == DM_UP
+            for y in range(-3, h + 1):
+                if y == h:
+                    bp.set(x, y, z, yard.pick(x, y, z) if is_yard else hill_top.pick(x, y, z))
+                elif h - y < 3:
+                    bp.set(x, y, z, "dirt")
+                else:
+                    bp.set(x, y, z, DM_ROCK.pick(x, y, z))
+    # ---- retaining wall with buttresses and a stair down to the lower terrace
+    for x in range(-24, 25):
+        for y in range(-3, DM_UP + 1):
+            bp.set(x, y, -3, DM_STONE.pick(x, y, -3))
+        bp.set(x, DM_UP + 1, -3, "cobblestone_wall" if x % 2 else "stone_brick_wall")
+        if x % 6 == 0 and abs(x) > 3:
+            arch.buttress(bp, "south", -3, x, 0, DM_UP + 1, "stone_bricks", "stone_brick_stairs", depth=2)
+    for i in range(DM_UP + 1):
+        z, y = -3 + i, DM_UP - i
+        for x in range(-2, 3):
+            bp.set(x, y, z, stair("stone_brick_stairs", "north"))
+            for yy in range(-2, y):
+                bp.set(x, yy, z, "cobblestone")
+            for yy in range(y + 1, DM_UP + 2):
+                bp.set(x, yy, z, "air")
+        for x in (-3, 3):
+            for yy in range(-2, y + 2):
+                bp.set(x, yy, z, DM_STONE.pick(x, yy, z))
+    for x in (-3, 3):
+        bp.set(x, DM_UP + 2, -3, "lantern[hanging=false,waterlogged=false]")
+
+    # ---- shaft collar, headframe (A-frame with back-stays), sheave wheel, cage and cable
+    for x in range(sxx - 4, sxx + 5):
+        for z in range(szz - 4, szz + 5):
+            bp.set(x, DM_UP, z, "spruce_planks" if max(abs(x - sxx), abs(z - szz)) > 1 else "air")
+    for x in range(sxx - 2, sxx + 3):
+        for z in range(szz - 2, szz + 3):
+            if max(abs(x - sxx), abs(z - szz)) == 2:
+                bp.set(x, DM_UP + 1, z, "spruce_fence")
+    bp.set(sxx, DM_UP + 1, szz + 2, "spruce_fence_gate[facing=south,in_wall=false,open=false,powered=false]")
+    HT = DM_UP + 20
+    legs = [((sxx - 3, szz - 3), (sxx - 1, szz - 1)), ((sxx + 3, szz - 3), (sxx + 1, szz - 1)),
+            ((sxx - 3, szz + 3), (sxx - 1, szz + 1)), ((sxx + 3, szz + 3), (sxx + 1, szz + 1))]
+    for (bx, bz), (tx, tz) in legs:
+        bp.line((bx, DM_UP + 1, bz), (tx, HT, tz), log("stripped_spruce_log"))
+        bp.set(bx, DM_UP + 1, bz, "stone_bricks")
+    for y in range(DM_UP + 6, HT, 5):
+        f = (y - DM_UP - 1) / (HT - DM_UP - 1)
+        r = round(3 - 2 * f)
+        for k in range(-r, r + 1):
+            for (x, z, ax) in ((sxx + k, szz - r, "x"), (sxx + k, szz + r, "x"), (sxx - r, szz + k, "z"),
+                               (sxx + r, szz + k, "z")):
+                bp.set(x, y, z, log("spruce_log", ax))
+    # back-stays to the hillside
+    for x in (sxx - 2, sxx + 2):
+        bp.line((x, HT - 2, szz - 1), (x, DM_UP + 6, szz - 11), log("spruce_log", "z"))
+    # head platform, roof and the sheave wheel (in the x-y plane)
+    bp.fill(sxx - 2, HT, szz - 2, sxx + 2, HT, szz + 2, "spruce_planks")
+    for x in range(sxx - 2, sxx + 3):
+        for z in range(szz - 2, szz + 3):
+            if max(abs(x - sxx), abs(z - szz)) == 2:
+                bp.set(x, HT + 1, z, "spruce_fence")
+    wy = HT + 4
+    for a in range(0, 360, 15):
+        x = sxx + round(math.cos(math.radians(a)) * 3)
+        y = wy + round(math.sin(math.radians(a)) * 3)
+        bp.set(x, y, szz, log("stripped_dark_oak_log", "z"))
+    for a in range(0, 360, 45):
+        x = sxx + round(math.cos(math.radians(a)) * 1.6)
+        y = wy + round(math.sin(math.radians(a)) * 1.6)
+        bp.set(x, y, szz, "dark_oak_fence")
+    bp.set(sxx, wy, szz, "iron_block")
+    for z in (szz - 1, szz + 1):
+        bp.set(sxx, wy, z, log("dark_oak_log", "z"))
+        for y in range(HT + 1, wy):
+            bp.set(sxx, y, z, log("spruce_log"))
+    bp.chain(sxx + 3, DM_UP + 4, szz, wy - 1)
+    bp.set(sxx + 3, DM_UP + 3, szz, "iron_bars")
+    bp.fill(sxx + 2, HT, szz, sxx + 3, HT, szz, "air")
+    # cage hanging in the shaft
+    for y in range(DM_UP - 2, DM_UP):
+        for x in range(sxx - 1, sxx + 2):
+            for z in range(szz - 1, szz + 2):
+                if (x, z) != (sxx, szz):
+                    bp.set(x, y, z, "iron_bars")
+    bp.set(sxx, DM_UP - 3, szz, "iron_block")
+    bp.chain(sxx, DM_UP - 1, szz, HT - 1)
+    bp.set(sxx, DM_UP - 2, szz, "air")
+    # ---- winding house (west of the shaft) with the winch drum
+    wh = Blueprint("winding_house")
+    _dm_timber_house(wh, -16, -15, 8, 7, 1, rng, roof_axis="z")
+    wh.door(-9, 1, -12, "east", "spruce")
+    wh.set(-14, 1, -12, log("stripped_spruce_log", "x"))
+    wh.set(-13, 1, -12, log("stripped_spruce_log", "x"))
+    wh.set(-12, 1, -12, "grindstone[face=floor,facing=east]")
+    wh.set(-15, 1, -12, "iron_block")
+    wh.set(-15, 1, -14, "barrel[facing=up,open=false]")
+    wh.set(-15, 1, -10, "lectern[facing=east,has_book=false,powered=false]")
+    wh.lantern(-12, 3, -12, hanging=True)
+    bp.paste(wh, 0, DM_UP, 0)
+    bp.set(-8, DM_UP, -12, stair("spruce_stairs", "west"))
+
+    # ---- shaft: timber-lined, ladder, landing lights, down to the great hall
+    for y in range(-DEPTH, DM_UP):
+        for x in range(sxx - 2, sxx + 3):
+            for z in range(szz - 2, szz + 3):
+                edge = max(abs(x - sxx), abs(z - szz)) == 2
+                if edge:
+                    corner = abs(x - sxx) == 2 and abs(z - szz) == 2
+                    bp.set(x, y, z, log("spruce_log") if corner or y % 6 == 0 else "spruce_planks")
+                elif y < DM_UP - 3:
+                    bp.set(x, y, z, "air")
+    bp.ladder(sxx, -DEPTH + 1, szz - 1, DM_UP, "south")
+    for y in range(-DEPTH + 5, DM_UP - 3, 7):
+        bp.lantern(sxx + 1, y, szz + 1, hanging=False)
+        bp.set(sxx + 1, y - 1, szz + 1, slab("spruce_slab", "top"))
+
+    # ---- rails from the shaft head to the tailings tip (east)
+    for x in range(sxx + 3, 21):
+        bp.set(x, DM_UP + 1, szz, "rail[shape=east_west,waterlogged=false]")
+        bp.set(x, DM_UP, szz, "spruce_planks")
+    for x in range(17, 22):
+        for z in (szz - 1, szz + 1):
+            bp.set(x, DM_UP, z, "spruce_planks")
+    bp.set(21, DM_UP + 1, szz, "spruce_fence")
+    bp.entity(9, DM_UP + 1, szz, {"id": "minecraft:minecart"})
+    bp.entity(14, DM_UP + 1, szz, {"id": "minecraft:chest_minecart"})
+    # trestle supports where the tip overhangs the terrace edge
+    for x in (18, 20):
+        for y in range(-2, DM_UP):
+            bp.set(x, y, szz - 1, log("spruce_log"))
+            bp.set(x, y, szz + 1, log("spruce_log"))
+    # tailings pile spilling down to the lower terrace
+    for x in range(14, 34):
+        for z in range(-16, 8):
+            d = math.hypot((x - 22) / 1.2, z - (szz + 4))
+            h = round(DM_UP + 2 - d * 0.55 + rng.uniform(-0.4, 0.4))
+            for y in range(-2, h + 1):
+                if bp.get(x, y, z) is None or y > DM_UP:
+                    bp.set(x, y, z, rng.choice(["gravel", "gravel", "andesite", "cobblestone", "tuff", "coarse_dirt"]))
+    # ore bin + sorting table on the terrace
+    for x in range(5, 9):
+        for z in (szz - 4, szz - 3):
+            bp.barrel(x, DM_UP + 1, z, "up")
+    bp.set(6, DM_UP + 2, szz - 4, "raw_iron_block")
+    bp.set(7, DM_UP + 2, szz - 4, "coal_block")
+    bp.set(5, DM_UP + 1, szz + 3, "raw_copper_block")
+    bp.set(6, DM_UP + 1, szz + 3, "raw_iron_block")
+    bp.set(6, DM_UP + 2, szz + 3, "raw_gold_block")
+    bp.barrel(8, DM_UP + 1, szz + 3, "up")
+    # lamp posts on the terrace
+    for x, z in ((-6, -6), (6, -6), (-20, -6), (12, -15)):
+        for y in range(DM_UP + 1, DM_UP + 4):
+            bp.set(x, y, z, "spruce_fence")
+        bp.lantern(x, DM_UP + 4, z)
+
+    # ---- lower terrace: bunkhouse (west), smithy (east), plaza with a waystone
+    ground_patch(bp, 0, 4, 30, 24, seed=74)
+    path_line(bp, [(0, -2), (0, 14), (-3, 26)], 0, Palette({"dirt_path": 3, "gravel": 2, "coarse_dirt": 1}, seed=3),
+              width=3, seed=8)
+    path_line(bp, [(0, 7), (-9, 7)], 0, Palette({"dirt_path": 3, "gravel": 1}, seed=3), width=2, seed=9)
+    path_line(bp, [(0, 7), (9, 7)], 0, Palette({"dirt_path": 3, "gravel": 1}, seed=3), width=2, seed=10)
+    btop, bridge = _dm_timber_house(bp, -21, 2, 12, 8, 2, rng, roof_axis="x")
+    bp.door(-15, 1, 9, "south", "spruce")
+    bp.set(-15, 0, 10, stair("stone_brick_stairs", "north"))
+    for x in (-20, -18, -16):
+        bp.bed(x, 1, 3, "south", "brown")
+        bp.bed(x, 5, 3, "south", "red")
+    bp.set(-12, 1, 3, "barrel[facing=up,open=false]")
+    bp.table(-12, 1, 6, "spruce_pressure_plate", "spruce_fence")
+    bp.stairs(-13, 1, 6, "spruce_stairs", "east")
+    bp.stairs(-11, 1, 6, "spruce_stairs", "west")
+    bp.set(-20, 1, 8, "furnace[facing=east,lit=true]")
+    bp.set(-20, 1, 7, "smoker[facing=east,lit=false]")
+    bp.barrel(-20, 5, 8, "up")
+    bp.set(-12, 5, 8, "crafting_table")
+    for x in range(-19, -16):
+        bp.set(x, 4, 7, "air")
+    for i in range(3):
+        bp.stairs(-17 + i, 1 + i, 7, "spruce_stairs", "east")
+    bp.lantern(-15, 3, 5, hanging=True)
+    bp.lantern(-15, 7, 5, hanging=True)
+    for y in range(1, bridge + 3):
+        bp.set(-21, y, 5, "bricks" if y > 3 else "cobblestone")
+        bp.set(-22, y, 5, "bricks" if y > 3 else "cobblestone")
+    bp.set(-22, bridge + 3, 5, "campfire[lit=true,signal_fire=false,waterlogged=false,facing=north]")
+    # smithy: open-fronted forge hall under a timber roof
+    sx0, sx1, sz0, sz1 = 7, 17, 2, 10
+    bp.fill(sx0, -3, sz0, sx1, 0, sz1, "cobblestone")
+    for x in range(sx0, sx1 + 1):
+        for z in range(sz0, sz1 + 1):
+            bp.set(x, 0, z, "polished_andesite" if (x + z) % 2 else "stone_bricks")
+    for x, z in ((sx0, sz0), (sx1, sz0), (sx0, sz1), (sx1, sz1), (sx0 + 5, sz1), (sx0 + 5, sz0)):
+        for y in range(1, 6):
+            bp.set(x, y, z, log("dark_oak_log"))
+    for x in range(sx0, sx1 + 1):
+        for y in range(1, 5):
+            bp.set(x, y, sz0, DM_STONE.pick(x, y, sz0) if x not in (sx0, sx1, sx0 + 5) else log("dark_oak_log"))
+        bp.set(x, 5, sz1, log("dark_oak_log", "x"))
+        bp.set(x, 5, sz0, log("dark_oak_log", "x"))
+    for z in range(sz0, sz1 + 1):
+        for y in range(1, 5):
+            bp.set(sx1, y, z, DM_STONE.pick(sx1, y, z) if z not in (sz0, sz1) else log("dark_oak_log"))
+        bp.set(sx0, 5, z, log("dark_oak_log", "z"))
+        bp.set(sx1, 5, z, log("dark_oak_log", "z"))
+    arch.steep_roof(bp, sx0, sz0, sx1, sz1, 6, DM_ROOF, axis="x", overhang=1, fill="spruce_planks",
+                    under="dark_oak_stairs", ridge=slab("wayfarers:crimson_roof_tile_slab"))
+    # forge: stone hearth with magma glow, chimney, anvils, quench trough
+    bp.fill(sx1 - 3, 1, sz0 + 1, sx1 - 1, 1, sz0 + 2, "bricks")
+    bp.set(sx1 - 2, 1, sz0 + 1, "magma_block")
+    bp.set(sx1 - 2, 2, sz0 + 1, "campfire[lit=true,signal_fire=false,waterlogged=false,facing=south]")
+    for y in range(3, 14):
+        for x in (sx1 - 3, sx1 - 2, sx1 - 1):
+            if y > 3 and x != sx1 - 2:
+                continue
+            bp.set(x, y, sz0 + 1, "bricks")
+    bp.set(sx1 - 2, 3, sz0 + 1, "air")
+    bp.set(sx1 - 2, 14, sz0 + 1, "bricks")
+    bp.set(sx1 - 3, 2, sz0 + 1, "blast_furnace[facing=south,lit=true]")
+    bp.set(sx1 - 1, 2, sz0 + 1, "blast_furnace[facing=south,lit=true]")
+    bp.set(sx0 + 3, 1, sz0 + 4, "anvil[facing=east]")
+    bp.set(sx0 + 2, 1, sz0 + 6, "smithing_table")
+    bp.set(sx0 + 4, 1, sz0 + 6, "grindstone[face=floor,facing=north]")
+    bp.set(sx1 - 1, 1, sz1 - 2, "water_cauldron[level=3]")
+    bp.set(sx1 - 1, 1, sz1 - 1, "cauldron")
+    bp.chest(sx1 - 1, 1, sz0 + 4, "west", LOOT + "dwarven_mine")
+    bp.barrel(sx0 + 1, 1, sz0 + 1, "up")
+    bp.set(sx0 + 1, 1, sz0 + 2, "iron_block")
+    bp.entity(sx0 + 2, 1, sz0 + 1, {"id": "minecraft:armor_stand", "Rotation": [180.0, 0.0]})
+    arch.hanging_lantern(bp, sx0 + 3, 5, sz0 + 5, chain=1)
+    arch.hanging_lantern(bp, sx0 + 8, 5, sz0 + 5, chain=1)
+    # plaza: waystone on a dais, ore carts, crates
+    for x, z in ring_cells(0, 7, -1, 2.5):
+        bp.set(x, 0, z, "polished_andesite")
+    ring_stairs(bp, 0, 0, 7, 3, "stone_brick_stairs", half="bottom")
+    bp.set(0, 1, 7, MOD["waystone"])
+    for x, z in ((-3, 12), (4, 12)):
+        for y in (1, 2, 3):
+            bp.set(x, y, z, "spruce_fence")
+        bp.lantern(x, 4, z)
+    for x, z in ((3, 14), (4, 14), (3, 15)):
+        bp.barrel(x, 1, z, "up")
+    bp.set(4, 2, 14, "barrel[facing=north,open=false]")
+    for z in range(13, 18):
+        bp.set(-5, 1, z, f"rail[shape=north_south,waterlogged=false]")
+    bp.entity(-5, 1, 15, {"id": "minecraft:minecart"})
+    bp.set(-5, 1, 18, "spruce_fence")
+    # ---- trees, bushes, flowers, terrain skirt
+    for x, z, h in ((-27, 12, 10), (24, 16, 9), (-26, -2, 11), (-8, -30, 9), (12, -28, 8), (-20, -26, 10),
+                    (-14, -36, 9), (17, -36, 11), (3, -40, 8), (26, -20, 9), (-29, -14, 8)):
+        y0 = 1
+        while bp.get(x, y0, z) not in (None, "minecraft:air"):
+            y0 += 1
+        arch.spruce(bp, x, y0, z, h=h, seed=x * 3 + z)
+    for x, z in ((-24, 6), (22, 2), (10, 19)):
+        arch.bush(bp, x, 1, z, leaves="spruce_leaves", r=1)
+    for x, z in ((-6, -24), (9, -21), (-18, -33), (21, -30)):
+        y0 = 1
+        while bp.get(x, y0, z) not in (None, "minecraft:air"):
+            y0 += 1
+        arch.boulder(bp, x, y0, z, r=2, blocks=("stone", "andesite", "mossy_cobblestone", "tuff"), seed=x - z)
+    skirt(bp, 0, depth=6, spread=3, seed=15)
+    scatter_plants(bp, -32, -2, 32, 30, 1, 0.22, 11, FLOWERS)
+
+    # ---- underground: the great hall
+    hy = -DEPTH
+    hx, hz = sxx, szz
+    bp.fill(hx - 9, hy - 2, hz - 9, hx + 9, hy + 7, hz + 9, "deepslate", keep=True)
+    bp.room(hx - 8, hy - 1, hz - 8, hx + 8, hy + 6, hz + 8, "deepslate_bricks", floor="polished_deepslate",
+            ceiling="deepslate_tiles")
+    for x in range(hx - 7, hx + 8):
+        for z in range(hz - 7, hz + 8):
+            if (x + z) % 4 == 0:
+                bp.set(x, hy - 1, z, "deepslate_tiles")
+    for x, z in ((hx - 5, hz - 5), (hx + 5, hz - 5), (hx - 5, hz + 5), (hx + 5, hz + 5)):
+        for y in range(hy, hy + 6):
+            bp.set(x, y, z, "polished_deepslate" if y % 3 else "chiseled_deepslate")
+        for ddx, ddz in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+            bp.set(x + ddx, hy + 5, z + ddz, stair("deepslate_brick_stairs", _toward(-ddx, -ddz), "top"))
+        bp.lantern(x, hy + 4, z + (1 if z < hz else -1), hanging=True)
+    # ladder landing (the shaft opens into the ceiling)
+    for x in range(hx - 1, hx + 2):
+        for z in range(hz - 1, hz + 2):
+            bp.set(x, hy + 6, z, "air")
+    bp.fill(hx - 1, hy, hz - 2, hx + 1, hy + 5, hz - 2, "spruce_planks")
+    bp.ladder(hx, hy, hz - 1, hy + 6, "south")
+    # dwarven statues flanking the north gallery, forge corner, long table
+    for x in (hx - 3, hx + 3):
+        bp.set(x, hy, hz - 7, "polished_deepslate")
+        bp.set(x, hy + 1, hz - 7, "deepslate_bricks")
+        bp.set(x, hy + 2, hz - 7, "deepslate_tiles")
+        bp.set(x, hy + 3, hz - 7, "wayfarers:lithite_block")
+        bp.set(x, hy + 4, hz - 7, slab("deepslate_tile_slab"))
+        bp.set(x - 1, hy + 2, hz - 7, stair("deepslate_tile_stairs", "east", "top"))
+        bp.set(x + 1, hy + 2, hz - 7, stair("deepslate_tile_stairs", "west", "top"))
+    bp.set(hx + 7, hy, hz - 7, "blast_furnace[facing=west,lit=false]")
+    bp.set(hx + 7, hy, hz - 6, "anvil[facing=north]")
+    bp.set(hx + 7, hy, hz - 5, "smithing_table")
+    for z in range(hz + 2, hz + 6):
+        bp.table(hx - 6, hy, z, "spruce_pressure_plate", "spruce_fence")
+        bp.stairs(hx - 7, hy, z, "spruce_stairs", "east")
+        bp.stairs(hx - 5, hy, z, "spruce_stairs", "west")
+    bp.chest(hx - 7, hy, hz - 3, "east", LOOT + "dwarven_mine")
+    bp.set(hx - 7, hy, hz - 7, "crafting_table")
+    bp.set(hx + 6, hy, hz + 6, "barrel[facing=up,open=false]")
+    bp.set(hx + 7, hy, hz + 6, "barrel[facing=up,open=false]")
+    arch.chandelier(bp, hx, hy + 5, hz + 3)
+    # ---- the four galleries
+    _dm_gallery(bp, hy, (hx + 9, hz), "east", 20, rng, vault=True)
+    _dm_gallery(bp, hy, (hx - 9, hz), "west", 20, rng)
+    _dm_gallery(bp, hy, (hx, hz + 9), "south", 18, rng)
+    _dm_gallery(bp, hy, (hx, hz - 9), "north", 18, rng)
+    for x, z in ((hx + 8, hz), (hx - 8, hz), (hx, hz + 8), (hx, hz - 8)):
+        for y in range(hy, hy + 3):
+            for w in (-1, 0, 1):
+                bp.set(x + (w if x == hx else 0), y, z + (w if z == hz else 0), "air")
+    bp.spawner(hx, hy, hz + 20, "minecraft:cave_spider")
+    bp.spawner(hx - 20, hy, hz, MOB["ruin_walker"])
 
 
 register(StructureDef(
@@ -2356,6 +2734,3 @@ register(StructureDef(
      "windswept_gravelly_hills", "#minecraft:is_taiga"],
     [Piece("mine", dwarven_mine)], spacing=30, separation=10, adaptation="beard_thin",
     title_fr="Mine naine abandonnée", title_en="Abandoned Dwarven Mine"))
-
-
-

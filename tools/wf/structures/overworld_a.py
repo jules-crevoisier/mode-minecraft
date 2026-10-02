@@ -514,6 +514,9 @@ def rtower(bp, cx, cz, y0, h, r, wall, R, *, floor="spruce_planks", corbel=None,
         return top + 2
     bp.disk(cx, top + 1, cz, r + 1, R[0])
     bp.disk(cx, top + 1, cz, r - 1, floor)
+    if crown == "spire":
+        return spire2(bp, cx, cz, top + 2, r + 1, R, steep=max(2, round((cone_h or 2 * r) / (r + 1))),
+                      shape="round", tip=2)
     return cone(bp, cx, cz, top + 2, r + 1, R, h=cone_h)
 
 
@@ -591,7 +594,8 @@ OUTPOST_STYLES = {
     # roof tiles, timber log, wood set, plaster infill, banner colour, awning stripes
     "azure": dict(roof="azure", log="dark_oak_log", wood="spruce", plaster={"calcite": 4, "polished_diorite": 1},
                   banner="blue", carpet="blue_carpet", awning=("blue_wool", "white_wool"), glass="light_blue"),
-    "crimson": dict(roof="crimson", log="stripped_spruce_log", wood="oak", plaster={"smooth_sandstone": 3, "sandstone": 1},
+    "crimson": dict(roof="crimson", log="stripped_spruce_log", wood="oak",
+                    plaster={"smooth_sandstone": 3, "sandstone": 1},
                     banner="red", carpet="red_carpet", awning=("red_wool", "yellow_wool"), glass="orange"),
     "slate": dict(roof="slate", log="dark_oak_log", wood="pale_oak", plaster={"pale_oak_planks": 4,
                                                                                "stripped_pale_oak_wood": 1},
@@ -650,7 +654,7 @@ def guild_outpost(style):
         wall_lamp(bp, "south", qz1, 23, 4, "tuff_brick_stairs")
         A.furnish(bp, qx0 + 1, 7, qz0 + 1, qx1 - 1, qz1 - 1, "bedroom", wood=wood)
         A.stair_run(bp, 5, 1, 19, "north", 7, 2, "tuff_brick_stairs", fill="tuff_bricks", clear=3)
-        for cx, cz, crown in ((4, 4, "cone"), (4, 42, "cone"), (42, 42, "crenels")):
+        for cx, cz, crown in ((4, 4, "spire"), (4, 42, "spire"), (42, 42, "crenels")):
             top = rtower(bp, cx, cz, 0, 11, 3, stone, R, trim=base, floor=planks, corbel="tuff_brick_stairs",
                          crown=crown, floors_every=5, cone_h=11)
             dx = 1 if cx < 23 else -1
@@ -688,7 +692,7 @@ def guild_outpost(style):
                 bp.set(x, 13, z, wall.pick(x, 13, z) if z % 2 == 0 else slb(GB_SL))
         for tz in (gz0, gz1):
             rtower(bp, gx1, tz, 0, 16, 2, wall, R, trim=base, floor=planks, corbel=GB_ST, ladder=False,
-                   lights=False, floors_every=5, cone_h=10)
+                   lights=False, floors_every=5, cone_h=10, crown="spire")
         banner_pole(bp, gx0 + 2, 13, gc, banner, h=4, post=fence)
         for u in (gc - 3, gc + 3):
             A.banner_wall(bp, gx1 + 1, 10, u, "east", banner)
@@ -813,7 +817,8 @@ def guild_outpost(style):
         # ---------------------------------------------------------- map tower (north-east)
         tcx, tcz = 38, 11
         mt = Palette({GB: 8, MGB: 1, CRGB: 1}, seed=41)
-        rtower(bp, tcx, tcz, 0, 27, 5, mt, R, trim=PGS, floor=planks, corbel=PGS_ST, floors_every=6, cone_h=17)
+        rtower(bp, tcx, tcz, 0, 27, 5, mt, R, trim=PGS, floor=planks, corbel=PGS_ST, floors_every=6, cone_h=17,
+               crown="spire")
         for (x, z) in round_ring(tcx, tcz, 6):
             bp.set(x, 0, z, base.pick(x, 0, z))
             bp.set(x, 1, z, stp("tuff_brick_stairs", OPPOSITE[_face_to(tcx, tcz, x, z)]))
@@ -829,6 +834,22 @@ def guild_outpost(style):
         bp.clear(hx1, 1, tcz, hx1 + 2, 2, tcz)
         bp.door(hx1, 1, tcz, "east", "spruce")
         bp.fill(hx1 + 1, 0, tcz, tcx - 6, 0, tcz, PGS)
+        # secret guild vault under the map tower (hidden trapdoor beside the ladder)
+        bp.clear(36, -4, 9, 40, -1, 13)
+        for x in range(35, 42):
+            for z in range(8, 15):
+                for y in range(-5, 0):
+                    if x in (35, 41) or z in (8, 14) or y == -5:
+                        bp.set(x, y, z, base.pick(x, y, z))
+        bp.ladder(40, -4, 11, -1, "west")
+        bp.set(40, 0, 11, "spruce_trapdoor[facing=west,half=top,open=false,powered=false,waterlogged=false]")
+        bp.chest(36, -4, 11, "east", LOOT + "guild_outpost")
+        bp.set(36, -4, 9, "gold_block")
+        bp.set(36, -4, 13, "barrel[facing=up,open=false]")
+        bp.set(37, -4, 9, "barrel[facing=up,open=false]")
+        bp.set(38, -2, 11, "lantern[hanging=true,waterlogged=false]")
+        bp.set(38, -1, 11, "iron_chain[axis=y,waterlogged=false]")
+        bp.set(37, -4, 13, f"{banner}_carpet")
         # map room on the top floor
         bp.set(tcx + 2, 25, tcz, "cartography_table")
         bp.set(tcx - 2, 25, tcz + 2, "lectern[facing=north,has_book=false,powered=false]")
@@ -897,14 +918,13 @@ def guild_outpost(style):
             bp.set(sx0 + 1, 2, z + 1, "hay_block[axis=x]")
             bp.set(sx0 + 1, 1, z - 1, "cauldron")
             bp.lantern(sx0 + 3, 4, z + 1, hanging=True)
-        bp.barrel(sx0 + 1, 1, sz0 + 1, "up", LOOT + "guild_outpost")
+        bp.barrel(sx0 + 1, 1, sz0 + 1, "up")
         bp.set(sx0 + 2, 1, sz0 + 1, "hay_block[axis=y]")
         bp.set(sx0 + 1, 1, sz1 - 1, "hay_block[axis=y]")
         bp.set(sx0 + 2, 1, sz1 - 1, "hay_block[axis=z]")
         bp.set(sx0 + 1, 2, sz1 - 1, "hay_block[axis=y]")
         for z in range(sz0 + 1, sz1, 4):
             bp.set(sx1 + 1, 1, z, "cauldron")
-        bp.entity(sx0 + 3, 1, sz0 + 5, {"id": "minecraft:horse"}) if False else None
 
         # ---------------------------------------------------------- market stall (south)
         kx0, kx1, kz0, kz1 = 27, 34, 36, 40
@@ -922,7 +942,7 @@ def guild_outpost(style):
         bp.set(kx0 + 2, 1, kz1, "melon")
         bp.set(kx0 + 3, 1, kz1, "hay_block[axis=y]")
         bp.set(kx1 - 1, 1, kz1, "composter[level=6]")
-        bp.barrel(kx1 - 2, 1, kz1, "up", LOOT + "guild_outpost")
+        bp.barrel(kx1 - 2, 1, kz1, "up")
         bp.set(kx0 + 2, 2, kz0, "decorated_pot[cracked=false,facing=south,waterlogged=false]")
         bp.set(kx1 - 2, 2, kz0, "potted_red_tulip")
         bp.chain(kx0 + 3, 4, kz0 + 2, 4)
@@ -1220,7 +1240,7 @@ def monastery(bp):
                 fset(bp, face, line, u, 1, y, stp(TS, OPPOSITE[face], "top"))
         for u in (a, b):
             A.buttress(bp, face, line, u, P, 30, T.pick(u, 0, line), TS, 2)
-        fset(bp, face, line, (a + b) // 2, 1, P + 26, "clock" if False else "chiseled_stone_bricks")
+        fset(bp, face, line, (a + b) // 2, 1, P + 26, "chiseled_stone_bricks")
     for fy in (P + 11, P + 22, P + 33):
         bp.fill(bx0 + 1, fy, bz0 + 1, bx1 - 1, fy, bz1 - 1, "spruce_planks")
         bp.set(bx0 + 1, fy, bz0 + 1, "air")
@@ -1404,7 +1424,6 @@ def monastery(bp):
     bp.fill(fx, P, fz, fx, P + 2, fz, "chiseled_stone_bricks")
     bp.disk(fx, P + 3, fz, 1, "stone_brick_slab[type=bottom,waterlogged=false]")
     bp.set(fx, P + 3, fz, "water")
-    bp.set(fx, P + 4, fz, "lantern[hanging=false,waterlogged=false]") if False else None
     for (x, z, s) in ((37, 19, 1), (53, 19, 2), (37, 25, 3), (53, 25, 4)):
         A.oak(bp, x, P + 1, z, 5, seed=s, log="cherry_log", leaves="cherry_leaves")
     rng = random.Random(7)
@@ -1577,6 +1596,20 @@ def library(bp):
             dormer(bp, face, line, u, HE + 2, R, W, glass=G2, trim="chiseled_tuff_bricks", depth=5)
     for x in range(HX0 + 2, HX1 - 1, 4):
         bp.set(x, ridge + 1, CZ, "tuff_brick_wall")
+    # flèche: open octagonal lantern with a slender copper spire above the crossing
+    fx = 46
+    for (dx, dz) in ((-2, -2), (2, -2), (-2, 2), (2, 2)):
+        for y in range(ridge - 2, ridge + 5):
+            bp.set(fx + dx, y, CZ + dz, PGS if y < ridge + 1 else GB_WALL)
+    for x in range(fx - 2, fx + 3):
+        for z in range(CZ - 2, CZ + 3):
+            bp.set(x, ridge, z, PGS)
+            bp.set(x, ridge + 5, z, PGS)
+    bp.lantern(fx, ridge + 1, CZ)
+    bp.set(fx, ridge + 4, CZ, RUNE)
+    for (x, z) in ((fx - 3, CZ), (fx + 3, CZ), (fx, CZ - 3), (fx, CZ + 3)):
+        bp.set(x, ridge + 5, z, stp(PGS_ST, OPPOSITE[_face_to(fx, CZ, x, z)], "top"))
+    spire2(bp, fx, CZ, ridge + 6, 2, R, steep=5, shape="octagon", tip=3)
 
     # ---------------------------------------------------------- interior: galleries, stacks, reading nave
     GY1, GY2 = 11, 17
@@ -1609,7 +1642,6 @@ def library(bp):
             if k == 3:                                  # reading alcove in each bay
                 bp.set(x, 1, zw + step, "dark_oak_fence")
                 bp.set(x, 2, zw + step, "dark_oak_pressure_plate[powered=false]")
-                bp.set(x, 3, zw + step, "candle[candles=2,lit=true,waterlogged=false]") if False else None
                 bp.stairs(x, 1, zw + step * 2, "dark_oak_stairs", f)
                 bp.lantern(x, GY1 - 1, zw + step, hanging=True)
                 bp.set(x, GY1 + 1, zw + step, "lectern[facing=%s,has_book=false,powered=false]" % OPPOSITE[f])
@@ -1640,8 +1672,6 @@ def library(bp):
         bp.set(x0 + 6, 1, CZ - 1, "lectern[facing=south,has_book=false,powered=false]")
     for xc in (24, 40, 56):
         great_chandelier(bp, xc, 16, CZ, ridge - 1, r=3)
-    for x in range(HX0 + 3, HX1 - 1, 6):
-        bp.chain(x, GY2 - 3, CZ - 5, GY2 - 1) if False else None
     # guardians and treasures
     bp.spawner(40, 1, CZ, MOB["map_wraith"])
     for dx, dz in ((1, 0), (-1, 0), (0, 1), (0, -1)):
@@ -1649,8 +1679,58 @@ def library(bp):
     bp.set(40, 1, CZ - 1, "air")
     bp.spawner(HX0 + 8, GY1 + 1, HZ0 + 3, MOB["map_wraith"])
     bp.chest(HX0 + 4, 1, HZ0 + 2, "south", LOOT + "library")
-    bp.chest(52, GY1 + 1, HZ1 - 3, "north", LOOT + "library")
     bp.chest(HX1 - 3, GY2 + 1, HZ0 + 2, "south", LOOT + "library")
+
+    # ---------------------------------------------------------- octagonal map room annex (south side)
+    ox, oz, orr, OH = 43, 40, 6, 12
+    for x in range(ox - orr - 2, ox + orr + 3):
+        for z in range(oz - orr - 2, oz + orr + 3):
+            d = _dist(x - ox, z - oz, "octagon")
+            if d <= orr + 0.3:
+                bp.set(x, 0, z, floor.pick(x, 0, z))
+                for y in range(1, OH + 1):
+                    bp.set(x, y, z, W.pick(x, y, z) if d > orr - 0.7 else "air")
+                bp.set(x, 1, z, BASE.pick(x, 1, z)) if d > orr - 0.7 else None
+            elif d <= orr + 1.3:
+                bp.set(x, OH, z, stp(TS, OPPOSITE[_face_to(ox, oz, x, z)], "top"))
+                bp.set(x, 0, z, BASE.pick(x, 0, z))
+                bp.set(x, 1, z, stp(BS, _face_to(ox, oz, x, z)))
+    for (dx, dz) in ((orr, 0), (-orr, 0), (0, orr), (orr - 2, orr - 2), (-orr + 2, orr - 2), (orr - 2, -orr + 2),
+                     (-orr + 2, -orr + 2)):
+        x, z = ox + dx, oz + dz
+        for y in range(3, 10):
+            bp.set(x, y, z, G1 if y < 9 else T.pick(x, y, z))
+    for (dx, dz) in ((orr, orr - 3), (orr, -orr + 3), (-orr, orr - 3), (-orr, -orr + 3),
+                     (orr - 3, orr), (-orr + 3, orr)):
+        x, z = ox + dx + (1 if dx > 0 else -1 if dx < 0 else 0), oz + dz + (1 if dz > 0 else -1 if dz < 0 else 0)
+        for y in range(0, OH - 2):
+            bp.set(x, y, z, T.pick(x, y, z))
+        bp.set(x, OH - 2, z, stp(TS, _face_to(ox, oz, x, z)))
+    spire2(bp, ox, oz, OH + 1, orr + 1, R, steep=2, shape="octagon", tip=2)
+    bp.clear(ox - 1, 1, HZ1, ox + 1, 4, oz - orr)
+    for x in (ox - 2, ox + 2):
+        for z in range(HZ1 + 1, oz - orr + 1):
+            for y in range(0, 6):
+                bp.set(x, y, z, W.pick(x, y, z))
+    for z in range(HZ1 + 1, oz - orr + 1):
+        for x in range(ox - 1, ox + 2):
+            bp.set(x, 0, z, "polished_deepslate")
+            bp.set(x, 5, z, W.pick(x, 5, z))
+        bp.set(ox - 2, 6, z, stp(TS, "west"))
+        bp.set(ox + 2, 6, z, stp(TS, "east"))
+        bp.set(ox, 6, z, PGS)
+        bp.set(ox - 1, 6, z, slb(PGS_SL))
+        bp.set(ox + 1, 6, z, slb(PGS_SL))
+    gwindow(bp, "south", HZ1, ox, 1, 3, "air", CGS, TS, w=3, hood=False)
+    bp.disk(ox, 1, oz, 2, "dark_oak_planks")
+    bp.set(ox, 2, oz, "cartography_table")
+    for (dx, dz, f) in ((0, -3, "south"), (0, 3, "north"), (-3, 0, "east"), (3, 0, "west")):
+        bp.stairs(ox + dx, 1, oz + dz, "dark_oak_stairs", f)
+    great_chandelier(bp, ox, OH - 2, oz, OH + 6, r=2)
+    for (dx, dz) in ((-4, 2), (4, 2), (-2, 4), (2, 4), (-4, -2), (4, -2)):
+        for y in range(1, 4):
+            bp.set(ox + dx, y, oz + dz, shelf)
+    bp.chest(ox, 1, oz + 5, "north", LOOT + "library")
 
     # ---------------------------------------------------------- east front: twin towers, narthex, rose window
     FX = HX1
@@ -1757,7 +1837,6 @@ def library(bp):
                 for y in (1, 2):
                     bp.set(tx0, y, z, W.pick(tx0, y, z)) if z != HZ1 - 2 else None
         else:
-            door_in(bp, "south", tz1, tcx + 1, 0, "dark_oak") if False else None
             bp.set(tx0 + 2, 1, tz1, "air")
             bp.set(tx0 + 2, 2, tz1, "air")
             bp.door(tx0 + 2, 1, tz1, "south", "dark_oak")
@@ -1784,7 +1863,8 @@ def library(bp):
             continue
         for y in range(4, 19):
             bp.set(x, y, z, (G1 if y < 11 else G2) if y not in (11, 18) else T.pick(x, y, z))
-        bx, bz = rcx + round(math.cos(a + math.radians(18)) * (rr + 1)), rcz + round(math.sin(a + math.radians(18)) * (rr + 1))
+        ab = a + math.radians(18)
+        bx, bz = rcx + round(math.cos(ab) * (rr + 1)), rcz + round(math.sin(ab) * (rr + 1))
         for y in range(1, RH - 2):
             bp.set(bx, y, bz, T.pick(bx, y, bz))
         bp.set(bx, RH - 2, bz, stp(TS, _face_to(rcx, rcz, bx, bz)))
@@ -1810,7 +1890,6 @@ def library(bp):
     for (x, z) in round_ring(rcx, rcz, rr - 1):
         if math.hypot(x - rcx, z - rcz) > rr - 1.5:
             bp.set(x, 11, z, "dark_oak_planks" if x < HX0 - 1 else bp.get(x, 11, z) or "air")
-            bp.set(x, 12, z, "dark_oak_fence") if False else None
     # open the hall into the rotunda with a tall arch
     gwindow(bp, "west", HX0, CZ, 1, 9, "air", CGS, TS, w=5, hood=False)
 
@@ -1853,16 +1932,16 @@ def library(bp):
         bp.set(x, 1, z, "chiseled_tuff_bricks")
         bp.set(x, 2, z, "polished_tuff")
         bp.set(x, 3, z, "tuff_brick_wall")
-        bp.set(x, 4, z, "carved_pumpkin[facing=east]" if False else "chiseled_tuff")
-    for (x, z, s) in ((NX + 4, -5, 1), (NX + 10, 40, 2), (40, -6, 3), (44, 40, 4), (-4, 32, 5)):
+        bp.set(x, 4, z, "chiseled_tuff")
+    for (x, z, s) in ((NX + 4, -5, 1), (NX + 8, 40, 2), (40, -6, 3), (60, 44, 4), (-3, 32, 5), (24, 44, 6)):
         A.big_oak(bp, x, 1, z, 9, seed=s, crown=4) if s % 2 else A.birch(bp, x, 1, z, 8, seed=s)
     A.dark_tree(bp, 26, 1, -6, 9, seed=7)
     A.boulder(bp, NX + 16, 1, -4, 2, seed=1, blocks=("tuff", "andesite", "mossy_cobblestone"))
-    for x in range(-6, NX + 16):
-        for z in range(-6, 43):
+    for x in range(-5, NX + 12):
+        for z in range(-6, 50):
             if not bp.get(x, 0, z):
                 bp.set(x, 0, z, "grass_block[snowy=false]" if (x * 3 + z * 7) % 11 else "podzol[snowy=false]")
-    A.landscape(bp, -6, -6, NX + 16, 43, 1, density=0.3, seed=21,
+    A.landscape(bp, -5, -6, NX + 12, 50, 1, density=0.3, seed=21,
                 flowers=("fern", "fern", "lily_of_the_valley", "allium", "azure_bluet", "oxeye_daisy"))
     skirt(bp, 0, depth=5, spread=2, seed=31)
 
@@ -1945,7 +2024,10 @@ def lighthouse(bp):
     SH0, SH1 = y0 + 9, y0 + 37          # shaft (tapered, banded)
 
     def rad(y):
-        return 6.0 if y < SH0 else 5.4 - (y - SH0) * 1.6 / (SH1 - SH0)
+        if y < SH0:
+            return 6.0
+        nb = (SH1 - SH0) // 4
+        return 5.4 - 1.5 * ((y - SH0) // 4) / nb
     for y in range(y0 + 1, SH1 + 1):
         r = rad(y)
         for x in range(LX - 7, LX + 8):
@@ -1978,21 +2060,17 @@ def lighthouse(bp):
             x, z = ring[i % len(ring)]
             bp.slab(x, y, z, "stone_brick_slab", half)
             i += 1
-    for y in range(y0 + 4, SH1 - 3, 6):
-        bp.chain(LX + 1, y + 2, LZ + 1, y + 3) if False else None
-        bp.lantern(LX, y + 3, LZ + 1) if False else None
-        bp.set(LX + 1, y, LZ, "lantern[hanging=false,waterlogged=false]") if False else None
     for k, y in enumerate(range(y0 + 5, SH1 - 3, 4)):
         a = math.radians(k * 75 + 40)
         r = rad(y)
         x, z = LX + round(math.cos(a) * r), LZ + round(math.sin(a) * r)
         bp.set(x, y, z, "glass_pane")
         bp.set(x, y + 1, z, "glass_pane")
-        bp.set(LX + round(math.cos(a) * (r - 1)), y + 2, LZ + round(math.sin(a) * (r - 1)), "air") if False else None
     for y in range(y0 + 3, SH1 - 3, 7):
         bp.set(LX + 1, y, LZ, "wall_torch[facing=east]")
     # entrance (south) with arch and steps
-    A.arch_door(bp, "south", LZ + 6, LX, y0, width=1, height=2, trim="chiseled_stone_bricks", stairs="stone_brick_stairs")
+    A.arch_door(bp, "south", LZ + 6, LX, y0, width=1, height=2, trim="chiseled_stone_bricks",
+                stairs="stone_brick_stairs")
     for dz in (5, 6):
         bp.set(LX, y0 + 1, LZ + dz, "air")
         bp.set(LX, y0 + 2, LZ + dz, "air")
@@ -2008,7 +2086,7 @@ def lighthouse(bp):
     bp.set(LX - 1, WR - 1, LZ - 2, "air")
     bp.chest(LX + 2, WR + 1, LZ, "west", LOOT + "lighthouse")
     bp.set(LX - 2, WR + 1, LZ, "cartography_table")
-    bp.set(LX, WR + 1, LZ + 2, "spyglass" if False else "lectern[facing=north,has_book=false,powered=false]")
+    bp.set(LX, WR + 1, LZ + 2, "lectern[facing=north,has_book=false,powered=false]")
     for (x, z) in ((LX, LZ + 4), (LX + 4, LZ), (LX - 4, LZ)):
         bp.set(x, WR + 2, z, "glass_pane")
         bp.set(x, WR + 3, z, "glass_pane")
@@ -2057,7 +2135,7 @@ def lighthouse(bp):
                              ("west", kx0, kz0, kz1)):
         A.facade(bp, face, line, a, b, TOP, TOP + 4, SB, "stone_bricks", pilaster_every=3, window_y=2, window_h=2,
                  plinth=Palette({"cobblestone": 2, "mossy_cobblestone": 1}), plinth_stairs="cobblestone_stairs",
-                 arched=False, sill="spruce_trapdoor" if False else None)
+                 arched=False, sill=None)
     timber_storey(bp, kx0, kz0, kx1, kz1, TOP + 5, TOP + 8, "spruce_log", plaster, wood="spruce", post_every=3,
                   faces=("south", "north"))
     bp.fill(kx0 + 1, TOP + 5, kz0 + 1, kx1 - 1, TOP + 5, kz1 - 1, "spruce_planks")
@@ -2084,7 +2162,7 @@ def lighthouse(bp):
     bp.stairs(13, TOP + 1, -7, "spruce_stairs", "west")
     bp.chest(kx0 + 1, TOP + 1, kz0 + 1, "south", LOOT + "lighthouse")
     bp.set(kx0 + 1, TOP + 1, kz1 - 1, "bookshelf")
-    bp.set(kx0 + 1, TOP + 2, kz1 - 1, "potted_blue_orchid" if False else "flower_pot")
+    bp.set(kx0 + 1, TOP + 2, kz1 - 1, "potted_blue_orchid")
     bp.lantern(12, TOP + 4, -7, hanging=True)
     bp.bed(kx1 - 2, TOP + 6, kz1 - 2, "north", "light_blue")
     bp.set(kx1 - 1, TOP + 6, kz1 - 1, "barrel[facing=up,open=false]")
@@ -2119,9 +2197,8 @@ def lighthouse(bp):
     for (x, z) in ((3, -6), (16, 0)):
         bp.set(x, TOP + 1, z, "spruce_fence")
         bp.set(x, TOP + 2, z, "spruce_fence")
-    for z in range(-5, 0):
-        bp.set(3 + (z + 5) * 3 // 1 if False else 3, TOP + 3, z, "spruce_fence") if False else None
-    path_line(bp, [(LX, LZ + 8), (LX, 6), (8, 6), (8, 4)], TOP, Palette({"gravel": 2, "coarse_dirt": 1}), width=2, seed=4)
+    path_line(bp, [(LX, LZ + 8), (LX, 6), (8, 6), (8, 4)], TOP, Palette({"gravel": 2, "coarse_dirt": 1}), width=2,
+              seed=4)
     path_line(bp, [(8, 4), (9, -3)], TOP, Palette({"gravel": 2, "coarse_dirt": 1}), width=2, seed=5)
 
     # ---------------------------------------------------------- stairs carved into the cliff, harbour, boat
@@ -2152,7 +2229,6 @@ def lighthouse(bp):
     bp.barrel(6, 1, 25, "up")
     bp.set(7, 1, 26, "barrel[facing=north,open=false]")
     bp.set(9, 1, 18, "cauldron")
-    bp.set(6, 1, 19, "hay_block[axis=z]") if False else None
     # moored sloop
     bx = 13
     for z in range(18, 28):
@@ -2175,7 +2251,7 @@ def lighthouse(bp):
             bp.set(bx, y, z, "white_wool")
     for y in range(3, 8):
         bp.set(bx, y, 21, "white_wool") if y < 7 else None
-    bp.set(bx, 10, 22, "red_banner[rotation=4]") if False else bp.set(bx, 10, 22, "spruce_fence")
+    bp.set(bx, 10, 22, "spruce_fence")
     bp.set(bx, 0, 25, "barrel[facing=up,open=false]")
     bp.set(bx, 0, 20, "chest[facing=north,type=single,waterlogged=false]")
     bp.set(11, 1, 22, "spruce_fence")
@@ -2192,6 +2268,7 @@ def lighthouse(bp):
             for y in range(1, 3):
                 bp.set(x, y, z, "air")
     bp.chest(-13, 1, 3, "west", LOOT + "lighthouse")
+    bp.spawner(-15, 1, 1, "minecraft:drowned")
     bp.barrel(-13, 1, -1, "up")
     bp.barrel(-14, 1, -1, "up")
     bp.set(-13, 3, 1, "lantern[hanging=true,waterlogged=false]")
