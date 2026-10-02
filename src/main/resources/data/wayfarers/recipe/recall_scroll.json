@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:paper",
+    "wayfarers:map_fragment",
+    "minecraft:ender_pearl"
+  ],
+  "result": {
+    "id": "wayfarers:recall_scroll",
+    "count": 2
+  }
+}

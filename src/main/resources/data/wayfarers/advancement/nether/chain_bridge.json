@@ -1,0 +1,42 @@
+{
+  "display": {
+    "icon": {
+      "id": "minecraft:iron_chain"
+    },
+    "title": {
+      "translate": "advancements.wayfarers.nether.chain_bridge.title"
+    },
+    "description": {
+      "translate": "advancements.wayfarers.nether.chain_bridge.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "found": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "wayfarers:chain_bridge"
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "parent": "wayfarers:nether/enter",
+  "rewards": {
+    "experience": 60,
+    "loot": [
+      "wayfarers:rewards/discovery"
+    ]
+  }
+}

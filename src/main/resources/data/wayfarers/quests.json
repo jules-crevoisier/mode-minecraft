@@ -1,0 +1,70 @@
+{
+  "first_steps": [
+    "first_steps/guild_outpost",
+    "first_steps/map_fragment",
+    "first_steps/waystone",
+    "first_steps/sorting_chest",
+    "first_steps/guild_terminal",
+    "first_steps/backpack",
+    "first_steps/blade",
+    "first_steps/explorer_armor"
+  ],
+  "explorer": [
+    "explorer/ruined_watchtower",
+    "explorer/mountain_monastery",
+    "explorer/desert_oasis",
+    "explorer/sunken_temple",
+    "explorer/witch_huts",
+    "explorer/giant_tree",
+    "explorer/sky_island",
+    "explorer/forgotten_library",
+    "explorer/bandit_camp",
+    "explorer/coastal_lighthouse",
+    "explorer/jungle_ziggurat",
+    "explorer/ice_observatory",
+    "explorer/rune_circle",
+    "explorer/galleon_wreck",
+    "explorer/master_cartographer"
+  ],
+  "depths": [
+    "depths/lithite",
+    "depths/dwarven_mine",
+    "depths/dwarven_forge",
+    "depths/crystal_grotto",
+    "depths/sealed_lab",
+    "depths/telluric_hammer",
+    "depths/excavator_pickaxe",
+    "depths/lumber_axe",
+    "depths/frost_blade",
+    "depths/boomerang",
+    "depths/sunken_citadel",
+    "depths/drowned_warden"
+  ],
+  "nether": [
+    "nether/enter",
+    "nether/basalt_fortress",
+    "nether/chain_bridge",
+    "nether/piglin_sanctuary",
+    "nether/lava_foundry",
+    "nether/soul_tower",
+    "nether/piglin_market",
+    "nether/ancient_ember",
+    "nether/ember_scythe",
+    "nether/storm_staff",
+    "nether/ember_armor",
+    "nether/all"
+  ],
+  "end": [
+    "end/enter",
+    "end/void_observatory",
+    "end/chorus_garden",
+    "end/end_archive",
+    "end/void_ship",
+    "end/void_nest",
+    "end/void_shard",
+    "end/void_spear",
+    "end/void_armor",
+    "end/void_warden",
+    "end/legend"
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "display": {
+    "icon": {
+      "id": "wayfarers:explorer_chestplate"
+    },
+    "title": {
+      "translate": "advancements.wayfarers.first_steps.explorer_armor.title"
+    },
+    "description": {
+      "translate": "advancements.wayfarers.first_steps.explorer_armor.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "armor": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "wayfarers:explorer_helmet"
+          },
+          {
+            "items": "wayfarers:explorer_chestplate"
+          },
+          {
+            "items": "wayfarers:explorer_leggings"
+          },
+          {
+            "items": "wayfarers:explorer_boots"
+          }
+        ]
+      }
+    }
+  },
+  "parent": "wayfarers:first_steps/blade",
+  "rewards": {
+    "experience": 60
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "wayfarers:explorer_chestplate",
+    "wayfarers:ember_chestplate",
+    "wayfarers:void_chestplate"
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "display": {
+    "icon": {
+      "id": "minecraft:purpur_pillar"
+    },
+    "title": {
+      "translate": "advancements.wayfarers.end.end_archive.title"
+    },
+    "description": {
+      "translate": "advancements.wayfarers.end.end_archive.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "found": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "wayfarers:end_archive"
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "parent": "wayfarers:end/enter",
+  "rewards": {
+    "experience": 80,
+    "loot": [
+      "wayfarers:rewards/discovery"
+    ]
+  }
+}

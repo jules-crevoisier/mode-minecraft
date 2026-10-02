@@ -1,0 +1,42 @@
+{
+  "display": {
+    "icon": {
+      "id": "minecraft:cartography_table"
+    },
+    "title": {
+      "translate": "advancements.wayfarers.first_steps.guild_outpost.title"
+    },
+    "description": {
+      "translate": "advancements.wayfarers.first_steps.guild_outpost.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "found": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "wayfarers:guild_outpost"
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "parent": "wayfarers:root",
+  "rewards": {
+    "experience": 50,
+    "loot": [
+      "wayfarers:rewards/first_outpost"
+    ]
+  }
+}

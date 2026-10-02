@@ -1,0 +1,122 @@
+{
+  "display": {
+    "icon": {
+      "id": "minecraft:nether_star"
+    },
+    "title": {
+      "translate": "advancements.wayfarers.nether.all.title"
+    },
+    "description": {
+      "translate": "advancements.wayfarers.nether.all.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "basalt_fortress": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "wayfarers:basalt_fortress"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "chain_bridge": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "wayfarers:chain_bridge"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "piglin_sanctuary": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "wayfarers:piglin_sanctuary"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "lava_foundry": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "wayfarers:lava_foundry"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "soul_tower": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "wayfarers:soul_tower"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "piglin_market": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "wayfarers:piglin_market"
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "parent": "wayfarers:nether/ancient_ember",
+  "rewards": {
+    "experience": 300,
+    "loot": [
+      "wayfarers:rewards/cartographer"
+    ]
+  }
+}

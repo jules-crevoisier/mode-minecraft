@@ -1,0 +1,42 @@
+{
+  "display": {
+    "icon": {
+      "id": "minecraft:anvil"
+    },
+    "title": {
+      "translate": "advancements.wayfarers.depths.dwarven_forge.title"
+    },
+    "description": {
+      "translate": "advancements.wayfarers.depths.dwarven_forge.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "found": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "wayfarers:dwarven_forge"
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "parent": "wayfarers:depths/lithite",
+  "rewards": {
+    "experience": 50,
+    "loot": [
+      "wayfarers:rewards/discovery"
+    ]
+  }
+}

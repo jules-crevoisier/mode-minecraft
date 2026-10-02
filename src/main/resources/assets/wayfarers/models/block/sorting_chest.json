@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "wayfarers:block/sorting_chest_top",
+    "side": "wayfarers:block/sorting_chest_side"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "MMM",
+    "M M",
+    "M M"
+  ],
+  "key": {
+    "M": "wayfarers:void_shard"
+  },
+  "result": {
+    "id": "wayfarers:void_leggings",
+    "count": 1
+  }
+}

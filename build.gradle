@@ -1,0 +1,52 @@
+// Wayfarers — Minecraft 26.2 / Forge 65.1.0 (Java 25)
+plugins {
+    id 'java'
+    id 'idea'
+    id 'eclipse'
+    id 'net.minecraftforge.gradle' version '[7.0.17,8)'
+}
+
+version = project.mod_version
+group = 'com.wayfarers'
+base.archivesName = 'wayfarers'
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(25)
+
+minecraft {
+    runs {
+        configureEach {
+            workingDir = layout.projectDirectory.dir('run')
+            systemProperty 'eventbus.api.strictRuntimeChecks', 'true'
+            systemProperty 'forge.enabledGameTestNamespaces', 'wayfarers'
+        }
+        register('client')
+        register('server') {
+            args '--nogui'
+        }
+        register('gameTestServer')
+    }
+}
+
+repositories {
+    minecraft.mavenizer(it)
+    maven fg.forgeMaven
+    maven fg.minecraftLibsMaven
+    mavenCentral()
+}
+
+dependencies {
+    implementation minecraft.dependency("net.minecraftforge:forge:${minecraft_version}-${forge_version}")
+    annotationProcessor "net.minecraftforge:eventbus-validator:${eventbus_version}"
+}
+
+tasks.named('processResources', ProcessResources).configure {
+    var props = [mod_version: project.mod_version]
+    inputs.properties(props)
+    filesMatching('META-INF/mods.toml') {
+        expand(props)
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}

@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "wayfarers:block/void_altar_top",
+    "side": "wayfarers:block/void_altar_side"
+  }
+}

@@ -2,7 +2,7 @@
 import math
 
 from ..defs import Piece, StructureDef, register
-from ..parts import LOOT
+from ..parts import LOOT, MOB
 
 DEEP = ["#minecraft:is_overworld"]
 
@@ -69,7 +69,7 @@ def dwarven_forge(bp):
         for z in (3, D - 3):
             bp.lantern(x, H - 2, z, hanging=True)
             bp.chain(x, H - 1, z, H - 1)
-    bp.spawner(W // 2, 1, D - 3, "minecraft:zombie")
+    bp.spawner(W // 2, 1, D - 3, MOB["ruin_walker"])
     # exit tunnels into the caves
     for x in (6, W - 6):
         bp.clear(x - 1, 1, -7, x + 1, 3, 0)
@@ -189,7 +189,7 @@ def sealed_lab(bp):
     bp.fill(W, 1, 8, W, 4, 10, "iron_bars")
     bp.set(W, 1, 9, "air")
     bp.set(W, 2, 9, "air")
-    bp.spawner(5, 1, 12, "minecraft:zombie")
+    bp.spawner(5, 1, 12, MOB["map_wraith"])
 
 
 register(StructureDef(

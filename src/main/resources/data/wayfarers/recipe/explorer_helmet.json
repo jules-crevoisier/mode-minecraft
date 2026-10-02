@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "MXM",
+    "M M"
+  ],
+  "key": {
+    "M": "minecraft:leather",
+    "X": "wayfarers:map_fragment"
+  },
+  "result": {
+    "id": "wayfarers:explorer_helmet",
+    "count": 1
+  }
+}

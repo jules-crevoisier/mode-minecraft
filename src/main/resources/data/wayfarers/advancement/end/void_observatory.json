@@ -1,0 +1,42 @@
+{
+  "display": {
+    "icon": {
+      "id": "minecraft:end_rod"
+    },
+    "title": {
+      "translate": "advancements.wayfarers.end.void_observatory.title"
+    },
+    "description": {
+      "translate": "advancements.wayfarers.end.void_observatory.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "found": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "wayfarers:void_observatory"
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "parent": "wayfarers:end/enter",
+  "rewards": {
+    "experience": 80,
+    "loot": [
+      "wayfarers:rewards/discovery"
+    ]
+  }
+}

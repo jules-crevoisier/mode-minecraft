@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    " T ",
+    "EBE",
+    " B "
+  ],
+  "key": {
+    "T": "minecraft:lightning_rod",
+    "E": "wayfarers:ancient_ember",
+    "B": "minecraft:blaze_rod"
+  },
+  "result": {
+    "id": "wayfarers:storm_staff",
+    "count": 1
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "display": {
+    "icon": {
+      "id": "minecraft:chorus_flower"
+    },
+    "title": {
+      "translate": "advancements.wayfarers.end.chorus_garden.title"
+    },
+    "description": {
+      "translate": "advancements.wayfarers.end.chorus_garden.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "found": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "wayfarers:chorus_garden"
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "parent": "wayfarers:end/enter",
+  "rewards": {
+    "experience": 80,
+    "loot": [
+      "wayfarers:rewards/discovery"
+    ]
+  }
+}

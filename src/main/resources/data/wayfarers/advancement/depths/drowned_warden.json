@@ -1,0 +1,40 @@
+{
+  "display": {
+    "icon": {
+      "id": "wayfarers:warden_scale"
+    },
+    "title": {
+      "translate": "advancements.wayfarers.depths.drowned_warden.title"
+    },
+    "description": {
+      "translate": "advancements.wayfarers.depths.drowned_warden.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "kill": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "wayfarers:drowned_warden"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "parent": "wayfarers:depths/sunken_citadel",
+  "rewards": {
+    "experience": 500,
+    "loot": [
+      "wayfarers:rewards/drowned_warden"
+    ]
+  }
+}

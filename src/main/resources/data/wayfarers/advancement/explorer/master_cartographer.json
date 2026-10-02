@@ -1,0 +1,250 @@
+{
+  "display": {
+    "icon": {
+      "id": "minecraft:filled_map"
+    },
+    "title": {
+      "translate": "advancements.wayfarers.explorer.master_cartographer.title"
+    },
+    "description": {
+      "translate": "advancements.wayfarers.explorer.master_cartographer.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "ruined_watchtower": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "wayfarers:ruined_watchtower"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "mountain_monastery": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "wayfarers:mountain_monastery"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "desert_oasis": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "wayfarers:desert_oasis"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "sunken_temple": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "wayfarers:sunken_temple"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "witch_huts": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "wayfarers:witch_huts"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "giant_tree": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "wayfarers:giant_tree"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "sky_island": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "wayfarers:sky_island"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "forgotten_library": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "wayfarers:forgotten_library"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "bandit_camp": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "wayfarers:bandit_camp"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "coastal_lighthouse": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "wayfarers:coastal_lighthouse"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "jungle_ziggurat": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "wayfarers:jungle_ziggurat"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "ice_observatory": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "wayfarers:ice_observatory"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "rune_circle": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "wayfarers:rune_circle"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "galleon_wreck": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "wayfarers:galleon_wreck"
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "parent": "wayfarers:explorer/galleon_wreck",
+  "rewards": {
+    "experience": 300,
+    "loot": [
+      "wayfarers:rewards/cartographer"
+    ]
+  }
+}

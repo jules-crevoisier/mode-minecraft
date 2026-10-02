@@ -1,0 +1,33 @@
+{
+  "display": {
+    "icon": {
+      "id": "wayfarers:telluric_hammer"
+    },
+    "title": {
+      "translate": "advancements.wayfarers.depths.telluric_hammer.title"
+    },
+    "description": {
+      "translate": "advancements.wayfarers.depths.telluric_hammer.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "wayfarers:telluric_hammer"
+          }
+        ]
+      }
+    }
+  },
+  "parent": "wayfarers:depths/lithite",
+  "rewards": {
+    "experience": 30
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "display": {
+    "icon": {
+      "id": "wayfarers:sorting_chest"
+    },
+    "title": {
+      "translate": "advancements.wayfarers.first_steps.sorting_chest.title"
+    },
+    "description": {
+      "translate": "advancements.wayfarers.first_steps.sorting_chest.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "wayfarers:sorting_chest"
+          }
+        ]
+      }
+    }
+  },
+  "parent": "wayfarers:first_steps/map_fragment",
+  "rewards": {
+    "experience": 20
+  }
+}

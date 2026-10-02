@@ -1,0 +1,33 @@
+{
+  "display": {
+    "icon": {
+      "id": "wayfarers:lithite_shard"
+    },
+    "title": {
+      "translate": "advancements.wayfarers.depths.lithite.title"
+    },
+    "description": {
+      "translate": "advancements.wayfarers.depths.lithite.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "wayfarers:lithite_shard"
+          }
+        ]
+      }
+    }
+  },
+  "parent": "wayfarers:first_steps/map_fragment",
+  "rewards": {
+    "experience": 50
+  }
+}

@@ -42,11 +42,15 @@ def res_path(rl, kind, ext):
 
 
 def mod_ids(kind):
-    """Ids registered by the Java side, collected from the generated registry manifest."""
-    manifest = os.path.join(ROOT, "build", "registry_manifest.json")
-    if os.path.exists(manifest):
-        return set(json.load(open(manifest)).get(kind, []))
-    return set()
+    """Ids registered by the Java side, read straight from the registry classes."""
+    import re
+    java = os.path.join(ROOT, "src", "main", "java", "com", "wayfarers", "registry")
+    files = {"blocks": ["ModBlocks.java"], "items": ["ModItems.java"], "entities": ["ModEntities.java"]}[kind]
+    ids = set()
+    for f in files:
+        text = open(os.path.join(java, f), encoding="utf-8").read()
+        ids |= set(re.findall(r'(?:register|simple|armor|block|egg)\("([a-z0-9_]+)"', text))
+    return ids
 
 
 def check_templates():
@@ -83,8 +87,8 @@ def check_templates():
             if "LootTable" in data:
                 loot_refs.add((data["LootTable"], rel))
             if "SpawnData" in data:
-                eid = data["SpawnData"]["entity"]["id"].split(":")[1]
-                if eid not in MC_GAME["entities"]:
+                ens, eid = data["SpawnData"]["entity"]["id"].split(":")
+                if (ens == "minecraft" and eid not in MC_GAME["entities"]) or (ens == "wayfarers" and eid not in mod_ids("entities")):
                     err(f"{rel}: spawner entity {eid} unknown")
             if "pool" in data and data["pool"] != "minecraft:empty":
                 if not os.path.exists(res_path(data["pool"], "worldgen/template_pool", ".json")):
@@ -96,6 +100,23 @@ def check_templates():
     for ref, rel in sorted(loot_refs):
         if ref.startswith("wayfarers:") and not os.path.exists(res_path(ref, "loot_table", ".json")):
             err(f"{rel}: loot table {ref} missing")
+
+
+def check_tags():
+    for path in glob.glob(os.path.join(DATA, "*", "tags", "item", "**", "*.json"), recursive=True):
+        for v in json.load(open(path))["values"]:
+            v = v["id"] if isinstance(v, dict) else v
+            if not v.startswith("#"):
+                check_item_id(os.path.relpath(path, DATA), v)
+    for path in glob.glob(os.path.join(DATA, "*", "tags", "block", "**", "*.json"), recursive=True):
+        for v in json.load(open(path))["values"]:
+            v = v["id"] if isinstance(v, dict) else v
+            if v.startswith("wayfarers:") and v.split(":")[1] not in mod_ids("blocks"):
+                err(f"{os.path.relpath(path, DATA)}: unknown mod block {v}")
+    for b in mod_ids("blocks"):
+        if b not in ("grave", "sealed_bars", "warden_altar", "void_altar") and \
+                not os.path.exists(os.path.join(DATA, "wayfarers", "loot_table", "blocks", b + ".json")):
+            err(f"block {b} has no loot table (would drop nothing)")
 
 
 def check_loot():
@@ -151,6 +172,71 @@ def check_worldgen():
         sets[salt] = path
 
 
+def check_item_id(where, rid):
+    ns, name = rid.split(":") if ":" in rid else ("minecraft", rid)
+    if ns == "minecraft" and name not in MC_GAME["items"]:
+        err(f"{where}: unknown item {rid}")
+    elif ns == "wayfarers" and name not in mod_ids("items"):
+        err(f"{where}: unknown mod item {rid}")
+
+
+def check_advancements():
+    adv_dir = os.path.join(DATA, "wayfarers", "advancement")
+    ids = set()
+    for path in glob.glob(os.path.join(adv_dir, "**", "*.json"), recursive=True):
+        ids.add("wayfarers:" + os.path.relpath(path, adv_dir)[:-5].replace(os.sep, "/"))
+    for path in glob.glob(os.path.join(adv_dir, "**", "*.json"), recursive=True):
+        rel = os.path.relpath(path, DATA)
+        adv = json.load(open(path))
+        if "parent" in adv and adv["parent"] not in ids:
+            err(f"{rel}: parent {adv['parent']} missing")
+        check_item_id(rel, adv["display"]["icon"]["id"])
+        for crit in adv["criteria"].values():
+            cond = crit.get("conditions", {})
+            for it in cond.get("items", []):
+                check_item_id(rel, it["items"])
+            for e in cond.get("entity", []):
+                t = e["predicate"]["type"]
+                ns, name = t.split(":")
+                if (ns == "wayfarers" and name not in mod_ids("entities")) or (ns == "minecraft" and name not in MC_GAME["entities"]):
+                    err(f"{rel}: unknown entity {t}")
+            for p in cond.get("player", []):
+                sid = p["predicate"]["location"]["structures"]
+                if not os.path.exists(res_path(sid, "worldgen/structure", ".json")):
+                    err(f"{rel}: unknown structure {sid}")
+        for loot in adv.get("rewards", {}).get("loot", []):
+            if not os.path.exists(res_path(loot, "loot_table", ".json")):
+                err(f"{rel}: reward table {loot} missing")
+    for path in glob.glob(os.path.join(DATA, "wayfarers", "recipe", "*.json")):
+        r = json.load(open(path))
+        rel = os.path.relpath(path, DATA)
+        check_item_id(rel, r["result"]["id"])
+        for v in list(r.get("key", {}).values()) + r.get("ingredients", []):
+            if isinstance(v, str) and not v.startswith("#"):
+                check_item_id(rel, v)
+
+
+def check_lang():
+    """Every registered id has a translation in both languages."""
+    a = os.path.join(ASSETS, "wayfarers", "lang")
+    for lang in ("en_us", "fr_fr"):
+        table = json.load(open(os.path.join(a, lang + ".json"), encoding="utf-8"))
+        for i in mod_ids("items"):
+            if f"item.wayfarers.{i}" not in table and f"block.wayfarers.{i}" not in table:
+                err(f"{lang}: missing name for item {i}")
+        for e in mod_ids("entities"):
+            if f"entity.wayfarers.{e}" not in table:
+                err(f"{lang}: missing name for entity {e}")
+        java = open(os.path.join(ROOT, "src", "main", "java", "com", "wayfarers", "registry", "ModItems.java")).read()
+        import re
+        for root, _, files in os.walk(os.path.join(ROOT, "src", "main", "java")):
+            for f in files:
+                text = open(os.path.join(root, f), encoding="utf-8").read()
+                for key in re.findall(r'"((?:message|tooltip|key|chapter|itemGroup)\.[a-z0-9_.]+)"', text):
+                    if not key.endswith(".") and key not in table:
+                        err(f"{lang}: missing key {key} (used in {f})")
+
+
 def check_assets():
     """Models -> textures, items/blocks -> models, lang keys (only once assets exist)."""
     a = os.path.join(ASSETS, "wayfarers")
@@ -175,6 +261,9 @@ def main():
     check_loot()
     check_worldgen()
     check_assets()
+    check_advancements()
+    check_lang()
+    check_tags()
     for w in sorted(set(warnings)):
         print("warning:", w)
     for e in errors:

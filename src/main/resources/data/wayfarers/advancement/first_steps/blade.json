@@ -1,0 +1,33 @@
+{
+  "display": {
+    "icon": {
+      "id": "wayfarers:cartographer_blade"
+    },
+    "title": {
+      "translate": "advancements.wayfarers.first_steps.blade.title"
+    },
+    "description": {
+      "translate": "advancements.wayfarers.first_steps.blade.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "wayfarers:cartographer_blade"
+          }
+        ]
+      }
+    }
+  },
+  "parent": "wayfarers:first_steps/map_fragment",
+  "rewards": {
+    "experience": 30
+  }
+}

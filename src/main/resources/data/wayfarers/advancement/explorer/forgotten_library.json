@@ -1,0 +1,42 @@
+{
+  "display": {
+    "icon": {
+      "id": "minecraft:bookshelf"
+    },
+    "title": {
+      "translate": "advancements.wayfarers.explorer.forgotten_library.title"
+    },
+    "description": {
+      "translate": "advancements.wayfarers.explorer.forgotten_library.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "found": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "wayfarers:forgotten_library"
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "parent": "wayfarers:first_steps/guild_outpost",
+  "rewards": {
+    "experience": 40,
+    "loot": [
+      "wayfarers:rewards/discovery"
+    ]
+  }
+}

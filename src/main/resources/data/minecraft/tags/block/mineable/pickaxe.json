@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "wayfarers:waystone",
+    "wayfarers:lithite_ore",
+    "wayfarers:deepslate_lithite_ore"
+  ]
+}

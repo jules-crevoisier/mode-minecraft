@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "wayfarers:cartographer_blade",
+    "wayfarers:telluric_hammer",
+    "wayfarers:frost_blade",
+    "wayfarers:ember_scythe",
+    "wayfarers:void_spear"
+  ]
+}

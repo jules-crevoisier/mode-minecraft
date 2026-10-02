@@ -3,7 +3,7 @@ import math
 
 from ..blueprint import with_props
 from ..defs import Piece, StructureDef, register
-from ..parts import LOOT
+from ..parts import LOOT, MOB, MOD
 
 NETHER = ["#minecraft:is_nether"]
 
@@ -62,7 +62,7 @@ def basalt_fortress(bp):
     bp.set(g2 - 2, 8, k0 + 1, "gilded_blackstone")
     bp.set(g2 + 2, 8, k0 + 1, "gilded_blackstone")
     bp.spawner(g2, 1, g2, "minecraft:blaze")
-    bp.spawner(g2, 8, g2, "minecraft:wither_skeleton")
+    bp.spawner(g2, 8, g2, MOB["basalt_guard"])
     for x, z in ((k0 + 2, k0 + 2), (k1 - 2, k0 + 2), (k0 + 2, k1 - 2), (k1 - 2, k1 - 2)):
         bp.lantern(x, 6, z, hanging=True, soul=True)
         bp.lantern(x, 13, z, hanging=True, soul=True)
@@ -268,7 +268,7 @@ def soul_tower(bp):
         bp.fill(x, h + 2, z, x, h + 4 + (a // 45) % 3, z, "blackstone_wall")
     bp.chest(1, h + 2, 1, "north", LOOT + "soul_tower")
     bp.chest(2, 9, -2, "west", LOOT + "soul_tower")
-    bp.spawner(-2, 17, 2, "minecraft:skeleton")
+    bp.spawner(-2, 17, 2, MOB["basalt_guard"])
     bp.spawner(2, 25, 2, "minecraft:blaze")
     # bone ribs half-buried around the base
     for a in (20, 140, 260):
@@ -324,6 +324,7 @@ def piglin_market(bp):
             bp.set(x, 7, z, "polished_blackstone_bricks")
         bp.set(cx, 6, cz, "soul_lantern[hanging=true,waterlogged=false]")
     bp.chest(-2, 1, 4, "north", LOOT + "piglin_market")
+    bp.set(0, 1, -6, MOD["waystone"])
     bp.spawner(4, 1, 0, "minecraft:piglin")
 
 

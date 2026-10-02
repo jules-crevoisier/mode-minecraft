@@ -1,0 +1,33 @@
+{
+  "display": {
+    "icon": {
+      "id": "wayfarers:void_shard"
+    },
+    "title": {
+      "translate": "advancements.wayfarers.end.void_shard.title"
+    },
+    "description": {
+      "translate": "advancements.wayfarers.end.void_shard.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "wayfarers:void_shard"
+          }
+        ]
+      }
+    }
+  },
+  "parent": "wayfarers:end/enter",
+  "rewards": {
+    "experience": 60
+  }
+}

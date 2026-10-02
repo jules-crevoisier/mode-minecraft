@@ -3,7 +3,7 @@ import math
 
 from ..blueprint import with_props
 from ..defs import Piece, StructureDef, register
-from ..parts import (LOOT, banner_pole, crate_stack, garden, lamp_post, leaves, palm, path,
+from ..parts import (LOOT, MOB, MOD, banner_pole, crate_stack, garden, lamp_post, leaves, palm, path,
                      round_tower, timber_house, tree)
 
 TEMPERATE = ["#minecraft:is_forest", "plains", "sunflower_plains", "meadow", "#minecraft:is_taiga",
@@ -53,7 +53,7 @@ def guild_outpost(wood, roof, banner):
         bp.set(18, 1, 17, "hay_block[axis=y]")
         # the guild's "waystone" plinth (replaced by the real block once the mod registers it)
         bp.fill(1, 1, 13, 3, 1, 15, "chiseled_stone_bricks")
-        bp.set(2, 2, 14, "lodestone")
+        bp.set(2, 2, 14, MOD["waystone"])
         bp.set(2, 3, 14, "lantern[hanging=false,waterlogged=false]")
         for x, z in ((1, 13), (3, 13), (1, 15), (3, 15)):
             bp.set(x, 2, z, "stone_brick_wall")
@@ -103,7 +103,7 @@ def watchtower(ruined):
         bp.set(1, 22, 1, "hay_block[axis=y]")
         bp.set(-2, 23, -1, "bell[attachment=floor,facing=north,powered=false]")
         if ruined:
-            bp.spawner(0, 1, -2, "minecraft:skeleton")
+            bp.spawner(0, 1, -2, MOB["ruin_walker"])
             bp.decay(0.10, protect=("ladder",), region=((-6, 14, -6), (6, 26, 6)))
             bp.weather({"stone_bricks": ["mossy_stone_bricks", "cracked_stone_bricks"]}, 0.3)
             for _ in range(25):
@@ -234,6 +234,7 @@ def monastery(bp):
     bp.set(4, 1, S - 1, "campfire[lit=true,signal_fire=false,waterlogged=false,facing=north]")
     bp.barrel(2, 1, S - 1, "up", LOOT + "monastery")
     bp.set(1, 1, S - 1, "composter[level=4]")
+    bp.set(10, 1, 14, MOD["waystone"])
     for x in range(S - 5, S):
         bp.barrel(x, 1, S - 1, "north")
     for x, z in ((15, 3), (15, S - 3), (3, 15), (S - 3, 15)):
@@ -286,6 +287,7 @@ def oasis(bp):
     bp.set(px + 7, 1, pz + 2, "orange_carpet")
     bp.set(px + 6, 1, pz + 2, "orange_carpet")
     bp.set(px + 6, 1, pz + 1, "decorated_pot[facing=north,waterlogged=false,cracked=false]")
+    bp.set(px + 4, 1, pz + 6, MOD["waystone"])
     # the tomb: trapdoor hidden under a carpet in the pavilion corner
     tx, tz = px + 1, pz + 1
     bp.set(tx, 1, tz, "orange_carpet")
@@ -722,6 +724,7 @@ def library(bp):
     bp.chest(W + 1, 1, 10, "east", LOOT + "library_secret")
     bp.lantern(W + 3, 4, 8, hanging=True)
     bp.set(W + 1, 1, 6, "cobweb")
+    bp.spawner(W // 2, 1, D // 2, MOB["map_wraith"])
 
 
 register(StructureDef(
@@ -822,7 +825,7 @@ def dwarven_mine(bp):
         toward_hall = {(1, 0): "west", (-1, 0): "east", (0, 1): "north", (0, -1): "south"}[(dx, dz)]
         bp.chest(ex - dx, hy, ez - dz, toward_hall, LOOT + "dwarven_mine")
     bp.spawner(0, hy, 18, "minecraft:cave_spider")
-    bp.spawner(-18, hy, 0, "minecraft:zombie")
+    bp.spawner(-18, hy, 0, MOB["ruin_walker"])
 
 
 register(StructureDef(
@@ -973,6 +976,7 @@ def lighthouse(bp):
             bp.fill(0, -4, z, 0, 1, z, "spruce_log[axis=y]")
     bp.lantern(-3, 2, -12)
     bp.barrel(-1, 1, -11, "up", LOOT + "lighthouse")
+    bp.set(3, 1, 6, MOD["waystone"])
 
 
 register(StructureDef(
@@ -1183,7 +1187,7 @@ def rune_circle(bp):
         bp.fill(-4, cy + 1, z, -2, cy + 1, z, "polished_deepslate")
         bp.set(-3, cy + 2, z, "skeleton_skull[rotation=4]")
     bp.chest(-4, cy + 1, 0, "east", LOOT + "rune_circle")
-    bp.spawner(0, cy + 1, 0, "minecraft:zombie")
+    bp.spawner(0, cy + 1, 0, MOB["ruin_walker"])
     bp.lantern(0, cy + 4, 0, hanging=True, soul=True)
     for x in (-4, 4):
         bp.wall_torch(x, cy + 3, -3, "south", soul=True)

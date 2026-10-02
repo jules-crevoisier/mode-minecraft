@@ -5,7 +5,7 @@ LOOT = "wayfarers:chests/"
 
 # Blocks provided by the Java side of the mod. Until the mod registers them the
 # generator falls back to vanilla stand-ins so the templates stay loadable.
-USE_MOD_BLOCKS = False
+USE_MOD_BLOCKS = True
 _MOD_IDS = {
     "waystone": ("wayfarers:waystone", "minecraft:lodestone"),
     "guardian_altar": ("wayfarers:warden_altar", "minecraft:reinforced_deepslate"),
@@ -13,6 +13,15 @@ _MOD_IDS = {
     "vault_bars": ("wayfarers:sealed_bars", "minecraft:iron_bars"),
 }
 MOD = {k: (v[0] if USE_MOD_BLOCKS else v[1]) for k, v in _MOD_IDS.items()}
+
+# Creatures for structure spawners (vanilla stand-ins when the Java side is disabled)
+_MOBS = {
+    "ruin_walker": "minecraft:zombie",
+    "map_wraith": "minecraft:husk",
+    "basalt_guard": "minecraft:wither_skeleton",
+    "void_stalker": "minecraft:enderman",
+}
+MOB = {k: (f"wayfarers:{k}" if USE_MOD_BLOCKS else v) for k, v in _MOBS.items()}
 
 
 def timber_house(bp, x0, y0, z0, w, d, floors=2, wood="spruce", frame="dark_oak_log",

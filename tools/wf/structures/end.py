@@ -2,7 +2,7 @@
 import math
 
 from ..defs import Piece, StructureDef, register
-from ..parts import LOOT
+from ..parts import LOOT, MOB, MOD
 
 OUTER_END = ["end_highlands", "end_midlands", "small_end_islands", "end_barrens"]
 
@@ -81,7 +81,7 @@ def void_observatory(bp):
         sx, sz = round(math.cos(math.radians(a)) * 17), round(math.sin(math.radians(a)) * 17)
         floating_rock(bp, sx, 4, sz, 3, 3, 3)
         bp.set(sx, 5, sz, "amethyst_cluster[facing=up,waterlogged=false]")
-    bp.spawner(0, 1, -4, "minecraft:enderman")
+    bp.spawner(0, 1, -4, MOB["void_stalker"])
 
 
 register(StructureDef(
@@ -160,6 +160,7 @@ def end_archive(bp):
     bp.ladder(-W + 3, 1, -W + 2, H, "south")
     bp.bookshelf_wall(W - 2, 1, -W + 2, W - 2, 3, W - 2, 0.05)
     bp.set(0, 1, 0, "enchanting_table")
+    bp.set(2, 1, 2, MOD["waystone"])
     bp.clear(0, 1, W - 1, 0, 2, W - 1)
     # dome roof
     bp.sphere(0, H, 0, W, "purpur_block", hollow=True, half="top")
@@ -214,7 +215,7 @@ def void_ship(bp):
     bp.chest(0, 1, 6, "south", LOOT + "void_ship")
     bp.set(0, 6, 2, "dragon_head[rotation=0]")
     bp.set(2, 1, 10, "brewing_stand[has_bottle_0=true,has_bottle_1=false,has_bottle_2=false]")
-    bp.spawner(-1, 1, 12, "minecraft:enderman")
+    bp.spawner(-1, 1, 12, MOB["void_stalker"])
     for z in range(2, L - 4, 6):
         bp.set(3, 6, z, "end_rod[facing=up]")
 
@@ -241,7 +242,7 @@ def void_nest(bp):
             bp.set(x, 1 + t, z, "obsidian" if t < 10 else "crying_obsidian")
     # arena centre: the summoning altar (activated by the mod's boss logic)
     bp.fill(-1, 1, -1, 1, 1, 1, "purpur_block")
-    bp.set(0, 2, 0, "respawn_anchor[charges=4]")
+    bp.set(0, 2, 0, MOD["void_altar"])
     for x, z in ((-3, 0), (3, 0), (0, -3), (0, 3)):
         bp.set(x, 1, z, "end_rod[facing=up]")
     for a in range(0, 360, 90):

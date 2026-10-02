@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "id": "wayfarers:wayfarer_atlas"
+    },
+    "title": {
+      "translate": "advancements.wayfarers.root.title"
+    },
+    "description": {
+      "translate": "advancements.wayfarers.root.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false,
+    "background": "minecraft:gui/advancements/backgrounds/stone"
+  },
+  "criteria": {
+    "start": {
+      "trigger": "minecraft:tick"
+    }
+  }
+}

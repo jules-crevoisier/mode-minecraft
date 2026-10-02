@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "GMG",
+    "PCP",
+    "PRP"
+  ],
+  "key": {
+    "G": "minecraft:gold_ingot",
+    "M": "wayfarers:map_fragment",
+    "P": "#minecraft:planks",
+    "C": "minecraft:chest",
+    "R": "minecraft:redstone"
+  },
+  "result": {
+    "id": "wayfarers:guild_terminal",
+    "count": 1
+  }
+}

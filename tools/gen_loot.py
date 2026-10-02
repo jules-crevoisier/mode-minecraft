@@ -133,8 +133,8 @@ THEMES = {
 # Progression materials from the Java side, by tier.
 MOD_ITEMS = {
     "overworld": [item("wayfarers:map_fragment", 25, (1, 3)), item("wayfarers:structure_compass", 2)],
-    "deep": [item("wayfarers:lithite", 25, (1, 3)), item("wayfarers:map_fragment", 10, (1, 2))],
-    "nether": [item("wayfarers:ancient_ember", 25, (1, 3)), item("wayfarers:lithite", 8, (1, 2))],
+    "deep": [item("wayfarers:lithite_shard", 25, (1, 3)), item("wayfarers:map_fragment", 10, (1, 2))],
+    "nether": [item("wayfarers:ancient_ember", 25, (1, 3)), item("wayfarers:lithite_shard", 8, (1, 2))],
     "end": [item("wayfarers:void_shard", 25, (1, 3)), item("wayfarers:ancient_ember", 8, (1, 2))],
 }
 
