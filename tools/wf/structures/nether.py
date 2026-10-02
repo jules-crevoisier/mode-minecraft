@@ -1015,24 +1015,47 @@ def giant_fungus(bp, x, y, z, h, cap_r, seed=0, kind="crimson"):
         bp.set(cx + round(math.cos(a) * r), top - 1, cz + round(math.sin(a) * r), "shroomlight")
 
 
-def zig_tier(bp, half, y0, h, seed=0):
+def mini_piglin(bp, x, y, z, rot):
+    """Small gilded piglin statue (4 tall) on a corner pier."""
+    bp.set(x, y, z, GBS)
+    bp.set(x, y + 1, z, "raw_gold_block")
+    bp.set(x, y + 2, z, "gold_block")
+    bp.set(x, y + 3, z, f"piglin_head[rotation={rot}]")
+
+
+def zig_tier(bp, half, y0, h, seed=0, niches=False, corner="brazier"):
     """One ziggurat tier: solid core, battered plinth, pilasters with gold capitals, gilded cornice,
-    gold-capped corner piers carrying braziers."""
+    gold-capped corner piers carrying braziers or small piglin statues; optional lamp-lit niches."""
     fill_pal(bp, -half, y0, -half, half, y0 + h - 1, half, TEMPLE)
     top = y0 + h - 1
     for face in ("north", "south", "east", "west"):
+        line = half if face in ("south", "east") else -half
+        inward = OPPOSITE[face]
         for u in range(-half, half + 1):
-            x, z = _pos(face, half if face in ("south", "east") else -half, u, 1)
-            inward = OPPOSITE[face]
+            x, z = _pos(face, line, u, 1)
             bp.set(x, y0, z, stair(PBBS, inward))
             bp.set(x, top, z, stair(PBBS, inward, "top"))
-            ex, ez = _pos(face, half if face in ("south", "east") else -half, u, 0)
+            ex, ez = _pos(face, line, u, 0)
             bp.set(ex, top, ez, GILD)
             if u % 4 == 0 and abs(u) < half - 1:
                 for y in range(y0, top):
                     bp.set(x, y, z, PBAS)
                 bp.set(x, top - 1, z, "gold_block")
                 bp.set(x, y0, z, CHIS)
+            elif u % 4 == 2 and abs(u) < half - 1 and niches and abs(u) > 3:
+                # recessed niche across the bay: ember lamp in the back, gilded jambs, lintel and sill
+                for du in (-1, 0, 1):
+                    fx, fz = _pos(face, line, u + du, 0)
+                    bx, bz = _pos(face, line, u + du, -1)
+                    for y in (y0 + 2, y0 + 3):
+                        bp.set(fx, y, fz, "air")
+                        bp.set(bx, y, bz, LAMP if du == 0 else GBS)
+                    bp.set(fx, y0 + 4, fz, GILD)
+                    bp.set(fx, y0 + 1, fz, GBS)
+                    sx_, sz_ = _pos(face, line, u + du, 1)
+                    bp.set(sx_, y0 + 1, sz_, stair(PBBS, inward, "top"))
+                cx_, cz_ = _pos(face, line, u, 0)
+                bp.set(cx_, y0 + 2, cz_, "candle[candles=3,lit=true,waterlogged=false]")
             elif u % 4 == 2 and abs(u) < half - 1 and h >= 5:
                 bp.set(ex, y0 + h // 2, ez, CHIS)
                 bp.set(ex, y0 + h // 2 - 1, ez, GBS)
@@ -1043,78 +1066,183 @@ def zig_tier(bp, half, y0, h, seed=0):
                 for dx in (0, -sx):
                     for dz in (0, -sz):
                         bp.set(cx + dx, y, cz + dz, GOLD.pick(cx + dx, y, cz + dz) if y > top - 1 else PBAS)
-            brazier(bp, cx, top + 2, cz, big=True)
+            if corner == "statue":
+                rot = {(1, 1): 14, (-1, 1): 2, (-1, -1): 6, (1, -1): 10}[(sx, sz)]
+                mini_piglin(bp, cx, top + 2, cz, rot)
+            else:
+                brazier(bp, cx, top + 2, cz, big=True)
 
 
-def piglin_idol(bp, B, zc=-4):
-    """Golden piglin statue (~32 tall) facing south, feet at y=B, torso centred on z=zc."""
-    # legs, boots with gilded cuffs
-    for (lx0, lx1) in ((-4, -1), (1, 4)):
-        fill_pal(bp, lx0, B, zc - 2, lx1, B + 8, zc + 1, GOLD)
-        bp.fill(lx0, B, zc + 2, lx1, B + 1, zc + 2, "raw_gold_block")
-        bp.fill(lx0, B + 2, zc - 2, lx1, B + 2, zc + 2, GBS)
-    # belt and red loincloth
-    bp.fill(-4, B + 9, zc - 2, 4, B + 9, zc + 2, GBS)
-    bp.fill(-1, B + 4, zc + 2, 1, B + 8, zc + 2, "red_wool")
+def _idol_gold(x, y, z, B, H=34):
+    """Gold shading: raw (darker) gold dominates low on the statue, bright gold high up."""
+    t = (y - B) / H
+    n = noise2(x + y * 0.3, z, 4.0, 51)
+    return "raw_gold_block" if n < 1.05 - 1.6 * t else "gold_block"
+
+
+def _section(bp, y, cz, hx, hz, B, fn=None, n=2.6, cx=0):
+    """Fill a rounded horizontal cross-section (superellipse) of the statue."""
+    cells = []
+    for x in range(cx - math.ceil(hx), cx + math.ceil(hx) + 1):
+        for z in range(cz - math.ceil(hz), cz + math.ceil(hz) + 1):
+            if (abs(x - cx) / hx) ** n + (abs(z - cz) / hz) ** n <= 1.0:
+                cells.append((x, z))
+    for (x, z) in cells:
+        bp.set(x, y, z, fn(x, y, z) if fn else _idol_gold(x, y, z, B))
+    return cells
+
+
+def _limb(bp, a, b, B, r=0.9):
+    """Rounded limb between two points."""
+    (x0, y0, z0), (x1, y1, z1) = a, b
+    n = max(1, int(max(abs(x1 - x0), abs(y1 - y0), abs(z1 - z0)) * 2))
+    for i in range(n + 1):
+        t = i / n
+        px, py, pz = x0 + (x1 - x0) * t, y0 + (y1 - y0) * t, z0 + (z1 - z0) * t
+        for x in range(math.floor(px - r), math.ceil(px + r) + 1):
+            for y in range(math.floor(py - r), math.ceil(py + r) + 1):
+                for z in range(math.floor(pz - r), math.ceil(pz + r) + 1):
+                    if (x - px) ** 2 + (y - py) ** 2 + (z - pz) ** 2 <= r * r + 0.35:
+                        bp.set(x, y, z, _idol_gold(x, y, z, B))
+
+
+def piglin_idol(bp, B, zc=-3):
+    """Sculpted golden piglin (~34 tall incl. crown) facing south, feet at y=B: robed body narrowing
+    to a gilded belt, broad shoulders with pauldrons, free-standing arms whose hands rest on the
+    pommel of a great sword planted before its feet, wide head with snout, tusks and floppy ears,
+    a tall spiked crown, and a red cape flowing off the shoulders."""
+    # robe skirt flaring to the ground, gilded hem, boots peeking out
+    for dy in range(0, 9):
+        cells = _section(bp, B + dy, zc, 4.7 - 0.14 * dy, 3.3 - 0.08 * dy, B)
+        if dy == 0:
+            for (x, z) in cells:
+                if (abs(x) / 4.7) ** 2.6 + (abs(z - zc) / 3.3) ** 2.6 > 0.55:
+                    bp.set(x, B, z, GILD)
+    for x in (-2, -1, 1, 2):
+        bp.set(x, B, zc + 4, "blackstone")
+    for x in (-3, 3):
+        for dy in range(1, 8, 2):
+            bp.set(x, B + dy, zc + 3, "raw_gold_block")
+    # belt with an ember buckle
+    _section(bp, B + 9, zc, 3.7, 2.7, B, fn=lambda *_: GILD)
     bp.set(0, B + 9, zc + 3, LAMP)
-    # torso with a strap
-    fill_pal(bp, -4, B + 10, zc - 2, 4, B + 18, zc + 2, GOLD)
-    for i in range(9):
-        bp.set(-4 + i, B + 10 + i, zc + 2, GBS)
-    # shoulders / arms: left hanging, right holding a sword raised before the face
-    fill_pal(bp, -7, B + 10, zc - 1, -5, B + 18, zc + 1, GOLD)
-    bp.fill(-7, B + 10, zc - 1, -5, B + 10, zc + 1, "raw_gold_block")
-    bp.fill(-7, B + 18, zc - 1, -5, B + 18, zc + 1, GBS)
-    # right arm resting on a great sword planted point-down beside the statue
-    fill_pal(bp, 5, B + 13, zc - 1, 7, B + 18, zc + 1, GOLD)
-    bp.fill(5, B + 18, zc - 1, 7, B + 18, zc + 1, GBS)
-    fill_pal(bp, 8, B + 14, zc - 1, 9, B + 16, zc + 1, Palette({"raw_gold_block": 1}))
-    for y in range(B - 3, B + 11):
-        bp.set(9, y, zc - 1, PBAS)
-        bp.set(9, y, zc + 1, PBAS)
-        bp.set(9, y, zc, "obsidian" if y % 4 else LAMP)
-    bp.fill(9, B + 11, zc - 3, 9, B + 11, zc + 3, GBS)
-    bp.set(9, B + 11, zc - 3, "gold_block")
-    bp.set(9, B + 11, zc + 3, "gold_block")
-    bp.set(9, B + 12, zc, GBS)
-    bp.set(9, B + 13, zc, GBS)
-    # head: wide, with a big snout, nostrils, tusks, angry brow, glowing eyes, drooping ears
-    fill_pal(bp, -5, B + 19, zc - 4, 5, B + 26, zc + 3, GOLD)
-    fill_pal(bp, -2, B + 19, zc + 4, 2, B + 21, zc + 5, Palette({"raw_gold_block": 1}))
-    for nx in (-1, 1):
-        bp.set(nx, B + 20, zc + 5, "blackstone")
-    for tx in (-3, 3):
-        bp.set(tx, B + 19, zc + 4, "bone_block[axis=y]")
-        bp.set(tx, B + 20, zc + 4, "bone_block[axis=y]")
-    for ex in (-4, -3, -2, 2, 3, 4):
-        bp.set(ex, B + 24, zc + 3, GBS)
-    for ex in (-3, 3):
-        bp.set(ex, B + 23, zc + 3, LAMP)
-    for ex in (-2, 2):
-        bp.set(ex, B + 23, zc + 3, "blackstone")
+    bp.set(-1, B + 9, zc + 3, GBS)
+    bp.set(1, B + 9, zc + 3, GBS)
+    # torso widening from the waist to broad shoulders, with a gilded strap
+    for dy in range(10, 18):
+        _section(bp, B + dy, zc, 3.7 + (dy - 10) * 0.22, 2.7 + (dy - 10) * 0.06, B)
+    for i in range(7):
+        bp.set(-3 + i, B + 10 + i, zc + 3, GBS)
+    # neck with a blackstone gorget
+    _section(bp, B + 18, zc, 2.6, 2.0, B, fn=lambda *_: "blackstone")
+    _section(bp, B + 19, zc, 2.3, 1.8, B)
+    # pauldrons
     for sx in (-1, 1):
-        for (dx, y0, y1) in ((6, B + 22, B + 26), (7, B + 20, B + 23), (8, B + 19, B + 20)):
-            for z in (zc - 2, zc - 1, zc):
-                bp.fill(sx * dx, y0, z, sx * dx, y1, z, "raw_gold_block")
-    # red cape down the back, gold-hemmed, flaring at the bottom
-    for y in range(B + 3, B + 19):
-        zz = zc - 3 if y > B + 9 else zc - 4
-        w = 4 if y > B + 9 else 5
-        for x in range(-w, w + 1):
-            hem = abs(x) == w or y == B + 3
-            bp.set(x, y, zz, GILD if hem else "red_wool")
-        if y <= B + 9:
-            for x in range(-w + 1, w):
-                bp.set(x, y, zc - 3, "red_wool")
-    # spiked crown
+        for dy, (hx, hz) in ((15, (1.6, 2.2)), (16, (2.1, 2.6)), (17, (2.1, 2.6)), (18, (1.5, 2.0))):
+            _section(bp, B + dy, zc, hx, hz, B, cx=sx * 6)
+        for z in range(zc - 2, zc + 3):
+            bp.set(sx * 6, B + 15, z, GILD)
+            bp.set(sx * 5, B + 15, z, "blackstone")
+    # arms: upper arms hang free of the torso, forearms reach forward to the pommel
+    sz = zc + 6
+    for sx in (-1, 1):
+        _limb(bp, (sx * 7, B + 15, zc), (sx * 7, B + 12, zc + 1), B, r=1.0)
+        bp.set(sx * 7, B + 12, zc + 1, "blackstone")
+        _limb(bp, (sx * 7, B + 12, zc + 1), (sx * 2, B + 11, sz - 1), B, r=0.9)
+        bp.set(sx * 2, B + 11, sz - 1, "blackstone")
+        bp.fill(sx * 1, B + 10, sz, sx * 1, B + 11, sz, "raw_gold_block")
+    # the great sword, point-down before the feet
+    for y in range(B - 1, B + 9):
+        bp.set(0, y, sz, "obsidian" if (y - B) % 3 else LAMP)
+        if y > B:
+            bp.set(-1, y, sz, PBAS)
+            bp.set(1, y, sz, PBAS)
+    bp.fill(-4, B + 9, sz, 4, B + 9, sz, GBS)
+    bp.set(-4, B + 10, sz, "gold_block")
+    bp.set(4, B + 10, sz, "gold_block")
+    bp.set(0, B + 10, sz, GBS)
+    bp.set(0, B + 11, sz, GBS)
+    bp.set(0, B + 12, sz, "gold_block")
+    bp.set(0, B + 13, sz, LAMP)
+    # head: wider than the neck, rounded, with brow, glowing eyes, snout, nostrils, tusks
+    hz0 = zc - 0.5
+    for dy in range(20, 28):
+        w = 5.3 if 21 <= dy <= 26 else 4.6
+        _section(bp, B + dy, round(hz0), w, 3.6 if 21 <= dy <= 26 else 3.0, B, n=3.0)
+    front = round(hz0) + 3
+    for x in range(-2, 3):
+        for dy in (20, 21, 22):
+            for dz in (1, 2):
+                if not (abs(x) == 2 and dz == 2):
+                    bp.set(x, B + dy, front + dz, "raw_gold_block")
+    for x in (-1, 1):
+        bp.set(x, B + 21, front + 3, "nether_wart_block")
+    bp.set(0, B + 21, front + 3, "raw_gold_block")
+    for x in (-3, 3):
+        bp.set(x, B + 20, front + 1, "bone_block[axis=y]")
+        bp.set(x, B + 21, front + 1, "bone_block[axis=y]")
+        bp.set(x, B + 22, front + 1, "bone_block[axis=y]")
+    for x in (-3, -2, 2, 3):
+        bp.set(x, B + 24, front, "blackstone" if abs(x) == 3 else LAMP)
+    for x in (-4, -3, -2, -1, 1, 2, 3, 4):
+        bp.set(x, B + 25 + (1 if abs(x) == 4 else 0), front + 1, GBS)
+    # floppy ears angled out and down
+    for sx in (-1, 1):
+        for i, (dx, ys_) in enumerate(((6, (25, 27)), (7, (24, 26)), (8, (23, 25)), (9, (22, 23)), (10, (21, 21)))):
+            for z in range(round(hz0) - 1, round(hz0) + 2 - (1 if i >= 3 else 0)):
+                for dy in range(ys_[0], ys_[1] + 1):
+                    bp.set(sx * dx, B + dy, z, "raw_gold_block" if i < 3 else "gold_block")
+        bp.set(sx * 6, B + 27, round(hz0) + 1, "blackstone")
+    # tall spiked crown of gold with gilded trim and ember jewels
+    hz_c = round(hz0)
+    ring = []
     for x in range(-5, 6):
-        for z in range(zc - 4, zc + 4):
-            if x in (-5, 5) or z in (zc - 4, zc + 3):
-                bp.set(x, B + 27, z, GBS if (x + z) % 2 else "gold_block")
-                if (x + z) % 2 == 0:
-                    bp.set(x, B + 28, z, GILD)
-                    if abs(x) == 5 and z in (zc - 4, zc + 3) or (z == zc + 3 and x == 0):
-                        bp.set(x, B + 29, z, LAMP)
+        for z in range(hz_c - 4, hz_c + 5):
+            inside = (abs(x) / 4.7) ** 3 + (abs(z - hz_c) / 3.1) ** 3 <= 1.0
+            if inside:
+                bp.set(x, B + 28, z, GBS)
+                edge = any((abs(x + dx) / 4.7) ** 3 + (abs(z + dz - hz_c) / 3.1) ** 3 > 1.0
+                           for dx, dz in ((1, 0), (-1, 0), (0, 1), (0, -1)))
+                if edge:
+                    ring.append((x, z))
+    ring.sort(key=lambda p: math.atan2(p[1] - hz_c, p[0]))
+    for i, (x, z) in enumerate(ring):
+        bp.set(x, B + 28, z, GILD)
+        bp.set(x, B + 29, z, "gold_block")
+        if i % 2 == 0:
+            tall = 4 if (x == 0 and z > hz_c) else 3 if abs(x) >= 4 else 2
+            for k in range(tall):
+                bp.set(x, B + 30 + k, z, "gold_block" if k < tall - 1 else GILD)
+            bp.set(x, B + 30 + tall, z, "lightning_rod[facing=up,powered=false,waterlogged=false]")
+    bp.set(0, B + 31, hz_c + 3, LAMP)
+    for x in (-2, 2):
+        bp.set(x, B + 29, hz_c + 3, LAMP)
+    # red cape flowing from the shoulders: billows out behind (deeper in the middle), widens and
+    # wraps forward at the sides, gilded hem, darker folds
+    back = zc - 3
+    for y in range(B + 1, B + 19):
+        drop = B + 18 - y
+        w = 5 + drop // 5
+        for x in range(-w, w + 1):
+            billow = 1 if abs(x) < w - 1 and drop > 3 else 0
+            zz = back - 1 - drop // 7 - billow
+            hem = abs(x) == w or y == B + 1
+            fold = (x + drop // 3) % 4 == 0
+            bp.set(x, y, zz, GILD if hem else "red_terracotta" if fold else "red_wool")
+            if abs(x) == w and drop > 5:
+                bp.set(x, y, zz + 1, "red_wool")
+    for sx in (-1, 1):
+        for z in range(back - 1, zc + 1):
+            bp.set(sx * 6, B + 19, z, "red_wool")
+            bp.set(sx * 5, B + 19, z, "red_wool")
+        bp.set(sx * 4, B + 19, back, GBS)
+    # braided mane down the back of the head
+    hb = round(hz0) - 4
+    for y in range(B + 20, B + 28):
+        bp.set(0, y, hb, GBS if y % 2 else "blackstone")
+        for sx in (-2, 2):
+            if y > B + 22:
+                bp.set(sx, y, hb + 1, "raw_gold_block")
 
 
 def piglin_sanctuary(bp):
@@ -1150,7 +1278,7 @@ def piglin_sanctuary(bp):
                 bp.set(x, -2, z, "magma_block")
     # the tiers
     for i, (half, y0, h) in enumerate(ZIG):
-        zig_tier(bp, half, y0, h, seed=i)
+        zig_tier(bp, half, y0, h, seed=i, niches=i in (1, 2), corner="statue" if i == 1 else "brazier")
     summit = ZIG[-1][1] + ZIG[-1][2]   # walking level on the summit
     # lava cascades down the east and west faces of the upper tiers into gilded basins
     for sx in (-1, 1):
@@ -1186,23 +1314,17 @@ def piglin_sanctuary(bp):
                 brazier(bp, x, i + 2, z)
     # summit: pedestal, idol, altar, obelisks
     ys = summit
-    fill_pal(bp, -8, ys, -8, 8, ys + 1, 1, TEMPLE)
-    fill_pal(bp, -6, ys + 2, -8, 6, ys + 4, 0, TEMPLE)
-    for x in range(-8, 9):
-        bp.set(x, ys + 1, 1, GILD)
-        bp.set(x, ys, 2, stair(PBBS, "north"))
-    for x in range(-6, 7):
-        bp.set(x, ys + 4, 0, GILD)
-        bp.set(x, ys + 2, 1, stair(PBBS, "north"))
-    for z in range(-8, 2):
-        bp.set(-8, ys + 1, z, GILD)
-        bp.set(8, ys + 1, z, GILD)
-    for z in range(-8, 1):
-        bp.set(-6, ys + 4, z, GILD)
-        bp.set(6, ys + 4, z, GILD)
-    for x in (-5, 5):
-        bp.set(x, ys + 3, 1, LAMP)
-    piglin_idol(bp, ys + 5, zc=-4)
+    for (hx, z0_, z1_, ya, yb) in ((8, -8, 3, ys, ys + 1), (7, -8, 2, ys + 2, ys + 3), (6, -7, 0, ys + 4, ys + 4)):
+        fill_pal(bp, -hx, ya, z0_, hx, yb, z1_, TEMPLE)
+        for x in range(-hx, hx + 1):
+            bp.set(x, yb, z1_, GILD)
+            bp.set(x, ya, z1_ + 1, stair(PBBS, "north"))
+        for z in range(z0_, z1_ + 1):
+            bp.set(-hx, yb, z, GILD)
+            bp.set(hx, yb, z, GILD)
+    for x in (-6, 6):
+        bp.set(x, ys + 3, 3, LAMP)
+    piglin_idol(bp, ys + 5, zc=-3)
     bp.fill(-3, ys, 5, 3, ys, 6, GBS)
     bp.fill(-2, ys + 1, 5, 2, ys + 1, 5, "gold_block")
     bp.chest(0, ys + 1, 6, "south", LOOT + "piglin_sanctuary")
@@ -1250,14 +1372,13 @@ def piglin_sanctuary(bp):
     for (x, z) in ((-5, 5), (5, 5), (-5, -5), (5, -5)):
         chandelier(bp, x, 9, z, drop=2)
     # hidden vault inside the third tier, reached by a ladder under a cracked slab on the summit
-    bp.set(6, ys - 1, -6, CPBB)
-    bp.clear(6, 13, -6, 6, ys - 2, -6)
-    bp.ladder(6, 14, -5, ys - 2, "south")
-    bp.room(2, 13, -9, 8, 17, -3, PBB, floor=GBS, ceiling=PBB)
-    bp.clear(6, 17, -6, 6, 17, -6)
-    bp.chest(3, 14, -8, "south", LOOT + "piglin_sanctuary")
-    bp.fill(4, 14, -8, 5, 14, -8, "gold_block")
-    bp.set(3, 14, -4, "soul_lantern[hanging=false,waterlogged=false]")
+    bp.room(2, 13, 2, 8, 17, 8, PBB, floor=GBS, ceiling=PBB)
+    bp.set(6, ys - 1, 5, CPBB)
+    bp.clear(6, 14, 5, 6, ys - 2, 5)
+    bp.ladder(6, 17, 5, ys - 2, "south")
+    bp.chest(3, 14, 7, "east", LOOT + "piglin_sanctuary")
+    bp.fill(4, 14, 7, 5, 14, 7, "gold_block")
+    bp.set(3, 14, 3, "soul_lantern[hanging=false,waterlogged=false]")
     # giant crimson fungi framing the temple
     for (fx, fz, h, r, sd) in ((-30, -24, 24, 9, 1), (29, -28, 20, 8, 2), (-29, 27, 18, 7, 3),
                                (31, 24, 26, 9, 4), (14, -32, 12, 5, 5), (-16, 33, 11, 5, 6)):
@@ -1271,7 +1392,7 @@ def piglin_sanctuary(bp):
 register(StructureDef(
     "piglin_sanctuary", "nether", ["crimson_forest", "nether_wastes"],
     [Piece("sanctuary", piglin_sanctuary)], spacing=24, separation=8, adaptation="beard_box",
-    height=("uniform", 30, 50), processors="aging",
+    height=("uniform", 30, 46), processors="aging",
     title_fr="Sanctuaire piglin", title_en="Piglin Sanctuary"))
 
 

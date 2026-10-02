@@ -961,8 +961,10 @@ def crystal_grotto(bp):
                     if fl is not None and y <= fl:
                         if y == fl:
                             b = "calcite"
-                        else:
+                        else:   # banded strata glinting with lithite veins
                             b = strata[(y + 30) % len(strata)]
+                            if rng.random() < 0.06:
+                                b = LORE if rng.random() < 0.8 else LC
                     else:
                         b = "air"
                 elif r < 16.6:
@@ -1353,7 +1355,7 @@ def sealed_lab(bp):
             bp.set(cxm + 1, 2, zw + (1 if side < 0 else -1), "polished_blackstone_button[face=wall,facing=" +
                    ("south" if side < 0 else "north") + ",powered=false]")
             zc = zw + (1 if side < 0 else -1)
-            bp.set(cxm, 5, zc, "redstone_lamp[lit=false]")
+            bp.set(cxm, 5, zw, "redstone_lamp[lit=false]")
             for x in (cxm - 1, cxm, cxm + 1):   # hazard stripes on the floor before each cell
                 bp.set(x, 0, zc, "yellow_concrete" if (x + i) % 2 else "black_concrete")
     fill_cells(bp, cells, rng)
@@ -1483,7 +1485,7 @@ def fill_cells(bp, cells, rng):
         back = zi0 if side < 0 else zi1
         mid = (zi0 + zi1) // 2
         kind = (i + (0 if side < 0 else 4))
-        bp.set(cx, 5, mid, "verdant_froglight[axis=y]" if kind % 2 else "ochre_froglight[axis=y]")
+        bp.set(cx, 6, mid, "verdant_froglight[axis=y]" if kind % 2 else "ochre_froglight[axis=y]")
         if kind == 0:      # sculk specimen bed
             for x in range(a + 1, b):
                 for z in range(zi0, zi1 + 1):
@@ -1539,7 +1541,6 @@ def fill_cells(bp, cells, rng):
                     if rng.random() < 0.4:
                         bp.set(x, 1, z, rng.choice(["moss_carpet", "short_grass", "fern", "azalea"]))
             bp.set(cx, 5, mid, "spore_blossom")
-            bp.set(cx, 6, mid, "verdant_froglight[axis=y]")
             bp.set(a + 1, 4, back, "glow_lichen[down=false,east=false,north=" + ("true" if side < 0 else "false") +
                    ",south=" + ("true" if side > 0 else "false") + ",up=false,waterlogged=false,west=true]")
         else:              # prisoner's cell

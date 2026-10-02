@@ -882,6 +882,8 @@ def citadel(variant):
         vault_passage(bp)
         tower(bp)
         nave_interior(bp)
+        bell_tower(bp)
+        encrust(bp, variant)
         # restore the tunnels' glass between the walls, then open every doorway
         for p0, p1, axis in TUNNELS:
             glass_tunnel(bp, *_inner(p0, p1, axis), axis)
@@ -898,18 +900,74 @@ def citadel(variant):
 
 
 def nave_interior(bp):
-    """The nave: a processional carpet of sea lanterns, statues of guardians in the bays."""
+    """The nave: a processional way of sea lanterns between two colonnades, banners and a
+    lithite portal framing the way into the arena."""
     for z in range(8, 27):
         bp.set(0, 0, z, SEA if z % 3 == 0 else LB)
         for x in (-1, 1):
             bp.set(x, 0, z, TRIM)
-    for z in (11, 23):
-        for s in (-1, 1):
-            x = 4 * s
-            bp.set(x, 1, z, TRIM)
-            bp.set(x, 2, z, "prismarine_bricks")
-            bp.set(x, 3, z, SEA)
-            bp.set(x, 4, z, "prismarine_bricks")
+    for z in (10, 14, 20, 24):
+        for x in (-4, 4):
+            for y in range(1, 16):
+                bp.set(x, y, z, LB if y in (1, 8, 15) else TRIM)
+            bp.set(x, 16, z, SEA)
+    for z in (11, 15, 19, 23):
+        for x, f in ((-6, "east"), (6, "west")):
+            bp.set(x, 9, z, f"cyan_wall_banner[facing={f}]")
+    for x in range(-5, 6):
+        for y in range(1, 15):
+            if abs(x) >= 4 or y >= 12:
+                if bp.get(x, y, 8) == AIR:
+                    bp.set(x, y, 8, LB if (x + y) % 2 else TRIM)
+    for x in (-4, 4):
+        bp.set(x, 12, 8, LC)
+
+
+def encrust(bp, seed):
+    """Coral and sea life growing on the lower outer walls."""
+    rng = random.Random(seed)
+    corals = ("brain", "tube", "bubble", "fire", "horn")
+    faces = (("north", 0, -1), ("south", 0, 1), ("east", 1, 0), ("west", -1, 0))
+    for (x, y, z), (name, props, data) in list(bp.blocks.items()):
+        if y > 6 or y < 0 or name not in ("minecraft:prismarine_bricks", "minecraft:prismarine"):
+            continue
+        open_faces = [(f, dx, dz) for f, dx, dz in faces if (x + dx, y, z + dz) not in bp.blocks]
+        if not open_faces:
+            continue
+        r = rng.random()
+        if r < 0.05 * (1 - y / 8):
+            bp.set(x, y, z, f"{rng.choice(corals)}_coral_block")
+        elif r < 0.09:
+            f, dx, dz = rng.choice(open_faces)
+            bp.set(x + dx, y, z + dz, f"{rng.choice(corals)}_coral_wall_fan[facing={f},waterlogged=true]")
+        elif r < 0.10 and (x, y + 1, z) not in bp.blocks:
+            bp.set(x, y + 1, z, f"sea_pickle[pickles={rng.randint(1, 4)},waterlogged=true]")
+
+
+def bell_tower(bp):
+    """A slender solid watch-turret on the north-east corner: breaks the symmetry."""
+    cx, cz, r = 40, -21, 3
+    for y in range(-4, 44):
+        for x in range(cx - r - 1, cx + r + 2):
+            for z in range(cz - r - 1, cz + r + 2):
+                d = math.hypot(x - cx, z - cz)
+                if d <= r + 0.4:
+                    edge = d > r - 0.6
+                    b = HULL.pick(x, y, z) if not edge else (TRIM if (x + z) % 3 == 0 else HULL.pick(x, y, z))
+                    if y % 9 == 0:
+                        b = LB
+                    if edge and y % 9 in (4, 5, 6) and (x == cx or z == cz):
+                        b = GLASS if y < 40 else SEA
+                    bp.set(x, y, z, b)
+    for x in range(cx - r - 1, cx + r + 2):
+        for z in range(cz - r - 1, cz + r + 2):
+            if r + 0.4 < math.hypot(x - cx, z - cz) <= r + 1.4:
+                bp.set(x, 43, z, TRIM)
+                bp.set(x, 42, z, stair(TRIM_S, _toward(x, z, cx, cz), "top"))
+    for y in range(40, 43):
+        for x, z in ((cx, cz - r), (cx, cz + r), (cx - r, cz), (cx + r, cz)):
+            bp.set(x, y, z, SEA)
+    spire(bp, cx, cz, 44, r + 1)
 
 
 register(StructureDef(
