@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "wayfarers:block/polished_guild_stone_slab"
+    },
+    "type=top": {
+      "model": "wayfarers:block/polished_guild_stone_slab_top"
+    },
+    "type=double": {
+      "model": "wayfarers:block/polished_guild_stone"
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "XXX"
+  ],
+  "key": {
+    "X": "wayfarers:guild_bricks"
+  },
+  "result": {
+    "id": "wayfarers:guild_brick_slab",
+    "count": 6
+  }
+}

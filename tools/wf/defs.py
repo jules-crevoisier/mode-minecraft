@@ -19,7 +19,7 @@ class StructureDef:
     def __init__(self, sid, dimension, biomes, pieces, spacing=32, separation=10,
                  step="surface_structures", adaptation="beard_thin", heightmap="WORLD_SURFACE_WG",
                  height_offset=0, height=None, size=1, extra_pools=None, processors="aging",
-                 max_distance=80, exclusion=None, title_fr="", title_en="", ground=0):
+                 max_distance=80, exclusion=None, title_fr="", title_en="", ground=0, spawns=None):
         self.id = sid
         self.dimension = dimension
         self.biomes = biomes
@@ -39,6 +39,9 @@ class StructureDef:
         self.title_fr = title_fr
         self.title_en = title_en
         self.ground = ground  # blueprint y that must sit on the ground surface
+        # monsters that keep spawning inside the structure (like vanilla fortresses):
+        # list of (entity id, weight, min, max)
+        self.spawns = spawns or []
 
     @property
     def salt(self):
@@ -115,7 +118,10 @@ def structure_json(sdef, ground_offset):
         "type": "minecraft:jigsaw",
         "biomes": f"#{rl('has_structure/' + sdef.id)}",
         "step": sdef.step,
-        "spawn_overrides": {},
+        "spawn_overrides": {} if not sdef.spawns else {"monster": {
+            "bounding_box": "piece",
+            "spawns": [{"type": t, "weight": w, "minCount": a, "maxCount": b} for t, w, a, b in sdef.spawns],
+        }},
         "terrain_adaptation": sdef.adaptation,
         "start_pool": rl(f"{sdef.id}/start"),
         "size": sdef.size,

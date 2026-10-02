@@ -5,6 +5,7 @@ import com.wayfarers.command.WayfarersCommand;
 import com.wayfarers.event.CoopEvents;
 import com.wayfarers.event.EquipmentEvents;
 import com.wayfarers.event.GraveEvents;
+import com.wayfarers.generated.ModDecor;
 import com.wayfarers.registry.ModBlockEntities;
 import com.wayfarers.registry.ModBlocks;
 import com.wayfarers.registry.ModDataComponents;
@@ -36,6 +37,7 @@ public final class Wayfarers {
 
     public Wayfarers(FMLJavaModLoadingContext context) {
         BusGroup modBus = context.getModBusGroup();
+        ModDecor.init();
         ModBlocks.BLOCKS.register(modBus);
         ModItems.ITEMS.register(modBus);
         ModBlockEntities.BLOCK_ENTITIES.register(modBus);

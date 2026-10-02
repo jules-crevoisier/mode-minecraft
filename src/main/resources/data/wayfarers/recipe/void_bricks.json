@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "OE",
+    "EO"
+  ],
+  "key": {
+    "O": "minecraft:obsidian",
+    "E": "minecraft:end_stone_bricks"
+  },
+  "result": {
+    "id": "wayfarers:void_bricks",
+    "count": 4
+  }
+}

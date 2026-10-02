@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/stairs",
+  "textures": {
+    "bottom": "wayfarers:block/mossy_guild_bricks",
+    "top": "wayfarers:block/mossy_guild_bricks",
+    "side": "wayfarers:block/mossy_guild_bricks"
+  }
+}

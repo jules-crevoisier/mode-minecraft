@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "wayfarers:block/gilded_trim_top",
+    "side": "wayfarers:block/gilded_trim_side"
+  }
+}

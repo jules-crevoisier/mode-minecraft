@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "wayfarers:slate_roof_tiles",
+  "result": {
+    "id": "wayfarers:slate_roof_tile_slab",
+    "count": 2
+  }
+}

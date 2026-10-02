@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "LS",
+    "SL"
+  ],
+  "key": {
+    "L": "wayfarers:lithite_shard",
+    "S": "minecraft:stone_bricks"
+  },
+  "result": {
+    "id": "wayfarers:lithite_bricks",
+    "count": 4
+  }
+}

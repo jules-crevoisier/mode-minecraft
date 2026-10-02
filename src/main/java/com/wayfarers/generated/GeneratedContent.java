@@ -10,24 +10,25 @@ public final class GeneratedContent {
 
     public static final List<StructureInfo> STRUCTURES = List.of(
             new StructureInfo("guild_outpost", "overworld"),
-            new StructureInfo("ruined_watchtower", "overworld"),
             new StructureInfo("mountain_monastery", "overworld"),
+            new StructureInfo("forgotten_library", "overworld"),
+            new StructureInfo("coastal_lighthouse", "overworld"),
             new StructureInfo("desert_oasis", "overworld"),
-            new StructureInfo("sunken_temple", "overworld"),
             new StructureInfo("witch_huts", "overworld"),
             new StructureInfo("giant_tree", "overworld"),
             new StructureInfo("sky_island", "overworld"),
-            new StructureInfo("forgotten_library", "overworld"),
+            new StructureInfo("jungle_ziggurat", "overworld"),
+            new StructureInfo("ruined_watchtower", "overworld"),
+            new StructureInfo("sunken_temple", "overworld"),
             new StructureInfo("dwarven_mine", "overworld"),
             new StructureInfo("bandit_camp", "overworld"),
-            new StructureInfo("coastal_lighthouse", "overworld"),
-            new StructureInfo("jungle_ziggurat", "overworld"),
             new StructureInfo("ice_observatory", "overworld"),
             new StructureInfo("rune_circle", "overworld"),
             new StructureInfo("galleon_wreck", "overworld"),
             new StructureInfo("dwarven_forge", "overworld"),
             new StructureInfo("crystal_grotto", "overworld"),
             new StructureInfo("sealed_lab", "overworld"),
+            new StructureInfo("sunken_citadel", "overworld"),
             new StructureInfo("basalt_fortress", "nether"),
             new StructureInfo("chain_bridge", "nether"),
             new StructureInfo("piglin_sanctuary", "nether"),
@@ -38,8 +39,7 @@ public final class GeneratedContent {
             new StructureInfo("chorus_garden", "end"),
             new StructureInfo("end_archive", "end"),
             new StructureInfo("void_ship", "end"),
-            new StructureInfo("void_nest", "end"),
-            new StructureInfo("sunken_citadel", "overworld")
+            new StructureInfo("void_nest", "end")
     );
 
     public static final List<Chapter> CHAPTERS = List.of(

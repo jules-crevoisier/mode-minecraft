@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "wayfarers:block/lithite_brick_slab"
+    },
+    "type=top": {
+      "model": "wayfarers:block/lithite_brick_slab_top"
+    },
+    "type=double": {
+      "model": "wayfarers:block/lithite_bricks"
+    }
+  }
+}

@@ -1,6 +1,7 @@
 package com.wayfarers.registry;
 
 import com.wayfarers.Wayfarers;
+import com.wayfarers.generated.ModDecor;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
@@ -16,7 +17,10 @@ public final class ModTabs {
             .title(Component.translatable("itemGroup.wayfarers"))
             .icon(() -> new ItemStack(ModItems.WAYFARER_ATLAS.get()))
             .withTabsBefore(CreativeModeTabs.SPAWN_EGGS)
-            .displayItems((params, output) -> ModItems.ALL.forEach(item -> output.accept(item.get())))
+            .displayItems((params, output) -> {
+                ModItems.ALL.forEach(item -> output.accept(item.get()));
+                ModDecor.ITEMS.forEach(item -> output.accept(item.get()));
+            })
             .build());
 
     private ModTabs() {}

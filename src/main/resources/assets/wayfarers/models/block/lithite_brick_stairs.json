@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/stairs",
+  "textures": {
+    "bottom": "wayfarers:block/lithite_bricks",
+    "top": "wayfarers:block/lithite_bricks",
+    "side": "wayfarers:block/lithite_bricks"
+  }
+}

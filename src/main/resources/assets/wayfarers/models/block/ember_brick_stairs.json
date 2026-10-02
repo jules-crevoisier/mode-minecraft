@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/stairs",
+  "textures": {
+    "bottom": "wayfarers:block/ember_bricks",
+    "top": "wayfarers:block/ember_bricks",
+    "side": "wayfarers:block/ember_bricks"
+  }
+}

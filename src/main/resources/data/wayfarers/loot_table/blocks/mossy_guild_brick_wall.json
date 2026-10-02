@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "wayfarers:mossy_guild_brick_wall"
+        }
+      ]
+    }
+  ],
+  "random_sequence": "wayfarers:blocks/mossy_guild_brick_wall"
+}

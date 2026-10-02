@@ -1,0 +1,14 @@
+{
+  "replace": false,
+  "values": [
+    "wayfarers:guild_brick_slab",
+    "wayfarers:mossy_guild_brick_slab",
+    "wayfarers:polished_guild_stone_slab",
+    "wayfarers:guild_roof_tile_slab",
+    "wayfarers:crimson_roof_tile_slab",
+    "wayfarers:slate_roof_tile_slab",
+    "wayfarers:lithite_brick_slab",
+    "wayfarers:ember_brick_slab",
+    "wayfarers:void_brick_slab"
+  ]
+}

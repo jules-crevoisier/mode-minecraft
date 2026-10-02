@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "XXX"
+  ],
+  "key": {
+    "X": "wayfarers:lithite_bricks"
+  },
+  "result": {
+    "id": "wayfarers:lithite_brick_slab",
+    "count": 6
+  }
+}

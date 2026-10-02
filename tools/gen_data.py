@@ -36,7 +36,7 @@ def shaped(name, pattern, key, count=1, category="misc"):
     })
 
 
-def shapeless(name, ingredients, count=1, category="misc"):
+def shapeless(name, ingredients, count=1, category="misc"):  # noqa: F811
     write(f"{NS}/recipe/{name}.json", {
         "type": "minecraft:crafting_shapeless",
         "category": category,
@@ -100,8 +100,6 @@ def tags():
     for slot, piece in (("head", "helmet"), ("chest", "chestplate"), ("leg", "leggings"), ("foot", "boots")):
         write(f"minecraft/tags/item/{slot}_armor.json", {"replace": False,
                                                         "values": [f"{NS}:{s}_{piece}" for s in ("explorer", "ember", "void")]})
-    write("minecraft/tags/block/mineable/pickaxe.json", {"replace": False, "values": [
-        f"{NS}:waystone", f"{NS}:lithite_ore", f"{NS}:deepslate_lithite_ore"]})
     write("minecraft/tags/block/mineable/axe.json", {"replace": False, "values": [f"{NS}:sorting_chest", f"{NS}:guild_terminal"]})
     write("minecraft/tags/block/needs_iron_tool.json", {"replace": False, "values": [
         f"{NS}:lithite_ore", f"{NS}:deepslate_lithite_ore"]})
@@ -186,7 +184,69 @@ def ore_worldgen():
     })
 
 
+def decor_data():
+    from wf import decor
+    pick, stairs, slabs, walls = [], [], [], []
+    for bid, d in decor.DECOR.items():
+        ids = [bid] + [decor.variant_id(bid, v) for v in d["variants"]]
+        pick += [f"{NS}:{i}" for i in ids]
+        for i in ids:
+            pool = {"rolls": 1.0, "bonus_rolls": 0.0, "conditions": [{"condition": "minecraft:survives_explosion"}],
+                    "entries": [{"type": "minecraft:item", "name": f"{NS}:{i}"}]}
+            if i.endswith("_slab"):
+                pool["entries"][0]["functions"] = [{
+                    "function": "minecraft:set_count", "count": 2.0, "add": False,
+                    "conditions": [{"condition": "minecraft:block_state_property", "block": f"{NS}:{i}",
+                                    "properties": {"type": "double"}}]}]
+            write(f"{NS}/loot_table/blocks/{i}.json", {"type": "minecraft:block", "pools": [pool],
+                                                      "random_sequence": f"{NS}:blocks/{i}"})
+        for v in d["variants"]:
+            vid = decor.variant_id(bid, v)
+            {"stairs": stairs, "slab": slabs, "wall": walls}[v].append(f"{NS}:{vid}")
+            pattern, count = {"stairs": (["X  ", "XX ", "XXX"], 4), "slab": (["XXX"], 6),
+                              "wall": (["XXX", "XXX"], 6)}[v]
+            write(f"{NS}/recipe/{vid}.json", {"type": "minecraft:crafting_shaped", "category": "building",
+                                             "pattern": pattern, "key": {"X": f"{NS}:{bid}"},
+                                             "result": {"id": f"{NS}:{vid}", "count": count}})
+            write(f"{NS}/recipe/{vid}_from_stonecutting.json", {
+                "type": "minecraft:stonecutting", "ingredient": f"{NS}:{bid}",
+                "result": {"id": f"{NS}:{vid}", "count": 2 if v == "slab" else 1}})
+    write("minecraft/tags/block/mineable/pickaxe.json", {"replace": False, "values": [
+        f"{NS}:waystone", f"{NS}:lithite_ore", f"{NS}:deepslate_lithite_ore"] + pick})
+    write("minecraft/tags/block/stairs.json", {"replace": False, "values": stairs})
+    write("minecraft/tags/block/slabs.json", {"replace": False, "values": slabs})
+    write("minecraft/tags/block/walls.json", {"replace": False, "values": walls})
+    write("minecraft/tags/item/stairs.json", {"replace": False, "values": stairs})
+    write("minecraft/tags/item/slabs.json", {"replace": False, "values": slabs})
+    write("minecraft/tags/item/walls.json", {"replace": False, "values": walls})
+
+    def craft(name, pattern, key, count):
+        write(f"{NS}/recipe/{name}.json", {"type": "minecraft:crafting_shaped", "category": "building",
+                                          "pattern": pattern, "key": {k: rid(v) for k, v in key.items()},
+                                          "result": {"id": f"{NS}:{name}", "count": count}})
+    craft("guild_bricks", ["SA", "AS"], {"S": "stone_bricks", "A": "sandstone"}, 4)
+    shapeless("mossy_guild_bricks", ["wayfarers:guild_bricks", "vine"], category="building")
+    write(f"{NS}/recipe/cracked_guild_bricks.json", {"type": "minecraft:smelting", "category": "blocks",
+                                                    "ingredient": f"{NS}:guild_bricks",
+                                                    "result": {"id": f"{NS}:cracked_guild_bricks"},
+                                                    "experience": 0.1, "cookingtime": 200})
+    craft("polished_guild_stone", ["XX", "XX"], {"X": "wayfarers:guild_bricks"}, 4)
+    craft("carved_guild_stone", ["X", "X"], {"X": "wayfarers:polished_guild_stone_slab"}, 1)
+    craft("guild_roof_tiles", ["XX", "XX"], {"X": "cyan_terracotta"}, 4)
+    craft("crimson_roof_tiles", ["XX", "XX"], {"X": "red_terracotta"}, 4)
+    craft("slate_roof_tiles", ["XX", "XX"], {"X": "deepslate_tiles"}, 4)
+    craft("rune_lamp", ["GMG", "MLM", "GMG"], {"G": "wayfarers:guild_bricks", "M": "map_fragment", "L": "glowstone"}, 4)
+    craft("lithite_block", ["XXX", "XXX", "XXX"], {"X": "lithite_shard"}, 1)
+    craft("lithite_bricks", ["LS", "SL"], {"L": "lithite_shard", "S": "stone_bricks"}, 4)
+    craft("ember_bricks", ["NM", "MN"], {"N": "polished_blackstone_bricks", "M": "magma_cream"}, 4)
+    craft("ember_lamp", [" B ", "BGB", " B "], {"B": "wayfarers:ember_bricks", "G": "glowstone"}, 2)
+    craft("gilded_trim", ["G", "B"], {"G": "gold_ingot", "B": "polished_blackstone"}, 2)
+    craft("void_bricks", ["OE", "EO"], {"O": "obsidian", "E": "end_stone_bricks"}, 4)
+    craft("starlight_block", [" R ", "RCR", " R "], {"R": "end_rod", "C": "amethyst_block"}, 2)
+
+
 def main():
+    decor_data()
     recipes()
     tags()
     block_loot()

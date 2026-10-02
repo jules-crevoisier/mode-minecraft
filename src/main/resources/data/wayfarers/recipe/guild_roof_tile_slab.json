@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "XXX"
+  ],
+  "key": {
+    "X": "wayfarers:guild_roof_tiles"
+  },
+  "result": {
+    "id": "wayfarers:guild_roof_tile_slab",
+    "count": 6
+  }
+}

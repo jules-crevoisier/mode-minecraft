@@ -44,12 +44,14 @@ def res_path(rl, kind, ext):
 def mod_ids(kind):
     """Ids registered by the Java side, read straight from the registry classes."""
     import re
-    java = os.path.join(ROOT, "src", "main", "java", "com", "wayfarers", "registry")
-    files = {"blocks": ["ModBlocks.java"], "items": ["ModItems.java"], "entities": ["ModEntities.java"]}[kind]
+    java = os.path.join(ROOT, "src", "main", "java", "com", "wayfarers")
+    files = {"blocks": ["registry/ModBlocks.java", "generated/ModDecor.java"],
+             "items": ["registry/ModItems.java", "generated/ModDecor.java"],
+             "entities": ["registry/ModEntities.java"]}[kind]
     ids = set()
     for f in files:
         text = open(os.path.join(java, f), encoding="utf-8").read()
-        ids |= set(re.findall(r'(?:register|simple|armor|block|egg)\("([a-z0-9_]+)"', text))
+        ids |= set(re.findall(r'(?:register|simple|armor|block|egg|stairs|slab|wall)\("([a-z0-9_]+)"', text))
     return ids
 
 

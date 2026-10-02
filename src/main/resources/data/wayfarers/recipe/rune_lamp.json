@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "GMG",
+    "MLM",
+    "GMG"
+  ],
+  "key": {
+    "G": "wayfarers:guild_bricks",
+    "M": "wayfarers:map_fragment",
+    "L": "minecraft:glowstone"
+  },
+  "result": {
+    "id": "wayfarers:rune_lamp",
+    "count": 4
+  }
+}

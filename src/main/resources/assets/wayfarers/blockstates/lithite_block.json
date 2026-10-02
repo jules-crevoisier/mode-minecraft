@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "wayfarers:block/lithite_block"
+    }
+  }
+}

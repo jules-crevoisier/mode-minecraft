@@ -333,6 +333,11 @@ def main():
         written[f"entity/equipment/humanoid/{prefix}"] = armor_layer(mat, acc)
         written[f"entity/equipment/humanoid_leggings/{prefix}"] = armor_layer(mat, acc, legs=True)
     written.update(mob_textures())
+    from wf import decor
+    for bid, d in decor.DECOR.items():
+        names = decor.texture_names(bid)
+        for face, fn in d["tex"].items():
+            written[f"block/{names[face]}"] = fn()
     for rel, cv in written.items():
         path = os.path.join(TEX, rel + ".png")
         os.makedirs(os.path.dirname(path), exist_ok=True)

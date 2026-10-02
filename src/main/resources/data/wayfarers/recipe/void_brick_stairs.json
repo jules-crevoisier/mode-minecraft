@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "X  ",
+    "XX ",
+    "XXX"
+  ],
+  "key": {
+    "X": "wayfarers:void_bricks"
+  },
+  "result": {
+    "id": "wayfarers:void_brick_stairs",
+    "count": 4
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "wayfarers:guild_bricks",
+    "minecraft:vine"
+  ],
+  "result": {
+    "id": "wayfarers:mossy_guild_bricks",
+    "count": 1
+  }
+}

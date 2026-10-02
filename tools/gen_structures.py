@@ -14,6 +14,10 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from wf import defs, render  # noqa: E402
+try:
+    from wf import render3d  # noqa: E402  (optional: needs Pillow + minecraft-textures)
+except ImportError:
+    render3d = None
 from wf.blueprint import Blueprint  # noqa: E402
 import wf.structures  # noqa: E402,F401  (registers every structure)
 
@@ -63,9 +67,14 @@ def main():
                 if args.preview:
                     os.makedirs(preview_dir, exist_ok=True)
                     stem = os.path.join(preview_dir, f"{sdef.id}__{piece.name}")
-                    render.render(blocks, stem + ".png", s=5)
                     cut = sdef.ground - my + 2
-                    render.render(blocks, stem + "_cut.png", s=5, max_y=cut)
+                    if render3d:
+                        render3d.render(blocks, stem + ".png", max_side=1600)
+                        render3d.render(blocks, stem + "_back.png", max_side=1600, angle=2)
+                        render3d.render(blocks, stem + "_cut.png", max_side=1600, max_y=cut)
+                    else:
+                        render.render(blocks, stem + ".png", s=5)
+                        render.render(blocks, stem + "_cut.png", s=5, max_y=cut)
                 used_processors.add(piece.processors or sdef.processors)
             write_json(os.path.join(DATA, "worldgen", "template_pool", sdef.id, f"{pool_name}.json"),
                        defs.template_pool(sdef, pieces, pool_name))

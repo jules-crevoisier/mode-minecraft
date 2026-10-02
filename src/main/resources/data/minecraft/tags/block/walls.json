@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "wayfarers:guild_brick_wall",
+    "wayfarers:mossy_guild_brick_wall",
+    "wayfarers:lithite_brick_wall",
+    "wayfarers:ember_brick_wall",
+    "wayfarers:void_brick_wall"
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "X  ",
+    "XX ",
+    "XXX"
+  ],
+  "key": {
+    "X": "wayfarers:mossy_guild_bricks"
+  },
+  "result": {
+    "id": "wayfarers:mossy_guild_brick_stairs",
+    "count": 4
+  }
+}
