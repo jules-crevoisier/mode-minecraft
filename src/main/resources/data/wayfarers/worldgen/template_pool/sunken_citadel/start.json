@@ -1,0 +1,32 @@
+{
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "wayfarers:sunken_citadel/citadel_0",
+        "projection": "rigid",
+        "processors": "wayfarers:none"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "wayfarers:sunken_citadel/citadel_1",
+        "projection": "rigid",
+        "processors": "wayfarers:none"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "wayfarers:sunken_citadel/citadel_2",
+        "projection": "rigid",
+        "processors": "wayfarers:none"
+      }
+    }
+  ]
+}
