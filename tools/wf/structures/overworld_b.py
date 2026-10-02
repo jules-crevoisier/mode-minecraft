@@ -138,7 +138,7 @@ def _gable(bp, x0, z0, x1, z1, y, stairs, full, gable, axis="x", overhang=1, ste
 
 
 def _bridge(bp, a, b, wood, sag=1, width=3, rail="fence", posts=5, clear_leaves=True, slab_block=None,
-            edge=None, post=None):
+            edge=None, post=None, under=True, piles=None, soul=False, gaps=0.0, seed=0):
     """Bridge from deck block a to deck block b ((x, y, z)), sagging in the middle. The walking surface
     is quantised to half blocks (bottom/top slabs) so slopes need no jumping. rail: 'fence' or 'chain'."""
     (ax, ay, az), (bx, by, bz) = a, b
@@ -148,6 +148,7 @@ def _bridge(bp, a, b, wood, sag=1, width=3, rail="fence", posts=5, clear_leaves=
     sb = slab_block or f"{wood}_slab"
     edge = edge or f"{wood}_planks"
     post = post or f"{wood}_fence"
+    rng = random.Random(seed)
     for i in range(n + 1):
         t = i / n
         x = round(ax + (bx - ax) * t)
@@ -162,6 +163,8 @@ def _bridge(bp, a, b, wood, sag=1, width=3, rail="fence", posts=5, clear_leaves=
             if clear_leaves:
                 _strip_leaves(bp, px, y, pz, px, y + 3, pz)
             if abs(w) <= half:
+                if gaps and 0 < i < n and rng.random() < gaps:
+                    continue                      # rotten plank
                 bp.set(px, y, pz, slab(sb, kind))
                 continue
             bp.set(px, y, pz, edge)
@@ -172,9 +175,12 @@ def _bridge(bp, a, b, wood, sag=1, width=3, rail="fence", posts=5, clear_leaves=
             if 0 < i < n and i % posts == 0:
                 bp.set(px, y + 1, pz, post)
                 bp.set(px, y + 2, pz, post)
-                bp.lantern(px, y + 3, pz)
-                bp.chain(px, y - 2, pz, y - 1)
-                bp.lantern(px, y - 3, pz, hanging=True)
+                bp.lantern(px, y + 3, pz, soul=soul)
+                if piles:
+                    bp.fill(px, y - 4, pz, px, y - 1, pz, piles)
+                elif under:
+                    bp.chain(px, y - 2, pz, y - 1)
+                    bp.lantern(px, y - 3, pz, hanging=True, soul=soul)
     return n
 
 
@@ -729,106 +735,566 @@ register(StructureDef(
     title_fr="Arbre-monde creux", title_en="Hollow Giant Tree"))
 
 
-from ..blueprint import with_props as _wp
-from ..parts import (banner_pole, crate_stack, garden, lamp_post, palm, path,
-                     round_tower, timber_house, tree)
+# ============================================================ Desert oasis caravanserai + tomb
+def _palm(bp, x, y, z, h, lean, seed):
+    """Date palm: curving trunk, drooping fronds, a few dates."""
+    rng = random.Random(seed)
+    lx, lz = lean
+    px, pz = float(x), float(z)
+    for i in range(h):
+        t = i / h
+        bp.set(round(px), y + i, round(pz), "jungle_log[axis=y]" if i % 3 else "stripped_jungle_log[axis=y]")
+        px += lx * t * 0.55
+        pz += lz * t * 0.55
+    tx, ty, tz = round(px), y + h, round(pz)
+    lv = Palette({_lvs("jungle_leaves"): 3, _lvs("oak_leaves"): 1}, seed=seed, scale=1.5)
+    bp.set(tx, ty, tz, lv.pick(tx, ty, tz))
+    bp.set(tx, ty + 1, tz, lv.pick(tx, ty + 1, tz))
+    n = rng.randint(6, 7)
+    for k in range(n):
+        a = 2 * math.pi * k / n + rng.uniform(-0.2, 0.2)
+        ln = rng.randint(4, 6)
+        for s_ in range(1, ln + 1):
+            fx = tx + round(math.cos(a) * s_)
+            fz = tz + round(math.sin(a) * s_)
+            fy = ty + (1 if s_ == 1 else 0) - (s_ * s_) // 9
+            bp.set(fx, fy, fz, lv.pick(fx, fy, fz))
 
 
-# ============================================================ Desert oasis + tomb
+def _desert_tower(bp, cx, cz, h, wall, dome_r=2):
+    """Round corner tower: banded shaft, corbelled parapet and a small azure dome (chhatri)."""
+    for y in range(-3, h + 1):
+        for x in range(cx - 4, cx + 5):
+            for z in range(cz - 4, cz + 5):
+                d = math.hypot(x - cx, z - cz)
+                if d <= 3.4:
+                    if d > 2.4 or y < 1 or y == h:
+                        bp.set(x, y, z, "cut_sandstone" if y % 5 == 0 else wall.pick(x, y, z))
+                    else:
+                        bp.set(x, y, z, "air")
+    for a in range(0, 360, 8):
+        x = cx + round(math.cos(math.radians(a)) * 4.2)
+        z = cz + round(math.sin(math.radians(a)) * 4.2)
+        if math.hypot(x - cx, z - cz) > 3.5:
+            bp.set(x, h, z, stair("sandstone_stairs", _card(cx - x, cz - z), "top"))
+            bp.set(x, h + 1, z, "sandstone_wall" if (x + z) % 2 else "cut_sandstone")
+    bp.disk(cx, h, cz, 3, "smooth_sandstone")
+    for k, y in enumerate((4, h - 4)):
+        for dx, dz in ((3, 0), (-3, 0), (0, 3), (0, -3)):
+            bp.set(cx + dx, y, cz + dz, "orange_stained_glass_pane")
+    arch.dome(bp, cx, h + 1, cz, dome_r, "wayfarers:guild_roof_tiles", oculus=False)
+    bp.set(cx, h + dome_r + 2, cz, "gold_block")
+    bp.set(cx, h + dome_r + 3, cz, "lightning_rod[facing=up,powered=false,waterlogged=false]")
+
+
+def _stall(bp, x0, z0, face, colors, goods, rng, loot=None):
+    """Market stall 5 wide (along the street) x 4 deep, opening toward `face` (east/west)."""
+    back = x0 if face == "east" else x0 + 3
+    front = x0 + 3 if face == "east" else x0
+    step = 1 if face == "east" else -1
+    for z in range(z0, z0 + 5):
+        bp.set(back, 1, z, "smooth_sandstone")
+        bp.set(back, 2, z, "smooth_sandstone" if z in (z0, z0 + 4) else "orange_terracotta")
+        for k in range(4):
+            x = back + step * k
+            bp.set(x, 0, z, "smooth_sandstone" if (x + z) % 2 else "cut_sandstone")
+            # striped canopy, sloping down to the street
+            bp.set(x, 4 if k < 3 else 3, z, f"{colors[(z - z0) % 2]}_wool")
+    for z in (z0, z0 + 4):
+        bp.fill(front, 1, z, front, 3, z, "jungle_fence")
+        bp.fill(back, 1, z, back, 3, z, "stripped_jungle_log[axis=y]")
+    bp.lantern(back + step * 2, 3, z0 + 2, hanging=True)
+    for i, z in enumerate(range(z0 + 1, z0 + 4)):
+        bp.set(front, 1, z, "barrel[facing=up,open=false]" if i != 1 else "smooth_sandstone_slab[type=double,waterlogged=false]")
+        bp.set(front, 2, z, goods[i % len(goods)])
+    if loot:
+        bp.chest(back + step, 1, z0 + 1, face, loot)
+    bp.set(back + step, 1, z0 + 3, rng.choice(["decorated_pot[facing=north,waterlogged=false,cracked=false]",
+                                              "hay_block[axis=y]", "loom[facing=north]"]))
+
+
 def oasis(bp):
-    bp.disk(0, 0, 0, 13, "sand")
-    bp.disk(0, 0, 0, 10, "grass_block[snowy=false]")
-    bp.disk(0, -1, 0, 6, "sand")
-    bp.disk(0, 0, 0, 6, "water")
-    bp.disk(0, -1, 0, 4, "water")
-    bp.disk(0, -2, 0, 4, "clay")
-    for _ in range(14):
-        a = bp.rng.uniform(0, 2 * math.pi)
-        r = bp.rng.uniform(6.6, 9.5)
-        x, z = round(math.cos(a) * r), round(math.sin(a) * r)
-        bp.set(x, 1, z, bp.rng.choice(["fern", "dead_bush", "sugar_cane", "fern"]))
-    for (x, z, lean) in ((-8, -4, (1, 0)), (7, -6, (0, 1)), (8, 5, (-1, 0)), (-5, 8, (0, -1))):
-        palm(bp, x, 1, z, bp.rng.randint(6, 8), lean)
-    for x, z in ((3, 6), (4, 6), (5, 5)):
-        bp.set(x, 1, z, "sugar_cane")
-        bp.set(x, 2, z, "sugar_cane")
-    bp.set(-2, 1, 2, "lily_pad")
-    # merchant pavilion
-    px, pz = 14, -4
-    bp.fill(px, 0, pz, px + 8, 0, pz + 8, "smooth_sandstone")
-    for x, z in ((px, pz), (px + 8, pz), (px, pz + 8), (px + 8, pz + 8)):
-        bp.fill(x, 1, z, x, 4, z, "cut_sandstone")
-        bp.set(x, 1, z, "chiseled_sandstone")
-    for x in range(px - 1, px + 10):
-        for z in range(pz - 1, pz + 10):
-            edge = x in (px - 1, px + 9) or z in (pz - 1, pz + 9)
-            bp.set(x, 5, z, "smooth_sandstone_slab[type=bottom,waterlogged=false]" if edge else
-                   ("white_wool" if (x + z) % 2 else "orange_wool"))
-    bp.set(px + 4, 4, pz + 4, "lantern[hanging=true,waterlogged=false]")
-    bp.barrel(px + 1, 1, pz + 7, "up", LOOT + "oasis")
-    crate_stack(bp, px + 2, 1, pz + 7)
-    bp.set(px + 7, 1, pz + 1, "loom[facing=west]")
-    bp.set(px + 7, 1, pz + 2, "orange_carpet")
-    bp.set(px + 6, 1, pz + 2, "orange_carpet")
-    bp.set(px + 6, 1, pz + 1, "decorated_pot[facing=north,waterlogged=false,cracked=false]")
-    bp.set(px + 4, 1, pz + 6, MOD["waystone"])
-    # the tomb: trapdoor hidden under a carpet in the pavilion corner
-    tx, tz = px + 1, pz + 1
-    bp.set(tx, 1, tz, "orange_carpet")
-    bp.set(tx, 0, tz, "spruce_trapdoor[facing=south,half=top,open=false,powered=false,waterlogged=false]")
-    bp.ladder(tx, -12, tz, -1, "south")
-    bp.fill(tx - 1, -13, tz - 1, tx + 1, -1, tz - 1, "sandstone")
-    bp.set(tx, -13, tz, "sandstone")
-    # corridor west toward the burial chamber
-    cy = -13
-    bp.room(-6, cy, tz - 2, tx + 1, cy + 4, tz + 2, "cut_sandstone", floor="smooth_sandstone",
-            ceiling="cut_sandstone")
-    bp.ladder(tx, cy + 1, tz, -1, "south")
-    for x in range(-5, tx, 3):
-        bp.set(x, cy + 2, tz - 2, "chiseled_sandstone")
-        bp.set(x, cy + 2, tz + 2, "chiseled_sandstone")
-        bp.wall_torch(x, cy + 3, tz - 1, "south")
+    rng = random.Random(5)
+    wall = Palette({"sandstone": 3, "smooth_sandstone": 2, "cut_sandstone": 2}, seed=21, scale=2.5)
+    TRIM, CHI = "cut_sandstone", "chiseled_sandstone"
+    TILE = "light_blue_glazed_terracotta"
+
+    # ---------------------------------------------------------------- desert floor + green oasis ring
+    sand = Palette({"sand": 6, "sandstone": 1, "smooth_sandstone": 1}, seed=22, scale=4.0)
+    green = Palette({"grass_block[snowy=false]": 4, "coarse_dirt": 2, "podzol[snowy=false]": 1, "sand": 1},
+                    seed=23, scale=2.0)
+    PX, PZ = 2, 8
+    for x in range(-48, 44):
+        for z in range(-62, 28):
+            if math.hypot((x + 2) / 46, (z + 17) / 45) > 1 + 0.04 * math.sin(x * 0.4 + z * 0.2):
+                continue
+            d = math.hypot(x - PX, z - PZ)
+            bp.set(x, 0, z, green.pick(x, 0, z) if d < 16 + 2 * math.sin(x * 0.5) else sand.pick(x, 0, z))
+            bp.set(x, -1, z, "sand")
+            bp.set(x, -2, z, "sandstone")
+    # the pond
+    for x in range(PX - 13, PX + 14):
+        for z in range(PZ - 11, PZ + 12):
+            a = math.atan2(z - PZ, x - PX)
+            rr = 10 + 1.6 * math.sin(3 * a + 1) + 0.8 * math.sin(5 * a)
+            d = math.hypot((x - PX) * 0.9, z - PZ)
+            if d <= rr:
+                bp.set(x, 0, z, "water[level=0]")
+                bp.set(x, -1, z, "water[level=0]" if d < rr - 2 else "sand")
+                bp.set(x, -2, z, "water[level=0]" if d < rr - 5 else "clay")
+                bp.set(x, -3, z, "sand")
+                if rng.random() < 0.05:
+                    bp.set(x, 1, z, "lily_pad")
+            elif d <= rr + 1.3 and rng.random() < 0.35:
+                for k in range(1, rng.randint(2, 4)):
+                    bp.set(x, k, z, "sugar_cane")
+    # palm grove
+    for k in range(10):
+        a = 2 * math.pi * k / 10 + rng.uniform(-0.15, 0.15)
+        r = rng.uniform(13, 16)
+        x, z = PX + round(math.cos(a) * r * 1.1), PZ + round(math.sin(a) * r)
+        if -22 < z < 26:
+            _palm(bp, x, 1, z, rng.randint(7, 11), (round(math.cos(a) * -1), round(math.sin(a) * -1)), k)
+    for _ in range(60):
+        x, z = rng.randint(PX - 18, PX + 18), rng.randint(PZ - 15, PZ + 16)
+        if bp.get(x, 0, z) in ("minecraft:grass_block", "minecraft:coarse_dirt", "minecraft:podzol") and not bp.get(x, 1, z):
+            bp.set(x, 1, z, rng.choice(["fern", "short_grass", "short_grass", "firefly_bush", "dead_bush"]))
+
+    # ---------------------------------------------------------------- caravanserai
+    X0, X1, ZF, ZB, ZH = -15, 15, -19, -55, -38           # ZH: front wall of the domed hall
+    bp.fill(X0 - 1, -4, ZB - 1, X1 + 1, -1, ZF + 1, "sandstone")
+    bp.fill(X0, 0, ZB, X1, 0, ZF, "smooth_sandstone")
+    bp.clear(X0 + 1, 1, ZB + 1, X1 - 1, 12, ZF - 1)
+    # outer facades: courtyard block 8 high, domed hall 11 high
+    kw = dict(pilaster_every=4, window_h=2, window_y=3, plinth=CHI, plinth_stairs="sandstone_stairs",
+              cornice_stairs="smooth_sandstone_stairs", glass="orange_stained_glass_pane", sill="sandstone_stairs")
+    arch.facade(bp, "south", ZF, X0, X1, 0, 8, wall, TRIM, **kw)
+    arch.facade(bp, "west", X0, ZH + 1, ZF, 0, 8, wall, TRIM, **kw)
+    arch.facade(bp, "east", X1, ZH + 1, ZF, 0, 8, wall, TRIM, **kw)
+    arch.facade(bp, "west", X0, ZB, ZH, 0, 11, wall, TRIM, **kw)
+    arch.facade(bp, "east", X1, ZB, ZH, 0, 11, wall, TRIM, **kw)
+    arch.facade(bp, "north", ZB, X0, X1, 0, 11, wall, TRIM, **kw)
+    # crenellated parapets
+    for x in range(X0, X1 + 1):
+        for z, top in ((ZF, 9), (ZB, 12)):
+            if x % 2 == 0:
+                bp.set(x, top, z, "sandstone_wall")
+    for z in range(ZB, ZF + 1):
+        top = 12 if z <= ZH else 9
+        for x in (X0, X1):
+            if z % 2 == 0:
+                bp.set(x, top, z, "sandstone_wall")
+    # courtyard wings (rooms + roof terrace at y 6), inner arcades
+    CX0, CX1, CZ0, CZ1 = -9, 9, ZH + 1, -25                  # open courtyard
+    for x in range(X0 + 1, X1):
+        for z in range(ZH + 1, ZF):
+            if not (CX0 < x < CX1 and CZ0 <= z < CZ1):
+                bp.set(x, 6, z, "smooth_sandstone")
+    for face, line, u0, u1 in (("east", CX0, CZ0, CZ1), ("west", CX1, CZ0, CZ1), ("north", CZ1, CX0, CX1)):
+        for u in range(u0, u1 + 1):
+            for y in range(1, 6):
+                x, z = (line, u) if face in ("east", "west") else (u, line)
+                bp.set(x, y, z, wall.pick(x, y, z))
+            x, z = (line, u) if face in ("east", "west") else (u, line)
+            bp.set(x, 7, z, "sandstone_wall")
+            bp.set(x, 6, z, TRIM)
+        # pointed arches every 3 blocks
+        for u in range(u0 + 1, u1 - 1, 3):
+            for du, f in ((0, None), (1, None)):
+                x, z = (line, u + du) if face in ("east", "west") else (u + du, line)
+                bp.clear(x, 1, z, x, 3, z)
+            along = "south" if face in ("east", "west") else "east"
+            x0_, z0_ = (line, u) if face in ("east", "west") else (u, line)
+            x1_, z1_ = (line, u + 1) if face in ("east", "west") else (u + 1, line)
+            bp.set(x0_, 4, z0_, stair("smooth_sandstone_stairs", arch.OPPOSITE[along], "top"))
+            bp.set(x1_, 4, z1_, stair("smooth_sandstone_stairs", along, "top"))
+    # partition walls between the wing rooms
+    for z in (-31, -26):
+        bp.fill(X0 + 1, 1, z, CX0 - 1, 5, z, wall.pick(0, 1, z))
+        bp.fill(CX1 + 1, 1, z, X1 - 1, 5, z, wall.pick(0, 1, z))
+        bp.clear(X0 + 3, 1, z, X0 + 3, 2, z)
+        bp.clear(X1 - 3, 1, z, X1 - 3, 2, z)
+    # the gate: a tall pishtaq with a pointed iwan, flanked by minarets
+    for x in range(-6, 7):
+        for z in (ZF, ZF + 1, ZF + 2):
+            for y in range(0, 15):
+                bp.set(x, y, z, wall.pick(x, y, z))
+        if x % 2 == 0:
+            bp.set(x, 15, ZF + 2, "sandstone_wall")
+            bp.set(x, 15, ZF, "sandstone_wall")
+    for x in range(-6, 7):
+        bp.set(x, 14, ZF + 3, stair("smooth_sandstone_stairs", "north", "top"))
+        bp.set(x, 12, ZF + 2, "cyan_terracotta" if x % 2 else "yellow_terracotta")
+    for y in range(0, 15):
+        bp.set(-6, y, ZF + 3, TRIM)
+        bp.set(6, y, ZF + 3, TRIM)
+    iw = {y: (3 if y <= 7 else 2 if y == 8 else 1 if y == 9 else 0) for y in range(1, 11)}
+    for y, hw in iw.items():
+        for x in range(-hw, hw + 1):
+            bp.clear(x, y, ZF + 1, x, y, ZF + 2)
+        for x in (-hw - 1, hw + 1):
+            bp.set(x, y, ZF + 2, TILE + "[facing=south]")
+    bp.set(0, 11, ZF + 2, TILE + "[facing=south]")
+    bp.set(0, 10, ZF + 2, "gold_block")
+    bp.clear(-1, 1, ZF, 1, 4, ZF)
+    bp.door(-1, 1, ZF, "south", "jungle", hinge="left")
+    bp.door(1, 1, ZF, "south", "jungle", hinge="right")
+    bp.door(0, 1, ZF, "south", "jungle", hinge="left", open_=True)
+    bp.fill(-2, 5, ZF, 2, 7, ZF, "iron_bars")
+    bp.clear(-1, 1, CZ1, 1, 4, ZF - 1)
+    bp.lantern(0, 9, ZF + 2, hanging=True)
+    for x in (-5, 5):
+        bp.lantern(x, 1, ZF + 4)
+    for mx in (-8, 8):           # minarets
+        mz = ZF + 2
+        for y in range(0, 20):
+            for dx in (-1, 0, 1):
+                for dz in (-1, 0, 1):
+                    if abs(dx) + abs(dz) < 2 or y < 2:
+                        bp.set(mx + dx, y, mz + dz, wall.pick(mx + dx, y, mz + dz))
+        for dx in (-2, -1, 0, 1, 2):
+            for dz in (-2, -1, 0, 1, 2):
+                if abs(dx) + abs(dz) <= 3:
+                    bp.set(mx + dx, 16, mz + dz, "smooth_sandstone_slab[type=top,waterlogged=false]")
+                    if abs(dx) + abs(dz) == 3 or max(abs(dx), abs(dz)) == 2:
+                        bp.set(mx + dx, 17, mz + dz, "sandstone_wall")
+        bp.set(mx, 12, mz + 1, "orange_stained_glass_pane")
+        bp.set(mx, 19, mz, CHI)
+        arch.spire(bp, mx, mz, 20, 1, "wayfarers:guild_roof_tiles", "wayfarers:guild_roof_tile_stairs", steep=2,
+                   finial="lightning_rod")
+    # corner towers
+    for (tx, tz, h) in ((X0, ZF, 13), (X1, ZF, 13), (X0, ZB, 16), (X1, ZB, 16)):
+        _desert_tower(bp, tx, tz, h, wall)
+    # domed hall: flat roof with a drum and a great azure dome
+    DX, DZ, DR = 0, -47, 7
+    for x in range(X0 + 1, X1):
+        for z in range(ZB + 1, ZH + 1):
+            if math.hypot(x - DX, z - DZ) > DR - 0.5:
+                bp.set(x, 11, z, "smooth_sandstone")
+    for x in range(X0, X1 + 1):
+        for y in range(1, 11):
+            bp.set(x, y, ZH, wall.pick(x, y, ZH))
+    for x in range(-2, 3):
+        bp.clear(x, 1, ZH, x, 4 if abs(x) < 2 else 3, ZH)
+    for x in (-3, 3):
+        bp.fill(x, 1, ZH + 1, x, 5, ZH + 1, TRIM)
+    for x in range(-3, 4):
+        bp.set(x, 6, ZH + 1, TILE + "[facing=north]")
+    DY = 17                                   # dome springing line, on a tall windowed drum
+    for y in range(11, DY):
+        bp.disk(DX, y, DZ, DR, "cut_sandstone" if y in (11, DY - 1) else wall.pick(0, y, 0), hollow=True)
+    for k in range(16):
+        a = 2 * math.pi * k / 16
+        for y in (13, 14):
+            bp.set(DX + round(math.cos(a) * DR), y, DZ + round(math.sin(a) * DR),
+                   "orange_stained_glass" if k % 2 else TILE + "[facing=north]")
+    for a in range(0, 360, 6):
+        x = DX + round(math.cos(math.radians(a)) * (DR + 1))
+        z = DZ + round(math.sin(math.radians(a)) * (DR + 1))
+        if math.hypot(x - DX, z - DZ) > DR + 0.4:
+            bp.set(x, DY - 1, z, stair("smooth_sandstone_stairs", _card(DX - x, DZ - z), "top"))
+    arch.dome(bp, DX, DY, DZ, DR, Palette({"wayfarers:guild_roof_tiles": 5, "light_blue_terracotta": 1}, seed=24),
+              ribs="smooth_sandstone", oculus=True, rib_count=8)
+    bp.set(DX, DY + DR + 1, DZ, "gold_block")
+    bp.set(DX, DY + DR + 2, DZ, "gold_block")
+    bp.set(DX, DY + DR + 3, DZ, "lightning_rod[facing=up,powered=false,waterlogged=false]")
+    # hall interior: carpets, fountain under the oculus, chandeliers, cushions
+    for x in range(X0 + 1, X1):
+        for z in range(ZB + 1, ZH):
+            c = ["red", "orange", "red", "blue"][(abs(x) // 2 + abs(z) // 2) % 4]
+            if max(abs(x), abs(z - DZ)) % 6 == 0:
+                c = "yellow"
+            bp.set(x, 1, z, f"{c}_carpet")
+    bp.disk(DX, 0, DZ, 3, "water[level=0]")
+    bp.disk(DX, 1, DZ, 3, "air")
+    bp.disk(DX, 0, DZ, 3, CHI, hollow=True)
+    bp.disk(DX, 1, DZ, 3, "smooth_sandstone_slab[type=bottom,waterlogged=false]", hollow=True)
+    bp.fill(DX, 0, DZ, DX, 2, DZ, CHI)
+    bp.set(DX, 3, DZ, "water[level=0]")
+    for (x, z) in ((-8, -42), (8, -42), (-8, -52), (8, -52)):
+        bp.fill(x, 1, z, x, 10, z, TRIM)
+        bp.set(x, 5, z, CHI)
+    for (x, z) in ((-11, -43), (11, -43), (-11, -51), (11, -51)):
+        arch.chandelier(bp, x, 10, z)
+    for x in range(-13, -9):
+        bp.stairs(x, 1, ZB + 1, "smooth_sandstone_stairs", "north")
+        bp.stairs(x + 22, 1, ZB + 1, "smooth_sandstone_stairs", "north")
+    bp.set(12, 1, -45, "cartography_table")
+    bp.set(12, 1, -46, "lectern[facing=west,has_book=false,powered=false]")
+    bp.set(-13, 1, -40, "loom[facing=east]")
+    bp.set(13, 1, -40, "barrel[facing=up,open=false]")
+    # storerooms in the front wing, stables and guest rooms on the sides
+    bp.chest(-12, 1, ZF - 1, "north", LOOT + "oasis")
+    for x in range(-13, -4, 2):
+        bp.barrel(x, 1, ZF - 3, "up")
+    for x in range(5, 14, 2):
+        bp.set(x, 1, ZF - 1, "hay_block[axis=x]")
+        bp.set(x, 2, ZF - 1, "hay_block[axis=z]")
+    for z in range(-36, -32, 2):
+        bp.bed(X1 - 1, 1, z, "west", "orange")
+    for z in range(-36, -32):
+        bp.set(X0 + 1, 1, z, "hay_block[axis=y]")
+        bp.set(X0 + 2, 1, z, "composter[level=3]")
+    for (x, z) in ((-12, -29), (12, -29), (-12, -35), (12, -35), (-8, -22), (8, -22)):
+        bp.lantern(x, 5, z, hanging=True)
+    # courtyard: well-fountain, palms, camels resting
+    bp.disk(0, 0, -31, 2, "water[level=0]")
+    bp.disk(0, 0, -31, 3, CHI, hollow=True)
+    bp.disk(0, 1, -31, 3, "smooth_sandstone_slab[type=bottom,waterlogged=false]", hollow=True)
+    bp.fill(0, 0, -31, 0, 2, -31, TRIM)
+    bp.set(0, 3, -31, "water[level=0]")
+    for (x, z) in ((-7, -36), (7, -36), (-7, -27), (7, -27)):
+        bp.set(x, 0, z, "grass_block[snowy=false]")
+        _palm(bp, x, 1, z, 6, (0, 0), x * 3 + z)
+    bp.entity(-4, 1, -28, {"id": "minecraft:camel", "PersistenceRequired": 1})
+    bp.entity(5, 1, -34, {"id": "minecraft:camel", "PersistenceRequired": 1})
+    for (x, z) in ((-3, -28), (6, -35)):
+        bp.set(x, 1, z, "hay_block[axis=y]")
+
+    # ---------------------------------------------------------------- plaza with twin obelisks and the waystone
+    pav = Palette({"smooth_sandstone": 3, "cut_sandstone": 2, "sandstone": 1}, seed=25)
+    for x in range(-13, 14):
+        for z in range(ZF + 3, -2):
+            if bp.get(x, 0, z) not in ("minecraft:water",) and math.hypot(x / 14, (z + 9) / 9) < 1.15:
+                bp.set(x, 0, z, "orange_terracotta" if (x + z) % 7 == 0 else pav.pick(x, 0, z))
+    for ox in (-11, 11):
+        oz = -7
+        bp.fill(ox - 2, 0, oz - 2, ox + 2, 1, oz + 2, TRIM)
+        for x in range(ox - 2, ox + 3):
+            for z in range(oz - 2, oz + 3):
+                if max(abs(x - ox), abs(z - oz)) == 2:
+                    bp.set(x, 1, z, stair("sandstone_stairs", _card(ox - x, oz - z) if abs(x - ox) != abs(z - oz)
+                                          else ("east" if x < ox else "west")))
+        for y in range(2, 23):
+            for x in range(ox - 1, ox + 2):
+                for z in range(oz - 1, oz + 2):
+                    carved = (x == ox or z == oz) and 5 <= y <= 19 and y % 2 == 0
+                    bp.set(x, y, z, CHI if carved else ("smooth_sandstone" if y % 7 else TRIM))
+        for x in range(ox - 1, ox + 2):
+            for z in range(oz - 1, oz + 2):
+                if (x, z) != (ox, oz):
+                    bp.set(x, 23, z, stair("smooth_sandstone_stairs", _card(ox - x, oz - z) if abs(x - ox) != abs(z - oz)
+                                           else ("east" if x < ox else "west")))
+        bp.set(ox, 23, oz, "gold_block")
+        bp.set(ox, 24, oz, "gold_block")
+        bp.set(ox, 25, oz, "lightning_rod[facing=up,powered=false,waterlogged=false]")
+    bp.fill(-2, 0, -12, 2, 0, -8, CHI)
+    bp.set(0, 1, -10, MOD["waystone"])
+    for (x, z) in ((-2, -12), (2, -12), (-2, -8), (2, -8)):
+        bp.set(x, 1, z, "sandstone_wall")
+        bp.set(x, 2, z, "sandstone_wall")
+        bp.lantern(x, 3, z)
+
+    # ---------------------------------------------------------------- the bazaar (east of the pond)
+    st = Palette({"smooth_sandstone": 2, "sandstone": 2, "sand": 1}, seed=26)
+    for x in range(17, 41):
+        for z in range(-16, 22):
+            bp.set(x, 0, z, st.pick(x, 0, z))
+    for x in range(12, 18):
+        for z in range(-4, 1):
+            if bp.get(x, 0, z) != "minecraft:water":
+                bp.set(x, 0, z, st.pick(x, 0, z))
+    goods = ["melon", "pumpkin", "potted_cactus", "hay_block[axis=y]", "decorated_pot[facing=east,waterlogged=false,cracked=false]",
+             "candle[candles=4,lit=true,waterlogged=false]", "bookshelf", "cake[bites=2]", "potted_dead_bush"]
+    palettes = [("red", "white"), ("blue", "white"), ("orange", "yellow"), ("cyan", "white"), ("purple", "magenta"),
+                ("green", "lime"), ("red", "orange"), ("light_blue", "white")]
+    k = 0
+    for z0 in (-15, -9, -3, 9, 15):
+        _stall(bp, 18, z0, "east", palettes[k % 8], rng.sample(goods, 3), rng,
+               loot=LOOT + "oasis" if z0 == -3 else None)
+        k += 1
+        _stall(bp, 36, z0, "west", palettes[k % 8], rng.sample(goods, 3), rng)
+        k += 1
+    bp.barrel(37, 1, 11, "up", LOOT + "oasis")
+    # a big shaded tent in the middle of the bazaar
+    for x in range(24, 35):
+        for z in range(2, 8):
+            bp.set(x, 5 if 26 <= x <= 32 else 4, z, "white_wool" if x % 2 else "red_wool")
+    bp.set(29, 6, 5, "red_wool")
+    for (x, z) in ((24, 2), (34, 2), (24, 7), (34, 7), (29, 2), (29, 7)):
+        bp.fill(x, 1, z, x, 3 if x in (24, 34) else 4, z, "jungle_fence")
+    for x in range(26, 33, 2):
+        bp.lantern(x, 4, 5, hanging=True)
+    for (x, z) in ((27, 4), (31, 5)):
+        bp.table(x, 1, z, "jungle_pressure_plate", "jungle_fence")
+    for (x, z, f) in ((26, 4, "east"), (28, 4, "west"), (30, 5, "east"), (32, 5, "west")):
+        bp.stairs(x, 1, z, "jungle_stairs", f)
+    for (x, z) in ((20, 20), (38, -18), (40, 4), (22, -18)):
+        _palm(bp, x, 1, z, rng.randint(7, 10), (rng.choice((-1, 1)), 0), x + z)
+    for z in (-14, 0, 14):
+        bp.fill(29, 1, z, 29, 3, z, "jungle_fence")
+        bp.lantern(29, 4, z)
+
+    # ---------------------------------------------------------------- the half-buried colossus (west)
+    HX, HZ = -33, 4
+    FX = HX + 5                                   # face plane, looking east toward the pond
+    face = Palette({"smooth_sandstone": 4, "sandstone": 2, "cut_sandstone": 1}, seed=27, scale=2.0)
+    for y in range(-3, 18):
+        for z in range(HZ - 8, HZ + 9):
+            dz = abs(z - HZ)
+            for x in range(HX - 7, FX + 1):
+                # nemes headdress: domed crown, lappets flaring down beside the face
+                if y > 11:
+                    if ((x - HX + 1) / 6.5) ** 2 + ((y - 11) / 6.5) ** 2 + (dz / 6.5) ** 2 > 1:
+                        continue
+                else:
+                    if dz > (6 if y > 5 else 7) or x < HX - 7 + max(0, (y - 8) // 3):
+                        continue
+                lappet = dz >= 5 or y >= 12 or x < FX - 3
+                if lappet:
+                    if dz >= 5 and x > FX - 1:
+                        continue                  # lappets sit just behind the face plane
+                    bp.set(x, y, z, "lapis_block" if (y + 30) % 3 == 0 else "yellow_terracotta")
+                else:
+                    bp.set(x, y, z, face.pick(x, y, z))
+    for z in range(HZ - 5, HZ + 6):                # gold brow band
+        bp.set(FX, 12, z, "gold_block" if abs(z - HZ) % 2 == 0 else "yellow_terracotta")
+    for sz in (-1, 1):                             # kohl-lined eyes and brows
+        for k in (2, 3):
+            bp.set(FX, 9, HZ + sz * k, "white_terracotta" if k == 2 else "black_terracotta")
+        bp.set(FX, 9, HZ + sz * 4, "black_terracotta")
+        for k in (2, 3, 4):
+            bp.set(FX + 1, 10, HZ + sz * k, stair("sandstone_stairs", "west", "top"))
+    bp.fill(FX + 1, 6, HZ, FX + 1, 8, HZ, "smooth_sandstone")      # nose
+    bp.set(FX + 2, 6, HZ, stair("smooth_sandstone_stairs", "west"))
+    for sz in (-1, 1):
+        bp.set(FX + 1, 6, HZ + sz, stair("smooth_sandstone_stairs", "west"))
+    bp.fill(FX, 4, HZ - 2, FX, 4, HZ + 2, "orange_terracotta")    # lips
+    bp.set(FX + 1, 4, HZ, "orange_terracotta")
+    bp.fill(FX + 1, 1, HZ - 1, FX + 1, 2, HZ + 1, "smooth_sandstone")  # chin and braided beard
+    for y in range(-3, 1):
+        for z in (HZ - 1, HZ, HZ + 1):
+            bp.set(FX + 2, y, z, "cut_sandstone" if y % 2 else "sandstone")
+            bp.set(FX + 1, y, z, "sandstone")
+    bp.fill(FX + 1, 12, HZ, FX + 1, 14, HZ, "gold_block")            # uraeus cobra
+    bp.set(FX + 2, 14, HZ, "lapis_block")
+    # erosion, a broken crown corner, and the dune that swallows the shoulders
+    for (x, y, z), b_ in list(bp.blocks.items()):
+        if HX - 8 <= x <= FX + 2 and abs(z - HZ) <= 8:
+            if y > 12 and x < HX - 1 and z > HZ + 1:
+                bp.remove(x, y, z)
+            elif y > 0 and rng.random() < 0.04 and "gold" not in b_[0]:
+                bp.set(x, y, z, "sand")
+    for x in range(HX - 18, FX + 9):
+        for z in range(HZ - 16, HZ + 17):
+            d = math.hypot((x - HX + 4) / 1.6, z - HZ)
+            h = int(10 - d * 0.7 + 1.5 * math.sin(x * 0.4 + z * 0.2) + (3 if x < HX - 2 else -3 if x > FX else 0))
+            if x > FX - 1 and abs(z - HZ) <= 6:
+                h = min(h, max(0, (x - FX - 3) // 2))
+            elif x > FX:
+                h = min(h, 2 + (FX + 8 - x) // 3)
+            for y in range(1, h + 1):
+                bp.set(x, y, z, "sand", keep=True)
+            if 1 <= h <= 7 and rng.random() < 0.05 and bp.get(x, h + 1, z) is None:
+                bp.set(x, h + 1, z, rng.choice(["dead_bush", "short_dry_grass", "tall_dry_grass", "cactus"]))
+    for (x, z) in ((FX + 4, HZ - 5), (FX + 3, HZ + 6), (HX - 3, HZ - 10)):
+        y = 1
+        while bp.get(x, y, z) == "minecraft:sand":
+            y += 1
+        bp.set(x, y - 1, z, "suspicious_sand", {"LootTable": "minecraft:archaeology/desert_pyramid"})
+
+    # ---------------------------------------------------------------- caravan camp (north-west) and dunes
+    for (cx, cz, c1, c2) in ((-32, -34, "brown", "white"), (-26, -46, "white", "orange")):
+        for i in range(-3, 4):
+            for x in range(cx - 2, cx + 3):
+                h = 3 - abs(x - cx)
+                if h >= 0:
+                    bp.set(x, 1 + h, cz + i, f"{c1 if (x + i) % 2 else c2}_wool")
+            for x in range(cx - 1, cx + 2):
+                bp.set(x, 1, cz + i, "red_carpet" if abs(i) < 3 else "air")
+        bp.fill(cx, 1, cz - 4, cx, 4, cz - 4, "jungle_fence")
+        bp.fill(cx, 1, cz + 4, cx, 4, cz + 4, "jungle_fence")
+        bp.barrel(cx - 1, 1, cz - 2, "up")
+        bp.lantern(cx, 3, cz, hanging=True)
+    bp.set(-29, 1, -40, "campfire[facing=north,lit=true,signal_fire=false,waterlogged=false]")
+    for (x, z, f) in ((-29, -38, "north"), (-31, -40, "east"), (-27, -40, "west")):
+        bp.stairs(x, 1, z, "jungle_stairs", f)
+    for (x, z) in ((-22, -36), (-35, -45)):
+        bp.set(x, 1, z, "hay_block[axis=y]")
+        bp.set(x + 1, 1, z, "barrel[facing=up,open=false]")
+    bp.entity(-24, 1, -40, {"id": "minecraft:camel", "PersistenceRequired": 1})
+    bp.entity(-36, 1, -36, {"id": "minecraft:camel", "PersistenceRequired": 1})
+    _palm(bp, -38, 1, -27, 8, (1, 0), 77)
+    for (dx_, dz_, rr) in ((-40, -50, 7), (18, -48, 8), (38, -40, 6), (-12, 22, 5), (30, 25, 6)):
+        for x in range(dx_ - rr - 3, dx_ + rr + 4):
+            for z in range(dz_ - rr, dz_ + rr + 1):
+                h = int(rr * 0.6 - math.hypot((x - dx_) / 1.5, z - dz_) * 0.6 + 0.8 * math.sin(x * 0.7))
+                if bp.get(x, 0, z) == "minecraft:sand":
+                    for y in range(1, h + 1):
+                        bp.set(x, y, z, "sand", keep=True)
+
+    # ---------------------------------------------------------------- hidden staircase and the tomb
+    # the hall's patterned carpet hides a trapdoor; a short ladder drops to a stair diving south
+    SX, TY = -5, -15
+    bp.set(SX, 0, -48, "jungle_trapdoor[facing=south,half=top,open=false,powered=false,waterlogged=false]")
+    bp.clear(SX, -3, -48, SX, -1, -48)
+    bp.ladder(SX, -3, -48, -1, "south")
+    bp.set(SX, -4, -48, "cut_sandstone")
+    bp.fill(SX, -4, -49, SX, -1, -49, "cut_sandstone")
+    for i in range(12):
+        z, y = -47 + i, -4 - i
+        for x in (SX, SX + 1):
+            bp.stairs(x, y, z, "sandstone_stairs", "north")
+            bp.clear(x, y + 1, z, x, y + 3, z)
+            bp.set(x, y + 4, z, "cut_sandstone")
+            bp.set(x, y - 1, z, "sandstone")
+        for x in (SX - 1, SX + 2):
+            bp.fill(x, y - 1, z, x, y + 4, z, "cut_sandstone")
+        if i % 4 == 1:
+            bp.lantern(SX + 1, y + 3, z, hanging=True)
+    bp.room(SX - 1, TY - 1, -36, SX + 2, TY + 3, -34, "cut_sandstone", floor="sandstone", ceiling="cut_sandstone")
+    bp.stairs(SX, TY, -36, "sandstone_stairs", "north")
+    bp.stairs(SX + 1, TY, -36, "sandstone_stairs", "north")
     # burial chamber
-    c0x, c0z = -20, tz - 7
-    bp.room(c0x, cy - 1, c0z, -6, cy + 7, c0z + 14, "sandstone", floor="orange_terracotta",
-            ceiling="cut_sandstone")
-    bp.clear(-6, cy + 1, tz - 1, -6, cy + 3, tz + 1)
-    for x in range(c0x + 1, -6):
-        for z in range(c0z + 1, c0z + 14):
+    C0X, C1X, C0Z, C1Z = -10, 10, -34, -16
+    bp.room(C0X, TY - 1, C0Z, C1X, TY + 8, C1Z, "sandstone", floor="orange_terracotta", ceiling="cut_sandstone")
+    bp.clear(SX, TY, C0Z, SX + 1, TY + 2, C0Z)
+    for x in range(C0X + 1, C1X):
+        for z in range(C0Z + 1, C1Z):
             if (x + z) % 4 == 0:
-                bp.set(x, cy - 1, z, "blue_terracotta")
-    for x in (c0x + 3, -9):
-        for z in (c0z + 3, c0z + 11):
-            bp.fill(x, cy, z, x, cy + 6, z, "cut_sandstone")
-            bp.set(x, cy + 3, z, "chiseled_sandstone")
-    mx, mz = c0x + 7, c0z + 7
-    # sarcophagus
-    bp.fill(mx - 1, cy, mz - 2, mx + 1, cy, mz + 2, "chiseled_sandstone")
-    bp.fill(mx - 1, cy + 1, mz - 2, mx + 1, cy + 1, mz + 2, "smooth_sandstone_slab[type=bottom,waterlogged=false]")
-    bp.set(mx, cy + 1, mz - 2, "gold_block")
-    bp.chest(mx - 3, cy, mz, "east", LOOT + "desert_tomb")
-    bp.chest(mx + 3, cy, mz, "west", LOOT + "desert_tomb")
-    bp.spawner(mx, cy, mz + 4, "minecraft:husk")
-    bp.set(c0x + 1, cy, c0z + 1, "decorated_pot[facing=south,waterlogged=false,cracked=false]")
-    bp.set(c0x + 1, cy, c0z + 13, "decorated_pot[facing=north,waterlogged=false,cracked=false]")
-    for x, z in ((c0x + 2, c0z + 2), (c0x + 2, c0z + 12), (-8, c0z + 2), (-8, c0z + 12)):
-        bp.lantern(x, cy + 5, z, hanging=True)
-        bp.chain(x, cy + 6, z, cy + 6)
-    # secret archaeology alcove behind the west wall
-    bp.clear(c0x - 4, cy, mz - 1, c0x - 1, cy + 2, mz + 1)
-    bp.fill(c0x, cy, mz - 1, c0x, cy + 2, mz + 1, "sandstone")
-    for z in (mz - 1, mz, mz + 1):
-        bp.set(c0x - 4, cy - 1, z, "suspicious_sand", {"LootTable": "minecraft:archaeology/desert_pyramid"})
-    bp.chest(c0x - 3, cy, mz, "east", LOOT + "desert_tomb_secret")
-    bp.fill(c0x - 5, cy - 1, mz - 2, c0x - 1, cy + 3, mz - 2, "sandstone", keep=True)
-    bp.fill(c0x - 5, cy - 1, mz + 2, c0x - 1, cy + 3, mz + 2, "sandstone", keep=True)
-    bp.fill(c0x - 5, cy + 3, mz - 1, c0x - 1, cy + 3, mz + 1, "sandstone", keep=True)
+                bp.set(x, TY - 1, z, "blue_terracotta")
+            elif (x - z) % 4 == 0:
+                bp.set(x, TY - 1, z, "yellow_terracotta")
+    for y in range(TY, TY + 8):           # painted hieroglyph bands
+        for x in range(C0X + 1, C1X):
+            if y in (TY + 2, TY + 5):
+                for z in (C0Z, C1Z):
+                    bp.set(x, y, z, CHI if x % 3 else "orange_glazed_terracotta[facing=north]")
+        for z in range(C0Z + 1, C1Z):
+            if y in (TY + 2, TY + 5):
+                for x in (C0X, C1X):
+                    bp.set(x, y, z, CHI if z % 3 else "blue_glazed_terracotta[facing=east]")
+    for x in (C0X + 3, C1X - 3):
+        for z in (C0Z + 4, C1Z - 4):
+            bp.fill(x, TY, z, x, TY + 7, z, "cut_sandstone")
+            bp.set(x, TY + 3, z, CHI)
+            bp.set(x, TY + 6, z, "orange_terracotta")
+    MX, MZ = 0, -25
+    bp.fill(MX - 1, TY, MZ - 2, MX + 1, TY, MZ + 2, CHI)
+    bp.fill(MX - 1, TY + 1, MZ - 2, MX + 1, TY + 1, MZ + 2, "smooth_sandstone_slab[type=bottom,waterlogged=false]")
+    bp.set(MX, TY + 1, MZ - 2, "gold_block")
+    bp.set(MX, TY + 1, MZ + 2, "gold_block")
+    bp.chest(MX - 4, TY, MZ, "east", LOOT + "desert_tomb")
+    bp.chest(MX + 4, TY, MZ, "west", LOOT + "desert_tomb")
+    bp.spawner(MX, TY, MZ + 5, "minecraft:husk")
+    for (x, z) in ((C0X + 1, C0Z + 1), (C1X - 1, C0Z + 1), (C0X + 1, C1Z - 1), (C1X - 1, C1Z - 1)):
+        bp.set(x, TY, z, "decorated_pot[facing=south,waterlogged=false,cracked=false]")
+    for (x, z) in ((-5, -29), (5, -29), (-5, -21), (5, -21)):
+        bp.chain(x, TY + 6, z, TY + 7)
+        bp.lantern(x, TY + 5, z, hanging=True)
+    # secret archaeology alcove behind the west wall (break the plain sandstone under the carved eye)
+    bp.set(C0X, TY + 3, MZ, "chiseled_red_sandstone")
+    bp.room(C0X - 6, TY - 1, MZ - 2, C0X, TY + 3, MZ + 2, "sandstone", floor="sandstone", ceiling="sandstone")
+    bp.fill(C0X, TY, MZ - 1, C0X, TY + 2, MZ + 1, "sandstone")
+    for z in (MZ - 1, MZ, MZ + 1):
+        bp.set(C0X - 5, TY - 1, z, "suspicious_sand", {"LootTable": "minecraft:archaeology/desert_pyramid"})
+    bp.chest(C0X - 4, TY, MZ, "east", LOOT + "desert_tomb_secret")
+    bp.set(C0X - 3, TY, MZ + 1, "candle[candles=3,lit=true,waterlogged=false]")
 
 
 register(StructureDef(
     "desert_oasis", "overworld", ["desert"], [Piece("oasis", oasis)],
     spacing=26, separation=9, title_fr="Oasis et tombeau", title_en="Desert Oasis"))
-
 
 
 # ============================================================ Swamp witch huts

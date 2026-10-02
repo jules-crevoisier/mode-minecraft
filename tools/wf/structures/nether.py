@@ -155,7 +155,7 @@ def chandelier(bp, x, y, z, soul=False, drop=2):
 
 
 def spike(bp, cx, cz, y, r, block="blackstone", stairs=BS, steep=3, round_=True, band=GILD,
-          tip=True, lamps=True):
+          tip=True, lamps=True, lamp=LAMP):
     """Sharp cone/pyramid roof: each ring is `steep` tall, gilded band on the first ring."""
     yy, rr, i = y, r, 0
     while rr >= 1:
@@ -169,7 +169,7 @@ def spike(bp, cx, cz, y, r, block="blackstone", stairs=BS, steep=3, round_=True,
                     if edge and k == steep - 1:
                         bp.set(x, yy, z, stair(stairs, toward(cx, cz, x, z)))
                     elif edge and lamps and i == 1 and k == 0 and (x == cx or z == cz):
-                        bp.set(x, yy, z, LAMP)
+                        bp.set(x, yy, z, lamp)
                     elif edge:
                         bp.set(x, yy, z, band if (band and i == 0 and k == 0) else block)
                     elif k == 0:
@@ -178,7 +178,7 @@ def spike(bp, cx, cz, y, r, block="blackstone", stairs=BS, steep=3, round_=True,
         rr -= 1
         i += 1
     bp.set(cx, yy, cz, block)
-    bp.set(cx, yy + 1, cz, LAMP)
+    bp.set(cx, yy + 1, cz, lamp)
     if tip:
         bp.set(cx, yy + 2, cz, PBBW)
         bp.set(cx, yy + 3, cz, "lightning_rod[facing=up,powered=false,waterlogged=false]")
@@ -1562,8 +1562,7 @@ def lava_foundry(bp):
     fill_pal(bp, ox0 + 1, 0, oz0 + 1, ox1 - 1, 0, oz1 - 1, FLOOR)
     bp.fill(ox0 + 1, 5, oz0 + 1, ox1 - 1, 5, oz1 - 1, "spruce_planks")
     arch.steep_roof(bp, ox0, oz0, ox1, oz1, 10, CUS, axis="x", overhang=1, steep=1, fill="nether_bricks",
-                    under="nether_brick_stairs", ridge=slab(CUSL), dormers=1, dormer_stairs=CUS,
-                    dormer_wall="nether_bricks")
+                    under="nether_brick_stairs", ridge=slab(CUSL))
     arch.arch_door(bp, "south", oz1, 17, 0, width=1, height=3, trim=PBAS, stairs=PBBS)
     bp.door(17, 1, oz1, "south", "crimson")
     arch.stair_run(bp, ox1 - 1, 1, oz1 - 1, "north", 4, 1, "spruce_stairs", clear=3)
@@ -1592,96 +1591,569 @@ register(StructureDef(
 
 
 # ============================================================ Soul tower (soul sand valley)
+# A 52-block black tower tapering in three stages, clasped by six twisting bone buttresses that
+# spiral up its flanks with rib-like struts. Cyan lancet windows glow with soul lanterns, three
+# ghostly balconies hang off different sides, and the top bristles with a crown of outward-leaning
+# blackstone spikes around a needle spire. Inside, a spiral stair climbs past six floors; under
+# the tower lies a hidden ossuary.
+ST_TOP = 52
+SOUL = Palette({PBB: 4, "blackstone": 2, CPBB: 1, "smooth_basalt": 1}, seed=41, scale=2.5)
+SOUL_GROUND = Palette({"soul_soil": 4, "soul_sand": 3, "basalt[axis=y]": 1, "blackstone": 1}, seed=42, scale=3.0)
+BONE = "bone_block[axis=y]"
+SOULGLASS = "cyan_stained_glass_pane"
+
+
+def st_r(y):
+    return 8 if y < 16 else 7 if y < 34 else 6
+
+
+def bone_buttresses(bp, cx, cz, n, y0, y1, twist, flare, seed=0):
+    """Helical bone buttresses: thick and flared at the foot, thinning as they wind up the tower,
+    tied back to the wall by rib struts."""
+    for k in range(n):
+        prev = None
+        for y in range(y0, y1):
+            t = (y - y0) / (y1 - y0)
+            ang = 2 * math.pi * k / n + math.radians(twist * (y - y0))
+            rad = st_r(max(y, 0)) + 1.2 + flare * (1 - t) ** 2.2
+            x = cx + round(math.cos(ang) * rad)
+            z = cz + round(math.sin(ang) * rad)
+            th = 1.0 if t < 0.12 else 0.5
+            for dx in (-1, 0, 1):
+                for dz in (-1, 0, 1):
+                    if math.hypot(dx, dz) <= th:
+                        bp.set(x + dx, y, z + dz, BONE)
+            if prev and max(abs(prev[0] - x), abs(prev[1] - z)) > 1:
+                bp.line((prev[0], y - 1, prev[1]), (x, y, z), BONE)
+            prev = (x, z)
+            if y % 6 == 3 and t > 0.05:
+                wx = cx + round(math.cos(ang) * (st_r(y) + 0.5))
+                wz = cz + round(math.sin(ang) * (st_r(y) + 0.5))
+                bp.line((x, y, z), (wx, y, wz), "bone_block[axis=x]" if abs(x - wx) >= abs(z - wz)
+                        else "bone_block[axis=z]")
+        # skull finial where the buttress dies into the wall
+        bp.set(prev[0], y1, prev[1], "wither_skeleton_skull[rotation=%d]" % ((k * 3) % 16))
+
+
+def ghost_balcony(bp, cx, cz, y, ang_deg, depth=3, spread=40, loot=None):
+    """Half-moon balcony on corbels: slab floor, wall rail, soul lantern posts, hanging lanterns."""
+    r = st_r(y)
+    a0 = math.radians(ang_deg)
+    cells = []
+    for x in range(cx - r - depth - 1, cx + r + depth + 2):
+        for z in range(cz - r - depth - 1, cz + r + depth + 2):
+            d = math.hypot(x - cx, z - cz)
+            da = abs((math.atan2(z - cz, x - cx) - a0 + math.pi) % (2 * math.pi) - math.pi)
+            if r + 0.4 < d <= r + depth + 0.4 and da <= math.radians(spread):
+                cells.append((x, z, d, da))
+    for (x, z, d, da) in cells:
+        bp.set(x, y, z, PBB)
+        bp.set(x, y - 1, z, stair(PBBS, toward(cx, cz, x, z), "top"))
+        outer = d > r + depth - 0.6 or da > math.radians(spread - 9)
+        if outer:
+            bp.set(x, y + 1, z, PBBW)
+            if (x + z) % 4 == 0:
+                bp.set(x, y + 2, z, "soul_lantern[hanging=false,waterlogged=false]")
+            if (x * 3 + z) % 5 == 0:
+                bp.chain(x, y - 3, z, y - 2)
+                bp.lantern(x, y - 4, z, hanging=True, soul=True)
+    # doorway into the tower
+    dx, dz = math.cos(a0), math.sin(a0)
+    for k in (r - 1, r, r + 1):
+        x, z = cx + round(dx * k), cz + round(dz * k)
+        for yy in (y + 1, y + 2):
+            bp.set(x, yy, z, "air")
+    x, z = cx + round(dx * (r + 2)), cz + round(dz * (r + 2))
+    if loot:
+        bp.chest(x, y + 1, z, toward(cx, cz, x, z), loot)
+    else:
+        bp.set(x, y + 1, z, "skeleton_skull[rotation=0]")
+
+
 def soul_tower(bp):
-    r, h = 5, 34
-    bp.disk(0, -3, 0, r + 3, "soul_soil")
-    bp.disk(0, 0, 0, r + 2, "polished_blackstone_bricks")
-    bp.cylinder(0, 1, 0, h, r, "polished_blackstone_bricks")
-    for y in range(1, h + 1, 5):
-        bp.disk(0, y, 0, r, "chiseled_polished_blackstone", hollow=True)
-    # floors with a central soul fire well
-    for fy in range(8, h, 8):
-        bp.disk(0, fy, 0, r - 1, "polished_blackstone")
-        bp.set(0, fy, 0, "soul_soil")
-        bp.set(0, fy + 1, 0, "soul_fire")
-        bp.fill(r, fy + 2, 0, r, fy + 4, 0, "iron_bars")
-        bp.fill(-r, fy + 2, 0, -r, fy + 4, 0, "iron_bars")
-        bp.lantern(2, fy + 1, 2, soul=True)
-    bp.ladder(0, 1, -r + 1, h, "south")
-    for fy in range(8, h, 8):
-        bp.set(0, fy, -r + 1, "ladder[facing=south,waterlogged=false]")
-    bp.clear(0, 1, r, 0, 2, r)
-    bp.set(0, 1, r, "air")
-    # top: open crown of blackstone spikes
-    bp.disk(0, h + 1, 0, r + 1, "polished_blackstone")
-    bp.set(0, h + 1, -r + 1, "ladder[facing=south,waterlogged=false]")
-    for a in range(0, 360, 45):
-        x, z = round(math.cos(math.radians(a)) * (r + 1)), round(math.sin(math.radians(a)) * (r + 1))
-        bp.fill(x, h + 2, z, x, h + 4 + (a // 45) % 3, z, "blackstone_wall")
-    bp.chest(1, h + 2, 1, "north", LOOT + "soul_tower")
-    bp.chest(2, 9, -2, "west", LOOT + "soul_tower")
-    bp.spawner(-2, 17, 2, MOB["basalt_guard"])
-    bp.spawner(2, 25, 2, "minecraft:blaze")
-    # bone ribs half-buried around the base
-    for a in (20, 140, 260):
-        cx, cz = round(math.cos(math.radians(a)) * 12), round(math.sin(math.radians(a)) * 12)
+    cx = cz = 0
+    # soul sand mound with fossils, basalt columns and soul fire
+    rock_island(bp, 18, 18, 18, depth=6, slope=0.9, spread=7, seed=13, pillars=18, pal=SOUL_GROUND)
+    rng = random.Random(8)
+    for x in range(-25, 26):
+        for z in range(-25, 26):
+            top = None
+            for y in range(-1, -12, -1):
+                if bp.get(x, y, z):
+                    top = y
+                    break
+            if top is not None and rng.random() < 0.025 and math.hypot(x, z) > 11:
+                bp.set(x, top + 1, z, "soul_campfire[facing=north,lit=true,signal_fire=false,waterlogged=false]")
+    for a in (35, 155, 275):
+        fx, fz = round(math.cos(math.radians(a)) * 15), round(math.sin(math.radians(a)) * 15)
         for k in range(-4, 5, 2):
-            bp.line((cx + k, -1, cz - 3), (cx + k, 5 - abs(k) // 2, cz), "bone_block[axis=y]")
-            bp.line((cx + k, 5 - abs(k) // 2, cz), (cx + k, -1, cz + 3), "bone_block[axis=y]")
+            px, pz = fx + round(math.cos(math.radians(a + 90)) * k), fz + round(math.sin(math.radians(a + 90)) * k)
+            hh = 5 - abs(k) // 2
+            bp.line((px - round(math.cos(math.radians(a)) * 3), -1, pz - round(math.sin(math.radians(a)) * 3)),
+                    (px, hh, pz), BONE)
+            bp.line((px, hh, pz), (px + round(math.cos(math.radians(a)) * 3), -1,
+                                   pz + round(math.sin(math.radians(a)) * 3)), BONE)
+        bp.line((fx - round(math.cos(math.radians(a + 90)) * 5), 4, fz - round(math.sin(math.radians(a + 90)) * 5)),
+                (fx + round(math.cos(math.radians(a + 90)) * 5), 4, fz + round(math.sin(math.radians(a + 90)) * 5)),
+                BONE)
+    # ---------------- the tower shell (three tapering stages)
+    for y in range(-6, ST_TOP + 1):
+        r = st_r(max(y, 0))
+        for x in range(cx - r - 1, cx + r + 2):
+            for z in range(cz - r - 1, cz + r + 2):
+                d = math.hypot(x - cx, z - cz)
+                if d <= r + 0.4:
+                    if d > r - 0.8 or y <= 0:
+                        bp.set(x, y, z, SOUL.pick(x, y, z))
+                    else:
+                        bp.set(x, y, z, "air")
+    for (y, r) in ((15, 8), (33, 7)):
+        for (x, z) in ring_cells(cx, cz, r + 1):
+            bp.set(x, y, z, stair(PBBS, toward(cx, cz, x, z), "top"))
+        for (x, z) in ring_cells(cx, cz, r):
+            bp.set(x, y + 1, z, stair(PBBS, toward(cx, cz, x, z)))
+            bp.set(x, y, z, CHIS)
+    for (x, z) in ring_cells(cx, cz, 9):
+        bp.set(x, 0, z, PBB)
+        bp.set(x, 1, z, stair(PBBS, toward(cx, cz, x, z)))
+    # rings of soul lanterns dripping from the corbel courses
+    for (y, r) in ((15, 8), (33, 7)):
+        for i, (x, z) in enumerate(sorted(ring_cells(cx, cz, r + 1), key=lambda p: math.atan2(p[1], p[0]))):
+            if i % 3 == 0:
+                bp.chain(x, y - 1, z, y - 1)
+                bp.lantern(x, y - 2, z, hanging=True, soul=True)
+    # floors around the open stair well, spiral stair round a bone column
+    floors = list(range(8, ST_TOP, 8))
+    for fy in floors:
+        r = st_r(fy)
+        for x in range(cx - r, cx + r + 1):
+            for z in range(cz - r, cz + r + 1):
+                if max(abs(x - cx), abs(z - cz)) >= 3 and math.hypot(x - cx, z - cz) <= r - 0.6:
+                    bp.set(x, fy, z, PB if (x + z) % 2 else PBB)
+    fill_pal(bp, -7, 0, -7, 7, 0, 7, FLOOR)
+    bp.disk(cx, 0, cz, 7, PB)
+    for (x, z) in ring_cells(cx, cz, 5):
+        bp.set(x, 0, z, CHIS)
+    bp.spiral_stairs(cx, cz, 1, ST_TOP, 2, PBBSL, center=BONE)
+    # lancet windows with soul light, rotating floor by floor
+    for i, fy in enumerate([0] + floors):
+        r = st_r(fy + 3)
+        for q in range(4):
+            a = math.radians(45 + 90 * q + i * 22)
+            x, z = cx + round(math.cos(a) * r), cz + round(math.sin(a) * r)
+            for dy in range(2, 6):
+                bp.set(x, fy + dy, z, SOULGLASS)
+            bp.set(x, fy + 6, z, CHIS)
+            ix, iz = cx + round(math.cos(a) * (r - 1)), cz + round(math.sin(a) * (r - 1))
+            if fy and bp.get(ix, fy, iz):
+                bp.set(ix, fy + 1, iz, "soul_lantern[hanging=false,waterlogged=false]")
+            ox, oz = cx + round(math.cos(a) * (r + 1)), cz + round(math.sin(a) * (r + 1))
+            bp.set(ox, fy + 1, oz, stair(PBBS, toward(cx, cz, ox, oz), "top"))
+        bp.lantern(cx + 4, fy + 7, cz, hanging=True, soul=True)
+        bp.lantern(cx - 4, fy + 7, cz, hanging=True, soul=True)
+    # entrance with a bone arch
+    for z in range(cz + 6, cz + 10):
+        for x in (-1, 0, 1):
+            for y in (1, 2, 3):
+                bp.set(x, y, z, "air")
+            bp.set(x, 0, z, PBB)
+    for z in (cz + 9, cz + 10):
+        for (x, y) in ((-2, 1), (-2, 2), (-2, 3), (2, 1), (2, 2), (2, 3), (-2, 4), (2, 4), (-1, 5), (0, 5), (1, 5)):
+            bp.set(x, y, z, BONE)
+        bp.set(-1, 4, z, stair(PBBS, "east", "top"))
+        bp.set(1, 4, z, stair(PBBS, "west", "top"))
+        bp.set(0, 6, z, "wither_skeleton_skull[rotation=0]" if z == cz + 10 else BONE)
+    bp.door(0, 1, cz + 8, "south", "crimson")
+    bp.door(-1, 1, cz + 8, "south", "crimson", hinge="left")
+    bp.door(1, 1, cz + 8, "south", "crimson", hinge="right")
+    bp.set(0, 1, cz + 8, "air")
+    bp.set(0, 2, cz + 8, "air")
+    for x in (-3, 3):
+        brazier(bp, x, 0, cz + 11, soul=True, big=True)
+    # ---------------- twisted bone buttresses
+    bone_buttresses(bp, cx, cz, 6, -3, ST_TOP - 6, twist=4.0, flare=5.0)
+    # ---------------- ghostly balconies
+    ghost_balcony(bp, cx, cz, 24, 40, depth=4, spread=45)
+    ghost_balcony(bp, cx, cz, 40, 200, depth=4, spread=45, loot=LOOT + "soul_tower")
+    ghost_balcony(bp, cx, cz, 48, 310, depth=3)
+    # ---------------- crown of spikes around a needle spire
+    top = ST_TOP
+    r = st_r(top)
+    for (x, z) in ring_cells(cx, cz, r + 1):
+        bp.set(x, top - 1, z, stair(PBBS, toward(cx, cz, x, z), "top"))
+        bp.set(x, top, z, SOUL.pick(x, top, z))
+    for (x, z) in ring_cells(cx, cz, r + 2):
+        bp.set(x, top, z, stair(PBBS, toward(cx, cz, x, z), "top"))
+    bp.disk(cx, top + 1, cz, r + 2, PBB)
+    bp.disk(cx, top + 1, cz, r - 1, PB)
+    # stair well opening onto the roof, railed, around the bone needle
+    for x in range(-2, 3):
+        for z in range(-2, 3):
+            if (x, z) != (0, 0):
+                bp.set(cx + x, top + 1, cz + z, "air")
+    for x in range(-3, 4):
+        for z in range(-3, 4):
+            if max(abs(x), abs(z)) == 3 and not (z == 3 and abs(x) <= 1):
+                bp.set(cx + x, top + 2, cz + z, PBBW)
+    cells = sorted(ring_cells(cx, cz, r + 2), key=lambda p: math.atan2(p[1] - cz, p[0] - cx))
+    for i, (x, z) in enumerate(cells):
+        bp.set(x, top + 2, z, SOUL.pick(x, top + 2, z))
+    for k in range(14):
+        a = 2 * math.pi * k / 14
+        h = 9 if k % 2 == 0 else 5
+        x0_, z0_ = cx + math.cos(a) * (r + 2), cz + math.sin(a) * (r + 2)
+        x1_, z1_ = cx + math.cos(a) * (r + 4.5), cz + math.sin(a) * (r + 4.5)
+        pts = []
+        for j in range(h + 1):
+            t = j / h
+            pts.append((round(x0_ + (x1_ - x0_) * t * t), top + 2 + j, round(z0_ + (z1_ - z0_) * t * t)))
+        for j, (x, y, z) in enumerate(pts):
+            bp.set(x, y, z, "blackstone" if j < h * 0.5 else PBW)
+        x, y, z = pts[-1]
+        bp.set(x, y + 1, z, "end_rod[facing=up]")
+    # soul braziers on the roof and the bone needle with its lantern crossbar
+    for (x, z) in ((cx + 5, cz), (cx - 5, cz), (cx, cz + 5), (cx, cz - 5)):
+        brazier(bp, x, top + 2, z, soul=True)
+    for y in range(top + 1, top + 13):
+        bp.set(cx, y, cz, BONE if y % 4 else CHIS)
+    for dx, dz in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+        bp.set(cx + dx, top + 10, cz + dz, PBBW)
+        bp.set(cx + 2 * dx, top + 10, cz + 2 * dz, PBBW)
+        bp.lantern(cx + 2 * dx, top + 9, cz + 2 * dz, hanging=True, soul=True)
+    spike(bp, cx, cz, top + 13, 1, "blackstone", BS, steep=4, band=None, lamps=False,
+          lamp="soul_lantern[hanging=false,waterlogged=false]")
+    # ---------------- floor contents
+    rooms = {8: "library", 16: "guard", 24: "crypt", 32: "alchemy", 40: "blaze", 48: "reliquary"}
+    for fy, kind in rooms.items():
+        r = st_r(fy) - 1
+        if kind == "library":
+            for a in range(0, 360, 30):
+                x, z = cx + round(math.cos(math.radians(a)) * r), cz + round(math.sin(math.radians(a)) * r)
+                for yy in (fy + 1, fy + 2):
+                    if not bp.get(x, yy, z) or bp.get(x, yy, z) == "minecraft:air":
+                        bp.set(x, yy, z, "bookshelf")
+            bp.set(cx + 4, fy + 1, cz + 1, "lectern[facing=west,has_book=false,powered=false]")
+            bp.set(cx - 4, fy + 1, cz - 2, "skeleton_skull[rotation=4]")
+        elif kind == "guard":
+            bp.spawner(cx + 4, fy + 1, cz - 3, MOB["basalt_guard"])
+            for (x, z) in ((cx - 4, cz + 3), (cx + 3, cz + 4)):
+                bp.set(x, fy + 1, z, "cobweb")
+        elif kind == "crypt":
+            for (x, z) in ((cx + 4, cz), (cx - 4, cz), (cx, cz + 4), (cx, cz - 4)):
+                bp.set(x, fy + 1, z, "polished_blackstone_slab[type=bottom,waterlogged=false]")
+                bp.set(x, fy + 2, z, "candle[candles=3,lit=true,waterlogged=false]")
+            bp.set(cx + 3, fy + 1, cz + 3, "wither_skeleton_skull[rotation=6]")
+        elif kind == "alchemy":
+            bp.set(cx + 4, fy + 1, cz + 2, "brewing_stand[has_bottle_0=false,has_bottle_1=false,has_bottle_2=false]")
+            bp.set(cx + 4, fy + 1, cz - 2, "cauldron")
+            bp.set(cx - 4, fy + 1, cz + 2, "soul_campfire[facing=north,lit=true,signal_fire=false,waterlogged=false]")
+        elif kind == "blaze":
+            bp.spawner(cx - 3, fy + 1, cz + 3, "minecraft:blaze")
+            bp.set(cx + 3, fy + 1, cz - 3, "magma_block")
+        elif kind == "reliquary":
+            bp.chest(cx, fy + 1, cz - 4, "south", LOOT + "soul_tower")
+            bp.set(cx - 1, fy + 1, cz - 4, "gold_block")
+            bp.set(cx + 1, fy + 1, cz - 4, "candle[candles=4,lit=true,waterlogged=false]")
+    # ---------------- hidden ossuary under the tower
+    bp.disk(cx, -6, cz, 6, PBB)
+    for y in range(-5, -1):
+        for (x, z) in ring_cells(cx, cz, 6, inner=0.8):
+            bp.set(x, y, z, BONE if (x + y + z) % 4 else CHIS)
+        bp.disk(cx, y, cz, 5, "air")
+    bp.disk(cx, -1, cz, 6, PBB)
+    bp.set(cx, -5, cz, BONE)
+    bp.set(cx + 4, 0, cz - 4, CPBB)
+    bp.clear(cx + 4, -4, cz - 4, cx + 4, -1, cz - 4)
+    bp.ladder(cx + 4, -5, cz - 3, -1, "south")
+    bp.set(cx + 4, -5, cz - 4, "air")
+    bp.chest(cx - 3, -5, cz + 3, "north", LOOT + "soul_tower")
+    for (x, z) in ((cx - 4, cz), (cx + 4, cz + 2), (cx, cz - 4)):
+        bp.set(x, -5, z, "soul_lantern[hanging=false,waterlogged=false]")
 
 
 register(StructureDef(
     "soul_tower", "nether", ["soul_sand_valley"], [Piece("tower", soul_tower)],
-    spacing=22, separation=7, adaptation="beard_box", height=("uniform", 30, 48), processors="aging",
+    spacing=22, separation=7, adaptation="beard_box", height=("uniform", 28, 34), processors="aging",
     title_fr="Tour des âmes", title_en="Soul Tower"))
 
 
 # ============================================================ Piglin market
+# A walled bazaar square: four arcaded market ranges full of stalls, red-roofed corner pavilions,
+# four gilded gate arches with banners, striped crimson and warped awnings, festoons of lanterns
+# strung from a central fountain-tower whose gargoyles pour lava into a gold-rimmed ring basin.
+PM_H = 28        # half size of the square (outer wall line)
+PM_IN = 23       # colonnade line
+RNB = "red_nether_bricks"
+RNBS = "red_nether_brick_stairs"
+GOODS = ["gold_block", "raw_gold_block", "crying_obsidian", "magma_block", "quartz_block", "shroomlight",
+         "decorated_pot[facing=north,waterlogged=false,cracked=false]", "lantern[hanging=false,waterlogged=false]",
+         "gilded_blackstone", "nether_wart_block", "warped_wart_block", "soul_lantern[hanging=false,waterlogged=false]"]
+
+
+def _frame(cx, cz, facing):
+    fx, fz = FACE_VEC[facing]
+    rx, rz = -fz, fx
+
+    def w(u, v):
+        return cx + rx * u + fx * v, cz + rz * u + fz * v
+    return w
+
+
+def market_stall(bp, cx, cz, facing, wood, seed=0, loot=None):
+    """5x3 stall facing `facing` (towards the shoppers): fence posts, counter with goods, barrels,
+    striped wool awning with a drooping front."""
+    rng = random.Random(seed)
+    w = _frame(cx, cz, facing)
+    stripes = ("red_wool", "yellow_wool") if wood == "crimson" else ("cyan_wool", "light_blue_wool")
+    for u in range(-2, 3):
+        for v in range(-1, 2):
+            x, z = w(u, v)
+            bp.set(x, 0, z, f"{wood}_planks" if v == -1 else f"stripped_{wood}_hyphae[axis=y]")
+    for u in (-2, 2):
+        for v in (-1, 1):
+            x, z = w(u, v)
+            for y in range(1, 4):
+                bp.set(x, y, z, f"{wood}_fence")
+    for u in (-1, 0, 1):
+        x, z = w(u, 1)
+        bp.set(x, 1, z, f"{wood}_planks")
+        bp.set(x, 2, z, rng.choice(GOODS))
+        x, z = w(u, -1)
+        bp.barrel(x, 1, z, "up", loot if (loot and u == 0) else None)
+        bp.set(x, 2, z, "barrel[facing=north,open=false]" if u else rng.choice(GOODS))
+    for u in range(-2, 3):
+        for v in range(-2, 3):
+            x, z = w(u, v)
+            bp.set(x, {-2: 3, -1: 4, 0: 5, 1: 4, 2: 3}[v], z, stripes[(u + 2) % 2])
+        x, z = w(u, 0)
+        if abs(u) == 2:
+            bp.set(x, 4, z, f"{wood}_fence")
+    x, z = w(0, 0)
+    bp.lantern(x, 3, z, hanging=True)
+
+
+def festoon(bp, axis, sign, r0, r1, y0, y1, sag=4):
+    """Chain strung along an axis from (r0, y0) to (r1, y1), sagging, with lanterns every 3."""
+    pts = []
+    n = r1 - r0
+    for i in range(n + 1):
+        t = i / n
+        y = round(y0 + (y1 - y0) * t - sag * 4 * t * (1 - t))
+        pts.append((r0 + i, y))
+    for (r, y), (r2, y2) in zip(pts, pts[1:]):
+        x, z = (sign * r, 0) if axis == "x" else (0, sign * r)
+        lo, hi = sorted((y, y2))
+        if hi > lo:
+            for yy in range(lo, hi + 1):
+                bp.set(x, yy, z, "iron_chain[axis=y,waterlogged=false]")
+        else:
+            bp.set(x, y, z, f"iron_chain[axis={axis},waterlogged=false]")
+        if r % 3 == 0:
+            bp.lantern(x, lo - 1, z, hanging=True)
+
+
 def piglin_market(bp):
-    S = 22
-    bp.fill(-S // 2, -2, -S // 2, S // 2, 0, S // 2, "blackstone", keep=True)
-    bp.fill(-S // 2, 0, -S // 2, S // 2, 0, S // 2, "polished_blackstone_bricks")
-    for x in range(-S // 2, S // 2 + 1):
-        for z in range(-S // 2, S // 2 + 1):
-            if (x + z) % 2 == 0 and abs(x) < S // 2 and abs(z) < S // 2:
-                bp.set(x, 0, z, "gilded_blackstone" if bp.rng.random() < 0.06 else "polished_blackstone")
-    # market stalls with crimson/warped awnings
-    stalls = [(-7, -7, "crimson"), (0, -8, "warped"), (7, -7, "crimson"), (-7, 7, "warped"), (7, 7, "crimson")]
-    for sx, sz, wood in stalls:
-        for dx, dz in ((-2, -1), (2, -1), (-2, 1), (2, 1)):
-            bp.fill(sx + dx, 1, sz + dz, sx + dx, 3, sz + dz, f"{wood}_fence")
-        for dx in range(-3, 4):
-            for dz in range(-2, 3):
-                bp.set(sx + dx, 4, sz + dz,
-                       f"{wood}_slab[type=bottom,waterlogged=false]" if abs(dz) == 2 else
-                       ("red_wool" if wood == "crimson" else "cyan_wool"))
-        bp.fill(sx - 1, 1, sz, sx + 1, 1, sz, f"{wood}_planks")
-        bp.barrel(sx - 1, 2, sz, "up", LOOT + "piglin_market")
-        bp.set(sx, 2, sz, "gold_block")
-        bp.set(sx + 1, 2, sz, "soul_lantern[hanging=false,waterlogged=false]")
-    # central gold fountain (lava)
-    bp.disk(0, 0, 0, 3, "gold_block")
-    bp.disk(0, 1, 0, 3, "polished_blackstone_brick_wall", hollow=True)
-    bp.disk(0, 0, 0, 2, "lava")
-    bp.fill(0, 0, 0, 0, 3, 0, "gilded_blackstone")
-    bp.set(0, 4, 0, "shroomlight")
-    # surrounding archways
-    for d, (dx, dz) in enumerate(((1, 0), (-1, 0), (0, 1), (0, -1))):
-        cx, cz = dx * (S // 2), dz * (S // 2)
-        for w in (-2, 2):
-            x, z = cx + (w if dz else 0), cz + (w if dx else 0)
-            bp.fill(x, 1, z, x, 6, z, "polished_blackstone_bricks")
-        for w in range(-2, 3):
-            x, z = cx + (w if dz else 0), cz + (w if dx else 0)
-            bp.set(x, 7, z, "polished_blackstone_bricks")
-        bp.set(cx, 6, cz, "soul_lantern[hanging=true,waterlogged=false]")
-    bp.chest(-2, 1, 4, "north", LOOT + "piglin_market")
-    bp.set(0, 1, -6, MOD["waystone"])
-    bp.spawner(4, 1, 0, "minecraft:piglin")
+    H, I = PM_H, PM_IN
+    # ground: blackstone/netherrack base, plaza paving with gilded radial lines
+    rock_island(bp, H + 2, H + 2, 6, depth=8, slope=1.3, spread=6, seed=17, pillars=0, pal=NETHER_GROUND)
+    for x in range(-H, H + 1):
+        for z in range(-H, H + 1):
+            d = math.hypot(x, z)
+            a = math.degrees(math.atan2(z, x)) % 45
+            line = (a < 3 or a > 42) and d > 11
+            bp.set(x, 0, z, GBS if line else "gold_block" if (round(d) == 13 and (x + z) % 3 == 0)
+                   else FLOOR.pick(x, 0, z))
+            for y in range(1, 4):
+                bp.set(x, y, z, "air")
+    # ---------------- open double arcades on the four sides under striped tent canopies
+    for face in ("north", "south", "east", "west"):
+        line = H if face in ("south", "east") else -H
+        along = arch._along_dir(face)
+        for (u0, u1) in ((-H + 1, -5), (5, H - 1)):
+            for u in range(u0, u1 + 1):
+                k = (u - u0) % 4
+                bay = (u - u0) // 4
+                warm = (bay + len(face)) % 2 == 0
+                stripes = ("red_wool", "yellow_wool") if warm else ("cyan_wool", "light_blue_wool")
+                for t in range(0, H - I + 1):
+                    x, z = _pos(face, line, u, -t)
+                    bp.set(x, 0, z, PB if 0 < t < H - I else PBB)
+                    for y in range(1, 11):
+                        bp.set(x, y, z, "air")
+                    cy = 8 + min(t, H - I - t, 2)
+                    bp.set(x, cy, z, stripes[u % 2])
+                # the two colonnades (outer line and inner line)
+                for t in (0, H - I):
+                    x, z = _pos(face, line, u, -t)
+                    if k == 0 or u == u1:
+                        for y in range(1, 8):
+                            bp.set(x, y, z, PBAS)
+                        bp.set(x, 1, z, CHIS)
+                        bp.set(x, 8, z, "gold_block")
+                        if t:
+                            bp.set(x, 9, z, "lantern[hanging=false,waterlogged=false]")
+                        else:
+                            ox, oz = _pos(face, line, u, 1)
+                            bp.set(ox, 0, oz, stair(PBBS, OPPOSITE[face]))
+                            bp.set(ox, 1, oz, PBAS)
+                            bp.set(ox, 2, oz, stair(PBBS, OPPOSITE[face]))
+                    else:
+                        bp.set(x, 7, z, PBB)
+                        if k == 1:
+                            bp.set(x, 6, z, stair(PBBS, OPPOSITE[along], "top"))
+                        elif k == 3:
+                            bp.set(x, 6, z, stair(PBBS, along, "top"))
+                        if t == 0:
+                            bp.set(x, 1, z, PBBW)
+                    gx, gz = _pos(face, line, u, -t + (1 if t == 0 else -1))
+                    bp.set(gx, 7, gz, stair(PBBS, OPPOSITE[face] if t == 0 else face, "top"))
+            # goods, counters and lanterns under the arcade
+            for k, u in enumerate(range(u0 + 2, u1 - 1, 4)):
+                x, z = _pos(face, line, u, -1)
+                bp.set(x, 1, z, "barrel[facing=up,open=false]")
+                bp.set(x, 2, z, GOODS[(k + len(face)) % len(GOODS)])
+                x2, z2 = _pos(face, line, u + 1, -1)
+                bp.set(x2, 1, z2, "gold_block" if k % 2 else "raw_gold_block")
+                x3, z3 = _pos(face, line, u, -3)
+                bp.chain(x3, 8, z3, 9)
+                bp.lantern(x3, 7, z3, hanging=True)
+                if k % 3 == 1:
+                    bx, bz = _pos(face, line, u + 1, -4)
+                    bp.set(bx, 1, bz, "decorated_pot[facing=north,waterlogged=false,cracked=false]")
+    # ---------------- corner pavilions
+    for sx in (-1, 1):
+        for sz in (-1, 1):
+            x0, z0 = (I if sx > 0 else -H), (I if sz > 0 else -H)
+            sq_tower(bp, x0, z0, x0 + H - I, z0 + H - I, 0, 15, TEMPLE, base=-4, steep=2, roof_block=RNB,
+                     roof_stairs=RNBS, floors_every=5)
+    # ---------------- gate towers with pointed arch passages and red spires
+    for face in ("north", "south", "east", "west"):
+        line = H if face in ("south", "east") else -H
+        along = arch._along_dir(face)
+        xa, za = _pos(face, line, -4, 1)
+        xb, zb = _pos(face, line, 4, -(H - I) - 2)
+        sq_tower(bp, min(xa, xb), min(za, zb), max(xa, xb), max(za, zb), 0, 13, TEMPLE, base=-4, steep=2,
+                 roof_block=RNB, roof_stairs=RNBS, floors_every=20)
+        rows = [(y, 2) for y in range(1, 8)] + [(8, 1), (9, 0)]
+        for (y, hw) in rows:
+            for u in range(-hw, hw + 1):
+                for t in range(-3, H - I + 4):
+                    x, z = _pos(face, line, u, -t)
+                    bp.set(x, y, z, "air")
+        for t in range(-3, H - I + 4):
+            for u in (-2, -1, 0, 1, 2):
+                x, z = _pos(face, line, u, -t)
+                bp.set(x, 0, z, GBS if u == 0 else PBB)
+        for t in (-1, H - I + 2):
+            for (y, hw) in rows[7:]:
+                x, z = _pos(face, line, -hw - 1, -t)
+                bp.set(x, y, z, stair(PBBS, OPPOSITE[along], "top"))
+                x, z = _pos(face, line, hw + 1, -t)
+                bp.set(x, y, z, stair(PBBS, along, "top"))
+            for (y, hw) in rows:
+                for uu in (-hw - 2, hw + 2) if y >= 8 else (-3, 3):
+                    x, z = _pos(face, line, uu, -t)
+                    bp.set(x, y, z, GILD)
+        x, z = _pos(face, line, 0, 2)
+        bp.set(x, 11, z, "gold_block")
+        bp.set(x, 12, z, "piglin_head[rotation=%d]" % {"south": 0, "west": 4, "north": 8, "east": 12}[face])
+        x, z = _pos(face, line, 0, 1)
+        bp.set(x, 10, z, LAMP)
+        for uu in (-3, 3):
+            x, z = _pos(face, line, uu, 2)
+            bp.set(x, 11, z, f"orange_wall_banner[facing={face}]")
+        x, z = _pos(face, line, 0, -3)
+        bp.chain(x, 9, z, 9)
+        bp.lantern(x, 8, z, hanging=True)
+    # ---------------- central fountain-tower
+    bp.disk(0, -1, 0, 10, "magma_block")
+    for (x, z) in [(x, z) for x in range(-10, 11) for z in range(-10, 11)]:
+        d = math.hypot(x, z)
+        if 5.4 < d <= 9.4:
+            bp.set(x, 0, z, "lava[level=0]")
+        elif 9.4 < d <= 10.4:
+            bp.set(x, 0, z, PBB)
+            bp.set(x, 1, z, "gold_block" if (x + z) % 4 == 0 else PBBW)
+    round_tower(bp, 0, 0, 0, 38, 4, wall=TEMPLE, base=-6, steep=4, roof_block=RNB, roof_stairs=RNBS,
+                rib=PBAS, slit_seed=5, floors_every=7)
+    for (x, z) in ring_cells(0, 0, 5):
+        bp.set(x, 0, z, PBB)
+    # open lantern loggia near the top with a golden bell
+    for y in range(30, 35):
+        for (x, z) in ring_cells(0, 0, 4, inner=0.8):
+            if not (abs(x) == abs(z) or x == 0 or z == 0):
+                bp.set(x, y, z, "air")
+    bp.set(0, 35, 0, "bell[attachment=ceiling,facing=north,powered=false]")
+    bp.disk(0, 29, 0, 3, PB)
+    bp.set(0, 29, -3, "ladder[facing=south,waterlogged=false]")
+    for (x, z) in ((2, 0), (-2, 0), (0, 2)):
+        bp.lantern(x, 35, z, hanging=True)
+    # lava-spewing gargoyles into the ring basin
+    for q in range(4):
+        a = math.radians(45 + 90 * q)
+        ca, sa = math.cos(a), math.sin(a)
+        gx, gz = round(ca * 5), round(sa * 5)
+        bp.set(gx, 9, gz, stair(PBBS, toward(0, 0, gx, gz), "top"))
+        bp.set(gx, 10, gz, GBS)
+        lx, lz = round(ca * 6.5), round(sa * 6.5)
+        lavafall(bp, lx, lz, 9, 0)
+    # tower door and interior
+    for z in range(3, 6):
+        bp.set(0, 1, z, "air")
+        bp.set(0, 2, z, "air")
+    for z in range(5, 11):
+        bp.set(0, 0, z, GBS)
+        bp.set(-1, 0, z, PBB)
+        bp.set(1, 0, z, PBB)
+        for x in (-1, 0, 1):
+            bp.set(x, 1, z, "air")
+        for x in (-2, 2):
+            if z > 5:
+                bp.set(x, 1, z, PBBW if z % 2 else "gold_block")
+    bp.chest(-2, 1, -2, "south", LOOT + "piglin_market")
+    bp.spawner(2, 1, -1, "minecraft:piglin")
+    # hidden treasury under the tower
+    bp.set(2, 0, 2, CPBB)
+    bp.clear(2, -4, 2, 2, -1, 2)
+    bp.ladder(2, -5, 1, -1, "south")
+    bp.room(-4, -6, -4, 4, -1, 4, PBB, floor=GBS, ceiling=PBB)
+    bp.set(2, -1, 2, "air")
+    bp.set(2, -1, 1, "ladder[facing=south,waterlogged=false]")
+    bp.chest(-3, -5, -3, "south", LOOT + "piglin_market")
+    bp.fill(-3, -5, 3, 3, -5, 3, "gold_block")
+    bp.fill(-2, -4, 3, 2, -4, 3, "raw_gold_block")
+    bp.set(0, -5, 0, "soul_lantern[hanging=false,waterlogged=false]")
+    # ---------------- stalls in the square (crimson and warped awnings)
+    stalls = [((-11, 16), "north", "crimson"), ((11, 16), "north", "warped"),
+              ((-11, -16), "south", "warped"), ((11, -16), "south", "crimson"),
+              ((16, -11), "west", "crimson"), ((16, 11), "west", "warped"),
+              ((-16, -11), "east", "crimson"), ((-16, 11), "east", "warped")]
+    for i, ((x, z), f, wood) in enumerate(stalls):
+        market_stall(bp, x, z, f, wood, seed=i, loot=LOOT + "piglin_market" if i in (0, 5) else None)
+    # festoons of lanterns from the tower to the gates
+    for axis in ("x", "z"):
+        for sign in (-1, 1):
+            festoon(bp, axis, sign, 5, H - 6, 22, 12, sag=3)
+    # braziers, planted fungi, waystone
+    for (x, z) in ((7, 18), (-7, 18), (7, -18), (-7, -18), (18, 7), (18, -7), (-18, 7), (-18, -7)):
+        brazier(bp, x, 1, z, big=True)
+    for (x, z, kind, sd) in ((-19, -19, "crimson", 1), (19, 19, "warped", 2), (19, -19, "crimson", 3),
+                             (-19, 19, "warped", 4)):
+        bp.disk(x, 0, z, 2, f"{kind}_nylium")
+        for (px, pz) in ring_cells(x, z, 3):
+            bp.set(px, 1, pz, PBBW if (px + pz) % 2 else GBS)
+        giant_fungus(bp, x, 1, z, 8, 4, seed=sd, kind=kind)
+    # piglin merchants minding the stalls
+    for (x, z) in ((-11, 13), (13, -11), (-13, 11), (11, -13), (0, 12)):
+        bp.entity(x, 1, z, {"id": "minecraft:piglin", "PersistenceRequired": True})
+    bp.set(0, 1, 21, MOD["waystone"])
+    bp.fill(-1, 0, 20, 1, 0, 22, GBS)
+    for x in (-2, 2):
+        bp.set(x, 1, 21, "soul_lantern[hanging=false,waterlogged=false]")
 
 
 register(StructureDef(
     "piglin_market", "nether", ["crimson_forest", "warped_forest", "nether_wastes"],
     [Piece("market", piglin_market)], spacing=24, separation=8, adaptation="beard_box",
-    height=("uniform", 32, 64), processors="aging",
+    height=("uniform", 30, 42), processors="aging",
     title_fr="Marché piglin", title_en="Piglin Market"))
