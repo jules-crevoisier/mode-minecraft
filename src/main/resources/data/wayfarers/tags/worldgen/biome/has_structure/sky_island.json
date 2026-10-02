@@ -1,0 +1,29 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "minecraft:plains",
+      "required": false
+    },
+    {
+      "id": "minecraft:meadow",
+      "required": false
+    },
+    {
+      "id": "#minecraft:is_forest",
+      "required": false
+    },
+    {
+      "id": "minecraft:savanna",
+      "required": false
+    },
+    {
+      "id": "minecraft:cherry_grove",
+      "required": false
+    },
+    {
+      "id": "minecraft:sunflower_plains",
+      "required": false
+    }
+  ]
+}

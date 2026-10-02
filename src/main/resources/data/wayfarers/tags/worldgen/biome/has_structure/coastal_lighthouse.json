@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "minecraft:beach",
+      "required": false
+    },
+    {
+      "id": "minecraft:stony_shore",
+      "required": false
+    },
+    {
+      "id": "minecraft:snowy_beach",
+      "required": false
+    }
+  ]
+}

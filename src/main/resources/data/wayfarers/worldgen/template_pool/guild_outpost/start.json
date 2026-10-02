@@ -1,0 +1,32 @@
+{
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 2,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "wayfarers:guild_outpost/outpost_spruce",
+        "projection": "rigid",
+        "processors": "wayfarers:aging"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "wayfarers:guild_outpost/outpost_oak",
+        "projection": "rigid",
+        "processors": "wayfarers:aging"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "wayfarers:guild_outpost/outpost_birch",
+        "projection": "rigid",
+        "processors": "wayfarers:aging"
+      }
+    }
+  ]
+}

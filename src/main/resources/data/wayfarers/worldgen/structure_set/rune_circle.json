@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "wayfarers:rune_circle",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 60604283,
+    "spacing": 22,
+    "separation": 7
+  }
+}

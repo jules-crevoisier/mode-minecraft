@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "wayfarers:bandit_camp",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 254141998,
+    "spacing": 26,
+    "separation": 9
+  }
+}

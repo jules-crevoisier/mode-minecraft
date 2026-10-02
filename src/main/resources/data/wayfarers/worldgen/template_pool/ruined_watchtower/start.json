@@ -1,0 +1,23 @@
+{
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 3,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "wayfarers:ruined_watchtower/tower_ruined",
+        "projection": "rigid",
+        "processors": "wayfarers:ruin"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "wayfarers:ruined_watchtower/tower_intact",
+        "projection": "rigid",
+        "processors": "wayfarers:ruin"
+      }
+    }
+  ]
+}

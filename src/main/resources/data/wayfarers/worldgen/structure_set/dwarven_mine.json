@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "wayfarers:dwarven_mine",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 59020236,
+    "spacing": 30,
+    "separation": 10
+  }
+}

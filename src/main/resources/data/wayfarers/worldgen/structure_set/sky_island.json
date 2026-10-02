@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "wayfarers:sky_island",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 238841319,
+    "spacing": 34,
+    "separation": 12
+  }
+}

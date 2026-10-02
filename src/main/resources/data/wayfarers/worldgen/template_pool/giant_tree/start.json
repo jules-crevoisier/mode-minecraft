@@ -1,0 +1,23 @@
+{
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 2,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "wayfarers:giant_tree/oak",
+        "projection": "rigid",
+        "processors": "wayfarers:none"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "wayfarers:giant_tree/dark_oak",
+        "projection": "rigid",
+        "processors": "wayfarers:none"
+      }
+    }
+  ]
+}
