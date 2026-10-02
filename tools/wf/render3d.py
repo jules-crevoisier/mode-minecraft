@@ -291,10 +291,22 @@ def rotate(blocks, quarter):
     """Rotate a normalized block dict by quarter turns around Y (to view other faces)."""
     if quarter % 4 == 0:
         return blocks
+    turn = {"north": "east", "east": "south", "south": "west", "west": "north"}
     out = {}
     for (x, y, z), b in blocks.items():
-        for _ in range(quarter % 4):
-            x, z = -z, x
+        name, props, nbt = b
+        if props and ("facing" in props or "axis" in props):
+            props = dict(props)
+            for _ in range(quarter % 4):
+                x, z = -z, x
+                if props.get("facing") in turn:
+                    props["facing"] = turn[props["facing"]]
+                if props.get("axis") in ("x", "z"):
+                    props["axis"] = "z" if props["axis"] == "x" else "x"
+            b = (name, props, nbt)
+        else:
+            for _ in range(quarter % 4):
+                x, z = -z, x
         out[(x, y, z)] = b
     mx = min(p[0] for p in out)
     mz = min(p[2] for p in out)
