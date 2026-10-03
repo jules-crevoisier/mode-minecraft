@@ -38,6 +38,7 @@ public final class GeneratedGuide {
             new Page("remembrance", "danger", "minecraft:nether_star", 1, List.of()),
             new Page("materials", "gear", "wayfarers:lithite_shard", 1, List.of("wayfarers:map_fragment", "wayfarers:lithite_shard", "wayfarers:ancient_ember", "wayfarers:void_shard")),
             new Page("armor", "gear", "wayfarers:explorer_chestplate", 1, List.of("wayfarers:explorer_chestplate", "wayfarers:ember_chestplate", "wayfarers:void_chestplate")),
+            new Page("wand", "gear", "wayfarers:builder_wand", 2, List.of("wayfarers:builder_wand", "wayfarers:master_builder_wand")),
             new Page("tools", "gear", "wayfarers:excavator_pickaxe", 1, List.of("wayfarers:excavator_pickaxe", "wayfarers:lumber_axe"))
     );
 

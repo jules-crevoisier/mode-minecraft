@@ -25,6 +25,7 @@ def rid(x):
 MOD_ITEMS = {"map_fragment", "lithite_shard", "ancient_ember", "void_shard", "warden_scale", "void_heart",
              "sorting_chest", "waystone", "guild_terminal"}
 MOD_ITEMS |= {f"remembrance_{row[0]}" for row in __import__("wf.bossgear", fromlist=["BOSS_GEAR"]).BOSS_GEAR}
+MOD_ITEMS |= {"builder_wand", "master_builder_wand", "wayfarer_manual"}
 
 
 def shaped(name, pattern, key, count=1, category="misc"):
@@ -71,6 +72,8 @@ def recipes():
     shapeless("recall_scroll", ["paper", "map_fragment", "ender_pearl"], count=2)
     shapeless("wayfarer_atlas", ["book", "map_fragment"])
     shapeless("wayfarer_manual", ["book", "feather"])
+    shapeless("builder_wand", ["stick", "gold_ingot", "gold_ingot", "amethyst_shard"])
+    shapeless("master_builder_wand", ["builder_wand", "lithite_shard", "lithite_shard", "diamond"])
     # tier 1 — map fragments (Overworld)
     shaped("cartographer_blade", [" I ", "MIM", " S "], {"I": "iron_ingot", "M": "map_fragment", "S": "stick"}, category="equipment")
     armor_set("explorer", "leather", {"X": "map_fragment"})

@@ -55,6 +55,10 @@ public final class ModItems {
     public static final RegistryObject<Item> TRAVEL_BACKPACK = register("travel_backpack", TravelBackpackItem::new, p -> p.stacksTo(1));
     public static final RegistryObject<Item> MAGNET_RING = register("magnet_ring", MagnetRingItem::new, p -> p.stacksTo(1));
     public static final RegistryObject<Item> RECALL_SCROLL = register("recall_scroll", RecallScrollItem::new, p -> p.stacksTo(16));
+    public static final RegistryObject<Item> BUILDER_WAND = register("builder_wand",
+            p -> new com.wayfarers.item.BuilderWandItem(p, 16), p -> p.durability(1024));
+    public static final RegistryObject<Item> MASTER_BUILDER_WAND = register("master_builder_wand",
+            p -> new com.wayfarers.item.BuilderWandItem(p, 64), p -> p.durability(4096).rarity(Rarity.RARE));
 
     // ---- weapons
     public static final RegistryObject<Item> CARTOGRAPHER_BLADE = register("cartographer_blade", CartographerBladeItem::new,

@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:stick",
+    "minecraft:gold_ingot",
+    "minecraft:gold_ingot",
+    "minecraft:amethyst_shard"
+  ],
+  "result": {
+    "id": "wayfarers:builder_wand",
+    "count": 1
+  }
+}

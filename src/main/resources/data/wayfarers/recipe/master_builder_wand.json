@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "wayfarers:builder_wand",
+    "wayfarers:lithite_shard",
+    "wayfarers:lithite_shard",
+    "minecraft:diamond"
+  ],
+  "result": {
+    "id": "wayfarers:master_builder_wand",
+    "count": 1
+  }
+}

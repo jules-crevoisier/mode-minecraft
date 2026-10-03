@@ -181,6 +181,15 @@ PAGES = [
          "Porte les quatre pièces d'un ensemble pour son bonus : Explorateur (vitesse, chutes douces, vision "
          "nocturne sous terre), Braise (immunité au feu) et Vide (chute lente, sauvé du vide)."),
     ], ["wayfarers:explorer_chestplate", "wayfarers:ember_chestplate", "wayfarers:void_chestplate"]),
+    ("wand", "gear", "wayfarers:builder_wand", ("Builder's Wand", "Baguette du bâtisseur"), [
+        ("Hold the wand and look at a block: gold outlines show where copies will go. Right-click to extend that face "
+         "with blocks of the same kind from your inventory (16 at a time, 64 with the Master wand).",
+         "Tiens la baguette et regarde un bloc : des contours dorés montrent où iront les copies. Clic droit pour "
+         "prolonger la face avec des blocs du même type pris dans ton inventaire (16 à la fois, 64 avec la baguette "
+         "du maître)."),
+        ("Made a mistake? Sneak-right-click in the air to undo the last use: the blocks come back to you.",
+         "Une erreur ? Accroupi + clic droit dans le vide pour annuler : les blocs te reviennent."),
+    ], ["wayfarers:builder_wand", "wayfarers:master_builder_wand"]),
     ("tools", "gear", "wayfarers:excavator_pickaxe", ("Special tools", "Outils spéciaux"), [
         ("The Excavator Pickaxe mines 3x3 and the Lumber Axe fells whole trees. Sneak to break a single block.",
          "La pioche d'excavation mine en 3x3 et la hache de bûcheron abat l'arbre entier. Accroupi : un seul bloc."),

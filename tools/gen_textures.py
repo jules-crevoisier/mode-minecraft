@@ -33,6 +33,8 @@ ITEMS = {
     "travel_backpack": ("backpack", "leather", "dark", "gold"),
     "magnet_ring": ("ring", "iron", "wood", "ruby"),
     "recall_scroll": ("scroll", "map", "wood", "sapphire"),
+    "builder_wand": ("staff", "gold", "wood", "emerald"),
+    "master_builder_wand": ("staff", "lithite", "dark", "amethyst"),
     # weapons
     "cartographer_blade": ("sword", "cartographer", "wood", "emerald"),
     "telluric_hammer": ("hammer", "lithite", "wood", "emerald"),
