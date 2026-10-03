@@ -7,11 +7,10 @@ on:
 permissions:
   contents: write
 
-# one build per branch at a time: a running build (and its smoke test) finishes, and only the
-# newest waiting push is kept in the queue
+# one build per branch at a time: a new push cancels the running build, so the latest code is always the one tested
 concurrency:
   group: build-${{ github.ref }}
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   build:
@@ -37,10 +36,11 @@ jobs:
 
   # Boots a real Forge server with the jar, places every structure, summons every mob and item,
   # breaks blocks, spawns every loot table and reloads data packs. Fails on any error in the log.
+  # the two server tests run side by side on separate machines
   smoke-test:
     needs: build
     runs-on: ubuntu-latest
-    timeout-minutes: 100
+    timeout-minutes: 50
     steps:
       - uses: actions/checkout@v4
 
@@ -60,13 +60,9 @@ jobs:
           curl -fsSL -o installer.jar https://maven.minecraftforge.net/net/minecraftforge/forge/26.2-65.1.0/forge-26.2-65.1.0-installer.jar
           java -jar installer.jar --installServer server > install.log 2>&1 || (tail -50 install.log; exit 1)
           cp jar/wayfarers-*.jar server/mods/
-          ls -la server
 
-      - name: Run the smoke test
+      - name: Run the smoke test (structures, mobs, items, loot)
         run: python3 tools/ci_smoke.py server
-
-      - name: Run the world overhaul test
-        run: python3 tools/ci_smoke.py server --overhaul
 
       - name: Upload the server logs
         if: always()
@@ -76,8 +72,44 @@ jobs:
           path: |
             server/logs/
             server/crash-reports/
-            server/smoke-console.log
-            server/smoke-console-overhaul.log
+            server/smoke-console*.log
+
+  world-test:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 25
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: wayfarers-mod
+          path: jar
+
+      - name: Install the Forge server
+        run: |
+          mkdir -p server/mods
+          curl -fsSL -o installer.jar https://maven.minecraftforge.net/net/minecraftforge/forge/26.2-65.1.0/forge-26.2-65.1.0-installer.jar
+          java -jar installer.jar --installServer server > install.log 2>&1 || (tail -50 install.log; exit 1)
+          cp jar/wayfarers-*.jar server/mods/
+
+      - name: Run the world overhaul test (new world, every biome, world map)
+        run: python3 tools/ci_smoke.py server --overhaul
+
+      - name: Upload the server logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: world-test-logs
+          path: |
+            server/logs/
+            server/crash-reports/
+            server/smoke-console*.log
 
       - name: Upload the world previews
         if: always()
@@ -91,7 +123,7 @@ jobs:
 
   previews:
     # the world map images go to their own pre-release, even when a test failed, so they can be looked at
-    needs: smoke-test
+    needs: world-test
     if: always()
     runs-on: ubuntu-latest
     steps:
@@ -113,7 +145,7 @@ jobs:
           files: previews/*
 
   release:
-    needs: [build, smoke-test]
+    needs: [build, smoke-test, world-test]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v4
