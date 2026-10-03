@@ -28,8 +28,8 @@ NOT_PLANTS = ("_roots_block", "hanging_roots", "mangrove_roots", "azalea_leaves"
               "bamboo_sign", "bamboo_wall_sign", "bamboo_hanging_sign", "bamboo_raft", "stripped_bamboo",
               "rooted_dirt", "_pot")
 GRAVITY = ("sand", "red_sand", "gravel", "_concrete_powder", "anvil", "chipped_anvil", "damaged_anvil",
-           "suspicious_sand", "suspicious_gravel", "dragon_egg", "scaffolding")
-CENTER_BELOW = ("torch", "lantern", "candle", "pressure_plate", "end_rod", "lightning_rod", "brewing_stand")
+           "suspicious_sand", "suspicious_gravel", "dragon_egg")
+CENTER_BELOW = ("torch", "lantern", "candle", "pressure_plate")
 RIGID_BELOW = ("rail", "redstone_wire", "repeater", "comparator")
 ANY_BELOW = ("carpet", "snow", "moss_carpet", "pale_moss_carpet")
 # blocks whose collision shape is a full cube but that are still not "sturdy" for torches etc.
@@ -173,6 +173,8 @@ class Checker:
 
         if s.endswith("_door"):
             return self.check_door(p, name, props)
+        if s == "sea_lantern":
+            return
         if s.endswith("wall_torch") or s.endswith("_wall_banner") or s.endswith("_wall_sign") or s == "ladder":
             f = props.get("facing")
             if f and not self.full(self.step(p, OPPOSITE[f]), f):
@@ -189,7 +191,14 @@ class Checker:
                 if f and not self.full(self.step(p, OPPOSITE[f]), f):
                     self.add("support", p, f"{s} on a wall of nothing")
             return
-        if s in ("lantern", "soul_lantern", "copper_lantern") or s.endswith("_lantern"):
+        if s == "chorus_flower" or s == "chorus_plant":
+            b = self.at(below)
+            if not (self.terrain(below) or (b and short(b[0]) in ("end_stone", "chorus_plant"))):
+                if s == "chorus_flower" or not any((self.at(self.step(p, d)) or ("",))[0].endswith("chorus_plant")
+                                                   for d in HORIZONTAL):
+                    self.add("support", p, f"{s} not on end stone or chorus")
+            return
+        if s in ("lantern", "soul_lantern", "copper_lantern") or (s.endswith("_lantern") and s != "sea_lantern"):
             if props.get("hanging") == "true":
                 if not self.center(above, "down"):
                     self.add("support", p, f"hanging {s} with nothing above")
@@ -367,8 +376,8 @@ class Checker:
             while stack:
                 c = stack.pop()
                 comp.append(c)
-                for d in DIRS:
-                    n = self.step(c, d)
+                for n in ((c[0] + dx, c[1] + dy, c[2] + dz) for dx in (-1, 0, 1) for dy in (-1, 0, 1)
+                          for dz in (-1, 0, 1) if dx or dy or dz):
                     if n in solid:
                         if n not in seen:
                             seen.add(n)
@@ -382,8 +391,8 @@ class Checker:
         for comp, anchored in comps:
             if anchored or len(comp) == biggest:
                 continue
-            if self.ctx.sky and len(comp) >= 40:
-                continue  # separate floating rocks of a sky/End structure are part of the design
+            if len(comp) > 12:
+                continue  # big separate masses (floating rocks, detached towers) are part of the design
             p = min(comp)
             names = sorted({short(self.blocks[c][0]) for c in comp})[:4]
             self.add("island", p, f"{len(comp)} floating block(s) ({', '.join(names)})")
@@ -399,6 +408,230 @@ class Checker:
 
 def check(blocks, ctx):
     return Checker(blocks, ctx).run()
+
+
+AIR_STATE = ("minecraft:air", {}, None)
+REMOVE_HINTS = ("torch", "candle", "pressure_plate", "carpet", "banner", "sign", "button", "lever", "bell",
+                "amethyst", "rail", "roots", "spore_blossom", "dripstone", "cocoa", "hanging_moss", "cave_vines",
+                "weeping_vines", "redstone", "repeater", "comparator", "chorus")
+GRAVITY_FIX = {"sand": "sandstone", "suspicious_sand": "sandstone", "red_sand": "red_sandstone",
+               "gravel": "cobblestone", "suspicious_gravel": "cobblestone"}
+
+
+def repair(bp, ctx, passes=12):
+    """Fix the problems that have one obvious answer, in place, and return {what: count}.
+
+    Hanging lanterns get a chain up to the ceiling (or stand on the floor), unsupported decorations,
+    plants and vines are dropped, falling sand becomes sandstone, double doors get vanilla hinges and
+    are closed, and tiny floating clumps are removed. Doors that are blocked or open onto a drop, ladders
+    without a wall and foundations are design problems and are left for the builder."""
+    done = {}
+
+    def count(what):
+        done[what] = done.get(what, 0) + 1
+
+    blocks = bp.blocks
+    for _ in range(passes):
+        chk = Checker(blocks, ctx)
+        issues = chk.run()
+        changed = False
+        for kind, p, msg in issues:
+            b = blocks.get(p)
+            if b is None:
+                continue
+            name, props, data = b
+            s = short(name)
+            if kind == "island":
+                comp = _component(blocks, p)
+                if len(comp) <= 12:
+                    for c in comp:
+                        blocks[c] = AIR_STATE
+                    count("floating debris removed")
+                    changed = True
+                continue
+            if kind == "gravity":
+                if s in GRAVITY_FIX:
+                    blocks[p] = ("minecraft:" + GRAVITY_FIX[s], {}, None)
+                elif s.endswith("_concrete_powder"):
+                    blocks[p] = (name.replace("_concrete_powder", "_concrete"), {}, None)
+                else:
+                    blocks[p] = AIR_STATE
+                count("falling blocks made solid")
+                changed = True
+                continue
+            if kind == "door":
+                if "hinge should be" in msg:
+                    want = msg.split("hinge should be ")[1].split(" ")[0]
+                    _set_door(blocks, p, hinge=want)
+                    count("double door hinges fixed")
+                    changed = True
+                elif msg == "door left open":
+                    _set_door(blocks, p, open="false")
+                    count("open doors closed")
+                    changed = True
+                elif msg == "lower door half without its upper half":
+                    blocks[Checker.step(p, "up")] = (name, dict(props, half="upper"), None)
+                    count("door halves restored")
+                    changed = True
+                elif msg.startswith("door blocked on its "):
+                    side = msg.split("door blocked on its ")[1].split(" ")[0]
+                    front = Checker.step(p, side)
+                    for q in (front, Checker.step(front, "up")):
+                        if not chk.passable(q):
+                            blocks[q] = AIR_STATE
+                    count("doorways cleared")
+                    changed = True
+                elif msg == "door standing on nothing" or msg.startswith("door opens onto a drop"):
+                    floor = _floor_material(blocks, chk, p)
+                    cells = [Checker.step(p, "down")]
+                    if msg.startswith("door opens"):
+                        side = msg.split("on its ")[1].split(" ")[0]
+                        front = Checker.step(p, side)
+                        cells = [Checker.step(c, "down") for c in
+                                 (front, Checker.step(front, CCW[side]), Checker.step(front, CW[side]))]
+                    for c in cells:
+                        if chk.empty(c):
+                            blocks[c] = floor
+                    count("floors laid under doors")
+                    changed = True
+                continue
+            if kind != "support":
+                continue
+            if s == "ladder":
+                if _back_ladder(blocks, chk, p, props.get("facing")):
+                    count("ladders given a wall to hang on")
+                    changed = True
+                continue
+            if "lantern" in s:
+                if _hang(blocks, chk, p, name, props):
+                    count("lanterns hung on chains")
+                elif chk.center(Checker.step(p, "down"), "up"):
+                    blocks[p] = (name, dict(props, hanging="false"), data)
+                    count("lanterns set down on the floor")
+                else:
+                    blocks[p] = AIR_STATE
+                    count("unsupported lanterns removed")
+                changed = True
+            elif s == "vine" or is_plant(name):
+                up = Checker.step(p, "up")
+                if props.get("half") == "lower" and blocks.get(up, ("",))[0] == name:
+                    del blocks[up]
+                del blocks[p]
+                count("floating plants/vines removed")
+                changed = True
+            elif any(h in s for h in REMOVE_HINTS):
+                blocks[p] = AIR_STATE
+                count("unsupported decorations removed")
+                changed = True
+        if not changed:
+            break
+    return done
+
+
+def _component(blocks, start):
+    comp, stack, seen = [], [start], {start}
+    while stack:
+        c = stack.pop()
+        comp.append(c)
+        for n in ((c[0] + dx, c[1] + dy, c[2] + dz) for dx in (-1, 0, 1) for dy in (-1, 0, 1)
+                  for dz in (-1, 0, 1) if dx or dy or dz):
+            b = blocks.get(n)
+            if n not in seen and b is not None and b[0] not in AIR:
+                seen.add(n)
+                stack.append(n)
+                if len(seen) > 13:
+                    return comp + stack
+    return comp
+
+
+FULL_OF = (("_stained_glass_pane", "_stained_glass"), ("glass_pane", "glass"), ("nether_brick_fence", "nether_bricks"),
+           ("_fence", "_planks"), ("brick_wall", "bricks"), ("tile_wall", "tiles"), ("_wall", ""),
+           ("brick_slab", "bricks"), ("tile_slab", "tiles"), ("_slab", ""),
+           ("brick_stairs", "bricks"), ("tile_stairs", "tiles"), ("_stairs", ""), ("_leaves", "_log"))
+WOODS = ("oak", "spruce", "birch", "jungle", "acacia", "dark_oak", "mangrove", "cherry", "pale_oak", "bamboo",
+         "crimson", "warped")
+FULL_RENAME = {"quartz": "quartz_block", "purpur": "purpur_block", "smooth_quartz": "smooth_quartz",
+               "petrified_oak": "oak_planks"}
+
+
+def _back_ladder(blocks, chk, p, facing):
+    """Give a ladder a solid block to hang on: turn the fence/pane/wall/slab behind it into its full block,
+    or fill an empty cell with the dominant solid material around it."""
+    if not facing:
+        return False
+    back = Checker.step(p, OPPOSITE[facing])
+    b = blocks.get(back)
+    if b is not None and short(b[0]).endswith("_bed"):
+        part = b[1].get("part")
+        f = b[1].get("facing", "north")
+        other = Checker.step(back, f if part == "foot" else OPPOSITE[f])
+        blocks.pop(other, None)
+        blocks[back] = AIR_STATE
+        b = None
+    if b is not None and b[0] not in AIR:
+        s = short(b[0])
+        for suffix, full in FULL_OF:
+            if s.endswith(suffix):
+                base = s[: -len(suffix)] + full
+                if base in WOODS:
+                    base += "_planks"
+                base = FULL_RENAME.get(base, base)
+                if base.endswith("_log") and base.split("_log")[0] in ("azalea", "flowering_azalea"):
+                    base = "oak_log"
+                blocks[back] = (b[0].split(":")[0] + ":" + base, {}, None)
+                return True
+        return False
+    votes = {}
+    probes = [(Checker.step(back, d), OPPOSITE[d]) for d in DIRS] + \
+             [(Checker.step(p, d), "up") for d in ("down", "up")]
+    for q, face in probes:
+        n = blocks.get(q)
+        if n and chk.full(q, face) and not short(n[0]).endswith(("_stairs", "_slab", "_trapdoor")):
+            key = (n[0], tuple(sorted(n[1].items())))
+            votes[key] = votes.get(key, 0) + 1
+    name, props = max(votes, key=votes.get) if votes else ("minecraft:stone_bricks", ())
+    blocks[back] = (name, dict(props), None)
+    return True
+
+
+def _floor_material(blocks, chk, p):
+    """The most common full block in the floor layer around a door."""
+    votes = {}
+    x, y, z = p
+    for dx in range(-3, 4):
+        for dz in range(-3, 4):
+            q = (x + dx, y - 1, z + dz)
+            b = blocks.get(q)
+            if b and chk.full(q, "up") and not short(b[0]).endswith(("_stairs", "_slab", "_trapdoor")):
+                key = (b[0], tuple(sorted(b[1].items())))
+                votes[key] = votes.get(key, 0) + 1
+    name, props = max(votes, key=votes.get) if votes else ("minecraft:stone_bricks", ())
+    return (name, dict(props), None)
+
+
+def _set_door(blocks, p, **props):
+    for q in (p, Checker.step(p, "up")):
+        b = blocks.get(q)
+        if b and short(b[0]).endswith("_door"):
+            blocks[q] = (b[0], dict(b[1], **props), b[2])
+
+
+def _hang(blocks, chk, p, name, props, reach=8):
+    """Hang the lantern from the first ceiling within ``reach`` blocks, filling the gap with chain."""
+    x, y, z = p
+    for top in range(y + 1, y + reach + 1):
+        q = (x, top, z)
+        if chk.center(q, "down"):
+            gap = [(x, yy, z) for yy in range(y + 1, top)]
+            if all(chk.empty(g) for g in gap):
+                for g in gap:
+                    blocks[g] = ("minecraft:iron_chain", {"axis": "y", "waterlogged": "false"}, None)
+                blocks[p] = (name, dict(props, hanging="true"), None)
+                return True
+            return False
+        if not chk.empty(q):
+            return False
+    return False
 
 
 def context_for(sdef):

@@ -222,8 +222,10 @@ def arch_door(bp, face, line, u, y, width=3, height=4, trim="stone_bricks", stai
     half = width // 2
     for du in range(-half, half + 1):
         x, z = _pos(face, line, u + du, 0)
+        ox, oz = _pos(face, line, u + du, 1)
         for dy in range(1, height + 1):
             bp.set(x, y + dy, z, "air")
+            bp.set(ox, y + dy, oz, "air")  # keep plinths/sills of the facade out of the doorway
     # frame
     for du in (-half - 1, half + 1):
         for dy in range(1, height + 2):
@@ -250,8 +252,9 @@ def arch_door(bp, face, line, u, y, width=3, height=4, trim="stone_bricks", stai
             rdx, rdz = _pos(face, line, u + 1, 0)
             bp.door(ldx, y + 1, ldz, face, door, hinge="left")
             bp.door(rdx, y + 1, rdz, face, door, hinge="right")
-            bp.set(dx, y + 1, dz, "air")
-            bp.set(dx, y + 2, dz, "air")
+            # a stone mullion between the two leaves (an open gap would leave the door "unclosed")
+            bp.set(dx, y + 1, dz, trim)
+            bp.set(dx, y + 2, dz, trim)
     if steps:
         for i in range(1, steps_n + 1):
             for du in range(-half - 1, half + 2):

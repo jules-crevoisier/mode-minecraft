@@ -955,7 +955,7 @@ def oasis(bp):
     bp.clear(-1, 1, ZF, 1, 4, ZF)
     bp.door(-1, 1, ZF, "south", "jungle", hinge="left")
     bp.door(1, 1, ZF, "south", "jungle", hinge="right")
-    bp.door(0, 1, ZF, "south", "jungle", hinge="left", open_=True)
+    bp.fill(0, 1, ZF, 0, 2, ZF, "chiseled_sandstone")   # mullion between the two leaves
     bp.fill(-2, 5, ZF, 2, 7, ZF, "iron_bars")
     bp.clear(-1, 1, CZ1, 1, 4, ZF - 1)
     bp.lantern(0, 9, ZF + 2, hanging=True)

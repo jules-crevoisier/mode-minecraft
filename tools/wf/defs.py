@@ -19,7 +19,8 @@ class StructureDef:
     def __init__(self, sid, dimension, biomes, pieces, spacing=32, separation=10,
                  step="surface_structures", adaptation="beard_thin", heightmap="WORLD_SURFACE_WG",
                  height_offset=0, height=None, size=1, extra_pools=None, processors="aging",
-                 max_distance=80, exclusion=None, title_fr="", title_en="", ground=0, spawns=None):
+                 max_distance=80, exclusion=None, title_fr="", title_en="", ground=0, spawns=None,
+                 foundation=True):
         self.id = sid
         self.dimension = dimension
         self.biomes = biomes
@@ -42,6 +43,8 @@ class StructureDef:
         # monsters that keep spawning inside the structure (like vanilla fortresses):
         # list of (entity id, weight, min, max)
         self.spawns = spawns or []
+        # extend ground-layer columns downwards so the structure never floats on a slope
+        self.foundation = foundation
 
     @property
     def salt(self):

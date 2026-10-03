@@ -13,7 +13,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from wf import defs, render, support  # noqa: E402
+from wf import defs, render, support, foundation  # noqa: E402
 try:
     from wf import render3d  # noqa: E402  (optional: needs Pillow + minecraft-textures)
 except ImportError:
@@ -32,9 +32,17 @@ def write_json(path, obj):
         f.write("\n")
 
 
-def build_piece(sdef, piece):
+def needs_foundation(sdef):
+    """Surface structures projected on the terrain (not sky islands, not ocean-floor wrecks)."""
+    return sdef.height is None and sdef.heightmap == "WORLD_SURFACE_WG" and sdef.height_offset == 0 \
+        and sdef.foundation
+
+
+def build_piece(sdef, piece, start=False):
     bp = Blueprint(f"{sdef.id}/{piece.name}")
     piece.builder(bp)
+    if start and needs_foundation(sdef):
+        foundation.add_foundations(bp, sdef.ground)
     piece.blueprint = bp
     return bp
 
@@ -46,6 +54,7 @@ def main():
     ap.add_argument("--no-check", action="store_true", help="skip the survival/door checks")
     args = ap.parse_args()
     report = []
+    repairs = {}
 
     preview_dir = os.path.join(ROOT, "build", "previews")
     used_processors = set()
@@ -58,12 +67,15 @@ def main():
         ground_offset = 0
         for pool_name, pieces in pools.items():
             for piece in pieces:
-                bp = build_piece(sdef, piece)
+                bp = build_piece(sdef, piece, start=pool_name == "start")
                 path = os.path.join(DATA, "structure", sdef.id, f"{piece.name}.nbt")
                 os.makedirs(os.path.dirname(path), exist_ok=True)
+                ctx = support.context_for(sdef) if pool_name == "start" else support.Context(unset_solid=True)
+                bp.resolve_shapes()
+                for what, n in support.repair(bp, ctx).items():
+                    repairs[what] = repairs.get(what, 0) + n
                 bp.save(path)
                 if not args.no_check:
-                    ctx = support.context_for(sdef) if pool_name == "start" else support.Context(unset_solid=True)
                     for kind, pos, msg in support.check(bp.blocks, ctx):
                         report.append((sdef.id, piece.name, kind, pos, msg))
                 size, blocks, _, (mx, my, mz) = bp.normalized()
@@ -100,6 +112,8 @@ def main():
     for name, size, n in summary:
         print(f"{name:45s} {size[0]:3d}x{size[1]:3d}x{size[2]:3d}  {n:6d} blocks")
     print(f"{len(summary)} templates, {len({s.split('/')[0] for s, _, _ in summary})} structures")
+    for what, n in sorted(repairs.items()):
+        print(f"auto-repair: {what}: {n}")
     if not args.no_check:
         write_report(report)
         if report:

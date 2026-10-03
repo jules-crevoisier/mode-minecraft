@@ -1186,7 +1186,7 @@ def monastery(bp):
     bp.door(16, P + 1, Z1, "south", "dark_oak", hinge="left")
     bp.door(18, P + 1, Z1, "south", "dark_oak", hinge="right")
     for y in range(P + 1, P + 3):
-        bp.set(17, y, Z1, "air")
+        bp.set(17, y, Z1, "stone_brick_wall")   # mullion between the two leaves
     # porch gablet over the portal
     for k in range(5):
         for out in (1, 2):
@@ -1751,8 +1751,8 @@ def library(bp):
         bp.set(FX, y, CZ + 2, "tuff_brick_wall")
     bp.door(FX, 1, CZ - 1, "east", "dark_oak", hinge="left")
     bp.door(FX, 1, CZ + 1, "east", "dark_oak", hinge="right")
-    bp.set(FX, 1, CZ, "air")
-    bp.set(FX, 2, CZ, "air")
+    bp.set(FX, 1, CZ, "tuff_brick_wall")   # mullion between the two leaves
+    bp.set(FX, 2, CZ, "tuff_brick_wall")
     # narthex (vaulted porch) between the towers
     NX = FX + 7
     bp.clear(FX + 1, 1, HZ0 + 5, NX - 1, 10, HZ1 - 5)

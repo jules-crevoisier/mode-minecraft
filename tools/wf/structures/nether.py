@@ -1884,11 +1884,10 @@ def soul_tower(bp):
         bp.set(-1, 4, z, stair(PBBS, "east", "top"))
         bp.set(1, 4, z, stair(PBBS, "west", "top"))
         bp.set(0, 6, z, "wither_skeleton_skull[rotation=0]" if z == cz + 10 else BONE)
-    bp.door(0, 1, cz + 8, "south", "crimson")
     bp.door(-1, 1, cz + 8, "south", "crimson", hinge="left")
     bp.door(1, 1, cz + 8, "south", "crimson", hinge="right")
-    bp.set(0, 1, cz + 8, "air")
-    bp.set(0, 2, cz + 8, "air")
+    bp.set(0, 1, cz + 8, "polished_blackstone_brick_wall")   # mullion between the two leaves
+    bp.set(0, 2, cz + 8, "polished_blackstone_brick_wall")
     for x in (-3, 3):
         brazier(bp, x, 0, cz + 11, soul=True, big=True)
     # ---------------- twisted bone buttresses
