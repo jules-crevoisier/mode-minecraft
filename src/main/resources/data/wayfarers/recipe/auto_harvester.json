@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "BHB",
+    "BCB",
+    "BRB"
+  ],
+  "key": {
+    "B": "wayfarers:brass_ingot",
+    "H": "minecraft:iron_hoe",
+    "C": "minecraft:chest",
+    "R": "minecraft:redstone"
+  },
+  "result": {
+    "id": "wayfarers:auto_harvester",
+    "count": 1
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "BPB",
+    "BRB",
+    "BBB"
+  ],
+  "key": {
+    "B": "wayfarers:brass_ingot",
+    "P": "minecraft:iron_pickaxe",
+    "R": "minecraft:redstone"
+  },
+  "result": {
+    "id": "wayfarers:block_breaker",
+    "count": 1
+  }
+}

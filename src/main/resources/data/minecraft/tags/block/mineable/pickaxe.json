@@ -80,6 +80,15 @@
     "wayfarers:raw_orichalcum_block",
     "wayfarers:aether_ore",
     "wayfarers:deepslate_aether_ore",
-    "wayfarers:aether_block"
+    "wayfarers:aether_block",
+    "wayfarers:auto_harvester",
+    "wayfarers:sprinkler",
+    "wayfarers:vacuum_hopper",
+    "wayfarers:block_breaker",
+    "wayfarers:block_placer",
+    "wayfarers:redstone_timer",
+    "wayfarers:wireless_transmitter",
+    "wayfarers:wireless_receiver",
+    "wayfarers:entity_detector"
   ]
 }

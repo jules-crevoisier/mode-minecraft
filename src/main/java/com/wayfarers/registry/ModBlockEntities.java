@@ -3,7 +3,9 @@ package com.wayfarers.registry;
 import com.wayfarers.Wayfarers;
 import com.wayfarers.block.BossSealBlockEntity;
 import com.wayfarers.block.GraveBlockEntity;
+import com.wayfarers.block.MachineBlockEntity;
 import com.wayfarers.block.SortingChestBlockEntity;
+import com.wayfarers.generated.GeneratedMachines;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -24,6 +26,9 @@ public final class ModBlockEntities {
     public static final RegistryObject<BlockEntityType<BossSealBlockEntity>> BOSS_SEAL =
             BLOCK_ENTITIES.register("boss_seal",
                     () -> new BlockEntityType<>(BossSealBlockEntity::new, Set.of(ModBlocks.BOSS_SEAL.get())));
+    public static final RegistryObject<BlockEntityType<MachineBlockEntity>> MACHINE =
+            BLOCK_ENTITIES.register("machine",
+                    () -> new BlockEntityType<>(MachineBlockEntity::new, Set.of(GeneratedMachines.blocks())));
 
     private ModBlockEntities() {}
 }

@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:block",
+  "random_sequence": "wayfarers:blocks/entity_detector",
+  "pools": [
+    {
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "wayfarers:entity_detector"
+        }
+      ]
+    }
+  ]
+}

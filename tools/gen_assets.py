@@ -108,6 +108,21 @@ def metal_assets():
                 "humanoid_leggings": [{"texture": f"{NS}:{mid}"}]}})
 
 
+def machine_assets():
+    """Models (off/on) and facing x powered blockstates for machines.py."""
+    from wf import machines
+    rot = {"north": {}, "east": {"y": 90}, "south": {"y": 180}, "west": {"y": 270}, "up": {"x": 270}, "down": {"x": 90}}
+    for mid in machines.MACHINES:
+        for suffix in ("", "_on"):
+            write(f"models/block/{mid}{suffix}.json", {"parent": "minecraft:block/orientable", "textures": {
+                "top": f"{NS}:block/machine_top", "front": f"{NS}:block/{mid}_front{suffix}",
+                "side": f"{NS}:block/machine_side"}})
+        write(f"blockstates/{mid}.json", {"variants": {
+            f"facing={f},powered={p}": {"model": f"{NS}:block/{mid}{'_on' if p == 'true' else ''}", **r}
+            for f, r in rot.items() for p in ("false", "true")}})
+        item_definition(mid, f"{NS}:block/{mid}")
+
+
 def decor_assets(lang_en, lang_fr):
     from wf import decor
     VNAMES = {"stairs": ("Stairs", "Escalier en "), "slab": ("Slab", "Dalle en "), "wall": ("Wall", "Muret en ")}
@@ -214,6 +229,7 @@ def main():
             lang_en[f"block.{NS}.{bid}.desc"], lang_fr[f"block.{NS}.{bid}.desc"] = ten, tfr
     decor_assets(lang_en, lang_fr)
     metal_assets()
+    machine_assets()
     for eid, (en, fr) in content.ENTITIES.items():
         lang_en[f"entity.{NS}.{eid}"], lang_fr[f"entity.{NS}.{eid}"] = en, fr
     for prefix in content.ARMOR_SETS:
@@ -226,8 +242,8 @@ def main():
         lang_fr[f"structure.{NS}.{sdef.id}"] = sdef.title_fr
     for key, (en, fr) in content.MESSAGES.items():
         lang_en[key], lang_fr[key] = en, fr
-    from wf import guide, skills, metals
-    for mod in (guide, skills, metals):
+    from wf import guide, skills, metals, machines
+    for mod in (guide, skills, metals, machines):
         g_en, g_fr = mod.lang()
         lang_en.update(g_en)
         lang_fr.update(g_fr)

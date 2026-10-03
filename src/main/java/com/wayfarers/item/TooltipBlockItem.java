@@ -25,5 +25,9 @@ public class TooltipBlockItem extends BlockItem {
         if (Language.getInstance().has(key)) {
             builder.accept(Component.translatable(key).withStyle(ChatFormatting.GRAY));
         }
+        // longer explanations come as extra lines: .desc2, .desc3
+        for (int i = 2; Language.getInstance().has(key + i); i++) {
+            builder.accept(Component.translatable(key + i).withStyle(ChatFormatting.GRAY));
+        }
     }
 }

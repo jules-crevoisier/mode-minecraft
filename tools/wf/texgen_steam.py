@@ -239,3 +239,87 @@ def aether_conduit(base, glow, seed=0):
         for x in range(3, 13):
             cv.set(x, y, mix(cv.get(x, y), glow, 0.35))
     return cv
+
+
+# ---------------------------------------------------------------- machines (wf/machines.py)
+def machine_frame(inner, seed=0):
+    """Dark iron housing with brass corners and a recessed 12x12 window filled with ``inner``."""
+    cv = _base(DARK_IRON, seed, 0.05)
+    _bevel(cv, mul(DARK_IRON, 1.3), 1.25, 0.6)
+    for x, y in ((1, 1), (13, 1), (1, 13), (13, 13)):
+        _rivet(cv, x, y, BRASS)
+    for i in range(2, 14):
+        cv.set(i, 2, mul(DARK_IRON, 0.55))
+        cv.set(2, i, mul(DARK_IRON, 0.55))
+        cv.set(i, 13, mul(DARK_IRON, 1.4))
+        cv.set(13, i, mul(DARK_IRON, 1.4))
+    for y in range(3, 13):
+        for x in range(3, 13):
+            c = inner(x - 3, y - 3)
+            if c is not None:
+                cv.set(x, y, c)
+    return cv
+
+
+def machine_side(seed=0):
+    """Machine casing: brass plate with a vent grille."""
+    cv = riveted_plate(BRASS, seed)
+    for y in range(4, 12):
+        for x in range(4, 12):
+            cv.set(x, y, mul(DARK_IRON, 0.8) if y % 2 == 0 else mul(BRASS, 0.75))
+    return cv
+
+
+def machine_top(seed=0):
+    return riveted_plate(DARK_IRON, seed)
+
+
+def _glyph(rows, colors, back):
+    rows = [r.ljust(10, ".") for r in rows]
+
+    def inner(x, y):
+        ch = rows[y][x] if y < len(rows) else "."
+        return colors[ch] if ch != "." else back(x, y)
+    return inner
+
+
+def _dark_back(base=(30, 26, 26)):
+    return lambda x, y: mul(base, 1.0 + ((x * 7 + y * 13) % 5 - 2) * 0.03)
+
+
+MACHINE_GLYPHS = {
+    # 10x10 glyphs drawn inside the window; letters map to colours below
+    "harvester": ["..s.....s.", ".ss....ss.", "sss...sss.", ".bb...bb..", "..bb.bb...",
+                  "...bbb....", "..wwwww...", ".w.w.w.w..", "w..w.w..w.", "...w.w...."],
+    "sprinkler": ["....bb....", "...bccb...", "..bccccb..", "...bccb...", "....bb....",
+                  ".d..bb..d.", "d.d.bb.d.d", "..d.bb.d..", ".d..bb..d.", "....bb...."],
+    "vacuum": ["..aaaaaa..", ".a......a.", "a..aaaa..a", "a.a....a.a", "a.a.cc.a.a",
+               "a.a.cc.a.a", "a.a....a.a", "a..aaaa..a", ".a......a.", "..aaaaaa.."],
+    "breaker": ["s........s", ".s......s.", "..s.ss.s..", "...ssss...", "..ssbbss..",
+                "..ssbbss..", "...ssss...", "..s.ss.s..", ".s......s.", "s........s"],
+    "placer": ["....bb....", "...bbbb...", "..bbbbbb..", ".bb.bb.bb.", "....bb....",
+               "....bb....", "..cccccc..", "..cccccc..", "..cccccc..", "..cccccc.."],
+    "timer": ["...bbbb...", "..bccccb..", ".bcccdccb.", "bccccdcccb", "bccccdcccb",
+              "bccccddddb", "bccccccccb", ".bccccccb.", "..bccccb..", "...bbbb..."],
+    "transmitter": ["....aa....", "...a..a...", "..a.aa.a..", ".a.a..a.a.", "....bb....",
+                    "....bb....", "....bb....", "...bbbb...", "..bbbbbb..", ".bbbbbbbb."],
+    "receiver": [".bbbbbbbb.", "b........b", "b.aaaaaa.b", ".b......b.", "..b.aa.b..",
+                 "...bbbb...", "....bb....", "....bb....", "...bbbb...", "..bbbbbb.."],
+    "detector": ["...bbbb...", "..bccccb..", ".bccaaccb.", "bccaddaccb", "bcaddddacb",
+                 "bcaddddacb", "bccaddaccb", ".bccaaccb.", "..bccccb..", "...bbbb..."],
+}
+
+
+def machine_face(name, on=False, seed=0):
+    glow = AETHER if name in ("transmitter", "receiver", "vacuum") else AMBER
+    colors = {
+        "s": (210, 214, 220), "b": BRASS, "w": (214, 190, 90), "c": CREAM if name in ("timer", "detector") else COPPER,
+        "d": (170, 30, 30) if name in ("timer", "detector") else (90, 170, 230),
+        "a": glow if on else mul(glow, 0.45),
+    }
+    if name == "sprinkler":
+        colors["c"] = (90, 170, 230)
+    if name == "detector" and on:
+        colors["d"] = (255, 70, 50)
+    back = _dark_back((60, 40, 26) if on and name in ("timer", "detector") else (30, 26, 26))
+    return machine_frame(_glyph(MACHINE_GLYPHS[name], colors, back), seed)

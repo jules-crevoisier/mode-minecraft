@@ -204,9 +204,18 @@ def metals_java():
     print(f"wrote {os.path.relpath(out, ROOT)}")
 
 
+def machines_java():
+    from wf import machines
+    out = os.path.join(ROOT, "src", "main", "java", "com", "wayfarers", "generated", "GeneratedMachines.java")
+    with open(out, "w") as f:
+        f.write(machines.java())
+    print(f"wrote {os.path.relpath(out, ROOT)}")
+
+
 def main():
     guide_java()
     metals_java()
+    machines_java()
     skills_java()
     decor_java()
     boss_gear_java()

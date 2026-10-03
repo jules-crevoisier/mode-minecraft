@@ -13,6 +13,7 @@ CATEGORIES = [
     ("storage", "wayfarers:sorting_chest", ("Storage", "Rangement")),
     ("danger", "minecraft:iron_sword", ("Danger & bosses", "Danger et boss")),
     ("gear", "wayfarers:lithite_shard", ("Gear & materials", "Équipement et matériaux")),
+    ("machines", "wayfarers:auto_harvester", ("Machines & redstone", "Machines et redstone")),
 ]
 
 # (id, category, icon, (title en, title fr), [(en, fr), ...paragraphs], [related item ids])
@@ -298,3 +299,11 @@ def lang():
     for tid, _icon, (te, tf), _page in TIPS:
         en[f"tip.wayfarers.{tid}"], fr[f"tip.wayfarers.{tid}"] = te, tf
     return en, fr
+
+
+def _machine_pages():
+    from .machines import GUIDE
+    return [(pid, "machines", icon, title, paras, items) for pid, icon, title, paras, items in GUIDE]
+
+
+PAGES += _machine_pages()

@@ -504,6 +504,8 @@ def main():
         written[f"entity/equipment/humanoid_leggings/{prefix}"] = armor_layer(mat, acc, legs=True)
     written.update(mob_textures())
     written.update(metal_textures())
+    from wf import machines
+    written.update(machines.textures())
     from wf import decor
     for bid, d in decor.DECOR.items():
         names = decor.texture_names(bid)

@@ -26,6 +26,7 @@ MOD_ITEMS = {"map_fragment", "lithite_shard", "ancient_ember", "void_shard", "wa
              "sorting_chest", "waystone", "guild_terminal"}
 MOD_ITEMS |= {f"remembrance_{row[0]}" for row in __import__("wf.bossgear", fromlist=["BOSS_GEAR"]).BOSS_GEAR}
 MOD_ITEMS |= __import__("wf.metals", fromlist=["all_item_ids"]).all_item_ids()
+MOD_ITEMS |= set(__import__("wf.machines", fromlist=["MACHINES"]).MACHINES)
 MOD_ITEMS |= {"builder_wand", "master_builder_wand", "wayfarer_manual", "fire_staff", "frost_staff", "thunder_staff",
               "healing_staff", "levitation_wand", "ward_orb", "steam_cane", "arcane_ring", "mana_amulet", "oblivion_vial"}
 
@@ -427,6 +428,21 @@ def decor_data():
     craft("smokestack_bricks", ["BC", "CB"], {"B": "brick", "C": "coal"}, 4)
 
 
+def machines_data():
+    """Recipes and loot for machines.py; returns their pickaxe tag values."""
+    from wf import machines
+    for mid, m in machines.MACHINES.items():
+        pattern, key, count = m["recipe"]
+        write(f"{NS}/recipe/{mid}.json", {"type": "minecraft:crafting_shaped", "category": "redstone",
+                                         "pattern": pattern, "key": {k: rid(v) for k, v in key.items()},
+                                         "result": {"id": f"{NS}:{mid}", "count": count}})
+        write(f"{NS}/loot_table/blocks/{mid}.json", {
+            "type": "minecraft:block", "random_sequence": f"{NS}:blocks/{mid}",
+            "pools": [{"rolls": 1.0, "bonus_rolls": 0.0, "conditions": [{"condition": "minecraft:survives_explosion"}],
+                       "entries": [{"type": "minecraft:item", "name": f"{NS}:{mid}"}]}]})
+    return {"minecraft/tags/block/mineable/pickaxe.json": [f"{NS}:{mid}" for mid in machines.MACHINES]}
+
+
 def main():
     decor_data()
     recipes()
@@ -436,7 +452,10 @@ def main():
     ore_worldgen()
     metals_data()
     # merge the metals' tag values into tag files written above (or create them)
-    for rel, values in metal_tags().items():
+    extra_tags = metal_tags()
+    for rel, values in machines_data().items():
+        extra_tags.setdefault(rel, []).extend(values)
+    for rel, values in extra_tags.items():
         path = os.path.join(DATA, rel)
         tag = json.load(open(path)) if os.path.exists(path) else {"replace": False, "values": []}
         tag["values"] = tag["values"] + [v for v in values if v not in tag["values"]]

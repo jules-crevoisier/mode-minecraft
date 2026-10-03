@@ -1,0 +1,50 @@
+{
+  "variants": {
+    "facing=north,powered=false": {
+      "model": "wayfarers:block/sprinkler"
+    },
+    "facing=north,powered=true": {
+      "model": "wayfarers:block/sprinkler_on"
+    },
+    "facing=east,powered=false": {
+      "model": "wayfarers:block/sprinkler",
+      "y": 90
+    },
+    "facing=east,powered=true": {
+      "model": "wayfarers:block/sprinkler_on",
+      "y": 90
+    },
+    "facing=south,powered=false": {
+      "model": "wayfarers:block/sprinkler",
+      "y": 180
+    },
+    "facing=south,powered=true": {
+      "model": "wayfarers:block/sprinkler_on",
+      "y": 180
+    },
+    "facing=west,powered=false": {
+      "model": "wayfarers:block/sprinkler",
+      "y": 270
+    },
+    "facing=west,powered=true": {
+      "model": "wayfarers:block/sprinkler_on",
+      "y": 270
+    },
+    "facing=up,powered=false": {
+      "model": "wayfarers:block/sprinkler",
+      "x": 270
+    },
+    "facing=up,powered=true": {
+      "model": "wayfarers:block/sprinkler_on",
+      "x": 270
+    },
+    "facing=down,powered=false": {
+      "model": "wayfarers:block/sprinkler",
+      "x": 90
+    },
+    "facing=down,powered=true": {
+      "model": "wayfarers:block/sprinkler_on",
+      "x": 90
+    }
+  }
+}

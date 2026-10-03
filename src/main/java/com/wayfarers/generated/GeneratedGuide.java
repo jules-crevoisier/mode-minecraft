@@ -14,7 +14,8 @@ public final class GeneratedGuide {
             new Category("travel", "wayfarers:waystone"),
             new Category("storage", "wayfarers:sorting_chest"),
             new Category("danger", "minecraft:iron_sword"),
-            new Category("gear", "wayfarers:lithite_shard")
+            new Category("gear", "wayfarers:lithite_shard"),
+            new Category("machines", "wayfarers:auto_harvester")
     );
 
     public static final List<Page> PAGES = List.of(
@@ -45,7 +46,9 @@ public final class GeneratedGuide {
             new Page("metal_armor", "gear", "wayfarers:brass_helmet", 2, List.of("wayfarers:brass_helmet", "wayfarers:mithril_chestplate", "wayfarers:aether_chestplate", "wayfarers:arcane_chestplate")),
             new Page("steam_blocks", "gear", "wayfarers:gear_panel", 2, List.of("wayfarers:brass_plating", "wayfarers:gear_panel", "wayfarers:copper_pipes", "wayfarers:edison_lamp", "wayfarers:aether_conduit", "wayfarers:mahogany_panelling")),
             new Page("wand", "gear", "wayfarers:builder_wand", 2, List.of("wayfarers:builder_wand", "wayfarers:master_builder_wand")),
-            new Page("tools", "gear", "wayfarers:excavator_pickaxe", 1, List.of("wayfarers:excavator_pickaxe", "wayfarers:lumber_axe"))
+            new Page("tools", "gear", "wayfarers:excavator_pickaxe", 1, List.of("wayfarers:excavator_pickaxe", "wayfarers:lumber_axe")),
+            new Page("machines", "machines", "wayfarers:auto_harvester", 3, List.of("wayfarers:auto_harvester", "wayfarers:sprinkler", "wayfarers:vacuum_hopper")),
+            new Page("redstone_easy", "machines", "wayfarers:redstone_timer", 3, List.of("wayfarers:redstone_timer", "wayfarers:block_breaker", "wayfarers:block_placer", "wayfarers:wireless_transmitter", "wayfarers:wireless_receiver", "wayfarers:entity_detector"))
     );
 
     public static final List<Tip> TIPS = List.of(

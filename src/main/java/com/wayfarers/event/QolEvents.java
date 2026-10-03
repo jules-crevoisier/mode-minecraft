@@ -157,7 +157,7 @@ public final class QolEvents {
     }
 
     /** The young state to replant if this block is a ripe crop, else null. */
-    private static BlockState replanted(BlockState state) {
+    public static BlockState replanted(BlockState state) {
         Block block = state.getBlock();
         if (block instanceof CropBlock crop && crop.isMaxAge(state)) {
             return crop.getStateForAge(0);

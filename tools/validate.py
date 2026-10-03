@@ -45,9 +45,10 @@ def mod_ids(kind):
     """Ids registered by the Java side, read straight from the registry classes."""
     import re
     java = os.path.join(ROOT, "src", "main", "java", "com", "wayfarers")
-    files = {"blocks": ["registry/ModBlocks.java", "generated/ModDecor.java", "generated/GeneratedMetals.java"],
+    files = {"blocks": ["registry/ModBlocks.java", "generated/ModDecor.java", "generated/GeneratedMetals.java",
+                        "generated/GeneratedMachines.java"],
              "items": ["registry/ModItems.java", "generated/ModDecor.java", "generated/BossGear.java",
-                       "generated/GeneratedMetals.java"],
+                       "generated/GeneratedMetals.java", "generated/GeneratedMachines.java"],
              "entities": ["registry/ModEntities.java"]}[kind]
     ids = set()
     for f in files:
@@ -55,7 +56,7 @@ def mod_ids(kind):
         if kind == "blocks" and f.endswith("GeneratedMetals.java"):
             ids |= set(re.findall(r'\bblock\("([a-z0-9_]+)"', text))
             continue
-        ids |= set(re.findall(r'(?:register|simple|armor|block|egg|stairs|slab|wall|weapon|remembrance|spell|item|gear)\("([a-z0-9_]+)"', text))
+        ids |= set(re.findall(r'(?:register|simple|armor|block|egg|stairs|slab|wall|weapon|remembrance|spell|item|gear|machine)\("([a-z0-9_]+)"', text))
     return ids
 
 
