@@ -26,6 +26,10 @@ public final class WayfarersClient {
             InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_M, CATEGORY);
     public static final KeyMapping QUESTS_KEY = new KeyMapping("key.wayfarers.quests",
             InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_J, CATEGORY);
+    public static final KeyMapping SKILLS_KEY = new KeyMapping("key.wayfarers.skills",
+            InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_K, CATEGORY);
+    public static final KeyMapping ABILITY_KEY = new KeyMapping("key.wayfarers.ability",
+            InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_V, CATEGORY);
 
     private WayfarersClient() {}
 
@@ -41,11 +45,14 @@ public final class WayfarersClient {
                 net.minecraft.client.gui.screens.MenuScreens.register(com.wayfarers.registry.ModMenus.TERMINAL.get(),
                         com.wayfarers.client.gui.TerminalScreen::new)));
         AddGuiOverlayLayersEvent.BUS.addListener(TipCards::register);
+        AddGuiOverlayLayersEvent.BUS.addListener(ManaHud::register);
         net.minecraftforge.event.entity.player.ItemTooltipEvent.BUS.addListener(TipCards::onTooltip);
         RegisterKeyMappingsEvent.BUS.addListener(event -> {
             event.register(SORT_KEY);
             event.register(MAGNET_KEY);
             event.register(QUESTS_KEY);
+            event.register(SKILLS_KEY);
+            event.register(ABILITY_KEY);
         });
         TickEvent.ClientTickEvent.Post.BUS.addListener(event -> onClientTick());
     }
@@ -75,6 +82,17 @@ public final class WayfarersClient {
         while (SORT_KEY.consumeClick()) {
             if (connection != null && mc.player != null) {
                 connection.sendCommand("wayfarers sort");
+            }
+        }
+        while (SKILLS_KEY.consumeClick()) {
+            if (mc.player != null) {
+                mc.gui.setScreen(new com.wayfarers.client.gui.SkillTreeScreen());
+            }
+        }
+        while (ABILITY_KEY.consumeClick()) {
+            if (connection != null && mc.player != null) {
+                com.wayfarers.network.WayfarersNet.toServer(new com.wayfarers.network.SkillActionMsg(
+                        com.wayfarers.network.SkillActionMsg.Action.USE_ACTIVE, ""));
             }
         }
         while (QUESTS_KEY.consumeClick()) {

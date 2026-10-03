@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:gold_ingot",
+    "minecraft:gold_ingot",
+    "minecraft:amethyst_shard",
+    "minecraft:lapis_lazuli"
+  ],
+  "result": {
+    "id": "wayfarers:arcane_ring",
+    "count": 1
+  }
+}

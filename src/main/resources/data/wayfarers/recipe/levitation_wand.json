@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:stick",
+    "minecraft:phantom_membrane",
+    "minecraft:feather",
+    "minecraft:amethyst_shard"
+  ],
+  "result": {
+    "id": "wayfarers:levitation_wand",
+    "count": 1
+  }
+}

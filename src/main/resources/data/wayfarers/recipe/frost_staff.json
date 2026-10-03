@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:stick",
+    "minecraft:packed_ice",
+    "minecraft:snowball",
+    "minecraft:amethyst_shard",
+    "minecraft:gold_ingot"
+  ],
+  "result": {
+    "id": "wayfarers:frost_staff",
+    "count": 1
+  }
+}

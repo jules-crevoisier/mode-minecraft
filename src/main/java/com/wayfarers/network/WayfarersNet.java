@@ -25,11 +25,13 @@ public final class WayfarersNet {
                     .addMain(QuestSnapshotMsg.class, QuestSnapshotMsg.STREAM_CODEC, QuestSnapshotMsg::handle)
                     .addMain(TipMsg.class, TipMsg.STREAM_CODEC, TipMsg::handle)
                     .addMain(TerminalContentsMsg.class, TerminalContentsMsg.STREAM_CODEC, TerminalContentsMsg::handle)
+                    .addMain(SkillSyncMsg.class, SkillSyncMsg.STREAM_CODEC, SkillSyncMsg::handle)
                 .serverbound()
                     .addMain(WaystoneActionMsg.class, WaystoneActionMsg.STREAM_CODEC, WaystoneActionMsg::handle)
                     .addMain(QuestRequestMsg.class, QuestRequestMsg.STREAM_CODEC, QuestRequestMsg::handle)
                     .addMain(ContainerActionMsg.class, ContainerActionMsg.STREAM_CODEC, ContainerActionMsg::handle)
                     .addMain(TerminalClickMsg.class, TerminalClickMsg.STREAM_CODEC, TerminalClickMsg::handle)
+                    .addMain(SkillActionMsg.class, SkillActionMsg.STREAM_CODEC, SkillActionMsg::handle)
             .build();
 
     private WayfarersNet() {}

@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:stick",
+    "minecraft:copper_ingot",
+    "minecraft:copper_ingot",
+    "minecraft:lightning_rod",
+    "minecraft:amethyst_shard"
+  ],
+  "result": {
+    "id": "wayfarers:thunder_staff",
+    "count": 1
+  }
+}

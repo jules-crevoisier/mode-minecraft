@@ -51,7 +51,7 @@ def mod_ids(kind):
     ids = set()
     for f in files:
         text = open(os.path.join(java, f), encoding="utf-8").read()
-        ids |= set(re.findall(r'(?:register|simple|armor|block|egg|stairs|slab|wall|weapon|remembrance)\("([a-z0-9_]+)"', text))
+        ids |= set(re.findall(r'(?:register|simple|armor|block|egg|stairs|slab|wall|weapon|remembrance|spell)\("([a-z0-9_]+)"', text))
     return ids
 
 

@@ -184,8 +184,17 @@ def guide_java():
     print(f"wrote {os.path.relpath(out, ROOT)}")
 
 
+def skills_java():
+    from wf import skills
+    out = os.path.join(ROOT, "src", "main", "java", "com", "wayfarers", "generated", "GeneratedSkills.java")
+    with open(out, "w") as f:
+        f.write(skills.java())
+    print(f"wrote {os.path.relpath(out, ROOT)}")
+
+
 def main():
     guide_java()
+    skills_java()
     decor_java()
     boss_gear_java()
     chapters = json.load(open(QUESTS))

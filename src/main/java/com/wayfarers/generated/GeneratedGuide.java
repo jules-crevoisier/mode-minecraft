@@ -10,6 +10,7 @@ public final class GeneratedGuide {
 
     public static final List<Category> CATEGORIES = List.of(
             new Category("start", "minecraft:compass"),
+            new Category("talents", "minecraft:enchanted_book"),
             new Category("travel", "wayfarers:waystone"),
             new Category("storage", "wayfarers:sorting_chest"),
             new Category("danger", "minecraft:iron_sword"),
@@ -21,6 +22,8 @@ public final class GeneratedGuide {
             new Page("quests", "start", "minecraft:writable_book", 3, List.of()),
             new Page("keys", "start", "minecraft:oak_sign", 2, List.of()),
             new Page("compass", "start", "wayfarers:structure_compass", 2, List.of("wayfarers:structure_compass")),
+            new Page("talents", "talents", "minecraft:enchanted_book", 3, List.of("wayfarers:oblivion_vial")),
+            new Page("magic", "talents", "wayfarers:fire_staff", 3, List.of("wayfarers:fire_staff", "wayfarers:frost_staff", "wayfarers:thunder_staff", "wayfarers:healing_staff", "wayfarers:levitation_wand", "wayfarers:ward_orb", "wayfarers:steam_cane", "wayfarers:arcane_ring", "wayfarers:mana_amulet")),
             new Page("waystones", "travel", "wayfarers:waystone", 3, List.of("wayfarers:waystone")),
             new Page("recall", "travel", "wayfarers:recall_scroll", 1, List.of("wayfarers:recall_scroll")),
             new Page("sorting_chest", "storage", "wayfarers:sorting_chest", 2, List.of("wayfarers:sorting_chest")),

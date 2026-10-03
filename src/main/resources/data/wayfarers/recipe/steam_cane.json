@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:stick",
+    "minecraft:copper_ingot",
+    "minecraft:copper_ingot",
+    "minecraft:campfire",
+    "minecraft:iron_ingot"
+  ],
+  "result": {
+    "id": "wayfarers:steam_cane",
+    "count": 1
+  }
+}

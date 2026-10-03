@@ -11,7 +11,8 @@ import wf.structures  # noqa: E402,F401
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 ASSETS = os.path.join(ROOT, "src", "main", "resources", "assets", "wayfarers")
 NS = "wayfarers"
-HANDHELD = {"builder_wand", "master_builder_wand", "cartographer_blade", "telluric_hammer", "storm_staff", "ember_scythe", "void_spear", "frost_blade",
+HANDHELD = {"builder_wand", "master_builder_wand", "fire_staff", "frost_staff", "thunder_staff", "healing_staff",
+            "levitation_wand", "steam_cane", "cartographer_blade", "telluric_hammer", "storm_staff", "ember_scythe", "void_spear", "frost_blade",
             "light_staff", "excavator_pickaxe", "lumber_axe"}
 HANDHELD |= {row[2] for row in __import__("wf.bossgear", fromlist=["BOSS_GEAR"]).BOSS_GEAR}
 
@@ -203,10 +204,11 @@ def main():
         lang_fr[f"structure.{NS}.{sdef.id}"] = sdef.title_fr
     for key, (en, fr) in content.MESSAGES.items():
         lang_en[key], lang_fr[key] = en, fr
-    from wf import guide
-    g_en, g_fr = guide.lang()
-    lang_en.update(g_en)
-    lang_fr.update(g_fr)
+    from wf import guide, skills
+    for mod in (guide, skills):
+        g_en, g_fr = mod.lang()
+        lang_en.update(g_en)
+        lang_fr.update(g_fr)
     # advancement translations are merged in by gen_quests.py
     extra = os.path.join(ROOT, "build", "quest_lang.json")
     if os.path.exists(extra):

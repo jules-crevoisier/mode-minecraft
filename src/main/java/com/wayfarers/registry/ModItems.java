@@ -55,6 +55,19 @@ public final class ModItems {
     public static final RegistryObject<Item> TRAVEL_BACKPACK = register("travel_backpack", TravelBackpackItem::new, p -> p.stacksTo(1));
     public static final RegistryObject<Item> MAGNET_RING = register("magnet_ring", MagnetRingItem::new, p -> p.stacksTo(1));
     public static final RegistryObject<Item> RECALL_SCROLL = register("recall_scroll", RecallScrollItem::new, p -> p.stacksTo(16));
+    // ---- magic (mana)
+    public static final RegistryObject<Item> FIRE_STAFF = spell("fire_staff", com.wayfarers.item.SpellItem.Spell.FIRE_BOLT, 15, 10);
+    public static final RegistryObject<Item> FROST_STAFF = spell("frost_staff", com.wayfarers.item.SpellItem.Spell.FROST_NOVA, 25, 20);
+    public static final RegistryObject<Item> THUNDER_STAFF = spell("thunder_staff", com.wayfarers.item.SpellItem.Spell.CHAIN_LIGHTNING, 35, 30);
+    public static final RegistryObject<Item> HEALING_STAFF = spell("healing_staff", com.wayfarers.item.SpellItem.Spell.HEALING, 30, 40);
+    public static final RegistryObject<Item> LEVITATION_WAND = spell("levitation_wand", com.wayfarers.item.SpellItem.Spell.LEVITATION, 20, 20);
+    public static final RegistryObject<Item> WARD_ORB = spell("ward_orb", com.wayfarers.item.SpellItem.Spell.WARD, 40, 100);
+    public static final RegistryObject<Item> STEAM_CANE = spell("steam_cane", com.wayfarers.item.SpellItem.Spell.STEAM_BLAST, 20, 16);
+    public static final RegistryObject<Item> ARCANE_RING = register("arcane_ring", TooltipItem::new, p -> p.stacksTo(1).rarity(Rarity.UNCOMMON));
+    public static final RegistryObject<Item> MANA_AMULET = register("mana_amulet", TooltipItem::new, p -> p.stacksTo(1).rarity(Rarity.UNCOMMON));
+    public static final RegistryObject<Item> OBLIVION_VIAL = register("oblivion_vial", com.wayfarers.item.OblivionVialItem::new,
+            p -> p.stacksTo(16).rarity(Rarity.RARE));
+
     public static final RegistryObject<Item> BUILDER_WAND = register("builder_wand",
             p -> new com.wayfarers.item.BuilderWandItem(p, 16), p -> p.durability(1024));
     public static final RegistryObject<Item> MASTER_BUILDER_WAND = register("master_builder_wand",
@@ -162,6 +175,10 @@ public final class ModItems {
 
     private static RegistryObject<Item> simple(String name, Function<Item.Properties, Item.Properties> props) {
         return register(name, TooltipItem::new, props);
+    }
+
+    private static RegistryObject<Item> spell(String name, com.wayfarers.item.SpellItem.Spell spell, float cost, int cooldown) {
+        return register(name, p -> new com.wayfarers.item.SpellItem(p, spell, cost, cooldown), p -> p.stacksTo(1).rarity(Rarity.UNCOMMON));
     }
 
     private static RegistryObject<Item> register(String name, Function<Item.Properties, ? extends Item> factory,

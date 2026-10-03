@@ -8,6 +8,7 @@ Keep paragraphs short: 1-3 sentences, say what to do, not how it works inside.
 
 CATEGORIES = [
     ("start", "minecraft:compass", ("Getting started", "Premiers pas")),
+    ("talents", "minecraft:enchanted_book", ("Talents & magic", "Talents et magie")),
     ("travel", "wayfarers:waystone", ("Travel", "Voyage")),
     ("storage", "wayfarers:sorting_chest", ("Storage", "Rangement")),
     ("danger", "minecraft:iron_sword", ("Danger & bosses", "Danger et boss")),
@@ -40,8 +41,8 @@ PAGES = [
          "les absents."),
     ], []),
     ("keys", "start", "minecraft:oak_sign", ("Keys", "Touches"), [
-        ("J: quest journal.  R: sort your inventory.  M: toggle the magnet ring.",
-         "J : journal de quêtes.  R : trier l'inventaire.  M : activer l'anneau aimanté."),
+        ("J: quest journal.  K: talent tree.  V: active talent.  R: sort your inventory.  M: magnet ring.",
+         "J : journal de quêtes.  K : arbre de talents.  V : talent actif.  R : trier l'inventaire.  M : aimant."),
         ("All keys can be changed in Options > Controls > Wayfarers.",
          "Toutes les touches se changent dans Options > Commandes > Wayfarers."),
     ], []),
@@ -52,6 +53,34 @@ PAGES = [
          "Accroupi + clic droit pour changer le type de structure recherché."),
     ], ["wayfarers:structure_compass"]),
 
+    ("talents", "talents", "minecraft:enchanted_book", ("Talent tree", "Arbre de talents"), [
+        ("Press K to open your talent tree: Warrior, Explorer, Arcanist and Engineer. Each talent costs points and "
+         "needs one of the talents linked above it.",
+         "Appuie sur K pour ouvrir ton arbre de talents : Guerrier, Explorateur, Arcaniste et Mécaniste. Chaque "
+         "talent coûte des points et demande un des talents reliés au-dessus."),
+        ("You earn 1 point per quest, 3 per boss quest and 1 every 10 experience levels gained.",
+         "Tu gagnes 1 point par quête, 3 par quête de boss et 1 tous les 10 niveaux d'expérience gagnés."),
+        ("The last talent of each branch is an active power: click it once unlocked to equip it, then press V to "
+         "use it. A Vial of Oblivion gives every point back.",
+         "Le dernier talent de chaque branche est un pouvoir actif : clique dessus une fois débloqué pour l'équiper, "
+         "puis appuie sur V. Une Fiole d'oubli rend tous les points."),
+    ], ["wayfarers:oblivion_vial"]),
+    ("magic", "talents", "wayfarers:fire_staff", ("Magic", "Magie"), [
+        ("Magic is simple: each staff holds one spell. Right-click to cast it. Spells cost mana, shown in the blue "
+         "bar above your experience; it refills by itself.",
+         "La magie est simple : chaque bâton contient un sort. Clic droit pour le lancer. Les sorts coûtent du mana, "
+         "affiché dans la barre bleue au-dessus de l'expérience ; il se recharge tout seul."),
+        ("Fire bolt, frost nova, Tesla lightning, mending, levitation, ward and steam blast: craft them with "
+         "amethyst. The Arcanist talents give more mana, faster regeneration and stronger, cheaper spells.",
+         "Trait de feu, nova de givre, éclair Tesla, soin, lévitation, protection et jet de vapeur : fabrique-les avec "
+         "de l'améthyste. Les talents d'Arcaniste donnent plus de mana, une recharge plus rapide et des sorts plus "
+         "forts et moins chers."),
+        ("Carry an Arcane Ring (+50 mana) or a Mana Amulet (faster regeneration): no slot needed.",
+         "Garde sur toi un Anneau arcanique (+50 mana) ou une Amulette de mana (recharge plus rapide) : aucune case "
+         "spéciale nécessaire."),
+    ], ["wayfarers:fire_staff", "wayfarers:frost_staff", "wayfarers:thunder_staff", "wayfarers:healing_staff",
+        "wayfarers:levitation_wand", "wayfarers:ward_orb", "wayfarers:steam_cane", "wayfarers:arcane_ring",
+        "wayfarers:mana_amulet"]),
     ("waystones", "travel", "wayfarers:waystone", ("Waystones", "Pierres de voyage"), [
         ("Right-click a waystone to discover it for the whole group and open the travel map.",
          "Clic droit sur une pierre pour la découvrir pour tout le groupe et ouvrir la carte de voyage."),

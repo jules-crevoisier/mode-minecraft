@@ -25,7 +25,8 @@ def rid(x):
 MOD_ITEMS = {"map_fragment", "lithite_shard", "ancient_ember", "void_shard", "warden_scale", "void_heart",
              "sorting_chest", "waystone", "guild_terminal"}
 MOD_ITEMS |= {f"remembrance_{row[0]}" for row in __import__("wf.bossgear", fromlist=["BOSS_GEAR"]).BOSS_GEAR}
-MOD_ITEMS |= {"builder_wand", "master_builder_wand", "wayfarer_manual"}
+MOD_ITEMS |= {"builder_wand", "master_builder_wand", "wayfarer_manual", "fire_staff", "frost_staff", "thunder_staff",
+              "healing_staff", "levitation_wand", "ward_orb", "steam_cane", "arcane_ring", "mana_amulet", "oblivion_vial"}
 
 
 def shaped(name, pattern, key, count=1, category="misc"):
@@ -73,6 +74,16 @@ def recipes():
     shapeless("wayfarer_atlas", ["book", "map_fragment"])
     shapeless("wayfarer_manual", ["book", "feather"])
     shapeless("builder_wand", ["stick", "gold_ingot", "gold_ingot", "amethyst_shard"])
+    shapeless("fire_staff", ["stick", "blaze_powder", "blaze_powder", "amethyst_shard", "gold_ingot"])
+    shapeless("frost_staff", ["stick", "packed_ice", "snowball", "amethyst_shard", "gold_ingot"])
+    shapeless("thunder_staff", ["stick", "copper_ingot", "copper_ingot", "lightning_rod", "amethyst_shard"])
+    shapeless("healing_staff", ["stick", "glistering_melon_slice", "ghast_tear", "amethyst_shard", "gold_ingot"])
+    shapeless("levitation_wand", ["stick", "phantom_membrane", "feather", "amethyst_shard"])
+    shapeless("ward_orb", ["amethyst_shard", "amethyst_shard", "iron_ingot", "lapis_lazuli", "lithite_shard"])
+    shapeless("steam_cane", ["stick", "copper_ingot", "copper_ingot", "campfire", "iron_ingot"])
+    shapeless("arcane_ring", ["gold_ingot", "gold_ingot", "amethyst_shard", "lapis_lazuli"])
+    shapeless("mana_amulet", ["gold_ingot", "string", "amethyst_shard", "amethyst_shard", "lithite_shard"])
+    shapeless("oblivion_vial", ["glass_bottle", "ghast_tear", "amethyst_shard"])
     shapeless("master_builder_wand", ["builder_wand", "lithite_shard", "lithite_shard", "diamond"])
     # tier 1 — map fragments (Overworld)
     shaped("cartographer_blade", [" I ", "MIM", " S "], {"I": "iron_ingot", "M": "map_fragment", "S": "stick"}, category="equipment")
