@@ -264,6 +264,10 @@ def exercise_overhaul(srv, failures):
     print(f"biomes not found nearby: {missing}", flush=True)
     if len(missing) > len(biomes) // 3:
         failures.append(f"{len(missing)} of {len(biomes)} biomes not found: {missing}")
+    with Phase("world map"):
+        res = srv.run("wayfarers worldmap", r"World map written|worldmap:|Unknown|Incorrect", 900)
+        if not res or "World map written" not in res:
+            failures.append(f"world map: {res}")
     with Phase("generate terrain around spawn"):
         srv.run("execute in minecraft:overworld run forceload add -64 -64 64 64", r"Marked|forceload|No chunks", 600)
     srv.run("say overhaul test finished")
