@@ -301,6 +301,9 @@ def main():
     check_advancements()
     check_lang()
     check_tags()
+    import validate_world
+    if validate_world.main() != 0:
+        err("world overhaul pack: see the errors above")
     for w in sorted(set(warnings)):
         print("warning:", w)
     for e in errors:

@@ -1,0 +1,11 @@
+{
+ "replace": false,
+ "values": [
+  "wayfarers:highland_meadow",
+  "wayfarers:frostpine_forest",
+  "wayfarers:snowcap_slopes",
+  "wayfarers:sakura_valley",
+  "wayfarers:windswept_crags",
+  "wayfarers:stone_spires"
+ ]
+}

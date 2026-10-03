@@ -1,0 +1,9 @@
+{
+ "replace": false,
+ "values": [
+  "wayfarers:glacial_sea",
+  "wayfarers:azure_ocean",
+  "wayfarers:slate_sea",
+  "wayfarers:coral_lagoon"
+ ]
+}

@@ -1,0 +1,8 @@
+{
+ "replace": false,
+ "values": [
+  "wayfarers:golden_beach",
+  "wayfarers:basalt_cliffs",
+  "wayfarers:frost_shore"
+ ]
+}

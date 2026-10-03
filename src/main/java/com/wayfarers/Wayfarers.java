@@ -15,8 +15,10 @@ import com.wayfarers.registry.ModDataComponents;
 import com.wayfarers.registry.ModEntities;
 import com.wayfarers.registry.ModItems;
 import com.wayfarers.registry.ModTabs;
+import com.wayfarers.world.WorldOverhaul;
 import net.minecraft.resources.Identifier;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.event.AddPackFindersEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.entity.SpawnPlacementRegisterEvent;
@@ -58,6 +60,7 @@ public final class Wayfarers {
 
         EntityAttributeCreationEvent.BUS.addListener(ModEntities::registerAttributes);
         RegisterCommandsEvent.BUS.addListener(WayfarersCommand::register);
+        AddPackFindersEvent.BUS.addListener(WorldOverhaul::addPacks);
         CoopEvents.register();
         GraveEvents.register();
         EquipmentEvents.register();

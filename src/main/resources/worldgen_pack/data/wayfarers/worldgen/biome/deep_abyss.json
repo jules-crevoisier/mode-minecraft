@@ -1,0 +1,99 @@
+{
+ "has_precipitation": true,
+ "temperature": 0.8,
+ "downfall": 0.4,
+ "attributes": {
+  "minecraft:visual/sky_color": "#78a7ff",
+  "minecraft:visual/fog_color": "#0c0c14",
+  "minecraft:visual/water_fog_color": "#050533",
+  "minecraft:audio/background_music": {
+   "default": {
+    "sound": "minecraft:music.overworld.deep_dark",
+    "min_delay": 12000,
+    "max_delay": 24000
+   }
+  },
+  "minecraft:visual/ambient_particles": [
+   {
+    "particle": {
+     "type": "minecraft:ash"
+    },
+    "probability": 0.004
+   }
+  ]
+ },
+ "effects": {
+  "water_color": "#3f76e4"
+ },
+ "carvers": [
+  "minecraft:cave",
+  "minecraft:cave_extra_underground",
+  "minecraft:canyon"
+ ],
+ "features": [
+  [],
+  [],
+  [
+   "minecraft:amethyst_geode"
+  ],
+  [
+   "minecraft:monster_room",
+   "minecraft:monster_room_deep"
+  ],
+  [],
+  [],
+  [
+   "minecraft:ore_dirt",
+   "minecraft:ore_gravel",
+   "minecraft:ore_granite_upper",
+   "minecraft:ore_granite_lower",
+   "minecraft:ore_diorite_upper",
+   "minecraft:ore_diorite_lower",
+   "minecraft:ore_andesite_upper",
+   "minecraft:ore_andesite_lower",
+   "minecraft:ore_tuff",
+   "minecraft:ore_coal_upper",
+   "minecraft:ore_coal_lower",
+   "minecraft:ore_iron_upper",
+   "minecraft:ore_iron_middle",
+   "minecraft:ore_iron_small",
+   "minecraft:ore_gold",
+   "minecraft:ore_gold_lower",
+   "minecraft:ore_redstone",
+   "minecraft:ore_redstone_lower",
+   "minecraft:ore_diamond",
+   "minecraft:ore_diamond_medium",
+   "minecraft:ore_diamond_large",
+   "minecraft:ore_diamond_buried",
+   "minecraft:ore_lapis",
+   "minecraft:ore_lapis_buried",
+   "minecraft:ore_copper",
+   "minecraft:underwater_magma",
+   "minecraft:disk_sand",
+   "minecraft:disk_clay",
+   "minecraft:disk_gravel"
+  ],
+  [
+   "minecraft:sculk_vein",
+   "minecraft:sculk_patch_deep_dark"
+  ],
+  [],
+  [
+   "minecraft:glow_lichen"
+  ],
+  [
+   "minecraft:freeze_top_layer"
+  ]
+ ],
+ "spawners": {
+  "ambient": [],
+  "axolotls": [],
+  "creature": [],
+  "misc": [],
+  "monster": [],
+  "underground_water_creature": [],
+  "water_ambient": [],
+  "water_creature": []
+ },
+ "spawn_costs": {}
+}

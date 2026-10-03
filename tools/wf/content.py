@@ -188,6 +188,8 @@ SPAWN_EGGS = ["ruin_walker", "map_wraith", "basalt_guard", "void_stalker", "drow
 
 # Misc translated messages used from Java (key suffix -> (en, fr))
 MESSAGES = {
+    "pack.wayfarers.world_overhaul": ("Wayfarers: new world (terrain, caves, biomes)",
+                                      "Wayfarers : nouveau monde (relief, grottes, biomes)"),
     "itemGroup.wayfarers": ("Wayfarers", "Wayfarers"),
     "key.category.wayfarers.main": ("Wayfarers", "Wayfarers"),
     "key.wayfarers.sort_inventory": ("Sort inventory", "Trier l'inventaire"),

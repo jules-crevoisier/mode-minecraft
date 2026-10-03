@@ -1,0 +1,14 @@
+{
+ "replace": false,
+ "values": [
+  "wayfarers:glowcap_isles",
+  "wayfarers:shattered_glacier",
+  "wayfarers:crystal_caverns",
+  "wayfarers:underground_jungle",
+  "wayfarers:thermal_caves",
+  "wayfarers:ashen_savanna",
+  "wayfarers:aurora_tundra",
+  "wayfarers:verdant_meadows",
+  "wayfarers:wildflower_fields"
+ ]
+}

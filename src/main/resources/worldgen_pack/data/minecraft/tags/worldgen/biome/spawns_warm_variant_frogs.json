@@ -1,0 +1,8 @@
+{
+ "replace": false,
+ "values": [
+  "wayfarers:dune_sea",
+  "wayfarers:coral_lagoon",
+  "wayfarers:glowing_marsh"
+ ]
+}

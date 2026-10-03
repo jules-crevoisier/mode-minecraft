@@ -1,0 +1,14 @@
+{
+ "replace": false,
+ "values": [
+  "wayfarers:aurora_tundra",
+  "wayfarers:shattered_glacier",
+  "wayfarers:majestic_peaks",
+  "wayfarers:snowcap_slopes",
+  "wayfarers:glacial_sea",
+  "wayfarers:frostpine_forest",
+  "wayfarers:deep_abyss",
+  "wayfarers:ice_river",
+  "wayfarers:frost_shore"
+ ]
+}

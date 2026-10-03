@@ -83,10 +83,10 @@ def loot_tables():
 
 
 class Server:
-    def __init__(self, cwd, cmd):
+    def __init__(self, cwd, cmd, log_name="smoke-console.log"):
         self.lines = []
         self.q = queue.Queue()
-        self.log = open(os.path.join(cwd, "smoke-console.log"), "w", encoding="utf-8")
+        self.log = open(os.path.join(cwd, log_name), "w", encoding="utf-8")
         self.proc = subprocess.Popen(cmd, cwd=cwd, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                                      stderr=subprocess.STDOUT, text=True, bufsize=1, encoding="utf-8",
                                      errors="replace")
@@ -123,7 +123,11 @@ class Server:
         self.proc.stdin.write(command + "\n")
         self.proc.stdin.flush()
         if expect:
-            return self.wait_for(expect, timeout)
+            t = time.time()
+            res = self.wait_for(expect, timeout)
+            if time.time() - t > 15:
+                print(f"[smoke] slow: {command} took {time.time() - t:.0f}s -> {res}", flush=True)
+            return res
         time.sleep(0.2)
         return None
 
@@ -137,67 +141,149 @@ def server_command(server_dir):
     return ["java", "-Xmx4G", "-jar", os.path.basename(jars[0]), "nogui"]
 
 
-def main():
-    server_dir = os.path.abspath(sys.argv[1])
+def prepare(server_dir, overhaul):
     with open(os.path.join(server_dir, "eula.txt"), "w") as f:
         f.write("eula=true\n")
+    props = ("online-mode=false\nspawn-protection=0\nlevel-seed=wayfarers-ci\nmax-tick-time=-1\n"
+             "view-distance=4\nsimulation-distance=4\nsync-chunk-writes=false\n")
+    if overhaul:
+        # a fresh world with the default generator, so the overhaul pack replaces the Overworld
+        props += "level-name=world_overhaul\n"
+    else:
+        # a flat Overworld generates in a blink; /place structure ignores biomes, so every structure
+        # still assembles (full noise terrain made the run take over an hour on CI runners)
+        props += "level-name=world\nlevel-type=minecraft\\:flat\ngenerate-structures=false\n"
     with open(os.path.join(server_dir, "server.properties"), "w") as f:
-        f.write("online-mode=false\nspawn-protection=0\nlevel-seed=wayfarers-ci\nmax-tick-time=-1\n"
-                "view-distance=4\nsimulation-distance=4\nsync-chunk-writes=false\n"
-                # a flat Overworld generates in a blink; /place structure ignores biomes, so every structure
-                # still assembles (full noise terrain made the run take over an hour on CI runners)
-                "level-type=minecraft\\:flat\ngenerate-structures=false\n")
+        f.write(props)
+    os.makedirs(os.path.join(server_dir, "config"), exist_ok=True)
+    with open(os.path.join(server_dir, "config", "wayfarers-common.toml"), "w") as f:
+        f.write(f"[world]\noverhaul = {'true' if overhaul else 'false'}\n")
     jvm = os.path.join(server_dir, "user_jvm_args.txt")
-    if os.path.exists(jvm):
+    if os.path.exists(jvm) and "-Xmx4G" not in open(jvm).read():
         with open(jvm, "a") as f:
             f.write("\n-Xmx4G\n")
 
-    failures = []
-    srv = Server(server_dir, server_command(server_dir))
-    if not srv.wait_for(r"Done \(", 900):
-        failures.append("server did not finish starting")
-    else:
-        dims = structure_dims()
-        for i, (sid, dim) in enumerate(dims.items()):
-            x = 2000 + 400 * i
-            r = 96
-            srv.run(f"execute in {dim} run forceload add {x - r} {-r} {x + r} {r}", r"Marked|forceload|No chunks|too many", 30)
-            res = None
-            for attempt in range(12):
-                res = srv.run(f"execute in {dim} run place structure wayfarers:{sid} {x} 100 0",
-                              r"Generated structure|Failed to place|not loaded|commands\.place|Unknown|Invalid|Incorrect", 120)
-                if not res or "not loaded" not in res:
-                    break
-                time.sleep(5)
-            if not res or "Generated structure" not in res:
-                failures.append(f"place structure {sid} in {dim}: {res}")
-            srv.run(f"execute in {dim} run forceload remove all", r"Unmarked|forceload|No chunks", 30)
-        for eid in lang_ids("entity.wayfarers."):
-            res = srv.run(f"execute in minecraft:overworld run summon wayfarers:{eid} 0 200 0",
-                          r"Summoned|Unable|Unknown|Invalid|Incorrect", 60)
-            if not res or "Summoned" not in res:
-                failures.append(f"summon {eid}: {res}")
-        srv.run("execute in minecraft:overworld run kill @e[type=!minecraft:player]", r"Killed|No entity", 60)
-        items = lang_ids("item.wayfarers.") + lang_ids("block.wayfarers.")
-        for iid in items:
-            res = srv.run(f'execute in minecraft:overworld run summon minecraft:item 0 200 0 '
-                          f'{{Item:{{id:"wayfarers:{iid}",count:1}}}}',
-                          r"Summoned|Unable|Unknown|Invalid|Incorrect|Expected", 60)
-            if not res or "Summoned" not in res:
-                failures.append(f"item {iid}: {res}")
-        for bid in lang_ids("block.wayfarers."):
-            srv.run(f"execute in minecraft:overworld run setblock 0 150 0 wayfarers:{bid}", r"Changed|Could not|Unknown|Invalid", 30)
-            srv.run("execute in minecraft:overworld run setblock 0 150 0 minecraft:air destroy", r"Changed|Could not", 30)
-        for table in loot_tables():
-            res = srv.run(f"execute in minecraft:overworld run loot spawn 0 200 0 loot wayfarers:{table}",
-                          r"Dropped|Unknown|Invalid|Incorrect|No loot", 30)
-            if not res or "Dropped" not in res and "No loot" not in res:
-                failures.append(f"loot {table}: {res}")
-        srv.run("execute in minecraft:overworld run kill @e[type=minecraft:item]", r"Killed|No entity", 60)
-        res = srv.run("reload", r"Reloading|Failed", 120)
+
+class Phase:
+    """Prints how long each part of the test took (the CI log is the only window into a slow run)."""
+    start = time.time()
+
+    def __init__(self, name):
+        self.name = name
+
+    def __enter__(self):
+        self.t = time.time()
+        print(f"[smoke] {self.name}: start (t={time.time() - Phase.start:.0f}s)", flush=True)
+
+    def __exit__(self, *exc):
+        print(f"[smoke] {self.name}: {time.time() - self.t:.0f}s", flush=True)
+
+
+def exercise_mod(srv, failures):
+    with Phase("structures"):
+        place_structures(srv, failures)
+    with Phase("entities and items"):
+        summon_all(srv, failures)
+    with Phase("blocks and loot"):
+        blocks_and_loot(srv, failures)
+    with Phase("reload"):
+        srv.run("reload", r"Reloading|Failed", 120)
         time.sleep(20)
         srv.run("say smoke test finished")
         time.sleep(2)
+
+
+def place_structures(srv, failures):
+    dims = structure_dims()
+    for i, (sid, dim) in enumerate(dims.items()):
+        x = 2000 + 400 * i
+        r = 96
+        srv.run(f"execute in {dim} run forceload add {x - r} {-r} {x + r} {r}", r"Marked|forceload|No chunks|too many", 30)
+        res = None
+        for attempt in range(12):
+            res = srv.run(f"execute in {dim} run place structure wayfarers:{sid} {x} 100 0",
+                          r"Generated structure|Failed to place|not loaded|commands\.place|Unknown|Invalid|Incorrect", 120)
+            if not res or "not loaded" not in res:
+                break
+            time.sleep(5)
+        if not res or "Generated structure" not in res:
+            failures.append(f"place structure {sid} in {dim}: {res}")
+        srv.run(f"execute in {dim} run forceload remove all", r"Unmarked|forceload|No chunks", 30)
+
+
+def summon_all(srv, failures):
+    for eid in lang_ids("entity.wayfarers."):
+        res = srv.run(f"execute in minecraft:overworld run summon wayfarers:{eid} 0 200 0",
+                      r"Summoned|Unable|Unknown|Invalid|Incorrect", 60)
+        if not res or "Summoned" not in res:
+            failures.append(f"summon {eid}: {res}")
+    srv.run("execute in minecraft:overworld run kill @e[type=!minecraft:player]", r"Killed|No entity", 60)
+    items = lang_ids("item.wayfarers.") + lang_ids("block.wayfarers.")
+    for iid in items:
+        res = srv.run(f'execute in minecraft:overworld run summon minecraft:item 0 200 0 '
+                      f'{{Item:{{id:"wayfarers:{iid}",count:1}}}}',
+                      r"Summoned|Unable|Unknown|Invalid|Incorrect|Expected", 60)
+        if not res or "Summoned" not in res:
+            failures.append(f"item {iid}: {res}")
+
+
+def blocks_and_loot(srv, failures):
+    for bid in lang_ids("block.wayfarers."):
+        srv.run(f"execute in minecraft:overworld run setblock 0 150 0 wayfarers:{bid}", r"Changed|Could not|Unknown|Invalid", 30)
+        srv.run("execute in minecraft:overworld run setblock 0 150 0 minecraft:air destroy", r"Changed|Could not", 30)
+    for table in loot_tables():
+        res = srv.run(f"execute in minecraft:overworld run loot spawn 0 200 0 loot wayfarers:{table}",
+                      r"Dropped|Unknown|Invalid|Incorrect|No loot", 30)
+        if not res or "Dropped" not in res and "No loot" not in res:
+            failures.append(f"loot {table}: {res}")
+    srv.run("execute in minecraft:overworld run kill @e[type=minecraft:item]", r"Killed|No entity", 60)
+
+
+def exercise_overhaul(srv, failures):
+    """The overhaul pack is on, every biome of ours can be found, and nothing logs an error."""
+    res = srv.run("datapack list enabled", r"data pack", 60)
+    if not res or "wayfarers:world_overhaul" not in res:
+        failures.append(f"world overhaul pack not enabled: {res}")
+    biomes = sorted(os.path.splitext(n)[0] for n in os.listdir(
+        os.path.join(RES, "worldgen_pack", "data", "wayfarers", "worldgen", "biome")))
+    missing = []
+    with Phase("locate biomes"):
+        found = locate_all(srv, biomes, missing)
+    print(f"biomes found: {found}", flush=True)
+    print(f"biomes not found nearby: {missing}", flush=True)
+    if len(missing) > len(biomes) // 3:
+        failures.append(f"{len(missing)} of {len(biomes)} biomes not found: {missing}")
+    with Phase("generate terrain around spawn"):
+        srv.run("execute in minecraft:overworld run forceload add -64 -64 64 64", r"Marked|forceload|No chunks", 600)
+    srv.run("say overhaul test finished")
+    time.sleep(2)
+
+
+def locate_all(srv, biomes, missing):
+    found = {}
+    for b in biomes:
+        res = srv.run(f"execute in minecraft:overworld run locate biome wayfarers:{b}",
+                      r"nearest|Could not find|Unknown|Invalid|not found|Incorrect", 300)
+        if not res or "nearest" not in res:
+            missing.append(b)
+        else:
+            m = re.search(r"\((\d+) blocks away\)", res)
+            found[b] = int(m.group(1)) if m else -1
+    return found
+
+
+def main():
+    server_dir = os.path.abspath(sys.argv[1])
+    overhaul = "--overhaul" in sys.argv[2:]
+    prepare(server_dir, overhaul)
+    failures = []
+    srv = Server(server_dir, server_command(server_dir), "smoke-console-overhaul.log" if overhaul else "smoke-console.log")
+    if not srv.wait_for(r"Done \(", 1800 if overhaul else 900):
+        failures.append("server did not finish starting")
+    elif overhaul:
+        exercise_overhaul(srv, failures)
+    else:
+        exercise_mod(srv, failures)
     srv.run("stop")
     try:
         srv.proc.wait(timeout=180)

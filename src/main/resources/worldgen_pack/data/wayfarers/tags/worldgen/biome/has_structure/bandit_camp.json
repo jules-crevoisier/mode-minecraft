@@ -1,0 +1,9 @@
+{
+ "replace": false,
+ "values": [
+  "wayfarers:verdant_meadows",
+  "wayfarers:ashen_savanna",
+  "wayfarers:emerald_jungle",
+  "wayfarers:highland_meadow"
+ ]
+}

@@ -1,0 +1,10 @@
+{
+ "replace": false,
+ "values": [
+  "wayfarers:pine_highlands",
+  "wayfarers:frostpine_forest",
+  "wayfarers:giant_sylvan",
+  "wayfarers:crystal_woods",
+  "wayfarers:emerald_jungle"
+ ]
+}

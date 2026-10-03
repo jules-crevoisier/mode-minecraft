@@ -1,0 +1,736 @@
+{
+"allows_surface_slime_spawns": {
+"biomes": [
+"swamp",
+"mangrove_swamp"
+],
+"tags": []
+},
+"allows_tropical_fish_spawns_at_any_height": {
+"biomes": [
+"lush_caves"
+],
+"tags": []
+},
+"has_structure/ancient_city": {
+"biomes": [
+"deep_dark"
+],
+"tags": []
+},
+"has_structure/bastion_remnant": {
+"biomes": [
+"crimson_forest",
+"nether_wastes",
+"soul_sand_valley",
+"warped_forest"
+],
+"tags": []
+},
+"has_structure/buried_treasure": {
+"biomes": [],
+"tags": [
+"is_beach"
+]
+},
+"has_structure/desert_pyramid": {
+"biomes": [
+"desert"
+],
+"tags": []
+},
+"has_structure/end_city": {
+"biomes": [
+"end_highlands",
+"end_midlands"
+],
+"tags": []
+},
+"has_structure/igloo": {
+"biomes": [
+"snowy_taiga",
+"snowy_plains",
+"snowy_slopes"
+],
+"tags": []
+},
+"has_structure/jungle_temple": {
+"biomes": [
+"bamboo_jungle",
+"jungle"
+],
+"tags": []
+},
+"has_structure/mineshaft": {
+"biomes": [
+"stony_shore",
+"mushroom_fields",
+"ice_spikes",
+"windswept_savanna",
+"desert",
+"savanna",
+"snowy_plains",
+"plains",
+"sunflower_plains",
+"swamp",
+"mangrove_swamp",
+"savanna_plateau",
+"dripstone_caves",
+"lush_caves",
+"sulfur_caves"
+],
+"tags": [
+"is_ocean",
+"is_river",
+"is_beach",
+"is_mountain",
+"is_hill",
+"is_taiga",
+"is_jungle",
+"is_forest"
+]
+},
+"has_structure/mineshaft_mesa": {
+"biomes": [],
+"tags": [
+"is_badlands"
+]
+},
+"has_structure/nether_fortress": {
+"biomes": [],
+"tags": [
+"is_nether"
+]
+},
+"has_structure/nether_fossil": {
+"biomes": [
+"soul_sand_valley"
+],
+"tags": []
+},
+"has_structure/ocean_monument": {
+"biomes": [],
+"tags": [
+"is_deep_ocean"
+]
+},
+"has_structure/ocean_ruin_cold": {
+"biomes": [
+"frozen_ocean",
+"cold_ocean",
+"ocean",
+"deep_frozen_ocean",
+"deep_cold_ocean",
+"deep_ocean"
+],
+"tags": []
+},
+"has_structure/ocean_ruin_warm": {
+"biomes": [
+"lukewarm_ocean",
+"warm_ocean",
+"deep_lukewarm_ocean"
+],
+"tags": []
+},
+"has_structure/pillager_outpost": {
+"biomes": [
+"desert",
+"plains",
+"savanna",
+"snowy_plains",
+"taiga",
+"grove"
+],
+"tags": [
+"is_mountain"
+]
+},
+"has_structure/ruined_portal_desert": {
+"biomes": [
+"desert"
+],
+"tags": []
+},
+"has_structure/ruined_portal_jungle": {
+"biomes": [],
+"tags": [
+"is_jungle"
+]
+},
+"has_structure/ruined_portal_mountain": {
+"biomes": [
+"savanna_plateau",
+"windswept_savanna",
+"stony_shore"
+],
+"tags": [
+"is_badlands",
+"is_hill",
+"is_mountain"
+]
+},
+"has_structure/ruined_portal_nether": {
+"biomes": [],
+"tags": [
+"is_nether"
+]
+},
+"has_structure/ruined_portal_ocean": {
+"biomes": [],
+"tags": [
+"is_ocean"
+]
+},
+"has_structure/ruined_portal_standard": {
+"biomes": [
+"mushroom_fields",
+"ice_spikes",
+"dripstone_caves",
+"lush_caves",
+"sulfur_caves",
+"savanna",
+"snowy_plains",
+"plains",
+"sunflower_plains"
+],
+"tags": [
+"is_beach",
+"is_river",
+"is_taiga",
+"is_forest"
+]
+},
+"has_structure/ruined_portal_swamp": {
+"biomes": [
+"swamp",
+"mangrove_swamp"
+],
+"tags": []
+},
+"has_structure/shipwreck": {
+"biomes": [],
+"tags": [
+"is_ocean"
+]
+},
+"has_structure/shipwreck_beached": {
+"biomes": [],
+"tags": [
+"is_beach"
+]
+},
+"has_structure/stronghold": {
+"biomes": [],
+"tags": [
+"is_overworld"
+]
+},
+"has_structure/swamp_hut": {
+"biomes": [
+"swamp"
+],
+"tags": []
+},
+"has_structure/trail_ruins": {
+"biomes": [
+"taiga",
+"snowy_taiga",
+"old_growth_pine_taiga",
+"old_growth_spruce_taiga",
+"old_growth_birch_forest",
+"jungle"
+],
+"tags": []
+},
+"has_structure/trial_chambers": {
+"biomes": [
+"badlands",
+"bamboo_jungle",
+"beach",
+"birch_forest",
+"cherry_grove",
+"cold_ocean",
+"dark_forest",
+"deep_cold_ocean",
+"deep_frozen_ocean",
+"deep_lukewarm_ocean",
+"deep_ocean",
+"desert",
+"dripstone_caves",
+"eroded_badlands",
+"flower_forest",
+"forest",
+"frozen_ocean",
+"frozen_peaks",
+"frozen_river",
+"grove",
+"ice_spikes",
+"jagged_peaks",
+"jungle",
+"lukewarm_ocean",
+"lush_caves",
+"mangrove_swamp",
+"meadow",
+"mushroom_fields",
+"ocean",
+"old_growth_birch_forest",
+"old_growth_pine_taiga",
+"old_growth_spruce_taiga",
+"pale_garden",
+"plains",
+"river",
+"savanna",
+"savanna_plateau",
+"snowy_beach",
+"snowy_plains",
+"snowy_slopes",
+"snowy_taiga",
+"sparse_jungle",
+"stony_peaks",
+"stony_shore",
+"sulfur_caves",
+"sunflower_plains",
+"swamp",
+"taiga",
+"warm_ocean",
+"windswept_forest",
+"windswept_gravelly_hills",
+"windswept_hills",
+"windswept_savanna",
+"wooded_badlands"
+],
+"tags": []
+},
+"has_structure/village_desert": {
+"biomes": [
+"desert"
+],
+"tags": []
+},
+"has_structure/village_plains": {
+"biomes": [
+"plains",
+"meadow"
+],
+"tags": []
+},
+"has_structure/village_savanna": {
+"biomes": [
+"savanna"
+],
+"tags": []
+},
+"has_structure/village_snowy": {
+"biomes": [
+"snowy_plains"
+],
+"tags": []
+},
+"has_structure/village_taiga": {
+"biomes": [
+"taiga"
+],
+"tags": []
+},
+"has_structure/woodland_mansion": {
+"biomes": [
+"dark_forest",
+"pale_garden"
+],
+"tags": []
+},
+"is_badlands": {
+"biomes": [
+"badlands",
+"eroded_badlands",
+"wooded_badlands"
+],
+"tags": []
+},
+"is_beach": {
+"biomes": [
+"beach",
+"snowy_beach"
+],
+"tags": []
+},
+"is_deep_ocean": {
+"biomes": [
+"deep_frozen_ocean",
+"deep_cold_ocean",
+"deep_ocean",
+"deep_lukewarm_ocean"
+],
+"tags": []
+},
+"is_end": {
+"biomes": [
+"the_end",
+"end_highlands",
+"end_midlands",
+"small_end_islands",
+"end_barrens"
+],
+"tags": []
+},
+"is_forest": {
+"biomes": [
+"forest",
+"flower_forest",
+"birch_forest",
+"old_growth_birch_forest",
+"dark_forest",
+"pale_garden",
+"grove"
+],
+"tags": []
+},
+"is_hill": {
+"biomes": [
+"windswept_hills",
+"windswept_forest",
+"windswept_gravelly_hills"
+],
+"tags": []
+},
+"is_jungle": {
+"biomes": [
+"bamboo_jungle",
+"jungle",
+"sparse_jungle"
+],
+"tags": []
+},
+"is_mountain": {
+"biomes": [
+"meadow",
+"frozen_peaks",
+"jagged_peaks",
+"stony_peaks",
+"snowy_slopes",
+"cherry_grove"
+],
+"tags": []
+},
+"is_nether": {
+"biomes": [],
+"tags": []
+},
+"is_ocean": {
+"biomes": [
+"frozen_ocean",
+"ocean",
+"cold_ocean",
+"lukewarm_ocean",
+"warm_ocean"
+],
+"tags": [
+"is_deep_ocean"
+]
+},
+"is_overworld": {
+"biomes": [
+"badlands",
+"bamboo_jungle",
+"beach",
+"birch_forest",
+"cherry_grove",
+"cold_ocean",
+"dark_forest",
+"deep_cold_ocean",
+"deep_dark",
+"deep_frozen_ocean",
+"deep_lukewarm_ocean",
+"deep_ocean",
+"desert",
+"dripstone_caves",
+"eroded_badlands",
+"flower_forest",
+"forest",
+"frozen_ocean",
+"frozen_peaks",
+"frozen_river",
+"grove",
+"ice_spikes",
+"jagged_peaks",
+"jungle",
+"lukewarm_ocean",
+"lush_caves",
+"mangrove_swamp",
+"meadow",
+"mushroom_fields",
+"ocean",
+"old_growth_birch_forest",
+"old_growth_pine_taiga",
+"old_growth_spruce_taiga",
+"pale_garden",
+"plains",
+"river",
+"savanna",
+"savanna_plateau",
+"snowy_beach",
+"snowy_plains",
+"snowy_slopes",
+"snowy_taiga",
+"sparse_jungle",
+"stony_peaks",
+"stony_shore",
+"sulfur_caves",
+"sunflower_plains",
+"swamp",
+"taiga",
+"warm_ocean",
+"windswept_forest",
+"windswept_gravelly_hills",
+"windswept_hills",
+"windswept_savanna",
+"wooded_badlands"
+],
+"tags": []
+},
+"is_river": {
+"biomes": [
+"river",
+"frozen_river"
+],
+"tags": []
+},
+"is_savanna": {
+"biomes": [
+"savanna",
+"savanna_plateau",
+"windswept_savanna"
+],
+"tags": []
+},
+"is_taiga": {
+"biomes": [
+"taiga",
+"snowy_taiga",
+"old_growth_pine_taiga",
+"old_growth_spruce_taiga"
+],
+"tags": []
+},
+"mineshaft_blocking": {
+"biomes": [
+"deep_dark"
+],
+"tags": []
+},
+"more_frequent_drowned_spawns": {
+"biomes": [],
+"tags": [
+"is_river"
+]
+},
+"polar_bears_spawn_on_alternate_blocks": {
+"biomes": [
+"frozen_ocean",
+"deep_frozen_ocean"
+],
+"tags": []
+},
+"produces_corals_from_bonemeal": {
+"biomes": [
+"warm_ocean"
+],
+"tags": []
+},
+"reduce_water_ambient_spawns": {
+"biomes": [],
+"tags": [
+"is_river"
+]
+},
+"required_ocean_monument_surrounding": {
+"biomes": [],
+"tags": [
+"is_ocean",
+"is_river"
+]
+},
+"spawns_cold_variant_farm_animals": {
+"biomes": [
+"snowy_plains",
+"ice_spikes",
+"frozen_peaks",
+"jagged_peaks",
+"snowy_slopes",
+"frozen_ocean",
+"deep_frozen_ocean",
+"grove",
+"deep_dark",
+"frozen_river",
+"snowy_taiga",
+"snowy_beach",
+"cold_ocean",
+"deep_cold_ocean",
+"old_growth_pine_taiga",
+"old_growth_spruce_taiga",
+"taiga",
+"windswept_forest",
+"windswept_gravelly_hills",
+"windswept_hills",
+"stony_peaks"
+],
+"tags": [
+"is_end"
+]
+},
+"spawns_cold_variant_frogs": {
+"biomes": [
+"snowy_plains",
+"ice_spikes",
+"frozen_peaks",
+"jagged_peaks",
+"snowy_slopes",
+"frozen_ocean",
+"deep_frozen_ocean",
+"grove",
+"deep_dark",
+"frozen_river",
+"snowy_taiga",
+"snowy_beach"
+],
+"tags": [
+"is_end"
+]
+},
+"spawns_coral_variant_zombie_nautilus": {
+"biomes": [
+"warm_ocean"
+],
+"tags": []
+},
+"spawns_gold_rabbits": {
+"biomes": [
+"desert"
+],
+"tags": []
+},
+"spawns_snow_foxes": {
+"biomes": [
+"snowy_plains",
+"ice_spikes",
+"frozen_ocean",
+"snowy_taiga",
+"frozen_river",
+"snowy_beach",
+"frozen_peaks",
+"jagged_peaks",
+"snowy_slopes",
+"grove"
+],
+"tags": []
+},
+"spawns_warm_variant_farm_animals": {
+"biomes": [
+"desert",
+"warm_ocean",
+"mangrove_swamp",
+"deep_lukewarm_ocean",
+"lukewarm_ocean"
+],
+"tags": [
+"is_jungle",
+"is_savanna",
+"is_nether",
+"is_badlands"
+]
+},
+"spawns_warm_variant_frogs": {
+"biomes": [
+"desert",
+"warm_ocean",
+"mangrove_swamp"
+],
+"tags": [
+"is_jungle",
+"is_savanna",
+"is_nether",
+"is_badlands"
+]
+},
+"spawns_white_rabbits": {
+"biomes": [
+"snowy_plains",
+"ice_spikes",
+"frozen_ocean",
+"snowy_taiga",
+"frozen_river",
+"snowy_beach",
+"frozen_peaks",
+"jagged_peaks",
+"snowy_slopes",
+"grove"
+],
+"tags": []
+},
+"stronghold_biased_to": {
+"biomes": [
+"plains",
+"sunflower_plains",
+"snowy_plains",
+"ice_spikes",
+"desert",
+"forest",
+"flower_forest",
+"birch_forest",
+"dark_forest",
+"pale_garden",
+"old_growth_birch_forest",
+"old_growth_pine_taiga",
+"old_growth_spruce_taiga",
+"taiga",
+"snowy_taiga",
+"savanna",
+"savanna_plateau",
+"windswept_hills",
+"windswept_gravelly_hills",
+"windswept_forest",
+"windswept_savanna",
+"jungle",
+"sparse_jungle",
+"bamboo_jungle",
+"badlands",
+"eroded_badlands",
+"wooded_badlands",
+"meadow",
+"cherry_grove",
+"grove",
+"snowy_slopes",
+"frozen_peaks",
+"jagged_peaks",
+"stony_peaks",
+"mushroom_fields",
+"dripstone_caves",
+"lush_caves",
+"sulfur_caves"
+],
+"tags": []
+},
+"water_on_map_outlines": {
+"biomes": [
+"swamp",
+"mangrove_swamp"
+],
+"tags": [
+"is_ocean",
+"is_river"
+]
+},
+"without_wandering_trader_spawns": {
+"biomes": [
+"the_void"
+],
+"tags": []
+},
+"without_zombie_sieges": {
+"biomes": [
+"mushroom_fields"
+],
+"tags": []
+}
+}

@@ -65,6 +65,9 @@ jobs:
       - name: Run the smoke test
         run: python3 tools/ci_smoke.py server
 
+      - name: Run the world overhaul test
+        run: python3 tools/ci_smoke.py server --overhaul
+
       - name: Upload the server logs
         if: always()
         uses: actions/upload-artifact@v4
@@ -74,6 +77,7 @@ jobs:
             server/logs/
             server/crash-reports/
             server/smoke-console.log
+            server/smoke-console-overhaul.log
 
   release:
     needs: [build, smoke-test]
