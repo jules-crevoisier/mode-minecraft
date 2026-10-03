@@ -269,7 +269,22 @@ def check_assets():
                 err(f"{os.path.relpath(path, a)}: parent {parent} missing")
 
 
+def check_pack_meta():
+    """Without a readable pack.mcmeta Forge skips the mod's assets and data entirely (missing models,
+    and a LootModifierManager crash on the first block drop). 26.2: resources 88.0, data 107.1."""
+    path = os.path.join(RES, "pack.mcmeta")
+    if not os.path.exists(path):
+        err("pack.mcmeta missing")
+        return
+    pack = json.load(open(path)).get("pack", {})
+    if not isinstance(pack.get("description"), str):
+        err("pack.mcmeta: description must be a plain string")
+    if not (pack.get("min_format", 999) <= 88 and pack.get("max_format", 0) >= 107):
+        err("pack.mcmeta: min_format/max_format must cover 88 (resources) to 107 (data)")
+
+
 def main():
+    check_pack_meta()
     check_templates()
     check_loot()
     check_worldgen()
