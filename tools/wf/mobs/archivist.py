@@ -51,7 +51,7 @@ def _glyph(x, y, seed):
 
 
 # ------------------------------------------------------------------ paints
-def parchment(seed=0, text=True, ragged=0, runes=False, base=PARCH):
+def parchment(seed=0, text=True, ragged=0, runes=False, base=PARCH, faces=("front", "back")):
     """Aged paper: soft stains, burnt margins, lines of handwriting, optional glowing runes."""
     def f(face, x, y, w, h):
         if ragged and _side(face):
@@ -65,20 +65,20 @@ def parchment(seed=0, text=True, ragged=0, runes=False, base=PARCH):
             return mix(BURN, c, 0.25)
         if edge == 1 and _h(x, y, seed + 2) < 0.5:
             c = mix(c, BURN, 0.35)
-        if text and face in ("front", "back") and w >= 5 and 2 <= x < w - 2 and y >= 2 and y % 3 == 0:
+        if text and face in faces and w >= 5 and 2 <= x < w - 2 and y >= 2 and y % 3 == 0:
             word = (x + int(_h(y, 0, seed) * 7)) % 6
             if word < 4:
                 return mix(INK, c, 0.55)
-        if runes and face in ("front", "back") and _glyph(x, y, seed) and 1 <= x < w - 1 and 1 <= y < h - 1 \
+        if runes and face in faces and _glyph(x, y, seed) and 1 <= x < w - 1 and 1 <= y < h - 1 \
                 and (y // 4) % 3 == 1:
             return mix(RUNE, INK, 0.4)
         return c
     return f
 
 
-def parchment_glow(seed=0):
+def parchment_glow(seed=0, faces=("front", "back")):
     def f(face, x, y, w, h):
-        if face in ("front", "back") and _glyph(x, y, seed) and 1 <= x < w - 1 and 1 <= y < h - 1 \
+        if face in faces and _glyph(x, y, seed) and 1 <= x < w - 1 and 1 <= y < h - 1 \
                 and (y // 4) % 3 == 1:
             return RUNE
         return None
@@ -151,9 +151,9 @@ def lamp_glass(face, x, y, w, h):
 
 
 def _eye(x, y):
-    """Slanted ink eyes (inner corners low: a glare) with ink running down the glass."""
-    return (y == 3 and x in (1, 2, 5, 6)) or (y == 4 and x in (2, 3, 4, 5)) or (y in (5, 6) and x == 2) or \
-        (y in (5, 6, 7) and x == 5)
+    """Two ink blots slanted into a glare (inner corners low), ink running down from the outer corners."""
+    return (y == 3 and x in (1, 6)) or (y == 4 and x in (1, 2, 5, 6)) or (y == 5 and x in (2, 5)) or \
+        (y in (5, 6) and x in (1, 6)) or (y == 7 and x == 6)
 
 
 def lamp_glow(face, x, y, w, h):
@@ -255,8 +255,9 @@ def build():
         m.box(f"fore_d{side}", -2, 8, -2, 4, 4, 4, ink(46 + sx, drips=True))
         # open tome: pages block + two covers splayed in a V
         tome = f"tome_{side}"
-        m.box(tome, -7, -1.5, -8, 14, 2, 16, {"top": parchment(50 + sx, runes=True), "*": PARCH_D},
-              glow={"top": parchment_glow(50 + sx)})
+        m.box(tome, -7, -1.5, -8, 14, 2, 16, {"top": parchment(50 + sx, runes=True, faces=("top",)),
+                                              "*": lambda f_, x, y, w, h: PARCH_D if y % 2 else PARCH},
+              glow={"top": parchment_glow(50 + sx, faces=("top",))})
         m.box(tome, -0.5, -2, -8, 1, 1, 16, PARCH_D)                            # gutter
         m.box(f"cover_{side}a", 0, -0.5, -8.5, 8, 1, 17, leather(52 + sx))
         m.box(f"cover_{side}b", -8, -0.5, -8.5, 8, 1, 17, leather(53 + sx))
@@ -338,7 +339,7 @@ def _animations(m):
 
     # summon (impact 0.9 s = 18 t): every arm raised, the tomes held to the ceiling, the lantern thrown back
     a = m.anim("summon", 1.9)
-    _tomes(a, [(0.7, (-90, 0, 0), (40, 0, 0)), (1.4, (-90, 0, 0), (40, 0, 0))], 1.9)
+    _tomes(a, [(0.7, (-10, 0, 46), (50, 0, 0)), (1.4, (-10, 0, 46), (50, 0, 0))], 1.9)
     _quill_arm(a, [(0.7, (-150, 0, 20)), (1.4, (-150, 0, 20))], 1.9)
     a.rot("arm_dl", (0, Z), (0.7, (-150, 0, -20)), (1.4, (-150, 0, -20)), (1.9, Z))
     a.rot("head", (0, Z), (0.7, (-26, 0, 0)), (1.4, (-26, 0, 0)), (1.9, Z))
@@ -388,7 +389,8 @@ def _animations(m):
     # roar (phase two): the halo flares, every arm spread, the lantern blazing upward
     a = m.anim("roar", 2.4)
     for side, sx in (("r", -1), ("l", 1)):
-        a.rot(f"arm_u{side}", (0, Z), (0.5, (-50, 0, 20 * -sx)), (1.9, (-50, 0, 20 * -sx)), (2.4, Z))
+        a.rot(f"arm_u{side}", (0, Z), (0.5, (10, 0, 34 * -sx)), (1.9, (10, 0, 34 * -sx)), (2.4, Z))
+        a.rot(f"fore_u{side}", (0, Z), (0.5, (60, 0, 0)), (1.9, (60, 0, 0)), (2.4, Z))
         a.rot(f"arm_d{side}", (0, Z), (0.5, (-20, 0, 50 * -sx)), (1.9, (-20, 0, 50 * -sx)), (2.4, Z))
     a.rot("head", (0, Z), (0.5, (-30, 0, 0)), (1.9, (-30, 0, 0)), (2.4, Z))
     a.rot("chest", (0, Z), (0.5, (-18, 0, 0)), (1.9, (-18, 0, 0)), (2.4, Z))

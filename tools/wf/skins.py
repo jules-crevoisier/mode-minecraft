@@ -73,76 +73,6 @@ def face(s, eye, pupil=None, mouth=None, brow=None, eye_y=4):
             s.front_px("head", mx, eye_y + 2, mouth)
 
 
-def ruin_walker():
-    """Moss-grown stone sentinel: stone skin, moss patches, glowing green eyes, rusty armour."""
-    s = Skin(1)
-    stone, moss = (128, 128, 120), (86, 116, 54)
-
-    def mossy(x, y, w, h, f):
-        return moss if (x * 7 + y * 3) % 11 < 3 or (f == "top") else mix(stone, (110, 108, 100), (x + y) % 3 / 3)
-    s.paint("head", mossy)
-    face(s, (170, 255, 120), (230, 255, 200), mouth=(60, 60, 56), brow=(90, 90, 86))
-    s.paint("hat", lambda x, y, w, h, f: moss if f == "top" or (f != "bottom" and y < 2 and x % 3) else None)
-    s.rows("body", [(2, (110, 84, 60)), (7, (120, 100, 70)), (1, (60, 46, 34)), (2, (96, 80, 58))])
-    s.paint("body", lambda x, y, w, h, f: (150, 118, 70) if f == "front" and x in (3, 4) and 2 <= y <= 8 else None)
-    s.rows("arm", [(4, (110, 84, 60)), (6, stone), (2, moss)])
-    s.rows("leg", [(6, (96, 80, 58)), (3, stone), (3, (70, 64, 58))])
-    return s.cv
-
-
-def map_wraith():
-    """Paper ghost wrapped in old maps: parchment body with ink lines, hollow black eyes."""
-    s = Skin(2)
-    paper, ink = (228, 214, 172), (70, 56, 40)
-
-    def parchment(x, y, w, h, f):
-        if (y % 4 == 1 and x % 5 != 0) or ((x + y * 2) % 13 == 0):
-            return mix(paper, ink, 0.55)
-        return mix(paper, (200, 180, 130), ((x * 3 + y) % 5) / 8)
-    for b in ("head", "body", "arm", "leg"):
-        s.paint(b, parchment)
-    face(s, (10, 8, 6), (10, 8, 6), mouth=(40, 30, 20))
-    s.paint("hat", lambda x, y, w, h, f: (196, 176, 128) if f in ("top", "back") or (f != "bottom" and y < 3) else None)
-    s.paint("body", lambda x, y, w, h, f: (170, 40, 30) if f == "front" and (x - 3) ** 2 + (y - 5) ** 2 <= 2 else None)
-    return s.cv
-
-
-def basalt_guard():
-    """Fortress guard in basalt plate armour with glowing ember seams and a horned helm."""
-    s = Skin(3)
-    plate, dark, ember = (62, 60, 66), (30, 28, 34), (255, 132, 40)
-
-    def armour(x, y, w, h, f):
-        if f in ("front", "back") and (y == 3 or y == 8):
-            return ember if x % 3 else mul(ember, 0.7)
-        return mix(plate, dark, ((x + y) % 4) / 6)
-    s.paint("head", lambda x, y, w, h, f: dark)
-    s.paint("hat", armour)
-    for ex in (1, 5):
-        s.front_px("hat", ex, 4, ember)
-        s.front_px("hat", ex + 1, 4, (255, 210, 120))
-    s.paint("hat", lambda x, y, w, h, f: (20, 18, 22) if f == "front" and y == 4 and x in (0, 3, 4, 7) else None)
-    s.paint("body", armour)
-    s.rows("arm", [(3, (90, 86, 94)), (7, plate), (2, ember)])
-    s.rows("leg", [(5, plate), (1, ember), (6, dark)])
-    return s.cv
-
-
-def void_stalker():
-    """Lanky hunter of the End: deep violet skin speckled with stars, burning magenta eyes."""
-    s = Skin(4)
-    void = (38, 20, 56)
-
-    def starry(x, y, w, h, f):
-        r = (x * 31 + y * 17 + hash(f)) % 23
-        return (230, 200, 255) if r == 0 else (150, 100, 220) if r == 1 else mix(void, (60, 30, 90), ((x + y) % 3) / 4)
-    for b in ("head", "body", "arm", "leg"):
-        s.paint(b, starry)
-    face(s, (255, 120, 255), (255, 230, 255))
-    s.paint("hat", lambda x, y, w, h, f: (24, 12, 36) if f in ("top", "back", "left", "right") and y < 5 else None)
-    return s.cv
-
-
 def void_warden():
     """End mini-boss: obsidian armour with violet glow, horned helm, starlight core."""
     s = Skin(6)
@@ -164,9 +94,10 @@ def void_warden():
     return s.cv
 
 
+# ruin_walker, map_wraith, basalt_guard and void_stalker now have generated models (tools/wf/mobs), whose
+# textures gen_models.py writes under the same file names.
 SKINS = {
-    "ruin_walker": ruin_walker, "map_wraith": map_wraith, "basalt_guard": basalt_guard,
-    "void_stalker": void_stalker, "void_warden": void_warden,
+    "void_warden": void_warden,
 }
 
 

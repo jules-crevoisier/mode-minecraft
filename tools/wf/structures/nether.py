@@ -1986,6 +1986,9 @@ def soul_tower(bp):
     bp.chest(cx - 3, -5, cz + 3, "north", LOOT + "soul_tower")
     for (x, z) in ((cx - 4, cz), (cx + 4, cz + 2), (cx, cz - 4)):
         bp.set(x, -5, z, "soul_lantern[hanging=false,waterlogged=false]")
+    # ---------------- the summit arena of the Soul Reaper (grace floor, turret, reliquary)
+    from . import lair_soul_reaper
+    lair_soul_reaper.build(bp, cx, cz)
 
 
 register(StructureDef(

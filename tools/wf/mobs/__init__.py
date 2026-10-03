@@ -14,6 +14,7 @@ from . import sculk_spawn
 from . import ash_lord
 from . import piglin_king
 from . import soul_reaper
+from . import void_warden
 from . import skeleton_knight
 from . import crypt_crawler
 from . import banshee
@@ -24,6 +25,10 @@ from . import grave_knight
 from . import bone_matriarch
 from . import weeping_lady
 from . import larva_mother
+from . import ruin_walker
+from . import map_wraith
+from . import basalt_guard
+from . import void_stalker
 
 MODELS = [
     drowned_warden.build,
@@ -41,6 +46,7 @@ MODELS = [
     ash_lord.build,
     piglin_king.build,
     soul_reaper.build,
+    void_warden.build,
     skeleton_knight.build,
     crypt_crawler.build,
     banshee.build,
@@ -51,4 +57,8 @@ MODELS = [
     bone_matriarch.build,
     weeping_lady.build,
     larva_mother.build,
+    ruin_walker.build,
+    map_wraith.build,
+    basalt_guard.build,
+    void_stalker.build,
 ]

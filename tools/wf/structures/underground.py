@@ -13,6 +13,7 @@ import random
 from ..arch import Palette, stair
 from ..defs import Piece, StructureDef, register
 from ..parts import LOOT, MOB
+from . import lair_forge_king
 
 DEEP = ["#minecraft:is_overworld"]
 
@@ -454,6 +455,8 @@ def dwarven_forge(bp):
     soften(bp, X0, 12, -Z, X1, F_TOP + 5, Z)
     # guards: one in the hall before the forge, one in the barracks
     bp.spawner(44, 1, 0, MOB["ruin_walker"])
+    # the King's Stair down to the Forge King's crucible (lair_forge_king.py)
+    lair_forge_king.build(bp)
 
 
 def dwarf_chandelier(bp, x, yc, z, drop):
@@ -884,7 +887,7 @@ def vault(bp):
 register(StructureDef(
     "dwarven_forge", "overworld", DEEP, [Piece("forge", dwarven_forge)],
     spacing=30, separation=10, step="underground_structures", adaptation="encapsulate",
-    height=("uniform", -48, -12), spawns=[(MOB["ruin_walker"], 10, 1, 2)],
+    height=("uniform", -58, -36), spawns=[(MOB["ruin_walker"], 10, 1, 2)],
     title_fr="Forge naine", title_en="Dwarven Forge"))
 
 
@@ -1473,6 +1476,9 @@ def sealed_lab(bp):
     spread_sculk(bp, 0, -17, 6, 7)
     bp.spawner(-19, 1, -6, MOB["map_wraith"])
     bp.spawner(2, 1, 21, MOB["map_wraith"])
+    # the boss lair below: shaft from the breached cell down to the Containment Core
+    from . import lair_sculk_spawn
+    lair_sculk_spawn.build(bp)
 
 
 def fill_cells(bp, cells, rng):
@@ -1551,5 +1557,5 @@ def fill_cells(bp, cells, rng):
 register(StructureDef(
     "sealed_lab", "overworld", ["deep_dark", "dripstone_caves", "lush_caves"],
     [Piece("lab", sealed_lab)], spacing=28, separation=9, step="underground_structures",
-    adaptation="encapsulate", height=("uniform", -52, -20), spawns=[(MOB["map_wraith"], 10, 1, 2)],
+    adaptation="encapsulate", height=("uniform", -59, -42), spawns=[(MOB["map_wraith"], 10, 1, 2)],
     title_fr="Laboratoire scellé", title_en="Sealed Laboratory"))

@@ -17,7 +17,7 @@ from ..texgen import mix, mul
 # ---------------------------------------------------------------- palette
 WHITE = (238, 236, 228)
 WHITE_D = (200, 196, 188)
-WHITE_S = (150, 146, 146)
+WHITE_S = (176, 170, 166)
 CREAM = (246, 240, 222)
 GOLD_F = (224, 170, 64)
 GOLD_FD = (166, 112, 38)
@@ -66,27 +66,32 @@ def jit(c, x, y, seed, amt=0.06):
 
 # ---------------------------------------------------------------- painters
 def scales(base, dark, light, seed=0, fw=4, fh=3, tip=None, top=None):
-    """Small overlapping feathers (head, neck, chest, trousers): staggered rows of rounded tips with a
-    dark gap between tips and a pale highlight at the root of each feather."""
+    """Small overlapping feathers (head, neck, chest, trousers): staggered rows of soft rounded tips,
+    a gentle shadow under each row, a pale sheen at the root and a slight tint per feather."""
     def f(face, x, y, w, h):
         if face in ("top", "bottom"):
             c = top or base
             if face == "bottom":
-                c = mix(c, dark, 0.25)
-            return jit(c, x, y, seed, 0.05)
+                c = mix(c, dark, 0.3)
+            elif (x + y) % 3 == 0:
+                c = mix(c, light, 0.25)
+            return jit(c, x, y, seed, 0.03)
         row = y // fh
-        u = (x + (row % 2) * (fw // 2)) % fw
+        shift = (row % 2) * (fw // 2)
+        col = (x + shift) // fw
+        u = (x + shift) % fw
         v = y % fh
-        c = base
-        if v == fh - 1 and (u == 0 or u == fw - 1):
-            c = dark
+        c = mix(base, light, 0.25) if hsh(col, row, seed) % 4 == 0 else base
+        if v == 0:
+            c = mix(c, light, 0.35)
+        elif v == fh - 1:
+            centre = abs(u - (fw - 1) / 2) < 1
+            c = mix(c, dark, 0.22 if centre else 0.5)
+            if tip is not None and centre:
+                c = mix(c, tip, 0.7)
         elif u == 0:
-            c = mix(base, dark, 0.45)
-        elif v == 0 and u == fw // 2:
-            c = light
-        if tip is not None and v == fh - 1 and 0 < u < fw - 1:
-            c = mix(c, tip, 0.65)
-        return jit(c, x, y, seed, 0.04)
+            c = mix(c, dark, 0.22)
+        return jit(c, x, y, seed, 0.025)
     return f
 
 
@@ -100,16 +105,20 @@ def grad(stops, t):
     return stops[-1][1]
 
 
-def quills(stops, fw=3, seed=0, along="y", base_at_end=True, lengths=None, slot_from=None, rim=None):
+def quills(stops, fw=3, seed=0, along="y", base_at_end=True, lengths=None, slot_from=None, rim=None,
+           edges=("front",)):
     """Long flight feathers side by side on the broad faces of a wing plane.
 
     ``along`` is the texture axis the feathers run along; ``base_at_end`` puts the feather roots at the
     far end of that axis (wing planes: texture row 0 is the trailing edge). ``lengths(i, n)`` shortens
     feather i (fan shapes); ``slot_from`` (0..1) opens slots between the feathers beyond that fraction
-    of their length (an eagle's fingered wingtip). Feather tips are cut to points."""
+    of their length (an eagle's fingered wingtip). Feather tips are cut to points. Only the side faces in
+    ``edges`` are painted ("all" for a solid tuft), so the thin edge of a ragged plane never outlines it."""
     def f(face, x, y, w, h):
         if face not in ("top", "bottom"):
-            return grad(stops, 0.5) if rim is None else rim
+            if edges != "all" and face not in edges:
+                return None
+            return grad(stops, 0.15) if rim is None else rim
         a_len = h if along == "y" else w
         pos = y if along == "y" else x
         acr = x if along == "y" else y
@@ -129,14 +138,16 @@ def quills(stops, fw=3, seed=0, along="y", base_at_end=True, lengths=None, slot_
         t = a / max(1, L - 1)
         c = grad(stops, t)
         if u == 0:
-            c = mix(c, (60, 50, 50), 0.35)                 # shadow line between feathers
+            c = mix(c, (70, 60, 60), 0.2)                  # soft shadow line between feathers
         elif abs(u - mid) < 0.6 and a < L - 2:
-            c = mix(c, WHITE_PX, 0.28)                     # the shaft
+            c = mix(c, WHITE_PX, 0.22)                     # the shaft
+        elif u == fw - 1:
+            c = mix(c, WHITE_PX, 0.08)
         elif (a + u + i) % 4 == 0:
             c = mul(c, 0.93)                               # barbs
         if face == "bottom":
-            c = mix(c, WHITE_D, 0.12)
-        return jit(c, x, y, seed + i, 0.03)
+            c = mul(c, 1.25)                               # cancels the baked underside shade: the
+        return jit(c, x, y, seed + i, 0.03)                # folded wing shows its underside outward
     return f
 
 
@@ -296,9 +307,11 @@ def ruff(seed=0):
 
 # ---------------------------------------------------------------- the model
 # rest rotations of the wing segments (folded) and their spread flight pose (all zero)
-WING_REST = {"wing_l": (-90, -90, -12), "wing_r": (-90, 90, 12),
-             "wingtip_l": (0, -14, -12), "wingtip_r": (0, 14, 12)}
-WING_SPREAD = {"wing_l": (0, 0, 0), "wing_r": (0, 0, 0), "wingtip_l": (0, -12, 0), "wingtip_r": (0, 12, 0)}
+WING_REST = {"shoulder_l": (-13, 0, 0), "shoulder_r": (-13, 0, 0),
+             "wing_l": (-90, -90, -14), "wing_r": (-90, 90, 14),
+             "wingtip_l": (0, 4, -14), "wingtip_r": (0, -4, 14)}
+WING_SPREAD = {"shoulder_l": (0, 0, 0), "shoulder_r": (0, 0, 0), "wing_l": (0, 0, 0), "wing_r": (0, 0, 0),
+               "wingtip_l": (0, -12, 0), "wingtip_r": (0, 12, 0)}
 
 
 def build():
@@ -322,20 +335,25 @@ def build():
     part("bone", None, (0, 24, 0))
     part("body", "bone", (0, g(31), 14))                    # hips: rears and pitches around them
     # the neck leans forward; the head undoes it so its own frame is level
-    m.part("neck", "body", pivot=(0, g(44) - g(31), -22 - 14), rot=(34, 0, 0))
-    m.part("head", "neck", pivot=(0, -15, -1), rot=(-34, 0, 0))
-    m.part("jaw", "head", pivot=(0, -3, -11))
-    m.part("plume", "head", pivot=(0, -14, 3), rot=(-40, 0, 0))
+    m.part("neck", "body", pivot=(0, g(42) - g(31), -24 - 14), rot=(22, 0, 0))
+    m.part("head", "neck", pivot=(0, -12, -1), rot=(-22, 0, 0))
+    m.part("jaw", "head", pivot=(0, -3, -12))
+    m.part("plume", "head", pivot=(0, -16, 2), rot=(-42, 0, 0))
+    m.part("plume_l", "plume", pivot=(1.5, 0, 1), rot=(-14, 0, 16))
+    m.part("plume_r", "plume", pivot=(-1.5, 0, 1), rot=(-14, 0, -16))
     for side, sx in (("l", 1), ("r", -1)):
-        m.part(f"wing_{side}", "body", pivot=(sx * 12, g(46) - g(31), -20 - 14), rot=WING_REST[f"wing_{side}"])
+        # the shoulder pitches the folded wing so it slopes down the back (zero in flight)
+        m.part(f"shoulder_{side}", "body", pivot=(sx * 12, g(47) - g(31), -20 - 14), rot=WING_REST[f"shoulder_{side}"])
+        m.part(f"wing_{side}", f"shoulder_{side}", pivot=(0, 0, 0), rot=WING_REST[f"wing_{side}"])
         m.part(f"wingtip_{side}", f"wing_{side}", pivot=(sx * 24, 0, 0), rot=WING_REST[f"wingtip_{side}"])
     for side, sx in (("l", 1), ("r", -1)):
         part(f"leg_f{side}", "body", (sx * 7.5, g(29), -17))
         part(f"shin_f{side}", f"leg_f{side}", (sx * 7.5, g(15), -17))
         part(f"leg_h{side}", "body", (sx * 6.5, g(33), 19))
         part(f"shin_h{side}", f"leg_h{side}", (sx * 6.5, g(18), 22))
-    m.part("tail", "body", pivot=(0, g(38) - g(31), 27 - 14), rot=(-40, 0, 0))
-    m.part("tail2", "tail", pivot=(0, 0, 15), rot=(55, 0, 0))
+    m.part("tail", "body", pivot=(0, g(39) - g(31), 27 - 14), rot=(-45, 0, 0))
+    m.part("tail2", "tail", pivot=(0, 0, 13), rot=(40, 0, 0))
+    m.part("tail3", "tail2", pivot=(0, 0, 11), rot=(35, 0, 0))
 
     # ------------------------------------------------------------------ body
     breast = scales(WHITE, WHITE_S, CREAM, 1, tip=GOLD_FL)
@@ -363,50 +381,65 @@ def build():
     # caparison skirt hanging under the wings, legs pass through it
     ab("body", -12, 30, -9, 24, 13, 37, caparison(4))
     # crupper on the rump with a gold spine
-    ab("body", -10.5, 44, 9, 21, 3, 17, plate(inlay=lambda f_, x, y, w, h: GOLD if f_ == "top" and abs(x - w // 2) < 1 else None))
-    ab("body", -1, 46, 11, 2, 2, 13, plate(GOLD, GOLD_D, rivets=False))
+    ab("body", -8, 44, 9, 16, 3, 16, plate(inlay=lambda f_, x, y, w, h: GOLD if f_ == "top" and abs(x - w // 2) < 1 else None))
+    ab("body", -1, 46, 11, 2, 2, 12, plate(GOLD, GOLD_D, rivets=False))
 
     # ------------------------------------------------------------------ neck and head
-    m.box("neck", -7, -18, -7, 14, 20, 14, scales(WHITE, WHITE_S, CREAM, 5, fw=4, fh=3))
-    m.box("neck", -9, -3, -9, 18, 8, 18, ruff(6))                                     # feather ruff
-    for i, y in enumerate((-18, -12, -6)):                                            # lames down the nape
-        m.box("neck", -4.5, y, 6, 9, 6, 3, plate(seed=7 + i))
-    eye = lambda f_, x, y, w, h: (EYE if f_ in ("left", "right") and y == 7 and
-                                   (x in (3, 4) if f_ == "left" else x in (w - 4, w - 5)) else None)
-    pupil = lambda f_, x, y, w, h: ((30, 20, 16) if f_ in ("left", "right") and y == 7 and
-                                     (x == 3 if f_ == "left" else x == w - 4) else None)
-    stripe = lambda f_, x, y, w, h: ((96, 84, 76) if f_ in ("left", "right") and y in (6, 8) and
-                                      (x <= 7 if f_ == "left" else x >= w - 8) else None)
+    m.box("neck", -8, -14, -7, 16, 16, 14, scales(WHITE, WHITE_S, CREAM, 5, fw=4, fh=3))
+    m.box("neck", -10, -2, -10, 20, 9, 19, ruff(6))                                   # feather ruff
+    for i, y in enumerate((-14, -9, -4)):                                             # lames down the nape
+        m.box("neck", -5, y, 6, 10, 5, 3, plate(seed=7 + i))
+    # eagle eye: glowing gold iris, black pupil, a dark brow shadow and the stripe running back
+    def eye_px(f_, x, y, w, h):
+        if f_ not in ("left", "right"):
+            return None
+        u = x if f_ == "left" else w - 1 - x                # distance from the front edge
+        if y in (7, 8) and u in (3, 4):
+            return (24, 18, 14) if (u == 3 and y == 8) else EYE
+        return None
+
+    def eye_shade(f_, x, y, w, h):
+        if f_ not in ("left", "right"):
+            return None
+        u = x if f_ == "left" else w - 1 - x
+        if (y == 6 and 1 <= u <= 6) or (y in (7, 8) and u in (2, 5)) or (y == 9 and 2 <= u <= 9):
+            return (92, 80, 74)
+        return None
     sk = scales(WHITE, WHITE_S, CREAM, 8, fw=3, fh=2)
 
     def skull(f_, x, y, w, h):
-        return pupil(f_, x, y, w, h) or eye(f_, x, y, w, h) or stripe(f_, x, y, w, h) or sk(f_, x, y, w, h)
-    m.box("head", -7, -13, -11, 14, 13, 16, skull, glow=eye)
-    m.box("head", -8, -12, -12, 16, 3, 8, scales(WHITE_D, WHITE_S, WHITE, 9, fw=3, fh=2))   # stern brow
-    m.box("head", -5, -11, -18, 10, 7, 7, beak(10))                                   # cere
-    m.box("head", -4, -10, -24, 8, 6, 6, beak(11))                                    # upper beak
-    m.box("head", -3, -7, -27, 6, 8, 4, beak(12, tip_rows=3))                         # the hook
-    m.box("head", -2, 1, -26, 4, 2, 3, beak(12, tip_rows=2))
-    m.box("jaw", -4, 0, -11, 8, 3, 11, beak(13))
-    m.box("jaw", -3, -1, -11, 6, 1, 1, (250, 236, 200))
+        return eye_px(f_, x, y, w, h) or eye_shade(f_, x, y, w, h) or sk(f_, x, y, w, h)
+    m.box("head", -8, -14, -11, 16, 14, 17, skull, glow=eye_px)
+    m.box("head", -9, -13, -13, 18, 4, 9, {"bottom": (120, 112, 108),                # stern brow
+                                           "*": scales(WHITE_D, WHITE_S, WHITE, 9, fw=3, fh=2)})
+    m.box("head", -5.5, -12, -19, 11, 9, 8, beak(10))                                 # cere
+    m.box("head", -4.5, -11, -25, 9, 8, 6, beak(11))                                  # upper beak
+    m.box("head", -3.5, -9, -29, 7, 10, 4, beak(12, tip_rows=4))                      # the hook
+    m.box("head", -2.5, 1, -28, 5, 3, 3, beak(12, tip_rows=3))
+    m.box("jaw", -4.5, 0, -12, 9, 3, 12, beak(13))
+    m.box("jaw", -3.5, -1, -12, 7, 1, 1, (250, 236, 200))
     for sx in (-1, 1):                                                                # ear tufts
-        m.box("head", 4 if sx > 0 else -7, -15, 1, 3, 5, 10, scales(WHITE, WHITE_S, GOLD_FL, 14, fw=3, fh=2, tip=GOLD_F))
+        m.box("head", 5 if sx > 0 else -9, -16, 2, 4, 6, 12, scales(WHITE, WHITE_S, GOLD_FL, 14, fw=3, fh=2, tip=GOLD_F))
     # chanfron: silver plate over the crown and the cere, cheek guards behind the eyes
-    m.box("head", -6, -14.5, -13, 12, 2, 16, plate(seed=15, inlay=lambda f_, x, y, w, h: GOLD if f_ == "top" and x == w // 2 else None))
-    m.box("head", -3.5, -12, -19, 7, 2, 7, plate(seed=16, rivets=False))
+    m.box("head", -7, -16, -14, 14, 2, 18, plate(seed=15, inlay=lambda f_, x, y, w, h: GOLD if f_ == "top" and x == w // 2 else None))
+    m.box("head", -3.5, -13.5, -21, 7, 2, 9, plate(seed=16, rivets=False))
     for sx in (-1, 1):
-        m.box("head", -8 if sx < 0 else 7, -10, -3, 1, 8, 8, plate(seed=17))
-    # plume: gold holder and a tall azure-and-white plume sweeping back
-    m.box("plume", -2, -3, -2, 4, 3, 4, plate(GOLD, GOLD_D, rivets=False))
-    m.box("plume", -2, -19, -2, 4, 16, 5, quills([(0, AZURE_D), (0.5, AZURE), (0.85, AZURE_L), (1, WHITE)],
-                                                   fw=2, seed=18, along="y", base_at_end=True, rim=AZURE))
-    m.box("plume", -1, -25, 0, 2, 7, 4, quills([(0, AZURE), (0.6, AZURE_L), (1, WHITE)], fw=2, seed=19,
-                                                 along="y", base_at_end=True, rim=AZURE_L))
-    m.box("plume", -0.5, -2, -2.5, 1, 1, 1, GEM, glow=GEM)
+        m.box("head", -9 if sx < 0 else 8, -11, -2, 1, 9, 8, plate(seed=17))
+    # plume: gold holder and a fan of three azure-and-white plumes sweeping back
+    m.box("plume", -2.5, -3, -2.5, 5, 3, 5, plate(GOLD, GOLD_D, rivets=False))
+    plume_main = quills([(0, AZURE_D), (0.45, AZURE), (0.8, AZURE_L), (1, WHITE)], fw=2, seed=18, along="y",
+                        base_at_end=True, rim=AZURE, edges="all")
+    m.box("plume", -2, -21, -2, 4, 18, 5, plume_main)
+    m.box("plume", -1, -27, -1, 2, 7, 4, quills([(0, AZURE), (0.6, AZURE_L), (1, WHITE)], fw=2, seed=19,
+                                                  along="y", base_at_end=True, rim=AZURE_L, edges="all"))
+    for p_ in ("plume_l", "plume_r"):
+        m.box(p_, -1, -15, -1.5, 2, 13, 4, quills([(0, WHITE_D), (0.5, WHITE), (1, AZURE_L)], fw=2, seed=20,
+                                                   along="y", base_at_end=True, rim=WHITE, edges="all"))
+    m.box("plume", -0.5, -2, -3, 1, 1, 1, GEM, glow=GEM)
 
     # ------------------------------------------------------------------ wings (local frame = spread wing:
     # +x outward along the bone, +z the trailing feathers, the plane is 1 px thick)
-    sec = [(0, WHITE), (0.35, CREAM), (0.55, GOLD_FL), (0.62, GOLD_F), (0.72, WHITE), (1, WHITE)]
+    sec = [(0, CREAM), (0.55, WHITE), (0.72, GOLD_FL), (0.88, GOLD_F), (1, GOLD_FD)]
     prim = [(0, WHITE), (0.3, GOLD_FL), (0.6, GOLD_F), (0.85, GOLD_FD), (1, (110, 76, 36))]
 
     def prim_len(i, n, a_len):
@@ -423,7 +456,8 @@ def build():
         m.box(t, x1, -1, 1, 14, 2, 5, scales(GOLD_FL, GOLD_FD, WHITE, 24, fw=3, fh=2, tip=GOLD_F))
         x2 = 0 if sx > 0 else -34
         m.box(t, x2, 0, -1, 34, 1, 15, quills(prim, fw=3, seed=25 + sx, along="x", base_at_end=sx < 0,
-                                               lengths=prim_len, slot_from=0.6))                   # primaries
+                                               lengths=prim_len, slot_from=0.72,
+                                               edges=("front", "right" if sx > 0 else "left")))                   # primaries
 
     # ------------------------------------------------------------------ legs
     for side, sx in (("l", 1), ("r", -1)):
@@ -441,9 +475,17 @@ def build():
         claws = lambda f_, x, y, w, h: (236, 226, 200) if y == h - 1 and x % 2 == 1 else fur(seed=35)(f_, x, y, w, h)
         ab(sh, sx * 6.5 - 4, 5, 16, 8, 5, 10, {"front": claws, "*": fur(seed=35)})
     # tail: drooping then curling up, with a dark tuft
-    m.box("tail", -1.5, -1.5, 0, 3, 3, 16, fur(seed=40))
-    m.box("tail2", -1, -1, 0, 2, 2, 11, fur(seed=41))
-    m.box("tail2", -2.5, -2.5, 9, 5, 5, 7, lambda f_, x, y, w, h: jit(TUFT if (x + y) % 3 else mul(TUFT, 0.75), x, y, 42))
+    m.box("tail", -2, -2, -1, 4, 4, 15, fur(seed=40))
+    m.box("tail2", -1.5, -1.5, -1, 3, 3, 13, fur(seed=41))
+    m.box("tail3", -1.5, -1.5, -1, 3, 3, 6, fur(seed=42))
+
+    def tuft(f_, x, y, w, h):
+        k = hsh(x, 43) % 4
+        c = TUFT if (x + k) % 3 else mix(TUFT, (60, 34, 20), 0.6)
+        if f_ in ("front", "back", "left", "right") and y >= h - 1 - k % 2:
+            c = mix(c, FUR_D, 0.4)
+        return jit(c, x, y, 44, 0.06)
+    m.box("tail3", -3, -3, 3, 6, 6, 9, tuft)
 
     anims(m)
     return m
@@ -552,9 +594,11 @@ def anims(m):
     # ---------------------------------------------------------------- gust (ground): rears and beats the
     # wings forward, a cone of wind (impact 0.9 s = 18 t)
     a = m.anim("gust", 1.8)
+    for sh_ in ("shoulder_l", "shoulder_r"):
+        a.rot(sh_, (0, Z3), (0.7, fp(sh_)), (1.3, fp(sh_)), (1.8, Z3))
     a.rot("body", (0, Z3), (0.7, (-28, 0, 0)), (0.9, (-12, 0, 0), "linear"), (1.3, (-10, 0, 0)), (1.8, Z3))
     for side, sx in (("l", 1), ("r", -1)):
-        a.rot(f"wing_{side}", (0, Z3), (0.7, fp(f"wing_{side}", (-30, 30 * sx, -50 * sx))),
+        a.rot(f"wing_{side}", (0, Z3), (0.7, fp(f"wing_{side}", (70, 20 * sx, -40 * sx))),
               (0.9, fp(f"wing_{side}", (0, -40 * sx, 40 * sx)), "linear"), (1.3, fp(f"wing_{side}", (0, -30 * sx, 25 * sx))),
               (1.8, Z3))
         a.rot(f"wingtip_{side}", (0, Z3), (0.7, (0, 0, -20 * sx)), (0.9, (0, -20 * sx, 25 * sx), "linear"), (1.8, Z3))
@@ -611,8 +655,8 @@ def anims(m):
     a.rot("neck", (0, fp("neck")), (0.7, fp("neck", (-25, 0, 0))), (0.9, fp("neck", (10, 0, 0))), (2.0, fp("neck")))
     a.rot("jaw", (0, Z3), (0.5, (40, 0, 0)), (0.75, (40, 0, 0)), (0.9, Z3), (2.0, Z3))
     for side, sx in (("l", 1), ("r", -1)):
-        a.rot(f"wing_{side}", (0, fp(f"wing_{side}")), (0.7, fp(f"wing_{side}", (-20, 0, -60 * sx))),
-              (0.9, fp(f"wing_{side}", (-10, -50 * sx, -40 * sx)), "linear"), (1.3, fp(f"wing_{side}", (0, -40 * sx, -30 * sx))),
+        a.rot(f"wing_{side}", (0, fp(f"wing_{side}")), (0.7, fp(f"wing_{side}", (70, 0, -45 * sx))),
+              (0.9, fp(f"wing_{side}", (0, -65 * sx, -10 * sx)), "linear"), (1.3, fp(f"wing_{side}", (0, -55 * sx, -10 * sx))),
               (1.6, fp(f"wing_{side}", (0, 0, 30 * sx))), (2.0, fp(f"wing_{side}")))
         a.rot(f"wingtip_{side}", (0, fp(f"wingtip_{side}")), (0.9, fp(f"wingtip_{side}", (0, 30 * sx, 0))), (2.0, fp(f"wingtip_{side}")))
         a.rot(f"leg_f{side}", (0, fp(f"leg_f{side}")), (0.7, fp(f"leg_f{side}")), (0.9, (-70, 0, 0), "linear"),
@@ -630,7 +674,7 @@ def anims(m):
             a.rot(name, (0, fp(name)), (1.8, fp(name)))
     a.rot("body", (0, Z3), (0.7, (-25, 0, 0)), (0.85, (10, 0, 0), "linear"), (1.3, (5, 0, 0)), (1.8, Z3))
     for side, sx in (("l", 1), ("r", -1)):
-        a.rot(f"wing_{side}", (0, fp(f"wing_{side}")), (0.7, fp(f"wing_{side}", (-10, 45 * sx, -45 * sx))),
+        a.rot(f"wing_{side}", (0, fp(f"wing_{side}")), (0.7, fp(f"wing_{side}", (70, 25 * sx, -35 * sx))),
               (0.85, fp(f"wing_{side}", (0, -35 * sx, 30 * sx)), "linear"), (1.3, fp(f"wing_{side}", (0, -20 * sx, 15 * sx))),
               (1.8, fp(f"wing_{side}")))
         a.rot(f"wingtip_{side}", (0, fp(f"wingtip_{side}")), (0.7, fp(f"wingtip_{side}", (0, 25 * sx, -20 * sx))),
@@ -646,7 +690,7 @@ def anims(m):
     a.rot("body", (0, Z3), (0.55, (-25, 0, 0)), (0.75, (6, 0, 0), "linear"), (1.1, (4, 0, 0)), (1.8, Z3))
     a.pos("bone", (0, Z3), (0.75, (0, -3, 0), "linear"), (1.1, (0, -2, 0)), (1.8, Z3))
     for side, sx in (("l", 1), ("r", -1)):
-        a.rot(f"wing_{side}", (0, fp(f"wing_{side}")), (0.55, fp(f"wing_{side}", (0, 0, -60 * sx))),
+        a.rot(f"wing_{side}", (0, fp(f"wing_{side}")), (0.55, fp(f"wing_{side}", (65, 0, -45 * sx))),
               (0.75, fp(f"wing_{side}", (0, 0, 40 * sx)), "linear"), (1.1, fp(f"wing_{side}", (0, 0, 30 * sx))),
               (1.8, Z3))
         a.rot(f"wingtip_{side}", (0, fp(f"wingtip_{side}")), (0.55, fp(f"wingtip_{side}", (0, 0, -30 * sx))),
@@ -655,14 +699,16 @@ def anims(m):
     # ---------------------------------------------------------------- storm (phase 2 spectacle): rears up,
     # wings raised to the sky, a long scream while the bolts fall (call at 1.0 s = 20 t)
     a = m.anim("storm", 2.6)
+    for sh_ in ("shoulder_l", "shoulder_r"):
+        a.rot(sh_, (0, Z3), (0.6, fp(sh_)), (2.0, fp(sh_)), (2.6, Z3))
     a.rot("body", (0, Z3), (0.6, (-40, 0, 0)), (2.0, (-40, 0, 0)), (2.6, Z3))
     a.pos("bone", (0, Z3), (0.6, (0, 0, 6)), (2.0, (0, 0, 6)), (2.6, Z3))
     a.rot("neck", (0, Z3), (0.6, (-20, 0, 0)), (2.0, (-24, 0, 0)), (2.6, Z3))
     a.rot("head", (0, Z3), (0.6, (-25, 0, 0)), (2.0, (-25, 0, 0)), (2.6, Z3))
     a.rot("jaw", (0, Z3), (0.6, (45, 0, 0)), (2.0, (45, 0, 0)), (2.6, Z3))
     for side, sx in (("l", 1), ("r", -1)):
-        a.rot(f"wing_{side}", (0, Z3), (0.6, fp(f"wing_{side}", (0, 0, -65 * sx))), (1.0, fp(f"wing_{side}", (0, 0, -55 * sx))),
-              (1.4, fp(f"wing_{side}", (0, 0, -70 * sx))), (2.0, fp(f"wing_{side}", (0, 0, -60 * sx))), (2.6, Z3))
+        a.rot(f"wing_{side}", (0, Z3), (0.6, fp(f"wing_{side}", (75, 0, -55 * sx))), (1.0, fp(f"wing_{side}", (70, 0, -45 * sx))),
+              (1.4, fp(f"wing_{side}", (80, 0, -60 * sx))), (2.0, fp(f"wing_{side}", (75, 0, -50 * sx))), (2.6, Z3))
         a.rot(f"leg_f{side}", (0, Z3), (0.6, (-80, 0, 0)), (2.0, (-80, 0, 0)), (2.6, Z3))
         a.rot(f"shin_f{side}", (0, Z3), (0.6, (60, 0, 0)), (2.0, (60, 0, 0)), (2.6, Z3))
         a.rot(f"leg_h{side}", (0, Z3), (0.6, (35, 0, 0)), (2.0, (35, 0, 0)), (2.6, Z3))
@@ -671,12 +717,14 @@ def anims(m):
     # ---------------------------------------------------------------- roar (phase change): rears, spreads
     # everything, screams
     a = m.anim("roar", 2.4)
+    for sh_ in ("shoulder_l", "shoulder_r"):
+        a.rot(sh_, (0, Z3), (0.5, fp(sh_)), (1.9, fp(sh_)), (2.4, Z3))
     a.rot("body", (0, Z3), (0.5, (-30, 0, 0)), (1.9, (-30, 0, 0)), (2.4, Z3))
     a.rot("neck", (0, Z3), (0.5, (-15, 0, 0)), (1.9, (-15, 0, 0)), (2.4, Z3))
     a.rot("head", (0, Z3), (0.5, (-20, 0, 0)), (1.0, (-10, 15, 0)), (1.5, (-10, -15, 0)), (1.9, (-20, 0, 0)), (2.4, Z3))
     a.rot("jaw", (0, Z3), (0.5, (50, 0, 0)), (1.9, (50, 0, 0)), (2.4, Z3))
     for side, sx in (("l", 1), ("r", -1)):
-        a.rot(f"wing_{side}", (0, Z3), (0.5, fp(f"wing_{side}", (0, 0, -35 * sx))), (1.9, fp(f"wing_{side}", (0, 0, -40 * sx))), (2.4, Z3))
+        a.rot(f"wing_{side}", (0, Z3), (0.5, fp(f"wing_{side}", (70, 0, -30 * sx))), (1.9, fp(f"wing_{side}", (72, 0, -35 * sx))), (2.4, Z3))
         a.rot(f"leg_f{side}", (0, Z3), (0.5, (-50, 0, 0)), (1.9, (-50, 0, 0)), (2.4, Z3))
     a.rot("tail", (0, Z3), (0.5, (35, 0, 0)), (1.9, (35, 0, 0)), (2.4, Z3))
 

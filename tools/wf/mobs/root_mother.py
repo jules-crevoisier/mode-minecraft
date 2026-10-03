@@ -536,7 +536,7 @@ def _animate(m, pods):
             (2.15, (1.3, 1.3, 1.3)), (2.35, ONE), (2.55, (1.18, 1.18, 1.18)), (2.8, ONE), (4.0, ONE)]
     idle.scale("heart", *beat)
     for i, pod in enumerate(pods):
-        t0 = 0.6 + i * 0.5
+        t0 = 0.4 + (i * 0.37) % 1.8
         idle.rot(pod, (0, Z), (t0, (8, 0, 6 if i % 2 else -6)), (t0 + 1.5, (-6, 0, 0)), (4, Z))
 
     walk = m.anim("walk", 2.0)

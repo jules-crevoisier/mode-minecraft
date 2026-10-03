@@ -50,16 +50,16 @@ public final class ModEntities {
 
     public static final RegistryObject<EntityType<RuinWalker>> RUIN_WALKER = ENTITIES.register("ruin_walker",
             () -> EntityType.Builder.<RuinWalker>of(RuinWalker::new, MobCategory.MONSTER)
-                    .sized(0.6F, 1.95F).clientTrackingRange(8).build(ENTITIES.key("ruin_walker")));
+                    .sized(0.98F, 2.3F).clientTrackingRange(8).build(ENTITIES.key("ruin_walker")));
     public static final RegistryObject<EntityType<MapWraith>> MAP_WRAITH = ENTITIES.register("map_wraith",
             () -> EntityType.Builder.<MapWraith>of(MapWraith::new, MobCategory.MONSTER)
-                    .sized(0.6F, 1.95F).clientTrackingRange(8).build(ENTITIES.key("map_wraith")));
+                    .sized(0.7F, 1.9F).clientTrackingRange(8).build(ENTITIES.key("map_wraith")));
     public static final RegistryObject<EntityType<BasaltGuard>> BASALT_GUARD = ENTITIES.register("basalt_guard",
             () -> EntityType.Builder.<BasaltGuard>of(BasaltGuard::new, MobCategory.MONSTER)
-                    .sized(0.7F, 2.4F).fireImmune().clientTrackingRange(8).build(ENTITIES.key("basalt_guard")));
+                    .sized(0.9F, 2.6F).fireImmune().clientTrackingRange(8).build(ENTITIES.key("basalt_guard")));
     public static final RegistryObject<EntityType<VoidStalker>> VOID_STALKER = ENTITIES.register("void_stalker",
             () -> EntityType.Builder.<VoidStalker>of(VoidStalker::new, MobCategory.MONSTER)
-                    .sized(0.6F, 1.95F).clientTrackingRange(8).build(ENTITIES.key("void_stalker")));
+                    .sized(0.7F, 2.7F).clientTrackingRange(8).build(ENTITIES.key("void_stalker")));
     public static final RegistryObject<EntityType<DrownedWarden>> DROWNED_WARDEN = ENTITIES.register("drowned_warden",
             () -> EntityType.Builder.<DrownedWarden>of(DrownedWarden::new, MobCategory.MONSTER)
                     .sized(1.6F, 4.2F).clientTrackingRange(10).build(ENTITIES.key("drowned_warden")));
@@ -147,7 +147,7 @@ public final class ModEntities {
 
     /** Every boss with an Elden Ring style fight (demo command, quests). */
     public static List<RegistryObject<? extends EntityType<? extends com.wayfarers.boss.WayfarerBoss>>> bosses() {
-        return List.of(DROWNED_WARDEN, GRAVE_KNIGHT, BONE_MATRIARCH, WEEPING_LADY, LARVA_MOTHER, BELL_KEEPER, ARCHIVIST, SAND_PHARAOH, JADE_JAGUAR, ROOT_MOTHER, SWAMP_CRONE, GRYPHON_KNIGHT, RUNE_COLOSSUS, FORGE_KING, CRYSTAL_SPIDER, SCULK_SPAWN, ASH_LORD, PIGLIN_KING, SOUL_REAPER);
+        return List.of(DROWNED_WARDEN, VOID_WARDEN, GRAVE_KNIGHT, BONE_MATRIARCH, WEEPING_LADY, LARVA_MOTHER, BELL_KEEPER, ARCHIVIST, SAND_PHARAOH, JADE_JAGUAR, ROOT_MOTHER, SWAMP_CRONE, GRYPHON_KNIGHT, RUNE_COLOSSUS, FORGE_KING, CRYSTAL_SPIDER, SCULK_SPAWN, ASH_LORD, PIGLIN_KING, SOUL_REAPER);
     }
 
     public static void registerAttributes(EntityAttributeCreationEvent event) {

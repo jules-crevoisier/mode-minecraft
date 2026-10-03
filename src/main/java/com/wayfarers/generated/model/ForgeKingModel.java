@@ -715,10 +715,10 @@ public final class ForgeKingModel extends EntityModel<WayfarerRenderState> {
                 new PartPose(0.0F, 24.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_hips = p_bone.addOrReplaceChild("hips", CubeListBuilder.create()
                 .texOffs(52, 45).addBox(-13.0F, -5.0F, -10.0F, 26.0F, 5.0F, 19.0F)
-                .texOffs(356, 126).addBox(-4.0F, -6.0F, -12.0F, 8.0F, 7.0F, 2.0F)
+                .texOffs(392, 126).addBox(-4.0F, -6.0F, -12.0F, 8.0F, 7.0F, 2.0F)
                 .texOffs(142, 45).addBox(-12.0F, 0.0F, -8.0F, 24.0F, 7.0F, 16.0F)
-                .texOffs(226, 126).addBox(-12.0F, 0.0F, -11.0F, 11.0F, 8.0F, 2.0F)
-                .texOffs(252, 126).addBox(1.0F, 0.0F, -11.0F, 11.0F, 8.0F, 2.0F)
+                .texOffs(262, 126).addBox(-12.0F, 0.0F, -11.0F, 11.0F, 8.0F, 2.0F)
+                .texOffs(288, 126).addBox(1.0F, 0.0F, -11.0F, 11.0F, 8.0F, 2.0F)
                 .texOffs(386, 45).addBox(-14.0F, 0.0F, -7.0F, 2.0F, 7.0F, 14.0F)
                 .texOffs(418, 45).addBox(12.0F, 0.0F, -7.0F, 2.0F, 7.0F, 14.0F),
                 new PartPose(0.0F, -13.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
@@ -731,74 +731,81 @@ public final class ForgeKingModel extends EntityModel<WayfarerRenderState> {
                 new PartPose(0.0F, -3.0F, 0.0F, 0.0872665F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_head = p_torso.addOrReplaceChild("head", CubeListBuilder.create()
                 .texOffs(0, 45).addBox(-7.0F, -13.0F, -7.0F, 14.0F, 13.0F, 12.0F)
-                .texOffs(206, 140).addBox(-1.5F, -8.0F, -9.0F, 3.0F, 5.0F, 2.0F)
+                .texOffs(250, 140).addBox(-1.5F, -8.0F, -9.0F, 3.0F, 5.0F, 2.0F)
                 .texOffs(222, 45).addBox(-8.0F, -18.0F, -8.0F, 16.0F, 8.0F, 14.0F)
                 .texOffs(38, 90).addBox(-9.0F, -11.0F, -9.0F, 18.0F, 2.0F, 16.0F)
                 .texOffs(178, 90).addBox(-9.0F, -9.0F, -6.0F, 2.0F, 8.0F, 10.0F)
                 .texOffs(202, 90).addBox(7.0F, -9.0F, -6.0F, 2.0F, 8.0F, 10.0F)
                 .texOffs(464, 109).addBox(-6.0F, -21.0F, -6.0F, 12.0F, 3.0F, 11.0F)
-                .texOffs(366, 140).addBox(-8.5F, -20.0F, -8.5F, 17.0F, 2.0F, 1.0F)
-                .texOffs(402, 140).addBox(-8.5F, -20.0F, 5.5F, 17.0F, 2.0F, 1.0F)
+                .texOffs(432, 140).addBox(-8.5F, -20.0F, -8.5F, 17.0F, 2.0F, 1.0F)
+                .texOffs(468, 140).addBox(-8.5F, -20.0F, 5.5F, 17.0F, 2.0F, 1.0F)
                 .texOffs(408, 109).addBox(-8.5F, -20.0F, -7.5F, 1.0F, 2.0F, 13.0F)
                 .texOffs(436, 109).addBox(7.5F, -20.0F, -7.5F, 1.0F, 2.0F, 13.0F)
-                .texOffs(56, 140).addBox(-1.0F, -27.0F, -9.0F, 2.0F, 7.0F, 1.0F)
-                .texOffs(438, 140).addBox(-0.5F, -29.0F, -9.0F, 1.0F, 2.0F, 1.0F)
-                .texOffs(270, 140).addBox(-5.0F, -25.0F, -9.0F, 2.0F, 5.0F, 1.0F)
-                .texOffs(442, 140).addBox(-4.5F, -27.0F, -9.0F, 1.0F, 2.0F, 1.0F)
-                .texOffs(276, 140).addBox(3.0F, -25.0F, -9.0F, 2.0F, 5.0F, 1.0F)
-                .texOffs(446, 140).addBox(3.5F, -27.0F, -9.0F, 1.0F, 2.0F, 1.0F)
-                .texOffs(282, 140).addBox(-9.0F, -24.0F, -4.0F, 1.0F, 4.0F, 2.0F)
-                .texOffs(450, 140).addBox(-9.0F, -26.0F, -3.5F, 1.0F, 2.0F, 1.0F)
-                .texOffs(288, 140).addBox(8.0F, -24.0F, -4.0F, 1.0F, 4.0F, 2.0F)
-                .texOffs(454, 140).addBox(8.0F, -26.0F, -3.5F, 1.0F, 2.0F, 1.0F)
-                .texOffs(216, 140).addBox(-9.0F, -25.0F, 2.0F, 1.0F, 5.0F, 2.0F)
-                .texOffs(458, 140).addBox(-9.0F, -27.0F, 2.5F, 1.0F, 2.0F, 1.0F)
-                .texOffs(222, 140).addBox(8.0F, -25.0F, 2.0F, 1.0F, 5.0F, 2.0F)
-                .texOffs(462, 140).addBox(8.0F, -27.0F, 2.5F, 1.0F, 2.0F, 1.0F)
-                .texOffs(294, 140).addBox(-1.0F, -24.0F, 5.0F, 2.0F, 4.0F, 1.0F)
-                .texOffs(466, 140).addBox(-0.5F, -26.0F, 5.0F, 1.0F, 2.0F, 1.0F)
-                .texOffs(358, 140).addBox(-1.5F, -25.0F, -10.0F, 3.0F, 3.0F, 1.0F),
+                .texOffs(100, 140).addBox(-1.0F, -27.0F, -9.0F, 2.0F, 7.0F, 1.0F)
+                .texOffs(504, 140).addBox(-0.5F, -29.0F, -9.0F, 1.0F, 2.0F, 1.0F)
+                .texOffs(336, 140).addBox(-5.0F, -25.0F, -9.0F, 2.0F, 5.0F, 1.0F)
+                .texOffs(508, 140).addBox(-4.5F, -27.0F, -9.0F, 1.0F, 2.0F, 1.0F)
+                .texOffs(342, 140).addBox(3.0F, -25.0F, -9.0F, 2.0F, 5.0F, 1.0F)
+                .texOffs(0, 148).addBox(3.5F, -27.0F, -9.0F, 1.0F, 2.0F, 1.0F)
+                .texOffs(348, 140).addBox(-9.0F, -24.0F, -4.0F, 1.0F, 4.0F, 2.0F)
+                .texOffs(4, 148).addBox(-9.0F, -26.0F, -3.5F, 1.0F, 2.0F, 1.0F)
+                .texOffs(354, 140).addBox(8.0F, -24.0F, -4.0F, 1.0F, 4.0F, 2.0F)
+                .texOffs(8, 148).addBox(8.0F, -26.0F, -3.5F, 1.0F, 2.0F, 1.0F)
+                .texOffs(260, 140).addBox(-9.0F, -25.0F, 2.0F, 1.0F, 5.0F, 2.0F)
+                .texOffs(12, 148).addBox(-9.0F, -27.0F, 2.5F, 1.0F, 2.0F, 1.0F)
+                .texOffs(266, 140).addBox(8.0F, -25.0F, 2.0F, 1.0F, 5.0F, 2.0F)
+                .texOffs(16, 148).addBox(8.0F, -27.0F, 2.5F, 1.0F, 2.0F, 1.0F)
+                .texOffs(360, 140).addBox(-1.0F, -24.0F, 5.0F, 2.0F, 4.0F, 1.0F)
+                .texOffs(20, 148).addBox(-0.5F, -26.0F, 5.0F, 1.0F, 2.0F, 1.0F)
+                .texOffs(424, 140).addBox(-1.5F, -25.0F, -10.0F, 3.0F, 3.0F, 1.0F),
                 new PartPose(0.0F, -27.0F, -5.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_horn_r = p_head.addOrReplaceChild("horn_r", CubeListBuilder.create()
-                .texOffs(112, 126).addBox(-6.0F, -3.0F, -3.0F, 6.0F, 6.0F, 6.0F),
+                .texOffs(148, 126).addBox(-6.0F, -3.0F, -3.0F, 6.0F, 6.0F, 6.0F),
                 new PartPose(-8.0F, -13.0F, 0.0F, 0.0F, 0.261799F, 0.349066F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_horn_r2 = p_horn_r.addOrReplaceChild("horn_r2", CubeListBuilder.create()
-                .texOffs(304, 126).addBox(-5.0F, -2.5F, -2.5F, 5.0F, 5.0F, 5.0F),
+                .texOffs(340, 126).addBox(-5.0F, -2.5F, -2.5F, 5.0F, 5.0F, 5.0F),
                 new PartPose(-6.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.698132F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_horn_r3 = p_horn_r2.addOrReplaceChild("horn_r3", CubeListBuilder.create()
-                .texOffs(0, 140).addBox(-6.0F, -2.0F, -2.0F, 6.0F, 4.0F, 4.0F)
-                .texOffs(348, 140).addBox(-9.0F, -1.0F, -1.0F, 3.0F, 2.0F, 2.0F),
+                .texOffs(44, 140).addBox(-6.0F, -2.0F, -2.0F, 6.0F, 4.0F, 4.0F)
+                .texOffs(414, 140).addBox(-9.0F, -1.0F, -1.0F, 3.0F, 2.0F, 2.0F),
                 new PartPose(-5.0F, 0.0F, 0.0F, 0.0F, -0.436332F, 0.698132F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_horn_l = p_head.addOrReplaceChild("horn_l", CubeListBuilder.create()
-                .texOffs(136, 126).addBox(0.0F, -3.0F, -3.0F, 6.0F, 6.0F, 6.0F),
+                .texOffs(172, 126).addBox(0.0F, -3.0F, -3.0F, 6.0F, 6.0F, 6.0F),
                 new PartPose(8.0F, -13.0F, 0.0F, 0.0F, -0.261799F, -0.349066F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_horn_l2 = p_horn_l.addOrReplaceChild("horn_l2", CubeListBuilder.create()
-                .texOffs(324, 126).addBox(0.0F, -2.5F, -2.5F, 3.0F, 5.0F, 5.0F),
+                .texOffs(360, 126).addBox(0.0F, -2.5F, -2.5F, 3.0F, 5.0F, 5.0F),
                 new PartPose(6.0F, 0.0F, 0.0F, 0.0F, 0.0F, -0.698132F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_beard = p_head.addOrReplaceChild("beard", CubeListBuilder.create()
-                .texOffs(62, 140).addBox(-10.0F, -2.0F, -4.0F, 20.0F, 3.0F, 4.0F)
+                .texOffs(106, 140).addBox(-10.0F, -2.0F, -4.0F, 20.0F, 3.0F, 4.0F)
                 .texOffs(116, 109).addBox(-9.0F, 1.0F, -3.0F, 18.0F, 11.0F, 5.0F)
-                .texOffs(196, 126).addBox(-7.0F, 0.0F, -4.0F, 14.0F, 9.0F, 1.0F)
-                .texOffs(160, 126).addBox(-7.0F, 11.0F, -3.0F, 14.0F, 7.0F, 4.0F),
+                .texOffs(232, 126).addBox(-7.0F, 0.0F, -4.0F, 14.0F, 9.0F, 1.0F)
+                .texOffs(196, 126).addBox(-7.0F, 11.0F, -3.0F, 14.0F, 7.0F, 4.0F)
+                .texOffs(272, 140).addBox(-4.0F, 17.0F, -2.0F, 8.0F, 3.0F, 3.0F),
                 new PartPose(0.0F, -3.0F, -8.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_braid_r = p_beard.addOrReplaceChild("braid_r", CubeListBuilder.create()
-                .texOffs(80, 126).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 10.0F, 4.0F)
-                .texOffs(110, 140).addBox(-2.5F, 2.0F, -2.5F, 5.0F, 2.0F, 5.0F)
-                .texOffs(130, 140).addBox(-2.5F, 7.0F, -2.5F, 5.0F, 2.0F, 5.0F)
-                .texOffs(246, 140).addBox(-1.5F, 10.0F, -1.5F, 3.0F, 3.0F, 3.0F),
+                .texOffs(116, 126).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 10.0F, 4.0F)
+                .texOffs(154, 140).addBox(-2.5F, 2.0F, -2.5F, 5.0F, 2.0F, 5.0F)
+                .texOffs(174, 140).addBox(-2.5F, 7.0F, -2.5F, 5.0F, 2.0F, 5.0F)
+                .texOffs(312, 140).addBox(-1.5F, 10.0F, -1.5F, 3.0F, 3.0F, 3.0F),
                 new PartPose(-6.0F, 13.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_braid_c = p_beard.addOrReplaceChild("braid_c", CubeListBuilder.create()
                 .texOffs(226, 90).addBox(-2.5F, 0.0F, -2.5F, 5.0F, 13.0F, 5.0F)
-                .texOffs(396, 126).addBox(-3.0F, 2.0F, -3.0F, 6.0F, 2.0F, 6.0F)
-                .texOffs(420, 126).addBox(-3.0F, 7.0F, -3.0F, 6.0F, 2.0F, 6.0F)
-                .texOffs(190, 140).addBox(-2.0F, 13.0F, -2.0F, 4.0F, 3.0F, 4.0F),
+                .texOffs(432, 126).addBox(-3.0F, 2.0F, -3.0F, 6.0F, 2.0F, 6.0F)
+                .texOffs(456, 126).addBox(-3.0F, 7.0F, -3.0F, 6.0F, 2.0F, 6.0F)
+                .texOffs(234, 140).addBox(-2.0F, 13.0F, -2.0F, 4.0F, 3.0F, 4.0F),
                 new PartPose(0.0F, 17.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_braid_l = p_beard.addOrReplaceChild("braid_l", CubeListBuilder.create()
-                .texOffs(96, 126).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 10.0F, 4.0F)
-                .texOffs(150, 140).addBox(-2.5F, 2.0F, -2.5F, 5.0F, 2.0F, 5.0F)
-                .texOffs(170, 140).addBox(-2.5F, 7.0F, -2.5F, 5.0F, 2.0F, 5.0F)
-                .texOffs(258, 140).addBox(-1.5F, 10.0F, -1.5F, 3.0F, 3.0F, 3.0F),
+                .texOffs(132, 126).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 10.0F, 4.0F)
+                .texOffs(194, 140).addBox(-2.5F, 2.0F, -2.5F, 5.0F, 2.0F, 5.0F)
+                .texOffs(214, 140).addBox(-2.5F, 7.0F, -2.5F, 5.0F, 2.0F, 5.0F)
+                .texOffs(324, 140).addBox(-1.5F, 10.0F, -1.5F, 3.0F, 3.0F, 3.0F),
                 new PartPose(6.0F, 13.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
+        PartDefinition p_whisk_r = p_beard.addOrReplaceChild("whisk_r", CubeListBuilder.create()
+                .texOffs(80, 126).addBox(-4.0F, -1.0F, -2.0F, 5.0F, 10.0F, 4.0F),
+                new PartPose(-9.0F, 0.0F, -1.0F, 0.0F, 0.0F, 0.314159F, 1.0F, 1.0F, 1.0F));
+        PartDefinition p_whisk_l = p_beard.addOrReplaceChild("whisk_l", CubeListBuilder.create()
+                .texOffs(98, 126).addBox(-1.0F, -1.0F, -2.0F, 5.0F, 10.0F, 4.0F),
+                new PartPose(9.0F, 0.0F, -1.0F, 0.0F, 0.0F, -0.314159F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_cape = p_torso.addOrReplaceChild("cape", CubeListBuilder.create()
                 .texOffs(12, 0).addBox(-15.0F, 0.0F, 0.0F, 30.0F, 37.0F, 1.0F),
                 new PartPose(0.0F, -27.0F, 10.0F, 0.10472F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
@@ -815,13 +822,13 @@ public final class ForgeKingModel extends EntityModel<WayfarerRenderState> {
                 .texOffs(40, 109).addBox(-4.5F, 9.0F, -5.0F, 9.0F, 7.0F, 10.0F),
                 new PartPose(-0.5F, 11.0F, 0.0F, -0.383972F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_hammer = p_forearm_r.addOrReplaceChild("hammer", CubeListBuilder.create()
-                .texOffs(20, 140).addBox(-2.5F, 15.0F, -2.5F, 5.0F, 3.0F, 5.0F)
+                .texOffs(64, 140).addBox(-2.5F, 15.0F, -2.5F, 5.0F, 3.0F, 5.0F)
                 .texOffs(0, 0).addBox(-1.5F, -27.0F, -1.5F, 3.0F, 42.0F, 3.0F)
-                .texOffs(376, 126).addBox(-2.5F, -31.0F, -2.5F, 5.0F, 4.0F, 5.0F)
+                .texOffs(412, 126).addBox(-2.5F, -31.0F, -2.5F, 5.0F, 4.0F, 5.0F)
                 .texOffs(178, 0).addBox(-7.0F, -45.0F, -11.0F, 14.0F, 14.0F, 22.0F)
                 .texOffs(464, 70).addBox(-8.0F, -46.0F, -6.0F, 16.0F, 16.0F, 3.0F)
                 .texOffs(0, 90).addBox(-8.0F, -46.0F, 3.0F, 16.0F, 16.0F, 3.0F)
-                .texOffs(40, 140).addBox(-2.0F, -50.0F, -2.0F, 4.0F, 4.0F, 4.0F),
+                .texOffs(84, 140).addBox(-2.0F, -50.0F, -2.0F, 4.0F, 4.0F, 4.0F),
                 new PartPose(-0.5F, 13.0F, -0.5F, 0.383972F, 0.0F, -0.279253F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_arm_l = p_torso.addOrReplaceChild("arm_l", CubeListBuilder.create()
                 .texOffs(320, 109).addBox(-4.0F, -10.0F, -6.0F, 10.0F, 3.0F, 12.0F)
@@ -837,30 +844,30 @@ public final class ForgeKingModel extends EntityModel<WayfarerRenderState> {
                 new PartPose(0.5F, 11.0F, 0.0F, -0.261799F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_shield = p_forearm_l.addOrReplaceChild("shield", CubeListBuilder.create()
                 .texOffs(344, 0).addBox(0.0F, -10.0F, -13.0F, 7.0F, 6.0F, 24.0F)
-                .texOffs(278, 126).addBox(0.0F, -10.0F, -19.0F, 7.0F, 4.0F, 6.0F)
-                .texOffs(228, 140).addBox(1.0F, -10.0F, -23.0F, 5.0F, 2.0F, 4.0F)
-                .texOffs(444, 126).addBox(0.0F, -10.0F, 11.0F, 7.0F, 4.0F, 4.0F)
+                .texOffs(314, 126).addBox(0.0F, -10.0F, -19.0F, 7.0F, 4.0F, 6.0F)
+                .texOffs(294, 140).addBox(1.0F, -10.0F, -23.0F, 5.0F, 2.0F, 4.0F)
+                .texOffs(480, 126).addBox(0.0F, -10.0F, 11.0F, 7.0F, 4.0F, 4.0F)
                 .texOffs(320, 70).addBox(1.0F, -4.0F, -7.0F, 5.0F, 7.0F, 13.0F)
                 .texOffs(406, 0).addBox(0.0F, 3.0F, -11.0F, 7.0F, 4.0F, 21.0F)
-                .texOffs(340, 126).addBox(-1.0F, -2.0F, -3.0F, 2.0F, 4.0F, 6.0F),
+                .texOffs(376, 126).addBox(-1.0F, -2.0F, -3.0F, 2.0F, 4.0F, 6.0F),
                 new PartPose(6.0F, 4.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_leg_r = p_bone.addOrReplaceChild("leg_r", CubeListBuilder.create()
                 .texOffs(446, 90).addBox(-5.0F, 0.0F, -5.0F, 10.0F, 7.0F, 10.0F),
                 new PartPose(-7.0F, -13.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_shin_r = p_leg_r.addOrReplaceChild("shin_r", CubeListBuilder.create()
                 .texOffs(0, 126).addBox(-5.0F, 0.0F, -5.0F, 10.0F, 4.0F, 10.0F)
-                .texOffs(466, 126).addBox(-4.0F, -2.0F, -7.0F, 8.0F, 5.0F, 3.0F)
+                .texOffs(0, 140).addBox(-4.0F, -2.0F, -7.0F, 8.0F, 5.0F, 3.0F)
                 .texOffs(356, 70).addBox(-6.0F, 3.0F, -9.0F, 12.0F, 4.0F, 15.0F)
-                .texOffs(300, 140).addBox(-5.0F, 2.0F, -10.0F, 10.0F, 2.0F, 2.0F),
+                .texOffs(366, 140).addBox(-5.0F, 2.0F, -10.0F, 10.0F, 2.0F, 2.0F),
                 new PartPose(0.0F, 6.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_leg_l = p_bone.addOrReplaceChild("leg_l", CubeListBuilder.create()
                 .texOffs(0, 109).addBox(-5.0F, 0.0F, -5.0F, 10.0F, 7.0F, 10.0F),
                 new PartPose(7.0F, -13.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_shin_l = p_leg_l.addOrReplaceChild("shin_l", CubeListBuilder.create()
                 .texOffs(40, 126).addBox(-5.0F, 0.0F, -5.0F, 10.0F, 4.0F, 10.0F)
-                .texOffs(488, 126).addBox(-4.0F, -2.0F, -7.0F, 8.0F, 5.0F, 3.0F)
+                .texOffs(22, 140).addBox(-4.0F, -2.0F, -7.0F, 8.0F, 5.0F, 3.0F)
                 .texOffs(410, 70).addBox(-6.0F, 3.0F, -9.0F, 12.0F, 4.0F, 15.0F)
-                .texOffs(324, 140).addBox(-5.0F, 2.0F, -10.0F, 10.0F, 2.0F, 2.0F),
+                .texOffs(390, 140).addBox(-5.0F, 2.0F, -10.0F, 10.0F, 2.0F, 2.0F),
                 new PartPose(0.0F, 6.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         return LayerDefinition.create(mesh, 512, 256);
     }

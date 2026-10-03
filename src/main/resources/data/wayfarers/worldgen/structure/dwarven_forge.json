@@ -23,10 +23,10 @@
   "start_height": {
     "type": "minecraft:uniform",
     "min_inclusive": {
-      "absolute": -48
+      "absolute": -58
     },
     "max_inclusive": {
-      "absolute": -12
+      "absolute": -36
     }
   }
 }

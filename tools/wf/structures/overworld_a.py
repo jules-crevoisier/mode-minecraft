@@ -13,6 +13,7 @@ from ..arch import Palette
 from ..blueprint import OPPOSITE, with_props
 from ..defs import Piece, StructureDef, register
 from ..parts import LOOT, MOB, MOD
+from . import lair_bell_keeper
 
 TEMPERATE = ["#minecraft:is_forest", "plains", "sunflower_plains", "meadow", "#minecraft:is_taiga",
              "savanna", "cherry_grove"]
@@ -1518,6 +1519,7 @@ def monastery(bp):
     bp.weather({"calcite": ["diorite", "calcite"]}, 0.05)
     skirt(bp, 0, depth=5, spread=2, seed=11, top="grass_block[snowy=false]")
     A.landscape(bp, -3, -3, 75, 68, 1, density=0.25, seed=12)
+    lair_bell_keeper.build(bp)          # crypt stair -> catacombs -> bell chamber (the Bell Keeper)
 
 
 register(StructureDef(

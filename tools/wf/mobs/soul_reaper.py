@@ -353,7 +353,7 @@ def build():
     m = Model("soul_reaper", seed=37, shadow=1.3, walk_speed=0.6, walk_scale=1.0)
 
     # ---------------- skeleton
-    m.part("bone", pivot=(0, 24, 0))
+    m.part("bone", pivot=(0, 24, 0), scale=(0.84, 0.84, 0.84))   # built large, worn at ~4.6 blocks
     m.part("body", "bone", pivot=(0, -36, 0))
     m.part("chest", "body", pivot=(0, -1, 0), rot=(12, 0, 0))
     m.part("head", "chest", pivot=(0, -24, -2), rot=(-8, 0, 0))
@@ -361,9 +361,9 @@ def build():
     m.part("hood_t1", "head", pivot=(0, -20, 2), rot=(-58, 0, 0))
     m.part("hood_t2", "hood_t1", pivot=(0, -7, 0), rot=(-35, 0, 6))
     m.part("hood_t3", "hood_t2", pivot=(0, -6, 0), rot=(-30, 0, 8))
-    m.part("cape", "chest", pivot=(0, -24, 7), rot=(14, 0, 0))
-    m.part("cape_l", "cape", pivot=(9, 0, 0), rot=(0, -22, 0))
-    m.part("cape_r", "cape", pivot=(-9, 0, 0), rot=(0, 22, 0))
+    m.part("cape", "chest", pivot=(0, -24, 7), rot=(18, 0, 0))
+    m.part("cape_l", "cape", pivot=(9, 0, 0), rot=(0, -32, 0))
+    m.part("cape_r", "cape", pivot=(-9, 0, 0), rot=(0, 32, 0))
     m.part("arm_r", "chest", pivot=(-14, -20, 0), rot=(-10, 0, 14))
     m.part("sleeve_r", "arm_r", pivot=(0, 0, 0), rot=(6, 0, 4))
     m.part("forearm_r", "arm_r", pivot=(0, 13, 0), rot=(-62, 0, 0))
@@ -579,6 +579,9 @@ def _anims(m):
         amp = 5 if name.startswith("cloak") else 4
         ph = math.radians(th)
         a.rot(name, *[(k * 0.5, (amp * math.sin(math.pi * k / 4 + ph), 0, 0)) for k in range(9)])
+    a.rot("cape", (0, Z), (1.6, (5, 0, 1)), (3.2, (-2, 0, -1)), (4.0, Z))
+    a.rot("cape_l", (0, Z), (2.0, (0, -6, 0)), (4.0, Z))
+    a.rot("cape_r", (0, Z), (1.0, (0, 5, 0)), (3.0, (0, -3, 0)), (4.0, Z))
     a.rot("chain_l", (0, Z), (1.0, (6, 0, 5)), (2.0, Z), (3.0, (-5, 0, -4)), (4.0, Z))
     a.rot("chain_e", (0, Z), (1.5, (-8, 0, 6)), (3.0, (5, 0, -3)), (4.0, Z))
     a.rot("chain_r", (0, Z), (1.2, (6, 0, -6)), (2.8, (-6, 0, 4)), (4.0, Z))
@@ -591,10 +594,11 @@ def _anims(m):
     a.rot("head", (0, (-9, 0, 0)), (0.8, (-12, 0, 0)), (1.6, (-9, 0, 0)))
     a.rot("chain_l", (0, (22, 0, 0)), (0.8, (28, 0, 0)), (1.6, (22, 0, 0)))
     a.rot("ribbon", (0, (30, 0, 0)), (0.8, (40, 0, 0)), (1.6, (30, 0, 0)))
+    a.rot("cape", (0, (16, 0, 0)), (0.8, (22, 0, 0)), (1.6, (16, 0, 0)))
     for name, th in _panels():
         c = math.cos(math.radians(th))
-        a.rot(name, (0, (8 * c - 6 * (1 - c), 0, 0)), (0.8, (10 * c - 9 * (1 - c), 0, 0)),
-              (1.6, (8 * c - 6 * (1 - c), 0, 0)))
+        a.rot(name, (0, (5 * c - 3 * (1 - c), 0, 0)), (0.8, (6 * c - 5 * (1 - c), 0, 0)),
+              (1.6, (5 * c - 3 * (1 - c), 0, 0)))
 
     # sweep: the scythe hauled far back to the right (0.8 s), then a flat crescent across the front
     a = m.anim("sweep", 1.7)

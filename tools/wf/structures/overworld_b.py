@@ -8,6 +8,9 @@ from ..arch import Palette, slab, stair
 from ..blueprint import with_props
 from ..defs import Piece, StructureDef, register
 from ..parts import LOOT, MOB, MOD
+from . import lair_sand_pharaoh
+from . import lair_root_mother
+from . import lair_swamp_crone
 
 # ============================================================ shared helpers
 def _card(dx, dz):
@@ -353,6 +356,7 @@ def giant_tree(v):
         bp.set(3, 0, -1, f"{deck}_trapdoor[facing=north,half=top,open=false,powered=false,waterlogged=false]")
         bp.ladder(3, -6, -1, -1, "west")
         bp.fill(4, -6, -1, 4, -1, -1, "rooted_dirt")
+        lair_root_mother.build_lair(bp, v)   # the Root Mother's descent and root cavern below
 
         # ---------------------------------------------------------------- interior: spiral stair + floors
         for x in range(-2, 3):
@@ -1303,6 +1307,8 @@ def oasis(bp):
         bp.set(C0X - 5, TY - 1, z, "suspicious_sand", {"LootTable": "minecraft:archaeology/desert_pyramid"})
     bp.chest(C0X - 4, TY, MZ, "east", LOOT + "desert_tomb_secret")
     bp.set(C0X - 3, TY, MZ + 1, "candle[candles=3,lit=true,waterlogged=false]")
+    # deeper still: the hypostyle, the Well of Souls and the Sand Pharaoh's great burial hall
+    lair_sand_pharaoh.build(bp)
 
 
 register(StructureDef(
@@ -1634,6 +1640,7 @@ def witch_huts(bp):
     for x in (-16, -15, -13, -12):
         bp.set(x, -5, 15 - 1, "potted_brown_mushroom" if x % 2 else "potted_crimson_fungus")
     bp.lantern(-14, -2, 11, hanging=True, soul=True)
+    lair_swamp_crone.build_lair(bp)   # the Swamp Crone's ritual passage, brewing rooms and drowned grotto
 
     # ---------------------------------------------------------------- boardwalks and rope bridges
     BW = dict(width=1, rail="fence", posts=4, clear_leaves=False, under=False, piles="mangrove_log[axis=y]",

@@ -329,6 +329,16 @@ public final class GryphonKnightModel extends EntityModel<WayfarerRenderState> {
                     new Keyframe(1.8F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .build();
     public static final AnimationDefinition GUST = AnimationDefinition.Builder.withLength(1.8F)
+            .addAnimation("shoulder_l", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.7F, KeyframeAnimations.degreeVec(13.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(1.3F, KeyframeAnimations.degreeVec(13.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(1.8F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
+            .addAnimation("shoulder_r", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.7F, KeyframeAnimations.degreeVec(13.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(1.3F, KeyframeAnimations.degreeVec(13.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(1.8F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .addAnimation("body", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.7F, KeyframeAnimations.degreeVec(-28.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
@@ -337,9 +347,9 @@ public final class GryphonKnightModel extends EntityModel<WayfarerRenderState> {
                     new Keyframe(1.8F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .addAnimation("wing_l", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.7F, KeyframeAnimations.degreeVec(60.0F, 120.0F, -38.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.9F, KeyframeAnimations.degreeVec(90.0F, 50.0F, 52.0F), AnimationChannel.Interpolations.LINEAR),
-                    new Keyframe(1.3F, KeyframeAnimations.degreeVec(90.0F, 60.0F, 37.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.7F, KeyframeAnimations.degreeVec(160.0F, 110.0F, -26.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.9F, KeyframeAnimations.degreeVec(90.0F, 50.0F, 54.0F), AnimationChannel.Interpolations.LINEAR),
+                    new Keyframe(1.3F, KeyframeAnimations.degreeVec(90.0F, 60.0F, 39.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(1.8F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .addAnimation("wingtip_l", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
@@ -353,9 +363,9 @@ public final class GryphonKnightModel extends EntityModel<WayfarerRenderState> {
                     new Keyframe(1.8F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .addAnimation("wing_r", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.7F, KeyframeAnimations.degreeVec(60.0F, -120.0F, 38.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.9F, KeyframeAnimations.degreeVec(90.0F, -50.0F, -52.0F), AnimationChannel.Interpolations.LINEAR),
-                    new Keyframe(1.3F, KeyframeAnimations.degreeVec(90.0F, -60.0F, -37.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.7F, KeyframeAnimations.degreeVec(160.0F, -110.0F, 26.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.9F, KeyframeAnimations.degreeVec(90.0F, -50.0F, -54.0F), AnimationChannel.Interpolations.LINEAR),
+                    new Keyframe(1.3F, KeyframeAnimations.degreeVec(90.0F, -60.0F, -39.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(1.8F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .addAnimation("wingtip_r", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
@@ -417,6 +427,16 @@ public final class GryphonKnightModel extends EntityModel<WayfarerRenderState> {
                     new Keyframe(1.5F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .build();
     public static final AnimationDefinition TAKEOFF = AnimationDefinition.Builder.withLength(1.4F)
+            .addAnimation("shoulder_l", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.55F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(1.0F, KeyframeAnimations.degreeVec(13.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(1.4F, KeyframeAnimations.degreeVec(13.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
+            .addAnimation("shoulder_r", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.55F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(1.0F, KeyframeAnimations.degreeVec(13.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(1.4F, KeyframeAnimations.degreeVec(13.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .addAnimation("leg_fl", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.55F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
@@ -490,47 +510,55 @@ public final class GryphonKnightModel extends EntityModel<WayfarerRenderState> {
             .addAnimation("wing_l", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.45F, KeyframeAnimations.degreeVec(30.0F, 40.0F, -10.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.7F, KeyframeAnimations.degreeVec(90.0F, 90.0F, -43.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(1.0F, KeyframeAnimations.degreeVec(90.0F, 90.0F, 42.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(1.4F, KeyframeAnimations.degreeVec(90.0F, 90.0F, 12.0F), AnimationChannel.Interpolations.CATMULLROM)))
+                    new Keyframe(0.7F, KeyframeAnimations.degreeVec(90.0F, 90.0F, -41.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(1.0F, KeyframeAnimations.degreeVec(90.0F, 90.0F, 44.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(1.4F, KeyframeAnimations.degreeVec(90.0F, 90.0F, 14.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .addAnimation("wingtip_l", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.7F, KeyframeAnimations.degreeVec(0.0F, -12.0F, -25.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(1.0F, KeyframeAnimations.degreeVec(0.0F, -12.0F, 15.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(1.4F, KeyframeAnimations.degreeVec(0.0F, -12.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
+                    new Keyframe(0.7F, KeyframeAnimations.degreeVec(0.0F, -16.0F, -11.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(1.0F, KeyframeAnimations.degreeVec(0.0F, -16.0F, 29.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(1.4F, KeyframeAnimations.degreeVec(0.0F, -16.0F, 14.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .addAnimation("wing_r", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.45F, KeyframeAnimations.degreeVec(30.0F, -40.0F, 10.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.7F, KeyframeAnimations.degreeVec(90.0F, -90.0F, 43.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(1.0F, KeyframeAnimations.degreeVec(90.0F, -90.0F, -42.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(1.4F, KeyframeAnimations.degreeVec(90.0F, -90.0F, -12.0F), AnimationChannel.Interpolations.CATMULLROM)))
+                    new Keyframe(0.7F, KeyframeAnimations.degreeVec(90.0F, -90.0F, 41.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(1.0F, KeyframeAnimations.degreeVec(90.0F, -90.0F, -44.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(1.4F, KeyframeAnimations.degreeVec(90.0F, -90.0F, -14.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .addAnimation("wingtip_r", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.7F, KeyframeAnimations.degreeVec(0.0F, 12.0F, 25.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(1.0F, KeyframeAnimations.degreeVec(0.0F, 12.0F, -15.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(1.4F, KeyframeAnimations.degreeVec(0.0F, 12.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
+                    new Keyframe(0.7F, KeyframeAnimations.degreeVec(0.0F, 16.0F, 11.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(1.0F, KeyframeAnimations.degreeVec(0.0F, 16.0F, -29.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(1.4F, KeyframeAnimations.degreeVec(0.0F, 16.0F, -14.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .build();
     public static final AnimationDefinition FLY = AnimationDefinition.Builder.withLength(0.8F)
             .addAnimation("wing_l", new AnimationChannel(AnimationChannel.Targets.ROTATION,
-                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(90.0F, 90.0F, 12.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.24F, KeyframeAnimations.degreeVec(90.0F, 90.0F, -26.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.56F, KeyframeAnimations.degreeVec(90.0F, 90.0F, 38.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.8F, KeyframeAnimations.degreeVec(90.0F, 90.0F, 12.0F), AnimationChannel.Interpolations.CATMULLROM)))
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(90.0F, 90.0F, 14.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.24F, KeyframeAnimations.degreeVec(90.0F, 90.0F, -24.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.56F, KeyframeAnimations.degreeVec(90.0F, 90.0F, 40.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.8F, KeyframeAnimations.degreeVec(90.0F, 90.0F, 14.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .addAnimation("wing_r", new AnimationChannel(AnimationChannel.Targets.ROTATION,
-                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(90.0F, -90.0F, -12.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.24F, KeyframeAnimations.degreeVec(90.0F, -90.0F, 26.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.56F, KeyframeAnimations.degreeVec(90.0F, -90.0F, -38.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.8F, KeyframeAnimations.degreeVec(90.0F, -90.0F, -12.0F), AnimationChannel.Interpolations.CATMULLROM)))
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(90.0F, -90.0F, -14.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.24F, KeyframeAnimations.degreeVec(90.0F, -90.0F, 24.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.56F, KeyframeAnimations.degreeVec(90.0F, -90.0F, -40.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.8F, KeyframeAnimations.degreeVec(90.0F, -90.0F, -14.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .addAnimation("wingtip_l", new AnimationChannel(AnimationChannel.Targets.ROTATION,
-                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, -12.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.24F, KeyframeAnimations.degreeVec(0.0F, -12.0F, -18.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.56F, KeyframeAnimations.degreeVec(0.0F, -12.0F, 14.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.8F, KeyframeAnimations.degreeVec(0.0F, -12.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, -16.0F, 14.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.24F, KeyframeAnimations.degreeVec(0.0F, -16.0F, -4.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.56F, KeyframeAnimations.degreeVec(0.0F, -16.0F, 28.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.8F, KeyframeAnimations.degreeVec(0.0F, -16.0F, 14.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .addAnimation("wingtip_r", new AnimationChannel(AnimationChannel.Targets.ROTATION,
-                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 12.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.24F, KeyframeAnimations.degreeVec(0.0F, 12.0F, 18.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.56F, KeyframeAnimations.degreeVec(0.0F, 12.0F, -14.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.8F, KeyframeAnimations.degreeVec(0.0F, 12.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 16.0F, -14.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.24F, KeyframeAnimations.degreeVec(0.0F, 16.0F, 4.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.56F, KeyframeAnimations.degreeVec(0.0F, 16.0F, -28.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.8F, KeyframeAnimations.degreeVec(0.0F, 16.0F, -14.0F), AnimationChannel.Interpolations.CATMULLROM)))
+            .addAnimation("shoulder_l", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(13.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.4F, KeyframeAnimations.degreeVec(13.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.8F, KeyframeAnimations.degreeVec(13.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
+            .addAnimation("shoulder_r", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(13.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.4F, KeyframeAnimations.degreeVec(13.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.8F, KeyframeAnimations.degreeVec(13.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .addAnimation("leg_fl", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(55.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.4F, KeyframeAnimations.degreeVec(58.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
@@ -586,6 +614,12 @@ public final class GryphonKnightModel extends EntityModel<WayfarerRenderState> {
                     new Keyframe(0.8F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .build();
     public static final AnimationDefinition DIVE = AnimationDefinition.Builder.withLength(2.0F)
+            .addAnimation("shoulder_l", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(13.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(2.0F, KeyframeAnimations.degreeVec(13.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
+            .addAnimation("shoulder_r", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(13.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(2.0F, KeyframeAnimations.degreeVec(13.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .addAnimation("tail", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(30.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(2.0F, KeyframeAnimations.degreeVec(30.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
@@ -617,16 +651,16 @@ public final class GryphonKnightModel extends EntityModel<WayfarerRenderState> {
                     new Keyframe(0.9F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(2.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .addAnimation("wing_l", new AnimationChannel(AnimationChannel.Targets.ROTATION,
-                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(90.0F, 90.0F, 12.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.7F, KeyframeAnimations.degreeVec(70.0F, 90.0F, -48.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.9F, KeyframeAnimations.degreeVec(80.0F, 40.0F, -28.0F), AnimationChannel.Interpolations.LINEAR),
-                    new Keyframe(1.3F, KeyframeAnimations.degreeVec(90.0F, 50.0F, -18.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(1.6F, KeyframeAnimations.degreeVec(90.0F, 90.0F, 42.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(2.0F, KeyframeAnimations.degreeVec(90.0F, 90.0F, 12.0F), AnimationChannel.Interpolations.CATMULLROM)))
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(90.0F, 90.0F, 14.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.7F, KeyframeAnimations.degreeVec(160.0F, 90.0F, -31.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.9F, KeyframeAnimations.degreeVec(90.0F, 25.0F, 4.0F), AnimationChannel.Interpolations.LINEAR),
+                    new Keyframe(1.3F, KeyframeAnimations.degreeVec(90.0F, 35.0F, 4.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(1.6F, KeyframeAnimations.degreeVec(90.0F, 90.0F, 44.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(2.0F, KeyframeAnimations.degreeVec(90.0F, 90.0F, 14.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .addAnimation("wingtip_l", new AnimationChannel(AnimationChannel.Targets.ROTATION,
-                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, -12.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.9F, KeyframeAnimations.degreeVec(0.0F, 18.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(2.0F, KeyframeAnimations.degreeVec(0.0F, -12.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, -16.0F, 14.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.9F, KeyframeAnimations.degreeVec(0.0F, 14.0F, 14.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(2.0F, KeyframeAnimations.degreeVec(0.0F, -16.0F, 14.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .addAnimation("leg_fl", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(55.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.7F, KeyframeAnimations.degreeVec(55.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
@@ -645,16 +679,16 @@ public final class GryphonKnightModel extends EntityModel<WayfarerRenderState> {
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(40.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(2.0F, KeyframeAnimations.degreeVec(40.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .addAnimation("wing_r", new AnimationChannel(AnimationChannel.Targets.ROTATION,
-                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(90.0F, -90.0F, -12.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.7F, KeyframeAnimations.degreeVec(70.0F, -90.0F, 48.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.9F, KeyframeAnimations.degreeVec(80.0F, -40.0F, 28.0F), AnimationChannel.Interpolations.LINEAR),
-                    new Keyframe(1.3F, KeyframeAnimations.degreeVec(90.0F, -50.0F, 18.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(1.6F, KeyframeAnimations.degreeVec(90.0F, -90.0F, -42.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(2.0F, KeyframeAnimations.degreeVec(90.0F, -90.0F, -12.0F), AnimationChannel.Interpolations.CATMULLROM)))
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(90.0F, -90.0F, -14.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.7F, KeyframeAnimations.degreeVec(160.0F, -90.0F, 31.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.9F, KeyframeAnimations.degreeVec(90.0F, -25.0F, -4.0F), AnimationChannel.Interpolations.LINEAR),
+                    new Keyframe(1.3F, KeyframeAnimations.degreeVec(90.0F, -35.0F, -4.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(1.6F, KeyframeAnimations.degreeVec(90.0F, -90.0F, -44.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(2.0F, KeyframeAnimations.degreeVec(90.0F, -90.0F, -14.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .addAnimation("wingtip_r", new AnimationChannel(AnimationChannel.Targets.ROTATION,
-                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 12.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.9F, KeyframeAnimations.degreeVec(0.0F, -18.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(2.0F, KeyframeAnimations.degreeVec(0.0F, 12.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 16.0F, -14.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.9F, KeyframeAnimations.degreeVec(0.0F, -14.0F, -14.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(2.0F, KeyframeAnimations.degreeVec(0.0F, 16.0F, -14.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .addAnimation("leg_fr", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(55.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.7F, KeyframeAnimations.degreeVec(55.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
@@ -674,6 +708,12 @@ public final class GryphonKnightModel extends EntityModel<WayfarerRenderState> {
                     new Keyframe(2.0F, KeyframeAnimations.degreeVec(40.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .build();
     public static final AnimationDefinition VOLLEY = AnimationDefinition.Builder.withLength(1.8F)
+            .addAnimation("shoulder_l", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(13.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(1.8F, KeyframeAnimations.degreeVec(13.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
+            .addAnimation("shoulder_r", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(13.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(1.8F, KeyframeAnimations.degreeVec(13.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .addAnimation("leg_fl", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(55.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(1.8F, KeyframeAnimations.degreeVec(55.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
@@ -717,29 +757,39 @@ public final class GryphonKnightModel extends EntityModel<WayfarerRenderState> {
                     new Keyframe(1.3F, KeyframeAnimations.degreeVec(5.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(1.8F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .addAnimation("wing_l", new AnimationChannel(AnimationChannel.Targets.ROTATION,
-                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(90.0F, 90.0F, 12.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.7F, KeyframeAnimations.degreeVec(80.0F, 135.0F, -33.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.85F, KeyframeAnimations.degreeVec(90.0F, 55.0F, 42.0F), AnimationChannel.Interpolations.LINEAR),
-                    new Keyframe(1.3F, KeyframeAnimations.degreeVec(90.0F, 70.0F, 27.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(1.8F, KeyframeAnimations.degreeVec(90.0F, 90.0F, 12.0F), AnimationChannel.Interpolations.CATMULLROM)))
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(90.0F, 90.0F, 14.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.7F, KeyframeAnimations.degreeVec(160.0F, 115.0F, -21.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.85F, KeyframeAnimations.degreeVec(90.0F, 55.0F, 44.0F), AnimationChannel.Interpolations.LINEAR),
+                    new Keyframe(1.3F, KeyframeAnimations.degreeVec(90.0F, 70.0F, 29.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(1.8F, KeyframeAnimations.degreeVec(90.0F, 90.0F, 14.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .addAnimation("wingtip_l", new AnimationChannel(AnimationChannel.Targets.ROTATION,
-                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, -12.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.7F, KeyframeAnimations.degreeVec(0.0F, 13.0F, -20.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.85F, KeyframeAnimations.degreeVec(0.0F, -37.0F, 20.0F), AnimationChannel.Interpolations.LINEAR),
-                    new Keyframe(1.8F, KeyframeAnimations.degreeVec(0.0F, -12.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, -16.0F, 14.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.7F, KeyframeAnimations.degreeVec(0.0F, 9.0F, -6.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.85F, KeyframeAnimations.degreeVec(0.0F, -41.0F, 34.0F), AnimationChannel.Interpolations.LINEAR),
+                    new Keyframe(1.8F, KeyframeAnimations.degreeVec(0.0F, -16.0F, 14.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .addAnimation("wing_r", new AnimationChannel(AnimationChannel.Targets.ROTATION,
-                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(90.0F, -90.0F, -12.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.7F, KeyframeAnimations.degreeVec(80.0F, -135.0F, 33.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.85F, KeyframeAnimations.degreeVec(90.0F, -55.0F, -42.0F), AnimationChannel.Interpolations.LINEAR),
-                    new Keyframe(1.3F, KeyframeAnimations.degreeVec(90.0F, -70.0F, -27.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(1.8F, KeyframeAnimations.degreeVec(90.0F, -90.0F, -12.0F), AnimationChannel.Interpolations.CATMULLROM)))
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(90.0F, -90.0F, -14.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.7F, KeyframeAnimations.degreeVec(160.0F, -115.0F, 21.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.85F, KeyframeAnimations.degreeVec(90.0F, -55.0F, -44.0F), AnimationChannel.Interpolations.LINEAR),
+                    new Keyframe(1.3F, KeyframeAnimations.degreeVec(90.0F, -70.0F, -29.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(1.8F, KeyframeAnimations.degreeVec(90.0F, -90.0F, -14.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .addAnimation("wingtip_r", new AnimationChannel(AnimationChannel.Targets.ROTATION,
-                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 12.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.7F, KeyframeAnimations.degreeVec(0.0F, -13.0F, 20.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.85F, KeyframeAnimations.degreeVec(0.0F, 37.0F, -20.0F), AnimationChannel.Interpolations.LINEAR),
-                    new Keyframe(1.8F, KeyframeAnimations.degreeVec(0.0F, 12.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 16.0F, -14.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.7F, KeyframeAnimations.degreeVec(0.0F, -9.0F, 6.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.85F, KeyframeAnimations.degreeVec(0.0F, 41.0F, -34.0F), AnimationChannel.Interpolations.LINEAR),
+                    new Keyframe(1.8F, KeyframeAnimations.degreeVec(0.0F, 16.0F, -14.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .build();
     public static final AnimationDefinition LAND = AnimationDefinition.Builder.withLength(1.8F)
+            .addAnimation("shoulder_l", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(13.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.55F, KeyframeAnimations.degreeVec(13.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.75F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+                    new Keyframe(1.8F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
+            .addAnimation("shoulder_r", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(13.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.55F, KeyframeAnimations.degreeVec(13.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.75F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+                    new Keyframe(1.8F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .addAnimation("leg_fl", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(55.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.55F, KeyframeAnimations.degreeVec(55.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
@@ -812,29 +862,39 @@ public final class GryphonKnightModel extends EntityModel<WayfarerRenderState> {
                     new Keyframe(1.1F, KeyframeAnimations.posVec(0.0F, -2.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(1.8F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .addAnimation("wing_l", new AnimationChannel(AnimationChannel.Targets.ROTATION,
-                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(90.0F, 90.0F, 12.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.55F, KeyframeAnimations.degreeVec(90.0F, 90.0F, -48.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.75F, KeyframeAnimations.degreeVec(90.0F, 90.0F, 52.0F), AnimationChannel.Interpolations.LINEAR),
-                    new Keyframe(1.1F, KeyframeAnimations.degreeVec(90.0F, 90.0F, 42.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(90.0F, 90.0F, 14.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.55F, KeyframeAnimations.degreeVec(155.0F, 90.0F, -31.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.75F, KeyframeAnimations.degreeVec(90.0F, 90.0F, 54.0F), AnimationChannel.Interpolations.LINEAR),
+                    new Keyframe(1.1F, KeyframeAnimations.degreeVec(90.0F, 90.0F, 44.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(1.8F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .addAnimation("wingtip_l", new AnimationChannel(AnimationChannel.Targets.ROTATION,
-                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, -12.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.55F, KeyframeAnimations.degreeVec(0.0F, -12.0F, -30.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.75F, KeyframeAnimations.degreeVec(0.0F, -12.0F, 25.0F), AnimationChannel.Interpolations.LINEAR),
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, -16.0F, 14.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.55F, KeyframeAnimations.degreeVec(0.0F, -16.0F, -16.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.75F, KeyframeAnimations.degreeVec(0.0F, -16.0F, 39.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(1.8F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .addAnimation("wing_r", new AnimationChannel(AnimationChannel.Targets.ROTATION,
-                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(90.0F, -90.0F, -12.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.55F, KeyframeAnimations.degreeVec(90.0F, -90.0F, 48.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.75F, KeyframeAnimations.degreeVec(90.0F, -90.0F, -52.0F), AnimationChannel.Interpolations.LINEAR),
-                    new Keyframe(1.1F, KeyframeAnimations.degreeVec(90.0F, -90.0F, -42.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(90.0F, -90.0F, -14.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.55F, KeyframeAnimations.degreeVec(155.0F, -90.0F, 31.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.75F, KeyframeAnimations.degreeVec(90.0F, -90.0F, -54.0F), AnimationChannel.Interpolations.LINEAR),
+                    new Keyframe(1.1F, KeyframeAnimations.degreeVec(90.0F, -90.0F, -44.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(1.8F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .addAnimation("wingtip_r", new AnimationChannel(AnimationChannel.Targets.ROTATION,
-                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 12.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.55F, KeyframeAnimations.degreeVec(0.0F, 12.0F, 30.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.75F, KeyframeAnimations.degreeVec(0.0F, 12.0F, -25.0F), AnimationChannel.Interpolations.LINEAR),
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 16.0F, -14.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.55F, KeyframeAnimations.degreeVec(0.0F, 16.0F, 16.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.75F, KeyframeAnimations.degreeVec(0.0F, 16.0F, -39.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(1.8F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .build();
     public static final AnimationDefinition STORM = AnimationDefinition.Builder.withLength(2.6F)
+            .addAnimation("shoulder_l", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.6F, KeyframeAnimations.degreeVec(13.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(2.0F, KeyframeAnimations.degreeVec(13.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(2.6F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
+            .addAnimation("shoulder_r", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.6F, KeyframeAnimations.degreeVec(13.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(2.0F, KeyframeAnimations.degreeVec(13.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(2.6F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .addAnimation("body", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.6F, KeyframeAnimations.degreeVec(-40.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
@@ -862,10 +922,10 @@ public final class GryphonKnightModel extends EntityModel<WayfarerRenderState> {
                     new Keyframe(2.6F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .addAnimation("wing_l", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.6F, KeyframeAnimations.degreeVec(90.0F, 90.0F, -53.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(1.0F, KeyframeAnimations.degreeVec(90.0F, 90.0F, -43.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(1.4F, KeyframeAnimations.degreeVec(90.0F, 90.0F, -58.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(2.0F, KeyframeAnimations.degreeVec(90.0F, 90.0F, -48.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.6F, KeyframeAnimations.degreeVec(165.0F, 90.0F, -41.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(1.0F, KeyframeAnimations.degreeVec(160.0F, 90.0F, -31.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(1.4F, KeyframeAnimations.degreeVec(170.0F, 90.0F, -46.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(2.0F, KeyframeAnimations.degreeVec(165.0F, 90.0F, -36.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(2.6F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .addAnimation("leg_fl", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
@@ -884,10 +944,10 @@ public final class GryphonKnightModel extends EntityModel<WayfarerRenderState> {
                     new Keyframe(2.6F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .addAnimation("wing_r", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.6F, KeyframeAnimations.degreeVec(90.0F, -90.0F, 53.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(1.0F, KeyframeAnimations.degreeVec(90.0F, -90.0F, 43.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(1.4F, KeyframeAnimations.degreeVec(90.0F, -90.0F, 58.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(2.0F, KeyframeAnimations.degreeVec(90.0F, -90.0F, 48.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.6F, KeyframeAnimations.degreeVec(165.0F, -90.0F, 41.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(1.0F, KeyframeAnimations.degreeVec(160.0F, -90.0F, 31.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(1.4F, KeyframeAnimations.degreeVec(170.0F, -90.0F, 46.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(2.0F, KeyframeAnimations.degreeVec(165.0F, -90.0F, 36.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(2.6F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .addAnimation("leg_fr", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
@@ -911,6 +971,16 @@ public final class GryphonKnightModel extends EntityModel<WayfarerRenderState> {
                     new Keyframe(2.6F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .build();
     public static final AnimationDefinition ROAR = AnimationDefinition.Builder.withLength(2.4F)
+            .addAnimation("shoulder_l", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.5F, KeyframeAnimations.degreeVec(13.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(1.9F, KeyframeAnimations.degreeVec(13.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(2.4F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
+            .addAnimation("shoulder_r", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.5F, KeyframeAnimations.degreeVec(13.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(1.9F, KeyframeAnimations.degreeVec(13.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(2.4F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .addAnimation("body", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.5F, KeyframeAnimations.degreeVec(-30.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
@@ -935,8 +1005,8 @@ public final class GryphonKnightModel extends EntityModel<WayfarerRenderState> {
                     new Keyframe(2.4F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .addAnimation("wing_l", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.5F, KeyframeAnimations.degreeVec(90.0F, 90.0F, -23.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(1.9F, KeyframeAnimations.degreeVec(90.0F, 90.0F, -28.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.5F, KeyframeAnimations.degreeVec(160.0F, 90.0F, -16.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(1.9F, KeyframeAnimations.degreeVec(162.0F, 90.0F, -21.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(2.4F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .addAnimation("leg_fl", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
@@ -945,8 +1015,8 @@ public final class GryphonKnightModel extends EntityModel<WayfarerRenderState> {
                     new Keyframe(2.4F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .addAnimation("wing_r", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.5F, KeyframeAnimations.degreeVec(90.0F, -90.0F, 23.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(1.9F, KeyframeAnimations.degreeVec(90.0F, -90.0F, 28.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.5F, KeyframeAnimations.degreeVec(160.0F, -90.0F, 16.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(1.9F, KeyframeAnimations.degreeVec(162.0F, -90.0F, 21.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(2.4F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .addAnimation("leg_fr", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
@@ -1057,109 +1127,124 @@ public final class GryphonKnightModel extends EntityModel<WayfarerRenderState> {
         PartDefinition p_bone = root.addOrReplaceChild("bone", CubeListBuilder.create(),
                 new PartPose(0.0F, 24.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_body = p_bone.addOrReplaceChild("body", CubeListBuilder.create()
-                .texOffs(112, 0).addBox(-11.0F, -14.0F, -41.0F, 22.0F, 24.0F, 22.0F)
-                .texOffs(0, 46).addBox(-10.0F, -11.0F, -21.0F, 20.0F, 20.0F, 17.0F)
-                .texOffs(74, 46).addBox(-9.0F, -9.0F, -5.0F, 18.0F, 18.0F, 17.0F)
-                .texOffs(118, 155).addBox(-12.0F, -8.0F, -43.0F, 24.0F, 13.0F, 3.0F)
-                .texOffs(96, 83).addBox(-13.0F, -7.0F, -41.0F, 1.0F, 11.0F, 14.0F)
-                .texOffs(126, 83).addBox(12.0F, -7.0F, -41.0F, 1.0F, 11.0F, 14.0F)
-                .texOffs(0, 0).addBox(-11.0F, 2.0F, -22.0F, 22.0F, 12.0F, 34.0F)
-                .texOffs(0, 155).addBox(-10.0F, -11.0F, -4.0F, 20.0F, 3.0F, 15.0F)
-                .texOffs(120, 173).addBox(-1.0F, -13.0F, -2.0F, 2.0F, 2.0F, 11.0F),
-                new PartPose(0.0F, -28.0F, 14.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
+                .texOffs(122, 0).addBox(-12.0F, -16.0F, -42.0F, 24.0F, 26.0F, 22.0F)
+                .texOffs(170, 167).addBox(-9.0F, 0.0F, -45.0F, 18.0F, 11.0F, 6.0F)
+                .texOffs(0, 50).addBox(-10.5F, -13.0F, -22.0F, 21.0F, 21.0F, 18.0F)
+                .texOffs(78, 50).addBox(-9.5F, -11.0F, -6.0F, 19.0F, 20.0F, 19.0F)
+                .texOffs(112, 167).addBox(-13.0F, -11.0F, -45.0F, 26.0F, 14.0F, 3.0F)
+                .texOffs(204, 89).addBox(-14.0F, -10.0F, -43.0F, 1.0F, 12.0F, 16.0F)
+                .texOffs(0, 120).addBox(13.0F, -10.0F, -43.0F, 1.0F, 12.0F, 16.0F)
+                .texOffs(0, 0).addBox(-12.0F, 1.0F, -23.0F, 24.0F, 13.0F, 37.0F)
+                .texOffs(192, 120).addBox(-8.0F, -13.0F, -5.0F, 16.0F, 3.0F, 16.0F)
+                .texOffs(206, 202).addBox(-1.0F, -15.0F, -3.0F, 2.0F, 2.0F, 12.0F),
+                new PartPose(0.0F, -31.0F, 14.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_neck = p_body.addOrReplaceChild("neck", CubeListBuilder.create()
-                .texOffs(144, 46).addBox(-6.0F, -21.0F, -6.0F, 12.0F, 22.0F, 12.0F)
-                .texOffs(156, 83).addBox(-8.0F, -5.0F, -8.0F, 16.0F, 8.0F, 16.0F)
-                .texOffs(116, 200).addBox(-4.0F, -20.0F, 5.0F, 8.0F, 6.0F, 3.0F)
-                .texOffs(138, 200).addBox(-4.0F, -14.0F, 5.0F, 8.0F, 6.0F, 3.0F)
-                .texOffs(160, 200).addBox(-4.0F, -8.0F, 5.0F, 8.0F, 6.0F, 3.0F),
-                new PartPose(0.0F, -10.0F, -34.0F, 0.418879F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
+                .texOffs(66, 89).addBox(-8.0F, -14.0F, -7.0F, 16.0F, 16.0F, 14.0F)
+                .texOffs(126, 89).addBox(-10.0F, -2.0F, -10.0F, 20.0F, 9.0F, 19.0F)
+                .texOffs(36, 241).addBox(-5.0F, -14.0F, 6.0F, 10.0F, 5.0F, 3.0F)
+                .texOffs(62, 241).addBox(-5.0F, -9.0F, 6.0F, 10.0F, 5.0F, 3.0F)
+                .texOffs(88, 241).addBox(-5.0F, -4.0F, 6.0F, 10.0F, 5.0F, 3.0F),
+                new PartPose(0.0F, -11.0F, -38.0F, 0.383972F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_head = p_neck.addOrReplaceChild("head", CubeListBuilder.create()
-                .texOffs(44, 83).addBox(-6.0F, -12.0F, -10.0F, 12.0F, 12.0F, 14.0F)
-                .texOffs(126, 188).addBox(-7.0F, -11.0F, -11.0F, 14.0F, 3.0F, 7.0F)
-                .texOffs(32, 188).addBox(-4.0F, -10.0F, -16.0F, 8.0F, 6.0F, 6.0F)
-                .texOffs(168, 188).addBox(-3.5F, -9.0F, -21.0F, 7.0F, 5.0F, 5.0F)
-                .texOffs(192, 188).addBox(-2.5F, -6.0F, -23.0F, 5.0F, 6.0F, 4.0F)
-                .texOffs(172, 173).addBox(-6.0F, -13.0F, 0.0F, 3.0F, 4.0F, 9.0F)
-                .texOffs(196, 173).addBox(3.0F, -13.0F, 0.0F, 3.0F, 4.0F, 9.0F)
-                .texOffs(172, 155).addBox(-5.0F, -13.0F, -12.0F, 10.0F, 2.0F, 14.0F)
-                .texOffs(52, 209).addBox(-3.0F, -11.0F, -17.0F, 6.0F, 2.0F, 6.0F)
-                .texOffs(20, 173).addBox(-7.0F, -9.0F, -3.0F, 1.0F, 7.0F, 7.0F)
-                .texOffs(36, 173).addBox(6.0F, -9.0F, -3.0F, 1.0F, 7.0F, 7.0F),
-                new PartPose(0.0F, -19.0F, -1.0F, -0.418879F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
+                .texOffs(0, 89).addBox(-8.0F, -14.0F, -11.0F, 16.0F, 14.0F, 17.0F)
+                .texOffs(0, 218).addBox(-9.0F, -13.0F, -13.0F, 18.0F, 4.0F, 9.0F)
+                .texOffs(218, 167).addBox(-5.5F, -12.0F, -19.0F, 11.0F, 9.0F, 8.0F)
+                .texOffs(176, 202).addBox(-4.5F, -11.0F, -25.0F, 9.0F, 8.0F, 6.0F)
+                .texOffs(234, 202).addBox(-3.5F, -9.0F, -29.0F, 7.0F, 10.0F, 4.0F)
+                .texOffs(38, 249).addBox(-2.5F, 1.0F, -28.0F, 5.0F, 3.0F, 3.0F)
+                .texOffs(0, 167).addBox(-9.0F, -16.0F, 2.0F, 4.0F, 6.0F, 12.0F)
+                .texOffs(32, 167).addBox(5.0F, -16.0F, 2.0F, 4.0F, 6.0F, 12.0F)
+                .texOffs(128, 120).addBox(-7.0F, -16.0F, -14.0F, 14.0F, 2.0F, 18.0F)
+                .texOffs(126, 218).addBox(-3.5F, -13.5F, -21.0F, 7.0F, 2.0F, 9.0F)
+                .texOffs(0, 185).addBox(-9.0F, -11.0F, -2.0F, 1.0F, 9.0F, 8.0F)
+                .texOffs(18, 185).addBox(8.0F, -11.0F, -2.0F, 1.0F, 9.0F, 8.0F),
+                new PartPose(0.0F, -12.0F, -1.0F, -0.383972F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_jaw = p_head.addOrReplaceChild("jaw", CubeListBuilder.create()
-                .texOffs(96, 188).addBox(-3.0F, 0.0F, -9.0F, 6.0F, 2.0F, 9.0F)
-                .texOffs(88, 217).addBox(-2.5F, -1.0F, -10.0F, 5.0F, 1.0F, 2.0F),
-                new PartPose(0.0F, -3.0F, -10.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
+                .texOffs(32, 202).addBox(-4.5F, 0.0F, -12.0F, 9.0F, 3.0F, 12.0F)
+                .texOffs(74, 249).addBox(-3.5F, -1.0F, -12.0F, 7.0F, 1.0F, 1.0F),
+                new PartPose(0.0F, -3.0F, -12.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_plume = p_head.addOrReplaceChild("plume", CubeListBuilder.create()
-                .texOffs(152, 209).addBox(-2.0F, -3.0F, -2.0F, 4.0F, 3.0F, 4.0F)
-                .texOffs(220, 83).addBox(-2.0F, -21.0F, -2.0F, 4.0F, 18.0F, 5.0F)
-                .texOffs(84, 188).addBox(-1.0F, -28.0F, 0.0F, 2.0F, 8.0F, 4.0F)
-                .texOffs(102, 217).addBox(-0.5F, -10.0F, -2.5F, 1.0F, 1.0F, 1.0F),
-                new PartPose(0.0F, -13.0F, 2.0F, -0.663225F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
-        PartDefinition p_wing_l = p_body.addOrReplaceChild("wing_l", CubeListBuilder.create()
-                .texOffs(182, 200).addBox(0.0F, -2.0F, -2.0F, 22.0F, 4.0F, 4.0F)
-                .texOffs(0, 200).addBox(0.0F, -1.0F, 1.0F, 22.0F, 2.0F, 7.0F)
-                .texOffs(68, 114).addBox(0.0F, 0.0F, 2.0F, 22.0F, 1.0F, 19.0F),
-                new PartPose(11.0F, -13.0F, -32.0F, -1.5708F, -1.5708F, -0.20944F, 1.0F, 1.0F, 1.0F));
+                .texOffs(114, 241).addBox(-2.5F, -3.0F, -2.5F, 5.0F, 3.0F, 5.0F)
+                .texOffs(110, 120).addBox(-2.0F, -21.0F, -2.0F, 4.0F, 18.0F, 5.0F)
+                .texOffs(158, 218).addBox(-1.0F, -27.0F, -1.0F, 2.0F, 7.0F, 4.0F)
+                .texOffs(90, 249).addBox(-0.5F, -2.0F, -3.0F, 1.0F, 1.0F, 1.0F),
+                new PartPose(0.0F, -16.0F, 2.0F, -0.733038F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
+        PartDefinition p_plume_l = p_plume.addOrReplaceChild("plume_l", CubeListBuilder.create()
+                .texOffs(36, 185).addBox(-1.0F, -15.0F, -1.5F, 2.0F, 13.0F, 4.0F),
+                new PartPose(1.5F, 0.0F, 1.0F, -0.244346F, 0.0F, 0.279253F, 1.0F, 1.0F, 1.0F));
+        PartDefinition p_plume_r = p_plume.addOrReplaceChild("plume_r", CubeListBuilder.create()
+                .texOffs(48, 185).addBox(-1.0F, -15.0F, -1.5F, 2.0F, 13.0F, 4.0F),
+                new PartPose(-1.5F, 0.0F, 1.0F, -0.244346F, 0.0F, -0.279253F, 1.0F, 1.0F, 1.0F));
+        PartDefinition p_shoulder_l = p_body.addOrReplaceChild("shoulder_l", CubeListBuilder.create(),
+                new PartPose(12.0F, -16.0F, -34.0F, -0.226893F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
+        PartDefinition p_wing_l = p_shoulder_l.addOrReplaceChild("wing_l", CubeListBuilder.create()
+                .texOffs(170, 218).addBox(0.0F, -2.5F, -2.5F, 24.0F, 5.0F, 5.0F)
+                .texOffs(58, 231).addBox(0.0F, -1.0F, 1.0F, 24.0F, 2.0F, 7.0F)
+                .texOffs(86, 148).addBox(0.0F, 0.0F, 2.0F, 24.0F, 1.0F, 17.0F),
+                new PartPose(0.0F, 0.0F, 0.0F, -1.5708F, -1.5708F, -0.244346F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_wingtip_l = p_wing_l.addOrReplaceChild("wingtip_l", CubeListBuilder.create()
-                .texOffs(0, 217).addBox(0.0F, -1.5F, -1.5F, 14.0F, 3.0F, 3.0F)
-                .texOffs(76, 209).addBox(0.0F, -1.0F, 1.0F, 14.0F, 2.0F, 5.0F)
-                .texOffs(0, 136).addBox(0.0F, 0.0F, -1.0F, 32.0F, 1.0F, 18.0F),
-                new PartPose(22.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
-        PartDefinition p_wing_r = p_body.addOrReplaceChild("wing_r", CubeListBuilder.create()
-                .texOffs(0, 209).addBox(-22.0F, -2.0F, -2.0F, 22.0F, 4.0F, 4.0F)
-                .texOffs(58, 200).addBox(-22.0F, -1.0F, 1.0F, 22.0F, 2.0F, 7.0F)
-                .texOffs(150, 114).addBox(-22.0F, 0.0F, 2.0F, 22.0F, 1.0F, 19.0F),
-                new PartPose(-11.0F, -13.0F, -32.0F, -1.5708F, 1.5708F, 0.20944F, 1.0F, 1.0F, 1.0F));
+                .texOffs(200, 231).addBox(0.0F, -2.0F, -2.0F, 14.0F, 4.0F, 4.0F)
+                .texOffs(218, 241).addBox(0.0F, -1.0F, 1.0F, 14.0F, 2.0F, 5.0F)
+                .texOffs(60, 185).addBox(0.0F, 0.0F, -1.0F, 34.0F, 1.0F, 15.0F),
+                new PartPose(24.0F, 0.0F, 0.0F, 0.0F, 0.0698132F, -0.244346F, 1.0F, 1.0F, 1.0F));
+        PartDefinition p_shoulder_r = p_body.addOrReplaceChild("shoulder_r", CubeListBuilder.create(),
+                new PartPose(-12.0F, -16.0F, -34.0F, -0.226893F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
+        PartDefinition p_wing_r = p_shoulder_r.addOrReplaceChild("wing_r", CubeListBuilder.create()
+                .texOffs(0, 231).addBox(-24.0F, -2.5F, -2.5F, 24.0F, 5.0F, 5.0F)
+                .texOffs(120, 231).addBox(-24.0F, -1.0F, 1.0F, 24.0F, 2.0F, 7.0F)
+                .texOffs(168, 148).addBox(-24.0F, 0.0F, 2.0F, 24.0F, 1.0F, 17.0F),
+                new PartPose(0.0F, 0.0F, 0.0F, -1.5708F, 1.5708F, 0.244346F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_wingtip_r = p_wing_r.addOrReplaceChild("wingtip_r", CubeListBuilder.create()
-                .texOffs(34, 217).addBox(-14.0F, -1.5F, -1.5F, 14.0F, 3.0F, 3.0F)
-                .texOffs(114, 209).addBox(-14.0F, -1.0F, 1.0F, 14.0F, 2.0F, 5.0F)
-                .texOffs(100, 136).addBox(-32.0F, 0.0F, -1.0F, 32.0F, 1.0F, 18.0F),
-                new PartPose(-22.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
+                .texOffs(0, 241).addBox(-14.0F, -2.0F, -2.0F, 14.0F, 4.0F, 4.0F)
+                .texOffs(0, 249).addBox(-14.0F, -1.0F, 1.0F, 14.0F, 2.0F, 5.0F)
+                .texOffs(158, 185).addBox(-34.0F, 0.0F, -1.0F, 34.0F, 1.0F, 15.0F),
+                new PartPose(-24.0F, 0.0F, 0.0F, 0.0F, -0.0698132F, 0.244346F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_leg_fl = p_body.addOrReplaceChild("leg_fl", CubeListBuilder.create()
-                .texOffs(0, 114).addBox(-4.0F, -1.0F, -4.5F, 8.0F, 13.0F, 9.0F),
-                new PartPose(7.0F, 4.0F, -29.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
+                .texOffs(34, 120).addBox(-4.5F, -1.0F, -5.0F, 9.0F, 16.0F, 10.0F),
+                new PartPose(7.5F, 2.0F, -31.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_shin_fl = p_leg_fl.addOrReplaceChild("shin_fl", CubeListBuilder.create()
-                .texOffs(220, 155).addBox(-2.5F, 0.0F, -2.5F, 5.0F, 10.0F, 5.0F)
-                .texOffs(220, 173).addBox(-3.5F, 9.0F, -6.0F, 7.0F, 3.0F, 9.0F)
-                .texOffs(168, 209).addBox(-3.5F, 10.0F, -9.0F, 2.0F, 3.0F, 4.0F)
-                .texOffs(180, 209).addBox(-1.0F, 10.0F, -10.0F, 2.0F, 3.0F, 4.0F)
-                .texOffs(192, 209).addBox(1.5F, 10.0F, -9.0F, 2.0F, 3.0F, 4.0F)
-                .texOffs(68, 217).addBox(-1.0F, 10.0F, 2.0F, 2.0F, 3.0F, 3.0F),
-                new PartPose(0.0F, 11.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
+                .texOffs(64, 167).addBox(-3.0F, 0.0F, -3.0F, 6.0F, 12.0F, 6.0F)
+                .texOffs(54, 218).addBox(-4.0F, 12.0F, -7.0F, 8.0F, 3.0F, 10.0F)
+                .texOffs(134, 241).addBox(-4.0F, 12.0F, -10.0F, 2.0F, 3.0F, 5.0F)
+                .texOffs(148, 241).addBox(-1.0F, 12.0F, -11.0F, 2.0F, 3.0F, 5.0F)
+                .texOffs(162, 241).addBox(2.0F, 12.0F, -10.0F, 2.0F, 3.0F, 5.0F)
+                .texOffs(54, 249).addBox(-1.0F, 12.0F, 2.0F, 2.0F, 3.0F, 3.0F),
+                new PartPose(0.0F, 14.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_leg_hl = p_body.addOrReplaceChild("leg_hl", CubeListBuilder.create()
-                .texOffs(192, 46).addBox(-4.0F, -2.0F, -7.0F, 8.0F, 17.0F, 14.0F),
-                new PartPose(6.5F, -2.0F, 4.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
+                .texOffs(154, 50).addBox(-4.0F, -2.0F, -8.0F, 8.0F, 18.0F, 15.0F),
+                new PartPose(6.5F, -2.0F, 5.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_shin_hl = p_leg_hl.addOrReplaceChild("shin_hl", CubeListBuilder.create()
-                .texOffs(70, 155).addBox(-3.0F, 0.0F, -3.0F, 6.0F, 12.0F, 6.0F)
-                .texOffs(52, 173).addBox(-4.0F, 12.0F, -5.0F, 8.0F, 4.0F, 9.0F),
-                new PartPose(0.0F, 14.0F, 2.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
+                .texOffs(38, 148).addBox(-3.0F, 0.0F, -3.0F, 6.0F, 13.0F, 6.0F)
+                .texOffs(74, 202).addBox(-4.0F, 13.0F, -6.0F, 8.0F, 5.0F, 10.0F),
+                new PartPose(0.0F, 15.0F, 3.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_leg_fr = p_body.addOrReplaceChild("leg_fr", CubeListBuilder.create()
-                .texOffs(34, 114).addBox(-4.0F, -1.0F, -4.5F, 8.0F, 13.0F, 9.0F),
-                new PartPose(-7.0F, 4.0F, -29.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
+                .texOffs(72, 120).addBox(-4.5F, -1.0F, -5.0F, 9.0F, 16.0F, 10.0F),
+                new PartPose(-7.5F, 2.0F, -31.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_shin_fr = p_leg_fr.addOrReplaceChild("shin_fr", CubeListBuilder.create()
-                .texOffs(0, 173).addBox(-2.5F, 0.0F, -2.5F, 5.0F, 10.0F, 5.0F)
-                .texOffs(0, 188).addBox(-3.5F, 9.0F, -6.0F, 7.0F, 3.0F, 9.0F)
-                .texOffs(204, 209).addBox(-3.5F, 10.0F, -9.0F, 2.0F, 3.0F, 4.0F)
-                .texOffs(216, 209).addBox(-1.0F, 10.0F, -10.0F, 2.0F, 3.0F, 4.0F)
-                .texOffs(228, 209).addBox(1.5F, 10.0F, -9.0F, 2.0F, 3.0F, 4.0F)
-                .texOffs(78, 217).addBox(-1.0F, 10.0F, 2.0F, 2.0F, 3.0F, 3.0F),
-                new PartPose(0.0F, 11.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
+                .texOffs(88, 167).addBox(-3.0F, 0.0F, -3.0F, 6.0F, 12.0F, 6.0F)
+                .texOffs(90, 218).addBox(-4.0F, 12.0F, -7.0F, 8.0F, 3.0F, 10.0F)
+                .texOffs(176, 241).addBox(-4.0F, 12.0F, -10.0F, 2.0F, 3.0F, 5.0F)
+                .texOffs(190, 241).addBox(-1.0F, 12.0F, -11.0F, 2.0F, 3.0F, 5.0F)
+                .texOffs(204, 241).addBox(2.0F, 12.0F, -10.0F, 2.0F, 3.0F, 5.0F)
+                .texOffs(64, 249).addBox(-1.0F, 12.0F, 2.0F, 2.0F, 3.0F, 3.0F),
+                new PartPose(0.0F, 14.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_leg_hr = p_body.addOrReplaceChild("leg_hr", CubeListBuilder.create()
-                .texOffs(0, 83).addBox(-4.0F, -2.0F, -7.0F, 8.0F, 17.0F, 14.0F),
-                new PartPose(-6.5F, -2.0F, 4.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
+                .texOffs(200, 50).addBox(-4.0F, -2.0F, -8.0F, 8.0F, 18.0F, 15.0F),
+                new PartPose(-6.5F, -2.0F, 5.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_shin_hr = p_leg_hr.addOrReplaceChild("shin_hr", CubeListBuilder.create()
-                .texOffs(94, 155).addBox(-3.0F, 0.0F, -3.0F, 6.0F, 12.0F, 6.0F)
-                .texOffs(86, 173).addBox(-4.0F, 12.0F, -5.0F, 8.0F, 4.0F, 9.0F),
-                new PartPose(0.0F, 14.0F, 2.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
+                .texOffs(62, 148).addBox(-3.0F, 0.0F, -3.0F, 6.0F, 13.0F, 6.0F)
+                .texOffs(110, 202).addBox(-4.0F, 13.0F, -6.0F, 8.0F, 5.0F, 10.0F),
+                new PartPose(0.0F, 15.0F, 3.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_tail = p_body.addOrReplaceChild("tail", CubeListBuilder.create()
-                .texOffs(200, 136).addBox(-1.5F, -1.5F, 0.0F, 3.0F, 3.0F, 16.0F),
-                new PartPose(0.0F, -6.0F, 12.0F, -0.663225F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
+                .texOffs(0, 148).addBox(-2.0F, -2.0F, -1.0F, 4.0F, 4.0F, 15.0F),
+                new PartPose(0.0F, -8.0F, 13.0F, -0.785398F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_tail2 = p_tail.addOrReplaceChild("tail2", CubeListBuilder.create()
-                .texOffs(146, 173).addBox(-1.0F, -1.0F, 0.0F, 2.0F, 2.0F, 11.0F)
-                .texOffs(60, 188).addBox(-2.5F, -2.5F, 9.0F, 5.0F, 5.0F, 7.0F),
-                new PartPose(0.0F, 0.0F, 15.0F, 0.907571F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
+                .texOffs(0, 202).addBox(-1.5F, -1.5F, -1.0F, 3.0F, 3.0F, 13.0F),
+                new PartPose(0.0F, 0.0F, 13.0F, 0.698132F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
+        PartDefinition p_tail3 = p_tail2.addOrReplaceChild("tail3", CubeListBuilder.create()
+                .texOffs(182, 231).addBox(-1.5F, -1.5F, -1.0F, 3.0F, 3.0F, 6.0F)
+                .texOffs(146, 202).addBox(-3.0F, -3.0F, 3.0F, 6.0F, 6.0F, 9.0F),
+                new PartPose(0.0F, 0.0F, 11.0F, 0.610865F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         return LayerDefinition.create(mesh, 256, 256);
     }
 
