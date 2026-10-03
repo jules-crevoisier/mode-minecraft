@@ -185,6 +185,19 @@ TABLES = {
     "citadel_shrine": ("ocean", (1, 2), (1, 2), (1, 2), "overworld"),
     "citadel_arena": ("citadel", (1, 2), (1, 2), (1, 2), "overworld"),
     "citadel_vault": ("citadel", (1, 2), (1, 2), (3, 5), "overworld"),
+    # standalone dungeons: common rooms, treasure rooms / secret chambers, the reward vault past the boss
+    "catacombs": ("monastery", (2, 4), (1, 2), (0, 1), "overworld"),
+    "catacombs_treasure": ("monastery", (1, 2), (1, 3), (1, 2), "overworld"),
+    "catacombs_reward": ("monastery", (1, 2), (1, 2), (3, 4), "overworld"),
+    "hypogeum": ("desert", (2, 4), (1, 2), (0, 1), "overworld"),
+    "hypogeum_treasure": ("desert", (1, 2), (1, 3), (1, 2), "overworld"),
+    "hypogeum_reward": ("desert", (1, 2), (1, 2), (3, 4), "overworld"),
+    "lithite_well": ("dwarf", (2, 4), (1, 2), (0, 1), "deep"),
+    "lithite_well_treasure": ("dwarf", (1, 2), (1, 3), (1, 2), "deep"),
+    "lithite_well_reward": ("dwarf", (1, 2), (1, 2), (3, 4), "deep"),
+    "void_crypt": ("end", (2, 4), (1, 2), (0, 1), "end"),
+    "void_crypt_treasure": ("end", (1, 2), (1, 3), (1, 2), "end"),
+    "void_crypt_reward": ("end", (1, 2), (1, 2), (3, 5), "end"),
 }
 
 

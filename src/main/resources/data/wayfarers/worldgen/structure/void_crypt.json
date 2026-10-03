@@ -1,0 +1,33 @@
+{
+  "type": "minecraft:jigsaw",
+  "biomes": "#wayfarers:has_structure/void_crypt",
+  "step": "surface_structures",
+  "spawn_overrides": {
+    "monster": {
+      "bounding_box": "piece",
+      "spawns": [
+        {
+          "type": "minecraft:endermite",
+          "weight": 8,
+          "minCount": 1,
+          "maxCount": 2
+        },
+        {
+          "type": "wayfarers:void_stalker",
+          "weight": 8,
+          "minCount": 1,
+          "maxCount": 1
+        }
+      ]
+    }
+  },
+  "terrain_adaptation": "beard_thin",
+  "start_pool": "wayfarers:void_crypt/start",
+  "size": 1,
+  "max_distance_from_center": 80,
+  "use_expansion_hack": false,
+  "start_height": {
+    "absolute": -27
+  },
+  "project_start_to_heightmap": "WORLD_SURFACE_WG"
+}

@@ -1,0 +1,39 @@
+{
+  "type": "minecraft:jigsaw",
+  "biomes": "#wayfarers:has_structure/lithite_well",
+  "step": "surface_structures",
+  "spawn_overrides": {
+    "monster": {
+      "bounding_box": "piece",
+      "spawns": [
+        {
+          "type": "minecraft:cave_spider",
+          "weight": 8,
+          "minCount": 1,
+          "maxCount": 2
+        },
+        {
+          "type": "wayfarers:map_wraith",
+          "weight": 8,
+          "minCount": 1,
+          "maxCount": 1
+        },
+        {
+          "type": "minecraft:skeleton",
+          "weight": 8,
+          "minCount": 1,
+          "maxCount": 2
+        }
+      ]
+    }
+  },
+  "terrain_adaptation": "beard_thin",
+  "start_pool": "wayfarers:lithite_well/start",
+  "size": 1,
+  "max_distance_from_center": 80,
+  "use_expansion_hack": false,
+  "start_height": {
+    "absolute": -41
+  },
+  "project_start_to_heightmap": "WORLD_SURFACE_WG"
+}
