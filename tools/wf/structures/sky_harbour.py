@@ -229,7 +229,7 @@ def envelope(bp):
         for side in (-1, 1):
             x = SHIP_X + side * 4
             for y in range(DECK + 1, bottom + 1):
-                if bp.get(x, y, z) is None or bp.get(x, y, z)[0] == "minecraft:air":
+                if bp.get(x, y, z) is None or bp.get(x, y, z) == "minecraft:air":
                     bp.chain(x, y, z, y)
 
 

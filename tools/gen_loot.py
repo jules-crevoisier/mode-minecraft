@@ -173,6 +173,8 @@ TABLES = {
     "clockwork_workshop": ("clockwork", (2, 4), (0, 1), (0, 1), "overworld"),
     "clockwork_vault": ("clockwork", (1, 2), (1, 3), (2, 3), "overworld"),
     "sky_harbour": ("clockwork", (1, 3), (1, 2), (1, 2), "overworld"),
+    "undercity": ("clockwork", (2, 4), (1, 2), (0, 1), "deep"),
+    "undercity_vault": ("dwarf", (1, 2), (1, 3), (2, 3), "deep"),
     "crystal_grotto": ("crystal", (1, 3), (1, 2), (1, 2), "deep"),
     "sealed_lab": ("lab", (1, 3), (1, 3), (1, 2), "deep"),
     "basalt_fortress": ("fortress", (1, 3), (1, 2), (1, 2), "nether"),
