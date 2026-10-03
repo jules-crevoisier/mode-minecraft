@@ -170,22 +170,36 @@ def _hall_of_tribute(L):
         for z in range(14, 22):
             bp.set(x, y0, z, GBS if (x + z) % 5 == 0 else FLOOR.pick(x, y0, z))
     # offering heaps along the east wall
-    for (x, z, h) in ((21, 15, 2), (21, 16, 3), (20, 16, 1), (21, 17, 2), (21, 20, 3), (20, 20, 2), (21, 21, 1)):
+    for (x, z, h) in ((21, 15, 2), (21, 16, 3), (20, 16, 1), (21, 17, 2), (21, 20, 3), (20, 20, 2), (21, 21, 1), (20, 21, 1)):
         for k in range(h):
             L.put(x, y0 + 1 + k, z, HEAP.pick(x, y0 + 1 + k, z))
     L.put(21, y0 + 4, 16, CANDLES)
-    bp.chest(20, y0 + 1, 18, "west", LOOT + "piglin_sanctuary")
-    L.put(20, y0 + 1, 19, "gold_block")
-    L.put(20, y0 + 2, 19, CANDLES)
+    bp.chest(21, y0 + 1, 18, "west", LOOT + "piglin_sanctuary")
+    L.put(21, y0 + 1, 19, "gold_block")
+    L.put(21, y0 + 2, 19, CANDLES)
     for (x, z, rot) in ((14, 15, 6), (14, 20, 2)):
         _piglin_post(L, x, y0 + 1, z, rot)
     for z in (16, 19):
         bp.set(13 - 1, y0 + 4, z, "red_wall_banner[facing=east]")
     for x in (16, 19):
         bp.set(x, y0 + 4, 22, "red_wall_banner[facing=north]")
-    bp.lantern(17, y0 + 5, 17, hanging=True)
-    bp.lantern(17, y0 + 5, 20, hanging=True)
-    bp.spawner(17, y0 + 1, 18, "minecraft:piglin")
+    # the tribute altar in the middle: a gilded plinth, the offering bowl of gold, candles at its corners
+    for x in range(16, 19):
+        for z in range(16, 19):
+            L.put(x, y0 + 1, z, GBS if (x + z) % 2 else CHIS)
+    L.put(17, y0 + 2, 17, "gold_block")
+    L.put(17, y0 + 3, 17, LAMP)
+    for (x, z) in ((16, 16), (18, 16), (16, 18), (18, 18)):
+        L.put(x, y0 + 2, z, CANDLES)
+    for (x, z) in ((17, 15), (15, 17), (19, 17)):
+        L.put(x, y0 + 1, z, stair(PBBS, {(17, 15): "south", (15, 17): "east", (19, 17): "west"}[(x, z)]))
+    # more offerings heaped in the corners
+    for (x, z, h) in ((13, 21, 2), (14, 21, 1), (13, 14, 1), (16, 21, 1), (19, 14, 2), (20, 14, 1)):
+        for k in range(h):
+            L.put(x, y0 + 1 + k, z, HEAP.pick(x, y0 + 1 + k, z))
+        L.put(x, y0 + 1 + h, z, "light_weighted_pressure_plate[power=0]")
+    _chandelier(L, 17, y0 + 6, 19)
+    bp.spawner(20, y0 + 1, 15, "minecraft:piglin")
 
 
 def _smelting_stair(L):

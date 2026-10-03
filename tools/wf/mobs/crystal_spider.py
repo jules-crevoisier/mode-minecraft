@@ -322,11 +322,10 @@ def anims(m):
         ph = 0.0 if group == 0 else 0.5
         swing = 16
         lift = 14 * -sx                              # positive lift raises the leg (z axis, mirrored)
-        y0 = (0, swing * (1 if group == 0 else -1), 0)
         keys = []
         for t in (0.0, 0.25, 0.5, 0.75, 1.0):
             u = (t + ph) % 1.0
-            sw = swing * (1 - 4 * abs(u - 0.5)) if True else 0   # -swing..swing triangle
+            sw = swing * (1 - 4 * abs(u - 0.5))           # triangle wave, -swing..swing
             up = lift if u < 0.5 and 0.1 < u < 0.4 else 0
             keys.append((t, (0, sw * -sx, up), (0, 0, 0)))
         keys[-1] = (1.0, keys[0][1], keys[0][2])
