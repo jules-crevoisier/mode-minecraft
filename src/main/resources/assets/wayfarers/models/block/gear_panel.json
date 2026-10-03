@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "wayfarers:block/gear_panel_top",
+    "side": "wayfarers:block/gear_panel_side"
+  }
+}

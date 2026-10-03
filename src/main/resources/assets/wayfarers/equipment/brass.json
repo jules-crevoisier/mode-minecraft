@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "wayfarers:brass"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "wayfarers:brass"
+      }
+    ]
+  }
+}

@@ -330,6 +330,124 @@ def armor_layer(mat, accent, legs=False):
     return cv
 
 
+# ------------------------------------------------------------------ metals (wf/metals.py)
+HOSTS = {"stone": (124, 124, 128), "deepslate": (78, 78, 86), "netherrack": (112, 46, 44)}
+GEAR_ACCENT = {"brass": "ember", "mithril": "sapphire", "aether": "ice", "arcane": "amethyst", "zinc": "gold",
+               "orichalcum": "ruby"}
+
+
+def host_tile(host, seed):
+    rng = random.Random(f"{host}{seed}")
+    base = HOSTS[host]
+    cv = noise_tile(base, 7, seed)
+    # strata / cracks so the host reads like its vanilla counterpart
+    for _ in range(5 if host != "deepslate" else 7):
+        x, y = rng.randrange(16), rng.randrange(16)
+        for _ in range(rng.randint(2, 5)):
+            cv.set(x % 16, y % 16, shade(base, 0.78))
+            x += rng.choice((1, 1, 0))
+            y += rng.choice((0, 0, 1)) if host == "deepslate" else rng.choice((0, 1, -1))
+    return cv
+
+
+def ore_tile(host, palette, gem, seed):
+    light, mid, dark, outline = palette
+    rng = random.Random(f"ore{host}{seed}")
+    cv = host_tile(host, seed)
+    centres = [(3, 3), (10, 4), (5, 10), (12, 11), (8, 7)]
+    for cx, cy in centres:
+        cx += rng.randint(-1, 1)
+        cy += rng.randint(-1, 1)
+        cells = {(cx, cy), (cx + 1, cy), (cx, cy + 1)}
+        if rng.random() < 0.7:
+            cells.add((cx + 1, cy + 1))
+        if rng.random() < 0.5:
+            cells.add((cx - 1, cy))
+        for x, y in cells:
+            if 0 <= x < 16 and 0 <= y < 16:
+                for ox, oy in ((1, 0), (0, 1), (1, 1)):
+                    if (x + ox, y + oy) not in cells and 0 <= x + ox < 16 and 0 <= y + oy < 16:
+                        cv.set(x + ox, y + oy, shade(HOSTS[host], 0.55))
+        for x, y in cells:
+            if 0 <= x < 16 and 0 <= y < 16:
+                c = light if (x, y) == (cx, cy) else mid if (x + y) % 2 else dark
+                cv.set(x, y, (255, 255, 255) if gem and (x, y) == (cx, cy) else c)
+    return cv
+
+
+def storage_tile(palette, mid_id):
+    light, mid, dark, outline = palette
+    cv = noise_tile(mid, 5, sum(map(ord, mid_id)))
+    for i in range(16):
+        cv.set(i, 0, light)
+        cv.set(0, i, light)
+        cv.set(i, 15, dark)
+        cv.set(15, i, dark)
+    for i in range(1, 15):
+        cv.set(i, 1, shade(light, 0.95))
+        cv.set(14, i, shade(dark, 1.1))
+    if mid_id in ("brass", "zinc"):
+        # riveted plate: four rivets and a seam
+        for x, y in ((3, 3), (12, 3), (3, 12), (12, 12)):
+            cv.set(x, y, light)
+            cv.set(x + 1, y + 1, dark)
+            cv.set(x + 1, y, mid)
+        for i in range(2, 14):
+            cv.set(i, 8, dark)
+            cv.set(i, 9, light)
+    elif mid_id == "aether":
+        for i in range(3, 13):
+            cv.set(i, i, light)
+            cv.set(15 - i, i, light)
+        cv.set(7, 7, (255, 255, 255))
+        cv.set(8, 8, (255, 255, 255))
+    else:
+        # forged ingots stacked: horizontal bevels
+        for y in (5, 10):
+            for x in range(1, 15):
+                cv.set(x, y, dark)
+                cv.set(x, y + 1, light)
+    return cv
+
+
+def raw_block_tile(palette, mid_id):
+    light, mid, dark, outline = palette
+    rng = random.Random(f"raw{mid_id}")
+    cv = noise_tile(mid, 18, len(mid_id))
+    for _ in range(26):
+        x, y = rng.randrange(16), rng.randrange(16)
+        cv.set(x, y, rng.choice((light, dark, dark, outline)))
+    frame(cv, dark)
+    return cv
+
+
+def metal_textures():
+    from wf import metals
+    out = {}
+    for mid, m in metals.METALS.items():
+        pal = metals.PALETTES[m["palette"]]
+        MATERIALS.setdefault(mid, pal)
+        accent = GEAR_ACCENT.get(mid, "gold")
+        for bid, (kind, host, _label) in metals.block_ids(mid).items():
+            if kind == "ore":
+                out[f"block/{bid}"] = ore_tile(host, pal, m["ore"].get("drop") == "gem", len(bid))
+            elif kind == "storage":
+                out[f"block/{bid}"] = storage_tile(pal, mid)
+            else:
+                out[f"block/{bid}"] = raw_block_tile(pal, mid)
+        for iid, (form, _label) in metals.item_ids(mid).items():
+            out[f"item/{iid}"] = render_sprite(form, mid, "wood", accent)
+        for gid, (kind, what, _label) in metals.gear_ids(mid).items():
+            handle = "dark" if mid in ("mithril", "aether") else "wood"
+            if mid == "arcane":
+                handle = "gold"
+            out[f"item/{gid}"] = render_sprite(what, mid, handle, accent)
+        if m.get("armor"):
+            out[f"entity/equipment/humanoid/{mid}"] = armor_layer(mid, accent)
+            out[f"entity/equipment/humanoid_leggings/{mid}"] = armor_layer(mid, accent, legs=True)
+    return out
+
+
 # ------------------------------------------------------------------ mob skins
 def humanoid_skin(w, h, skin, cloth, accent, eyes, seed, hat=None):
     """Fills the standard player-style UV layout (works for zombie/drowned 64x64, skeleton 64x32)."""
@@ -385,6 +503,7 @@ def main():
         written[f"entity/equipment/humanoid/{prefix}"] = armor_layer(mat, acc)
         written[f"entity/equipment/humanoid_leggings/{prefix}"] = armor_layer(mat, acc, legs=True)
     written.update(mob_textures())
+    written.update(metal_textures())
     from wf import decor
     for bid, d in decor.DECOR.items():
         names = decor.texture_names(bid)

@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "wayfarers:arcane"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "wayfarers:arcane"
+      }
+    ]
+  }
+}

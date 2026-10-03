@@ -178,7 +178,7 @@ public final class PlayerSkills {
     }
 
     public static float spellPower(ServerPlayer player) {
-        return 1F + (float) sum(unlocked(player), "power");
+        return 1F + (float) sum(unlocked(player), "power") + ManaItems.bonusPower(player);
     }
 
     public static float costMultiplier(ServerPlayer player) {

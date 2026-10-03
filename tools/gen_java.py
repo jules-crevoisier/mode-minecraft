@@ -44,7 +44,8 @@ def decor_java():
     for bid, d in decor.DECOR.items():
         const = bid.upper()
         L.append(f'    public static final RegistryObject<Block> {const} = block("{bid}", MapColor.{d["color"]}, '
-                 f'SoundType.{d["sound"]}, {d["strength"]}F, {d.get("light", 0)});')
+                 f'SoundType.{d["sound"]}, {d["strength"]}F, {d.get("light", 0)}, '
+                 f'{str(d.get("tool", "pickaxe") == "pickaxe").lower()});')
         for v in d["variants"]:
             vid = decor.variant_id(bid, v)
             L.append(f'    public static final RegistryObject<Block> {vid.upper()} = {v}("{vid}", {const});')
@@ -53,13 +54,16 @@ def decor_java():
         "    /** Forces class initialisation so every block/item is queued on the deferred registers. */",
         "    public static void init() {}",
         "",
-        "    private static BlockBehaviour.Properties props(String name, MapColor color, SoundType sound, float strength, int light) {",
-        "        return BlockBehaviour.Properties.of().mapColor(color).sound(sound).strength(strength, 6.0F)",
-        "                .requiresCorrectToolForDrops().lightLevel(s -> light).setId(ModBlocks.BLOCKS.key(name));",
+        "    private static BlockBehaviour.Properties props(String name, MapColor color, SoundType sound, float strength, int light,",
+        "                                                   boolean needsPickaxe) {",
+        "        BlockBehaviour.Properties p = BlockBehaviour.Properties.of().mapColor(color).sound(sound).strength(strength, 6.0F)",
+        "                .lightLevel(s -> light).setId(ModBlocks.BLOCKS.key(name));",
+        "        return needsPickaxe ? p.requiresCorrectToolForDrops() : p;",
         "    }",
         "",
-        "    private static RegistryObject<Block> block(String name, MapColor color, SoundType sound, float strength, int light) {",
-        "        return item(name, ModBlocks.BLOCKS.register(name, () -> new Block(props(name, color, sound, strength, light))));",
+        "    private static RegistryObject<Block> block(String name, MapColor color, SoundType sound, float strength, int light,",
+        "                                              boolean needsPickaxe) {",
+        "        return item(name, ModBlocks.BLOCKS.register(name, () -> new Block(props(name, color, sound, strength, light, needsPickaxe))));",
         "    }",
         "",
         "    private static RegistryObject<Block> stairs(String name, Supplier<Block> base) {",
@@ -192,8 +196,17 @@ def skills_java():
     print(f"wrote {os.path.relpath(out, ROOT)}")
 
 
+def metals_java():
+    from wf import metals
+    out = os.path.join(ROOT, "src", "main", "java", "com", "wayfarers", "generated", "GeneratedMetals.java")
+    with open(out, "w") as f:
+        f.write(metals.java())
+    print(f"wrote {os.path.relpath(out, ROOT)}")
+
+
 def main():
     guide_java()
+    metals_java()
     skills_java()
     decor_java()
     boss_gear_java()

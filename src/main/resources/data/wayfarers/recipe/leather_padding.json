@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "LW",
+    "WL"
+  ],
+  "key": {
+    "L": "minecraft:leather",
+    "W": "minecraft:red_wool"
+  },
+  "result": {
+    "id": "wayfarers:leather_padding",
+    "count": 4
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "wayfarers:orichalcum_block"
+  ],
+  "result": {
+    "id": "wayfarers:orichalcum_ingot",
+    "count": 9
+  }
+}

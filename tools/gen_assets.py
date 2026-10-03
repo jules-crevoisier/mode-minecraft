@@ -87,6 +87,27 @@ def blockstate(bid, kind):
     write(f"blockstates/{bid}.json", {"variants": variants})
 
 
+def metal_assets():
+    """Models, blockstates, item definitions and equipment layers for metals.py (lang comes from metals.lang())."""
+    from wf import metals
+    for mid, m in metals.METALS.items():
+        for bid in metals.block_ids(mid):
+            block_models(bid, "cube")
+            blockstate(bid, "cube")
+            item_definition(bid, f"{NS}:block/{bid}")
+        for iid in metals.item_ids(mid):
+            write(f"models/item/{iid}.json", {"parent": "minecraft:item/generated", "textures": {"layer0": f"{NS}:item/{iid}"}})
+            item_definition(iid, f"{NS}:item/{iid}")
+        for gid, (kind, _what, _l) in metals.gear_ids(mid).items():
+            parent = "minecraft:item/handheld" if kind == "tool" else "minecraft:item/generated"
+            write(f"models/item/{gid}.json", {"parent": parent, "textures": {"layer0": f"{NS}:item/{gid}"}})
+            item_definition(gid, f"{NS}:item/{gid}")
+        if m.get("armor"):
+            write(f"equipment/{mid}.json", {"layers": {
+                "humanoid": [{"texture": f"{NS}:{mid}"}],
+                "humanoid_leggings": [{"texture": f"{NS}:{mid}"}]}})
+
+
 def decor_assets(lang_en, lang_fr):
     from wf import decor
     VNAMES = {"stairs": ("Stairs", "Escalier en "), "slab": ("Slab", "Dalle en "), "wall": ("Wall", "Muret en ")}
@@ -192,6 +213,7 @@ def main():
         if ten:
             lang_en[f"block.{NS}.{bid}.desc"], lang_fr[f"block.{NS}.{bid}.desc"] = ten, tfr
     decor_assets(lang_en, lang_fr)
+    metal_assets()
     for eid, (en, fr) in content.ENTITIES.items():
         lang_en[f"entity.{NS}.{eid}"], lang_fr[f"entity.{NS}.{eid}"] = en, fr
     for prefix in content.ARMOR_SETS:
@@ -204,8 +226,8 @@ def main():
         lang_fr[f"structure.{NS}.{sdef.id}"] = sdef.title_fr
     for key, (en, fr) in content.MESSAGES.items():
         lang_en[key], lang_fr[key] = en, fr
-    from wf import guide, skills
-    for mod in (guide, skills):
+    from wf import guide, skills, metals
+    for mod in (guide, skills, metals):
         g_en, g_fr = mod.lang()
         lang_en.update(g_en)
         lang_fr.update(g_fr)

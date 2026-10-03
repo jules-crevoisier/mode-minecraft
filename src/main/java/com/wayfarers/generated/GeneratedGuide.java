@@ -41,6 +41,9 @@ public final class GeneratedGuide {
             new Page("remembrance", "danger", "minecraft:nether_star", 1, List.of()),
             new Page("materials", "gear", "wayfarers:lithite_shard", 1, List.of("wayfarers:map_fragment", "wayfarers:lithite_shard", "wayfarers:ancient_ember", "wayfarers:void_shard")),
             new Page("armor", "gear", "wayfarers:explorer_chestplate", 1, List.of("wayfarers:explorer_chestplate", "wayfarers:ember_chestplate", "wayfarers:void_chestplate")),
+            new Page("ores", "gear", "wayfarers:zinc_ingot", 2, List.of("wayfarers:zinc_ingot", "wayfarers:brass_ingot", "wayfarers:mithril_ingot", "wayfarers:aether_crystal", "wayfarers:orichalcum_ingot")),
+            new Page("metal_armor", "gear", "wayfarers:brass_helmet", 2, List.of("wayfarers:brass_helmet", "wayfarers:mithril_chestplate", "wayfarers:aether_chestplate", "wayfarers:arcane_chestplate")),
+            new Page("steam_blocks", "gear", "wayfarers:gear_panel", 2, List.of("wayfarers:brass_plating", "wayfarers:gear_panel", "wayfarers:copper_pipes", "wayfarers:edison_lamp", "wayfarers:aether_conduit", "wayfarers:mahogany_panelling")),
             new Page("wand", "gear", "wayfarers:builder_wand", 2, List.of("wayfarers:builder_wand", "wayfarers:master_builder_wand")),
             new Page("tools", "gear", "wayfarers:excavator_pickaxe", 1, List.of("wayfarers:excavator_pickaxe", "wayfarers:lumber_axe"))
     );

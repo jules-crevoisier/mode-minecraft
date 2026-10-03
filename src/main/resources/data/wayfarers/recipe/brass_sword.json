@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "X",
+    "X",
+    "S"
+  ],
+  "key": {
+    "X": "wayfarers:brass_ingot",
+    "S": "minecraft:stick"
+  },
+  "result": {
+    "id": "wayfarers:brass_sword",
+    "count": 1
+  }
+}

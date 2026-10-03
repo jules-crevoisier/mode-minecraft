@@ -25,6 +25,7 @@ def rid(x):
 MOD_ITEMS = {"map_fragment", "lithite_shard", "ancient_ember", "void_shard", "warden_scale", "void_heart",
              "sorting_chest", "waystone", "guild_terminal"}
 MOD_ITEMS |= {f"remembrance_{row[0]}" for row in __import__("wf.bossgear", fromlist=["BOSS_GEAR"]).BOSS_GEAR}
+MOD_ITEMS |= __import__("wf.metals", fromlist=["all_item_ids"]).all_item_ids()
 MOD_ITEMS |= {"builder_wand", "master_builder_wand", "wayfarer_manual", "fire_staff", "frost_staff", "thunder_staff",
               "healing_staff", "levitation_wand", "ward_orb", "steam_cane", "arcane_ring", "mana_amulet", "oblivion_vial"}
 
@@ -123,7 +124,11 @@ def tags():
     for slot, piece in (("head", "helmet"), ("chest", "chestplate"), ("leg", "leggings"), ("foot", "boots")):
         write(f"minecraft/tags/item/{slot}_armor.json", {"replace": False,
                                                         "values": [f"{NS}:{s}_{piece}" for s in ("explorer", "ember", "void")]})
-    write("minecraft/tags/block/mineable/axe.json", {"replace": False, "values": [f"{NS}:sorting_chest", f"{NS}:guild_terminal"]})
+    from wf import decor
+    axe_decor = [f"{NS}:{i}" for bid, d in decor.DECOR.items() if d.get("tool") == "axe"
+                 for i in [bid] + [decor.variant_id(bid, v) for v in d["variants"]]]
+    write("minecraft/tags/block/mineable/axe.json", {"replace": False, "values": [f"{NS}:sorting_chest", f"{NS}:guild_terminal"]
+                                                                               + axe_decor})
     write("minecraft/tags/block/needs_iron_tool.json", {"replace": False, "values": [
         f"{NS}:lithite_ore", f"{NS}:deepslate_lithite_ore"]})
 
@@ -234,12 +239,125 @@ def ore_worldgen():
     })
 
 
+def metal_tags():
+    """Tag values contributed by metals.py: {tag file: [ids]}."""
+    from wf import metals
+    out = {}
+
+    def add(tag, value):
+        out.setdefault(tag, []).append(f"{NS}:{value}")
+    for mid, m in metals.METALS.items():
+        for bid, (kind, host, _l) in metals.block_ids(mid).items():
+            add("minecraft/tags/block/mineable/pickaxe.json", bid)
+            tool = m["ore"]["tool"] if kind == "ore" else ("iron" if mid in ("mithril", "aether") else "stone")
+            add(f"minecraft/tags/block/needs_{tool}_tool.json", bid)
+        for gid, (kind, what, _l) in metals.gear_ids(mid).items():
+            if kind == "tool":
+                add(f"minecraft/tags/item/{what if what != 'pickaxe' else 'pickaxes'}{'s' if what in ('sword', 'axe', 'shovel', 'hoe') else ''}.json", gid)
+            else:
+                slot = {"helmet": "head", "chestplate": "chest", "leggings": "leg", "boots": "foot"}[what]
+                add(f"minecraft/tags/item/{slot}_armor.json", gid)
+    return out
+
+
+def metals_data():
+    """Recipes, smelting, loot, repair tags and ore worldgen for every metal of metals.py."""
+    from wf import metals
+    items_of = {mid: metals.item_ids(mid) for mid in metals.METALS}
+
+    def cook(name, ingredient, result, xp=0.7, blast=True):
+        write(f"{NS}/recipe/{name}_from_smelting.json", {"type": "minecraft:smelting", "category": "misc",
+              "ingredient": rid(ingredient), "result": {"id": rid(result)}, "experience": xp, "cookingtime": 200})
+        if blast:
+            write(f"{NS}/recipe/{name}_from_blasting.json", {"type": "minecraft:blasting", "category": "misc",
+                  "ingredient": rid(ingredient), "result": {"id": rid(result)}, "experience": xp, "cookingtime": 100})
+
+    for mid, m in metals.METALS.items():
+        forms = {form: iid for iid, (form, _n) in items_of[mid].items()}
+        ingot = forms.get("ingot") or forms.get("gem") or forms.get("cloth")
+        blocks = metals.block_ids(mid)
+        if "nugget" in forms:
+            shapeless_named(f"{forms['nugget']}_from_ingot", forms["nugget"], [ingot], 9)
+            write(f"{NS}/recipe/{ingot}_from_nuggets.json", {"type": "minecraft:crafting_shaped", "category": "misc",
+                  "pattern": ["XXX", "XXX", "XXX"], "key": {"X": rid(forms["nugget"])}, "result": {"id": rid(ingot), "count": 1}})
+        if f"{mid}_block" in blocks:
+            write(f"{NS}/recipe/{mid}_block.json", {"type": "minecraft:crafting_shaped", "category": "building",
+                  "pattern": ["XXX", "XXX", "XXX"], "key": {"X": rid(ingot)}, "result": {"id": rid(f"{mid}_block"), "count": 1}})
+            shapeless_named(f"{ingot}_from_block", ingot, [f"{mid}_block"], 9)
+        if "raw" in forms:
+            raw = forms["raw"]
+            cook(ingot, raw, ingot)
+            if f"raw_{mid}_block" in blocks:
+                write(f"{NS}/recipe/raw_{mid}_block.json", {"type": "minecraft:crafting_shaped", "category": "building",
+                      "pattern": ["XXX", "XXX", "XXX"], "key": {"X": rid(raw)}, "result": {"id": rid(f"raw_{mid}_block"), "count": 1}})
+                shapeless_named(f"{raw}_from_block", raw, [f"raw_{mid}_block"], 9)
+        # ores: loot + smelting + worldgen
+        ore = m.get("ore")
+        ore_ids = [bid for bid, (k, _h, _l) in blocks.items() if k == "ore"]
+        for bid in ore_ids:
+            drop = forms.get("raw") or forms.get("gem")
+            write(f"{NS}/loot_table/blocks/{bid}.json", {"type": "minecraft:block", "random_sequence": f"{NS}:blocks/{bid}",
+                  "pools": [{"rolls": 1.0, "bonus_rolls": 0.0, "entries": [{"type": "minecraft:alternatives", "children": [
+                      {"type": "minecraft:item", "name": f"{NS}:{bid}", "conditions": [{"condition": "minecraft:match_tool",
+                       "predicate": {"predicates": {"minecraft:enchantments": [{"enchantments": "minecraft:silk_touch",
+                                                                                 "levels": {"min": 1}}]}}}]},
+                      {"type": "minecraft:item", "name": rid(drop), "functions": [
+                          {"function": "minecraft:apply_bonus", "enchantment": "minecraft:fortune", "formula": "minecraft:ore_drops"},
+                          {"function": "minecraft:explosion_decay"}]}]}]}]})
+            cook(f"{ingot}_from_{bid}", bid, ingot, xp=1.0)
+        if ore:
+            targets = []
+            for bid, (k, host, _l) in blocks.items():
+                if k != "ore":
+                    continue
+                tag = {"stone": "minecraft:stone_ore_replaceables", "deepslate": "minecraft:deepslate_ore_replaceables",
+                       "netherrack": "minecraft:base_stone_nether"}[host]
+                targets.append({"target": {"predicate_type": "minecraft:tag_match", "tag": tag}, "state": {"Name": f"{NS}:{bid}"}})
+            write(f"{NS}/worldgen/configured_feature/{mid}_ore.json", {"type": "minecraft:ore", "config": {
+                "size": ore["size"], "discard_chance_on_air_exposure": 0.3 if ore["drop"] == "gem" else 0.0, "targets": targets}})
+            lo, hi = ore["y"]
+            write(f"{NS}/worldgen/placed_feature/{mid}_ore.json", {"feature": f"{NS}:{mid}_ore", "placement": [
+                {"type": "minecraft:count", "count": ore["count"]}, {"type": "minecraft:in_square"},
+                {"type": "minecraft:height_range", "height": {"type": f"minecraft:{ore['shape']}",
+                 "min_inclusive": {"absolute": lo}, "max_inclusive": {"absolute": hi}}},
+                {"type": "minecraft:biome"}]})
+            nether = "netherrack" in ore["hosts"]
+            write(f"{NS}/forge/biome_modifier/add_{mid}_ore.json", {"type": "forge:add_features",
+                  "biomes": "#minecraft:is_nether" if nether else "#minecraft:is_overworld",
+                  "features": f"{NS}:{mid}_ore", "step": "underground_decoration" if nether else "underground_ores"})
+        # storage block loot
+        for bid, (k, _h, _l) in blocks.items():
+            if k != "ore":
+                write(f"{NS}/loot_table/blocks/{bid}.json", {"type": "minecraft:block", "random_sequence": f"{NS}:blocks/{bid}",
+                      "pools": [{"rolls": 1.0, "bonus_rolls": 0.0, "conditions": [{"condition": "minecraft:survives_explosion"}],
+                                 "entries": [{"type": "minecraft:item", "name": f"{NS}:{bid}"}]}]})
+        # repair tag, tools, armor
+        if m.get("tools") or m.get("armor"):
+            write(f"{NS}/tags/item/{mid}_repair.json", {"values": [rid(ingot)]})
+        if m.get("tools"):
+            pats = {"sword": ["X", "X", "S"], "pickaxe": ["XXX", " S ", " S "], "axe": ["XX", "XS", " S"],
+                    "shovel": ["X", "S", "S"], "hoe": ["XX", " S", " S"]}
+            for kind, pat in pats.items():
+                shaped(f"{mid}_{kind}", pat, {"X": ingot, "S": "stick"}, category="equipment")
+        if m.get("armor"):
+            armor_set(mid, ingot)
+    # alloys and cloth
+    shapeless_named("brass_ingot_from_alloy", "brass_ingot", ["copper_ingot", "copper_ingot", "copper_ingot", "zinc_ingot"], 4)
+    shapeless_named("arcane_cloth", "arcane_cloth", ["purple_wool", "aether_crystal", "string"], 2)
+
+
+def shapeless_named(name, result, ingredients, count=1, category="misc"):
+    write(f"{NS}/recipe/{name}.json", {"type": "minecraft:crafting_shapeless", "category": category,
+          "ingredients": [rid(i) for i in ingredients], "result": {"id": rid(result), "count": count}})
+
+
 def decor_data():
     from wf import decor
     pick, stairs, slabs, walls = [], [], [], []
     for bid, d in decor.DECOR.items():
         ids = [bid] + [decor.variant_id(bid, v) for v in d["variants"]]
-        pick += [f"{NS}:{i}" for i in ids]
+        if d.get("tool", "pickaxe") == "pickaxe":
+            pick += [f"{NS}:{i}" for i in ids]
         for i in ids:
             pool = {"rolls": 1.0, "bonus_rolls": 0.0, "conditions": [{"condition": "minecraft:survives_explosion"}],
                     "entries": [{"type": "minecraft:item", "name": f"{NS}:{i}"}]}
@@ -293,6 +411,20 @@ def decor_data():
     craft("gilded_trim", ["G", "B"], {"G": "gold_ingot", "B": "polished_blackstone"}, 2)
     craft("void_bricks", ["OE", "EO"], {"O": "obsidian", "E": "end_stone_bricks"}, 4)
     craft("starlight_block", [" R ", "RCR", " R "], {"R": "end_rod", "C": "amethyst_block"}, 2)
+    # steampunk
+    craft("brass_plating", ["XX", "XX"], {"X": "wayfarers:brass_ingot"}, 8)
+    craft("copper_plating", ["XX", "XX"], {"X": "copper_ingot"}, 8)
+    shapeless("verdigris_plating", ["wayfarers:copper_plating", "clay_ball"], category="building")
+    craft("dark_iron_plating", ["IC", "CI"], {"I": "iron_ingot", "C": "coal"}, 8)
+    craft("diamond_plate", ["IN", "NI"], {"I": "iron_ingot", "N": "iron_nugget"}, 4)
+    craft("gear_panel", ["B", "D"], {"B": "wayfarers:brass_ingot", "D": "wayfarers:dark_iron_plating"}, 2)
+    craft("copper_pipes", ["C C", "C C", "C C"], {"C": "copper_ingot"}, 4)
+    craft("pressure_gauge", ["G", "D"], {"G": "clock", "D": "wayfarers:dark_iron_plating"}, 2)
+    craft("edison_lamp", ["N", "G", "L"], {"N": "wayfarers:brass_nugget", "G": "glass", "L": "glowstone_dust"}, 1)
+    craft("aether_conduit", ["D", "A", "D"], {"D": "wayfarers:dark_iron_plating", "A": "wayfarers:aether_crystal"}, 2)
+    craft("mahogany_panelling", ["PS", "SP"], {"P": "dark_oak_planks", "S": "stick"}, 4)
+    craft("leather_padding", ["LW", "WL"], {"L": "leather", "W": "red_wool"}, 4)
+    craft("smokestack_bricks", ["BC", "CB"], {"B": "brick", "C": "coal"}, 4)
 
 
 def main():
@@ -302,6 +434,13 @@ def main():
     block_loot()
     entity_loot()
     ore_worldgen()
+    metals_data()
+    # merge the metals' tag values into tag files written above (or create them)
+    for rel, values in metal_tags().items():
+        path = os.path.join(DATA, rel)
+        tag = json.load(open(path)) if os.path.exists(path) else {"replace": False, "values": []}
+        tag["values"] = tag["values"] + [v for v in values if v not in tag["values"]]
+        write(rel, tag)
     print("data written")
 
 

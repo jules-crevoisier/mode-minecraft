@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "wayfarers:mahogany_panelling",
+  "result": {
+    "id": "wayfarers:mahogany_panelling_slab",
+    "count": 2
+  }
+}

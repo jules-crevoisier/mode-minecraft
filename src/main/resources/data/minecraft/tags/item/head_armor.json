@@ -3,6 +3,10 @@
   "values": [
     "wayfarers:explorer_helmet",
     "wayfarers:ember_helmet",
-    "wayfarers:void_helmet"
+    "wayfarers:void_helmet",
+    "wayfarers:brass_helmet",
+    "wayfarers:mithril_helmet",
+    "wayfarers:aether_helmet",
+    "wayfarers:arcane_helmet"
   ]
 }

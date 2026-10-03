@@ -2,6 +2,9 @@
   "replace": false,
   "values": [
     "wayfarers:sorting_chest",
-    "wayfarers:guild_terminal"
+    "wayfarers:guild_terminal",
+    "wayfarers:mahogany_panelling",
+    "wayfarers:mahogany_panelling_stairs",
+    "wayfarers:mahogany_panelling_slab"
   ]
 }

@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "wayfarers:mithril_ingot"
+  ],
+  "result": {
+    "id": "wayfarers:mithril_nugget",
+    "count": 9
+  }
+}

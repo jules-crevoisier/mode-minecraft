@@ -44,6 +44,7 @@ public final class Wayfarers {
         BusGroup modBus = context.getModBusGroup();
         ModDecor.init();
         BossGear.init();
+        com.wayfarers.generated.GeneratedMetals.init();
         ModBlocks.BLOCKS.register(modBus);
         ModItems.ITEMS.register(modBus);
         ModBlockEntities.BLOCK_ENTITIES.register(modBus);

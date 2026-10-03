@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "XXX"
+  ],
+  "key": {
+    "X": "wayfarers:diamond_plate"
+  },
+  "result": {
+    "id": "wayfarers:diamond_plate_slab",
+    "count": 6
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "wayfarers:copper_plating",
+  "result": {
+    "id": "wayfarers:copper_plating_stairs",
+    "count": 1
+  }
+}

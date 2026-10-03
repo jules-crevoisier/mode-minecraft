@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "XXX",
+    "XXX",
+    "XXX"
+  ],
+  "key": {
+    "X": "wayfarers:zinc_ingot"
+  },
+  "result": {
+    "id": "wayfarers:zinc_block",
+    "count": 1
+  }
+}

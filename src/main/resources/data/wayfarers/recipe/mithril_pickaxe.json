@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "XXX",
+    " S ",
+    " S "
+  ],
+  "key": {
+    "X": "wayfarers:mithril_ingot",
+    "S": "minecraft:stick"
+  },
+  "result": {
+    "id": "wayfarers:mithril_pickaxe",
+    "count": 1
+  }
+}

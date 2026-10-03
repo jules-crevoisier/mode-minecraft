@@ -1,0 +1,6 @@
+{
+  "type": "forge:add_features",
+  "biomes": "#minecraft:is_nether",
+  "features": "wayfarers:orichalcum_ore",
+  "step": "underground_decoration"
+}

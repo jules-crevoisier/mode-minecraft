@@ -3,6 +3,10 @@
   "values": [
     "wayfarers:explorer_chestplate",
     "wayfarers:ember_chestplate",
-    "wayfarers:void_chestplate"
+    "wayfarers:void_chestplate",
+    "wayfarers:brass_chestplate",
+    "wayfarers:mithril_chestplate",
+    "wayfarers:aether_chestplate",
+    "wayfarers:arcane_chestplate"
   ]
 }

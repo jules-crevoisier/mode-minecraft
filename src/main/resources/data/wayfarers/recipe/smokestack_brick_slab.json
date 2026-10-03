@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "XXX"
+  ],
+  "key": {
+    "X": "wayfarers:smokestack_bricks"
+  },
+  "result": {
+    "id": "wayfarers:smokestack_brick_slab",
+    "count": 6
+  }
+}

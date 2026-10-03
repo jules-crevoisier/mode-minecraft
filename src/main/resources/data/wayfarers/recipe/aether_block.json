@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "XXX",
+    "XXX",
+    "XXX"
+  ],
+  "key": {
+    "X": "wayfarers:aether_crystal"
+  },
+  "result": {
+    "id": "wayfarers:aether_block",
+    "count": 1
+  }
+}

@@ -5,6 +5,8 @@
     "wayfarers:mossy_guild_brick_wall",
     "wayfarers:lithite_brick_wall",
     "wayfarers:ember_brick_wall",
-    "wayfarers:void_brick_wall"
+    "wayfarers:void_brick_wall",
+    "wayfarers:dark_iron_plating_wall",
+    "wayfarers:smokestack_brick_wall"
   ]
 }

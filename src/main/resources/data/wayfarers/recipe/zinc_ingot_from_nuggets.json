@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "XXX",
+    "XXX",
+    "XXX"
+  ],
+  "key": {
+    "X": "wayfarers:zinc_nugget"
+  },
+  "result": {
+    "id": "wayfarers:zinc_ingot",
+    "count": 1
+  }
+}

@@ -1,6 +1,8 @@
 {
   "replace": false,
   "values": [
-    "wayfarers:excavator_pickaxe"
+    "wayfarers:excavator_pickaxe",
+    "wayfarers:brass_pickaxe",
+    "wayfarers:mithril_pickaxe"
   ]
 }

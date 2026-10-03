@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "XXX",
+    "XXX",
+    "XXX"
+  ],
+  "key": {
+    "X": "wayfarers:raw_orichalcum"
+  },
+  "result": {
+    "id": "wayfarers:raw_orichalcum_block",
+    "count": 1
+  }
+}

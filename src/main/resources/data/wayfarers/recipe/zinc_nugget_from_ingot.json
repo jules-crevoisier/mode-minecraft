@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "wayfarers:zinc_ingot"
+  ],
+  "result": {
+    "id": "wayfarers:zinc_nugget",
+    "count": 9
+  }
+}

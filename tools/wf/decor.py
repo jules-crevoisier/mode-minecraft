@@ -1,7 +1,9 @@
 """Wayfarers decorative blocks: one table drives textures, Java registration, models, data and lang."""
 from . import texgen as T
+from . import texgen_steam as S
 
-# id -> dict(en, fr, tex: {face: callable}, light, color(map color), sound, strength, variants, tool)
+# id -> dict(en, fr, tex: {face: callable}, light, color(map color), sound, strength, variants,
+#            tool: "pickaxe" (default, needs it to drop) | "axe" | None)
 # faces: "all" or "top"/"side"
 SANDSTONE_WARM = (222, 196, 146)
 GUILD = (206, 182, 140)
@@ -80,6 +82,50 @@ DECOR = {
     "starlight_block": dict(en="Starlight Block", fr="Bloc de lumière stellaire",
                             tex={"all": lambda: T.crystal((255, 245, 255), (210, 180, 255), (140, 100, 220), seed=24)},
                             color="COLOR_MAGENTA", sound="AMETHYST", strength=2.0, light=15, variants=()),
+    # ---------------------------------------------------------------- steampunk (tools/STYLE_STEAMPUNK.md)
+    "brass_plating": dict(en="Riveted Brass Plating", fr="Placage en laiton riveté",
+                          tex={"all": lambda: S.riveted_plate(S.BRASS, seed=40)},
+                          color="GOLD", sound="METAL", strength=4.0, variants=("stairs", "slab")),
+    "copper_plating": dict(en="Riveted Copper Plating", fr="Placage en cuivre riveté",
+                           tex={"all": lambda: S.riveted_plate(S.COPPER, seed=41)},
+                           color="COLOR_ORANGE", sound="COPPER", strength=4.0, variants=("stairs", "slab")),
+    "verdigris_plating": dict(en="Verdigris Copper Plating", fr="Placage en cuivre vert-de-gris",
+                              tex={"all": lambda: S.riveted_plate(S.COPPER, seed=42, patina=S.VERDIGRIS,
+                                                                  patina_amount=0.8)},
+                              color="WARPED_WART_BLOCK", sound="COPPER", strength=4.0, variants=("stairs", "slab")),
+    "dark_iron_plating": dict(en="Dark Iron Plating", fr="Placage en fer sombre",
+                              tex={"all": lambda: S.riveted_plate(S.DARK_IRON, seed=43)},
+                              color="COLOR_BLACK", sound="METAL", strength=5.0, variants=("stairs", "slab", "wall")),
+    "diamond_plate": dict(en="Iron Tread Plate", fr="Tôle striée",
+                          tex={"all": lambda: S.grate((92, 92, 96), seed=44)},
+                          color="METAL", sound="METAL", strength=5.0, variants=("stairs", "slab")),
+    "gear_panel": dict(en="Clockwork Panel", fr="Panneau d'horlogerie",
+                       tex={"top": lambda: S.riveted_plate(S.DARK_IRON, seed=45),
+                            "side": lambda: S.gear_panel(S.DARK_IRON, S.BRASS, seed=46)},
+                       color="COLOR_BLACK", sound="METAL", strength=4.0, variants=()),
+    "copper_pipes": dict(en="Copper Pipe Bundle", fr="Faisceau de tuyaux en cuivre",
+                         tex={"top": lambda: S.riveted_plate(S.COPPER, seed=47),
+                              "side": lambda: S.pipe_casing(S.COPPER, S.BRASS, seed=48)},
+                         color="COLOR_ORANGE", sound="COPPER", strength=3.0, variants=()),
+    "pressure_gauge": dict(en="Pressure Gauge Panel", fr="Panneau à manomètre",
+                           tex={"top": lambda: S.riveted_plate(S.DARK_IRON, seed=49),
+                                "side": lambda: S.gauge(S.BRASS, S.CREAM, (170, 30, 30), seed=50)},
+                           color="COLOR_BLACK", sound="METAL", strength=3.0, variants=()),
+    "edison_lamp": dict(en="Edison Lamp", fr="Lampe Edison",
+                        tex={"all": lambda: S.edison_lamp(S.DARK_IRON, S.AMBER, (255, 250, 220), seed=51)},
+                        color="COLOR_ORANGE", sound="GLASS", strength=1.5, light=15, tool=None, variants=()),
+    "aether_conduit": dict(en="Aether Conduit", fr="Conduit d'éther",
+                           tex={"all": lambda: S.aether_conduit(S.DARK_IRON, S.AETHER, seed=52)},
+                           color="COLOR_CYAN", sound="METAL", strength=4.0, light=10, variants=()),
+    "mahogany_panelling": dict(en="Mahogany Panelling", fr="Lambris d'acajou",
+                               tex={"all": lambda: S.planks_panel(S.MAHOGANY, seed=53)},
+                               color="COLOR_BROWN", sound="WOOD", strength=2.0, tool="axe", variants=("stairs", "slab")),
+    "leather_padding": dict(en="Tufted Leather", fr="Capitonnage en cuir",
+                            tex={"all": lambda: S.tufted_leather(S.LEATHER, S.BRASS, seed=54)},
+                            color="COLOR_RED", sound="WOOL", strength=0.8, tool=None, variants=("slab",)),
+    "smokestack_bricks": dict(en="Smokestack Bricks", fr="Briques de cheminée",
+                              tex={"all": lambda: S.soot_bricks((140, 62, 48), (60, 50, 46), seed=55)},
+                              color="COLOR_RED", sound="STONE", strength=2.0, variants=("stairs", "slab", "wall")),
 }
 
 

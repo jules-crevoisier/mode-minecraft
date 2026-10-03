@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "values": [
+    "wayfarers:zinc_ore",
+    "wayfarers:deepslate_zinc_ore",
+    "wayfarers:zinc_block",
+    "wayfarers:raw_zinc_block",
+    "wayfarers:brass_block",
+    "wayfarers:orichalcum_block",
+    "wayfarers:raw_orichalcum_block"
+  ]
+}

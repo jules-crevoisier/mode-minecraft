@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "XXX",
+    "XXX",
+    "XXX"
+  ],
+  "key": {
+    "X": "wayfarers:orichalcum_nugget"
+  },
+  "result": {
+    "id": "wayfarers:orichalcum_ingot",
+    "count": 1
+  }
+}

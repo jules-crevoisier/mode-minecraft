@@ -9,6 +9,13 @@
     "wayfarers:slate_roof_tile_stairs",
     "wayfarers:lithite_brick_stairs",
     "wayfarers:ember_brick_stairs",
-    "wayfarers:void_brick_stairs"
+    "wayfarers:void_brick_stairs",
+    "wayfarers:brass_plating_stairs",
+    "wayfarers:copper_plating_stairs",
+    "wayfarers:verdigris_plating_stairs",
+    "wayfarers:dark_iron_plating_stairs",
+    "wayfarers:diamond_plate_stairs",
+    "wayfarers:mahogany_panelling_stairs",
+    "wayfarers:smokestack_brick_stairs"
   ]
 }

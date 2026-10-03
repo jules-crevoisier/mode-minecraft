@@ -1,17 +1,23 @@
 package com.wayfarers.event;
 
+import com.wayfarers.Wayfarers;
+import com.wayfarers.generated.GeneratedMetals;
 import com.wayfarers.registry.ModItems;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -46,7 +52,14 @@ public final class EquipmentEvents {
         BlockEvent.BreakEvent.BUS.addListener((Consumer<BlockEvent.BreakEvent>) EquipmentEvents::onBreak);
     }
 
-    public enum ArmorSet { EXPLORER, EMBER, VOID, NONE }
+    public enum ArmorSet { EXPLORER, EMBER, VOID, BRASS, MITHRIL, AETHER, ARCANE, NONE }
+
+    private static final Identifier MITHRIL_HEALTH = Wayfarers.id("set/mithril_health");
+    private static final Identifier MITHRIL_SPEED = Wayfarers.id("set/mithril_speed");
+
+    private static boolean wearing(Item head, Item chest, Item legs, Item feet, Item h, Item c, Item l, Item f) {
+        return head == h && chest == c && legs == l && feet == f;
+    }
 
     public static ArmorSet fullSet(Player player) {
         Item head = player.getItemBySlot(EquipmentSlot.HEAD).getItem();
@@ -64,6 +77,22 @@ public final class EquipmentEvents {
         if (head == ModItems.VOID_HELMET.get() && chest == ModItems.VOID_CHESTPLATE.get()
                 && legs == ModItems.VOID_LEGGINGS.get() && feet == ModItems.VOID_BOOTS.get()) {
             return ArmorSet.VOID;
+        }
+        if (wearing(head, chest, legs, feet, GeneratedMetals.BRASS_HELMET.get(), GeneratedMetals.BRASS_CHESTPLATE.get(),
+                GeneratedMetals.BRASS_LEGGINGS.get(), GeneratedMetals.BRASS_BOOTS.get())) {
+            return ArmorSet.BRASS;
+        }
+        if (wearing(head, chest, legs, feet, GeneratedMetals.MITHRIL_HELMET.get(), GeneratedMetals.MITHRIL_CHESTPLATE.get(),
+                GeneratedMetals.MITHRIL_LEGGINGS.get(), GeneratedMetals.MITHRIL_BOOTS.get())) {
+            return ArmorSet.MITHRIL;
+        }
+        if (wearing(head, chest, legs, feet, GeneratedMetals.AETHER_HELMET.get(), GeneratedMetals.AETHER_CHESTPLATE.get(),
+                GeneratedMetals.AETHER_LEGGINGS.get(), GeneratedMetals.AETHER_BOOTS.get())) {
+            return ArmorSet.AETHER;
+        }
+        if (wearing(head, chest, legs, feet, GeneratedMetals.ARCANE_HELMET.get(), GeneratedMetals.ARCANE_CHESTPLATE.get(),
+                GeneratedMetals.ARCANE_LEGGINGS.get(), GeneratedMetals.ARCANE_BOOTS.get())) {
+            return ArmorSet.ARCANE;
         }
         return ArmorSet.NONE;
     }
@@ -85,6 +114,7 @@ public final class EquipmentEvents {
         if (player.tickCount % 20 != 0) {
             return;
         }
+        mithrilModifiers(player, set == ArmorSet.MITHRIL);
         switch (set) {
             case EXPLORER -> {
                 player.addEffect(new MobEffectInstance(MobEffects.SPEED, 60, 0, true, false, true));
@@ -103,7 +133,31 @@ public final class EquipmentEvents {
                     player.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 40, 0, true, false, true));
                 }
             }
+            case BRASS -> {
+                // the goggles: see in the dark, and the clockwork gauntlets dig faster
+                player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 260, 0, true, false, true));
+                player.addEffect(new MobEffectInstance(MobEffects.HASTE, 60, 0, true, false, true));
+            }
             default -> {
+            }
+        }
+    }
+
+    /** Mithril's +4 health and +10% speed, as modifiers that come and go with the full set. */
+    private static void mithrilModifiers(Player player, boolean on) {
+        AttributeInstance health = player.getAttribute(Attributes.MAX_HEALTH);
+        AttributeInstance speed = player.getAttribute(Attributes.MOVEMENT_SPEED);
+        if (health == null || speed == null || health.hasModifier(MITHRIL_HEALTH) == on) {
+            return;
+        }
+        if (on) {
+            health.addTransientModifier(new AttributeModifier(MITHRIL_HEALTH, 4.0, AttributeModifier.Operation.ADD_VALUE));
+            speed.addTransientModifier(new AttributeModifier(MITHRIL_SPEED, 0.10, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+        } else {
+            health.removeModifier(MITHRIL_HEALTH);
+            speed.removeModifier(MITHRIL_SPEED);
+            if (player.getHealth() > player.getMaxHealth()) {
+                player.setHealth(player.getMaxHealth());
             }
         }
     }
@@ -122,6 +176,9 @@ public final class EquipmentEvents {
             return false;
         }
         ArmorSet set = fullSet(player);
+        if (set == ArmorSet.AETHER) {
+            return true;
+        }
         if (set == ArmorSet.EXPLORER) {
             if (event.getDistance() < 8) {
                 return true;

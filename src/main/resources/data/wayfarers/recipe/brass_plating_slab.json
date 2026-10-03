@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "XXX"
+  ],
+  "key": {
+    "X": "wayfarers:brass_plating"
+  },
+  "result": {
+    "id": "wayfarers:brass_plating_slab",
+    "count": 6
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "B",
+    "D"
+  ],
+  "key": {
+    "B": "wayfarers:brass_ingot",
+    "D": "wayfarers:dark_iron_plating"
+  },
+  "result": {
+    "id": "wayfarers:gear_panel",
+    "count": 2
+  }
+}

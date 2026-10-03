@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/outer_stairs",
+  "textures": {
+    "bottom": "wayfarers:block/brass_plating",
+    "top": "wayfarers:block/brass_plating",
+    "side": "wayfarers:block/brass_plating"
+  }
+}

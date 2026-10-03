@@ -3,6 +3,10 @@
   "values": [
     "wayfarers:explorer_leggings",
     "wayfarers:ember_leggings",
-    "wayfarers:void_leggings"
+    "wayfarers:void_leggings",
+    "wayfarers:brass_leggings",
+    "wayfarers:mithril_leggings",
+    "wayfarers:aether_leggings",
+    "wayfarers:arcane_leggings"
   ]
 }

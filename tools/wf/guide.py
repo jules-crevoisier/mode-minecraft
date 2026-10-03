@@ -210,6 +210,41 @@ PAGES = [
          "Porte les quatre pièces d'un ensemble pour son bonus : Explorateur (vitesse, chutes douces, vision "
          "nocturne sous terre), Braise (immunité au feu) et Vide (chute lente, sauvé du vide)."),
     ], ["wayfarers:explorer_chestplate", "wayfarers:ember_chestplate", "wayfarers:void_chestplate"]),
+    ("ores", "gear", "wayfarers:zinc_ingot", ("New ores & brass", "Nouveaux minerais et laiton"), [
+        ("Zinc is common in stone (y -16 to 96). Craft 3 copper ingots + 1 zinc ingot into 4 brass ingots: brass "
+         "tools are faster than iron and enchant well.",
+         "Le zinc est courant dans la pierre (y -16 à 96). Fabrique 3 lingots de cuivre + 1 lingot de zinc pour "
+         "obtenir 4 lingots de laiton : les outils en laiton sont plus rapides que le fer et s'enchantent bien."),
+        ("Mithril hides deep in deepslate (below y -8, iron pickaxe). Aether crystals glow faintly between y -48 and "
+         "32. Orichalcum is found in the Nether. Smelt raw ores like iron.",
+         "Le mithril se cache dans l'ardoise des abîmes (sous y -8, pioche en fer). Les cristaux d'éther luisent "
+         "faiblement entre y -48 et 32. L'orichalque se trouve dans le Nether. Les minerais bruts se cuisent comme le "
+         "fer."),
+    ], ["wayfarers:zinc_ingot", "wayfarers:brass_ingot", "wayfarers:mithril_ingot", "wayfarers:aether_crystal",
+        "wayfarers:orichalcum_ingot"]),
+    ("metal_armor", "gear", "wayfarers:brass_helmet", ("Brass, mithril & arcane gear", "Laiton, mithril et arcanes"), [
+        ("Brass set: night vision and faster mining. Mithril set: +4 health and +10% speed. Aether set: +75 mana, "
+         "mana refills twice as fast, no fall damage.",
+         "Ensemble en laiton : vision nocturne et minage plus rapide. Mithril : +4 points de vie et +10 % de vitesse. "
+         "Éther : +75 de mana, recharge deux fois plus rapide, aucun dégât de chute."),
+        ("Arcanist robes are woven from Arcane Cloth (purple wool, string and an aether crystal): +100 mana and spells 25% "
+         "stronger.",
+         "Les robes d'arcaniste se tissent en étoffe arcanique (laine violette, ficelle et cristal d'éther) : +100 de mana et "
+         "sorts 25 % plus puissants."),
+    ], ["wayfarers:brass_helmet", "wayfarers:mithril_chestplate", "wayfarers:aether_chestplate",
+        "wayfarers:arcane_chestplate"]),
+    ("steam_blocks", "gear", "wayfarers:gear_panel", ("Steampunk blocks", "Blocs steampunk"), [
+        ("Brass, copper and dark iron plating, clockwork and gauge panels, pipe bundles, Edison lamps, aether "
+         "conduits, mahogany panelling, tufted leather and smokestack bricks. Most plates also come as stairs and "
+         "slabs.",
+         "Placages en laiton, cuivre et fer sombre, panneaux d'horlogerie et à manomètre, faisceaux de tuyaux, lampes "
+         "Edison, conduits d'éther, lambris d'acajou, capitonnage en cuir et briques de cheminée. La plupart des "
+         "plaques existent aussi en escaliers et dalles."),
+        ("Tip: keep brass for the trims and let dark iron and mahogany carry the mass; light it with Edison lamps.",
+         "Astuce : garde le laiton pour les finitions, laisse le fer sombre et l'acajou porter la masse, et éclaire "
+         "avec des lampes Edison."),
+    ], ["wayfarers:brass_plating", "wayfarers:gear_panel", "wayfarers:copper_pipes", "wayfarers:edison_lamp",
+        "wayfarers:aether_conduit", "wayfarers:mahogany_panelling"]),
     ("wand", "gear", "wayfarers:builder_wand", ("Builder's Wand", "Baguette du bâtisseur"), [
         ("Hold the wand and look at a block: gold outlines show where copies will go. Right-click to extend that face "
          "with blocks of the same kind from your inventory (16 at a time, 64 with the Master wand).",

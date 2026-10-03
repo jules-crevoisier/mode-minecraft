@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "wayfarers:brass_block"
+  ],
+  "result": {
+    "id": "wayfarers:brass_ingot",
+    "count": 9
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/outer_stairs",
+  "textures": {
+    "bottom": "wayfarers:block/mahogany_panelling",
+    "top": "wayfarers:block/mahogany_panelling",
+    "side": "wayfarers:block/mahogany_panelling"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "N",
+    "G",
+    "L"
+  ],
+  "key": {
+    "N": "wayfarers:brass_nugget",
+    "G": "minecraft:glass",
+    "L": "minecraft:glowstone_dust"
+  },
+  "result": {
+    "id": "wayfarers:edison_lamp",
+    "count": 1
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "wayfarers:block/pressure_gauge"
+    }
+  }
+}

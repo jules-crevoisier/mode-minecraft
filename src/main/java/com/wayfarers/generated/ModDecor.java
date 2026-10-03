@@ -21,56 +21,89 @@ import java.util.function.Supplier;
 public final class ModDecor {
     public static final List<RegistryObject<Item>> ITEMS = new ArrayList<>();
 
-    public static final RegistryObject<Block> GUILD_BRICKS = block("guild_bricks", MapColor.SAND, SoundType.STONE, 2.0F, 0);
+    public static final RegistryObject<Block> GUILD_BRICKS = block("guild_bricks", MapColor.SAND, SoundType.STONE, 2.0F, 0, true);
     public static final RegistryObject<Block> GUILD_BRICK_STAIRS = stairs("guild_brick_stairs", GUILD_BRICKS);
     public static final RegistryObject<Block> GUILD_BRICK_SLAB = slab("guild_brick_slab", GUILD_BRICKS);
     public static final RegistryObject<Block> GUILD_BRICK_WALL = wall("guild_brick_wall", GUILD_BRICKS);
-    public static final RegistryObject<Block> MOSSY_GUILD_BRICKS = block("mossy_guild_bricks", MapColor.SAND, SoundType.STONE, 2.0F, 0);
+    public static final RegistryObject<Block> MOSSY_GUILD_BRICKS = block("mossy_guild_bricks", MapColor.SAND, SoundType.STONE, 2.0F, 0, true);
     public static final RegistryObject<Block> MOSSY_GUILD_BRICK_STAIRS = stairs("mossy_guild_brick_stairs", MOSSY_GUILD_BRICKS);
     public static final RegistryObject<Block> MOSSY_GUILD_BRICK_SLAB = slab("mossy_guild_brick_slab", MOSSY_GUILD_BRICKS);
     public static final RegistryObject<Block> MOSSY_GUILD_BRICK_WALL = wall("mossy_guild_brick_wall", MOSSY_GUILD_BRICKS);
-    public static final RegistryObject<Block> CRACKED_GUILD_BRICKS = block("cracked_guild_bricks", MapColor.SAND, SoundType.STONE, 2.0F, 0);
-    public static final RegistryObject<Block> POLISHED_GUILD_STONE = block("polished_guild_stone", MapColor.SAND, SoundType.STONE, 2.0F, 0);
+    public static final RegistryObject<Block> CRACKED_GUILD_BRICKS = block("cracked_guild_bricks", MapColor.SAND, SoundType.STONE, 2.0F, 0, true);
+    public static final RegistryObject<Block> POLISHED_GUILD_STONE = block("polished_guild_stone", MapColor.SAND, SoundType.STONE, 2.0F, 0, true);
     public static final RegistryObject<Block> POLISHED_GUILD_STONE_STAIRS = stairs("polished_guild_stone_stairs", POLISHED_GUILD_STONE);
     public static final RegistryObject<Block> POLISHED_GUILD_STONE_SLAB = slab("polished_guild_stone_slab", POLISHED_GUILD_STONE);
-    public static final RegistryObject<Block> CARVED_GUILD_STONE = block("carved_guild_stone", MapColor.SAND, SoundType.STONE, 2.0F, 0);
-    public static final RegistryObject<Block> GUILD_ROOF_TILES = block("guild_roof_tiles", MapColor.COLOR_CYAN, SoundType.STONE, 1.5F, 0);
+    public static final RegistryObject<Block> CARVED_GUILD_STONE = block("carved_guild_stone", MapColor.SAND, SoundType.STONE, 2.0F, 0, true);
+    public static final RegistryObject<Block> GUILD_ROOF_TILES = block("guild_roof_tiles", MapColor.COLOR_CYAN, SoundType.STONE, 1.5F, 0, true);
     public static final RegistryObject<Block> GUILD_ROOF_TILE_STAIRS = stairs("guild_roof_tile_stairs", GUILD_ROOF_TILES);
     public static final RegistryObject<Block> GUILD_ROOF_TILE_SLAB = slab("guild_roof_tile_slab", GUILD_ROOF_TILES);
-    public static final RegistryObject<Block> CRIMSON_ROOF_TILES = block("crimson_roof_tiles", MapColor.COLOR_RED, SoundType.STONE, 1.5F, 0);
+    public static final RegistryObject<Block> CRIMSON_ROOF_TILES = block("crimson_roof_tiles", MapColor.COLOR_RED, SoundType.STONE, 1.5F, 0, true);
     public static final RegistryObject<Block> CRIMSON_ROOF_TILE_STAIRS = stairs("crimson_roof_tile_stairs", CRIMSON_ROOF_TILES);
     public static final RegistryObject<Block> CRIMSON_ROOF_TILE_SLAB = slab("crimson_roof_tile_slab", CRIMSON_ROOF_TILES);
-    public static final RegistryObject<Block> SLATE_ROOF_TILES = block("slate_roof_tiles", MapColor.COLOR_GRAY, SoundType.STONE, 1.5F, 0);
+    public static final RegistryObject<Block> SLATE_ROOF_TILES = block("slate_roof_tiles", MapColor.COLOR_GRAY, SoundType.STONE, 1.5F, 0, true);
     public static final RegistryObject<Block> SLATE_ROOF_TILE_STAIRS = stairs("slate_roof_tile_stairs", SLATE_ROOF_TILES);
     public static final RegistryObject<Block> SLATE_ROOF_TILE_SLAB = slab("slate_roof_tile_slab", SLATE_ROOF_TILES);
-    public static final RegistryObject<Block> RUNE_LAMP = block("rune_lamp", MapColor.COLOR_LIGHT_BLUE, SoundType.STONE, 2.0F, 15);
-    public static final RegistryObject<Block> LITHITE_BLOCK = block("lithite_block", MapColor.COLOR_CYAN, SoundType.AMETHYST, 3.0F, 12);
-    public static final RegistryObject<Block> LITHITE_BRICKS = block("lithite_bricks", MapColor.COLOR_GRAY, SoundType.DEEPSLATE_BRICKS, 3.0F, 3);
+    public static final RegistryObject<Block> RUNE_LAMP = block("rune_lamp", MapColor.COLOR_LIGHT_BLUE, SoundType.STONE, 2.0F, 15, true);
+    public static final RegistryObject<Block> LITHITE_BLOCK = block("lithite_block", MapColor.COLOR_CYAN, SoundType.AMETHYST, 3.0F, 12, true);
+    public static final RegistryObject<Block> LITHITE_BRICKS = block("lithite_bricks", MapColor.COLOR_GRAY, SoundType.DEEPSLATE_BRICKS, 3.0F, 3, true);
     public static final RegistryObject<Block> LITHITE_BRICK_STAIRS = stairs("lithite_brick_stairs", LITHITE_BRICKS);
     public static final RegistryObject<Block> LITHITE_BRICK_SLAB = slab("lithite_brick_slab", LITHITE_BRICKS);
     public static final RegistryObject<Block> LITHITE_BRICK_WALL = wall("lithite_brick_wall", LITHITE_BRICKS);
-    public static final RegistryObject<Block> EMBER_BRICKS = block("ember_bricks", MapColor.COLOR_BLACK, SoundType.NETHER_BRICKS, 3.0F, 5);
+    public static final RegistryObject<Block> EMBER_BRICKS = block("ember_bricks", MapColor.COLOR_BLACK, SoundType.NETHER_BRICKS, 3.0F, 5, true);
     public static final RegistryObject<Block> EMBER_BRICK_STAIRS = stairs("ember_brick_stairs", EMBER_BRICKS);
     public static final RegistryObject<Block> EMBER_BRICK_SLAB = slab("ember_brick_slab", EMBER_BRICKS);
     public static final RegistryObject<Block> EMBER_BRICK_WALL = wall("ember_brick_wall", EMBER_BRICKS);
-    public static final RegistryObject<Block> EMBER_LAMP = block("ember_lamp", MapColor.COLOR_ORANGE, SoundType.NETHER_BRICKS, 2.5F, 15);
-    public static final RegistryObject<Block> GILDED_TRIM = block("gilded_trim", MapColor.GOLD, SoundType.STONE, 3.0F, 0);
-    public static final RegistryObject<Block> VOID_BRICKS = block("void_bricks", MapColor.COLOR_PURPLE, SoundType.STONE, 3.0F, 2);
+    public static final RegistryObject<Block> EMBER_LAMP = block("ember_lamp", MapColor.COLOR_ORANGE, SoundType.NETHER_BRICKS, 2.5F, 15, true);
+    public static final RegistryObject<Block> GILDED_TRIM = block("gilded_trim", MapColor.GOLD, SoundType.STONE, 3.0F, 0, true);
+    public static final RegistryObject<Block> VOID_BRICKS = block("void_bricks", MapColor.COLOR_PURPLE, SoundType.STONE, 3.0F, 2, true);
     public static final RegistryObject<Block> VOID_BRICK_STAIRS = stairs("void_brick_stairs", VOID_BRICKS);
     public static final RegistryObject<Block> VOID_BRICK_SLAB = slab("void_brick_slab", VOID_BRICKS);
     public static final RegistryObject<Block> VOID_BRICK_WALL = wall("void_brick_wall", VOID_BRICKS);
-    public static final RegistryObject<Block> STARLIGHT_BLOCK = block("starlight_block", MapColor.COLOR_MAGENTA, SoundType.AMETHYST, 2.0F, 15);
+    public static final RegistryObject<Block> STARLIGHT_BLOCK = block("starlight_block", MapColor.COLOR_MAGENTA, SoundType.AMETHYST, 2.0F, 15, true);
+    public static final RegistryObject<Block> BRASS_PLATING = block("brass_plating", MapColor.GOLD, SoundType.METAL, 4.0F, 0, true);
+    public static final RegistryObject<Block> BRASS_PLATING_STAIRS = stairs("brass_plating_stairs", BRASS_PLATING);
+    public static final RegistryObject<Block> BRASS_PLATING_SLAB = slab("brass_plating_slab", BRASS_PLATING);
+    public static final RegistryObject<Block> COPPER_PLATING = block("copper_plating", MapColor.COLOR_ORANGE, SoundType.COPPER, 4.0F, 0, true);
+    public static final RegistryObject<Block> COPPER_PLATING_STAIRS = stairs("copper_plating_stairs", COPPER_PLATING);
+    public static final RegistryObject<Block> COPPER_PLATING_SLAB = slab("copper_plating_slab", COPPER_PLATING);
+    public static final RegistryObject<Block> VERDIGRIS_PLATING = block("verdigris_plating", MapColor.WARPED_WART_BLOCK, SoundType.COPPER, 4.0F, 0, true);
+    public static final RegistryObject<Block> VERDIGRIS_PLATING_STAIRS = stairs("verdigris_plating_stairs", VERDIGRIS_PLATING);
+    public static final RegistryObject<Block> VERDIGRIS_PLATING_SLAB = slab("verdigris_plating_slab", VERDIGRIS_PLATING);
+    public static final RegistryObject<Block> DARK_IRON_PLATING = block("dark_iron_plating", MapColor.COLOR_BLACK, SoundType.METAL, 5.0F, 0, true);
+    public static final RegistryObject<Block> DARK_IRON_PLATING_STAIRS = stairs("dark_iron_plating_stairs", DARK_IRON_PLATING);
+    public static final RegistryObject<Block> DARK_IRON_PLATING_SLAB = slab("dark_iron_plating_slab", DARK_IRON_PLATING);
+    public static final RegistryObject<Block> DARK_IRON_PLATING_WALL = wall("dark_iron_plating_wall", DARK_IRON_PLATING);
+    public static final RegistryObject<Block> DIAMOND_PLATE = block("diamond_plate", MapColor.METAL, SoundType.METAL, 5.0F, 0, true);
+    public static final RegistryObject<Block> DIAMOND_PLATE_STAIRS = stairs("diamond_plate_stairs", DIAMOND_PLATE);
+    public static final RegistryObject<Block> DIAMOND_PLATE_SLAB = slab("diamond_plate_slab", DIAMOND_PLATE);
+    public static final RegistryObject<Block> GEAR_PANEL = block("gear_panel", MapColor.COLOR_BLACK, SoundType.METAL, 4.0F, 0, true);
+    public static final RegistryObject<Block> COPPER_PIPES = block("copper_pipes", MapColor.COLOR_ORANGE, SoundType.COPPER, 3.0F, 0, true);
+    public static final RegistryObject<Block> PRESSURE_GAUGE = block("pressure_gauge", MapColor.COLOR_BLACK, SoundType.METAL, 3.0F, 0, true);
+    public static final RegistryObject<Block> EDISON_LAMP = block("edison_lamp", MapColor.COLOR_ORANGE, SoundType.GLASS, 1.5F, 15, false);
+    public static final RegistryObject<Block> AETHER_CONDUIT = block("aether_conduit", MapColor.COLOR_CYAN, SoundType.METAL, 4.0F, 10, true);
+    public static final RegistryObject<Block> MAHOGANY_PANELLING = block("mahogany_panelling", MapColor.COLOR_BROWN, SoundType.WOOD, 2.0F, 0, false);
+    public static final RegistryObject<Block> MAHOGANY_PANELLING_STAIRS = stairs("mahogany_panelling_stairs", MAHOGANY_PANELLING);
+    public static final RegistryObject<Block> MAHOGANY_PANELLING_SLAB = slab("mahogany_panelling_slab", MAHOGANY_PANELLING);
+    public static final RegistryObject<Block> LEATHER_PADDING = block("leather_padding", MapColor.COLOR_RED, SoundType.WOOL, 0.8F, 0, false);
+    public static final RegistryObject<Block> LEATHER_PADDING_SLAB = slab("leather_padding_slab", LEATHER_PADDING);
+    public static final RegistryObject<Block> SMOKESTACK_BRICKS = block("smokestack_bricks", MapColor.COLOR_RED, SoundType.STONE, 2.0F, 0, true);
+    public static final RegistryObject<Block> SMOKESTACK_BRICK_STAIRS = stairs("smokestack_brick_stairs", SMOKESTACK_BRICKS);
+    public static final RegistryObject<Block> SMOKESTACK_BRICK_SLAB = slab("smokestack_brick_slab", SMOKESTACK_BRICKS);
+    public static final RegistryObject<Block> SMOKESTACK_BRICK_WALL = wall("smokestack_brick_wall", SMOKESTACK_BRICKS);
 
     /** Forces class initialisation so every block/item is queued on the deferred registers. */
     public static void init() {}
 
-    private static BlockBehaviour.Properties props(String name, MapColor color, SoundType sound, float strength, int light) {
-        return BlockBehaviour.Properties.of().mapColor(color).sound(sound).strength(strength, 6.0F)
-                .requiresCorrectToolForDrops().lightLevel(s -> light).setId(ModBlocks.BLOCKS.key(name));
+    private static BlockBehaviour.Properties props(String name, MapColor color, SoundType sound, float strength, int light,
+                                                   boolean needsPickaxe) {
+        BlockBehaviour.Properties p = BlockBehaviour.Properties.of().mapColor(color).sound(sound).strength(strength, 6.0F)
+                .lightLevel(s -> light).setId(ModBlocks.BLOCKS.key(name));
+        return needsPickaxe ? p.requiresCorrectToolForDrops() : p;
     }
 
-    private static RegistryObject<Block> block(String name, MapColor color, SoundType sound, float strength, int light) {
-        return item(name, ModBlocks.BLOCKS.register(name, () -> new Block(props(name, color, sound, strength, light))));
+    private static RegistryObject<Block> block(String name, MapColor color, SoundType sound, float strength, int light,
+                                              boolean needsPickaxe) {
+        return item(name, ModBlocks.BLOCKS.register(name, () -> new Block(props(name, color, sound, strength, light, needsPickaxe))));
     }
 
     private static RegistryObject<Block> stairs(String name, Supplier<Block> base) {

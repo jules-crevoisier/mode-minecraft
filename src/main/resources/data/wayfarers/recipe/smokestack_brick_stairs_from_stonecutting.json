@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "wayfarers:smokestack_bricks",
+  "result": {
+    "id": "wayfarers:smokestack_brick_stairs",
+    "count": 1
+  }
+}

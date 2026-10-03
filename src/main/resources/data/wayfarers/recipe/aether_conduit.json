@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "D",
+    "A",
+    "D"
+  ],
+  "key": {
+    "D": "wayfarers:dark_iron_plating",
+    "A": "wayfarers:aether_crystal"
+  },
+  "result": {
+    "id": "wayfarers:aether_conduit",
+    "count": 2
+  }
+}

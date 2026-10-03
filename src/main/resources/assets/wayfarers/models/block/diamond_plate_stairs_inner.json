@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/inner_stairs",
+  "textures": {
+    "bottom": "wayfarers:block/diamond_plate",
+    "top": "wayfarers:block/diamond_plate",
+    "side": "wayfarers:block/diamond_plate"
+  }
+}

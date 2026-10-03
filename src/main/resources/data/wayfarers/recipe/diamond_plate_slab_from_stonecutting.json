@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "wayfarers:diamond_plate",
+  "result": {
+    "id": "wayfarers:diamond_plate_slab",
+    "count": 2
+  }
+}

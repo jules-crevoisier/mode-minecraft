@@ -9,6 +9,14 @@
     "wayfarers:slate_roof_tile_slab",
     "wayfarers:lithite_brick_slab",
     "wayfarers:ember_brick_slab",
-    "wayfarers:void_brick_slab"
+    "wayfarers:void_brick_slab",
+    "wayfarers:brass_plating_slab",
+    "wayfarers:copper_plating_slab",
+    "wayfarers:verdigris_plating_slab",
+    "wayfarers:dark_iron_plating_slab",
+    "wayfarers:diamond_plate_slab",
+    "wayfarers:mahogany_panelling_slab",
+    "wayfarers:leather_padding_slab",
+    "wayfarers:smokestack_brick_slab"
   ]
 }

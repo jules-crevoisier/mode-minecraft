@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "ingredient": "wayfarers:raw_orichalcum",
+  "result": {
+    "id": "wayfarers:orichalcum_ingot"
+  },
+  "experience": 0.7,
+  "cookingtime": 200
+}

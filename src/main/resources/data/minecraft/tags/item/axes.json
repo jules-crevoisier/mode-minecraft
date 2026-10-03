@@ -1,6 +1,8 @@
 {
   "replace": false,
   "values": [
-    "wayfarers:lumber_axe"
+    "wayfarers:lumber_axe",
+    "wayfarers:brass_axe",
+    "wayfarers:mithril_axe"
   ]
 }
