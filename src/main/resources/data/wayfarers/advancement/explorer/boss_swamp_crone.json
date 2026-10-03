@@ -23,7 +23,7 @@
             "condition": "minecraft:entity_properties",
             "entity": "this",
             "predicate": {
-              "type": "wayfarers:swamp_crone"
+              "entity_type": "wayfarers:swamp_crone"
             }
           }
         ]

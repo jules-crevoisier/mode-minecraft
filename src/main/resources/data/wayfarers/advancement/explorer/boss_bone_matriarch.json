@@ -23,7 +23,7 @@
             "condition": "minecraft:entity_properties",
             "entity": "this",
             "predicate": {
-              "type": "wayfarers:bone_matriarch"
+              "entity_type": "wayfarers:bone_matriarch"
             }
           }
         ]

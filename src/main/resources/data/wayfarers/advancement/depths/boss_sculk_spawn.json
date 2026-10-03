@@ -23,7 +23,7 @@
             "condition": "minecraft:entity_properties",
             "entity": "this",
             "predicate": {
-              "type": "wayfarers:sculk_spawn"
+              "entity_type": "wayfarers:sculk_spawn"
             }
           }
         ]

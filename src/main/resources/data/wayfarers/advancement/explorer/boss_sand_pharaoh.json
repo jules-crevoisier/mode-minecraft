@@ -23,7 +23,7 @@
             "condition": "minecraft:entity_properties",
             "entity": "this",
             "predicate": {
-              "type": "wayfarers:sand_pharaoh"
+              "entity_type": "wayfarers:sand_pharaoh"
             }
           }
         ]

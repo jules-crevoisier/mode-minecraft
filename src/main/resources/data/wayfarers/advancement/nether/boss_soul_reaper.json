@@ -23,7 +23,7 @@
             "condition": "minecraft:entity_properties",
             "entity": "this",
             "predicate": {
-              "type": "wayfarers:soul_reaper"
+              "entity_type": "wayfarers:soul_reaper"
             }
           }
         ]

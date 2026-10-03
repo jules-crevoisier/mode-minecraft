@@ -23,7 +23,7 @@
             "condition": "minecraft:entity_properties",
             "entity": "this",
             "predicate": {
-              "type": "wayfarers:jade_jaguar"
+              "entity_type": "wayfarers:jade_jaguar"
             }
           }
         ]

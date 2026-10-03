@@ -23,7 +23,7 @@
             "condition": "minecraft:entity_properties",
             "entity": "this",
             "predicate": {
-              "type": "wayfarers:drowned_warden"
+              "entity_type": "wayfarers:drowned_warden"
             }
           }
         ]

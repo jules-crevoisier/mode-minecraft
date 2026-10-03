@@ -23,7 +23,7 @@
             "condition": "minecraft:entity_properties",
             "entity": "this",
             "predicate": {
-              "type": "wayfarers:drowned_warden"
+              "entity_type": "wayfarers:drowned_warden"
             }
           }
         ]
@@ -37,7 +37,7 @@
             "condition": "minecraft:entity_properties",
             "entity": "this",
             "predicate": {
-              "type": "wayfarers:void_warden"
+              "entity_type": "wayfarers:void_warden"
             }
           }
         ]
@@ -51,7 +51,7 @@
             "condition": "minecraft:entity_properties",
             "entity": "this",
             "predicate": {
-              "type": "wayfarers:bell_keeper"
+              "entity_type": "wayfarers:bell_keeper"
             }
           }
         ]
@@ -65,7 +65,7 @@
             "condition": "minecraft:entity_properties",
             "entity": "this",
             "predicate": {
-              "type": "wayfarers:archivist"
+              "entity_type": "wayfarers:archivist"
             }
           }
         ]
@@ -79,7 +79,7 @@
             "condition": "minecraft:entity_properties",
             "entity": "this",
             "predicate": {
-              "type": "wayfarers:sand_pharaoh"
+              "entity_type": "wayfarers:sand_pharaoh"
             }
           }
         ]
@@ -93,7 +93,7 @@
             "condition": "minecraft:entity_properties",
             "entity": "this",
             "predicate": {
-              "type": "wayfarers:jade_jaguar"
+              "entity_type": "wayfarers:jade_jaguar"
             }
           }
         ]
@@ -107,7 +107,7 @@
             "condition": "minecraft:entity_properties",
             "entity": "this",
             "predicate": {
-              "type": "wayfarers:root_mother"
+              "entity_type": "wayfarers:root_mother"
             }
           }
         ]
@@ -121,7 +121,7 @@
             "condition": "minecraft:entity_properties",
             "entity": "this",
             "predicate": {
-              "type": "wayfarers:swamp_crone"
+              "entity_type": "wayfarers:swamp_crone"
             }
           }
         ]
@@ -135,7 +135,7 @@
             "condition": "minecraft:entity_properties",
             "entity": "this",
             "predicate": {
-              "type": "wayfarers:gryphon_knight"
+              "entity_type": "wayfarers:gryphon_knight"
             }
           }
         ]
@@ -149,7 +149,7 @@
             "condition": "minecraft:entity_properties",
             "entity": "this",
             "predicate": {
-              "type": "wayfarers:rune_colossus"
+              "entity_type": "wayfarers:rune_colossus"
             }
           }
         ]
@@ -163,7 +163,7 @@
             "condition": "minecraft:entity_properties",
             "entity": "this",
             "predicate": {
-              "type": "wayfarers:forge_king"
+              "entity_type": "wayfarers:forge_king"
             }
           }
         ]
@@ -177,7 +177,7 @@
             "condition": "minecraft:entity_properties",
             "entity": "this",
             "predicate": {
-              "type": "wayfarers:crystal_spider"
+              "entity_type": "wayfarers:crystal_spider"
             }
           }
         ]
@@ -191,7 +191,7 @@
             "condition": "minecraft:entity_properties",
             "entity": "this",
             "predicate": {
-              "type": "wayfarers:sculk_spawn"
+              "entity_type": "wayfarers:sculk_spawn"
             }
           }
         ]
@@ -205,7 +205,7 @@
             "condition": "minecraft:entity_properties",
             "entity": "this",
             "predicate": {
-              "type": "wayfarers:ash_lord"
+              "entity_type": "wayfarers:ash_lord"
             }
           }
         ]
@@ -219,7 +219,7 @@
             "condition": "minecraft:entity_properties",
             "entity": "this",
             "predicate": {
-              "type": "wayfarers:piglin_king"
+              "entity_type": "wayfarers:piglin_king"
             }
           }
         ]
@@ -233,7 +233,7 @@
             "condition": "minecraft:entity_properties",
             "entity": "this",
             "predicate": {
-              "type": "wayfarers:soul_reaper"
+              "entity_type": "wayfarers:soul_reaper"
             }
           }
         ]

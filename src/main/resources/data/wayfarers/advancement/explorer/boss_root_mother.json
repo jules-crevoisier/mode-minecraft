@@ -23,7 +23,7 @@
             "condition": "minecraft:entity_properties",
             "entity": "this",
             "predicate": {
-              "type": "wayfarers:root_mother"
+              "entity_type": "wayfarers:root_mother"
             }
           }
         ]

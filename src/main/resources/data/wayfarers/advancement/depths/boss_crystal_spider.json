@@ -23,7 +23,7 @@
             "condition": "minecraft:entity_properties",
             "entity": "this",
             "predicate": {
-              "type": "wayfarers:crystal_spider"
+              "entity_type": "wayfarers:crystal_spider"
             }
           }
         ]

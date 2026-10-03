@@ -23,7 +23,7 @@
             "condition": "minecraft:entity_properties",
             "entity": "this",
             "predicate": {
-              "type": "wayfarers:gryphon_knight"
+              "entity_type": "wayfarers:gryphon_knight"
             }
           }
         ]

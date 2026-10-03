@@ -23,7 +23,7 @@
             "condition": "minecraft:entity_properties",
             "entity": "this",
             "predicate": {
-              "type": "wayfarers:weeping_lady"
+              "entity_type": "wayfarers:weeping_lady"
             }
           }
         ]

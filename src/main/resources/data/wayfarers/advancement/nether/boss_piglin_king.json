@@ -23,7 +23,7 @@
             "condition": "minecraft:entity_properties",
             "entity": "this",
             "predicate": {
-              "type": "wayfarers:piglin_king"
+              "entity_type": "wayfarers:piglin_king"
             }
           }
         ]

@@ -74,7 +74,7 @@ def has_items(*items):
 def killed(entity):
     return {"trigger": "minecraft:player_killed_entity", "conditions": {"entity": [{
         "condition": "minecraft:entity_properties", "entity": "this",
-        "predicate": {"type": entity if ":" in entity else f"{NS}:{entity}"}}]}}
+        "predicate": {"entity_type": entity if ":" in entity else f"{NS}:{entity}"}}]}}
 
 
 def entered(dim):

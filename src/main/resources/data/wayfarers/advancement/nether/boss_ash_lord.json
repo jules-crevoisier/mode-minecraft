@@ -23,7 +23,7 @@
             "condition": "minecraft:entity_properties",
             "entity": "this",
             "predicate": {
-              "type": "wayfarers:ash_lord"
+              "entity_type": "wayfarers:ash_lord"
             }
           }
         ]

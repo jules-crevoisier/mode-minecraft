@@ -23,7 +23,7 @@
             "condition": "minecraft:entity_properties",
             "entity": "this",
             "predicate": {
-              "type": "wayfarers:archivist"
+              "entity_type": "wayfarers:archivist"
             }
           }
         ]

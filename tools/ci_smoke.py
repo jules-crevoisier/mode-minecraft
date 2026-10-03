@@ -36,6 +36,7 @@ BENIGN = [
         r"Failed to (load|fetch) .*(profile|session|skin|realms)",
         r"Ambiguity between arguments",
         r"Can't keep up!",
+        r"kqueue|OSX/BSD|Appender DebugFile",  # netty probing a macOS-only transport on the Linux runner
     )
 ]
 BAD = [re.compile(p) for p in (
@@ -156,10 +157,18 @@ def main():
         dims = structure_dims()
         for i, (sid, dim) in enumerate(dims.items()):
             x = 2000 + 400 * i
-            res = srv.run(f"execute in {dim} run place structure wayfarers:{sid} {x} 100 0",
-                          r"Generated structure|Failed to place|commands\.place|Unknown|Invalid|Incorrect")
+            r = 96
+            srv.run(f"execute in {dim} run forceload add {x - r} {-r} {x + r} {r}", r"Marked|forceload|No chunks|too many", 30)
+            res = None
+            for attempt in range(12):
+                res = srv.run(f"execute in {dim} run place structure wayfarers:{sid} {x} 100 0",
+                              r"Generated structure|Failed to place|not loaded|commands\.place|Unknown|Invalid|Incorrect", 120)
+                if not res or "not loaded" not in res:
+                    break
+                time.sleep(5)
             if not res or "Generated structure" not in res:
                 failures.append(f"place structure {sid} in {dim}: {res}")
+            srv.run(f"execute in {dim} run forceload remove all", r"Unmarked|forceload|No chunks", 30)
         for eid in lang_ids("entity.wayfarers."):
             res = srv.run(f"execute in minecraft:overworld run summon wayfarers:{eid} 0 200 0",
                           r"Summoned|Unable|Unknown|Invalid|Incorrect", 60)

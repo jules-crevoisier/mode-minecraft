@@ -23,7 +23,7 @@
             "condition": "minecraft:entity_properties",
             "entity": "this",
             "predicate": {
-              "type": "wayfarers:bell_keeper"
+              "entity_type": "wayfarers:bell_keeper"
             }
           }
         ]
