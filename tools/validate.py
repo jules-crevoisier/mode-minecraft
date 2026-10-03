@@ -61,6 +61,24 @@ def mod_ids(kind):
     return ids
 
 
+HORIZONTAL = ["north", "south", "east", "west"]
+
+
+def _mod_states():
+    """Block-state properties of the mod's machines, furniture and crate (wf tables)."""
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from wf import furniture, machines
+    out = {"compacting_crate": {"facing": HORIZONTAL}}
+    for mid in machines.MACHINES:
+        out[mid] = {"facing": HORIZONTAL + ["up", "down"], "powered": ["false", "true"]}
+    for fid, f in furniture.FURNITURE.items():
+        out[fid] = {} if f["mount"] == "none" else {"axis": ["x", "y", "z"]} if f["mount"] == "axis" else {"facing": HORIZONTAL}
+    return out
+
+
+MOD_STATES = _mod_states()
+
+
 def check_templates():
     mod_blocks = mod_ids("blocks")
     loot_refs = set()
@@ -81,6 +99,12 @@ def check_templates():
                 states = MC_TEMPLATE["blocks"].get(analog, {}) if analog else {}
                 if name == "mist_gate":
                     states = {"sealed": ["false", "true"]}
+                own = MOD_STATES.get(name)
+                if own is not None:
+                    for k, v in props.items():
+                        if k not in own or v not in own[k]:
+                            err(f"{rel}: {name}[{k}={v}] invalid")
+                    continue
                 for k, v in props.items():
                     if k not in states or (k != "facing" and v not in states[k]) or \
                             (k == "facing" and v not in ("north", "south", "east", "west")):
