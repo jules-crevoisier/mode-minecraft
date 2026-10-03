@@ -713,20 +713,129 @@ def well_head(bp, t, x, z):
 
 
 def void_obelisk(bp, t, x, z):
-    """Void crypt: a ring of void-brick obelisks with starlight caps around the stair."""
-    for xx in range(x - 6, x + 7):
-        for zz in range(z - 6, z + 7):
-            d = math.hypot(xx - x, zz - z)
-            if 4.4 < d <= 6.4:
-                bp.set(xx, 0, zz, "purpur_block" if (xx + zz) % 3 else "wayfarers:void_bricks")
-    for i in range(6):
-        a = math.pi * 2 * i / 6
-        ox, oz = int(round(x + math.cos(a) * 8)), int(round(z + math.sin(a) * 8))
-        h = 7 + (i % 3) * 2
+    """Void crypt: a sunken amphitheatre of void brick. Stepped purpur rings lead down to a plaza inlaid with
+    starlight constellations, where eight void-brick obelisks (purpur arches joining every other pair) stand around
+    the descending portal: the stairwell, rimmed with crying obsidian under a floating purpur halo hung with end
+    rods. Chorus groves and fallen obelisk drums dot the end stone around it."""
+    rng = random.Random(x * 17 + z * 29)
+    VB, SL = "wayfarers:void_bricks", "wayfarers:starlight_block"
+    ESB_WALL = "end_stone_brick_wall[east=none,north=none,south=none,west=none,up=true,waterlogged=false]"
+    FLOOR = -3                       # plaza floor (blocks); the surrounding ground is y = -1
+
+    def put(dx, y, dz, spec):
+        bp.set(x + dx, y, z + dz, spec)
+
+    def outward(dx, dz):
+        if abs(dx) >= abs(dz):
+            return "east" if dx > 0 else "west"
+        return "south" if dz > 0 else "north"
+
+    # carve the bowl: plaza (r <= 9), one step ring (9-10.5), the rim (10.5-12.5); clear the stairwell's ring wall
+    for dx in range(-14, 15):
+        for dz in range(-14, 15):
+            d = math.hypot(dx, dz)
+            if d > 13.5:
+                continue
+            top = FLOOR if d <= 9 else -2 if d <= 10.5 else -1
+            for y in range(top + 1, 14):
+                if d > 3.6 or y >= 4:
+                    put(dx, y, dz, "air")
+            if d <= 4.6:
+                continue
+            for y in range(top - 2, top):
+                put(dx, y, dz, "end_stone")
+            if d <= 9:
+                spec = VB
+                if 6.5 <= d < 7.5:
+                    spec = "purpur_block"
+                elif d <= 5.6:
+                    spec = "crying_obsidian" if (dx + dz) % 2 else "obsidian"
+                put(dx, FLOOR, dz, spec)
+            elif d <= 10.5:
+                put(dx, -3, dz, "end_stone_bricks")
+                put(dx, -2, dz, stair("purpur_stairs", outward(dx, dz)))
+            else:
+                put(dx, -2, dz, "end_stone")
+                put(dx, -1, dz, "end_stone_bricks" if d <= 12 else "end_stone")
+    # starlight constellations: eight spokes of stars in the plaza floor, a star ring on the rim
+    for k in range(8):
+        a = math.pi * 2 * (k + 0.5) / 8
+        for r in (5.9, 8.3):
+            put(int(round(math.cos(a) * r)), FLOOR, int(round(math.sin(a) * r)), SL)
+    for k in range(16):
+        a = math.pi * 2 * k / 16
+        put(int(round(math.cos(a) * 11.5)), -1, int(round(math.sin(a) * 11.5)), SL)
+    # the portal rim: a low parapet of end-stone posts with four openings
+    for dx in range(-6, 7):
+        for dz in range(-6, 7):
+            d = math.hypot(dx, dz)
+            if 4.6 < d <= 5.4 and abs(dx) > 1 and abs(dz) > 1:
+                put(dx, FLOOR + 1, dz, ESB_WALL)
+    for dx, dz in ((2, 5), (-2, 5), (2, -5), (-2, -5), (5, 2), (5, -2), (-5, 2), (-5, -2)):
+        put(dx, FLOOR + 2, dz, "end_rod[facing=up]")
+
+    # obelisks: plinth, a cross-shaped lower shaft, a slender upper shaft, starlight capstone and end rod
+    tops = []
+    for i in range(8):
+        a = math.pi * 2 * i / 8
+        ox, oz = int(round(math.cos(a) * 8)), int(round(math.sin(a) * 8))
+        hgt = 11 if i % 2 == 0 else 8
+        for ddx in (-1, 0, 1):
+            for ddz in (-1, 0, 1):
+                put(ox + ddx, FLOOR + 1, oz + ddz, "purpur_block")
+        for y in range(FLOOR + 2, hgt):
+            put(ox, y, oz, VB if y % 4 else "purpur_pillar[axis=y]")
+            if y <= FLOOR + 5:
+                for ddx, ddz in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                    put(ox + ddx, y, oz + ddz, VB if y < FLOOR + 5 else stair("wayfarers:void_brick_stairs",
+                                                                              outward(-ddx, -ddz), "bottom"))
+        put(ox, hgt, oz, SL)
+        put(ox, hgt + 1, oz, "end_rod[facing=up]")
+        tops.append((ox, oz))
+    # purpur arches: a lintel with a starlight keystone between every other pair of obelisks
+    for i in range(0, 8, 2):
+        (ax, az), (bx, bz) = tops[i], tops[(i + 1) % 8]
+        bp.line((x + ax, 6, z + az), (x + bx, 6, z + bz), "purpur_block")
+        bp.line((x + ax, 5, z + az), (x + bx, 5, z + bz), "purpur_slab[type=top,waterlogged=false]")
+        mx, mz = (ax + bx) // 2, (az + bz) // 2
+        put(mx, 7, mz, SL)
+        put(mx, 5, mz, "end_rod[facing=down]")
+        put(ax, 5, az, VB)
+        put(bx, 5, bz, VB)
+        put(bx, 6, bz, VB)
+
+    # the floating halo over the portal: a purpur ring with starlight, end rods dripping light into the shaft
+    for dx in range(-5, 6):
+        for dz in range(-5, 6):
+            d = math.hypot(dx, dz)
+            if 3.5 <= d < 4.5:
+                put(dx, 9, dz, SL if (dx * 3 + dz) % 5 == 0 else "purpur_slab[type=bottom,waterlogged=false]")
+    for k in range(8):
+        a = math.pi * 2 * k / 8
+        hx, hz = int(round(math.cos(a) * 4)), int(round(math.sin(a) * 4))
+        put(hx, 8, hz, "end_rod[facing=down]")
+    put(0, 11, 0, SL)
+    put(0, 10, 0, "end_rod[facing=down]")
+
+    # chorus groves on end-stone mounds and fallen obelisk drums around the bowl
+    def chorus(cx, cz, h):
+        put(cx, -1, cz, "end_stone")
         for y in range(0, h):
-            bp.set(ox, y, oz, "wayfarers:void_bricks")
-        bp.set(ox, h, oz, "wayfarers:starlight_block")
-        bp.set(ox, h + 1, oz, "end_rod[facing=up]")
+            branch = y == h // 2
+            put(cx, y, cz, "chorus_plant[down=true,east=%s,north=false,south=false,up=true,west=false]"
+                % ("true" if branch else "false"))
+            if branch:
+                put(cx + 1, y, cz, "chorus_plant[down=false,east=false,north=false,south=false,up=true,west=true]")
+                put(cx + 1, y + 1, cz, "chorus_plant[down=true,east=false,north=false,south=false,up=true,west=false]")
+                put(cx + 1, y + 2, cz, "chorus_flower[age=5]")
+        put(cx, h, cz, "chorus_flower[age=4]")
+    for cx, cz, h in ((-14, 6, 4), (13, -7, 5), (6, 14, 3), (-8, -14, 4), (15, 9, 3)):
+        chorus(cx, cz, h)
+    for cx, cz, axis in ((-13, -3, "x"), (4, -14, "z"), (14, 2, "z")):
+        for k in range(3):
+            put(cx + (k if axis == "x" else 0), 0, cz + (k if axis == "z" else 0),
+                "purpur_pillar[axis=%s]" % axis if k < 2 else VB)
+        put(cx, -1, cz, "end_stone")
 
 
 def _register(sid, theme, entrance, biomes, title_fr, title_en, boss, loot, levels=3, spacing=34, **kw):
