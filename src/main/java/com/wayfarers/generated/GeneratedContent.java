@@ -43,7 +43,8 @@ public final class GeneratedContent {
             new StructureInfo("forgotten_catacombs", "overworld"),
             new StructureInfo("sand_hypogeum", "overworld"),
             new StructureInfo("lithite_well", "overworld"),
-            new StructureInfo("void_crypt", "end")
+            new StructureInfo("void_crypt", "end"),
+            new StructureInfo("clockwork_citadel", "overworld")
     );
 
     public static final List<Chapter> CHAPTERS = List.of(

@@ -8,7 +8,11 @@
 - **8 armes à capacité**, **16 armes de boss**, **2 outils de zone**, **3 ensembles d'armure** ;
 - **10 créatures** et **20 boss façon Elden Ring** (16 grands boss et 4 champions de donjon), tous avec un vrai modèle 3D animé ;
 - **15 blocs de construction exclusifs** (briques de la Guilde, tuiles de toit, lampes runiques, briques de braise, briques du vide…), utilisés dans les structures et fabricables ;
-- **une vraie difficulté** : plus on s'éloigne du spawn, plus les monstres sont forts, avec des monstres d'élite et des lunes de sang.
+- **une vraie difficulté** : plus on s'éloigne du spawn, plus les monstres sont forts, avec des monstres d'élite et des lunes de sang ;
+- **un nouveau monde** (désactivable) : relief plus haut et plus déchiqueté, méga-cavernes et **41 biomes** propres au mod ;
+- **un univers steampunk** : laiton, zinc, mithril, éther, 13 blocs de déco, 9 meubles en 3D, 9 machines simples et la **Citadelle d'horlogerie** ;
+- **des talents RPG et de la magie simple** : arbre de 36 talents (touche **K**), capacité active (touche **V**), mana et 7 bâtons de sort ;
+- **de vraies interfaces** : journal de quêtes, écran de voyage, terminal de stockage, manuel illustré, barres de vie des monstres.
 
 | Cible | Version |
 |---|---|
@@ -43,6 +47,52 @@ GitHub recompile le mod à chaque modification : voir l'onglet *Releases* ou *Ac
 ./gradlew runClient      # lancer le jeu en développement
 ./gradlew runServer      # serveur de test
 ```
+
+---
+
+
+## Nouveautés de la grande mise à jour
+
+### Interfaces et aide en jeu
+| Quoi | Comment |
+|---|---|
+| **Manuel du Voyageur** | Donné à la première connexion : une page par système, avec sommaire. Survole un objet du mod et **maintiens W** pour ouvrir sa page. Des cartes d'astuce s'affichent la première fois qu'on rencontre un système. |
+| **Journal de quêtes** (touche **J** ou l'Atlas) | Chapitres, étapes, récompenses ; bouton « Suivre » qui affiche l'objectif à l'écran. |
+| **Écran de voyage** | Clic droit sur une pierre : liste avec recherche, favoris et renommage. On ne voyage que depuis une pierre. |
+| **Barres de vie** | Au-dessus des monstres blessés, avec les dégâts infligés ; étoile pour les élites. Réglable dans la config client. |
+
+### Rangement, construction et fermes
+| Quoi | Comment |
+|---|---|
+| **Boutons dans tous les coffres** | Trier, Tout prendre, Déposer les identiques, Ranger dans les coffres proches ; barre de recherche ; clic molette pour trier. |
+| **Confort** | Réapprovisionnement automatique de la barre d'action ; récolte au clic droit avec replantation. |
+| **Terminal de guilde** | Tous les coffres à 12 blocs dans une seule grille, avec recherche. |
+| **Caisse compacte** | 32 piles d'un seul objet, affiché en façade avec le total. Clic droit pour ranger (double clic : tout), clic gauche pour prendre. |
+| **Baguettes du bâtisseur** | Prolongent une face (16 ou 64 blocs) avec un aperçu ; accroupi dans le vide pour annuler. |
+| **Machines simples** (sans énergie ni câble) | Moissonneuse, arroseur, trémie aspirante, casseur et poseur de blocs, minuteur, émetteur et récepteur sans fil, détecteur de créatures. |
+
+### Talents et magie
+Points gagnés par quête, par boss et tous les 10 niveaux. Arbre de **4 branches** (Guerrier, Explorateur, Arcaniste, Mécaniste) sur la touche **K**, avec une capacité active par branche sur la touche **V**. Les bâtons (feu, givre, foudre, soin, lévitation, bouclier, vapeur) consomment du mana. Anneau et amulette augmentent le mana ; la Fiole d'oubli rend tous les points.
+
+### Steampunk : métaux, armures, blocs et meubles
+- **Minerais** : zinc (3 cuivre + 1 zinc → 4 laiton), mithril (profondeurs), cristal d'éther, orichalque (Nether).
+- **Ensembles d'armure** : Laiton (vision nocturne, minage rapide), Mithril (+4 PV, vitesse), Éther (+75 mana, aucune chute), Arcaniste (+100 mana, sorts +25 %).
+- **Blocs** : placages de laiton, de cuivre, de vert-de-gris et de fer sombre ; panneaux d'horlogerie et à manomètre ; tuyaux ; lampes Edison ; conduits d'éther ; lambris d'acajou ; capitonnage ; briques de cheminée.
+- **Meubles 3D** : table, chaise, étagère, lustre, lampe suspendue, tuyau, garde-corps, engrenage mural, vanne.
+- **Armes en 3D en main** pour les armes de boss, les bâtons et les armes spéciales.
+
+### Nouveau monde (option `world.overhaul`)
+Le pack intégré **wayfarers:world_overhaul** remplace l'Overworld des **nouveaux** mondes :
+- montagnes ~65 % plus hautes, pics jusque vers y 300 ;
+- méga-cavernes entre y -40 et 10 ;
+- **41 biomes** : forêt enchantée, sylve géante, vallée des cerisiers, toundra aurorale, glacier brisé, pics majestueux, terres rouillées, vallée des engrenages, canyon peint, mer de dunes, marais luminescent, cavernes de cristal, jungle souterraine, grottes thermales, abîme…
+
+Villages, forteresses et structures du mod y apparaissent comme avant.
+
+Pour garder le monde vanilla : mettre `world.overhaul = false` dans `config/wayfarers-common.toml`, ou décocher le pack dans l'écran « Packs de données » à la création du monde. Comme Terralith, Minecraft affiche un avertissement « expérimental » à la création du monde : c'est normal.
+
+### Méga-structures
+**Citadelle d'horlogerie** (71×71 blocs) : tour-horloge de 75 blocs avec quatre cadrans, beffroi et flèche de cuivre oxydé ; sept étages meublés ; quatre ateliers ; quatre cheminées fumantes ; fontaines. On la trouve dans les badlands, savanes, déserts et plaines.
 
 ---
 
@@ -99,9 +149,9 @@ La quête est un onglet de progrès (touche **L**). Clic droit avec l'**Atlas** 
 
 | Objet / bloc | Effet |
 |---|---|
-| **Pierre de voyage** | Clic droit : liste cliquable de toutes les pierres découvertes, dans toutes les dimensions. Une pierre découverte l'est **pour tout le monde**. |
+| **Pierre de voyage** | Clic droit : écran de voyage vers toutes les pierres découvertes, dans toutes les dimensions (recherche, favoris, renommage). Une pierre découverte l'est **pour tout le monde**. |
 | **Coffre de tri** | 54 emplacements. Il aspire les objets au sol dans un rayon de 6 blocs et se trie tout seul quand personne ne regarde dedans. |
-| **Terminal de guilde** | Clic droit : range ton inventaire dans les coffres autour (10 blocs) qui contiennent déjà ces objets. Accroupi : trie tous les coffres. |
+| **Terminal de guilde** | Clic droit : tous les coffres à 12 blocs dans une seule grille avec recherche. Accroupi : trie tous les coffres. |
 | **Tombe** | À la mort, tes objets sont rangés dans une tombe, et ses coordonnées s'affichent dans le chat. N'importe quel membre du groupe peut les récupérer. |
 | **Sac du Voyageur** | 27 emplacements qui voyagent avec toi. |
 | **Anneau aimanté** | Attire objets et expérience. Se bascule au clic droit ou avec la touche **M**. |
@@ -252,7 +302,8 @@ Les structures sont bâties avec des blocs propres au mod, qu'on peut aussi util
 
 | Commande | Qui | Effet |
 |---|---|---|
-| `/wayfarers atlas` · `waystones` · `warp <id>` · `sort` · `magnet` | tous | Utilisées par l'Atlas, les pierres de voyage et les touches. |
+| `/wayfarers atlas` · `waystones` · `sort` · `magnet` | tous | Utilisées par l'Atlas, les pierres de voyage et les touches. |
+| `/wayfarers warp <id>` | op | Téléportation directe vers une pierre. |
 | `/wayfarers demo` | op | Donne tout le contenu du mod (idéal pour une vidéo). |
 | `/wayfarers kit <starter\|explorer\|depths\|nether\|end>` | op | Kits par palier. |
 | `/wayfarers locate <structure>` · `/wayfarers tp <structure>` | op | Trouver ou visiter une structure. |
@@ -307,7 +358,13 @@ Le code Java vit dans `src/main/java/com/wayfarers` :
 À tester au premier lancement :
 - [ ] Le jeu démarre sans erreur de données (structures, butin, quêtes) dans `logs/latest.log`.
 - [ ] `/wayfarers tp guild_outpost` puis `/wayfarers tp sunken_citadel` : les structures sont bien posées au sol ou au fond de l'eau.
-- [ ] Une pierre de voyage : la liste cliquable s'affiche et la téléportation fonctionne.
+- [ ] Une pierre de voyage : l'écran de voyage s'ouvre et la téléportation fonctionne.
+- [ ] Nouveau monde : le relief et les biomes du mod (F3 affiche `wayfarers:…`) ; `/locate biome wayfarers:enchanted_forest`.
+- [ ] `/wayfarers tp clockwork_citadel` : la citadelle, ses cadrans et ses cheminées fumantes.
+- [ ] Touche **K** (talents), **J** (quêtes), clic droit sur le Manuel ; maintenir **W** sur un objet du mod.
+- [ ] Une machine : moissonneuse au bord d'un champ avec un coffre collé ; minuteur relié à un casseur.
+- [ ] Une caisse compacte : l'objet et le total s'affichent en façade.
+- [ ] Une arme de boss en main : le modèle 3D s'affiche à la 1re et à la 3e personne.
 - [ ] Une mort : une tombe apparaît et rend les objets.
 - [ ] Citadelle engloutie : en entrant dans l'arène, le boss apparaît, la brume se ferme, la barre de vie s'affiche en bas de l'écran, et les barreaux et la brume tombent à sa mort (« ENNEMI ABATTU »).
 - [ ] `/wayfarers boss bell_keeper` (puis les autres) : les modèles et les animations d'attaque s'affichent correctement.
