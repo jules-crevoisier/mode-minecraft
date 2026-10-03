@@ -72,7 +72,7 @@ DECOR = {k: _mc(v) for k, v in {
     "acacias": ["trees_savanna"],
     "dry_grass": ["patch_grass_savanna"],
     "steam_vents": ["wayfarers:steam_vents"],
-    "rusted_wrecks": [],
+    "rusted_wrecks": ["wayfarers:rusted_wrecks"],
     "jungle_giants": ["trees_jungle", "bamboo_light"],
     "jungle_floor": ["patch_grass_jungle", "vines", "flower_warm"],
     "melons": ["patch_melon"],
@@ -98,7 +98,7 @@ EXTRA_STEPS = {
     "minecraft:ore_emerald": 6,
     "wayfarers:basalt_columns": 4, "wayfarers:basalt_columns_cave": 7,
     "wayfarers:calcite_veins": 6, "wayfarers:cave_magma": 6, "wayfarers:mithril_veins": 6,
-    "wayfarers:giant_spruce": 9, "wayfarers:glowwood": 9,
+    "wayfarers:giant_spruce": 9, "wayfarers:glowwood": 9, "wayfarers:rusted_wrecks": 4,
     "wayfarers:surface_crystals": 9, "wayfarers:river_crystals": 9, "wayfarers:steam_vents": 9,
 }
 
@@ -260,6 +260,13 @@ def _provider(name):
 
 # id -> (configured feature, placement modifiers)
 OURS = {
+    # half-buried steampunk wrecks (templates from wf/wrecks.py)
+    "rusted_wrecks": ({"type": "minecraft:template", "config": {"templates": [
+        {"data": {"id": f"wayfarers:wrecks/{n}"}, "weight": w}
+        for n, w in (("cog", 3), ("pipe", 3), ("boiler", 2), ("stump", 2), ("automaton", 2))]}},
+        [{"type": "minecraft:rarity_filter", "chance": 6}, {"type": "minecraft:in_square"},
+         {"type": "minecraft:heightmap", "heightmap": "WORLD_SURFACE_WG"},
+         {"type": "minecraft:random_offset", "xz_spread": 0, "y_spread": -1}, BIOME]),
     # Giant Sylvan Forest: spruces 28 to 40 blocks tall
     "giant_spruce": (_tree(_provider("spruce_log"),
                            {"type": "minecraft:giant_trunk_placer", "base_height": 28, "height_rand_a": 4, "height_rand_b": 8},

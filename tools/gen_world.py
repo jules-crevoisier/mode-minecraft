@@ -204,6 +204,8 @@ def main():
         "type": "minecraft:overworld",
         "generator": {"type": "minecraft:noise", "settings": f"{NS}:overworld",
                       "biome_source": {"type": "minecraft:multi_noise", "biomes": biomes.climate_points()}}})
+    from wf import wrecks
+    wrecks.write(ROOT)
     count = biomes.write_biomes(write)
     print(f"world overhaul written: {count} biomes")
 
