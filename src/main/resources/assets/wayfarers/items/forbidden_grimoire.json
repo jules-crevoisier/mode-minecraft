@@ -1,6 +1,24 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "wayfarers:item/forbidden_grimoire"
+    "type": "minecraft:select",
+    "property": "minecraft:display_context",
+    "cases": [
+      {
+        "when": [
+          "gui",
+          "ground",
+          "fixed",
+          "on_shelf"
+        ],
+        "model": {
+          "type": "minecraft:model",
+          "model": "wayfarers:item/forbidden_grimoire"
+        }
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:model",
+      "model": "wayfarers:item/forbidden_grimoire_3d"
+    }
   }
 }

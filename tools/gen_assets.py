@@ -123,6 +123,14 @@ def machine_assets():
         item_definition(mid, f"{NS}:block/{mid}")
 
 
+def held_assets():
+    """3D in-hand models (wf/held3d.py): the item definition switches between the sprite and the 3D model."""
+    from wf import held3d
+    for iid in held3d.HELD:
+        write(f"models/item/{iid}_3d.json", held3d.model(iid))
+        write(f"items/{iid}.json", held3d.item_definition(iid))
+
+
 def furniture_assets():
     from wf import furniture
     for fid in furniture.FURNITURE:
@@ -239,6 +247,7 @@ def main():
     metal_assets()
     machine_assets()
     furniture_assets()
+    held_assets()
     for eid, (en, fr) in content.ENTITIES.items():
         lang_en[f"entity.{NS}.{eid}"], lang_fr[f"entity.{NS}.{eid}"] = en, fr
     for prefix in content.ARMOR_SETS:

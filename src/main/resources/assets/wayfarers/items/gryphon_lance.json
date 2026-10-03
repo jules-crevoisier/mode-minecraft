@@ -1,6 +1,24 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "wayfarers:item/gryphon_lance"
+    "type": "minecraft:select",
+    "property": "minecraft:display_context",
+    "cases": [
+      {
+        "when": [
+          "gui",
+          "ground",
+          "fixed",
+          "on_shelf"
+        ],
+        "model": {
+          "type": "minecraft:model",
+          "model": "wayfarers:item/gryphon_lance"
+        }
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:model",
+      "model": "wayfarers:item/gryphon_lance_3d"
+    }
   }
 }
