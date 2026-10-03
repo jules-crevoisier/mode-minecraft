@@ -610,6 +610,8 @@
   "item.wayfarers.ember_scythe.desc": "Enflamme les ennemis. Te soigne dans le Nether.",
   "item.wayfarers.excavator_pickaxe": "Pioche d'excavation",
   "item.wayfarers.excavator_pickaxe.desc": "Mine en 3x3. Accroupi : un seul bloc.",
+  "item.wayfarers.explorer_backpack": "Sac de l'Explorateur",
+  "item.wayfarers.explorer_backpack.desc": "Clic droit : 54 emplacements. Se fabrique avec un Sac du Voyageur et un lingot de laiton, sans rien perdre du contenu.",
   "item.wayfarers.explorer_boots": "Bottes d'explorateur",
   "item.wayfarers.explorer_boots.desc": "Ensemble : vitesse, pas de dégâts de chute sous 8 blocs, vision nocturne sous terre.",
   "item.wayfarers.explorer_chestplate": "Plastron d'explorateur",

@@ -23,7 +23,7 @@ def rid(x):
 
 
 MOD_ITEMS = {"map_fragment", "lithite_shard", "ancient_ember", "void_shard", "warden_scale", "void_heart",
-             "sorting_chest", "waystone", "guild_terminal", "compacting_crate"}
+             "sorting_chest", "waystone", "guild_terminal", "compacting_crate", "explorer_backpack"}
 MOD_ITEMS |= {f"remembrance_{row[0]}" for row in __import__("wf.bossgear", fromlist=["BOSS_GEAR"]).BOSS_GEAR}
 MOD_ITEMS |= __import__("wf.metals", fromlist=["all_item_ids"]).all_item_ids()
 MOD_ITEMS |= set(__import__("wf.machines", fromlist=["MACHINES"]).MACHINES)
@@ -72,6 +72,10 @@ def recipes():
     shaped("guild_terminal", ["GMG", "PCP", "PRP"], {"G": "gold_ingot", "M": "map_fragment", "P": "#planks",
                                                     "C": "chest", "R": "redstone"})
     shaped("travel_backpack", ["LSL", "LCL", "LLL"], {"L": "leather", "S": "string", "C": "chest"}, category="equipment")
+    # transmute keeps the bag's contents (container component) when it is upgraded
+    write(f"{NS}/recipe/explorer_backpack.json", {"type": "minecraft:crafting_transmute", "category": "equipment",
+                                                 "input": f"{NS}:travel_backpack", "material": f"{NS}:brass_ingot",
+                                                 "result": {"id": f"{NS}:explorer_backpack"}})
     shaped("magnet_ring", ["MRM", "I I", " I "], {"M": "map_fragment", "R": "redstone", "I": "iron_ingot"}, category="equipment")
     shaped("structure_compass", [" M ", "MCM", " M "], {"M": "map_fragment", "C": "compass"}, category="equipment")
     shapeless("recall_scroll", ["paper", "map_fragment", "ender_pearl"], count=2)

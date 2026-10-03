@@ -18,20 +18,25 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.world.level.Level;
 
-/** 27 portable slots stored on the item itself (vanilla container component). */
+/** Portable slots stored on the item itself (vanilla container component): 27, or 54 for the Explorer's Backpack. */
 public class TravelBackpackItem extends TooltipItem {
-    public static final int SIZE = 27;
+    private final int rows;
 
     public TravelBackpackItem(Properties properties) {
+        this(properties, 3);
+    }
+
+    public TravelBackpackItem(Properties properties, int rows) {
         super(properties);
+        this.rows = rows;
     }
 
     @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack backpack = player.getItemInHand(hand);
         if (!level.isClientSide()) {
-            BackpackContainer container = new BackpackContainer(backpack);
-            player.openMenu(new SimpleMenuProvider((id, inventory, p) -> new BackpackMenu(id, inventory, container, backpack),
+            BackpackContainer container = new BackpackContainer(backpack, rows * 9);
+            player.openMenu(new SimpleMenuProvider((id, inventory, p) -> new BackpackMenu(id, inventory, container, backpack, rows),
                     backpack.getHoverName()));
             level.playSound(null, player, SoundEvents.ARMOR_EQUIP_LEATHER.value(), SoundSource.PLAYERS, 1.0F, 1.0F);
         }
@@ -42,12 +47,12 @@ public class TravelBackpackItem extends TooltipItem {
     static final class BackpackContainer extends SimpleContainer {
         private final ItemStack backpack;
 
-        BackpackContainer(ItemStack backpack) {
-            super(SIZE);
+        BackpackContainer(ItemStack backpack, int size) {
+            super(size);
             this.backpack = backpack;
-            NonNullList<ItemStack> items = NonNullList.withSize(SIZE, ItemStack.EMPTY);
+            NonNullList<ItemStack> items = NonNullList.withSize(size, ItemStack.EMPTY);
             backpack.getOrDefault(DataComponents.CONTAINER, ItemContainerContents.EMPTY).copyInto(items);
-            for (int i = 0; i < SIZE; i++) {
+            for (int i = 0; i < size; i++) {
                 super.setItem(i, items.get(i));
             }
         }
@@ -79,10 +84,12 @@ public class TravelBackpackItem extends TooltipItem {
      */
     static final class BackpackMenu extends ChestMenu {
         private final ItemStack backpack;
+        private final int size;
 
-        BackpackMenu(int id, Inventory inventory, Container container, ItemStack backpack) {
-            super(MenuType.GENERIC_9x3, id, inventory, container, 3);
+        BackpackMenu(int id, Inventory inventory, Container container, ItemStack backpack, int rows) {
+            super(rows == 6 ? MenuType.GENERIC_9x6 : MenuType.GENERIC_9x3, id, inventory, container, rows);
             this.backpack = backpack;
+            this.size = rows * 9;
         }
 
         @Override
@@ -96,7 +103,7 @@ public class TravelBackpackItem extends TooltipItem {
                 if (slots.get(slotIndex).getItem() == backpack) {
                     return;
                 }
-                boolean intoBackpack = slotIndex < SIZE;
+                boolean intoBackpack = slotIndex < size;
                 if (intoBackpack && (isBackpack(getCarried()) || isBackpack(swapped))) {
                     return;
                 }
@@ -106,7 +113,7 @@ public class TravelBackpackItem extends TooltipItem {
 
         @Override
         public ItemStack quickMoveStack(Player player, int slotIndex) {
-            if (slotIndex >= SIZE && isBackpack(slots.get(slotIndex).getItem())) {
+            if (slotIndex >= size && isBackpack(slots.get(slotIndex).getItem())) {
                 return ItemStack.EMPTY;
             }
             return super.quickMoveStack(player, slotIndex);

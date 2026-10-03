@@ -31,6 +31,7 @@ ITEMS = {
     "wayfarer_manual": ("book", "map", "gold", "sapphire"),
     "structure_compass": ("compass", "gold", "dark", "ruby"),
     "travel_backpack": ("backpack", "leather", "dark", "gold"),
+    "explorer_backpack": ("backpack", "gold", "dark", "sapphire"),
     "magnet_ring": ("ring", "iron", "wood", "ruby"),
     "recall_scroll": ("scroll", "map", "wood", "sapphire"),
     "builder_wand": ("staff", "gold", "wood", "emerald"),

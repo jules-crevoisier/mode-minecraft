@@ -53,6 +53,8 @@ public final class ModItems {
     public static final RegistryObject<Item> STRUCTURE_COMPASS = register("structure_compass", StructureCompassItem::new,
             p -> p.stacksTo(1).rarity(Rarity.UNCOMMON));
     public static final RegistryObject<Item> TRAVEL_BACKPACK = register("travel_backpack", TravelBackpackItem::new, p -> p.stacksTo(1));
+    public static final RegistryObject<Item> EXPLORER_BACKPACK = register("explorer_backpack", p -> new TravelBackpackItem(p, 6),
+            p -> p.stacksTo(1));
     public static final RegistryObject<Item> MAGNET_RING = register("magnet_ring", MagnetRingItem::new, p -> p.stacksTo(1));
     public static final RegistryObject<Item> RECALL_SCROLL = register("recall_scroll", RecallScrollItem::new, p -> p.stacksTo(16));
     // ---- magic (mana)

@@ -610,6 +610,8 @@
   "item.wayfarers.ember_scythe.desc": "Sets foes ablaze. Heals you in the Nether.",
   "item.wayfarers.excavator_pickaxe": "Excavator Pickaxe",
   "item.wayfarers.excavator_pickaxe.desc": "Mines 3x3. Sneak to mine one block.",
+  "item.wayfarers.explorer_backpack": "Explorer's Backpack",
+  "item.wayfarers.explorer_backpack.desc": "Use: 54 extra slots. Craft it from a Travel Backpack and a brass ingot: nothing inside is lost.",
   "item.wayfarers.explorer_boots": "Explorer Boots",
   "item.wayfarers.explorer_boots.desc": "Set: Speed, no fall damage below 8 blocks, night vision underground.",
   "item.wayfarers.explorer_chestplate": "Explorer Chestplate",
