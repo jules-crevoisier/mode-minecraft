@@ -353,8 +353,8 @@ def build():
     for side, sx in (("l", 1), ("r", -1)):
         part(f"leg_f{side}", "body", (sx * 8, g(31), -20), rot=(-BODY_PITCH, 0, 0))
         part(f"shin_f{side}", f"leg_f{side}", (sx * 8, g(21), -20))
-        part(f"leg_h{side}", "body", (sx * 7, g(39), 19), rot=(12 - BODY_PITCH, 0, 0))
-        part(f"shin_h{side}", f"leg_h{side}", (sx * 7, g(24), 21), rot=(-28, 0, 0))
+        part(f"leg_h{side}", "body", (sx * 7, g(39), 19), rot=(-6 - BODY_PITCH, 0, 0))
+        part(f"shin_h{side}", f"leg_h{side}", (sx * 7, g(24), 21), rot=(24, 0, 0))
     m.part("tail", "body", pivot=(0, g(42) - g(36), 26 - 14), rot=(-55, 0, 0))
     m.part("tail2", "tail", pivot=(0, 0, 15), rot=(35, 0, 0))
     m.part("tail3", "tail2", pivot=(0, 0, 14), rot=(45, 0, 0))
@@ -460,7 +460,8 @@ def build():
     for side, sx in (("l", 1), ("r", -1)):
         w, t = f"wing_{side}", f"wingtip_{side}"
         x0 = 0 if sx > 0 else -23
-        m.box(w, x0, -2.5, -2.5, 23, 5, 5, scales(WHITE, WHITE_S, CREAM, 20, fw=3, fh=2))          # arm
+        m.box(w, x0, -2, -2, 23, 4, 4, {"bottom": lambda f_, x, y, w_, h_: jit(mul(CREAM, 1.25), x, y, 20, 0.04),
+                                          "*": scales(WHITE, WHITE_S, CREAM, 20, fw=3, fh=2)})   # arm
         m.box(w, x0, -2.5, 1, 23, 1, 7, quills(lesser, fw=3, seed=21, along="y", base_at_end=True,
                                                edges=("front",)))                                    # lesser coverts
         m.box(w, x0, -1.5, 1, 23, 1, 11, quills(greater, fw=3, seed=22, along="y", base_at_end=True))  # greater coverts
@@ -488,9 +489,9 @@ def build():
         ab(sf, X - 1, 4, -12, 3, 4, 2, talon)
         # lion hind legs: a heavy haunch, a lean shank with the hock behind, a broad paw with claws
         ab(lh, sx * 7 - 4.5, 41, 11, 9, 19, 15, fur(seed=35 + sx))
-        ab(sh, sx * 7 - 3, 24, 18, 6, 18, 7, fur(seed=36 + sx))
+        ab(sh, sx * 7 - 3, 24, 18, 6, 22, 7, fur(seed=36 + sx))
         claws = lambda f_, x, y, w, h: (236, 226, 200) if y >= h - 2 and x % 2 == 1 else fur(seed=37)(f_, x, y, w, h)
-        ab(sh, sx * 7 - 4.5, 8, 13, 9, 5, 11, {"front": claws, "*": fur(seed=37)})
+        ab(sh, sx * 7 - 4.5, 3, 13, 9, 5, 11, {"front": claws, "*": fur(seed=37)})
     # the lion tail: long, drooping, curling up into a dark tuft
     m.box("tail", -2, -2, -1, 4, 4, 16, fur(seed=40))
     m.box("tail2", -1.5, -1.5, -1, 3, 3, 15, fur(seed=41))

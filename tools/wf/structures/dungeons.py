@@ -617,25 +617,27 @@ def well_head(bp, t, x, z):
         for dz in (-1, 0, 1):
             if dx != 0 or dz != 0:
                 put(dx, TOP, dz, "dark_oak_planks")
-    for dz in (-1, 1):
-        for y in range(TOP + 1, TOP + 4):
-            put(0, y, dz * 2, "dark_oak_log[axis=y]")             # wheel bearings
-    wc = TOP + 4
-    for dx in range(-4, 5):
-        for dy in range(-4, 5):
+    wc = TOP + 6                                               # the sheave wheel, radius 5, on two A-frames
+    for dz in (-2, 2):
+        for k in range(0, 6):
+            put(-3 + k // 2, TOP + 1 + k, dz, "dark_oak_fence[east=false,north=false,south=false,west=false,waterlogged=false]")
+            put(3 - k // 2, TOP + 1 + k, dz, "dark_oak_fence[east=false,north=false,south=false,west=false,waterlogged=false]")
+        put(0, wc, dz, "dark_oak_log[axis=z]")
+    for dx in range(-6, 7):
+        for dy in range(-6, 7):
             r = math.hypot(dx, dy)
-            if 2.6 <= r < 3.6:
+            if 4.3 <= r < 5.4:
                 put(dx, wc + dy, 0, "stripped_dark_oak_log[axis=z]")
-            elif r < 2.6 and (dx == 0 or dy == 0):
+            elif r < 4.3 and (dx == 0 or dy == 0 or abs(dx) == abs(dy)):
                 put(dx, wc + dy, 0, FENCE)
-    put(0, wc, 0, "dark_oak_log[axis=z]")
+    put(0, wc, 0, "iron_block")
     for dz in (-1, 1):
-        put(0, wc, dz, "iron_block")
+        put(0, wc, dz, "dark_oak_log[axis=z]")
     # the rope: from the wheel down the shaft to an ore bucket, and from the wheel to the winch drum
     for y in range(6, TOP):
         put(0, y, 0, CHAIN)
     put(0, 5, 0, "cauldron")
-    bp.line((x + 3, wc, z), (x + 11, 5, z), "iron_chain[axis=x,waterlogged=false]")
+    bp.line((x + 5, wc, z), (x + 11, 5, z), "iron_chain[axis=x,waterlogged=false]")
     for sx, sz in ((-5, -5), (5, 5)):
         put(sx, TOP + 1, sz, LK)
         put(sx, TOP + 2, sz, "soul_lantern[hanging=false,waterlogged=false]")
@@ -670,8 +672,9 @@ def well_head(bp, t, x, z):
     put(12, 3, 0, LANT)
 
     # ore-cart line through the west door: rails, a buffer, carts, heaps of ore and lithite
-    for dx in range(-18, -2):
+    for dx in range(-18, -5):
         put(dx, 0, 0, "rail[shape=east_west,waterlogged=false]")
+    put(-5, 0, 0, POST)                                       # buffer at the parapet
     put(-19, 0, 0, POST)
     put(-19, 1, 0, LK)
     bp.entity(x - 10, 0, z, {"id": "minecraft:minecart"})
