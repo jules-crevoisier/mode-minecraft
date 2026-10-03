@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "wayfarers:item/bone_matriarch_spawn_egg"
+  }
+}

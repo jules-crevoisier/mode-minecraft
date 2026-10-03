@@ -45,6 +45,10 @@ ITEMS = {
     "excavator_pickaxe": ("pickaxe", "lithite", "wood", "emerald"),
     "lumber_axe": ("axe", "iron", "wood", "gold"),
 }
+from wf.bossgear import BOSS_GEAR, remembrance_id  # noqa: E402
+for _row in BOSS_GEAR:
+    ITEMS[_row[2]] = _row[13]
+    ITEMS[remembrance_id(_row[0])] = ("orb", _row[14][0], "gold", _row[14][1])
 for prefix, mat, acc in (("explorer", "map", "emerald"), ("ember", "ember", "gold"), ("void", "void", "amethyst")):
     for piece in ("helmet", "chestplate", "leggings", "boots"):
         ITEMS[f"{prefix}_{piece}"] = (piece, mat, "wood", acc)
@@ -57,6 +61,16 @@ EGGS = {
     "void_stalker": ((40, 20, 60), (190, 110, 240)),
     "drowned_warden": ((40, 120, 120), (120, 230, 210)),
     "void_warden": ((24, 12, 40), (250, 120, 255)),
+    "skeleton_knight": ((200, 196, 180), (90, 96, 110)),
+    "crypt_crawler": ((220, 214, 196), (120, 30, 30)),
+    "banshee": ((190, 220, 230), (60, 80, 120)),
+    "gargoyle": ((110, 110, 118), (230, 80, 60)),
+    "ember_imp": ((120, 30, 20), (255, 160, 40)),
+    "void_larva": ((60, 30, 90), (210, 150, 255)),
+    "grave_knight": ((60, 60, 66), (200, 196, 180)),
+    "bone_matriarch": ((230, 220, 190), (150, 40, 40)),
+    "weeping_lady": ((200, 230, 240), (40, 200, 200)),
+    "larva_mother": ((50, 25, 80), (230, 170, 255)),
     "bell_keeper": ((90, 90, 100), (220, 190, 90)),
     "archivist": ((226, 214, 170), (60, 40, 90)),
     "sand_pharaoh": ((210, 180, 110), (40, 90, 170)),

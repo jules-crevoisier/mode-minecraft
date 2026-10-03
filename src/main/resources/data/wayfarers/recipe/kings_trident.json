@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "equipment",
+  "ingredients": [
+    "wayfarers:remembrance_drowned_warden",
+    "wayfarers:lithite_shard",
+    "wayfarers:lithite_shard",
+    "wayfarers:lithite_shard",
+    "wayfarers:lithite_shard",
+    "minecraft:diamond",
+    "minecraft:diamond"
+  ],
+  "result": {
+    "id": "wayfarers:kings_trident",
+    "count": 1
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "wayfarers:item/weeping_lady_spawn_egg"
+  }
+}

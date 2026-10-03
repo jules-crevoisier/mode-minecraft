@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "equipment",
+  "ingredients": [
+    "wayfarers:remembrance_ash_lord",
+    "wayfarers:ancient_ember",
+    "wayfarers:ancient_ember",
+    "wayfarers:ancient_ember",
+    "wayfarers:ancient_ember",
+    "minecraft:diamond",
+    "minecraft:diamond"
+  ],
+  "result": {
+    "id": "wayfarers:ash_greatsword",
+    "count": 1
+  }
+}

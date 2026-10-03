@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "equipment",
+  "ingredients": [
+    "wayfarers:remembrance_soul_reaper",
+    "wayfarers:ancient_ember",
+    "wayfarers:ancient_ember",
+    "wayfarers:ancient_ember",
+    "wayfarers:ancient_ember",
+    "minecraft:diamond",
+    "minecraft:diamond"
+  ],
+  "result": {
+    "id": "wayfarers:soul_scythe",
+    "count": 1
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "equipment",
+  "ingredients": [
+    "wayfarers:remembrance_sculk_spawn",
+    "wayfarers:lithite_shard",
+    "wayfarers:lithite_shard",
+    "wayfarers:lithite_shard",
+    "wayfarers:lithite_shard",
+    "minecraft:diamond",
+    "minecraft:diamond"
+  ],
+  "result": {
+    "id": "wayfarers:sculk_horn",
+    "count": 1
+  }
+}

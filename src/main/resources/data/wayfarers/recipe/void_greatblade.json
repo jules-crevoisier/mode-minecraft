@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "equipment",
+  "ingredients": [
+    "wayfarers:remembrance_void_warden",
+    "wayfarers:void_shard",
+    "wayfarers:void_shard",
+    "wayfarers:void_shard",
+    "wayfarers:void_shard",
+    "minecraft:diamond",
+    "minecraft:diamond"
+  ],
+  "result": {
+    "id": "wayfarers:void_greatblade",
+    "count": 1
+  }
+}

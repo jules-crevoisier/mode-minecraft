@@ -111,6 +111,16 @@ public final class ModItems {
     public static final RegistryObject<Item> VOID_STALKER_SPAWN_EGG = egg("void_stalker_spawn_egg", ModEntities.VOID_STALKER);
     public static final RegistryObject<Item> DROWNED_WARDEN_SPAWN_EGG = egg("drowned_warden_spawn_egg", ModEntities.DROWNED_WARDEN);
     public static final RegistryObject<Item> VOID_WARDEN_SPAWN_EGG = egg("void_warden_spawn_egg", ModEntities.VOID_WARDEN);
+    public static final RegistryObject<Item> SKELETON_KNIGHT_SPAWN_EGG = egg("skeleton_knight_spawn_egg", ModEntities.SKELETON_KNIGHT);
+    public static final RegistryObject<Item> CRYPT_CRAWLER_SPAWN_EGG = egg("crypt_crawler_spawn_egg", ModEntities.CRYPT_CRAWLER);
+    public static final RegistryObject<Item> BANSHEE_SPAWN_EGG = egg("banshee_spawn_egg", ModEntities.BANSHEE);
+    public static final RegistryObject<Item> GARGOYLE_SPAWN_EGG = egg("gargoyle_spawn_egg", ModEntities.GARGOYLE);
+    public static final RegistryObject<Item> EMBER_IMP_SPAWN_EGG = egg("ember_imp_spawn_egg", ModEntities.EMBER_IMP);
+    public static final RegistryObject<Item> VOID_LARVA_SPAWN_EGG = egg("void_larva_spawn_egg", ModEntities.VOID_LARVA);
+    public static final RegistryObject<Item> GRAVE_KNIGHT_SPAWN_EGG = egg("grave_knight_spawn_egg", ModEntities.GRAVE_KNIGHT);
+    public static final RegistryObject<Item> BONE_MATRIARCH_SPAWN_EGG = egg("bone_matriarch_spawn_egg", ModEntities.BONE_MATRIARCH);
+    public static final RegistryObject<Item> WEEPING_LADY_SPAWN_EGG = egg("weeping_lady_spawn_egg", ModEntities.WEEPING_LADY);
+    public static final RegistryObject<Item> LARVA_MOTHER_SPAWN_EGG = egg("larva_mother_spawn_egg", ModEntities.LARVA_MOTHER);
     public static final RegistryObject<Item> BELL_KEEPER_SPAWN_EGG = egg("bell_keeper_spawn_egg", ModEntities.BELL_KEEPER);
     public static final RegistryObject<Item> ARCHIVIST_SPAWN_EGG = egg("archivist_spawn_egg", ModEntities.ARCHIVIST);
     public static final RegistryObject<Item> SAND_PHARAOH_SPAWN_EGG = egg("sand_pharaoh_spawn_egg", ModEntities.SAND_PHARAOH);

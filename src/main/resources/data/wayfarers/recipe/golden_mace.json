@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "equipment",
+  "ingredients": [
+    "wayfarers:remembrance_piglin_king",
+    "wayfarers:ancient_ember",
+    "wayfarers:ancient_ember",
+    "wayfarers:ancient_ember",
+    "wayfarers:ancient_ember",
+    "minecraft:diamond",
+    "minecraft:diamond"
+  ],
+  "result": {
+    "id": "wayfarers:golden_mace",
+    "count": 1
+  }
+}

@@ -24,6 +24,7 @@ def rid(x):
 
 MOD_ITEMS = {"map_fragment", "lithite_shard", "ancient_ember", "void_shard", "warden_scale", "void_heart",
              "sorting_chest", "waystone", "guild_terminal"}
+MOD_ITEMS |= {f"remembrance_{row[0]}" for row in __import__("wf.bossgear", fromlist=["BOSS_GEAR"]).BOSS_GEAR}
 
 
 def shaped(name, pattern, key, count=1, category="misc"):
@@ -86,6 +87,11 @@ def recipes():
     # tier 4 — void shards (End)
     shaped("void_spear", ["  V", " R ", "R  "], {"V": "void_shard", "R": "end_rod"}, category="equipment")
     armor_set("void", "void_shard")
+    # boss weapons: remembrance + four tier materials + two diamonds
+    from wf.bossgear import BOSS_GEAR, TIER_MATERIAL, remembrance_id
+    for row in BOSS_GEAR:
+        boss, tier, wid = row[:3]
+        shapeless(wid, [remembrance_id(boss)] + [TIER_MATERIAL[tier]] * 4 + ["diamond", "diamond"], category="equipment")
 
 
 def tags():
@@ -93,7 +99,9 @@ def tags():
     write(f"{NS}/tags/item/lithite_materials.json", {"values": [f"{NS}:lithite_shard"]})
     write(f"{NS}/tags/item/ember_materials.json", {"values": [f"{NS}:ancient_ember"]})
     write(f"{NS}/tags/item/void_materials.json", {"values": [f"{NS}:void_shard"]})
-    swords = ["cartographer_blade", "telluric_hammer", "frost_blade", "ember_scythe", "void_spear"]
+    from wf.bossgear import BOSS_GEAR
+    swords = ["cartographer_blade", "telluric_hammer", "frost_blade", "ember_scythe", "void_spear"] + \
+        [row[2] for row in BOSS_GEAR if row[6] is not None]
     write("minecraft/tags/item/swords.json", {"replace": False, "values": [f"{NS}:{s}" for s in swords]})
     write("minecraft/tags/item/pickaxes.json", {"replace": False, "values": [f"{NS}:excavator_pickaxe"]})
     write("minecraft/tags/item/axes.json", {"replace": False, "values": [f"{NS}:lumber_axe"]})
@@ -146,6 +154,16 @@ def entity_loot():
         "drowned_warden": [entry("warden_scale", 3, 5), entry("heart_of_the_sea"), entry("trident"),
                            entry("map_fragment", 6, 10), entry("lithite_shard", 4, 8)],
         "void_warden": [entry("void_heart"), entry("void_shard", 6, 10), entry("elytra", chance=0.35)],
+        "skeleton_knight": [entry("bone", 1, 3), entry("iron_nugget", 1, 4), entry("map_fragment", chance=0.2)],
+        "crypt_crawler": [entry("bone", 1, 4), entry("spider_eye", 0, 1), entry("string", 0, 2)],
+        "banshee": [entry("phantom_membrane", 0, 1), entry("ghast_tear", chance=0.15), entry("lithite_shard", chance=0.25)],
+        "gargoyle": [entry("cobblestone", 1, 3), entry("flint", 0, 2), entry("lithite_shard", chance=0.3)],
+        "ember_imp": [entry("blaze_powder", 0, 2), entry("magma_cream", 0, 1), entry("ancient_ember", chance=0.2)],
+        "void_larva": [entry("ender_pearl", 0, 1), entry("chorus_fruit", 0, 2), entry("void_shard", chance=0.2)],
+        "grave_knight": [entry("map_fragment", 4, 7), entry("emerald", 3, 6), entry("experience_bottle", 2, 5), entry("golden_apple")],
+        "bone_matriarch": [entry("map_fragment", 4, 7), entry("emerald", 3, 6), entry("experience_bottle", 2, 5), entry("golden_apple")],
+        "weeping_lady": [entry("lithite_shard", 4, 7), entry("emerald", 3, 6), entry("experience_bottle", 2, 5), entry("golden_apple")],
+        "larva_mother": [entry("void_shard", 4, 7), entry("emerald", 3, 6), entry("experience_bottle", 2, 5), entry("golden_apple")],
         "bell_keeper": [entry("map_fragment", 6, 10), entry("emerald", 4, 8), entry("experience_bottle", 3, 6), entry("golden_apple", 1, 2)],
         "archivist": [entry("map_fragment", 6, 10), entry("emerald", 4, 8), entry("experience_bottle", 3, 6), entry("golden_apple", 1, 2)],
         "sand_pharaoh": [entry("map_fragment", 6, 10), entry("emerald", 4, 8), entry("experience_bottle", 3, 6), entry("golden_apple", 1, 2)],
@@ -161,6 +179,9 @@ def entity_loot():
         "piglin_king": [entry("ancient_ember", 6, 10), entry("emerald", 4, 8), entry("experience_bottle", 3, 6), entry("golden_apple", 1, 2)],
         "soul_reaper": [entry("ancient_ember", 6, 10), entry("emerald", 4, 8), entry("experience_bottle", 3, 6), entry("golden_apple", 1, 2)],
     }
+    from wf.bossgear import BOSS_GEAR, remembrance_id
+    for row in BOSS_GEAR:  # every great boss always drops its remembrance
+        tables[row[0]] = [entry(remembrance_id(row[0]))] + tables[row[0]]
     for name, pools in tables.items():
         write(f"{NS}/loot_table/entities/{name}.json", {"type": "minecraft:entity", "pools": pools,
                                                         "random_sequence": f"{NS}:entities/{name}"})

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "equipment",
+  "ingredients": [
+    "wayfarers:remembrance_crystal_spider",
+    "wayfarers:lithite_shard",
+    "wayfarers:lithite_shard",
+    "wayfarers:lithite_shard",
+    "wayfarers:lithite_shard",
+    "minecraft:diamond",
+    "minecraft:diamond"
+  ],
+  "result": {
+    "id": "wayfarers:crystal_fang",
+    "count": 1
+  }
+}

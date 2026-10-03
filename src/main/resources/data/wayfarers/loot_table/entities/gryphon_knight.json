@@ -7,6 +7,16 @@
       "entries": [
         {
           "type": "minecraft:item",
+          "name": "wayfarers:remembrance_gryphon_knight"
+        }
+      ]
+    },
+    {
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
           "name": "wayfarers:map_fragment",
           "functions": [
             {

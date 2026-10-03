@@ -510,6 +510,70 @@
           }
         ]
       }
+    },
+    "forgotten_catacombs": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "wayfarers:forgotten_catacombs"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "sand_hypogeum": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "wayfarers:sand_hypogeum"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "lithite_well": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "wayfarers:lithite_well"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "void_crypt": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "wayfarers:void_crypt"
+              }
+            }
+          }
+        ]
+      }
     }
   },
   "parent": "wayfarers:end/void_warden",

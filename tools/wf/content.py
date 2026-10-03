@@ -103,6 +103,16 @@ ENTITIES = {
     "void_stalker": ("Void Stalker", "Traqueur du vide"),
     "drowned_warden": ("Drowned Warden", "Gardien englouti"),
     "void_warden": ("Void Warden", "Gardien du vide"),
+    "skeleton_knight": ("Skeleton Knight", "Chevalier squelette"),
+    "crypt_crawler": ("Crypt Crawler", "Rampant des cryptes"),
+    "banshee": ("Banshee", "Banshee"),
+    "gargoyle": ("Gargoyle", "Gargouille"),
+    "ember_imp": ("Ember Imp", "Imp de braise"),
+    "void_larva": ("Void Larva", "Larve du vide"),
+    "grave_knight": ("The Grave Knight", "Le Chevalier des tombes"),
+    "bone_matriarch": ("The Bone Matriarch", "La Matriarche d'os"),
+    "weeping_lady": ("The Weeping Lady", "La Dame en pleurs"),
+    "larva_mother": ("The Larva Mother", "La Mère-Larve"),
     "bell_keeper": ("The Bell Keeper", "Le Sonneur de glas"),
     "archivist": ("The Archivist", "L'Archiviste"),
     "sand_pharaoh": ("The Sand Pharaoh", "Le Pharaon ensablé"),
@@ -134,6 +144,16 @@ SPAWN_EGGS = ["ruin_walker", "map_wraith", "basalt_guard", "void_stalker", "drow
               "ash_lord",
               "piglin_king",
               "soul_reaper",
+              "skeleton_knight",
+              "crypt_crawler",
+              "banshee",
+              "gargoyle",
+              "ember_imp",
+              "void_larva",
+              "grave_knight",
+              "bone_matriarch",
+              "weeping_lady",
+              "larva_mother",
               ]
 
 # Misc translated messages used from Java (key suffix -> (en, fr))
@@ -204,3 +224,16 @@ MESSAGES = {
     "tooltip.wayfarers.magnet.on": ("Active", "Actif"),
     "tooltip.wayfarers.magnet.off": ("Inactive", "Inactif"),
 }
+
+
+# boss remembrances and weapons (tools/wf/bossgear.py)
+def _boss_gear():
+    from .bossgear import BOSS_GEAR, remembrance_id
+    for row in BOSS_GEAR:
+        boss, tier, wid, (wen, wfr), (ten, tfr), (ren, rfr) = row[:6]
+        ITEMS[remembrance_id(boss)] = (ren, rfr, "Craft it with four tier materials and two diamonds into its boss weapon.",
+                                       "Avec quatre matériaux de palier et deux diamants, il devient l'arme du boss.")
+        ITEMS[wid] = (wen, wfr, ten, tfr)
+
+
+_boss_gear()

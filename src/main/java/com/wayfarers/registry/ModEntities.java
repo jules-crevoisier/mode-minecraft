@@ -8,6 +8,16 @@ import com.wayfarers.entity.MapWraith;
 import com.wayfarers.entity.RuinWalker;
 import com.wayfarers.entity.VoidStalker;
 import com.wayfarers.entity.VoidWarden;
+import com.wayfarers.entity.mob.SkeletonKnight;
+import com.wayfarers.entity.mob.CryptCrawler;
+import com.wayfarers.entity.mob.Banshee;
+import com.wayfarers.entity.mob.Gargoyle;
+import com.wayfarers.entity.mob.EmberImp;
+import com.wayfarers.entity.mob.VoidLarva;
+import com.wayfarers.entity.boss.GraveKnight;
+import com.wayfarers.entity.boss.BoneMatriarch;
+import com.wayfarers.entity.boss.WeepingLady;
+import com.wayfarers.entity.boss.LarvaMother;
 import com.wayfarers.entity.boss.BellKeeper;
 import com.wayfarers.entity.boss.Archivist;
 import com.wayfarers.entity.boss.SandPharaoh;
@@ -99,13 +109,45 @@ public final class ModEntities {
     public static final RegistryObject<EntityType<SoulReaper>> SOUL_REAPER = ENTITIES.register("soul_reaper",
             () -> EntityType.Builder.<SoulReaper>of(SoulReaper::new, MobCategory.MONSTER)
                     .sized(SoulReaper.WIDTH, SoulReaper.HEIGHT).fireImmune().clientTrackingRange(10).build(ENTITIES.key("soul_reaper")));
+    // ---- dungeon creatures
+    public static final RegistryObject<EntityType<SkeletonKnight>> SKELETON_KNIGHT = ENTITIES.register("skeleton_knight",
+            () -> EntityType.Builder.<SkeletonKnight>of(SkeletonKnight::new, MobCategory.MONSTER)
+                    .sized(SkeletonKnight.WIDTH, SkeletonKnight.HEIGHT).clientTrackingRange(8).build(ENTITIES.key("skeleton_knight")));
+    public static final RegistryObject<EntityType<CryptCrawler>> CRYPT_CRAWLER = ENTITIES.register("crypt_crawler",
+            () -> EntityType.Builder.<CryptCrawler>of(CryptCrawler::new, MobCategory.MONSTER)
+                    .sized(CryptCrawler.WIDTH, CryptCrawler.HEIGHT).clientTrackingRange(8).build(ENTITIES.key("crypt_crawler")));
+    public static final RegistryObject<EntityType<Banshee>> BANSHEE = ENTITIES.register("banshee",
+            () -> EntityType.Builder.<Banshee>of(Banshee::new, MobCategory.MONSTER)
+                    .sized(Banshee.WIDTH, Banshee.HEIGHT).clientTrackingRange(8).build(ENTITIES.key("banshee")));
+    public static final RegistryObject<EntityType<Gargoyle>> GARGOYLE = ENTITIES.register("gargoyle",
+            () -> EntityType.Builder.<Gargoyle>of(Gargoyle::new, MobCategory.MONSTER)
+                    .sized(Gargoyle.WIDTH, Gargoyle.HEIGHT).clientTrackingRange(8).build(ENTITIES.key("gargoyle")));
+    public static final RegistryObject<EntityType<EmberImp>> EMBER_IMP = ENTITIES.register("ember_imp",
+            () -> EntityType.Builder.<EmberImp>of(EmberImp::new, MobCategory.MONSTER)
+                    .sized(EmberImp.WIDTH, EmberImp.HEIGHT).fireImmune().clientTrackingRange(8).build(ENTITIES.key("ember_imp")));
+    public static final RegistryObject<EntityType<VoidLarva>> VOID_LARVA = ENTITIES.register("void_larva",
+            () -> EntityType.Builder.<VoidLarva>of(VoidLarva::new, MobCategory.MONSTER)
+                    .sized(VoidLarva.WIDTH, VoidLarva.HEIGHT).clientTrackingRange(8).build(ENTITIES.key("void_larva")));
+    // ---- dungeon champions
+    public static final RegistryObject<EntityType<GraveKnight>> GRAVE_KNIGHT = ENTITIES.register("grave_knight",
+            () -> EntityType.Builder.<GraveKnight>of(GraveKnight::new, MobCategory.MONSTER)
+                    .sized(GraveKnight.WIDTH, GraveKnight.HEIGHT).clientTrackingRange(10).build(ENTITIES.key("grave_knight")));
+    public static final RegistryObject<EntityType<BoneMatriarch>> BONE_MATRIARCH = ENTITIES.register("bone_matriarch",
+            () -> EntityType.Builder.<BoneMatriarch>of(BoneMatriarch::new, MobCategory.MONSTER)
+                    .sized(BoneMatriarch.WIDTH, BoneMatriarch.HEIGHT).clientTrackingRange(10).build(ENTITIES.key("bone_matriarch")));
+    public static final RegistryObject<EntityType<WeepingLady>> WEEPING_LADY = ENTITIES.register("weeping_lady",
+            () -> EntityType.Builder.<WeepingLady>of(WeepingLady::new, MobCategory.MONSTER)
+                    .sized(WeepingLady.WIDTH, WeepingLady.HEIGHT).clientTrackingRange(10).build(ENTITIES.key("weeping_lady")));
+    public static final RegistryObject<EntityType<LarvaMother>> LARVA_MOTHER = ENTITIES.register("larva_mother",
+            () -> EntityType.Builder.<LarvaMother>of(LarvaMother::new, MobCategory.MONSTER)
+                    .sized(LarvaMother.WIDTH, LarvaMother.HEIGHT).clientTrackingRange(10).build(ENTITIES.key("larva_mother")));
     public static final RegistryObject<EntityType<BoomerangEntity>> BOOMERANG = ENTITIES.register("boomerang",
             () -> EntityType.Builder.<BoomerangEntity>of(BoomerangEntity::new, MobCategory.MISC)
                     .sized(0.4F, 0.4F).clientTrackingRange(6).updateInterval(2).build(ENTITIES.key("boomerang")));
 
     /** Every boss with an Elden Ring style fight (demo command, quests). */
     public static List<RegistryObject<? extends EntityType<? extends com.wayfarers.boss.WayfarerBoss>>> bosses() {
-        return List.of(DROWNED_WARDEN, BELL_KEEPER, ARCHIVIST, SAND_PHARAOH, JADE_JAGUAR, ROOT_MOTHER, SWAMP_CRONE, GRYPHON_KNIGHT, RUNE_COLOSSUS, FORGE_KING, CRYSTAL_SPIDER, SCULK_SPAWN, ASH_LORD, PIGLIN_KING, SOUL_REAPER);
+        return List.of(DROWNED_WARDEN, GRAVE_KNIGHT, BONE_MATRIARCH, WEEPING_LADY, LARVA_MOTHER, BELL_KEEPER, ARCHIVIST, SAND_PHARAOH, JADE_JAGUAR, ROOT_MOTHER, SWAMP_CRONE, GRYPHON_KNIGHT, RUNE_COLOSSUS, FORGE_KING, CRYSTAL_SPIDER, SCULK_SPAWN, ASH_LORD, PIGLIN_KING, SOUL_REAPER);
     }
 
     public static void registerAttributes(EntityAttributeCreationEvent event) {
@@ -115,6 +157,16 @@ public final class ModEntities {
         event.put(VOID_STALKER.get(), VoidStalker.attributes().build());
         event.put(DROWNED_WARDEN.get(), DrownedWarden.attributes().build());
         event.put(VOID_WARDEN.get(), VoidWarden.attributes().build());
+        event.put(SKELETON_KNIGHT.get(), SkeletonKnight.attributes().build());
+        event.put(CRYPT_CRAWLER.get(), CryptCrawler.attributes().build());
+        event.put(BANSHEE.get(), Banshee.attributes().build());
+        event.put(GARGOYLE.get(), Gargoyle.attributes().build());
+        event.put(EMBER_IMP.get(), EmberImp.attributes().build());
+        event.put(VOID_LARVA.get(), VoidLarva.attributes().build());
+        event.put(GRAVE_KNIGHT.get(), GraveKnight.attributes().build());
+        event.put(BONE_MATRIARCH.get(), BoneMatriarch.attributes().build());
+        event.put(WEEPING_LADY.get(), WeepingLady.attributes().build());
+        event.put(LARVA_MOTHER.get(), LarvaMother.attributes().build());
         event.put(BELL_KEEPER.get(), BellKeeper.attributes().build());
         event.put(ARCHIVIST.get(), Archivist.attributes().build());
         event.put(SAND_PHARAOH.get(), SandPharaoh.attributes().build());
@@ -133,7 +185,8 @@ public final class ModEntities {
 
     /** Natural/structure spawning rules: on the ground, in the dark, like vanilla monsters. */
     public static void registerSpawnPlacements(SpawnPlacementRegisterEvent event) {
-        for (EntityType<? extends Monster> type : List.of(RUIN_WALKER.get(), MAP_WRAITH.get(), BASALT_GUARD.get(), VOID_STALKER.get())) {
+        for (EntityType<? extends Monster> type : List.of(RUIN_WALKER.get(), MAP_WRAITH.get(), BASALT_GUARD.get(), VOID_STALKER.get(),
+                SKELETON_KNIGHT.get(), CRYPT_CRAWLER.get(), BANSHEE.get(), GARGOYLE.get(), EMBER_IMP.get(), VOID_LARVA.get())) {
             register(event, type);
         }
     }

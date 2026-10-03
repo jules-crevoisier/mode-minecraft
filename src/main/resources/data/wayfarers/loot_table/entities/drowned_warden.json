@@ -7,6 +7,16 @@
       "entries": [
         {
           "type": "minecraft:item",
+          "name": "wayfarers:remembrance_drowned_warden"
+        }
+      ]
+    },
+    {
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
           "name": "wayfarers:warden_scale",
           "functions": [
             {

@@ -1,0 +1,37 @@
+{
+  "display": {
+    "icon": {
+      "id": "wayfarers:forge_king_hammer"
+    },
+    "title": {
+      "translate": "advancements.wayfarers.depths.boss_forge_king.title"
+    },
+    "description": {
+      "translate": "advancements.wayfarers.depths.boss_forge_king.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "kill": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "wayfarers:forge_king"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "parent": "wayfarers:depths/dwarven_forge",
+  "rewards": {
+    "experience": 500
+  }
+}

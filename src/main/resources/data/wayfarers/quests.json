@@ -24,7 +24,19 @@
     "explorer/ice_observatory",
     "explorer/galleon_wreck",
     "explorer/sunken_temple",
-    "explorer/master_cartographer"
+    "explorer/forgotten_catacombs",
+    "explorer/sand_hypogeum",
+    "explorer/master_cartographer",
+    "explorer/boss_bell_keeper",
+    "explorer/boss_archivist",
+    "explorer/boss_sand_pharaoh",
+    "explorer/boss_jade_jaguar",
+    "explorer/boss_root_mother",
+    "explorer/boss_swamp_crone",
+    "explorer/boss_gryphon_knight",
+    "explorer/boss_rune_colossus",
+    "explorer/boss_grave_knight",
+    "explorer/boss_bone_matriarch"
   ],
   "depths": [
     "depths/lithite",
@@ -32,13 +44,18 @@
     "depths/dwarven_forge",
     "depths/crystal_grotto",
     "depths/sealed_lab",
+    "depths/lithite_well",
     "depths/telluric_hammer",
     "depths/excavator_pickaxe",
     "depths/lumber_axe",
     "depths/frost_blade",
     "depths/boomerang",
     "depths/sunken_citadel",
-    "depths/drowned_warden"
+    "depths/drowned_warden",
+    "depths/boss_forge_king",
+    "depths/boss_crystal_spider",
+    "depths/boss_sculk_spawn",
+    "depths/boss_weeping_lady"
   ],
   "nether": [
     "nether/enter",
@@ -52,7 +69,10 @@
     "nether/ember_scythe",
     "nether/storm_staff",
     "nether/ember_armor",
-    "nether/all"
+    "nether/all",
+    "nether/boss_ash_lord",
+    "nether/boss_piglin_king",
+    "nether/boss_soul_reaper"
   ],
   "end": [
     "end/enter",
@@ -61,10 +81,13 @@
     "end/end_archive",
     "end/void_ship",
     "end/void_nest",
+    "end/void_crypt",
     "end/void_shard",
     "end/void_spear",
     "end/void_armor",
     "end/void_warden",
+    "end/boss_larva_mother",
+    "end/legends_bane",
     "end/legend"
   ]
 }

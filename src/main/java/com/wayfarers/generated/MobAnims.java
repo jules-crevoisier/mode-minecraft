@@ -21,10 +21,20 @@ public final class MobAnims {
         private DrownedWarden() {}
     }
     public static final class BellKeeper {
-
-        public static final int COUNT = 0;
+        public static final int TOLL = 0;
+        public static final int SMASH = 1;
+        public static final int SWEEP = 2;
+        public static final int KNELL = 3;
+        public static final int CHARGE = 4;
+        public static final int FRENZY = 5;
+        public static final int TRIPLE_TOLL = 6;
+        public static final int REQUIEM = 7;
+        public static final int BELL_FALL = 8;
+        public static final int ROAR = 9;
+        public static final int STAGGER = 10;
+        public static final int COUNT = 11;
         /** Length of each action in ticks. */
-        public static final int[] TICKS = {};
+        public static final int[] TICKS = {30, 40, 32, 52, 30, 46, 48, 44, 48, 48, 48};
 
         private BellKeeper() {}
     }
@@ -37,10 +47,20 @@ public final class MobAnims {
         private Archivist() {}
     }
     public static final class SandPharaoh {
-
-        public static final int COUNT = 0;
+        public static final int FLAIL = 0;
+        public static final int HOOK = 1;
+        public static final int PILLARS = 2;
+        public static final int SCARABS = 3;
+        public static final int CURSE = 4;
+        public static final int BURROW = 5;
+        public static final int SANDSTORM = 6;
+        public static final int SARCOPHAGUS = 7;
+        public static final int FLURRY = 8;
+        public static final int ROAR = 9;
+        public static final int STAGGER = 10;
+        public static final int COUNT = 11;
         /** Length of each action in ticks. */
-        public static final int[] TICKS = {};
+        public static final int[] TICKS = {30, 32, 40, 40, 32, 48, 66, 48, 52, 48, 50};
 
         private SandPharaoh() {}
     }
@@ -53,10 +73,19 @@ public final class MobAnims {
         private JadeJaguar() {}
     }
     public static final class RootMother {
-
-        public static final int COUNT = 0;
+        public static final int SWEEP = 0;
+        public static final int GRAB = 1;
+        public static final int ERUPT = 2;
+        public static final int VOLLEY = 3;
+        public static final int TIMBER = 4;
+        public static final int SPORES = 5;
+        public static final int SPROUT = 6;
+        public static final int ROOTWAVE = 7;
+        public static final int ROAR = 8;
+        public static final int STAGGER = 9;
+        public static final int COUNT = 10;
         /** Length of each action in ticks. */
-        public static final int[] TICKS = {};
+        public static final int[] TICKS = {32, 48, 40, 32, 60, 44, 40, 48, 52, 44};
 
         private RootMother() {}
     }
@@ -69,10 +98,22 @@ public final class MobAnims {
         private SwampCrone() {}
     }
     public static final class GryphonKnight {
-
-        public static final int COUNT = 0;
+        public static final int PECK = 0;
+        public static final int RAKE = 1;
+        public static final int POUNCE = 2;
+        public static final int GUST = 3;
+        public static final int SWEEP = 4;
+        public static final int TAKEOFF = 5;
+        public static final int FLY = 6;
+        public static final int DIVE = 7;
+        public static final int VOLLEY = 8;
+        public static final int LAND = 9;
+        public static final int STORM = 10;
+        public static final int ROAR = 11;
+        public static final int STAGGER = 12;
+        public static final int COUNT = 13;
         /** Length of each action in ticks. */
-        public static final int[] TICKS = {};
+        public static final int[] TICKS = {44, 38, 36, 36, 30, 28, 16, 40, 36, 36, 52, 48, 48};
 
         private GryphonKnight() {}
     }
@@ -85,10 +126,19 @@ public final class MobAnims {
         private RuneColossus() {}
     }
     public static final class ForgeKing {
-
-        public static final int COUNT = 0;
+        public static final int SLAM = 0;
+        public static final int SWEEP = 1;
+        public static final int BASH = 2;
+        public static final int SPARKS = 3;
+        public static final int ANVIL = 4;
+        public static final int SPIN = 5;
+        public static final int TRIPLE = 6;
+        public static final int LEAP = 7;
+        public static final int ROAR = 8;
+        public static final int STAGGER = 9;
+        public static final int COUNT = 10;
         /** Length of each action in ticks. */
-        public static final int[] TICKS = {};
+        public static final int[] TICKS = {40, 30, 36, 33, 38, 54, 65, 48, 48, 40};
 
         private ForgeKing() {}
     }
@@ -101,10 +151,19 @@ public final class MobAnims {
         private CrystalSpider() {}
     }
     public static final class SculkSpawn {
-
-        public static final int COUNT = 0;
+        public static final int WHIP = 0;
+        public static final int SLAM = 1;
+        public static final int SONIC = 2;
+        public static final int PULSE = 3;
+        public static final int ERUPT = 4;
+        public static final int SCREAM = 5;
+        public static final int LUNGE = 6;
+        public static final int BOOMS = 7;
+        public static final int ROAR = 8;
+        public static final int STAGGER = 9;
+        public static final int COUNT = 10;
         /** Length of each action in ticks. */
-        public static final int[] TICKS = {};
+        public static final int[] TICKS = {30, 40, 42, 38, 40, 48, 36, 60, 52, 48};
 
         private SculkSpawn() {}
     }
@@ -125,11 +184,101 @@ public final class MobAnims {
         private PiglinKing() {}
     }
     public static final class SoulReaper {
+        public static final int SWEEP = 0;
+        public static final int COMBO = 1;
+        public static final int THROW = 2;
+        public static final int WAVE = 3;
+        public static final int REAP = 4;
+        public static final int LASH = 5;
+        public static final int ERUPT = 6;
+        public static final int SUMMON = 7;
+        public static final int GRAB = 8;
+        public static final int ROAR = 9;
+        public static final int STAGGER = 10;
+        public static final int COUNT = 11;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {34, 42, 60, 41, 35, 32, 62, 40, 72, 48, 50};
+
+        private SoulReaper() {}
+    }
+    public static final class SkeletonKnight {
 
         public static final int COUNT = 0;
         /** Length of each action in ticks. */
         public static final int[] TICKS = {};
 
-        private SoulReaper() {}
+        private SkeletonKnight() {}
+    }
+    public static final class CryptCrawler {
+
+        public static final int COUNT = 0;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {};
+
+        private CryptCrawler() {}
+    }
+    public static final class Banshee {
+
+        public static final int COUNT = 0;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {};
+
+        private Banshee() {}
+    }
+    public static final class Gargoyle {
+
+        public static final int COUNT = 0;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {};
+
+        private Gargoyle() {}
+    }
+    public static final class EmberImp {
+
+        public static final int COUNT = 0;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {};
+
+        private EmberImp() {}
+    }
+    public static final class VoidLarva {
+
+        public static final int COUNT = 0;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {};
+
+        private VoidLarva() {}
+    }
+    public static final class GraveKnight {
+
+        public static final int COUNT = 0;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {};
+
+        private GraveKnight() {}
+    }
+    public static final class BoneMatriarch {
+
+        public static final int COUNT = 0;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {};
+
+        private BoneMatriarch() {}
+    }
+    public static final class WeepingLady {
+
+        public static final int COUNT = 0;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {};
+
+        private WeepingLady() {}
+    }
+    public static final class LarvaMother {
+
+        public static final int COUNT = 0;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {};
+
+        private LarvaMother() {}
     }
 }

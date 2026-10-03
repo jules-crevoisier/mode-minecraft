@@ -103,6 +103,18 @@ STRUCTURE_ICONS = {
     "soul_tower": "soul_lantern", "piglin_market": "gilded_blackstone", "void_observatory": "end_rod",
     "chorus_garden": "chorus_flower", "end_archive": "purpur_pillar", "void_ship": "dragon_head",
     "void_nest": "crying_obsidian", "sunken_citadel": "conduit",
+    "forgotten_catacombs": "skeleton_skull", "sand_hypogeum": "chiseled_sandstone",
+    "lithite_well": "deepslate_bricks", "void_crypt": "purpur_pillar",
+}
+# where each boss lives (its quest follows the discovery of that structure)
+BOSS_HOME = {
+    "bell_keeper": "mountain_monastery", "archivist": "forgotten_library", "sand_pharaoh": "desert_oasis",
+    "jade_jaguar": "jungle_ziggurat", "root_mother": "giant_tree", "swamp_crone": "witch_huts",
+    "gryphon_knight": "sky_island", "rune_colossus": "rune_circle", "forge_king": "dwarven_forge",
+    "crystal_spider": "crystal_grotto", "sculk_spawn": "sealed_lab", "ash_lord": "basalt_fortress",
+    "piglin_king": "piglin_sanctuary", "soul_reaper": "soul_tower",
+    "grave_knight": "forgotten_catacombs", "bone_matriarch": "sand_hypogeum", "weeping_lady": "lithite_well",
+    "larva_mother": "void_crypt",
 }
 CHAPTER = {}
 for s in defs.STRUCTURES:
@@ -110,7 +122,7 @@ for s in defs.STRUCTURES:
         CHAPTER[s.id] = "nether"
     elif s.dimension == "end":
         CHAPTER[s.id] = "end"
-    elif s.step == "underground_structures" or s.id in ("dwarven_mine", "sunken_citadel"):
+    elif s.step == "underground_structures" or s.id in ("dwarven_mine", "sunken_citadel", "lithite_well"):
         CHAPTER[s.id] = "depths"
     else:
         CHAPTER[s.id] = "explorer"
@@ -253,6 +265,23 @@ def build():
     quest("end/void_warden", "end/void_nest", f"{NS}:void_heart", ("Heart of the Void", "Cœur du vide"),
           ("Defeat the Void Warden in its nest.", "Vaincs le Gardien du vide dans son nid."),
           {"kill": killed("void_warden")}, frame="challenge", reward="void_warden", xp=800)
+    # ---------------------------------------------------------------- the legends: one quest per boss
+    from wf import content
+    from wf.bossgear import BOSS_GEAR
+    weapon_of = {row[0]: row[2] for row in BOSS_GEAR}
+    for boss, home in BOSS_HOME.items():
+        chapter = CHAPTER[home]
+        en, fr = content.ENTITIES[boss]
+        champion = boss not in weapon_of
+        quest(f"{chapter}/boss_{boss}", f"{chapter}/{home}",
+              "wither_skeleton_skull" if champion else f"{NS}:{weapon_of[boss]}",
+              (f"Felled: {en}", f"Vaincu : {fr}"),
+              (f"Defeat {en[0].lower() + en[1:]} in its lair.", f"Vaincs {fr[0].lower() + fr[1:]} dans son antre."),
+              {"kill": killed(boss)}, frame="goal" if champion else "challenge", xp=250 if champion else 500)
+    great = ["drowned_warden", "void_warden"] + [b for b in BOSS_HOME if b in weapon_of]
+    quest("end/legends_bane", "end/void_warden", "nether_star", ("Bane of Legends", "Fléau des Légendes"),
+          ("Defeat every great boss of the Wayfarers.", "Vaincs tous les grands boss des Voyageurs."),
+          {b: killed(b) for b in great}, frame="challenge", xp=3000)
     all_ids = [s.id for s in defs.STRUCTURES]
     quest("end/legend", "end/void_warden", "dragon_egg", ("Legend of the Wayfarers", "Légende des Voyageurs"),
           ("Discover every single Wayfarers structure in every dimension.",

@@ -13,6 +13,7 @@ ASSETS = os.path.join(ROOT, "src", "main", "resources", "assets", "wayfarers")
 NS = "wayfarers"
 HANDHELD = {"cartographer_blade", "telluric_hammer", "storm_staff", "ember_scythe", "void_spear", "frost_blade",
             "light_staff", "excavator_pickaxe", "lumber_axe"}
+HANDHELD |= {row[2] for row in __import__("wf.bossgear", fromlist=["BOSS_GEAR"]).BOSS_GEAR}
 
 
 def write(rel, obj):
