@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "top": "wayfarers:block/compacting_crate_side",
+    "front": "wayfarers:block/compacting_crate_front",
+    "side": "wayfarers:block/compacting_crate_side"
+  }
+}

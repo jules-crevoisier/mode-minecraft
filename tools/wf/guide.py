@@ -106,6 +106,16 @@ PAGES = [
         ("Sneak-right-click to sort it right now. Put one next to your mob farm or your mine entrance.",
          "Accroupi + clic droit pour le trier tout de suite. Pose-en un près de ta ferme ou de l'entrée de ta mine."),
     ], ["wayfarers:sorting_chest"]),
+    ("crate", "storage", "wayfarers:compacting_crate", ("Compacting Crate", "Caisse compacte"), [
+        ("A crate holds 32 stacks of a single item and shows it on its front with the count. Right-click with an "
+         "item to put it in; right-click twice quickly to put in every one you carry.",
+         "Une caisse contient 32 piles d'un seul objet, affiché en façade avec le total. Clic droit avec l'objet pour "
+         "le ranger ; deux clics rapides rangent tous ceux que tu portes."),
+        ("Left-click takes a stack (sneak: a single item). Hoppers, the Guild Terminal and quick-stack treat crates "
+         "like chests that accept only their item.",
+         "Clic gauche : prendre une pile (accroupi : un seul objet). Les entonnoirs, le terminal de guilde et le "
+         "rangement rapide voient la caisse comme un coffre qui n'accepte que son objet."),
+    ], ["wayfarers:compacting_crate"]),
     ("guild_terminal", "storage", "wayfarers:guild_terminal", ("Guild Terminal", "Terminal de guilde"), [
         ("Place it in your storage room: it shows everything stored in the chests within 12 blocks as one grid, "
          "with a search box. No cables, no power.",

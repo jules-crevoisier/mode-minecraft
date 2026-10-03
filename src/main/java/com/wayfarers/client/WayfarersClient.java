@@ -2,7 +2,9 @@ package com.wayfarers.client;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import com.wayfarers.Wayfarers;
+import com.wayfarers.client.render.CrateRenderer;
 import com.wayfarers.generated.model.ModelRegistry;
+import com.wayfarers.registry.ModBlockEntities;
 import com.wayfarers.registry.ModEntities;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -64,6 +66,7 @@ public final class WayfarersClient {
         humanoid(event, ModEntities.VOID_STALKER.get(), "void_stalker");
         humanoid(event, ModEntities.VOID_WARDEN.get(), "void_warden");
         event.registerEntityRenderer(ModEntities.BOOMERANG.get(), ThrownItemRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.CRATE.get(), CrateRenderer::new);
         ModelRegistry.registerRenderers(event);
     }
 

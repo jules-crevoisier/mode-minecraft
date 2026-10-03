@@ -23,7 +23,7 @@ def rid(x):
 
 
 MOD_ITEMS = {"map_fragment", "lithite_shard", "ancient_ember", "void_shard", "warden_scale", "void_heart",
-             "sorting_chest", "waystone", "guild_terminal"}
+             "sorting_chest", "waystone", "guild_terminal", "compacting_crate"}
 MOD_ITEMS |= {f"remembrance_{row[0]}" for row in __import__("wf.bossgear", fromlist=["BOSS_GEAR"]).BOSS_GEAR}
 MOD_ITEMS |= __import__("wf.metals", fromlist=["all_item_ids"]).all_item_ids()
 MOD_ITEMS |= set(__import__("wf.machines", fromlist=["MACHINES"]).MACHINES)
@@ -68,6 +68,7 @@ def armor_set(prefix, material, extra=None):
 def recipes():
     shaped("waystone", [" E ", "MCM", "SSS"], {"E": "ender_pearl", "M": "map_fragment", "C": "compass", "S": "stone_bricks"})
     shaped("sorting_chest", ["PHP", "PCP", "PPP"], {"P": "#planks", "H": "hopper", "C": "chest"})
+    shaped("compacting_crate", ["PIP", "IBI", "PIP"], {"P": "#planks", "I": "iron_ingot", "B": "barrel"})
     shaped("guild_terminal", ["GMG", "PCP", "PRP"], {"G": "gold_ingot", "M": "map_fragment", "P": "#planks",
                                                     "C": "chest", "R": "redstone"})
     shaped("travel_backpack", ["LSL", "LCL", "LLL"], {"L": "leather", "S": "string", "C": "chest"}, category="equipment")
@@ -129,14 +130,14 @@ def tags():
     from wf import decor
     axe_decor = [f"{NS}:{i}" for bid, d in decor.DECOR.items() if d.get("tool") == "axe"
                  for i in [bid] + [decor.variant_id(bid, v) for v in d["variants"]]]
-    write("minecraft/tags/block/mineable/axe.json", {"replace": False, "values": [f"{NS}:sorting_chest", f"{NS}:guild_terminal"]
+    write("minecraft/tags/block/mineable/axe.json", {"replace": False, "values": [f"{NS}:sorting_chest", f"{NS}:guild_terminal", f"{NS}:compacting_crate"]
                                                                                + axe_decor})
     write("minecraft/tags/block/needs_iron_tool.json", {"replace": False, "values": [
         f"{NS}:lithite_ore", f"{NS}:deepslate_lithite_ore"]})
 
 
 def block_loot():
-    for b in ("waystone", "sorting_chest", "guild_terminal"):
+    for b in ("waystone", "sorting_chest", "guild_terminal", "compacting_crate"):
         write(f"{NS}/loot_table/blocks/{b}.json", {
             "type": "minecraft:block",
             "pools": [{"rolls": 1.0, "bonus_rolls": 0.0,

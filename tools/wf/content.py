@@ -108,6 +108,10 @@ BLOCKS = {
                        "Use: browse and search every chest within 12 blocks in one grid. Sneak-use: sort them all.",
                        "Clic droit : tous les coffres à 12 blocs dans une seule grille, avec recherche. Accroupi : trie tout.",
                        "front"),
+    "compacting_crate": ("Compacting Crate", "Caisse compacte",
+                         "Holds 32 stacks of one item, shown on its front. Right-click: put in (twice quickly: all you carry). Left-click: take a stack.",
+                         "32 piles d'un seul objet, affiché en façade. Clic droit : ranger (deux fois vite : tout). Clic gauche : prendre une pile.",
+                         "front"),
     "grave": ("Grave", "Tombe", "Holds the belongings of a fallen wayfarer.",
               "Garde les affaires d'un voyageur tombé.", "grave"),
     "sealed_bars": ("Sealed Bars", "Barreaux scellés", "Opens when the guardian falls.",
@@ -188,6 +192,9 @@ SPAWN_EGGS = ["ruin_walker", "map_wraith", "basalt_guard", "void_stalker", "drow
 
 # Misc translated messages used from Java (key suffix -> (en, fr))
 MESSAGES = {
+    "message.wayfarers.crate.empty": ("Empty crate: put any item in to choose its kind.",
+                                      "Caisse vide : range un objet pour choisir son type."),
+    "message.wayfarers.crate.count": ("%s: %s / %s", "%s : %s / %s"),
     "pack.wayfarers.world_overhaul": ("Wayfarers: new world (terrain, caves, biomes)",
                                       "Wayfarers : nouveau monde (relief, grottes, biomes)"),
     "itemGroup.wayfarers": ("Wayfarers", "Wayfarers"),

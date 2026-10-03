@@ -3,6 +3,7 @@ package com.wayfarers.registry;
 import com.wayfarers.Wayfarers;
 import com.wayfarers.block.AltarBlock;
 import com.wayfarers.block.BossSealBlock;
+import com.wayfarers.block.CrateBlock;
 import com.wayfarers.block.GraveBlock;
 import com.wayfarers.block.GuildTerminalBlock;
 import com.wayfarers.block.MistGateBlock;
@@ -28,6 +29,8 @@ public final class ModBlocks {
             BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).strength(2.5F).sound(SoundType.WOOD));
     public static final RegistryObject<Block> GUILD_TERMINAL = register("guild_terminal", GuildTerminalBlock::new,
             BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).strength(2.5F).sound(SoundType.WOOD).lightLevel(s -> 5));
+    public static final RegistryObject<Block> COMPACTING_CRATE = register("compacting_crate", CrateBlock::new,
+            BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).strength(2.5F).sound(SoundType.WOOD));
     public static final RegistryObject<Block> GRAVE = register("grave", GraveBlock::new,
             BlockBehaviour.Properties.of().mapColor(MapColor.STONE).strength(-1.0F, 3600000.0F)
                     .sound(SoundType.STONE).noOcclusion());

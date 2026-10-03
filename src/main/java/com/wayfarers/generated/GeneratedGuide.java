@@ -28,6 +28,7 @@ public final class GeneratedGuide {
             new Page("waystones", "travel", "wayfarers:waystone", 3, List.of("wayfarers:waystone")),
             new Page("recall", "travel", "wayfarers:recall_scroll", 1, List.of("wayfarers:recall_scroll")),
             new Page("sorting_chest", "storage", "wayfarers:sorting_chest", 2, List.of("wayfarers:sorting_chest")),
+            new Page("crate", "storage", "wayfarers:compacting_crate", 2, List.of("wayfarers:compacting_crate")),
             new Page("guild_terminal", "storage", "wayfarers:guild_terminal", 3, List.of("wayfarers:guild_terminal")),
             new Page("backpack", "storage", "wayfarers:travel_backpack", 1, List.of("wayfarers:travel_backpack")),
             new Page("magnet", "storage", "wayfarers:magnet_ring", 2, List.of("wayfarers:magnet_ring")),

@@ -1,5 +1,6 @@
 package com.wayfarers.util;
 
+import com.wayfarers.block.MachineBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Container;
@@ -41,7 +42,9 @@ public final class StorageNetwork {
         List<Container> result = new ArrayList<>();
         for (BlockPos p : BlockPos.betweenClosed(center.offset(-RANGE, -RANGE / 2, -RANGE), center.offset(RANGE, RANGE / 2, RANGE))) {
             BlockEntity be = level.getBlockEntity(p);
-            if (be instanceof BaseContainerBlockEntity container && container.getContainerSize() >= 9) {
+            // machine buffers are not storage (a block placer would place whatever got stored in it)
+            if (be instanceof BaseContainerBlockEntity container && container.getContainerSize() >= 9
+                    && !(be instanceof MachineBlockEntity)) {
                 result.add(container);
             }
         }

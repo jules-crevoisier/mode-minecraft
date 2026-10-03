@@ -218,6 +218,26 @@ def block_textures():
     gs = noise_tile((96, 86, 76), 8, 6)
     frame(gs, (50, 44, 40))
     out["guild_terminal_side"] = gs
+    # compacting crate: banded planks, iron corners, a recessed front panel where the item is drawn
+    cs = noise_tile((150, 104, 60), 9, 31)
+    for y in (0, 15):
+        for x in range(16):
+            cs.set(x, y, (88, 60, 34))
+    for i in range(16):
+        cs.set(0, i, (88, 60, 34))
+        cs.set(15, i, (88, 60, 34))
+    for x, y in ((1, 1), (14, 1), (1, 14), (14, 14)):
+        cs.set(x, y, (170, 170, 176))
+    for y in (5, 10):
+        for x in range(1, 15):
+            cs.set(x, y, (112, 78, 44))
+    out["compacting_crate_side"] = cs
+    cf = noise_tile((150, 104, 60), 9, 32)
+    frame(cf, (88, 60, 34))
+    frame(cf, (170, 170, 176), 1)
+    cf.rect(3, 2, 12, 11, (64, 44, 26))
+    cf.rect(4, 12, 11, 13, (210, 190, 120))
+    out["compacting_crate_front"] = cf
     # grave
     gr = noise_tile((140, 140, 140), 12, 7)
     frame(gr, (90, 90, 90))
