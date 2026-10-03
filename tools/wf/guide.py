@@ -92,6 +92,20 @@ PAGES = [
         ("You can craft and place your own waystones at home, at your farms or at a dungeon entrance.",
          "Tu peux fabriquer et poser tes propres pierres : à la base, aux fermes ou à l'entrée d'un donjon."),
     ], ["wayfarers:waystone"]),
+    ("wonders", "travel", "wayfarers:structure_compass", ("Wonders of the world", "Merveilles du monde"), [
+        ("Three giant places wait to be found. The Clockwork Citadel: a steampunk town around a 75-block clock "
+         "tower, in badlands, savannas, deserts and plains.",
+         "Trois lieux gigantesques attendent d'être trouvés. La Citadelle d'horlogerie : une ville steampunk autour "
+         "d'une tour-horloge de 75 blocs, dans les badlands, savanes, déserts et plaines."),
+        ("The Sky Harbour: an airship moored to an iron tower, seen from far away above the plains. The Undercity: a "
+         "town on stilts in a vast cavern 12 to 30 blocks underground, around a glowing lake.",
+         "Le Port céleste : un dirigeable amarré à une tour de fer, visible de loin au-dessus des plaines. Les "
+         "Bas-fonds : une ville sur pilotis dans une immense caverne, de 12 à 30 blocs sous terre, autour d'un lac "
+         "luminescent."),
+        ("Sneak-use the Structure Compass to pick one of them, then use it to see the distance and direction.",
+         "Accroupi + clic droit sur la boussole des structures pour en choisir une, puis clic droit pour voir la "
+         "distance et la direction."),
+    ], ["wayfarers:structure_compass"]),
     ("recall", "travel", "wayfarers:recall_scroll", ("Recall Scroll", "Parchemin de rappel"), [
         ("Use it to return instantly to the nearest waystone of your dimension. Elites sometimes drop them.",
          "Utilise-le pour revenir aussitôt à la pierre de voyage la plus proche de ta dimension. Les élites en "
