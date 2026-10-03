@@ -185,7 +185,7 @@ def cold_store(bp, rng, vein):
                     elif broken and rng.random() < 0.6:
                         bp.set(vx + dx, y, vz + dz, "air")
                     else:
-                        bp.set(vx + dx, y, vz + dz, "iron_bars" if (dx and dz) else "light_blue_stained_glass")
+                        bp.set(vx + dx, y, vz + dz, METAL_D if (dx and dz) else "light_blue_stained_glass")
         if broken:
             bp.set(vx, B1 + 4, vz, "skeleton_skull[rotation=4]")
             bp.set(vx + 2, B1 + 1, vz, "snow[layers=2]")

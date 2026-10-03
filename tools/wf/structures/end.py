@@ -1839,12 +1839,11 @@ def void_nest(bp):
     for (x, z) in ring_pts(0, 0, AR + 1):
         bp.set(x, 1, z, stair(VB_ST, OPPOSITE[face_in(x, z, 0, 0)]))
 
-    # --- the summoning altar at the centre
+    # --- the dais at the centre (the boss seal is set by lair_void_warden)
     for (x, z) in disk_pts(0, 0, 2):
         bp.set(x, 1, z, PUR)
     for (x, z) in ring_pts(0, 0, 3):
         bp.set(x, 1, z, stair(PUR_ST, face_in(x, z, 0, 0)))
-    bp.set(0, 2, 0, MOD["void_altar"])
     for (x, z) in ((2, 0), (-2, 0), (0, 2), (0, -2)):
         bp.set(x, 2, z, ROD_UP)
     # a floating halo of crying obsidian high above the altar
@@ -1916,6 +1915,10 @@ def void_nest(bp):
         bp.fill(cx - 1, b - 11, cz - 1, cx + 1, b - 11, cz + 1, "obsidian")
         bp.set(cx, b - 10, cz, "skeleton_skull[powered=false,rotation=4]")
         bp.set(cx, b - 12, cz, ROD_DOWN)
+
+    # --- the boss: seal on the dais, the Fang Gate and its mist, site of grace, caged hoard
+    from . import lair_void_warden
+    lair_void_warden.build(bp, AR)
 
 
 register(StructureDef(

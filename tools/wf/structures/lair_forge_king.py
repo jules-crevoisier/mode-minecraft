@@ -455,17 +455,23 @@ def crucible(bp):
             for y in range(AY - 3, AY):
                 bp.set(x, y, z, PB)
             if d <= R + 0.5:
-                # concentric floor: a forge sigil at the heart, gilded rings, radial bands
+                # concentric floor: a forge sigil of ember brick at the heart, gilded rings, eight
+                # spokes of carved stone, blackstone and deepslate bands between them
+                spoke = min(ang % 45, 45 - ang % 45) * math.pi / 180 * d < 0.55
                 if d < 1.6:
                     b = "gold_block"
                 elif d < 2.6:
-                    b = LC if int(ang / 45) % 2 == 0 else "chiseled_polished_blackstone"
-                elif 5.5 <= d < 6.4 or 11.6 <= d < 12.5:
+                    b = LC if int(ang / 45) % 2 == 0 else GT
+                elif d < 5.5:
+                    b = "chiseled_polished_blackstone" if spoke else "wayfarers:ember_bricks"
+                elif d < 6.4 or 11.6 <= d < 12.5:
                     b = GT
-                elif int(ang / 15) % 2 == 0:
-                    b = "polished_blackstone" if d < 9 else PB
+                elif spoke:
+                    b = "chiseled_polished_blackstone"
+                elif d < 11.6:
+                    b = PB if int(d) % 2 else "polished_blackstone"
                 else:
-                    b = "polished_deepslate" if d < 9 else "deepslate_tiles"
+                    b = "polished_deepslate"
                 bp.set(x, AY, z, b)
             elif d <= R + 1.5:
                 bp.set(x, AY, z, "polished_blackstone")       # kerb
@@ -504,9 +510,9 @@ def crucible(bp):
         bp.set(ix, AY + 4, iz, "wayfarers:ember_lamp")
         bp.set(ix, AY + 3, iz, stair(PBS, _facing_out(a), "top"))
         bp.set(ix, AY + 5, iz, stair(PBS, _facing_out(a)))
-    for k in range(8):
-        if k in (0, 4):
-            continue            # the west portal and the east apse
+    for k in (1, 3, 5, 7):
+        forge_hearth(bp, math.radians(k * 45))
+    for k in (2, 6):
         a = math.radians(k * 45)
         fx, fz = AX + round(math.cos(a) * (Rw + 0.6)), AZ + round(math.sin(a) * (Rw + 0.6))
         for y in range(AY, AY + 6):
@@ -559,6 +565,41 @@ def crucible(bp):
     bp.boss_seal(AX, AY, AZ, "wayfarers:forge_king", AR)
 
 
+def forge_hearth(bp, a):
+    """A forge mouth sunk in the drum wall: blast furnaces glowing at the back, a bed of magma behind
+    an iron grille, a gilded lintel under a carved hood."""
+    ux, uz = math.cos(a), math.sin(a)          # outward
+    vx, vz = -uz, ux                           # lateral
+    Rw = AR + 3.5
+
+    def at(depth, lat):
+        return AX + round(ux * (Rw + depth) + vx * lat), AZ + round(uz * (Rw + depth) + vz * lat)
+    for depth in (0, 1, 2, 3):
+        for lat in (-1.5, -0.5, 0.5, 1.5):
+            x, z = at(depth, lat)
+            for y in range(AY, AY + 7):
+                if depth == 3 or abs(lat) > 1:
+                    if bp.get(x, y, z) != AIR:
+                        bp.set(x, y, z, PB)
+                elif y == AY:
+                    bp.set(x, y, z, "magma_block" if depth >= 1 else "polished_blackstone")
+                elif depth == 2:
+                    b = "blast_furnace[facing=" + _facing_out(a + math.pi) + ",lit=true]" if y <= AY + 2 else \
+                        "wayfarers:ember_lamp" if y == AY + 3 else PB
+                    bp.set(x, y, z, b)
+                elif y <= AY + 4:
+                    bp.set(x, y, z, "air")
+                else:
+                    bp.set(x, y, z, GT if y == AY + 5 else PB)
+    for lat in (-1.5, -0.5, 0.5, 1.5):
+        x, z = at(0, lat)
+        if abs(lat) < 1:
+            bp.set(x, AY + 1, z, "iron_bars")
+            bp.set(x, AY + 2, z, "iron_bars")
+        bp.set(x, AY + 5, z, GT)
+        bp.set(x, AY + 6, z, stair(PBS, _facing_out(a + math.pi), "top"))
+
+
 def dome_h(d):
     """Height of the dome's inner surface above the drum at distance d from the axis."""
     Rd = AR + 3.5
@@ -568,11 +609,14 @@ def dome_h(d):
 
 
 def dome_block(x, y, z, d, ang):
-    rib = min(ang % 45, 45 - ang % 45) * max(d, 1) * math.pi / 180 < 0.8
+    """Coffered dome: sixteen gilded ribs, a belt of glowing lithite, deepslate panels."""
+    rib = min(ang % 22.5, 22.5 - ang % 22.5) * max(d, 1) * math.pi / 180 < 0.7
     if rib:
-        return PB
+        return GT if d > 3 else PB
     if 9.5 < d < 10.5:
-        return GT
+        return LC
+    if 13.5 < d < 14.5 or 5.5 < d < 6.3:
+        return PB
     return "deepslate_tiles" if (x + z) % 3 else "polished_deepslate"
 
 

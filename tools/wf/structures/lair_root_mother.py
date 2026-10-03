@@ -2,7 +2,7 @@
 
 Descent: the secret root cellar (y -7) -> a curtain of hanging roots in its south wall -> a winding root
 tunnel sloping down to the buried druid crypt (floor y -13) -> a stair down beside the crypt -> a site of
-grace (waystone, bench, candles) -> mist -> the root cavern arena (floor y -26, radius ~16, up to 15 high):
+grace (waystone, bench, candles) -> mist -> the root cavern arena (floor y -27, radius ~16, up to 17 high):
 great roots arch down from the ceiling as pillars around the edge, the tree's taproot hangs over a dais of
 heartwood rings, shroomlights and glow berries light the soil. Past the arena, behind a second mist, the
 heartwood vault holds the reward.
@@ -13,7 +13,7 @@ import random
 from ..arch import Palette, stair
 from ..parts import LOOT, MOB, MOD
 
-FLOOR = -26                 # arena floor block (players stand on y = -25)
+FLOOR = -27                 # arena floor block (players stand on y = -26)
 AX, AZ = 0, -3              # arena centre
 CRYPT_Y = -13               # crypt floor block
 
@@ -24,9 +24,9 @@ def _radius(a):
 
 
 def _ceiling(r, a):
-    """Top carved y of the cavern at distance r from the centre: a low dome, 15 high in the middle."""
+    """Top carved y of the cavern at distance r from the centre: a low dome, 17 high in the middle."""
     R = _radius(a) + 3.5
-    return FLOOR + max(4, min(15, round(15 * math.sqrt(max(0.0, 1 - (r / R) ** 2)))))
+    return FLOOR + max(5, min(17, round(17 * math.sqrt(max(0.0, 1 - (r / R) ** 2)))))
 
 
 def _root_line(bp, p0, p1, r0, r1, block, bend=(0, 0, 0)):
@@ -61,7 +61,7 @@ def build_lair(bp, v):
     WOOD = f"{v['wood']}[axis=y]"
     STRIP = f"stripped_{v['log']}[axis=y]"
     deck = v["deck"]
-    earth = Palette({"dirt": 4, "rooted_dirt": 3, "coarse_dirt": 2, "tuff": 1}, seed=v["seed"] + 1, scale=2.5)
+    earth = Palette({"rooted_dirt": 5, "dirt": 3, "coarse_dirt": 1}, seed=v["seed"] + 1, scale=3.5)
     soil = Palette({"rooted_dirt": 4, "moss_block": 3, "podzol[snowy=false]": 2, "coarse_dirt": 2,
                     "mud": 1}, seed=v["seed"] + 2, scale=2.0)
     stone = Palette({"mossy_stone_bricks": 4, "stone_bricks": 2, "cracked_stone_bricks": 1, "tuff_bricks": 2},
@@ -100,7 +100,7 @@ def build_lair(bp, v):
     # ------------------------------------------------------------------ 3. stair down to the site of grace
     stair_cells = []
     SX = (14, 15, 16)
-    for i, z in enumerate(range(28, 14, -1)):
+    for i, z in enumerate(range(29, 14, -1)):
         fy = CRYPT_Y - i                              # one step down per block northward
         for x in SX:
             for y in range(fy + 1, fy + 5):

@@ -46,7 +46,7 @@ def _ball_line(bp, p0, p1, r0, r1, block):
 
 def build_lair(bp):
     rng = random.Random(77)
-    earth = Palette({"mud": 3, "packed_mud": 2, "clay": 2, "dirt": 2, "tuff": 1}, seed=41, scale=2.5)
+    earth = Palette({"mud": 5, "packed_mud": 2, "muddy_mangrove_roots[axis=y]": 1, "tuff": 1}, seed=41, scale=3.5)
     bank = Palette({"mud": 4, "moss_block": 3, "packed_mud": 2, "clay": 1, "muddy_mangrove_roots[axis=y]": 1},
                    seed=42, scale=2.0)
     brick = Palette({"mud_bricks": 5, "packed_mud": 1, "tuff_bricks": 1}, seed=43, scale=1.7)
@@ -295,6 +295,23 @@ def build_lair(bp):
                 for k in range(ln):
                     bp.set(x, top - k, z, "mangrove_roots[waterlogged=false]")
                 bp.set(x, top - ln, z, "hanging_roots[waterlogged=false]")
+    # the cavern walls: a damp band of moss at the waterline, patches of glow lichen higher up
+    dirs = {(1, 0): "east", (-1, 0): "west", (0, 1): "south", (0, -1): "north"}
+    for (x, z), top in arena.items():
+        for (ddx, ddz), face in dirs.items():
+            n = (x + ddx, z + ddz)
+            if n in arena or (x + ddx, FLOOR + 1, z + ddz) in carve:
+                continue
+            for y in (FLOOR + 1, FLOOR + 2):
+                if rng.random() < 0.6:
+                    bp.set(n[0], y, n[1], "moss_block")
+            if rng.random() < 0.18:
+                y = FLOOR + rng.randint(3, 6)
+                if (x, y, z) in carve and bp.get(x, y, z) == "minecraft:air":
+                    props = {k: "false" for k in ("down", "east", "north", "south", "up", "west")}
+                    props[face] = "true"
+                    bp.set(x, y, z, "glow_lichen[" + ",".join(f"{k}={v}" for k, v in sorted(props.items())) +
+                           ",waterlogged=false]")
     # mangrove pillars at the edge, roots flaring at their feet and spreading over the ceiling
     for k in range(7):
         a = 2 * math.pi * k / 7 + 0.4

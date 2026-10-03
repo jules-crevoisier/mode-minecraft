@@ -233,10 +233,10 @@ def bell_chamber(bp):
     """The arena: drum wall of radius AR+1..AR+2, pointed dome, bronze-inlaid floor, the hanging bell."""
     cx, cz = ARENA
     R = AR
-    for x in range(cx - R - 3, cx + R + 4):
-        for z in range(cz - R - 3, cz + R + 4):
+    for x in range(cx - R - 4, cx + R + 5):
+        for z in range(cz - R - 4, cz + R + 5):
             d = math.hypot(x - cx, z - cz)
-            if d > R + 2.5:
+            if d > R + 3.5:
                 continue
             for y in range(L2 - 1, L2 + 1):
                 bp.set(x, y, z, DEEP.pick(x, y, z))
@@ -280,18 +280,20 @@ def dome_y(r):
 
 
 def _floor(dx, dz, d):
-    """Concentric floor: seal disc, bronze ring, sound-line spokes, dark rim."""
-    ang = math.degrees(math.atan2(dz, dx)) % 360
+    """Concentric floor: seal disc, a bronze ring, eight dark sound-lines, a dark rim."""
+    ang = math.degrees(math.atan2(dz, dx)) % 45
     if d < 1.6:
         return "waxed_chiseled_copper"
-    if d < 3.0:
+    if d < 3.2:
         return "chiseled_stone_bricks"
-    if 5.5 <= d < 6.5 or 10.5 <= d < 11.3:
-        return BRONZE.pick(int(dx) + 100, 0, int(dz))
-    if d >= AR - 1.2:
+    if 5.6 <= d < 6.6:
+        return "waxed_exposed_cut_copper" if (int(dx) + int(dz)) % 4 else "waxed_weathered_cut_copper"
+    if d >= AR - 1.0:
         return "deepslate_tiles"
-    if min(ang % 30, 30 - ang % 30) * d * math.pi / 180 < 0.55:
+    if d > 6.6 and min(ang, 45 - ang) * d * math.pi / 180 < 0.6:
         return "polished_deepslate"
+    if 10.6 <= d < 11.4:
+        return "polished_blackstone_bricks"
     return FLOOR.pick(int(dx) + 50, 0, int(dz) + 50)
 
 
@@ -312,29 +314,18 @@ def _hanging_bell(bp, cx, cz):
             bp.set(x, beam_y, z, "stripped_dark_oak_log[axis=x]" if abs(z - cz) == 1 else "dark_oak_log[axis=x]")
     for x in (cx - 4, cx + 4):                           # iron straps
         bp.set(x, beam_y, cz, "waxed_copper_grate")
-    # bell profile: (y offset below the beam, radius)
-    profile = [(1, 1.4), (2, 2.4), (3, 3.0), (4, 3.2), (5, 3.3), (6, 3.5), (7, 3.8), (8, 4.3), (9, 5.0), (10, 5.4)]
-    crack = {(round(math.sin(k * 1.3)), k) for k in range(0, 11)}
+    # bell profile: (rows below the beam, radius); crown, rounded shoulder, long waist, flared sound bow, lip
+    profile = [(1, 1.5), (2, 2.6), (3, 3.1), (4, 3.3), (5, 3.4), (6, 3.6), (7, 3.9), (8, 4.5), (9, 5.1), (10, 5.5)]
     for dy, r in profile:
         y = beam_y - dy
         for x in range(cx - 6, cx + 7):
             for z in range(cz - 6, cz + 7):
                 d = math.hypot(x - cx, z - cz)
-                if d > r + 0.35:
-                    continue
-                if d < r - 0.95 and dy > 2:
-                    continue                             # hollow bell
-                if z - cz > 2 and (x - cx, dy) in crack:
-                    continue                             # the crack runs down the south face
-                if dy == 6:
-                    b = "waxed_chiseled_copper"
-                elif dy >= 9:
-                    b = "waxed_cut_copper" if (x + z) % 3 else "waxed_exposed_cut_copper"
-                else:
-                    b = BRONZE.pick(x, y, z)
-                    if (x * 7 + z * 3 + y) % 11 == 0:
-                        b = "waxed_oxidized_cut_copper"   # verdigris
-                bp.set(x, y, z, b)
+                if d > r + 0.35 or (d < r - 0.95 and dy > 2):
+                    continue                             # outside, or the hollow inside
+                if z - cz >= 2 and abs(x - cx - round(math.sin(dy * 1.1))) < 1 and 3 <= dy <= 9:
+                    continue                             # the crack running down the south face
+                bp.set(x, y, z, _bell_block(x - cx, z - cz, dy))
     bp.chain(cx, beam_y - 9, cz, beam_y - 2)            # clapper
     bp.set(cx, beam_y - 10, cz, "polished_blackstone")
     for dx, dz in ((-1, 0), (1, 0), (0, -1), (0, 1)):
@@ -342,6 +333,19 @@ def _hanging_bell(bp, cx, cz):
     # broken bell-wheel and dangling ropes / chains around the beam
     for x, length in ((cx - 9, 6), (cx - 6, 3), (cx + 7, 8), (cx + 11, 4)):
         bp.chain(x, beam_y - length, cz, beam_y - 1)
+
+
+def _bell_block(dx, dz, dy):
+    """Bronze by band: shoulder and sound-bow bands darker, an inscription band, verdigris dripping below."""
+    if dy == 10:
+        return "waxed_copper_block"                      # the lip
+    if dy == 5:
+        return "waxed_chiseled_copper"                   # inscription band
+    if dy in (3, 8):
+        return "waxed_exposed_cut_copper"
+    if (dx * 3 + dz * 5) % 7 == 0 and dy in (6, 7, 9):
+        return "waxed_weathered_cut_copper"              # verdigris streaks under the bands
+    return "waxed_cut_copper"
 
 
 def founders_vault(bp):
