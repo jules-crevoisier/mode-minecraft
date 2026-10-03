@@ -3,10 +3,7 @@ package com.wayfarers.util;
 import com.wayfarers.data.WayfarersData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.HoverEvent;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -14,8 +11,12 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.level.block.Block;
 
+import com.wayfarers.network.WaystoneActionMsg;
+import com.wayfarers.network.WaystoneListMsg;
+import com.wayfarers.network.WayfarersNet;
+
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -51,27 +52,50 @@ public final class Waystones {
         list(player, here);
     }
 
+    /** Opens the travel screen on the player's client (current = the waystone they stand at, or ""). */
     public static void list(ServerPlayer player, String currentId) {
         WayfarersData data = WayfarersData.get(player.level().getServer());
-        List<Map.Entry<String, WayfarersData.Waystone>> all = data.sortedWaystones();
-        if (all.size() <= 1) {
-            player.sendSystemMessage(Component.translatable("message.wayfarers.waystone.none").withStyle(ChatFormatting.GRAY));
+        List<WaystoneListMsg.Entry> entries = new ArrayList<>();
+        for (Map.Entry<String, WayfarersData.Waystone> e : data.sortedWaystones()) {
+            WayfarersData.Waystone w = e.getValue();
+            entries.add(new WaystoneListMsg.Entry(e.getKey(), w.name(), w.dimension().getPath(),
+                    w.pos().getX(), w.pos().getY(), w.pos().getZ(), w.pinned()));
+        }
+        WayfarersNet.toPlayer(player, new WaystoneListMsg(currentId, entries));
+    }
+
+    /** Validates and runs an action sent from the travel screen. */
+    public static void handleAction(ServerPlayer player, WaystoneActionMsg msg) {
+        WayfarersData data = WayfarersData.get(player.level().getServer());
+        boolean atStone = data.waystone(msg.from())
+                .filter(w -> w.levelKey().equals(player.level().dimension())
+                        && w.pos().closerToCenterThan(player.position(), 8.0))
+                .isPresent();
+        if (!atStone && !player.permissions().hasPermission(net.minecraft.server.permissions.Permissions.COMMANDS_GAMEMASTER)) {
+            player.sendSystemMessage(Component.translatable("message.wayfarers.waystone.too_far").withStyle(ChatFormatting.RED));
             return;
         }
-        player.sendSystemMessage(Component.translatable("message.wayfarers.waystone.list").withStyle(ChatFormatting.GOLD));
-        for (Map.Entry<String, WayfarersData.Waystone> e : all) {
-            if (e.getKey().equals(currentId)) {
-                continue;
+        switch (msg.action()) {
+            case WARP -> {
+                if (msg.target().equals(msg.from())) {
+                    return;
+                }
+                if (!warp(player, msg.target())) {
+                    player.sendSystemMessage(Component.translatable("message.wayfarers.waystone.gone").withStyle(ChatFormatting.RED));
+                    list(player, msg.from());
+                }
             }
-            WayfarersData.Waystone w = e.getValue();
-            String dim = w.dimension().getPath().replace("the_", "");
-            MutableComponent line = Component.translatable("message.wayfarers.waystone.entry",
-                            dim.toUpperCase(Locale.ROOT), w.name(), w.pos().getX() + " " + w.pos().getY() + " " + w.pos().getZ())
-                    .withStyle(style -> style
-                            .withColor(ChatFormatting.AQUA)
-                            .withClickEvent(new ClickEvent.RunCommand("/wayfarers warp " + e.getKey()))
-                            .withHoverEvent(new HoverEvent.ShowText(Component.translatable("message.wayfarers.waystone.hover"))));
-            player.sendSystemMessage(line);
+            case RENAME -> {
+                String name = msg.text().strip();
+                if (!name.isEmpty() && name.length() <= 32) {
+                    data.renameWaystone(msg.target(), name);
+                }
+                list(player, msg.from());
+            }
+            case PIN -> {
+                data.togglePinned(msg.target());
+                list(player, msg.from());
+            }
         }
     }
 

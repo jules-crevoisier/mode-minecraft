@@ -50,6 +50,7 @@ public final class Wayfarers {
         ModEntities.ENTITIES.register(modBus);
         ModTabs.TABS.register(modBus);
         ModDataComponents.COMPONENTS.register(modBus);
+        com.wayfarers.network.WayfarersNet.init();
 
         EntityAttributeCreationEvent.BUS.addListener(ModEntities::registerAttributes);
         RegisterCommandsEvent.BUS.addListener(WayfarersCommand::register);

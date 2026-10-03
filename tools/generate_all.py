@@ -5,7 +5,7 @@ import subprocess
 import sys
 
 TOOLS = os.path.dirname(os.path.abspath(__file__))
-STEPS = ["gen_structures.py", "gen_loot.py", "gen_quests.py", "gen_data.py", "gen_textures.py", "gen_models.py", "gen_assets.py",
+STEPS = ["gen_structures.py", "gen_loot.py", "gen_quests.py", "gen_data.py", "gen_textures.py", "gen_gui.py", "gen_models.py", "gen_assets.py",
          "gen_java.py", "validate.py"]
 
 for step in STEPS:

@@ -27,12 +27,17 @@ import java.util.Set;
  * quests (advancements) completed by anyone. Stored once, in the overworld's data storage.
  */
 public final class WayfarersData extends SavedData {
-    public record Waystone(String name, Identifier dimension, BlockPos pos) {
+    public record Waystone(String name, Identifier dimension, BlockPos pos, boolean pinned) {
         public static final Codec<Waystone> CODEC = RecordCodecBuilder.create(b -> b.group(
                 Codec.STRING.fieldOf("name").forGetter(Waystone::name),
                 Identifier.CODEC.fieldOf("dimension").forGetter(Waystone::dimension),
-                BlockPos.CODEC.fieldOf("pos").forGetter(Waystone::pos)
+                BlockPos.CODEC.fieldOf("pos").forGetter(Waystone::pos),
+                Codec.BOOL.optionalFieldOf("pinned", false).forGetter(Waystone::pinned)
         ).apply(b, Waystone::new));
+
+        public Waystone(String name, Identifier dimension, BlockPos pos) {
+            this(name, dimension, pos, false);
+        }
 
         public ResourceKey<Level> levelKey() {
             return ResourceKey.create(Registries.DIMENSION, dimension);
@@ -105,6 +110,22 @@ public final class WayfarersData extends SavedData {
             waystones.remove(id);
             setDirty();
         });
+    }
+
+    public void renameWaystone(String id, String name) {
+        Waystone w = waystones.get(id);
+        if (w != null) {
+            waystones.put(id, new Waystone(name, w.dimension(), w.pos(), w.pinned()));
+            setDirty();
+        }
+    }
+
+    public void togglePinned(String id) {
+        Waystone w = waystones.get(id);
+        if (w != null) {
+            waystones.put(id, new Waystone(w.name(), w.dimension(), w.pos(), !w.pinned()));
+            setDirty();
+        }
     }
 
     public Optional<Waystone> waystone(String id) {
