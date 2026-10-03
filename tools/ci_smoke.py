@@ -51,6 +51,7 @@ BAD = [re.compile(p) for p in (
 )]
 
 FEEDBACK_TIMEOUT = 180
+BUDGET = 25 * 60  # seconds per test; past it the remaining phases are skipped and the run fails with a clear message
 
 
 def structure_dims():
@@ -164,6 +165,11 @@ def prepare(server_dir, overhaul):
             f.write("\n-Xmx4G\n")
 
 
+def check_budget(where):
+    if time.time() - Phase.start > BUDGET:
+        raise TimeoutError(f"time budget used up at {where}")
+
+
 class Phase:
     """Prints how long each part of the test took (the CI log is the only window into a slow run)."""
     start = time.time()
@@ -172,6 +178,8 @@ class Phase:
         self.name = name
 
     def __enter__(self):
+        if time.time() - Phase.start > BUDGET:
+            raise TimeoutError(f"time budget used up before '{self.name}'")
         self.t = time.time()
         print(f"[smoke] {self.name}: start (t={time.time() - Phase.start:.0f}s)", flush=True)
 
@@ -196,6 +204,7 @@ def exercise_mod(srv, failures):
 def place_structures(srv, failures):
     dims = structure_dims()
     for i, (sid, dim) in enumerate(dims.items()):
+        check_budget(f"structure {sid}")
         x = 2000 + 400 * i
         r = 96
         srv.run(f"execute in {dim} run forceload add {x - r} {-r} {x + r} {r}", r"Marked|forceload|No chunks|too many", 30)
@@ -220,6 +229,7 @@ def summon_all(srv, failures):
     srv.run("execute in minecraft:overworld run kill @e[type=!minecraft:player]", r"Killed|No entity", 60)
     items = lang_ids("item.wayfarers.") + lang_ids("block.wayfarers.")
     for iid in items:
+        check_budget(f"item {iid}")
         res = srv.run(f'execute in minecraft:overworld run summon minecraft:item 0 200 0 '
                       f'{{Item:{{id:"wayfarers:{iid}",count:1}}}}',
                       r"Summoned|Unable|Unknown|Invalid|Incorrect|Expected", 60)
@@ -229,6 +239,7 @@ def summon_all(srv, failures):
 
 def blocks_and_loot(srv, failures):
     for bid in lang_ids("block.wayfarers."):
+        check_budget(f"block {bid}")
         srv.run(f"execute in minecraft:overworld run setblock 0 150 0 wayfarers:{bid}", r"Changed|Could not|Unknown|Invalid", 30)
         srv.run("execute in minecraft:overworld run setblock 0 150 0 minecraft:air destroy", r"Changed|Could not", 30)
     for table in loot_tables():
@@ -262,6 +273,7 @@ def exercise_overhaul(srv, failures):
 def locate_all(srv, biomes, missing):
     found = {}
     for b in biomes:
+        check_budget(f"biome {b}")
         res = srv.run(f"execute in minecraft:overworld run locate biome wayfarers:{b}",
                       r"nearest|Could not find|Unknown|Invalid|not found|Incorrect", 300)
         if not res or "nearest" not in res:
@@ -280,10 +292,12 @@ def main():
     srv = Server(server_dir, server_command(server_dir), "smoke-console-overhaul.log" if overhaul else "smoke-console.log")
     if not srv.wait_for(r"Done \(", 1800 if overhaul else 900):
         failures.append("server did not finish starting")
-    elif overhaul:
-        exercise_overhaul(srv, failures)
     else:
-        exercise_mod(srv, failures)
+        Phase.start = time.time()
+        try:
+            (exercise_overhaul if overhaul else exercise_mod)(srv, failures)
+        except TimeoutError as e:
+            failures.append(str(e))
     srv.run("stop")
     try:
         srv.proc.wait(timeout=180)
