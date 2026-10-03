@@ -34,6 +34,7 @@ public final class WayfarersClient {
         EntityRenderersEvent.RegisterRenderers.BUS.addListener(WayfarersClient::registerRenderers);
         AddGuiOverlayLayersEvent.BUS.addListener(EldenBossBar::register);
         AddGuiOverlayLayersEvent.BUS.addListener(QuestTracker::register);
+        MobHealthBars.register();
         RegisterKeyMappingsEvent.BUS.addListener(event -> {
             event.register(SORT_KEY);
             event.register(MAGNET_KEY);
