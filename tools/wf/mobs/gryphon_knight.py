@@ -306,12 +306,15 @@ def ruff(seed=0):
 
 
 # ---------------------------------------------------------------- the model
-# rest rotations of the wing segments (folded) and their spread flight pose (all zero)
-WING_REST = {"shoulder_l": (-13, 0, 0), "shoulder_r": (-13, 0, 0),
-             "wing_l": (-90, -90, -14), "wing_r": (-90, 90, 14),
-             "wingtip_l": (0, 4, -14), "wingtip_r": (0, -4, 14)}
+# Rest rotations of the wing chain: half-raised (shoulder pitched up so the wrist stands above the back,
+# the arm splayed outward, the hand bent back so the primaries fan out past the rump). The flight pose
+# is all zero (spread), so the flight offsets below are simply minus these.
+WING_REST = {"shoulder_l": (25, 0, 0), "shoulder_r": (25, 0, 0),
+             "wing_l": (-90, -70, -30), "wing_r": (-90, 70, 30),
+             "wingtip_l": (0, -50, -8), "wingtip_r": (0, 50, 8)}
 WING_SPREAD = {"shoulder_l": (0, 0, 0), "shoulder_r": (0, 0, 0), "wing_l": (0, 0, 0), "wing_r": (0, 0, 0),
                "wingtip_l": (0, -12, 0), "wingtip_r": (0, 12, 0)}
+BODY_PITCH = 9          # the body leans forward around the hips: chest low, haunches high
 
 
 def build():
@@ -324,7 +327,7 @@ def build():
         piv[name] = abs_pivot
 
     def ab(p, x0, htop, z0, w, h, d, paint, glow=None, grow=0.0):
-        """Box in absolute model space: x0/z0 min corner, htop = top height above the ground (px)."""
+        """Box in the (unpitched) body design frame: x0/z0 min corner, htop = top height above the ground."""
         P = piv[p]
         m.box(p, x0 - P[0], (24 - htop) - P[1], z0 - P[2], w, h, d, paint, glow=glow, grow=grow)
 
@@ -333,35 +336,38 @@ def build():
 
     # ------------------------------------------------------------------ skeleton
     part("bone", None, (0, 24, 0))
-    part("body", "bone", (0, g(31), 14))                    # hips: rears and pitches around them
-    # the neck leans forward; the head undoes it so its own frame is level
-    m.part("neck", "body", pivot=(0, g(42) - g(31), -24 - 14), rot=(22, 0, 0))
-    m.part("head", "neck", pivot=(0, -12, -1), rot=(-22, 0, 0))
+    part("body", "bone", (0, g(36), 14), rot=(BODY_PITCH, 0, 0))
+    # S-curved neck: the base thrusts forward, the upper neck rises, the head is held level and proud
+    m.part("neck", "body", pivot=(0, g(44) - g(36), -27 - 14), rot=(38, 0, 0))
+    m.part("neck2", "neck", pivot=(0, -9, -1), rot=(-52, 0, 0))
+    m.part("head", "neck2", pivot=(0, -9, 0), rot=(5, 0, 0))
     m.part("jaw", "head", pivot=(0, -3, -12))
-    m.part("plume", "head", pivot=(0, -16, 2), rot=(-42, 0, 0))
+    m.part("crest", "head", pivot=(0, -11, 5), rot=(-28, 0, 0))
+    m.part("plume", "head", pivot=(0, -16, 0), rot=(-38, 0, 0))
     m.part("plume_l", "plume", pivot=(1.5, 0, 1), rot=(-14, 0, 16))
     m.part("plume_r", "plume", pivot=(-1.5, 0, 1), rot=(-14, 0, -16))
     for side, sx in (("l", 1), ("r", -1)):
-        # the shoulder pitches the folded wing so it slopes down the back (zero in flight)
-        m.part(f"shoulder_{side}", "body", pivot=(sx * 12, g(47) - g(31), -20 - 14), rot=WING_REST[f"shoulder_{side}"])
+        m.part(f"shoulder_{side}", "body", pivot=(sx * 10, g(47) - g(36), -18 - 14), rot=WING_REST[f"shoulder_{side}"])
         m.part(f"wing_{side}", f"shoulder_{side}", pivot=(0, 0, 0), rot=WING_REST[f"wing_{side}"])
-        m.part(f"wingtip_{side}", f"wing_{side}", pivot=(sx * 24, 0, 0), rot=WING_REST[f"wingtip_{side}"])
+        m.part(f"wingtip_{side}", f"wing_{side}", pivot=(sx * 23, 0, 0), rot=WING_REST[f"wingtip_{side}"])
     for side, sx in (("l", 1), ("r", -1)):
-        part(f"leg_f{side}", "body", (sx * 7.5, g(29), -17))
-        part(f"shin_f{side}", f"leg_f{side}", (sx * 7.5, g(15), -17))
-        part(f"leg_h{side}", "body", (sx * 6.5, g(33), 19))
-        part(f"shin_h{side}", f"leg_h{side}", (sx * 6.5, g(18), 22))
-    m.part("tail", "body", pivot=(0, g(39) - g(31), 27 - 14), rot=(-45, 0, 0))
-    m.part("tail2", "tail", pivot=(0, 0, 13), rot=(40, 0, 0))
-    m.part("tail3", "tail2", pivot=(0, 0, 11), rot=(35, 0, 0))
+        part(f"leg_f{side}", "body", (sx * 8, g(31), -20), rot=(-BODY_PITCH, 0, 0))
+        part(f"shin_f{side}", f"leg_f{side}", (sx * 8, g(21), -20))
+        part(f"leg_h{side}", "body", (sx * 7, g(39), 19), rot=(12 - BODY_PITCH, 0, 0))
+        part(f"shin_h{side}", f"leg_h{side}", (sx * 7, g(24), 21), rot=(-28, 0, 0))
+    m.part("tail", "body", pivot=(0, g(42) - g(36), 26 - 14), rot=(-55, 0, 0))
+    m.part("tail2", "tail", pivot=(0, 0, 15), rot=(35, 0, 0))
+    m.part("tail3", "tail2", pivot=(0, 0, 14), rot=(45, 0, 0))
 
-    # ------------------------------------------------------------------ body
+    # ------------------------------------------------------------------ body: a deep eagle breast, a lean
+    # lion waist and powerful haunches
     breast = scales(WHITE, WHITE_S, CREAM, 1, tip=GOLD_FL)
-    ab("body", -12, 47, -28, 24, 26, 22, {"front": scales(WHITE, WHITE_S, CREAM, 1, tip=WHITE_D), "*": breast})
-    ab("body", -9, 31, -31, 18, 11, 6, scales(WHITE, WHITE_S, CREAM, 2, tip=WHITE_D))   # rounded keel
-    ab("body", -10.5, 44, -8, 21, 21, 18, fur(seed=2))                                # waist
-    ab("body", -9.5, 42, 8, 19, 20, 19, fur(seed=3))                                  # lion hindquarters
-    # barding: peytral (chest plate) with the sapphire, wrapping the sides of the breast
+    ab("body", -12, 47, -32, 24, 25, 22, {"front": scales(WHITE, WHITE_S, CREAM, 1, tip=WHITE_D), "*": breast})
+    ab("body", -10, 36, -35, 20, 13, 6, scales(WHITE, WHITE_S, CREAM, 2, tip=WHITE_D))   # the keel
+    ab("body", -9, 43, -12, 18, 18, 20, fur(seed=2))                                   # waist
+    ab("body", -10, 45, 7, 20, 20, 19, fur(seed=3))                                    # rump
+    ab("body", -2, 47, 9, 4, 2, 15, fur(FUR_D, (130, 86, 44), FUR, seed=4))            # spine ridge
+    # barding: only the chest plate with the sapphire (the feathers dominate)
     gem = lambda f_, x, y, w, h: GEM if f_ == "front" and abs(x - w // 2) <= 1 and abs(y - h // 2) <= 1 else None
 
     def peytral_inlay(f_, x, y, w, h):
@@ -373,59 +379,63 @@ def build():
         if dx + dy <= 4:
             return AZURE if dx + dy <= 3 else GOLD
         if dy == 0 and 4 < dx < w // 2 - 1:
-            return GOLD_D                                                             # engraved line
+            return GOLD_D
         return None
-    ab("body", -13, 42, -31, 26, 14, 3, {"front": plate(inlay=peytral_inlay), "*": plate()}, glow={"front": gem})
-    for sx in (-1, 1):
-        ab("body", -14 if sx < 0 else 13, 41, -29, 1, 12, 16, plate(rivets=True))
-    # caparison skirt hanging under the wings, legs pass through it
-    ab("body", -12, 30, -9, 24, 13, 37, caparison(4))
-    # crupper on the rump with a gold spine
-    ab("body", -8, 44, 9, 16, 3, 16, plate(inlay=lambda f_, x, y, w, h: GOLD if f_ == "top" and abs(x - w // 2) < 1 else None))
-    ab("body", -1, 46, 11, 2, 2, 12, plate(GOLD, GOLD_D, rivets=False))
+    ab("body", -10, 41, -36, 20, 11, 2, {"front": plate(inlay=peytral_inlay), "*": plate()}, glow={"front": gem})
+    # a narrow azure girth strap with the temple star (a last touch of livery)
+    ab("body", -9.5, 43.5, -9, 19, 19, 3, {"top": None, "bottom": None, "front": None, "back": None,
+                                            "*": lambda f_, x, y, w, h: GOLD if y in (0, h - 1) else AZURE})
 
-    # ------------------------------------------------------------------ neck and head
-    m.box("neck", -8, -14, -7, 16, 16, 14, scales(WHITE, WHITE_S, CREAM, 5, fw=4, fh=3))
-    m.box("neck", -10, -2, -10, 20, 9, 19, ruff(6))                                   # feather ruff
-    for i, y in enumerate((-14, -9, -4)):                                             # lames down the nape
-        m.box("neck", -5, y, 6, 10, 5, 3, plate(seed=7 + i))
-    # eagle eye: glowing gold iris, black pupil, a dark brow shadow and the stripe running back
+    # ------------------------------------------------------------------ neck, mane and head
+    m.box("neck", -8, -11, -7, 16, 13, 14, scales(WHITE, WHITE_S, CREAM, 5, fw=4, fh=3))
+    m.box("neck2", -7, -11, -6, 14, 13, 12, scales(WHITE, WHITE_S, CREAM, 6, fw=4, fh=3))
+    # the mane: two layered rings of long white feathers tipped gold, wider than the head
+    m.box("neck", -13, -6, -11, 26, 10, 22, ruff(61))
+    m.box("neck2", -11, -8, -9, 22, 8, 18, ruff(62))
+    m.box("neck", -2, -13, 6, 4, 9, 3, plate(seed=7))                                  # one nape lame
+    # eagle eye under the heavy brow: glowing gold iris, black pupil, the dark stripe running back
+
     def eye_px(f_, x, y, w, h):
         if f_ not in ("left", "right"):
             return None
-        u = x if f_ == "left" else w - 1 - x                # distance from the front edge
-        if y in (7, 8) and u in (3, 4):
-            return (24, 18, 14) if (u == 3 and y == 8) else EYE
+        u = x if f_ == "left" else w - 1 - x
+        if y in (6, 7) and u in (3, 4):
+            return (24, 18, 14) if (u == 3 and y == 7) else EYE
         return None
 
     def eye_shade(f_, x, y, w, h):
         if f_ not in ("left", "right"):
             return None
         u = x if f_ == "left" else w - 1 - x
-        if (y == 6 and 1 <= u <= 6) or (y in (7, 8) and u in (2, 5)) or (y == 9 and 2 <= u <= 9):
-            return (92, 80, 74)
+        if (y in (6, 7) and u in (2, 5)) or (y == 8 and 2 <= u <= 11) or (y == 5 and 1 <= u <= 6):
+            return (84, 72, 66)
         return None
     sk = scales(WHITE, WHITE_S, CREAM, 8, fw=3, fh=2)
 
     def skull(f_, x, y, w, h):
         return eye_px(f_, x, y, w, h) or eye_shade(f_, x, y, w, h) or sk(f_, x, y, w, h)
     m.box("head", -8, -14, -11, 16, 14, 17, skull, glow=eye_px)
-    m.box("head", -9, -13, -13, 18, 4, 9, {"bottom": (120, 112, 108),                # stern brow
-                                           "*": scales(WHITE_D, WHITE_S, WHITE, 9, fw=3, fh=2)})
-    m.box("head", -5.5, -12, -19, 11, 9, 8, beak(10))                                 # cere
-    m.box("head", -4.5, -11, -25, 9, 8, 6, beak(11))                                  # upper beak
-    m.box("head", -3.5, -9, -29, 7, 10, 4, beak(12, tip_rows=4))                      # the hook
-    m.box("head", -2.5, 1, -28, 5, 3, 3, beak(12, tip_rows=3))
-    m.box("jaw", -4.5, 0, -12, 9, 3, 12, beak(13))
-    m.box("jaw", -3.5, -1, -12, 7, 1, 1, (250, 236, 200))
-    for sx in (-1, 1):                                                                # ear tufts
-        m.box("head", 5 if sx > 0 else -9, -16, 2, 4, 6, 12, scales(WHITE, WHITE_S, GOLD_FL, 14, fw=3, fh=2, tip=GOLD_F))
-    # chanfron: silver plate over the crown and the cere, cheek guards behind the eyes
-    m.box("head", -7, -16, -14, 14, 2, 18, plate(seed=15, inlay=lambda f_, x, y, w, h: GOLD if f_ == "top" and x == w // 2 else None))
-    m.box("head", -3.5, -13.5, -21, 7, 2, 9, plate(seed=16, rivets=False))
+    # heavy brow ridge jutting over the eyes, in shadow underneath
+    m.box("head", -9.5, -14, -14, 19, 5, 11, {"bottom": (96, 88, 84),
+                                             "*": scales(WHITE_D, WHITE_S, WHITE, 9, fw=3, fh=2)})
+    # the beak: tall cere, long upper bill, a hook curving down and back to a dark point
+    m.box("head", -5.5, -12, -19, 11, 10, 8, beak(10))
+    m.box("head", -4.5, -11, -26, 9, 8, 7, beak(11))
+    m.box("head", -3.5, -10, -31, 7, 11, 5, beak(12, tip_rows=3))
+    m.box("head", -2.5, 1, -30, 5, 4, 4, beak(14, tip_rows=4))
+    m.box("head", -1.5, 4, -28, 3, 2, 2, BEAK_TIP)
+    m.box("jaw", -4.5, 0, -13, 9, 3, 13, beak(13))
+    m.box("jaw", -3.5, -1, -13, 7, 1, 1, (250, 236, 200))
+    # feather tufts sweeping back from the skull
+    tuftq = quills([(0, WHITE), (0.6, CREAM), (0.85, GOLD_FL), (1, GOLD_F)], fw=2, seed=63, along="y",
+                   base_at_end=True, rim=WHITE, edges="all")
+    for dx in (-7, -2, 3):
+        m.box("crest", dx, -3, 0, 4, 4, 13 if dx == -2 else 10, {"top": tuftq, "*": scales(WHITE, WHITE_S, GOLD_FL, 64, fw=3, fh=2, tip=GOLD_F)})
     for sx in (-1, 1):
-        m.box("head", -9 if sx < 0 else 8, -11, -2, 1, 9, 8, plate(seed=17))
-    # plume: gold holder and a fan of three azure-and-white plumes sweeping back
+        m.box("head", 6 if sx > 0 else -10, -12, 1, 4, 8, 9, scales(WHITE, WHITE_S, GOLD_FL, 14, fw=3, fh=2, tip=GOLD_F))
+    # the chanfron: a silver crown plate and nasal, carrying the plume
+    m.box("head", -5, -16, -12, 10, 2, 13, plate(seed=15, inlay=lambda f_, x, y, w, h: GOLD if f_ == "top" and x == w // 2 else None))
+    m.box("head", -3, -13.5, -22, 6, 2, 10, plate(seed=16, rivets=False))
     m.box("plume", -2.5, -3, -2.5, 5, 3, 5, plate(GOLD, GOLD_D, rivets=False))
     plume_main = quills([(0, AZURE_D), (0.45, AZURE), (0.8, AZURE_L), (1, WHITE)], fw=2, seed=18, along="y",
                         base_at_end=True, rim=AZURE, edges="all")
@@ -437,47 +447,54 @@ def build():
                                                    along="y", base_at_end=True, rim=WHITE, edges="all"))
     m.box("plume", -0.5, -2, -3, 1, 1, 1, GEM, glow=GEM)
 
-    # ------------------------------------------------------------------ wings (local frame = spread wing:
-    # +x outward along the bone, +z the trailing feathers, the plane is 1 px thick)
-    sec = [(0, CREAM), (0.55, WHITE), (0.72, GOLD_FL), (0.88, GOLD_F), (1, GOLD_FD)]
-    prim = [(0, WHITE), (0.3, GOLD_FL), (0.6, GOLD_F), (0.85, GOLD_FD), (1, (110, 76, 36))]
+    # ------------------------------------------------------------------ wings, in layers stepped along the
+    # plane's thickness (local frame = spread wing: +x outward along the bone, +z trailing, -y the top)
+    lesser = [(0, GOLD_FL), (0.6, GOLD_F), (1, GOLD_FD)]
+    greater = [(0, WHITE), (0.6, CREAM), (0.85, GOLD_FL), (1, GOLD_F)]
+    sec = [(0, CREAM), (0.5, WHITE), (0.75, WHITE), (0.88, GOLD_FL), (1, GOLD_F)]
+    prim = [(0, WHITE), (0.3, GOLD_FL), (0.62, GOLD_F), (0.88, GOLD_FD), (1, (110, 76, 36))]
 
     def prim_len(i, n, a_len):
-        k = n - 1 - i                                     # rows counted from the leading edge
-        return a_len - (5, 0, 1, 3, 6)[min(k, 4)]
+        k = n - 1 - i
+        return a_len - (6, 1, 0, 2, 5)[min(k, 4)]
     for side, sx in (("l", 1), ("r", -1)):
         w, t = f"wing_{side}", f"wingtip_{side}"
-        x0 = 0 if sx > 0 else -24
-        m.box(w, x0, -2.5, -2.5, 24, 5, 5, scales(WHITE, WHITE_S, CREAM, 20, fw=3, fh=2))          # arm
-        m.box(w, x0, -1, 1, 24, 2, 7, scales(GOLD_FL, GOLD_FD, WHITE, 21, fw=3, fh=2, tip=GOLD_F))  # coverts
-        m.box(w, x0, 0, 2, 24, 1, 17, quills(sec, fw=3, seed=22, along="y", base_at_end=True))     # secondaries
-        x1 = 0 if sx > 0 else -14
-        m.box(t, x1, -2, -2, 14, 4, 4, scales(WHITE, WHITE_S, CREAM, 23, fw=3, fh=2))              # hand
-        m.box(t, x1, -1, 1, 14, 2, 5, scales(GOLD_FL, GOLD_FD, WHITE, 24, fw=3, fh=2, tip=GOLD_F))
+        x0 = 0 if sx > 0 else -23
+        m.box(w, x0, -2.5, -2.5, 23, 5, 5, scales(WHITE, WHITE_S, CREAM, 20, fw=3, fh=2))          # arm
+        m.box(w, x0, -2.5, 1, 23, 1, 7, quills(lesser, fw=3, seed=21, along="y", base_at_end=True,
+                                               edges=("front",)))                                    # lesser coverts
+        m.box(w, x0, -1.5, 1, 23, 1, 11, quills(greater, fw=3, seed=22, along="y", base_at_end=True))  # greater coverts
+        m.box(w, x0, -0.5, 2, 23, 1, 18, quills(sec, fw=4, seed=23, along="y", base_at_end=True))      # secondaries
+        x1 = 0 if sx > 0 else -13
+        m.box(t, x1, -2, -2, 13, 4, 4, scales(WHITE, WHITE_S, CREAM, 24, fw=3, fh=2))              # hand
+        m.box(t, x1, -2, 1, 13, 1, 7, quills(lesser, fw=3, seed=25, along="y", base_at_end=True))   # primary coverts
         x2 = 0 if sx > 0 else -34
-        m.box(t, x2, 0, -1, 34, 1, 15, quills(prim, fw=3, seed=25 + sx, along="x", base_at_end=sx < 0,
-                                               lengths=prim_len, slot_from=0.72,
-                                               edges=("front", "right" if sx > 0 else "left")))                   # primaries
+        m.box(t, x2, -1, -1, 34, 1, 16, quills(prim, fw=3, seed=26 + sx, along="x", base_at_end=sx < 0,
+                                                lengths=prim_len, slot_from=0.7,
+                                                edges=("front", "right" if sx > 0 else "left")))   # primaries
 
     # ------------------------------------------------------------------ legs
     for side, sx in (("l", 1), ("r", -1)):
         lf, sf, lh, sh = f"leg_f{side}", f"shin_f{side}", f"leg_h{side}", f"shin_h{side}"
-        # eagle forelegs: feathered trousers, yellow scaled shank, black talons
-        ab(lf, sx * 7.5 - 4.5, 30, -22, 9, 16, 10, scales(WHITE, WHITE_S, CREAM, 30 + sx, fw=3, fh=2, tip=WHITE_D))
-        ab(sf, sx * 7.5 - 3, 15, -20, 6, 12, 6, scaled_leg(31 + sx))
-        ab(sf, sx * 7.5 - 4, 3, -24, 8, 3, 10, scaled_leg(32 + sx))
-        for i, dx in enumerate((-4, -1, 2)):
-            ab(sf, sx * 7.5 + dx, 3, -28 + (1 if i != 1 else 0), 2, 3, 5, talon)
-        ab(sf, sx * 7.5 - 1, 3, -15, 2, 3, 3, talon)
-        # lion hind legs: haunch, shank, paw with pale claws
-        ab(lh, sx * 6.5 - 4, 35, 11, 8, 18, 15, fur(seed=33 + sx))
-        ab(sh, sx * 6.5 - 3, 18, 19, 6, 13, 6, fur(seed=34 + sx))
-        claws = lambda f_, x, y, w, h: (236, 226, 200) if y == h - 1 and x % 2 == 1 else fur(seed=35)(f_, x, y, w, h)
-        ab(sh, sx * 6.5 - 4, 5, 16, 8, 5, 10, {"front": claws, "*": fur(seed=35)})
-    # tail: drooping then curling up, with a dark tuft
-    m.box("tail", -2, -2, -1, 4, 4, 15, fur(seed=40))
-    m.box("tail2", -1.5, -1.5, -1, 3, 3, 13, fur(seed=41))
-    m.box("tail3", -1.5, -1.5, -1, 3, 3, 6, fur(seed=42))
+        X = sx * 8
+        # eagle forelegs: feathered trousers, scaled yellow shank, a broad foot with spread black talons
+        ab(lf, X - 5, 33, -25, 10, 14, 11, scales(WHITE, WHITE_S, CREAM, 30 + sx, fw=3, fh=2, tip=WHITE_D))
+        ab(sf, X - 3, 21, -23, 6, 16, 6, scaled_leg(31 + sx))
+        ab(sf, X - 4, 6, -25, 8, 3, 9, scaled_leg(32 + sx))                                 # the foot
+        for dx, dz, ln in ((-5, -1, 6), (-1.5, 0, 8), (2, -1, 6)):                           # three front toes
+            ab(sf, X + dx + (0.5 if dx < 0 else 0), 3, -25 - ln + 2 + dz, 3, 2, ln, scaled_leg(33 + sx))
+            ab(sf, X + dx + (0.5 if dx < 0 else 0), 4, -25 - ln + dz, 3, 4, 2, talon)        # hooked talon
+        ab(sf, X - 1, 3, -16, 3, 2, 5, scaled_leg(34 + sx))                                  # hind toe
+        ab(sf, X - 1, 4, -12, 3, 4, 2, talon)
+        # lion hind legs: a heavy haunch, a lean shank with the hock behind, a broad paw with claws
+        ab(lh, sx * 7 - 4.5, 41, 11, 9, 19, 15, fur(seed=35 + sx))
+        ab(sh, sx * 7 - 3, 24, 18, 6, 18, 7, fur(seed=36 + sx))
+        claws = lambda f_, x, y, w, h: (236, 226, 200) if y >= h - 2 and x % 2 == 1 else fur(seed=37)(f_, x, y, w, h)
+        ab(sh, sx * 7 - 4.5, 8, 13, 9, 5, 11, {"front": claws, "*": fur(seed=37)})
+    # the lion tail: long, drooping, curling up into a dark tuft
+    m.box("tail", -2, -2, -1, 4, 4, 16, fur(seed=40))
+    m.box("tail2", -1.5, -1.5, -1, 3, 3, 15, fur(seed=41))
+    m.box("tail3", -1.5, -1.5, -1, 3, 3, 8, fur(seed=42))
 
     def tuft(f_, x, y, w, h):
         k = hsh(x, 43) % 4
@@ -485,7 +502,7 @@ def build():
         if f_ in ("front", "back", "left", "right") and y >= h - 1 - k % 2:
             c = mix(c, FUR_D, 0.4)
         return jit(c, x, y, 44, 0.06)
-    m.box("tail3", -3, -3, 3, 6, 6, 9, tuft)
+    m.box("tail3", -3, -3, 5, 6, 6, 10, tuft)
 
     anims(m)
     return m
