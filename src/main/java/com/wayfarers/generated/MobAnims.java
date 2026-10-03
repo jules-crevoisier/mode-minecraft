@@ -372,10 +372,18 @@ public final class MobAnims {
         private BoneMatriarch() {}
     }
     public static final class WeepingLady {
-
-        public static final int COUNT = 0;
+        public static final int CLAW = 0;
+        public static final int RAKE = 1;
+        public static final int WAIL = 2;
+        public static final int ERUPT = 3;
+        public static final int SUMMON = 4;
+        public static final int VEIL = 5;
+        public static final int SWOOP = 6;
+        public static final int ROAR = 7;
+        public static final int STAGGER = 8;
+        public static final int COUNT = 9;
         /** Length of each action in ticks. */
-        public static final int[] TICKS = {};
+        public static final int[] TICKS = {28, 34, 48, 40, 36, 36, 32, 52, 50};
 
         private WeepingLady() {}
     }

@@ -249,8 +249,8 @@ public final class VoidWardenModel extends EntityModel<WayfarerRenderState> {
             .addAnimation("halo", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.6F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 90.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.9F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 180.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(1.9F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 360.0F), AnimationChannel.Interpolations.CATMULLROM)))
+                    new Keyframe(0.9F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 150.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(1.9F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .build();
     public static final AnimationDefinition ORBS = AnimationDefinition.Builder.withLength(1.6F)
             .addAnimation("arm_l", new AnimationChannel(AnimationChannel.Targets.ROTATION,
@@ -358,7 +358,8 @@ public final class VoidWardenModel extends EntityModel<WayfarerRenderState> {
                     new Keyframe(1.8F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .addAnimation("halo", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(1.8F, KeyframeAnimations.degreeVec(0.0F, 0.0F, -360.0F), AnimationChannel.Interpolations.CATMULLROM)))
+                    new Keyframe(0.9F, KeyframeAnimations.degreeVec(0.0F, 0.0F, -150.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(1.8F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .addAnimation("arm_l", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.5F, KeyframeAnimations.degreeVec(-40.0F, 0.0F, -60.0F), AnimationChannel.Interpolations.CATMULLROM),
@@ -512,7 +513,8 @@ public final class VoidWardenModel extends EntityModel<WayfarerRenderState> {
                     new Keyframe(2.6F, KeyframeAnimations.scaleVec(1.0, 1.0, 1.0), AnimationChannel.Interpolations.CATMULLROM)))
             .addAnimation("halo", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(2.6F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 360.0F), AnimationChannel.Interpolations.CATMULLROM)))
+                    new Keyframe(1.3F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 180.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(2.6F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .build();
     public static final AnimationDefinition WAVES = AnimationDefinition.Builder.withLength(2.1F)
             .addAnimation("sword", new AnimationChannel(AnimationChannel.Targets.ROTATION,

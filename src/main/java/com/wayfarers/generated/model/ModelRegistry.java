@@ -96,7 +96,7 @@ public final class ModelRegistry {
         event.registerEntityRenderer(ModEntities.BONE_MATRIARCH.get(), ctx -> new WayfarerModelRenderer<>(ctx,
                 new BoneMatriarchModel(ctx.bakeLayer(BoneMatriarchModel.LAYER)), 2.0F, "bone_matriarch", true));
         event.registerEntityRenderer(ModEntities.WEEPING_LADY.get(), ctx -> new WayfarerModelRenderer<>(ctx,
-                new WeepingLadyModel(ctx.bakeLayer(WeepingLadyModel.LAYER)), 0.6F, "weeping_lady", false));
+                new WeepingLadyModel(ctx.bakeLayer(WeepingLadyModel.LAYER)), 1.1F, "weeping_lady", true));
         event.registerEntityRenderer(ModEntities.LARVA_MOTHER.get(), ctx -> new WayfarerModelRenderer<>(ctx,
                 new LarvaMotherModel(ctx.bakeLayer(LarvaMotherModel.LAYER)), 0.6F, "larva_mother", false));
         event.registerEntityRenderer(ModEntities.RUIN_WALKER.get(), ctx -> new WayfarerModelRenderer<>(ctx,

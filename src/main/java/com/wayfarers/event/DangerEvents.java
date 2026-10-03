@@ -95,7 +95,7 @@ public final class DangerEvents {
     private static void onJoin(EntityJoinLevelEvent event) {
         Entity entity = event.getEntity();
         if (!(event.getLevel() instanceof ServerLevel level) || !(entity instanceof Mob mob) || !(entity instanceof Enemy)
-                || entity instanceof BossZombie || entity.entityTags().contains(SCALED)) {
+                || entity instanceof BossZombie || entity instanceof com.wayfarers.boss.WayfarerBoss || entity.entityTags().contains(SCALED)) {
             return;
         }
         entity.addTag(SCALED);

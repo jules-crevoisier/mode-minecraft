@@ -11,6 +11,7 @@ from .. import arch
 from ..arch import FACE_VEC, OPPOSITE, Palette, _pos, fill_pal, slab, stair
 from ..defs import Piece, StructureDef, register
 from ..parts import LOOT, MOB, MOD
+from .lair_ash_lord import ash_lord_lair
 
 NETHER = ["#minecraft:is_nether"]
 
@@ -710,6 +711,7 @@ def basalt_fortress(bp):
     for z in (6, 12, 18):
         for x in (-4, 4):
             brazier(bp, x, 1, z)
+    ash_lord_lair(bp)
 
 
 register(StructureDef(

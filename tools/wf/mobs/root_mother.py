@@ -424,8 +424,12 @@ def build():
         m.box("chest", x, y, z, w, 1, d, fungus, glow=fungus_glow)
 
     # a mossy shawl down the back
-    m.box("shawl", -10, 0, 0.5, 20, 30, 0, moss_strands(9, density=0.92))
-    m.box("shawl", -7, 1, 1.0, 14, 24, 0, moss_strands(19, density=0.7, dark=True))
+    # a ragged moss shawl: staggered curtains of different lengths, with a few vines and a root knot
+    for i, (x, w, ln, dz, dens, dark) in enumerate(((-10, 7, 26, 0.5, 0.8, False), (-4, 8, 33, 0.9, 0.85, True),
+                                                     (3, 7, 22, 0.6, 0.8, False), (-7, 5, 16, 1.3, 0.7, False),
+                                                     (5, 5, 28, 1.2, 0.75, True))):
+        m.box("shawl", x, 0, dz, w, ln, 0, moss_strands(9 + i * 7, density=dens, dark=dark))
+    m.box("shawl", -2, -1, 0, 4, 3, 2, bark(19, moss=2, knots=False))
 
     # ------------------------------------------------------------------ neck, head, mask, hair
     m.box("neck", -3, -7, -3, 6, 8, 6, bark(10, moss=0, twist=0.4))

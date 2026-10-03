@@ -73,32 +73,7 @@ def face(s, eye, pupil=None, mouth=None, brow=None, eye_y=4):
             s.front_px("head", mx, eye_y + 2, mouth)
 
 
-def void_warden():
-    """End mini-boss: obsidian armour with violet glow, horned helm, starlight core."""
-    s = Skin(6)
-    obs, glow = (24, 14, 36), (230, 110, 255)
-
-    def armour(x, y, w, h, f):
-        if (x + 2 * y) % 7 == 0:
-            return mix(obs, glow, 0.45)
-        return mix(obs, (40, 24, 60), ((x * y) % 3) / 3)
-    for b in ("head", "body", "arm", "leg"):
-        s.paint(b, armour)
-    s.paint("body", lambda x, y, w, h, f: (255, 230, 255) if f == "front" and x in (3, 4) and y in (4, 5) else
-            glow if f == "front" and abs(x - 3.5) <= 1.5 and 3 <= y <= 6 else None)
-    face(s, glow, (255, 220, 255))
-    s.paint("hat", lambda x, y, w, h, f: (12, 6, 20) if f != "bottom" and (y < 3 or f == "top") else None)
-    for hx in (0, 7):
-        s.front_px("hat", hx, 0, glow)
-        s.front_px("hat", hx, 1, glow)
-    return s.cv
-
-
-# ruin_walker, map_wraith, basalt_guard and void_stalker now have generated models (tools/wf/mobs), whose
-# textures gen_models.py writes under the same file names.
-SKINS = {
-    "void_warden": void_warden,
-}
+SKINS = {}
 
 
 def front_view(cv, scale=8):

@@ -8,6 +8,8 @@ from ..arch import Palette, slab, stair
 from ..blueprint import with_props
 from ..defs import Piece, StructureDef, register
 from ..parts import LOOT, MOB, MOD
+from . import lair_gryphon_knight
+from . import lair_jade_jaguar
 from . import lair_sand_pharaoh
 from . import lair_root_mother
 from . import lair_swamp_crone
@@ -2089,6 +2091,7 @@ def sky_island(bp):
             if (x, z) in main:
                 bp.set(x, main[(x, z)], z, "calcite" if (x + z) % 3 else "polished_diorite")
     arch.vines_on(bp, ((X0 - 3, Y, Z0 - 3), (X1 + 3, H1 + 12, ZP + 3)), chance=0.03, seed=7, max_len=5)
+    lair_gryphon_knight.build(bp, Y, main)      # the sky plaza arena of the Gryphon Knight
 
 
 register(StructureDef(
@@ -2486,6 +2489,9 @@ def ziggurat(bp):
             bp.set(x, 1, z, "melon")
         else:
             bp.set(x, 1, z, "short_grass")
+
+    # ---------------------------------------------------------------- under the pyramid: the Jade Jaguar's cenote
+    lair_jade_jaguar.build(bp)
 
 
 register(StructureDef(

@@ -59,11 +59,6 @@ def air(bp, x0, y0, z0, x1, y1, z1):
                 bp.set(x, y, z, "air")
 
 
-def lamp_post(bp, x, y, z):
-    bp.set(x, y, z, PBW)
-    bp.lantern(x, y + 1, z)
-
-
 # ------------------------------------------------------------------ 1. the King's Stair
 def kings_stair(bp):
     from .underground import hanging
@@ -179,68 +174,82 @@ def ceil_at(x):
     return min(-5, floor_at(x) + 12)
 
 
-ANCESTORS = (-4, -10, -16, -22)
+ANCESTORS = (-3, -10, -17)
 
 
 def ancestor(bp, cx, base, cz, inward):
-    """A dwarven ancestor statue (11 tall): pedestal, mail skirt, folded arms on a planted hammer,
-    long calcite beard, gilded helm with horns and glowing lithite eyes. inward = +1 / -1 along z."""
+    """A dwarven ancestor statue (13 tall): stepped pedestal with a lithite plaque, plated skirt, broad
+    shoulders, fists folded on a planted war hammer, a long calcite beard ringed with gold, glowing
+    lithite eyes, a gilded horned helm. inward = +1 / -1 along z (the way it looks)."""
     s = inward
-    tuff = Palette({"polished_tuff": 3, "tuff_bricks": 3, "tuff": 1}, seed=cx * 7 + cz, scale=1.5)
-
-    def P(u, f, y, b):            # u along x, f toward the hall (inward), y up from the base
-        bp.set(cx + u, base + y, cz + s * f, b)
-    face = "north" if s < 0 else "south"     # direction the statue looks
+    tuff = Palette({"polished_tuff": 3, "tuff_bricks": 3, "chiseled_tuff_bricks": 1}, seed=cx * 7 + cz, scale=1.5)
     back = "south" if s < 0 else "north"
-    for u in range(-2, 3):
+
+    def P(u, f, y, b):            # u along x, f toward the hall, y up from the base
+        bp.set(cx + u, base + y, cz + s * f, b)
+    for u in range(-2, 3):        # pedestal
         for f in range(-2, 3):
             P(u, f, 0, GT if abs(u) == 2 or abs(f) == 2 else PB)
-    P(0, 2, 0, LC)
-    for u in (-1, 1):                              # boots
-        P(u, 0, 1, "polished_blackstone")
-        P(u, 1, 1, stair("polished_blackstone_stairs", back))
-    for y in (2, 3):                               # mail skirt
-        for u in range(-1, 2):
-            for f in range(-1, 2):
-                P(u, f, y, "iron_block" if (y == 2 and (u + f) % 2 == 0) else tuff.pick(u, y, f))
-    for y in (4, 5, 6):                            # torso, shoulders
+            if abs(u) <= 1 and abs(f) <= 1:
+                P(u, f, 1, "polished_blackstone")
+    P(0, 2, 1, LC)
+    P(-1, 2, 1, stair(PBS, back))
+    P(1, 2, 1, stair(PBS, back))
+    for u in (-1, 1):             # boots with upturned toes
+        P(u, 0, 2, "polished_blackstone")
+        P(u, 1, 2, stair("polished_blackstone_stairs", back))
+    for u in range(-2, 3):        # plated skirt and a gilded belt
+        for f in range(-1, 2):
+            if abs(u) == 2 and f == 1:
+                continue
+            P(u, f, 3, "iron_block" if (u + f) % 2 == 0 else "polished_blackstone")
+            P(u, f, 4, GT if f == 1 else tuff.pick(u, 4, f))
+    for y in (5, 6, 7):           # barrel chest
         for u in range(-2, 3):
-            for f in range(-1, 1):
-                P(u, f, y, GT if (y == 4 and abs(u) < 2) else tuff.pick(u, y, f) if abs(u) < 2 else "polished_blackstone")
-    for u in (-2, 2):
-        P(u, 0, 6, stair(PBS, back, "top"))
-        P(u, 1, 4, "polished_tuff")                # fists resting on the hammer
-    P(0, 2, 4, GT)                                 # hammer: planted head, haft up to the fists
-    for y in (1, 2, 3):
-        P(0, 2, y, PBW if y > 1 else "iron_block")
-    P(-1, 2, 1, "iron_block")
-    P(1, 2, 1, "iron_block")
-    for y in (7, 8):                               # head
+            for f in range(-1, 2):
+                P(u, f, y, tuff.pick(u, y, f))
+    for u in (-3, 3):             # pauldrons, arms, fists folded on the hammer
+        P(u, 0, 7, "polished_blackstone")
+        P(u, -1, 7, "polished_blackstone")
+        P(u, 1, 7, stair(PBS, back, "top"))
+        P(u, 0, 6, tuff.pick(u, 6, 0))
+        P(u, 0, 5, tuff.pick(u, 5, 0))
+    for u in (-1, 1):
+        P(u, 2, 5, "polished_tuff")
+    for y in (2, 3, 4):           # the war hammer: head planted at its feet, haft up to the fists
+        P(0, 3, y, PBW if y > 2 else "iron_block")
+    P(-1, 3, 2, "iron_block")
+    P(1, 3, 2, "iron_block")
+    P(0, 3, 5, GT)
+    for y in (8, 9, 10):          # head
         for u in range(-1, 2):
             for f in range(-1, 2):
                 P(u, f, y, "polished_tuff")
-    P(-1, 1, 8, LC)
-    P(1, 1, 8, LC)
-    P(0, 2, 8, "polished_tuff")                    # nose
-    for y, w in ((7, 1), (6, 1), (5, 1), (4, 0), (3, 0)):   # beard, braided with gold
+    P(-1, 1, 9, LC)               # eyes
+    P(1, 1, 9, LC)
+    P(0, 2, 9, stair("polished_tuff_stairs", back, "top"))   # nose
+    beard = ((8, 2), (7, 2), (6, 2), (5, 1), (4, 1), (3, 0))
+    for y, w in beard:            # long beard over the chest, braided with gold
         for u in range(-w, w + 1):
-            P(u, 1, y, "gold_block" if (y == 4) else "calcite" if (u + y) % 2 else "polished_diorite")
-    P(0, 2, 7, stair("diorite_stairs", back, "top"))       # moustache
-    for u in range(-2, 3):                         # helm
-        for f in range(-2, 2):
-            P(u, f, 9, GT if f == 1 or abs(u) == 2 else PB)
+            P(u, 2, y, "gold_block" if (y == 5 and abs(u) == 1) else "calcite" if (u + y) % 2 else "polished_diorite")
+    P(0, 2, 8, stair("diorite_stairs", back, "top"))         # moustache
+    for u in range(-2, 3):        # helm: gilded rim, blackstone dome, golden crest, horns
+        for f in range(-2, 3):
+            if abs(u) + abs(f) <= 3:
+                P(u, f, 11, GT if (abs(u) == 2 or abs(f) == 2) else PB)
     for u in range(-1, 2):
-        for f in range(-1, 1):
-            P(u, f, 10, PB if u else "gold_block")
+        for f in range(-1, 2):
+            P(u, f, 12, PB if (u or f) else "gold_block")
+    P(0, 0, 13, "gold_block")
     for u in (-3, 3):
-        P(u, 0, 9, "bone_block[axis=x]")
-        P(u, 0, 10, "bone_block[axis=y]")
+        P(u, 0, 11, "bone_block[axis=x]")
+        P(u, 0, 12, "bone_block[axis=y]")
 
 
 def ancestors_hall(bp):
     from .underground import hanging
     xa, xb = -24, 5
-    shell(bp, xa - 2, CRYPT_Y - 4, -12, xb + 1, -4, 12, DEEP_WALL)
+    shell(bp, xa - 2, CRYPT_Y - 4, -14, xb + 1, -4, 14, DEEP_WALL)
     for x in range(xa, xb + 1):
         f, c = floor_at(x), ceil_at(x)
         drop = floor_at(x + 1) > f if x < xb else False   # this cell is lower than the next one east
@@ -261,27 +270,30 @@ def ancestors_hall(bp):
             for y in range(f, c):
                 bp.set(x, y, z, PB if y == f else DEEP_WALL.pick(x, y, z))
             bp.set(x, f + 1, z, "polished_blackstone")
-    # the statues in tall pointed niches, facing each other across the stair
+    # the statues in tall pointed niches, facing each other across the stair, a lithite halo behind each
     for cx in ANCESTORS:
         base = floor_at(cx)
         for s in (-1, 1):
-            for x in range(cx - 3, cx + 4):
-                for zz in range(6, 11):
+            for x in range(cx - 4, cx + 5):
+                for zz in range(6, 13):
                     z = zz * s
-                    for y in range(base - 1, base + 14):
-                        u = abs(x - cx)
-                        top = min(base + 12, -6) - (u == 3) * 2 - (u == 2)
-                        inside = u <= 3 and zz <= 9 and y <= top and y >= base
-                        if inside:
+                    u = abs(x - cx)
+                    top = min(base + 14, -6) - max(0, u - 1)
+                    for y in range(base - 1, base + 16):
+                        if u <= 3 and zz <= 11 and base <= y <= top:
                             bp.set(x, y, z, "air")
-                        elif bp.get(x, y, z) is None or zz == 10 or y == base - 1:
-                            bp.set(x, y, z, PB if zz == 10 else DEEP_WALL.pick(x, y, z))
-            for x in (cx - 3, cx + 3):     # niche jambs
-                for y in range(base, base + 10):
-                    bp.set(x, y, 6 * s, GT if y == base + 9 else "polished_blackstone")
-            ancestor(bp, cx, base, 8 * s, -s)
-            bp.set(cx - 2, base + 1, 6 * s, "candle[candles=3,lit=true,waterlogged=false]")
-            bp.set(cx + 2, base + 1, 6 * s, "candle[candles=2,lit=true,waterlogged=false]")
+                        elif zz == 12 or u == 4 or y == base - 1 or bp.get(x, y, z) is None:
+                            bp.set(x, y, z, PB if zz == 12 else DEEP_WALL.pick(x, y, z))
+            for x in (cx - 4, cx + 4):     # niche jambs
+                for y in range(base, min(base + 12, -6)):
+                    bp.set(x, y, 6 * s, GT if y == base + 10 else "polished_blackstone")
+            for (u, dy) in ((-2, 8), (-2, 9), (-2, 10), (2, 8), (2, 9), (2, 10), (-1, 11), (0, 11), (1, 11),
+                            (-1, 7), (1, 7)):
+                if base + dy <= min(base + 14, -6):
+                    bp.set(cx + u, base + dy, 12 * s, LC)
+            ancestor(bp, cx, base, 9 * s, -s)
+            bp.set(cx - 3, base + 1, 7 * s, "candle[candles=3,lit=true,waterlogged=false]")
+            bp.set(cx + 3, base + 1, 7 * s, "candle[candles=2,lit=true,waterlogged=false]")
         hanging(bp, cx, ceil_at(cx), 0, 3)
     # a great carved relief of the first king on the west wall, above the crypt door
     for z in range(-5, 6):
@@ -340,18 +352,16 @@ def collapsed_way(bp):
     """From the crypt's south door: a short passage, then a long stair east under everything, half
     blocked by a cave-in, down to the level of the arena."""
     y0 = CRYPT_Y
-    shell(bp, -30, AY - 3, 6, 8, y0 + 7, 16, DEEP_ROCK)
+    shell(bp, -30, AY - 3, 6, 8, y0 + 7, 18, DEEP_ROCK)
     for x in range(-29, -26):           # passage south out of the crypt
-        for z in range(7, 15):
+        for z in range(7, 17):
             bp.set(x, y0, z, "polished_deepslate")
             air(bp, x, y0 + 1, z, x, y0 + 4, z)
-    for z in range(-1, 2):
-        air(bp, -28 + z, y0 + 1, 6, -28 + z, y0 + 3, 6)
-        air(bp, -28 + z, y0 + 1, 7, -28 + z, y0 + 3, 7)
+    air(bp, -29, y0 + 1, 6, -27, y0 + 3, 7)              # the crypt's south door
     for x in range(-29, 8):
         f = way_floor(x)
         step = way_floor(x - 1) > f     # the cell to the west is higher: a stair leads down into this one
-        for z in range(12, 15):
+        for z in range(14, 17):
             for y in range(f - 2, f):
                 bp.set(x, y, z, "deepslate_tiles")
             bp.set(x, f, z, "polished_deepslate" if (x + z) % 4 else "deepslate_tiles")
@@ -359,25 +369,25 @@ def collapsed_way(bp):
             if step:
                 bp.set(x, f + 1, z, stair("polished_deepslate_stairs", "west"))
             bp.set(x, f + 6, z, DEEP_WALL.pick(x, f + 6, z))
-        for z in (11, 15):
+        for z in ((17,) if x <= -27 or 5 <= x <= 7 else (13, 17)):   # openings: crypt passage, grace door
             for y in range(f, f + 6):
                 bp.set(x, y, z, DEEP_WALL.pick(x, y, z))
         if x % 6 == 0:          # timber props, like a mine
-            for z in (12, 14):
+            for z in (14, 16):
                 for y in range(f + 1 + step, f + 5):
                     bp.set(x, y, z, "dark_oak_log[axis=y]")
-            for z in range(12, 15):
+            for z in range(14, 17):
                 bp.set(x, f + 5, z, "dark_oak_log[axis=z]")
-            bp.lantern(x, f + 4, 13, hanging=True)
+            bp.lantern(x, f + 4, 15, hanging=True)
     # the cave-in: rubble heaped along the north side, a fallen beam, cobwebs
-    for x, z, h in ((-14, 12, 2), (-13, 12, 3), (-12, 12, 2), (-13, 13, 1), (-11, 12, 1), (-6, 14, 2), (-5, 14, 1)):
+    for x, z, h in ((-14, 14, 2), (-13, 14, 3), (-12, 14, 2), (-13, 15, 1), (-11, 14, 1), (-6, 16, 2), (-5, 16, 1)):
         f = way_floor(x)
         for k in range(h):
             bp.set(x, f + 1 + k, z, "cobbled_deepslate" if k < h - 1 else "gravel")
     for x in range(-10, -7):
-        bp.set(x, way_floor(x) + 3, 13, "stripped_dark_oak_log[axis=x]")
-    bp.set(-12, way_floor(-12) + 5, 14, "cobweb")
-    bp.set(-3, way_floor(-3) + 5, 12, "cobweb")
+        bp.set(x, way_floor(x) + 3, 15, "stripped_dark_oak_log[axis=x]")
+    bp.set(-12, way_floor(-12) + 5, 16, "cobweb")
+    bp.set(-3, way_floor(-3) + 5, 14, "cobweb")
 
 
 # ------------------------------------------------------------------ 6. the Last Anvil (site of grace)
@@ -385,7 +395,7 @@ def grace(bp):
     from .underground import hanging
     x0, x1, z0, z1 = 3, 15, -5, 6
     y = AY
-    shell(bp, x0 - 2, y - 3, z0 - 2, x1 + 1, y + 9, z1 + 7, DEEP_WALL)
+    shell(bp, x0 - 2, y - 3, z0 - 2, x1 + 1, y + 9, z1 + 9, DEEP_WALL)
     for x in range(x0, x1 + 1):
         for z in range(z0, z1 + 1):
             bp.set(x, y, z, PB if abs(z) <= 1 else "polished_deepslate")
@@ -397,7 +407,7 @@ def grace(bp):
             bp.set(x, y + h + 1, z, PB if x % 4 == 1 else DEEP_WALL.pick(x, y + h + 1, z))
     # door from the Collapsed Way (south wall, x 5..7)
     for x in range(5, 8):
-        for z in range(7, 12):
+        for z in range(7, 14):
             bp.set(x, y, z, "polished_deepslate")
             air(bp, x, y + 1, z, x, y + 4, z)
     # the waystone on a gilded plinth against the west wall, lit by lithite

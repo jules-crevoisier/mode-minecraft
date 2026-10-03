@@ -127,12 +127,9 @@ def _skull_niche(L, x, y, z, facing, k):
     bp = L.bp
     bp.set(x, y - 1, z, "bone_block[axis=y]")
     L.put(x, y, z, ("skeleton_skull[rotation=%d]" if k % 3 else "wither_skeleton_skull[rotation=%d]")
-          % {"north": 8, "south": 0, "east": 12, "west": 4}[OPP[facing]])
+          % {"north": 8, "south": 0, "east": 12, "west": 4}[facing])
     L.put(x, y + 1, z, "candle[candles=2,lit=true,waterlogged=false]" if k % 2 else "air")
     bp.set(x, y + 2, z, "bone_block[axis=x]" if facing in ("east", "west") else "bone_block[axis=z]")
-
-
-OPP = {"north": "south", "south": "north", "east": "west", "west": "east"}
 
 
 # ------------------------------------------------------------------ the route
@@ -151,12 +148,6 @@ def _vault_access(L):
         bp.set(-9, y, -18, PBB)
         bp.set(-11, y, -18, PBB)
         bp.set(-10, y, -17, PBB)
-    # a doorway in the vault's west wall, framed in chiseled blackstone
-    L.air(-11, -6, -16, -11, -4, -16)
-    for y in (-6, -5, -4):
-        bp.set(-11, y, -17, CHIS)
-        bp.set(-11, y, -15, CHIS)
-    bp.set(-11, -3, -16, GILD)
 
 
 def _bone_nave(L):
@@ -168,6 +159,12 @@ def _bone_nave(L):
         L.air(x, -6, -16, x, -3, -16)
     for x in (-16, -13):
         bp.lantern(x, -3, -16, hanging=True, soul=True)
+    # the doorway in the vault's west wall, framed in chiseled blackstone
+    L.air(-11, -6, -16, -11, -4, -16)
+    for y in (-6, -5, -4):
+        bp.set(-11, y, -17, CHIS)
+        bp.set(-11, y, -15, CHIS)
+    bp.set(-11, -3, -16, GILD)
     # the nave: interior x -23..-19, z -18..10, ribbed vault
     _box_room(L, -23, -19, -18, 10, -7, -2, wall=ROCKWALL)
     L.air(-18, -6, -17, -18, -3, -15)     # opening to the corridor
@@ -178,6 +175,8 @@ def _bone_nave(L):
             for x in range(-23, -18):
                 L.put(x, -3, z, "polished_basalt[axis=x]")
             for x in (-23, -19):
+                if (x, z) == (-19, -16):
+                    continue            # keep the corridor mouth clear
                 L.put(x, -6, z, PBAS)
                 L.put(x, -5, z, PBAS)
                 L.put(x, -4, z, stair(PBBS, "east" if x == -23 else "west", "top"))
@@ -194,19 +193,21 @@ def _bone_nave(L):
         bp.set(-19, -6, z, "bone_block[axis=z]")
         L.put(-19, -5, z, "skeleton_skull[rotation=4]")
     bp.spawner(-21, -6, -6, MOB["basalt_guard"])
-    # side cache behind a gilded arch
-    L.air(-18, -6, 1, -18, -5, 1)
-    _box_room(L, -17, -15, 0, 2, -7, -3, wall=ROCKWALL)
-    L.put(-16, -6, 1, "air")
-    bp.chest(-15, -6, 1, "west", LOOT + "basalt_fortress")
-    bp.set(-16, -6, 0, "candle[candles=3,lit=true,waterlogged=false]")
-    bp.set(-16, -6, 2, "gold_block")
-    bp.set(-18, -4, 1, GILD)
+    # side cache through a gilded arch in the west wall
+    _box_room(L, -27, -25, 1, 3, -7, -3, wall=ROCKWALL)
+    L.air(-24, -6, 2, -24, -5, 2)
+    bp.chest(-27, -6, 2, "east", LOOT + "basalt_fortress")
+    bp.set(-26, -6, 1, "candle[candles=3,lit=true,waterlogged=false]")
+    bp.set(-26, -6, 3, "gold_block")
+    bp.set(-24, -4, 2, GILD)
 
 
 def _ember_stair(L):
     """From the nave (walk -6) down six steps to the landing of level 2 (walk -12)."""
     bp = L.bp
+    # landing (walk -12) x -23..-19, z 17..21
+    _box_room(L, -23, -19, 17, 21, -13, -7, wall=ROCKWALL)
+    bp.lantern(-21, -8, 19, hanging=True)
     for k in range(6):
         z = 11 + k
         y = -7 - k                      # stair block; walk on top of it
@@ -226,10 +227,6 @@ def _ember_stair(L):
         if k % 2 == 0:
             for x in (-24, -18):
                 L.put(x, y + 3, z, LAMP)
-    # landing (walk -12) x -23..-19, z 17..21
-    _box_room(L, -23, -19, 17, 21, -13, -7, wall=ROCKWALL)
-    L.air(-23, -12, 16, -19, -8, 16)
-    bp.lantern(-21, -8, 19, hanging=True)
 
 
 def _magma_gallery(L):
@@ -258,7 +255,14 @@ def _magma_gallery(L):
         L.put(x, -10, 22, stair(PBBS, "south", "top"))
         L.put(x, -10, 28, stair(PBBS, "north", "top"))
     for x in range(x0 + 2, x1, 4):
-        bp.lantern(x, -9, 25, hanging=True)
+        if x in (-18, -10):
+            # lavafalls pour from the vault into the channel between the bars
+            bp.set(x, -8, 25, "lava[level=0]")
+            for y in range(-12, -8):
+                L.put(x, y, 25, "lava[level=8]")
+            bp.set(x, -7, 25, ROCKWALL.pick(x, -7, 25))
+        else:
+            bp.lantern(x, -9, 25, hanging=True)
     # burnt ossuaries in the south wall: bones and skulls behind bars, soul lanterns
     for k, x in enumerate(range(x0 + 1, x1, 2)):
         if x % 4 == 0:
@@ -349,7 +353,9 @@ def _arena(L):
             for x in cx:
                 L.put(x, -5, cz - 1, stair(PBBS, "south", "top"))
                 L.put(x, -5, cz + 2, stair(PBBS, "north", "top"))
-            L.put(cx[0], -10, cz - 1, LAMP if cz % 10 == 0 else stair(PBBS, "south", "top"))
+            if cz % 10 == 0:
+                for x in cx:
+                    L.put(x, -10, cz - 1, LAMP)
             # wall pilaster facing the column
             wx = x1 + 1 if sx > 0 else x0 - 1
             for z in (cz, cz + 1):
@@ -429,7 +435,18 @@ def _arena(L):
         _brazier(L, x, -13, z0 + 1)
     for x in (-4, 4):
         L.put(x, -8, z0, "red_wall_banner[facing=south]")
-        L.put(x, -7, z0, "air")
+    # remains of fallen challengers along the walls, chains and lanterns over the aisles
+    for (x, z, rot) in ((-12, -6, 4), (12, 18, 12), (-11, 19, 0), (12, -7, 8), (-12, 11, 4)):
+        L.put(x, -13, z, "bone_block[axis=x]")
+        L.put(x + (1 if x < 0 else -1), -13, z, "skeleton_skull[rotation=%d]" % rot)
+        L.put(x, -12, z, "candle[candles=1,lit=true,waterlogged=false]")
+    for sx in (-1, 1):
+        for cz in COL_Z:
+            ax_ = sx * 11
+            L.put(ax_, -3, cz + 3, "iron_chain[axis=y,waterlogged=false]")
+            L.put(ax_, -4, cz + 3, "iron_chain[axis=y,waterlogged=false]")
+            bp.lantern(ax_, -5, cz + 3, hanging=True, soul=cz % 10 != 0)
+            L.open.add((ax_, -5, cz + 3))
     # the central sigil and the seal of the fight
     bp.boss_seal(AX, -13, AZ, "wayfarers:ash_lord", AR)
     L.open.add((AX, -13, AZ))
@@ -481,7 +498,7 @@ def _hoard(L):
     for x in range(6, 9):
         bp.set(x, -14, -10, PBB)
         bp.set(x, -14, -9, PBB)
-        for y in range(-13, -10):
+        for y in range(-13, -9):
             bp.set(x, y, -9, MOD["vault_bars"])
     bp.set(7, -9, -9, GILD)
     for z in range(-17, -10):
@@ -500,7 +517,7 @@ def _hoard(L):
     L.put(10, -12, -15, "gold_block")
     # the Ash Lord's spare blade, planted in a pedestal
     L.put(7, -13, -14, CHIS)
-    L.put(7, -12, -14, "chain[axis=y,waterlogged=false]" if False else PBBW)
+    L.put(7, -12, -14, PBBW)
     L.put(7, -11, -14, GILD)
     bp.lantern(7, -9, -12, hanging=True)
     bp.set(3, -10, -14, LAMP)
@@ -514,8 +531,8 @@ def ash_lord_lair(bp):
     _bone_nave(L)
     _ember_stair(L)
     _magma_gallery(L)
-    _site_of_grace(L)
     _arena(L)
+    _site_of_grace(L)       # after the arena: it opens the gate in the arena's south wall
     _hoard(L)
     bp.mist(-2, -12, AZ + AR + 1, 2, -8, AZ + AR + 1)     # the only way into the hall: its south gate
     L.seal()

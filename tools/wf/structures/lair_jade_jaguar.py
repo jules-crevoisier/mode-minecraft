@@ -40,12 +40,12 @@ SEAL_R = 16
 
 def build(bp):
     rng = random.Random(77)
+    _cenote(bp, rng)                 # the cavern first: the passages and rooms are cut through its rock shell
+    _platform(bp, rng)
     _serpent_stair(bp)
     _passage(bp, rng)
     _root_stair(bp, rng)
     _grace(bp)
-    _cenote(bp, rng)
-    _platform(bp, rng)
     _light_wells(bp, rng)
     _hoard(bp, rng)
     _mists(bp)
@@ -282,26 +282,35 @@ def _cenote(bp, rng):
             if top is None:
                 continue
             r = rng.random()
-            if r < 0.07:
-                n = rng.randint(3, 9)
+            if r < 0.04:
+                n = rng.randint(3, 8)
                 for k in range(n):
                     if bp.get(x, top - k, z) != "minecraft:air":
                         break
                     last = k == n - 1
                     berries = "true" if rng.random() < 0.35 else "false"
                     bp.set(x, top - k, z, f"cave_vines[age=25,berries={berries}]" if last else f"cave_vines_plant[berries={berries}]")
-            elif r < 0.12:
-                n = rng.randint(2, 6)
-                for k in range(n):
-                    if bp.get(x, top - k, z) != "minecraft:air":
-                        break
-                    bp.set(x, top - k, z, "vine[east=false,north=true,south=false,up=false,west=false]"
-                           if k else "vine[east=false,north=true,south=false,up=true,west=false]")
-            elif r < 0.135:
+            elif r < 0.06:
                 bp.set(x, top, z, "spore_blossom")
-            elif r < 0.17:
+            elif r < 0.09:
                 bp.set(x, top, z, "pointed_dripstone[thickness=frustum,vertical_direction=down,waterlogged=false]")
                 bp.set(x, top - 1, z, "pointed_dripstone[thickness=tip,vertical_direction=down,waterlogged=false]")
+    # jungle vines draped down the cavern walls (each strand hangs on the rock behind it)
+    sides = (("north", 0, -1), ("south", 0, 1), ("west", -1, 0), ("east", 1, 0))
+    for x in range(-CR - 1, CR + 2):
+        for z in range(-CR - 1, CR + 2):
+            for y in range(CTOP, WY + 3, -1):
+                if bp.get(x, y, z) != "minecraft:air" or rng.random() > 0.05:
+                    continue
+                for face, dx, dz in sides:
+                    wall = bp.get(x + dx, y, z + dz)
+                    if wall in (None, "minecraft:air", "minecraft:water") or "vine" in wall:
+                        continue
+                    for k in range(rng.randint(3, 9)):
+                        if bp.get(x, y - k, z) != "minecraft:air" or bp.get(x + dx, y - k, z + dz) in (None, "minecraft:air"):
+                            break
+                        bp.set(x, y - k, z, f"vine[{face}=true]")
+                    break
     # lily pads, sea pickles and ferns on the shore
     for x in range(-CR, CR + 1):
         for z in range(-CR, CR + 1):
@@ -341,7 +350,7 @@ def _platform(bp, rng):
             elif rho > 8.5:
                 b = GOLD if int(a // 15) % 2 == 0 else "polished_tuff"
             elif rho > 4.5:
-                b = ("chiseled_copper" if int(a // 22.5) % 2 else "oxidized_chiseled_copper") if int(a // 45) % 2 else "polished_tuff"
+                b = ("oxidized_chiseled_copper" if int(a // 22.5) % 2 else "weathered_chiseled_copper") if int(a // 45) % 2 else "polished_tuff"
             elif rho > 3.5:
                 b = "oxidized_cut_copper"
             elif rho > 1.5:
@@ -431,8 +440,6 @@ def _light_wells(bp, rng):
         for dx in range(-2, 4):
             for dz in range(-2, 4):
                 x, z = sx + dx, sz + dz
-                for y in range(L3 + 1, WY - 1, -1):
-                    pass
                 if bp.get(x, L3 - 1, z) is not None and bp.get(x, L3, z) == "minecraft:air" and math.hypot(x, z) < PR - 0.5:
                     continue                                   # the platform's carved floor stays clean
                 ground = None

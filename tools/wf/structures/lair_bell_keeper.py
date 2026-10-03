@@ -22,11 +22,14 @@ from ..blueprint import OPPOSITE
 from ..parts import LOOT, MOB, MOD
 
 L1 = -11                  # catacombs floor (feet at L1 + 1)
-L2 = -27                  # bell chamber floor
-ARENA = (36, 46)          # bell chamber centre (x, z)
+L2 = -30                  # bell chamber floor
+ARENA = (36, 49)          # bell chamber centre (x, z)
 AR = 15                   # clear floor radius
-WALL_TOP = L2 + 12        # the drum wall springs the dome here
-DOME = 9                  # dome rise above the drum
+WALL_TOP = L2 + 13        # the drum wall springs the dome here
+DOME = 11                 # dome rise above the drum
+STAIR_Z = 31              # the long stair: one step per block of z from the chapel door...
+STAIR_END = STAIR_Z + (L1 - L2) - 1   # ...down to the last step above the site of grace floor
+GRACE = (54, ARENA[1] - 4, 66, ARENA[1] + 10)   # site of grace shell x0, z0, x1, z1
 
 WALL = Palette({"stone_bricks": 5, "cracked_stone_bricks": 2, "mossy_stone_bricks": 1, "tuff_bricks": 2,
                 "andesite": 1}, seed=501, scale=2.0)
@@ -196,28 +199,33 @@ def chapel(bp):
         rib(bp, "z", x, 17, 29, L1 + 9, TRIM, TS)
 
 
+def _step_y(z):
+    return L1 - (z - STAIR_Z)
+
+
 def long_stair(bp):
-    """From the chapel's south door the stair falls 16 blocks to the site of grace (x 57..59, z 31..46)."""
-    for z in range(31, 47):
-        y = L1 - (z - 31)
+    """From the chapel's south door the stair falls to the site of grace (x 57..59, z STAIR_Z..STAIR_END)."""
+    for z in range(STAIR_Z, GRACE[1]):
+        y = _step_y(z)
         solid(bp, 56, y - 3, z, 60, y + 6, z, WALL)
-    steps = [(x, L1 - (z - 31), z) for z in range(31, 47) for x in (57, 58, 59)]
+    steps = [(x, _step_y(z), z) for z in range(STAIR_Z, GRACE[1]) for x in (57, 58, 59)]
     stairway(bp, steps, "north", TS, WALL, head=4)
-    for z in range(32, 46, 3):                          # candle niches in both walls
-        y = L1 - (z - 31) + 2
+    for z in range(STAIR_Z + 1, GRACE[1] - 1, 3):      # candle niches in both walls
+        y = _step_y(z) + 2
         bp.set(56, y, z, CANDLE % 2)
         bp.set(60, y, z, CANDLE % 3)
-    for z in range(33, 46, 5):
-        hang(bp, 58, L1 - (z - 31) + 5, z, 1, soul=True)
+    for z in range(STAIR_Z + 2, GRACE[1] - 1, 5):
+        hang(bp, 58, _step_y(z) + 5, z, 1, soul=True)
 
 
 def grace(bp):
-    """Site of grace (x 55..65, z 43..55): waystone, benches, candles, before the arena door."""
-    hollow(bp, 54, L2, 42, 66, L2 + 9, 56, WALL, FLOOR)
-    cove(bp, 55, 43, 65, 55, L2 + 8, TS)
+    """Site of grace (the GRACE box): waystone, benches, candles, before the arena door."""
+    x0, z0, x1, z1 = GRACE
+    hollow(bp, x0, L2, z0, x1, L2 + 9, z1, WALL, FLOOR)
+    cove(bp, x0 + 1, z0 + 1, x1 - 1, z1 - 1, L2 + 8, TS)
     # the stair comes in through the north wall and lands inside
-    for z in range(42, 47):
-        y = L1 - (z - 31)
+    for z in range(z0, STAIR_END + 1):
+        y = _step_y(z)
         for x in (57, 58, 59):
             bp.stairs(x, y, z, TS, "north")
             bp.clear(x, y + 1, z, x, min(y + 4, L2 + 8), z)
@@ -315,21 +323,22 @@ def _hanging_bell(bp, cx, cz):
     for x in (cx - 4, cx + 4):                           # iron straps
         bp.set(x, beam_y, cz, "waxed_copper_grate")
     # bell profile: (rows below the beam, radius); crown, rounded shoulder, long waist, flared sound bow, lip
-    profile = [(1, 1.5), (2, 2.6), (3, 3.1), (4, 3.3), (5, 3.4), (6, 3.6), (7, 3.9), (8, 4.5), (9, 5.1), (10, 5.5)]
+    profile = [(1, 1.6), (2, 2.9), (3, 3.6), (4, 3.9), (5, 4.0), (6, 4.1), (7, 4.3), (8, 4.6), (9, 5.0), (10, 5.6),
+               (11, 6.3), (12, 6.7)]
     for dy, r in profile:
         y = beam_y - dy
-        for x in range(cx - 6, cx + 7):
-            for z in range(cz - 6, cz + 7):
+        for x in range(cx - 8, cx + 9):
+            for z in range(cz - 8, cz + 9):
                 d = math.hypot(x - cx, z - cz)
                 if d > r + 0.35 or (d < r - 0.95 and dy > 2):
                     continue                             # outside, or the hollow inside
-                if z - cz >= 2 and abs(x - cx - round(math.sin(dy * 1.1))) < 1 and 3 <= dy <= 9:
+                if z - cz >= 2 and abs(x - cx - round(math.sin(dy * 1.1))) < 1 and 3 <= dy <= 11:
                     continue                             # the crack running down the south face
                 bp.set(x, y, z, _bell_block(x - cx, z - cz, dy))
-    bp.chain(cx, beam_y - 9, cz, beam_y - 2)            # clapper
-    bp.set(cx, beam_y - 10, cz, "polished_blackstone")
+    bp.chain(cx, beam_y - 11, cz, beam_y - 2)           # clapper
+    bp.set(cx, beam_y - 12, cz, "polished_blackstone")
     for dx, dz in ((-1, 0), (1, 0), (0, -1), (0, 1)):
-        bp.set(cx + dx, beam_y - 10, cz + dz, "polished_blackstone_wall")
+        bp.set(cx + dx, beam_y - 12, cz + dz, "polished_blackstone_wall")
     # broken bell-wheel and dangling ropes / chains around the beam
     for x, length in ((cx - 9, 6), (cx - 6, 3), (cx + 7, 8), (cx + 11, 4)):
         bp.chain(x, beam_y - length, cz, beam_y - 1)
@@ -337,22 +346,24 @@ def _hanging_bell(bp, cx, cz):
 
 def _bell_block(dx, dz, dy):
     """Bronze by band: shoulder and sound-bow bands darker, an inscription band, verdigris dripping below."""
-    if dy == 10:
+    if dy == 12:
         return "waxed_copper_block"                      # the lip
-    if dy == 5:
+    if dy == 6:
         return "waxed_chiseled_copper"                   # inscription band
-    if dy in (3, 8):
+    if dy in (3, 10):
         return "waxed_exposed_cut_copper"
-    if (dx * 3 + dz * 5) % 7 == 0 and dy in (6, 7, 9):
+    if (dx * 3 + dz * 5) % 7 == 0 and dy in (7, 8, 11):
         return "waxed_weathered_cut_copper"              # verdigris streaks under the bands
     return "waxed_cut_copper"
 
 
 def founders_vault(bp):
-    """Reward room past the arena (x 7..17, z 41..51): the bell-founders' vault with moulds and bronze."""
-    hollow(bp, 6, L2, 40, 18, L2 + 8, 52, WALL, Palette({"deepslate_tiles": 2, "polished_deepslate": 1}, seed=9))
-    cove(bp, 7, 41, 17, 51, L2 + 7, DS)
-    for z in range(43, 51, 4):
+    """Reward room past the arena (x 7..17): the bell-founders' vault."""
+    cz = ARENA[1]
+    hollow(bp, 6, L2, cz - 6, 18, L2 + 8, cz + 6, WALL, Palette({"deepslate_tiles": 2, "polished_deepslate": 1},
+                                                                  seed=9))
+    cove(bp, 7, cz - 5, 17, cz + 5, L2 + 7, DS)
+    for z in range(cz - 3, cz + 5, 4):
         rib(bp, "x", z, 7, 17, L2 + 7, "polished_deepslate", DS)
 
 
@@ -463,32 +474,7 @@ def furnish(bp):
     for x in range(52, 65, 3):
         if rng.random() < 0.4:
             bp.set(x, L1 + 1, 29, "cobweb")
-    # ---- site of grace: waystone on a dais, benches, candles, a soft light
-    gx, gz = 61, 50
-    solid(bp, gx - 1, L2 + 1, gz - 1, gx + 1, L2 + 1, gz + 1, "polished_andesite")
-    for (x, z) in square_ring(gx, gz, 2):
-        bp.stairs(x, L2 + 1, z, "polished_andesite_stairs", _face_out(gx, gz, x, z))
-    bp.set(gx, L2 + 2, gz, MOD["waystone"])
-    candles(bp, [(gx - 1, L2 + 2, gz - 1), (gx + 1, L2 + 2, gz + 1), (gx + 1, L2 + 2, gz - 1),
-                 (gx - 1, L2 + 2, gz + 1)], seed=5)
-    for x in range(56, 60):                               # benches against the south wall
-        bp.stairs(x, L2 + 1, 55, "spruce_stairs", "south")
-    for z in range(48, 54):
-        bp.stairs(65, L2 + 1, z, "spruce_stairs", "east")
-    for (x, z) in ((56, 44), (64, 44), (56, 54), (64, 54)):
-        for y in range(L2 + 1, L2 + 8):
-            bp.set(x, y, z, COLUMN.pick(x, y, z))
-        bp.set(x, L2 + 4, z, BULB)
-    hang(bp, gx, L2 + 9, gz, 2)
-    hang(bp, 58, L2 + 9, 50, 3, soul=True)
-    for (x, z) in ((55, 44), (55, 54), (65, 54)):
-        bp.set(x, L2 + 1, z, CANDLE % 4)
-    # the portal toward the bell: framed in bronze, two kneeling-monk statues
-    for z in (cz - 2, cz + 2):
-        for y in range(L2 + 1, L2 + 6):
-            bp.set(54, y, z, "waxed_copper_block" if y in (L2 + 1, L2 + 5) else COLUMN.pick(54, y, z))
-    for z in (cz - 3, cz + 3):
-        _statue(bp, 55, L2 + 1, z, "west")
+    _furnish_grace(bp)
     # ---- bell chamber: lights in the niches between pilasters, soul lanterns from the dome, shards
     for k in range(16):
         a = math.radians(k * 22.5 + 11.25)
@@ -514,22 +500,69 @@ def furnish(bp):
     bp.set(cx + 12, L2 + 1, cz - 6, "waxed_weathered_cut_copper_stairs[facing=north,half=bottom,shape=straight,"
                                     "waterlogged=false]")
     bp.boss_seal(cx, L2, cz, "wayfarers:bell_keeper", AR)
-    # ---- founders' vault: casting pit, moulds, ingots of bronze, the reward chests
+    _furnish_vault(bp)
+
+
+def _furnish_grace(bp):
+    """Waystone on a stepped dais, benches, candles, bronze bulbs; the portal flanked by kneeling monks."""
+    cx, cz = ARENA
+    x0, z0, x1, z1 = GRACE
+    gx, gz = 61, cz + 5
+    solid(bp, gx - 1, L2 + 1, gz - 1, gx + 1, L2 + 1, gz + 1, "polished_andesite")
+    for (x, z) in square_ring(gx, gz, 2):
+        bp.stairs(x, L2 + 1, z, "polished_andesite_stairs", _face_out(gx, gz, x, z))
+    bp.set(gx, L2 + 2, gz, MOD["waystone"])
+    candles(bp, [(gx - 1, L2 + 2, gz - 1), (gx + 1, L2 + 2, gz + 1), (gx + 1, L2 + 2, gz - 1),
+                 (gx - 1, L2 + 2, gz + 1)], seed=5)
+    for x in range(56, 60):                               # benches along the south wall and the east wall
+        bp.stairs(x, L2 + 1, z1 - 1, "spruce_stairs", "south")
+    for z in range(cz + 1, cz + 6):
+        bp.stairs(x1 - 1, L2 + 1, z, "spruce_stairs", "east")
+    for (x, z) in ((x1 - 2, z0 + 2), (x1 - 2, z1 - 2), (x0 + 2, z1 - 2)):
+        for y in range(L2 + 1, L2 + 8):
+            bp.set(x, y, z, COLUMN.pick(x, y, z))
+        bp.set(x, L2 + 4, z, BULB)
+    hang(bp, gx, L2 + 9, gz, 2)
+    hang(bp, 58, L2 + 9, cz + 4, 3, soul=True)
+    for (x, z) in ((x0 + 1, z1 - 1), (x1 - 1, z1 - 1), (x1 - 1, z0 + 1)):
+        bp.set(x, L2 + 1, z, CANDLE % 4)
+    for z in (cz - 2, cz + 2):                            # the portal toward the bell
+        for y in range(L2 + 1, L2 + 6):
+            bp.set(x0, y, z, "waxed_copper_block" if y in (L2 + 1, L2 + 5) else COLUMN.pick(x0, y, z))
+    for z in (cz - 3, cz + 3):
+        _statue(bp, x0 + 1, L2 + 1, z, "west")
+    for x in range(x0 + 1, 60):                           # a worn runner from the stair foot to the portal
+        for z in (cz - 1, cz, cz + 1):
+            if bp.get(x, L2 + 1, z) in (None, "minecraft:air"):
+                bp.set(x, L2 + 1, z, "red_carpet" if z == cz else "gray_carpet")
+    for x in (x0 + 4, x0 + 8):                            # banners of the order on the south wall
+        for y in (L2 + 5, L2 + 6):
+            bp.set(x, y, z1 - 1, "purple_wall_banner[facing=north]" if y == L2 + 6 else "air")
+    bp.set(x1 - 1, L2 + 1, z1 - 3, "lectern[facing=west,has_book=false,powered=false]")
+    candles(bp, [(x1 - 1, L2 + 1, z1 - 4), (x1 - 1, L2 + 1, z1 - 2), (gx - 2, L2 + 1, gz + 2),
+                 (gx + 2, L2 + 1, gz - 2)], seed=6)
+
+
+def _furnish_vault(bp):
+    """Founders' vault: a casting pit glowing under a grate, bronze bulbs, tools, the reward chests."""
+    cz = ARENA[1]
     for x in range(10, 15):
-        for z in range(44, 49):
-            bp.set(x, L2, z, "magma_block" if (x, z) == (12, 46) else "polished_blackstone")
-    bp.set(12, L2 + 1, 46, "waxed_copper_grate")
-    for (x, z) in ((8, 42), (16, 42), (8, 50), (16, 50)):
+        for z in range(cz - 2, cz + 3):
+            bp.set(x, L2, z, "magma_block" if (x, z) == (12, cz) else "polished_blackstone")
+    bp.set(12, L2 + 1, cz, "waxed_copper_grate")
+    for (x, z) in ((8, cz - 4), (16, cz - 4), (8, cz + 4), (16, cz + 4)):
         bp.set(x, L2 + 1, z, "waxed_copper_block")
         bp.set(x, L2 + 2, z, BULB)
-    for z in range(43, 50, 2):
-        bp.set(7, L2 + 1, z, "anvil[facing=north]" if z == 45 else "smithing_table" if z == 47 else "barrel[facing=up,"
-                                                                                                    "open=false]")
-    bp.chest(17, L2 + 1, 44, "west", LOOT + "monastery")
-    bp.chest(17, L2 + 1, 48, "west", LOOT + "monastery_library")
-    bp.set(17, L2 + 1, 46, "waxed_copper_block")
-    bp.set(17, L2 + 2, 46, "bell[attachment=floor,facing=west,powered=false]")
-    hang(bp, 12, L2 + 8, 46, 2)
+    for x, north, south in ((10, "anvil[facing=north]", "barrel[facing=up,open=false]"),
+                            (12, "smithing_table", "blast_furnace[facing=north,lit=false]"),
+                            (14, "barrel[facing=up,open=false]", "barrel[facing=up,open=false]")):
+        bp.set(x, L2 + 1, cz - 5, north)
+        bp.set(x, L2 + 1, cz + 5, south)
+    bp.chest(7, L2 + 1, cz - 2, "east", LOOT + "monastery")
+    bp.chest(7, L2 + 1, cz + 2, "east", LOOT + "monastery_library")
+    bp.set(7, L2 + 1, cz, "waxed_copper_block")
+    bp.set(7, L2 + 2, cz, "bell[attachment=floor,facing=east,powered=false]")
+    hang(bp, 12, L2 + 8, cz, 2)
 
 
 def _statue(bp, x, y, z, facing):
