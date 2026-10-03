@@ -120,6 +120,34 @@ def render_sprite(shape, mat, handle, accent):
     return cv
 
 
+# 5x5 emblems drawn on each boss Remembrance orb, so the 16 relics are told apart at a glance
+EMBLEMS = {
+    "drowned_warden": [".#.#.", "#.#.#", ".....", ".#.#.", "#.#.#"],   # waves
+    "bell_keeper": ["..#..", ".###.", ".###.", "#####", "..#.."],     # bell
+    "archivist": ["##.##", "#####", "#####", "#####", "##.##"],       # open book
+    "sand_pharaoh": ["#.#.#", ".###.", "##.##", ".###.", "#.#.#"],    # sun
+    "jade_jaguar": ["#...#", "#...#", "##.##", ".#.#.", ".#.#."],     # fangs
+    "root_mother": ["..#..", ".###.", "#####", "..#..", ".#.#."],     # leaf and roots
+    "swamp_crone": ["#...#", "#####", "#####", "#####", ".###."],     # cauldron
+    "gryphon_knight": ["....#", "...##", "..##.", ".##..", "#...."],  # feather
+    "rune_colossus": ["###..", "#.#..", "###..", "#..#.", "#...#"],   # rune
+    "forge_king": ["#####", ".###.", "..#..", ".###.", "#####"],      # anvil
+    "crystal_spider": ["#.#.#", ".###.", "#####", ".###.", "#.#.#"],  # web
+    "sculk_spawn": [".###.", "#...#", "#.#.#", "#...#", ".###."],     # eye
+    "ash_lord": ["..#..", ".##..", ".###.", "#####", ".###."],        # flame
+    "piglin_king": ["#.#.#", "#####", "#####", ".....", "....."],     # crown
+    "soul_reaper": [".###.", "#.#.#", "#####", ".#.#.", "....."],     # skull
+    "void_warden": ["..#..", "..#..", "#####", "..#..", "..#.."],     # star
+}
+
+
+def emblem(cv, mask, color):
+    for y, row in enumerate(mask):
+        for x, ch in enumerate(row):
+            if ch == "#":
+                cv.set(5 + x, 5 + y, color)
+
+
 def egg(base, spots):
     cv = Canvas(16, 16)
     rows = SHAPES["egg"].strip("\n").split("\n")
@@ -515,6 +543,11 @@ def main():
     written = {}
     for name, (shape, mat, handle, accent) in ITEMS.items():
         written[f"item/{name}"] = render_sprite(shape, mat, handle, accent)
+    for row in BOSS_GEAR:
+        cv = written[f"item/{remembrance_id(row[0])}"]
+        light, mid, dark, outline = MATERIALS[row[14][0]]
+        bright = sum(mid[:3]) / 3 > 150
+        emblem(cv, EMBLEMS[row[0]], outline if bright else (255, 250, 230))
     for mob, (base, spots) in EGGS.items():
         written[f"item/{mob}_spawn_egg"] = egg(base, spots)
     for name, cv in block_textures().items():
