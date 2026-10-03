@@ -13,6 +13,7 @@
   "wayfarers:azure_ocean",
   "wayfarers:dune_sea",
   "wayfarers:crystal_caverns",
+  "wayfarers:cogwork_valley",
   "wayfarers:enchanted_forest",
   "wayfarers:elderwood",
   "wayfarers:majestic_peaks",
@@ -28,6 +29,7 @@
   "wayfarers:verdant_meadows",
   "wayfarers:crystal_river",
   "wayfarers:ashen_savanna",
+  "wayfarers:rustlands",
   "wayfarers:frost_shore",
   "wayfarers:aurora_tundra",
   "wayfarers:snowcap_slopes",
@@ -36,8 +38,6 @@
   "wayfarers:thermal_caves",
   "wayfarers:wildflower_fields",
   "wayfarers:pine_highlands",
-  "wayfarers:windswept_crags",
-  "wayfarers:rustlands",
-  "wayfarers:cogwork_valley"
+  "wayfarers:windswept_crags"
  ]
 }
