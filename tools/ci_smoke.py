@@ -143,7 +143,10 @@ def main():
         f.write("eula=true\n")
     with open(os.path.join(server_dir, "server.properties"), "w") as f:
         f.write("online-mode=false\nspawn-protection=0\nlevel-seed=wayfarers-ci\nmax-tick-time=-1\n"
-                "view-distance=4\nsimulation-distance=4\nsync-chunk-writes=false\n")
+                "view-distance=4\nsimulation-distance=4\nsync-chunk-writes=false\n"
+                # a flat Overworld generates in a blink; /place structure ignores biomes, so every structure
+                # still assembles (full noise terrain made the run take over an hour on CI runners)
+                "level-type=minecraft\\:flat\ngenerate-structures=false\n")
     jvm = os.path.join(server_dir, "user_jvm_args.txt")
     if os.path.exists(jvm):
         with open(jvm, "a") as f:
