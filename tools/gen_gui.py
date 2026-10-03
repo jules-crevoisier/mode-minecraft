@@ -327,7 +327,105 @@ EYE = [
 ]
 
 
+CHECK = [
+    "................",
+    "................",
+    "............ooo.",
+    "...........oggo.",
+    "..........oggdo.",
+    ".........oggdo..",
+    "..ooo...oggdo...",
+    ".oggo..oggdo....",
+    ".odggooggdo.....",
+    "..odgggggdo.....",
+    "...odgggdo......",
+    "....odgdo.......",
+    ".....odo........",
+    "......o.........",
+    "................",
+    "................",
+]
+LOCK = [
+    "................",
+    ".....oooooo.....",
+    "....ossssssо....",
+    "....os....so....",
+    "....os....so....",
+    "...oooooooooo...",
+    "...obbbbbbbbo...",
+    "...obhhhhhhbo...",
+    "...obhbkkbhbo...",
+    "...obhbkkbhbo...",
+    "...obhhkkhhbo...",
+    "...obhhhhhhbo...",
+    "...obbbbbbbbo...",
+    "...oooooooooo...",
+    "................",
+    "................",
+]
+HOURGLASS = [
+    "................",
+    "...oooooooooo...",
+    "...obbbbbbbbo...",
+    "....oyyyyyyo....",
+    "....oyyyyyyo....",
+    ".....oyyyyo.....",
+    "......oyyo......",
+    ".......oo.......",
+    "......o..o......",
+    ".....o.yy.o.....",
+    "....o.yyyy.o....",
+    "....oyyyyyyo....",
+    "...obbbbbbbbo...",
+    "...oooooooooo...",
+    "................",
+    "................",
+]
+ORB = [
+    "................",
+    "................",
+    "......oooo......",
+    ".....ohhggo.....",
+    "....ohhgggyo....",
+    "...ohggggyyyo...",
+    "...ohgggyyyyo...",
+    "...oggggyyyyo...",
+    "...oggyyyyydo...",
+    "....oyyyyydo....",
+    ".....oyyddo.....",
+    "......oooo......",
+    "................",
+    "................",
+    "................",
+    "................",
+]
+FLAG = [
+    "................",
+    "..oo............",
+    "..owoooooooo....",
+    "..owrrrrrrrro...",
+    "..owrrhhrrrro...",
+    "..owrrrrrrro....",
+    "..owrrrrrrrro...",
+    "..owoooooooo....",
+    "..ow............",
+    "..ow............",
+    "..ow............",
+    "..ow............",
+    ".owwo...........",
+    ".oooo...........",
+    "................",
+    "................",
+]
+
+
 def icons():
+    icon("done", CHECK, {"o": SOOT, "g": hexc("7CE35A"), "d": hexc("2F8A2A")})
+    icon("lock", [r.replace("о", "o") for r in LOCK], {"o": SOOT, "s": hexc("A8A8B0"), "b": hexc("B58A45"),
+                                                       "h": hexc("D9B25E"), "k": hexc("2B1B0C")})
+    icon("progress", HOURGLASS, {"o": SOOT, "b": hexc("7C5A2B"), "y": hexc("F6C343")})
+    icon("xp", ORB, {"o": SOOT, "h": hexc("F4FFB0"), "g": hexc("B6F24A"), "y": hexc("6FD02A"), "d": hexc("3E7E14")})
+    icon("track", FLAG, {"o": SOOT, "w": hexc("C9B184"), "r": hexc("E0483B"), "h": hexc("FF9A8A")})
     icon("overworld", GLOBE, {"o": SOOT, "h": hexc("BFF1FF"), "g": hexc("4FAE4A"), "w": hexc("E8F6FF"),
                               "b": hexc("2F7FD8"), "d": hexc("1C4F8F")})
     icon("nether", GLOBE, {"o": SOOT, "h": hexc("FFD18A"), "g": hexc("F36A1D"), "w": hexc("FFE07A"),
@@ -452,6 +550,78 @@ def mockup_waystones():
     m.save("waystones")
 
 
+def bars():
+    b = Sprite(16, 6)
+    b.rect(0, 0, 15, 5, IRON_DK)
+    b.bevel(0, 0, 15, 5, SOOT, IRON_LT)
+    b.save("bar_back", nine=2)
+    f = Sprite(16, 6)
+    for y in range(6):
+        c = mix(hexc("F6D77A"), hexc("B5832A"), y / 5)
+        for x in range(16):
+            f.set(x, y, c)
+    f.save("bar_fill", nine=1)
+    g = Sprite(16, 6)
+    for y in range(6):
+        c = mix(hexc("A6F07A"), hexc("3E9A2A"), y / 5)
+        for x in range(16):
+            g.set(x, y, c)
+    g.save("bar_done", nine=1)
+
+
+def mockup_quests():
+    W, H = 384, 228
+    m = Mock(W + 40, H + 40)
+    ox, oy = 20, 20
+    m.nine("panel", ox, oy, W, H, 9)
+    m.nine("title_plate", ox + W // 2 - 60, oy - 5, 120, 18, 6)
+    m.text("Journal de quêtes", ox + W // 2, oy - 1, hexc("2B1B0C"), shadow=False, center=True)
+    chapters = [("Premiers pas", 8, 8), ("Explorateur", 9, 27), ("Profondeurs", 3, 17), ("Nether", 0, 15), ("End", 0, 14)]
+    for i, (name, d, t) in enumerate(chapters):
+        x, y = ox + 12, oy + 22 + i * 34
+        m.nine("inset", x, y, 104, 30, 4)
+        if i == 1:
+            m.nine("row_selected", x + 2, y + 2, 100, 26, 2)
+        m.icon("overworld" if i < 3 else ("nether" if i == 3 else "end"), x + 4, y + 4)
+        m.text(name, x + 23, y + 4, hexc("F6C343") if i == 1 else hexc("F3E3C0"))
+        m.nine("bar_back", x + 23, y + 18, 74, 6, 2)
+        fill = int(72 * d / t)
+        if fill:
+            m.nine("bar_done" if d == t else "bar_fill", x + 24, y + 19, fill, 4, 1)
+    lx, ly = ox + 122, oy + 22
+    m.nine("inset", lx, ly, 132, H - 34, 4)
+    qs = [("Avant-poste de la Guilde", "done"), ("Tour de guet en ruine", "done"), ("Monastère des cimes", "progress"),
+          ("Le Sonneur de Glas", "lock"), ("Oasis du désert", None), ("Bibliothèque oubliée", None),
+          ("Camp de bandits", "done"), ("Phare côtier", None)]
+    for i, (q, st) in enumerate(qs):
+        ry = ly + 3 + i * 22
+        if i == 2:
+            m.nine("row_selected", lx + 3, ry, 120, 21, 2)
+        m.icon("overworld", lx + 5, ry + 2)
+        col = hexc("A6F07A") if st == "done" else hexc("7E7262") if st == "lock" else hexc("F3E3C0")
+        m.text(q[:17], lx + 24, ry + 6, col)
+        if st:
+            m.icon(st, lx + 105, ry + 2)
+        if i == 2:
+            m.icon("track", lx + 89, ry + 2)
+    cx, cy, cw, ch = ox + 260, oy + 18, W - 272, H - 28
+    m.nine("card", cx, cy, cw, ch, 4)
+    m.icon("overworld", cx + cw // 2 - 8, cy + 6)
+    m.text("Monastère des cimes", cx + cw // 2, cy + 26, INK, shadow=False, center=True)
+    for i, l in enumerate(["Trouve le monastère", "perché sur les cimes", "enneigées et sonne", "sa grande cloche."]):
+        m.text(l, cx + 5, cy + 40 + i * 9, hexc("6E5A40"), shadow=False)
+    m.text("Objectifs : 1 / 2", cx + 5, cy + 82, INK, shadow=False)
+    m.nine("bar_back", cx + 5, cy + 92, cw - 10, 6, 2)
+    m.nine("bar_fill", cx + 6, cy + 93, (cw - 12) // 2, 4, 1)
+    m.text("Récompenses", cx + 5, cy + ch - 52, INK, shadow=False)
+    m.icon("xp", cx + 5, cy + ch - 42)
+    m.text("100", cx + 21, cy + ch - 37, hexc("3E7E14"), shadow=False)
+    m.icon("pin", cx + 45, cy + ch - 42)
+    m.nine("button_hover", cx + 6, cy + ch - 26, cw - 12, 20, 4)
+    m.text("Ne plus suivre", cx + cw // 2, cy + ch - 21, hexc("FFFFFF"), center=True)
+    m.save("quests")
+
+
 def main():
     panel()
     inset()
@@ -463,8 +633,10 @@ def main():
     title_plate()
     scroll()
     icons()
+    bars()
     if "--mockup" in sys.argv:
         mockup_waystones()
+        mockup_quests()
     print("gui sprites written to", os.path.relpath(OUT, ROOT))
 
 

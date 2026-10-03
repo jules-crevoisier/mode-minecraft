@@ -17,13 +17,15 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.bus.BusGroup;
 import org.lwjgl.glfw.GLFW;
 
-/** Client-only wiring: entity models and renderers, the boss bars, and the two key bindings (sort, magnet). */
+/** Client-only wiring: entity models and renderers, HUD layers (boss bars, quest tracker) and key bindings. */
 public final class WayfarersClient {
     private static final KeyMapping.Category CATEGORY = KeyMapping.Category.register(Wayfarers.id("main"));
     public static final KeyMapping SORT_KEY = new KeyMapping("key.wayfarers.sort_inventory",
             InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_R, CATEGORY);
     public static final KeyMapping MAGNET_KEY = new KeyMapping("key.wayfarers.toggle_magnet",
             InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_M, CATEGORY);
+    public static final KeyMapping QUESTS_KEY = new KeyMapping("key.wayfarers.quests",
+            InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_J, CATEGORY);
 
     private WayfarersClient() {}
 
@@ -31,9 +33,11 @@ public final class WayfarersClient {
         EntityRenderersEvent.RegisterLayerDefinitions.BUS.addListener(ModelRegistry::registerLayers);
         EntityRenderersEvent.RegisterRenderers.BUS.addListener(WayfarersClient::registerRenderers);
         AddGuiOverlayLayersEvent.BUS.addListener(EldenBossBar::register);
+        AddGuiOverlayLayersEvent.BUS.addListener(QuestTracker::register);
         RegisterKeyMappingsEvent.BUS.addListener(event -> {
             event.register(SORT_KEY);
             event.register(MAGNET_KEY);
+            event.register(QUESTS_KEY);
         });
         TickEvent.ClientTickEvent.Post.BUS.addListener(event -> onClientTick());
     }
@@ -63,6 +67,14 @@ public final class WayfarersClient {
             if (connection != null && mc.player != null) {
                 connection.sendCommand("wayfarers sort");
             }
+        }
+        while (QUESTS_KEY.consumeClick()) {
+            if (connection != null && mc.player != null) {
+                com.wayfarers.network.WayfarersNet.toServer(new com.wayfarers.network.QuestRequestMsg(true));
+            }
+        }
+        if (mc.player != null && mc.player.tickCount % 20 == 0) {
+            QuestTracker.tick();
         }
         while (MAGNET_KEY.consumeClick()) {
             if (connection != null && mc.player != null) {

@@ -1,6 +1,8 @@
 package com.wayfarers.client;
 
+import com.wayfarers.client.gui.QuestJournalScreen;
 import com.wayfarers.client.gui.WaystoneScreen;
+import com.wayfarers.network.QuestSnapshotMsg;
 import com.wayfarers.network.WaystoneListMsg;
 import net.minecraft.client.Minecraft;
 
@@ -15,5 +17,15 @@ public final class ClientHooks {
             screen.withStateFrom(old);
         }
         mc.gui.setScreen(screen);
+    }
+
+    public static void questSnapshot(QuestSnapshotMsg msg) {
+        ClientQuests.update(msg);
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.gui.screen() instanceof QuestJournalScreen journal) {
+            journal.refresh(msg);
+        } else if (msg.open()) {
+            mc.gui.setScreen(new QuestJournalScreen());
+        }
     }
 }

@@ -7,10 +7,49 @@ import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.advancements.AdvancementProgress;
+import com.wayfarers.network.QuestSnapshotMsg;
+import com.wayfarers.network.WayfarersNet;
 
-/** Prints the group's quest progress per chapter (backed by the shared advancements). */
+import java.util.ArrayList;
+import java.util.List;
+
+/** Quest progress (backed by the shared advancements): journal snapshots and the chat summary. */
 public final class QuestBook {
     private QuestBook() {}
+
+    /** The player's progress on every quest of every chapter, for the journal and the HUD tracker. */
+    public static QuestSnapshotMsg snapshot(ServerPlayer player, boolean open) {
+        MinecraftServer server = player.level().getServer();
+        List<QuestSnapshotMsg.State> states = new ArrayList<>();
+        for (GeneratedContent.Chapter chapter : GeneratedContent.CHAPTERS) {
+            for (String quest : chapter.quests()) {
+                AdvancementHolder holder = server.getAdvancements().get(Wayfarers.id(quest));
+                if (holder == null) {
+                    continue;
+                }
+                AdvancementProgress progress = player.getAdvancements().getOrStartProgress(holder);
+                int done = 0;
+                int total = 0;
+                for (String ignored : progress.getCompletedCriteria()) {
+                    done++;
+                    total++;
+                }
+                for (String ignored : progress.getRemainingCriteria()) {
+                    total++;
+                }
+                states.add(new QuestSnapshotMsg.State(quest, progress.isDone(), done, total));
+            }
+        }
+        return new QuestSnapshotMsg(open, states);
+    }
+
+    /** Refreshes the journal/tracker of every online player (quest progress is shared by the group). */
+    public static void pushToAll(MinecraftServer server) {
+        for (ServerPlayer p : server.getPlayerList().getPlayers()) {
+            WayfarersNet.toPlayer(p, snapshot(p, false));
+        }
+    }
 
     public static void print(ServerPlayer player) {
         MinecraftServer server = player.level().getServer();

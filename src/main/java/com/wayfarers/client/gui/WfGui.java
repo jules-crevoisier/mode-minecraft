@@ -33,6 +33,10 @@ public final class WfGui {
     public static final int GOLD = 0xFFF6C343;
     public static final int PLATE_INK = 0xFF2B1B0C;
 
+    public static Identifier id(String sprite) {
+        return Wayfarers.id(sprite);
+    }
+
     public static Identifier icon(String name) {
         return Wayfarers.id("icon/" + name);
     }

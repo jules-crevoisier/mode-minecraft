@@ -21,6 +21,8 @@ NS = "wayfarers"
 ADV = {}
 LANG_EN, LANG_FR = {}, {}
 REWARDS = {}
+INFO = {}
+REWARD_ITEMS = {}
 
 
 def text(key):
@@ -58,6 +60,7 @@ def quest(qid, parent, icon, title, desc, criteria, frame="task", reward=None, x
     if rewards:
         adv["rewards"] = rewards
     ADV[qid] = adv
+    INFO[qid] = {"xp": xp, "reward": reward}
 
 
 def in_structure(sid):
@@ -82,6 +85,7 @@ def entered(dim):
 
 
 def reward(name, *entries):
+    REWARD_ITEMS[name] = [(i if ":" in i else f"{NS}:{i}", c) for i, c in entries]
     REWARDS[name] = {
         "type": "minecraft:advancement_reward",
         "pools": [{"rolls": 1.0, "bonus_rolls": 0.0, "entries": [{
@@ -310,6 +314,10 @@ def main():
     chapters = {}
     for qid in ADV:
         chapters.setdefault(qid.split("/")[0], []).append(qid)
+    # gen_java bakes the rewards into GeneratedContent for the quest journal
+    info = {q: {"xp": v["xp"], "items": REWARD_ITEMS.get(v["reward"], []) if v["reward"] else []} for q, v in INFO.items()}
+    with open(os.path.join(ROOT, "build", "quest_info.json"), "w", encoding="utf-8") as f:
+        json.dump(info, f, indent=1)
     # Java reads this to print chapter progress from the Atlas item
     with open(os.path.join(DATA, "quests.json"), "w", encoding="utf-8") as f:
         json.dump({c: v for c, v in chapters.items() if c != "root"}, f, indent=2)

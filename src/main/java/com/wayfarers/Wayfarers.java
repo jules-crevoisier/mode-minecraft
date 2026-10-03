@@ -60,6 +60,7 @@ public final class Wayfarers {
         DangerEvents.register();
         SpawnPlacementRegisterEvent.BUS.addListener(ModEntities::registerSpawnPlacements);
         context.registerConfig(ModConfig.Type.COMMON, WayfarersConfig.SPEC);
+        context.registerConfig(ModConfig.Type.CLIENT, com.wayfarers.config.WayfarersClientConfig.SPEC);
 
         if (FMLEnvironment.dist == Dist.CLIENT) {
             com.wayfarers.client.WayfarersClient.init(modBus);

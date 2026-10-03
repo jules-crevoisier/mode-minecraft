@@ -57,6 +57,7 @@ public final class CoopEvents {
         } finally {
             sharing = false;
         }
+        com.wayfarers.util.QuestBook.pushToAll(server);
     }
 
     private static void onLogin(PlayerEvent.PlayerLoggedInEvent event) {
@@ -85,5 +86,6 @@ public final class CoopEvents {
             player.getInventory().add(new ItemStack(ModItems.STRUCTURE_COMPASS.get()));
             player.sendSystemMessage(Component.translatable("message.wayfarers.welcome").withStyle(ChatFormatting.GOLD));
         }
+        com.wayfarers.network.WayfarersNet.toPlayer(player, com.wayfarers.util.QuestBook.snapshot(player, false));
     }
 }

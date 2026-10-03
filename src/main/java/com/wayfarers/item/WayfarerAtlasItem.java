@@ -9,7 +9,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 
-/** Shows the guild's progress through the five chapters of the quest line. */
+/** Opens the quest journal: the guild's progress through the five chapters of the quest line. */
 public class WayfarerAtlasItem extends TooltipItem {
     public WayfarerAtlasItem(Properties properties) {
         super(properties);
@@ -18,7 +18,7 @@ public class WayfarerAtlasItem extends TooltipItem {
     @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         if (player instanceof ServerPlayer serverPlayer) {
-            QuestBook.print(serverPlayer);
+            com.wayfarers.network.WayfarersNet.toPlayer(serverPlayer, QuestBook.snapshot(serverPlayer, true));
             level.playSound(null, player, SoundEvents.BOOK_PAGE_TURN, SoundSource.PLAYERS, 1.0F, 1.0F);
         }
         return InteractionResult.SUCCESS;

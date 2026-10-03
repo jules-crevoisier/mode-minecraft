@@ -183,6 +183,16 @@ def main():
         qs = ", ".join(f'"{q}"' for q in quests)
         ch.append(f'            new Chapter("{cid}", List.of({qs}))')
     lines.append(",\n".join(ch))
+    lines += ["    );", ""]
+    info_path = os.path.join(ROOT, "build", "quest_info.json")
+    info = json.load(open(info_path)) if os.path.exists(info_path) else {}
+    lines.append("    /** Quest rewards shown in the journal: \"xp|item*count;item*count\". */")
+    lines.append("    public static final java.util.Map<String, String> REWARDS = java.util.Map.ofEntries(")
+    ents = []
+    for q, v in sorted(info.items()):
+        items = ";".join(f"{i}*{c}" for i, c in v["items"])
+        ents.append(f'            java.util.Map.entry("{q}", "{v["xp"]}|{items}")')
+    lines.append(",\n".join(ents))
     lines += ["    );", "", "    private GeneratedContent() {}", "}", ""]
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     with open(OUT, "w") as f:
