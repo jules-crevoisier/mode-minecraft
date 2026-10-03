@@ -70,6 +70,7 @@ def recipes():
     shaped("structure_compass", [" M ", "MCM", " M "], {"M": "map_fragment", "C": "compass"}, category="equipment")
     shapeless("recall_scroll", ["paper", "map_fragment", "ender_pearl"], count=2)
     shapeless("wayfarer_atlas", ["book", "map_fragment"])
+    shapeless("wayfarer_manual", ["book", "feather"])
     # tier 1 — map fragments (Overworld)
     shaped("cartographer_blade", [" I ", "MIM", " S "], {"I": "iron_ingot", "M": "map_fragment", "S": "stick"}, category="equipment")
     armor_set("explorer", "leather", {"X": "map_fragment"})

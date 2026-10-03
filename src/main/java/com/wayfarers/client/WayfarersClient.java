@@ -35,6 +35,8 @@ public final class WayfarersClient {
         AddGuiOverlayLayersEvent.BUS.addListener(EldenBossBar::register);
         AddGuiOverlayLayersEvent.BUS.addListener(QuestTracker::register);
         MobHealthBars.register();
+        AddGuiOverlayLayersEvent.BUS.addListener(TipCards::register);
+        net.minecraftforge.event.entity.player.ItemTooltipEvent.BUS.addListener(TipCards::onTooltip);
         RegisterKeyMappingsEvent.BUS.addListener(event -> {
             event.register(SORT_KEY);
             event.register(MAGNET_KEY);
@@ -62,6 +64,7 @@ public final class WayfarersClient {
 
     private static void onClientTick() {
         EldenBossBar.tick();
+        TipCards.tick();
         Minecraft mc = Minecraft.getInstance();
         ClientPacketListener connection = mc.getConnection();
         while (SORT_KEY.consumeClick()) {

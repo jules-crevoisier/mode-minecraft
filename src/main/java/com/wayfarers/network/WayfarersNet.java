@@ -23,6 +23,7 @@ public final class WayfarersNet {
                 .clientbound()
                     .addMain(WaystoneListMsg.class, WaystoneListMsg.STREAM_CODEC, WaystoneListMsg::handle)
                     .addMain(QuestSnapshotMsg.class, QuestSnapshotMsg.STREAM_CODEC, QuestSnapshotMsg::handle)
+                    .addMain(TipMsg.class, TipMsg.STREAM_CODEC, TipMsg::handle)
                 .serverbound()
                     .addMain(WaystoneActionMsg.class, WaystoneActionMsg.STREAM_CODEC, WaystoneActionMsg::handle)
                     .addMain(QuestRequestMsg.class, QuestRequestMsg.STREAM_CODEC, QuestRequestMsg::handle)

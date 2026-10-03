@@ -24,6 +24,8 @@ public final class CoopEvents {
 
     public static void register() {
         AdvancementEvent.AdvancementProgressEvent.BUS.addListener(CoopEvents::onProgress);
+        net.minecraftforge.event.level.BlockEvent.EntityPlaceEvent.BUS.addListener(
+                (java.util.function.Consumer<net.minecraftforge.event.level.BlockEvent.EntityPlaceEvent>) CoopEvents::onPlace);
         PlayerEvent.PlayerLoggedInEvent.BUS.addListener(CoopEvents::onLogin);
     }
 
@@ -60,6 +62,18 @@ public final class CoopEvents {
         com.wayfarers.util.QuestBook.pushToAll(server);
     }
 
+    /** Placing a storage block for the first time explains it. */
+    private static void onPlace(net.minecraftforge.event.level.BlockEvent.EntityPlaceEvent event) {
+        if (event.getEntity() instanceof ServerPlayer player) {
+            var block = event.getPlacedBlock().getBlock();
+            if (block == com.wayfarers.registry.ModBlocks.SORTING_CHEST.get()) {
+                com.wayfarers.util.Tips.show(player, "sorting_chest");
+            } else if (block == com.wayfarers.registry.ModBlocks.GUILD_TERMINAL.get()) {
+                com.wayfarers.util.Tips.show(player, "guild_terminal");
+            }
+        }
+    }
+
     private static void onLogin(PlayerEvent.PlayerLoggedInEvent event) {
         if (!(event.getEntity() instanceof ServerPlayer player)) {
             return;
@@ -83,6 +97,7 @@ public final class CoopEvents {
         }
         if (data.welcome(player.getUUID())) {
             player.getInventory().add(new ItemStack(ModItems.WAYFARER_ATLAS.get()));
+            player.getInventory().add(new ItemStack(ModItems.WAYFARER_MANUAL.get()));
             player.getInventory().add(new ItemStack(ModItems.STRUCTURE_COMPASS.get()));
             player.sendSystemMessage(Component.translatable("message.wayfarers.welcome").withStyle(ChatFormatting.GOLD));
         }

@@ -203,6 +203,10 @@ def main():
         lang_fr[f"structure.{NS}.{sdef.id}"] = sdef.title_fr
     for key, (en, fr) in content.MESSAGES.items():
         lang_en[key], lang_fr[key] = en, fr
+    from wf import guide
+    g_en, g_fr = guide.lang()
+    lang_en.update(g_en)
+    lang_fr.update(g_fr)
     # advancement translations are merged in by gen_quests.py
     extra = os.path.join(ROOT, "build", "quest_lang.json")
     if os.path.exists(extra):

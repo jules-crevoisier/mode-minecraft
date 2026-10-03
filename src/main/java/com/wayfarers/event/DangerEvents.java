@@ -126,6 +126,9 @@ public final class DangerEvents {
         mob.setCustomName(Component.translatable("message.wayfarers.elite", mob.getType().getDescription())
                 .withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
         mob.setHealth(mob.getMaxHealth());
+        if (mob.level() instanceof ServerLevel sl) {
+            com.wayfarers.util.Tips.showNear(sl, mob.position(), 32, "elite");
+        }
     }
 
     private static void add(Mob mob, net.minecraft.core.Holder<net.minecraft.world.entity.ai.attributes.Attribute> attr,
@@ -179,6 +182,9 @@ public final class DangerEvents {
             for (ServerPlayer player : server.getPlayerList().getPlayers()) {
                 player.level().playSound(null, player, now ? SoundEvents.WITHER_SPAWN : SoundEvents.BELL_BLOCK,
                         SoundSource.AMBIENT, 0.6F, now ? 0.5F : 1.0F);
+                if (now) {
+                    com.wayfarers.util.Tips.show(player, "blood_moon");
+                }
             }
         }
     }
@@ -196,6 +202,9 @@ public final class DangerEvents {
                     : danger <= 5 ? ChatFormatting.RED : ChatFormatting.DARK_PURPLE;
             serverPlayer.sendOverlayMessage(Component.translatable("message.wayfarers.danger",
                     Component.translatable("message.wayfarers.danger." + Math.min(danger, 7))).withStyle(color));
+            if (danger >= 2 && danger > last) {
+                com.wayfarers.util.Tips.show(serverPlayer, "danger");
+            }
         }
     }
 }

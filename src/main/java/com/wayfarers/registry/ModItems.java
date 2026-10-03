@@ -48,6 +48,8 @@ public final class ModItems {
 
     // ---- explorer utilities
     public static final RegistryObject<Item> WAYFARER_ATLAS = register("wayfarer_atlas", WayfarerAtlasItem::new, p -> p.stacksTo(1));
+    public static final RegistryObject<Item> WAYFARER_MANUAL = register("wayfarer_manual", com.wayfarers.item.WayfarerManualItem::new,
+            p -> p.stacksTo(1));
     public static final RegistryObject<Item> STRUCTURE_COMPASS = register("structure_compass", StructureCompassItem::new,
             p -> p.stacksTo(1).rarity(Rarity.UNCOMMON));
     public static final RegistryObject<Item> TRAVEL_BACKPACK = register("travel_backpack", TravelBackpackItem::new, p -> p.stacksTo(1));

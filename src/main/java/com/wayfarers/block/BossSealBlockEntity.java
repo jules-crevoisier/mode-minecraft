@@ -60,6 +60,9 @@ public class BossSealBlockEntity extends BlockEntity {
         List<Player> inside = server.getEntitiesOfClass(Player.class, arena(radius * 0.8),
                 p -> p.isAlive() && !p.isSpectator() && !p.isCreative());
         if (state == READY) {
+            if (server.getGameTime() % 40 == 0) {
+                com.wayfarers.util.Tips.showNear(server, net.minecraft.world.phys.Vec3.atCenterOf(worldPosition), radius * 1.6, "boss_mist");
+            }
             if (!inside.isEmpty()) {
                 wake(server, inside);
             }

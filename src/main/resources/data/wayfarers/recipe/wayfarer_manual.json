@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:book",
+    "minecraft:feather"
+  ],
+  "result": {
+    "id": "wayfarers:wayfarer_manual",
+    "count": 1
+  }
+}

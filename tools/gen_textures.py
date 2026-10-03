@@ -28,6 +28,7 @@ ITEMS = {
     "void_heart": ("heart", "void", "wood", "amethyst"),
     # explorer utilities
     "wayfarer_atlas": ("book", "leather", "gold", "gold"),
+    "wayfarer_manual": ("book", "map", "gold", "sapphire"),
     "structure_compass": ("compass", "gold", "dark", "ruby"),
     "travel_backpack": ("backpack", "leather", "dark", "gold"),
     "magnet_ring": ("ring", "iron", "wood", "ruby"),

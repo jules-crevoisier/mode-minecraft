@@ -19,6 +19,10 @@ public final class ClientHooks {
         mc.gui.setScreen(screen);
     }
 
+    public static void openGuide(String page) {
+        Minecraft.getInstance().gui.setScreen(new com.wayfarers.client.gui.GuideScreen(page));
+    }
+
     public static void questSnapshot(QuestSnapshotMsg msg) {
         ClientQuests.update(msg);
         Minecraft mc = Minecraft.getInstance();

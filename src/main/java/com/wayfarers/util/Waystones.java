@@ -50,6 +50,7 @@ public final class Waystones {
             level.playSound(null, pos, SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.BLOCKS, 1.0F, 1.0F);
         }
         list(player, here);
+        Tips.show(player, "waystone");
     }
 
     /** Opens the travel screen on the player's client (current = the waystone they stand at, or ""). */

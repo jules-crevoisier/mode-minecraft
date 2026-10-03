@@ -49,6 +49,7 @@ public final class GraveEvents {
         grave.fill(player, stacks);
         player.sendSystemMessage(Component.translatable("message.wayfarers.grave", pos.getX(), pos.getY(), pos.getZ(),
                 level.dimension().identifier().getPath()).withStyle(ChatFormatting.YELLOW));
+        com.wayfarers.util.Tips.show(player, "grave");
         return true; // cancel the vanilla drops: everything is in the grave
     }
 
