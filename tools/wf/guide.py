@@ -77,12 +77,18 @@ PAGES = [
          "Accroupi + clic droit pour le trier tout de suite. Pose-en un près de ta ferme ou de l'entrée de ta mine."),
     ], ["wayfarers:sorting_chest"]),
     ("guild_terminal", "storage", "wayfarers:guild_terminal", ("Guild Terminal", "Terminal de guilde"), [
-        ("Place it in your storage room. Right-click: every item of your inventory that already exists in a chest "
-         "within 10 blocks goes into that chest.",
-         "Pose-le dans ta salle de stockage. Clic droit : chaque objet de ton inventaire déjà présent dans un coffre "
-         "à moins de 10 blocs y est rangé."),
-        ("Sneak-right-click to sort every chest around it at once.",
-         "Accroupi + clic droit pour trier d'un coup tous les coffres autour."),
+        ("Place it in your storage room: it shows everything stored in the chests within 12 blocks as one grid, "
+         "with a search box. No cables, no power.",
+         "Pose-le dans ta salle de stockage : il affiche tout le contenu des coffres à 12 blocs dans une seule "
+         "grille, avec une recherche. Ni câble, ni énergie."),
+        ("Click an item to take a stack (right-click: half, middle-click: one, shift-click: straight into your "
+         "inventory). Click the grid with an item, or shift-click your inventory, to store it. Store all and Store "
+         "matching empty your inventory in one click.",
+         "Clic sur un objet : une pile (clic droit : la moitié, molette : un seul, Maj : directement dans "
+         "l'inventaire). Clic sur la grille avec un objet, ou Maj + clic dans ton inventaire, pour le ranger. "
+         "« Tout ranger » et « Ranger identiques » vident ton inventaire d'un clic."),
+        ("Sneak-right-click the terminal to sort every chest around it at once.",
+         "Accroupi + clic droit sur le terminal pour trier d'un coup tous les coffres autour."),
     ], ["wayfarers:guild_terminal"]),
     ("backpack", "storage", "wayfarers:travel_backpack", ("Travel Backpack", "Sac du Voyageur"), [
         ("Right-click to open 27 extra slots that travel with you. Keep it in your hand to use it.",
@@ -191,9 +197,9 @@ TIPS = [
     ("sorting_chest", "wayfarers:sorting_chest", ("Sorting chest: it sorts itself and pulls in nearby drops.",
                                                   "Coffre de tri : il se trie seul et aspire les objets proches."),
      "sorting_chest"),
-    ("guild_terminal", "wayfarers:guild_terminal", ("Terminal: right-click to store your items in the chests around.",
-                                                    "Terminal : clic droit pour ranger tes objets dans les coffres "
-                                                    "autour."), "guild_terminal"),
+    ("guild_terminal", "wayfarers:guild_terminal", ("Terminal: every chest within 12 blocks in one searchable grid.",
+                                                    "Terminal : tous les coffres à 12 blocs dans une seule grille, "
+                                                    "avec recherche."), "guild_terminal"),
     ("elite", "minecraft:gold_ingot", ("An Elite! Gold name, hits hard, drops good loot.",
                                        "Un élite ! Nom doré, frappe fort, bon butin."), "danger"),
     ("blood_moon", "minecraft:redstone", ("A Blood Moon rises: monsters are much stronger tonight.",

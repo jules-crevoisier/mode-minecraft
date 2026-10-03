@@ -19,6 +19,14 @@ public final class ClientHooks {
         mc.gui.setScreen(screen);
     }
 
+    public static void terminalContents(com.wayfarers.network.TerminalContentsMsg msg) {
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.player != null && mc.player.containerMenu instanceof com.wayfarers.menu.TerminalMenu menu
+                && menu.containerId == msg.containerId()) {
+            menu.clientContents = msg.entries();
+        }
+    }
+
     public static void openGuide(String page) {
         Minecraft.getInstance().gui.setScreen(new com.wayfarers.client.gui.GuideScreen(page));
     }

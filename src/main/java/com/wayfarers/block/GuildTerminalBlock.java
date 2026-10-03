@@ -9,6 +9,10 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.SimpleMenuProvider;
+import com.wayfarers.menu.TerminalMenu;
+import com.wayfarers.util.StorageNetwork;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Container;
@@ -58,27 +62,22 @@ public class GuildTerminalBlock extends HorizontalDirectionalBlock {
 
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
-        if (!(level instanceof ServerLevel serverLevel)) {
-            return InteractionResult.SUCCESS;
-        }
-        List<Container> chests = nearbyStorage(serverLevel, pos);
-        if (chests.isEmpty()) {
-            player.sendSystemMessage(Component.translatable("message.wayfarers.terminal.nothing", RANGE)
-                    .withStyle(ChatFormatting.GRAY));
+        if (!(level instanceof ServerLevel serverLevel) || !(player instanceof ServerPlayer serverPlayer)) {
             return InteractionResult.SUCCESS;
         }
         if (player.isShiftKeyDown()) {
+            List<Container> chests = StorageNetwork.containers(serverLevel, pos);
             chests.forEach(InventoryUtil::sortContainer);
             player.sendSystemMessage(Component.translatable("message.wayfarers.terminal.sorted", chests.size())
                     .withStyle(ChatFormatting.GOLD));
-        } else {
-            int[] result = deposit(player, chests);
-            player.sendSystemMessage(Component.translatable("message.wayfarers.terminal.deposit", result[0], result[1])
-                    .withStyle(ChatFormatting.GOLD));
+            serverLevel.sendParticles(ParticleTypes.HAPPY_VILLAGER, pos.getX() + 0.5, pos.getY() + 1.1, pos.getZ() + 0.5,
+                    12, 0.3, 0.2, 0.3, 0.0);
+            level.playSound(null, pos, SoundEvents.BARREL_CLOSE, SoundSource.BLOCKS, 0.8F, 1.2F);
+            return InteractionResult.SUCCESS;
         }
-        serverLevel.sendParticles(ParticleTypes.HAPPY_VILLAGER, pos.getX() + 0.5, pos.getY() + 1.1, pos.getZ() + 0.5,
-                12, 0.3, 0.2, 0.3, 0.0);
-        level.playSound(null, pos, SoundEvents.BARREL_CLOSE, SoundSource.BLOCKS, 0.8F, 1.2F);
+        ((net.minecraftforge.common.extensions.IForgeServerPlayer) serverPlayer).openMenu(new SimpleMenuProvider((id, inv, p) -> new TerminalMenu(id, inv, pos),
+                Component.translatable("block.wayfarers.guild_terminal")), buf -> buf.writeBlockPos(pos));
+        com.wayfarers.util.Tips.show(serverPlayer, "guild_terminal");
         return InteractionResult.SUCCESS;
     }
 
