@@ -30,6 +30,12 @@ FLOOR_PAL = Palette({"deepslate_tiles": 5, "cracked_deepslate_tiles": 1, "polish
 MENHIR = Palette({"stone": 4, "tuff": 3, "andesite": 2, "mossy_cobblestone": 1}, seed=93, scale=2.2)
 
 
+def nzc(x, z):
+    n = (x * 73856093) ^ (z * 19349663) ^ 0x5F3759DF
+    n = (n ^ (n >> 13)) * 1274126177 & 0xFFFFFFFF
+    return (n & 0xFFFF) / 65535.0
+
+
 def _card(dx, dz):
     if abs(dx) >= abs(dz):
         return "east" if dx > 0 else "west"
@@ -166,7 +172,7 @@ def statue(bp, x, y, z, facing, rng):
 def gallery(bp, rng):
     y0, y1 = FLOOR, FLOOR + 8
     # shell and the barrel vault
-    for x in range(GX0 - 4, GX1 + 5):
+    for x in range(GX0 - 5, GX1 + 6):
         for z in range(GZ0, GZ1 + 2):
             for y in range(y0 - 1, y1 + 2):
                 bp.set(x, y, z, WALL.pick(x, y, z))
@@ -188,7 +194,7 @@ def gallery(bp, rng):
             bp.set(x, y1 - 1, z - 2, "polished_deepslate")
         for side, xw in ((-1, GX0 - 1), (1, GX1 + 1)):
             for zz in range(z - 1, z + 2):
-                for dx in range(0, 3):
+                for dx in range(0, 4):
                     for y in range(y0 + 1, y0 + 7):
                         bp.set(xw + side * dx, y, zz, "air")
                     bp.set(xw + side * dx, y0, zz, "polished_tuff")
@@ -197,8 +203,8 @@ def gallery(bp, rng):
                 bp.set(xw, y, z + 2, "tuff_bricks")
             bp.set(xw, y0 + 7, z, RUNE)
             kind = (i * 2 + (0 if side < 0 else 1)) % 7
-            sx = xw + side * 1
-            if kind == 3:
+            sx = xw + side * 2
+            if kind in (3, 6):
                 bp.spawner(sx, y0 + 1, z, MOB["ruin_walker"])
                 bp.set(sx + side, y0 + 1, z, "cobweb")
             elif kind == 5:
@@ -207,7 +213,8 @@ def gallery(bp, rng):
                 bp.set(sx + side, y0 + 1, z - 1, "skeleton_skull[rotation=4]")
             else:
                 statue(bp, sx, y0 + 1, z, "east" if side < 0 else "west", rng)
-            bp.lantern(xw + side * 2, y0 + 6, z + 1, hanging=True, soul=True)
+            bp.lantern(xw + side * 1, y0 + 6, z + 1, hanging=True, soul=True)
+            bp.set(xw + side * 4, y0 + 3, z, LAMP)
     # the collapsed stretch: rubble slope, a hole in the vault with hanging roots
     for z in range(-23, -17):
         for x in range(GX0, GX1 + 1):
@@ -302,18 +309,23 @@ def vault(bp, rng):
                 bp.set(x, y, z, "deepslate_bricks")
             if d <= R_in:
                 # ---- floor: the inlaid circle-rune
-                if d < 2.0:
-                    b = "chiseled_deepslate"
-                elif d < 3.0:
-                    b = "chiseled_tuff_bricks"
-                elif 7.5 <= d < 8.5:
-                    b = (LAMP if int(a) % 45 < 4 else RUNE if int(a // 6) % 2 else "polished_tuff")
-                elif 12.0 <= d < 13.0:
-                    b = "tuff_bricks"
-                elif abs((a + 7.5) % 30 - 7.5) < 1.6 * 10 / max(d, 1) and d < 12:
+                ray = abs((a + 15) % 30 - 15) < 1.1 * 10 / max(d, 1)
+                if d < 1.6:
+                    b = "chiseled_tuff"
+                elif d < 3.2:
+                    b = "chiseled_tuff_bricks" if (x + z) % 2 else "polished_tuff"
+                elif d < 4.0:
+                    b = LAMP if ray else "tuff_bricks"
+                elif 7.4 <= d < 8.6:
+                    b = LAMP if abs((a + 11.25) % 22.5 - 11.25) < 2.5 else (RUNE if int(a // 5) % 2 else "polished_tuff")
+                elif 12.0 <= d < 13.2:
+                    b = "chiseled_tuff_bricks" if ray else "tuff_bricks"
+                elif ray and d < 12:
+                    b = "polished_tuff"
+                elif d > 16.8:
                     b = "polished_deepslate"
-                elif d > 16.5:
-                    b = "polished_deepslate"
+                elif d > 14.5 and nzc(x, z) < 0.25:
+                    b = "moss_block"
                 else:
                     b = FLOOR_PAL.pick(x, FLOOR, z)
                 bp.set(x, FLOOR, z, b)
@@ -348,6 +360,21 @@ def vault(bp, rng):
         xx, zz = AX + round(math.cos(a) * (AR + 0.6)), AZ + round(math.sin(a) * (AR + 0.6))
         if k % 2 == 0:
             bp.set(xx, drum_top - 1, zz, LAMP)
+    # roots and glow lichen creeping on the drum wall
+    for k in range(80):
+        a = rng.random() * math.pi * 2
+        x, z = AX + round(math.cos(a) * (AR - 0.3)), AZ + round(math.sin(a) * (AR - 0.3))
+        y = FLOOR + 3 + rng.randint(0, drum_top - FLOOR - 3)
+        f = _card(math.cos(a), math.sin(a))
+        dx, dz = {"east": (1, 0), "west": (-1, 0), "south": (0, 1), "north": (0, -1)}[f]
+        if bp.get(x, y, z) != "minecraft:air" or bp.get(x + dx, y, z + dz) in (None, "minecraft:air"):
+            continue
+        if k % 4 == 0 and bp.get(x, y + 1, z) not in (None, "minecraft:air"):
+            bp.set(x, y, z, "hanging_roots[waterlogged=false]")
+        else:
+            faces = {d: "false" for d in ("down", "east", "north", "south", "up", "west")}
+            faces[f] = "true"
+            bp.set(x, y, z, "glow_lichen[" + ",".join(f"{k_}={v}" for k_, v in sorted(faces.items())) + ",waterlogged=false]")
     # the keystone: a cluster of lithite at the apex, chandeliers of soul lanterns
     apex = drum_top + rise
     for dx in (-1, 0, 1):
@@ -364,9 +391,9 @@ def vault(bp, rng):
         a = k * 30 + 15
         if min(abs(a - 180), abs(a - 0), abs(a - 360)) < 16:
             continue
-        h = 7 + (k * 5) % 4
+        h = 8 + (k * 5) % 4
         stones.append((a, h))
-        _menhir(bp, a, 15.6, 1.2, 0.9, FLOOR + 1, FLOOR + h, rng)
+        _menhir(bp, a, 15.6, 1.7, 1.2, FLOOR + 1, FLOOR + h, rng)
     for (a, h), (b, h2) in ((stones[0], stones[1]), (stones[2], stones[3]), (stones[4], stones[5]), (stones[6], stones[7])):
         top = FLOOR + max(h, h2) + 1
         for t in range(0, 11):

@@ -14,6 +14,7 @@ from ..arch import Palette, stair
 from ..defs import Piece, StructureDef, register
 from ..parts import LOOT, MOB
 from . import lair_forge_king
+from . import lair_crystal_spider
 
 DEEP = ["#minecraft:is_overworld"]
 
@@ -1180,12 +1181,14 @@ def crystal_grotto(bp):
                 kind = rng.choice(["amethyst_cluster", "large_amethyst_bud", "medium_amethyst_bud", "amethyst_cluster"])
                 bp.set(x + dx, y + dy, z + dz, f"{kind}[facing={face},waterlogged=false]")
                 break
+    # the Crystal Stair down to the Crystal Matriarch's nest (lair_crystal_spider.py)
+    lair_crystal_spider.build(bp)
 
 
 register(StructureDef(
     "crystal_grotto", "overworld", DEEP, [Piece("grotto", crystal_grotto)],
     spacing=26, separation=8, step="underground_structures", adaptation="none",
-    height=("uniform", -40, 10), processors="none",
+    height=("uniform", -58, -20), processors="none",
     title_fr="Grotte de cristal", title_en="Crystal Grotto"))
 
 

@@ -67,7 +67,15 @@ public class Archivist extends WayfarerBoss {
 
     private static final ParticleOptions INK = new DustParticleOptions(0x1C1830, 1.8F);
     private static final ParticleOptions RUNE = new DustParticleOptions(0x78E8FF, 1.0F);
-    private static final ParticleOptions PAGE = new ItemParticleOption(ParticleTypes.ITEM, Items.PAPER);
+    private static @Nullable ParticleOptions page;
+
+    /** Flying paper bits (built on first use, once the item registry is surely ready). */
+    private static ParticleOptions page() {
+        if (page == null) {
+            page = new ItemParticleOption(ParticleTypes.ITEM, Items.PAPER);
+        }
+        return page;
+    }
 
     private @Nullable BlockPos arenaCenter;
     private int arenaRadius = 16;
@@ -204,7 +212,7 @@ public class Archivist extends WayfarerBoss {
                 .impact((b, level, t, tick) -> {
                     Vec3 from = b.position();
                     b.hitCircle(level, from, 2.6, 7.0F, 0.9, 0.3);
-                    level.sendParticles(PAGE, from.x, from.y + 2, from.z, 40, 0.8, 1.2, 0.8, 0.15);
+                    level.sendParticles(page(), from.x, from.y + 2, from.z, 40, 0.8, 1.2, 0.8, 0.15);
                     ((Archivist) b).blinkAway(level, t, 9.0 + b.getRandom().nextDouble() * 3.0);
                 })
                 .build());
@@ -371,7 +379,7 @@ public class Archivist extends WayfarerBoss {
             Vec3 spot = findSpot(level, around.add(Math.cos(a) * dist, 0, Math.sin(a) * dist));
             if (spot != null) {
                 teleportTo(spot.x, spot.y + HOVER, spot.z);
-                level.sendParticles(PAGE, spot.x, spot.y + 2, spot.z, 40, 0.8, 1.2, 0.8, 0.15);
+                level.sendParticles(page(), spot.x, spot.y + 2, spot.z, 40, 0.8, 1.2, 0.8, 0.15);
                 level.playSound(null, this, SoundEvents.ENDERMAN_TELEPORT, SoundSource.HOSTILE, 1.5F, 0.6F);
                 return;
             }
@@ -396,7 +404,7 @@ public class Archivist extends WayfarerBoss {
             } else {
                 addEffect(phantom(spot.add(0, HOVER, 0), target, 30));
             }
-            level.sendParticles(PAGE, spot.x, spot.y + 2, spot.z, 25, 0.6, 1.0, 0.6, 0.12);
+            level.sendParticles(page(), spot.x, spot.y + 2, spot.z, 25, 0.6, 1.0, 0.6, 0.12);
         }
         level.playSound(null, this, SoundEvents.ILLUSIONER_MIRROR_MOVE, SoundSource.HOSTILE, 2.0F, 0.8F);
     }
@@ -463,7 +471,7 @@ public class Archivist extends WayfarerBoss {
             level.sendParticles(ParticleTypes.ENCHANT, getX(), getY() + 4.2, getZ(), 4, 0.6, 0.4, 0.6, 0.4);
         }
         if (phase() == 2 && tickCount % 5 == 0) {
-            level.sendParticles(PAGE, getX(), getY() + 2.0, getZ(), 1, 1.4, 1.2, 1.4, 0.02);
+            level.sendParticles(page(), getX(), getY() + 2.0, getZ(), 1, 1.4, 1.2, 1.4, 0.02);
         }
     }
 
@@ -539,10 +547,10 @@ public class Archivist extends WayfarerBoss {
     protected void onDefeated(ServerLevel level) {
         for (MapWraith w : level.getEntitiesOfClass(MapWraith.class, getBoundingBox().inflate(48),
                 w -> w.entityTags().contains(MINION_TAG))) {
-            level.sendParticles(PAGE, w.getX(), w.getY() + 1, w.getZ(), 20, 0.3, 0.6, 0.3, 0.1);
+            level.sendParticles(page(), w.getX(), w.getY() + 1, w.getZ(), 20, 0.3, 0.6, 0.3, 0.1);
             w.discard();
         }
-        level.sendParticles(PAGE, getX(), getY() + 2, getZ(), 120, 1.5, 2.0, 1.5, 0.25);
+        level.sendParticles(page(), getX(), getY() + 2, getZ(), 120, 1.5, 2.0, 1.5, 0.25);
         level.sendParticles(ParticleTypes.SQUID_INK, getX(), getY() + 1, getZ(), 60, 1.0, 1.5, 1.0, 0.1);
         level.playSound(null, this, SoundEvents.BOOK_PAGE_TURN, SoundSource.HOSTILE, 3.0F, 0.3F);
     }
@@ -578,11 +586,11 @@ public class Archivist extends WayfarerBoss {
             }
             Vec3 next = pos.add(vel);
             if (level.getBlockState(BlockPos.containing(next)).blocksMotion()) {
-                level.sendParticles(PAGE, pos.x, pos.y, pos.z, 6, 0.1, 0.1, 0.1, 0.08);
+                level.sendParticles(page(), pos.x, pos.y, pos.z, 6, 0.1, 0.1, 0.1, 0.08);
                 return true;
             }
             pos = next;
-            level.sendParticles(PAGE, pos.x, pos.y, pos.z, 2, 0.08, 0.08, 0.08, 0.01);
+            level.sendParticles(page(), pos.x, pos.y, pos.z, 2, 0.08, 0.08, 0.08, 0.01);
             level.sendParticles(RUNE, pos.x, pos.y, pos.z, 1, 0.05, 0.05, 0.05, 0);
             for (LivingEntity e : boss.victims(level, pos, 1.5)) {
                 if (e.getBoundingBox().inflate(0.3).contains(pos)) {

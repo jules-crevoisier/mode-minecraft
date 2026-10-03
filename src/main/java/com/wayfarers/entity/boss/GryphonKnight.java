@@ -79,6 +79,7 @@ public class GryphonKnight extends WayfarerBoss {
     private int flightMode = CLIMB;
     private int animUntil;
     private int airActions;
+    private int groundTicks;
     private int divesInRow;
     private double circleAngle;
     private int circleDir = 1;
@@ -450,6 +451,10 @@ public class GryphonKnight extends WayfarerBoss {
     private BossAttack.Builder takeoff(String name) {
         return BossAttack.of(name).anim(TAKEOFF).timing(14, 1, 13).range(0, 40).weight(9)
                 .start((b, level, t, tick) -> {
+                    if (groundTicks < 160) {        // let the melee players have their opening first
+                        b.chain(level, t != null && b.distanceToSqr(t) < 25 ? "rake" : "pounce");
+                        return;
+                    }
                     animUntil = tickCount + MobAnims.GryphonKnight.TICKS[TAKEOFF];
                     airActions = 0;
                     divesInRow = 0;
@@ -520,7 +525,10 @@ public class GryphonKnight extends WayfarerBoss {
     protected void bossTick(ServerLevel level) {
         fallDistance = 0;
         if (airborne) {
+            groundTicks = 0;
             flightTick(level);
+        } else {
+            groundTicks++;
         }
         if (tickCount % 8 == 0 && phase() == 2) {
             level.sendParticles(ParticleTypes.ELECTRIC_SPARK, getX(), getY() + 2.5, getZ(), 3, 1.2, 1.0, 1.2, 0.05);

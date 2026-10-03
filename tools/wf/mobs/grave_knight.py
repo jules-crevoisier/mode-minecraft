@@ -25,6 +25,8 @@ def plate(seed=0, rim=GOLD_D, filigree=False, sheen=True):
     def f(face, x, y, w, h):
         edge = x == 0 or y == 0 or x == w - 1 or y == h - 1
         if rim is not None and edge and w > 2 and h > 2 and face != "bottom":
+            if y == 0 and face != "top" and x % 3 == 1:
+                return GOLD_L         # gilded rivets
             return GOLD if (y == 0 and face != "top") or face == "top" else rim
         c = BLACK
         if sheen and face in ("front", "back", "left", "right"):
@@ -34,6 +36,11 @@ def plate(seed=0, rim=GOLD_D, filigree=False, sheen=True):
         r = H(x, y, seed)
         if r % 23 == 0:
             c = mix(c, BLACK_L, 0.7)  # scratch
+        if face in ("front", "back", "left", "right") and h > 5 and not filigree:
+            if y % 4 == 3:
+                c = mul(c, 0.6)       # overlapping lames: a shadow line ...
+            elif y % 4 == 0 and y > 0:
+                c = mix(c, BLACK_L, 0.5)  # ... and the lit edge of the next plate
         if filigree and face == "front":
             cx = (w - 1) / 2
             dx = abs(x - cx)
@@ -131,7 +138,7 @@ def build():
                 return None
             if face == "back" and (x in (1, w - 2)):
                 return GOLD_D  # gold hem stripes
-            if face == "back" and 6 <= y <= 12 and abs(x - (w - 1) / 2) < 3:
+            if face == "back" and not ragged and 6 <= y <= 12 and abs(x - (w - 1) / 2) < 3:
                 # a faded gold crowned skull emblem
                 dx, dy = abs(x - (w - 1) / 2), y - 6
                 if dy == 0 and dx < 3 and x % 2 == 0:

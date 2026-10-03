@@ -268,6 +268,30 @@ def build():
     S(m, "fist_r", (-7, -4, -6, 13, 5, 13), Stone(TUFF, 48, moss=0.6))                                # stacked stone
     S(m, "fist_r", (-9, 12, -13, 18, 5, 4), Stone(DARK, 49, moss=0.0))                                # knuckles
 
+    # ------------------------------------------------------------------ details: knee caps, elbows, flank stones,
+    # a cairn on the back, vines trailing from the capstone
+    for side, sx in (("l", 1), ("r", -1)):
+        S(m, f"leg_{side}", (-6, 9, -9, 12, 8, 3), Stone(TUFF, 50 + sx, moss=0.5))                     # knee cap
+        S(m, f"forearm_{side}", (-5, -3, 3, 10, 6, 5), Stone(DARK, 52 + sx, moss=0.6))                # elbow
+        S(m, "torso", (sx * 19 - (4 if sx > 0 else 0) + (0 if sx > 0 else -0), -22, -9, 4, 14, 16),
+          Stone(BLUE_GREY, 54 + sx, cracks=1, moss=0.3))                                               # flank stone
+    S(m, "torso", (-6, -31, 11, 12, 6, 5), Stone(GREY, 56, moss=0.9))                                   # cairn
+    S(m, "torso", (-3, -35, 12, 6, 4, 4), Stone(TUFF, 57, moss=1.0))
+    S(m, "fist_l", (-8.5, 5, -6, 3, 6, 10), Stone(GREY, 58, moss=0.2))
+    S(m, "fist_r", (9, 4, -8, 4, 8, 14), Stone(TUFF, 59, moss=0.3))
+
+    def vines(f_, x, y, w, h):
+        if f_ not in ("front", "back"):
+            return None
+        if y > h - 2 - (x * 7 % 5) or x % 3 == 1:
+            return None
+        return MOSS if (x + y) % 4 else MOSS_D
+    m.box("crown", -17, 1, 6.5, 22, 14, 0, vines)
+    m.box("crown", 8, 1, 6.5, 14, 10, 0, vines)
+    # a cracked rune tablet hanging on chains across the chest
+    m.box("slab", -9, -16, -3, 1, 8, 1, (70, 72, 76))
+    m.box("slab", 8, -16, -3, 1, 8, 1, (70, 72, 76))
+
     anims(m)
     return m
 

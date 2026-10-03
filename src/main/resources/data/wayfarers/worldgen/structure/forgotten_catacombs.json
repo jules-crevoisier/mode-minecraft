@@ -7,22 +7,22 @@
       "bounding_box": "piece",
       "spawns": [
         {
-          "type": "minecraft:skeleton",
+          "type": "wayfarers:skeleton_knight",
           "weight": 10,
+          "minCount": 1,
+          "maxCount": 2
+        },
+        {
+          "type": "wayfarers:crypt_crawler",
+          "weight": 8,
           "minCount": 1,
           "maxCount": 2
         },
         {
           "type": "minecraft:zombie",
-          "weight": 10,
+          "weight": 8,
           "minCount": 1,
           "maxCount": 2
-        },
-        {
-          "type": "wayfarers:ruin_walker",
-          "weight": 6,
-          "minCount": 1,
-          "maxCount": 1
         }
       ]
     }

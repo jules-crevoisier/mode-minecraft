@@ -119,7 +119,7 @@ def grand_stair(bp):
     """From the stacks' west door the stair falls 21 blocks westward (x 53..73, z 45..47)."""
     for x in range(53, 74):
         y = LA1 - (73 - x)
-        solid(bp, x, y - 3, 44, x, y + 6, 48, WALL)
+        solid(bp, x, y - 3, 43, x, y + 6, 49, WALL)      # two-thick side walls hold the candle recesses
     for x in range(53, 74):
         y = LA1 - (73 - x)
         for z in (45, 46, 47):
@@ -355,9 +355,14 @@ def _furnish_stacks(bp):
                         bp.set(x, y, z, rng.choice(RUBBLE))
     for (x, z) in ((88, 47), (88, 46), (87, 47)):                       # the hidden chest's niche
         bp.set(x, LA1 + 1, z, "air")
-    bp.chest(88, LA1 + 1, 47, "north", LOOT + "library_secret")
-    bp.set(88, LA1 + 1, 46, SHELF)
-    bp.set(87, LA1 + 1, 47, SHELF)
+    bp.chest(88, LA1 + 1, 47, "north", LOOT + "library_secret")   # walled in by fallen cases: break one
+    for (x, y, z) in ((88, LA1 + 1, 46), (87, LA1 + 1, 47), (88, LA1 + 1, 48), (89, LA1 + 1, 47), (88, LA1 + 2, 47),
+                      (87, LA1 + 2, 46), (88, LA1 + 2, 46)):
+        bp.set(x, y, z, SHELF if y == LA1 + 1 else rng.choice(RUBBLE))
+    for _ in range(40):                                                 # loose pages over the floor
+        x, z = rng.randint(75, 89), rng.randint(36, 48)
+        if bp.get(x, LA1 + 1, z) == "minecraft:air":
+            bp.set(x, LA1 + 1, z, "white_carpet" if rng.random() < 0.7 else "light_gray_carpet")
     bp.spawner(81, LA1 + 1, 41, MOB["ruin_walker"])
     for x in range(75, 90, 2):                                          # standing shelves along the walls
         for z, f in ((36, "south"), (48, "north")):

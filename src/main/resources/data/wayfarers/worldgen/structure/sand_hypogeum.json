@@ -7,14 +7,14 @@
       "bounding_box": "piece",
       "spawns": [
         {
-          "type": "minecraft:husk",
+          "type": "wayfarers:crypt_crawler",
           "weight": 10,
           "minCount": 1,
           "maxCount": 2
         },
         {
-          "type": "minecraft:skeleton",
-          "weight": 8,
+          "type": "minecraft:husk",
+          "weight": 10,
           "minCount": 1,
           "maxCount": 2
         }

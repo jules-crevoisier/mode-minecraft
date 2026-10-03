@@ -76,6 +76,10 @@ def rust_plate(seed=0, base=STEEL, rim=STEEL_D, rust=RUST, amount=0.32, rivets=T
             c = mix(c, rust, 0.45 + 0.35 * fine)
         elif face in ("front", "back", "left", "right") and H(x, 1, seed) % 6 == 0 and y > 1:
             c = mix(c, RUST_D, 0.35 + 0.02 * y)  # rust run-off streak
+        if face in ("front", "back", "left", "right") and h > 5 and y % 3 == 2:
+            c = mul(c, 0.78)  # lame edge
+        if (H(x, y, seed + 2) % 41) == 0:
+            c = mix(c, (200, 200, 205), 0.5)  # bright nick in the metal
         return c
     return f
 

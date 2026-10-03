@@ -388,10 +388,17 @@ public final class MobAnims {
         private WeepingLady() {}
     }
     public static final class LarvaMother {
-
-        public static final int COUNT = 0;
+        public static final int BITE = 0;
+        public static final int SLAM = 1;
+        public static final int BURROW = 2;
+        public static final int SPIT = 3;
+        public static final int BIRTH = 4;
+        public static final int ROLL = 5;
+        public static final int ROAR = 6;
+        public static final int STAGGER = 7;
+        public static final int COUNT = 8;
         /** Length of each action in ticks. */
-        public static final int[] TICKS = {};
+        public static final int[] TICKS = {28, 36, 48, 32, 36, 52, 48, 50};
 
         private LarvaMother() {}
     }

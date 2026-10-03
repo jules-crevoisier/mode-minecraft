@@ -148,7 +148,7 @@ public class ForgeKing extends WayfarerBoss {
                 })
                 .build());
         // anvil-shield charge: crouches behind the anvil (telegraph line), then barrels forward
-        out.add(BossAttack.of("bash").anim(BASH).timing(14, 10, 14).range(5.0, 15.0).cooldown(100).weight(8)
+        out.add(BossAttack.of("bash").anim(BASH).timing(14, 10, 12).range(5.0, 15.0).cooldown(100).weight(8)
                 .start((b, level, t, tick) -> charged.clear())
                 .windup((b, level, t, tick) -> {
                     if (tick % 3 == 0) {
@@ -206,7 +206,7 @@ public class ForgeKing extends WayfarerBoss {
                 })
                 .build());
         // anvil drop: the anvil is driven into the floor, and molten anvils fall on every player after a warning
-        out.add(BossAttack.of("anvil").anim(ANVIL).timing(18, 2, 20).range(0, 26.0).cooldown(150).weight(7)
+        out.add(BossAttack.of("anvil").anim(ANVIL).timing(18, 2, 18).range(0, 26.0).cooldown(150).weight(7)
                 .windup((b, level, t, tick) -> {
                     if (tick % 3 == 0) {
                         level.sendParticles(ParticleTypes.LAVA, b.getX(), b.getY() + 4.2, b.getZ(), 2, 0.6, 0.2, 0.6, 0);
@@ -232,7 +232,7 @@ public class ForgeKing extends WayfarerBoss {
 
         // ---------------------------------------------------------------- phase 2
         // hammer spin: three turns at arm's length, drifting toward the target
-        out.add(BossAttack.of("spin").anim(SPIN).phaseTwo().timing(12, 30, 14).range(0, 8.0).cooldown(160).weight(8)
+        out.add(BossAttack.of("spin").anim(SPIN).phaseTwo().timing(12, 30, 12).range(0, 8.0).cooldown(160).weight(8)
                 .windup((b, level, t, tick) -> {
                     if (tick % 3 == 0) {
                         b.telegraphRing(level, b.position(), 3.6, ParticleTypes.FLAME);

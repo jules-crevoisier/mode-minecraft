@@ -165,41 +165,317 @@ def mausoleum(bp, t, x, z):
 
 
 def sand_gate(bp, t, x, z):
-    """Hypogeum: a half-buried temple gate between two leaning obelisks; steps lead down."""
-    r = 6
-    for xx in range(x - r - 3, x + r + 4):
-        for zz in range(z - r - 3, z + r + 4):
-            d = math.hypot(xx - x, zz - z)
-            if d <= 4.4:
+    """Hypogeum: a half-buried desert temple. From the dunes in the south a monumental stair guarded by two
+    sphinxes descends into an excavated forecourt lined with jackal statues and obelisks; a battered pylon gate
+    with a winged sun disk opens on a hypostyle hall whose roof is open over the stairwell, and the dunes pile up
+    against its sides and back. The stairwell opening (radius 4.4 around (x, z), y <= 3) stays clear."""
+    rng = random.Random(x * 17 + z * 5 + 3)
+    S, CUT, SM, CH = "sandstone", "cut_sandstone", "smooth_sandstone", "chiseled_sandstone"
+    RED, CRED = "chiseled_red_sandstone", "cut_red_sandstone"
+    TOP = 5                              # dune / stair-head level (walking surface y = 6)
+    HX0, HX1, HZ0, HZ1 = -9, 9, -11, 5   # hypostyle hall walls (relative)
+    WALL_H = 8                           # roof at y = 8
+
+    def opening(dx, y, dz):
+        return y <= 3 and dx * dx + dz * dz <= 4.4 * 4.4
+
+    def put(dx, y, dz, spec):
+        if not opening(dx, y, dz):
+            bp.set(x + dx, y, z + dz, spec)
+
+    def sst(facing, half="bottom", block="sandstone_stairs"):
+        return stair(block, facing, half)
+
+    # ---------------------------------------------------------------- dunes (half-burying the temple)
+    def in_hall(dx, dz, m=0):
+        return HX0 - m <= dx <= HX1 + m and HZ0 - m <= dz <= HZ1 + m
+
+    def in_court(dx, dz):          # the excavated forecourt and the stair corridor stay open
+        return abs(dx) <= 8 and HZ1 < dz <= 23
+
+    def dune_h(dx, dz):
+        ox = max(HX0 - dx, 0, dx - HX1)
+        oz = max(HZ0 - dz, 0, dz - HZ1)
+        near = math.hypot(ox, oz)
+        h = 6.6 - 0.42 * near + 1.4 * math.sin(dx * 0.31 + x * 0.1) * math.cos(dz * 0.27 - z * 0.1)
+        if dz > HZ1:                # the south side was dug out: dunes stand level with the stair head
+            h = max(h, TOP + 0.6 + 0.8 * math.sin(dx * 0.4)) if abs(dx) <= 14 and dz <= 26 else h
+        r = math.hypot(dx, dz * 0.9)
+        h *= max(0.0, min(1.0, (27 - r) / 7))
+        if dz < HZ0 - 1 and abs(dx) < 6:
+            h += 1.2              # drift heaped against the back wall
+        return h
+
+    for dx in range(-27, 28):
+        for dz in range(-26, 31):
+            if in_hall(dx, dz) or in_court(dx, dz) or dx * dx + dz * dz <= 4.6 * 4.6:
                 continue
-            h = max(0, int(2 - d / 4)) if d < r + 3 else 0
-            for y in range(-1, h):
-                bp.set(xx, y, zz, "sand")
-    for xx in range(x - r, x + r + 1):
-        for zz in range(z - r, z + r + 1):
-            if math.hypot(xx - x, zz - z) <= 4.4:
-                continue
-            bp.set(xx, 0, zz, "smooth_sandstone")
-            if abs(xx - x) == r or abs(zz - z) == r:
-                for y in range(1, 6):
-                    bp.set(xx, y, zz, "cut_sandstone" if y in (1, 5) else "sandstone")
-    for y in range(1, 5):
-        for dx in (-1, 0, 1):
-            bp.set(x + dx, y, z + r, "air")
-    for xx in range(x - r - 1, x + r + 2):
-        for zz in range(z - r - 1, z + r + 2):
-            if abs(xx - x) == r + 1 or abs(zz - z) == r + 1:
-                bp.set(xx, 6, zz, "smooth_sandstone_slab[type=bottom,waterlogged=false]")
-            elif math.hypot(xx - x, zz - z) > 2:
-                bp.set(xx, 6, zz, "chiseled_sandstone" if (xx + zz) % 4 == 0 else "smooth_sandstone")
-    for dx in (-1, 0, 1):
-        bp.set(x + dx, 5, z + r, "chiseled_red_sandstone")
+            hf = max(0.0, dune_h(dx, dz))
+            h = int(hf)
+            put(dx, -1, dz, "sandstone")
+            for y in range(0, h):
+                put(dx, y, dz, "sand" if y >= h - 2 else "sandstone")
+            if hf - h >= 0.5:     # half steps soften the dune terraces
+                put(dx, h, dz, "sandstone_slab[type=bottom,waterlogged=false]")
+            elif h > 0 and rng.random() < 0.025:
+                put(dx, h, dz, "dead_bush")
+
+    # ---------------------------------------------------------------- forecourt floor and retaining walls
+    for dx in range(-8, 9):
+        for dz in range(HZ1 + 1, 17):
+            put(dx, -1, dz, S)
+            path = abs(dx) <= 2
+            put(dx, 0, dz, CUT if path and (dz % 4) else RED if path else (SM if (dx + dz) % 5 else CH))
+            for y in range(1, TOP + 3):
+                put(dx, y, dz, "air")
     for side in (-1, 1):
-        ox = x + side * (r + 3)
-        for y in range(0, 10):
-            bp.set(ox, y, z + r, "smooth_sandstone" if y < 9 else "gold_block")
-        bp.set(ox, 4, z + r + 1, "chiseled_red_sandstone")
-    bp.set(x, 4, z + r - 1, "lantern[hanging=true,waterlogged=false]")
+        wx = 9 * side
+        for dz in range(HZ1 + 3, 17):
+            top = TOP
+            for y in range(0, top + 1):
+                put(wx, y, dz, CUT if y in (0, top) else (S if (y + dz) % 4 else CH))
+            put(wx, top + 1, dz, sst("east" if side > 0 else "west", "bottom", "smooth_sandstone_stairs") if dz % 3 else CH)
+    # drifted sand in the forecourt corners, a fallen column drum
+    for dx, dz in ((-8, 15), (-7, 16), (-8, 16), (8, 14), (8, 15), (7, 16), (8, 16), (-8, 8)):
+        put(dx, 1, dz, "sand")
+    for dx, dz in ((-8, 16), (8, 16)):
+        put(dx, 2, dz, "sand")
+    for i in range(3):
+        put(4 + i, 1, 15, CUT if i != 1 else CH)
+
+    # ---------------------------------------------------------------- monumental stair up to the dunes
+    for k in range(0, TOP + 1):
+        dz = 17 + k
+        for dx in range(-8, 9):
+            put(dx, -1, dz, S)
+            if abs(dx) <= 5:
+                for y in range(0, k + 1):
+                    put(dx, y, dz, S)
+                if k < TOP:
+                    put(dx, k + 1, dz, sst("south", block="smooth_sandstone_stairs" if abs(dx) <= 3 else "sandstone_stairs"))
+                else:
+                    put(dx, k + 1, dz, CUT if abs(dx) % 3 else RED)
+                for y in range(k + 2, k + 6):
+                    put(dx, y, dz, "air")
+            else:   # terraces either side, level with the dunes, edged with a stepped coping
+                for y in range(0, TOP + 1):
+                    put(dx, y, dz, S if y < TOP else (CUT if abs(dx) == 6 else SM))
+                if abs(dx) == 6:
+                    put(dx, TOP + 1, dz, "cut_sandstone_slab[type=bottom,waterlogged=false]")
+    for dz in range(23, 27):     # landing at the stair head
+        for dx in range(-5, 6):
+            put(dx, TOP, dz, SM)
+            put(dx, TOP + 1, dz, CUT if (dx + dz) % 2 else SM)
+            for y in range(TOP + 2, TOP + 6):
+                put(dx, y, dz, "air")
+
+    # ---------------------------------------------------------------- sphinxes flanking the stair head (facing south)
+    def sphinx(sx, sz, y0):
+        for dx in range(-2, 3):                     # plinth
+            for dz in range(-6, 3):
+                put(sx + dx, y0, sz + dz, CUT if dx in (-2, 2) or dz in (-6, 2) else SM)
+        for dx in range(-1, 2):                     # lion body
+            for dz in range(-5, 0):
+                put(sx + dx, y0 + 1, sz + dz, S)
+                put(sx + dx, y0 + 2, sz + dz, S if dz > -5 else sst("north", block="sandstone_stairs"))
+        put(sx - 1, y0 + 1, sz + 1, sst("south", block="sandstone_stairs"))   # paws
+        put(sx + 1, y0 + 1, sz + 1, sst("south", block="sandstone_stairs"))
+        put(sx, y0 + 1, sz + 1, "smooth_sandstone_slab[type=bottom,waterlogged=false]")
+        for dx in range(-1, 2):                     # chest
+            put(sx + dx, y0 + 1, sz, S)
+            put(sx + dx, y0 + 2, sz, S)
+        put(sx, y0 + 3, sz, CH)                     # face
+        put(sx, y0 + 3, sz + 1, sst("north", "top", "sandstone_stairs"))      # chin / beard
+        put(sx - 1, y0 + 3, sz, "lapis_block")      # nemes headdress lappets
+        put(sx + 1, y0 + 3, sz, "lapis_block")
+        put(sx - 1, y0 + 2, sz + 1, "gold_block")
+        put(sx + 1, y0 + 2, sz + 1, "gold_block")
+        put(sx, y0 + 4, sz, "gold_block")
+        put(sx, y0 + 4, sz - 1, "lapis_block")
+        put(sx, y0 + 3, sz - 1, "gold_block")
+        put(sx, y0 + 5, sz, "smooth_sandstone_slab[type=bottom,waterlogged=false]")
+        put(sx, y0 + 1, sz - 6, "sandstone_wall[east=none,north=none,south=none,west=none,up=true,waterlogged=false]")  # tail tuft
+    for side in (-1, 1):
+        sphinx(9 * side, 25, TOP + 1)
+
+    # ---------------------------------------------------------------- obelisks before the pylon, jackal statues on the walls
+    def obelisk(ox, oz, h, broken=False):
+        for dx in (-1, 0, 1):
+            for dz in (-1, 0, 1):
+                put(ox + dx, 1, oz + dz, CUT if dx and dz else SM)
+                put(ox + dx, 2, oz + dz, "smooth_sandstone_slab[type=bottom,waterlogged=false]" if dx and dz else CUT)
+        top = 3 + (h - 4 if broken else h)
+        for y in range(3, top):
+            put(ox, y, oz, CH if (y - 3) % 4 == 1 else ("orange_terracotta" if (y - 3) % 4 == 3 and y > 4 else SM))
+            if y < 3 + h * 0.45:
+                for dx, dz in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                    put(ox + dx, y, oz + dz, "smooth_sandstone_stairs[facing=%s,half=bottom,shape=straight,waterlogged=false]"
+                        % {(1, 0): "west", (-1, 0): "east", (0, 1): "north", (0, -1): "south"}[(dx, dz)]
+                        if y == int(3 + h * 0.45) - 1 else SM)
+        if broken:   # the snapped pyramidion lies in the sand beside it
+            put(ox + 2, 1, oz + 1, SM)
+            put(ox + 3, 1, oz + 1, "orange_terracotta")
+            put(ox + 4, 1, oz + 1, "gold_block")
+        else:
+            put(ox, top, oz, "gold_block")
+            put(ox, top + 1, oz, "lightning_rod[facing=up,powered=false,waterlogged=false]")
+    obelisk(-5, 10, 11)
+    obelisk(5, 10, 11, broken=rng.random() < 0.5)
+
+    def jackal(jx, jz, face):            # seated Anubis on a plinth, facing east or west
+        fx = 1 if face == "east" else -1
+        for dz in (-1, 0, 1):
+            put(jx, 1, jz + dz, CUT)
+            put(jx - fx, 1, jz + dz, CUT)
+        put(jx + fx, 1, jz, "polished_blackstone_slab[type=bottom,waterlogged=false]")   # forepaws
+        put(jx - fx, 2, jz, "polished_blackstone")                                       # haunches
+        put(jx, 2, jz, "polished_blackstone")
+        put(jx, 3, jz, "gold_block")                                                     # collar
+        put(jx - fx, 3, jz, "polished_blackstone_stairs[facing=%s,half=bottom,shape=straight,waterlogged=false]" % face)
+        put(jx, 4, jz, "polished_blackstone")                                            # head
+        put(jx + fx, 4, jz, "polished_blackstone_slab[type=top,waterlogged=false]")      # snout
+        put(jx, 5, jz, "polished_blackstone_wall[east=none,north=none,south=none,west=none,up=true,waterlogged=false]")  # ears
+    for jz in (13, 16):
+        jackal(-7, jz, "east")
+        jackal(7, jz, "west")
+
+    # ---------------------------------------------------------------- hypostyle hall
+    for dx in range(HX0, HX1 + 1):
+        for dz in range(HZ0, HZ1 + 1):
+            put(dx, -1, dz, S)
+            d = math.hypot(dx, dz)
+            edge = dx in (HX0, HX1) or dz in (HZ0, HZ1)
+            if not opening(dx, 0, dz):
+                put(dx, 0, dz, CH if 4.4 < d <= 5.5 else (RED if 5.5 < d <= 6.3 and (dx + dz) % 2 else SM))
+            for y in range(1, WALL_H):
+                if edge:
+                    band = y in (1, WALL_H - 1)
+                    put(dx, y, dz, CUT if band else (S if y != 4 else "orange_terracotta" if (dx + dz) % 3 == 0 else CH))
+                else:
+                    put(dx, y, dz, "air")
+            # roof, open above the stairwell
+            if d > 5.6:
+                put(dx, WALL_H, dz, SM if not edge else CUT)
+            if edge:
+                put(dx, WALL_H, dz, "cut_red_sandstone" if dz == HZ0 or dx in (HX0, HX1) else CUT)
+                put(dx, WALL_H + 1, dz, "smooth_sandstone_slab[type=bottom,waterlogged=false]")
+    # the surface ring of the stairwell shaft: open (no wall), one step down onto the shell rim at y = -1
+    for dx in range(-5, 6):
+        for dz in range(-5, 6):
+            d = math.hypot(dx, dz)
+            if 3.6 < d <= 4.65:   # the drum wall left by the dungeon shell above ground is removed
+                if d > 4.4:
+                    bp.set(x + dx, 0, z + dz, CH if (dx + dz) % 2 else CUT)
+                for y in range(0 if d <= 4.4 else 1, 5):
+                    bp.set(x + dx, y, z + dz, "air")
+    bp.set(x, 4, z, "lantern[hanging=false,waterlogged=false]")          # on the stair's central column
+    # a lip of stairs around the roof opening
+    for dx in range(-7, 8):
+        for dz in range(-7, 8):
+            d = math.hypot(dx, dz)
+            if 5.6 < d <= 6.6 and in_hall(dx, dz):
+                ax, az = abs(dx), abs(dz)
+                facing = ("east" if dx < 0 else "west") if ax >= az else ("south" if dz < 0 else "north")
+                put(dx, WALL_H + 1, dz, sst(facing, "bottom", "smooth_sandstone_stairs"))
+    # papyrus columns: banded shafts with flared capitals; lanterns hang between them
+    cols = [(cx, cz) for cx in (-6, 6) for cz in (-8, -4, 0, 3)] + [(-2, -8), (2, -8)]
+    for cx, cz in cols:
+        for y in range(1, WALL_H - 1):
+            put(cx, y, cz, CH if y in (1, 3) else ("orange_terracotta" if y == 5 else S))
+        put(cx, WALL_H - 1, cz, CUT)
+        for dx, dz in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+            if in_hall(cx + dx, cz + dz, -1):
+                put(cx + dx, WALL_H - 1, cz + dz, sst({(1, 0): "west", (-1, 0): "east", (0, 1): "north", (0, -1): "south"}[(dx, dz)],
+                                                      "top", "smooth_sandstone_stairs"))
+    for cx, cz in ((-3, -6), (3, -6), (-6, -2), (6, -2), (-6, 2), (6, 2)):
+        put(cx, WALL_H - 1, cz, "iron_chain[axis=y,waterlogged=false]")
+        put(cx, WALL_H - 2, cz, "lantern[hanging=true,waterlogged=false]")
+    # braziers at the four corners of the rim
+    for cx, cz in ((-4, -4), (4, -4), (-4, 4), (4, 4)):
+        put(cx, 1, cz, CUT)
+        put(cx, 2, cz, "campfire[facing=north,lit=true,signal_fire=false,waterlogged=false]")
+    # sanctuary at the back: a gilded altar with a lapis cat idol, candles and painted panels
+    put(0, 1, HZ0 + 1, RED)
+    put(-1, 1, HZ0 + 1, sst("east", "bottom", "smooth_red_sandstone_stairs"))
+    put(1, 1, HZ0 + 1, sst("west", "bottom", "smooth_red_sandstone_stairs"))
+    put(0, 2, HZ0 + 1, "gold_block")
+    put(0, 3, HZ0 + 1, "lapis_block")
+    put(0, 4, HZ0 + 1, "lapis_block")
+    put(0, 5, HZ0 + 1, "polished_blackstone_wall[east=none,north=none,south=none,west=none,up=true,waterlogged=false]")
+    for dx in (-3, 3):
+        put(dx, 1, HZ0 + 1, "orange_candle[candles=4,lit=true,waterlogged=false]")
+    for dx in range(HX0 + 1, HX1):
+        if abs(dx) > 1 and dx % 2 == 0:
+            for y in (3, 4, 5):
+                put(dx, y, HZ0 + 1, "blue_terracotta" if y == 4 else "orange_terracotta")
+    # sarcophagi along the side walls
+    for side in (-1, 1):
+        for dz in (-7, -6, -5):
+            put(8 * side, 1, dz, CRED)
+            put(8 * side, 2, dz, "cut_red_sandstone_slab[type=bottom,waterlogged=false]" if dz != -7 else "gold_block")
+
+    # ---------------------------------------------------------------- pylon gate (battered towers) and the winged sun
+    for side in (-1, 1):
+        for dz in range(HZ1 - 1, HZ1 + 3):
+            for y in range(0, 15):
+                inset = y // 4                       # the towers lean back (batter)
+                x_in, x_out = 3, 12 - inset
+                for ax in range(x_in, x_out + 1):
+                    dx = ax * side
+                    if dz == HZ1 + 2 and y > 12:
+                        continue
+                    outer = ax == x_out or y in (0, 14) or dz in (HZ1 - 1, HZ1 + 2)
+                    if not outer:
+                        put(dx, y, dz, S)
+                        continue
+                    if y == 14:
+                        put(dx, y, dz, SM)
+                    elif y == 13:
+                        put(dx, y, dz, "cut_red_sandstone")
+                    elif y == 12:
+                        put(dx, y, dz, "lapis_block" if ax % 2 else "gold_block") if dz == HZ1 + 2 else put(dx, y, dz, CUT)
+                    elif ax == x_out:
+                        put(dx, y, dz, CUT)
+                    elif dz == HZ1 + 2 and 3 <= y <= 10 and 5 <= ax <= 9:
+                        # relief panel: a striped frame with painted figures
+                        put(dx, y, dz, CH if ax in (5, 9) or y in (3, 10) else
+                            ("orange_terracotta" if (y + ax) % 3 == 0 else "blue_terracotta" if (y + ax) % 5 == 0 else S))
+                    else:
+                        put(dx, y, dz, S)
+            # cavetto cornice: upside-down stairs flaring out under the top
+            put(3 * side, 15, dz, "smooth_sandstone_slab[type=bottom,waterlogged=false]")
+        for ax in range(3, 10):
+            put(ax * side, 13, HZ1 + 3, sst("north", "top", "smooth_sandstone_stairs"))
+        # flagstaffs in the pylon's niches, with long blue and gold pennants
+        for ax, colour in ((6, "blue"), (11, "yellow")):
+            for y in range(1, 19):
+                put(ax * side, y, HZ1 + 3, "spruce_fence[east=false,north=false,south=false,west=false,waterlogged=false]")
+            put(ax * side, 17, HZ1 + 4, f"{colour}_wall_banner[facing=south]")
+    # doorway (5 wide, 7 tall) with posts, lintel and the winged sun disk
+    for dz in range(HZ1 - 1, HZ1 + 3):
+        for dx in range(-2, 3):
+            for y in range(1, 8):
+                put(dx, y, dz, "air")
+            put(dx, 0, dz, CUT)
+            put(dx, 8, dz, CUT)
+            put(dx, 9, dz, SM)
+        put(-3, 8, dz, CUT)
+        put(3, 8, dz, CUT)
+    for dx, spec in ((0, "gold_block"), (-1, "lapis_block"), (1, "lapis_block"), (-2, "light_blue_terracotta"),
+                     (2, "light_blue_terracotta"), (-3, "blue_terracotta"), (3, "blue_terracotta")):
+        put(dx, 8, HZ1 + 3, spec)
+    put(0, 9, HZ1 + 3, "orange_terracotta")
+    put(0, 7, HZ1 + 3, "gold_block")
+    for dx in (-4, 4):
+        put(dx, 1, HZ1 + 3, CH)
+        put(dx, 2, HZ1 + 3, "campfire[facing=south,lit=true,signal_fire=false,waterlogged=false]")
+    put(0, 6, HZ1 - 2, "lantern[hanging=true,waterlogged=false]")
+    put(0, 7, HZ1 - 2, "iron_chain[axis=y,waterlogged=false]")
+    # sand spilled over the roof's back corners
+    for dx, dz, hh in ((HX0, HZ0, 2), (HX0 + 1, HZ0, 1), (HX0, HZ0 + 1, 1), (HX1, HZ0, 2), (HX1 - 1, HZ0, 1),
+                       (HX1, HZ0 + 1, 1), (HX0 + 2, HZ0, 1), (HX1 - 3, HZ0 + 1, 1)):
+        for y in range(WALL_H + 2, WALL_H + 2 + hh):
+            put(dx, y, dz, "sand")
 
 
 def well_head(bp, t, x, z):

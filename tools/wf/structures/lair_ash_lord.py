@@ -75,7 +75,7 @@ class _Lair:
         for (x, y, z) in list(self.open):
             for dx, dy, dz in ((1, 0, 0), (-1, 0, 0), (0, 1, 0), (0, -1, 0), (0, 0, 1), (0, 0, -1)):
                 p = (x + dx, y + dy, z + dz)
-                if self.bp.get(*p) is None:
+                if p[1] >= FLOOR_Y and self.bp.get(*p) is None:     # never below the template floor
                     self.bp.set(*p, SEALER.pick(*p))
 
 
@@ -134,20 +134,15 @@ def _skull_niche(L, x, y, z, facing, k):
 
 # ------------------------------------------------------------------ the route
 def _vault_access(L):
-    """The keep's secret vault: a cracked block in the great-hall floor and a working ladder down."""
+    """The keep's secret vault: a cracked block in the great-hall floor and a working ladder down.
+    (The keep's own corner shaft ends inside the corner turret's footing; it is filled in.)"""
     bp = L.bp
-    # the old corner shaft is sealed off; the way down is now one block east of it
     for y in range(-2, 1):
         bp.set(-11, y, -19, PBB)
         bp.set(-11, y, -18, PBB)
-    bp.set(-10, 1, -18, CPBB)
-    L.air(-10, -6, -18, -10, 0, -18)
-    bp.ladder(-10, -6, -18, 0, "south")
-    for y in range(-1, 1):
-        bp.set(-10, y, -19, PBB)
-        bp.set(-9, y, -18, PBB)
-        bp.set(-11, y, -18, PBB)
-        bp.set(-10, y, -17, PBB)
+    bp.set(-6, 1, -18, CPBB)
+    L.air(-6, -6, -18, -6, 0, -18)
+    bp.ladder(-6, -6, -18, 0, "south")
 
 
 def _bone_nave(L):

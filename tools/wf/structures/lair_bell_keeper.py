@@ -146,7 +146,7 @@ def build(bp):
 # ------------------------------------------------------------------------ crypt -> catacombs
 def descent(bp):
     """The crypt's east wall opens on a stair down to the catacombs (x 24..33, z 15..17)."""
-    solid(bp, 23, L1 - 1, 14, 34, 4, 18, WALL)
+    solid(bp, 23, L1 - 1, 13, 34, 4, 19, WALL)
     bp.clear(23, 0, 15, 23, 3, 17)                     # through the crypt wall
     for z in (15, 16, 17):
         bp.set(23, -1, z, FLOOR.pick(23, -1, z))
@@ -207,7 +207,7 @@ def long_stair(bp):
     """From the chapel's south door the stair falls to the site of grace (x 57..59, z STAIR_Z..STAIR_END)."""
     for z in range(STAIR_Z, GRACE[1]):
         y = _step_y(z)
-        solid(bp, 56, y - 3, z, 60, y + 6, z, WALL)
+        solid(bp, 55, y - 3, z, 61, y + 6, z, WALL)      # two-thick side walls hold the candle recesses
     steps = [(x, _step_y(z), z) for z in range(STAIR_Z, GRACE[1]) for x in (57, 58, 59)]
     stairway(bp, steps, "north", TS, WALL, head=4)
     for z in range(STAIR_Z + 1, GRACE[1] - 1, 3):      # candle niches in both walls

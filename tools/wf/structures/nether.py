@@ -12,6 +12,7 @@ from ..arch import FACE_VEC, OPPOSITE, Palette, _pos, fill_pal, slab, stair
 from ..defs import Piece, StructureDef, register
 from ..parts import LOOT, MOB, MOD
 from .lair_ash_lord import ash_lord_lair
+from .lair_piglin_king import piglin_king_lair
 
 NETHER = ["#minecraft:is_nether"]
 
@@ -1389,6 +1390,7 @@ def piglin_sanctuary(bp):
     for k in (-18, -9, 9, 18):
         for (x, z) in ((k, 26), (k, -26), (26, k), (-26, k)):
             brazier(bp, x, 0, z)
+    piglin_king_lair(bp)
 
 
 register(StructureDef(

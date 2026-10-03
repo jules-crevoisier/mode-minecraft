@@ -98,7 +98,7 @@ public final class ModelRegistry {
         event.registerEntityRenderer(ModEntities.WEEPING_LADY.get(), ctx -> new WayfarerModelRenderer<>(ctx,
                 new WeepingLadyModel(ctx.bakeLayer(WeepingLadyModel.LAYER)), 1.1F, "weeping_lady", true));
         event.registerEntityRenderer(ModEntities.LARVA_MOTHER.get(), ctx -> new WayfarerModelRenderer<>(ctx,
-                new LarvaMotherModel(ctx.bakeLayer(LarvaMotherModel.LAYER)), 0.6F, "larva_mother", false));
+                new LarvaMotherModel(ctx.bakeLayer(LarvaMotherModel.LAYER)), 2.0F, "larva_mother", true));
         event.registerEntityRenderer(ModEntities.RUIN_WALKER.get(), ctx -> new WayfarerModelRenderer<>(ctx,
                 new RuinWalkerModel(ctx.bakeLayer(RuinWalkerModel.LAYER)), 0.9F, "ruin_walker", true));
         event.registerEntityRenderer(ModEntities.MAP_WRAITH.get(), ctx -> new WayfarerModelRenderer<>(ctx,
