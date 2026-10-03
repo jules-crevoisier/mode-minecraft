@@ -1,0 +1,61 @@
+{
+ "type": "minecraft:tree",
+ "config": {
+  "trunk_provider": {
+   "type": "minecraft:simple_state_provider",
+   "state": {
+    "Name": "minecraft:spruce_log"
+   }
+  },
+  "trunk_placer": {
+   "type": "minecraft:giant_trunk_placer",
+   "base_height": 28,
+   "height_rand_a": 4,
+   "height_rand_b": 8
+  },
+  "foliage_provider": {
+   "type": "minecraft:simple_state_provider",
+   "state": {
+    "Name": "minecraft:spruce_leaves"
+   }
+  },
+  "foliage_placer": {
+   "type": "minecraft:mega_pine_foliage_placer",
+   "radius": 0,
+   "offset": 0,
+   "crown_height": {
+    "type": "minecraft:uniform",
+    "min_inclusive": 15,
+    "max_inclusive": 20
+   }
+  },
+  "minimum_size": {
+   "type": "minecraft:two_layers_feature_size",
+   "limit": 1,
+   "lower_size": 1,
+   "upper_size": 2
+  },
+  "decorators": [],
+  "ignore_vines": true,
+  "below_trunk_provider": {
+   "type": "minecraft:rule_based_state_provider",
+   "rules": [
+    {
+     "if_true": {
+      "type": "minecraft:not",
+      "predicate": {
+       "type": "minecraft:matching_block_tag",
+       "tag": "minecraft:cannot_replace_below_tree_trunk"
+      }
+     },
+     "then": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+       "Name": "minecraft:dirt"
+      }
+     }
+    }
+   ]
+  }
+ }
+}

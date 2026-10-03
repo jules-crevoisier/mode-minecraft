@@ -52,7 +52,7 @@ DECOR = {k: _mc(v) for k, v in {
     "wildflowers": ["flower_flower_forest", "patch_sunflower", "wildflowers_birch_forest"],
     "bee_trees": ["trees_plains"],
     "boulders": ["forest_rock"],
-    "glowwood_trees": ["trees_flower_forest"],
+    "glowwood_trees": ["wayfarers:glowwood", "trees_flower_forest"],
     "glow_flowers": ["flower_flower_forest"],
     "great_oaks": ["trees_birch_and_oak_leaf_litter", "fallen_oak_tree"],
     "forest_floor": ["forest_flowers", "patch_grass_forest", "patch_leaf_litter"],
@@ -60,7 +60,7 @@ DECOR = {k: _mc(v) for k, v in {
     "surface_crystals": ["wayfarers:surface_crystals"],
     "shadow_oaks": ["dark_forest_vegetation"],
     "pines": ["trees_taiga", "fallen_spruce_tree"],
-    "giant_trees": ["trees_old_growth_spruce_taiga", "trees_old_growth_pine_taiga"],
+    "giant_trees": ["wayfarers:giant_spruce", "trees_old_growth_spruce_taiga"],
     "ferns": ["patch_large_fern", "patch_grass_taiga"],
     "mossy_boulders": ["forest_rock"],
     "great_cherries": ["trees_cherry"],
@@ -98,6 +98,7 @@ EXTRA_STEPS = {
     "minecraft:ore_emerald": 6,
     "wayfarers:basalt_columns": 4, "wayfarers:basalt_columns_cave": 7,
     "wayfarers:calcite_veins": 6, "wayfarers:cave_magma": 6, "wayfarers:mithril_veins": 6,
+    "wayfarers:giant_spruce": 9, "wayfarers:glowwood": 9,
     "wayfarers:surface_crystals": 9, "wayfarers:river_crystals": 9, "wayfarers:steam_vents": 9,
 }
 
@@ -231,8 +232,53 @@ ABOVE = {"type": "minecraft:random_offset", "xz_spread": 0, "y_spread": 1}
 ON_AIR = {"type": "minecraft:block_predicate_filter", "predicate": {"type": "minecraft:matching_blocks", "blocks": "minecraft:air"}}
 BIOME = {"type": "minecraft:biome"}
 
+BELOW_TRUNK = {"type": "minecraft:rule_based_state_provider", "rules": [{
+    "if_true": {"type": "minecraft:not", "predicate": {"type": "minecraft:matching_block_tag",
+                                                         "tag": "minecraft:cannot_replace_below_tree_trunk"}},
+    "then": {"type": "minecraft:simple_state_provider", "state": {"Name": "minecraft:dirt"}}}]}
+
+
+def _tree(trunk, trunk_placer, foliage, foliage_placer, size):
+    return {"type": "minecraft:tree", "config": {
+        "trunk_provider": trunk, "trunk_placer": trunk_placer, "foliage_provider": foliage,
+        "foliage_placer": foliage_placer, "minimum_size": size, "decorators": [], "ignore_vines": True,
+        "below_trunk_provider": BELOW_TRUNK}}
+
+
+def _tree_placement(count, sapling):
+    return [{"type": "minecraft:count", "count": count}, {"type": "minecraft:in_square"},
+            {"type": "minecraft:surface_water_depth_filter", "max_water_depth": 0},
+            {"type": "minecraft:heightmap", "heightmap": "OCEAN_FLOOR"},
+            {"type": "minecraft:block_predicate_filter",
+             "predicate": {"type": "minecraft:would_survive", "state": {"Name": f"minecraft:{sapling}", "Properties": {"stage": "0"}}}},
+            BIOME]
+
+
+def _provider(name):
+    return {"type": "minecraft:simple_state_provider", "state": {"Name": f"minecraft:{name}"}}
+
+
 # id -> (configured feature, placement modifiers)
 OURS = {
+    # Giant Sylvan Forest: spruces 28 to 40 blocks tall
+    "giant_spruce": (_tree(_provider("spruce_log"),
+                           {"type": "minecraft:giant_trunk_placer", "base_height": 28, "height_rand_a": 4, "height_rand_b": 8},
+                           _provider("spruce_leaves"),
+                           {"type": "minecraft:mega_pine_foliage_placer", "radius": 0, "offset": 0,
+                            "crown_height": _uniform(15, 20)},
+                           {"type": "minecraft:two_layers_feature_size", "limit": 1, "lower_size": 1, "upper_size": 2}),
+                     _tree_placement(4, "spruce_sapling")),
+    # Enchanted Forest: round azalea crowns dotted with glowing shroomlights
+    "glowwood": (_tree(_provider("oak_log"),
+                       {"type": "minecraft:fancy_trunk_placer", "base_height": 8, "height_rand_a": 6, "height_rand_b": 0},
+                       {"type": "minecraft:weighted_state_provider", "entries": [
+                           {"data": {"Name": "minecraft:azalea_leaves"}, "weight": 6},
+                           {"data": {"Name": "minecraft:flowering_azalea_leaves"}, "weight": 4},
+                           {"data": {"Name": "minecraft:shroomlight"}, "weight": 1}]},
+                       {"type": "minecraft:fancy_foliage_placer", "radius": 2, "offset": 4, "height": 4},
+                       {"type": "minecraft:two_layers_feature_size", "limit": 0, "lower_size": 0, "upper_size": 0,
+                        "min_clipped_height": 4}),
+                 _tree_placement(5, "oak_sapling")),
     "basalt_columns": ({"type": "minecraft:basalt_columns", "config": {"reach": 1, "height": _uniform(2, 6)}},
                        [{"type": "minecraft:count", "count": 3}] + SURFACE + [BIOME]),
     "basalt_columns_cave": ({"type": "minecraft:basalt_columns", "config": {"reach": 2, "height": _uniform(3, 9)}},
