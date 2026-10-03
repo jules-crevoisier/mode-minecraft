@@ -1,5 +1,6 @@
 package com.wayfarers.item;
 
+import com.wayfarers.util.Targets;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -51,7 +52,7 @@ public class BossWeaponItem extends AbilityItem {
     }
 
     private static List<LivingEntity> foes(ServerLevel level, Player player, AABB box) {
-        return level.getEntitiesOfClass(LivingEntity.class, box, e -> e != player && e.isAlive() && !(e instanceof Player));
+        return level.getEntitiesOfClass(LivingEntity.class, box, e -> Targets.foe(player, e));
     }
 
     private void hit(ServerLevel level, Player player, LivingEntity e, float damage, double knock) {
@@ -97,7 +98,10 @@ public class BossWeaponItem extends AbilityItem {
             }
             case BEAM -> {
                 Vec3 eye = player.getEyePosition();
-                for (int i = 1; i <= size; i++) {
+                BlockHitResult wall = level.clip(new ClipContext(eye, eye.add(look.scale(size)), ClipContext.Block.COLLIDER,
+                        ClipContext.Fluid.NONE, player));
+                double reach = wall.getType() == HitResult.Type.MISS ? size : wall.getLocation().distanceTo(eye);
+                for (int i = 1; i <= reach; i++) {
                     Vec3 p = eye.add(look.scale(i));
                     level.sendParticles(particle, p.x, p.y, p.z, 2, 0.1, 0.1, 0.1, 0.0);
                     for (LivingEntity e : foes(level, player, new AABB(p, p).inflate(1.0))) {
@@ -148,10 +152,11 @@ public class BossWeaponItem extends AbilityItem {
                 cloud.setRadius(size);
                 cloud.setDuration(120);
                 cloud.setRadiusPerTick(-size / 140.0F);
-                cloud.addEffect(new MobEffectInstance(MobEffects.POISON, 80, 1));
+                // the cloud is only the look: poison goes to foes directly, never to the wielder or friends
                 level.addFreshEntity(cloud);
                 for (LivingEntity e : foes(level, player, new AABB(at, at).inflate(size, 2, size))) {
                     hit(level, player, e, power, 0.0);
+                    e.addEffect(new MobEffectInstance(MobEffects.POISON, 120, 1), player);
                 }
                 level.playSound(null, player, SoundEvents.SPLASH_POTION_BREAK, SoundSource.PLAYERS, 1.0F, 0.7F);
             }

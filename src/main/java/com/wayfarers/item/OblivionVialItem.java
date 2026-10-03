@@ -21,6 +21,10 @@ public class OblivionVialItem extends TooltipItem {
     @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         if (player instanceof ServerPlayer sp) {
+            if (PlayerSkills.unlocked(sp).isEmpty()) {
+                sp.sendOverlayMessage(Component.translatable("message.wayfarers.skill.nothing_to_forget").withStyle(ChatFormatting.GRAY));
+                return InteractionResult.FAIL;
+            }
             PlayerSkills.reset(sp);
             SkillEvents.sync(sp);
             if (!sp.isCreative()) {

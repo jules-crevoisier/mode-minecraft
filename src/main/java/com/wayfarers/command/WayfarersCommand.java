@@ -64,8 +64,9 @@ public final class WayfarersCommand {
     public static void register(RegisterCommandsEvent event) {
         CommandDispatcher<CommandSourceStack> dispatcher = event.getDispatcher();
         dispatcher.register(Commands.literal("wayfarers")
-                // ---- everyone
-                .then(Commands.literal("warp").then(Commands.argument("id", StringArgumentType.word())
+                // ---- everyone (travel itself goes through the waystone screen, which checks you stand at a stone)
+                .then(Commands.literal("warp").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
+                        .then(Commands.argument("id", StringArgumentType.word())
                         .executes(ctx -> warp(ctx, StringArgumentType.getString(ctx, "id")))))
                 .then(Commands.literal("waystones").executes(ctx -> {
                     Waystones.list(ctx.getSource().getPlayerOrException(), "");

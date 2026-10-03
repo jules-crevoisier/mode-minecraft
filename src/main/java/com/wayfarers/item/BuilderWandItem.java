@@ -18,6 +18,8 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.SlabType;
 import net.minecraft.world.phys.AABB;
 
 import java.util.ArrayDeque;
@@ -50,14 +52,26 @@ public class BuilderWandItem extends TooltipItem {
         return maxBlocks;
     }
 
+    /** Items one copy of this block costs (a double slab is two slabs). */
+    private static int cost(BlockState state) {
+        return state.hasProperty(BlockStateProperties.SLAB_TYPE) && state.getValue(BlockStateProperties.SLAB_TYPE) == SlabType.DOUBLE ? 2 : 1;
+    }
+
+    /** The state the wand places: the clicked block's, minus water (no free water from waterlogged blocks). */
+    private static BlockState placed(BlockState state) {
+        return state.hasProperty(BlockStateProperties.WATERLOGGED) ? state.setValue(BlockStateProperties.WATERLOGGED, false) : state;
+    }
+
     /** Where the wand would place blocks when used on {@code pos}/{@code face} (shared by preview and use). */
     public static List<BlockPos> targets(Level level, Player player, BlockPos pos, Direction face, int max) {
         BlockState source = level.getBlockState(pos);
         Item item = source.getBlock().asItem();
-        if (source.isAir() || !(item instanceof BlockItem) || source.hasBlockEntity()) {
+        // two-block things (doors, beds, tall plants) would only get one half
+        if (source.isAir() || !(item instanceof BlockItem) || source.hasBlockEntity() || !player.mayBuild()
+                || source.hasProperty(BlockStateProperties.DOUBLE_BLOCK_HALF) || source.hasProperty(BlockStateProperties.BED_PART)) {
             return List.of();
         }
-        int budget = player.isCreative() ? max : Math.min(max, count(player.getInventory(), item));
+        int budget = player.isCreative() ? max : Math.min(max, count(player.getInventory(), item) / cost(source));
         List<BlockPos> out = new ArrayList<>();
         Set<BlockPos> seen = new HashSet<>();
         ArrayDeque<BlockPos> queue = new ArrayDeque<>();
@@ -69,7 +83,7 @@ public class BuilderWandItem extends TooltipItem {
             BlockPos p = queue.poll();
             BlockPos target = p.relative(face);
             if (!level.getBlockState(p).is(source.getBlock()) || !level.getBlockState(target).canBeReplaced()
-                    || !level.getEntitiesOfClass(net.minecraft.world.entity.LivingEntity.class, new AABB(target)).isEmpty()) {
+                    || !level.mayInteract(player, target) || !level.getEntitiesOfClass(net.minecraft.world.entity.LivingEntity.class, new AABB(target)).isEmpty()) {
                 continue;
             }
             out.add(target);
@@ -117,12 +131,13 @@ public class BuilderWandItem extends TooltipItem {
             return InteractionResult.FAIL;
         }
         if (level instanceof ServerLevel server) {
-            BlockState state = level.getBlockState(pos);
+            BlockState source = level.getBlockState(pos);
+            BlockState state = placed(source);
             for (BlockPos t : targets) {
                 server.setBlock(t, state, Block.UPDATE_ALL);
             }
             if (!player.isCreative()) {
-                consume(player.getInventory(), state.getBlock().asItem(), targets.size());
+                consume(player.getInventory(), state.getBlock().asItem(), targets.size() * cost(state));
                 ctx.getItemInHand().hurtAndBreak(1, player, ctx.getHand() == InteractionHand.MAIN_HAND
                         ? net.minecraft.world.entity.EquipmentSlot.MAINHAND : net.minecraft.world.entity.EquipmentSlot.OFFHAND);
             }
@@ -152,7 +167,8 @@ public class BuilderWandItem extends TooltipItem {
                 }
             }
             if (!player.isCreative() && restored > 0) {
-                player.getInventory().placeItemBackInInventory(new ItemStack(undo.state().getBlock().asItem(), restored));
+                player.getInventory().placeItemBackInInventory(new ItemStack(undo.state().getBlock().asItem(),
+                        restored * cost(undo.state())));
             }
             player.sendOverlayMessage(Component.translatable("message.wayfarers.wand.undone", restored).withStyle(ChatFormatting.GOLD));
         }

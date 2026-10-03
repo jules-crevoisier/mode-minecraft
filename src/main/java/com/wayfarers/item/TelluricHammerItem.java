@@ -1,5 +1,6 @@
 package com.wayfarers.item;
 
+import com.wayfarers.util.Targets;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -20,7 +21,7 @@ public class TelluricHammerItem extends AbilityItem {
     protected boolean activate(ServerLevel level, Player player, ItemStack stack) {
         double radius = 5.5;
         for (LivingEntity target : level.getEntitiesOfClass(LivingEntity.class, player.getBoundingBox().inflate(radius),
-                e -> e != player && e.isAlive() && !(e instanceof Player))) {
+                e -> Targets.foe(player, e))) {
             Vec3 push = target.position().subtract(player.position()).normalize().scale(1.4);
             target.hurtServer(level, level.damageSources().playerAttack(player), 7.0F);
             target.push(push.x, 0.55, push.z);

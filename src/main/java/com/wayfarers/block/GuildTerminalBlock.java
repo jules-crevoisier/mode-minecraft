@@ -33,12 +33,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * "Quick stack to nearby chests": every item of the main inventory that already exists in a
- * chest within range goes there. Sneak-use sorts every chest in range instead.
+ * The Guild Terminal: use it to open one storage screen for every chest within range
+ * ({@link StorageNetwork}); sneak-use sorts every chest in range instead.
  */
 public class GuildTerminalBlock extends HorizontalDirectionalBlock {
     public static final MapCodec<GuildTerminalBlock> CODEC = simpleCodec(GuildTerminalBlock::new);
-    public static final int RANGE = 10;
+    public static final int RANGE = StorageNetwork.RANGE;
 
     public GuildTerminalBlock(Properties properties) {
         super(properties);

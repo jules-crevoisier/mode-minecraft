@@ -2,6 +2,7 @@ package com.wayfarers.item;
 
 import com.wayfarers.skill.ManaItems;
 import com.wayfarers.skill.PlayerSkills;
+import com.wayfarers.util.Targets;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
@@ -66,7 +67,6 @@ public class SpellItem extends TooltipItem {
             cast(server, sp, PlayerSkills.spellPower(sp));
             player.getCooldowns().addCooldown(stack, cooldown);
         }
-        player.swing(hand);
         return InteractionResult.SUCCESS;
     }
 
@@ -174,7 +174,7 @@ public class SpellItem extends TooltipItem {
 
     // ------------------------------------------------------------------ helpers
     private static List<LivingEntity> foes(ServerLevel level, Player player, AABB box) {
-        return level.getEntitiesOfClass(LivingEntity.class, box, e -> e != player && e.isAlive() && !(e instanceof Player));
+        return level.getEntitiesOfClass(LivingEntity.class, box, e -> Targets.foe(player, e));
     }
 
     private static void hurt(ServerLevel level, ServerPlayer player, LivingEntity e, float amount) {

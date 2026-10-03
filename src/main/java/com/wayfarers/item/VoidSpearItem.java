@@ -1,5 +1,6 @@
 package com.wayfarers.item;
 
+import com.wayfarers.util.Targets;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -7,7 +8,9 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.Comparator;
@@ -24,20 +27,27 @@ public class VoidSpearItem extends AbilityItem {
     @Override
     protected boolean activate(ServerLevel level, Player player, ItemStack stack) {
         Vec3 eye = player.getEyePosition();
-        Vec3 end = eye.add(player.getLookAngle().scale(RANGE));
+        // stop at the first wall: no striking (or blinking) through blocks
+        HitResult wall = level.clip(new ClipContext(eye, eye.add(player.getLookAngle().scale(RANGE)),
+                ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, player));
+        Vec3 end = wall.getType() == HitResult.Type.MISS ? eye.add(player.getLookAngle().scale(RANGE)) : wall.getLocation();
         AABB sweep = new AABB(eye, end).inflate(1.0);
         Optional<LivingEntity> target = level.getEntitiesOfClass(LivingEntity.class, sweep,
-                        e -> e != player && e.isAlive() && !(e instanceof Player)
+                        e -> Targets.foe(player, e)
                                 && e.getBoundingBox().inflate(0.3).clip(eye, end).isPresent())
                 .stream()
                 .min(Comparator.comparingDouble(e -> e.distanceToSqr(player)));
         if (target.isEmpty()) {
+            noTarget(player);
             return false;
         }
         LivingEntity t = target.get();
         Vec3 behind = t.position().add(t.getLookAngle().multiply(1, 0, 1).normalize().scale(-1.6));
         level.sendParticles(ParticleTypes.REVERSE_PORTAL, player.getX(), player.getY() + 1, player.getZ(), 30, 0.3, 0.6, 0.3, 0.05);
-        player.teleportTo(behind.x, t.getY(), behind.z);
+        Vec3 dest = new Vec3(behind.x, t.getY(), behind.z);
+        if (level.noCollision(player, player.getBoundingBox().move(dest.subtract(player.position())))) {
+            player.teleportTo(dest.x, dest.y, dest.z);
+        }
         player.lookAt(net.minecraft.commands.arguments.EntityAnchorArgument.Anchor.EYES, t.getEyePosition());
         t.hurtServer(level, level.damageSources().playerAttack(player), 9.0F);
         level.sendParticles(ParticleTypes.PORTAL, t.getX(), t.getY() + 1, t.getZ(), 40, 0.4, 0.6, 0.4, 0.2);

@@ -60,6 +60,9 @@ public class AltarBlock extends Block {
             return InteractionResult.SUCCESS;
         }
         Item offering = boss.offering.get();
+        if (!stack.is(offering) && player.getOffhandItem().is(offering)) {
+            stack = player.getOffhandItem();
+        }
         if (!stack.is(offering)) {
             player.sendSystemMessage(Component.translatable("message.wayfarers.altar.need",
                     Component.translatable(offering.getDescriptionId())).withStyle(ChatFormatting.GRAY));
@@ -68,6 +71,7 @@ public class AltarBlock extends Block {
         EntityType<? extends Mob> type = boss.type.get();
         if (!serverLevel.getEntitiesOfClass(Mob.class, new AABB(pos).inflate(48),
                 e -> e instanceof BossZombie || e instanceof WayfarerBoss).isEmpty()) {
+            player.sendSystemMessage(Component.translatable("message.wayfarers.altar.busy").withStyle(ChatFormatting.GRAY));
             return InteractionResult.FAIL;
         }
         Mob entity = type.create(serverLevel, EntitySpawnReason.TRIGGERED);

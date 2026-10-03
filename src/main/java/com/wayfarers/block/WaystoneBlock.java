@@ -22,8 +22,8 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * Waystones are shared by every player: the first person to touch one (or to place it)
- * makes it available to the whole server. Using it lists every waystone as clickable chat
- * entries that run {@code /wayfarers warp <id>}.
+ * makes it available to the whole server. Using it opens the travel screen (search, favourites,
+ * renaming); travelling is only allowed while standing at a waystone.
  */
 public class WaystoneBlock extends Block {
     private static final VoxelShape SHAPE = Block.box(1, 0, 1, 15, 16, 15);

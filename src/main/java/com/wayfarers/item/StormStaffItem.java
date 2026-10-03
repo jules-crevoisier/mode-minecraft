@@ -21,6 +21,7 @@ public class StormStaffItem extends AbilityItem {
     protected boolean activate(ServerLevel level, Player player, ItemStack stack) {
         HitResult hit = player.pick(48.0, 1.0F, false);
         if (hit.getType() == HitResult.Type.MISS) {
+            noTarget(player);
             return false;
         }
         Vec3 at = hit.getLocation();

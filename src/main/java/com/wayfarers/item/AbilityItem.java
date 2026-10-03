@@ -1,6 +1,9 @@
 package com.wayfarers.item;
 
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -34,15 +37,23 @@ public abstract class AbilityItem extends TooltipItem {
             if (durabilityCost > 0 && stack.isDamageableItem()) {
                 stack.hurtAndBreak(durabilityCost, player, hand.asEquipmentSlot());
             }
+            // only the server starts the cooldown (it syncs to the client), so a refused ability shows none
+            player.getCooldowns().addCooldown(stack, cooldownTicks);
         } else {
             activateClient(player, stack);
         }
-        player.getCooldowns().addCooldown(stack, cooldownTicks);
         return InteractionResult.SUCCESS;
     }
 
     /** Server-side effect. Return false to cancel (no cooldown, no durability). */
     protected abstract boolean activate(ServerLevel level, Player player, ItemStack stack);
+
+    /** Tells the player why the ability did nothing (shown above the hotbar). */
+    protected static void noTarget(Player player) {
+        if (player instanceof ServerPlayer sp) {
+            sp.sendOverlayMessage(Component.translatable("message.wayfarers.ability.no_target").withStyle(ChatFormatting.GRAY));
+        }
+    }
 
     /** Optional client-side prediction (e.g. movement) so abilities feel instant. */
     protected void activateClient(Player player, ItemStack stack) {}
