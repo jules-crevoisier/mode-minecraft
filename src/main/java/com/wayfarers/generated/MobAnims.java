@@ -20,4 +20,116 @@ public final class MobAnims {
 
         private DrownedWarden() {}
     }
+    public static final class BellKeeper {
+
+        public static final int COUNT = 0;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {};
+
+        private BellKeeper() {}
+    }
+    public static final class Archivist {
+
+        public static final int COUNT = 0;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {};
+
+        private Archivist() {}
+    }
+    public static final class SandPharaoh {
+
+        public static final int COUNT = 0;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {};
+
+        private SandPharaoh() {}
+    }
+    public static final class JadeJaguar {
+
+        public static final int COUNT = 0;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {};
+
+        private JadeJaguar() {}
+    }
+    public static final class RootMother {
+
+        public static final int COUNT = 0;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {};
+
+        private RootMother() {}
+    }
+    public static final class SwampCrone {
+
+        public static final int COUNT = 0;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {};
+
+        private SwampCrone() {}
+    }
+    public static final class GryphonKnight {
+
+        public static final int COUNT = 0;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {};
+
+        private GryphonKnight() {}
+    }
+    public static final class RuneColossus {
+
+        public static final int COUNT = 0;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {};
+
+        private RuneColossus() {}
+    }
+    public static final class ForgeKing {
+
+        public static final int COUNT = 0;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {};
+
+        private ForgeKing() {}
+    }
+    public static final class CrystalSpider {
+
+        public static final int COUNT = 0;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {};
+
+        private CrystalSpider() {}
+    }
+    public static final class SculkSpawn {
+
+        public static final int COUNT = 0;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {};
+
+        private SculkSpawn() {}
+    }
+    public static final class AshLord {
+
+        public static final int COUNT = 0;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {};
+
+        private AshLord() {}
+    }
+    public static final class PiglinKing {
+
+        public static final int COUNT = 0;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {};
+
+        private PiglinKing() {}
+    }
+    public static final class SoulReaper {
+
+        public static final int COUNT = 0;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {};
+
+        private SoulReaper() {}
+    }
 }

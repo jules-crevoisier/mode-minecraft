@@ -19,6 +19,9 @@ import net.minecraft.world.level.Level;
 
 /** End mini-boss guarding its nest: blinks around, levitates its foes, calls Void Stalkers. */
 public class VoidWarden extends BossZombie {
+    public static final float WIDTH = 0.6F;
+    public static final float HEIGHT = 1.95F;
+
     public VoidWarden(EntityType<? extends Zombie> type, Level level) {
         super(type, level, BossEvent.BossBarColor.PURPLE);
     }

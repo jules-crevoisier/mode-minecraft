@@ -111,6 +111,20 @@ public final class ModItems {
     public static final RegistryObject<Item> VOID_STALKER_SPAWN_EGG = egg("void_stalker_spawn_egg", ModEntities.VOID_STALKER);
     public static final RegistryObject<Item> DROWNED_WARDEN_SPAWN_EGG = egg("drowned_warden_spawn_egg", ModEntities.DROWNED_WARDEN);
     public static final RegistryObject<Item> VOID_WARDEN_SPAWN_EGG = egg("void_warden_spawn_egg", ModEntities.VOID_WARDEN);
+    public static final RegistryObject<Item> BELL_KEEPER_SPAWN_EGG = egg("bell_keeper_spawn_egg", ModEntities.BELL_KEEPER);
+    public static final RegistryObject<Item> ARCHIVIST_SPAWN_EGG = egg("archivist_spawn_egg", ModEntities.ARCHIVIST);
+    public static final RegistryObject<Item> SAND_PHARAOH_SPAWN_EGG = egg("sand_pharaoh_spawn_egg", ModEntities.SAND_PHARAOH);
+    public static final RegistryObject<Item> JADE_JAGUAR_SPAWN_EGG = egg("jade_jaguar_spawn_egg", ModEntities.JADE_JAGUAR);
+    public static final RegistryObject<Item> ROOT_MOTHER_SPAWN_EGG = egg("root_mother_spawn_egg", ModEntities.ROOT_MOTHER);
+    public static final RegistryObject<Item> SWAMP_CRONE_SPAWN_EGG = egg("swamp_crone_spawn_egg", ModEntities.SWAMP_CRONE);
+    public static final RegistryObject<Item> GRYPHON_KNIGHT_SPAWN_EGG = egg("gryphon_knight_spawn_egg", ModEntities.GRYPHON_KNIGHT);
+    public static final RegistryObject<Item> RUNE_COLOSSUS_SPAWN_EGG = egg("rune_colossus_spawn_egg", ModEntities.RUNE_COLOSSUS);
+    public static final RegistryObject<Item> FORGE_KING_SPAWN_EGG = egg("forge_king_spawn_egg", ModEntities.FORGE_KING);
+    public static final RegistryObject<Item> CRYSTAL_SPIDER_SPAWN_EGG = egg("crystal_spider_spawn_egg", ModEntities.CRYSTAL_SPIDER);
+    public static final RegistryObject<Item> SCULK_SPAWN_SPAWN_EGG = egg("sculk_spawn_spawn_egg", ModEntities.SCULK_SPAWN);
+    public static final RegistryObject<Item> ASH_LORD_SPAWN_EGG = egg("ash_lord_spawn_egg", ModEntities.ASH_LORD);
+    public static final RegistryObject<Item> PIGLIN_KING_SPAWN_EGG = egg("piglin_king_spawn_egg", ModEntities.PIGLIN_KING);
+    public static final RegistryObject<Item> SOUL_REAPER_SPAWN_EGG = egg("soul_reaper_spawn_egg", ModEntities.SOUL_REAPER);
 
     /** Axe subclass keeps vanilla stripping behaviour; tree felling is handled in EquipmentEvents. */
     public static final class LumberAxe extends AxeItem {

@@ -8,6 +8,8 @@ import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
 import net.minecraftforge.client.event.AddGuiOverlayLayersEvent;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
@@ -37,13 +39,20 @@ public final class WayfarersClient {
     }
 
     private static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
-        event.registerEntityRenderer(ModEntities.RUIN_WALKER.get(), ctx -> new WayfarerMobRenderer<>(ctx, "ruin_walker"));
-        event.registerEntityRenderer(ModEntities.MAP_WRAITH.get(), ctx -> new WayfarerMobRenderer<>(ctx, "map_wraith"));
-        event.registerEntityRenderer(ModEntities.BASALT_GUARD.get(), ctx -> new WayfarerMobRenderer<>(ctx, "basalt_guard"));
-        event.registerEntityRenderer(ModEntities.VOID_STALKER.get(), ctx -> new WayfarerMobRenderer<>(ctx, "void_stalker"));
-        event.registerEntityRenderer(ModEntities.VOID_WARDEN.get(), ctx -> new WayfarerMobRenderer<>(ctx, "void_warden"));
+        humanoid(event, ModEntities.RUIN_WALKER.get(), "ruin_walker");
+        humanoid(event, ModEntities.MAP_WRAITH.get(), "map_wraith");
+        humanoid(event, ModEntities.BASALT_GUARD.get(), "basalt_guard");
+        humanoid(event, ModEntities.VOID_STALKER.get(), "void_stalker");
+        humanoid(event, ModEntities.VOID_WARDEN.get(), "void_warden");
         event.registerEntityRenderer(ModEntities.BOOMERANG.get(), ThrownItemRenderer::new);
         ModelRegistry.registerRenderers(event);
+    }
+
+    /** Vanilla humanoid model with the mob's painted skin, unless the mob has its own generated model. */
+    private static <T extends Mob> void humanoid(EntityRenderersEvent.RegisterRenderers event, EntityType<T> type, String skin) {
+        if (!ModelRegistry.NAMES.contains(skin)) {
+            event.registerEntityRenderer(type, ctx -> new WayfarerMobRenderer<>(ctx, skin));
+        }
     }
 
     private static void onClientTick() {

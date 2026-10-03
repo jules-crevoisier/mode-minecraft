@@ -5,6 +5,11 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.wayfarers.Wayfarers;
+import com.wayfarers.boss.WayfarerBoss;
+import com.wayfarers.registry.ModEntities;
+import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.phys.Vec3;
 import com.wayfarers.data.WayfarersData;
 import com.wayfarers.generated.GeneratedContent;
 import com.wayfarers.item.MagnetRingItem;
@@ -103,9 +108,36 @@ public final class WayfarersCommand {
                                 .suggests((ctx, b) -> SharedSuggestionProvider.suggest(
                                         GeneratedContent.STRUCTURES.stream().map(GeneratedContent.StructureInfo::id), b))
                                 .executes(ctx -> locate(ctx, StringArgumentType.getString(ctx, "structure"), true))))
+                .then(Commands.literal("boss").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
+                        .then(Commands.argument("boss", StringArgumentType.word())
+                                .suggests((ctx, b) -> SharedSuggestionProvider.suggest(
+                                        ModEntities.bosses().stream().map(r -> r.getId().getPath()), b))
+                                .executes(ctx -> boss(ctx, StringArgumentType.getString(ctx, "boss")))))
                 .then(Commands.literal("progress").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                         .then(Commands.literal("reset").executes(ctx -> progress(ctx, false)))
                         .then(Commands.literal("complete").executes(ctx -> progress(ctx, true)))));
+    }
+
+    /** Demo: summon a boss 6 blocks in front of you, its arena centred where it appears (radius 20). */
+    private static int boss(CommandContext<CommandSourceStack> ctx, String id) throws CommandSyntaxException {
+        ServerPlayer player = ctx.getSource().getPlayerOrException();
+        for (RegistryObject<? extends EntityType<? extends WayfarerBoss>> type : ModEntities.bosses()) {
+            if (!type.getId().getPath().equals(id)) {
+                continue;
+            }
+            WayfarerBoss boss = type.get().create(player.level(), EntitySpawnReason.COMMAND);
+            if (boss == null) {
+                return 0;
+            }
+            Vec3 at = player.position().add(player.getLookAngle().multiply(1, 0, 1).normalize().scale(6));
+            boss.snapTo(at.x, player.getY(), at.z, player.getYRot() + 180.0F, 0.0F);
+            boss.setArena(BlockPos.containing(at.x, player.getY(), at.z), 20, null);
+            boss.setTarget(player);
+            player.level().addFreshEntity(boss);
+            return 1;
+        }
+        ctx.getSource().sendFailure(Component.literal("Unknown boss: " + id));
+        return 0;
     }
 
     private static int warp(CommandContext<CommandSourceStack> ctx, String id) throws CommandSyntaxException {
