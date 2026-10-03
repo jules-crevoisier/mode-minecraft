@@ -80,7 +80,7 @@ def gold(seed, emboss=None, rim=True, worn=0.0):
     return paint
 
 
-def skin(seed, base=SKIN, bristle=True, scars=(), lit_top=True):
+def skin(seed, base=SKIN, bristle=True, scars=(), lit_top=True, grad=True):
     """Piglin hide: warm pink, darker toward the bottom, coarse dark bristles and pale scars."""
     def paint(face, x, y, w, h):
         k = 1 + (hsh(seed, x // 2, y // 2, FACE_ID[face]) - 0.5) * 0.09
@@ -89,7 +89,7 @@ def skin(seed, base=SKIN, bristle=True, scars=(), lit_top=True):
             c = mix(c, SKIN_L, 0.25)
         elif face == "bottom":
             c = mix(c, SKIN_D, 0.6)
-        elif h > 3:
+        elif h > 3 and grad:
             c = mix(c, SKIN_D, max(0.0, y / h - 0.55))
         if bristle and hsh(seed, x, y, FACE_ID[face]) < 0.03:
             c = mix(c, (112, 64, 60), 0.7)
@@ -188,9 +188,9 @@ def build():
 
     # ------------------------------------------------------------------ torso: belly, breastplate, mantle
     box("belly", -13, -8, -9, 26, 15, 19, skin(20, scars=(("front", 3, 3, 6),)))
-    box("belly", -12, -6, -12, 24, 12, 3, skin(21, base=SKIN_L, lit_top=False))
+    box("belly", -12, -6, -12, 24, 12, 3, skin(21, base=SKIN_L, lit_top=False, grad=False))
     box("belly", -9, -4, -15, 18, 9, 3, ({"front": lambda f, x, y, w, h: NOSTRIL if (x, y) in ((8, 5), (9, 5)) else
-                                          skin(22, base=SKIN_L)(f, x, y, w, h), "*": skin(22, base=SKIN_L, lit_top=False)}, None))
+                                          skin(22, base=SKIN_L, grad=False)(f, x, y, w, h), "*": skin(22, base=SKIN_L, lit_top=False, grad=False)}, None))
     # one heavy gold chain swagged across the belly, links alternating face-on and edge-on
     swag = ((-13, -5, -10), (-11, -3, -13), (-9, -1, -15), (-6, 1, -16), (-3, 2, -16), (0, 2, -16), (3, 1, -16),
             (6, -1, -16), (9, -3, -13), (11, -5, -10))

@@ -479,34 +479,234 @@ def sand_gate(bp, t, x, z):
 
 
 def well_head(bp, t, x, z):
-    """Lithite well: a mine head of deepslate with a timber winch over the shaft."""
-    for xx in range(x - 6, x + 7):
-        for zz in range(z - 6, z + 7):
-            d = math.hypot(xx - x, zz - z)
-            if d <= 4.4:
+    """Lithite well: a dwarven mine head. A square deepslate tower with lithite quoins stands over the shaft
+    (round parapet, a timber gallery, hanging soul lanterns, an ore bucket on a chain); a dark-oak headframe
+    rises above it to a great sheave wheel. A winch house leans on its east side, an ore-cart track leaves by
+    the west door past heaps of ore, scaffolding climbs the north wall and crystal lamp posts light the yard."""
+    rng = random.Random(x * 7 + z * 13)
+    B, BC, TL, PD = "deepslate_bricks", "cracked_deepslate_bricks", "deepslate_tiles", "polished_deepslate"
+    LB, LK, LO = "wayfarers:lithite_bricks", "wayfarers:lithite_block", "wayfarers:deepslate_lithite_ore"
+    POST = "deepslate_brick_wall[east=none,north=none,south=none,west=none,up=true,waterlogged=false]"
+    FENCE = "dark_oak_fence[east=false,north=false,south=false,west=false,waterlogged=false]"
+    BARS_X = "iron_bars[east=true,north=false,south=false,west=true,waterlogged=false]"
+    BARS_Z = "iron_bars[east=false,north=true,south=true,west=false,waterlogged=false]"
+    CHAIN = "iron_chain[axis=y,waterlogged=false]"
+    LANT = "soul_lantern[hanging=true,waterlogged=false]"
+    SCAF = "scaffolding[bottom=false,distance=0,waterlogged=false]"
+    H = 10                                   # tower wall height (top course at y=H)
+
+    def put(dx, y, dz, spec):
+        bp.set(x + dx, y, z + dz, spec)
+
+    # yard: clear the stairwell's surface ring, lay a chamfered deepslate pad on the ground
+    for dx in range(-13, 14):
+        for dz in range(-13, 14):
+            d = math.hypot(dx, dz)
+            if abs(dx) + abs(dz) > 21:
                 continue
-            if d <= 6.2:
-                bp.set(xx, 0, zz, "polished_deepslate")
-                if d > 5.2:
-                    bp.set(xx, 1, zz, "deepslate_brick_wall[east=low,north=low,south=low,west=low,up=true,waterlogged=false]"
-                           if (xx + zz) % 2 else "wayfarers:lithite_bricks")
-    for sx, sz in ((-5, -5), (5, -5), (-5, 5), (5, 5)):
+            for y in range(0, 6):
+                if d > 3.6 or y >= 4:
+                    put(dx, y, dz, "air")
+            if d > 4.6:
+                put(dx, -1, dz, PD if (dx + dz) % 4 else TL)
+                put(dx, -2, dz, "cobbled_deepslate")
+    # ore-cart track bed to the west and a gravel path to the south
+    for dx in range(-19, -6):
+        for dz in (-1, 0, 1):
+            put(dx, -1, dz, "gravel" if dz else "cobbled_deepslate")
+            put(dx, -2, dz, "cobbled_deepslate")
+    for dz in range(8, 17):
+        for dx in (-1, 0, 1):
+            put(dx, -1, dz, "gravel" if (dx + dz) % 3 else "tuff")
+
+    # tower walls: brick with lithite quoins, a plinth, a string course, a corbelled cornice
+    for dx in range(-7, 8):
+        for dz in range(-7, 8):
+            if abs(dx) != 7 and abs(dz) != 7:
+                continue
+            corner = abs(dx) == 7 and abs(dz) == 7
+            for y in range(0, H + 1):
+                if corner:
+                    spec = LB if y % 2 == 0 else B
+                elif y == 0:
+                    spec = PD
+                elif y in (5, H):
+                    spec = TL
+                else:
+                    spec = BC if rng.random() < 0.18 else B
+                put(dx, y, dz, spec)
+    for i in range(-7, 8):
+        for (dx, dz, facing) in ((i, -8, "south"), (i, 8, "north"), (-8, i, "east"), (8, i, "west")):
+            put(dx, H, dz, stair("deepslate_brick_stairs", facing, "top"))
+            if i % 2 == 0:
+                put(dx, H + 1, dz, POST)                 # crenels
+    for sx in (-1, 1):                                    # corner buttresses
+        for sz in (-1, 1):
+            for y in range(0, 7):
+                put(sx * 8, y, sz * 8, LB if y == 6 else B)
+            put(sx * 8, 7, sz * 8, LK)
+    # doorways: a great south arch, a west cart door, an east door to the winch house
+    for y in range(0, 5):
+        for dx in (-1, 0, 1):
+            if y < 4 or dx == 0:
+                put(dx, y, 7, "air")
+    put(-1, 4, 7, stair("deepslate_brick_stairs", "east", "top"))
+    put(1, 4, 7, stair("deepslate_brick_stairs", "west", "top"))
+    put(0, 5, 7, LK)
+    for dx in (-2, 2):
+        for y in range(0, 5):
+            put(dx, y, 8, LB if y % 2 else B)
+        put(dx, 5, 8, stair("deepslate_brick_stairs", "north", "bottom"))
+        put(dx, 3, 9, LANT.replace("hanging=true", "hanging=false"))
+    for y in range(0, 3):
+        for dz in (-1, 0, 1):
+            put(-7, y, dz, "air")
+        put(7, y, 0, "air") if y < 2 else None
+    put(-7, 3, 0, LK)
+    # windows: barred slits high on every side
+    for k in (-4, 4):
+        for y in (6, 7, 8):
+            put(k, y, -7, BARS_X)
+            put(-7, y, k, BARS_Z)
+            put(7, y, k, BARS_Z)
+            if abs(k) == 4:
+                put(k, y, 7, BARS_X)
+
+    # inside: a round parapet with the opening toward the south door, hanging soul lanterns, a timber gallery
+    for dx in range(-6, 7):
+        for dz in range(-6, 7):
+            d = math.hypot(dx, dz)
+            if 4.5 < d <= 5.3 and not (dz > 0 and abs(dx) <= 1):
+                put(dx, 0, dz, POST)
+            if abs(dx) == 6 or abs(dz) == 6:
+                put(dx, 5, dz, "dark_oak_planks")          # gallery on the string course
+                if abs(dx) == 5 or abs(dz) == 5:
+                    pass
+            elif abs(dx) == 5 or abs(dz) == 5:
+                put(dx, 6, dz, FENCE)
+    for sx in (-1, 1):
+        for sz in (-1, 1):
+            for y in range(6, 10):
+                put(sx * 5, y, sz * 5, CHAIN)
+            put(sx * 5, 5, sz * 5, LANT)
+    for y in range(0, 5):
+        put(6, y, -6, "ladder[facing=west,waterlogged=false]")
+    put(-6, 0, -5, "barrel[facing=up,open=false]")
+    put(-6, 0, -6, "barrel[facing=up,open=false]")
+    put(-5, 0, -6, LO)
+    put(6, 0, 5, "grindstone[face=floor,facing=north]")
+    put(5, 0, 6, "anvil[facing=east]")
+
+    # headframe: four dark-oak legs from the gallery to a deck, cross beams, the sheave wheel on top
+    TOP = 19
+    for sx in (-1, 1):
+        for sz in (-1, 1):
+            for y in range(6, TOP):
+                put(sx * 5, y, sz * 5, "dark_oak_log[axis=y]")
+    for y in (13, TOP):
+        for i in range(-5, 6):
+            put(i, y, -5, "dark_oak_log[axis=x]")
+            put(i, y, 5, "dark_oak_log[axis=x]")
+            put(-5, y, i, "dark_oak_log[axis=z]")
+            put(5, y, i, "dark_oak_log[axis=z]")
+    for i in range(-4, 5):                                     # X bracing on the faces
+        for (dx, dz) in ((i, -5), (i, 5), (-5, i), (5, i)):
+            yy = 14 + int(round(abs(i) * 4 / 4))
+            put(dx, yy, dz, FENCE)
+    for dx in range(-4, 5):
+        for dz in (-1, 0, 1):
+            if dx != 0 or dz != 0:
+                put(dx, TOP, dz, "dark_oak_planks")
+    for dz in (-1, 1):
+        for y in range(TOP + 1, TOP + 4):
+            put(0, y, dz * 2, "dark_oak_log[axis=y]")             # wheel bearings
+    wc = TOP + 4
+    for dx in range(-4, 5):
+        for dy in range(-4, 5):
+            r = math.hypot(dx, dy)
+            if 2.6 <= r < 3.6:
+                put(dx, wc + dy, 0, "stripped_dark_oak_log[axis=z]")
+            elif r < 2.6 and (dx == 0 or dy == 0):
+                put(dx, wc + dy, 0, FENCE)
+    put(0, wc, 0, "dark_oak_log[axis=z]")
+    for dz in (-1, 1):
+        put(0, wc, dz, "iron_block")
+    # the rope: from the wheel down the shaft to an ore bucket, and from the wheel to the winch drum
+    for y in range(6, TOP):
+        put(0, y, 0, CHAIN)
+    put(0, 5, 0, "cauldron")
+    bp.line((x + 3, wc, z), (x + 11, 5, z), "iron_chain[axis=x,waterlogged=false]")
+    for sx, sz in ((-5, -5), (5, 5)):
+        put(sx, TOP + 1, sz, LK)
+        put(sx, TOP + 2, sz, "soul_lantern[hanging=false,waterlogged=false]")
+
+    # winch house: stone base, timber frame, gable roof, the winding drum inside
+    hx0, hx1, hz0, hz1 = 8, 14, -3, 3
+    for dx in range(hx0, hx1 + 1):
+        for dz in range(hz0, hz1 + 1):
+            put(dx, -1, dz, TL)
+            edge = dx in (hx0, hx1) or dz in (hz0, hz1)
+            for y in range(0, 4):
+                if not edge:
+                    put(dx, y, dz, "air")
+                elif dx in (hx0, hx1) and dz in (hz0, hz1):
+                    put(dx, y, dz, "dark_oak_log[axis=y]")
+                else:
+                    put(dx, y, dz, B if y == 0 else ("spruce_planks" if y < 3 else "dark_oak_log[axis=x]"
+                                                       if dz in (hz0, hz1) else "dark_oak_log[axis=z]"))
+    bp.gable_roof(x + hx0 - 1, z + hz0 - 1, x + hx1 + 1, z + hz1 + 1, 4, "spruce_stairs", ridge_axis="x",
+                  overhang=0, fill="spruce_planks")
+    for y in (0, 1):
+        put(hx0, y, 0, "air")
+    put(hx1, 1, -1, "glass_pane[east=false,north=true,south=true,west=false,waterlogged=false]")
+    put(hx1, 1, 1, "glass_pane[east=false,north=true,south=true,west=false,waterlogged=false]")
+    for dz in (-1, 0, 1):
+        put(11, 1, dz, "stripped_spruce_log[axis=z]")                # the drum
+    for dz in (-2, 2):
+        put(11, 0, dz, "spruce_fence[east=false,north=false,south=false,west=false,waterlogged=false]")
+        put(11, 1, dz, "spruce_planks")
+    put(13, 0, -2, "barrel[facing=up,open=false]")
+    put(13, 0, 2, "lever[face=floor,facing=west,powered=false]")
+    put(12, 3, 0, LANT)
+
+    # ore-cart line through the west door: rails, a buffer, carts, heaps of ore and lithite
+    for dx in range(-18, -2):
+        put(dx, 0, 0, "rail[shape=east_west,waterlogged=false]")
+    put(-19, 0, 0, POST)
+    put(-19, 1, 0, LK)
+    bp.entity(x - 10, 0, z, {"id": "minecraft:minecart"})
+    bp.entity(x - 14, 0, z, {"id": "minecraft:chest_minecart", "LootTable": LOOT + "lithite_well"})
+    heaps = (("deepslate_iron_ore", "raw_iron_block"), (LO, LK), ("deepslate_coal_ore", "coal_block"))
+    for i, (hx, hz) in enumerate(((-11, 3), (-15, -3), (-16, 3))):
+        a, b2 = heaps[i % len(heaps)]
+        for dx in range(-1, 2):
+            for dz in range(-1, 2):
+                put(hx + dx, 0, hz + dz, a if (dx + dz) % 2 else "cobbled_deepslate")
+        put(hx, 1, hz, b2)
+        put(hx + 1, 1, hz, "gravel")
+
+    # scaffolding up the north wall (repairs), with stacked bricks and a stonecutter
+    for dx in range(-4, 5):
         for y in range(0, 9):
-            bp.set(x + sx, y, z + sz, "dark_oak_log[axis=y]")
-    for xx in range(x - 5, x + 6):
-        bp.set(xx, 9, z - 5, "dark_oak_log[axis=x]")
-        bp.set(xx, 9, z + 5, "dark_oak_log[axis=x]")
-    for zz in range(z - 5, z + 6):
-        bp.set(x, 10, zz, "dark_oak_log[axis=z]")
-        bp.set(x - 5, 9, zz, "dark_oak_log[axis=z]")
-        bp.set(x + 5, 9, zz, "dark_oak_log[axis=z]")
-    for y in range(1, 10):
-        bp.set(x, y, z, "iron_chain[axis=y,waterlogged=false]")
-    bp.set(x, 1, z, "wayfarers:lithite_block")
-    for sx in (-5, 5):
-        bp.set(x + sx, 8, z, "soul_lantern[hanging=true,waterlogged=false]")
-    for zz in range(z - 4, z + 5):
-        bp.set(x + 7, 0, zz, "rail[shape=north_south,waterlogged=false]")
+            if dx in (-4, 0, 4) or y in (3, 7):
+                put(dx, y, -8, SCAF)
+    put(-6, 0, -10, "stonecutter[facing=south]")
+    for dx, dz in ((-5, -11), (-4, -11), (-5, -10)):
+        put(dx, 0, dz, B)
+    put(-5, 1, -11, "deepslate_brick_slab[type=bottom,waterlogged=false]")
+
+    # crystal lamp posts in the yard and along the path
+    for lx, lz in ((-10, -10), (10, -10), (-10, 10), (10, 10), (-3, 13), (3, 13)):
+        for y in range(0, 3):
+            put(lx, y, lz, POST)
+        put(lx, 3, lz, LK)
+        put(lx, 4, lz, "soul_lantern[hanging=false,waterlogged=false]")
+    # spoil heap of tailings north-east
+    for dx in range(-4, 5):
+        for dz in range(-4, 5):
+            hgt = int(3.2 - math.hypot(dx, dz * 1.3) * 0.8 + rng.random() * 0.6)
+            for y in range(0, hgt):
+                put(12 + dx, y, -12 + dz, rng.choice(("gravel", "tuff", "cobbled_deepslate", "gravel")))
 
 
 def void_obelisk(bp, t, x, z):

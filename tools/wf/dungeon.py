@@ -402,7 +402,7 @@ def spiral_down(p, cx, cz, y_top, y_bottom, open_top=True):
                     if d <= r - 0.4:
                         if y_bottom <= y <= y_top + 3:
                             p.air(x, y, z, x, y, z, floor=False)
-                    else:
+                    elif y < y_top:  # the shaft wall stops at the upper floor: no ring around the opening
                         p.shell(x, y, z, x, y, z)
     return (cx, cz, y_top, y_bottom)
 
