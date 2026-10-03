@@ -209,7 +209,10 @@ def check_advancements():
             for it in cond.get("items", []):
                 check_item_id(rel, it["items"])
             for e in cond.get("entity", []):
-                t = e["predicate"]["type"]
+                if "type" in e["predicate"]:
+                    err(f"{rel}: 26.2 entity predicates use 'entity_type', not 'type'")
+                    continue
+                t = e["predicate"]["entity_type"]
                 ns, name = t.split(":")
                 if (ns == "wayfarers" and name not in mod_ids("entities")) or (ns == "minecraft" and name not in MC_GAME["entities"]):
                     err(f"{rel}: unknown entity {t}")
