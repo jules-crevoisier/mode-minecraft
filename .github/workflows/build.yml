@@ -7,10 +7,11 @@ on:
 permissions:
   contents: write
 
-# a newer push supersedes the running build (the smoke test takes a while)
+# one build per branch at a time: a running build (and its smoke test) finishes, and only the
+# newest waiting push is kept in the queue
 concurrency:
   group: build-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   build:
