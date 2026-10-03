@@ -58,6 +58,7 @@ public final class Wayfarers {
         GraveEvents.register();
         EquipmentEvents.register();
         DangerEvents.register();
+        com.wayfarers.event.QolEvents.register();
         SpawnPlacementRegisterEvent.BUS.addListener(ModEntities::registerSpawnPlacements);
         context.registerConfig(ModConfig.Type.COMMON, WayfarersConfig.SPEC);
         context.registerConfig(ModConfig.Type.CLIENT, com.wayfarers.config.WayfarersClientConfig.SPEC);

@@ -93,6 +93,27 @@ PAGES = [
          "Tant qu'il est dans ton inventaire et allumé (il brille), objets et expérience à 7 blocs volent vers toi."),
         ("Right-click it or press M to switch it on or off.", "Clic droit ou touche M pour l'allumer ou l'éteindre."),
     ], ["wayfarers:magnet_ring"]),
+    ("storage_buttons", "storage", "minecraft:barrel", ("Storage buttons", "Boutons de rangement"), [
+        ("Every chest, barrel or backpack shows small brass buttons above it: Sort, Take everything, Deposit the "
+         "items it already holds, and Quick-stack into the chests around you.",
+         "Chaque coffre, tonneau ou sac affiche de petits boutons en laiton : Trier, Tout prendre, Déposer les objets "
+         "qu'il contient déjà, et Ranger dans les coffres autour de toi."),
+        ("Type in the search box to light up the matching slots. Middle-click any slot to sort its inventory.",
+         "Écris dans la barre de recherche pour faire ressortir les cases correspondantes. Clic molette sur une case "
+         "pour trier son inventaire."),
+    ], []),
+    ("refill", "storage", "minecraft:cobblestone", ("Hotbar refill", "Recharge de la barre"), [
+        ("When the stack in your hand runs out (last block placed, last food eaten, tool broken), the next stack of "
+         "the same item from your inventory takes its place by itself.",
+         "Quand la pile en main est épuisée (dernier bloc posé, dernier aliment mangé, outil cassé), la pile suivante "
+         "du même objet prend sa place toute seule."),
+    ], []),
+    ("harvest", "start", "minecraft:wheat", ("Right-click harvest", "Récolte au clic droit"), [
+        ("Right-click a ripe crop (wheat, carrots, potatoes, beetroots, nether wart, cocoa...) to harvest it and "
+         "replant it in one go.",
+         "Clic droit sur une culture mûre (blé, carottes, pommes de terre, betteraves, verrues, cacao...) pour la "
+         "récolter et la replanter d'un coup."),
+    ], []),
     ("sorting", "storage", "minecraft:chest", ("Sorting your inventory", "Trier l'inventaire"), [
         ("Press R to sort your main inventory (not the hotbar or armour): stacks are merged and grouped.",
          "Appuie sur R pour trier ton inventaire principal (ni la barre d'action ni l'armure) : les piles sont "

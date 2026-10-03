@@ -550,6 +550,75 @@ def mockup_waystones():
     m.save("waystones")
 
 
+SORT_G = [
+    "..........",
+    ".kkkkkkk..",
+    "..........",
+    ".kkkkk....",
+    "..........",
+    ".kkk....k.",
+    ".......kkk",
+    ".k.....kkk",
+    "........k.",
+    "..........",
+]
+TAKE_G = [
+    "....kk....",
+    "....kk....",
+    "....kk....",
+    "....kk....",
+    ".kkkkkkkk.",
+    "..kkkkkk..",
+    "...kkkk...",
+    "....kk....",
+    ".........",
+    "kkkkkkkkkk",
+]
+DEPOSIT_G = [
+    "kkkkkkkkkk",
+    "..........",
+    "....kk....",
+    "...kkkk...",
+    "..kkkkkk..",
+    ".kkkkkkkk.",
+    "....kk....",
+    "....kk....",
+    "....kk....",
+    "....kk....",
+]
+NEARBY_G = [
+    "..........",
+    ".kkkkkkkk.",
+    ".k......k.",
+    ".kkkkkkkk.",
+    ".k..kk..k.",
+    ".k......k.",
+    ".kkkkkkkk.",
+    "..........",
+    "k.k.k.k.k.",
+    "..........",
+]
+
+
+def small_buttons():
+    for name, hi, lo in (("button_small", BRASS_LT, BRASS_DK), ("button_small_hover", BRASS_HI, BRASS)):
+        b = Sprite(12, 12)
+        for y in range(12):
+            c = mix(hi, lo, y / 11)
+            for x in range(12):
+                b.set(x, y, c)
+        b.frame(0, 0, 11, 11, SOOT)
+        b.bevel(1, 1, 10, 10, mix(hi, (255, 255, 255, 255), 0.35), mix(lo, SOOT, 0.4))
+        b.save(name, nine=3)
+    for name, art in (("sort", SORT_G), ("take", TAKE_G), ("deposit", DEPOSIT_G), ("nearby", NEARBY_G)):
+        g = Sprite(10, 10)
+        for y, row in enumerate(art):
+            for x, ch in enumerate(row):
+                if ch == "k":
+                    g.set(x, y, hexc("2B1B0C"))
+        g.save("glyph/" + name)
+
+
 def bars():
     b = Sprite(16, 6)
     b.rect(0, 0, 15, 5, IRON_DK)
@@ -634,6 +703,7 @@ def main():
     scroll()
     icons()
     bars()
+    small_buttons()
     if "--mockup" in sys.argv:
         mockup_waystones()
         mockup_quests()

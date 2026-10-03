@@ -35,6 +35,7 @@ public final class WayfarersClient {
         AddGuiOverlayLayersEvent.BUS.addListener(EldenBossBar::register);
         AddGuiOverlayLayersEvent.BUS.addListener(QuestTracker::register);
         MobHealthBars.register();
+        ContainerButtons.register();
         AddGuiOverlayLayersEvent.BUS.addListener(TipCards::register);
         net.minecraftforge.event.entity.player.ItemTooltipEvent.BUS.addListener(TipCards::onTooltip);
         RegisterKeyMappingsEvent.BUS.addListener(event -> {

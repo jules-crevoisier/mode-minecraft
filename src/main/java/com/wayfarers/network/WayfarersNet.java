@@ -27,6 +27,7 @@ public final class WayfarersNet {
                 .serverbound()
                     .addMain(WaystoneActionMsg.class, WaystoneActionMsg.STREAM_CODEC, WaystoneActionMsg::handle)
                     .addMain(QuestRequestMsg.class, QuestRequestMsg.STREAM_CODEC, QuestRequestMsg::handle)
+                    .addMain(ContainerActionMsg.class, ContainerActionMsg.STREAM_CODEC, ContainerActionMsg::handle)
             .build();
 
     private WayfarersNet() {}
