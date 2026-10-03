@@ -220,7 +220,14 @@ def place_structures(srv, failures):
         srv.run(f"execute in {dim} run forceload remove all", r"Unmarked|forceload|No chunks", 30)
 
 
+def load_origin(srv):
+    """Keep the chunks around 0,0 loaded (place_structures ends with 'forceload remove all'), or every command
+    there answers 'That position is not loaded'."""
+    srv.run("execute in minecraft:overworld run forceload add -16 -16 16 16", r"Marked|forceload|No chunks|already", 120)
+
+
 def summon_all(srv, failures):
+    load_origin(srv)
     for eid in lang_ids("entity.wayfarers."):
         res = srv.run(f"execute in minecraft:overworld run summon wayfarers:{eid} 0 200 0",
                       r"Summoned|Unable|Unknown|Invalid|Incorrect", 60)
@@ -238,10 +245,14 @@ def summon_all(srv, failures):
 
 
 def blocks_and_loot(srv, failures):
+    load_origin(srv)
     for bid in lang_ids("block.wayfarers."):
         check_budget(f"block {bid}")
-        srv.run(f"execute in minecraft:overworld run setblock 0 150 0 wayfarers:{bid}", r"Changed|Could not|Unknown|Invalid", 30)
-        srv.run("execute in minecraft:overworld run setblock 0 150 0 minecraft:air destroy", r"Changed|Could not", 30)
+        res = srv.run(f"execute in minecraft:overworld run setblock 0 150 0 wayfarers:{bid}",
+                      r"Changed|Could not|Unknown|Invalid|not loaded", 30)
+        if not res or re.search(r"Unknown|Invalid|not loaded", res):
+            failures.append(f"setblock {bid}: {res}")
+        srv.run("execute in minecraft:overworld run setblock 0 150 0 minecraft:air destroy", r"Changed|Could not|not loaded", 30)
     for table in loot_tables():
         res = srv.run(f"execute in minecraft:overworld run loot spawn 0 200 0 loot wayfarers:{table}",
                       r"Dropped|Unknown|Invalid|Incorrect|No loot", 30)
