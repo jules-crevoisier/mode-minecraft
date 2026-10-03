@@ -18,6 +18,12 @@
 
 ---
 
+## Télécharger
+
+**[⬇ wayfarers-1.0.0.jar (dernier build)](https://github.com/jules-crevoisier/mode-minecraft/releases/download/dev-ccr-127dc262-tsdn10/wayfarers-1.0.0.jar)**
+
+GitHub recompile le mod à chaque modification : voir l'onglet *Releases* ou *Actions* du dépôt.
+
 ## Installation (CurseForge)
 
 1. Dans CurseForge, crée un profil **Minecraft 26.2** avec **Forge 65.1.0**.
@@ -294,10 +300,11 @@ Le code Java vit dans `src/main/java/com/wayfarers` :
 - Le code Java a été vérifié par `javac` contre les signatures exactes de l'API **Minecraft 26.2 + Forge 65.1** : **0 erreur**.
 - Toutes les ressources passent `validate.py` : **0 erreur**.
 
-**Ce qui n'a pas pu l'être :** l'environnement de développement n'avait pas accès aux dépôts Maven de Forge. Le `./gradlew build` officiel et une partie en jeu n'ont donc **pas encore été lancés**.
+**La compilation officielle** (`./gradlew build` avec Forge 65.1.0 et Java 25) tourne sur GitHub Actions à chaque modification et produit le `.jar`.
+
+**Ce qui n'a pas pu l'être :** une partie en jeu. Les boss, les modèles et les structures ont été vérifiés uniquement par des rendus.
 
 À tester au premier lancement :
-- [ ] `./gradlew build` réussit et produit `build/libs/wayfarers-1.0.0.jar`.
 - [ ] Le jeu démarre sans erreur de données (structures, butin, quêtes) dans `logs/latest.log`.
 - [ ] `/wayfarers tp guild_outpost` puis `/wayfarers tp sunken_citadel` : les structures sont bien posées au sol ou au fond de l'eau.
 - [ ] Une pierre de voyage : la liste cliquable s'affiche et la téléportation fonctionne.
