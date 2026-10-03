@@ -1,0 +1,42 @@
+name: Build the mod
+
+on:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 25
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Build
+        run: ./gradlew build --no-daemon --stacktrace
+
+      - name: Upload the jar (Actions artifact)
+        uses: actions/upload-artifact@v4
+        with:
+          name: wayfarers-mod
+          path: build/libs/wayfarers-*.jar
+
+      - name: Publish the jar as the latest development build
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: dev-${{ github.ref_name }}
+          name: Wayfarers — build de développement (${{ github.ref_name }})
+          prerelease: true
+          make_latest: false
+          body: |
+            Build automatique du commit ${{ github.sha }}.
+            Mets `wayfarers-1.0.0.jar` dans le dossier `mods` d'un profil CurseForge Minecraft 26.2 + Forge 65.1.0.
+          files: build/libs/wayfarers-*.jar
