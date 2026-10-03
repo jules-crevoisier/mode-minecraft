@@ -77,7 +77,8 @@
   ],
   [
    "minecraft:glow_lichen",
-   "minecraft:trees_savanna"
+   "minecraft:trees_savanna",
+   "wayfarers:steam_vents"
   ],
   [
    "minecraft:freeze_top_layer"

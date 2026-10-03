@@ -1,0 +1,9 @@
+{
+ "replace": false,
+ "values": [
+  "wayfarers:ashen_savanna",
+  "wayfarers:rustlands",
+  "wayfarers:dune_sea",
+  "wayfarers:verdant_meadows"
+ ]
+}

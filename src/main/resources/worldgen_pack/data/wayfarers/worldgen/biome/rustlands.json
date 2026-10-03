@@ -78,7 +78,8 @@
   ],
   [
    "minecraft:glow_lichen",
-   "minecraft:patch_grass_savanna"
+   "minecraft:patch_grass_savanna",
+   "wayfarers:steam_vents"
   ],
   [
    "minecraft:freeze_top_layer"

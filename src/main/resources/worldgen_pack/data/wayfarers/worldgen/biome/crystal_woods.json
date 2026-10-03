@@ -87,7 +87,8 @@
    "minecraft:glow_lichen",
    "minecraft:flower_flower_forest",
    "minecraft:birch_tall",
-   "minecraft:fallen_super_birch_tree"
+   "minecraft:fallen_super_birch_tree",
+   "wayfarers:surface_crystals"
   ],
   [
    "minecraft:freeze_top_layer"

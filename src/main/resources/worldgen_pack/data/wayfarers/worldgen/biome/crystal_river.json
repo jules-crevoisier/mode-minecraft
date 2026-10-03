@@ -87,7 +87,8 @@
   [
    "minecraft:glow_lichen",
    "minecraft:patch_sugar_cane",
-   "minecraft:seagrass_river"
+   "minecraft:seagrass_river",
+   "wayfarers:river_crystals"
   ],
   [
    "minecraft:freeze_top_layer"

@@ -75,11 +75,13 @@
    "minecraft:underwater_magma",
    "minecraft:disk_sand",
    "minecraft:disk_clay",
-   "minecraft:disk_gravel"
+   "minecraft:disk_gravel",
+   "wayfarers:cave_magma"
   ],
   [
    "minecraft:dripstone_cluster",
-   "minecraft:pointed_dripstone"
+   "minecraft:pointed_dripstone",
+   "wayfarers:basalt_columns_cave"
   ],
   [
    "minecraft:spring_water",

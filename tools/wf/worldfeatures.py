@@ -33,10 +33,10 @@ DECOR = {k: _mc(v) for k, v in {
     "palms": ["jungle_bush"],
     "beach_grass": ["patch_grass_badlands"],
     "frost_rocks": ["forest_rock"],
-    "basalt_columns": [],
+    "basalt_columns": ["wayfarers:basalt_columns"],
     "sea_stacks": ["forest_rock"],
     "river_reeds": ["patch_sugar_cane"],
-    "river_crystals": [],
+    "river_crystals": ["wayfarers:river_crystals"],
     "seagrass": ["seagrass_river"],
     "snowy_spruces_sparse": ["trees_snowy"],
     "ice_spires": ["ice_spike", "ice_patch"],
@@ -45,7 +45,7 @@ DECOR = {k: _mc(v) for k, v in {
     "berry_bushes": ["patch_berry_common"],
     "frost_pines_sparse": ["trees_snowy"],
     "ice_spires_small": ["ice_patch"],
-    "calcite_veins": [],
+    "calcite_veins": ["wayfarers:calcite_veins"],
     "meadow_flowers": ["flower_meadow", "wildflowers_meadow"],
     "lone_oaks": ["trees_plains"],
     "tall_grass": ["patch_tall_grass_2", "patch_grass_plain"],
@@ -57,7 +57,7 @@ DECOR = {k: _mc(v) for k, v in {
     "great_oaks": ["trees_birch_and_oak_leaf_litter", "fallen_oak_tree"],
     "forest_floor": ["forest_flowers", "patch_grass_forest", "patch_leaf_litter"],
     "tall_birches": ["birch_tall", "fallen_super_birch_tree"],
-    "surface_crystals": [],
+    "surface_crystals": ["wayfarers:surface_crystals"],
     "shadow_oaks": ["dark_forest_vegetation"],
     "pines": ["trees_taiga", "fallen_spruce_tree"],
     "giant_trees": ["trees_old_growth_spruce_taiga", "trees_old_growth_pine_taiga"],
@@ -71,7 +71,7 @@ DECOR = {k: _mc(v) for k, v in {
     "reeds": ["patch_sugar_cane_swamp", "seagrass_swamp"],
     "acacias": ["trees_savanna"],
     "dry_grass": ["patch_grass_savanna"],
-    "steam_vents": [],
+    "steam_vents": ["wayfarers:steam_vents"],
     "rusted_wrecks": [],
     "jungle_giants": ["trees_jungle", "bamboo_light"],
     "jungle_floor": ["patch_grass_jungle", "vines", "flower_warm"],
@@ -85,9 +85,9 @@ DECOR = {k: _mc(v) for k, v in {
     "lush_cave_vegetation": ["lush_caves_ceiling_vegetation", "cave_vines", "lush_caves_clay", "lush_caves_vegetation",
                              "rooted_azalea_tree", "spore_blossom", "classic_vines_cave_feature"],
     "sculk_growth": ["sculk_vein", "sculk_patch_deep_dark"],
-    "cave_magma_pools": [],
-    "basalt_columns_cave": [],
-    "mithril_veins": [],
+    "cave_magma_pools": ["wayfarers:cave_magma"],
+    "basalt_columns_cave": ["wayfarers:basalt_columns_cave"],
+    "mithril_veins": ["wayfarers:mithril_veins"],
 }.items()}
 
 # generation step of features that no vanilla template places (the rest come from the templates)
@@ -96,6 +96,9 @@ EXTRA_STEPS = {
     "minecraft:fossil_upper": 3, "minecraft:fossil_lower": 3,
     "minecraft:blue_ice": 4, "minecraft:ice_spike": 4, "minecraft:ice_patch": 4,
     "minecraft:ore_emerald": 6,
+    "wayfarers:basalt_columns": 4, "wayfarers:basalt_columns_cave": 7,
+    "wayfarers:calcite_veins": 6, "wayfarers:cave_magma": 6, "wayfarers:mithril_veins": 6,
+    "wayfarers:surface_crystals": 9, "wayfarers:river_crystals": 9, "wayfarers:steam_vents": 9,
 }
 
 # mobs: our key -> vanilla template whose spawners we copy
@@ -194,6 +197,68 @@ def attribute_extras(b):
     return out
 
 
+def _state(name, **props):
+    st = {"Name": name if ":" in name else f"minecraft:{name}"}
+    if props:
+        st["Properties"] = {k: str(v).lower() for k, v in props.items()}
+    return st
+
+
+def _simple(state):
+    return {"type": "minecraft:simple_block",
+            "config": {"to_place": {"type": "minecraft:simple_state_provider", "state": state}}}
+
+
+def _ore(state, tag, size):
+    return {"type": "minecraft:ore", "config": {"size": size, "discard_chance_on_air_exposure": 0.0, "targets": [
+        {"target": {"predicate_type": "minecraft:tag_match", "tag": tag}, "state": state}]}}
+
+
+def _uniform(lo, hi):
+    return {"type": "minecraft:uniform", "min_inclusive": lo, "max_inclusive": hi}
+
+
+def _height(lo, hi):
+    return {"type": "minecraft:height_range", "height": {"type": "minecraft:uniform", "min_inclusive": {"absolute": lo},
+                                                          "max_inclusive": {"absolute": hi}}}
+
+
+SURFACE = [{"type": "minecraft:in_square"}, {"type": "minecraft:heightmap", "heightmap": "MOTION_BLOCKING_NO_LEAVES"}]
+FLOOR_SCAN = {"type": "minecraft:environment_scan", "direction_of_search": "down", "max_steps": 12,
+              "target_condition": {"type": "minecraft:solid"},
+              "allowed_search_condition": {"type": "minecraft:matching_blocks", "blocks": "minecraft:air"}}
+ABOVE = {"type": "minecraft:random_offset", "xz_spread": 0, "y_spread": 1}
+ON_AIR = {"type": "minecraft:block_predicate_filter", "predicate": {"type": "minecraft:matching_blocks", "blocks": "minecraft:air"}}
+BIOME = {"type": "minecraft:biome"}
+
+# id -> (configured feature, placement modifiers)
+OURS = {
+    "basalt_columns": ({"type": "minecraft:basalt_columns", "config": {"reach": 1, "height": _uniform(2, 6)}},
+                       [{"type": "minecraft:count", "count": 3}] + SURFACE + [BIOME]),
+    "basalt_columns_cave": ({"type": "minecraft:basalt_columns", "config": {"reach": 2, "height": _uniform(3, 9)}},
+                            [{"type": "minecraft:count", "count": 24}, {"type": "minecraft:in_square"}, _height(-56, 40),
+                             FLOOR_SCAN, ABOVE, BIOME]),
+    "calcite_veins": (_ore(_state("calcite"), "minecraft:base_stone_overworld", 33),
+                      [{"type": "minecraft:count", "count": 6}, {"type": "minecraft:in_square"}, _height(60, 300), BIOME]),
+    "cave_magma": (_ore(_state("magma_block"), "minecraft:base_stone_overworld", 24),
+                   [{"type": "minecraft:count", "count": 10}, {"type": "minecraft:in_square"}, _height(-56, 30), BIOME]),
+    "mithril_veins": (_ore(_state("wayfarers:deepslate_mithril_ore"), "minecraft:deepslate_ore_replaceables", 7),
+                      [{"type": "minecraft:count", "count": 10}, {"type": "minecraft:in_square"}, _height(-64, 0), BIOME]),
+    "surface_crystals": (_simple(_state("amethyst_cluster", facing="up", waterlogged=False)),
+                         [{"type": "minecraft:count", "count": 4}] + SURFACE + [ON_AIR, BIOME]),
+    "river_crystals": (_simple(_state("amethyst_cluster", facing="up", waterlogged=True)),
+                       [{"type": "minecraft:count", "count": 3}, {"type": "minecraft:in_square"},
+                        {"type": "minecraft:heightmap", "heightmap": "OCEAN_FLOOR"},
+                        {"type": "minecraft:block_predicate_filter",
+                         "predicate": {"type": "minecraft:matching_blocks", "blocks": "minecraft:water"}}, BIOME]),
+    "steam_vents": (_simple(_state("campfire", facing="north", lit=True, signal_fire=False, waterlogged=False)),
+                    [{"type": "minecraft:rarity_filter", "chance": 2}] + SURFACE + [ON_AIR, BIOME]),
+}
+
+
 def write_features(write):
-    """Our own configured/placed features (none yet: v1 biomes use vanilla features only)."""
-    return 0
+    """Our configured and placed features (data/wayfarers/worldgen/... inside the overhaul pack)."""
+    for fid, (configured, placement) in OURS.items():
+        write(f"wayfarers/worldgen/configured_feature/{fid}.json", configured)
+        write(f"wayfarers/worldgen/placed_feature/{fid}.json", {"feature": f"wayfarers:{fid}", "placement": placement})
+    return len(OURS)

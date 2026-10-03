@@ -67,7 +67,8 @@
    "minecraft:disk_sand",
    "minecraft:disk_clay",
    "minecraft:disk_gravel",
-   "minecraft:ore_emerald"
+   "minecraft:ore_emerald",
+   "wayfarers:calcite_veins"
   ],
   [
    "minecraft:ore_infested"
