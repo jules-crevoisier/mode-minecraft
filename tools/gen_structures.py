@@ -13,7 +13,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from wf import defs, render  # noqa: E402
+from wf import defs, render, support  # noqa: E402
 try:
     from wf import render3d  # noqa: E402  (optional: needs Pillow + minecraft-textures)
 except ImportError:
@@ -43,7 +43,9 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--preview", action="store_true")
     ap.add_argument("--only", nargs="*")
+    ap.add_argument("--no-check", action="store_true", help="skip the survival/door checks")
     args = ap.parse_args()
+    report = []
 
     preview_dir = os.path.join(ROOT, "build", "previews")
     used_processors = set()
@@ -60,6 +62,10 @@ def main():
                 path = os.path.join(DATA, "structure", sdef.id, f"{piece.name}.nbt")
                 os.makedirs(os.path.dirname(path), exist_ok=True)
                 bp.save(path)
+                if not args.no_check:
+                    ctx = support.context_for(sdef) if pool_name == "start" else support.Context(unset_solid=True)
+                    for kind, pos, msg in support.check(bp.blocks, ctx):
+                        report.append((sdef.id, piece.name, kind, pos, msg))
                 size, blocks, _, (mx, my, mz) = bp.normalized()
                 if pool_name == "start" and piece is pieces[0]:
                     ground_offset = my - sdef.ground
@@ -87,9 +93,31 @@ def main():
     for kind in sorted(used_processors | {"aging", "ruin", "none"}):
         write_json(os.path.join(DATA, "worldgen", "processor_list", f"{kind}.json"), defs.processor_list(kind))
 
+    for kind in sorted(used_processors | {"aging", "ruin", "none"}):
+        for src in support.stair_rules_ok(defs.processor_list(kind)):
+            report.append(("processor_list", kind, "processor", (0, 0, 0), f"rule rewrites {src} without its properties"))
+
     for name, size, n in summary:
         print(f"{name:45s} {size[0]:3d}x{size[1]:3d}x{size[2]:3d}  {n:6d} blocks")
     print(f"{len(summary)} templates, {len({s.split('/')[0] for s, _, _ in summary})} structures")
+    if not args.no_check:
+        write_report(report)
+        if report:
+            print(f"{len(report)} survival/door problems (see build/structure_report.txt)")
+            sys.exit(1)
+
+
+def write_report(report):
+    """Group problems per structure piece and kind, with a few coordinates (blueprint space)."""
+    os.makedirs(os.path.join(ROOT, "build"), exist_ok=True)
+    groups = {}
+    for sid, piece, kind, pos, msg in report:
+        key = (sid, piece, kind, msg.split(" (")[0])
+        groups.setdefault(key, []).append(pos)
+    with open(os.path.join(ROOT, "build", "structure_report.txt"), "w", encoding="utf-8") as f:
+        for (sid, piece, kind, msg), positions in sorted(groups.items()):
+            pts = " ".join(f"({x},{y},{z})" for x, y, z in sorted(positions)[:6])
+            f.write(f"{sid}/{piece} [{kind}] {msg} x{len(positions)}: {pts}\n")
 
 
 if __name__ == "__main__":

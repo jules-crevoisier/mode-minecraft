@@ -89,13 +89,28 @@ def processor_list(kind):
     if rules:
         processors.insert(0, {
             "processor_type": "minecraft:rule",
-            "rules": [{
-                "input_predicate": {"predicate_type": "minecraft:random_block_match", "block": b, "probability": p},
-                "location_predicate": {"predicate_type": "minecraft:always_true"},
-                "output_state": {"Name": out},
-            } for b, p, out in rules],
+            "rules": [r for b, p, out in rules for r in _rules_for(b, p, out)],
         })
     return {"processors": processors}
+
+
+STAIR_STATES = [{"facing": f, "half": h, "shape": s, "waterlogged": w}
+                for f in ("north", "south", "east", "west") for h in ("bottom", "top")
+                for s in ("straight", "inner_left", "inner_right", "outer_left", "outer_right")
+                for w in ("false", "true")]
+
+
+def _rules_for(block, p, out):
+    """A rule processor replaces the whole state: stairs need one exact-state rule per orientation so the
+    replacement keeps facing/half/shape (a bare output would turn every aged stair into a north stair)."""
+    always = {"predicate_type": "minecraft:always_true"}
+    if not block.endswith("_stairs"):
+        return [{"input_predicate": {"predicate_type": "minecraft:random_block_match", "block": block, "probability": p},
+                 "location_predicate": always, "output_state": {"Name": out}}]
+    return [{"input_predicate": {"predicate_type": "minecraft:random_blockstate_match",
+                                 "block_state": {"Name": block, "Properties": st}, "probability": p},
+             "location_predicate": always, "output_state": {"Name": out, "Properties": st}}
+            for st in STAIR_STATES]
 
 
 def template_pool(sdef, pieces, pool_name):
