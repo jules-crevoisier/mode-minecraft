@@ -143,25 +143,6 @@ def void_stalker():
     return s.cv
 
 
-def drowned_warden():
-    """Giant drowned king: teal skin, kelp robes, barnacles, golden crown and trident sash."""
-    s = Skin(5)
-    skin, kelp, gold = (70, 150, 140), (40, 96, 50), (240, 200, 70)
-    s.paint("head", lambda x, y, w, h, f: mix(skin, (50, 120, 112), (x * y % 4) / 5))
-    face(s, (170, 255, 240), (255, 255, 255), mouth=(30, 70, 66), brow=(40, 90, 84))
-    s.paint("hat", lambda x, y, w, h, f: gold if f != "bottom" and y < 2 and (f != "top") else
-            (255, 120, 120) if f == "front" and y == 2 and x in (3, 4) else None)
-
-    def robe(x, y, w, h, f):
-        if f == "front" and x == y % w:
-            return gold
-        return mix(kelp, (30, 70, 40), ((x * 5 + y) % 7) / 8) if (x + y) % 6 else (200, 200, 190)
-    s.paint("body", robe)
-    s.rows("arm", [(4, kelp), (6, skin), (2, (50, 120, 112))])
-    s.rows("leg", [(8, kelp), (4, skin)])
-    return s.cv
-
-
 def void_warden():
     """End mini-boss: obsidian armour with violet glow, horned helm, starlight core."""
     s = Skin(6)
@@ -185,7 +166,7 @@ def void_warden():
 
 SKINS = {
     "ruin_walker": ruin_walker, "map_wraith": map_wraith, "basalt_guard": basalt_guard,
-    "void_stalker": void_stalker, "drowned_warden": drowned_warden, "void_warden": void_warden,
+    "void_stalker": void_stalker, "void_warden": void_warden,
 }
 
 

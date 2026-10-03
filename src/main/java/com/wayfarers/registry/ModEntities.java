@@ -38,7 +38,7 @@ public final class ModEntities {
                     .sized(0.6F, 1.95F).clientTrackingRange(8).build(ENTITIES.key("void_stalker")));
     public static final RegistryObject<EntityType<DrownedWarden>> DROWNED_WARDEN = ENTITIES.register("drowned_warden",
             () -> EntityType.Builder.<DrownedWarden>of(DrownedWarden::new, MobCategory.MONSTER)
-                    .sized(0.6F, 1.95F).clientTrackingRange(10).build(ENTITIES.key("drowned_warden")));
+                    .sized(1.6F, 4.2F).clientTrackingRange(10).build(ENTITIES.key("drowned_warden")));
     public static final RegistryObject<EntityType<VoidWarden>> VOID_WARDEN = ENTITIES.register("void_warden",
             () -> EntityType.Builder.<VoidWarden>of(VoidWarden::new, MobCategory.MONSTER)
                     .sized(0.6F, 1.95F).fireImmune().clientTrackingRange(10).build(ENTITIES.key("void_warden")));

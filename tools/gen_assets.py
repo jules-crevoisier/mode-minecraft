@@ -57,6 +57,9 @@ def block_models(bid, kind):
                  "faces": {f: {"texture": "#top" if f in ("up", "down") else "#side"}
                            for f in ("north", "south", "east", "west", "up", "down")}},
             ]})
+    elif kind == "mist":
+        write(f"models/block/{bid}.json", {"parent": "minecraft:block/cube_all", "render_type": "minecraft:translucent",
+                                           "textures": {"all": t + bid}})
     elif kind == "grave":
         tex = t + "grave"
         write(f"models/block/{bid}.json", {
@@ -72,7 +75,9 @@ def block_models(bid, kind):
 
 def blockstate(bid, kind):
     model = f"{NS}:block/{bid}"
-    if kind in ("front", "grave"):
+    if kind == "mist":
+        variants = {f"sealed={v}": {"model": model} for v in ("false", "true")}
+    elif kind in ("front", "grave"):
         variants = {f"facing={f}": {"model": model, **({"y": r} if r else {})}
                     for f, r in (("north", 0), ("east", 90), ("south", 180), ("west", 270))}
     else:

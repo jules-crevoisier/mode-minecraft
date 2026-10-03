@@ -1,7 +1,9 @@
 package com.wayfarers.block;
 
 import com.wayfarers.Wayfarers;
+import com.wayfarers.boss.WayfarerBoss;
 import com.wayfarers.entity.BossZombie;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -35,10 +37,10 @@ public class AltarBlock extends Block {
         DROWNED_WARDEN(() -> ModEntities.DROWNED_WARDEN.get(), () -> ModItems.MAP_FRAGMENT.get()),
         VOID_WARDEN(() -> ModEntities.VOID_WARDEN.get(), () -> ModItems.VOID_SHARD.get());
 
-        final Supplier<? extends EntityType<? extends BossZombie>> type;
+        final Supplier<? extends EntityType<? extends Mob>> type;
         final Supplier<Item> offering;
 
-        Boss(Supplier<? extends EntityType<? extends BossZombie>> type, Supplier<Item> offering) {
+        Boss(Supplier<? extends EntityType<? extends Mob>> type, Supplier<Item> offering) {
             this.type = type;
             this.offering = offering;
         }
@@ -63,17 +65,21 @@ public class AltarBlock extends Block {
                     Component.translatable(offering.getDescriptionId())).withStyle(ChatFormatting.GRAY));
             return InteractionResult.SUCCESS;
         }
-        EntityType<? extends BossZombie> type = boss.type.get();
-        if (!serverLevel.getEntitiesOfClass(BossZombie.class, new AABB(pos).inflate(48)).isEmpty()) {
+        EntityType<? extends Mob> type = boss.type.get();
+        if (!serverLevel.getEntitiesOfClass(Mob.class, new AABB(pos).inflate(48),
+                e -> e instanceof BossZombie || e instanceof WayfarerBoss).isEmpty()) {
             return InteractionResult.FAIL;
         }
-        BossZombie entity = type.create(serverLevel, EntitySpawnReason.TRIGGERED);
+        Mob entity = type.create(serverLevel, EntitySpawnReason.TRIGGERED);
         if (entity == null) {
             return InteractionResult.FAIL;
         }
         entity.snapTo(pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 3.5, 180.0F, 0.0F);
         entity.finalizeSpawn(serverLevel, serverLevel.getCurrentDifficultyAt(pos), EntitySpawnReason.TRIGGERED, null);
         entity.setTarget(player);
+        if (entity instanceof WayfarerBoss wb) {
+            wb.setArena(pos.above(), 24, null);
+        }
         // co-op scaling: +60% health per extra player in the arena
         int players = serverLevel.getEntitiesOfClass(Player.class, new AABB(pos).inflate(48), p -> !p.isSpectator()).size();
         if (players > 1) {

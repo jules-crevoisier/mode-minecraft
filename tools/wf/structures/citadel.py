@@ -7,7 +7,8 @@ the ocean floor:
   * a lookout tower in the south that breaks the sea surface (waystone in the glass cabin),
     with a full-block spiral stair down to the
   * nave, a tall pointed-vault hall with flying buttresses, opening north into the
-  * boss arena, a ribbed glass dome on a windowed drum, the Warden's altar in the centre;
+  * boss arena, a ribbed glass dome on a windowed drum, the boss seal in the centre and boss mist
+    across its three doorways;
     behind it the treasure vault, sealed by bars that fall when the boss dies;
   * six themed halls (three per side) linked by gothic glass tunnels; three variants
     shuffle the themes between the halls.
@@ -423,7 +424,7 @@ def arena(bp):
         bp.set(x, 2, z, "prismarine_bricks")
         bp.set(x, 3, z, TRIM)
         bp.set(x, 4, z, SEA)
-    bp.set(ax, 3, az, MOD["guardian_altar"])
+    bp.boss_seal(ax, 3, az, "wayfarers:drowned_warden", AR)
     # exterior flying buttresses around the drum
     for deg in (30, 150, 210, 240, 300, 330):
         a = math.radians(deg)
@@ -896,7 +897,17 @@ def citadel(variant):
                     if y <= h:
                         bp.set(x, y, z, "air")
                 bp.set(x, 0, z, TRIM)
+        arena_mist(bp)
     return build
+
+
+def arena_mist(bp):
+    """Boss mist across the three ways into the arena: the nave portal and the two side tunnels."""
+    ax, az = ARENA
+    bp.mist(-3, 1, az + AR + 1, 3, 10, az + AR + 1)          # nave portal, just outside the drum
+    for side in (-1, 1):
+        x = ax + side * (AR + 2)
+        bp.mist(x, 1, -13, x, 8, -7)                          # W2 / E2 tunnels
 
 
 def nave_interior(bp):

@@ -99,6 +99,8 @@ public final class ModItems {
     public static final RegistryObject<Item> SEALED_BARS = block("sealed_bars", ModBlocks.SEALED_BARS, p -> p);
     public static final RegistryObject<Item> WARDEN_ALTAR = block("warden_altar", ModBlocks.WARDEN_ALTAR, p -> p.rarity(Rarity.RARE));
     public static final RegistryObject<Item> VOID_ALTAR = block("void_altar", ModBlocks.VOID_ALTAR, p -> p.rarity(Rarity.RARE));
+    public static final RegistryObject<Item> MIST_GATE = block("mist_gate", ModBlocks.MIST_GATE, p -> p);
+    public static final RegistryObject<Item> BOSS_SEAL = block("boss_seal", ModBlocks.BOSS_SEAL, p -> p.rarity(Rarity.EPIC));
     public static final RegistryObject<Item> LITHITE_ORE = block("lithite_ore", ModBlocks.LITHITE_ORE, p -> p);
     public static final RegistryObject<Item> DEEPSLATE_LITHITE_ORE = block("deepslate_lithite_ore", ModBlocks.DEEPSLATE_LITHITE_ORE, p -> p);
 

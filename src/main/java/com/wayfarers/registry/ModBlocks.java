@@ -2,8 +2,10 @@ package com.wayfarers.registry;
 
 import com.wayfarers.Wayfarers;
 import com.wayfarers.block.AltarBlock;
+import com.wayfarers.block.BossSealBlock;
 import com.wayfarers.block.GraveBlock;
 import com.wayfarers.block.GuildTerminalBlock;
+import com.wayfarers.block.MistGateBlock;
 import com.wayfarers.block.SortingChestBlock;
 import com.wayfarers.block.WaystoneBlock;
 import net.minecraft.world.level.block.Block;
@@ -40,6 +42,13 @@ public final class ModBlocks {
             p -> new AltarBlock(p, AltarBlock.Boss.VOID_WARDEN),
             BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PURPLE).strength(-1.0F, 3600000.0F)
                     .sound(SoundType.STONE).lightLevel(s -> 10));
+    public static final RegistryObject<Block> MIST_GATE = register("mist_gate", MistGateBlock::new,
+            BlockBehaviour.Properties.of().mapColor(MapColor.SNOW).strength(-1.0F, 3600000.0F).noOcclusion()
+                    .noLootTable().lightLevel(s -> 6)
+                    .isViewBlocking((s, l, p) -> false).isSuffocating((s, l, p) -> false));
+    public static final RegistryObject<Block> BOSS_SEAL = register("boss_seal", BossSealBlock::new,
+            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BLACK).strength(-1.0F, 3600000.0F)
+                    .sound(SoundType.STONE).noLootTable().lightLevel(s -> 9));
     public static final RegistryObject<Block> LITHITE_ORE = register("lithite_ore", Block::new,
             BlockBehaviour.Properties.of().mapColor(MapColor.STONE).strength(3.0F, 3.0F)
                     .requiresCorrectToolForDrops().lightLevel(s -> 3));

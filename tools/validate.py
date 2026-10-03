@@ -73,6 +73,8 @@ def check_templates():
                 if name in ("grave", "guild_terminal"):
                     analog = "furnace"
                 states = MC_TEMPLATE["blocks"].get(analog, {}) if analog else {}
+                if name == "mist_gate":
+                    states = {"sealed": ["false", "true"]}
                 for k, v in props.items():
                     if k not in states or (k != "facing" and v not in states[k]) or \
                             (k == "facing" and v not in ("north", "south", "east", "west")):
@@ -125,7 +127,7 @@ def check_tags():
             if v.startswith("wayfarers:") and v.split(":")[1] not in mod_ids("blocks"):
                 err(f"{os.path.relpath(path, DATA)}: unknown mod block {v}")
     for b in mod_ids("blocks"):
-        if b not in ("grave", "sealed_bars", "warden_altar", "void_altar") and \
+        if b not in ("grave", "sealed_bars", "warden_altar", "void_altar", "mist_gate", "boss_seal") and \
                 not os.path.exists(os.path.join(DATA, "wayfarers", "loot_table", "blocks", b + ".json")):
             err(f"block {b} has no loot table (would drop nothing)")
 

@@ -215,6 +215,30 @@ def block_textures():
     for a in range(0, 360, 20):
         vt.set(8 + round(4 * math.cos(math.radians(a))), 8 + round(4 * math.sin(math.radians(a))), (250, 170, 255))
     out["void_altar_top"] = vt
+    # boss mist: pale, swirling and translucent
+    mist = Canvas(16, 16)
+    for y in range(16):
+        for x in range(16):
+            v = 0.5 + 0.5 * math.sin((x * 0.7 + y * 0.35) + math.sin(y * 0.6) * 1.6)
+            a = int(70 + 70 * v)
+            mist.set(x, y, (int(205 + 40 * v), int(215 + 35 * v), 255, a))
+    out["mist_gate"] = mist
+    # boss seal: black stone ringed with gold, a burning soul sigil on top
+    ss = noise_tile((34, 32, 38), 8, 21)
+    bricks(ss, (16, 14, 18), 4)
+    for x in range(16):
+        ss.set(x, 0, (190, 150, 60))
+        ss.set(x, 15, (120, 90, 40))
+    rune(ss, (110, 230, 255), 22)
+    out["boss_seal_side"] = ss
+    st = noise_tile((30, 28, 34), 8, 23)
+    frame(st, (190, 150, 60))
+    for a in range(0, 360, 15):
+        st.set(8 + round(5 * math.cos(math.radians(a))), 8 + round(5 * math.sin(math.radians(a))), (110, 230, 255))
+    for d in (-2, -1, 0, 1, 2):
+        st.set(8 + d, 8, (190, 250, 255))
+        st.set(8, 8 + d, (190, 250, 255))
+    out["boss_seal_top"] = st
     # ores
     for name, base, seed in (("lithite_ore", stone, 14), ("deepslate_lithite_ore", (72, 72, 78), 15)):
         o = noise_tile(base, 12, seed)

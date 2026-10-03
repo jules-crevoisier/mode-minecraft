@@ -1,6 +1,7 @@
 package com.wayfarers.registry;
 
 import com.wayfarers.Wayfarers;
+import com.wayfarers.block.BossSealBlockEntity;
 import com.wayfarers.block.GraveBlockEntity;
 import com.wayfarers.block.SortingChestBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -20,6 +21,9 @@ public final class ModBlockEntities {
     public static final RegistryObject<BlockEntityType<GraveBlockEntity>> GRAVE =
             BLOCK_ENTITIES.register("grave",
                     () -> new BlockEntityType<>(GraveBlockEntity::new, Set.of(ModBlocks.GRAVE.get())));
+    public static final RegistryObject<BlockEntityType<BossSealBlockEntity>> BOSS_SEAL =
+            BLOCK_ENTITIES.register("boss_seal",
+                    () -> new BlockEntityType<>(BossSealBlockEntity::new, Set.of(ModBlocks.BOSS_SEAL.get())));
 
     private ModBlockEntities() {}
 }
