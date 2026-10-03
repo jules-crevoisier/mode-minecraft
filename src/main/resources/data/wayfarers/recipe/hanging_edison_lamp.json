@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "N",
+    "L"
+  ],
+  "key": {
+    "N": "minecraft:iron_nugget",
+    "L": "wayfarers:edison_lamp"
+  },
+  "result": {
+    "id": "wayfarers:hanging_edison_lamp",
+    "count": 2
+  }
+}

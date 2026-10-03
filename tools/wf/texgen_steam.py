@@ -323,3 +323,55 @@ def machine_face(name, on=False, seed=0):
         colors["d"] = (255, 70, 50)
     back = _dark_back((60, 40, 26) if on and name in ("timer", "detector") else (30, 26, 26))
     return machine_frame(_glyph(MACHINE_GLYPHS[name], colors, back), seed)
+
+
+# ---------------------------------------------------------------- furniture surfaces (wf/furniture.py)
+def plain_wood(base, seed=0):
+    rng = random.Random(seed)
+    cv = Canvas(16, 16)
+    for y in range(16):
+        for x in range(16):
+            g = 0.07 * math.sin(y * 0.9 + math.sin(x * 0.7) * 1.5) + rng.uniform(-0.03, 0.03)
+            cv.set(x, y, mul(base, 1 + g))
+    return cv
+
+
+def smooth_metal(base, seed=0):
+    rng = random.Random(seed)
+    cv = Canvas(16, 16)
+    for y in range(16):
+        for x in range(16):
+            f = 1.12 - 0.22 * (x + y) / 30 + rng.uniform(-0.025, 0.025)
+            cv.set(x, y, mul(base, f))
+    for i in range(3, 8):
+        cv.set(i, 15 - i - 4, mul(base, 1.3))
+    return cv
+
+
+def glow_bulb(glass, core, seed=0):
+    cv = Canvas(16, 16)
+    for y in range(16):
+        for x in range(16):
+            d = math.hypot(x - 7.5, y - 7.5) / 10.6
+            cv.set(x, y, mix(core, glass, min(1.0, d * 1.3)))
+    return cv
+
+
+def chain(metal):
+    cv = Canvas(16, 16)
+    for y in range(16):
+        for x in (6, 7, 8, 9):
+            link = (y // 4) % 2
+            edge = x in (6, 9) if link == 0 else y % 4 in (0, 3)
+            if link == 0 or x in (7, 8):
+                cv.set(x, y, mul(metal, 0.7 if edge else 1.15))
+    return cv
+
+
+def wax(base, seed=0):
+    rng = random.Random(seed)
+    cv = Canvas(16, 16)
+    for y in range(16):
+        for x in range(16):
+            cv.set(x, y, mul(base, 1 + rng.uniform(-0.04, 0.04) - y * 0.008))
+    return cv

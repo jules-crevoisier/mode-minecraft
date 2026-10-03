@@ -212,10 +212,19 @@ def machines_java():
     print(f"wrote {os.path.relpath(out, ROOT)}")
 
 
+def furniture_java():
+    from wf import furniture
+    out = os.path.join(ROOT, "src", "main", "java", "com", "wayfarers", "generated", "GeneratedFurniture.java")
+    with open(out, "w") as f:
+        f.write(furniture.java())
+    print(f"wrote {os.path.relpath(out, ROOT)}")
+
+
 def main():
     guide_java()
     metals_java()
     machines_java()
+    furniture_java()
     skills_java()
     decor_java()
     boss_gear_java()

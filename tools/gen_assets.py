@@ -123,6 +123,14 @@ def machine_assets():
         item_definition(mid, f"{NS}:block/{mid}")
 
 
+def furniture_assets():
+    from wf import furniture
+    for fid in furniture.FURNITURE:
+        write(f"models/block/{fid}.json", furniture.model(fid))
+        write(f"blockstates/{fid}.json", furniture.blockstate(fid))
+        item_definition(fid, f"{NS}:block/{fid}")
+
+
 def decor_assets(lang_en, lang_fr):
     from wf import decor
     VNAMES = {"stairs": ("Stairs", "Escalier en "), "slab": ("Slab", "Dalle en "), "wall": ("Wall", "Muret en ")}
@@ -230,6 +238,7 @@ def main():
     decor_assets(lang_en, lang_fr)
     metal_assets()
     machine_assets()
+    furniture_assets()
     for eid, (en, fr) in content.ENTITIES.items():
         lang_en[f"entity.{NS}.{eid}"], lang_fr[f"entity.{NS}.{eid}"] = en, fr
     for prefix in content.ARMOR_SETS:
@@ -242,8 +251,8 @@ def main():
         lang_fr[f"structure.{NS}.{sdef.id}"] = sdef.title_fr
     for key, (en, fr) in content.MESSAGES.items():
         lang_en[key], lang_fr[key] = en, fr
-    from wf import guide, skills, metals, machines
-    for mod in (guide, skills, metals, machines):
+    from wf import guide, skills, metals, machines, furniture
+    for mod in (guide, skills, metals, machines, furniture):
         g_en, g_fr = mod.lang()
         lang_en.update(g_en)
         lang_fr.update(g_fr)

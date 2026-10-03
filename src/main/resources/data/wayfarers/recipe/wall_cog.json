@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    " N ",
+    "NBN",
+    " N "
+  ],
+  "key": {
+    "N": "wayfarers:brass_nugget",
+    "B": "wayfarers:brass_ingot"
+  },
+  "result": {
+    "id": "wayfarers:wall_cog",
+    "count": 2
+  }
+}

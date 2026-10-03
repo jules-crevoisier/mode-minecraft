@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=y": {
+      "model": "wayfarers:block/copper_pipe"
+    },
+    "axis=z": {
+      "model": "wayfarers:block/copper_pipe",
+      "x": 90
+    },
+    "axis=x": {
+      "model": "wayfarers:block/copper_pipe",
+      "x": 90,
+      "y": 90
+    }
+  }
+}

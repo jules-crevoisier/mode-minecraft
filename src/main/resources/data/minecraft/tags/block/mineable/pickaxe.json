@@ -89,6 +89,12 @@
     "wayfarers:redstone_timer",
     "wayfarers:wireless_transmitter",
     "wayfarers:wireless_receiver",
-    "wayfarers:entity_detector"
+    "wayfarers:entity_detector",
+    "wayfarers:brass_chandelier",
+    "wayfarers:hanging_edison_lamp",
+    "wayfarers:copper_pipe",
+    "wayfarers:brass_railing",
+    "wayfarers:wall_cog",
+    "wayfarers:valve_wheel"
   ]
 }

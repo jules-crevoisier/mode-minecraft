@@ -1,0 +1,141 @@
+{
+  "parent": "minecraft:block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "wayfarers:block/f_brass",
+    "f_brass": "wayfarers:block/f_brass",
+    "f_bulb": "wayfarers:block/f_bulb",
+    "f_iron": "wayfarers:block/f_iron"
+  },
+  "elements": [
+    {
+      "from": [
+        7.5,
+        9,
+        7.5
+      ],
+      "to": [
+        8.5,
+        16,
+        8.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#f_iron"
+        },
+        "south": {
+          "texture": "#f_iron"
+        },
+        "east": {
+          "texture": "#f_iron"
+        },
+        "west": {
+          "texture": "#f_iron"
+        },
+        "up": {
+          "texture": "#f_iron"
+        },
+        "down": {
+          "texture": "#f_iron"
+        }
+      }
+    },
+    {
+      "from": [
+        6,
+        8,
+        6
+      ],
+      "to": [
+        10,
+        9,
+        10
+      ],
+      "faces": {
+        "north": {
+          "texture": "#f_brass"
+        },
+        "south": {
+          "texture": "#f_brass"
+        },
+        "east": {
+          "texture": "#f_brass"
+        },
+        "west": {
+          "texture": "#f_brass"
+        },
+        "up": {
+          "texture": "#f_brass"
+        },
+        "down": {
+          "texture": "#f_brass"
+        }
+      }
+    },
+    {
+      "from": [
+        6.5,
+        3,
+        6.5
+      ],
+      "to": [
+        9.5,
+        8,
+        9.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#f_bulb"
+        },
+        "south": {
+          "texture": "#f_bulb"
+        },
+        "east": {
+          "texture": "#f_bulb"
+        },
+        "west": {
+          "texture": "#f_bulb"
+        },
+        "up": {
+          "texture": "#f_bulb"
+        },
+        "down": {
+          "texture": "#f_bulb"
+        }
+      }
+    },
+    {
+      "from": [
+        7,
+        2,
+        7
+      ],
+      "to": [
+        9,
+        3,
+        9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#f_bulb"
+        },
+        "south": {
+          "texture": "#f_bulb"
+        },
+        "east": {
+          "texture": "#f_bulb"
+        },
+        "west": {
+          "texture": "#f_bulb"
+        },
+        "up": {
+          "texture": "#f_bulb"
+        },
+        "down": {
+          "texture": "#f_bulb"
+        }
+      }
+    }
+  ]
+}

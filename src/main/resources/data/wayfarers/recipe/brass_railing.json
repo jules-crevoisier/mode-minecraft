@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "BBB",
+    "N N"
+  ],
+  "key": {
+    "B": "wayfarers:brass_ingot",
+    "N": "minecraft:iron_nugget"
+  },
+  "result": {
+    "id": "wayfarers:brass_railing",
+    "count": 6
+  }
+}

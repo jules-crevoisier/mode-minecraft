@@ -506,6 +506,8 @@ def main():
     written.update(metal_textures())
     from wf import machines
     written.update(machines.textures())
+    from wf import furniture
+    written.update(furniture.textures())
     from wf import decor
     for bid, d in decor.DECOR.items():
         names = decor.texture_names(bid)

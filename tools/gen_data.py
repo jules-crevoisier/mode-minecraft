@@ -27,6 +27,7 @@ MOD_ITEMS = {"map_fragment", "lithite_shard", "ancient_ember", "void_shard", "wa
 MOD_ITEMS |= {f"remembrance_{row[0]}" for row in __import__("wf.bossgear", fromlist=["BOSS_GEAR"]).BOSS_GEAR}
 MOD_ITEMS |= __import__("wf.metals", fromlist=["all_item_ids"]).all_item_ids()
 MOD_ITEMS |= set(__import__("wf.machines", fromlist=["MACHINES"]).MACHINES)
+MOD_ITEMS |= set(__import__("wf.furniture", fromlist=["FURNITURE"]).FURNITURE)
 MOD_ITEMS |= {"builder_wand", "master_builder_wand", "wayfarer_manual", "fire_staff", "frost_staff", "thunder_staff",
               "healing_staff", "levitation_wand", "ward_orb", "steam_cane", "arcane_ring", "mana_amulet", "oblivion_vial"}
 
@@ -440,7 +441,20 @@ def machines_data():
             "type": "minecraft:block", "random_sequence": f"{NS}:blocks/{mid}",
             "pools": [{"rolls": 1.0, "bonus_rolls": 0.0, "conditions": [{"condition": "minecraft:survives_explosion"}],
                        "entries": [{"type": "minecraft:item", "name": f"{NS}:{mid}"}]}]})
-    return {"minecraft/tags/block/mineable/pickaxe.json": [f"{NS}:{mid}" for mid in machines.MACHINES]}
+    out = {"minecraft/tags/block/mineable/pickaxe.json": [f"{NS}:{mid}" for mid in machines.MACHINES]}
+    from wf import furniture
+    for fid, f in furniture.FURNITURE.items():
+        pattern, key, count = f["recipe"]
+        write(f"{NS}/recipe/{fid}.json", {"type": "minecraft:crafting_shaped", "category": "building",
+                                         "pattern": pattern, "key": {k: rid(v) for k, v in key.items()},
+                                         "result": {"id": f"{NS}:{fid}", "count": count}})
+        write(f"{NS}/loot_table/blocks/{fid}.json", {
+            "type": "minecraft:block", "random_sequence": f"{NS}:blocks/{fid}",
+            "pools": [{"rolls": 1.0, "bonus_rolls": 0.0, "conditions": [{"condition": "minecraft:survives_explosion"}],
+                       "entries": [{"type": "minecraft:item", "name": f"{NS}:{fid}"}]}]})
+        tag = "axe" if f.get("tool") == "axe" else "pickaxe"
+        out.setdefault(f"minecraft/tags/block/mineable/{tag}.json", []).append(f"{NS}:{fid}")
+    return out
 
 
 def main():

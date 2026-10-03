@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "SSS",
+    "N N"
+  ],
+  "key": {
+    "S": "wayfarers:mahogany_panelling_slab",
+    "N": "wayfarers:brass_nugget"
+  },
+  "result": {
+    "id": "wayfarers:wall_shelf",
+    "count": 2
+  }
+}
