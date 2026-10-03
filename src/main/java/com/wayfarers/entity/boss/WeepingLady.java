@@ -71,7 +71,7 @@ public class WeepingLady extends WayfarerBoss {
 
     public static AttributeSupplier.Builder attributes() {
         return Monster.createMonsterAttributes()
-                .add(Attributes.MAX_HEALTH, 300.0)
+                .add(Attributes.MAX_HEALTH, 380.0)
                 .add(Attributes.ARMOR, 8.0)
                 .add(Attributes.ARMOR_TOUGHNESS, 2.0)
                 .add(Attributes.ATTACK_DAMAGE, 10.0)

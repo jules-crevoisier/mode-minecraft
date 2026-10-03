@@ -7,16 +7,16 @@
       "bounding_box": "piece",
       "spawns": [
         {
-          "type": "minecraft:endermite",
-          "weight": 8,
+          "type": "wayfarers:void_larva",
+          "weight": 10,
           "minCount": 1,
           "maxCount": 2
         },
         {
-          "type": "wayfarers:void_stalker",
-          "weight": 8,
+          "type": "minecraft:endermite",
+          "weight": 6,
           "minCount": 1,
-          "maxCount": 1
+          "maxCount": 2
         }
       ]
     }

@@ -71,7 +71,7 @@ public class LarvaMother extends WayfarerBoss {
 
     public static AttributeSupplier.Builder attributes() {
         return Monster.createMonsterAttributes()
-                .add(Attributes.MAX_HEALTH, 340.0)
+                .add(Attributes.MAX_HEALTH, 480.0)
                 .add(Attributes.ARMOR, 12.0)
                 .add(Attributes.ARMOR_TOUGHNESS, 4.0)
                 .add(Attributes.ATTACK_DAMAGE, 12.0)

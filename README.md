@@ -2,11 +2,11 @@
 
 **Wayfarers** transforme une survie entre potes en grande expédition. On y trouve :
 
-- **31 structures** construites à la main, réparties dans toutes les dimensions ;
+- **35 structures** construites à la main, réparties dans toutes les dimensions, dont **4 donjons souterrains** générés en plusieurs plans ;
 - **une quête en 5 chapitres partagée par tout le serveur**, qui fait découvrir le monde étape par étape ;
 - des **outils de confort** pour passer moins de temps à ranger et plus de temps à explorer : pierres de voyage, coffre de tri, terminal de guilde, tombes, sac à dos, aimant ;
-- **8 armes à capacité**, **2 outils de zone**, **3 ensembles d'armure** ;
-- **4 créatures** et **2 boss** ;
+- **8 armes à capacité**, **16 armes de boss**, **2 outils de zone**, **3 ensembles d'armure** ;
+- **10 créatures** et **20 boss façon Elden Ring** (16 grands boss et 4 champions de donjon), tous avec un vrai modèle 3D animé ;
 - **15 blocs de construction exclusifs** (briques de la Guilde, tuiles de toit, lampes runiques, briques de braise, briques du vide…), utilisés dans les structures et fabricables ;
 - **une vraie difficulté** : plus on s'éloigne du spawn, plus les monstres sont forts, avec des monstres d'élite et des lunes de sang.
 
@@ -42,7 +42,7 @@
 
 ## Le contenu
 
-### Les structures (31)
+### Les structures (35)
 
 Ce sont des constructions monumentales : 50 à 100 blocs de large, avec des tours qui montent jusqu'à 70 blocs et des intérieurs meublés. Les aperçus isométriques de chaque structure sont dans [`docs/structures/`](docs/structures).
 
@@ -68,7 +68,7 @@ Chaque structure a :
 
 Plusieurs structures contiennent une **pierre de voyage**.
 
-### La quête : l'Atlas du Voyageur (5 chapitres, 59 étapes)
+### La quête : l'Atlas du Voyageur (5 chapitres, 82 étapes)
 
 La quête est un onglet de progrès (touche **L**). Clic droit avec l'**Atlas** pour voir le résumé de la guilde.
 
@@ -128,31 +128,70 @@ Pour la pioche et la hache, s'accroupir désactive l'effet de zone.
 | **Braise** | Immunité au feu, rapide dans la lave. |
 | **Vide** | Chute lente ; le vide de l'End te ramène au lieu de te tuer. |
 
-### Créatures et boss
+### Les boss, façon Elden Ring
+
+![Bestiaire](docs/bestiary/all.png)
+
+Chaque grande structure cache un boss **au fond d'une descente** : un ou deux niveaux de catacombes, d'ossuaires, de cryptes ou de galeries, avec des pièges, des générateurs de monstres et des coffres. Le joueur traverse ensuite une **brume**, et le combat commence.
+
+- **Avant la brume** : un **lieu de grâce**, avec une pierre de voyage pour revenir après une mort.
+- **La brume** : on la traverse librement. Pendant le combat elle se solidifie, et elle disparaît quand le boss tombe.
+- **La barre de vie** : longue et fine en bas de l'écran, avec une traînée jaune pour les dégâts récents et le compteur de dégâts infligés. La musique de combat se lance.
+- **Des attaques télégraphiées** : chaque coup a une préparation lisible (animation et marque au sol), puis une fenêtre pour riposter. Il faut apprendre les schémas, esquiver les ondes en sautant et punir les ouvertures.
+- **La deuxième phase** : à mi-vie, le boss rugit (il est alors invulnérable) puis change de rythme, avec de nouvelles attaques et des combos.
+- **La posture** : frapper fort et souvent fait chanceler le boss, qui subit alors +50 % de dégâts.
+- **Si tout le monde meurt ou s'enfuit** : le boss revient à pleine vie et la brume se rouvre.
+- **À sa mort** : « **ENNEMI ABATTU** » s'affiche en or, la salle du trésor s'ouvre et le boss lâche son **Souvenir**.
+- **En coop** : la vie du boss augmente de 60 % par joueur supplémentaire.
+
+| Boss | Repaire | Arme forgée avec son Souvenir |
+|---|---|---|
+| Le Sonneur de glas | Monastère des cimes, chambre de la cloche | Marteau-cloche |
+| L'Archiviste | Bibliothèque oubliée, archives interdites | Grimoire interdit |
+| Le Pharaon ensablé | Oasis, salle funéraire du tombeau | Fléau du pharaon |
+| Le Jaguar de jade | Ziggourat, cénote sacré | Croc de jade |
+| La Mère-Racine | Arbre-monde, caverne des racines | Bâton de la Mère-Racine |
+| La Grand-Mère du marais | Huttes des sorcières, grotte inondée | Louche de la sorcière |
+| Le Chevalier-griffon | Île céleste, esplanade du temple (combat aérien) | Lance du griffon |
+| Le Colosse runique | Cercle runique, voûte des runes | Poing runique |
+| Le Roi-Forgeron | Forge naine, creuset du roi | Marteau du Roi-Forgeron |
+| La Matriarche de cristal | Grotte de cristal, nid de la géode profonde | Croc de cristal |
+| Le Rejeton du sculk | Laboratoire scellé, cœur de confinement | Corne du sculk |
+| Gardien englouti | Citadelle engloutie, arène sous le dôme | Trident du roi noyé |
+| Le Seigneur des Cendres | Forteresse de basalte, trône des cendres | Espadon des Cendres |
+| Le Roi piglin doré | Sanctuaire piglin, trésor du roi | Masse dorée |
+| La Faucheuse des âmes | Tour des âmes, sommet | Faux des âmes |
+| Gardien du vide (boss final) | Nid du vide | Grande lame du vide |
+
+**L'arme de boss** se fabrique avec le Souvenir, 4 matériaux de palier et 2 diamants. Elle a une capacité au clic droit : onde de choc, rayon, ruée, éruptions, racines, nuage de poison, bond, balayage enflammé ou téléportation.
+
+### Les donjons souterrains
+
+Quatre donjons ont une petite entrée en surface (mausolée, temple ensablé, tête de puits, cercle d'obélisques). Elle mène à **2 ou 3 niveaux** de couloirs et de salles tirés au hasard : chaque donjon existe en 3 plans différents. On y trouve des ossuaires, des cryptes, des pièges à flèches, une salle secrète derrière des briques fissurées, et un champion au fond.
+
+| Donjon | Où | Champion |
+|---|---|---|
+| Catacombes oubliées | Plaines et forêts | Le Chevalier des tombes |
+| Hypogée des sables | Désert, badlands | La Matriarche d'os |
+| Puits de lithite | Montagnes | La Dame en pleurs |
+| Crypte du vide | Îles de l'End | La Mère-Larve |
+
+### Créatures
 
 | Créature | Où on la trouve | Particularité |
 |---|---|---|
-| Rôdeur des ruines | Ruines de la Surface | Ses coups affaiblissent. |
-| Spectre des cartes | Bibliothèques | Aveugle et donne la nausée ; brûle au soleil. |
-| Garde de basalte | Forteresses du Nether | — |
+| Rôdeur des ruines | Ruines de la Surface | Golem de pierre moussue ; ses coups affaiblissent. |
+| Spectre des cartes | Bibliothèques | Fantôme de parchemin ; aveugle, brûle au soleil. |
+| Garde de basalte | Forteresses du Nether | Hache dorée ; un coup sur trois balaie large. |
 | Traqueur du vide | End | Se téléporte près de sa proie. |
+| Chevalier squelette | Catacombes | Bouclier qui bloque 80 % des coups de face ; charge au bouclier. |
+| Rampant des cryptes | Catacombes, hypogée | Araignée d'os qui grimpe aux murs et bondit. |
+| Banshee | Puits de lithite | Vole ; son cri ralentit et repousse. |
+| Gargouille | Puits de lithite | Se fige en statue quand on la regarde, attaque quand on tourne le dos. |
+| Imp de braise | Nether | Lance des boules de feu, fuit et revient. |
+| Larve du vide | Crypte du vide | S'enfouit et ressort sous tes pieds ; libère des endermites en mourant. |
 
-**Les boss** :
-
-- **Gardien englouti** (Citadelle) : 320 PV et 3 phases.
-  1. Il appelle des noyés.
-  2. Il frappe le sol d'une onde de marée.
-  3. Enragé, il crée un tourbillon qui attire les joueurs.
-
-  À sa mort, les barreaux scellés de la salle du trésor tombent.
-- **Gardien du vide** (Nid de l'End) : il se téléporte, fait léviter les joueurs et invoque des traqueurs.
-
-Les deux boss se réveillent en déposant une offrande sur leur autel :
-
-| Boss | Offrande |
-|---|---|
-| Gardien englouti | Fragment de carte |
-| Gardien du vide | Éclat du vide |
+Le chapitre **« Légendes »** de la quête demande de vaincre chaque boss. Le défi final, **Fléau des Légendes**, demande de les vaincre tous.
 
 ### Difficulté : le monde devient dangereux
 
@@ -211,6 +250,7 @@ Les structures sont bâties avec des blocs propres au mod, qu'on peut aussi util
 | `/wayfarers demo` | op | Donne tout le contenu du mod (idéal pour une vidéo). |
 | `/wayfarers kit <starter\|explorer\|depths\|nether\|end>` | op | Kits par palier. |
 | `/wayfarers locate <structure>` · `/wayfarers tp <structure>` | op | Trouver ou visiter une structure. |
+| `/wayfarers boss <boss>` | op | Fait apparaître un boss devant toi, pour le tester. |
 | `/wayfarers progress reset\|complete` | op | Réinitialiser ou terminer la quête. |
 
 L'onglet créatif **Wayfarers** contient tous les objets, blocs et œufs d'apparition.
@@ -228,9 +268,10 @@ python3 tools/generate_all.py --preview  # + aperçus isométriques des structur
 
 | Script | Ce qu'il génère |
 |---|---|
-| `gen_structures.py` + `wf/structures/*.py` | Les plans des 31 structures (éditeur de blocs en Python) → modèles `.nbt`, pools, ensembles de structures, tags de biomes |
+| `gen_structures.py` + `wf/structures/*.py` | Les plans des 35 structures (dont les repaires `lair_*.py` et les donjons `wf/dungeon.py`) (éditeur de blocs en Python) → modèles `.nbt`, pools, ensembles de structures, tags de biomes |
 | `gen_loot.py`, `gen_quests.py`, `gen_data.py` | Butin, quêtes (progrès), recettes, tags, minerai |
 | `gen_textures.py`, `gen_assets.py` | Textures pixel-art, modèles, traductions fr/en |
+| `gen_models.py` + `wf/mobs/*.py` | Les 30 modèles 3D animés (`wf/models.py`) → classes Java, textures, aperçus (`--preview`, voir `tools/BOSSES.md`) |
 | `gen_java.py` | Le catalogue Java partagé (`GeneratedContent.java`) |
 | `validate.py` | Vérifie tous les identifiants de blocs, objets, entités et biomes contre les données de 26.1. Il contrôle aussi chaque référence croisée : butin, quêtes, traductions, modèles et textures. |
 
@@ -241,10 +282,11 @@ Le code Java vit dans `src/main/java/com/wayfarers` :
 | `registry` | Registres |
 | `block` | Blocs |
 | `item` | Objets |
-| `entity` | Créatures |
+| `entity` | Créatures, boss (`entity/boss`), monstres de donjon (`entity/mob`) |
+| `boss` | Moteur des boss : attaques télégraphiées, phases, posture, arène |
 | `event` | Coop, tombes, équipement |
 | `command` | Commande `/wayfarers` |
-| `client` | Rendu et touches |
+| `client` | Rendu, barre de boss, touches |
 
 ### État de la vérification
 
@@ -260,4 +302,6 @@ Le code Java vit dans `src/main/java/com/wayfarers` :
 - [ ] `/wayfarers tp guild_outpost` puis `/wayfarers tp sunken_citadel` : les structures sont bien posées au sol ou au fond de l'eau.
 - [ ] Une pierre de voyage : la liste cliquable s'affiche et la téléportation fonctionne.
 - [ ] Une mort : une tombe apparaît et rend les objets.
-- [ ] L'autel de la Citadelle : le boss apparaît et les barreaux tombent à sa mort.
+- [ ] Citadelle engloutie : en entrant dans l'arène, le boss apparaît, la brume se ferme, la barre de vie s'affiche en bas de l'écran, et les barreaux et la brume tombent à sa mort (« ENNEMI ABATTU »).
+- [ ] `/wayfarers boss bell_keeper` (puis les autres) : les modèles et les animations d'attaque s'affichent correctement.
+- [ ] `/wayfarers tp forgotten_catacombs` : l'entrée mène bien aux niveaux et à l'arène du champion.

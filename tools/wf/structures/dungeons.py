@@ -33,7 +33,7 @@ LITHITE = Theme(
     floor=["polished_deepslate", "deepslate_tiles"], trim="deepslate_brick", pillar="wayfarers:lithite_bricks",
     ceiling=["deepslate_tiles", "cobbled_deepslate"], cracked="cracked_deepslate_tiles", accent="wayfarers:lithite_block",
     light="soul_lantern", candle="cyan_candle",
-    spawners=("minecraft:cave_spider", MOB["map_wraith"], "minecraft:skeleton"),
+    spawners=("wayfarers:banshee", "wayfarers:gargoyle", "minecraft:cave_spider"),
 )
 VOID = Theme(
     "void",
@@ -41,7 +41,7 @@ VOID = Theme(
     floor=["purpur_block", "wayfarers:void_bricks"], trim="wayfarers:void_brick", pillar="purpur_pillar",
     ceiling=["end_stone_bricks", "wayfarers:void_bricks"], cracked="end_stone", accent="wayfarers:starlight_block",
     light="end_rod", candle="purple_candle", bones="purpur_pillar",
-    spawners=("minecraft:endermite", MOB["void_stalker"]),
+    spawners=("wayfarers:void_larva", "wayfarers:void_larva", "minecraft:endermite"),
 )
 
 
@@ -805,17 +805,20 @@ def void_obelisk(bp, t, x, z):
         put(bx, 6, bz, VB)
 
     # the floating halo over the portal: a purpur ring with starlight, end rods dripping light into the shaft
-    for dx in range(-5, 6):
-        for dz in range(-5, 6):
+    for dx in range(-6, 7):
+        for dz in range(-6, 7):
             d = math.hypot(dx, dz)
-            if 3.5 <= d < 4.5:
+            if 4.0 <= d < 5.1:
                 put(dx, 9, dz, SL if (dx * 3 + dz) % 5 == 0 else "purpur_slab[type=bottom,waterlogged=false]")
+            elif 1.6 <= d < 2.6:
+                put(dx, 11, dz, SL if (dx + dz) % 2 else "purpur_slab[type=top,waterlogged=false]")
     for k in range(8):
         a = math.pi * 2 * k / 8
-        hx, hz = int(round(math.cos(a) * 4)), int(round(math.sin(a) * 4))
+        hx, hz = int(round(math.cos(a) * 4.5)), int(round(math.sin(a) * 4.5))
         put(hx, 8, hz, "end_rod[facing=down]")
-    put(0, 11, 0, SL)
-    put(0, 10, 0, "end_rod[facing=down]")
+    put(0, 12, 0, SL)
+    put(0, 11, 0, "end_rod[facing=down]")
+    put(0, 13, 0, "end_rod[facing=up]")
 
     # chorus groves on end-stone mounds and fallen obelisk drums around the bowl
     def chorus(cx, cz, h):
@@ -861,7 +864,7 @@ _register("lithite_well", LITHITE, well_head,
           ["windswept_hills", "windswept_forest", "windswept_gravelly_hills", "grove", "snowy_slopes", "jagged_peaks",
            "stony_peaks", "old_growth_spruce_taiga"],
           "Puits de lithite", "Lithite Well", "wayfarers:weeping_lady", "lithite_well",
-          spawns=[("minecraft:cave_spider", 8, 1, 2), (MOB["map_wraith"], 8, 1, 1), ("minecraft:skeleton", 8, 1, 2)])
+          spawns=[("wayfarers:banshee", 8, 1, 1), ("wayfarers:gargoyle", 6, 1, 1), ("minecraft:cave_spider", 8, 1, 2)])
 _register("void_crypt", VOID, void_obelisk, ["end_highlands", "end_midlands"],
           "Crypte du vide", "Void Crypt", "wayfarers:larva_mother", "void_crypt", levels=2, spacing=30,
-          dimension="end", spawns=[("minecraft:endermite", 8, 1, 2), (MOB["void_stalker"], 8, 1, 1)])
+          dimension="end", spawns=[("wayfarers:void_larva", 10, 1, 2), ("minecraft:endermite", 6, 1, 2)])
