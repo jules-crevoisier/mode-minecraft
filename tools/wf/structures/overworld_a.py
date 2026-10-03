@@ -13,7 +13,7 @@ from ..arch import Palette
 from ..blueprint import OPPOSITE, with_props
 from ..defs import Piece, StructureDef, register
 from ..parts import LOOT, MOB, MOD
-from . import lair_bell_keeper
+from . import lair_archivist, lair_bell_keeper
 
 TEMPERATE = ["#minecraft:is_forest", "plains", "sunflower_plains", "meadow", "#minecraft:is_taiga",
              "savanna", "cherry_grove"]
@@ -1946,6 +1946,7 @@ def library(bp):
     A.landscape(bp, -5, -6, NX + 12, 50, 1, density=0.3, seed=21,
                 flowers=("fern", "fern", "lily_of_the_valley", "allium", "azure_bluet", "oxeye_daisy"))
     skirt(bp, 0, depth=5, spread=2, seed=31)
+    lair_archivist.build(bp)            # secret study stair -> buried scriptorium -> Forbidden Archive
 
 
 register(StructureDef(

@@ -17,7 +17,7 @@ CATACOMBS = Theme(
     floor=["polished_tuff", "tuff_bricks", "wayfarers:polished_guild_stone"],
     trim="wayfarers:guild_brick", pillar="wayfarers:polished_guild_stone", ceiling=["tuff_bricks", "stone_bricks"],
     cracked="wayfarers:cracked_guild_bricks", accent="wayfarers:carved_guild_stone", light="lantern",
-    candle="candle", spawners=("minecraft:zombie", "minecraft:skeleton", MOB["ruin_walker"]),
+    candle="candle", spawners=("wayfarers:skeleton_knight", "wayfarers:crypt_crawler", "minecraft:zombie"),
 )
 HYPOGEUM = Theme(
     "hypogeum",
@@ -25,7 +25,7 @@ HYPOGEUM = Theme(
     floor=["smooth_sandstone", "cut_sandstone"], trim="sandstone", pillar="cut_sandstone",
     ceiling=["sandstone", "smooth_sandstone"], cracked="chiseled_sandstone", accent="chiseled_red_sandstone",
     light="lantern", candle="orange_candle", skull="skeleton_skull",
-    spawners=("minecraft:husk", "minecraft:skeleton", "minecraft:cave_spider"),
+    spawners=("wayfarers:crypt_crawler", "minecraft:husk"),
 )
 LITHITE = Theme(
     "lithite",
@@ -265,10 +265,10 @@ _register("forgotten_catacombs", CATACOMBS, mausoleum,
           ["plains", "forest", "birch_forest", "dark_forest", "old_growth_birch_forest", "meadow", "taiga",
            "flower_forest", "cherry_grove"],
           "Catacombes oubliées", "Forgotten Catacombs", "wayfarers:grave_knight", "catacombs",
-          spawns=[("minecraft:skeleton", 10, 1, 2), ("minecraft:zombie", 10, 1, 2), (MOB["ruin_walker"], 6, 1, 1)])
+          spawns=[("wayfarers:skeleton_knight", 10, 1, 2), ("wayfarers:crypt_crawler", 8, 1, 2), ("minecraft:zombie", 8, 1, 2)])
 _register("sand_hypogeum", HYPOGEUM, sand_gate, ["desert", "badlands", "wooded_badlands", "eroded_badlands"],
           "Hypogée des sables", "Sand Hypogeum", "wayfarers:bone_matriarch", "hypogeum",
-          spawns=[("minecraft:husk", 10, 1, 2), ("minecraft:skeleton", 8, 1, 2)])
+          spawns=[("wayfarers:crypt_crawler", 10, 1, 2), ("minecraft:husk", 10, 1, 2)])
 _register("lithite_well", LITHITE, well_head,
           ["windswept_hills", "windswept_forest", "windswept_gravelly_hills", "grove", "snowy_slopes", "jagged_peaks",
            "stony_peaks", "old_growth_spruce_taiga"],

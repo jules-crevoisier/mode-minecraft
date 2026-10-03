@@ -11,6 +11,7 @@ from ..arch import Palette, slab, stair
 from ..blueprint import OPPOSITE, Blueprint, family, with_props
 from ..defs import Piece, StructureDef, register
 from ..parts import LOOT, MOB, MOD
+from . import lair_rune_colossus
 
 FLOWERS = ["short_grass", "short_grass", "short_grass", "fern", "poppy", "dandelion", "oxeye_daisy",
            "azure_bluet", "cornflower", "bush", "leaf_litter[facing=north,segment_amount=3]"]
@@ -1224,6 +1225,7 @@ def rune_circle(bp):
     scatter_plants(bp, -26, -26, 26, 28, 1, 0.3, 9,
                    FLOWERS + ["allium", "lily_of_the_valley", "pink_petals[facing=east,flower_amount=4]",
                               "wildflowers[facing=north,flower_amount=3]", "red_mushroom", "brown_mushroom"])
+    lair_rune_colossus.build(bp)     # rune well, gallery of guardians, grace and the rune vault (y -30)
 
 
 register(StructureDef(
