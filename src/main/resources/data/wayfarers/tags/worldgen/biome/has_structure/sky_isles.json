@@ -28,10 +28,6 @@
     {
       "id": "minecraft:sunflower_plains",
       "required": false
-    },
-    {
-      "id": "minecraft:meadow",
-      "required": false
     }
   ]
 }

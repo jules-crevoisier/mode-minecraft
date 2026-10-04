@@ -4,10 +4,31 @@
     {
       "weight": 1,
       "element": {
-        "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:coral_shrine/shrine",
+        "element_type": "wayfarers:chunked_template",
+        "size": [
+          24,
+          17,
+          24
+        ],
+        "cells": [
+          {
+            "location": "wayfarers:coral_shrine/shrine",
+            "offset": [
+              0,
+              0,
+              0
+            ],
+            "size": [
+              24,
+              17,
+              24
+            ],
+            "blocks": 1837
+          }
+        ],
         "projection": "rigid",
-        "processors": "wayfarers:none"
+        "processors": "wayfarers:none",
+        "ground_level_delta": 5
       }
     }
   ]

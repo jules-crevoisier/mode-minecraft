@@ -162,14 +162,17 @@ def write_cells(directory, location_prefix, cells):
     return out
 
 
-def element(size, cells, projection, processors):
-    return {
+def element(size, cells, projection, processors, ground_level_delta=None):
+    el = {
         "element_type": ELEMENT_TYPE,
         "size": list(size),
         "cells": cells,
         "projection": projection,
         "processors": processors,
     }
+    if ground_level_delta is not None:
+        el["ground_level_delta"] = ground_level_delta  # see wf/placement.py "Terrain fit"
+    return el
 
 
 # ------------------------------------------------------------------ verification

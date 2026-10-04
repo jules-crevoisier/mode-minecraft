@@ -139,7 +139,8 @@
           }
         ],
         "projection": "rigid",
-        "processors": "wayfarers:none"
+        "processors": "wayfarers:none",
+        "ground_level_delta": 5
       }
     },
     {
@@ -280,7 +281,8 @@
           }
         ],
         "projection": "rigid",
-        "processors": "wayfarers:none"
+        "processors": "wayfarers:none",
+        "ground_level_delta": 5
       }
     },
     {
@@ -421,7 +423,8 @@
           }
         ],
         "projection": "rigid",
-        "processors": "wayfarers:none"
+        "processors": "wayfarers:none",
+        "ground_level_delta": 5
       }
     }
   ]

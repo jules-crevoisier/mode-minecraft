@@ -23,7 +23,7 @@
               76,
               28
             ],
-            "blocks": 9298
+            "blocks": 8776
           },
           {
             "location": "wayfarers:forgotten_library/library/x0_z1",
@@ -51,7 +51,7 @@
               78,
               32
             ],
-            "blocks": 28213
+            "blocks": 27429
           },
           {
             "location": "wayfarers:forgotten_library/library/x1_z1",
@@ -125,7 +125,8 @@
           }
         ],
         "projection": "rigid",
-        "processors": "wayfarers:aging"
+        "processors": "wayfarers:aging",
+        "ground_level_delta": 36
       }
     }
   ]

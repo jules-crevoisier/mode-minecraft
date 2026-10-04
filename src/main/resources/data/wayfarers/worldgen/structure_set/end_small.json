@@ -1,0 +1,32 @@
+{
+  "structures": [
+    {
+      "structure": "wayfarers:chorus_garden",
+      "weight": 3
+    },
+    {
+      "structure": "wayfarers:void_observatory",
+      "weight": 2
+    },
+    {
+      "structure": "wayfarers:void_ship",
+      "weight": 2
+    }
+  ],
+  "placement": {
+    "type": "wayfarers:curated_spread",
+    "salt": 229271714,
+    "spacing": 32,
+    "separation": 10,
+    "avoid": [
+      {
+        "set": "wayfarers:end_large",
+        "chunks": 5
+      },
+      {
+        "set": "minecraft:end_cities",
+        "chunks": 3
+      }
+    ]
+  }
+}

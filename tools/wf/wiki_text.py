@@ -568,7 +568,7 @@ TEST_CHECKLIST = [
                                "/wayfarers tp geothermal_foundry", "/wayfarers tp tesla_observatory",
                                "/wayfarers tp sky_isles"],
      "Téléportation à la plus proche (générée si besoin, quelques secondes ; si aucune n'est assez près, le "
-     "message le dit). Les Îles célestes flottent vers y 160-225 : tu arrives dessus ou dessous ; en dessous, "
+     "message le dit). Les Îles célestes flottent vers y 170-230 : tu arrives dessus ou dessous ; en dessous, "
      "passe en /gamemode spectator pour monter."),
     ("Merveilles souterraines", ["/wayfarers locate dwarven_city", "/wayfarers locate crystal_cathedral",
                                  "/locate structure wayfarers:dwarven_city", "/gamemode spectator"],

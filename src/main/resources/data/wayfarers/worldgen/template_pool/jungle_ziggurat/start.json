@@ -237,7 +237,8 @@
           }
         ],
         "projection": "rigid",
-        "processors": "wayfarers:aging"
+        "processors": "wayfarers:aging",
+        "ground_level_delta": 43
       }
     }
   ]

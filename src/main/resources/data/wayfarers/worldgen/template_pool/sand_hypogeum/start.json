@@ -23,7 +23,7 @@
               53,
               24
             ],
-            "blocks": 6484
+            "blocks": 6481
           },
           {
             "location": "wayfarers:sand_hypogeum/layout_0/x0_z1",
@@ -37,7 +37,7 @@
               60,
               24
             ],
-            "blocks": 10112
+            "blocks": 9996
           },
           {
             "location": "wayfarers:sand_hypogeum/layout_0/x0_z2",
@@ -65,7 +65,7 @@
               53,
               24
             ],
-            "blocks": 10432
+            "blocks": 10332
           },
           {
             "location": "wayfarers:sand_hypogeum/layout_0/x1_z1",
@@ -79,7 +79,7 @@
               60,
               24
             ],
-            "blocks": 15338
+            "blocks": 14780
           },
           {
             "location": "wayfarers:sand_hypogeum/layout_0/x1_z2",
@@ -139,7 +139,8 @@
           }
         ],
         "projection": "rigid",
-        "processors": "wayfarers:none"
+        "processors": "wayfarers:none",
+        "ground_level_delta": 42
       }
     },
     {
@@ -220,7 +221,7 @@
               57,
               26
             ],
-            "blocks": 17415
+            "blocks": 16993
           },
           {
             "location": "wayfarers:sand_hypogeum/layout_1/x1_z2",
@@ -234,7 +235,7 @@
               60,
               25
             ],
-            "blocks": 9103
+            "blocks": 8861
           },
           {
             "location": "wayfarers:sand_hypogeum/layout_1/x2_z0",
@@ -262,7 +263,7 @@
               56,
               26
             ],
-            "blocks": 9564
+            "blocks": 9519
           },
           {
             "location": "wayfarers:sand_hypogeum/layout_1/x2_z2",
@@ -276,11 +277,12 @@
               60,
               25
             ],
-            "blocks": 7056
+            "blocks": 6986
           }
         ],
         "projection": "rigid",
-        "processors": "wayfarers:none"
+        "processors": "wayfarers:none",
+        "ground_level_delta": 42
       }
     },
     {
@@ -319,7 +321,7 @@
               60,
               21
             ],
-            "blocks": 9065
+            "blocks": 9064
           },
           {
             "location": "wayfarers:sand_hypogeum/layout_2/x0_z2",
@@ -361,7 +363,7 @@
               60,
               21
             ],
-            "blocks": 10974
+            "blocks": 10437
           },
           {
             "location": "wayfarers:sand_hypogeum/layout_2/x1_z2",
@@ -375,7 +377,7 @@
               53,
               22
             ],
-            "blocks": 11787
+            "blocks": 11548
           },
           {
             "location": "wayfarers:sand_hypogeum/layout_2/x2_z0",
@@ -421,7 +423,8 @@
           }
         ],
         "projection": "rigid",
-        "processors": "wayfarers:none"
+        "processors": "wayfarers:none",
+        "ground_level_delta": 42
       }
     }
   ]

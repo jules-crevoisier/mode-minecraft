@@ -23,7 +23,7 @@
               27,
               19
             ],
-            "blocks": 3222
+            "blocks": 2780
           },
           {
             "location": "wayfarers:geothermal_foundry/foundry/x0_z1",
@@ -37,7 +37,7 @@
               35,
               31
             ],
-            "blocks": 9992
+            "blocks": 8117
           },
           {
             "location": "wayfarers:geothermal_foundry/foundry/x0_z2",
@@ -51,7 +51,7 @@
               65,
               31
             ],
-            "blocks": 19845
+            "blocks": 18717
           },
           {
             "location": "wayfarers:geothermal_foundry/foundry/x0_z3",
@@ -65,7 +65,7 @@
               59,
               25
             ],
-            "blocks": 10902
+            "blocks": 10421
           },
           {
             "location": "wayfarers:geothermal_foundry/foundry/x1_z0",
@@ -79,7 +79,7 @@
               66,
               31
             ],
-            "blocks": 24004
+            "blocks": 23344
           },
           {
             "location": "wayfarers:geothermal_foundry/foundry/x1_z1",
@@ -93,7 +93,7 @@
               66,
               31
             ],
-            "blocks": 31167
+            "blocks": 30469
           },
           {
             "location": "wayfarers:geothermal_foundry/foundry/x1_z2",
@@ -107,7 +107,7 @@
               41,
               31
             ],
-            "blocks": 17812
+            "blocks": 14682
           },
           {
             "location": "wayfarers:geothermal_foundry/foundry/x1_z3",
@@ -121,7 +121,7 @@
               39,
               31
             ],
-            "blocks": 16997
+            "blocks": 13730
           },
           {
             "location": "wayfarers:geothermal_foundry/foundry/x2_z0",
@@ -135,7 +135,7 @@
               66,
               31
             ],
-            "blocks": 25860
+            "blocks": 25187
           },
           {
             "location": "wayfarers:geothermal_foundry/foundry/x2_z1",
@@ -149,7 +149,7 @@
               65,
               31
             ],
-            "blocks": 32386
+            "blocks": 31619
           },
           {
             "location": "wayfarers:geothermal_foundry/foundry/x2_z2",
@@ -163,7 +163,7 @@
               41,
               31
             ],
-            "blocks": 18232
+            "blocks": 14823
           },
           {
             "location": "wayfarers:geothermal_foundry/foundry/x2_z3",
@@ -177,7 +177,7 @@
               39,
               31
             ],
-            "blocks": 17544
+            "blocks": 13917
           },
           {
             "location": "wayfarers:geothermal_foundry/foundry/x3_z0",
@@ -191,7 +191,7 @@
               28,
               22
             ],
-            "blocks": 3466
+            "blocks": 2975
           },
           {
             "location": "wayfarers:geothermal_foundry/foundry/x3_z1",
@@ -205,7 +205,7 @@
               35,
               31
             ],
-            "blocks": 10070
+            "blocks": 8115
           },
           {
             "location": "wayfarers:geothermal_foundry/foundry/x3_z2",
@@ -219,7 +219,7 @@
               65,
               31
             ],
-            "blocks": 19746
+            "blocks": 18648
           },
           {
             "location": "wayfarers:geothermal_foundry/foundry/x3_z3",
@@ -233,11 +233,12 @@
               59,
               25
             ],
-            "blocks": 10620
+            "blocks": 10143
           }
         ],
         "projection": "rigid",
-        "processors": "wayfarers:none"
+        "processors": "wayfarers:none",
+        "ground_level_delta": 13
       }
     }
   ]

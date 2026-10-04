@@ -14,13 +14,15 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from wf import defs, render, support, foundation, chunking, nbt  # noqa: E402
+from wf import defs, render, support, foundation, chunking, nbt, placement  # noqa: E402
 try:
     from wf import render3d  # noqa: E402  (optional: needs Pillow + minecraft-textures)
 except ImportError:
     render3d = None
 from wf.blueprint import Blueprint, template_nbt  # noqa: E402
 import wf.structures  # noqa: E402,F401  (registers every structure)
+
+placement.apply_overrides()  # terrain adaptation / foundation overrides of wf/placement.py (also for gen_wiki)
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 DATA = os.path.join(ROOT, "src", "main", "resources", "data", defs.MODID)
@@ -39,8 +41,14 @@ def needs_foundation(sdef):
         and sdef.foundation
 
 
+def projected(sdef):
+    """Start placed on a heightmap (its start pieces carry their ground depth, see wf/placement.py)."""
+    return sdef.height is None
+
+
 def prunes_sky_air(sdef, start):
-    """Surface structures projected on the terrain (sky air above them only carves hills, see wf/chunking.py)."""
+    """Surface structures projected on the terrain: air around and high above them only carves hills
+    (wf/placement.py carve_limit)."""
     return start and sdef.height is None and sdef.heightmap == "WORLD_SURFACE_WG"
 
 
@@ -53,13 +61,19 @@ def save_piece(sdef, piece, bp, start, report):
     cell_dir = os.path.join(DATA, "structure", sdef.id, piece.name)
     os.makedirs(os.path.dirname(path), exist_ok=True)
     piece.chunks = None
-    if not chunking.needs_split(size, len(blocks)):
-        nbt.save(path, template_nbt(size, blocks, ents))
+    # ground layer height above the template's lowest layer, + 1 (the jigsaw/beardifier "ground level delta")
+    piece.ground_delta = sdef.ground - origin[1] + 1 if start and projected(sdef) else None
+    dropped = placement.carve_limit(blocks, sdef.ground - origin[1]) if prunes_sky_air(sdef, start) else set()
+    kept = {p: b for p, b in blocks.items() if p not in dropped}
+    if not chunking.needs_split(size, len(kept)):
+        nbt.save(path, template_nbt(size, kept, ents))
         if os.path.isdir(cell_dir):
             shutil.rmtree(cell_dir)
-        return size, blocks, origin, 0, len(blocks), len(blocks)
-    dropped = chunking.sky_air(blocks, sdef.ground - origin[1]) if prunes_sky_air(sdef, start) else set()
-    kept = {p: b for p, b in blocks.items() if p not in dropped}
+        if piece.ground_delta is not None:
+            # a single column = the whole template, so the pool element can carry ground_level_delta
+            piece.chunks = (size, [{"location": defs.rl(f"{sdef.id}/{piece.name}"), "offset": [0, 0, 0],
+                                    "size": list(size), "blocks": len(kept)}])
+        return size, blocks, origin, 0, len(kept), len(kept)
     cells = chunking.split(size, kept, ents)
     records = chunking.write_cells(cell_dir, defs.rl(f"{sdef.id}/{piece.name}"), cells)
     for msg in chunking.verify(cell_dir, records, size, blocks, ents, dropped):
@@ -127,19 +141,22 @@ def main():
                        defs.template_pool(sdef, pieces, pool_name))
         write_json(os.path.join(DATA, "worldgen", "structure", f"{sdef.id}.json"),
                    defs.structure_json(sdef, ground_offset))
-        write_json(os.path.join(DATA, "worldgen", "structure_set", f"{sdef.id}.json"),
-                   defs.structure_set_json(sdef))
         write_json(os.path.join(DATA, "tags", "worldgen", "biome", "has_structure", f"{sdef.id}.json"),
                    defs.biome_tag_json(sdef.biomes))
     for kind in sorted(used_processors | {"aging", "ruin", "none"}):
         write_json(os.path.join(DATA, "worldgen", "processor_list", f"{kind}.json"), defs.processor_list(kind))
+    # structure sets: one per family (wf/placement.py); the old one-set-per-structure files are removed
+    placement.write_sets(DATA, write_json)
+    for sid in placement.unassigned():
+        print(f"warning: {sid} has no family in tools/wf/placement.py (it gets its own fallback set)")
 
     for kind in sorted(used_processors | {"aging", "ruin", "none"}):
         for src in support.stair_rules_ok(defs.processor_list(kind)):
             report.append(("processor_list", kind, "processor", (0, 0, 0), f"rule rewrites {src} without its properties"))
 
     for name, size, n, ncells, written, _ in summary:
-        split = f"  -> {ncells} columns, {written} entries ({n - written} sky air dropped)" if ncells else ""
+        pruned = f" ({n - written} carving air dropped)" if n != written else ""
+        split = f"  -> {ncells} columns, {written} entries{pruned}" if ncells else pruned
         print(f"{name:45s} {size[0]:3d}x{size[1]:3d}x{size[2]:3d}  {n:6d} blocks{split}")
     files = sum(s[3] or 1 for s in summary)
     biggest = max((s[5] for s in summary), default=0)

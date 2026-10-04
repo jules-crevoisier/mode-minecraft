@@ -4,10 +4,31 @@
     {
       "weight": 1,
       "element": {
-        "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:diving_bell/bell",
+        "element_type": "wayfarers:chunked_template",
+        "size": [
+          21,
+          22,
+          22
+        ],
+        "cells": [
+          {
+            "location": "wayfarers:diving_bell/bell",
+            "offset": [
+              0,
+              0,
+              0
+            ],
+            "size": [
+              21,
+              22,
+              22
+            ],
+            "blocks": 1861
+          }
+        ],
         "projection": "rigid",
-        "processors": "wayfarers:none"
+        "processors": "wayfarers:none",
+        "ground_level_delta": 5
       }
     }
   ]

@@ -4,10 +4,31 @@
     {
       "weight": 1,
       "element": {
-        "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:sunken_submarine/submarine",
+        "element_type": "wayfarers:chunked_template",
+        "size": [
+          34,
+          19,
+          22
+        ],
+        "cells": [
+          {
+            "location": "wayfarers:sunken_submarine/submarine",
+            "offset": [
+              0,
+              0,
+              0
+            ],
+            "size": [
+              34,
+              19,
+              22
+            ],
+            "blocks": 3121
+          }
+        ],
         "projection": "rigid",
-        "processors": "wayfarers:none"
+        "processors": "wayfarers:none",
+        "ground_level_delta": 5
       }
     }
   ]

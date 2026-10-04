@@ -37,7 +37,7 @@
               59,
               30
             ],
-            "blocks": 3723
+            "blocks": 3721
           },
           {
             "location": "wayfarers:desert_oasis/oasis/x0_z2",
@@ -65,7 +65,7 @@
               41,
               30
             ],
-            "blocks": 7735
+            "blocks": 7545
           },
           {
             "location": "wayfarers:desert_oasis/oasis/x1_z1",
@@ -79,7 +79,7 @@
               75,
               30
             ],
-            "blocks": 17455
+            "blocks": 17063
           },
           {
             "location": "wayfarers:desert_oasis/oasis/x1_z2",
@@ -93,7 +93,7 @@
               64,
               30
             ],
-            "blocks": 9502
+            "blocks": 9499
           },
           {
             "location": "wayfarers:desert_oasis/oasis/x2_z0",
@@ -107,7 +107,7 @@
               44,
               30
             ],
-            "blocks": 9934
+            "blocks": 9578
           },
           {
             "location": "wayfarers:desert_oasis/oasis/x2_z1",
@@ -121,7 +121,7 @@
               75,
               30
             ],
-            "blocks": 22624
+            "blocks": 21894
           },
           {
             "location": "wayfarers:desert_oasis/oasis/x2_z2",
@@ -135,7 +135,7 @@
               63,
               30
             ],
-            "blocks": 11584
+            "blocks": 11575
           },
           {
             "location": "wayfarers:desert_oasis/oasis/x3_z0",
@@ -159,11 +159,11 @@
               30
             ],
             "size": [
-              24,
+              23,
               61,
               30
             ],
-            "blocks": 2871
+            "blocks": 2869
           },
           {
             "location": "wayfarers:desert_oasis/oasis/x3_z2",
@@ -173,15 +173,16 @@
               60
             ],
             "size": [
-              22,
+              21,
               39,
               25
             ],
-            "blocks": 4151
+            "blocks": 4149
           }
         ],
         "projection": "rigid",
-        "processors": "wayfarers:aging"
+        "processors": "wayfarers:aging",
+        "ground_level_delta": 50
       }
     }
   ]

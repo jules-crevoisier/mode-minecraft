@@ -1,0 +1,40 @@
+{
+  "structures": [
+    {
+      "structure": "wayfarers:forgotten_catacombs",
+      "weight": 1
+    },
+    {
+      "structure": "wayfarers:sand_hypogeum",
+      "weight": 1
+    },
+    {
+      "structure": "wayfarers:lithite_well",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "wayfarers:curated_spread",
+    "salt": 233463812,
+    "spacing": 60,
+    "separation": 24,
+    "avoid": [
+      {
+        "set": "wayfarers:wonders",
+        "chunks": 10
+      },
+      {
+        "set": "wayfarers:deep_wonders",
+        "chunks": 8
+      },
+      {
+        "set": "minecraft:villages",
+        "chunks": 4
+      },
+      {
+        "set": "wayfarers:landmarks",
+        "chunks": 6
+      }
+    ]
+  }
+}

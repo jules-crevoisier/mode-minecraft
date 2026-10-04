@@ -1,0 +1,56 @@
+{
+  "structures": [
+    {
+      "structure": "wayfarers:ruined_watchtower",
+      "weight": 3
+    },
+    {
+      "structure": "wayfarers:rune_circle",
+      "weight": 2
+    },
+    {
+      "structure": "wayfarers:bandit_camp",
+      "weight": 2
+    },
+    {
+      "structure": "wayfarers:giant_tree",
+      "weight": 2
+    },
+    {
+      "structure": "wayfarers:witch_huts",
+      "weight": 2
+    },
+    {
+      "structure": "wayfarers:desert_oasis",
+      "weight": 2
+    }
+  ],
+  "placement": {
+    "type": "wayfarers:curated_spread",
+    "salt": 133627041,
+    "spacing": 40,
+    "separation": 16,
+    "avoid": [
+      {
+        "set": "wayfarers:wonders",
+        "chunks": 10
+      },
+      {
+        "set": "minecraft:villages",
+        "chunks": 4
+      },
+      {
+        "set": "wayfarers:landmarks",
+        "chunks": 6
+      },
+      {
+        "set": "wayfarers:dungeons",
+        "chunks": 5
+      },
+      {
+        "set": "wayfarers:coast",
+        "chunks": 3
+      }
+    ]
+  }
+}

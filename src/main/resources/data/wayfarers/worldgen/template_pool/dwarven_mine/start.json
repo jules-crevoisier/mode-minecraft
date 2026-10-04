@@ -79,7 +79,7 @@
               66,
               26
             ],
-            "blocks": 12091
+            "blocks": 12086
           },
           {
             "location": "wayfarers:dwarven_mine/mine/x1_z2",
@@ -139,7 +139,8 @@
           }
         ],
         "projection": "rigid",
-        "processors": "wayfarers:aging"
+        "processors": "wayfarers:aging",
+        "ground_level_delta": 35
       }
     }
   ]

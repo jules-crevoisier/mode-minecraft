@@ -23,7 +23,7 @@
               52,
               25
             ],
-            "blocks": 9158
+            "blocks": 6726
           },
           {
             "location": "wayfarers:clockwork_citadel/citadel/x0_z1",
@@ -34,10 +34,10 @@
             ],
             "size": [
               20,
-              49,
+              41,
               28
             ],
-            "blocks": 15988
+            "blocks": 11628
           },
           {
             "location": "wayfarers:clockwork_citadel/citadel/x0_z2",
@@ -51,7 +51,7 @@
               63,
               27
             ],
-            "blocks": 9475
+            "blocks": 8683
           },
           {
             "location": "wayfarers:clockwork_citadel/citadel/x1_z0",
@@ -65,7 +65,7 @@
               62,
               27
             ],
-            "blocks": 20725
+            "blocks": 15453
           },
           {
             "location": "wayfarers:clockwork_citadel/citadel/x1_z1",
@@ -79,7 +79,7 @@
               109,
               28
             ],
-            "blocks": 36672
+            "blocks": 34040
           },
           {
             "location": "wayfarers:clockwork_citadel/citadel/x1_z2",
@@ -90,10 +90,10 @@
             ],
             "size": [
               26,
-              49,
+              41,
               27
             ],
-            "blocks": 19008
+            "blocks": 15688
           },
           {
             "location": "wayfarers:clockwork_citadel/citadel/x2_z0",
@@ -107,7 +107,7 @@
               52,
               27
             ],
-            "blocks": 12543
+            "blocks": 9039
           },
           {
             "location": "wayfarers:clockwork_citadel/citadel/x2_z1",
@@ -118,10 +118,10 @@
             ],
             "size": [
               25,
-              43,
+              35,
               28
             ],
-            "blocks": 19757
+            "blocks": 14277
           },
           {
             "location": "wayfarers:clockwork_citadel/citadel/x2_z2",
@@ -135,11 +135,12 @@
               63,
               16
             ],
-            "blocks": 6493
+            "blocks": 5069
           }
         ],
         "projection": "rigid",
-        "processors": "wayfarers:none"
+        "processors": "wayfarers:none",
+        "ground_level_delta": 24
       }
     }
   ]

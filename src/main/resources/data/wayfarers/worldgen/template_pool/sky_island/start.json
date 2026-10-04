@@ -65,7 +65,7 @@
               68,
               26
             ],
-            "blocks": 11591
+            "blocks": 11055
           },
           {
             "location": "wayfarers:sky_island/island/x1_z1",
@@ -79,7 +79,7 @@
               103,
               27
             ],
-            "blocks": 13255
+            "blocks": 13194
           },
           {
             "location": "wayfarers:sky_island/island/x1_z2",
@@ -104,10 +104,10 @@
             ],
             "size": [
               29,
-              39,
+              38,
               20
             ],
-            "blocks": 3186
+            "blocks": 3087
           },
           {
             "location": "wayfarers:sky_island/island/x2_z1",
@@ -139,7 +139,8 @@
           }
         ],
         "projection": "rigid",
-        "processors": "wayfarers:none"
+        "processors": "wayfarers:none",
+        "ground_level_delta": 13
       }
     }
   ]

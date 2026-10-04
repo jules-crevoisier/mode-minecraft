@@ -39,8 +39,9 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * One big structure piece stored as several column templates ({@code wayfarers:chunked_template} in a template pool,
- * written by tools/wf/chunking.py).
+ * One structure piece stored as one or several column templates ({@code wayfarers:chunked_template} in a template
+ * pool, written by tools/wf/chunking.py). Small surface pieces use it too, with a single column, for its
+ * {@code ground_level_delta}.
  *
  * <p>For the jigsaw machinery it is a single piece with the size of the whole build: same bounding box, same
  * start height, same terrain adaptation (the beard is computed per piece box) as the single template it replaces.
@@ -68,7 +69,8 @@ public class ChunkedPoolElement extends StructurePoolElement {
             Cell.CODEC.listOf().fieldOf("cells").forGetter(e -> e.cells),
             StructureProcessorType.LIST_CODEC.fieldOf("processors").forGetter(e -> e.processors),
             projectionCodec(),
-            LiquidSettings.CODEC.optionalFieldOf("override_liquid_settings").forGetter(e -> e.overrideLiquidSettings)
+            LiquidSettings.CODEC.optionalFieldOf("override_liquid_settings").forGetter(e -> e.overrideLiquidSettings),
+            Codec.intRange(0, 4096).optionalFieldOf("ground_level_delta", 1).forGetter(e -> e.groundLevelDelta)
     ).apply(i, ChunkedPoolElement::new));
 
     private static final Set<Identifier> REPORTED_MISSING = ConcurrentHashMap.newKeySet();
@@ -77,15 +79,29 @@ public class ChunkedPoolElement extends StructurePoolElement {
     private final List<Cell> cells;
     private final Holder<StructureProcessorList> processors;
     private final Optional<LiquidSettings> overrideLiquidSettings;
+    /**
+     * Height of the template's ground layer above its lowest layer, plus one (vanilla elements always say 1: their
+     * lowest layer is the ground). Our surface templates carry cellars, skirts and foundations below the ground
+     * layer; the jigsaw start puts {@code minY + groundLevelDelta} on the heightmap and the beardifier flattens the
+     * terrain around that same height, so with the default 1 the beard would dig a moat at the foundation's
+     * bottom instead of meeting the real ground (written by tools/gen_structures.py).
+     */
+    private final int groundLevelDelta;
 
     protected ChunkedPoolElement(Vec3i size, List<Cell> cells, Holder<StructureProcessorList> processors,
                                  StructureTemplatePool.Projection projection,
-                                 Optional<LiquidSettings> overrideLiquidSettings) {
+                                 Optional<LiquidSettings> overrideLiquidSettings, int groundLevelDelta) {
         super(projection);
         this.size = size;
         this.cells = List.copyOf(cells);
         this.processors = processors;
         this.overrideLiquidSettings = overrideLiquidSettings;
+        this.groundLevelDelta = groundLevelDelta;
+    }
+
+    @Override
+    public int getGroundLevelDelta() {
+        return this.groundLevelDelta;
     }
 
     @Override

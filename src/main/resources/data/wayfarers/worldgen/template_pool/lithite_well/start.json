@@ -37,7 +37,7 @@
               63,
               21
             ],
-            "blocks": 9588
+            "blocks": 9073
           },
           {
             "location": "wayfarers:lithite_well/layout_0/x0_z2",
@@ -51,7 +51,7 @@
               72,
               22
             ],
-            "blocks": 11280
+            "blocks": 10676
           },
           {
             "location": "wayfarers:lithite_well/layout_0/x1_z0",
@@ -79,7 +79,7 @@
               61,
               21
             ],
-            "blocks": 8090
+            "blocks": 7795
           },
           {
             "location": "wayfarers:lithite_well/layout_0/x1_z2",
@@ -93,7 +93,7 @@
               71,
               22
             ],
-            "blocks": 10502
+            "blocks": 10190
           },
           {
             "location": "wayfarers:lithite_well/layout_0/x2_z0",
@@ -139,7 +139,8 @@
           }
         ],
         "projection": "rigid",
-        "processors": "wayfarers:none"
+        "processors": "wayfarers:none",
+        "ground_level_delta": 42
       }
     },
     {
@@ -164,7 +165,7 @@
               72,
               22
             ],
-            "blocks": 11484
+            "blocks": 10866
           },
           {
             "location": "wayfarers:lithite_well/layout_1/x0_z1",
@@ -178,7 +179,7 @@
               61,
               21
             ],
-            "blocks": 10954
+            "blocks": 10453
           },
           {
             "location": "wayfarers:lithite_well/layout_1/x0_z2",
@@ -206,7 +207,7 @@
               71,
               22
             ],
-            "blocks": 11005
+            "blocks": 10700
           },
           {
             "location": "wayfarers:lithite_well/layout_1/x1_z1",
@@ -220,7 +221,7 @@
               63,
               21
             ],
-            "blocks": 9260
+            "blocks": 8958
           },
           {
             "location": "wayfarers:lithite_well/layout_1/x1_z2",
@@ -280,7 +281,8 @@
           }
         ],
         "projection": "rigid",
-        "processors": "wayfarers:none"
+        "processors": "wayfarers:none",
+        "ground_level_delta": 42
       }
     },
     {
@@ -305,7 +307,7 @@
               72,
               22
             ],
-            "blocks": 10876
+            "blocks": 10258
           },
           {
             "location": "wayfarers:lithite_well/layout_2/x0_z1",
@@ -319,7 +321,7 @@
               61,
               21
             ],
-            "blocks": 10539
+            "blocks": 10038
           },
           {
             "location": "wayfarers:lithite_well/layout_2/x0_z2",
@@ -347,7 +349,7 @@
               71,
               22
             ],
-            "blocks": 10986
+            "blocks": 10681
           },
           {
             "location": "wayfarers:lithite_well/layout_2/x1_z1",
@@ -361,7 +363,7 @@
               63,
               21
             ],
-            "blocks": 8422
+            "blocks": 8120
           },
           {
             "location": "wayfarers:lithite_well/layout_2/x1_z2",
@@ -421,7 +423,8 @@
           }
         ],
         "projection": "rigid",
-        "processors": "wayfarers:none"
+        "processors": "wayfarers:none",
+        "ground_level_delta": 42
       }
     }
   ]

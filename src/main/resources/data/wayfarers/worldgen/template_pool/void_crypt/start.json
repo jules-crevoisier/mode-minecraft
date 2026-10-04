@@ -34,10 +34,10 @@
             ],
             "size": [
               22,
-              40,
+              32,
               21
             ],
-            "blocks": 7291
+            "blocks": 6883
           },
           {
             "location": "wayfarers:void_crypt/layout_0/x0_z2",
@@ -62,10 +62,10 @@
             ],
             "size": [
               21,
-              40,
+              32,
               22
             ],
-            "blocks": 7061
+            "blocks": 6645
           },
           {
             "location": "wayfarers:void_crypt/layout_0/x1_z1",
@@ -79,7 +79,7 @@
               41,
               21
             ],
-            "blocks": 12847
+            "blocks": 8537
           },
           {
             "location": "wayfarers:void_crypt/layout_0/x1_z2",
@@ -90,10 +90,10 @@
             ],
             "size": [
               21,
-              40,
+              31,
               22
             ],
-            "blocks": 5708
+            "blocks": 5288
           },
           {
             "location": "wayfarers:void_crypt/layout_0/x2_z0",
@@ -118,10 +118,10 @@
             ],
             "size": [
               22,
-              40,
+              33,
               21
             ],
-            "blocks": 6479
+            "blocks": 6059
           },
           {
             "location": "wayfarers:void_crypt/layout_0/x2_z2",
@@ -139,7 +139,8 @@
           }
         ],
         "projection": "rigid",
-        "processors": "wayfarers:none"
+        "processors": "wayfarers:none",
+        "ground_level_delta": 28
       }
     },
     {
@@ -220,7 +221,7 @@
               41,
               21
             ],
-            "blocks": 6106
+            "blocks": 5213
           },
           {
             "location": "wayfarers:void_crypt/layout_1/x1_z2",
@@ -234,7 +235,7 @@
               41,
               22
             ],
-            "blocks": 7675
+            "blocks": 6251
           },
           {
             "location": "wayfarers:void_crypt/layout_1/x2_z0",
@@ -262,7 +263,7 @@
               41,
               21
             ],
-            "blocks": 7744
+            "blocks": 6324
           },
           {
             "location": "wayfarers:void_crypt/layout_1/x2_z2",
@@ -276,11 +277,12 @@
               41,
               22
             ],
-            "blocks": 10722
+            "blocks": 8485
           }
         ],
         "projection": "rigid",
-        "processors": "wayfarers:none"
+        "processors": "wayfarers:none",
+        "ground_level_delta": 28
       }
     },
     {
@@ -344,10 +346,10 @@
             ],
             "size": [
               21,
-              40,
+              32,
               22
             ],
-            "blocks": 6312
+            "blocks": 6192
           },
           {
             "location": "wayfarers:void_crypt/layout_2/x1_z1",
@@ -361,7 +363,7 @@
               41,
               21
             ],
-            "blocks": 8216
+            "blocks": 6139
           },
           {
             "location": "wayfarers:void_crypt/layout_2/x1_z2",
@@ -372,10 +374,10 @@
             ],
             "size": [
               21,
-              40,
+              28,
               20
             ],
-            "blocks": 4992
+            "blocks": 4872
           },
           {
             "location": "wayfarers:void_crypt/layout_2/x2_z0",
@@ -386,10 +388,10 @@
             ],
             "size": [
               22,
-              40,
+              32,
               22
             ],
-            "blocks": 7332
+            "blocks": 7036
           },
           {
             "location": "wayfarers:void_crypt/layout_2/x2_z1",
@@ -403,7 +405,7 @@
               41,
               21
             ],
-            "blocks": 10760
+            "blocks": 7699
           },
           {
             "location": "wayfarers:void_crypt/layout_2/x2_z2",
@@ -414,14 +416,15 @@
             ],
             "size": [
               22,
-              40,
+              31,
               22
             ],
-            "blocks": 7510
+            "blocks": 7210
           }
         ],
         "projection": "rigid",
-        "processors": "wayfarers:none"
+        "processors": "wayfarers:none",
+        "ground_level_delta": 28
       }
     }
   ]

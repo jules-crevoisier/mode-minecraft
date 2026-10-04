@@ -6,98 +6,71 @@
       "element": {
         "element_type": "wayfarers:chunked_template",
         "size": [
-          66,
-          69,
-          51
+          56,
+          67,
+          45
         ],
         "cells": [
           {
             "location": "wayfarers:coastal_lighthouse/lighthouse/x0_z0",
             "offset": [
               0,
-              2,
+              0,
               0
             ],
             "size": [
-              22,
-              26,
-              26
+              28,
+              67,
+              22
             ],
-            "blocks": 3829
+            "blocks": 9194
           },
           {
             "location": "wayfarers:coastal_lighthouse/lighthouse/x0_z1",
             "offset": [
               1,
               0,
-              26
+              22
             ],
             "size": [
-              21,
-              21,
-              25
+              27,
+              19,
+              18
             ],
-            "blocks": 3537
+            "blocks": 973
           },
           {
             "location": "wayfarers:coastal_lighthouse/lighthouse/x1_z0",
             "offset": [
-              22,
-              2,
+              28,
+              0,
               0
             ],
             "size": [
-              22,
-              67,
-              26
+              28,
+              61,
+              22
             ],
-            "blocks": 12317
+            "blocks": 7241
           },
           {
             "location": "wayfarers:coastal_lighthouse/lighthouse/x1_z1",
             "offset": [
-              22,
+              28,
               0,
-              26
+              22
             ],
             "size": [
-              22,
-              22,
-              25
+              25,
+              20,
+              23
             ],
-            "blocks": 4451
-          },
-          {
-            "location": "wayfarers:coastal_lighthouse/lighthouse/x2_z0",
-            "offset": [
-              44,
-              2,
-              0
-            ],
-            "size": [
-              22,
-              33,
-              26
-            ],
-            "blocks": 2860
-          },
-          {
-            "location": "wayfarers:coastal_lighthouse/lighthouse/x2_z1",
-            "offset": [
-              44,
-              0,
-              26
-            ],
-            "size": [
-              22,
-              19,
-              25
-            ],
-            "blocks": 3366
+            "blocks": 1221
           }
         ],
         "projection": "rigid",
-        "processors": "wayfarers:aging"
+        "processors": "wayfarers:aging",
+        "ground_level_delta": 7
       }
     }
   ]

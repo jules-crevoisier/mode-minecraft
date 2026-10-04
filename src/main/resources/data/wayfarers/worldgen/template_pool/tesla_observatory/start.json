@@ -20,10 +20,10 @@
             ],
             "size": [
               19,
-              39,
+              32,
               20
             ],
-            "blocks": 1440
+            "blocks": 1418
           },
           {
             "location": "wayfarers:tesla_observatory/campus/x0_z1",
@@ -37,7 +37,7 @@
               49,
               28
             ],
-            "blocks": 8664
+            "blocks": 7196
           },
           {
             "location": "wayfarers:tesla_observatory/campus/x0_z2",
@@ -51,7 +51,7 @@
               44,
               28
             ],
-            "blocks": 6958
+            "blocks": 5991
           },
           {
             "location": "wayfarers:tesla_observatory/campus/x0_z3",
@@ -79,7 +79,7 @@
               51,
               28
             ],
-            "blocks": 8400
+            "blocks": 6332
           },
           {
             "location": "wayfarers:tesla_observatory/campus/x1_z1",
@@ -93,7 +93,7 @@
               47,
               28
             ],
-            "blocks": 20976
+            "blocks": 18990
           },
           {
             "location": "wayfarers:tesla_observatory/campus/x1_z2",
@@ -107,7 +107,7 @@
               37,
               28
             ],
-            "blocks": 17001
+            "blocks": 14644
           },
           {
             "location": "wayfarers:tesla_observatory/campus/x1_z3",
@@ -118,10 +118,10 @@
             ],
             "size": [
               27,
-              39,
+              35,
               28
             ],
-            "blocks": 5790
+            "blocks": 4738
           },
           {
             "location": "wayfarers:tesla_observatory/campus/x2_z0",
@@ -135,7 +135,7 @@
               93,
               28
             ],
-            "blocks": 8910
+            "blocks": 7070
           },
           {
             "location": "wayfarers:tesla_observatory/campus/x2_z1",
@@ -149,7 +149,7 @@
               84,
               28
             ],
-            "blocks": 18114
+            "blocks": 14179
           },
           {
             "location": "wayfarers:tesla_observatory/campus/x2_z2",
@@ -163,7 +163,7 @@
               40,
               28
             ],
-            "blocks": 19556
+            "blocks": 17768
           },
           {
             "location": "wayfarers:tesla_observatory/campus/x2_z3",
@@ -174,10 +174,10 @@
             ],
             "size": [
               28,
-              39,
+              35,
               28
             ],
-            "blocks": 6228
+            "blocks": 5096
           },
           {
             "location": "wayfarers:tesla_observatory/campus/x3_z0",
@@ -205,7 +205,7 @@
               39,
               28
             ],
-            "blocks": 8043
+            "blocks": 6336
           },
           {
             "location": "wayfarers:tesla_observatory/campus/x3_z2",
@@ -219,7 +219,7 @@
               47,
               28
             ],
-            "blocks": 7093
+            "blocks": 6180
           },
           {
             "location": "wayfarers:tesla_observatory/campus/x3_z3",
@@ -237,7 +237,8 @@
           }
         ],
         "projection": "rigid",
-        "processors": "wayfarers:none"
+        "processors": "wayfarers:none",
+        "ground_level_delta": 27
       }
     }
   ]

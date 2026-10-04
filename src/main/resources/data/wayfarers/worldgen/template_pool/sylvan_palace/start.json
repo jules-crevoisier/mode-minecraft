@@ -79,7 +79,7 @@
               97,
               26
             ],
-            "blocks": 19535
+            "blocks": 19263
           },
           {
             "location": "wayfarers:sylvan_palace/palace/x1_z2",
@@ -125,7 +125,8 @@
           }
         ],
         "projection": "rigid",
-        "processors": "wayfarers:none"
+        "processors": "wayfarers:none",
+        "ground_level_delta": 13
       }
     }
   ]

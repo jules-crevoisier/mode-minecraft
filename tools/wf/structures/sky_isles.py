@@ -1,6 +1,6 @@
 """Sky Isles (Îles célestes): an archipelago of floating islands high above the oceans and plains (mega-structure).
 
-The template is placed at a fixed height (bottom at y 160-172, island tops around y 190-225), no terrain.
+The template is placed at a fixed height (bottom at y 168-174, island tops around y 195-230), no terrain.
 Template y = 0 is the lowest point of the lowest underside.
   * the Crown Isle (A, 40 blocks): meadows, oaks and birches, a pond spilling into a waterfall, and the Sky
     Shrine: a ruined round temple of white stone with a half-fallen verdigris dome and the treasure altar,
@@ -513,9 +513,10 @@ def sky_isles(bp):
 
 register(StructureDef(
     "sky_isles", "overworld",
-    ["ocean", "deep_ocean", "lukewarm_ocean", "deep_lukewarm_ocean", "warm_ocean", "plains", "sunflower_plains",
-     "meadow"],
+    # low biomes only (a meadow can sit at y 160+ on a mountain flank, under the isles' undersides)
+    ["ocean", "deep_ocean", "lukewarm_ocean", "deep_lukewarm_ocean", "warm_ocean", "plains", "sunflower_plains"],
     [Piece("isles", sky_isles)],
-    spacing=64, separation=24, adaptation="none", height=("uniform", 160, 172), processors="none",
+    # absolute height, never projected on the terrain: the lowest underside lands at y 168-174
+    spacing=64, separation=24, adaptation="none", height=("uniform", 169, 175), processors="none",
     max_distance=100, foundation=False,
     title_fr="Îles célestes", title_en="Sky Isles"))

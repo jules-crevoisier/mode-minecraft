@@ -1969,23 +1969,10 @@ def lighthouse(bp):
     TOP = 10                                   # plateau height of the rocky cape
     rng = random.Random(5)
 
-    # ---------------------------------------------------------- the sea, the beach and the rocky cape
-    for x in range(-30, 34):
-        for z in range(-18, 32):
-            sea = z > 4 - (x + 30) * 0.12 + math.sin(x * 0.3) * 1.5 or x < -20 + math.cos(z * 0.4) * 2
-            if sea:
-                depth = 3 + int(min(4, max(0, (z - 8) * 0.25)))
-                bp.set(x, -depth - 1, z, "sand" if (x + z) % 5 else "gravel")
-                for y in range(-depth, 0):
-                    bp.set(x, y, z, "water")
-                if rng.random() < 0.12:
-                    bp.set(x, -depth, z, "seagrass")
-                elif rng.random() < 0.03 and depth > 2:
-                    for k in range(depth - 1):
-                        bp.set(x, -depth + k, z, "kelp_plant" if k < depth - 2 else "kelp[age=20]")
-            else:
-                bp.set(x, 0, z, "sand" if x > 12 or z > -6 else "grass_block[snowy=false]")
-                bp.set(x, -1, z, "sand")
+    # ---------------------------------------------------------- the rocky cape
+    # No sea or beach of its own: the template used to carry a 64 x 50 slab of water and sand, which made a
+    # square pool wherever the shore was higher or lower than the cape. It now stands on the real shore
+    # (beach biomes only, wf/placement.py), with the dock and the sloop resting on the sand or in the shallows.
     ccx, ccz, crx, crz = 0, -2, 20, 14
     for x in range(ccx - crx - 3, ccx + crx + 4):
         for z in range(ccz - crz - 3, ccz + crz + 4):

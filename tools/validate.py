@@ -197,8 +197,22 @@ def check_worldgen():
         tag = s["biomes"].lstrip("#")
         if not os.path.exists(res_path(tag, "tags/worldgen/biome", ".json")):
             err(f"structure {sid}: biome tag {tag} missing")
-        if not os.path.exists(os.path.join(ns_dir, "worldgen", "structure_set", sid + ".json")):
-            err(f"structure {sid}: no structure_set")
+    # structure sets: every structure in exactly one family set, spacing minima, wonders' exclusion zones,
+    # no avoid cycle (wf/placement.py)
+    from wf import defs, placement
+    import wf.structures  # noqa: F401  (registers every structure)
+    for msg in placement.check(DATA):
+        err(msg)
+    for sid in placement.unassigned():
+        warnings.append(f"structure {sid} has no family in tools/wf/placement.py (fallback set)")
+    for path in glob.glob(os.path.join(ns_dir, "worldgen", "structure", "*.json")):
+        s = json.load(open(path))
+        if s.get("project_start_to_heightmap"):
+            pool = json.load(open(res_path(s["start_pool"], "worldgen/template_pool", ".json")))
+            for el in pool["elements"]:
+                if el["element"].get("ground_level_delta") is None:
+                    err(f"{path}: heightmap-projected start piece without ground_level_delta (the beard would "
+                        f"flatten the terrain at the template's lowest layer)")
     for path in glob.glob(os.path.join(ns_dir, "worldgen", "template_pool", "**", "*.json"), recursive=True):
         pool = json.load(open(path))
         for el in pool["elements"]:

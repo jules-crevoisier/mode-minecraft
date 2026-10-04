@@ -1,0 +1,28 @@
+{
+  "structures": [
+    {
+      "structure": "wayfarers:sunken_temple",
+      "weight": 2
+    },
+    {
+      "structure": "wayfarers:sunken_citadel",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "wayfarers:curated_spread",
+    "salt": 136344787,
+    "spacing": 60,
+    "separation": 24,
+    "avoid": [
+      {
+        "set": "wayfarers:wonders",
+        "chunks": 10
+      },
+      {
+        "set": "minecraft:ocean_monuments",
+        "chunks": 8
+      }
+    ]
+  }
+}

@@ -4,10 +4,31 @@
     {
       "weight": 1,
       "element": {
-        "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:sky_harbour/harbour",
+        "element_type": "wayfarers:chunked_template",
+        "size": [
+          39,
+          79,
+          47
+        ],
+        "cells": [
+          {
+            "location": "wayfarers:sky_harbour/harbour",
+            "offset": [
+              0,
+              0,
+              0
+            ],
+            "size": [
+              39,
+              79,
+              47
+            ],
+            "blocks": 11763
+          }
+        ],
         "projection": "rigid",
-        "processors": "wayfarers:none"
+        "processors": "wayfarers:none",
+        "ground_level_delta": 13
       }
     }
   ]

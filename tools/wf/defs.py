@@ -14,6 +14,7 @@ class Piece:
         self.projection = projection
         self.blueprint = None
         self.chunks = None  # (size, [cell records]) once gen_structures split it into columns (wf/chunking.py)
+        self.ground_delta = None  # start piece of a heightmap-projected structure: ground layer depth + 1
 
 
 class StructureDef:
@@ -122,7 +123,7 @@ def pool_element(sdef, p):
     if p.chunks:
         from . import chunking
         size, cells = p.chunks
-        return chunking.element(size, cells, p.projection, processors)
+        return chunking.element(size, cells, p.projection, processors, p.ground_delta)
     return {
         "element_type": "minecraft:single_pool_element",
         "location": rl(f"{sdef.id}/{p.name}"),
@@ -162,12 +163,15 @@ def structure_json(sdef, ground_offset):
                                   "min_inclusive": {"absolute": sdef.height[1]},
                                   "max_inclusive": {"absolute": sdef.height[2]}}
     else:
-        js["start_height"] = {"absolute": ground_offset + sdef.height_offset}
+        # the start pieces say how deep their ground layer is (ground_level_delta, wf/placement.py), so the
+        # ground layer lands on the heightmap without subtracting the template's depth here
+        js["start_height"] = {"absolute": sdef.height_offset}
         js["project_start_to_heightmap"] = sdef.heightmap
     return js
 
 
 def structure_set_json(sdef):
+    """Legacy one-set-per-structure placement; gen_structures writes the family sets of wf/placement.py."""
     placement = {
         "type": "minecraft:random_spread",
         "salt": sdef.salt,
