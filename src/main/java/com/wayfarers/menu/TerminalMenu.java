@@ -30,7 +30,7 @@ import java.util.List;
  */
 public class TerminalMenu extends AbstractContainerMenu {
     public static final int INV_X = 17;
-    public static final int INV_Y = 154;
+    public static final int INV_Y = 152;
 
     private final BlockPos pos;
     private final Player player;

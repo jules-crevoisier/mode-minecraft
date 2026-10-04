@@ -437,6 +437,76 @@ def check_guide():
                             f"{max(en, fr) - 1} continuations): consider splitting it into two pages")
 
 
+def check_screen_fit(sw=427, sh=240):
+    """Every mod screen fits a 427 x 240 GUI (1280 x 720 at the automatic GUI scale 3), title plate (5 px above the
+    window) and hint line (13 px under it) included. The sizes are read from the Java constants, so a screen made
+    bigger fails here instead of in the next in-game screenshot."""
+    import re
+    java = os.path.join(ROOT, "src", "main", "java", "com", "wayfarers")
+
+    def consts(*rels):
+        """``int NAME = expr;`` constants of these files, evaluated (expressions may use earlier constants)."""
+        out = {}
+        for rel in rels:
+            src = open(os.path.join(java, rel), encoding="utf-8").read()
+            for name, expr in re.findall(r"\bint ([A-Z][A-Z0-9_]*) = ([^;]+);", src):
+                try:
+                    out[name] = eval(re.sub(r"\b\w+\.(?=[A-Z])", "", expr).replace("/", "//"), {}, dict(out))
+                except Exception:
+                    pass
+        return out
+
+    def size(rel, pattern):
+        """Width and height passed to an AbstractContainerScreen constructor (literals or constants)."""
+        src = open(os.path.join(java, rel), encoding="utf-8").read()
+        m = re.search(pattern, src)
+        if not m:
+            err(f"screen fit: no size found in {rel}: update check_screen_fit")
+            return None
+        c = consts("menu/TerminalMenu.java", rel)
+        return [int(v) if v.isdigit() else c.get(v, 10 ** 6) for v in m.groups()]
+
+    def fits(name, w, h, below=0):
+        if w > sw or h + 5 + below > sh:
+            err(f"screen fit: {name} is {w} x {h} (+5 px title plate, +{below} px hint): it does not fit {sw} x {sh}")
+
+    gui = "client/gui/"
+    c = consts(gui + "WaystoneScreen.java")
+    fits("waystone screen", c["W"], c["H"], 13)
+    c = consts(gui + "SettingsScreen.java")
+    fits("settings screen", c["W"], c["H"])
+    for rel, label in (("ChiselTableScreen.java", "chisel table"), ("TerminalScreen.java", "guild terminal")):
+        wh = size(gui + rel, r"super\(menu, inv, title, (\w+), (\w+)\)")
+        if wh:
+            fits(label, *wh)
+    # machines: MachineMenu.height() of the tallest kind (4 settings rows, buffer and player inventory)
+    c = consts("menu/MachineMenu.java")
+    content = max(c["ROW_Y0"] + 4 * c["ROW_H"], c["BUF_Y"] + 54)
+    fits("machine screen", c["W"], content + 8 + 76 + 7)
+    # screens that shrink to the screen: what they become at sw x sh must still hold their content
+    c = consts(gui + "QuestJournalScreen.java")
+    h = min(c["MAX_H"], sh - 20)
+    fits("quest journal", c["W"], h, 13)
+    chapters = open(os.path.join(java, "generated", "GeneratedContent.java"), encoding="utf-8").read().count("new Chapter(")
+    if 22 + chapters * (c["TAB_H"] + 4) > h - 6:
+        err(f"screen fit: the quest journal's {chapters} chapter tabs do not fit its {h} px window")
+    c = consts(gui + "SkillTreeScreen.java")
+    w, h = min(c["MAX_W"], sw - 8), min(c["MAX_H"], sh - 10)
+    fits("talent tree", w, h)
+    skills = open(os.path.join(java, "generated", "GeneratedSkills.java"), encoding="utf-8").read()
+    cells = re.findall(r'new Skill\("[^"]+", "[^"]+", (\d+), (\d+),', skills)
+    cols = max(int(x) for x, _ in cells) + 1
+    rows = max(int(y) for _, y in cells) + 1
+    branch_w = (w - 2 * c["MARGIN"] + c["GAP"]) // max(1, skills.count("new Branch("))
+    col_w = min(c["MAX_COL_W"], (branch_w - c["GAP"] - 8 - c["NODE"]) // max(1, cols - 1))
+    row_h = min(c["MAX_ROW_H"], (h - 17 - c["NODES_Y"] - c["NODE"]) // max(1, rows - 1))
+    # talents side by side need room for the 3 px ring of an active talent
+    if min(col_w, row_h) < c["NODE"] + 6:
+        err(f"screen fit: talent tree cells are {col_w} x {row_h} px at {sw} x {sh}, under {c['NODE'] + 6}")
+    c = consts(gui + "GuideScreen.java")
+    fits("manual", c["MIN_W"], c["MIN_H"] + 3)  # its top is at least 8 px down, 3 more than the plate needs
+
+
 def check_pack_meta():
     """Without a readable pack.mcmeta Forge skips the mod's assets and data entirely (missing models,
     and a LootModifierManager crash on the first block drop). 26.2: resources 88.0, data 107.1."""
@@ -463,6 +533,7 @@ def main():
     check_tags()
     check_chisel()
     check_guide()
+    check_screen_fit()
     from wf import machines
     for e in machines.check_gui():
         err(e)

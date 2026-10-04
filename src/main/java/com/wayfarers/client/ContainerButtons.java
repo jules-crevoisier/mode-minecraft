@@ -90,7 +90,9 @@ public final class ContainerButtons {
         }
         AbstractContainerScreen<?> screen = (AbstractContainerScreen<?>) event.getScreen();
         int left = screen.getGuiLeft();
-        int top = screen.getGuiTop();
+        // the row sits on the window's top edge; a big chest on a small screen (222 px tall on 240) leaves no room
+        // above, so the row then overlaps the frame instead of going off-screen
+        int top = Math.max(15, screen.getGuiTop());
         int right = left + screen.getXSize();
         Consumer<IconButton> add = event::addListener;
         if (screen instanceof InventoryScreen) {

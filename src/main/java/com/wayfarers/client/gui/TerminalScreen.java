@@ -39,7 +39,12 @@ public class TerminalScreen extends AbstractContainerScreen<TerminalMenu> {
     private static final int GRID_X = 17;
     private static final int GRID_Y = 32;
     private static final int STATUS_Y = 126;
-    private static final int BUTTONS_Y = 137;
+    private static final int BUTTONS_Y = 136;
+    /**
+     * 8 px of frame under the hotbar, like the machine screens: 235 px, the most a 240 px tall screen (1280 x 720 at
+     * GUI scale 3) can show with the title plate 5 px above.
+     */
+    private static final int HEIGHT = TerminalMenu.INV_Y + 83;
 
     private enum Sort { COUNT, NAME, MOD }
 
@@ -65,12 +70,13 @@ public class TerminalScreen extends AbstractContainerScreen<TerminalMenu> {
     private TerminalLinksMsg rowsFrom;
 
     public TerminalScreen(TerminalMenu menu, Inventory inv, Component title) {
-        super(menu, inv, title, 196, 238);
+        super(menu, inv, title, 196, HEIGHT);
     }
 
     @Override
     protected void init() {
         super.init();
+        topPos = WfGui.windowTop(height, imageHeight, 0);
         itemButtons.clear();
         networkButtons.clear();
         search = new EditBox(font, leftPos + 19, topPos + 17, 96, 11, Component.translatable("gui.wayfarers.storage.search"));

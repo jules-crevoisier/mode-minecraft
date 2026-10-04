@@ -54,6 +54,15 @@ public final class WfGui {
     }
 
     /**
+     * Top of a window of height {@code h} centred on a screen of height {@code screenH}, counting the title plate that
+     * sticks out 5 px above it and {@code below} px of hint text under it, so neither is cut on a small screen
+     * (1280 x 720 at GUI scale 3 is 427 x 240).
+     */
+    public static int windowTop(int screenH, int h, int below) {
+        return (screenH - h - 5 - below) / 2 + 5;
+    }
+
+    /**
      * Centred text without a drop shadow: ink on parchment or brass. ({@code GuiGraphicsExtractor.centeredText}
      * always draws a shadow, which smudges dark text on a light background.)
      */

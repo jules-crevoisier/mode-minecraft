@@ -10,6 +10,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.entity.player.Player;
 
 import java.util.ArrayList;
@@ -249,9 +250,15 @@ public class WaystoneScreen extends Screen {
                 WfGui.textClipped(g, font, e.name(), cardX() + 5, cardY() + 26, cardW() - 10, WfGui.INK, false);
             }
             WfGui.centered(g, font, Component.translatable("gui.wayfarers.dim." + e.dimension()), cx, cardY() + 40, WfGui.INK_SOFT);
-            WfGui.centered(g, font, Component.translatable("gui.wayfarers.waystones.coords", e.x(), e.y(), e.z()), cx, cardY() + 52, WfGui.INK_SOFT);
+            // far-off or negative coordinates are wider than the card: they wrap onto a second line
+            int ty = cardY() + 52;
+            for (FormattedCharSequence line : font.split(Component.translatable("gui.wayfarers.waystones.coords", e.x(), e.y(), e.z()),
+                    cardW() - 8)) {
+                WfGui.centered(g, font, line, cx, ty, WfGui.INK_SOFT);
+                ty += 10;
+            }
             if (sameDimension(e) && !e.id().equals(current)) {
-                WfGui.centered(g, font, Component.translatable("gui.wayfarers.waystones.distance", (int) distance(e)), cx, cardY() + 64, WfGui.INK_SOFT);
+                WfGui.centered(g, font, Component.translatable("gui.wayfarers.waystones.distance", (int) distance(e)), cx, ty + 2, WfGui.INK_SOFT);
             }
         }
         g.centeredText(font, Component.translatable("gui.wayfarers.waystones.hint"), left + W / 2, top + H + 4, WfGui.CREAM_SOFT);

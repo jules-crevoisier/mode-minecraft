@@ -22,10 +22,12 @@ import java.util.List;
  */
 public class QuestJournalScreen extends Screen {
     private static final int W = 384;
-    private static final int H = 228;
+    /** The window's height on a big screen; a small one (427 x 240) gets a shorter one. */
+    private static final int MAX_H = 228;
     private static final int TAB_H = 30;
     private static final int ROW = 22;
 
+    private int h = MAX_H;
     private int left;
     private int top;
     private int chapter;
@@ -71,17 +73,20 @@ public class QuestJournalScreen extends Screen {
     private int listX() { return left + 122; }
     private int listY() { return top + 22; }
     private int listW() { return 132; }
-    private int listH() { return H - 34; }
+    private int listH() { return h - 34; }
     private int rows() { return (listH() - 6) / ROW; }
     private int cardX() { return left + 260; }
     private int cardY() { return top + 18; }
     private int cardW() { return W - 272; }
-    private int cardH() { return H - 28; }
+    private int cardH() { return h - 28; }
 
     @Override
     protected void init() {
+        // room for the title plate above and the keyboard hint below (13 px) on a small screen
+        h = Math.min(MAX_H, height - 20);
         left = (width - W) / 2;
-        top = (height - H) / 2;
+        top = WfGui.windowTop(height, h, 13);
+        scroll = Math.max(0, Math.min(scroll, quests().size() - rows()));
         track = addRenderableWidget(new WfButton(cardX() + 6, cardY() + cardH() - 26, cardW() - 12, 20,
                 Component.translatable("gui.wayfarers.quests.track"), b -> toggleTrack()));
         updateTrack();
@@ -114,13 +119,13 @@ public class QuestJournalScreen extends Screen {
     // ------------------------------------------------------------------ rendering
     @Override
     public void extractRenderState(GuiGraphicsExtractor g, int mouseX, int mouseY, float a) {
-        WfGui.window(g, font, title, left, top, W, H);
+        WfGui.window(g, font, title, left, top, W, h);
         drawTabs(g, mouseX, mouseY);
         drawList(g, mouseX, mouseY);
         descCut = false;
         drawCard(g);
         // keyboard hint under the window, like the waystone screen's
-        g.centeredText(font, Component.translatable("gui.wayfarers.quests.keys"), left + W / 2, top + H + 4, WfGui.CREAM_SOFT);
+        g.centeredText(font, Component.translatable("gui.wayfarers.quests.keys"), left + W / 2, top + h + 4, WfGui.CREAM_SOFT);
         super.extractRenderState(g, mouseX, mouseY, a);
         hoverTips(g, mouseX, mouseY);
     }
