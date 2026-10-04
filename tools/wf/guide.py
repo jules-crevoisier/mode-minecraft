@@ -18,6 +18,7 @@ CATEGORIES = [
     ("building", "wayfarers:builder_wand", ("Building tools", "Construction")),
     ("machines", "wayfarers:auto_harvester", ("Redstone machines", "Mécanismes")),
     ("gadgets", "wayfarers:brass_wrench", ("Steam gadgets", "Gadgets à vapeur")),
+    ("oceans", "wayfarers:diving_helmet", ("Living oceans", "Océans vivants")),
 ]
 
 # (id, category, icon, (title en, title fr), [(en, fr), ...paragraphs], [related item ids])
@@ -757,6 +758,14 @@ def _gadget_pages():
 
 
 PAGES += _gadget_pages()
+
+
+def _ocean_pages():
+    from .ocean import guide_pages
+    return guide_pages()
+
+
+PAGES += _ocean_pages()
 
 
 # ------------------------------------------------------------------ page layout estimate (validate.py, gen_gui.py)

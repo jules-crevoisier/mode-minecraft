@@ -33,6 +33,12 @@ from . import clockwork_spider
 from . import steam_drone
 from . import brass_golem
 from . import grand_clockmaker
+# living oceans
+from . import glow_jellyfish
+from . import reef_fish
+from . import manta_ray
+from . import sea_serpent
+from . import whale
 
 MODELS = [
     drowned_warden.build,
@@ -69,4 +75,9 @@ MODELS = [
     steam_drone.build,
     brass_golem.build,
     grand_clockmaker.build,
+    glow_jellyfish.build,
+    reef_fish.build,
+    manta_ray.build,
+    sea_serpent.build,
+    whale.build,
 ]

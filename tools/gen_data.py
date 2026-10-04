@@ -31,6 +31,7 @@ MOD_ITEMS |= __import__("wf.metals", fromlist=["all_item_ids"]).all_item_ids()
 MOD_ITEMS |= set(__import__("wf.machines", fromlist=["MACHINES"]).MACHINES)
 MOD_ITEMS |= set(__import__("wf.furniture", fromlist=["FURNITURE"]).FURNITURE)
 MOD_ITEMS |= __import__("wf.gadgets", fromlist=["MOD_ITEMS"]).MOD_ITEMS
+MOD_ITEMS |= __import__("wf.ocean", fromlist=["MOD_ITEMS"]).MOD_ITEMS
 MOD_ITEMS |= {"builder_wand", "master_builder_wand", "wayfarer_manual", "fire_staff", "frost_staff", "thunder_staff",
               "healing_staff", "levitation_wand", "ward_orb", "steam_cane", "arcane_ring", "mana_amulet", "oblivion_vial"}
 
@@ -125,6 +126,8 @@ def recipes():
     # steam gadgets (wf/gadgets.py)
     from wf import gadgets
     gadgets.recipes(shaped, shapeless)
+    # living oceans (wf/ocean.py)
+    __import__("wf.ocean", fromlist=["recipes"]).recipes(shaped, shapeless, write)
     # boss weapons: remembrance + four tier materials + two diamonds
     from wf.bossgear import BOSS_GEAR, TIER_MATERIAL, remembrance_id
     for row in BOSS_GEAR:
@@ -526,6 +529,10 @@ def main():
     block_loot()
     entity_loot()
     automaton_spawns()
+    from wf import ocean
+    ocean.loot(write)
+    ocean.worldgen(write)
+    ocean.write_templates(ROOT)
     ore_worldgen()
     metals_data()
     # merge the metals' tag values into tag files written above (or create them)
@@ -534,6 +541,8 @@ def main():
         extra_tags.setdefault(rel, []).extend(values)
     from wf import worldblocks
     for rel, values in worldblocks.data(write).items():
+        extra_tags.setdefault(rel, []).extend(values)
+    for rel, values in ocean.tags(write).items():
         extra_tags.setdefault(rel, []).extend(values)
     for rel, values in extra_tags.items():
         path = os.path.join(DATA, rel)

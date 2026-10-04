@@ -283,6 +283,7 @@ def main():
     furniture_assets()
     held_assets()
     gadget_assets()
+    __import__("wf.ocean", fromlist=["assets"]).assets(write)
     for eid, (en, fr) in content.ENTITIES.items():
         lang_en[f"entity.{NS}.{eid}"], lang_fr[f"entity.{NS}.{eid}"] = en, fr
     for prefix in content.ARMOR_SETS:
@@ -295,8 +296,8 @@ def main():
         lang_fr[f"structure.{NS}.{sdef.id}"] = sdef.title_fr
     for key, (en, fr) in content.MESSAGES.items():
         lang_en[key], lang_fr[key] = en, fr
-    from wf import guide, skills, metals, machines, furniture, biomes, gadgets, worldmap
-    for mod in (guide, skills, metals, machines, furniture, biomes, gadgets, worldblocks, worldmap):
+    from wf import guide, skills, metals, machines, furniture, biomes, gadgets, worldmap, ocean
+    for mod in (guide, skills, metals, machines, furniture, biomes, gadgets, worldblocks, worldmap, ocean):
         g_en, g_fr = mod.lang()
         lang_en.update(g_en)
         lang_fr.update(g_fr)

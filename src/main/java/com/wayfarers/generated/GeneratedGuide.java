@@ -19,7 +19,8 @@ public final class GeneratedGuide {
             new Category("gear", "wayfarers:lithite_shard"),
             new Category("building", "wayfarers:builder_wand"),
             new Category("machines", "wayfarers:auto_harvester"),
-            new Category("gadgets", "wayfarers:brass_wrench")
+            new Category("gadgets", "wayfarers:brass_wrench"),
+            new Category("oceans", "wayfarers:diving_helmet")
     );
 
     public static final List<Page> PAGES = List.of(
@@ -85,7 +86,12 @@ public final class GeneratedGuide {
             new Page("glider", "gadgets", "wayfarers:brass_glider", 3, List.of("wayfarers:brass_glider")),
             new Page("rivet_gun", "gadgets", "wayfarers:rivet_gun", 2, List.of("wayfarers:rivet_gun", "wayfarers:rivet")),
             new Page("watch", "gadgets", "wayfarers:pocket_watch", 3, List.of("wayfarers:pocket_watch")),
-            new Page("airship_compass", "gadgets", "wayfarers:airship_compass", 2, List.of("wayfarers:airship_compass"))
+            new Page("airship_compass", "gadgets", "wayfarers:airship_compass", 2, List.of("wayfarers:airship_compass")),
+            new Page("oceans", "oceans", "wayfarers:glow_jelly", 2, List.of()),
+            new Page("ocean_creatures", "oceans", "wayfarers:reef_fish_bucket", 3, List.of("wayfarers:glow_jelly", "wayfarers:jelly_lamp", "wayfarers:reef_fish_bucket")),
+            new Page("sea_serpent", "oceans", "wayfarers:serpent_scale", 2, List.of("wayfarers:serpent_scale", "wayfarers:sea_serpent_spawn_egg")),
+            new Page("diving_gear", "oceans", "wayfarers:diving_helmet", 2, List.of("wayfarers:diving_helmet", "wayfarers:flippers")),
+            new Page("sea_floor", "oceans", "wayfarers:pearl_oyster", 2, List.of("wayfarers:pearl_oyster", "wayfarers:pearl", "wayfarers:glow_anemone"))
     );
 
     public static final List<Tip> TIPS = List.of(

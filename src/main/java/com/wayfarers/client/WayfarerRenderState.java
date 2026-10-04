@@ -7,6 +7,8 @@ import net.minecraft.world.entity.AnimationState;
 /** Render state shared by every generated Wayfarers model: one animation state per action. */
 public class WayfarerRenderState extends LivingEntityRenderState {
     public final AnimationState[] actions = new AnimationState[MobAnims.MAX_ACTIONS];
+    /** Colour variant (index into the renderer's textures). */
+    public int variant;
 
     public WayfarerRenderState() {
         for (int i = 0; i < actions.length; i++) {

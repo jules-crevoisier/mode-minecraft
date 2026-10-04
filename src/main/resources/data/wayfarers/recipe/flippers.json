@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "L L",
+    "K K"
+  ],
+  "key": {
+    "L": "minecraft:leather",
+    "K": "minecraft:dried_kelp_block"
+  },
+  "result": {
+    "id": "wayfarers:flippers",
+    "count": 1
+  }
+}

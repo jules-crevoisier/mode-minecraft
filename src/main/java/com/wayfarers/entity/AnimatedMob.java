@@ -18,6 +18,16 @@ public interface AnimatedMob {
     /** Action lengths in ticks (MobAnims.X.TICKS), used to stop finished actions on the client. */
     int[] actionTicks();
 
+    /** Colour variant drawn by the renderer (textures of the model's variants, in order). */
+    default int modelVariant() {
+        return 0;
+    }
+
+    /** Box the renderer uses to skip creatures out of view; long ones inflate it to cover their whole body. */
+    default net.minecraft.world.phys.AABB cullingBox(net.minecraft.world.phys.AABB hitbox) {
+        return hitbox;
+    }
+
     static AnimationState[] createStates() {
         AnimationState[] states = new AnimationState[MobAnims.MAX_ACTIONS];
         for (int i = 0; i < states.length; i++) {

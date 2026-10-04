@@ -482,4 +482,47 @@ public final class MobAnims {
 
         private GrandClockmaker() {}
     }
+    public static final class GlowJellyfish {
+
+        public static final int COUNT = 0;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {};
+
+        private GlowJellyfish() {}
+    }
+    public static final class ReefFish {
+
+        public static final int COUNT = 0;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {};
+
+        private ReefFish() {}
+    }
+    public static final class MantaRay {
+        public static final int BREACH = 0;
+        public static final int COUNT = 1;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {32};
+
+        private MantaRay() {}
+    }
+    public static final class SeaSerpent {
+        public static final int BITE = 0;
+        public static final int ROAR = 1;
+        public static final int LUNGE = 2;
+        public static final int COUNT = 3;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {18, 32, 28};
+
+        private SeaSerpent() {}
+    }
+    public static final class Whale {
+        public static final int SING = 0;
+        public static final int SPOUT = 1;
+        public static final int COUNT = 2;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {80, 40};
+
+        private Whale() {}
+    }
 }

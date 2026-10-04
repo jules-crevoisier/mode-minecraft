@@ -1,0 +1,12 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": "#wayfarers:ocean/deep",
+  "spawners": [
+    {
+      "type": "wayfarers:whale",
+      "weight": 1,
+      "minCount": 1,
+      "maxCount": 1
+    }
+  ]
+}

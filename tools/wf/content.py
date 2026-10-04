@@ -482,3 +482,11 @@ def _gadgets():
 
 
 _gadgets()
+
+
+def _ocean():
+    from .ocean import register_content
+    register_content(ITEMS, ENTITIES, SPAWN_EGGS)
+
+
+_ocean()

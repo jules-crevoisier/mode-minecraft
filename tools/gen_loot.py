@@ -177,6 +177,13 @@ THEMES = {
                   item("wayfarers:levitation_wand", 2), item("elytra", 1), item("firework_rocket", 12, (6, 16)),
                   item("amethyst_shard", 12, (4, 10)), item("ender_pearl", 8, (1, 3)), item("diamond", 6, (1, 3)),
                   item("wayfarers:storm_staff", 1)],
+    # living oceans: diving gear, sea treasures
+    "diving": [item("wayfarers:pearl", 18, (1, 3)), item("wayfarers:glow_jelly", 14, (2, 5)),
+               item("wayfarers:brass_ingot", 14, (2, 6)), item("copper_ingot", 12, (3, 8)),
+               item("prismarine_crystals", 12, (2, 6)), item("nautilus_shell", 8, (1, 2)),
+               item("wayfarers:flippers", 3), item("wayfarers:diving_helmet", 2), item("turtle_helmet", 2),
+               item("compass", 6), item("spyglass", 5), item("clock", 5), item("heart_of_the_sea", 1),
+               item("wayfarers:pocket_watch", 2)],
 }
 
 # Progression materials from the Java side, by tier.
@@ -270,6 +277,11 @@ TABLES = {
     "inventor_lab": ("inventor", (1, 2), (1, 3), (2, 3), "overworld"),
     "sky_isles": ("sky_isles", (1, 3), (1, 2), (0, 1), "overworld"),
     "sky_isles_shrine": ("sky_isles", (1, 2), (1, 2), (2, 4), "overworld"),
+    # living oceans: small sea-floor structures
+    "sunken_submarine": ("diving", (1, 3), (1, 2), (0, 1), "overworld"),
+    "diving_bell": ("diving", (2, 4), (0, 1), (0, 1), "overworld"),
+    "coral_shrine": ("ocean", (1, 2), (1, 2), (0, 1), "overworld"),
+    "shipwreck_debris": ("ship", (2, 4), (1, 2), (0, 1), "overworld"),
 }
 
 

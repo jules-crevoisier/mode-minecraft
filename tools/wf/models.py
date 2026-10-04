@@ -147,8 +147,16 @@ def _catmull(a, p0, p1, p2, p3):
 class Model:
     """A creature model. ``name`` is the entity id (snake_case)."""
 
-    def __init__(self, name, seed=1, shadow=0.6, walk_speed=1.0, walk_scale=1.0, head="head"):
+    def __init__(self, name, seed=1, shadow=0.6, walk_speed=1.0, walk_scale=1.0, head="head", render="entityCutout",
+                 variants=None, glow_pulse=0.0):
         self.name = name
+        # RenderTypes factory of the model ("entityTranslucent" for see-through jellies)
+        self.render = render
+        # texture variants: the module's build(variant) repaints the same cubes; variant 0 is <name>.png, the others
+        # <name>_<variant>.png, picked by AnimatedMob.modelVariant()
+        self.variants = list(variants or [])
+        # > 0: the glow layer pulses (alpha 0.55..1 at this angular speed per tick)
+        self.glow_pulse = glow_pulse
         self.seed = seed
         self.shadow = shadow
         self.walk_speed = walk_speed

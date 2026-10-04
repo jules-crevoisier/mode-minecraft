@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "color=0": {
+      "model": "wayfarers:block/glow_anemone_0"
+    },
+    "color=1": {
+      "model": "wayfarers:block/glow_anemone_1"
+    },
+    "color=2": {
+      "model": "wayfarers:block/glow_anemone_2"
+    }
+  }
+}

@@ -212,6 +212,15 @@ STRUCTURES = {
     "undercity": "Une ville suspendue dans une immense caverne creusée sous terre (12 à 30 blocs de profondeur) : lac "
                  "toxique et luminescent, pilier central à trois niveaux de plateformes, maisons sur pilotis "
                  "accrochées aux parois, passerelles, tuyaux et lampes Edison.",
+    "sunken_submarine": "Un sous-marin steampunk couché sur le sable, la coque de fer sombre cerclée de laiton, une "
+                        "brèche dans le flanc. Salle de commandes (table des cartes et coffre du capitaine) et salle "
+                        "des machines inondées, kiosque à hublot et périscope.",
+    "diving_bell": "Une cloche de plongée en cuivre et laiton posée sur quatre pieds : on y entre par le dessous, et "
+                   "l'intérieur est plein d'air. Un refuge pour respirer, avec les tonneaux du plongeur.",
+    "coral_shrine": "Un petit sanctuaire de prismarine dans les mers chaudes : six colonnes, un dôme à moitié écroulé, "
+                    "un autel couronné de corail et son coffre d'offrandes, le tout envahi de coraux et d'anémones.",
+    "shipwreck_debris": "Ce qui reste d'un navire, éparpillé sur le sable : membrures de la coque, mât tombé et voile "
+                        "déchirée, canon, ancre et chaîne, cargaison répandue et coffre du capitaine à demi enfoui.",
 }
 
 # Bestiaire : description en français (le moteur ajoute vie, dégâts, lieux et butin depuis les données)
@@ -285,6 +294,18 @@ MOBS = {
     "grand_clockmaker": "Champion de la Citadelle d'horlogerie : un gentleman-automate de 4,4 blocs, le torse en "
                         "cadran d'horloge, le monocle qui luit, des ailes d'engrenages et une canne-pendule. Il arrête "
                         "le temps, appelle des araignées-horloges et, blessé, sonne minuit.",
+    "glow_jellyfish": "Une cloche translucide qui pulse et dérive dans toutes les mers, en rose, azur, ambre ou "
+                      "violet ; elle brille la nuit. La toucher pique un peu (poison). Sa gelée donne une lampe ou la "
+                      "vision nocturne.",
+    "reef_fish": "Petits poissons des mers chaudes qui nagent en bancs de dix : soleil, clown ou azur. Ils "
+                 "s'attrapent au seau.",
+    "manta_ray": "Une raie géante et paisible de 3,5 blocs d'envergure ; ses ailes battent en vague, et près de la "
+                 "surface elle saute hors de l'eau.",
+    "sea_serpent": "Mini-boss des eaux profondes : la nuit, il monte sous les bateaux et les nageurs. Morsure, charge "
+                   "qui brise les bateaux, tourbillon qui renverse les passagers. Ses écailles font le casque de "
+                   "scaphandre.",
+    "whale": "Une baleine à bosse de dix blocs, rare, dans les océans profonds : elle remonte souffler à la surface "
+             "et chante de très loin. Paisible.",
 }
 
 # Créatures amies (bestiaire : groupe « Compagnons »)

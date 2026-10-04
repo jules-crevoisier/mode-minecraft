@@ -51,10 +51,14 @@ def mod_ids(kind):
              "items": ["registry/ModItems.java", "generated/ModDecor.java", "generated/BossGear.java",
                        "generated/GeneratedMetals.java", "generated/GeneratedMachines.java",
                        "generated/GeneratedFurniture.java", "generated/GeneratedWorldBlocks.java"],
-             "entities": ["registry/ModEntities.java"]}[kind]
+             "entities": ["registry/ModEntities.java"]}[kind] + ["registry/ModOcean.java"] * (kind != "entities")
     ids = set()
     for f in files:
         text = open(os.path.join(java, f), encoding="utf-8").read()
+        if f.endswith("ModOcean.java"):  # living oceans: block(...) registers a block and its item
+            ids |= set(re.findall(r'\b(?:block)\("([a-z0-9_]+)"' if kind == "blocks"
+                                  else r'\b(?:block|item|egg)\("([a-z0-9_]+)"', text))
+            continue
         if kind == "blocks" and f.endswith("GeneratedMetals.java"):
             ids |= set(re.findall(r'\bblock\("([a-z0-9_]+)"', text))
             continue
@@ -68,8 +72,9 @@ HORIZONTAL = ["north", "south", "east", "west"]
 def _mod_states():
     """Block-state properties of the mod's machines, furniture and crate (wf tables)."""
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-    from wf import furniture, machines
+    from wf import furniture, machines, ocean
     out = {"compacting_crate": {"facing": HORIZONTAL}, "chisel_table": {"facing": HORIZONTAL}}
+    out.update(ocean.MOD_STATES)
     for mid in machines.MACHINES:
         out[mid] = {"facing": HORIZONTAL + ["up", "down"], "powered": ["false", "true"]}
     for fid, f in furniture.FURNITURE.items():

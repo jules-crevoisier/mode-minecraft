@@ -413,6 +413,8 @@ def main():
         light, mid, dark, outline = MATERIALS[row[14][0]]
         bright = sum(mid[:3]) / 3 > 150
         emblem(cv, EMBLEMS[row[0]], outline if bright else (255, 250, 230))
+    from wf import ocean
+    EGGS.update(ocean.EGGS)
     for mob, (base, spots) in EGGS.items():
         written[f"item/{mob}_spawn_egg"] = egg(base, spots)
     for name, cv in block_textures().items():
@@ -432,6 +434,7 @@ def main():
     written.update(gadgets.textures())
     from wf import worldblocks
     written.update(worldblocks.textures())
+    written.update(ocean.textures())
     from wf import decor
     for bid, d in decor.DECOR.items():
         names = decor.texture_names(bid)

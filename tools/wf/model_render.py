@@ -154,19 +154,25 @@ def render(model, tex, glow, offsets, size=420, yaw=28, pitch=18, ppb=None, grou
     light = np.array([-0.45, 0.75, 0.5])
     light /= np.linalg.norm(light)
 
-    for pts, uvs, name in faces:
-        v = view(pts)
-        n = np.cross(v[1] - v[0], v[3] - v[0])
-        nn = np.linalg.norm(n)
-        if nn < 1e-9:
-            continue
-        n /= nn
-        shade = 0.5 + 0.5 * max(0.0, float(abs(n @ light)))
-        sx = ox + v[:, 0] * ppb
-        syy = oy - v[:, 1] * ppb
-        for tri in ((0, 1, 2), (0, 2, 3)):
-            _raster(img, zbuf, tex_a, glow_a, tw, th,
-                    sx[list(tri)], syy[list(tri)], v[list(tri), 2], [uvs[i] for i in tri], shade)
+    translucent = getattr(model, "render", "") == "entityTranslucent"
+    passes = [("opaque", faces)]
+    if translucent:  # see-through texels blended back to front over the opaque ones, like the game does
+        passes.append(("blend", sorted(faces, key=lambda f: float(view(f[0])[:, 2].mean()))))
+    for mode, flist in passes:
+        for pts, uvs, name in flist:
+            v = view(pts)
+            n = np.cross(v[1] - v[0], v[3] - v[0])
+            nn = np.linalg.norm(n)
+            if nn < 1e-9:
+                continue
+            n /= nn
+            shade = 0.5 + 0.5 * max(0.0, float(abs(n @ light)))
+            sx = ox + v[:, 0] * ppb
+            syy = oy - v[:, 1] * ppb
+            for tri in ((0, 1, 2), (0, 2, 3)):
+                _raster(img, zbuf, tex_a, glow_a, tw, th,
+                        sx[list(tri)], syy[list(tri)], v[list(tri), 2], [uvs[i] for i in tri], shade,
+                        mode if translucent else None)
     out = Image.fromarray(np.clip(img, 0, 255).astype(np.uint8))
     if label:
         dr = ImageDraw.Draw(out)
@@ -174,7 +180,7 @@ def render(model, tex, glow, offsets, size=420, yaw=28, pitch=18, ppb=None, grou
     return out
 
 
-def _raster(img, zbuf, tex, glow, tw, th, xs, ys, zs, uvs, shade):
+def _raster(img, zbuf, tex, glow, tw, th, xs, ys, zs, uvs, shade, mode=None):
     h, w = zbuf.shape
     x0, x1 = int(max(0, math.floor(xs.min()))), int(min(w - 1, math.ceil(xs.max())))
     y0, y1 = int(max(0, math.floor(ys.min()))), int(min(h - 1, math.ceil(ys.max())))
@@ -198,7 +204,13 @@ def _raster(img, zbuf, tex, glow, tw, th, xs, ys, zs, uvs, shade):
     vi = np.clip(np.floor(vv).astype(int), 0, th - 1)
     texel = tex[vi, ui]
     sub_z = zbuf[y0:y1 + 1, x0:x1 + 1]
-    mask = inside & (texel[..., 3] >= 128) & (z > sub_z)
+    alpha = texel[..., 3]
+    if mode == "opaque":
+        mask = inside & (alpha >= 250) & (z > sub_z)
+    elif mode == "blend":
+        mask = inside & (alpha >= 8) & (alpha < 250) & (z > sub_z)
+    else:
+        mask = inside & (alpha >= 128) & (z > sub_z)
     if not mask.any():
         return
     col = texel[..., :3] * shade
@@ -207,6 +219,10 @@ def _raster(img, zbuf, tex, glow, tw, th, xs, ys, zs, uvs, shade):
         lit = gl[..., 3] >= 128
         col = np.where(lit[..., None], np.maximum(col, gl[..., :3]), col)
     sub_img = img[y0:y1 + 1, x0:x1 + 1]
+    if mode == "blend":
+        a = (alpha / 255.0)[..., None]
+        sub_img[mask] = (col * a + sub_img * (1 - a))[mask]
+        return
     sub_img[mask] = col[mask]
     sub_z[mask] = z[mask]
 
@@ -245,6 +261,8 @@ def sheet(model, tex, glow, path, size=360):
     ppb = 0.62 * size / extent
     rows = [views]
     strips = []
+    if getattr(model, "preview_idle", False) and "idle" in model.anims:
+        strips.append(("idle", "idle", model.anims["idle"].length))
     if "walk" in model.anims:
         strips.append(("walk", "walk", model.anims["walk"].length))
     for a in model.actions:
@@ -255,6 +273,8 @@ def sheet(model, tex, glow, path, size=360):
             tt = length * i / 4
             if name == "walk":
                 pose = sample_pose(model, tt, walk=tt or 1e-3)
+            elif name == "idle":
+                pose = sample_pose(model, tt)
             else:
                 pose = sample_pose(model, tt, action=name, action_t=tt)
             row.append(render(model, tex_i, glow_i, pose, size * 2 // 3, yaw=40, ppb=ppb * 2 / 3,

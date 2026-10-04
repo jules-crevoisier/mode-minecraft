@@ -1,0 +1,8 @@
+{
+  "type": "forge:add_features",
+  "biomes": "#wayfarers:ocean/oysters",
+  "features": [
+    "wayfarers:ocean_oyster_beds"
+  ],
+  "step": "vegetal_decoration"
+}
