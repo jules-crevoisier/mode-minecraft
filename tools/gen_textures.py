@@ -58,6 +58,9 @@ ITEMS = {
     # tools
     "excavator_pickaxe": ("pickaxe", "lithite", "wood", "emerald"),
     "lumber_axe": ("axe", "iron", "wood", "gold"),
+    # automatons
+    "brass_gear": ("gear", "brass", "dark", "gold"),
+    "clockwork_heart": ("clockwork_heart", "copper", "dark", "aether"),
 }
 from wf.bossgear import BOSS_GEAR, remembrance_id  # noqa: E402
 for _row in BOSS_GEAR:
@@ -99,6 +102,10 @@ EGGS = {
     "ash_lord": ((50, 45, 50), (250, 110, 30)),
     "piglin_king": ((220, 160, 140), (250, 200, 60)),
     "soul_reaper": ((40, 35, 30), (90, 230, 255)),
+    "clockwork_spider": ((200, 158, 70), (255, 70, 46)),
+    "steam_drone": ((186, 112, 58), (255, 70, 46)),
+    "brass_golem": ((200, 158, 70), (70, 214, 255)),
+    "grand_clockmaker": ((124, 90, 40), (222, 204, 168)),
 }
 
 
@@ -139,6 +146,7 @@ EMBLEMS = {
     "piglin_king": ["#.#.#", "#####", "#####", ".....", "....."],     # crown
     "soul_reaper": [".###.", "#.#.#", "#####", ".#.#.", "....."],     # skull
     "void_warden": ["..#..", "..#..", "#####", "..#..", "..#.."],     # star
+    "grand_clockmaker": [".###.", "#.#.#", "#.###", "#...#", ".###."],  # clock face
 }
 
 

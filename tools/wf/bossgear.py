@@ -78,6 +78,12 @@ BOSS_GEAR = [
      ("Use: blink ahead and cleave everything around you.", "Clic droit : téléporte-toi en avant et fends tout autour de toi."),
      ("Remembrance of the Void Warden", "Souvenir du Gardien du vide"),
      ("VOID", 9.0, -3.0), "BLINK", 14.0, 12.0, 80, "REVERSE_PORTAL", "", ("greatsword", "void", "purpur", "amethyst"), ("void", "amethyst")),
+    ("grand_clockmaker", "overworld", "clockmaker_pendulum", ("Clockmaker's Pendulum", "Pendule du Grand Horloger"),
+     ("Use: a pendulum sweep that slows foes as if time stood still.",
+      "Clic droit : un balancier qui ralentit les ennemis comme si le temps s'arrêtait."),
+     ("Remembrance of the Grand Clockmaker", "Souvenir du Grand Horloger"),
+     ("LITHITE", 6.0, -2.6), "ARC", 10.0, 6.0, 70, "ELECTRIC_SPARK", "slow", ("cane", "brass", "dark", "aether"),
+     ("brass", "aether")),
 ]
 
 

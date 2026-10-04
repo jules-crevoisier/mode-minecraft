@@ -45,6 +45,10 @@ public final class ModItems {
     public static final RegistryObject<Item> VOID_SHARD = simple("void_shard", p -> p.rarity(Rarity.UNCOMMON));
     public static final RegistryObject<Item> WARDEN_SCALE = simple("warden_scale", p -> p.rarity(Rarity.RARE));
     public static final RegistryObject<Item> VOID_HEART = simple("void_heart", p -> p.rarity(Rarity.EPIC).fireResistant());
+    // ---- automatons
+    public static final RegistryObject<Item> BRASS_GEAR = simple("brass_gear", p -> p);
+    public static final RegistryObject<Item> CLOCKWORK_HEART = register("clockwork_heart", com.wayfarers.item.ClockworkHeartItem::new,
+            p -> p.stacksTo(16).rarity(Rarity.UNCOMMON));
 
     // ---- explorer utilities
     public static final RegistryObject<Item> WAYFARER_ATLAS = register("wayfarer_atlas", WayfarerAtlasItem::new, p -> p.stacksTo(1));
@@ -157,6 +161,10 @@ public final class ModItems {
     public static final RegistryObject<Item> ASH_LORD_SPAWN_EGG = egg("ash_lord_spawn_egg", ModEntities.ASH_LORD);
     public static final RegistryObject<Item> PIGLIN_KING_SPAWN_EGG = egg("piglin_king_spawn_egg", ModEntities.PIGLIN_KING);
     public static final RegistryObject<Item> SOUL_REAPER_SPAWN_EGG = egg("soul_reaper_spawn_egg", ModEntities.SOUL_REAPER);
+    public static final RegistryObject<Item> CLOCKWORK_SPIDER_SPAWN_EGG = egg("clockwork_spider_spawn_egg", ModEntities.CLOCKWORK_SPIDER);
+    public static final RegistryObject<Item> STEAM_DRONE_SPAWN_EGG = egg("steam_drone_spawn_egg", ModEntities.STEAM_DRONE);
+    public static final RegistryObject<Item> BRASS_GOLEM_SPAWN_EGG = egg("brass_golem_spawn_egg", ModEntities.BRASS_GOLEM);
+    public static final RegistryObject<Item> GRAND_CLOCKMAKER_SPAWN_EGG = egg("grand_clockmaker_spawn_egg", ModEntities.GRAND_CLOCKMAKER);
 
     /** Axe subclass keeps vanilla stripping behaviour; tree felling is handled in EquipmentEvents. */
     public static final class LumberAxe extends AxeItem {

@@ -29,6 +29,10 @@ from . import ruin_walker
 from . import map_wraith
 from . import basalt_guard
 from . import void_stalker
+from . import clockwork_spider
+from . import steam_drone
+from . import brass_golem
+from . import grand_clockmaker
 
 MODELS = [
     drowned_warden.build,
@@ -61,4 +65,8 @@ MODELS = [
     map_wraith.build,
     basalt_guard.build,
     void_stalker.build,
+    clockwork_spider.build,
+    steam_drone.build,
+    brass_golem.build,
+    grand_clockmaker.build,
 ]

@@ -21,6 +21,12 @@ ITEMS = {
                      "Trophy of the Sunken Citadel.", "Trophée de la Citadelle engloutie."),
     "void_heart": ("Void Heart", "Cœur du vide", "It beats with the rhythm of the void.",
                    "Il bat au rythme du vide."),
+    "brass_gear": ("Brass Gear", "Engrenage en laiton",
+                   "A precise little cog salvaged from an automaton.",
+                   "Un petit engrenage de précision récupéré sur un automate."),
+    "clockwork_heart": ("Clockwork Heart", "Cœur mécanique",
+                        "Use it on two stacked Blocks of Brass to wake a Brass Golem that follows you.",
+                        "Utilise-le sur deux blocs de laiton empilés pour réveiller un golem de laiton qui te suit."),
     "wayfarer_atlas": ("Wayfarer's Atlas", "Atlas du Voyageur",
                        "Use (or press J): open the quest journal.",
                        "Clic droit (ou touche J) : ouvre le journal de quêtes."),
@@ -164,6 +170,11 @@ ENTITIES = {
     "ash_lord": ("The Ash Lord", "Le Seigneur des Cendres"),
     "piglin_king": ("The Golden Piglin King", "Le Roi piglin doré"),
     "soul_reaper": ("The Soul Reaper", "La Faucheuse des âmes"),
+    "clockwork_spider": ("Clockwork Spider", "Araignée-horloge"),
+    "steam_drone": ("Steam Drone", "Drone à vapeur"),
+    "brass_golem": ("Brass Golem", "Golem de laiton"),
+    "grand_clockmaker": ("The Grand Clockmaker", "Le Grand Horloger"),
+    "rivet": ("Rivet", "Rivet"),
     "boomerang": ("Boomerang", "Boomerang"),
 }
 SPAWN_EGGS = ["ruin_walker", "map_wraith", "basalt_guard", "void_stalker", "drowned_warden", "void_warden",
@@ -191,6 +202,10 @@ SPAWN_EGGS = ["ruin_walker", "map_wraith", "basalt_guard", "void_stalker", "drow
               "bone_matriarch",
               "weeping_lady",
               "larva_mother",
+              "clockwork_spider",
+              "steam_drone",
+              "brass_golem",
+              "grand_clockmaker",
               ]
 
 # Misc translated messages used from Java (key suffix -> (en, fr))
@@ -311,6 +326,16 @@ MESSAGES = {
     "message.wayfarers.altar.awake": ("%s awakens!", "%s se réveille !"),
     "message.wayfarers.boss.defeated": ("%s has been defeated! The sealed bars crumble.",
                                         "%s est vaincu ! Les barreaux scellés s'effondrent."),
+    "message.wayfarers.brass_golem.built": ("Gears whir, steam hisses: your Brass Golem wakes up! It follows you and "
+                                            "fights monsters. Sneak-use it with an empty hand: guard here / follow. "
+                                            "Brass ingots repair it.",
+                                            "Les engrenages ronronnent, la vapeur siffle : ton golem de laiton se réveille ! "
+                                            "Il te suit et combat les monstres. Accroupi + clic droit main vide : garder ici / "
+                                            "suivre. Les lingots de laiton le réparent."),
+    "message.wayfarers.brass_golem.guard": ("Brass Golem: guarding this spot.", "Golem de laiton : il garde cet endroit."),
+    "message.wayfarers.brass_golem.follow": ("Brass Golem: following you.", "Golem de laiton : il te suit."),
+    "message.wayfarers.brass_golem.need": ("A Brass Golem needs two Blocks of Brass stacked on top of each other.",
+                                           "Un golem de laiton demande deux blocs de laiton empilés l'un sur l'autre."),
     "message.wayfarers.void_saved": ("The void spits you back out.", "Le vide te recrache."),
     "message.wayfarers.cooldown": ("Recharging...", "Recharge..."),
     "message.wayfarers.kit": ("Kit '%s' given.", "Kit « %s » donné."),

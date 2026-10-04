@@ -66,6 +66,7 @@ public final class WayfarersClient {
         humanoid(event, ModEntities.VOID_STALKER.get(), "void_stalker");
         humanoid(event, ModEntities.VOID_WARDEN.get(), "void_warden");
         event.registerEntityRenderer(ModEntities.BOOMERANG.get(), ThrownItemRenderer::new);
+        event.registerEntityRenderer(ModEntities.RIVET.get(), ThrownItemRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.CRATE.get(), CrateRenderer::new);
         ModelRegistry.registerRenderers(event);
     }

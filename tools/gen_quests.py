@@ -109,6 +109,7 @@ STRUCTURE_ICONS = {
     "void_nest": "crying_obsidian", "sunken_citadel": "conduit",
     "forgotten_catacombs": "skeleton_skull", "sand_hypogeum": "chiseled_sandstone",
     "lithite_well": "deepslate_bricks", "void_crypt": "purpur_pillar",
+    "clockwork_citadel": "clock", "sky_harbour": "firework_rocket", "undercity": "verdant_froglight",
 }
 # where each boss lives (its quest follows the discovery of that structure)
 BOSS_HOME = {
@@ -119,6 +120,7 @@ BOSS_HOME = {
     "piglin_king": "piglin_sanctuary", "soul_reaper": "soul_tower",
     "grave_knight": "forgotten_catacombs", "bone_matriarch": "sand_hypogeum", "weeping_lady": "lithite_well",
     "larva_mother": "void_crypt",
+    "grand_clockmaker": "clockwork_citadel",
 }
 CHAPTER = {}
 for s in defs.STRUCTURES:

@@ -438,4 +438,48 @@ public final class MobAnims {
 
         private VoidStalker() {}
     }
+    public static final class ClockworkSpider {
+        public static final int BITE = 0;
+        public static final int LEAP = 1;
+        public static final int COUNT = 2;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {12, 20};
+
+        private ClockworkSpider() {}
+    }
+    public static final class SteamDrone {
+        public static final int SHOOT = 0;
+        public static final int DIVE = 1;
+        public static final int COUNT = 2;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {12, 28};
+
+        private SteamDrone() {}
+    }
+    public static final class BrassGolem {
+        public static final int PUNCH = 0;
+        public static final int SLAM = 1;
+        public static final int CHEER = 2;
+        public static final int COUNT = 3;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {18, 24, 28};
+
+        private BrassGolem() {}
+    }
+    public static final class GrandClockmaker {
+        public static final int SWEEP = 0;
+        public static final int SLAM = 1;
+        public static final int SUMMON = 2;
+        public static final int TIMESTOP = 3;
+        public static final int GEARS = 4;
+        public static final int BLINK = 5;
+        public static final int CHIME = 6;
+        public static final int ROAR = 7;
+        public static final int STAGGER = 8;
+        public static final int COUNT = 9;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {32, 36, 32, 40, 24, 20, 44, 40, 32};
+
+        private GrandClockmaker() {}
+    }
 }

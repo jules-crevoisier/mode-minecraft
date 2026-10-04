@@ -32,6 +32,11 @@ import com.wayfarers.entity.boss.SculkSpawn;
 import com.wayfarers.entity.boss.AshLord;
 import com.wayfarers.entity.boss.PiglinKing;
 import com.wayfarers.entity.boss.SoulReaper;
+import com.wayfarers.entity.boss.GrandClockmaker;
+import com.wayfarers.entity.automaton.BrassGolem;
+import com.wayfarers.entity.automaton.ClockworkSpider;
+import com.wayfarers.entity.automaton.RivetEntity;
+import com.wayfarers.entity.automaton.SteamDrone;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.SpawnPlacementTypes;
@@ -145,9 +150,26 @@ public final class ModEntities {
             () -> EntityType.Builder.<BoomerangEntity>of(BoomerangEntity::new, MobCategory.MISC)
                     .sized(0.4F, 0.4F).clientTrackingRange(6).updateInterval(2).build(ENTITIES.key("boomerang")));
 
+    // ---- automatons (Clockwork Citadel, Rustlands, Cogwork Valley, Undercity)
+    public static final RegistryObject<EntityType<ClockworkSpider>> CLOCKWORK_SPIDER = ENTITIES.register("clockwork_spider",
+            () -> EntityType.Builder.<ClockworkSpider>of(ClockworkSpider::new, MobCategory.MONSTER)
+                    .sized(ClockworkSpider.WIDTH, ClockworkSpider.HEIGHT).clientTrackingRange(8).build(ENTITIES.key("clockwork_spider")));
+    public static final RegistryObject<EntityType<SteamDrone>> STEAM_DRONE = ENTITIES.register("steam_drone",
+            () -> EntityType.Builder.<SteamDrone>of(SteamDrone::new, MobCategory.MONSTER)
+                    .sized(SteamDrone.WIDTH, SteamDrone.HEIGHT).clientTrackingRange(8).build(ENTITIES.key("steam_drone")));
+    public static final RegistryObject<EntityType<BrassGolem>> BRASS_GOLEM = ENTITIES.register("brass_golem",
+            () -> EntityType.Builder.<BrassGolem>of(BrassGolem::new, MobCategory.MISC)
+                    .sized(BrassGolem.WIDTH, BrassGolem.HEIGHT).clientTrackingRange(10).build(ENTITIES.key("brass_golem")));
+    public static final RegistryObject<EntityType<GrandClockmaker>> GRAND_CLOCKMAKER = ENTITIES.register("grand_clockmaker",
+            () -> EntityType.Builder.<GrandClockmaker>of(GrandClockmaker::new, MobCategory.MONSTER)
+                    .sized(GrandClockmaker.WIDTH, GrandClockmaker.HEIGHT).clientTrackingRange(10).build(ENTITIES.key("grand_clockmaker")));
+    public static final RegistryObject<EntityType<RivetEntity>> RIVET = ENTITIES.register("rivet",
+            () -> EntityType.Builder.<RivetEntity>of(RivetEntity::new, MobCategory.MISC)
+                    .sized(0.25F, 0.25F).clientTrackingRange(6).updateInterval(2).build(ENTITIES.key("rivet")));
+
     /** Every boss with an Elden Ring style fight (demo command, quests). */
     public static List<RegistryObject<? extends EntityType<? extends com.wayfarers.boss.WayfarerBoss>>> bosses() {
-        return List.of(DROWNED_WARDEN, VOID_WARDEN, GRAVE_KNIGHT, BONE_MATRIARCH, WEEPING_LADY, LARVA_MOTHER, BELL_KEEPER, ARCHIVIST, SAND_PHARAOH, JADE_JAGUAR, ROOT_MOTHER, SWAMP_CRONE, GRYPHON_KNIGHT, RUNE_COLOSSUS, FORGE_KING, CRYSTAL_SPIDER, SCULK_SPAWN, ASH_LORD, PIGLIN_KING, SOUL_REAPER);
+        return List.of(DROWNED_WARDEN, VOID_WARDEN, GRAVE_KNIGHT, BONE_MATRIARCH, WEEPING_LADY, LARVA_MOTHER, BELL_KEEPER, ARCHIVIST, SAND_PHARAOH, JADE_JAGUAR, ROOT_MOTHER, SWAMP_CRONE, GRYPHON_KNIGHT, RUNE_COLOSSUS, FORGE_KING, CRYSTAL_SPIDER, SCULK_SPAWN, ASH_LORD, PIGLIN_KING, SOUL_REAPER, GRAND_CLOCKMAKER);
     }
 
     public static void registerAttributes(EntityAttributeCreationEvent event) {
@@ -181,12 +203,16 @@ public final class ModEntities {
         event.put(ASH_LORD.get(), AshLord.attributes().build());
         event.put(PIGLIN_KING.get(), PiglinKing.attributes().build());
         event.put(SOUL_REAPER.get(), SoulReaper.attributes().build());
+        event.put(CLOCKWORK_SPIDER.get(), ClockworkSpider.attributes().build());
+        event.put(STEAM_DRONE.get(), SteamDrone.attributes().build());
+        event.put(BRASS_GOLEM.get(), BrassGolem.attributes().build());
+        event.put(GRAND_CLOCKMAKER.get(), GrandClockmaker.attributes().build());
     }
 
     /** Natural/structure spawning rules: on the ground, in the dark, like vanilla monsters. */
     public static void registerSpawnPlacements(SpawnPlacementRegisterEvent event) {
         for (EntityType<? extends Monster> type : List.of(RUIN_WALKER.get(), MAP_WRAITH.get(), BASALT_GUARD.get(), VOID_STALKER.get(),
-                SKELETON_KNIGHT.get(), CRYPT_CRAWLER.get(), BANSHEE.get(), GARGOYLE.get(), EMBER_IMP.get(), VOID_LARVA.get())) {
+                SKELETON_KNIGHT.get(), CRYPT_CRAWLER.get(), BANSHEE.get(), GARGOYLE.get(), EMBER_IMP.get(), VOID_LARVA.get(), CLOCKWORK_SPIDER.get(), STEAM_DRONE.get())) {
             register(event, type);
         }
     }

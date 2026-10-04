@@ -15,6 +15,7 @@ from ..arch import stair
 from ..blueprint import with_props
 from ..defs import Piece, StructureDef, register
 from ..parts import LOOT
+from . import lair_grand_clockmaker
 
 W = "wayfarers:"
 BRASS, COPPER, VERD, IRON = W + "brass_plating", W + "copper_plating", W + "verdigris_plating", W + "dark_iron_plating"
@@ -438,6 +439,8 @@ def citadel():
                     bp.set(x, 1, z, IRON)
                     bp.set(x, 2, z, SMOKE_WALL)
                     bp.set(x, 3, z, EDISON)
+        # the stair in the tower hall down to the Gearworks and the Clock Vault (lair_grand_clockmaker.py)
+        lair_grand_clockmaker.build(bp)
     return build
 
 
@@ -446,4 +449,7 @@ register(StructureDef(
     ["#minecraft:is_badlands", "savanna", "savanna_plateau", "windswept_savanna", "desert", "plains"],
     [Piece("citadel", citadel())],
     spacing=64, separation=24, adaptation="beard_box", processors="none", max_distance=100,
+    # automatons keep stalking the streets at night (darkness rules apply, the lamps keep the plaza safer)
+    spawns=[("wayfarers:clockwork_spider", 60, 2, 4), ("wayfarers:steam_drone", 25, 1, 2),
+            ("minecraft:zombie", 30, 1, 3), ("minecraft:skeleton", 30, 1, 2)],
     title_fr="Citadelle d'horlogerie", title_en="Clockwork Citadel"))

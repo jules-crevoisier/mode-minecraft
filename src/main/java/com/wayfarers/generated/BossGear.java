@@ -63,6 +63,9 @@ public final class BossGear {
     public static final RegistryObject<Item> REMEMBRANCE_VOID_WARDEN = remembrance("remembrance_void_warden");
     public static final RegistryObject<Item> VOID_GREATBLADE = weapon("void_greatblade", p -> p.sword(ModMaterials.VOID, 9.0F, -3.0F).rarity(Rarity.EPIC).fireResistant(),
             BossWeaponItem.Ability.BLINK, 14.0F, 12.0F, 80, () -> ParticleTypes.REVERSE_PORTAL, 0);
+    public static final RegistryObject<Item> REMEMBRANCE_GRAND_CLOCKMAKER = remembrance("remembrance_grand_clockmaker");
+    public static final RegistryObject<Item> CLOCKMAKER_PENDULUM = weapon("clockmaker_pendulum", p -> p.sword(ModMaterials.LITHITE, 6.0F, -2.6F).rarity(Rarity.EPIC),
+            BossWeaponItem.Ability.ARC, 10.0F, 6.0F, 70, () -> ParticleTypes.ELECTRIC_SPARK, BossWeaponItem.SLOW);
 
     private BossGear() {}
 

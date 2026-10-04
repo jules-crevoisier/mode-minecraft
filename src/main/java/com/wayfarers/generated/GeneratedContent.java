@@ -51,8 +51,8 @@ public final class GeneratedContent {
 
     public static final List<Chapter> CHAPTERS = List.of(
             new Chapter("first_steps", List.of("first_steps/guild_outpost", "first_steps/map_fragment", "first_steps/waystone", "first_steps/sorting_chest", "first_steps/guild_terminal", "first_steps/backpack", "first_steps/blade", "first_steps/explorer_armor")),
-            new Chapter("explorer", List.of("explorer/mountain_monastery", "explorer/forgotten_library", "explorer/coastal_lighthouse", "explorer/giant_tree", "explorer/desert_oasis", "explorer/witch_huts", "explorer/sky_island", "explorer/jungle_ziggurat", "explorer/ruined_watchtower", "explorer/bandit_camp", "explorer/rune_circle", "explorer/ice_observatory", "explorer/galleon_wreck", "explorer/sunken_temple", "explorer/forgotten_catacombs", "explorer/sand_hypogeum", "explorer/master_cartographer", "explorer/boss_bell_keeper", "explorer/boss_archivist", "explorer/boss_sand_pharaoh", "explorer/boss_jade_jaguar", "explorer/boss_root_mother", "explorer/boss_swamp_crone", "explorer/boss_gryphon_knight", "explorer/boss_rune_colossus", "explorer/boss_grave_knight", "explorer/boss_bone_matriarch")),
-            new Chapter("depths", List.of("depths/lithite", "depths/dwarven_mine", "depths/dwarven_forge", "depths/crystal_grotto", "depths/sealed_lab", "depths/lithite_well", "depths/telluric_hammer", "depths/excavator_pickaxe", "depths/lumber_axe", "depths/frost_blade", "depths/boomerang", "depths/sunken_citadel", "depths/drowned_warden", "depths/boss_forge_king", "depths/boss_crystal_spider", "depths/boss_sculk_spawn", "depths/boss_weeping_lady")),
+            new Chapter("explorer", List.of("explorer/mountain_monastery", "explorer/forgotten_library", "explorer/coastal_lighthouse", "explorer/giant_tree", "explorer/desert_oasis", "explorer/witch_huts", "explorer/sky_island", "explorer/jungle_ziggurat", "explorer/ruined_watchtower", "explorer/bandit_camp", "explorer/rune_circle", "explorer/ice_observatory", "explorer/galleon_wreck", "explorer/sunken_temple", "explorer/forgotten_catacombs", "explorer/sand_hypogeum", "explorer/clockwork_citadel", "explorer/sky_harbour", "explorer/master_cartographer", "explorer/boss_bell_keeper", "explorer/boss_archivist", "explorer/boss_sand_pharaoh", "explorer/boss_jade_jaguar", "explorer/boss_root_mother", "explorer/boss_swamp_crone", "explorer/boss_gryphon_knight", "explorer/boss_rune_colossus", "explorer/boss_grave_knight", "explorer/boss_bone_matriarch", "explorer/boss_grand_clockmaker")),
+            new Chapter("depths", List.of("depths/lithite", "depths/dwarven_mine", "depths/dwarven_forge", "depths/crystal_grotto", "depths/sealed_lab", "depths/lithite_well", "depths/undercity", "depths/telluric_hammer", "depths/excavator_pickaxe", "depths/lumber_axe", "depths/frost_blade", "depths/boomerang", "depths/sunken_citadel", "depths/drowned_warden", "depths/boss_forge_king", "depths/boss_crystal_spider", "depths/boss_sculk_spawn", "depths/boss_weeping_lady")),
             new Chapter("nether", List.of("nether/enter", "nether/basalt_fortress", "nether/chain_bridge", "nether/piglin_sanctuary", "nether/lava_foundry", "nether/soul_tower", "nether/piglin_market", "nether/ancient_ember", "nether/ember_scythe", "nether/storm_staff", "nether/ember_armor", "nether/all", "nether/boss_ash_lord", "nether/boss_piglin_king", "nether/boss_soul_reaper")),
             new Chapter("end", List.of("end/enter", "end/void_observatory", "end/chorus_garden", "end/end_archive", "end/void_ship", "end/void_nest", "end/void_crypt", "end/void_shard", "end/void_spear", "end/void_armor", "end/void_warden", "end/boss_larva_mother", "end/legends_bane", "end/legend"))
     );
@@ -76,6 +76,7 @@ public final class GeneratedContent {
             java.util.Map.entry("depths/sealed_lab", "50|wayfarers:map_fragment*2"),
             java.util.Map.entry("depths/sunken_citadel", "80|wayfarers:map_fragment*2"),
             java.util.Map.entry("depths/telluric_hammer", "30|"),
+            java.util.Map.entry("depths/undercity", "50|wayfarers:map_fragment*2"),
             java.util.Map.entry("end/boss_larva_mother", "250|"),
             java.util.Map.entry("end/chorus_garden", "80|wayfarers:map_fragment*2"),
             java.util.Map.entry("end/end_archive", "80|wayfarers:map_fragment*2"),
@@ -94,6 +95,7 @@ public final class GeneratedContent {
             java.util.Map.entry("explorer/boss_archivist", "500|"),
             java.util.Map.entry("explorer/boss_bell_keeper", "500|"),
             java.util.Map.entry("explorer/boss_bone_matriarch", "250|"),
+            java.util.Map.entry("explorer/boss_grand_clockmaker", "500|"),
             java.util.Map.entry("explorer/boss_grave_knight", "250|"),
             java.util.Map.entry("explorer/boss_gryphon_knight", "500|"),
             java.util.Map.entry("explorer/boss_jade_jaguar", "500|"),
@@ -101,6 +103,7 @@ public final class GeneratedContent {
             java.util.Map.entry("explorer/boss_rune_colossus", "500|"),
             java.util.Map.entry("explorer/boss_sand_pharaoh", "500|"),
             java.util.Map.entry("explorer/boss_swamp_crone", "500|"),
+            java.util.Map.entry("explorer/clockwork_citadel", "40|wayfarers:map_fragment*2"),
             java.util.Map.entry("explorer/coastal_lighthouse", "40|wayfarers:map_fragment*2"),
             java.util.Map.entry("explorer/desert_oasis", "40|wayfarers:map_fragment*2"),
             java.util.Map.entry("explorer/forgotten_catacombs", "40|wayfarers:map_fragment*2"),
@@ -114,6 +117,7 @@ public final class GeneratedContent {
             java.util.Map.entry("explorer/ruined_watchtower", "40|wayfarers:map_fragment*2"),
             java.util.Map.entry("explorer/rune_circle", "40|wayfarers:map_fragment*2"),
             java.util.Map.entry("explorer/sand_hypogeum", "40|wayfarers:map_fragment*2"),
+            java.util.Map.entry("explorer/sky_harbour", "40|wayfarers:map_fragment*2"),
             java.util.Map.entry("explorer/sky_island", "40|wayfarers:map_fragment*2"),
             java.util.Map.entry("explorer/sunken_temple", "40|wayfarers:map_fragment*2"),
             java.util.Map.entry("explorer/witch_huts", "40|wayfarers:map_fragment*2"),
