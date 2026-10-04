@@ -118,6 +118,9 @@ final class MapPoints {
                 d.graves = d.graves == null ? new ArrayList<>() : new ArrayList<>(d.graves);
                 d.structures.removeIf(p -> p == null || p.dim == null || p.name == null);
                 d.graves.removeIf(p -> p == null || p.dim == null);
+                if (d.target != null && (d.target.dim == null || d.target.name == null)) {
+                    d.target = null; // drawn every frame: a damaged entry must not crash the HUD
+                }
                 data = d;
             }
         } catch (IOException | RuntimeException e) {
@@ -135,7 +138,11 @@ final class MapPoints {
                 try (Writer w = Files.newBufferedWriter(tmp, StandardCharsets.UTF_8)) {
                     w.write(json);
                 }
-                Files.move(tmp, file, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
+                try {
+                    Files.move(tmp, file, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
+                } catch (java.nio.file.AtomicMoveNotSupportedException e) {
+                    Files.move(tmp, file, StandardCopyOption.REPLACE_EXISTING);
+                }
             } catch (IOException | RuntimeException e) {
                 LOGGER.warn("Wayfarers map: could not save {}: {}", file, e.toString());
             }

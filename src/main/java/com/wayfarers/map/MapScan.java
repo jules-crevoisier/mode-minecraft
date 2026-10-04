@@ -82,6 +82,11 @@ public final class MapScan {
         return changed;
     }
 
+    /** Forgets the biome holders of a world that was closed (they belong to its registries). */
+    public void clearCache() {
+        biomeIds.clear();
+    }
+
     private String biomeId(Holder<Biome> holder) {
         return biomeIds.computeIfAbsent(holder, h -> h.unwrapKey().map(k -> k.identifier().toString()).orElse("minecraft:plains"));
     }

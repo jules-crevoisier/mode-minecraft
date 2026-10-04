@@ -263,17 +263,24 @@ public final class StorageNetwork {
 
     /** Every item type in the network with its total count, most plentiful first. */
     public static List<Entry> contents(List<Container> containers) {
-        Map<Key, Integer> totals = new LinkedHashMap<>();
+        // runs every half second per viewer on networks of thousands of slots: look up with the live stack and copy
+        // it only for a new item type (the stored key must never be a live, mutable stack)
+        Map<Key, int[]> totals = new LinkedHashMap<>();
         for (Container c : containers) {
             for (int i = 0; i < c.getContainerSize(); i++) {
                 ItemStack s = c.getItem(i);
                 if (!s.isEmpty()) {
-                    totals.merge(new Key(s.copyWithCount(1)), s.getCount(), Integer::sum);
+                    int[] total = totals.get(new Key(s));
+                    if (total == null) {
+                        totals.put(new Key(s.copyWithCount(1)), new int[] {s.getCount()});
+                    } else {
+                        total[0] = (int) Math.min(Integer.MAX_VALUE, (long) total[0] + s.getCount());
+                    }
                 }
             }
         }
         List<Entry> list = new ArrayList<>(totals.size());
-        totals.forEach((k, v) -> list.add(new Entry(k.stack, v)));
+        totals.forEach((k, v) -> list.add(new Entry(k.stack, v[0])));
         list.sort(Comparator.comparingInt(Entry::count).reversed());
         return list;
     }
@@ -362,7 +369,11 @@ public final class StorageNetwork {
                     for (int i = 0; i < c.getContainerSize(); i++) {
                         ItemStack s = c.getItem(i);
                         if (!s.isEmpty()) {
-                            List<Container> list = holders.computeIfAbsent(new Key(s.copyWithCount(1)), k -> new ArrayList<>(2));
+                            List<Container> list = holders.get(new Key(s));
+                            if (list == null) {
+                                list = new ArrayList<>(2);
+                                holders.put(new Key(s.copyWithCount(1)), list);
+                            }
                             if (list.isEmpty() || list.get(list.size() - 1) != c) {
                                 list.add(c);
                             }
@@ -375,7 +386,7 @@ public final class StorageNetwork {
 
         /** Does any linked container already hold this item? */
         public boolean holds(ItemStack like) {
-            return !like.isEmpty() && holders().containsKey(new Key(like.copyWithCount(1)));
+            return !like.isEmpty() && holders().containsKey(new Key(like));
         }
 
         public ItemStack insert(ItemStack stack) {

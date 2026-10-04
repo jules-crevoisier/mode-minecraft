@@ -102,7 +102,8 @@ public final class GeneratedGuide {
             new Tip("elite", "minecraft:gold_ingot", "danger"),
             new Tip("blood_moon", "minecraft:redstone", "blood_moon"),
             new Tip("boss_mist", "wayfarers:mist_gate", "bosses"),
-            new Tip("danger", "minecraft:skeleton_skull", "danger")
+            new Tip("danger", "minecraft:skeleton_skull", "danger"),
+            new Tip("map", "minecraft:filled_map", "map")
     );
 
     private GeneratedGuide() {}

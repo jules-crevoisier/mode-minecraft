@@ -721,6 +721,11 @@ TIPS = [
     ("danger", "minecraft:skeleton_skull", ("The danger level rose: monsters here are stronger.",
                                             "Le niveau de danger augmente : les monstres sont plus forts ici."),
      "danger"),
+    # first login: the minimap has just appeared in the corner
+    ("map", "minecraft:filled_map", ("The minimap shows the land around you. M: world map, H: hide it, Z: zoom, "
+                                     "B: ping the spot you look at.",
+                                     "La mini-carte montre les alentours. M : carte du monde, H : la masquer, "
+                                     "Z : zoom, B : signaler l'endroit visé."), "map"),
 ]
 
 

@@ -328,9 +328,9 @@ MESSAGES = {
     "gui.wayfarers.terminal.back": ("Items", "Objets"),
     "gui.wayfarers.terminal.group": ("%s x%s", "%s x%s"),
     "gui.wayfarers.terminal.double": ("%s (double)", "%s (double)"),
-    "gui.wayfarers.terminal.status": ("%s chests linked - %s free slots", "%s coffres reliés - %s emplacements libres"),
-    "gui.wayfarers.terminal.network_status": ("%s linked - %s relays - reach %s blocks",
-                                              "%s reliés - %s relais - portée %s blocs"),
+    # status lines: under the grid, 172 px wide (with real numbers) in both languages
+    "gui.wayfarers.terminal.status": ("%s chests - %s free slots", "%s coffres - %s cases libres"),
+    "gui.wayfarers.terminal.network_status": ("%s linked, %s relays, reach %s", "%s reliés, %s relais, portée %s"),
     "gui.wayfarers.terminal.capped": ("Too many containers: the server's limit (storage.maxContainers) is reached.",
                                       "Trop de conteneurs : la limite du serveur (storage.maxContainers) est atteinte."),
     "gui.wayfarers.terminal.stored": ("In storage: %s", "En stock : %s"),

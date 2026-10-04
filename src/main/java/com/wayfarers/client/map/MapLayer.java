@@ -19,6 +19,8 @@ final class MapLayer {
     private static final int MAX_FULL = 72;
     private static final int MAX_TEXTURES = 96;
     private static final int MAX_MINI_TEXTURES = 1500;
+    /** Regions known at all (mostly 64 x 64 thumbnails); beyond this the least recently seen are forgotten. */
+    private static final int MAX_TILES = 4096;
     private static final long UPLOAD_INTERVAL_MS = 150;
     /** Texture builds per ~frame (16 ms): each costs about a millisecond. */
     private static final int UPLOADS_PER_FRAME = 2;
@@ -322,6 +324,24 @@ final class MapLayer {
                 minis.get(i).closeMiniTexture();
             }
         }
+        if (!local && tiles.size() > MAX_TILES) {
+            // thumbnails (16 KB each) of everything ever looked at: forget the longest unseen, they are asked again
+            List<MapTile> idle = new ArrayList<>();
+            for (MapTile t : tiles.values()) {
+                if (t.full == null && t.texture == null) {
+                    idle.add(t);
+                }
+            }
+            idle.sort(Comparator.comparingLong(MapLayer::lastSeen));
+            for (int i = 0; i < idle.size() && tiles.size() > MAX_TILES * 3 / 4; i++) {
+                MapTile t = idle.get(i);
+                if (now - lastSeen(t) < 5000) {
+                    break;
+                }
+                t.close();
+                tiles.remove(RegionData.key(t.rx, t.rz));
+            }
+        }
         if (full.size() > MAX_FULL) {
             full.sort(Comparator.comparingLong(t -> t.lastUse));
             int drop = full.size() - MAX_FULL;
@@ -347,6 +367,17 @@ final class MapLayer {
                 drop--;
             }
         }
+    }
+
+    /** Frees the GPU textures (rebuilt from the data when drawn again): this layer's dimension was left. */
+    void closeTextures() {
+        for (MapTile t : tiles.values()) {
+            t.close(); // texture() / miniTexture() refill a new one entirely
+        }
+    }
+
+    private static long lastSeen(MapTile t) {
+        return Math.max(Math.max(t.lastUse, t.lastMiniUse), Math.max(t.fullAsked, t.miniAsked));
     }
 
     void clear() {

@@ -65,6 +65,11 @@ public final class MapServer {
     private static final long RESCAN_TICKS = 6000;
     private static final long NEAR_RESCAN_TICKS = 400;
     private static final long SUBSCRIPTION_MS = 40_000;
+    /** Server-thread time per tick for copying the regions players asked for (all players together). */
+    private static final long REQUEST_BUDGET_NS = 2_000_000L;
+    private static final long MAX_OUTBOX_BYTES = 1_500_000L;
+    /** Regions farther than the world border (30 million blocks) are never asked for by an honest client. */
+    private static final int MAX_REGION_COORD = 30_000_000 / RegionData.REGION + 2;
 
     private static ExecutorService worker;
     private static MinecraftServer server;
@@ -87,9 +92,14 @@ public final class MapServer {
         final ArrayDeque<Object[]> requests = new ArrayDeque<>();
         final Map<String, Long2LongOpenHashMap> subs = new HashMap<>();
         final ArrayDeque<MapDataMsg> outbox = new ArrayDeque<>();
+        /** Bytes waiting in {@link #outbox}: no new region is prepared while the connection is this far behind. */
+        long outboxBytes;
         long budget;
         int inFlight;
         long lastPing;
+        /** Server tick at which the waypoints are sent once more after login (the first copy can arrive before the
+         * client has its world); -1 when done. */
+        int resendPointsAt = -1;
 
         Session(UUID id) {
             this.id = id;
@@ -103,9 +113,16 @@ public final class MapServer {
         void queue(MapDataMsg msg) {
             if (outbox.size() >= 512) {
                 // the client re-asks for its regions every few seconds and will get the newer revision then
-                outbox.pollFirst();
+                outboxBytes -= outbox.pollFirst().data().length;
             }
             outbox.addLast(msg);
+            outboxBytes += msg.data().length;
+        }
+
+        MapDataMsg poll() {
+            MapDataMsg msg = outbox.pollFirst();
+            outboxBytes -= msg.data().length;
+            return msg;
         }
     }
 
@@ -115,9 +132,12 @@ public final class MapServer {
         PlayerEvent.PlayerLoggedInEvent.BUS.addListener(e -> {
             if (e.getEntity() instanceof ServerPlayer p) {
                 start(p.level().getServer());
-                SESSIONS.put(p.getUUID(), new Session(p.getUUID()));
+                Session session = new Session(p.getUUID());
+                session.resendPointsAt = server.getTickCount() + 60;
+                SESSIONS.put(p.getUUID(), session);
                 explorers.get(p.getUUID());
                 sendPoints(p);
+                com.wayfarers.util.Tips.show(p, "map");
             }
         });
         PlayerEvent.PlayerLoggedOutEvent.BUS.addListener(e -> {
@@ -184,6 +204,7 @@ public final class MapServer {
         QUEUES.clear();
         SESSIONS.clear();
         COMPLETED.clear();
+        SCAN.clearCache();
         server = null;
     }
 
@@ -222,7 +243,7 @@ public final class MapServer {
             Session s = SESSIONS.get(e.getPlayer().getUUID());
             MapStore.Region r = store(dim).region(RegionData.key(cx >> 4, cz >> 4));
             if (s != null && r != null && r.ready() && s.subscribed(dim, r.key, System.currentTimeMillis())) {
-                s.queue(chunkMsg(dim, r, cx, cz));
+                s.queue(chunkMsg(dim, r, cx, cz, revisionFor(s, dim, r)));
             }
         }
         enqueue(dim, cx, cz, RESCAN_TICKS);
@@ -300,9 +321,29 @@ public final class MapServer {
         }
     }
 
-    private static MapDataMsg chunkMsg(String dim, MapStore.Region r, int cx, int cz) {
-        byte[] bytes = r.data.sample((cx & 15) << 4, (cz & 15) << 4, 16, 1, null).encodeAll();
-        return new MapDataMsg(MapDataMsg.CHUNK, dim, cx, cz, bytes);
+    private static MapDataMsg chunkMsg(String dim, MapStore.Region r, int cx, int cz, int revision) {
+        RegionData chunk = r.data.sample((cx & 15) << 4, (cz & 15) << 4, 16, 1, null);
+        chunk.revision = revision;
+        return new MapDataMsg(MapDataMsg.CHUNK, dim, cx, cz, chunk.encodeAll());
+    }
+
+    /**
+     * The revision of a region as one player sees it. Shared: the region's own. Per player, the chunks they saw
+     * count too (the region's data does not change when a second player walks into chunks already mapped, yet their
+     * map must update): both only ever grow, so "newer than N" keeps working.
+     */
+    private static int revisionFor(Session s, String dim, MapStore.Region r) {
+        if (shared()) {
+            return r.data.revision;
+        }
+        long[] mask = explorers.get(s.id).mask(dim, r.key);
+        int seen = 0;
+        if (mask != null) {
+            for (long m : mask) {
+                seen += Long.bitCount(m);
+            }
+        }
+        return r.data.revision + seen;
     }
 
     /** Sends a freshly changed chunk to the players looking at its region. */
@@ -314,24 +355,29 @@ public final class MapServer {
             if (!s.subscribed(dim, r.key, now) || !shared && !explorers.get(s.id).has(dim, cx, cz)) {
                 continue;
             }
+            if (!shared) {
+                s.queue(chunkMsg(dim, r, cx, cz, revisionFor(s, dim, r)));
+                continue;
+            }
             if (msg == null) {
-                msg = chunkMsg(dim, r, cx, cz);
+                msg = chunkMsg(dim, r, cx, cz, r.data.revision);
             }
             s.queue(msg);
         }
     }
 
     // ------------------------------------------------------------------ requests
-    private static void handleRequests(ServerPlayer player, Session s) {
+    private static void handleRequests(ServerPlayer player, Session s, long deadline) {
         long now = System.currentTimeMillis();
         int handled = 0;
         boolean shared = shared();
-        while (!s.requests.isEmpty() && handled < 6 && s.inFlight < 3) {
+        while (!s.requests.isEmpty() && handled < 6 && s.inFlight < 3 && s.outboxBytes < MAX_OUTBOX_BYTES
+                && System.nanoTime() < deadline) {
             Object[] q = s.requests.pollFirst();
             String dim = (String) q[0];
             MapProtocol.Request req = (MapProtocol.Request) q[1];
             int tries = (Integer) q[2];
-            if (level(dim) == null) {
+            if (level(dim) == null || Math.abs(req.rx()) > MAX_REGION_COORD || Math.abs(req.rz()) > MAX_REGION_COORD) {
                 continue;
             }
             MapStore store = store(dim);
@@ -353,7 +399,8 @@ public final class MapServer {
             }
             MapStore.Region r = store.region(rk);
             int rev = r.data.revision;
-            if (req.knownRevision() > 0 && rev <= req.knownRevision()) {
+            int seenRev = shared ? rev : revisionFor(s, dim, r);
+            if (req.knownRevision() > 0 && seenRev <= req.knownRevision()) {
                 continue;
             }
             int kind = req.full() ? MapDataMsg.TILE : MapDataMsg.MINI;
@@ -371,9 +418,18 @@ public final class MapServer {
             RegionData.Visible visible = shared ? null : (x, z) -> MapExplorers.visible(mask, x, z);
             RegionData sample = req.full() ? r.data.sample(0, 0, RegionData.REGION, 1, visible)
                     : r.data.sample(1, 1, RegionData.MINI, 4, visible);
+            sample.revision = seenRev;
             s.inFlight++;
             worker().execute(() -> {
-                byte[] bytes = sample.encodeAll();
+                byte[] bytes;
+                try {
+                    bytes = sample.encodeAll();
+                } catch (RuntimeException ex) {
+                    // never leave the session waiting for an answer that will not come
+                    LOGGER.warn("Wayfarers map: could not encode a region: {}", ex.toString());
+                    COMPLETED.add(() -> s.inFlight--);
+                    return;
+                }
                 COMPLETED.add(() -> {
                     s.inFlight--;
                     if (shared && r.data != null && r.data.revision == rev) {
@@ -420,15 +476,23 @@ public final class MapServer {
         }
         scanSome();
         long perTick = s.isDedicatedServer() ? 12_000 : 96_000;
-        for (ServerPlayer p : players) {
+        long deadline = System.nanoTime() + REQUEST_BUDGET_NS;
+        // a different player goes first each tick, so the time budget is shared fairly
+        int first = players.isEmpty() ? 0 : tick % players.size();
+        for (int pi = 0; pi < players.size(); pi++) {
+            ServerPlayer p = players.get((first + pi) % players.size());
             Session ss = SESSIONS.get(p.getUUID());
             if (ss == null) {
                 continue;
             }
-            handleRequests(p, ss);
+            if (ss.resendPointsAt >= 0 && tick >= ss.resendPointsAt) {
+                ss.resendPointsAt = -1;
+                sendPoints(p);
+            }
+            handleRequests(p, ss, deadline);
             ss.budget = Math.min(ss.budget + perTick, perTick * 40);
             while (!ss.outbox.isEmpty() && ss.budget > 0) {
-                MapDataMsg msg = ss.outbox.pollFirst();
+                MapDataMsg msg = ss.poll();
                 ss.budget -= msg.data().length + 48;
                 WayfarersNet.toPlayer(p, msg);
             }
@@ -452,6 +516,9 @@ public final class MapServer {
                     m.long2LongEntrySet().removeIf(en -> en.getLongValue() < now);
                 }
             }
+        }
+        // memory bound: a player scrolling a zoomed-out world map can load many regions within a minute
+        if (tick % 100 == 0) {
             for (Map.Entry<String, MapStore> e : STORES.entrySet()) {
                 LongOpenHashSet keep = new LongOpenHashSet();
                 for (ServerPlayer p : players) {
@@ -550,7 +617,7 @@ public final class MapServer {
                         player.getUUID().toString(), player.getName().getString(), MapProtocol.clean(in.readUTF()), in.readUTF(),
                         in.readInt(), in.readInt(), in.readInt(), in.readInt() & 0xFFFFFF,
                         Math.floorMod(in.readByte(), MapProtocol.ICONS.length), in.readBoolean()));
-                if (w == null || w.name().isEmpty() || w.dim().length() > 64 || Math.abs(w.x()) > 30_000_000
+                if (w == null || w.name().isEmpty() || w.dim().length() > 64 || level(w.dim()) == null || Math.abs(w.x()) > 30_000_000
                         || Math.abs(w.z()) > 30_000_000 || Math.abs(w.y()) > 4096) {
                     return;
                 }
@@ -592,19 +659,24 @@ public final class MapServer {
                     return;
                 }
                 s.lastPing = now;
-                int x = (Integer) p[1];
-                int y = (Integer) p[2];
-                int z = (Integer) p[3];
+                int x = Math.clamp((Integer) p[1], -30_000_000, 30_000_000);
+                int y = Math.clamp((Integer) p[2], -4096, 4096);
+                int z = Math.clamp((Integer) p[3], -30_000_000, 30_000_000);
+                String dim = (String) p[0];
                 String name = player.getName().getString();
-                MapDataMsg out = new MapDataMsg(MapDataMsg.PING, (String) p[0], x, z, MapProtocol.bytes(o -> {
+                MapDataMsg out = new MapDataMsg(MapDataMsg.PING, dim, x, z, MapProtocol.bytes(o -> {
                     o.writeUTF(name);
                     o.writeInt(y);
                 }));
+                // only where the ping can be seen: the players of that dimension
+                Component chat = Component.translatable("message.wayfarers.map.ping", player.getDisplayName(), x, z)
+                        .withStyle(ChatFormatting.AQUA);
                 for (ServerPlayer other : server.getPlayerList().getPlayers()) {
-                    WayfarersNet.toPlayer(other, out);
+                    if (dimId(other.level()).equals(dim)) {
+                        WayfarersNet.toPlayer(other, out);
+                        other.sendSystemMessage(chat);
+                    }
                 }
-                server.getPlayerList().broadcastSystemMessage(Component.translatable("message.wayfarers.map.ping",
-                        player.getDisplayName(), x, z).withStyle(ChatFormatting.AQUA), false);
             }
             default -> { }
         }

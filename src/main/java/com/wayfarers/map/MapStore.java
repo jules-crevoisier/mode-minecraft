@@ -23,7 +23,11 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  */
 final class MapStore {
     private static final Logger LOGGER = LogUtils.getLogger();
-    private static final int MAX_REGIONS = 192;
+    private static final int MAX_REGIONS = 160;
+    /** Remembered "no file there" answers (bounded: a client may ask for any coordinates). */
+    private static final int MAX_MISSING = 65536;
+    /** A region file is ~100 KB; anything much larger is damaged (and must not be read into memory whole). */
+    private static final long MAX_FILE = 4L << 20;
 
     /** In-memory state of a region. */
     static final class Region {
@@ -116,13 +120,18 @@ final class MapStore {
             return null;
         }
         try {
+            if (Files.size(f) > MAX_FILE) {
+                LOGGER.warn("Wayfarers map: ignoring oversized region {}", f);
+                return null;
+            }
             RegionData d = RegionData.decode(Files.readAllBytes(f));
             if (d == null || d.size != RegionData.REGION) {
                 LOGGER.warn("Wayfarers map: ignoring unreadable region {}", f);
                 return null;
             }
             return d;
-        } catch (IOException e) {
+        } catch (IOException | RuntimeException e) {
+            // a damaged region is simply rebuilt from the chunks players see
             LOGGER.warn("Wayfarers map: could not read {}: {}", f, e.toString());
             return null;
         }
@@ -142,6 +151,9 @@ final class MapStore {
             if (d == null) {
                 if (!r.create) {
                     regions.remove(key);
+                    if (missing.size() >= MAX_MISSING) {
+                        missing.clear();
+                    }
                     missing.add(key);
                     continue;
                 }

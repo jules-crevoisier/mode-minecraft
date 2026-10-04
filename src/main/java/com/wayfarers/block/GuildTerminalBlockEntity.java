@@ -24,6 +24,10 @@ public class GuildTerminalBlockEntity extends BlockEntity {
     /** Ticks between two scans of the base while the terminal is in use. */
     private static final int REFRESH_TICKS = 100;
     private static final int MAX_EXCLUDED = 1024;
+    private static final int MIN_FORCED_TICKS = 10;
+
+    /** Game time of the last sneak-sort (sorting a whole base is rate-limited). */
+    private long sortedAt = Long.MIN_VALUE;
 
     private final Set<BlockPos> excluded = new HashSet<>();
     private StorageNetwork.Scan scan = StorageNetwork.Scan.EMPTY;
@@ -39,7 +43,10 @@ public class GuildTerminalBlockEntity extends BlockEntity {
             return StorageNetwork.Scan.EMPTY;
         }
         long now = serverLevel.getGameTime();
-        if (force || now - scannedAt >= REFRESH_TICKS || now < scannedAt) {
+        // forced scans (opening the screen) at most twice a second: spam-clicking must not rescan a huge base each time
+        boolean stale = scannedAt == Long.MIN_VALUE || now < scannedAt
+                || now - scannedAt >= (force ? MIN_FORCED_TICKS : REFRESH_TICKS);
+        if (stale) {
             scan = StorageNetwork.scan(serverLevel, worldPosition);
             scannedAt = now;
             pruneExcluded(serverLevel);
@@ -58,6 +65,16 @@ public class GuildTerminalBlockEntity extends BlockEntity {
             }
         }
         return out;
+    }
+
+    /** True (and starts the cooldown) when the whole network may be sorted now: at most once a second. */
+    public boolean trySort() {
+        long now = level == null ? 0 : level.getGameTime();
+        if (sortedAt != Long.MIN_VALUE && now >= sortedAt && now - sortedAt < 20) {
+            return false;
+        }
+        sortedAt = now;
+        return true;
     }
 
     public boolean isExcluded(BlockPos key) {
