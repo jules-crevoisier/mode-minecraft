@@ -93,9 +93,9 @@ PAGES = [
          "Tu peux fabriquer et poser tes propres pierres : à la base, aux fermes ou à l'entrée d'un donjon."),
     ], ["wayfarers:waystone"]),
     ("wonders", "travel", "wayfarers:structure_compass", ("Wonders of the world", "Merveilles du monde"), [
-        ("Three giant places wait to be found. The Clockwork Citadel: a steampunk town around a 75-block clock "
+        ("Giant places wait to be found. The Clockwork Citadel: a steampunk town around a 75-block clock "
          "tower, in badlands, savannas, deserts and plains.",
-         "Trois lieux gigantesques attendent d'être trouvés. La Citadelle d'horlogerie : une ville steampunk autour "
+         "Des lieux gigantesques attendent d'être trouvés. La Citadelle d'horlogerie : une ville steampunk autour "
          "d'une tour-horloge de 75 blocs, dans les badlands, savanes, déserts et plaines."),
         ("The Sky Harbour: an airship moored to an iron tower, seen from far away above the plains. The Undercity: a "
          "town on stilts in a vast cavern 12 to 30 blocks underground, around a glowing lake.",
@@ -105,6 +105,20 @@ PAGES = [
         ("Sneak-use the Structure Compass to pick one of them, then use it to see the distance and direction.",
          "Accroupi + clic droit sur la boussole des structures pour en choisir une, puis clic droit pour voir la "
          "distance et la direction."),
+    ], ["wayfarers:structure_compass"]),
+    ("wonders_more", "travel", "wayfarers:structure_compass", ("Fire, Sky and Crystal", "Feu, ciel et cristal"), [
+        ("The Geothermal Foundry: ironworks built into a smoking volcano, in badlands and rust lands. A lava "
+         "caldera, a bridge crane and the Forge of the Deep inside the mountain.",
+         "La Fonderie géothermique : des forges bâties dans un volcan fumant, dans les badlands et les terres "
+         "rouillées. Une caldeira de lave, un pont roulant et la Forge des Profondeurs dans la montagne."),
+        ("The Tesla Observatory: a copper dome with a giant telescope, a 75-block Tesla coil and an orrery, on "
+         "a mountain crag.",
+         "L'Observatoire Tesla : une coupole de cuivre et son télescope géant, une bobine Tesla de 75 blocs et un "
+         "planétarium, sur un piton de montagne."),
+        ("The Crystal Cathedral: a gothic cathedral in a giant geode, its floor between y -44 and -34. Its crypt "
+         "keeps a reliquary.",
+         "La Cathédrale de cristal : une cathédrale gothique dans une géode géante, le sol entre y -44 et -34. Sa "
+         "crypte garde un reliquaire."),
     ], ["wayfarers:structure_compass"]),
     ("recall", "travel", "wayfarers:recall_scroll", ("Recall Scroll", "Parchemin de rappel"), [
         ("Use it to return instantly to the nearest waystone of your dimension. Elites sometimes drop them.",

@@ -1,0 +1,18 @@
+{
+  "structures": [
+    {
+      "structure": "wayfarers:geothermal_foundry",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 104315289,
+    "spacing": 72,
+    "separation": 28,
+    "exclusion_zone": {
+      "other_set": "wayfarers:clockwork_citadel",
+      "chunk_count": 8
+    }
+  }
+}
