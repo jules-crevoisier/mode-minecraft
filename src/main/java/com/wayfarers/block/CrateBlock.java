@@ -23,6 +23,7 @@ import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.BlockHitResult;
 
 import java.util.HashMap;
@@ -94,9 +95,9 @@ public class CrateBlock extends BaseEntityBlock {
             ItemStack kind = stack.copyWithCount(1);
             player.setItemInHand(hand, InventoryUtil.insert(crate, stack, false));
             if (last != null && now - last <= 10) {
-                // double-click: every matching stack of the inventory goes in
+                // double-click: every matching stack of the inventory goes in (not the armour being worn)
                 Inventory inv = player.getInventory();
-                for (int i = 0; i < inv.getContainerSize(); i++) {
+                for (int i = 0; i < Inventory.INVENTORY_SIZE; i++) {
                     ItemStack s = inv.getItem(i);
                     if (ItemStack.isSameItemSameComponents(s, kind)) {
                         inv.setItem(i, InventoryUtil.insert(crate, s, false));
@@ -119,9 +120,30 @@ public class CrateBlock extends BaseEntityBlock {
 
     @Override
     protected void attack(BlockState state, Level level, BlockPos pos, Player player) {
-        if (level.isClientSide() || !(level.getBlockEntity(pos) instanceof CrateBlockEntity crate)) {
-            return;
+        if (!level.isClientSide() && level.getBlockEntity(pos) instanceof CrateBlockEntity crate) {
+            takeStack(level, pos, player, crate);
         }
+    }
+
+    /**
+     * Forge IForgeBlock#onDestroyedByPlayer (no @Override: the API stubs used for type-checking are unpatched
+     * vanilla). In creative a left-click breaks the block at once, before {@link #attack} could run: a crate that
+     * still holds items gives a stack instead, like in survival, and only breaks once it is empty.
+     */
+    public boolean onDestroyedByPlayer(BlockState state, Level level, BlockPos pos, Player player, boolean willHarvest,
+                                       FluidState fluid) {
+        if (player != null && player.getAbilities().instabuild && level.getBlockEntity(pos) instanceof CrateBlockEntity crate
+                && !crate.kind().isEmpty()) {
+            if (!level.isClientSide()) {
+                takeStack(level, pos, player, crate);
+            }
+            return false;
+        }
+        playerWillDestroy(level, pos, state, player);
+        return level.setBlock(pos, fluid.createLegacyBlock(), level.isClientSide() ? 11 : 3);
+    }
+
+    private static void takeStack(Level level, BlockPos pos, Player player, CrateBlockEntity crate) {
         ItemStack kind = crate.kind();
         if (kind.isEmpty()) {
             return;

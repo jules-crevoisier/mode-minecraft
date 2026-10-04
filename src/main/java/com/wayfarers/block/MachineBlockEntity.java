@@ -29,6 +29,8 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.context.DirectionalPlaceContext;
+import net.minecraft.world.level.block.BedBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BonemealableBlock;
@@ -37,6 +39,9 @@ import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.HopperBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BedPart;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.AABB;
@@ -126,7 +131,7 @@ public class MachineBlockEntity extends BaseContainerBlockEntity {
         items = NonNullList.withSize(SIZE, ItemStack.EMPTY);
         ContainerHelper.loadAllItems(input, items);
         setting = input.getIntOr("setting", -1);
-        mode = input.getIntOr("mode", 0);
+        mode = Math.floorMod(input.getIntOr("mode", 0), DETECTOR_MODES.length);
         channel = input.getIntOr("channel", 0);
         xp = input.getIntOr("xp", 0);
         signal = input.getIntOr("signal", 0);
@@ -219,7 +224,11 @@ public class MachineBlockEntity extends BaseContainerBlockEntity {
 
     public void setChannel(Player player, int newChannel) {
         if (level instanceof ServerLevel server && kind() == MachineBlock.Kind.TRANSMITTER) {
-            TRANSMITTERS.getOrDefault(key(server, channel), Set.of()).remove(worldPosition);
+            // (not getOrDefault(..., Set.of()): removing from an immutable set throws, e.g. right after placing)
+            Set<BlockPos> old = TRANSMITTERS.get(key(server, channel));
+            if (old != null) {
+                old.remove(worldPosition);
+            }
         }
         channel = newChannel;
         setChanged();
@@ -464,7 +473,21 @@ public class MachineBlockEntity extends BaseContainerBlockEntity {
                     || target.getBlock() instanceof MachineBlock) {
                 return;
             }
-            List<ItemStack> drops = Block.getDrops(target, level, front, level.getBlockEntity(front), null,
+            // a door, tall plant or bed only drops from one of its halves; the other half goes with it
+            BlockPos dropPos = front;
+            if (target.hasProperty(BlockStateProperties.DOUBLE_BLOCK_HALF)
+                    && target.getValue(BlockStateProperties.DOUBLE_BLOCK_HALF) == DoubleBlockHalf.UPPER) {
+                dropPos = front.below();
+            } else if (target.hasProperty(BlockStateProperties.BED_PART)
+                    && target.getValue(BlockStateProperties.BED_PART) == BedPart.FOOT) {
+                dropPos = front.relative(BedBlock.getConnectedDirection(target));
+            }
+            BlockState dropState = level.getBlockState(dropPos);
+            if (!dropState.is(target.getBlock())) {
+                dropPos = front;
+                dropState = target;
+            }
+            List<ItemStack> drops = Block.getDrops(dropState, level, dropPos, level.getBlockEntity(dropPos), null,
                     new ItemStack(Items.DIAMOND_PICKAXE));
             level.destroyBlock(front, false);
             for (ItemStack drop : drops) {
@@ -479,27 +502,28 @@ public class MachineBlockEntity extends BaseContainerBlockEntity {
             }
             Container behind = level.getBlockEntity(worldPosition.relative(facing.getOpposite())) instanceof MachineBlockEntity
                     ? null : HopperBlockEntity.getContainerAt(level, worldPosition.relative(facing.getOpposite()));
-            if (placeFrom(level, behind, front) || placeFrom(level, this, front)) {
+            if (placeFrom(level, behind, front, facing) || placeFrom(level, this, front, facing)) {
                 level.sendParticles(ParticleTypes.CLOUD, front.getX() + 0.5, front.getY() + 0.5, front.getZ() + 0.5, 4, 0.3, 0.3, 0.3, 0.01);
             }
         }
     }
 
-    private static boolean placeFrom(ServerLevel level, Container from, BlockPos front) {
+    /**
+     * Places the first block item of {@code from} that can go at {@code front}, the way a dispenser places a shulker
+     * box: the item's own placement (both halves of doors and beds, contents of shulker boxes, waystone names...)
+     * and the item is used up by it.
+     */
+    private static boolean placeFrom(ServerLevel level, Container from, BlockPos front, Direction facing) {
         if (from == null) {
             return false;
         }
+        Direction clickedFace = level.isEmptyBlock(front.below()) ? facing : Direction.UP;
         for (int i = 0; i < from.getContainerSize(); i++) {
             ItemStack stack = from.getItem(i);
-            if (stack.getItem() instanceof BlockItem bi) {
-                BlockState place = bi.getBlock().defaultBlockState();
-                if (place.canSurvive(level, front)) {
-                    level.setBlock(front, place, Block.UPDATE_ALL);
-                    level.playSound(null, front, place.getSoundType().getPlaceSound(), SoundSource.BLOCKS, 1.0F, 0.9F);
-                    from.removeItem(i, 1);
-                    from.setChanged();
-                    return true;
-                }
+            if (stack.getItem() instanceof BlockItem bi
+                    && bi.place(new DirectionalPlaceContext(level, front, facing, stack, clickedFace)).consumesAction()) {
+                from.setChanged();
+                return true;
             }
         }
         return false;

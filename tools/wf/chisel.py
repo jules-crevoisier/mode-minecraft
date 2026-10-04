@@ -6,7 +6,9 @@ gen_data writes one data/wayfarers/chisel/<family>.json per family ({"blocks": [
 (ChiselFamilies, reloadable with /reload) and datapacks may add their own files in data/<ns>/chisel/.
 
 Rules: a block belongs to one family only; no family turns something cheap into something that drops loot
-(no gilded blackstone, no ores, no infested blocks); blocks with a block entity are refused by the game anyway.
+(no gilded blackstone, no ores, no infested blocks); no family mixes blocks of different worth (the stonecutter's
+1 -> 4 recipes must not run backwards: no copper block with cut copper); blocks with a block entity are refused by
+the game anyway.
 """
 from . import decor
 
@@ -98,11 +100,12 @@ COLORS = ["white", "orange", "magenta", "light_blue", "yellow", "lime", "pink", 
 for _c in COLORS:
     FAMILIES[f"{_c}_terracotta"] = _mc(f"{_c}_terracotta", f"{_c}_glazed_terracotta")
 # ---------------------------------------------------------------- copper: one family per oxidation level and wax,
-# so chiselling never cleans, ages or unwaxes a block
+# so chiselling never cleans, ages or unwaxes a block. The full copper block stays out: the stonecutter makes four
+# cut copper, chiseled copper or grates from one block, so turning them back into blocks (9 ingots each) would
+# multiply copper.
 for _wax in ("", "waxed_"):
     for _age in ("", "exposed_", "weathered_", "oxidized_"):
-        block = f"{_wax}{_age}copper" if _age else f"{_wax}copper_block"
-        FAMILIES[f"{_wax}{_age}copper"] = _mc(block, f"{_wax}{_age}cut_copper", f"{_wax}{_age}chiseled_copper",
+        FAMILIES[f"{_wax}{_age}copper"] = _mc(f"{_wax}{_age}cut_copper", f"{_wax}{_age}chiseled_copper",
                                               f"{_wax}{_age}copper_grate")
 
 # ---------------------------------------------------------------- Wayfarers decor (tools/wf/decor.py)
