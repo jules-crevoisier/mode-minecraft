@@ -19,6 +19,7 @@ import net.minecraft.world.level.biome.MultiNoiseBiomeSourceParameterLists;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.chunk.ProtoChunk;
+import net.minecraft.world.level.chunk.status.ChunkStatus;
 import net.minecraft.world.level.chunk.UpgradeData;
 import net.minecraft.world.level.levelgen.Aquifer;
 import net.minecraft.world.level.levelgen.Beardifier;
@@ -170,7 +171,10 @@ public final class GenBenchCommand {
             // chunk outside the chunk map)
             chunk.getOrCreateNoiseChunk(c -> NoiseChunk.forChunk(c, rs, Beardifier.EMPTY, settings, fluids, Blender.empty()));
             gen.createBiomes(rs, Blender.empty(), null, chunk).join();
+            // the chunk system marks each step done; the surface step reads the biomes and refuses a chunk short of it
+            chunk.setPersistedStatus(ChunkStatus.BIOMES);
             gen.fillFromNoise(Blender.empty(), rs, null, chunk).join();
+            chunk.setPersistedStatus(ChunkStatus.NOISE);
             gen.buildSurface(chunk, new WorldGenerationContext(gen, chunk), rs, null, new BiomeManager(chunk, seed),
                     Blender.empty(), null);
             if (i >= 0) {

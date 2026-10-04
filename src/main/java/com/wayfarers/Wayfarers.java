@@ -63,6 +63,7 @@ public final class Wayfarers {
         com.wayfarers.registry.ModWorldgen.PLACEMENTS.register(modBus);
         com.wayfarers.registry.ModWorldgen.STRUCTURE_TYPES.register(modBus);
         com.wayfarers.registry.ModWorldgen.DENSITY_FUNCTION_TYPES.register(modBus);
+        com.wayfarers.registry.ModWorldgen.PLACEMENT_MODIFIERS.register(modBus);
         com.wayfarers.network.WayfarersNet.init();
 
         EntityAttributeCreationEvent.BUS.addListener(ModEntities::registerAttributes);

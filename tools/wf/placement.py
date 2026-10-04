@@ -382,6 +382,19 @@ def write_sets(ns_dir, write_json):
     for f in os.listdir(out_dir):
         if f.endswith(".json") and f not in keep:
             os.remove(os.path.join(out_dir, f))
+    write_json(os.path.join(ns_dir, "tags", "worldgen", "structure", "clears_decoration.json"), clears_decoration())
+
+
+# vanilla surface structures whose chunks keep the overhaul's big decorations (thorns, hoodoos, boulders) away
+VANILLA_CLEARS = ["#minecraft:village", "minecraft:pillager_outpost", "minecraft:desert_pyramid",
+                  "minecraft:jungle_pyramid", "minecraft:swamp_hut", "minecraft:igloo", "minecraft:mansion"]
+
+
+def clears_decoration():
+    """Tag wayfarers:clears_decoration (com.wayfarers.world.ClearOfStructuresFilter): the structures standing on the
+    ground, ours (land, wetland, coast) and vanilla's, so no surface feature grows through them."""
+    ours = sorted(f"wayfarers:{sid}" for sid, fit in FIT.items() if fit["mode"] in ("land", "wetland", "coast"))
+    return {"replace": False, "values": ours + [{"id": v, "required": False} for v in VANILLA_CLEARS]}
 
 
 # ------------------------------------------------------------------ terrain fit

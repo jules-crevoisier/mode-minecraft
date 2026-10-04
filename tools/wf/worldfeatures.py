@@ -500,9 +500,22 @@ OURS.update({
 })
 
 
+# A surface feature (thorn, giant mushroom, hoodoo, boulder, tree...) generates after the structures: without this
+# filter (com.wayfarers.world.ClearOfStructuresFilter) it can grow through a building. Skipped in a chunk that a
+# surface structure (tag wayfarers:clears_decoration) reaches.
+CLEAR = {"type": "wayfarers:clear_of_structures"}
+
+
+def _on_surface(placement):
+    return any(m.get("type") in ("minecraft:heightmap", "minecraft:surface_relative_threshold_filter")
+               or m is FLOOR_SCAN for m in placement)
+
+
 def write_features(write):
     """Our configured and placed features (data/wayfarers/worldgen/... inside the overhaul pack)."""
     for fid, (configured, placement) in OURS.items():
+        if _on_surface(placement):
+            placement = [m for m in placement if m is not BIOME] + [CLEAR, BIOME]
         if isinstance(configured, str):  # a configured feature of the mod's own data (always loaded)
             write(f"wayfarers/worldgen/placed_feature/{fid}.json", {"feature": configured, "placement": placement})
             continue

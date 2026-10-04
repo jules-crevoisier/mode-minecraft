@@ -22,8 +22,10 @@ import net.minecraft.world.level.levelgen.DensityFunction;
  * </ul>
  * This node fixes both without changing a single value: {@link #mapChildren} remembers what it returned to the walk
  * in progress on this thread (the same visitor walks the same node again: same answer), and {@link #compute}
- * remembers the last column it computed on this thread (the argument must not depend on y, like any
- * {@code flat_cache} function). Both caches are per thread because the sampler is shared by all worldgen threads.
+ * remembers the last column it computed (the argument must not depend on y, like any {@code flat_cache} function).
+ * The sampler is shared by all worldgen threads, so both caches are single immutable records swapped through a
+ * volatile field: a thread that loses a race only recomputes. (Per-thread caches leaked: every NoiseChunk walk makes
+ * new nodes, and their ThreadLocal entries kept whole NoiseChunks alive until the heap ran out.)
  */
 public final class SharedColumnFunction implements DensityFunction {
     public static final MapCodec<SharedColumnFunction> MAP_CODEC = DensityFunction.CODEC.fieldOf("argument")
@@ -31,18 +33,19 @@ public final class SharedColumnFunction implements DensityFunction {
     public static final KeyDispatchDataCodec<SharedColumnFunction> CODEC = KeyDispatchDataCodec.of(MAP_CODEC);
 
     private final DensityFunction argument;
-    private final ThreadLocal<State> state = ThreadLocal.withInitial(State::new);
+    /**
+     * Last column computed, one slot per thread (by thread id, 8 slots: worldgen threads rarely collide). Each entry is
+     * an immutable record (final fields: safely published without locks), so a racing thread at worst recomputes.
+     */
+    private final Column[] last = new Column[SLOTS];
+    private static final int SLOTS = 8;
+    /** Last walk's visitor and what this node returned to it. */
+    private volatile Mapping lastMapping;
     private int hash;
 
-    /** What this thread last asked of this node. */
-    private static final class State {
-        boolean has;
-        int x;
-        int z;
-        double value;
-        Visitor visitor;
-        DensityFunction mapped;
-    }
+    private record Column(int x, int z, double value) {}
+
+    private record Mapping(Visitor visitor, DensityFunction mapped) {}
 
     public SharedColumnFunction(DensityFunction argument) {
         this.argument = argument;
@@ -54,17 +57,15 @@ public final class SharedColumnFunction implements DensityFunction {
 
     @Override
     public double compute(FunctionContext context) {
-        State s = this.state.get();
         int x = context.blockX();
         int z = context.blockZ();
-        if (s.has && s.x == x && s.z == z) {
-            return s.value;
+        int slot = (int) Thread.currentThread().threadId() & (SLOTS - 1);
+        Column c = this.last[slot];
+        if (c != null && c.x() == x && c.z() == z) {
+            return c.value();
         }
         double v = this.argument.compute(context);
-        s.x = x;
-        s.z = z;
-        s.value = v;
-        s.has = true;
+        this.last[slot] = new Column(x, z, v);
         return v;
     }
 
@@ -75,15 +76,14 @@ public final class SharedColumnFunction implements DensityFunction {
 
     @Override
     public DensityFunction mapChildren(Visitor visitor) {
-        State s = this.state.get();
-        if (s.visitor == visitor && s.mapped != null) {
-            return s.mapped;
+        Mapping m = this.lastMapping;
+        if (m != null && m.visitor() == visitor) {
+            return m.mapped();
         }
         DensityFunction mapped = new SharedColumnFunction(visitor.apply(this.argument));
-        // holds the last walk's visitor and result (one per thread): a new walk has a new visitor, so a stale
-        // answer is never handed out, and the reference keeps that visitor's identity from being reused
-        s.visitor = visitor;
-        s.mapped = mapped;
+        // one walk at a time is remembered (a new walk has a new visitor, so a stale answer is never handed out); the
+        // reference keeps that visitor's identity from being reused
+        this.lastMapping = new Mapping(visitor, mapped);
         return mapped;
     }
 
