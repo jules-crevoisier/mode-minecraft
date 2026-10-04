@@ -382,3 +382,12 @@ def _boss_gear():
 
 
 _boss_gear()
+
+
+def _gadgets():
+    from .gadgets import ENTITIES as GADGET_ENTITIES, register_content
+    register_content(ITEMS)
+    ENTITIES.update(GADGET_ENTITIES)
+
+
+_gadgets()

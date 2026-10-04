@@ -145,6 +145,13 @@ public final class ModEntities {
             () -> EntityType.Builder.<BoomerangEntity>of(BoomerangEntity::new, MobCategory.MISC)
                     .sized(0.4F, 0.4F).clientTrackingRange(6).updateInterval(2).build(ENTITIES.key("boomerang")));
 
+    public static final RegistryObject<EntityType<com.wayfarers.entity.GrapplingHookEntity>> GRAPPLING_HOOK = ENTITIES.register("grappling_hook",
+            () -> EntityType.Builder.<com.wayfarers.entity.GrapplingHookEntity>of(com.wayfarers.entity.GrapplingHookEntity::new, MobCategory.MISC)
+                    .sized(0.3F, 0.3F).clientTrackingRange(8).updateInterval(1).build(ENTITIES.key("grappling_hook")));
+    public static final RegistryObject<EntityType<com.wayfarers.entity.RivetEntity>> RIVET = ENTITIES.register("rivet",
+            () -> EntityType.Builder.<com.wayfarers.entity.RivetEntity>of(com.wayfarers.entity.RivetEntity::new, MobCategory.MISC)
+                    .sized(0.2F, 0.2F).clientTrackingRange(4).updateInterval(5).build(ENTITIES.key("rivet")));
+
     /** Every boss with an Elden Ring style fight (demo command, quests). */
     public static List<RegistryObject<? extends EntityType<? extends com.wayfarers.boss.WayfarerBoss>>> bosses() {
         return List.of(DROWNED_WARDEN, VOID_WARDEN, GRAVE_KNIGHT, BONE_MATRIARCH, WEEPING_LADY, LARVA_MOTHER, BELL_KEEPER, ARCHIVIST, SAND_PHARAOH, JADE_JAGUAR, ROOT_MOTHER, SWAMP_CRONE, GRYPHON_KNIGHT, RUNE_COLOSSUS, FORGE_KING, CRYSTAL_SPIDER, SCULK_SPAWN, ASH_LORD, PIGLIN_KING, SOUL_REAPER);

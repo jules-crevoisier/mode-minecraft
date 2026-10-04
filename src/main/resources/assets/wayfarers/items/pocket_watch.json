@@ -1,0 +1,265 @@
+{
+  "model": {
+    "type": "minecraft:select",
+    "property": "minecraft:context_dimension",
+    "cases": [
+      {
+        "when": "minecraft:overworld",
+        "model": {
+          "type": "minecraft:range_dispatch",
+          "property": "minecraft:time",
+          "source": "daytime",
+          "scale": 16.0,
+          "entries": [
+            {
+              "threshold": 0.0,
+              "model": {
+                "type": "minecraft:model",
+                "model": "wayfarers:item/pocket_watch_00"
+              }
+            },
+            {
+              "threshold": 0.5,
+              "model": {
+                "type": "minecraft:model",
+                "model": "wayfarers:item/pocket_watch_01"
+              }
+            },
+            {
+              "threshold": 1.5,
+              "model": {
+                "type": "minecraft:model",
+                "model": "wayfarers:item/pocket_watch_02"
+              }
+            },
+            {
+              "threshold": 2.5,
+              "model": {
+                "type": "minecraft:model",
+                "model": "wayfarers:item/pocket_watch_03"
+              }
+            },
+            {
+              "threshold": 3.5,
+              "model": {
+                "type": "minecraft:model",
+                "model": "wayfarers:item/pocket_watch_04"
+              }
+            },
+            {
+              "threshold": 4.5,
+              "model": {
+                "type": "minecraft:model",
+                "model": "wayfarers:item/pocket_watch_05"
+              }
+            },
+            {
+              "threshold": 5.5,
+              "model": {
+                "type": "minecraft:model",
+                "model": "wayfarers:item/pocket_watch_06"
+              }
+            },
+            {
+              "threshold": 6.5,
+              "model": {
+                "type": "minecraft:model",
+                "model": "wayfarers:item/pocket_watch_07"
+              }
+            },
+            {
+              "threshold": 7.5,
+              "model": {
+                "type": "minecraft:model",
+                "model": "wayfarers:item/pocket_watch_08"
+              }
+            },
+            {
+              "threshold": 8.5,
+              "model": {
+                "type": "minecraft:model",
+                "model": "wayfarers:item/pocket_watch_09"
+              }
+            },
+            {
+              "threshold": 9.5,
+              "model": {
+                "type": "minecraft:model",
+                "model": "wayfarers:item/pocket_watch_10"
+              }
+            },
+            {
+              "threshold": 10.5,
+              "model": {
+                "type": "minecraft:model",
+                "model": "wayfarers:item/pocket_watch_11"
+              }
+            },
+            {
+              "threshold": 11.5,
+              "model": {
+                "type": "minecraft:model",
+                "model": "wayfarers:item/pocket_watch_12"
+              }
+            },
+            {
+              "threshold": 12.5,
+              "model": {
+                "type": "minecraft:model",
+                "model": "wayfarers:item/pocket_watch_13"
+              }
+            },
+            {
+              "threshold": 13.5,
+              "model": {
+                "type": "minecraft:model",
+                "model": "wayfarers:item/pocket_watch_14"
+              }
+            },
+            {
+              "threshold": 14.5,
+              "model": {
+                "type": "minecraft:model",
+                "model": "wayfarers:item/pocket_watch_15"
+              }
+            },
+            {
+              "threshold": 15.5,
+              "model": {
+                "type": "minecraft:model",
+                "model": "wayfarers:item/pocket_watch_00"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:range_dispatch",
+      "property": "minecraft:time",
+      "source": "random",
+      "scale": 16.0,
+      "entries": [
+        {
+          "threshold": 0.0,
+          "model": {
+            "type": "minecraft:model",
+            "model": "wayfarers:item/pocket_watch_00"
+          }
+        },
+        {
+          "threshold": 0.5,
+          "model": {
+            "type": "minecraft:model",
+            "model": "wayfarers:item/pocket_watch_01"
+          }
+        },
+        {
+          "threshold": 1.5,
+          "model": {
+            "type": "minecraft:model",
+            "model": "wayfarers:item/pocket_watch_02"
+          }
+        },
+        {
+          "threshold": 2.5,
+          "model": {
+            "type": "minecraft:model",
+            "model": "wayfarers:item/pocket_watch_03"
+          }
+        },
+        {
+          "threshold": 3.5,
+          "model": {
+            "type": "minecraft:model",
+            "model": "wayfarers:item/pocket_watch_04"
+          }
+        },
+        {
+          "threshold": 4.5,
+          "model": {
+            "type": "minecraft:model",
+            "model": "wayfarers:item/pocket_watch_05"
+          }
+        },
+        {
+          "threshold": 5.5,
+          "model": {
+            "type": "minecraft:model",
+            "model": "wayfarers:item/pocket_watch_06"
+          }
+        },
+        {
+          "threshold": 6.5,
+          "model": {
+            "type": "minecraft:model",
+            "model": "wayfarers:item/pocket_watch_07"
+          }
+        },
+        {
+          "threshold": 7.5,
+          "model": {
+            "type": "minecraft:model",
+            "model": "wayfarers:item/pocket_watch_08"
+          }
+        },
+        {
+          "threshold": 8.5,
+          "model": {
+            "type": "minecraft:model",
+            "model": "wayfarers:item/pocket_watch_09"
+          }
+        },
+        {
+          "threshold": 9.5,
+          "model": {
+            "type": "minecraft:model",
+            "model": "wayfarers:item/pocket_watch_10"
+          }
+        },
+        {
+          "threshold": 10.5,
+          "model": {
+            "type": "minecraft:model",
+            "model": "wayfarers:item/pocket_watch_11"
+          }
+        },
+        {
+          "threshold": 11.5,
+          "model": {
+            "type": "minecraft:model",
+            "model": "wayfarers:item/pocket_watch_12"
+          }
+        },
+        {
+          "threshold": 12.5,
+          "model": {
+            "type": "minecraft:model",
+            "model": "wayfarers:item/pocket_watch_13"
+          }
+        },
+        {
+          "threshold": 13.5,
+          "model": {
+            "type": "minecraft:model",
+            "model": "wayfarers:item/pocket_watch_14"
+          }
+        },
+        {
+          "threshold": 14.5,
+          "model": {
+            "type": "minecraft:model",
+            "model": "wayfarers:item/pocket_watch_15"
+          }
+        },
+        {
+          "threshold": 15.5,
+          "model": {
+            "type": "minecraft:model",
+            "model": "wayfarers:item/pocket_watch_00"
+          }
+        }
+      ]
+    }
+  }
+}

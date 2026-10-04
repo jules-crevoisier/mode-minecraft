@@ -15,6 +15,7 @@ HANDHELD = {"builder_wand", "master_builder_wand", "chisel", "fire_staff", "fros
             "levitation_wand", "steam_cane", "cartographer_blade", "telluric_hammer", "storm_staff", "ember_scythe", "void_spear", "frost_blade",
             "light_staff", "excavator_pickaxe", "lumber_axe"}
 HANDHELD |= {row[2] for row in __import__("wf.bossgear", fromlist=["BOSS_GEAR"]).BOSS_GEAR}
+HANDHELD |= __import__("wf.gadgets", fromlist=["HANDHELD"]).HANDHELD
 
 
 def write(rel, obj):
@@ -136,6 +137,15 @@ def held_assets():
         write(f"items/{iid}.json", held3d.item_definition(iid))
 
 
+def gadget_assets():
+    """Steam gadgets (wf/gadgets.py): 3D in-hand models, the flying claw, animated watch and compass."""
+    from wf import gadgets
+    for name, model in gadgets.item_models().items():
+        write(f"models/item/{name}.json", model)
+    for gid, definition in gadgets.item_definitions().items():
+        write(f"items/{gid}.json", definition)
+
+
 def furniture_assets():
     from wf import furniture
     for fid in furniture.FURNITURE:
@@ -253,6 +263,7 @@ def main():
     machine_assets()
     furniture_assets()
     held_assets()
+    gadget_assets()
     for eid, (en, fr) in content.ENTITIES.items():
         lang_en[f"entity.{NS}.{eid}"], lang_fr[f"entity.{NS}.{eid}"] = en, fr
     for prefix in content.ARMOR_SETS:
@@ -265,8 +276,8 @@ def main():
         lang_fr[f"structure.{NS}.{sdef.id}"] = sdef.title_fr
     for key, (en, fr) in content.MESSAGES.items():
         lang_en[key], lang_fr[key] = en, fr
-    from wf import guide, skills, metals, machines, furniture, biomes
-    for mod in (guide, skills, metals, machines, furniture, biomes):
+    from wf import guide, skills, metals, machines, furniture, biomes, gadgets
+    for mod in (guide, skills, metals, machines, furniture, biomes, gadgets):
         g_en, g_fr = mod.lang()
         lang_en.update(g_en)
         lang_fr.update(g_fr)

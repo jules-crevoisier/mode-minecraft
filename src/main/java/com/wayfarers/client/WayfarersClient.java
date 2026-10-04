@@ -74,6 +74,8 @@ public final class WayfarersClient {
         humanoid(event, ModEntities.VOID_STALKER.get(), "void_stalker");
         humanoid(event, ModEntities.VOID_WARDEN.get(), "void_warden");
         event.registerEntityRenderer(ModEntities.BOOMERANG.get(), ThrownItemRenderer::new);
+        event.registerEntityRenderer(ModEntities.GRAPPLING_HOOK.get(), com.wayfarers.client.render.GrapplingHookRenderer::new);
+        event.registerEntityRenderer(ModEntities.RIVET.get(), ctx -> new ThrownItemRenderer<>(ctx, 0.5F, false));
         event.registerBlockEntityRenderer(ModBlockEntities.CRATE.get(), CrateRenderer::new);
         ModelRegistry.registerRenderers(event);
     }

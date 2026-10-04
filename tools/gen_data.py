@@ -29,6 +29,7 @@ MOD_ITEMS |= {f"remembrance_{row[0]}" for row in __import__("wf.bossgear", froml
 MOD_ITEMS |= __import__("wf.metals", fromlist=["all_item_ids"]).all_item_ids()
 MOD_ITEMS |= set(__import__("wf.machines", fromlist=["MACHINES"]).MACHINES)
 MOD_ITEMS |= set(__import__("wf.furniture", fromlist=["FURNITURE"]).FURNITURE)
+MOD_ITEMS |= __import__("wf.gadgets", fromlist=["MOD_ITEMS"]).MOD_ITEMS
 MOD_ITEMS |= {"builder_wand", "master_builder_wand", "wayfarer_manual", "fire_staff", "frost_staff", "thunder_staff",
               "healing_staff", "levitation_wand", "ward_orb", "steam_cane", "arcane_ring", "mana_amulet", "oblivion_vial"}
 
@@ -114,6 +115,9 @@ def recipes():
     # tier 4 — void shards (End)
     shaped("void_spear", ["  V", " R ", "R  "], {"V": "void_shard", "R": "end_rod"}, category="equipment")
     armor_set("void", "void_shard")
+    # steam gadgets (wf/gadgets.py)
+    from wf import gadgets
+    gadgets.recipes(shaped, shapeless)
     # boss weapons: remembrance + four tier materials + two diamonds
     from wf.bossgear import BOSS_GEAR, TIER_MATERIAL, remembrance_id
     for row in BOSS_GEAR:
@@ -130,6 +134,7 @@ def tags():
     swords = ["cartographer_blade", "telluric_hammer", "frost_blade", "ember_scythe", "void_spear"] + \
         [row[2] for row in BOSS_GEAR if row[6] is not None]
     write("minecraft/tags/item/swords.json", {"replace": False, "values": [f"{NS}:{s}" for s in swords]})
+    __import__("wf.gadgets", fromlist=["tags"]).tags(write)
     write("minecraft/tags/item/pickaxes.json", {"replace": False, "values": [f"{NS}:excavator_pickaxe"]})
     write("minecraft/tags/item/axes.json", {"replace": False, "values": [f"{NS}:lumber_axe"]})
     for slot, piece in (("head", "helmet"), ("chest", "chestplate"), ("leg", "leggings"), ("foot", "boots")):

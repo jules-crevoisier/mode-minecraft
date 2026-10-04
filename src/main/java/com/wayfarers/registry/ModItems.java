@@ -37,6 +37,9 @@ public final class ModItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Wayfarers.MODID);
     /** Every item in creative-tab order. */
     public static final List<RegistryObject<? extends Item>> ALL = new ArrayList<>();
+    /** Brass ingots: repair material of the steam gadgets. */
+    public static final net.minecraft.tags.TagKey<Item> GADGET_REPAIR = net.minecraft.tags.TagKey.create(
+            net.minecraft.core.registries.Registries.ITEM, Wayfarers.id("gadget_repair_materials"));
 
     // ---- progression materials
     public static final RegistryObject<Item> MAP_FRAGMENT = simple("map_fragment", p -> p);
@@ -75,6 +78,21 @@ public final class ModItems {
     public static final RegistryObject<Item> MASTER_BUILDER_WAND = register("master_builder_wand",
             p -> new com.wayfarers.item.BuilderWandItem(p, 64), p -> p.durability(4096).rarity(Rarity.RARE));
     public static final RegistryObject<Item> CHISEL = register("chisel", com.wayfarers.item.ChiselItem::new, p -> p.durability(640));
+
+    // ---- steam gadgets (repaired with brass ingots)
+    public static final RegistryObject<Item> BRASS_WRENCH = register("brass_wrench", com.wayfarers.item.BrassWrenchItem::new,
+            p -> p.durability(512).repairable(GADGET_REPAIR));
+    public static final RegistryObject<Item> GRAPPLING_HOOK = register("grappling_hook", com.wayfarers.item.GrapplingHookItem::new,
+            p -> p.durability(320).repairable(GADGET_REPAIR).rarity(Rarity.UNCOMMON));
+    public static final RegistryObject<Item> BRASS_GLIDER = register("brass_glider", com.wayfarers.item.GliderItem::new,
+            p -> p.durability(900).repairable(GADGET_REPAIR).rarity(Rarity.UNCOMMON));
+    public static final RegistryObject<Item> RIVET_GUN = register("rivet_gun", com.wayfarers.item.RivetGunItem::new,
+            p -> p.durability(465).repairable(GADGET_REPAIR));
+    public static final RegistryObject<Item> RIVET = simple("rivet", p -> p);
+    public static final RegistryObject<Item> POCKET_WATCH = register("pocket_watch", com.wayfarers.item.PocketWatchItem::new,
+            p -> p.stacksTo(1));
+    public static final RegistryObject<Item> AIRSHIP_COMPASS = register("airship_compass", com.wayfarers.item.AirshipCompassItem::new,
+            p -> p.stacksTo(1).rarity(Rarity.UNCOMMON));
 
     // ---- weapons
     public static final RegistryObject<Item> CARTOGRAPHER_BLADE = register("cartographer_blade", CartographerBladeItem::new,

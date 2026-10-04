@@ -14,6 +14,7 @@ CATEGORIES = [
     ("danger", "minecraft:iron_sword", ("Danger & bosses", "Danger et boss")),
     ("gear", "wayfarers:lithite_shard", ("Gear & materials", "Équipement et matériaux")),
     ("machines", "wayfarers:auto_harvester", ("Machines & redstone", "Machines et redstone")),
+    ("gadgets", "wayfarers:brass_wrench", ("Steam gadgets", "Gadgets à vapeur")),
 ]
 
 # (id, category, icon, (title en, title fr), [(en, fr), ...paragraphs], [related item ids])
@@ -371,3 +372,11 @@ def _machine_pages():
 
 
 PAGES += _machine_pages()
+
+
+def _gadget_pages():
+    from .gadgets import guide_pages
+    return guide_pages()
+
+
+PAGES += _gadget_pages()

@@ -66,6 +66,7 @@ public final class Wayfarers {
         EquipmentEvents.register();
         DangerEvents.register();
         com.wayfarers.event.QolEvents.register();
+        com.wayfarers.event.GadgetEvents.register();
         com.wayfarers.skill.SkillEvents.register();
         com.wayfarers.chisel.ChiselFamilies.register();
         SpawnPlacementRegisterEvent.BUS.addListener(ModEntities::registerSpawnPlacements);
