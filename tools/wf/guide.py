@@ -36,9 +36,10 @@ PAGES = [
          "the mouse wheel or the arrow keys. When a page goes on, the button reads \"More >\".",
          "Ce manuel explique chaque système. Clique une page dans le sommaire à gauche ; tourne les pages avec les "
          "flèches, la molette ou les touches fléchées. Quand une page continue, le bouton affiche « Suite > »."),
-        ("Shortcut: hover a Wayfarers item in your inventory and hold W to open its page. Lost the manual? Craft a "
-         "book and a feather.",
-         "Raccourci : survole un objet Wayfarers dans ton inventaire et maintiens W pour ouvrir sa page. Manuel "
+        ("Shortcut: hover a Wayfarers item in your inventory and hold the manual key (W, or the key its tooltip "
+         "shows; Controls to change it) to open its page. Lost the manual? Craft a book and a feather.",
+         "Raccourci : survole un objet Wayfarers dans ton inventaire et maintiens la touche du manuel (Z sur un "
+         "clavier AZERTY, celle qu'indique l'infobulle ; réglable dans Commandes) pour ouvrir sa page. Manuel "
          "perdu ? Un livre et une plume."),
     ], ["wayfarers:wayfarer_atlas", "wayfarers:wayfarer_manual"]),
     ("quests", "start", "minecraft:writable_book", ("Quests & journal", "Quêtes et journal"), [
@@ -61,8 +62,11 @@ PAGES = [
          "G: Builder's Wand symmetry\nW (held over an item): its manual page",
          "J : journal de quêtes\nK : arbre de talents\nV : utiliser le talent actif\nR : trier l'inventaire\n"
          "M : allumer/éteindre l'aimant\nG : symétrie de la baguette\nW (maintenu sur un objet) : sa page du manuel"),
-        ("Change them in Options > Controls, Wayfarers section (W cannot be changed).",
-         "Change-les dans Options > Commandes, rubrique Wayfarers (W ne se change pas)."),
+        ("These are the keys of a QWERTY keyboard: Options > Controls, Wayfarers section, shows yours and changes "
+         "them. Display settings (health bars, damage numbers, tracker, tips): Config button of Wayfarers in the mods list.",
+         "Ce sont les touches d'un clavier QWERTY (en AZERTY, W devient Z et M devient la virgule) : Options > "
+         "Commandes, rubrique Wayfarers, montre les tiennes et les change. Réglages d'affichage (barres de vie, "
+         "chiffres de dégâts, suivi, astuces) : bouton Config de Wayfarers dans la liste des mods."),
     ], []),
     ("compass", "start", "wayfarers:structure_compass", ("Structure Compass", "Boussole des structures"), [
         ("It finds Wayfarers structures. You get one when you first arrive; craft more with a compass surrounded by "

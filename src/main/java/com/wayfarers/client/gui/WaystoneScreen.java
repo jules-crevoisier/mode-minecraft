@@ -248,10 +248,10 @@ public class WaystoneScreen extends Screen {
             if (!renaming) {
                 WfGui.textClipped(g, font, e.name(), cardX() + 5, cardY() + 26, cardW() - 10, WfGui.INK, false);
             }
-            g.centeredText(font, Component.translatable("gui.wayfarers.dim." + e.dimension()), cx, cardY() + 40, WfGui.INK_SOFT);
-            g.centeredText(font, Component.translatable("gui.wayfarers.waystones.coords", e.x(), e.y(), e.z()), cx, cardY() + 52, WfGui.INK_SOFT);
+            WfGui.centered(g, font, Component.translatable("gui.wayfarers.dim." + e.dimension()), cx, cardY() + 40, WfGui.INK_SOFT);
+            WfGui.centered(g, font, Component.translatable("gui.wayfarers.waystones.coords", e.x(), e.y(), e.z()), cx, cardY() + 52, WfGui.INK_SOFT);
             if (sameDimension(e) && !e.id().equals(current)) {
-                g.centeredText(font, Component.translatable("gui.wayfarers.waystones.distance", (int) distance(e)), cx, cardY() + 64, WfGui.INK_SOFT);
+                WfGui.centered(g, font, Component.translatable("gui.wayfarers.waystones.distance", (int) distance(e)), cx, cardY() + 64, WfGui.INK_SOFT);
             }
         }
         g.centeredText(font, Component.translatable("gui.wayfarers.waystones.hint"), left + W / 2, top + H + 4, WfGui.CREAM_SOFT);
@@ -300,6 +300,29 @@ public class WaystoneScreen extends Screen {
     public boolean keyPressed(KeyEvent event) {
         if (renaming && renameBox.isFocused() && (event.key() == 257 || event.key() == 335)) {
             toggleRename();
+            return true;
+        }
+        // keyboard: up / down walk the list (even while typing in the search box), Enter travels
+        if (!renaming && (event.isUp() || event.isDown()) && !shown.isEmpty()) {
+            int i = 0;
+            for (int k = 0; k < shown.size(); k++) {
+                if (shown.get(k).id().equals(selected)) {
+                    i = k + (event.isUp() ? -1 : 1);
+                }
+            }
+            i = Math.max(0, Math.min(shown.size() - 1, i));
+            selected = shown.get(i).id();
+            if (i < scroll) {
+                scroll = i;
+            } else if (i >= scroll + visibleRows()) {
+                scroll = i - visibleRows() + 1;
+            }
+            updateButtons();
+            return true;
+        }
+        if (!renaming && (event.key() == 257 || event.key() == 335) && (getFocused() == null || getFocused() == search)
+                && travel.active) {
+            travel();
             return true;
         }
         return super.keyPressed(event);

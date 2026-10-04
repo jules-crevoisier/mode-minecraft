@@ -63,7 +63,7 @@ public final class QuestTracker {
         int lines = Math.min(desc.size(), 3);
         int h = 34 + lines * 9;
         int x = g.guiWidth() - W - 6;
-        int y = 6;
+        int y = 6 + effectRows(mc) * 26;
         WfGui.sprite(g, WfGui.CARD, x, y, W, h);
         g.item(cachedIcon, x + 5, y + 5);
         g.text(font, Component.translatable("gui.wayfarers.quests.tracker"), x + 25, y + 4, WfGui.INK_SOFT, false);
@@ -79,6 +79,25 @@ public final class QuestTracker {
             WfGui.sprite(g, WfGui.id("bar_fill"), x + 6, by + 1, fill, 4);
         }
         g.text(font, s.completed() + "/" + s.total(), x + bw + 9, by - 1, WfGui.INK, false);
+    }
+
+    /**
+     * Rows of status effect icons vanilla draws in the top-right corner (beneficial ones on the first row, the
+     * others on the second): the card goes below them instead of covering them.
+     */
+    private static int effectRows(Minecraft mc) {
+        boolean good = false;
+        boolean bad = false;
+        for (net.minecraft.world.effect.MobEffectInstance e : mc.player.getActiveEffects()) {
+            if (e.showIcon()) {
+                if (e.getEffect().value().isBeneficial()) {
+                    good = true;
+                } else {
+                    bad = true;
+                }
+            }
+        }
+        return bad ? 2 : good ? 1 : 0;
     }
 
     /** When the tracked quest is completed, follow the next available quest of the same chapter. */

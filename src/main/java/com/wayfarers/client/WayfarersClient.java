@@ -35,6 +35,9 @@ public final class WayfarersClient {
     /** Builder's Wand in hand: cycle its symmetry (off, mirror X, mirror Z, both). */
     public static final KeyMapping WAND_KEY = new KeyMapping("key.wayfarers.wand_symmetry",
             InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_G, CATEGORY);
+    /** Held over an item in an inventory: opens its manual page (TipCards). */
+    public static final KeyMapping MANUAL_KEY = new KeyMapping("key.wayfarers.manual_page",
+            InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_W, CATEGORY);
 
     private WayfarersClient() {}
 
@@ -53,10 +56,18 @@ public final class WayfarersClient {
                             com.wayfarers.client.gui.TerminalScreen::new);
                     net.minecraft.client.gui.screens.MenuScreens.register(com.wayfarers.registry.ModMenus.CHISEL_TABLE.get(),
                             com.wayfarers.client.gui.ChiselTableScreen::new);
+                    net.minecraft.client.gui.screens.MenuScreens.register(com.wayfarers.registry.ModMenus.MACHINE.get(),
+                            com.wayfarers.client.gui.MachineScreen::new);
                 }));
         AddGuiOverlayLayersEvent.BUS.addListener(TipCards::register);
         AddGuiOverlayLayersEvent.BUS.addListener(ManaHud::register);
         net.minecraftforge.event.entity.player.ItemTooltipEvent.BUS.addListener(TipCards::onTooltip);
+        TipCards.registerKeys();
+        // "Config" button of the mods list: the display settings in the mod's own theme
+        net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext.get().registerExtensionPoint(
+                net.minecraftforge.client.ConfigScreenHandler.ConfigScreenFactory.class,
+                () -> new net.minecraftforge.client.ConfigScreenHandler.ConfigScreenFactory(
+                        (mc, parent) -> new com.wayfarers.client.gui.SettingsScreen(parent)));
         RegisterKeyMappingsEvent.BUS.addListener(event -> {
             event.register(SORT_KEY);
             event.register(MAGNET_KEY);
@@ -64,6 +75,7 @@ public final class WayfarersClient {
             event.register(SKILLS_KEY);
             event.register(ABILITY_KEY);
             event.register(WAND_KEY);
+            event.register(MANUAL_KEY);
         });
         TickEvent.ClientTickEvent.Post.BUS.addListener(event -> onClientTick());
     }
@@ -92,6 +104,7 @@ public final class WayfarersClient {
     private static void onClientTick() {
         EldenBossBar.tick();
         TipCards.tick();
+        MachineAreaPreview.tick();
         Minecraft mc = Minecraft.getInstance();
         ClientPacketListener connection = mc.getConnection();
         while (SORT_KEY.consumeClick()) {

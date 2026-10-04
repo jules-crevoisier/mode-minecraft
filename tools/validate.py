@@ -385,6 +385,9 @@ def main():
     check_tags()
     check_chisel()
     check_guide()
+    from wf import machines
+    for e in machines.check_gui():
+        err(e)
     import validate_world
     if validate_world.main() != 0:
         err("world overhaul pack: see the errors above")

@@ -99,7 +99,8 @@ public final class CoopEvents {
             player.getInventory().add(new ItemStack(ModItems.WAYFARER_ATLAS.get()));
             player.getInventory().add(new ItemStack(ModItems.WAYFARER_MANUAL.get()));
             player.getInventory().add(new ItemStack(ModItems.STRUCTURE_COMPASS.get()));
-            player.sendSystemMessage(Component.translatable("message.wayfarers.welcome").withStyle(ChatFormatting.GOLD));
+            player.sendSystemMessage(Component.translatable("message.wayfarers.welcome", Component.keybind("key.wayfarers.quests"))
+                    .withStyle(ChatFormatting.GOLD));
         }
         com.wayfarers.network.WayfarersNet.toPlayer(player, com.wayfarers.util.QuestBook.snapshot(player, false));
     }

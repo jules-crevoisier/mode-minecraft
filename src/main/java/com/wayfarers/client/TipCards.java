@@ -1,6 +1,5 @@
 package com.wayfarers.client;
 
-import com.mojang.blaze3d.platform.InputConstants;
 import com.wayfarers.Wayfarers;
 import com.wayfarers.client.gui.GuideScreen;
 import com.wayfarers.client.gui.WfGui;
@@ -22,7 +21,6 @@ import net.minecraft.world.item.Items;
 import net.minecraftforge.client.event.AddGuiOverlayLayersEvent;
 import net.minecraftforge.client.gui.overlay.ForgeLayeredDraw;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -31,7 +29,8 @@ import java.util.List;
 /**
  * One-time tip cards (sent by the server the first time a player meets a system) shown under the quest
  * tracker, plus the manual shortcut: items with a manual page get "Hold W: manual page" in their tooltip,
- * and holding W over them in an inventory opens that page.
+ * and holding that key over them in an inventory opens the page. The key is a real key binding (W by default,
+ * rebindable), so the tooltip names the right key on every keyboard layout (it reads "Z" on AZERTY).
  */
 public final class TipCards {
     private static final int W = 170;
@@ -43,8 +42,27 @@ public final class TipCards {
     private static String shownId;
     private static List<FormattedCharSequence> shownLines = List.of();
     private static ItemStack shownIcon = ItemStack.EMPTY;
+    private static boolean manualKeyDown;
 
     private TipCards() {}
+
+    /** Key bindings are not updated while a screen is open: follow the manual key through the screen's key events. */
+    public static void registerKeys() {
+        net.minecraftforge.client.event.ScreenEvent.KeyPressed.Pre.BUS.addListener(
+                (java.util.function.Predicate<net.minecraftforge.client.event.ScreenEvent.KeyPressed.Pre>) e -> {
+                    if (WayfarersClient.MANUAL_KEY.matches(e.getInfo())) {
+                        manualKeyDown = true;
+                    }
+                    return false;
+                });
+        net.minecraftforge.client.event.ScreenEvent.KeyReleased.Pre.BUS.addListener(
+                (java.util.function.Predicate<net.minecraftforge.client.event.ScreenEvent.KeyReleased.Pre>) e -> {
+                    if (WayfarersClient.MANUAL_KEY.matches(e.getInfo())) {
+                        manualKeyDown = false;
+                    }
+                    return false;
+                });
+    }
 
     public static void register(AddGuiOverlayLayersEvent event) {
         event.getLayeredDraw().addAbove(ForgeLayeredDraw.PRE_SLEEP_STACK, Wayfarers.id("tips"),
@@ -70,26 +88,36 @@ public final class TipCards {
             age = 0;
             shownId = null;
         }
-        // hold W over an item with a manual page (in any inventory screen) to open it
+        // hold the manual key over an item with a manual page (in any inventory screen) to open it
         Minecraft mc = Minecraft.getInstance();
         if (mc.gui.screen() instanceof AbstractContainerScreen<?> screen) {
             Slot slot = screen.getSlotUnderMouse();
             String page = slot != null && slot.hasItem() ? GuideScreen.pageFor(slot.getItem()) : null;
-            if (page != null && InputConstants.isKeyDown(mc.getWindow(), GLFW.GLFW_KEY_W)) {
+            if (page != null && manualKeyDown) {
                 if (++holdW == 8) {
-                    mc.gui.setScreen(new GuideScreen(page));
+                    manualKeyDown = false;
+                    // from the player's own inventory the manual returns there on close; from a chest, machine...
+                    // the container is closed properly first (the server would otherwise still think it is open)
+                    boolean ownInventory = screen instanceof net.minecraft.client.gui.screens.inventory.InventoryScreen
+                            || screen instanceof net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
+                    if (!ownInventory && mc.player != null) {
+                        mc.player.closeContainer();
+                    }
+                    mc.gui.setScreen(new GuideScreen(page).returningTo(ownInventory ? screen : null));
                 }
             } else {
                 holdW = 0;
             }
         } else {
             holdW = 0;
+            manualKeyDown = false;
         }
     }
 
     public static void onTooltip(ItemTooltipEvent event) {
         if (GuideScreen.pageFor(event.getItemStack()) != null) {
-            event.getToolTip().add(Component.translatable("gui.wayfarers.manual.hold").withStyle(ChatFormatting.DARK_AQUA));
+            event.getToolTip().add(Component.translatable("gui.wayfarers.manual.hold", WayfarersClient.MANUAL_KEY.getTranslatedKeyMessage())
+                    .withStyle(ChatFormatting.DARK_AQUA));
         }
     }
 

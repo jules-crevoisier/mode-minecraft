@@ -15,6 +15,8 @@ public final class ModMenus {
             () -> IForgeMenuType.create((id, inv, buf) -> new TerminalMenu(id, inv, buf.readBlockPos())));
     public static final RegistryObject<MenuType<com.wayfarers.menu.ChiselTableMenu>> CHISEL_TABLE = MENUS.register("chisel_table",
             () -> IForgeMenuType.create((id, inv, buf) -> new com.wayfarers.menu.ChiselTableMenu(id, inv, buf.readBlockPos())));
+    public static final RegistryObject<MenuType<com.wayfarers.menu.MachineMenu>> MACHINE = MENUS.register("machine",
+            () -> IForgeMenuType.create(com.wayfarers.menu.MachineMenu::new));
 
     private ModMenus() {}
 }
