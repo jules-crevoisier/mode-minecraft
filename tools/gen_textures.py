@@ -564,6 +564,8 @@ def main():
     written.update(furniture.textures())
     from wf import held3d
     written.update(held3d.textures())
+    from wf import gadgets
+    written.update(gadgets.textures())
     from wf import decor
     for bid, d in decor.DECOR.items():
         names = decor.texture_names(bid)

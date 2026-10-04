@@ -80,6 +80,13 @@ Points gagnés par quête, par boss et tous les 10 niveaux. Arbre de **4 branche
 - **Blocs** : placages de laiton, de cuivre, de vert-de-gris et de fer sombre ; panneaux d'horlogerie et à manomètre ; tuyaux ; lampes Edison ; conduits d'éther ; lambris d'acajou ; capitonnage ; briques de cheminée.
 - **Meubles 3D** : table, chaise, étagère, lustre, lampe suspendue, tuyau, garde-corps, engrenage mural, vanne.
 - **Armes en 3D en main** pour les armes de boss, les bâtons et les armes spéciales.
+- **Gadgets à vapeur** (manuel, catégorie « Gadgets à vapeur ») :
+  - **Clé à molette en laiton** : tourne les blocs (escaliers, bûches, coffres, machines…) ; accroupi, règle les machines du mod ou ramasse ses blocs déco et meubles.
+  - **Grappin** : griffe lancée à 32 blocs qui te tire jusqu'à elle, sans dégâts de chute.
+  - **Planeur en laiton** : tenu en main pendant une chute, il ralentit la descente et fait planer là où on regarde.
+  - **Pistolet à rivets** : tire des rivets (ou des pépites de fer), 5 dégâts.
+  - **Montre à gousset** : aiguille qui suit le soleil ; clic droit : heure, jour, lune et biome.
+  - **Boussole de dirigeable** : son aiguille d'éther pointe vers le Port céleste le plus proche.
 
 ### Nouveau monde (option `world.overhaul`)
 Le pack intégré **wayfarers:world_overhaul** remplace l'Overworld des **nouveaux** mondes :

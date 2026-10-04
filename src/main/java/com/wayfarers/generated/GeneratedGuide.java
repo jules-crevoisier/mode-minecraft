@@ -15,7 +15,8 @@ public final class GeneratedGuide {
             new Category("storage", "wayfarers:sorting_chest"),
             new Category("danger", "minecraft:iron_sword"),
             new Category("gear", "wayfarers:lithite_shard"),
-            new Category("machines", "wayfarers:auto_harvester")
+            new Category("machines", "wayfarers:auto_harvester"),
+            new Category("gadgets", "wayfarers:brass_wrench")
     );
 
     public static final List<Page> PAGES = List.of(
@@ -50,7 +51,13 @@ public final class GeneratedGuide {
             new Page("wand", "gear", "wayfarers:builder_wand", 2, List.of("wayfarers:builder_wand", "wayfarers:master_builder_wand")),
             new Page("tools", "gear", "wayfarers:excavator_pickaxe", 1, List.of("wayfarers:excavator_pickaxe", "wayfarers:lumber_axe")),
             new Page("machines", "machines", "wayfarers:auto_harvester", 3, List.of("wayfarers:auto_harvester", "wayfarers:sprinkler", "wayfarers:vacuum_hopper")),
-            new Page("redstone_easy", "machines", "wayfarers:redstone_timer", 3, List.of("wayfarers:redstone_timer", "wayfarers:block_breaker", "wayfarers:block_placer", "wayfarers:wireless_transmitter", "wayfarers:wireless_receiver", "wayfarers:entity_detector"))
+            new Page("redstone_easy", "machines", "wayfarers:redstone_timer", 3, List.of("wayfarers:redstone_timer", "wayfarers:block_breaker", "wayfarers:block_placer", "wayfarers:wireless_transmitter", "wayfarers:wireless_receiver", "wayfarers:entity_detector")),
+            new Page("wrench", "gadgets", "wayfarers:brass_wrench", 2, List.of("wayfarers:brass_wrench")),
+            new Page("grapple", "gadgets", "wayfarers:grappling_hook", 2, List.of("wayfarers:grappling_hook")),
+            new Page("glider", "gadgets", "wayfarers:brass_glider", 2, List.of("wayfarers:brass_glider")),
+            new Page("rivet_gun", "gadgets", "wayfarers:rivet_gun", 2, List.of("wayfarers:rivet_gun", "wayfarers:rivet")),
+            new Page("watch", "gadgets", "wayfarers:pocket_watch", 2, List.of("wayfarers:pocket_watch")),
+            new Page("airship_compass", "gadgets", "wayfarers:airship_compass", 1, List.of("wayfarers:airship_compass"))
     );
 
     public static final List<Tip> TIPS = List.of(
