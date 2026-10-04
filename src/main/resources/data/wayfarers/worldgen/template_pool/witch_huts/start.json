@@ -6,71 +6,105 @@
       "element": {
         "element_type": "wayfarers:chunked_template",
         "size": [
-          55,
+          63,
           65,
-          64
+          68
         ],
         "cells": [
           {
             "location": "wayfarers:witch_huts/huts/x0_z0",
             "offset": [
-              2,
+              5,
               0,
               0
             ],
             "size": [
-              26,
-              55,
-              32
+              27,
+              48,
+              23
             ],
-            "blocks": 12492
+            "blocks": 7567
           },
           {
             "location": "wayfarers:witch_huts/huts/x0_z1",
             "offset": [
               0,
               0,
-              32
+              23
             ],
             "size": [
-              28,
-              51,
-              32
+              32,
+              55,
+              22
             ],
-            "blocks": 10036
+            "blocks": 12468
+          },
+          {
+            "location": "wayfarers:witch_huts/huts/x0_z2",
+            "offset": [
+              1,
+              0,
+              45
+            ],
+            "size": [
+              31,
+              51,
+              23
+            ],
+            "blocks": 4485
           },
           {
             "location": "wayfarers:witch_huts/huts/x1_z0",
             "offset": [
-              28,
+              32,
               0,
-              10
+              6
             ],
             "size": [
-              27,
+              28,
               65,
-              22
+              17
             ],
-            "blocks": 6743
+            "blocks": 3869
           },
           {
             "location": "wayfarers:witch_huts/huts/x1_z1",
             "offset": [
-              28,
+              32,
               0,
-              32
+              23
             ],
             "size": [
-              27,
-              54,
-              32
+              31,
+              62,
+              22
             ],
-            "blocks": 9227
+            "blocks": 9706
+          },
+          {
+            "location": "wayfarers:witch_huts/huts/x1_z2",
+            "offset": [
+              32,
+              7,
+              45
+            ],
+            "size": [
+              30,
+              40,
+              23
+            ],
+            "blocks": 4205
           }
         ],
         "projection": "rigid",
         "processors": "wayfarers:none",
-        "ground_level_delta": 32
+        "ground_level_delta": 32,
+        "footprint": [
+          4,
+          10,
+          58,
+          63
+        ]
       }
     }
   ]

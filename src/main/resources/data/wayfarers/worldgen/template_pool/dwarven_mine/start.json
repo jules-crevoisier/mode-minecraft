@@ -6,9 +6,9 @@
       "element": {
         "element_type": "wayfarers:chunked_template",
         "size": [
-          72,
+          74,
           66,
-          76
+          78
         ],
         "cells": [
           {
@@ -16,63 +16,63 @@
             "offset": [
               2,
               28,
-              1
+              0
             ],
             "size": [
-              21,
+              22,
               32,
-              24
+              26
             ],
-            "blocks": 6073
+            "blocks": 6237
           },
           {
             "location": "wayfarers:dwarven_mine/mine/x0_z1",
             "offset": [
               0,
               1,
-              25
+              26
             ],
             "size": [
-              23,
+              24,
               51,
               26
             ],
-            "blocks": 6113
+            "blocks": 6234
           },
           {
             "location": "wayfarers:dwarven_mine/mine/x0_z2",
             "offset": [
               0,
               28,
-              51
+              52
             ],
             "size": [
-              23,
+              24,
               21,
-              17
+              19
             ],
-            "blocks": 2260
+            "blocks": 2405
           },
           {
             "location": "wayfarers:dwarven_mine/mine/x1_z0",
             "offset": [
-              23,
+              24,
               1,
               0
             ],
             "size": [
               25,
               63,
-              25
+              26
             ],
-            "blocks": 12232
+            "blocks": 12334
           },
           {
             "location": "wayfarers:dwarven_mine/mine/x1_z1",
             "offset": [
-              23,
+              24,
               0,
-              25
+              26
             ],
             "size": [
               25,
@@ -84,63 +84,69 @@
           {
             "location": "wayfarers:dwarven_mine/mine/x1_z2",
             "offset": [
-              23,
+              24,
               1,
-              51
+              52
             ],
             "size": [
               25,
               46,
-              25
+              26
             ],
-            "blocks": 4281
+            "blocks": 4412
           },
           {
             "location": "wayfarers:dwarven_mine/mine/x2_z0",
             "offset": [
-              48,
+              49,
               28,
               1
             ],
             "size": [
-              20,
+              21,
               32,
-              24
+              25
             ],
-            "blocks": 5917
+            "blocks": 6081
           },
           {
             "location": "wayfarers:dwarven_mine/mine/x2_z1",
             "offset": [
-              48,
+              49,
               1,
-              25
+              26
             ],
             "size": [
-              24,
+              25,
               48,
               26
             ],
-            "blocks": 6079
+            "blocks": 6199
           },
           {
             "location": "wayfarers:dwarven_mine/mine/x2_z2",
             "offset": [
-              48,
+              49,
               28,
-              51
+              52
             ],
             "size": [
+              22,
               19,
-              19,
-              25
+              26
             ],
-            "blocks": 2551
+            "blocks": 2749
           }
         ],
         "projection": "rigid",
         "processors": "wayfarers:aging",
-        "ground_level_delta": 35
+        "ground_level_delta": 35,
+        "footprint": [
+          4,
+          2,
+          69,
+          73
+        ]
       }
     }
   ]

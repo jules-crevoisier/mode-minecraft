@@ -8,7 +8,7 @@
         "size": [
           73,
           60,
-          72
+          76
         ],
         "cells": [
           {
@@ -21,37 +21,37 @@
             "size": [
               24,
               53,
-              24
+              25
             ],
-            "blocks": 6481
+            "blocks": 5681
           },
           {
             "location": "wayfarers:sand_hypogeum/layout_0/x0_z1",
             "offset": [
               0,
               0,
-              24
+              25
             ],
             "size": [
               24,
               60,
-              24
+              26
             ],
-            "blocks": 9996
+            "blocks": 11080
           },
           {
             "location": "wayfarers:sand_hypogeum/layout_0/x0_z2",
             "offset": [
               0,
               0,
-              48
+              51
             ],
             "size": [
               24,
               53,
-              24
+              25
             ],
-            "blocks": 8155
+            "blocks": 8649
           },
           {
             "location": "wayfarers:sand_hypogeum/layout_0/x1_z0",
@@ -63,84 +63,90 @@
             "size": [
               25,
               53,
-              24
+              25
             ],
-            "blocks": 10332
+            "blocks": 9052
           },
           {
             "location": "wayfarers:sand_hypogeum/layout_0/x1_z1",
             "offset": [
               24,
               0,
-              24
+              25
             ],
             "size": [
               25,
               60,
-              24
+              26
             ],
-            "blocks": 14780
+            "blocks": 15953
           },
           {
             "location": "wayfarers:sand_hypogeum/layout_0/x1_z2",
             "offset": [
               24,
               0,
-              48
+              51
             ],
             "size": [
               25,
               53,
-              24
+              25
             ],
-            "blocks": 11977
+            "blocks": 12739
           },
           {
             "location": "wayfarers:sand_hypogeum/layout_0/x2_z0",
             "offset": [
               49,
               0,
-              0
+              4
             ],
             "size": [
               24,
               42,
-              24
+              21
             ],
-            "blocks": 11502
+            "blocks": 9757
           },
           {
             "location": "wayfarers:sand_hypogeum/layout_0/x2_z1",
             "offset": [
               49,
               0,
-              24
+              25
             ],
             "size": [
               24,
               42,
-              24
+              26
             ],
-            "blocks": 11455
+            "blocks": 13296
           },
           {
             "location": "wayfarers:sand_hypogeum/layout_0/x2_z2",
             "offset": [
               49,
               0,
-              48
+              51
             ],
             "size": [
               24,
               41,
-              24
+              25
             ],
-            "blocks": 11364
+            "blocks": 11564
           }
         ],
         "projection": "rigid",
         "processors": "wayfarers:none",
-        "ground_level_delta": 42
+        "ground_level_delta": 42,
+        "footprint": [
+          4,
+          4,
+          50,
+          57
+        ]
       }
     },
     {
@@ -165,7 +171,7 @@
               41,
               25
             ],
-            "blocks": 15870
+            "blocks": 15876
           },
           {
             "location": "wayfarers:sand_hypogeum/layout_1/x0_z1",
@@ -179,7 +185,7 @@
               43,
               26
             ],
-            "blocks": 11728
+            "blocks": 11943
           },
           {
             "location": "wayfarers:sand_hypogeum/layout_1/x0_z2",
@@ -193,7 +199,7 @@
               43,
               25
             ],
-            "blocks": 5587
+            "blocks": 5658
           },
           {
             "location": "wayfarers:sand_hypogeum/layout_1/x1_z0",
@@ -207,7 +213,7 @@
               46,
               25
             ],
-            "blocks": 12040
+            "blocks": 12317
           },
           {
             "location": "wayfarers:sand_hypogeum/layout_1/x1_z1",
@@ -221,7 +227,7 @@
               57,
               26
             ],
-            "blocks": 16993
+            "blocks": 17003
           },
           {
             "location": "wayfarers:sand_hypogeum/layout_1/x1_z2",
@@ -235,7 +241,7 @@
               60,
               25
             ],
-            "blocks": 8861
+            "blocks": 9261
           },
           {
             "location": "wayfarers:sand_hypogeum/layout_1/x2_z0",
@@ -249,7 +255,7 @@
               45,
               25
             ],
-            "blocks": 7850
+            "blocks": 8037
           },
           {
             "location": "wayfarers:sand_hypogeum/layout_1/x2_z1",
@@ -263,7 +269,7 @@
               56,
               26
             ],
-            "blocks": 9519
+            "blocks": 9770
           },
           {
             "location": "wayfarers:sand_hypogeum/layout_1/x2_z2",
@@ -277,12 +283,18 @@
               60,
               25
             ],
-            "blocks": 6986
+            "blocks": 7348
           }
         ],
         "projection": "rigid",
         "processors": "wayfarers:none",
-        "ground_level_delta": 42
+        "ground_level_delta": 42,
+        "footprint": [
+          22,
+          19,
+          68,
+          72
+        ]
       }
     },
     {
@@ -307,7 +319,7 @@
               46,
               22
             ],
-            "blocks": 12744
+            "blocks": 12933
           },
           {
             "location": "wayfarers:sand_hypogeum/layout_2/x0_z1",
@@ -321,7 +333,7 @@
               60,
               21
             ],
-            "blocks": 9064
+            "blocks": 9246
           },
           {
             "location": "wayfarers:sand_hypogeum/layout_2/x0_z2",
@@ -335,7 +347,7 @@
               48,
               22
             ],
-            "blocks": 10302
+            "blocks": 10535
           },
           {
             "location": "wayfarers:sand_hypogeum/layout_2/x1_z0",
@@ -349,7 +361,7 @@
               53,
               22
             ],
-            "blocks": 10701
+            "blocks": 10975
           },
           {
             "location": "wayfarers:sand_hypogeum/layout_2/x1_z1",
@@ -377,7 +389,7 @@
               53,
               22
             ],
-            "blocks": 11548
+            "blocks": 11809
           },
           {
             "location": "wayfarers:sand_hypogeum/layout_2/x2_z0",
@@ -391,7 +403,7 @@
               47,
               22
             ],
-            "blocks": 10421
+            "blocks": 10619
           },
           {
             "location": "wayfarers:sand_hypogeum/layout_2/x2_z1",
@@ -405,7 +417,7 @@
               60,
               21
             ],
-            "blocks": 8865
+            "blocks": 9052
           },
           {
             "location": "wayfarers:sand_hypogeum/layout_2/x2_z2",
@@ -419,12 +431,18 @@
               48,
               22
             ],
-            "blocks": 10892
+            "blocks": 11100
           }
         ],
         "projection": "rigid",
         "processors": "wayfarers:none",
-        "ground_level_delta": 42
+        "ground_level_delta": 42,
+        "footprint": [
+          9,
+          6,
+          56,
+          59
+        ]
       }
     }
   ]

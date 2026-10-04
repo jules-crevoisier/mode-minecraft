@@ -2,7 +2,9 @@
 """Boot a real Forge server with the mod and exercise its content, then fail on any error in the log.
 
 Used by CI (.github/workflows/build.yml) after `./gradlew build`:
-    python3 tools/ci_smoke.py <server_dir>
+    python3 tools/ci_smoke.py <server_dir>                    # flat world: every structure, mob, item, loot table
+    python3 tools/ci_smoke.py <server_dir> --overhaul         # overhaul world: biomes, world map, biome renders
+    python3 tools/ci_smoke.py <server_dir> --overhaul --fit   # overhaul world: how every structure sits on the terrain
 
 The server directory must already contain an installed Forge server and the mod jar in mods/.
 The script accepts the EULA, starts the server, waits for "Done", then from the console:
@@ -87,6 +89,7 @@ def loot_tables():
 
 class Server:
     def __init__(self, cwd, cmd, log_name="smoke-console.log"):
+        self.cwd = cwd
         self.lines = []
         self.q = queue.Queue()
         self.log = open(os.path.join(cwd, log_name), "w", encoding="utf-8")
@@ -431,6 +434,40 @@ def exercise_overhaul(srv, failures):
     time.sleep(2)
 
 
+def exercise_fit(srv, failures):
+    """Every Overworld structure of the mod, located in the overhaul world and really generated: /wayfarers fitcheck
+    measures floating edges, buried edges and flooding at each, draws it in place (wayfarers-fit-<id>.png) and writes
+    wayfarers-fit.txt. A MISFIT line fails the run, so any change of the terrain is checked against every structure."""
+    res = srv.run("datapack list enabled", r"data pack", 60)
+    if not res or "wayfarers:world_overhaul" not in res:
+        failures.append(f"world overhaul pack not enabled: {res}")
+    with Phase("structure fit"):
+        # the command keeps to about 20 minutes and reports what it skipped past that
+        res = srv.run("wayfarers fitcheck", r"Fit check (written|failed)|Unknown|Incorrect", 1560)
+    if not res or "Fit check written" not in res:
+        failures.append(f"fit check: {res}")
+    report = os.path.join(srv.cwd, "wayfarers-fit.txt")
+    if not os.path.exists(report):
+        failures.append("fit check: no wayfarers-fit.txt")
+        return
+    lines = open(report, encoding="utf-8").read().splitlines()[1:]
+    print("\n".join(["structure fit report:"] + lines), flush=True)
+    verdicts = {}
+    for line in lines:
+        parts = line.split()
+        if len(parts) >= 3:
+            verdicts[parts[0]] = parts[2]
+            if parts[2] in ("MISFIT", "ERROR"):
+                failures.append(f"structure {parts[2].lower()}: {line.strip()}")
+    checked = [v for v in verdicts.values() if v in ("OK", "MISFIT", "NOT_FOUND", "ERROR")]
+    missing = [k for k, v in verdicts.items() if v == "NOT_FOUND"]
+    if len(missing) > max(2, len(checked) // 3):
+        failures.append(f"{len(missing)} of {len(checked)} structures not found near spawn (does the site check reject "
+                        f"them everywhere on this terrain?): {missing}")
+    srv.run("say fit test finished")
+    time.sleep(2)
+
+
 def locate_all(srv, biomes, missing):
     found = {}
     for b in biomes:
@@ -448,11 +485,14 @@ def locate_all(srv, biomes, missing):
 def main():
     server_dir = os.path.abspath(sys.argv[1])
     overhaul = "--overhaul" in sys.argv[2:]
+    fit = "--fit" in sys.argv[2:]
+    overhaul = overhaul or fit
     prepare(server_dir, overhaul)
     failures = []
     if not overhaul:
         check_vanilla_jigsaws(server_dir, failures)
-    srv = Server(server_dir, server_command(server_dir), "smoke-console-overhaul.log" if overhaul else "smoke-console.log")
+    log_name = "smoke-console-fit.log" if fit else "smoke-console-overhaul.log" if overhaul else "smoke-console.log"
+    srv = Server(server_dir, server_command(server_dir), log_name)
     # stop waiting as soon as the server gives up (a broken data pack used to cost the whole 15 minutes)
     started = srv.wait_for(r"Done \(|Failed to load datapacks|Crashing|Encountered an unexpected exception",
                            1800 if overhaul else 900)
@@ -461,7 +501,7 @@ def main():
     else:
         Phase.start = time.time()
         try:
-            (exercise_overhaul if overhaul else exercise_mod)(srv, failures)
+            (exercise_fit if fit else exercise_overhaul if overhaul else exercise_mod)(srv, failures)
         except TimeoutError as e:
             failures.append(str(e))
     srv.run("stop")

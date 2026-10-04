@@ -74,10 +74,18 @@ jobs:
             server/crash-reports/
             server/smoke-console*.log
 
+  # The overhaul world, in two parts on two machines: "world" checks every biome, draws the world map and a render of
+  # each biome; "fit" locates every Overworld structure of the mod, generates it and measures how it sits on the
+  # terrain (/wayfarers fitcheck: floating edges, buried edges, flooding), with a render of each in place. A misfit
+  # fails the job, so every change of the terrain generator is checked against every structure.
   world-test:
     needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 50
+    strategy:
+      fail-fast: false
+      matrix:
+        part: [world, fit]
     steps:
       - uses: actions/checkout@v4
 
@@ -99,13 +107,18 @@ jobs:
           cp jar/wayfarers-*.jar server/mods/
 
       - name: Run the world overhaul test (new world, every biome, world map, biome renders)
+        if: matrix.part == 'world'
         run: python3 tools/ci_smoke.py server --overhaul
+
+      - name: Run the structure fit test (every Overworld structure located, generated and measured in the overhaul world)
+        if: matrix.part == 'fit'
+        run: python3 tools/ci_smoke.py server --overhaul --fit
 
       - name: Upload the server logs
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: world-test-logs
+          name: world-test-logs-${{ matrix.part }}
           path: |
             server/logs/
             server/crash-reports/
@@ -115,13 +128,15 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: world-previews
+          name: world-previews-${{ matrix.part }}
           if-no-files-found: ignore
           path: |
             server/wayfarers-worldmap*.png
             server/wayfarers-worldmap.txt
             server/wayfarers-biome-*.png
             server/wayfarers-biomes.txt
+            server/wayfarers-fit-*.png
+            server/wayfarers-fit.txt
 
   # Runs the real client (software OpenGL under Xvfb) through ForgeGradle's runClient. client/CiDriver creates a
   # world, opens every screen of the mod, places machines, summons creatures and the Clockwork Citadel, and saves a
@@ -187,7 +202,8 @@ jobs:
       - uses: actions/download-artifact@v4
         continue-on-error: true
         with:
-          name: world-previews
+          pattern: world-previews-*
+          merge-multiple: true
           path: previews
 
       - uses: actions/download-artifact@v4
@@ -209,7 +225,7 @@ jobs:
           name: Wayfarers — aperçus du monde (${{ github.ref_name }})
           prerelease: true
           make_latest: false
-          body: Carte des biomes, biomes souterrains et coupe du relief générés par /wayfarers worldmap, un rendu 3D de chaque biome par /wayfarers biomeshots, et des captures du vrai client (wayfarers-shot-*.png — écrans, HUD, créatures, Citadelle) prises par le job client-test (commit ${{ github.sha }}).
+          body: Carte des biomes, biomes souterrains et coupe du relief générés par /wayfarers worldmap, un rendu 3D de chaque biome par /wayfarers biomeshots, chaque structure en place sur le relief avec sa mesure d'intégration (wayfarers-fit-*.png, wayfarers-fit.txt, /wayfarers fitcheck), et des captures du vrai client (wayfarers-shot-*.png — écrans, HUD, créatures, Citadelle) prises par le job client-test (commit ${{ github.sha }}).
           files: previews/*
 
   release:

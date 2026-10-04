@@ -1,5 +1,5 @@
 {
-  "type": "minecraft:jigsaw",
+  "type": "wayfarers:fitted_jigsaw",
   "biomes": "#wayfarers:has_structure/undercity",
   "step": "underground_structures",
   "spawn_overrides": {
@@ -52,5 +52,22 @@
     "max_inclusive": {
       "absolute": -12
     }
+  },
+  "fit": {
+    "mode": "underground",
+    "spread": 8,
+    "slope": 0.8,
+    "wet": 0.05,
+    "min_wet": 0.0,
+    "land": 0.5,
+    "drop": 10,
+    "depth": 0,
+    "clearance": 0,
+    "cover": 10,
+    "lift": 6,
+    "open": 0.0,
+    "ground": 6,
+    "pond": 0.0,
+    "theme": "stone"
   }
 }

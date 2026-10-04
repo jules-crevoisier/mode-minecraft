@@ -70,7 +70,8 @@ public class ChunkedPoolElement extends StructurePoolElement {
             StructureProcessorType.LIST_CODEC.fieldOf("processors").forGetter(e -> e.processors),
             projectionCodec(),
             LiquidSettings.CODEC.optionalFieldOf("override_liquid_settings").forGetter(e -> e.overrideLiquidSettings),
-            Codec.intRange(0, 4096).optionalFieldOf("ground_level_delta", 1).forGetter(e -> e.groundLevelDelta)
+            Codec.intRange(0, 4096).optionalFieldOf("ground_level_delta", 1).forGetter(e -> e.groundLevelDelta),
+            Codec.INT.listOf(4, 4).optionalFieldOf("footprint").forGetter(e -> e.footprint)
     ).apply(i, ChunkedPoolElement::new));
 
     private static final Set<Identifier> REPORTED_MISSING = ConcurrentHashMap.newKeySet();
@@ -87,16 +88,28 @@ public class ChunkedPoolElement extends StructurePoolElement {
      * bottom instead of meeting the real ground (written by tools/gen_structures.py).
      */
     private final int groundLevelDelta;
+    /**
+     * Built columns of the template (x0, z0, x1, z1, template coordinates): what the site check of
+     * {@link FittedJigsawStructure} samples, instead of the whole box with its skirts and empty corners.
+     */
+    private final Optional<List<Integer>> footprint;
 
     protected ChunkedPoolElement(Vec3i size, List<Cell> cells, Holder<StructureProcessorList> processors,
                                  StructureTemplatePool.Projection projection,
-                                 Optional<LiquidSettings> overrideLiquidSettings, int groundLevelDelta) {
+                                 Optional<LiquidSettings> overrideLiquidSettings, int groundLevelDelta,
+                                 Optional<List<Integer>> footprint) {
         super(projection);
         this.size = size;
         this.cells = List.copyOf(cells);
         this.processors = processors;
         this.overrideLiquidSettings = overrideLiquidSettings;
         this.groundLevelDelta = groundLevelDelta;
+        this.footprint = footprint.map(List::copyOf);
+    }
+
+    /** The built columns {x0, z0, x1, z1} in template coordinates, when the generator wrote them. */
+    public Optional<List<Integer>> footprint() {
+        return this.footprint;
     }
 
     @Override

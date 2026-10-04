@@ -54,7 +54,8 @@ def prunes_sky_air(sdef, start):
 
 def save_piece(sdef, piece, bp, start, report):
     """Write the piece as one template, or as column templates when it is big (wf/chunking.py).
-    Returns (size, normalized blocks, origin, number of columns or 0, entries written, biggest template)."""
+    Returns (size, normalized blocks, origin, number of columns or 0, entries written, biggest template).
+    A start piece also gets ``piece.fit_info`` (footprint, pond share, ground theme: wf/placement.py ground_info)."""
     bp.resolve_shapes()
     size, blocks, ents, origin = bp.normalized()
     path = os.path.join(DATA, "structure", sdef.id, f"{piece.name}.nbt")
@@ -63,6 +64,10 @@ def save_piece(sdef, piece, bp, start, report):
     piece.chunks = None
     # ground layer height above the template's lowest layer, + 1 (the jigsaw/beardifier "ground level delta")
     piece.ground_delta = sdef.ground - origin[1] + 1 if start and projected(sdef) else None
+    piece.fit_info = None
+    if start:
+        fp, pond, theme = placement.ground_info(blocks, sdef.ground - origin[1])
+        piece.fit_info = {"footprint": fp, "pond": pond, "theme": theme, "ground": sdef.ground - origin[1]}
     dropped = placement.carve_limit(blocks, sdef.ground - origin[1]) if prunes_sky_air(sdef, start) else set()
     kept = {p: b for p, b in blocks.items() if p not in dropped}
     if not chunking.needs_split(size, len(kept)):
@@ -89,8 +94,20 @@ def build_piece(sdef, piece, start=False):
     piece.builder(bp)
     if start and needs_foundation(sdef):
         foundation.add_foundations(bp, sdef.ground)
+        # stair-step earth bank around the footprint: shows only where the ground falls away (wf/foundation.py)
+        foundation.add_skirt(bp, sdef.ground, seed=sdef.salt, theme="end" if sdef.dimension == "end" else None)
     piece.blueprint = bp
     return bp
+
+
+def merged_fit_info(sdef):
+    """The structure-level fit facts: the largest pond share of its start pieces, the first one's theme and ground
+    layer (each start piece carries its own footprint on its pool element)."""
+    infos = [getattr(p, "fit_info", None) for p in sdef.pieces]
+    infos = [i for i in infos if i]
+    if not infos:
+        return None
+    return {"pond": max(i["pond"] for i in infos), "theme": infos[0]["theme"], "ground": infos[0]["ground"]}
 
 
 def main():
@@ -140,7 +157,7 @@ def main():
             write_json(os.path.join(DATA, "worldgen", "template_pool", sdef.id, f"{pool_name}.json"),
                        defs.template_pool(sdef, pieces, pool_name))
         write_json(os.path.join(DATA, "worldgen", "structure", f"{sdef.id}.json"),
-                   defs.structure_json(sdef, ground_offset))
+                   defs.structure_json(sdef, ground_offset, merged_fit_info(sdef)))
         write_json(os.path.join(DATA, "tags", "worldgen", "biome", "has_structure", f"{sdef.id}.json"),
                    defs.biome_tag_json(sdef.biomes))
     if not args.only or "villages" in args.only:

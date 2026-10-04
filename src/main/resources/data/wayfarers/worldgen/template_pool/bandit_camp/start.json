@@ -6,99 +6,105 @@
       "element": {
         "element_type": "wayfarers:chunked_template",
         "size": [
-          62,
-          25,
-          65
+          64,
+          26,
+          67
         ],
         "cells": [
           {
             "location": "wayfarers:bandit_camp/camp/x0_z0",
             "offset": [
-              5,
+              4,
               0,
               0
             ],
             "size": [
-              26,
-              21,
+              28,
+              22,
               22
             ],
-            "blocks": 2834
+            "blocks": 2837
           },
           {
             "location": "wayfarers:bandit_camp/camp/x0_z1",
             "offset": [
-              2,
+              1,
               0,
               22
             ],
             "size": [
-              29,
-              21,
-              21
+              31,
+              26,
+              23
             ],
-            "blocks": 4150
+            "blocks": 4726
           },
           {
             "location": "wayfarers:bandit_camp/camp/x0_z2",
             "offset": [
               0,
               0,
-              43
+              45
             ],
             "size": [
-              31,
-              25,
+              32,
+              23,
               22
             ],
-            "blocks": 3533
+            "blocks": 3568
           },
           {
             "location": "wayfarers:bandit_camp/camp/x1_z0",
             "offset": [
-              31,
+              32,
               0,
               0
             ],
             "size": [
-              28,
-              15,
+              29,
+              16,
               22
             ],
-            "blocks": 1668
+            "blocks": 1693
           },
           {
             "location": "wayfarers:bandit_camp/camp/x1_z1",
             "offset": [
-              31,
+              32,
               0,
               22
             ],
             "size": [
-              31,
-              21,
-              21
+              32,
+              26,
+              23
             ],
-            "blocks": 4381
+            "blocks": 4931
           },
           {
             "location": "wayfarers:bandit_camp/camp/x1_z2",
             "offset": [
-              31,
+              32,
               0,
-              43
+              45
             ],
             "size": [
-              27,
-              25,
-              21
+              29,
+              23,
+              20
             ],
-            "blocks": 2376
+            "blocks": 2362
           }
         ],
         "projection": "rigid",
         "processors": "wayfarers:none",
-        "ground_level_delta": 6
+        "ground_level_delta": 7,
+        "footprint": [
+          3,
+          4,
+          59,
+          62
+        ]
       }
     }
   ]

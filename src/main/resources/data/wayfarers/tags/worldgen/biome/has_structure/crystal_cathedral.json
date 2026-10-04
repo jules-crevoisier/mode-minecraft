@@ -4,6 +4,14 @@
     {
       "id": "#minecraft:is_overworld",
       "required": false
+    },
+    {
+      "id": "wayfarers:fungal_grotto",
+      "required": false
+    },
+    {
+      "id": "wayfarers:mithril_hollows",
+      "required": false
     }
   ]
 }

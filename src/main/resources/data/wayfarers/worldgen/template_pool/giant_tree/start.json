@@ -6,71 +6,105 @@
       "element": {
         "element_type": "wayfarers:chunked_template",
         "size": [
-          55,
+          62,
           110,
-          63
+          66
         ],
         "cells": [
           {
             "location": "wayfarers:giant_tree/oak/x0_z0",
             "offset": [
+              4,
               0,
-              0,
-              0
+              3
             ],
             "size": [
               27,
-              110,
-              32
+              98,
+              19
             ],
-            "blocks": 16188
+            "blocks": 4757
           },
           {
             "location": "wayfarers:giant_tree/oak/x0_z1",
             "offset": [
               0,
               0,
-              32
+              22
             ],
             "size": [
-              27,
+              31,
               110,
-              31
+              22
             ],
-            "blocks": 12137
+            "blocks": 20826
+          },
+          {
+            "location": "wayfarers:giant_tree/oak/x0_z2",
+            "offset": [
+              5,
+              0,
+              44
+            ],
+            "size": [
+              26,
+              102,
+              22
+            ],
+            "blocks": 4505
           },
           {
             "location": "wayfarers:giant_tree/oak/x1_z0",
             "offset": [
-              27,
+              31,
               0,
               0
             ],
             "size": [
-              28,
-              110,
-              32
+              31,
+              97,
+              22
             ],
-            "blocks": 14963
+            "blocks": 5896
           },
           {
             "location": "wayfarers:giant_tree/oak/x1_z1",
             "offset": [
-              27,
+              31,
               0,
-              32
+              22
             ],
             "size": [
-              26,
+              30,
               110,
-              31
+              22
             ],
-            "blocks": 14779
+            "blocks": 18665
+          },
+          {
+            "location": "wayfarers:giant_tree/oak/x1_z2",
+            "offset": [
+              31,
+              0,
+              44
+            ],
+            "size": [
+              29,
+              101,
+              22
+            ],
+            "blocks": 7256
           }
         ],
         "projection": "rigid",
         "processors": "wayfarers:none",
-        "ground_level_delta": 29
+        "ground_level_delta": 29,
+        "footprint": [
+          4,
+          4,
+          58,
+          61
+        ]
       }
     },
     {
@@ -78,71 +112,105 @@
       "element": {
         "element_type": "wayfarers:chunked_template",
         "size": [
-          56,
+          62,
           110,
-          63
+          66
         ],
         "cells": [
           {
             "location": "wayfarers:giant_tree/dark_oak/x0_z0",
             "offset": [
+              4,
               0,
-              0,
-              0
+              3
             ],
             "size": [
-              28,
-              110,
-              32
+              27,
+              98,
+              19
             ],
-            "blocks": 17434
+            "blocks": 4711
           },
           {
             "location": "wayfarers:giant_tree/dark_oak/x0_z1",
             "offset": [
               0,
               0,
-              32
+              22
             ],
             "size": [
-              28,
+              31,
               110,
-              31
+              22
             ],
-            "blocks": 13216
+            "blocks": 20851
+          },
+          {
+            "location": "wayfarers:giant_tree/dark_oak/x0_z2",
+            "offset": [
+              5,
+              0,
+              44
+            ],
+            "size": [
+              26,
+              102,
+              22
+            ],
+            "blocks": 4564
           },
           {
             "location": "wayfarers:giant_tree/dark_oak/x1_z0",
             "offset": [
-              28,
+              31,
               0,
               0
             ],
             "size": [
-              28,
-              110,
-              32
+              31,
+              97,
+              22
             ],
-            "blocks": 13482
+            "blocks": 5773
           },
           {
             "location": "wayfarers:giant_tree/dark_oak/x1_z1",
             "offset": [
-              28,
+              31,
               0,
-              32
+              22
             ],
             "size": [
-              25,
+              30,
               110,
-              31
+              22
             ],
-            "blocks": 13846
+            "blocks": 18624
+          },
+          {
+            "location": "wayfarers:giant_tree/dark_oak/x1_z2",
+            "offset": [
+              31,
+              0,
+              44
+            ],
+            "size": [
+              29,
+              101,
+              22
+            ],
+            "blocks": 7259
           }
         ],
         "projection": "rigid",
         "processors": "wayfarers:none",
-        "ground_level_delta": 29
+        "ground_level_delta": 29,
+        "footprint": [
+          4,
+          4,
+          59,
+          60
+        ]
       }
     }
   ]

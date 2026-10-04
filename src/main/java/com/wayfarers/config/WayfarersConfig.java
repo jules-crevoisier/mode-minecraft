@@ -11,6 +11,11 @@ public final class WayfarersConfig {
                     "Set to false to keep the vanilla Overworld; the pack then stays available, unticked, in the Data Packs screen.",
                     "Existing worlds keep whatever they were created with.")
             .define("world.overhaul", true);
+    public static final ForgeConfigSpec.BooleanValue STRUCTURE_FIT = B
+            .comment("Wayfarers structures only start where the terrain suits them: flat enough dry ground for buildings,",
+                    "a shore for the lighthouse, open sea floor for wrecks, clear sky under floating isles. A site that does not",
+                    "fit is skipped like one with the wrong biome (/locate looks further). False: build wherever the grid says.")
+            .define("world.structureFit", true);
     public static final ForgeConfigSpec.BooleanValue DANGER_SCALING = B
             .comment("Monsters get stronger the further you travel from world spawn, and in the Nether/End.")
             .define("danger.enabled", true);

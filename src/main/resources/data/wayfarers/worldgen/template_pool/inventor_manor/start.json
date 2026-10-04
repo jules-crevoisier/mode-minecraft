@@ -6,9 +6,9 @@
       "element": {
         "element_type": "wayfarers:chunked_template",
         "size": [
-          63,
+          71,
           46,
-          39
+          47
         ],
         "cells": [
           {
@@ -19,58 +19,92 @@
               0
             ],
             "size": [
-              32,
-              43,
-              20
+              24,
+              41,
+              24
             ],
-            "blocks": 15693
+            "blocks": 9365
           },
           {
             "location": "wayfarers:inventor_manor/manor/x0_z1",
             "offset": [
               0,
               0,
-              20
+              24
             ],
             "size": [
+              24,
               32,
-              35,
-              19
+              23
             ],
-            "blocks": 8843
+            "blocks": 5969
           },
           {
             "location": "wayfarers:inventor_manor/manor/x1_z0",
             "offset": [
-              32,
+              24,
               0,
               0
             ],
             "size": [
-              31,
-              42,
-              20
+              23,
+              43,
+              24
             ],
-            "blocks": 13738
+            "blocks": 13570
           },
           {
             "location": "wayfarers:inventor_manor/manor/x1_z1",
             "offset": [
-              32,
+              24,
               0,
-              20
+              24
             ],
             "size": [
-              31,
-              46,
-              19
+              23,
+              42,
+              23
             ],
-            "blocks": 9692
+            "blocks": 7792
+          },
+          {
+            "location": "wayfarers:inventor_manor/manor/x2_z0",
+            "offset": [
+              47,
+              0,
+              0
+            ],
+            "size": [
+              24,
+              38,
+              24
+            ],
+            "blocks": 8311
+          },
+          {
+            "location": "wayfarers:inventor_manor/manor/x2_z1",
+            "offset": [
+              47,
+              0,
+              24
+            ],
+            "size": [
+              24,
+              46,
+              23
+            ],
+            "blocks": 6567
           }
         ],
         "projection": "rigid",
         "processors": "wayfarers:none",
-        "ground_level_delta": 13
+        "ground_level_delta": 13,
+        "footprint": [
+          4,
+          4,
+          66,
+          42
+        ]
       }
     }
   ]

@@ -79,7 +79,7 @@
               57,
               22
             ],
-            "blocks": 8284
+            "blocks": 8760
           },
           {
             "location": "wayfarers:forgotten_catacombs/layout_0/x1_z2",
@@ -93,7 +93,7 @@
               57,
               23
             ],
-            "blocks": 8355
+            "blocks": 8974
           },
           {
             "location": "wayfarers:forgotten_catacombs/layout_0/x2_z0",
@@ -121,7 +121,7 @@
               60,
               22
             ],
-            "blocks": 10721
+            "blocks": 11251
           },
           {
             "location": "wayfarers:forgotten_catacombs/layout_0/x2_z2",
@@ -133,14 +133,20 @@
             "size": [
               22,
               61,
-              20
+              23
             ],
-            "blocks": 9523
+            "blocks": 10287
           }
         ],
         "projection": "rigid",
         "processors": "wayfarers:none",
-        "ground_level_delta": 42
+        "ground_level_delta": 42,
+        "footprint": [
+          26,
+          24,
+          63,
+          67
+        ]
       }
     },
     {
@@ -179,7 +185,7 @@
               42,
               22
             ],
-            "blocks": 9632
+            "blocks": 9964
           },
           {
             "location": "wayfarers:forgotten_catacombs/layout_1/x0_z2",
@@ -193,7 +199,7 @@
               56,
               23
             ],
-            "blocks": 13475
+            "blocks": 13830
           },
           {
             "location": "wayfarers:forgotten_catacombs/layout_1/x1_z0",
@@ -221,7 +227,7 @@
               60,
               22
             ],
-            "blocks": 9040
+            "blocks": 9457
           },
           {
             "location": "wayfarers:forgotten_catacombs/layout_1/x1_z2",
@@ -233,9 +239,9 @@
             "size": [
               21,
               61,
-              22
+              23
             ],
-            "blocks": 8758
+            "blocks": 9429
           },
           {
             "location": "wayfarers:forgotten_catacombs/layout_1/x2_z0",
@@ -263,7 +269,7 @@
               54,
               22
             ],
-            "blocks": 8029
+            "blocks": 8304
           },
           {
             "location": "wayfarers:forgotten_catacombs/layout_1/x2_z2",
@@ -275,14 +281,20 @@
             "size": [
               22,
               42,
-              19
+              23
             ],
-            "blocks": 7021
+            "blocks": 7395
           }
         ],
         "projection": "rigid",
         "processors": "wayfarers:none",
-        "ground_level_delta": 42
+        "ground_level_delta": 42,
+        "footprint": [
+          13,
+          24,
+          50,
+          67
+        ]
       }
     },
     {
@@ -307,7 +319,7 @@
               60,
               22
             ],
-            "blocks": 8392
+            "blocks": 8826
           },
           {
             "location": "wayfarers:forgotten_catacombs/layout_2/x0_z1",
@@ -321,7 +333,7 @@
               61,
               21
             ],
-            "blocks": 8680
+            "blocks": 9094
           },
           {
             "location": "wayfarers:forgotten_catacombs/layout_2/x0_z2",
@@ -335,7 +347,7 @@
               60,
               22
             ],
-            "blocks": 10353
+            "blocks": 10904
           },
           {
             "location": "wayfarers:forgotten_catacombs/layout_2/x1_z0",
@@ -349,7 +361,7 @@
               57,
               22
             ],
-            "blocks": 9185
+            "blocks": 9468
           },
           {
             "location": "wayfarers:forgotten_catacombs/layout_2/x1_z1",
@@ -363,7 +375,7 @@
               57,
               21
             ],
-            "blocks": 8072
+            "blocks": 8484
           },
           {
             "location": "wayfarers:forgotten_catacombs/layout_2/x1_z2",
@@ -377,7 +389,7 @@
               57,
               22
             ],
-            "blocks": 8564
+            "blocks": 9008
           },
           {
             "location": "wayfarers:forgotten_catacombs/layout_2/x2_z0",
@@ -424,7 +436,13 @@
         ],
         "projection": "rigid",
         "processors": "wayfarers:none",
-        "ground_level_delta": 42
+        "ground_level_delta": 42,
+        "footprint": [
+          0,
+          11,
+          37,
+          54
+        ]
       }
     }
   ]

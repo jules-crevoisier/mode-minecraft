@@ -6,239 +6,301 @@
       "element": {
         "element_type": "wayfarers:chunked_template",
         "size": [
-          101,
+          109,
           66,
-          124
+          132
         ],
         "cells": [
           {
             "location": "wayfarers:geothermal_foundry/foundry/x0_z0",
             "offset": [
-              15,
+              16,
               0,
               12
             ],
             "size": [
-              10,
-              27,
-              19
+              11,
+              22,
+              14
             ],
-            "blocks": 2780
+            "blocks": 803
           },
           {
             "location": "wayfarers:geothermal_foundry/foundry/x0_z1",
             "offset": [
-              4,
+              10,
               0,
-              31
+              26
             ],
             "size": [
-              21,
-              35,
-              31
+              17,
+              24,
+              27
             ],
-            "blocks": 8117
+            "blocks": 4919
           },
           {
             "location": "wayfarers:geothermal_foundry/foundry/x0_z2",
             "offset": [
               0,
               0,
-              62
+              53
             ],
             "size": [
-              25,
+              27,
               65,
-              31
+              26
             ],
-            "blocks": 18721
+            "blocks": 11624
           },
           {
             "location": "wayfarers:geothermal_foundry/foundry/x0_z3",
             "offset": [
               0,
               0,
-              93
+              79
             ],
             "size": [
-              25,
-              59,
-              25
+              27,
+              65,
+              27
             ],
-            "blocks": 10421
+            "blocks": 15898
+          },
+          {
+            "location": "wayfarers:geothermal_foundry/foundry/x0_z4",
+            "offset": [
+              1,
+              0,
+              106
+            ],
+            "size": [
+              26,
+              59,
+              20
+            ],
+            "blocks": 4337
           },
           {
             "location": "wayfarers:geothermal_foundry/foundry/x1_z0",
             "offset": [
-              25,
+              27,
               0,
               0
             ],
             "size": [
-              25,
-              66,
-              31
+              27,
+              56,
+              26
             ],
-            "blocks": 23344
+            "blocks": 13391
           },
           {
             "location": "wayfarers:geothermal_foundry/foundry/x1_z1",
             "offset": [
-              25,
+              27,
               0,
-              31
+              26
             ],
             "size": [
-              25,
+              27,
               66,
-              31
+              27
             ],
-            "blocks": 30469
+            "blocks": 33432
           },
           {
             "location": "wayfarers:geothermal_foundry/foundry/x1_z2",
             "offset": [
-              25,
+              27,
               0,
-              62
+              53
             ],
             "size": [
-              25,
-              41,
-              31
+              27,
+              52,
+              26
             ],
-            "blocks": 14693
+            "blocks": 16679
           },
           {
             "location": "wayfarers:geothermal_foundry/foundry/x1_z3",
             "offset": [
-              25,
+              27,
               0,
-              93
+              79
             ],
             "size": [
-              25,
-              39,
-              31
+              27,
+              41,
+              27
             ],
-            "blocks": 13730
+            "blocks": 14426
+          },
+          {
+            "location": "wayfarers:geothermal_foundry/foundry/x1_z4",
+            "offset": [
+              27,
+              0,
+              106
+            ],
+            "size": [
+              27,
+              32,
+              26
+            ],
+            "blocks": 10498
           },
           {
             "location": "wayfarers:geothermal_foundry/foundry/x2_z0",
             "offset": [
-              50,
+              54,
               0,
               0
             ],
             "size": [
-              26,
-              66,
-              31
+              28,
+              55,
+              26
             ],
-            "blocks": 25187
+            "blocks": 14957
           },
           {
             "location": "wayfarers:geothermal_foundry/foundry/x2_z1",
             "offset": [
-              50,
+              54,
               0,
-              31
+              26
             ],
             "size": [
-              26,
-              65,
-              31
+              28,
+              66,
+              27
             ],
-            "blocks": 31619
+            "blocks": 34529
           },
           {
             "location": "wayfarers:geothermal_foundry/foundry/x2_z2",
             "offset": [
-              50,
+              54,
               0,
-              62
+              53
             ],
             "size": [
-              26,
-              41,
-              31
+              28,
+              54,
+              26
             ],
-            "blocks": 14826
+            "blocks": 17333
           },
           {
             "location": "wayfarers:geothermal_foundry/foundry/x2_z3",
             "offset": [
-              50,
+              54,
               0,
-              93
+              79
             ],
             "size": [
-              26,
-              39,
-              31
+              28,
+              41,
+              27
             ],
-            "blocks": 13917
+            "blocks": 14460
+          },
+          {
+            "location": "wayfarers:geothermal_foundry/foundry/x2_z4",
+            "offset": [
+              54,
+              0,
+              106
+            ],
+            "size": [
+              28,
+              32,
+              26
+            ],
+            "blocks": 10588
           },
           {
             "location": "wayfarers:geothermal_foundry/foundry/x3_z0",
             "offset": [
-              76,
+              82,
               0,
               9
             ],
             "size": [
               10,
-              28,
-              22
+              21,
+              17
             ],
-            "blocks": 2975
+            "blocks": 1009
           },
           {
             "location": "wayfarers:geothermal_foundry/foundry/x3_z1",
             "offset": [
-              76,
+              82,
               0,
-              31
+              26
             ],
             "size": [
-              23,
-              35,
-              31
+              17,
+              25,
+              27
             ],
-            "blocks": 8115
+            "blocks": 4751
           },
           {
             "location": "wayfarers:geothermal_foundry/foundry/x3_z2",
             "offset": [
-              76,
+              82,
               0,
-              62
+              53
             ],
             "size": [
-              25,
+              27,
               65,
-              31
+              26
             ],
-            "blocks": 18651
+            "blocks": 11917
           },
           {
             "location": "wayfarers:geothermal_foundry/foundry/x3_z3",
             "offset": [
-              76,
+              82,
               0,
-              93
+              79
             ],
             "size": [
-              25,
-              59,
-              25
+              27,
+              65,
+              27
             ],
-            "blocks": 10143
+            "blocks": 15587
+          },
+          {
+            "location": "wayfarers:geothermal_foundry/foundry/x3_z4",
+            "offset": [
+              82,
+              0,
+              106
+            ],
+            "size": [
+              26,
+              59,
+              19
+            ],
+            "blocks": 4256
           }
         ],
         "projection": "rigid",
         "processors": "wayfarers:none",
-        "ground_level_delta": 13
+        "ground_level_delta": 13,
+        "footprint": [
+          4,
+          4,
+          104,
+          127
+        ]
       }
     }
   ]

@@ -162,7 +162,7 @@ def write_cells(directory, location_prefix, cells):
     return out
 
 
-def element(size, cells, projection, processors, ground_level_delta=None):
+def element(size, cells, projection, processors, ground_level_delta=None, footprint=None):
     el = {
         "element_type": ELEMENT_TYPE,
         "size": list(size),
@@ -172,6 +172,8 @@ def element(size, cells, projection, processors, ground_level_delta=None):
     }
     if ground_level_delta is not None:
         el["ground_level_delta"] = ground_level_delta  # see wf/placement.py "Terrain fit"
+    if footprint is not None:
+        el["footprint"] = list(footprint)  # built columns x0, z0, x1, z1 (wf/placement.py "Site selection")
     return el
 
 

@@ -6,9 +6,9 @@
       "element": {
         "element_type": "wayfarers:chunked_template",
         "size": [
-          68,
+          70,
           44,
-          53
+          55
         ],
         "cells": [
           {
@@ -16,28 +16,28 @@
             "offset": [
               0,
               0,
-              8
+              9
             ],
             "size": [
               23,
               22,
-              18
+              19
             ],
-            "blocks": 2564
+            "blocks": 2740
           },
           {
             "location": "wayfarers:ruined_watchtower/tower_ruined/x0_z1",
             "offset": [
               0,
               0,
-              26
+              28
             ],
             "size": [
               23,
               23,
-              20
+              19
             ],
-            "blocks": 3325
+            "blocks": 3112
           },
           {
             "location": "wayfarers:ruined_watchtower/tower_ruined/x1_z0",
@@ -47,58 +47,64 @@
               0
             ],
             "size": [
-              22,
-              43,
-              26
+              24,
+              44,
+              28
             ],
-            "blocks": 6526
+            "blocks": 7602
           },
           {
             "location": "wayfarers:ruined_watchtower/tower_ruined/x1_z1",
             "offset": [
               23,
               0,
-              26
+              28
             ],
             "size": [
-              22,
-              44,
+              24,
+              43,
               27
             ],
-            "blocks": 5577
+            "blocks": 5539
           },
           {
             "location": "wayfarers:ruined_watchtower/tower_ruined/x2_z0",
             "offset": [
-              45,
+              47,
               0,
               0
             ],
             "size": [
               19,
               20,
-              26
+              28
             ],
-            "blocks": 3479
+            "blocks": 3659
           },
           {
             "location": "wayfarers:ruined_watchtower/tower_ruined/x2_z1",
             "offset": [
-              45,
+              47,
               0,
-              26
+              28
             ],
             "size": [
               23,
               20,
               27
             ],
-            "blocks": 4376
+            "blocks": 4129
           }
         ],
         "projection": "rigid",
         "processors": "wayfarers:ruin",
-        "ground_level_delta": 7
+        "ground_level_delta": 7,
+        "footprint": [
+          2,
+          4,
+          66,
+          50
+        ]
       }
     },
     {
@@ -106,9 +112,9 @@
       "element": {
         "element_type": "wayfarers:chunked_template",
         "size": [
-          55,
+          56,
           62,
-          48
+          50
         ],
         "cells": [
           {
@@ -121,23 +127,23 @@
             "size": [
               28,
               51,
-              23
+              24
             ],
-            "blocks": 4087
+            "blocks": 4246
           },
           {
             "location": "wayfarers:ruined_watchtower/tower_intact/x0_z1",
             "offset": [
-              3,
+              2,
               0,
-              24
+              25
             ],
             "size": [
-              25,
+              26,
               49,
-              24
+              25
             ],
-            "blocks": 3210
+            "blocks": 3392
           },
           {
             "location": "wayfarers:ruined_watchtower/tower_intact/x1_z0",
@@ -147,30 +153,36 @@
               0
             ],
             "size": [
-              24,
+              25,
               62,
-              24
+              25
             ],
-            "blocks": 7089
+            "blocks": 7278
           },
           {
             "location": "wayfarers:ruined_watchtower/tower_intact/x1_z1",
             "offset": [
               28,
               0,
-              24
+              25
             ],
             "size": [
-              27,
+              28,
               57,
-              24
+              25
             ],
-            "blocks": 5226
+            "blocks": 5435
           }
         ],
         "projection": "rigid",
         "processors": "wayfarers:aging",
-        "ground_level_delta": 7
+        "ground_level_delta": 7,
+        "footprint": [
+          0,
+          4,
+          51,
+          45
+        ]
       }
     }
   ]
