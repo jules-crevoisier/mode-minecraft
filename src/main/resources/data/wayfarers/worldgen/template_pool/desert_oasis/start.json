@@ -6,183 +6,245 @@
       "element": {
         "element_type": "wayfarers:chunked_template",
         "size": [
-          98,
+          100,
           77,
-          90
+          98
         ],
         "cells": [
           {
             "location": "wayfarers:desert_oasis/oasis/x0_z0",
             "offset": [
-              6,
-              47,
+              8,
+              41,
               8
             ],
             "size": [
-              18,
-              7,
-              22
+              17,
+              11,
+              16
             ],
-            "blocks": 893
+            "blocks": 743
           },
           {
             "location": "wayfarers:desert_oasis/oasis/x0_z1",
             "offset": [
               0,
               1,
-              30
+              24
             ],
             "size": [
-              24,
+              25,
               59,
-              30
+              25
             ],
-            "blocks": 3721
+            "blocks": 2075
           },
           {
             "location": "wayfarers:desert_oasis/oasis/x0_z2",
             "offset": [
               0,
               1,
-              60
+              49
+            ],
+            "size": [
+              25,
+              66,
+              25
+            ],
+            "blocks": 8265
+          },
+          {
+            "location": "wayfarers:desert_oasis/oasis/x0_z3",
+            "offset": [
+              1,
+              1,
+              74
             ],
             "size": [
               24,
-              66,
-              23
+              65,
+              19
             ],
-            "blocks": 8892
+            "blocks": 4215
           },
           {
             "location": "wayfarers:desert_oasis/oasis/x1_z0",
             "offset": [
-              24,
-              33,
+              25,
+              40,
               0
             ],
             "size": [
               25,
-              41,
-              30
+              34,
+              24
             ],
-            "blocks": 7545
+            "blocks": 5255
           },
           {
             "location": "wayfarers:desert_oasis/oasis/x1_z1",
             "offset": [
-              24,
+              25,
               0,
-              30
+              24
             ],
             "size": [
               25,
-              75,
-              30
+              71,
+              25
             ],
-            "blocks": 17064
+            "blocks": 12306
           },
           {
             "location": "wayfarers:desert_oasis/oasis/x1_z2",
             "offset": [
-              24,
-              0,
-              60
-            ],
-            "size": [
               25,
-              64,
-              30
-            ],
-            "blocks": 9504
-          },
-          {
-            "location": "wayfarers:desert_oasis/oasis/x2_z0",
-            "offset": [
-              49,
-              33,
-              0
-            ],
-            "size": [
-              25,
-              44,
-              30
-            ],
-            "blocks": 9578
-          },
-          {
-            "location": "wayfarers:desert_oasis/oasis/x2_z1",
-            "offset": [
-              49,
               0,
-              30
+              49
             ],
             "size": [
               25,
               75,
-              30
+              25
             ],
-            "blocks": 21897
+            "blocks": 13354
+          },
+          {
+            "location": "wayfarers:desert_oasis/oasis/x1_z3",
+            "offset": [
+              25,
+              21,
+              74
+            ],
+            "size": [
+              25,
+              41,
+              24
+            ],
+            "blocks": 4262
+          },
+          {
+            "location": "wayfarers:desert_oasis/oasis/x2_z0",
+            "offset": [
+              50,
+              41,
+              0
+            ],
+            "size": [
+              25,
+              36,
+              24
+            ],
+            "blocks": 6751
+          },
+          {
+            "location": "wayfarers:desert_oasis/oasis/x2_z1",
+            "offset": [
+              50,
+              0,
+              24
+            ],
+            "size": [
+              25,
+              73,
+              25
+            ],
+            "blocks": 15524
           },
           {
             "location": "wayfarers:desert_oasis/oasis/x2_z2",
             "offset": [
-              49,
+              50,
               0,
-              60
+              49
             ],
             "size": [
               25,
-              63,
-              30
+              75,
+              25
             ],
-            "blocks": 11578
+            "blocks": 16907
+          },
+          {
+            "location": "wayfarers:desert_oasis/oasis/x2_z3",
+            "offset": [
+              50,
+              21,
+              74
+            ],
+            "size": [
+              25,
+              42,
+              24
+            ],
+            "blocks": 4897
           },
           {
             "location": "wayfarers:desert_oasis/oasis/x3_z0",
             "offset": [
-              74,
-              47,
-              10
+              75,
+              41,
+              6
             ],
             "size": [
-              18,
-              7,
-              20
+              20,
+              11,
+              18
             ],
-            "blocks": 892
+            "blocks": 736
           },
           {
             "location": "wayfarers:desert_oasis/oasis/x3_z1",
             "offset": [
-              74,
-              1,
-              30
+              75,
+              41,
+              24
             ],
             "size": [
-              23,
-              61,
-              30
+              25,
+              21,
+              25
             ],
-            "blocks": 2876
+            "blocks": 2012
           },
           {
             "location": "wayfarers:desert_oasis/oasis/x3_z2",
             "offset": [
-              74,
-              21,
-              60
+              75,
+              1,
+              49
             ],
             "size": [
-              21,
-              39,
+              25,
+              61,
               25
             ],
-            "blocks": 4156
+            "blocks": 3845
+          },
+          {
+            "location": "wayfarers:desert_oasis/oasis/x3_z3",
+            "offset": [
+              75,
+              21,
+              74
+            ],
+            "size": [
+              22,
+              37,
+              19
+            ],
+            "blocks": 3285
           }
         ],
         "projection": "rigid",
         "processors": "wayfarers:aging",
-        "ground_level_delta": 50
+        "ground_level_delta": 50,
+        "footprint": [
+          1,
+          4,
+          97,
+          93
+        ]
       }
     }
   ]

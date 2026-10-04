@@ -6,239 +6,245 @@
       "element": {
         "element_type": "wayfarers:chunked_template",
         "size": [
+          103,
           99,
-          99,
-          100
+          104
         ],
         "cells": [
           {
             "location": "wayfarers:jungle_ziggurat/ziggurat/x0_z0",
             "offset": [
-              0,
-              21,
+              2,
+              20,
               4
             ],
             "size": [
-              25,
-              51,
-              21
+              24,
+              52,
+              22
             ],
-            "blocks": 2976
+            "blocks": 3445
           },
           {
             "location": "wayfarers:jungle_ziggurat/ziggurat/x0_z1",
             "offset": [
-              2,
-              3,
-              25
+              0,
+              4,
+              26
             ],
             "size": [
-              23,
-              69,
-              25
+              26,
+              67,
+              26
             ],
-            "blocks": 5385
+            "blocks": 5850
           },
           {
             "location": "wayfarers:jungle_ziggurat/ziggurat/x0_z2",
             "offset": [
-              1,
-              3,
-              50
+              0,
+              4,
+              52
             ],
             "size": [
-              24,
+              26,
               64,
-              25
+              26
             ],
-            "blocks": 4229
+            "blocks": 4398
           },
           {
             "location": "wayfarers:jungle_ziggurat/ziggurat/x0_z3",
             "offset": [
-              0,
+              3,
               30,
-              75
+              78
             ],
             "size": [
-              25,
+              23,
               38,
-              25
+              22
             ],
-            "blocks": 2046
+            "blocks": 2030
           },
           {
             "location": "wayfarers:jungle_ziggurat/ziggurat/x1_z0",
             "offset": [
-              25,
-              4,
+              26,
+              3,
               2
             ],
             "size": [
-              25,
-              65,
-              23
+              26,
+              66,
+              24
             ],
-            "blocks": 3871
+            "blocks": 5015
           },
           {
             "location": "wayfarers:jungle_ziggurat/ziggurat/x1_z1",
             "offset": [
-              25,
+              26,
               0,
-              25
+              26
             ],
             "size": [
-              25,
+              26,
               99,
-              25
+              26
             ],
-            "blocks": 27521
+            "blocks": 30407
           },
           {
             "location": "wayfarers:jungle_ziggurat/ziggurat/x1_z2",
             "offset": [
-              25,
+              26,
               0,
-              50
+              52
             ],
             "size": [
-              25,
-              87,
-              25
+              26,
+              85,
+              26
             ],
-            "blocks": 29547
+            "blocks": 28609
           },
           {
             "location": "wayfarers:jungle_ziggurat/ziggurat/x1_z3",
             "offset": [
-              25,
-              4,
-              75
+              26,
+              30,
+              78
             ],
             "size": [
-              25,
-              60,
-              25
+              26,
+              34,
+              26
             ],
-            "blocks": 4564
+            "blocks": 3769
           },
           {
             "location": "wayfarers:jungle_ziggurat/ziggurat/x2_z0",
             "offset": [
-              50,
-              4,
+              52,
+              3,
               0
             ],
             "size": [
-              24,
-              70,
-              25
+              25,
+              72,
+              26
             ],
-            "blocks": 3192
+            "blocks": 4370
           },
           {
             "location": "wayfarers:jungle_ziggurat/ziggurat/x2_z1",
             "offset": [
-              50,
+              52,
               0,
-              25
+              26
             ],
             "size": [
-              24,
+              25,
               97,
-              25
+              26
             ],
-            "blocks": 27333
+            "blocks": 30067
           },
           {
             "location": "wayfarers:jungle_ziggurat/ziggurat/x2_z2",
             "offset": [
-              50,
+              52,
               0,
-              50
+              52
             ],
             "size": [
-              24,
-              87,
-              25
+              25,
+              85,
+              26
             ],
-            "blocks": 28070
+            "blocks": 27153
           },
           {
             "location": "wayfarers:jungle_ziggurat/ziggurat/x2_z3",
             "offset": [
-              50,
-              4,
-              75
+              52,
+              30,
+              78
             ],
             "size": [
-              24,
-              60,
-              25
+              25,
+              34,
+              26
             ],
-            "blocks": 4911
+            "blocks": 4280
           },
           {
             "location": "wayfarers:jungle_ziggurat/ziggurat/x3_z0",
             "offset": [
-              74,
+              77,
               30,
               8
             ],
             "size": [
-              22,
+              21,
               44,
-              17
+              18
             ],
-            "blocks": 1477
+            "blocks": 1982
           },
           {
             "location": "wayfarers:jungle_ziggurat/ziggurat/x3_z1",
             "offset": [
-              74,
-              3,
-              25
+              77,
+              4,
+              26
             ],
             "size": [
-              25,
-              70,
-              25
+              26,
+              67,
+              26
             ],
-            "blocks": 4888
+            "blocks": 5664
           },
           {
             "location": "wayfarers:jungle_ziggurat/ziggurat/x3_z2",
             "offset": [
-              74,
-              3,
-              50
+              77,
+              4,
+              52
             ],
             "size": [
-              24,
-              66,
-              25
+              26,
+              65,
+              26
             ],
-            "blocks": 4971
+            "blocks": 4943
           },
           {
             "location": "wayfarers:jungle_ziggurat/ziggurat/x3_z3",
             "offset": [
-              74,
+              77,
               30,
-              75
+              78
             ],
             "size": [
-              22,
+              21,
               40,
-              23
+              21
             ],
-            "blocks": 2205
+            "blocks": 2174
           }
         ],
         "projection": "rigid",
         "processors": "wayfarers:aging",
-        "ground_level_delta": 43
+        "ground_level_delta": 43,
+        "footprint": [
+          2,
+          0,
+          100,
+          99
+        ]
       }
     }
   ]

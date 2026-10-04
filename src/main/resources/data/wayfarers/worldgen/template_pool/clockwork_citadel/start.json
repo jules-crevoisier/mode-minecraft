@@ -6,141 +6,147 @@
       "element": {
         "element_type": "wayfarers:chunked_template",
         "size": [
-          76,
+          80,
           109,
-          82
+          86
         ],
         "cells": [
           {
             "location": "wayfarers:clockwork_citadel/citadel/x0_z0",
             "offset": [
-              5,
+              1,
               11,
-              2
+              0
             ],
             "size": [
-              20,
+              25,
               52,
-              25
+              29
             ],
-            "blocks": 6726
+            "blocks": 7176
           },
           {
             "location": "wayfarers:clockwork_citadel/citadel/x0_z1",
             "offset": [
-              5,
+              1,
               0,
-              27
+              29
             ],
             "size": [
-              20,
+              25,
               41,
               28
             ],
-            "blocks": 11628
+            "blocks": 12735
           },
           {
             "location": "wayfarers:clockwork_citadel/citadel/x0_z2",
             "offset": [
               0,
               0,
-              55
+              57
             ],
             "size": [
-              25,
+              26,
               63,
-              27
+              29
             ],
-            "blocks": 8683
+            "blocks": 10500
           },
           {
             "location": "wayfarers:clockwork_citadel/citadel/x1_z0",
             "offset": [
-              25,
+              26,
               11,
               0
             ],
             "size": [
-              26,
-              62,
-              27
+              27,
+              30,
+              29
             ],
-            "blocks": 15453
+            "blocks": 14584
           },
           {
             "location": "wayfarers:clockwork_citadel/citadel/x1_z1",
             "offset": [
-              25,
+              26,
               0,
-              27
+              29
             ],
             "size": [
-              26,
+              27,
               109,
               28
             ],
-            "blocks": 34040
+            "blocks": 34815
           },
           {
             "location": "wayfarers:clockwork_citadel/citadel/x1_z2",
             "offset": [
-              25,
+              26,
               0,
-              55
+              57
             ],
             "size": [
-              26,
+              27,
               41,
-              27
+              29
             ],
-            "blocks": 15688
+            "blocks": 17602
           },
           {
             "location": "wayfarers:clockwork_citadel/citadel/x2_z0",
             "offset": [
-              51,
+              53,
               11,
               0
             ],
             "size": [
-              25,
+              27,
               52,
-              27
+              29
             ],
-            "blocks": 9039
+            "blocks": 8075
           },
           {
             "location": "wayfarers:clockwork_citadel/citadel/x2_z1",
             "offset": [
-              51,
-              6,
-              27
+              53,
+              11,
+              29
             ],
             "size": [
-              25,
-              35,
+              27,
+              30,
               28
             ],
-            "blocks": 14277
+            "blocks": 13734
           },
           {
             "location": "wayfarers:clockwork_citadel/citadel/x2_z2",
             "offset": [
-              51,
-              0,
-              55
+              53,
+              2,
+              57
             ],
             "size": [
-              19,
-              63,
-              16
+              25,
+              61,
+              22
             ],
-            "blocks": 5069
+            "blocks": 5531
           }
         ],
         "projection": "rigid",
         "processors": "wayfarers:none",
-        "ground_level_delta": 24
+        "ground_level_delta": 24,
+        "footprint": [
+          5,
+          4,
+          75,
+          74
+        ]
       }
     }
   ]

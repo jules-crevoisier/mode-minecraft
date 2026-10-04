@@ -6,7 +6,7 @@
       "element": {
         "element_type": "wayfarers:chunked_template",
         "size": [
-          86,
+          87,
           112,
           81
         ],
@@ -14,58 +14,58 @@
           {
             "location": "wayfarers:sky_island/island/x0_z0",
             "offset": [
-              1,
-              9,
-              0
+              0,
+              4,
+              1
             ],
             "size": [
-              28,
-              103,
-              27
+              29,
+              105,
+              26
             ],
-            "blocks": 2280
+            "blocks": 2462
           },
           {
             "location": "wayfarers:sky_island/island/x0_z1",
             "offset": [
-              0,
-              53,
+              1,
+              6,
               27
             ],
             "size": [
-              29,
-              50,
+              28,
+              97,
               27
             ],
-            "blocks": 2526
+            "blocks": 2522
           },
           {
             "location": "wayfarers:sky_island/island/x0_z2",
             "offset": [
-              27,
-              59,
+              28,
+              62,
               54
             ],
             "size": [
-              2,
-              17,
-              9
+              1,
+              9,
+              6
             ],
-            "blocks": 75
+            "blocks": 27
           },
           {
             "location": "wayfarers:sky_island/island/x1_z0",
             "offset": [
               29,
               41,
-              1
+              0
             ],
             "size": [
-              28,
-              68,
-              26
+              29,
+              71,
+              27
             ],
-            "blocks": 11055
+            "blocks": 11463
           },
           {
             "location": "wayfarers:sky_island/island/x1_z1",
@@ -75,11 +75,11 @@
               27
             ],
             "size": [
-              28,
+              29,
               103,
               27
             ],
-            "blocks": 13203
+            "blocks": 14620
           },
           {
             "location": "wayfarers:sky_island/island/x1_z2",
@@ -89,16 +89,16 @@
               54
             ],
             "size": [
-              28,
+              29,
               47,
               27
             ],
-            "blocks": 8037
+            "blocks": 8085
           },
           {
             "location": "wayfarers:sky_island/island/x2_z0",
             "offset": [
-              57,
+              58,
               44,
               7
             ],
@@ -112,21 +112,21 @@
           {
             "location": "wayfarers:sky_island/island/x2_z1",
             "offset": [
-              57,
-              9,
+              58,
+              4,
               27
             ],
             "size": [
               22,
-              78,
+              83,
               27
             ],
-            "blocks": 2371
+            "blocks": 2855
           },
           {
             "location": "wayfarers:sky_island/island/x2_z2",
             "offset": [
-              57,
+              58,
               63,
               54
             ],
@@ -140,7 +140,13 @@
         ],
         "projection": "rigid",
         "processors": "wayfarers:none",
-        "ground_level_delta": 13
+        "ground_level_delta": 13,
+        "footprint": [
+          1,
+          0,
+          86,
+          80
+        ]
       }
     }
   ]

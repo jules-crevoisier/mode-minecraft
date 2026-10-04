@@ -239,6 +239,9 @@ def check_worldgen():
     import wf.structures  # noqa: F401  (registers every structure)
     for msg in placement.check(DATA):
         err(msg)
+    # site fit: every structure is a fitted_jigsaw whose terrain check suits how and where it is placed
+    for msg in placement.check_fit(DATA):
+        err(msg)
     for sid in placement.unassigned():
         warnings.append(f"structure {sid} has no family in tools/wf/placement.py (fallback set)")
     for path in glob.glob(os.path.join(ns_dir, "worldgen", "structure", "*.json")):

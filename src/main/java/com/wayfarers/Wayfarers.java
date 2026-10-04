@@ -61,6 +61,7 @@ public final class Wayfarers {
         com.wayfarers.registry.ModMenus.MENUS.register(modBus);
         com.wayfarers.registry.ModWorldgen.POOL_ELEMENTS.register(modBus);
         com.wayfarers.registry.ModWorldgen.PLACEMENTS.register(modBus);
+        com.wayfarers.registry.ModWorldgen.STRUCTURE_TYPES.register(modBus);
         com.wayfarers.network.WayfarersNet.init();
 
         EntityAttributeCreationEvent.BUS.addListener(ModEntities::registerAttributes);
@@ -77,6 +78,7 @@ public final class Wayfarers {
         com.wayfarers.skill.SkillEvents.register();
         com.wayfarers.chisel.ChiselFamilies.register();
         com.wayfarers.util.StructureLocator.register();
+        com.wayfarers.world.SiteFit.register();
         com.wayfarers.block.MachineBlockEntity.registerEvents();
         SpawnPlacementRegisterEvent.BUS.addListener(ModEntities::registerSpawnPlacements);
         context.registerConfig(ModConfig.Type.COMMON, WayfarersConfig.SPEC);

@@ -140,7 +140,13 @@
         ],
         "projection": "rigid",
         "processors": "wayfarers:none",
-        "ground_level_delta": 5
+        "ground_level_delta": 5,
+        "footprint": [
+          0,
+          0,
+          84,
+          82
+        ]
       }
     },
     {
@@ -282,7 +288,13 @@
         ],
         "projection": "rigid",
         "processors": "wayfarers:none",
-        "ground_level_delta": 5
+        "ground_level_delta": 5,
+        "footprint": [
+          0,
+          0,
+          84,
+          82
+        ]
       }
     },
     {
@@ -424,7 +436,13 @@
         ],
         "projection": "rigid",
         "processors": "wayfarers:none",
-        "ground_level_delta": 5
+        "ground_level_delta": 5,
+        "footprint": [
+          0,
+          0,
+          84,
+          82
+        ]
       }
     }
   ]

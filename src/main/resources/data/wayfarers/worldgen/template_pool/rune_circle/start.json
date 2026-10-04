@@ -6,52 +6,52 @@
       "element": {
         "element_type": "wayfarers:chunked_template",
         "size": [
-          69,
+          70,
           48,
-          89
+          90
         ],
         "cells": [
           {
             "location": "wayfarers:rune_circle/circle/x0_z0",
             "offset": [
-              5,
+              6,
               0,
-              11
+              13
             ],
             "size": [
-              18,
-              20,
-              19
+              17,
+              17,
+              17
             ],
-            "blocks": 2762
+            "blocks": 2418
           },
           {
             "location": "wayfarers:rune_circle/circle/x0_z1",
             "offset": [
+              2,
               1,
-              0,
               30
             ],
             "size": [
-              22,
-              46,
-              29
+              21,
+              45,
+              30
             ],
-            "blocks": 8581
+            "blocks": 8947
           },
           {
             "location": "wayfarers:rune_circle/circle/x0_z2",
             "offset": [
               0,
               1,
-              59
+              60
             ],
             "size": [
               23,
               42,
-              27
+              26
             ],
-            "blocks": 4886
+            "blocks": 4410
           },
           {
             "location": "wayfarers:rune_circle/circle/x1_z0",
@@ -61,11 +61,11 @@
               0
             ],
             "size": [
-              23,
+              24,
               27,
               30
             ],
-            "blocks": 15046
+            "blocks": 15390
           },
           {
             "location": "wayfarers:rune_circle/circle/x1_z1",
@@ -75,30 +75,30 @@
               30
             ],
             "size": [
-              23,
+              24,
               48,
-              29
+              30
             ],
-            "blocks": 9551
+            "blocks": 10357
           },
           {
             "location": "wayfarers:rune_circle/circle/x1_z2",
             "offset": [
               23,
               20,
-              59
+              60
             ],
             "size": [
-              23,
+              24,
               24,
               30
             ],
-            "blocks": 4865
+            "blocks": 4950
           },
           {
             "location": "wayfarers:rune_circle/circle/x2_z0",
             "offset": [
-              46,
+              47,
               0,
               1
             ],
@@ -112,35 +112,41 @@
           {
             "location": "wayfarers:rune_circle/circle/x2_z1",
             "offset": [
-              46,
+              47,
               0,
               30
             ],
             "size": [
               13,
               35,
-              29
+              30
             ],
-            "blocks": 2132
+            "blocks": 2228
           },
           {
             "location": "wayfarers:rune_circle/circle/x2_z2",
             "offset": [
-              46,
-              27,
-              59
+              47,
+              26,
+              60
             ],
             "size": [
+              10,
               9,
-              8,
-              22
+              23
             ],
-            "blocks": 687
+            "blocks": 823
           }
         ],
         "projection": "rigid",
         "processors": "wayfarers:none",
-        "ground_level_delta": 33
+        "ground_level_delta": 33,
+        "footprint": [
+          2,
+          35,
+          52,
+          85
+        ]
       }
     }
   ]

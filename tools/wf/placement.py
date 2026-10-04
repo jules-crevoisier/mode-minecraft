@@ -25,6 +25,29 @@ Terrain fit
     ground layer + 1, and the structure's start height no longer subtracts that depth.
     ``carve_limit`` then drops template air that would only carve hills: air above the ground layer in columns with
     nothing built, and air more than ``KEEP_AIR`` blocks above the highest built block of its column.
+
+Site selection (FIT)
+    Every structure is a ``wayfarers:fitted_jigsaw`` (com.wayfarers.world.FittedJigsawStructure): a vanilla jigsaw
+    whose start is first checked against the real terrain, sampled with ``ChunkGenerator.getBaseHeight``
+    (WORLD_SURFACE_WG and OCEAN_FLOOR_WG) on a grid over the structure's footprint (corners, edges, centre, up to
+    7 x 7 points). A site that does not fit is rejected like a cell with the wrong biome: the grid cell stays empty
+    and ``/locate`` moves on to the next one, so nothing has to know about it. Modes (see ``FIT`` below):
+
+    land       dry ground: height spread <= ``spread``, steepest step between two neighbouring samples <= ``slope``
+               (rise over run), at most ``wet`` of the samples under water. The start is moved to the median ground
+               height of the footprint (never more than ``drop`` above its lowest sample, which the foundations
+               reach), instead of the height of its centre column.
+    wetland    land where water counts as ground (swamp huts on stilts): heights are the water surface, and at least
+               ``min_wet`` of the samples must be water (a template pond on dry land is a square pool).
+    coast      the template's ``sea_side`` (after rotation) must be water (>= ``wet`` of the samples there) and the
+               opposite side land (>= ``land``), the shore at most ``spread`` above the sea; the ground layer lands
+               one block above the sea surface.
+    seabed     under water (>= ``wet`` of the samples, median depth >= ``depth``), flat enough sea floor.
+    sky        fixed absolute height; the terrain under the footprint must stay ``clearance`` blocks below the
+               structure's underside (it may rise by up to ``lift`` blocks to get there).
+    underground  fixed height; at least ``cover`` blocks of rock between its top and the lowest ground (or sea
+               floor) above it (it may sink by up to ``lift``).
+    cavern     Nether: at least ``open`` of the samples are open (air or lava) just above the deck.
 """
 import hashlib
 import json
@@ -140,7 +163,101 @@ FAMILIES = [
 ADAPTATION = {
     "clockwork_citadel": "beard_thin",   # was beard_box: cut a canyon the height of its towers through mesas
     "coastal_lighthouse": "none",        # sits on the shore as is: a beard would fill the sea around its cape
+    "sky_island": "beard_thin",          # its ground shrine and waterfall pool blend in; the islands float above
 }
+
+# Biome list overrides (structure id -> biomes), applied before the tags are written. Kept here so the whole
+# "where does it go" decision is in one file; validate.py checks the theme rules (check_fit).
+BIOMES = {
+    # grass-topped hillside settlement: mountains, hills and taiga, not the red mesas (badlands have the citadel,
+    # the foundry and the hypogeum)
+    "dwarven_mine": ["#minecraft:is_mountain", "#minecraft:is_hill", "windswept_hills", "windswept_gravelly_hills",
+                     "#minecraft:is_taiga"],
+}
+# the overhaul's extra cave biomes (they replace no vanilla biome, so no vanilla tag lists them)
+EXTRA_CAVES = ["wayfarers:fungal_grotto", "wayfarers:mithril_hollows"]
+DEEP_EVERYWHERE = ("dwarven_forge", "crystal_grotto", "undercity", "dwarven_city", "crystal_cathedral")
+
+# ------------------------------------------------------------------ site fit (see "Site selection" above)
+FIT_MODES = ("land", "wetland", "coast", "seabed", "sky", "underground", "cavern")
+FOUNDATION_DEPTH = 12   # wf/foundation.py: how far the foundations reach below the ground layer
+DEFAULT_DROP = 10       # land: the start never sits more than this above the lowest sample (foundations reach it)
+
+
+def _f(mode, **kw):
+    return dict(mode=mode, **kw)
+
+
+FIT = {
+    # ---- overworld land: spread (blocks), slope (rise/run between neighbouring samples), wet (max water share)
+    "guild_outpost": _f("land", spread=8, slope=0.7, wet=0.05),
+    "mountain_monastery": _f("land", spread=16, slope=1.0, wet=0.05),   # rock plinth 30 deep: made for slopes
+    "forgotten_library": _f("land", spread=10, slope=0.7, wet=0.05),
+    "giant_tree": _f("land", spread=12, slope=0.9, wet=0.05),           # roots reach down on their own
+    "desert_oasis": _f("land", spread=8, slope=0.6, wet=0.05),
+    "witch_huts": _f("wetland", spread=5, slope=0.5, wet=0.9, min_wet=0.2),  # stilts over a real marsh
+    "sky_island": _f("land", spread=14, slope=0.8, wet=0.1),            # ground shrine + pool under the islands
+    "jungle_ziggurat": _f("land", spread=12, slope=0.8, wet=0.05),
+    "ruined_watchtower": _f("land", spread=10, slope=0.9, wet=0.05),
+    "bandit_camp": _f("land", spread=8, slope=0.7, wet=0.05),
+    "rune_circle": _f("land", spread=8, slope=0.6, wet=0.05),
+    "ice_observatory": _f("land", spread=10, slope=0.8, wet=0.05),
+    "dwarven_mine": _f("land", spread=22, slope=1.3, wet=0.05),         # a hillside settlement: wants a slope
+    "forgotten_catacombs": _f("land", spread=6, slope=0.6, wet=0.0),    # footprint = the mausoleum on top
+    "sand_hypogeum": _f("land", spread=6, slope=0.6, wet=0.0),
+    "lithite_well": _f("land", spread=8, slope=0.9, wet=0.0),
+    "clockwork_citadel": _f("land", spread=14, slope=0.5, wet=0.05),
+    "sky_harbour": _f("land", spread=12, slope=0.8, wet=0.05),
+    "sylvan_palace": _f("land", spread=14, slope=0.7, wet=0.05),
+    "inventor_manor": _f("land", spread=10, slope=0.6, wet=0.05),
+    "geothermal_foundry": _f("land", spread=16, slope=0.7, wet=0.05),
+    "tesla_observatory": _f("land", spread=20, slope=1.0, wet=0.05),    # terraced mountain campus
+    # ---- coast: the dock side (template +z = south) in the sea, the cape on land, shore near sea level
+    "coastal_lighthouse": _f("coast", sea_side="south", wet=0.5, land=0.5, spread=8, slope=1.0),
+    # ---- sea floor: wet share, median water depth, floor spread
+    "galleon_wreck": _f("seabed", wet=0.7, depth=4, spread=8, slope=0.6),
+    "sunken_temple": _f("seabed", wet=0.95, depth=6, spread=10, slope=0.6),
+    "sunken_citadel": _f("seabed", wet=0.95, depth=10, spread=12, slope=0.6),
+    "sunken_submarine": _f("seabed", wet=0.95, depth=6, spread=5, slope=0.6),
+    "diving_bell": _f("seabed", wet=0.95, depth=6, spread=4, slope=0.6),
+    "coral_shrine": _f("seabed", wet=0.95, depth=4, spread=4, slope=0.6),
+    "shipwreck_debris": _f("seabed", wet=0.6, depth=2, spread=4, slope=0.7),
+    # ---- sky: fixed height, the terrain stays this far below the underside
+    "sky_isles": _f("sky", clearance=24, lift=0),
+    # ---- underground: rock cover above the top
+    "dwarven_forge": _f("underground", cover=8, lift=4),
+    "crystal_grotto": _f("underground", cover=8, lift=4),
+    "sealed_lab": _f("underground", cover=8, lift=4),
+    "undercity": _f("underground", cover=10, lift=6),
+    "dwarven_city": _f("underground", cover=10, lift=2),
+    "crystal_cathedral": _f("underground", cover=10, lift=6),
+    # ---- Nether: open air (or the lava sea) above the deck
+    "basalt_fortress": _f("cavern", open=0.3),
+    "chain_bridge": _f("cavern", open=0.6),
+    "piglin_sanctuary": _f("cavern", open=0.3),
+    "lava_foundry": _f("cavern", open=0.5),
+    "soul_tower": _f("cavern", open=0.3),
+    "piglin_market": _f("cavern", open=0.3),
+    # ---- End: monuments floating over the void beside the outer islands; they rise above an island in the way
+    "void_observatory": _f("sky", clearance=4, lift=32),
+    "chorus_garden": _f("sky", clearance=4, lift=32),
+    "end_archive": _f("sky", clearance=4, lift=32),
+    "void_ship": _f("sky", clearance=4, lift=32),
+    "void_nest": _f("sky", clearance=4, lift=32),
+    "void_crypt": _f("land", spread=6, slope=0.7, wet=0.0),            # mausoleum on an End island
+}
+
+# Biome groups for the theme checks
+ARID = {"desert", "badlands", "eroded_badlands", "wooded_badlands"}
+PEAKS = {"frozen_peaks", "jagged_peaks", "stony_peaks"}
+COLD = {"snowy_plains", "ice_spikes", "snowy_taiga", "grove", "snowy_slopes", "frozen_peaks", "jagged_peaks",
+        "snowy_beach", "frozen_river", "frozen_ocean", "deep_frozen_ocean"}
+WATERY = {"ocean", "deep_ocean", "cold_ocean", "deep_cold_ocean", "lukewarm_ocean", "deep_lukewarm_ocean",
+          "warm_ocean", "frozen_ocean", "deep_frozen_ocean", "river", "frozen_river"}
+SHORE = {"beach", "snowy_beach", "stony_shore"}
+GRASSY = {"grass_block", "podzol", "moss_block", "coarse_dirt", "dirt_path", "mycelium", "rooted_dirt", "dirt"}
+SANDY = {"sand", "red_sand", "sandstone", "smooth_sandstone", "cut_sandstone", "red_sandstone"}
+SNOWY = {"snow_block", "powder_snow", "packed_ice", "ice", "blue_ice"}
 # Hidden foundations (wf/foundation.py) switched off: the lighthouse cape already reaches 6 blocks down, and
 # its dock would otherwise stand on a solid wall of cobblestone instead of piles.
 FOUNDATION = {
@@ -178,6 +295,65 @@ def apply_overrides():
             sdef.adaptation = ADAPTATION[sdef.id]
         if sdef.id in FOUNDATION:
             sdef.foundation = FOUNDATION[sdef.id]
+        if sdef.id in BIOMES:
+            sdef.biomes = list(BIOMES[sdef.id])
+        if sdef.id in DEEP_EVERYWHERE:
+            sdef.biomes = list(sdef.biomes) + [b for b in EXTRA_CAVES if b not in sdef.biomes]
+
+
+# ------------------------------------------------------------------ site fit
+def fit_params(sid):
+    """FIT entry with every key filled (the defaults the Java codec uses too)."""
+    p = dict(spread=8, slope=0.8, wet=0.05, min_wet=0.0, land=0.5, drop=DEFAULT_DROP, depth=0, clearance=0, cover=0, lift=0,
+             open=0.0)
+    p.update(FIT.get(sid, {"mode": "land"}))
+    return p
+
+
+def ground_info(blocks, ground):
+    """From a start template (normalized blocks, ground layer y): the built footprint (x0, z0, x1, z1: columns with
+    anything at or above the ground layer), the share of that footprint the template floods itself (ponds,
+    fountains, a moat) and the ground theme (grass / sand / snow / stone) for the biome checks."""
+    cols = {}
+    for (x, y, z), b in blocks.items():
+        if y >= ground and b[0] not in AIR:
+            cols.setdefault((x, z), []).append((y, b[0]))
+    if not cols:
+        return None, 0.0, "stone"
+    xs = [c[0] for c in cols]
+    zs = [c[1] for c in cols]
+    fp = (min(xs), min(zs), max(xs), max(zs))
+    area = (fp[2] - fp[0] + 1) * (fp[3] - fp[1] + 1)
+    wet = sum(1 for c in cols.values() if any(n == "minecraft:water" and y <= ground + 1 for y, n in c))
+    top = {}
+    for (x, y, z), b in blocks.items():
+        if y == ground and b[0] not in AIR:
+            s = b[0].split(":")[1]
+            kind = "grass" if s in GRASSY else "sand" if s in SANDY else "snow" if s in SNOWY else "stone"
+            top[kind] = top.get(kind, 0) + 1
+    n = sum(top.values()) or 1
+    theme = "stone"
+    for kind in ("sand", "snow", "grass"):
+        if top.get(kind, 0) >= 0.25 * n:
+            theme = kind
+            break
+    return fp, round(wet / area, 3), theme
+
+
+def fit_json(sdef, info):
+    """The ``fit`` object of a fitted_jigsaw structure. ``info``: {"pond", "ground", "theme"} from gen_structures
+    (the footprint of each start template goes on its pool element, ChunkedPoolElement ``footprint``)."""
+    p = fit_params(sdef.id)
+    js = {"mode": p["mode"]}
+    for k in ("spread", "slope", "wet", "min_wet", "land", "drop", "depth", "clearance", "cover", "lift", "open"):
+        js[k] = p[k]
+    if p.get("sea_side"):
+        js["sea_side"] = p["sea_side"]
+    if info:
+        js["ground"] = info["ground"]
+        js["pond"] = info.get("pond", 0.0)
+        js["theme"] = info.get("theme", "stone")  # documentation only (validate.py); the game ignores it
+    return js
 
 
 def structure_set_json(fam):
@@ -277,6 +453,7 @@ def per_type_spacing(fam, sid):
 
 def check(data_dir):
     """Placement rules, read back from the written structure sets. Returns a list of error strings."""
+    apply_overrides()
     errors = []
     sets = {}
     set_dir = os.path.join(data_dir, defs.MODID, "worldgen", "structure_set")
@@ -368,6 +545,156 @@ def check(data_dir):
                 errors.append(f"structure set {other_rl} may start {r} chunks from a wonder of {rl} "
                               f"(needs avoid {rl} >= {WONDER_RADIUS})")
     return errors
+
+
+def check_fit(data_dir):
+    """Site-fit rules, read back from the written structures (wayfarers:fitted_jigsaw): every structure has a fit
+    mode that matches how it is placed, sane tolerances, a footprint inside its templates, a terrain adaptation that
+    suits the mode, and biomes that suit its ground (no desert template on snowy peaks, no land building in the
+    sea...). Returns a list of error strings."""
+    apply_overrides()
+    errors = []
+    by_id = {s.id: s for s in defs.STRUCTURES}
+    for sid in sorted(by_id):
+        if sid not in FIT:
+            errors.append(f"{sid}: no site-fit entry in tools/wf/placement.py FIT")
+    struct_dir = os.path.join(data_dir, defs.MODID, "worldgen", "structure")
+    for f in sorted(os.listdir(struct_dir)):
+        if not f.endswith(".json"):
+            continue
+        sid = f[:-5]
+        js = json.load(open(os.path.join(struct_dir, f)))
+        sdef = by_id.get(sid)
+        if js.get("type") != defs.rl("fitted_jigsaw"):
+            errors.append(f"{sid}: type {js.get('type')} (every structure is a {defs.rl('fitted_jigsaw')})")
+            continue
+        fit = js.get("fit")
+        if not isinstance(fit, dict) or fit.get("mode") not in FIT_MODES:
+            errors.append(f"{sid}: fit.mode must be one of {FIT_MODES}")
+            continue
+        mode = fit["mode"]
+        proj = js.get("project_start_to_heightmap")
+        adapt = js.get("terrain_adaptation", "none")
+        dim = sdef.dimension if sdef else "overworld"
+        want_proj = {"land": "WORLD_SURFACE_WG", "wetland": "WORLD_SURFACE_WG", "coast": "WORLD_SURFACE_WG",
+                     "seabed": "OCEAN_FLOOR_WG"}.get(mode)
+        if proj != want_proj:
+            errors.append(f"{sid}: fit mode {mode} needs project_start_to_heightmap {want_proj}, has {proj}")
+        if mode == "cavern" and dim != "nether":
+            errors.append(f"{sid}: fit mode cavern is for the Nether")
+        if dim == "nether" and mode != "cavern":
+            errors.append(f"{sid}: Nether structures use fit mode cavern (the surface heightmap is the roof)")
+        if mode == "underground" and (dim != "overworld" or js.get("step") != "underground_structures"):
+            errors.append(f"{sid}: fit mode underground needs the overworld and step underground_structures")
+        if mode == "sky" and dim not in ("overworld", "end"):
+            errors.append(f"{sid}: fit mode sky is for the overworld and the End")
+        # tolerances
+        rng = {"spread": (1, 40), "slope": (0.1, 3.0), "wet": (0.0, 1.0), "min_wet": (0.0, 1.0), "land": (0.0, 1.0),
+               "open": (0.0, 1.0),
+               "drop": (0, FOUNDATION_DEPTH - 1), "depth": (0, 40), "clearance": (0, 64), "cover": (0, 64),
+               "lift": (0, 64)}
+        for k, (lo, hi) in rng.items():
+            v = fit.get(k)
+            if not isinstance(v, (int, float)) or not lo <= v <= hi:
+                errors.append(f"{sid}: fit.{k} = {v} outside {lo}..{hi}")
+        if mode == "underground" and fit.get("cover", 0) < 4:
+            errors.append(f"{sid}: an underground structure needs cover >= 4 (it would open onto the surface)")
+        if mode == "sky" and fit.get("clearance", 0) < 1:
+            errors.append(f"{sid}: a sky structure needs clearance >= 1")
+        if fit.get("min_wet", 0) > fit.get("wet", 1):
+            errors.append(f"{sid}: fit.min_wet {fit.get('min_wet')} above fit.wet {fit.get('wet')}")
+        if mode in ("land", "wetland") and fit.get("wet", 1) > (0.95 if mode == "wetland" else 0.25):
+            errors.append(f"{sid}: fit.wet {fit.get('wet')} lets a land structure start in the water")
+        if mode == "seabed" and (fit.get("wet", 0) < 0.5 or fit.get("depth", 0) < 2):
+            errors.append(f"{sid}: a sea-floor structure needs wet >= 0.5 and depth >= 2")
+        if mode == "coast":
+            if fit.get("sea_side") not in ("north", "south", "east", "west"):
+                errors.append(f"{sid}: coast fit needs sea_side north/south/east/west (template frame)")
+            if fit.get("wet", 0) < 0.3 or fit.get("land", 0) < 0.3:
+                errors.append(f"{sid}: coast fit needs water on one side and land on the other (wet, land >= 0.3)")
+        # adaptation that suits the mode
+        ok_adapt = {"land": ("beard_thin", "beard_box", "bury"), "wetland": ("none", "beard_thin"),
+                    "coast": ("none",), "seabed": ("none", "beard_box", "beard_thin"), "sky": ("none",),
+                    "underground": ("none", "encapsulate", "bury"), "cavern": ("none", "beard_box")}[mode]
+        if adapt not in ok_adapt:
+            errors.append(f"{sid}: terrain_adaptation {adapt} does not suit fit mode {mode} (use {ok_adapt})")
+        # heights and the footprint against the start templates
+        pool = json.load(open(os.path.join(data_dir, defs.MODID, "worldgen", "template_pool", sid, "start.json")))
+        sizes = [e["element"].get("size") for e in pool["elements"] if e["element"].get("size")]
+        if want_proj:
+            for e in pool["elements"]:
+                fp, size = e["element"].get("footprint"), e["element"].get("size")
+                if not fp or len(fp) != 4 or not size:
+                    errors.append(f"{sid}: projected start piece without a footprint (the site check would test "
+                                  f"its whole box)")
+                elif not (0 <= fp[0] <= fp[2] < size[0] and 0 <= fp[1] <= fp[3] < size[2]):
+                    errors.append(f"{sid}: footprint {fp} outside its template {size}")
+                gd = e["element"].get("ground_level_delta")
+                if gd is not None and fit.get("ground") != gd - 1:
+                    errors.append(f"{sid}: fit.ground {fit.get('ground')} != ground_level_delta - 1 ({gd - 1})")
+        else:
+            sh = js.get("start_height", {})
+            lo_y = sh.get("min_inclusive", sh).get("absolute")
+            hi_y = sh.get("max_inclusive", sh).get("absolute")
+            tall = max((s[1] for s in sizes), default=0)
+            top = {"overworld": 320, "end": 256, "nether": 128}[dim]
+            if lo_y is None or hi_y is None:
+                errors.append(f"{sid}: fixed-height structure without an absolute start_height")
+            elif mode == "sky" and hi_y + fit.get("lift", 0) + tall > top:
+                errors.append(f"{sid}: lifted by {fit.get('lift')} it would reach y {hi_y + fit.get('lift', 0) + tall} "
+                              f"(top of the {dim}: {top})")
+            elif mode == "underground" and lo_y - fit.get("lift", 0) < -63:
+                errors.append(f"{sid}: sunk by {fit.get('lift')} it would reach under the bedrock floor")
+        # biomes that suit the ground
+        if not sdef:
+            continue
+        biomes = biome_set(sdef)
+        theme = fit.get("theme", "stone")
+        if mode in ("land", "wetland", "coast") and dim == "overworld" and biomes & WATERY:
+            errors.append(f"{sid}: land structure listed in water biomes {sorted(biomes & WATERY)}")
+        if mode == "seabed" and biomes - WATERY - SHORE:
+            errors.append(f"{sid}: sea-floor structure listed in dry biomes {sorted(biomes - WATERY - SHORE)}")
+        if mode == "coast" and not biomes & SHORE:
+            errors.append(f"{sid}: coast structure without any shore biome")
+        if mode in ("land", "wetland", "coast", "sky") and biomes & ARID and biomes & PEAKS:
+            errors.append(f"{sid}: listed in deserts and on mountain peaks at once ({sorted(biomes & ARID)} / "
+                          f"{sorted(biomes & PEAKS)})")
+        if mode in ("land", "wetland") and dim == "overworld":
+            if theme == "sand" and biomes - ARID - SHORE:
+                errors.append(f"{sid}: sandy template in non-arid biomes {sorted(biomes - ARID - SHORE)}")
+            if theme == "snow" and biomes - COLD:
+                errors.append(f"{sid}: snowy template in warm biomes {sorted(biomes - COLD)}")
+            if theme == "grass" and biomes & ARID:
+                errors.append(f"{sid}: grass-topped template in arid biomes {sorted(biomes & ARID)}")
+        if mode == "sky" and dim == "overworld" and biomes & (PEAKS | {"snowy_slopes", "meadow", "grove"}):
+            errors.append(f"{sid}: a fixed-height sky structure listed in mountain biomes")
+    return errors
+
+
+def fit_rows():
+    """Rows for the per-structure fit table: id, dimension, family, placement, adaptation, fit summary, biomes."""
+    apply_overrides()
+    fam = {s: f.id for f in FAMILIES for s in f.members}
+    rows = []
+    for s in defs.STRUCTURES:
+        p = fit_params(s.id)
+        m = p["mode"]
+        if m in ("land", "wetland"):
+            summary = f"spread<={p['spread']} slope<={p['slope']} water<={p['wet']:.0%} drop<={p['drop']}"
+        elif m == "coast":
+            summary = f"{p['sea_side']} side sea>={p['wet']:.0%}, land>={p['land']:.0%}, shore<=sea+{p['spread']}"
+        elif m == "seabed":
+            summary = f"water>={p['wet']:.0%} depth>={p['depth']} spread<={p['spread']}"
+        elif m == "sky":
+            summary = f"clearance>={p['clearance']} lift<={p['lift']}"
+        elif m == "underground":
+            summary = f"cover>={p['cover']} sink<={p['lift']}"
+        else:
+            summary = f"open>={p['open']:.0%}"
+        height = (f"{s.height[0]} {s.height[1]}" + (f"..{s.height[2]}" if len(s.height) > 2 else "")
+                  if s.height else f"projected {s.heightmap}")
+        rows.append((s.id, s.dimension, fam.get(s.id, "-"), height, s.adaptation, m, summary, s.biomes))
+    return rows
 
 
 # ------------------------------------------------------------------ report

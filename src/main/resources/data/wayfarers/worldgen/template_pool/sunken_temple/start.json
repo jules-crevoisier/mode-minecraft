@@ -140,7 +140,13 @@
         ],
         "projection": "rigid",
         "processors": "wayfarers:none",
-        "ground_level_delta": 8
+        "ground_level_delta": 8,
+        "footprint": [
+          3,
+          3,
+          64,
+          75
+        ]
       }
     }
   ]

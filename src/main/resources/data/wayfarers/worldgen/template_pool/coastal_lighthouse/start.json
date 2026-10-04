@@ -70,7 +70,13 @@
         ],
         "projection": "rigid",
         "processors": "wayfarers:aging",
-        "ground_level_delta": 7
+        "ground_level_delta": 7,
+        "footprint": [
+          1,
+          0,
+          55,
+          44
+        ]
       }
     }
   ]

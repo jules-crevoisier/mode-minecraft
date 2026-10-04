@@ -6,9 +6,9 @@
       "element": {
         "element_type": "wayfarers:chunked_template",
         "size": [
-          61,
+          63,
           36,
-          59
+          61
         ],
         "cells": [
           {
@@ -19,30 +19,30 @@
               0
             ],
             "size": [
-              30,
-              30,
+              32,
+              29,
               30
             ],
-            "blocks": 7069
+            "blocks": 7232
           },
           {
             "location": "wayfarers:ice_observatory/observatory/x0_z1",
             "offset": [
-              0,
+              1,
               0,
               30
             ],
             "size": [
+              31,
               30,
-              29,
-              29
+              31
             ],
-            "blocks": 6387
+            "blocks": 7397
           },
           {
             "location": "wayfarers:ice_observatory/observatory/x1_z0",
             "offset": [
-              30,
+              32,
               0,
               0
             ],
@@ -51,26 +51,32 @@
               36,
               30
             ],
-            "blocks": 5779
+            "blocks": 5225
           },
           {
             "location": "wayfarers:ice_observatory/observatory/x1_z1",
             "offset": [
-              30,
+              32,
               0,
               30
             ],
             "size": [
               31,
               29,
-              22
+              24
             ],
-            "blocks": 4953
+            "blocks": 5228
           }
         ],
         "projection": "rigid",
         "processors": "wayfarers:none",
-        "ground_level_delta": 9
+        "ground_level_delta": 9,
+        "footprint": [
+          1,
+          3,
+          58,
+          56
+        ]
       }
     }
   ]

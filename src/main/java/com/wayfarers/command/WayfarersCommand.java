@@ -120,6 +120,12 @@ public final class WayfarersCommand {
                         .executes(BiomeShotsCommand::run)
                         .then(Commands.argument("biome", StringArgumentType.word())
                                 .executes(ctx -> BiomeShotsCommand.run(ctx, StringArgumentType.getString(ctx, "biome")))))
+                .then(Commands.literal("fitcheck").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
+                        .executes(ctx -> FitCheckCommand.run(ctx, null))
+                        .then(Commands.argument("structure", StringArgumentType.word())
+                                .suggests((ctx, b) -> SharedSuggestionProvider.suggest(
+                                        GeneratedContent.STRUCTURES.stream().map(GeneratedContent.StructureInfo::id), b))
+                                .executes(ctx -> FitCheckCommand.run(ctx, StringArgumentType.getString(ctx, "structure")))))
                 .then(Commands.literal("progress").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                         .then(Commands.literal("reset").executes(ctx -> progress(ctx, false)))
                         .then(Commands.literal("complete").executes(ctx -> progress(ctx, true)))));

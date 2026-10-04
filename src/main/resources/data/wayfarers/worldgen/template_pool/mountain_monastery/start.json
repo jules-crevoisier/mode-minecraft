@@ -6,24 +6,24 @@
       "element": {
         "element_type": "wayfarers:chunked_template",
         "size": [
-          79,
+          81,
           107,
-          72
+          73
         ],
         "cells": [
           {
             "location": "wayfarers:mountain_monastery/monastery/x0_z0",
             "offset": [
               0,
-              26,
+              25,
               0
             ],
             "size": [
-              26,
-              57,
+              27,
+              58,
               24
             ],
-            "blocks": 8857
+            "blocks": 8503
           },
           {
             "location": "wayfarers:mountain_monastery/monastery/x0_z1",
@@ -33,30 +33,30 @@
               24
             ],
             "size": [
-              26,
-              73,
-              24
+              27,
+              80,
+              25
             ],
-            "blocks": 18550
+            "blocks": 19524
           },
           {
             "location": "wayfarers:mountain_monastery/monastery/x0_z2",
             "offset": [
               0,
               0,
-              48
+              49
             ],
             "size": [
-              26,
+              27,
               77,
               24
             ],
-            "blocks": 7568
+            "blocks": 7916
           },
           {
             "location": "wayfarers:mountain_monastery/monastery/x1_z0",
             "offset": [
-              26,
+              27,
               19,
               0
             ],
@@ -65,82 +65,88 @@
               46,
               24
             ],
-            "blocks": 12750
+            "blocks": 12404
           },
           {
             "location": "wayfarers:mountain_monastery/monastery/x1_z1",
             "offset": [
-              26,
+              27,
               0,
               24
             ],
             "size": [
               27,
               107,
-              24
+              25
             ],
-            "blocks": 24115
+            "blocks": 24688
           },
           {
             "location": "wayfarers:mountain_monastery/monastery/x1_z2",
             "offset": [
-              26,
+              27,
               0,
-              48
+              49
             ],
             "size": [
               27,
               93,
               24
             ],
-            "blocks": 19403
+            "blocks": 19586
           },
           {
             "location": "wayfarers:mountain_monastery/monastery/x2_z0",
             "offset": [
-              53,
+              54,
               20,
               0
             ],
             "size": [
-              26,
+              27,
               39,
               24
             ],
-            "blocks": 10852
+            "blocks": 10710
           },
           {
             "location": "wayfarers:mountain_monastery/monastery/x2_z1",
             "offset": [
-              53,
+              54,
               0,
               24
             ],
             "size": [
-              26,
+              27,
               58,
-              24
+              25
             ],
-            "blocks": 12810
+            "blocks": 13600
           },
           {
             "location": "wayfarers:mountain_monastery/monastery/x2_z2",
             "offset": [
-              53,
+              54,
               0,
-              48
+              49
             ],
             "size": [
-              26,
+              27,
               44,
               24
             ],
-            "blocks": 7017
+            "blocks": 7361
           }
         ],
         "projection": "rigid",
         "processors": "wayfarers:aging",
-        "ground_level_delta": 32
+        "ground_level_delta": 32,
+        "footprint": [
+          1,
+          1,
+          79,
+          72
+        ]
       }
     }
   ]

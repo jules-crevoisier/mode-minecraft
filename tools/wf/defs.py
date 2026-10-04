@@ -123,7 +123,9 @@ def pool_element(sdef, p):
     if p.chunks:
         from . import chunking
         size, cells = p.chunks
-        return chunking.element(size, cells, p.projection, processors, p.ground_delta)
+        info = getattr(p, "fit_info", None)
+        footprint = info["footprint"] if info and p.ground_delta is not None and info["footprint"] else None
+        return chunking.element(size, cells, p.projection, processors, p.ground_delta, footprint)
     return {
         "element_type": "minecraft:single_pool_element",
         "location": rl(f"{sdef.id}/{p.name}"),
@@ -139,9 +141,12 @@ def template_pool(sdef, pieces, pool_name):
     }
 
 
-def structure_json(sdef, ground_offset):
+def structure_json(sdef, ground_offset, fit_info=None):
+    """A ``wayfarers:fitted_jigsaw``: the vanilla jigsaw fields plus ``fit``, the terrain check its start must pass
+    (com.wayfarers.world.FittedJigsawStructure, wf/placement.py FIT)."""
+    from . import placement
     js = {
-        "type": "minecraft:jigsaw",
+        "type": rl("fitted_jigsaw"),
         "biomes": f"#{rl('has_structure/' + sdef.id)}",
         "step": sdef.step,
         "spawn_overrides": {} if not sdef.spawns else {"monster": {
@@ -167,6 +172,7 @@ def structure_json(sdef, ground_offset):
         # ground layer lands on the heightmap without subtracting the template's depth here
         js["start_height"] = {"absolute": sdef.height_offset}
         js["project_start_to_heightmap"] = sdef.heightmap
+    js["fit"] = placement.fit_json(sdef, fit_info)
     return js
 
 

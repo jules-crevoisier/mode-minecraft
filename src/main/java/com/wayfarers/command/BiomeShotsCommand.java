@@ -361,13 +361,18 @@ public final class BiomeShotsCommand {
 
     /** Reads the blocks of the box into voxels; biome tints come from the surface (or from tintY in caves). */
     private static int[] sample(ServerLevel level, int x0, int z0, int y0, int y1, int tintY) {
+        return sample(level, x0, z0, SIZE, SIZE, y0, y1, tintY);
+    }
+
+    /** {@link #sample} for any {@code sx x sz} box (the structure fit renders, {@link FitCheckCommand}). */
+    static int[] sample(ServerLevel level, int x0, int z0, int sx, int sz, int y0, int y1, int tintY) {
         int sy = y1 - y0 + 1;
-        int[] vox = new int[sy * SIZE * SIZE];
+        int[] vox = new int[sy * sz * sx];
         Map<BlockState, int[]> kinds = new IdentityHashMap<>();
         Map<Biome, int[]> tints = new IdentityHashMap<>();
         BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
-        for (int z = 0; z < SIZE; z++) {
-            for (int x = 0; x < SIZE; x++) {
+        for (int z = 0; z < sz; z++) {
+            for (int x = 0; x < sx; x++) {
                 int ty = tintY >= y0 ? tintY : level.getHeight(Heightmap.Types.WORLD_SURFACE, x0 + x, z0 + z) - 1;
                 Biome b = level.getBiome(pos.set(x0 + x, ty, z0 + z)).value();
                 int[] tint = tints.computeIfAbsent(b, k -> new int[] {
@@ -390,7 +395,7 @@ public final class BiomeShotsCommand {
                         case TINT_WATER -> tint[2];
                         default -> k[1];
                     };
-                    vox[(y * SIZE + z) * SIZE + x] = IsoRenderer.voxel(k[0], rgb, k[2]);
+                    vox[(y * sz + z) * sx + x] = IsoRenderer.voxel(k[0], rgb, k[2]);
                 }
             }
         }

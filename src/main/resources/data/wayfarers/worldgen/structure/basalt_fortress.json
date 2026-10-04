@@ -1,5 +1,5 @@
 {
-  "type": "minecraft:jigsaw",
+  "type": "wayfarers:fitted_jigsaw",
   "biomes": "#wayfarers:has_structure/basalt_fortress",
   "step": "surface_structures",
   "spawn_overrides": {
@@ -34,5 +34,22 @@
     "max_inclusive": {
       "absolute": 24
     }
+  },
+  "fit": {
+    "mode": "cavern",
+    "spread": 8,
+    "slope": 0.8,
+    "wet": 0.05,
+    "min_wet": 0.0,
+    "land": 0.5,
+    "drop": 10,
+    "depth": 0,
+    "clearance": 0,
+    "cover": 0,
+    "lift": 0,
+    "open": 0.3,
+    "ground": 14,
+    "pond": 0.0,
+    "theme": "stone"
   }
 }

@@ -6,7 +6,7 @@
       "element": {
         "element_type": "wayfarers:chunked_template",
         "size": [
-          39,
+          42,
           79,
           47
         ],
@@ -19,16 +19,22 @@
               0
             ],
             "size": [
-              39,
+              42,
               79,
               47
             ],
-            "blocks": 11796
+            "blocks": 12679
           }
         ],
         "projection": "rigid",
         "processors": "wayfarers:none",
-        "ground_level_delta": 13
+        "ground_level_delta": 13,
+        "footprint": [
+          3,
+          0,
+          41,
+          46
+        ]
       }
     }
   ]
