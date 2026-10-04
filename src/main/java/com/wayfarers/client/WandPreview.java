@@ -28,6 +28,10 @@ public final class WandPreview {
     /** Half size of the drawn mirror planes, in blocks. */
     private static final int PLANE_HALF = 5;
 
+    // the plan flood-fills the face and checks entities per block: compute it once per tick, not once per frame
+    private static BuilderWandItem.Plan cachedPlan = BuilderWandItem.Plan.EMPTY;
+    private static Object cacheKey;
+
     private WandPreview() {}
 
     public static void register() {
@@ -47,8 +51,15 @@ public final class WandPreview {
         BlockPos centre = BuilderWandItem.mirrorCentre(mc.level, held);
         BuilderWandItem.Symmetry symmetry = BuilderWandItem.symmetry(held);
         boolean settingCentre = mc.player.isShiftKeyDown();
-        BuilderWandItem.Plan plan = settingCentre ? BuilderWandItem.Plan.EMPTY
-                : BuilderWandItem.plan(mc.level, mc.player, held, pos, event.getTarget().getDirection(), wand.maxBlocks());
+        BuilderWandItem.Plan plan = BuilderWandItem.Plan.EMPTY;
+        if (!settingCentre) {
+            Object key = java.util.List.of(pos, event.getTarget().getDirection(), mc.level.getGameTime());
+            if (!key.equals(cacheKey)) {
+                cacheKey = key;
+                cachedPlan = BuilderWandItem.plan(mc.level, mc.player, held, pos, event.getTarget().getDirection(), wand.maxBlocks());
+            }
+            plan = cachedPlan;
+        }
         event.setCustomRenderer((collector, poseStack, state) -> {
             Vec3 cam = state.cameraRenderState.pos;
             if (settingCentre) {
