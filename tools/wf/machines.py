@@ -75,6 +75,11 @@ GUIDE = [
          "cactus et bambou marchent tous."),
         ("Vacuum Hopper above a chest: it collects everything dropped around it, even experience.",
          "Trémie aspirante au-dessus d'un coffre : elle ramasse tout ce qui tombe autour, même l'expérience."),
+        ("Craft: most machines use brass ingots and redstone around the tool of their job (hoe, pickaxe, dispenser, "
+         "hopper...); the Sprinkler is four copper ingots around a water bucket.",
+         "Fabrication : la plupart des machines demandent des lingots de laiton et de la redstone autour de l'outil "
+         "de leur métier (houe, pioche, distributeur, entonnoir...) ; l'arroseur, quatre lingots de cuivre autour "
+         "d'un seau d'eau."),
     ], ["wayfarers:auto_harvester", "wayfarers:sprinkler", "wayfarers:vacuum_hopper"]),
     ("redstone_easy", "wayfarers:redstone_timer", ("Easy redstone", "Redstone facile"), [
         ("Redstone Timer: a ready-made clock. Click it to pick the delay.",

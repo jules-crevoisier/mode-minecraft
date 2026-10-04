@@ -314,6 +314,51 @@ def check_assets():
                 err(f"{os.path.relpath(path, a)}: parent {parent} missing")
 
 
+def check_guide():
+    """The Wayfarer's Manual (wf/guide.py): known items and icons, translations, and an estimate of each page's
+    length. GuideScreen splits a page that does not fit into continuation sheets, so a long page is never cut; this
+    only warns when a page needs more than two sheets at the smallest book size (it would read better split in two)."""
+    from wf import guide
+    cats = {c for c, _i, _t in guide.CATEGORIES}
+    items = mod_ids("items")
+    seen = set()
+
+    def item_ok(where, rid):
+        ns, name = rid.split(":")
+        if (ns == "minecraft" and name not in MC_GAME["items"]) or (ns == "wayfarers" and name not in items):
+            err(f"{where}: unknown item {rid}")
+
+    for c, icon, _t in guide.CATEGORIES:
+        item_ok(f"guide category {c}", icon)
+    for pid, cat, icon, _t, paras, related in guide.PAGES:
+        if pid in seen:
+            err(f"guide: duplicate page id {pid}")
+        seen.add(pid)
+        if cat not in cats:
+            err(f"guide page {pid}: unknown category {cat}")
+        if not paras:
+            err(f"guide page {pid}: no text")
+        item_ok(f"guide page {pid}", icon)
+        for rid in related:
+            item_ok(f"guide page {pid}", rid)
+    for tid, icon, _t, page in guide.TIPS:
+        item_ok(f"tip {tid}", icon)
+        if page not in seen:
+            err(f"tip {tid}: unknown manual page {page}")
+    for lang in ("en_us", "fr_fr"):
+        table = json.load(open(os.path.join(ASSETS, "wayfarers", "lang", lang + ".json"), encoding="utf-8"))
+        keys = list(guide.UI) + [f"guide.wayfarers.cat.{c}" for c in cats]
+        for pid, _c, _i, _t, paras, _r in guide.PAGES:
+            keys += [f"guide.wayfarers.{pid}.title"] + [f"guide.wayfarers.{pid}.p{i}" for i in range(len(paras))]
+        for k in keys:
+            if k not in table:
+                err(f"{lang}: missing manual text {k}: run gen_assets.py")
+    for pid, (en, fr) in guide.sheet_counts().items():
+        if max(en, fr) > 2:
+            warnings.append(f"manual page {pid} needs {en} sheets in English, {fr} in French (1 page + "
+                            f"{max(en, fr) - 1} continuations): consider splitting it into two pages")
+
+
 def check_pack_meta():
     """Without a readable pack.mcmeta Forge skips the mod's assets and data entirely (missing models,
     and a LootModifierManager crash on the first block drop). 26.2: resources 88.0, data 107.1."""
@@ -338,6 +383,7 @@ def main():
     check_lang()
     check_tags()
     check_chisel()
+    check_guide()
     import validate_world
     if validate_world.main() != 0:
         err("world overhaul pack: see the errors above")
