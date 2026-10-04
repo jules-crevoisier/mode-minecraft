@@ -8,6 +8,7 @@ import json
 import os
 
 from . import worldfeatures as WF
+from .terrain import GLOWCAP_W, MUSHROOM_C
 
 NS = "wayfarers"
 
@@ -269,13 +270,192 @@ for _bid, _extra in {
 
 
 # ------------------------------------------------------------------ placement
-def climate_points():
+# VANILLA_TO_OURS and SPLITS above say which vanilla biomes each of ours stands for (its tags, the structures it
+# hosts, the wiki groups). Where each biome goes is decided here: vanilla's climate layout (world_points.json) keeps
+# the terrain roles (oceans, coasts, rivers in the valleys, peaks, slopes, plateaus, windswept hills, swamps), every
+# box is cut at our climate bands, and each piece takes the biome of LAYOUT[role][temperature][humidity].
+# The temperature and humidity bands get chosen shares of the world (wf/terrain.py remaps the noises: TEMP_CDF,
+# VEG_CDF), so each cell of the tables covers a known area; tools/world_preview.py --stats measures the result.
+T_EDGES = [-0.45, -0.15, 0.2, 0.55]     # frozen | cold | temperate | warm | hot
+H_EDGES = [-0.35, -0.1, 0.1, 0.3]       # arid | dry | medium | humid | wet
+# terrain roles of the land boxes, from wf/terrain.py's erosion splines (inland, continentalness >= -0.11):
+# summit (the range cores, erosion < -0.55), mountain (< -0.31), plateau (< -0.11, the canyon plateaus, from
+# mid-inland: continentalness >= 0.03), wetland (>= 0.62, the swamp spline), low (everything else)
+E_EDGES = [-0.55, -0.31, -0.11, 0.62]
+C_EDGES = [-0.11, 0.03]
+W_SPLIT = 0.0                           # a cell may hold two biomes: (weirdness < 0, weirdness >= 0)
+
+ROLE_OF_VANILLA = {
+    "river": "river", "frozen_river": "river",
+    "beach": "beach", "snowy_beach": "beach", "stony_shore": "beach",
+    "windswept_hills": "shattered", "windswept_gravelly_hills": "shattered", "windswept_forest": "shattered",
+    "windswept_savanna": "shattered",
+}
+
+
+def _mid(r):
+    return (r[0] + r[1]) / 2.0
+
+
+def _role(vanilla, p):
+    """The terrain role of a (cut) vanilla box: rivers, beaches and windswept hills keep vanilla's places; the rest
+    of the land is classed by erosion and continentalness (E_EDGES)."""
+    if vanilla in ROLE_OF_VANILLA:
+        return ROLE_OF_VANILLA[vanilla]
+    if "ocean" in vanilla or vanilla == "mushroom_fields" or "caves" in vanilla or vanilla == "deep_dark":
+        return None
+    e, c = _mid(p["erosion"]), _mid(p["continentalness"])
+    if c < -0.11:
+        return "low"                        # the coast band (beaches take most of it)
+    if e < -0.55:
+        return "summit"
+    if e < -0.31:
+        return "mountain"
+    if e < -0.11 and c >= 0.03:
+        return "plateau"
+    if e >= 0.62:
+        return "wetland"
+    return "low"
+
+
+def _cuts(r, edges):
+    a, b = r
+    cuts = [a] + [x for x in edges if a < x < b] + [b]
+    return list(zip(cuts[:-1], cuts[1:]))
+
+
+def _band(r, edges):
+    return sum(1 for x in edges if _mid(r) >= x)
+
+
+def _pick(role, ti, hi, p):
+    """LAYOUT[role] is a biome, or 5 temperature rows, each a biome or 5 humidity cells; a cell is a biome, a pair
+    (weirdness < 0, >= 0) or a function of the box's parameters."""
+    cell = LAYOUT[role]
+    if isinstance(cell, list):
+        cell = cell[ti]
+        if isinstance(cell, list):
+            cell = cell[hi]
+    if callable(cell):
+        cell = cell(p)
+    if isinstance(cell, tuple):
+        cell = cell[0] if _mid(p["weirdness"]) < W_SPLIT else cell[1]
+    return cell
+
+
+def layout_points():
+    """(vanilla biome, role, temperature band, humidity band, parameters) for every (cut) box of the layout."""
     rows = json.load(open(os.path.join(os.path.dirname(__file__), "world_points.json")))
-    out = []
     for b, t, h, c, e, d, w, o in rows:
-        ours = ours_for(b, {"temperature": t, "humidity": h, "continentalness": c, "erosion": e, "weirdness": w})
+        p = {"temperature": t, "humidity": h, "continentalness": c, "erosion": e, "weirdness": w, "depth": d,
+             "offset": o}
+        if _role(b, p) is None:
+            if c[1] == -1.05 or c[0] == -1.05:      # the mushroom isles reach further out (wf/terrain.py)
+                p = dict(p, continentalness=[x if x != -1.05 else MUSHROOM_C for x in c])
+            if b == "ocean":                        # and have archipelagos in the temperate seas
+                for ww in _cuts(w, [GLOWCAP_W]):
+                    yield ("mushroom_fields" if ww[0] >= GLOWCAP_W else b), None, None, None, dict(
+                        p, weirdness=list(ww))
+                continue
+            yield b, None, None, None, p
+            continue
+        land = b not in ROLE_OF_VANILLA
+        river = b in ("river", "frozen_river")
+        for tt in _cuts(t, T_EDGES):
+            for hh in _cuts(h, H_EDGES):
+                for ee in _cuts(e, E_EDGES if land else []):
+                    for cc in _cuts(c, C_EDGES if land else []):
+                        for ww in _cuts(w, [] if river else [W_SPLIT]):
+                            q = dict(p, temperature=list(tt), humidity=list(hh), erosion=list(ee),
+                                     continentalness=list(cc), weirdness=list(ww))
+                            yield b, _role(b, q), _band(tt, T_EDGES), _band(hh, H_EDGES), q
+
+
+def _fjord_coast(other):
+    """Rimefrost Fjords on the frozen coasts (continentalness < 0.03, weirdness < 0: wf/terrain.py cuts the fjords
+    there), `other` inland."""
+    return lambda p: "rimefrost_fjords" if _mid(p["continentalness"]) < 0.03 and _mid(p["weirdness"]) < 0 else other
+
+
+# rows: frozen, cold, temperate, warm, hot; columns: arid, dry, medium, humid, wet; (a, b): weirdness < 0 / >= 0.
+# Each cell of `low` is ~2.6% of the land, of `plateau` ~0.4%, of `mountain` ~0.35% (measured, 3 seeds).
+LAYOUT = {
+    "low": [
+        [_fjord_coast("shattered_glacier"), _fjord_coast(("snowcap_slopes", "aurora_tundra")), _fjord_coast("aurora_tundra"),
+         _fjord_coast("frostpine_forest"), _fjord_coast("frostpine_forest")],
+        [_fjord_coast(("windswept_crags", "highland_meadow")), _fjord_coast(("pine_highlands", "silver_birch_wood")),
+         _fjord_coast(("emberleaf_taiga", "pine_highlands")), _fjord_coast(("starlight_grove", "emberleaf_taiga")),
+         ("giant_sylvan", "silver_birch_wood")],
+        ["verdant_meadows", "wildflower_fields", ("elderwood", "crystal_woods"), ("shadow_woods", "enchanted_forest"),
+         "aetherblight_grove"],
+        [("dune_sea", "rustlands"), ("ashen_savanna", "geyser_basin"), "geyser_basin", "emerald_jungle", ("glowing_marsh", "crimson_mire")],
+        ["pale_dunes", ("painted_canyon", "pale_dunes"), "ashen_wastes", ("volcanic_highlands", "cogwork_valley"),
+         "crimson_mire"],
+    ],
+    "plateau": [
+        "snowcap_slopes",
+        ["highland_meadow", "highland_meadow", "sakura_valley", "pine_highlands", "giant_sylvan"],
+        ["sakura_valley", "sakura_valley", "starlight_grove", "enchanted_forest", "aetherblight_grove"],
+        ["painted_canyon", "rustlands", "geyser_basin", "emerald_jungle", "emerald_jungle"],
+        ["ashen_wastes", "ashen_wastes", "ashen_wastes", "ashen_wastes", "volcanic_highlands"],
+    ],
+    "mountain": ["majestic_peaks", "alpine_peaks", ("alpine_peaks", "windswept_crags"), "stone_spires",
+                 "volcanic_highlands"],
+    "summit": ["majestic_peaks", "alpine_peaks", "alpine_peaks", "stone_spires", "volcanic_highlands"],
+    # the swamp flats (erosion > 0.62): marshes where it is wet, dunes and dry savanna where it is not
+    "wetland": [
+        "aurora_tundra",
+        ["pine_highlands", "pine_highlands", "glowing_marsh", "glowing_marsh", "glowing_marsh"],
+        ["verdant_meadows", "glowing_marsh", "glowing_marsh", "glowing_marsh", "glowing_marsh"],
+        ["dune_sea", "ashen_savanna", "glowing_marsh", "crimson_mire", "crimson_mire"],
+        ["pale_dunes", "pale_dunes", "crimson_mire", "crimson_mire", "crimson_mire"],
+    ],
+    "shattered": ["windswept_crags", "windswept_crags", "windswept_crags", "geyser_basin", "volcanic_highlands"],
+}
+
+
+AXES = ("temperature", "humidity", "continentalness", "erosion", "weirdness")
+
+
+def merge_boxes(points):
+    """Merge boxes of the same biome that touch along one axis and match on the others (fewer points to search)."""
+    def key(p, skip):
+        q = p["parameters"]
+        return (p["biome"], json.dumps(q["depth"]), q["offset"]) + tuple(tuple(q[a]) for a in AXES if a != skip)
+    changed = True
+    while changed:
+        changed = False
+        for axis in AXES:
+            groups = {}
+            for p in points:
+                groups.setdefault(key(p, axis), []).append(p)
+            out = []
+            for g in groups.values():
+                g.sort(key=lambda p: p["parameters"][axis][0])
+                cur = g[0]
+                for p in g[1:]:
+                    if abs(p["parameters"][axis][0] - cur["parameters"][axis][1]) < 1e-6:
+                        cur = {"biome": cur["biome"], "parameters": dict(
+                            cur["parameters"], **{axis: [cur["parameters"][axis][0], p["parameters"][axis][1]]})}
+                        changed = True
+                    else:
+                        out.append(cur)
+                        cur = p
+                out.append(cur)
+            points = out
+    return points
+
+
+def climate_points():
+    out = []
+    for b, role, ti, hi, p in layout_points():
+        # oceans, rivers and beaches keep the plain swap (their vanilla boxes already follow our temperature bands)
+        ours = ours_for(b, p) if role in (None, "river", "beach") else _pick(role, ti, hi, p)
+        if role == "beach" and ti <= 1 and _mid(p["weirdness"]) < 0:
+            ours = "rimefrost_fjords"           # the fjord cliffs replace the cold beaches (wf/terrain.py)
         out.append({"biome": f"{NS}:{ours}", "parameters": {
-            "temperature": t, "humidity": h, "continentalness": c, "erosion": e, "depth": d, "weirdness": w, "offset": o}})
+            k: p[k] for k in ("temperature", "humidity", "continentalness", "erosion", "depth", "weirdness", "offset")}})
+    out = merge_boxes(out)
     for biome, t, h, c, e, w in EXTRA_CAVES:
         out.append({"biome": f"{NS}:{biome}", "parameters": {
             "temperature": t, "humidity": h, "continentalness": c, "erosion": e, "depth": [0.2, 0.9], "weirdness": w,
@@ -285,9 +465,9 @@ def climate_points():
 
 # ------------------------------------------------------------------ surface rules
 def _block(name, props=None):
-    if "[" in name:  # "basalt[axis=y]": the properties go in "Properties", never in the id
-        name, _, rest = name.partition("[")
-        props = dict(kv.split("=", 1) for kv in rest.rstrip("]").split(",") if kv) | (props or {})
+    if "[" in name:                 # 'basalt[axis=y]': the properties go to Properties, not into the id
+        name, rest = name.rstrip("]").split("[", 1)
+        props = dict(dict(kv.split("=") for kv in rest.split(",") if kv), **(props or {}))
     state = {"Name": name if ":" in name else f"minecraft:{name}"}
     if props:
         state["Properties"] = props
@@ -373,9 +553,10 @@ MARBLE_BANDS = [(92, 96), (109, 112), (127, 132), (146, 149), (165, 170), (186, 
                 (254, 259), (279, 283)]
 
 
-VOLCANIC_BANDS = ["brown_terracotta", "red_terracotta", "brown_terracotta", "orange_terracotta", "terracotta",
-                  "brown_terracotta", "blackstone", "red_terracotta", "coarse_dirt", "brown_terracotta",
-                  "orange_terracotta", "basalt[axis=y]"]
+# ochre mountains: orange, yellow and plain terracotta, brown and red streaks, a dark basalt seam now and then
+VOLCANIC_BANDS = ["orange_terracotta", "terracotta", "brown_terracotta", "orange_terracotta", "yellow_terracotta",
+                  "terracotta", "red_terracotta", "orange_terracotta", "brown_terracotta", "terracotta",
+                  "basalt[axis=y]", "orange_terracotta", "yellow_terracotta", "brown_terracotta"]
 ASH_BANDS = ["tuff", "deepslate[axis=y]", "andesite", "smooth_basalt", "tuff", "cobbled_deepslate", "stone",
              "deepslate[axis=y]", "polished_andesite", "basalt[axis=y]", "tuff", "light_gray_terracotta"]
 CLIFF_BANDS = ["stone", "andesite", "stone", "tuff", "stone", "stone", "andesite", "wayfarers:marble", "stone",
@@ -384,6 +565,17 @@ CLIFF_BANDS = ["stone", "andesite", "stone", "tuff", "stone", "stone", "andesite
 # land biomes that get the generic highland look: bare banded rock on cliffs above y ~100, snow above y ~205
 HIGHLAND_SURFACES = {"grass", "alpine", "pine_slate", "podzol_patches", "crags", "snowy_grass", "snowy_podzol",
                      "starlight", "blight", "marsh", "crimson_mire", "mycelium", "river", "fjord", "savanna"}
+
+
+def _striated():
+    """Alpine rock: vertical stripes (2D noise, constant down a face) of tuff, gravel, andesite and diorite in
+    stone, moss in the gullies."""
+    return _seq(_if(_wnoise("moss_streak", 0.42, 1.0), _block("moss_block")),
+                _if(_wnoise("striation", -1.0, -0.35), _block("tuff")),
+                _if(_wnoise("striation", -0.35, -0.2), _block("gravel")),
+                _if(_wnoise("striation", 0.2, 0.4), _block("andesite")),
+                _if(_wnoise("striation", 0.55, 1.0), _block("diorite")),
+                _block("stone"))
 
 
 def highland():
@@ -457,22 +649,23 @@ SURFACES = {
     "desert": lambda: _land(_block("sand"), _seq(_if(DEEP_UNDER_FLOOR, _block("sandstone")), _block("sand")), _block("sand")),
     "badlands": lambda: _seq(_if(STEEP, {"type": "minecraft:bandlands"}),
                              _if(ON_FLOOR, _seq(_if(_above(74, 1), _block("orange_terracotta")), _block("red_sand"))),
-                             _if(UNDER_FLOOR, {"type": "minecraft:bandlands"})),
+                             {"type": "minecraft:bandlands"}),       # banded cliffs at any depth
     # Crimson Mire: mud and blood-red nylium patches, podzol, mud under shallow water
     "crimson_mire": lambda: _land(_seq(_if(_noise("surface", 0.05, 1.0), _block("crimson_nylium")),
                                        _if(_noise("surface_swamp", 0.0, 1.0), _block("mud")),
                                        _if(_noise("surface", -1.0, -0.55), _block("podzol", {"snowy": "false"})), GRASS),
                                   _block("mud"), _block("mud")),
-    # Volcanic Highlands: brown terracotta cliffs banded with red, orange and blackstone; tan grass, coarse dirt,
+    # Volcanic Highlands: ochre terracotta cliffs banded with brown, red and basalt (at any depth, so whole faces
+    # show them, like the badlands and the ashen plateaus); tan grass, coarse dirt,
     # blackstone and magma on the slopes
     "volcanic": lambda: _seq(
-        _if(STEEP, _if(UNDER_FLOOR, _ybands(VOLCANIC_BANDS, 60, 330, 4, "brown_terracotta"))),
+        _if(STEEP, _ybands(VOLCANIC_BANDS, 60, 330, 4, "brown_terracotta")),
         _if(ON_FLOOR, _seq(_if(_noise("surface", -1.0, -0.62), _block("blackstone")),
                            _if(_noise("surface", -0.62, -0.57), _block("magma_block")),
                            _if(_noise("surface", 0.35, 1.0), _block("coarse_dirt")),
                            _if(_above(150, 2), _block("brown_terracotta")),
                            _if(ABOVE_WATER, GRASS), _block("blackstone"))),
-        _if(UNDER_FLOOR, _ybands(VOLCANIC_BANDS, 60, 330, 4, "brown_terracotta"))),
+        _ybands(VOLCANIC_BANDS, 60, 330, 4, "brown_terracotta")),
     # Ashen Wastes: stratified dark grey plateaus, white ash streaks on the tops, gravel and tuff
     "ashen": lambda: _seq(
         _if(ON_FLOOR, _seq(_if(STEEP, _ybands(ASH_BANDS, 40, 330, 3, "tuff")),
@@ -480,22 +673,20 @@ SURFACES = {
                            _if(_noise("surface", 0.3, 1.0), _block("light_gray_concrete_powder")),
                            _if(_noise("surface", -1.0, -0.4), _block("gravel")),
                            _ybands(ASH_BANDS, 40, 330, 3, "tuff"))),
-        _if(UNDER_FLOOR, _ybands(ASH_BANDS, 40, 330, 3, "tuff"))),
-    # Alpine Peaks: vertical striations of stone, andesite, gravel and tuff on the faces, moss in the gullies,
+        _ybands(ASH_BANDS, 40, 330, 3, "tuff")),
+    # Alpine Peaks: bare rock above y ~170 and on every steep face (at any depth), striated: the 2D striation noise
+    # draws vertical stripes of stone, tuff, gravel, andesite and diorite down the faces, moss in the gullies;
     # meadow grass and podzol below, snow from y ~200
     "alpine_peak": lambda: _seq(
-        _if(STEEP, _if(UNDER_FLOOR, _seq(_if(_wnoise("moss_streak", 0.42, 1.0), _block("moss_block")),
-                                         _if(_wnoise("striation", -1.0, -0.3), _block("andesite")),
-                                         _if(_wnoise("striation", -0.3, -0.12), _block("gravel")),
-                                         _if(_wnoise("striation", 0.25, 0.5), _block("tuff")),
-                                         _block("stone")))),
+        _if(STEEP, _if(_above(80), _striated())),
         _if(ON_FLOOR, _seq(_if(_above(200, 3), _seq(_if(_noise("powder_snow", 0.45, 0.58), _block("powder_snow")),
                                                      _block("snow_block"))),
                            _if(_wnoise("moss_streak", 0.5, 1.0), _block("moss_block")),
+                           _if(_above(170, 2), _striated()),
                            _if(_noise("surface", 0.3, 1.0), _block("podzol", {"snowy": "false"})),
-                           _if(_above(170, 2), _block("stone")),
                            _if(ABOVE_WATER, GRASS), _block("gravel"))),
-        _if(UNDER_FLOOR, _seq(_if(_above(170, 2), _block("stone")), DIRT))),
+        _if(_above(170, 2), _striated()),
+        _if(UNDER_FLOOR, DIRT)),
     # Pale Dunes: pale white sand rippled with ordinary sand, sandstone underneath
     "pale_dunes": lambda: _seq(
         _if(ON_FLOOR, _seq(_if(_wnoise("striation", -0.2, 0.25), _block("sand")),
@@ -520,7 +711,7 @@ SURFACES = {
                                  DIRT)),
     # Rimefrost Fjords: blue slate and stone cliffs, snowy tops, gravel shores
     "fjord": lambda: _seq(
-        _if(STEEP, _if(UNDER_FLOOR, _ybands(["wayfarers:blue_slate", "stone", "wayfarers:blue_slate", "andesite"],
+        _if(STEEP, _if(_above(40), _ybands(["wayfarers:blue_slate", "stone", "wayfarers:blue_slate", "andesite"],
                                             30, 200, 5, "stone"))),
         _if(ON_FLOOR, _seq(_if(_not(_above(66, 1)), _block("gravel")),
                            _if(_noise("powder_snow", 0.35, 0.6), _block("snow_block")),
@@ -533,7 +724,7 @@ SURFACES = {
     "cogwork": lambda: _seq(_if(ON_FLOOR, _seq(_if(_noise("surface", 0.2, 1.0), _block("smooth_sandstone")),
                                                _if(_noise("surface", -1.0, -0.6), _block("wayfarers:rust_rock")),
                                                _block("red_sand"))),
-                            _if(UNDER_FLOOR, {"type": "minecraft:bandlands"})),
+                            {"type": "minecraft:bandlands"}),
 }
 
 # cave floors (applied below the preliminary surface, on any floor in these biomes)

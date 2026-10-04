@@ -1,12 +1,41 @@
 {
  "type": "minecraft:flat_cache",
  "argument": {
-  "type": "minecraft:shifted_noise",
-  "noise": "minecraft:vegetation",
-  "xz_scale": 0.25,
-  "y_scale": 0.0,
-  "shift_x": "minecraft:shift_x",
-  "shift_y": 0.0,
-  "shift_z": "minecraft:shift_z"
+  "type": "minecraft:spline",
+  "spline": {
+   "coordinate": "wayfarers:overworld/vegetation_noise",
+   "points": [
+    {
+     "location": -0.654261,
+     "value": -1.0,
+     "derivative": 1.541168
+    },
+    {
+     "location": -0.232503,
+     "value": -0.35,
+     "derivative": 1.576664
+    },
+    {
+     "location": -0.077592,
+     "value": -0.1,
+     "derivative": 1.542513
+    },
+    {
+     "location": 0.057796,
+     "value": 0.1,
+     "derivative": 1.372854
+    },
+    {
+     "location": 0.213772,
+     "value": 0.3,
+     "derivative": 1.419299
+    },
+    {
+     "location": 0.654261,
+     "value": 1.0,
+     "derivative": 1.589144
+    }
+   ]
+  }
  }
 }

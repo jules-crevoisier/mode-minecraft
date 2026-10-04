@@ -6,9 +6,11 @@ turned off with the config option world.overhaul (or by unticking it in the "Dat
 Terrain: wf/terrain.py (continents, rolling lowlands, escarpments, canyon plateaus, sharp mountain ranges up to
 y ~320, terraced mesas, spires, fjords, archipelagos, skylands; caves with mega caverns and underground rivers).
 The world is 448 blocks tall (y -64..383): the pack overrides minecraft:dimension_type/overworld.
-tools/world_preview.py draws maps and cross-sections of it (build/world_preview/).
-Biomes are placed by vanilla's own climate layout (tools/wf/world_points.json, dumped from OverworldBiomeBuilder),
-with every vanilla biome swapped for one of ours (wf/biomes.py), plus extra cave biomes.
+tools/world_preview.py draws maps and cross-sections of it, measures the biome shares (--stats) and renders sample
+areas of the showcase biomes (--postcards), all in build/world_preview/.
+Biomes keep the terrain roles of vanilla's climate layout (tools/wf/world_points.json, dumped from
+OverworldBiomeBuilder: oceans, coasts, rivers, peaks, plateaus, swamps), cut at our climate bands, and take the biome
+of wf/biomes.py LAYOUT for their role, temperature and humidity; plus extra cave biomes.
 """
 import json
 import os

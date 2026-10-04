@@ -32,6 +32,7 @@ ALLOWED_TOP = {"has_precipitation", "temperature", "temperature_modifier", "down
                "spawners", "spawn_costs", "creature_spawn_probability", "carvers", "features"}
 ALLOWED_EFFECTS = {"water_color", "foliage_color", "dry_foliage_color", "grass_color", "grass_color_modifier"}
 COLOR = re.compile(r"^#[0-9a-fA-F]{6}$")
+BLOCK_ID = re.compile(r"^[a-z0-9_.-]+:[a-z0-9_./-]+$")
 
 errors = []
 
@@ -211,6 +212,16 @@ def main():
         walk(obj, fn)
     settings = json.load(open(os.path.join(PACK, "wayfarers", "worldgen", "noise_settings", "overworld.json")))
     check_refs(settings, "noise_settings")
+
+    # block states: the id must be a plain resource location ('minecraft:basalt[axis=y]' fails to parse)
+    def check_states(obj, where):
+        def fn(o):
+            if isinstance(o, dict) and isinstance(o.get("Name"), str) and not BLOCK_ID.match(o["Name"]):
+                err(f"{where}: bad block id {o['Name']}")
+        walk(obj, fn)
+    check_states(settings, "noise_settings")
+    for path in glob.glob(os.path.join(PACK, "*", "worldgen", "configured_feature", "*.json")):
+        check_states(json.load(open(path)), os.path.relpath(path, PACK))
     for router_key, v in settings["noise_router"].items():
         if isinstance(v, str) and v not in VANILLA_DENSITY | ours_df:
             err(f"noise_router.{router_key}: unknown density function {v}")
