@@ -143,6 +143,9 @@ def main():
                    defs.structure_json(sdef, ground_offset))
         write_json(os.path.join(DATA, "tags", "worldgen", "biome", "has_structure", f"{sdef.id}.json"),
                    defs.biome_tag_json(sdef.biomes))
+    if not args.only or "villages" in args.only:
+        gen_villages(args, report, repairs, summary, preview_dir)
+    used_processors.add("village")
     for kind in sorted(used_processors | {"aging", "ruin", "none"}):
         write_json(os.path.join(DATA, "worldgen", "processor_list", f"{kind}.json"), defs.processor_list(kind))
     # structure sets: one per family (wf/placement.py); the old one-set-per-structure files are removed
@@ -169,6 +172,43 @@ def main():
         if report:
             print(f"{len(report)} survival/door problems (see build/structure_report.txt)")
             sys.exit(1)
+
+
+def gen_villages(args, report, repairs, summary, preview_dir):
+    """Our pieces for the vanilla villages and outposts (wf/village.py): templates, then the vanilla pools they
+    extend, written under data/minecraft with every vanilla element kept."""
+    from wf import village
+    grounds = {}
+    for tid, bp, kind in village.build_all():
+        ns, path = tid.split(":", 1)
+        ctx = support.Context(ground=0)
+        bp.resolve_shapes()
+        for what, n in support.repair(bp, ctx).items():
+            repairs[what] = repairs.get(what, 0) + n
+        size, blocks, ents, (mx, my, mz) = bp.normalized()
+        out = os.path.join(ROOT, "src", "main", "resources", "data", ns, "structure", path + ".nbt")
+        os.makedirs(os.path.dirname(out), exist_ok=True)
+        nbt.save(out, template_nbt(size, blocks, ents))
+        if kind == "start":
+            grounds[tid] = -my + 1  # the ground layer (blueprint y = 0) above the template's lowest layer, + 1
+        if not args.no_check:
+            for k, pos, msg in support.check(bp.blocks, ctx):
+                report.append(("village", path, k, pos, msg))
+        for msg in village.check(bp, kind):
+            report.append(("village", path, "jigsaw", (0, 0, 0), msg))
+        summary.append((path, size, len(blocks), 0, len(blocks), len(blocks)))
+        if args.preview:
+            os.makedirs(preview_dir, exist_ok=True)
+            stem = os.path.join(preview_dir, path.replace("/", "__"))
+            if render3d:
+                render3d.render(blocks, stem + ".png", max_side=1600)
+                render3d.render(blocks, stem + "_back.png", max_side=1600, angle=2)
+                render3d.render(blocks, stem + "_cut.png", max_side=1600, max_y=-my + 3)
+            else:
+                render.render(blocks, stem + ".png", s=5)
+    mc = os.path.join(ROOT, "src", "main", "resources", "data", "minecraft", "worldgen", "template_pool")
+    for pid, pool in village.pools(grounds).items():
+        write_json(os.path.join(mc, pid.split(":", 1)[1] + ".json"), pool)
 
 
 def write_report(report):

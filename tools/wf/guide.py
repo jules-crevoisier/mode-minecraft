@@ -173,6 +173,21 @@ PAGES = [
         ("Elites sometimes drop one. Craft 2 with paper, a Map Fragment and an ender pearl.",
          "Les élites en lâchent parfois. Fabrique-en 2 avec du papier, un fragment de carte et une perle de l'Ender."),
     ], ["wayfarers:recall_scroll"]),
+    ("villages", "travel", "minecraft:bell", ("Villages", "Villages"), [
+        ("Every kind of village (plains, desert, savanna, snow, taiga) grows new buildings in its own style: an inn "
+         "with rooms, a tinkerer's workshop, a watchtower, a market, an orchard, cottages, manors and wells.",
+         "Tous les villages (plaines, désert, savane, neige, taïga) ont de nouveaux bâtiments dans leur style : "
+         "une auberge avec des chambres, l'atelier du bricoleur, une tour de guet, un marché, un verger, des "
+         "cottages, des manoirs et des puits."),
+        ("About one village in four is built around a square with a waystone: right-click it to put the village "
+         "on the travel map. The notice board and the meeting bell stand beside it.",
+         "Environ un village sur quatre se forme autour d'une place avec une pierre de voyage : clic droit pour "
+         "mettre le village sur la carte de voyage. Le tableau d'annonces et la cloche sont à côté."),
+        ("Streets get brass lamps, signposts and planters. Pillager outposts now field steam ballistas and spiked "
+         "barricades.",
+         "Les rues ont des lampes en laiton, des panneaux et des jardinières. Les avant-postes pillards ont des "
+         "balistes à vapeur et des barricades hérissées."),
+    ], ["wayfarers:waystone", "wayfarers:edison_lamp", "minecraft:bell"]),
 
     # ------------------------------------------------------------------ wonders
     ("wonders", "wonders", "wayfarers:structure_compass", ("How to find them", "Où les trouver"), [

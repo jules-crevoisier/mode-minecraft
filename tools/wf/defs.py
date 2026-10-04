@@ -85,6 +85,12 @@ def processor_list(kind):
             ("minecraft:stone_bricks", 0.06, "minecraft:air"),
             ("minecraft:cobblestone", 0.06, "minecraft:air"),
         ],
+        # our pieces in the vanilla villages (wf/village.py): lived-in, not ruined
+        "village": [
+            ("minecraft:cobblestone", 0.12, "minecraft:mossy_cobblestone"),
+            ("minecraft:stone_bricks", 0.08, "minecraft:mossy_stone_bricks"),
+            ("minecraft:stone_bricks", 0.06, "minecraft:cracked_stone_bricks"),
+        ],
         "none": [],
     }[kind]
     processors = [{

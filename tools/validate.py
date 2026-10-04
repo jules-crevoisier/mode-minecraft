@@ -25,6 +25,10 @@ VANILLA_BIOME_TAGS = {
     "is_overworld", "is_nether", "is_end", "is_ocean", "is_deep_ocean", "is_beach", "is_river", "is_mountain",
     "is_badlands", "is_hill", "is_taiga", "is_jungle", "is_forest", "is_savanna",
 }
+# vanilla village and outpost pools (they live in the game jar; our overrides copy them, wf/vanilla_pools.py)
+VANILLA_POOLS = json.load(open(os.path.join(ROOT, "tools", "wf", "vanilla_village_pools.json")))
+VANILLA_PROCESSORS = {e["element"]["processors"] for p in VANILLA_POOLS.values() for e in p["elements"]
+                      if isinstance(e["element"].get("processors"), str)}
 # Blocks renamed after 1.20 that DataFixerUpper converts (old -> new)
 UPGRADED = {"grass": "short_grass", "chain": "iron_chain"}
 
@@ -142,7 +146,7 @@ def check_templates():
                 ens, eid = data["SpawnData"]["entity"]["id"].split(":")
                 if (ens == "minecraft" and eid not in MC_GAME["entities"]) or (ens == "wayfarers" and eid not in mod_ids("entities")):
                     err(f"{rel}: spawner entity {eid} unknown")
-            if "pool" in data and data["pool"] != "minecraft:empty":
+            if "pool" in data and data["pool"] != "minecraft:empty" and data["pool"] not in VANILLA_POOLS:
                 if not os.path.exists(res_path(data["pool"], "worldgen/template_pool", ".json")):
                     err(f"{rel}: jigsaw pool {data['pool']} missing")
         for e in d["entities"]:
@@ -298,6 +302,43 @@ def check_worldgen():
         if salt in sets:
             err(f"duplicate structure_set salt {salt}: {path} / {sets[salt]}")
         sets[salt] = path
+
+
+def check_vanilla_overrides():
+    """Our copies of vanilla village/outpost pools (wf/village.py) keep every vanilla element with its weight, and
+    every element we add points at an existing template and processor list."""
+    root = os.path.join(DATA, "minecraft", "worldgen", "template_pool")
+    for path in glob.glob(os.path.join(root, "**", "*.json"), recursive=True):
+        pid = "minecraft:" + os.path.relpath(path, root)[:-5].replace(os.sep, "/")
+        pool = json.load(open(path))
+        vanilla = VANILLA_POOLS.get(pid)
+        if vanilla is None:
+            err(f"{path}: overrides {pid}, which is not a vanilla 26.2 pool (wf/vanilla_village_pools.json)")
+            continue
+        if pool.get("fallback") != vanilla["fallback"]:
+            err(f"{path}: fallback {pool.get('fallback')} differs from vanilla {vanilla['fallback']}")
+        mine = list(pool["elements"])
+        for v in vanilla["elements"]:
+            if v in mine:
+                mine.remove(v)
+            else:
+                err(f"{path}: vanilla element {v['element'].get('location') or v['element']['element_type']} "
+                    f"(weight {v['weight']}) missing or changed")
+        for el in mine:
+            e = el["element"]
+            if not 1 <= el["weight"] <= 150:
+                err(f"{path}: weight {el['weight']} outside 1..150")
+            if e["element_type"] not in ("minecraft:single_pool_element", "wayfarers:grounded_single"):
+                err(f"{path}: unexpected element type {e['element_type']} for an added piece")
+                continue
+            if e["location"] not in TEMPLATES:
+                err(f"{path}: template {e['location']} missing")
+            procs = e["processors"]
+            if isinstance(procs, str) and procs not in VANILLA_PROCESSORS and \
+                    not os.path.exists(res_path(procs, "worldgen/processor_list", ".json")):
+                err(f"{path}: processor list {procs} missing")
+            if e["element_type"] == "wayfarers:grounded_single" and not isinstance(e.get("ground_level_delta"), int):
+                err(f"{path}: grounded element without an integer ground_level_delta")
 
 
 def check_chunked(path, e):
@@ -576,6 +617,7 @@ def main():
     check_templates()
     check_loot()
     check_worldgen()
+    check_vanilla_overrides()
     check_assets()
     check_model_bounds()
     check_advancements()

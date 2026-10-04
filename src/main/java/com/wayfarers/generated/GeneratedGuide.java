@@ -34,6 +34,7 @@ public final class GeneratedGuide {
             new Page("waystones", "travel", "wayfarers:waystone", 3, List.of("wayfarers:waystone")),
             new Page("map", "travel", "minecraft:filled_map", 6, List.of("wayfarers:wayfarer_atlas")),
             new Page("recall", "travel", "wayfarers:recall_scroll", 2, List.of("wayfarers:recall_scroll")),
+            new Page("villages", "travel", "minecraft:bell", 3, List.of("wayfarers:waystone", "wayfarers:edison_lamp", "minecraft:bell")),
             new Page("wonders", "wonders", "wayfarers:structure_compass", 4, List.of()),
             new Page("clockwork_citadel", "wonders", "minecraft:clock", 3, List.of()),
             new Page("sky_harbour", "wonders", "wayfarers:airship_compass", 3, List.of()),
