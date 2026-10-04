@@ -12,6 +12,10 @@ base.archivesName = 'wayfarers'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(25)
 
+// CI client test (tools/ci_client.py): `./gradlew runClient -Pwayfarers.ci=true` turns on the scripted screenshot run
+def wayfarersCi = providers.gradleProperty('wayfarers.ci').getOrElse('false') == 'true'
+def wayfarersCiTimeout = providers.gradleProperty('wayfarers.ci.timeout').getOrElse('1080')
+
 minecraft {
     runs {
         configureEach {
@@ -19,7 +23,14 @@ minecraft {
             systemProperty 'eventbus.api.strictRuntimeChecks', 'true'
             systemProperty 'forge.enabledGameTestNamespaces', 'wayfarers'
         }
-        register('client')
+        register('client') {
+            // client/CiDriver plays its scripted tour, in a 1280x720 OpenGL window (see tools/ci_client.py)
+            if (wayfarersCi) {
+                systemProperty 'wayfarers.ci', 'true'
+                systemProperty 'wayfarers.ci.timeout', wayfarersCiTimeout
+                args '--width', '1280', '--height', '720', '--graphicsBackend', 'opengl'
+            }
+        }
         register('server') {
             args '--nogui'
         }

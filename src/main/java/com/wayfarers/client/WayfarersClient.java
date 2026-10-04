@@ -102,6 +102,8 @@ public final class WayfarersClient {
             event.register(PING_KEY);
         });
         TickEvent.ClientTickEvent.Post.BUS.addListener(event -> onClientTick());
+        // scripted screenshot run for CI; inert unless the JVM has -Dwayfarers.ci=true
+        CiDriver.register();
     }
 
     private static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
