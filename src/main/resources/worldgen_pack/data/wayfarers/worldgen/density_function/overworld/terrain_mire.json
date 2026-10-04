@@ -3,46 +3,49 @@
  "argument": {
   "type": "minecraft:cache_2d",
   "argument": {
-   "type": "minecraft:add",
-   "argument1": "wayfarers:overworld/terrain_terraced",
-   "argument2": {
-    "type": "minecraft:mul",
-    "argument1": "wayfarers:overworld/mire_mask",
+   "type": "wayfarers:shared_2d",
+   "argument": {
+    "type": "minecraft:add",
+    "argument1": "wayfarers:overworld/terrain_terraced",
     "argument2": {
-     "type": "minecraft:add",
-     "argument1": {
-      "type": "minecraft:min",
-      "argument1": "wayfarers:overworld/terrain_terraced",
-      "argument2": {
-       "type": "minecraft:add",
-       "argument1": {
+     "type": "minecraft:mul",
+     "argument1": "wayfarers:overworld/mire_mask",
+     "argument2": {
+      "type": "minecraft:add",
+      "argument1": {
+       "type": "minecraft:min",
+       "argument1": "wayfarers:overworld/terrain_terraced",
+       "argument2": {
         "type": "minecraft:add",
         "argument1": {
-         "type": "minecraft:mul",
-         "argument1": 0.15,
+         "type": "minecraft:add",
+         "argument1": {
+          "type": "minecraft:mul",
+          "argument1": 0.15,
+          "argument2": {
+           "type": "minecraft:abs",
+           "argument": "wayfarers:overworld/terrain_terraced"
+          }
+         },
          "argument2": {
-          "type": "minecraft:abs",
-          "argument": "wayfarers:overworld/terrain_terraced"
+          "type": "minecraft:mul",
+          "argument1": 0.04,
+          "argument2": {
+           "type": "minecraft:noise",
+           "noise": "wayfarers:mire",
+           "xz_scale": 1.0,
+           "y_scale": 0.0
+          }
          }
         },
-        "argument2": {
-         "type": "minecraft:mul",
-         "argument1": 0.04,
-         "argument2": {
-          "type": "minecraft:noise",
-          "noise": "wayfarers:mire",
-          "xz_scale": 1.0,
-          "y_scale": 0.0
-         }
-        }
-       },
-       "argument2": 0.002
+        "argument2": 0.002
+       }
+      },
+      "argument2": {
+       "type": "minecraft:mul",
+       "argument1": -1.0,
+       "argument2": "wayfarers:overworld/terrain_terraced"
       }
-     },
-     "argument2": {
-      "type": "minecraft:mul",
-      "argument1": -1.0,
-      "argument2": "wayfarers:overworld/terrain_terraced"
      }
     }
    }

@@ -3,72 +3,75 @@
  "argument": {
   "type": "minecraft:cache_2d",
   "argument": {
-   "type": "minecraft:mul",
-   "argument1": {
+   "type": "wayfarers:shared_2d",
+   "argument": {
     "type": "minecraft:mul",
     "argument1": {
-     "type": "minecraft:spline",
-     "spline": {
-      "coordinate": "wayfarers:overworld/temperature",
-      "points": [
-       {
-        "location": -0.22,
-        "value": 1.0,
-        "derivative": 0.0
-       },
-       {
-        "location": -0.12,
-        "value": 0.0,
-        "derivative": 0.0
-       }
-      ]
+     "type": "minecraft:mul",
+     "argument1": {
+      "type": "minecraft:spline",
+      "spline": {
+       "coordinate": "wayfarers:overworld/temperature",
+       "points": [
+        {
+         "location": -0.22,
+         "value": 1.0,
+         "derivative": 0.0
+        },
+        {
+         "location": -0.12,
+         "value": 0.0,
+         "derivative": 0.0
+        }
+       ]
+      }
+     },
+     "argument2": {
+      "type": "minecraft:spline",
+      "spline": {
+       "coordinate": "wayfarers:overworld/continents",
+       "points": [
+        {
+         "location": -0.32,
+         "value": 0.0,
+         "derivative": 0.0
+        },
+        {
+         "location": -0.2,
+         "value": 1.0,
+         "derivative": 0.0
+        },
+        {
+         "location": 0.0,
+         "value": 1.0,
+         "derivative": 0.0
+        },
+        {
+         "location": 0.07,
+         "value": 0.0,
+         "derivative": 0.0
+        }
+       ]
+      }
      }
     },
     "argument2": {
      "type": "minecraft:spline",
      "spline": {
-      "coordinate": "wayfarers:overworld/continents",
+      "coordinate": "wayfarers:overworld/ridges",
       "points": [
        {
-        "location": -0.32,
-        "value": 0.0,
-        "derivative": 0.0
-       },
-       {
-        "location": -0.2,
+        "location": -0.05,
         "value": 1.0,
         "derivative": 0.0
        },
        {
         "location": 0.0,
-        "value": 1.0,
-        "derivative": 0.0
-       },
-       {
-        "location": 0.07,
         "value": 0.0,
         "derivative": 0.0
        }
       ]
      }
-    }
-   },
-   "argument2": {
-    "type": "minecraft:spline",
-    "spline": {
-     "coordinate": "wayfarers:overworld/ridges",
-     "points": [
-      {
-       "location": -0.05,
-       "value": 1.0,
-       "derivative": 0.0
-      },
-      {
-       "location": 0.0,
-       "value": 0.0,
-       "derivative": 0.0
-      }
-     ]
     }
    }
   }

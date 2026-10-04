@@ -1,6 +1,7 @@
 package com.wayfarers.world;
 
 import com.mojang.datafixers.util.Either;
+import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
@@ -9,6 +10,9 @@ import com.wayfarers.Wayfarers;
 import com.wayfarers.registry.ModWorldgen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.QuartPos;
+import net.minecraft.core.Vec3i;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
@@ -16,9 +20,13 @@ import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
 import net.minecraft.world.level.levelgen.structure.structures.JigsawStructure;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * {@code "type": "wayfarers:fitted_jigsaw"}: a vanilla jigsaw structure (every field of {@code minecraft:jigsaw},
@@ -116,59 +124,191 @@ public final class FittedJigsawStructure extends Structure {
      * to a flatter or drier spot nearby, instead of the whole cell being lost (on the overhaul's hills and lakes most
      * cells failed by a few blocks). Two chunks keep the pieces well inside the reach of structure references.
      */
-    private static final int[][] NUDGES = {{0, 0}, {2, 0}, {-2, 0}, {0, 2}, {0, -2}, {2, 2}, {-2, -2}, {2, -2}, {-2, 2}};
+    private static final int[][] NUDGES = {{0, 0}, {2, 0}, {-2, 0}, {0, 2}, {0, -2}};
+    /** Jigsaw assemblies plus full terrain checks per grid cell, at most (the expensive part of a site check). */
+    private static final int FULL_CHECKS = 2;
+    /** Decisions kept per structure (a cell is asked twice: by /locate or the structure check, then by the chunk). */
+    private static final int DECISION_CACHE = 4096;
+
+    /** Half the smallest side of the start templates' footprints (blocks), for the cheap pre-test; -1 until known. */
+    private volatile int startHalf = -1;
+    /** Grid cell (chunk) -> the nudge that fitted and its vertical move, or -1 when the cell was rejected. */
+    private final Map<Long, Decision> decisions = new ConcurrentHashMap<>();
+
+    private record Decision(long seed, int nudge, int dy) {}
+
+    private record Candidate(int nudge, GenerationContext context, GenerationStub stub, double score) {}
 
     /**
      * The jigsaw start, its biome (checked first: it is far cheaper than the terrain), then the terrain fit, which may
      * move the pieces up or down. When the spot does not fit, nearby spots of the same cell are tried ({@link #NUDGES}).
-     * The pieces are assembled here once and handed over ready-made.
+     *
+     * <p>Cost: each nudge first gets a cheap pre-test ({@link SiteFit#preScore}: five height samples on the start
+     * template's footprint, no jigsaw assembly); a spot that looks right is assembled and fully checked at once (the
+     * first good one ends the search), the others are ranked by their pre-test and only the best are assembled, at
+     * most {@link #FULL_CHECKS} assemblies per cell. The decision is remembered, so the chunk that generates the
+     * structure after /locate or the structure check found it does not search again, and the fit statistics count
+     * each cell once.
      */
     @Override
     public Optional<GenerationStub> findValidGenerationPoint(GenerationContext context) {
         if (!SiteFit.active()) {
             return this.tryAt(context, false).map(Attempt::stub);
         }
+        long key = context.chunkPos().pack();
+        Decision known = this.decisions.get(key);
+        if (known != null && known.seed() == context.seed()) {
+            if (known.nudge() < 0) {
+                return Optional.empty();
+            }
+            Optional<GenerationStub> replay = this.replay(nudged(context, known.nudge()), known.dy());
+            if (replay.isPresent()) {
+                return replay;
+            }
+        }
+        int half = this.startHalf(context);
         SiteFit.Verdict first = null;
-        for (int[] nudge : NUDGES) {
-            GenerationContext at = nudge[0] == 0 && nudge[1] == 0 ? context : new GenerationContext(context.registryAccess(),
-                    context.chunkGenerator(), context.biomeSource(), context.randomState(), context.structureTemplateManager(),
-                    context.seed(), new ChunkPos(context.chunkPos().x() + nudge[0], context.chunkPos().z() + nudge[1]),
-                    context.heightAccessor(), context.validBiome());
-            Optional<Attempt> attempt = this.tryAt(at, true);
-            if (attempt.isEmpty()) {
+        int full = 0;
+        List<Candidate> later = new ArrayList<>();
+        for (int i = 0; i < NUDGES.length && full < FULL_CHECKS; i++) {
+            GenerationContext at = nudged(context, i);
+            Optional<GenerationStub> stub = this.startAt(at);
+            if (stub.isEmpty()) {
                 continue;
             }
-            if (attempt.get().verdict().ok()) {
-                SiteFit.record(this.name, attempt.get().verdict());
-                return Optional.of(attempt.get().stub());
+            double score = SiteFit.preScore(this.fit, at, stub.get().position(), half);
+            if (score > SiteFit.LIKELY) {
+                later.add(new Candidate(i, at, stub.get(), score));
+                continue;
             }
-            if (first == null) {
+            full++;
+            Optional<Attempt> attempt = this.check(at, stub.get());
+            if (attempt.isPresent() && attempt.get().verdict().ok()) {
+                return this.accept(key, context.seed(), i, attempt.get());
+            }
+            if (first == null && attempt.isPresent()) {
                 first = attempt.get().verdict();
             }
+        }
+        later.sort(Comparator.comparingDouble(Candidate::score));
+        for (Candidate c : later) {
+            if (full >= FULL_CHECKS || c.score() >= SiteFit.HOPELESS) {
+                break;
+            }
+            full++;
+            Optional<Attempt> attempt = this.check(c.context(), c.stub());
+            if (attempt.isPresent() && attempt.get().verdict().ok()) {
+                return this.accept(key, context.seed(), c.nudge(), attempt.get());
+            }
+            if (first == null && attempt.isPresent()) {
+                first = attempt.get().verdict();
+            }
+        }
+        if (first == null && !later.isEmpty()) {
+            first = SiteFit.Verdict.reject(SiteFit.preReason(this.fit, later.get(0).score()));
         }
         if (first != null) {
             SiteFit.record(this.name, first);
         }
+        this.remember(key, new Decision(context.seed(), -1, 0));
         return Optional.empty();
+    }
+
+    private Optional<GenerationStub> accept(long key, long seed, int nudge, Attempt attempt) {
+        SiteFit.record(this.name, attempt.verdict());
+        this.remember(key, new Decision(seed, nudge, attempt.verdict().dy()));
+        return Optional.of(attempt.stub());
+    }
+
+    private void remember(long key, Decision decision) {
+        if (this.decisions.size() >= DECISION_CACHE) {
+            this.decisions.clear();
+        }
+        this.decisions.put(key, decision);
+    }
+
+    private static GenerationContext nudged(GenerationContext context, int nudge) {
+        int[] n = NUDGES[nudge];
+        if (n[0] == 0 && n[1] == 0) {
+            return context;
+        }
+        return new GenerationContext(context.registryAccess(), context.chunkGenerator(), context.biomeSource(),
+                context.randomState(), context.structureTemplateManager(), context.seed(),
+                new ChunkPos(context.chunkPos().x() + n[0], context.chunkPos().z() + n[1]), context.heightAccessor(),
+                context.validBiome());
+    }
+
+    /** The pieces of a decision already taken: the same start (same random), assembled and moved by {@code dy}. */
+    private Optional<GenerationStub> replay(GenerationContext at, int dy) {
+        Optional<GenerationStub> found = this.findGenerationPoint(at);
+        if (found.isEmpty()) {
+            return Optional.empty();
+        }
+        StructurePiecesBuilder builder = found.get().getPiecesBuilder();
+        if (builder.build().pieces().isEmpty()) {
+            return Optional.empty();
+        }
+        if (dy != 0) {
+            builder.offsetPiecesVertically(dy);
+        }
+        return Optional.of(new GenerationStub(found.get().position().above(dy), Either.right(builder)));
+    }
+
+    /** Half the smallest side of the start pool's templates (their built footprint when known), at least 4. */
+    private int startHalf(GenerationContext context) {
+        int half = this.startHalf;
+        if (half >= 0) {
+            return half;
+        }
+        int smallest = Integer.MAX_VALUE;
+        try {
+            for (Pair<StructurePoolElement, Integer> e : this.jigsaw.getStartPool().value().getTemplates()) {
+                StructurePoolElement element = e.getFirst();
+                Optional<List<Integer>> fp = element instanceof ChunkedPoolElement chunked ? chunked.footprint() : Optional.empty();
+                if (fp.isPresent()) {
+                    List<Integer> f = fp.get();
+                    smallest = Math.min(smallest, Math.min(f.get(2) - f.get(0), f.get(3) - f.get(1)) + 1);
+                } else {
+                    Vec3i size = element.getSize(context.structureTemplateManager(), Rotation.NONE);
+                    smallest = Math.min(smallest, Math.min(size.getX(), size.getZ()));
+                }
+            }
+        } catch (RuntimeException e) {
+            smallest = Integer.MAX_VALUE;
+        }
+        half = smallest == Integer.MAX_VALUE ? 8 : Math.max(4, smallest / 2);
+        this.startHalf = half;
+        return half;
     }
 
     private record Attempt(GenerationStub stub, SiteFit.Verdict verdict) {}
 
-    /** The start at this context's chunk if its biome suits; with {@code check}, also its terrain verdict (moved when ok). */
-    private Optional<Attempt> tryAt(GenerationContext context, boolean check) {
+    /** The start at this context's chunk if its biome suits (no jigsaw assembly yet). */
+    private Optional<GenerationStub> startAt(GenerationContext context) {
         Optional<GenerationStub> found = this.findGenerationPoint(context);
         if (found.isEmpty()) {
             return Optional.empty();
         }
-        GenerationStub stub = found.get();
-        BlockPos pos = stub.position();
+        BlockPos pos = found.get().position();
         if (!context.validBiome().test(context.chunkGenerator().getBiomeSource().getNoiseBiome(QuartPos.fromBlock(pos.getX()),
                 QuartPos.fromBlock(pos.getY()), QuartPos.fromBlock(pos.getZ()), context.randomState().sampler()))) {
             return Optional.empty();
         }
-        if (!check) {
-            return Optional.of(new Attempt(stub, null));
+        return found;
+    }
+
+    /** The start at this context's chunk if its biome suits; with {@code check}, also its terrain verdict (moved when ok). */
+    private Optional<Attempt> tryAt(GenerationContext context, boolean check) {
+        Optional<GenerationStub> found = this.startAt(context);
+        if (found.isEmpty()) {
+            return Optional.empty();
         }
+        return check ? this.check(context, found.get()) : Optional.of(new Attempt(found.get(), null));
+    }
+
+    /** Assembles the jigsaw and checks the start piece on the terrain (moved when it fits). */
+    private Optional<Attempt> check(GenerationContext context, GenerationStub stub) {
+        BlockPos pos = stub.position();
         StructurePiecesBuilder builder = stub.getPiecesBuilder();
         List<StructurePiece> pieces = builder.build().pieces();
         if (pieces.isEmpty()) {

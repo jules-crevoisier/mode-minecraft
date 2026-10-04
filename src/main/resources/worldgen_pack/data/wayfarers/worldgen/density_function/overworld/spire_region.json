@@ -3,109 +3,112 @@
  "argument": {
   "type": "minecraft:cache_2d",
   "argument": {
-   "type": "minecraft:mul",
-   "argument1": {
-    "type": "minecraft:spline",
-    "spline": {
-     "coordinate": "wayfarers:overworld/continents",
-     "points": [
-      {
-       "location": -0.1,
-       "value": 0.0,
-       "derivative": 0.0
-      },
-      {
-       "location": 0.0,
-       "value": 1.0,
-       "derivative": 0.0
-      }
-     ]
-    }
-   },
-   "argument2": {
-    "type": "minecraft:max",
+   "type": "wayfarers:shared_2d",
+   "argument": {
+    "type": "minecraft:mul",
     "argument1": {
-     "type": "minecraft:mul",
-     "argument1": 0.55,
+     "type": "minecraft:spline",
+     "spline": {
+      "coordinate": "wayfarers:overworld/continents",
+      "points": [
+       {
+        "location": -0.1,
+        "value": 0.0,
+        "derivative": 0.0
+       },
+       {
+        "location": 0.0,
+        "value": 1.0,
+        "derivative": 0.0
+       }
+      ]
+     }
+    },
+    "argument2": {
+     "type": "minecraft:max",
+     "argument1": {
+      "type": "minecraft:mul",
+      "argument1": 0.55,
+      "argument2": {
+       "type": "minecraft:mul",
+       "argument1": "wayfarers:overworld/hot_dry",
+       "argument2": {
+        "type": "minecraft:spline",
+        "spline": {
+         "coordinate": "minecraft:overworld/erosion",
+         "points": [
+          {
+           "location": -0.62,
+           "value": 0.0,
+           "derivative": 0.0
+          },
+          {
+           "location": -0.48,
+           "value": 1.0,
+           "derivative": 0.0
+          },
+          {
+           "location": -0.36,
+           "value": 1.0,
+           "derivative": 0.0
+          },
+          {
+           "location": -0.29,
+           "value": 0.0,
+           "derivative": 0.0
+          }
+         ]
+        }
+       }
+      }
+     },
      "argument2": {
       "type": "minecraft:mul",
-      "argument1": "wayfarers:overworld/hot_dry",
+      "argument1": {
+       "type": "minecraft:spline",
+       "spline": {
+        "coordinate": "wayfarers:overworld/temperature",
+        "points": [
+         {
+          "location": 0.12,
+          "value": 0.0,
+          "derivative": 0.0
+         },
+         {
+          "location": 0.22,
+          "value": 1.0,
+          "derivative": 0.0
+         },
+         {
+          "location": 0.5,
+          "value": 1.0,
+          "derivative": 0.0
+         },
+         {
+          "location": 0.6,
+          "value": 0.0,
+          "derivative": 0.0
+         }
+        ]
+       }
+      },
       "argument2": {
        "type": "minecraft:spline",
        "spline": {
         "coordinate": "minecraft:overworld/erosion",
         "points": [
          {
-          "location": -0.62,
-          "value": 0.0,
-          "derivative": 0.0
-         },
-         {
-          "location": -0.48,
+          "location": -0.45,
           "value": 1.0,
           "derivative": 0.0
          },
          {
-          "location": -0.36,
-          "value": 1.0,
-          "derivative": 0.0
-         },
-         {
-          "location": -0.29,
+          "location": -0.33,
           "value": 0.0,
           "derivative": 0.0
          }
         ]
        }
-      }
-     }
-    },
-    "argument2": {
-     "type": "minecraft:mul",
-     "argument1": {
-      "type": "minecraft:spline",
-      "spline": {
-       "coordinate": "wayfarers:overworld/temperature",
-       "points": [
-        {
-         "location": 0.12,
-         "value": 0.0,
-         "derivative": 0.0
-        },
-        {
-         "location": 0.22,
-         "value": 1.0,
-         "derivative": 0.0
-        },
-        {
-         "location": 0.5,
-         "value": 1.0,
-         "derivative": 0.0
-        },
-        {
-         "location": 0.6,
-         "value": 0.0,
-         "derivative": 0.0
-        }
-       ]
-      }
-     },
-     "argument2": {
-      "type": "minecraft:spline",
-      "spline": {
-       "coordinate": "minecraft:overworld/erosion",
-       "points": [
-        {
-         "location": -0.45,
-         "value": 1.0,
-         "derivative": 0.0
-        },
-        {
-         "location": -0.33,
-         "value": 0.0,
-         "derivative": 0.0
-        }
-       ]
       }
      }
     }

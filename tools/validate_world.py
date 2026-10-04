@@ -75,7 +75,10 @@ DF_FIELDS = {
     "find_top_surface": ({"density", "upper_bound", "lower_bound", "cell_height"}, {"density", "upper_bound"}),
     "old_blended_noise": ({"xz_scale", "y_scale", "xz_factor", "y_factor", "smear_scale_multiplier"}, set()),
     "blend_alpha": (set(), set()), "blend_offset": (set(), set()), "beardifier": (set(), set()),
+    # ours (ModWorldgen.DENSITY_FUNCTION_TYPES): a 2D stage computed once per column (SharedColumnFunction.java)
+    "shared_2d": (_ONE, _ONE),
 }
+MOD_DF_TYPES = {"shared_2d"}
 
 
 def check_df(node, where):
@@ -88,6 +91,10 @@ def check_df(node, where):
     t = node["type"].split(":")[-1]
     if t not in DF_FIELDS:
         err(f"{where}: unknown density function type {node['type']}")
+        return
+    ns = node["type"].split(":")[0] if ":" in node["type"] else "minecraft"
+    if (ns == "wayfarers") != (t in MOD_DF_TYPES):
+        err(f"{where}: density function type {node['type']} is not registered under that namespace")
         return
     fields, fns = DF_FIELDS[t]
     keys = set(node) - {"type"}

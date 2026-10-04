@@ -155,6 +155,125 @@ public final class SiteFit {
         return fit.seaSide().map(Direction::byName).map(rot::rotate);
     }
 
+    // ------------------------------------------------------------------ the cheap pre-test
+
+    /** A pre-test score at or below this: the spot looks right, assemble and check it at once. */
+    static final double LIKELY = 1.0;
+    /** A pre-test score at or above this: not worth an assembly (water where there must be land, dry sea floor...). */
+    static final double HOPELESS = 3.0;
+
+    /**
+     * How well a spot looks before any jigsaw is assembled (lower is better, {@link #LIKELY} and below: probably fits):
+     * the terrain at the centre and the four corners of a square of half side {@code 0.75 half} around the start
+     * position, where {@code half} is half the smallest side of the start template, so the square stays inside the
+     * footprint whatever the rotation. Five columns (about one tenth of a full check) and no assembly; the full check
+     * ({@link #evaluate}) still decides. Only ranks the nudges of one grid cell, so it may be rough.
+     */
+    static double preScore(FittedJigsawStructure.Fit fit, Structure.GenerationContext ctx, BlockPos start, int half) {
+        if (fit.mode().equals("cavern")) {
+            return 0.0;  // the Nether's fit needs whole columns: no cheap test, the nudges keep their order
+        }
+        ChunkGenerator gen = ctx.chunkGenerator();
+        LevelHeightAccessor heights = ctx.heightAccessor();
+        RandomState rs = ctx.randomState();
+        int r = Math.max(2, Math.round(half * 0.75F));
+        int[][] at = {{0, 0}, {-r, -r}, {r, -r}, {-r, r}, {r, r}};
+        boolean needTop = !fit.mode().equals("underground");
+        boolean needFloor = !fit.mode().equals("sky");
+        int n = at.length;
+        int[] top = new int[n];
+        int[] floor = new int[n];
+        int wet = 0;
+        for (int k = 0; k < n; k++) {
+            int x = start.getX() + at[k][0];
+            int z = start.getZ() + at[k][1];
+            top[k] = needTop ? gen.getBaseHeight(x, z, Heightmap.Types.WORLD_SURFACE_WG, heights, rs) : 0;
+            floor[k] = needFloor ? gen.getBaseHeight(x, z, Heightmap.Types.OCEAN_FLOOR_WG, heights, rs) : top[k];
+            if (!needTop) {
+                top[k] = floor[k];
+            }
+            wet += top[k] > floor[k] ? 1 : 0;
+        }
+        double wetShare = wet / (double) n;
+        switch (fit.mode()) {
+            case "land", "wetland" -> {
+                boolean wetland = fit.mode().equals("wetland");
+                int lo = Integer.MAX_VALUE;
+                int hi = Integer.MIN_VALUE;
+                for (int k = 0; k < n; k++) {
+                    int h = wetland ? top[k] : floor[k];
+                    lo = Math.min(lo, h);
+                    hi = Math.max(hi, h);
+                }
+                double score = (hi - lo) / (double) Math.max(1, fit.spread());
+                if (wetShare > fit.wet() + 1.0E-4) {
+                    score = Math.max(score, 1.5 + 4.0 * (wetShare - fit.wet()));
+                }
+                if (wetShare < fit.minWet() - 1.0E-4) {
+                    score = Math.max(score, 1.5 + 4.0 * (fit.minWet() - wetShare));
+                }
+                return score;
+            }
+            case "coast" -> {
+                // a shore crosses the footprint: some samples wet, some dry, the dry ground near the sea
+                if (wet == 0 || wet == n) {
+                    return HOPELESS;
+                }
+                int sea = gen.getSeaLevel();
+                int worst = 0;
+                for (int k = 0; k < n; k++) {
+                    if (top[k] == floor[k]) {
+                        worst = Math.max(worst, Math.abs(floor[k] - sea));
+                    }
+                }
+                return 0.5 * Math.abs(wetShare - 0.5) * 2 + worst / (double) Math.max(2, fit.spread() + 2);
+            }
+            case "seabed" -> {
+                if (wetShare < fit.wet() - 1.0E-4) {
+                    return wet == 0 ? HOPELESS : 1.5 + 4.0 * (fit.wet() - wetShare);
+                }
+                int lo = Integer.MAX_VALUE;
+                int hi = Integer.MIN_VALUE;
+                int shallowest = Integer.MAX_VALUE;
+                for (int k = 0; k < n; k++) {
+                    lo = Math.min(lo, floor[k]);
+                    hi = Math.max(hi, floor[k]);
+                    shallowest = Math.min(shallowest, top[k] - floor[k]);
+                }
+                double score = (hi - lo) / (double) Math.max(1, fit.spread());
+                if (shallowest < fit.depth()) {
+                    score = Math.max(score, 1.2 + (fit.depth() - shallowest) / (double) Math.max(1, fit.depth()));
+                }
+                return score;
+            }
+            case "sky" -> {
+                // the start position is about the structure's middle: the terrain must stay well below it
+                int highest = Integer.MIN_VALUE;
+                for (int k = 0; k < n; k++) {
+                    highest = Math.max(highest, top[k] - 1);
+                }
+                int over = highest - (start.getY() - fit.clearance());
+                return over <= 0 ? 0.0 : over / (double) Math.max(1, fit.lift() + fit.clearance());
+            }
+            case "underground" -> {
+                int lowest = Integer.MAX_VALUE;
+                for (int k = 0; k < n; k++) {
+                    lowest = Math.min(lowest, floor[k] - 1);
+                }
+                int under = start.getY() + fit.cover() - lowest;
+                return under <= 0 ? 0.0 : under / (double) Math.max(1, fit.lift() + fit.cover());
+            }
+            default -> {
+                return 0.0;
+            }
+        }
+    }
+
+    /** The rejection reason recorded for a cell whose every nudge failed the pre-test (no assembly was made). */
+    static String preReason(FittedJigsawStructure.Fit fit, double bestScore) {
+        return String.format(Locale.ROOT, "pretest %s %.1f", fit.mode(), bestScore);
+    }
+
     // ------------------------------------------------------------------ the check
 
     public static Verdict evaluate(FittedJigsawStructure.Fit fit, StructurePiece start, Structure.GenerationContext ctx) {

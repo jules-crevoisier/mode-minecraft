@@ -3,12 +3,15 @@
  "argument": {
   "type": "minecraft:cache_2d",
   "argument": {
-   "type": "minecraft:abs",
+   "type": "wayfarers:shared_2d",
    "argument": {
-    "type": "minecraft:noise",
-    "noise": "wayfarers:underground_rivers",
-    "xz_scale": 1.0,
-    "y_scale": 0.0
+    "type": "minecraft:abs",
+    "argument": {
+     "type": "minecraft:noise",
+     "noise": "wayfarers:underground_rivers",
+     "xz_scale": 1.0,
+     "y_scale": 0.0
+    }
    }
   }
  }

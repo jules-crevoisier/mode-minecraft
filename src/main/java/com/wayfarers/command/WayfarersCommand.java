@@ -1,6 +1,7 @@
 package com.wayfarers.command;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -120,8 +121,23 @@ public final class WayfarersCommand {
                         .executes(BiomeShotsCommand::run)
                         .then(Commands.argument("biome", StringArgumentType.word())
                                 .executes(ctx -> BiomeShotsCommand.run(ctx, StringArgumentType.getString(ctx, "biome")))))
+                .then(Commands.literal("genbench").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
+                        .then(Commands.literal("noise").executes(GenBenchCommand::noise))
+                        .then(Commands.literal("area")
+                                .then(Commands.argument("x", IntegerArgumentType.integer())
+                                        .then(Commands.argument("z", IntegerArgumentType.integer())
+                                                .then(Commands.argument("size", IntegerArgumentType.integer(1, 32))
+                                                        .executes(ctx -> GenBenchCommand.area(ctx, IntegerArgumentType.getInteger(ctx, "x"),
+                                                                IntegerArgumentType.getInteger(ctx, "z"),
+                                                                IntegerArgumentType.getInteger(ctx, "size"))))))))
                 .then(Commands.literal("fitcheck").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                         .executes(ctx -> FitCheckCommand.run(ctx, null))
+                        .then(Commands.literal("shard")
+                                .then(Commands.argument("index", IntegerArgumentType.integer(0))
+                                        .then(Commands.argument("count", IntegerArgumentType.integer(1))
+                                                .executes(ctx -> FitCheckCommand.run(ctx, null,
+                                                        IntegerArgumentType.getInteger(ctx, "index"),
+                                                        IntegerArgumentType.getInteger(ctx, "count"))))))
                         .then(Commands.argument("structure", StringArgumentType.word())
                                 .suggests((ctx, b) -> SharedSuggestionProvider.suggest(
                                         GeneratedContent.STRUCTURES.stream().map(GeneratedContent.StructureInfo::id), b))

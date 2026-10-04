@@ -1,41 +1,44 @@
 {
  "type": "minecraft:flat_cache",
  "argument": {
-  "type": "minecraft:spline",
-  "spline": {
-   "coordinate": "wayfarers:overworld/temperature_noise",
-   "points": [
-    {
-     "location": -0.610472,
-     "value": -1.0,
-     "derivative": 1.507523
-    },
-    {
-     "location": -0.245635,
-     "value": -0.45,
-     "derivative": 1.698198
-    },
-    {
-     "location": -0.091321,
-     "value": -0.15,
-     "derivative": 2.15198
-    },
-    {
-     "location": 0.053928,
-     "value": 0.2,
-     "derivative": 2.407275
-    },
-    {
-     "location": 0.199464,
-     "value": 0.55,
-     "derivative": 1.504702
-    },
-    {
-     "location": 0.610472,
-     "value": 1.0,
-     "derivative": 1.094871
-    }
-   ]
+  "type": "wayfarers:shared_2d",
+  "argument": {
+   "type": "minecraft:spline",
+   "spline": {
+    "coordinate": "wayfarers:overworld/temperature_noise",
+    "points": [
+     {
+      "location": -0.610472,
+      "value": -1.0,
+      "derivative": 1.507523
+     },
+     {
+      "location": -0.245635,
+      "value": -0.45,
+      "derivative": 1.698198
+     },
+     {
+      "location": -0.091321,
+      "value": -0.15,
+      "derivative": 2.15198
+     },
+     {
+      "location": 0.053928,
+      "value": 0.2,
+      "derivative": 2.407275
+     },
+     {
+      "location": 0.199464,
+      "value": 0.55,
+      "derivative": 1.504702
+     },
+     {
+      "location": 0.610472,
+      "value": 1.0,
+      "derivative": 1.094871
+     }
+    ]
+   }
   }
  }
 }

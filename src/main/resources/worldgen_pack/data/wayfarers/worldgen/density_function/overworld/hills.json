@@ -3,157 +3,160 @@
  "argument": {
   "type": "minecraft:cache_2d",
   "argument": {
-   "type": "minecraft:add",
-   "argument1": {
-    "type": "minecraft:mul",
+   "type": "wayfarers:shared_2d",
+   "argument": {
+    "type": "minecraft:add",
     "argument1": {
      "type": "minecraft:mul",
      "argument1": {
       "type": "minecraft:mul",
       "argument1": {
-       "type": "minecraft:spline",
-       "spline": {
-        "coordinate": "minecraft:overworld/erosion",
-        "points": [
-         {
-          "location": -0.25,
-          "value": 0.0,
-          "derivative": 0.0
-         },
-         {
-          "location": -0.05,
-          "value": 1.0,
-          "derivative": 0.0
-         },
-         {
-          "location": 0.42,
-          "value": 1.0,
-          "derivative": 0.0
-         },
-         {
-          "location": 0.62,
-          "value": 0.0,
-          "derivative": 0.0
-         }
-        ]
-       }
-      },
-      "argument2": {
-       "type": "minecraft:spline",
-       "spline": {
-        "coordinate": "wayfarers:overworld/continents",
-        "points": [
-         {
-          "location": -0.14,
-          "value": 0.0,
-          "derivative": 0.0
-         },
-         {
-          "location": 0.02,
-          "value": 1.0,
-          "derivative": 0.0
-         }
-        ]
-       }
-      }
-     },
-     "argument2": {
-      "type": "minecraft:spline",
-      "spline": {
-       "coordinate": "wayfarers:overworld/ridges_folded",
-       "points": [
-        {
-         "location": -0.85,
-         "value": 0.0,
-         "derivative": 0.0
-        },
-        {
-         "location": -0.55,
-         "value": 1.0,
-         "derivative": 0.0
+       "type": "minecraft:mul",
+       "argument1": {
+        "type": "minecraft:spline",
+        "spline": {
+         "coordinate": "minecraft:overworld/erosion",
+         "points": [
+          {
+           "location": -0.25,
+           "value": 0.0,
+           "derivative": 0.0
+          },
+          {
+           "location": -0.05,
+           "value": 1.0,
+           "derivative": 0.0
+          },
+          {
+           "location": 0.42,
+           "value": 1.0,
+           "derivative": 0.0
+          },
+          {
+           "location": 0.62,
+           "value": 0.0,
+           "derivative": 0.0
+          }
+         ]
         }
-       ]
-      }
-     }
-    },
-    "argument2": {
-     "type": "minecraft:add",
-     "argument1": {
-      "type": "minecraft:mul",
-      "argument1": 0.09,
-      "argument2": {
-       "type": "minecraft:noise",
-       "noise": "wayfarers:hills",
-       "xz_scale": 1.0,
-       "y_scale": 0.0
-      }
-     },
-     "argument2": 0.03
-    }
-   },
-   "argument2": {
-    "type": "minecraft:mul",
-    "argument1": {
-     "type": "minecraft:mul",
-     "argument1": "wayfarers:overworld/hot_dry",
-     "argument2": {
-      "type": "minecraft:mul",
-      "argument1": {
-       "type": "minecraft:spline",
-       "spline": {
-        "coordinate": "minecraft:overworld/erosion",
-        "points": [
-         {
-          "location": -0.1,
-          "value": 0.0,
-          "derivative": 0.0
-         },
-         {
-          "location": 0.05,
-          "value": 1.0,
-          "derivative": 0.0
-         }
-        ]
+       },
+       "argument2": {
+        "type": "minecraft:spline",
+        "spline": {
+         "coordinate": "wayfarers:overworld/continents",
+         "points": [
+          {
+           "location": -0.14,
+           "value": 0.0,
+           "derivative": 0.0
+          },
+          {
+           "location": 0.02,
+           "value": 1.0,
+           "derivative": 0.0
+          }
+         ]
+        }
        }
       },
       "argument2": {
        "type": "minecraft:spline",
        "spline": {
-        "coordinate": "wayfarers:overworld/continents",
+        "coordinate": "wayfarers:overworld/ridges_folded",
         "points": [
          {
-          "location": -0.12,
+          "location": -0.85,
           "value": 0.0,
           "derivative": 0.0
          },
          {
-          "location": 0.0,
+          "location": -0.55,
           "value": 1.0,
           "derivative": 0.0
          }
         ]
        }
       }
+     },
+     "argument2": {
+      "type": "minecraft:add",
+      "argument1": {
+       "type": "minecraft:mul",
+       "argument1": 0.09,
+       "argument2": {
+        "type": "minecraft:noise",
+        "noise": "wayfarers:hills",
+        "xz_scale": 1.0,
+        "y_scale": 0.0
+       }
+      },
+      "argument2": 0.03
      }
     },
     "argument2": {
      "type": "minecraft:mul",
-     "argument1": 0.06,
-     "argument2": {
-      "type": "minecraft:square",
-      "argument": {
-       "type": "minecraft:add",
-       "argument1": 1.0,
+     "argument1": {
+      "type": "minecraft:mul",
+      "argument1": "wayfarers:overworld/hot_dry",
+      "argument2": {
+       "type": "minecraft:mul",
+       "argument1": {
+        "type": "minecraft:spline",
+        "spline": {
+         "coordinate": "minecraft:overworld/erosion",
+         "points": [
+          {
+           "location": -0.1,
+           "value": 0.0,
+           "derivative": 0.0
+          },
+          {
+           "location": 0.05,
+           "value": 1.0,
+           "derivative": 0.0
+          }
+         ]
+        }
+       },
        "argument2": {
-        "type": "minecraft:mul",
-        "argument1": -1.0,
+        "type": "minecraft:spline",
+        "spline": {
+         "coordinate": "wayfarers:overworld/continents",
+         "points": [
+          {
+           "location": -0.12,
+           "value": 0.0,
+           "derivative": 0.0
+          },
+          {
+           "location": 0.0,
+           "value": 1.0,
+           "derivative": 0.0
+          }
+         ]
+        }
+       }
+      }
+     },
+     "argument2": {
+      "type": "minecraft:mul",
+      "argument1": 0.06,
+      "argument2": {
+       "type": "minecraft:square",
+       "argument": {
+        "type": "minecraft:add",
+        "argument1": 1.0,
         "argument2": {
-         "type": "minecraft:abs",
-         "argument": {
-          "type": "minecraft:noise",
-          "noise": "wayfarers:dunes",
-          "xz_scale": 1.0,
-          "y_scale": 0.0
+         "type": "minecraft:mul",
+         "argument1": -1.0,
+         "argument2": {
+          "type": "minecraft:abs",
+          "argument": {
+           "type": "minecraft:noise",
+           "noise": "wayfarers:dunes",
+           "xz_scale": 1.0,
+           "y_scale": 0.0
+          }
          }
         }
        }

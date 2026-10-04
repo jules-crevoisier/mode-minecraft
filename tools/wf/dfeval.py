@@ -278,7 +278,7 @@ class Evaluator:
         if t in ("add", "mul", "min", "max"):
             a, b = self.ev(node["argument1"]), self.ev(node["argument2"])
             return {"add": np.add, "mul": np.multiply, "min": np.minimum, "max": np.maximum}[t](a, b)
-        if t in ("flat_cache", "cache_2d", "cache_once", "cache_all_in_cell", "interpolated", "blend_density"):
+        if t in ("flat_cache", "cache_2d", "cache_once", "cache_all_in_cell", "interpolated", "blend_density", "shared_2d"):
             return self.ev(node["argument"])
         if t in ("abs", "square", "cube", "half_negative", "quarter_negative", "invert", "squeeze"):
             v = self.ev(node["argument"])

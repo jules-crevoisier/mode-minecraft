@@ -3,183 +3,186 @@
  "argument": {
   "type": "minecraft:cache_2d",
   "argument": {
-   "type": "minecraft:add",
-   "argument1": "wayfarers:overworld/terrain_base",
-   "argument2": {
-    "type": "minecraft:mul",
-    "argument1": "wayfarers:overworld/hot_dry",
+   "type": "wayfarers:shared_2d",
+   "argument": {
+    "type": "minecraft:add",
+    "argument1": "wayfarers:overworld/terrain_base",
     "argument2": {
-     "type": "minecraft:add",
-     "argument1": {
+     "type": "minecraft:mul",
+     "argument1": "wayfarers:overworld/hot_dry",
+     "argument2": {
       "type": "minecraft:add",
       "argument1": {
-       "type": "minecraft:spline",
-       "spline": {
-        "coordinate": "wayfarers:overworld/terrain_base",
-        "points": [
-         {
-          "location": -0.2,
-          "value": -0.2,
-          "derivative": 1.0
-         },
-         {
-          "location": 0.24,
-          "value": 0.24,
-          "derivative": 1.0
-         },
-         {
-          "location": 0.254,
-          "value": 0.254,
-          "derivative": 0.0
-         },
-         {
-          "location": 0.32875,
-          "value": 0.262,
-          "derivative": 0.0
-         },
-         {
-          "location": 0.363375,
-          "value": 0.363375,
-          "derivative": 0.0
-         },
-         {
-          "location": 0.438125,
-          "value": 0.371375,
-          "derivative": 0.0
-         },
-         {
-          "location": 0.47275,
-          "value": 0.47275,
-          "derivative": 0.0
-         },
-         {
-          "location": 0.5475,
-          "value": 0.48075,
-          "derivative": 0.0
-         },
-         {
-          "location": 0.582125,
-          "value": 0.582125,
-          "derivative": 0.0
-         },
-         {
-          "location": 0.656875,
-          "value": 0.590125,
-          "derivative": 0.0
-         },
-         {
-          "location": 0.6915,
-          "value": 0.6915,
-          "derivative": 0.0
-         },
-         {
-          "location": 0.76625,
-          "value": 0.6995,
-          "derivative": 0.0
-         },
-         {
-          "location": 0.800875,
-          "value": 0.800875,
-          "derivative": 0.0
-         },
-         {
-          "location": 0.875625,
-          "value": 0.808875,
-          "derivative": 0.0
-         },
-         {
-          "location": 0.91025,
-          "value": 0.91025,
-          "derivative": 0.0
-         },
-         {
-          "location": 0.985,
-          "value": 0.91825,
-          "derivative": 0.0
-         },
-         {
-          "location": 1.019625,
-          "value": 1.019625,
-          "derivative": 0.0
-         },
-         {
-          "location": 1.094375,
-          "value": 1.027625,
-          "derivative": 0.0
-         },
-         {
-          "location": 1.129,
-          "value": 1.129,
-          "derivative": 0.0
-         },
-         {
-          "location": 1.20375,
-          "value": 1.137,
-          "derivative": 0.0
-         },
-         {
-          "location": 1.238375,
-          "value": 1.238375,
-          "derivative": 0.0
-         },
-         {
-          "location": 1.313125,
-          "value": 1.246375,
-          "derivative": 0.0
-         },
-         {
-          "location": 1.34775,
-          "value": 1.34775,
-          "derivative": 0.0
-         },
-         {
-          "location": 1.4225,
-          "value": 1.35575,
-          "derivative": 0.0
-         },
-         {
-          "location": 1.457125,
-          "value": 1.457125,
-          "derivative": 0.0
-         },
-         {
-          "location": 1.531875,
-          "value": 1.465125,
-          "derivative": 0.0
-         },
-         {
-          "location": 1.5665,
-          "value": 1.5665,
-          "derivative": 0.0
-         },
-         {
-          "location": 1.64125,
-          "value": 1.5745,
-          "derivative": 0.0
-         },
-         {
-          "location": 1.675875,
-          "value": 1.675875,
-          "derivative": 1.0
-         }
-        ]
+       "type": "minecraft:add",
+       "argument1": {
+        "type": "minecraft:spline",
+        "spline": {
+         "coordinate": "wayfarers:overworld/terrain_base",
+         "points": [
+          {
+           "location": -0.2,
+           "value": -0.2,
+           "derivative": 1.0
+          },
+          {
+           "location": 0.24,
+           "value": 0.24,
+           "derivative": 1.0
+          },
+          {
+           "location": 0.254,
+           "value": 0.254,
+           "derivative": 0.0
+          },
+          {
+           "location": 0.32875,
+           "value": 0.262,
+           "derivative": 0.0
+          },
+          {
+           "location": 0.363375,
+           "value": 0.363375,
+           "derivative": 0.0
+          },
+          {
+           "location": 0.438125,
+           "value": 0.371375,
+           "derivative": 0.0
+          },
+          {
+           "location": 0.47275,
+           "value": 0.47275,
+           "derivative": 0.0
+          },
+          {
+           "location": 0.5475,
+           "value": 0.48075,
+           "derivative": 0.0
+          },
+          {
+           "location": 0.582125,
+           "value": 0.582125,
+           "derivative": 0.0
+          },
+          {
+           "location": 0.656875,
+           "value": 0.590125,
+           "derivative": 0.0
+          },
+          {
+           "location": 0.6915,
+           "value": 0.6915,
+           "derivative": 0.0
+          },
+          {
+           "location": 0.76625,
+           "value": 0.6995,
+           "derivative": 0.0
+          },
+          {
+           "location": 0.800875,
+           "value": 0.800875,
+           "derivative": 0.0
+          },
+          {
+           "location": 0.875625,
+           "value": 0.808875,
+           "derivative": 0.0
+          },
+          {
+           "location": 0.91025,
+           "value": 0.91025,
+           "derivative": 0.0
+          },
+          {
+           "location": 0.985,
+           "value": 0.91825,
+           "derivative": 0.0
+          },
+          {
+           "location": 1.019625,
+           "value": 1.019625,
+           "derivative": 0.0
+          },
+          {
+           "location": 1.094375,
+           "value": 1.027625,
+           "derivative": 0.0
+          },
+          {
+           "location": 1.129,
+           "value": 1.129,
+           "derivative": 0.0
+          },
+          {
+           "location": 1.20375,
+           "value": 1.137,
+           "derivative": 0.0
+          },
+          {
+           "location": 1.238375,
+           "value": 1.238375,
+           "derivative": 0.0
+          },
+          {
+           "location": 1.313125,
+           "value": 1.246375,
+           "derivative": 0.0
+          },
+          {
+           "location": 1.34775,
+           "value": 1.34775,
+           "derivative": 0.0
+          },
+          {
+           "location": 1.4225,
+           "value": 1.35575,
+           "derivative": 0.0
+          },
+          {
+           "location": 1.457125,
+           "value": 1.457125,
+           "derivative": 0.0
+          },
+          {
+           "location": 1.531875,
+           "value": 1.465125,
+           "derivative": 0.0
+          },
+          {
+           "location": 1.5665,
+           "value": 1.5665,
+           "derivative": 0.0
+          },
+          {
+           "location": 1.64125,
+           "value": 1.5745,
+           "derivative": 0.0
+          },
+          {
+           "location": 1.675875,
+           "value": 1.675875,
+           "derivative": 1.0
+          }
+         ]
+        }
+       },
+       "argument2": {
+        "type": "minecraft:mul",
+        "argument1": 0.012,
+        "argument2": {
+         "type": "minecraft:noise",
+         "noise": "wayfarers:terrace_jitter",
+         "xz_scale": 1.0,
+         "y_scale": 0.0
+        }
        }
       },
       "argument2": {
        "type": "minecraft:mul",
-       "argument1": 0.012,
-       "argument2": {
-        "type": "minecraft:noise",
-        "noise": "wayfarers:terrace_jitter",
-        "xz_scale": 1.0,
-        "y_scale": 0.0
-       }
+       "argument1": -1.0,
+       "argument2": "wayfarers:overworld/terrain_base"
       }
-     },
-     "argument2": {
-      "type": "minecraft:mul",
-      "argument1": -1.0,
-      "argument2": "wayfarers:overworld/terrain_base"
      }
     }
    }

@@ -3,9 +3,12 @@
  "argument": {
   "type": "minecraft:cache_2d",
   "argument": {
-   "type": "minecraft:add",
-   "argument1": "wayfarers:overworld/terrain",
-   "argument2": -0.50375
+   "type": "wayfarers:shared_2d",
+   "argument": {
+    "type": "minecraft:add",
+    "argument1": "wayfarers:overworld/terrain",
+    "argument2": -0.50375
+   }
   }
  }
 }

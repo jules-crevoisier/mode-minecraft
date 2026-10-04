@@ -600,7 +600,28 @@ def density_functions():
     out.update(caves())
     # land above the surface: spires and skylands
     out["extra_terrain"] = dmax(DF + "spires", DF + "skylands")
-    return out
+    return {name: shared(fn) for name, fn in out.items()}
+
+
+SHARED = f"{NS}:shared_2d"
+
+
+def shared(fn):
+    """Every named 2D stage (a flat_cache function) computed once per column and walked once per tree.
+
+    The stages read the one below several times (lerp reads its input twice, the mire's min(x, f(x)) twice...):
+    3 x 4 x 3 = 36 reads of the base height in `terrain`. Vanilla caches a named function only inside a chunk's
+    NoiseChunk; the climate sampler (biome lookups: /locate, structure biome checks, the spawn search) strips the
+    caches, and every NoiseChunk walks the router as a tree when it builds it (680 000 nodes per chunk or
+    getBaseHeight column). wayfarers:shared_2d (SharedColumnFunction.java) keeps one value per column and one copy
+    per walk, so both stay linear in the size of the JSON. It sits inside the flat cache markers, so a chunk still
+    reads its flat cache first. The values are unchanged (tools/wf/dfeval.py treats it as a plain pass-through)."""
+    if not isinstance(fn, dict) or fn.get("type") != "minecraft:flat_cache":
+        return fn
+    inner = fn["argument"]
+    if isinstance(inner, dict) and inner.get("type") == "minecraft:cache_2d":
+        return unary("flat_cache", unary("cache_2d", {"type": SHARED, "argument": inner["argument"]}))
+    return unary("flat_cache", {"type": SHARED, "argument": inner})
 
 
 def noise_router():

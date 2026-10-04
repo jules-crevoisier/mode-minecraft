@@ -36,6 +36,8 @@ public final class WorldMapCommand {
     private static final int STEP = 15;
     private static final int SLICE_W = 512;
     private static final int SLICE_STEP = 4;
+    /** Past this the map stops where it is (the rest stays black) and says so (tools/ci_smoke.py waits longer). */
+    static final long BUDGET_MS = 10 * 60_000L;
 
     private WorldMapCommand() {}
 
@@ -54,7 +56,8 @@ public final class WorldMapCommand {
         int half = SIZE / 2;
         int minH = Integer.MAX_VALUE;
         int maxH = Integer.MIN_VALUE;
-        for (int px = 0; px < SIZE; px++) {
+        int rows = 0;
+        for (int px = 0; px < SIZE && System.currentTimeMillis() - t < BUDGET_MS; px++, rows++) {
             for (int pz = 0; pz < SIZE; pz++) {
                 int x = (px - half) * STEP;
                 int z = (pz - half) * STEP;
@@ -106,7 +109,7 @@ public final class WorldMapCommand {
             ImageIO.write(slice, "png", dir.resolve("wayfarers-worldmap-slice.png").toFile());
             try (PrintWriter out = new PrintWriter(Files.newBufferedWriter(dir.resolve("wayfarers-worldmap.txt")))) {
                 out.printf("area %d x %d blocks around 0,0 (1 px = %d blocks); height %d..%d%n", SIZE * STEP, SIZE * STEP, STEP, minH, maxH);
-                int total = SIZE * SIZE;
+                int total = Math.max(1, rows) * SIZE;
                 for (Map.Entry<String, int[]> e : legend.entrySet()) {
                     out.printf("#%06x %-36s %5.1f%%%n", e.getValue()[0], e.getKey(), 100.0 * e.getValue()[1] / total);
                 }
@@ -118,7 +121,9 @@ public final class WorldMapCommand {
         long ms = System.currentTimeMillis() - t;
         int lo = minH;
         int hi = maxH;
-        src.sendSuccess(() -> Component.literal("World map written to " + dir + " in " + ms + " ms (height " + lo + ".." + hi + ")"), false);
+        String partial = rows < SIZE ? String.format(java.util.Locale.ROOT, " (partial: %d of %d columns, time budget used up)", rows, SIZE) : "";
+        src.sendSuccess(() -> Component.literal("World map written to " + dir + " in " + ms + " ms (height " + lo + ".." + hi + ")"
+                + partial), false);
         return 1;
     }
 

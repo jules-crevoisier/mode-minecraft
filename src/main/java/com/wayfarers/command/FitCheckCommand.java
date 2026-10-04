@@ -56,10 +56,21 @@ import java.util.Optional;
  * Each one is drawn in place as an isometric diorama (wayfarers-fit-&lt;id&gt;.png, {@link IsoRenderer}); the report
  * wayfarers-fit.txt gives one line per structure with OK / MISFIT / NOT_FOUND / SKIPPED. CI (tools/ci_smoke.py
  * --fit) fails on a MISFIT, so every change of the terrain generator is checked against every structure.
+ *
+ * <p>{@code /wayfarers fitcheck shard <i> <n>} checks every n-th structure from the i-th (CI runs two shards on two
+ * machines) and writes wayfarers-fit-shard&lt;i&gt;.txt. The whole command keeps to {@link #BUDGET_MS} and each
+ * structure's locate to {@link #LOCATE_BUDGET_MS} (it searches in growing rings and gives up between two rings): what
+ * is left is reported as SKIPPED with the reason, never as a pass. tools/ci_smoke.py waits {@code BUDGET_MS} plus
+ * one structure's worth, so the server always answers before the script gives up.
  */
 public final class FitCheckCommand {
     private static final int LOCATE_RADIUS = 64;
-    private static final long BUDGET_MS = 20 * 60_000L;
+    /** Locate rings, in grid cells: the search grows ring by ring and checks the time between two of them. */
+    private static final int[] LOCATE_STEPS = {4, 8, 12, 16, 24, 32, 40, 48, 56, 64};
+    /** Whole command (keep in step with FIT_BUDGET in tools/ci_smoke.py). */
+    static final long BUDGET_MS = 22 * 60_000L;
+    /** One structure's locate. */
+    static final long LOCATE_BUDGET_MS = 5 * 60_000L;
     private static final int MARGIN = 12;
     private static final int MAX_SIDE = 176;
     private static final int MAX_HEIGHT = 224;
@@ -110,21 +121,37 @@ public final class FitCheckCommand {
     }
 
     static int run(CommandContext<CommandSourceStack> ctx, String only) {
+        return run(ctx, only, 0, 1);
+    }
+
+    static int run(CommandContext<CommandSourceStack> ctx, String only, int shard, int shards) {
         CommandSourceStack src = ctx.getSource();
+        if (shards < 1 || shard < 0 || shard >= shards) {
+            src.sendFailure(Component.literal("Fit check failed: shard " + shard + " of " + shards));
+            return 0;
+        }
+        String report = shards > 1 ? "wayfarers-fit-shard" + shard + ".txt" : "wayfarers-fit.txt";
         ServerLevel level = src.getServer().overworld();
         Path dir = src.getServer().getServerDirectory();
         long start = System.currentTimeMillis();
         var registry = level.registryAccess().lookupOrThrow(Registries.STRUCTURE);
         List<String> lines = new ArrayList<>();
-        lines.add(String.format(Locale.ROOT, "structure fit: nearest of each to 0,0 (locate radius %d cells); misfit = float > %d%%, "
+        lines.add(String.format(Locale.ROOT, "structure fit%s: nearest of each to 0,0 (locate radius %d cells); misfit = float > %d%%, "
                         + "buried > %d%%, water > allowed, sky hits > %d%% of columns",
+                shards > 1 ? " (shard " + (shard + 1) + " of " + shards + ")" : "",
                 LOCATE_RADIUS, Math.round(MAX_FLOAT * 100), Math.round(MAX_BURIED * 100), Math.round(MAX_SKY_HIT * 100)));
         int checked = 0;
         int misfits = 0;
         int missing = 0;
+        int skipped = 0;
+        int index = -1;
         for (GeneratedContent.StructureInfo info : GeneratedContent.STRUCTURES) {
             String id = info.id();
             if (!info.dimension().equals("overworld") || only != null && !id.equals(only)) {
+                continue;
+            }
+            index++;
+            if (index % shards != shard) {
                 continue;
             }
             Optional<Holder.Reference<Structure>> holder = registry.get(ResourceKey.create(Registries.STRUCTURE, Wayfarers.id(id)));
@@ -138,13 +165,15 @@ public final class FitCheckCommand {
                 continue;
             }
             if (System.currentTimeMillis() - start > BUDGET_MS) {
-                lines.add(String.format(Locale.ROOT, "%-22s %-11s SKIPPED   time budget used up", id, mode));
+                lines.add(String.format(Locale.ROOT, "%-22s %-11s SKIPPED   time budget used up (%d s)", id, mode, BUDGET_MS / 1000));
+                skipped++;
                 continue;
             }
             long t = System.currentTimeMillis();
+            long deadline = Math.min(t + LOCATE_BUDGET_MS, start + BUDGET_MS + LOCATE_BUDGET_MS / 2);
             String line;
             try {
-                line = check(level, dir, id, holder.get(), fitted);
+                line = check(level, dir, id, holder.get(), fitted, deadline);
             } catch (RuntimeException e) {
                 line = String.format(Locale.ROOT, "%-22s %-11s ERROR     %s", id, mode, e);
                 Wayfarers.LOGGER.warn("fit check of {} failed", id, e);
@@ -152,27 +181,31 @@ public final class FitCheckCommand {
             line += String.format(Locale.ROOT, "  %d ms  [%s]", System.currentTimeMillis() - t, SiteFit.stats(fitted.name()));
             lines.add(line);
             Wayfarers.LOGGER.info("fit check: {}", line);
-            checked++;
+            if (line.contains(" SKIPPED ")) {
+                skipped++;
+            } else {
+                checked++;
+            }
             misfits += line.contains(" MISFIT ") ? 1 : 0;
             missing += line.contains(" NOT_FOUND ") ? 1 : 0;
-            writeReport(dir, lines);
+            writeReport(dir, report, lines);
             // let the chunk map unload the areas already measured (the server does not tick while this runs)
             long until = System.currentTimeMillis() + 300;
             level.getChunkSource().tick(() -> System.currentTimeMillis() < until, false);
         }
-        if (!writeReport(dir, lines)) {
-            src.sendFailure(Component.literal("Fit check failed: could not write wayfarers-fit.txt in " + dir));
+        if (!writeReport(dir, report, lines)) {
+            src.sendFailure(Component.literal("Fit check failed: could not write " + report + " in " + dir));
             return 0;
         }
         long secs = (System.currentTimeMillis() - start) / 1000;
-        String summary = String.format(Locale.ROOT, "Fit check written: %d structures, %d misfits, %d not found in %d s",
-                checked, misfits, missing, secs);
+        String summary = String.format(Locale.ROOT, "Fit check written: %d structures, %d misfits, %d not found, %d skipped in %d s (%s)",
+                checked, misfits, missing, skipped, secs, report);
         src.sendSuccess(() -> Component.literal(summary), false);
         return checked > 0 ? 1 : 0;
     }
 
-    private static boolean writeReport(Path dir, List<String> lines) {
-        try (PrintWriter out = new PrintWriter(Files.newBufferedWriter(dir.resolve("wayfarers-fit.txt")))) {
+    private static boolean writeReport(Path dir, String name, List<String> lines) {
+        try (PrintWriter out = new PrintWriter(Files.newBufferedWriter(dir.resolve(name)))) {
             lines.forEach(out::println);
             return true;
         } catch (IOException e) {
@@ -180,11 +213,26 @@ public final class FitCheckCommand {
         }
     }
 
-    private static String check(ServerLevel level, Path dir, String id, Holder<Structure> holder, FittedJigsawStructure fitted) {
+    private static String check(ServerLevel level, Path dir, String id, Holder<Structure> holder, FittedJigsawStructure fitted,
+                                long deadline) {
         FittedJigsawStructure.Fit fit = fitted.fit();
         String mode = fit.mode();
-        Pair<BlockPos, Holder<Structure>> found = level.getChunkSource().getGenerator()
-                .findNearestMapStructure(level, HolderSet.direct(holder), BlockPos.ZERO, LOCATE_RADIUS, false);
+        Pair<BlockPos, Holder<Structure>> found = null;
+        int searched = 0;
+        long t = System.currentTimeMillis();
+        for (int radius : LOCATE_STEPS) {
+            if (System.currentTimeMillis() > deadline) {
+                return String.format(Locale.ROOT, "%-22s %-11s SKIPPED   locate gave up after %d s (searched rings up to %d of %d grid cells)",
+                        id, mode, (System.currentTimeMillis() - t) / 1000, searched, LOCATE_RADIUS);
+            }
+            // the rings already searched cost nothing the second time (the structure check keeps its answers)
+            found = level.getChunkSource().getGenerator()
+                    .findNearestMapStructure(level, HolderSet.direct(holder), BlockPos.ZERO, radius, false);
+            searched = radius;
+            if (found != null) {
+                break;
+            }
+        }
         if (found == null) {
             return String.format(Locale.ROOT, "%-22s %-11s NOT_FOUND within %d grid cells", id, mode, LOCATE_RADIUS);
         }
