@@ -27,8 +27,10 @@ import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.TargetGoal;
 import net.minecraft.world.entity.animal.golem.AbstractGolem;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.Enemy;
@@ -65,6 +67,8 @@ public class BrassGolem extends AbstractGolem implements AnimatedMob {
     public static final float HEIGHT = 2.3F;
     private static final int PUNCH_IMPACT = 8;    // 0.4 s, matches brass_golem.py
     private static final int SLAM_IMPACT = 12;    // 0.6 s
+    /** Never strays further than this from its owner (or guarded spot) to chase a foe. */
+    private static final double LEASH = 24.0;
 
     private final AnimationState[] actionStates = AnimatedMob.createStates();
     private @Nullable UUID owner;
@@ -101,7 +105,7 @@ public class BrassGolem extends AbstractGolem implements AnimatedMob {
         targetSelector.addGoal(1, new DefendOwnerGoal(this));
         targetSelector.addGoal(2, new HurtByTargetGoal(this));
         targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Mob.class, 5, false, false,
-                (target, level) -> target instanceof Enemy && !(target instanceof Creeper)));
+                (target, level) -> target instanceof Enemy && !(target instanceof Creeper) && nearAnchor(target, LEASH - 8.0)));
     }
 
     // ------------------------------------------------------------------ owner, modes, saving
@@ -120,6 +124,30 @@ public class BrassGolem extends AbstractGolem implements AnimatedMob {
     /** The player who built it, when online in this dimension. */
     public @Nullable Player getOwner() {
         return owner == null ? null : level().getPlayerByUUID(owner);
+    }
+
+    /** Where it belongs: the guarded spot, or its owner (alive, in this dimension); null when neither. */
+    private @Nullable Vec3 anchor() {
+        if (guarding) {
+            return guardPos == null ? null : Vec3.atBottomCenterOf(guardPos);
+        }
+        Player o = getOwner();
+        return o != null && o.isAlive() && !o.isSpectator() ? o.position() : null;
+    }
+
+    private boolean nearAnchor(LivingEntity e, double radius) {
+        Vec3 a = anchor();
+        return a == null || e.position().distanceToSqr(a) <= radius * radius;
+    }
+
+    /** Gives up the current foe (also ends the target goals, which would otherwise pick it up again). */
+    private void dropTarget() {
+        for (WrappedGoal goal : targetSelector.getAvailableGoals()) {
+            if (goal.isRunning()) {
+                goal.stop();
+            }
+        }
+        setTarget(null);
     }
 
     @Override
@@ -171,6 +199,9 @@ public class BrassGolem extends AbstractGolem implements AnimatedMob {
             return InteractionResult.SUCCESS;
         }
         if (stack.isEmpty() && player.isSecondaryUseActive()) {
+            if (owner != null && !owner.equals(player.getUUID())) {
+                return InteractionResult.PASS; // only its builder gives it orders
+            }
             if (!level().isClientSide()) {
                 if (owner == null) {
                     owner = player.getUUID();
@@ -280,6 +311,11 @@ public class BrassGolem extends AbstractGolem implements AnimatedMob {
         if (whistle > 0 && --whistle == 0) {
             level.playSound(null, this, SoundEvents.NOTE_BLOCK_FLUTE.value(), SoundSource.NEUTRAL, 0.9F, 1.6F);
             level.sendParticles(ParticleTypes.CLOUD, getX(), getY() + 2.6, getZ(), 6, 0.1, 0.2, 0.1, 0.03);
+        }
+        // never chase a foe far from its owner or post: it would be left behind (or lured away) for good
+        LivingEntity target = getTarget();
+        if (target != null && tickCount % 10 == 0 && (!nearAnchor(this, LEASH) || !nearAnchor(target, LEASH))) {
+            dropTarget();
         }
         if (tickCount % 20 == 0 && getHealth() < getMaxHealth() * 0.3F) {
             level.sendParticles(ParticleTypes.LARGE_SMOKE, getX(), getY() + 1.6, getZ(), 2, 0.3, 0.3, 0.3, 0.01);
@@ -430,23 +466,15 @@ public class BrassGolem extends AbstractGolem implements AnimatedMob {
             setFlags(EnumSet.of(Flag.MOVE));
         }
 
-        private @Nullable Vec3 anchor() {
-            if (g.guarding) {
-                return g.guardPos == null ? null : Vec3.atBottomCenterOf(g.guardPos);
-            }
-            LivingEntity o = g.getOwner();
-            return o != null && o.isAlive() && !o.isSpectator() ? o.position() : null;
-        }
-
         @Override
         public boolean canUse() {
-            Vec3 a = anchor();
+            Vec3 a = g.anchor();
             return a != null && g.getTarget() == null && g.position().distanceTo(a) > (g.guarding ? 6.0 : 9.0);
         }
 
         @Override
         public boolean canContinueToUse() {
-            Vec3 a = anchor();
+            Vec3 a = g.anchor();
             return a != null && g.getTarget() == null && g.position().distanceTo(a) > 3.5;
         }
 
@@ -457,12 +485,12 @@ public class BrassGolem extends AbstractGolem implements AnimatedMob {
 
         @Override
         public void tick() {
-            Vec3 a = anchor();
+            Vec3 a = g.anchor();
             if (a == null) {
                 return;
             }
             double d = g.position().distanceTo(a);
-            if (!g.guarding && d > 28.0) {
+            if (!g.guarding && d > 28.0 && g.tickCount % 10 == 0) {
                 for (int i = 0; i < 10; i++) {
                     double ang = g.random.nextDouble() * Math.PI * 2;
                     double r = 2.0 + g.random.nextDouble() * 2.0;
@@ -472,7 +500,7 @@ public class BrassGolem extends AbstractGolem implements AnimatedMob {
                         return;
                     }
                 }
-                return;
+                // no room near the owner (a narrow tunnel, open water): keep walking after them
             }
             if (g.tickCount % 10 == 0) {
                 g.getNavigation().moveTo(a.x, a.y, a.z, d > 14.0 ? 1.2 : 0.9);
@@ -480,20 +508,25 @@ public class BrassGolem extends AbstractGolem implements AnimatedMob {
         }
     }
 
-    /** Strike whoever hurts the owner, or whoever the owner strikes (never a player or a pet). */
-    static final class DefendOwnerGoal extends Goal {
+    /**
+     * Strike whoever hurts the owner, or whoever the owner strikes (never a player or a pet). A target goal, so the
+     * usual checks drop the foe once it is out of range or can no longer be attacked.
+     */
+    static final class DefendOwnerGoal extends TargetGoal {
         private final BrassGolem g;
+        private @Nullable LivingEntity pending;
         private int lastHurtBy;
         private int lastHurt;
 
         DefendOwnerGoal(BrassGolem g) {
+            super(g, false);
             this.g = g;
             setFlags(EnumSet.of(Flag.TARGET));
         }
 
         private @Nullable LivingEntity candidate() {
             Player o = g.getOwner();
-            if (o == null || g.distanceToSqr(o) > 24 * 24) {
+            if (o == null || g.distanceToSqr(o) > LEASH * LEASH) {
                 return null;
             }
             LivingEntity by = o.getLastHurtByMob();
@@ -512,16 +545,16 @@ public class BrassGolem extends AbstractGolem implements AnimatedMob {
         @Override
         public boolean canUse() {
             LivingEntity c = candidate();
-            if (c != null && c.isAlive()) {
-                g.setTarget(c);
-                return true;
-            }
-            return false;
+            pending = c != null && c.isAlive() ? c : null;
+            return pending != null;
         }
 
         @Override
-        public boolean canContinueToUse() {
-            return false;
+        public void start() {
+            g.setTarget(pending);
+            targetMob = pending;
+            pending = null;
+            super.start();
         }
     }
 }

@@ -952,6 +952,7 @@
   "message.wayfarers.brass_golem.follow": "Golem de laiton : il te suit.",
   "message.wayfarers.brass_golem.guard": "Golem de laiton : il garde cet endroit.",
   "message.wayfarers.brass_golem.need": "Un golem de laiton demande deux blocs de laiton empilés l'un sur l'autre.",
+  "message.wayfarers.brass_golem.room": "Pas assez de place pour un golem de laiton : il lui faut un peu d'espace autour et au-dessus des deux blocs.",
   "message.wayfarers.chisel.none": "Le burin ne sait pas tailler : %s",
   "message.wayfarers.chisel.variant": "%s (%s/%s)",
   "message.wayfarers.compass.any": "n'importe quelle structure",

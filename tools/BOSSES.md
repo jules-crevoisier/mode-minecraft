@@ -174,7 +174,7 @@ moustache and a glowing monocle under a top hat, two wings of spinning cogs, and
 |---|---|---|---|---|
 | sweep | 1-2 | 18 / 3 / 13 | 0-6.5 | Pendulum swing over 220°, 15 damage. P2: 35% chains into slam. |
 | slam | 1-2 | 20 / 3 / 13 | 0-7 | Cane slam 3.5 ahead (18) + a spark ring to jump (8). P2: second ring, 40% chains into gears. |
-| gears | 1-2 | 12 / 4 / 10 | 4-24 | Fan of 3 (P2: 5) brass cogs, 7 damage each (`RivetEntity`). |
+| gears | 1-2 | 12 / 4 / 10 | 4-24 | Fan of 3 (P2: 5) brass cogs, 7 damage each (`HotRivetEntity`). |
 | summon | 1-2 | 16 / 2 / 14 | any | 2 (P2: 3) Clockwork Spiders, never more than 4 alive; they wind down when he dies. |
 | timestop | 1-2 | 24 / 4 / 12 | 0-14 | Hands rewind, a 9-block ring closes; whoever is inside at the chime: Slowness IV + Mining Fatigue III, 2 s. |
 | blink | 2 | 10 / 2 / 6 | 6-26 | "Time skip": teleports 2.5 blocks behind the target, then chains a sweep. |
