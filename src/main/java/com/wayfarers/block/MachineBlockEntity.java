@@ -131,6 +131,7 @@ public class MachineBlockEntity extends BaseContainerBlockEntity {
     private int countdown = -1;
     private int pulseLeft;
     private int quiet;
+    private boolean timerAllowed = true;
     private boolean lastInput;
     private boolean outputFull;
     private long lastWork = -1000;
@@ -596,28 +597,32 @@ public class MachineBlockEntity extends BaseContainerBlockEntity {
     }
 
     private void timerTick(ServerLevel level, BlockState state) {
-        if (state.getValue(MachineBlock.POWERED)) {
-            if (--pulseLeft <= 0) {
-                setPowered(level, state, false);
-                quiet = 2;
-            }
-            return;
+        boolean on = state.getValue(MachineBlock.POWERED);
+        if (on && --pulseLeft <= 0) {
+            setPowered(level, state, false);
+            state = getBlockState();
+            on = false;
+            quiet = 2;
         }
         if (quiet > 0) {
-            // let our own pulse fade out of the wires before reading the redstone input again
+            // our own pulse is still fading out of the wires around: keep the last reading of the input
             quiet--;
-            return;
+        } else if (!on) {
+            timerAllowed = redstoneAllows(level);
         }
-        if (!redstoneAllows(level)) {
+        if (!timerAllowed) {
             return; // paused: the countdown waits where it is
         }
         if (countdown < 0 || countdown > intervalTicks(interval)) {
             countdown = intervalTicks(interval);
         }
         if (--countdown <= 0) {
+            // exactly one pulse per interval: the countdown keeps running while a pulse is on
             countdown = intervalTicks(interval);
-            pulseLeft = pulseTicks(pulse, interval);
-            setPowered(level, state, true);
+            if (!on) {
+                pulseLeft = pulseTicks(pulse, interval);
+                setPowered(level, state, true);
+            }
         }
     }
 
@@ -693,7 +698,7 @@ public class MachineBlockEntity extends BaseContainerBlockEntity {
             case TIMER -> {
                 if (state.getValue(MachineBlock.POWERED)) {
                     status = Status.PULSE;
-                } else if (quiet == 0 && !redstoneAllows(level)) {
+                } else if (!timerAllowed) {
                     status = gatedStatus();
                 } else {
                     status = Status.COUNTDOWN;
