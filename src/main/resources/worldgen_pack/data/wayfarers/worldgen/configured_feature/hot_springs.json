@@ -1,0 +1,25 @@
+{
+ "type": "minecraft:template",
+ "config": {
+  "templates": [
+   {
+    "data": {
+     "id": "wayfarers:worldobjects/hot_spring_0"
+    },
+    "weight": 1
+   },
+   {
+    "data": {
+     "id": "wayfarers:worldobjects/hot_spring_1"
+    },
+    "weight": 1
+   },
+   {
+    "data": {
+     "id": "wayfarers:worldobjects/hot_spring_2"
+    },
+    "weight": 1
+   }
+  ]
+ }
+}

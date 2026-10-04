@@ -74,7 +74,7 @@ COMMANDS = {
 }
 
 CONFIG_FR = {
-    "world.overhaul": "Les nouveaux mondes utilisent le relief, les grottes et les 41 biomes de Wayfarers.",
+    "world.overhaul": "Les nouveaux mondes utilisent le relief, les grottes et les 52 biomes de Wayfarers.",
     "danger.enabled": "Les monstres deviennent plus forts en s'éloignant du spawn, et dans le Nether et l'End.",
     "danger.blocksPerLevel": "Nombre de blocs depuis le spawn pour gagner un niveau de danger.",
     "danger.maxLevel": "Niveau de danger maximal.",
@@ -637,7 +637,7 @@ BIOMES = {
     "shattered_glacier": "Glace bleue brisée en flèches et en blocs.",
     "frostpine_forest": "Forêt de pins givrés et de buissons à baies.",
     "snowcap_slopes": "Pentes de neige poudreuse sous les sommets.",
-    "majestic_peaks": "Les plus hauts sommets du monde, jusque vers y 300, coiffés de glace.",
+    "majestic_peaks": "Les plus hauts sommets du monde, jusque vers y 320, coiffés de glace.",
     "stone_spires": "Aiguilles de pierre nue veinées de calcite.",
     "verdant_meadows": "Prairies douces, fleurs et chênes solitaires : un bon endroit pour s'installer.",
     "wildflower_fields": "Champs de fleurs sauvages et arbres à abeilles.",
@@ -664,6 +664,17 @@ BIOMES = {
     "thermal_caves": "Grottes chaudes de magma et de colonnes de basalte.",
     "fungal_grotto": "Grotte de mycélium et de champignons géants lumineux.",
     "mithril_hollows": "Creux d'ardoise des abîmes veinés de mithril, le meilleur endroit pour en miner.",
+    "crimson_mire": "Marais corrompu sous un brouillard pâle : cornes de pierre noire recourbées, champignons rouges géants aux chapeaux plats, roseaux et sol pourpre.",
+    "volcanic_highlands": "Montagnes de terre cuite brune en gradins, herbe rase et arbres d'automne ; des coulées de lave descendent les pentes.",
+    "ashen_wastes": "Plateaux gris stratifiés sous un ciel sépia, cendre blanche, arches naturelles, éclats de cristal d'éther et mares de lave.",
+    "alpine_peaks": "Pics aiguisés striés de roche et de mousse, forêt d'épicéas verts et dorés, rochers moussus.",
+    "pale_dunes": "Dunes de sable blanc ridées par le vent, cheminées de fée en terre cuite rayée.",
+    "geyser_basin": "Bassins de sources chaudes en terrasses aux rebords jaunes et orange, croûtes de travertin et vapeur.",
+    "starlight_grove": "Bosquet lavande de bouleaux et de bois-lueur, cristaux d'éther et poussière d'étoiles.",
+    "aetherblight_grove": "Bois sombre corrompu par l'éther : brume violette, feuillage pourpre, cristaux et obsidienne pleureuse.",
+    "emberleaf_taiga": "Taïga d'automne : épicéas verts et orangés, troncs tombés, rochers moussus.",
+    "rimefrost_fjords": "Bras de mer étroits entre de hautes falaises d'ardoise bleue enneigées.",
+    "tidebrass_archipelago": "Mer tiède turquoise semée de petites îles herbeuses bordées de sable.",
 }
 
 DECOR = {
@@ -692,6 +703,15 @@ DECOR = {
     "shadow_oaks": "chênes sombres", "snowy_spruces_sparse": "épicéas enneigés", "steam_vents": "évents de vapeur",
     "surface_crystals": "cristaux", "tall_birches": "grands bouleaux", "tall_grass": "hautes herbes",
     "warm_ocean_vegetation": "coraux", "wildflowers": "fleurs sauvages", "windswept_spruces": "épicéas tordus",
+    "thorn_spikes": "cornes de pierre noire", "stone_arches": "arches de pierre", "crystal_shards": "éclats de cristal",
+    "hoodoos": "cheminées de fée", "hoodoos_sparse": "cheminées de fée", "hot_springs": "sources chaudes en terrasses",
+    "flat_mushrooms": "champignons géants", "ash_columns": "colonnes de cendre", "lava_streams": "coulées de lave",
+    "lava_pools": "mares de lave", "mossy_boulders_many": "rochers moussus", "marble_boulders": "rochers de marbre",
+    "slate_boulders": "rochers d'ardoise", "rust_boulders": "rochers rouillés", "basalt_boulders": "rochers de pierre noire",
+    "fallen_spruce_logs": "troncs tombés", "fallen_oak_logs": "troncs tombés", "fallen_glowwood_logs": "troncs de bois-lueur",
+    "fallen_rustwood_logs": "troncs de bois rouillé", "autumn_spruces": "épicéas d'automne", "tall_spruces": "grands épicéas",
+    "autumn_oaks": "chênes d'automne", "sparse_autumn_oaks": "chênes d'automne", "crimson_reeds": "roseaux",
+    "ripple_grass": "herbes sèches",
 }
 
 BIOME_GROUPS = [

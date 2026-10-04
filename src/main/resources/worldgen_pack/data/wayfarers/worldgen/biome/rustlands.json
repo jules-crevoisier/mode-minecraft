@@ -32,7 +32,8 @@
    "minecraft:lake_lava_surface"
   ],
   [
-   "minecraft:amethyst_geode"
+   "minecraft:amethyst_geode",
+   "wayfarers:rust_boulders"
   ],
   [
    "minecraft:monster_room",

@@ -1,0 +1,38 @@
+{
+ "type": "minecraft:spring_feature",
+ "config": {
+  "state": {
+   "Name": "minecraft:lava",
+   "Properties": {
+    "falling": "false"
+   }
+  },
+  "requires_block_below": true,
+  "rock_count": 3,
+  "hole_count": 1,
+  "valid_blocks": [
+   "minecraft:stone",
+   "minecraft:granite",
+   "minecraft:andesite",
+   "minecraft:tuff",
+   "minecraft:deepslate",
+   "minecraft:blackstone",
+   "minecraft:basalt",
+   "minecraft:coarse_dirt",
+   "minecraft:dirt",
+   "minecraft:grass_block",
+   "minecraft:terracotta",
+   "minecraft:brown_terracotta",
+   "minecraft:orange_terracotta",
+   "minecraft:red_terracotta",
+   "minecraft:yellow_terracotta",
+   "minecraft:light_gray_terracotta",
+   "minecraft:gray_terracotta",
+   "minecraft:magma_block",
+   "minecraft:smooth_basalt",
+   "minecraft:calcite",
+   "minecraft:red_sand",
+   "wayfarers:rust_rock"
+  ]
+ }
+}

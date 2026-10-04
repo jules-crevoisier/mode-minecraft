@@ -31,7 +31,9 @@
    "minecraft:lake_lava_surface"
   ],
   [
-   "minecraft:amethyst_geode"
+   "minecraft:amethyst_geode",
+   "minecraft:forest_rock",
+   "wayfarers:tuff_boulders"
   ],
   [
    "minecraft:monster_room",
@@ -81,7 +83,8 @@
    "minecraft:trees_birch_and_oak_leaf_litter",
    "minecraft:patch_grass_forest",
    "minecraft:patch_leaf_litter",
-   "minecraft:fallen_oak_tree"
+   "minecraft:fallen_oak_tree",
+   "wayfarers:fallen_oak_logs"
   ],
   [
    "minecraft:freeze_top_layer"

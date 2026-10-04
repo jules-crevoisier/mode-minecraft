@@ -9,7 +9,7 @@
 - **10 créatures** et **20 boss façon Elden Ring** (16 grands boss et 4 champions de donjon), tous avec un vrai modèle 3D animé ;
 - **15 blocs de construction exclusifs** (briques de la Guilde, tuiles de toit, lampes runiques, briques de braise, briques du vide…), utilisés dans les structures et fabricables ;
 - **une vraie difficulté** : plus on s'éloigne du spawn, plus les monstres sont forts, avec des monstres d'élite et des lunes de sang ;
-- **un nouveau monde** (désactivable) : relief plus haut et plus déchiqueté, méga-cavernes et **41 biomes** propres au mod ;
+- **un nouveau monde** (désactivable) : relief spectaculaire (chaînes de montagnes jusque vers y 320, falaises, canyons, mesas, fjords, archipels, îles célestes), méga-cavernes, rivières souterraines et **52 biomes** propres au mod ;
 - **un univers steampunk** : laiton, zinc, mithril, éther, 13 blocs de déco, 9 meubles en 3D, 9 machines simples et la **Citadelle d'horlogerie** ;
 - **des talents RPG et de la magie simple** : arbre de 36 talents (touche **K**), capacité active (touche **V**), mana et 7 bâtons de sort ;
 - **une carte du monde et une mini-carte** (touche **M**) partagées sur un serveur, avec repères, signaux et pierres de voyage ;
@@ -99,12 +99,19 @@ Méduses lumineuses (4 couleurs, piquent un peu, gelée → lampe ou vision noct
 
 ### Nouveau monde (option `world.overhaul`)
 Le pack intégré **wayfarers:world_overhaul** remplace l'Overworld des **nouveaux** mondes :
-- montagnes ~65 % plus hautes, pics jusque vers y 300 ;
-- méga-cavernes entre y -40 et 10 ;
-- **41 biomes** : forêt enchantée, sylve géante, vallée des cerisiers, toundra aurorale, glacier brisé, pics majestueux, terres rouillées, vallée des engrenages, canyon peint, mer de dunes, marais luminescent, cavernes de cristal, jungle souterraine, grottes thermales, abîme…
+- un monde de 448 blocs de haut (y -64 à 383) et des continents 1,6 fois plus grands ;
+- de vraies chaînes de montagnes aux crêtes aiguës (sommets vers y 280-320), des plaines vallonnées, un escarpement qui monte vers des plateaux entaillés de canyons au fond desquels coulent les rivières ;
+- des mesas en gradins et des cheminées de fée dans les terres chaudes, des aiguilles de pierre, des fjords sur les côtes gelées, des archipels dans les mers chaudes et de rares îles célestes (y 170-260) au-dessus des forêts ;
+- méga-cavernes entre y -40 et 10 et rivières souterraines (galeries inondées vers y 6-24) ;
+- des sous-biomes qui alternent dans un même climat, des brouillards et couleurs propres à chaque biome, et des objets naturels : cornes de pierre noire, arches, éclats de cristal d'éther, sources chaudes en terrasses, champignons géants, coulées de lave, rochers et troncs tombés ;
+- **52 biomes** : marais pourpre, hautes terres volcaniques, désolation cendrée, pics alpins, dunes pâles, bassin des geysers, bosquet astral, bosquet de l'éther corrompu, taïga aux feuilles de braise, fjords de givre, archipel d'airain, forêt enchantée, sylve géante, vallée des cerisiers, toundra aurorale, glacier brisé, pics majestueux, terres rouillées, vallée des engrenages, canyon peint, mer de dunes, marais luminescent, cavernes de cristal, jungle souterraine, grottes thermales, abîme…
 - **ses propres bois et pierres** : le **bois-lueur** (troncs pâles, feuilles turquoise qui luisent la nuit ; forêt enchantée, bois de cristal) et le **bois rouillé** (écorce rouge sombre, feuilles rouille ; terres rouillées, vallée des engrenages, savane cendrée), chacun avec bûches, planches, escaliers, dalles, barrières, portillons, portes, trappes, boutons, plaques de pression, feuilles et pousses ; le **marbre** en strates dans les falaises des montagnes, la **roche rouillée** des terres rouillées et l'**ardoise bleue** de la mer d'ardoise et des hautes terres de pins, avec leurs formes polies, briques, pilier, carreaux, escaliers, dalles et murets. Tous se fabriquent aussi dans un monde vanilla (voir le manuel, pages « Bois du nouveau monde » et « Pierres du nouveau monde »).
 
 Villages, forteresses et structures du mod y apparaissent comme avant.
+
+Aperçu hors jeu du relief et des biomes : `python3 tools/world_preview.py` (numpy, cartes et coupes dans `build/world_preview/`).
+
+Crédits : certaines techniques de relief (splines de falaises, aiguilles, îles célestes) s'inspirent de [Terralith](https://github.com/Stardust-Labs-MC/Terralith) de Stardust Labs (licence MIT) ; l'ambiance des biomes s'inspire de Dregora.
 
 Pour garder le monde vanilla : mettre `world.overhaul = false` dans `config/wayfarers-common.toml`, ou décocher le pack dans l'écran « Packs de données » à la création du monde. Comme Terralith, Minecraft affiche un avertissement « expérimental » à la création du monde : c'est normal.
 

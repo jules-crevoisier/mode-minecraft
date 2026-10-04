@@ -22,21 +22,24 @@
   "argument2": {
    "type": "minecraft:flat_cache",
    "argument": {
-    "type": "minecraft:clamp",
-    "input": {
-     "type": "minecraft:mul",
-     "argument1": {
-      "type": "minecraft:noise",
-      "noise": "wayfarers:mega_caverns",
-      "xz_scale": 1.0,
-      "y_scale": 0.0
+    "type": "minecraft:cache_2d",
+    "argument": {
+     "type": "minecraft:clamp",
+     "input": {
+      "type": "minecraft:mul",
+      "argument1": {
+       "type": "minecraft:noise",
+       "noise": "wayfarers:mega_caverns",
+       "xz_scale": 1.0,
+       "y_scale": 0.0
+      },
+      "argument2": 1.7
      },
-     "argument2": 1.6
-    },
-    "min": 0.0,
-    "max": 1.0
+     "min": 0.0,
+     "max": 1.0
+    }
    }
   }
  },
- "argument2": -0.26
+ "argument2": -0.3
 }

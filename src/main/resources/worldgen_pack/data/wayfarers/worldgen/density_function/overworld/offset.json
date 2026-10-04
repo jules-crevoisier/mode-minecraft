@@ -4,20 +4,8 @@
   "type": "minecraft:cache_2d",
   "argument": {
    "type": "minecraft:add",
-   "argument1": "minecraft:overworld/offset",
-   "argument2": {
-    "type": "minecraft:mul",
-    "argument1": 0.65,
-    "argument2": {
-     "type": "minecraft:max",
-     "argument1": {
-      "type": "minecraft:add",
-      "argument1": "minecraft:overworld/offset",
-      "argument2": 0.50375
-     },
-     "argument2": 0.0
-    }
-   }
+   "argument1": "wayfarers:overworld/terrain",
+   "argument2": -0.50375
   }
  }
 }

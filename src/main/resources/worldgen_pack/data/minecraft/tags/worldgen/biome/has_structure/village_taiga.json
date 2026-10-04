@@ -1,6 +1,7 @@
 {
  "replace": false,
  "values": [
-  "wayfarers:pine_highlands"
+  "wayfarers:pine_highlands",
+  "wayfarers:emberleaf_taiga"
  ]
 }

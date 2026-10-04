@@ -2,7 +2,10 @@
  "replace": false,
  "values": [
   "wayfarers:dune_sea",
+  "wayfarers:pale_dunes",
   "wayfarers:painted_canyon",
-  "wayfarers:cogwork_valley"
+  "wayfarers:ashen_wastes",
+  "wayfarers:cogwork_valley",
+  "wayfarers:volcanic_highlands"
  ]
 }

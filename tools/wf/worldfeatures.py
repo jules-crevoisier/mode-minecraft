@@ -95,6 +95,32 @@ DECOR = {k: _mc(v) for k, v in {
     "marble_strata": ["wayfarers:marble_strata"],
     "rust_rock_veins": ["wayfarers:rust_rock_veins"],
     "blue_slate_veins": ["wayfarers:blue_slate_veins"],
+    # natural objects (structure templates from wf/worldobjects.py) and scenery
+    "thorn_spikes": ["wayfarers:thorn_spikes"],
+    "stone_arches": ["wayfarers:stone_arches"],
+    "crystal_shards": ["wayfarers:crystal_shards"],
+    "hoodoos": ["wayfarers:hoodoos"],
+    "hoodoos_sparse": ["wayfarers:hoodoos_sparse"],
+    "hot_springs": ["wayfarers:hot_springs"],
+    "flat_mushrooms": ["wayfarers:flat_mushrooms"],
+    "ash_columns": ["wayfarers:ash_columns"],
+    "lava_streams": ["wayfarers:lava_streams"],
+    "lava_pools": ["wayfarers:lava_pools"],
+    "mossy_boulders_many": ["forest_rock", "wayfarers:tuff_boulders"],
+    "marble_boulders": ["wayfarers:marble_boulders"],
+    "slate_boulders": ["wayfarers:slate_boulders"],
+    "rust_boulders": ["wayfarers:rust_boulders"],
+    "basalt_boulders": ["wayfarers:basalt_boulders"],
+    "fallen_spruce_logs": ["wayfarers:fallen_spruce_logs"],
+    "fallen_oak_logs": ["wayfarers:fallen_oak_logs"],
+    "fallen_glowwood_logs": ["wayfarers:fallen_glowwood_logs"],
+    "fallen_rustwood_logs": ["wayfarers:fallen_rustwood_logs"],
+    "autumn_spruces": ["wayfarers:autumn_spruces", "trees_taiga"],
+    "tall_spruces": ["wayfarers:giant_spruce_sparse", "trees_old_growth_spruce_taiga"],
+    "autumn_oaks": ["wayfarers:autumn_oaks"],
+    "sparse_autumn_oaks": ["wayfarers:autumn_oaks_sparse"],
+    "crimson_reeds": ["patch_sugar_cane_swamp", "patch_tall_grass_2", "patch_grass_jungle"],
+    "ripple_grass": ["patch_dry_grass_desert"],
 }.items()}
 
 # generation step of features that no vanilla template places (the rest come from the templates)
@@ -109,6 +135,14 @@ EXTRA_STEPS = {
     "wayfarers:glowwood_sparse": 9, "wayfarers:rustwood": 9, "wayfarers:rustwood_sparse": 9,
     "wayfarers:marble_strata": 6, "wayfarers:rust_rock_veins": 6, "wayfarers:blue_slate_veins": 6,
     "wayfarers:surface_crystals": 9, "wayfarers:river_crystals": 9, "wayfarers:steam_vents": 9,
+    "wayfarers:thorn_spikes": 4, "wayfarers:stone_arches": 4, "wayfarers:crystal_shards": 4, "wayfarers:hoodoos": 4,
+    "wayfarers:hoodoos_sparse": 4, "wayfarers:hot_springs": 4, "wayfarers:flat_mushrooms": 4,
+    "wayfarers:ash_columns": 4, "wayfarers:lava_pools": 1, "wayfarers:lava_streams": 8,
+    "wayfarers:tuff_boulders": 2, "wayfarers:marble_boulders": 2, "wayfarers:slate_boulders": 2,
+    "wayfarers:rust_boulders": 2, "wayfarers:basalt_boulders": 2,
+    "wayfarers:fallen_spruce_logs": 9, "wayfarers:fallen_oak_logs": 9, "wayfarers:fallen_glowwood_logs": 9,
+    "wayfarers:fallen_rustwood_logs": 9, "wayfarers:autumn_spruces": 9, "wayfarers:giant_spruce_sparse": 9,
+    "wayfarers:autumn_oaks": 9, "wayfarers:autumn_oaks_sparse": 9,
 }
 
 # mobs: our key -> vanilla template whose spawners we copy
@@ -203,7 +237,11 @@ def attribute_extras(b):
     if music:
         out["minecraft:audio/background_music"] = music
     if b["particles"]:
-        out["minecraft:visual/ambient_particles"] = [{"particle": {"type": b["particles"]}, "probability": 0.004}]
+        out["minecraft:visual/ambient_particles"] = [{"particle": {"type": b["particles"]},
+                                                      "probability": b.get("particle_rate", 0.004)}]
+    if b.get("fog_end"):
+        # thick fog (mires, ash wastes): a plain value overrides the dimension's distance, blended between biomes
+        out["minecraft:visual/fog_end_distance"] = float(b["fog_end"])
     return out
 
 
@@ -340,6 +378,123 @@ OURS = {
     "steam_vents": (_simple(_state("campfire", facing="north", lit=True, signal_fire=False, waterlogged=False)),
                     [{"type": "minecraft:rarity_filter", "chance": 2}] + SURFACE + [ON_AIR, BIOME]),
 }
+
+
+# ------------------------------------------------------------------ natural objects and scenery
+def _objects(kind):
+    """A template feature picking one of the variants of `kind` (wf/worldobjects.py), rotated at random."""
+    from . import worldobjects
+    return {"type": "minecraft:template", "config": {"templates": [
+        {"data": {"id": t}, "weight": 1} for t in worldobjects.template_ids(kind)]}}
+
+
+def _object_placement(count=None, rarity=None, sink=2):
+    head = [{"type": "minecraft:rarity_filter", "chance": rarity}] if rarity else [{"type": "minecraft:count", "count": count}]
+    return head + [{"type": "minecraft:in_square"}, {"type": "minecraft:surface_water_depth_filter", "max_water_depth": 0},
+                   {"type": "minecraft:heightmap", "heightmap": "WORLD_SURFACE_WG"},
+                   {"type": "minecraft:random_offset", "xz_spread": 0, "y_spread": -sink}, BIOME]
+
+
+GROUND = {"type": "minecraft:any_of", "predicates": [
+    {"type": "minecraft:matching_block_tag", "tag": t} for t in
+    ("minecraft:dirt", "minecraft:sand", "minecraft:terracotta", "minecraft:base_stone_overworld", "minecraft:nylium")]
+    + [{"type": "minecraft:matching_blocks", "blocks": ["minecraft:snow_block", "minecraft:gravel", "minecraft:calcite",
+                                                        "minecraft:coarse_dirt", "minecraft:mud", "minecraft:blackstone",
+                                                        "wayfarers:marble", "wayfarers:rust_rock", "wayfarers:blue_slate"]}]}
+
+
+def _boulder(block, count):
+    return ({"type": "minecraft:block_blob", "config": {"state": _state(block), "can_place_on": GROUND}},
+            [{"type": "minecraft:count", "count": count}] + SURFACE + [BIOME])
+
+
+def _fallen(log, sapling, rarity):
+    return ({"type": "minecraft:fallen_tree", "config": {
+        "trunk_provider": {"type": "minecraft:simple_state_provider", "state": _state(log, axis="y")},
+        "log_length": _uniform(5, 9), "stump_decorators": [], "log_decorators": []}},
+        _tree_placement(0, sapling, rarity=rarity))
+
+
+SPRING_ROCK = ["minecraft:" + b for b in (
+    "stone", "granite", "andesite", "tuff", "deepslate", "blackstone", "basalt", "coarse_dirt", "dirt", "grass_block",
+    "terracotta", "brown_terracotta", "orange_terracotta", "red_terracotta", "yellow_terracotta",
+    "light_gray_terracotta", "gray_terracotta", "magma_block", "smooth_basalt", "calcite", "red_sand")] + [
+    "wayfarers:rust_rock"]
+
+
+def _leaves(name):
+    return {"type": "minecraft:simple_state_provider",
+            "state": _state(name, distance=7, persistent=False, waterlogged=False)}
+
+
+def _spruce_like(leaves, base, rand_a, rand_b):
+    return _tree(_provider("spruce_log"),
+                 {"type": "minecraft:straight_trunk_placer", "base_height": base, "height_rand_a": rand_a,
+                  "height_rand_b": rand_b},
+                 _leaves(leaves),
+                 {"type": "minecraft:spruce_foliage_placer", "radius": _uniform(2, 3), "offset": _uniform(0, 2),
+                  "trunk_height": _uniform(1, 2)},
+                 {"type": "minecraft:two_layers_feature_size", "limit": 2, "lower_size": 0, "upper_size": 2})
+
+
+def _oak_like(base, rand_a):
+    return _tree(_provider("oak_log"),
+                 {"type": "minecraft:straight_trunk_placer", "base_height": base, "height_rand_a": rand_a,
+                  "height_rand_b": 0},
+                 _leaves("minecraft:oak_leaves"),
+                 {"type": "minecraft:blob_foliage_placer", "radius": 2, "offset": 0, "height": 3},
+                 {"type": "minecraft:two_layers_feature_size", "limit": 1, "lower_size": 0, "upper_size": 1})
+
+
+OURS.update({
+    # curved blackstone thorns of the Crimson Mire, 10-28 blocks
+    "thorn_spikes": (_objects("thorn"), _object_placement(rarity=2, sink=2)),
+    # natural arches of banded grey rock (Ashen Wastes)
+    "stone_arches": (_objects("arch"), _object_placement(rarity=14, sink=3)),
+    # leaning aether crystal shards
+    "crystal_shards": (_objects("crystal"), _object_placement(rarity=3, sink=1)),
+    # banded terracotta hoodoos (Pale Dunes, Painted Canyon)
+    "hoodoos": (_objects("hoodoo"), _object_placement(count=1, sink=2)),
+    "hoodoos_sparse": (_objects("hoodoo"), _object_placement(rarity=4, sink=2)),
+    # hot-spring terraces with coloured rims (Geyser Basin)
+    "hot_springs": (_objects("hot_spring"), _object_placement(rarity=3, sink=3)),
+    # giant flat-capped red mushrooms with weeping vines (Crimson Mire)
+    "flat_mushrooms": (_objects("flat_mushroom"), _object_placement(count=2, sink=1)),
+    "ash_columns": (_objects("ash_column"), _object_placement(rarity=3, sink=2)),
+    # lava springs just under the surface of slopes: lava streams run down the mountainsides
+    "lava_streams": ({"type": "minecraft:spring_feature", "config": {
+        "state": {"Name": "minecraft:lava", "Properties": {"falling": "false"}}, "requires_block_below": True,
+        "rock_count": 3, "hole_count": 1, "valid_blocks": SPRING_ROCK}},
+        [{"type": "minecraft:count", "count": 12}, {"type": "minecraft:in_square"},
+         {"type": "minecraft:heightmap", "heightmap": "WORLD_SURFACE_WG"},
+         {"type": "minecraft:random_offset", "xz_spread": 0, "y_spread": -2}, BIOME]),
+    "lava_pools": ({"type": "minecraft:lake", "config": {
+        "fluid": {"type": "minecraft:simple_state_provider", "state": {"Name": "minecraft:lava", "Properties": {"level": "0"}}},
+        "barrier": {"type": "minecraft:simple_state_provider", "state": {"Name": "minecraft:blackstone"}},
+        "can_place_feature": {"type": "minecraft:true"},
+        "can_replace_with_air_or_fluid": {"type": "minecraft:not", "predicate": {
+            "type": "minecraft:matching_block_tag", "tag": "minecraft:features_cannot_replace"}},
+        "can_replace_with_barrier": {"type": "minecraft:not", "predicate": {
+            "type": "minecraft:matching_block_tag", "tag": "minecraft:lava_pool_stone_cannot_replace"}}}},
+        [{"type": "minecraft:rarity_filter", "chance": 9}, {"type": "minecraft:in_square"},
+         {"type": "minecraft:heightmap", "heightmap": "WORLD_SURFACE_WG"}, BIOME]),
+    # boulders of our stones and vanilla rock
+    "tuff_boulders": _boulder("tuff", 1),
+    "marble_boulders": _boulder("wayfarers:marble", 2),
+    "slate_boulders": _boulder("wayfarers:blue_slate", 2),
+    "rust_boulders": _boulder("wayfarers:rust_rock", 2),
+    "basalt_boulders": _boulder("blackstone", 2),
+    # fallen logs
+    "fallen_spruce_logs": _fallen("spruce_log", "spruce_sapling", 3),
+    "fallen_oak_logs": _fallen("oak_log", "oak_sapling", 3),
+    "fallen_glowwood_logs": _fallen("wayfarers:glowwood_log", "oak_sapling", 4),
+    "fallen_rustwood_logs": _fallen("wayfarers:rustwood_log", "oak_sapling", 5),
+    # autumn trees: oak leaves take the biome's (orange) foliage colour, spruce leaves stay green
+    "autumn_spruces": (_spruce_like("oak_leaves", 6, 3, 2), _tree_placement(4, "spruce_sapling")),
+    "giant_spruce_sparse": ("wayfarers:giant_spruce", _tree_placement(0, "spruce_sapling", rarity=3)),
+    "autumn_oaks": (_oak_like(5, 3), _tree_placement(3, "oak_sapling")),
+    "autumn_oaks_sparse": (_oak_like(4, 2), _tree_placement(0, "oak_sapling", rarity=4)),
+})
 
 
 def write_features(write):

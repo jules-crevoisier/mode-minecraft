@@ -81,7 +81,8 @@
    "minecraft:patch_grass_forest",
    "minecraft:patch_leaf_litter",
    "minecraft:birch_tall",
-   "minecraft:fallen_super_birch_tree"
+   "minecraft:fallen_super_birch_tree",
+   "wayfarers:fallen_oak_logs"
   ],
   [
    "minecraft:freeze_top_layer"

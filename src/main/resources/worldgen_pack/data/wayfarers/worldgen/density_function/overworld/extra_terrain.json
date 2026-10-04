@@ -1,0 +1,5 @@
+{
+ "type": "minecraft:max",
+ "argument1": "wayfarers:overworld/spires",
+ "argument2": "wayfarers:overworld/skylands"
+}

@@ -1,6 +1,7 @@
 {
  "replace": false,
  "values": [
-  "wayfarers:glowing_marsh"
+  "wayfarers:glowing_marsh",
+  "wayfarers:crimson_mire"
  ]
 }

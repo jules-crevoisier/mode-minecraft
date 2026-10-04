@@ -1,6 +1,7 @@
 {
  "replace": false,
  "values": [
-  "wayfarers:rustlands"
+  "wayfarers:rustlands",
+  "wayfarers:geyser_basin"
  ]
 }

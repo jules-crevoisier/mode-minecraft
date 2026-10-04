@@ -24,7 +24,8 @@
    "minecraft:lake_lava_surface"
   ],
   [
-   "minecraft:amethyst_geode"
+   "minecraft:amethyst_geode",
+   "wayfarers:slate_boulders"
   ],
   [
    "minecraft:monster_room",
@@ -73,7 +74,8 @@
    "minecraft:glow_lichen",
    "minecraft:trees_taiga",
    "minecraft:patch_berry_common",
-   "minecraft:fallen_spruce_tree"
+   "minecraft:fallen_spruce_tree",
+   "wayfarers:fallen_spruce_logs"
   ],
   [
    "minecraft:freeze_top_layer"

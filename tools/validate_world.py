@@ -54,6 +54,79 @@ def walk(obj, fn):
             walk(v, fn)
 
 
+# density function types (DensityFunctions.bootstrap, 26.2) -> their fields, and which of those are functions
+_ONE = {"argument"}
+DF_FIELDS = {
+    **{t: ({"argument1", "argument2"}, {"argument1", "argument2"}) for t in ("add", "mul", "min", "max")},
+    **{t: (_ONE, _ONE) for t in ("abs", "square", "cube", "half_negative", "quarter_negative", "invert", "squeeze",
+                                  "interpolated", "flat_cache", "cache_2d", "cache_once", "cache_all_in_cell",
+                                  "blend_density")},
+    "clamp": ({"input", "min", "max"}, {"input"}),
+    "noise": ({"noise", "xz_scale", "y_scale"}, set()),
+    "shifted_noise": ({"noise", "xz_scale", "y_scale", "shift_x", "shift_y", "shift_z"}, {"shift_x", "shift_y", "shift_z"}),
+    "range_choice": ({"input", "min_inclusive", "max_exclusive", "when_in_range", "when_out_of_range"},
+                     {"input", "when_in_range", "when_out_of_range"}),
+    "interval_select": ({"input", "thresholds", "functions"}, {"input"}),
+    "shift_a": (_ONE, set()), "shift_b": (_ONE, set()), "shift": (_ONE, set()),
+    "spline": ({"spline"}, set()),
+    "constant": (_ONE, set()),
+    "y_clamped_gradient": ({"from_y", "to_y", "from_value", "to_value"}, set()),
+    "find_top_surface": ({"density", "upper_bound", "lower_bound", "cell_height"}, {"density", "upper_bound"}),
+    "old_blended_noise": ({"xz_scale", "y_scale", "xz_factor", "y_factor", "smear_scale_multiplier"}, set()),
+    "blend_alpha": (set(), set()), "blend_offset": (set(), set()), "beardifier": (set(), set()),
+}
+
+
+def check_df(node, where):
+    """A density function: a number, a registered id, or an object whose type and fields match the 26.2 codecs."""
+    if isinstance(node, (int, float)) or isinstance(node, str):
+        return
+    if not isinstance(node, dict) or "type" not in node:
+        err(f"{where}: not a density function: {str(node)[:80]}")
+        return
+    t = node["type"].split(":")[-1]
+    if t not in DF_FIELDS:
+        err(f"{where}: unknown density function type {node['type']}")
+        return
+    fields, fns = DF_FIELDS[t]
+    keys = set(node) - {"type"}
+    if keys != fields:
+        err(f"{where}: {t} has fields {sorted(keys)}, expected {sorted(fields)}")
+        return
+    for k in fns:
+        check_df(node[k], f"{where}.{k}")
+    if t == "interval_select":
+        th = node["thresholds"]
+        if th != sorted(th) or len(th) != len(node["functions"]) - 1:
+            err(f"{where}: interval_select thresholds unsorted or wrong count")
+        for i, f in enumerate(node["functions"]):
+            check_df(f, f"{where}.functions[{i}]")
+    if t == "spline":
+        check_spline(node["spline"], f"{where}.spline")
+    if t == "range_choice" and node["min_inclusive"] >= node["max_exclusive"]:
+        err(f"{where}: empty range_choice range")
+    if t == "y_clamped_gradient":
+        for k in ("from_y", "to_y"):
+            if not -4064 <= node[k] <= 4062:
+                err(f"{where}: {k} out of range")
+
+
+def check_spline(sp, where):
+    if isinstance(sp, (int, float)):
+        return
+    if set(sp) != {"coordinate", "points"} or not sp["points"]:
+        err(f"{where}: a spline needs a coordinate and points")
+        return
+    check_df(sp["coordinate"], f"{where}.coordinate")
+    locs = [p["location"] for p in sp["points"]]
+    if any(b <= a for a, b in zip(locs, locs[1:])):
+        err(f"{where}: spline locations not strictly ascending: {locs}")
+    for i, p in enumerate(sp["points"]):
+        if set(p) != {"location", "value", "derivative"}:
+            err(f"{where}.points[{i}]: fields {sorted(p)}")
+        check_spline(p["value"], f"{where}.points[{i}]")
+
+
 def main():
     if not os.path.isdir(PACK):
         print("world overhaul pack not generated (run tools/gen_world.py)")
@@ -143,6 +216,41 @@ def main():
             err(f"noise_router.{router_key}: unknown density function {v}")
     for d in ours_df:
         check_refs(json.load(open(os.path.join(PACK, "wayfarers", "worldgen", "density_function", d.split(":")[1] + ".json"))), d)
+
+    for name, d in [("noise_settings.noise_router." + k, v) for k, v in settings["noise_router"].items()] + \
+            [(d, json.load(open(os.path.join(PACK, "wayfarers", "worldgen", "density_function", d.split(":")[1] + ".json"))))
+             for d in sorted(ours_df)]:
+        check_df(d, name)
+
+    # world height: noise settings and dimension type agree, and fit the codecs (DimensionType, NoiseSettings)
+    noise = settings["noise"]
+    dt_path = os.path.join(PACK, "minecraft", "dimension_type", "overworld.json")
+    if dim.get("type") == "minecraft:overworld" and os.path.exists(dt_path):
+        dt = json.load(open(dt_path))
+        if (dt["min_y"], dt["height"]) != (noise["min_y"], noise["height"]):
+            err(f"dimension_type min_y/height {dt['min_y']}/{dt['height']} != noise settings {noise['min_y']}/{noise['height']}")
+        if dt["logical_height"] > dt["height"]:
+            err("dimension_type: logical_height > height")
+    elif (noise["min_y"], noise["height"]) != (-64, 384):
+        err("noise settings change the world height but the pack has no minecraft:dimension_type/overworld")
+    if noise["min_y"] % 16 or noise["height"] % 16:
+        err("noise min_y and height must be multiples of 16")
+    if noise["min_y"] + noise["height"] > 2032 or noise["height"] > 4064 or noise["min_y"] < -2032:
+        err("world height out of range (min_y >= -2032, min_y + height <= 2032)")
+    cell = 4 * noise["size_vertical"]
+    if noise["height"] % cell:
+        err(f"noise height must be a multiple of the cell height {cell}")
+
+    # template features: every template exists (mod data or the pack)
+    res = os.path.join(HERE, "..", "src", "main", "resources")
+    for path in glob.glob(os.path.join(PACK, "*", "worldgen", "configured_feature", "*.json")):
+        cf = json.load(open(path))
+        if cf.get("type") == "minecraft:template":
+            for t in cf["config"]["templates"]:
+                ns, p = t["data"]["id"].split(":")
+                if not any(os.path.exists(os.path.join(r, ns, "structure", p + ".nbt"))
+                           for r in (os.path.join(res, "data"), PACK)):
+                    err(f"{path}: missing structure template {t['data']['id']}")
 
     for e in errors[:100]:
         print("ERROR:", e)

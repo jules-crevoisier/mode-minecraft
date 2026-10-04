@@ -3,10 +3,12 @@
  "values": [
   "wayfarers:elderwood",
   "wayfarers:silver_birch_wood",
+  "wayfarers:starlight_grove",
   "wayfarers:shadow_woods",
   "wayfarers:enchanted_forest",
   "wayfarers:crystal_woods",
   "wayfarers:pine_highlands",
+  "wayfarers:emberleaf_taiga",
   "wayfarers:verdant_meadows"
  ]
 }
