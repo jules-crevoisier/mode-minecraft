@@ -216,6 +216,7 @@ jobs:
         run: |
           mkdir -p previews
           cp client/wayfarers-shot-*.png previews/ 2>/dev/null || echo "no client screenshots"
+          cp client/ci-client-summary.md previews/ 2>/dev/null || echo "no client summary"
 
       - name: Publish the world previews
         if: hashFiles('previews/*') != ''

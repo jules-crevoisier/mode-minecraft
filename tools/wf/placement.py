@@ -190,28 +190,28 @@ def _f(mode, **kw):
 
 FIT = {
     # ---- overworld land: spread (blocks), slope (rise/run between neighbouring samples), wet (max water share)
-    "guild_outpost": _f("land", spread=8, slope=0.7, wet=0.05),
-    "mountain_monastery": _f("land", spread=16, slope=1.0, wet=0.05),   # rock plinth 30 deep: made for slopes
-    "forgotten_library": _f("land", spread=10, slope=0.7, wet=0.05),
-    "giant_tree": _f("land", spread=12, slope=0.9, wet=0.05),           # roots reach down on their own
-    "desert_oasis": _f("land", spread=8, slope=0.6, wet=0.05),
+    "guild_outpost": _f("land", spread=13, slope=1.0, wet=0.12),
+    "mountain_monastery": _f("land", spread=26, slope=1.3, wet=0.12),   # rock plinth 30 deep: made for slopes
+    "forgotten_library": _f("land", spread=16, slope=1.0, wet=0.12),
+    "giant_tree": _f("land", spread=19, slope=1.2, wet=0.12),           # roots reach down on their own
+    "desert_oasis": _f("land", spread=13, slope=0.9, wet=0.12),
     "witch_huts": _f("wetland", spread=5, slope=0.5, wet=0.9, min_wet=0.2),  # stilts over a real marsh
-    "sky_island": _f("land", spread=14, slope=0.8, wet=0.1),            # ground shrine + pool under the islands
-    "jungle_ziggurat": _f("land", spread=12, slope=0.8, wet=0.05),
-    "ruined_watchtower": _f("land", spread=10, slope=0.9, wet=0.05),
-    "bandit_camp": _f("land", spread=8, slope=0.7, wet=0.05),
-    "rune_circle": _f("land", spread=8, slope=0.6, wet=0.05),
-    "ice_observatory": _f("land", spread=10, slope=0.8, wet=0.05),
-    "dwarven_mine": _f("land", spread=22, slope=1.3, wet=0.05),         # a hillside settlement: wants a slope
-    "forgotten_catacombs": _f("land", spread=6, slope=0.6, wet=0.0),    # footprint = the mausoleum on top
-    "sand_hypogeum": _f("land", spread=6, slope=0.6, wet=0.0),
-    "lithite_well": _f("land", spread=8, slope=0.9, wet=0.0),
-    "clockwork_citadel": _f("land", spread=14, slope=0.5, wet=0.05),
-    "sky_harbour": _f("land", spread=12, slope=0.8, wet=0.05),
-    "sylvan_palace": _f("land", spread=14, slope=0.7, wet=0.05),
-    "inventor_manor": _f("land", spread=10, slope=0.6, wet=0.05),
-    "geothermal_foundry": _f("land", spread=16, slope=0.7, wet=0.05),
-    "tesla_observatory": _f("land", spread=20, slope=1.0, wet=0.05),    # terraced mountain campus
+    "sky_island": _f("land", spread=22, slope=1.1, wet=0.12),            # ground shrine + pool under the islands
+    "jungle_ziggurat": _f("land", spread=19, slope=1.1, wet=0.12),
+    "ruined_watchtower": _f("land", spread=16, slope=1.2, wet=0.12),
+    "bandit_camp": _f("land", spread=13, slope=1.0, wet=0.12),
+    "rune_circle": _f("land", spread=13, slope=0.9, wet=0.12),
+    "ice_observatory": _f("land", spread=16, slope=1.1, wet=0.12),
+    "dwarven_mine": _f("land", spread=35, slope=1.6, wet=0.12),         # a hillside settlement: wants a slope
+    "forgotten_catacombs": _f("land", spread=12, slope=0.9, wet=0.04),    # footprint = the mausoleum on top
+    "sand_hypogeum": _f("land", spread=12, slope=0.9, wet=0.04),
+    "lithite_well": _f("land", spread=13, slope=1.2, wet=0.04),
+    "clockwork_citadel": _f("land", spread=22, slope=0.8, wet=0.12),
+    "sky_harbour": _f("land", spread=19, slope=1.1, wet=0.12),
+    "sylvan_palace": _f("land", spread=22, slope=1.0, wet=0.12),
+    "inventor_manor": _f("land", spread=16, slope=0.9, wet=0.12),
+    "geothermal_foundry": _f("land", spread=26, slope=1.0, wet=0.12),
+    "tesla_observatory": _f("land", spread=32, slope=1.3, wet=0.12),    # terraced mountain campus
     # ---- coast: the dock side (template +z = south) in the sea, the cape on land, shore near sea level
     "coastal_lighthouse": _f("coast", sea_side="south", wet=0.5, land=0.5, spread=8, slope=1.0),
     # ---- sea floor: wet share, median water depth, floor spread

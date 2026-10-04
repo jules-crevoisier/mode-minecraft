@@ -9,6 +9,7 @@ import com.wayfarers.Wayfarers;
 import com.wayfarers.registry.ModWorldgen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.QuartPos;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.StructureType;
@@ -111,14 +112,53 @@ public final class FittedJigsawStructure extends Structure {
     }
 
     /**
+     * Chunk offsets tried when the grid cell's own spot does not fit: the start may slide up to two chunks (32 blocks)
+     * to a flatter or drier spot nearby, instead of the whole cell being lost (on the overhaul's hills and lakes most
+     * cells failed by a few blocks). Two chunks keep the pieces well inside the reach of structure references.
+     */
+    private static final int[][] NUDGES = {{0, 0}, {2, 0}, {-2, 0}, {0, 2}, {0, -2}, {2, 2}, {-2, -2}, {2, -2}, {-2, 2}};
+
+    /**
      * The jigsaw start, its biome (checked first: it is far cheaper than the terrain), then the terrain fit, which may
-     * move the pieces up or down. The pieces are assembled here once and handed over ready-made.
+     * move the pieces up or down. When the spot does not fit, nearby spots of the same cell are tried ({@link #NUDGES}).
+     * The pieces are assembled here once and handed over ready-made.
      */
     @Override
     public Optional<GenerationStub> findValidGenerationPoint(GenerationContext context) {
+        if (!SiteFit.active()) {
+            return this.tryAt(context, false).map(Attempt::stub);
+        }
+        SiteFit.Verdict first = null;
+        for (int[] nudge : NUDGES) {
+            GenerationContext at = nudge[0] == 0 && nudge[1] == 0 ? context : new GenerationContext(context.registryAccess(),
+                    context.chunkGenerator(), context.biomeSource(), context.randomState(), context.structureTemplateManager(),
+                    context.seed(), new ChunkPos(context.chunkPos().x() + nudge[0], context.chunkPos().z() + nudge[1]),
+                    context.heightAccessor(), context.validBiome());
+            Optional<Attempt> attempt = this.tryAt(at, true);
+            if (attempt.isEmpty()) {
+                continue;
+            }
+            if (attempt.get().verdict().ok()) {
+                SiteFit.record(this.name, attempt.get().verdict());
+                return Optional.of(attempt.get().stub());
+            }
+            if (first == null) {
+                first = attempt.get().verdict();
+            }
+        }
+        if (first != null) {
+            SiteFit.record(this.name, first);
+        }
+        return Optional.empty();
+    }
+
+    private record Attempt(GenerationStub stub, SiteFit.Verdict verdict) {}
+
+    /** The start at this context's chunk if its biome suits; with {@code check}, also its terrain verdict (moved when ok). */
+    private Optional<Attempt> tryAt(GenerationContext context, boolean check) {
         Optional<GenerationStub> found = this.findGenerationPoint(context);
         if (found.isEmpty()) {
-            return found;
+            return Optional.empty();
         }
         GenerationStub stub = found.get();
         BlockPos pos = stub.position();
@@ -126,8 +166,8 @@ public final class FittedJigsawStructure extends Structure {
                 QuartPos.fromBlock(pos.getY()), QuartPos.fromBlock(pos.getZ()), context.randomState().sampler()))) {
             return Optional.empty();
         }
-        if (!SiteFit.active()) {
-            return found;
+        if (!check) {
+            return Optional.of(new Attempt(stub, null));
         }
         StructurePiecesBuilder builder = stub.getPiecesBuilder();
         List<StructurePiece> pieces = builder.build().pieces();
@@ -135,14 +175,13 @@ public final class FittedJigsawStructure extends Structure {
             return Optional.empty();
         }
         SiteFit.Verdict verdict = SiteFit.evaluate(this.fit, pieces.get(0), context);
-        SiteFit.record(this.name, verdict);
         if (!verdict.ok()) {
-            return Optional.empty();
+            return Optional.of(new Attempt(stub, verdict));
         }
         if (verdict.dy() != 0) {
             builder.offsetPiecesVertically(verdict.dy());
         }
-        return Optional.of(new GenerationStub(pos.above(verdict.dy()), Either.right(builder)));
+        return Optional.of(new Attempt(new GenerationStub(pos.above(verdict.dy()), Either.right(builder)), verdict));
     }
 
     @Override

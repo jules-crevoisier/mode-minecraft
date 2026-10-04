@@ -32,8 +32,8 @@ import java.util.TreeMap;
  * surface biomes shaded by height, cave biomes at y -20, and a vertical slice through the terrain and caves.
  */
 public final class WorldMapCommand {
-    private static final int SIZE = 384;
-    private static final int STEP = 10;
+    private static final int SIZE = 256;
+    private static final int STEP = 15;
     private static final int SLICE_W = 512;
     private static final int SLICE_STEP = 4;
 

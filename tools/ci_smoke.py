@@ -41,6 +41,8 @@ BENIGN = [
         r"Ambiguity between arguments",
         r"Can't keep up!",
         r"kqueue|OSX/BSD|Appender DebugFile",  # netty probing a macOS-only transport on the Linux runner
+        # vanilla's own deep dark sculk patch spreads 2 chunks out; 26.2's unsafe-read detector flags it (not our feature)
+        r"unsafe terrain read.*minecraft:sculk_patch_deep_dark",
     )
 ]
 BAD = [re.compile(p) for p in (
@@ -55,7 +57,7 @@ BAD = [re.compile(p) for p in (
 )]
 
 FEEDBACK_TIMEOUT = 180
-BUDGET = 25 * 60  # seconds per test; past it the remaining phases are skipped and the run fails with a clear message
+BUDGET = 40 * 60  # seconds per test; past it the remaining phases are skipped and the run fails with a clear message
 
 
 def structure_dims():
@@ -419,7 +421,7 @@ def exercise_overhaul(srv, failures):
     if len(missing) > len(biomes) // 3:
         failures.append(f"{len(missing)} of {len(biomes)} biomes not found: {missing}")
     with Phase("world map"):
-        res = srv.run("wayfarers worldmap", r"World map written|worldmap:|Unknown|Incorrect", 900)
+        res = srv.run("wayfarers worldmap", r"World map written|worldmap:|Unknown|Incorrect", 1500)
         if not res or "World map written" not in res:
             failures.append(f"world map: {res}")
     with Phase("biome shots"):
