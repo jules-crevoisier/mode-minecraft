@@ -117,8 +117,60 @@ public class QuestJournalScreen extends Screen {
         WfGui.window(g, font, title, left, top, W, H);
         drawTabs(g, mouseX, mouseY);
         drawList(g, mouseX, mouseY);
+        descCut = false;
         drawCard(g);
+        // keyboard hint under the window, like the waystone screen's
+        g.centeredText(font, Component.translatable("gui.wayfarers.quests.keys"), left + W / 2, top + H + 4, WfGui.CREAM_SOFT);
         super.extractRenderState(g, mouseX, mouseY, a);
+        hoverTips(g, mouseX, mouseY);
+    }
+
+    private boolean descCut;
+
+    /** Tooltips: full names (rows and tabs are clipped), what the status icons mean, a long description. */
+    private void hoverTips(GuiGraphicsExtractor g, int mouseX, int mouseY) {
+        List<Component> tip = new ArrayList<>();
+        for (int i = 0; i < GeneratedContent.CHAPTERS.size(); i++) {
+            int y = tabY() + i * (TAB_H + 4);
+            if (mouseX >= tabX() && mouseX < tabX() + tabW() && mouseY >= y && mouseY < y + TAB_H) {
+                GeneratedContent.Chapter c = GeneratedContent.CHAPTERS.get(i);
+                int[] p = ClientQuests.chapterProgress(c);
+                tip.add(Component.translatable("chapter.wayfarers." + c.id()));
+                tip.add(Component.translatable("gui.wayfarers.quests.objectives", p[0], p[1]).withStyle(net.minecraft.ChatFormatting.GRAY));
+            }
+        }
+        List<String> qs = quests();
+        int rowW = listW() - 12;
+        for (int i = 0; i < rows() && i + scroll < qs.size(); i++) {
+            int rx = listX() + 3;
+            int ry = listY() + 3 + i * ROW;
+            if (mouseX >= rx && mouseX < rx + rowW && mouseY >= ry && mouseY < ry + ROW - 1) {
+                String q = qs.get(i + scroll);
+                tip.add(ClientQuests.hidden(q) ? Component.translatable("gui.wayfarers.quests.hidden") : ClientQuests.title(q));
+                if (ClientQuests.done(q)) {
+                    tip.add(Component.translatable("gui.wayfarers.quests.done").withStyle(net.minecraft.ChatFormatting.GREEN));
+                } else if (!ClientQuests.unlocked(q)) {
+                    String parent = ClientQuests.parent(q);
+                    tip.add(Component.translatable("gui.wayfarers.quests.locked",
+                            parent == null ? Component.literal("?") : ClientQuests.title(parent)).withStyle(net.minecraft.ChatFormatting.RED));
+                } else {
+                    QuestSnapshotMsg.State s = ClientQuests.state(q);
+                    tip.add(Component.translatable("gui.wayfarers.quests.objectives", s.completed(), s.total())
+                            .withStyle(net.minecraft.ChatFormatting.GRAY));
+                }
+                if (q.equals(WayfarersClientConfig.TRACKED_QUEST.get())) {
+                    tip.add(Component.translatable("gui.wayfarers.quests.tracker").withStyle(net.minecraft.ChatFormatting.GOLD));
+                }
+            }
+        }
+        if (descCut && selected != null && mouseX >= cardX() && mouseX < cardX() + cardW() && mouseY >= cardY() + 26
+                && mouseY < cardY() + cardH() - 56) {
+            g.setTooltipForNextFrame(font, font.split(ClientQuests.description(selected), 220), mouseX, mouseY);
+            return;
+        }
+        if (!tip.isEmpty()) {
+            g.setComponentTooltipForNextFrame(font, tip, mouseX, mouseY);
+        }
     }
 
     private void drawTabs(GuiGraphicsExtractor g, int mouseX, int mouseY) {
@@ -206,20 +258,26 @@ public class QuestJournalScreen extends Screen {
         int ty = y + 26;
         Component name = hidden ? Component.translatable("gui.wayfarers.quests.hidden") : ClientQuests.title(q);
         for (FormattedCharSequence line : font.split(name, w - 10)) {
-            g.centeredText(font, line, x + w / 2, ty, WfGui.INK);
+            WfGui.centered(g, font, line, x + w / 2, ty, WfGui.INK);
             ty += 10;
         }
         ty += 3;
         if (!hidden) {
             List<FormattedCharSequence> desc = font.split(ClientQuests.description(q), w - 10);
             for (int i = 0; i < Math.min(desc.size(), 6); i++) {
-                g.text(font, desc.get(i), x + 5, ty, WfGui.INK_SOFT, false);
+                if (i == 5 && desc.size() > 6) {
+                    // a long (often French) description: end on "..." and show the whole text on hover
+                    g.text(font, "...", x + 5, ty, WfGui.INK_SOFT, false);
+                    descCut = true;
+                } else {
+                    g.text(font, desc.get(i), x + 5, ty, WfGui.INK_SOFT, false);
+                }
                 ty += 9;
             }
         }
         ty += 4;
         if (done) {
-            g.centeredText(font, Component.translatable("gui.wayfarers.quests.done"), x + w / 2, ty, 0xFF2F8A2A);
+            WfGui.centered(g, font, Component.translatable("gui.wayfarers.quests.done"), x + w / 2, ty, 0xFF2F8A2A);
         } else if (!unlocked) {
             String parent = ClientQuests.parent(q);
             Component pn = parent == null ? Component.literal("?") : ClientQuests.title(parent);
@@ -307,6 +365,48 @@ public class QuestJournalScreen extends Screen {
         int max = Math.max(0, quests().size() - rows());
         scroll = (int) Math.max(0, Math.min(max, scroll - Math.signum(scrollY)));
         return true;
+    }
+
+    /**
+     * Keyboard: up / down pick a quest, left / right a chapter, Enter tracks the quest, and the journal key (J)
+     * closes the journal like it opened it.
+     */
+    @Override
+    public boolean keyPressed(net.minecraft.client.input.KeyEvent event) {
+        if (com.wayfarers.client.WayfarersClient.QUESTS_KEY.matches(event)) {
+            onClose();
+            return true;
+        }
+        List<String> qs = quests();
+        int key = event.key();
+        if (event.isUp() || event.isDown()) {
+            if (!qs.isEmpty()) {
+                int i = selected == null ? -1 : qs.indexOf(selected);
+                i = Math.max(0, Math.min(qs.size() - 1, i + (event.isUp() ? -1 : 1)));
+                selected = qs.get(i);
+                if (i < scroll) {
+                    scroll = i;
+                } else if (i >= scroll + rows()) {
+                    scroll = i - rows() + 1;
+                }
+                updateTrack();
+            }
+            return true;
+        }
+        if (event.isLeft() || event.isRight()) {
+            int c = Math.max(0, Math.min(GeneratedContent.CHAPTERS.size() - 1, chapter + (event.isLeft() ? -1 : 1)));
+            if (c != chapter) {
+                chapter = c;
+                selectDefault();
+                updateTrack();
+            }
+            return true;
+        }
+        if ((key == 257 || key == 335) && track.active && getFocused() == null) {
+            toggleTrack();
+            return true;
+        }
+        return super.keyPressed(event);
     }
 
     @Override

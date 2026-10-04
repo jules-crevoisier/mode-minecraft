@@ -72,9 +72,14 @@ public class SkillTreeScreen extends Screen {
     @Override
     public void extractRenderState(GuiGraphicsExtractor g, int mouseX, int mouseY, float a) {
         WfGui.window(g, font, title, left, top, W, H);
-        g.text(font, Component.translatable("gui.wayfarers.skills.points", ClientSkills.points, ClientSkills.earned),
-                left + 16, top + 14, WfGui.INK, false);
-        g.text(font, Component.translatable("gui.wayfarers.skills.hint"), left + 150, top + 14, WfGui.INK_SOFT, false);
+        Component points = Component.translatable("gui.wayfarers.skills.points", ClientSkills.points, ClientSkills.earned);
+        g.text(font, points, left + 16, top + 14, WfGui.INK, false);
+        // the hint goes on the right of the points line, clipped to the window (it overflowed it in both languages)
+        int hintX = left + 16 + font.width(points) + 12;
+        int hintW = left + W - 16 - hintX;
+        String hint = Component.translatable("gui.wayfarers.skills.hint").getString();
+        WfGui.textClipped(g, font, hint, Math.max(hintX, left + W - 16 - font.width(hint)), top + 14, hintW, WfGui.INK_SOFT, false);
+        boolean overPoints = mouseX >= left + 16 && mouseX < left + W - 16 && mouseY >= top + 12 && mouseY < top + 23;
         // branch panels
         for (int i = 0; i < GeneratedSkills.BRANCHES.size(); i++) {
             GeneratedSkills.Branch b = GeneratedSkills.BRANCHES.get(i);
@@ -127,17 +132,23 @@ public class SkillTreeScreen extends Screen {
         // mana / active summary
         g.text(font, Component.translatable("gui.wayfarers.skills.mana", (int) ClientSkills.maxMana), left + 16, top + H - 11, WfGui.INK_SOFT, false);
         if (!ClientSkills.active.isEmpty()) {
-            g.text(font, Component.translatable("gui.wayfarers.skills.active",
-                    Component.translatable("skill.wayfarers.ability." + ClientSkills.active)), left + 150, top + H - 11, WfGui.INK_SOFT, false);
+            WfGui.textClipped(g, font, Component.translatable("gui.wayfarers.skills.active", abilityKey(),
+                    Component.translatable("skill.wayfarers.ability." + ClientSkills.active)).getString(), left + 150, top + H - 11,
+                    W - 150 - 16, WfGui.INK_SOFT, false);
         }
         super.extractRenderState(g, mouseX, mouseY, a);
+        if (hovered == null && overPoints) {
+            g.setComponentTooltipForNextFrame(font, List.of(Component.translatable("gui.wayfarers.skills.hint"),
+                    Component.translatable("gui.wayfarers.skills.points.tip").withStyle(ChatFormatting.GRAY)), mouseX, mouseY);
+        }
         if (hovered != null) {
             List<FormattedCharSequence> lines = new ArrayList<>();
             lines.add(Component.translatable("skill.wayfarers." + hovered.id()).withStyle(ChatFormatting.GOLD).getVisualOrderText());
             lines.addAll(font.split(Component.translatable("skill.wayfarers." + hovered.id() + ".desc"), 200));
             boolean has = ClientSkills.has(hovered.id());
             Component state = has
-                    ? Component.translatable(hovered.kind().equals("active") ? "gui.wayfarers.skills.click_equip" : "gui.wayfarers.skills.owned")
+                    ? Component.translatable(hovered.kind().equals("active") ? "gui.wayfarers.skills.click_equip" : "gui.wayfarers.skills.owned",
+                    abilityKey())
                     .withStyle(ChatFormatting.GREEN)
                     : Component.translatable("gui.wayfarers.skills.cost", hovered.cost())
                     .withStyle(ClientSkills.canUnlock(hovered.id(), hovered.cost(), hovered.requires()) ? ChatFormatting.YELLOW : ChatFormatting.RED);
@@ -163,6 +174,21 @@ public class SkillTreeScreen extends Screen {
             }
         }
         return super.mouseClicked(event, doubleClick);
+    }
+
+    /** The key bound to "use active talent" (V unless rebound). */
+    private static Component abilityKey() {
+        return com.wayfarers.client.WayfarersClient.ABILITY_KEY.getTranslatedKeyMessage();
+    }
+
+    @Override
+    public boolean keyPressed(net.minecraft.client.input.KeyEvent event) {
+        // the key that opens the talent tree closes it too
+        if (com.wayfarers.client.WayfarersClient.SKILLS_KEY.matches(event)) {
+            onClose();
+            return true;
+        }
+        return super.keyPressed(event);
     }
 
     @Override

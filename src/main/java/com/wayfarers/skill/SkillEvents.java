@@ -52,7 +52,8 @@ public final class SkillEvents {
                 int before = PlayerSkills.availablePoints(p);
                 PlayerSkills.addLevels(p, e.getLevels());
                 if (PlayerSkills.availablePoints(p) > before) {
-                    p.sendSystemMessage(Component.translatable("message.wayfarers.skill.point").withStyle(ChatFormatting.LIGHT_PURPLE));
+                    p.sendSystemMessage(Component.translatable("message.wayfarers.skill.point", Component.keybind("key.wayfarers.skills"))
+                            .withStyle(ChatFormatting.LIGHT_PURPLE));
                 }
                 sync(p);
             }

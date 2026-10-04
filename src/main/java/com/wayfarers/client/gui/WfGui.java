@@ -50,7 +50,20 @@ public final class WfGui {
         sprite(g, PANEL, x, y, w, h);
         int tw = Math.max(90, font.width(title) + 24);
         sprite(g, TITLE_PLATE, x + (w - tw) / 2, y - 5, tw, 18);
-        g.centeredText(font, title, x + w / 2, y, PLATE_INK);
+        centered(g, font, title, x + w / 2, y, PLATE_INK);
+    }
+
+    /**
+     * Centred text without a drop shadow: ink on parchment or brass. ({@code GuiGraphicsExtractor.centeredText}
+     * always draws a shadow, which smudges dark text on a light background.)
+     */
+    public static void centered(GuiGraphicsExtractor g, Font font, Component text, int x, int y, int color) {
+        g.text(font, text, x - font.width(text) / 2, y, color, false);
+    }
+
+    public static void centered(GuiGraphicsExtractor g, Font font, net.minecraft.util.FormattedCharSequence text, int x, int y,
+                                int color) {
+        g.text(font, text, x - font.width(text) / 2, y, color, false);
     }
 
     /** Draws ``text`` cut to ``width`` pixels with an ellipsis. */

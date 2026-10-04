@@ -12,7 +12,7 @@ TAGLINE = ("Un mod d'exploration à plusieurs pour Minecraft 26.2 : des dizaines
 # "Par où commencer" : (titre, texte, [ids d'objets illustrés])
 FIRST_HOUR = [
     ("Ouvre le Manuel", "Tu le reçois à la première connexion. Une page par système, avec sommaire. Astuce : survole "
-     "n'importe quel objet du mod dans ton inventaire et maintiens W pour ouvrir directement sa page.",
+     "n'importe quel objet du mod dans ton inventaire et maintiens la touche du manuel (Z sur un clavier AZERTY, réglable dans Commandes) pour ouvrir directement sa page.",
      ["wayfarer_manual"]),
     ("Suis les quêtes (touche J)", "Le journal de quêtes te guide pas à pas. Clique sur « Suivre » : l'objectif "
      "s'affiche en haut à droite de l'écran. La progression est commune à tout le groupe.",

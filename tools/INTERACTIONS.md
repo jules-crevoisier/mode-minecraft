@@ -16,7 +16,7 @@ Every block and item of the mod must react visibly when a player uses it: a scre
 | Magnet Ring | Toggles the magnet. | Message, sound, glint |
 | Recall Scroll | Teleports to the nearest waystone; says so when there is none. | Particles, sound, message |
 | Wayfarer's Atlas | Quest journal. | Screen, sound |
-| Wayfarer's Manual | Guide (client). Hold W over an item: opens its page. | Screen, sound |
+| Wayfarer's Manual | Guide (client). Hold the manual key (W by default, Z on AZERTY, rebindable; the item tooltip names it) over an item in any inventory: opens its page. From the player's inventory, closing the manual goes back to it; from a chest or machine, the container is closed first. | Screen, sound |
 | Structure Compass | Distance and direction to the nearest structure. Sneak: change the target. | Message, particle trail, sound |
 | Builder's Wands | Extend a face. Sneak in the air: undo. Sneak on a block: mirror centre there (turns symmetry on at mirror X); sneak on the centre again, or key G: off / mirror X / mirror Z / X + Z. Mirrored copies follow the same rules and cost a block each; a block and its copies go in together or not at all; copies further than 96 blocks or in unloaded chunks are skipped. Refuses doors, beds and tall plants. A double slab costs 2 slabs. No water copied. Respects spawn protection and adventure mode. | Gold outline (blocks), blue outline (mirrored copies), amber centre and plane frames; sound; message above the hotbar; sparks on the plane |
 | Engraver's Chisel | Next variant of the block's chisel family; sneak: previous. Keeps stairs/slab/wall shape, copper age and wax. Refuses blocks with no family or a block entity, spawn protection and adventure mode. 1 durability per cut. | Block particles, hit + stonecutter sound, "Variant (3/6)" above the hotbar; "can't carve X" otherwise |
@@ -30,5 +30,7 @@ Every block and item of the mod must react visibly when a player uses it: a scre
 | Rivet Gun | Fires a rivet (5 damage): Rivets first, then iron nuggets; free in creative. Never hits the shooter or their pets. 0.7 s cooldown. | Shot and piston hiss, muzzle smoke, smoking rivet; "Out of rivets" + click |
 | Pocket Watch | Time (hh:mm, Overworld clock), day number, moon phase, biome. Its hand follows the sun (spins outside the Overworld). | Above the hotbar, tick sound |
 | Airship Compass | Nearest Sky Harbour (Void Ship Wreck in the End); stores it as a lodestone target so the needle points there. Nothing found: says so and the needle spins. | Message, spark trail, lodestone sound |
+
+Display settings (health bars, damage numbers, quest tracker, tip cards, key bindings): the Config button of Wayfarers in the mods list opens a settings screen in the mod's theme; every change is saved at once.
 
 Commands: `/wayfarers warp` is for game masters only. Players travel through the waystone screen.

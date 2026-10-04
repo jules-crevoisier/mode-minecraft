@@ -11,7 +11,7 @@ import net.minecraft.world.inventory.Slot;
  * Chisel Table screen: the input slot on the left, the variants of its chisel family in a grid on the right
  * (the current one framed in gold); click a variant to convert the whole stack.
  */
-public class ChiselTableScreen extends AbstractContainerScreen<ChiselTableMenu> {
+public class ChiselTableScreen extends AbstractContainerScreen<ChiselTableMenu> implements com.wayfarers.client.ContainerButtons.Exempt {
     public ChiselTableScreen(ChiselTableMenu menu, Inventory inv, Component title) {
         super(menu, inv, title, 196, 190);
     }
@@ -53,12 +53,14 @@ public class ChiselTableScreen extends AbstractContainerScreen<ChiselTableMenu> 
         } else {
             hint = Component.translatable("gui.wayfarers.chisel_table.pick", menu.familySize());
         }
-        g.centeredText(font, hint, imageWidth / 2, ChiselTableMenu.GRID_Y + ChiselTableMenu.ROWS * 18 + 8, WfGui.CREAM_SOFT);
-    }
-
-    @Override
-    public void extractRenderState(GuiGraphicsExtractor g, int mouseX, int mouseY, float a) {
-        super.extractRenderState(g, mouseX, mouseY, a);
-        extractTooltip(g, mouseX, mouseY);
+        // ink on the parchment (cream was unreadable there); two lines when a translation is too long for one
+        int y = ChiselTableMenu.GRID_Y + ChiselTableMenu.ROWS * 18 + 8;
+        java.util.List<net.minecraft.util.FormattedCharSequence> lines = font.split(hint, imageWidth - 20);
+        if (lines.size() > 1) {
+            y -= 4;
+        }
+        for (int i = 0; i < Math.min(2, lines.size()); i++) {
+            WfGui.centered(g, font, lines.get(i), imageWidth / 2, y + i * 9, WfGui.INK_SOFT);
+        }
     }
 }

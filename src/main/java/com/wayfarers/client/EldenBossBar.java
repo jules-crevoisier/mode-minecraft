@@ -131,7 +131,8 @@ public final class EldenBossBar {
         int width = gg.guiWidth();
         int barW = Math.min(360, (int) (width * 0.62F));
         int x = (width - barW) / 2;
-        int y = gg.guiHeight() - 64;
+        // above the action bar text (guiHeight - 72) and the held item name (guiHeight - 59): they used to overlap
+        int y = gg.guiHeight() - 96;
         long now = mc.level == null ? 0 : mc.level.getGameTime();
         for (LerpingBossEvent event : mine) {
             Bar bar = BARS.computeIfAbsent(event.getId(), id -> new Bar());

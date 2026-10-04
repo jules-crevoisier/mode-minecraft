@@ -3,15 +3,23 @@ package com.wayfarers.client;
 import com.wayfarers.Wayfarers;
 import com.wayfarers.client.gui.WfGui;
 import com.wayfarers.item.SpellItem;
+import net.minecraft.client.AttackIndicatorStatus;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.world.entity.HumanoidArm;
 import net.minecraftforge.client.event.AddGuiOverlayLayersEvent;
 import net.minecraftforge.client.gui.overlay.ForgeLayeredDraw;
 
 /**
- * The mana bar: a slim blue bar just above the experience bar, shown while you hold a magic item or while
- * your mana refills. The active ability's cooldown shows as a small dial next to it.
+ * The mana gauge: a slim blue vial standing right of the hotbar (past the off-hand slot or the attack indicator
+ * when they are on that side), with the mana as "37/50" beside it, shown while you hold a magic item or while your
+ * mana refills. Under the number, a small brass key cap shows the active ability: its key when ready, the seconds
+ * left while it recharges.
+ *
+ * <p>(It used to lie across the screen just above the experience bar, which is where the hearts and the food bar
+ * are drawn in survival: it covered them.)
  */
 public final class ManaHud {
     private static long lastVisible;
@@ -27,6 +35,18 @@ public final class ManaHud {
         return mc.player.getMainHandItem().getItem() instanceof SpellItem || mc.player.getOffhandItem().getItem() instanceof SpellItem;
     }
 
+    /** Left edge of the free space right of the hotbar, like vanilla's own placement of the off-hand slot. */
+    private static int rightOfHotbar(Minecraft mc, int screenCenter) {
+        int x = screenCenter + 91 + 4;
+        HumanoidArm offhandSide = mc.player.getMainArm().getOpposite();
+        if (offhandSide == HumanoidArm.RIGHT && !mc.player.getOffhandItem().isEmpty()) {
+            x += 29;
+        } else if (offhandSide == HumanoidArm.LEFT && mc.options.attackIndicator().get() == AttackIndicatorStatus.HOTBAR) {
+            x += 22;
+        }
+        return x;
+    }
+
     private static void extract(GuiGraphicsExtractor g, DeltaTracker dt) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null || mc.player.isSpectator()) {
@@ -40,23 +60,29 @@ public final class ManaHud {
         if (now - lastVisible > 2000) {
             return;
         }
-        int w = 182;
-        int x = g.guiWidth() / 2 - w / 2;
-        int y = g.guiHeight() - 32 - 6;
+        Font font = mc.font;
+        int x = rightOfHotbar(mc, g.guiWidth() / 2);
+        int bottom = g.guiHeight() - 1;
+        int h = 21;
+        int top = bottom - h;
         float frac = ClientSkills.maxMana <= 0 ? 0 : Math.min(1F, ClientSkills.mana / ClientSkills.maxMana);
-        g.fill(x - 1, y - 1, x + w + 1, y + 4, 0xFF0F0C0A);
-        g.fill(x, y, x + w, y + 3, 0xFF14243A);
-        int fill = (int) (w * frac);
+        // vial: soot rim, dark glass, blue mana rising from the bottom, a glint on the glass
+        g.fill(x - 1, top - 1, x + 7, bottom + 1, 0xFF0F0C0A);
+        g.fill(x, top, x + 6, bottom, 0xFF14243A);
+        int fill = Math.round(h * frac);
         if (fill > 0) {
-            g.fillGradient(x, y, x + fill, y + 3, 0xFF6FD8FF, 0xFF2F6FD8);
+            g.fillGradient(x, bottom - fill, x + 6, bottom, 0xFF6FD8FF, 0xFF2F6FD8);
         }
-        String label = (int) ClientSkills.mana + " / " + (int) ClientSkills.maxMana;
-        g.text(mc.font, label, g.guiWidth() / 2 - mc.font.width(label) / 2, y - 9, 0xFF9FE6FF, true);
+        g.fill(x + 1, top + 1, x + 2, bottom - 1, 0x40FFFFFF);
+        g.fill(x - 1, top - 2, x + 7, top - 1, 0xFFB58A45);
+        String label = (int) ClientSkills.mana + "/" + (int) ClientSkills.maxMana;
+        g.text(font, label, x + 10, top, 0xFF9FE6FF, true);
         if (!ClientSkills.active.isEmpty()) {
             long remaining = ClientSkills.cooldownTicks - (now - ClientSkills.syncedAt) / 50;
-            String v = remaining > 0 ? (remaining / 20 + 1) + "s" : "V";
-            WfGui.sprite(g, WfGui.id("button_small"), x + w + 4, y - 6, 12, 12);
-            g.centeredText(mc.font, v, x + w + 10, y - 4, remaining > 0 ? 0xFF6E5A40 : 0xFF2B1B0C);
+            String v = remaining > 0 ? (remaining / 20 + 1) + "s" : WayfarersClient.ABILITY_KEY.getTranslatedKeyMessage().getString();
+            int w = Math.max(12, font.width(v) + 5);
+            WfGui.sprite(g, WfGui.id("button_small"), x + 10, bottom - 11, w, 12);
+            g.text(font, v, x + 10 + (w - font.width(v) + 1) / 2, bottom - 9, remaining > 0 ? 0xFF6E5A40 : 0xFF2B1B0C, false);
         }
     }
 }

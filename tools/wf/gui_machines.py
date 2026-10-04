@@ -722,3 +722,62 @@ def _mc(name):
     data, Image, io, base64 = entry
     im = Image.open(io.BytesIO(base64.b64decode(data.split(",", 1)[1]))).convert("RGBA")
     return im.resize((16, 16), Image.LANCZOS)
+
+
+def mockup_settings(G, li=1):
+    """SettingsScreen.java (Mods > Wayfarers > Config): same window, rows and controls."""
+    from . import guide
+    tr = {}
+    for path in ("src/main/resources/assets/wayfarers/lang/fr_fr.json", "src/main/resources/assets/wayfarers/lang/en_us.json"):
+        pass
+    import json
+    root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+    tr = json.load(open(os.path.join(root, "src/main/resources/assets/wayfarers/lang",
+                                     "fr_fr.json" if li else "en_us.json"), encoding="utf-8"))
+    k = "gui.wayfarers.settings."
+    w_, rows_n, row_h, cx = 300, 5, 22, 120
+    h_ = 40 + rows_n * row_h + 30
+    m = G.Mock(w_ + 40, h_ + 40)
+    ox, oy = 20, 22
+    texts = []
+    m.nine("panel", ox, oy, w_, h_, 9)
+    title = tr[k + "title"]
+    tw = max(90, guide.text_width(title) + 24)
+    m.nine("title_plate", ox + (w_ - tw) // 2, oy - 5, tw, 18, 6)
+    texts.append((ox + w_ // 2 - guide.text_width(title) // 2, oy, title, G.hexc("2B1B0C"), False))
+
+    def row_y(i):
+        return oy + 26 + i * row_h
+
+    for i, key in enumerate(["health_bars", "damage_numbers", "quest_tracker", "tips", "keys"]):
+        texts.append((ox + 12, row_y(i) + 5, tr[k + key], G.INK, False))
+    x = ox + cx
+    for j, mode in enumerate(["always", "damaged", "never"]):
+        lab = tr[k + "health_bars." + mode]
+        bw = max(18, guide.text_width(lab) + 10)
+        m.nine("button_on" if j == 1 else "button", x, row_y(0), bw, 18, 4)
+        texts.append((x + (bw - guide.text_width(lab) + 1) // 2, row_y(0) + 5, lab,
+                      G.hexc("F6C343") if j == 1 else G.hexc("FFFFFF"), True))
+        x += bw + 2
+    for i, on in ((1, True), (2, True), (3, False)):
+        m.im.alpha_composite(G.Image.open(G.sp("toggle_on" if on else "toggle_off")).convert("RGBA"), (ox + cx, row_y(i) + 2))
+        texts.append((ox + cx + 30, row_y(i) + 5, tr["gui.wayfarers.machine." + ("on" if on else "off")], G.INK, False))
+    kb = tr[k + "keys.button"]
+    bw = max(60, guide.text_width(kb) + 16)
+    m.nine("button", ox + cx, row_y(4), bw, 18, 4)
+    texts.append((ox + cx + (bw - guide.text_width(kb)) // 2, row_y(4) + 5, kb, G.hexc("FFFFFF"), True))
+    done = "Terminé" if li else "Done"
+    m.nine("button", ox + w_ // 2 - 50, oy + h_ - 28, 100, 20, 4)
+    texts.append((ox + w_ // 2 - guide.text_width(done) // 2, oy + h_ - 22, done, G.hexc("FFFFFF"), True))
+    S = 3
+    big = m.im.resize((m.im.width * S, m.im.height * S), G.Image.NEAREST)
+    d = G.ImageDraw.Draw(big)
+    ttf = G.ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 26)
+    for x, y, s, c, shadow in texts:
+        cx_ = x
+        for ch in s:
+            if shadow:
+                d.text(((cx_ + 1) * S, (y + 1) * S - 3), ch, font=ttf, fill=(0, 0, 0, 160))
+            d.text((cx_ * S, y * S - 3), ch, font=ttf, fill=c)
+            cx_ += guide.char_width(ch)
+    big.save(os.path.join(G.PREVIEW, "settings" + ("" if li else "_en") + ".png"))

@@ -358,7 +358,7 @@ public class GuideScreen extends Screen {
                 ix += 20;
             }
         }
-        g.centeredText(font, Component.literal((sheet + 1) + " / " + sheets.size()), px + pw / 2, top + h - 27, WfGui.INK_SOFT);
+        WfGui.centered(g, font, Component.literal((sheet + 1) + " / " + sheets.size()), px + pw / 2, top + h - 27, WfGui.INK_SOFT);
         super.extractRenderState(g, mouseX, mouseY, a);
     }
 
@@ -454,6 +454,19 @@ public class GuideScreen extends Screen {
             return true;
         }
         return super.keyPressed(event);
+    }
+
+    /** Screen to go back to on close (the player's inventory when the page was opened from it), else the game. */
+    private net.minecraft.client.gui.screens.Screen back;
+
+    public GuideScreen returningTo(net.minecraft.client.gui.screens.Screen back) {
+        this.back = back;
+        return this;
+    }
+
+    @Override
+    public void onClose() {
+        minecraft.gui.setScreen(back);
     }
 
     @Override

@@ -829,6 +829,7 @@ def main():
         mockup_guide()
         gui_machines.mockups(sys.modules[__name__])
         gui_machines.mockups(sys.modules[__name__], li=0)
+        gui_machines.mockup_settings(sys.modules[__name__])
     print("gui sprites written to", os.path.relpath(OUT, ROOT))
 
 

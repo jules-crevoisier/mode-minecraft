@@ -121,7 +121,8 @@ public final class MobHealthBars {
         PoseStack ps = event.getPoseStack();
         SubmitNodeCollector out = event.getNodeCollector();
         ps.pushPose();
-        ps.translate(0.0F, state.boundingBoxHeight + 0.5F, 0.0F);
+        // above the name tag when the creature has one (they used to be drawn on top of each other)
+        ps.translate(0.0F, state.boundingBoxHeight + (state.nameTag != null ? 0.8F : 0.5F), 0.0F);
         ps.mulPose(event.getCameraState().orientation);
         ps.scale(SCALE, -SCALE, SCALE);
         Font font = mc.font;
