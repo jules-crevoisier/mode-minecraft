@@ -491,6 +491,21 @@ NEW_GROUPS = [
         ("Serveur et performances", "Moins de calculs à chaque tick, boussoles plus rapides, HUD plus léger ; et "
          "les options utiles pour un serveur.", "performances", "items:minecraft:comparator,minecraft:clock"),
     ]),
+    ("Villages enrichis", "Les cinq villages du jeu (plaines, désert, savane, neige, taïga) grandissent : de "
+     "nouveaux bâtiments dans leur propre style, avec une touche de laiton et de vapeur.", [
+        ("Place à pierre de voyage", "Un village sur quatre se forme autour d'une place : pierre de voyage sur un "
+         "socle de laiton, tableau d'annonces, cloche, lampes, bancs et massifs fleuris.", "m-villages",
+         "items:waystone,edison_lamp,minecraft:bell"),
+        ("Auberge des Voyageurs", "Taverne avec comptoir, cheminée, lustres de laiton, aubergiste et voyageur de "
+         "passage ; chambres à l'étage, balcon et enseignes suspendues.", "m-villages",
+         "items:mahogany_table,mahogany_chair,brass_chandelier"),
+        ("Atelier, tour de guet, marché, verger", "L'atelier du bricoleur et sa chaudière, la tour de guet et sa "
+         "cloche d'alarme, des étals rayés avec leurs marchands, un verger clos ; plus des cottages, des manoirs et "
+         "des coins de puits.", "m-villages", "items:gear_panel,pressure_gauge,copper_pipes,smokestack_bricks"),
+        ("Rues et avant-postes", "Lampes de laiton, panneaux et jardinières le long des rues. Les avant-postes "
+         "pillards ont des balistes à vapeur et des barricades hérissées.", "m-villages",
+         "items:brass_railing,dark_iron_plating,minecraft:crossbow"),
+    ]),
     ("Laiton et vapeur", "Des outils de tous les jours et de quoi bâtir vite.", [
         ("Gadgets à vapeur", "Clé à molette, grappin, planeur, pistolet à rivets, montre à gousset et boussole de "
          "dirigeable : six objets de laiton pour grimper, planer, tirer et s'orienter.", "gadgets",
@@ -620,6 +635,11 @@ TEST_CHECKLIST = [
      "Les Terres rouillées ont des arbres de bois rouillé et de la roche rouillée ; la Forêt enchantée des arbres "
      "de bois-lueur qui luisent la nuit. Plante la pousse avec de la poudre d'os ; mets le marbre dans un tailleur "
      "de pierre : poli, briques, pilier, sculpté."),
+    ("Villages enrichis", ["/place structure minecraft:village_plains", "/place structure minecraft:village_desert",
+                           "/place structure minecraft:village_snowy", "/place structure minecraft:pillager_outpost"],
+     "Recommence quelques fois (chaque village est tiré au sort) : auberge, atelier à cheminée, tour de guet, "
+     "marché, verger, cottages et manoirs dans le style du village, lampes en laiton dans les rues ; parfois une "
+     "place avec une pierre de voyage. Les avant-postes ont des balistes à vapeur et des barricades."),
 ]
 
 BIOMES = {

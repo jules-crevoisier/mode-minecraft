@@ -6,7 +6,8 @@ Used by CI (.github/workflows/build.yml) after `./gradlew build`:
 
 The server directory must already contain an installed Forge server and the mod jar in mods/.
 The script accepts the EULA, starts the server, waits for "Done", then from the console:
-  * places every structure (in its own dimension),
+  * places every structure (in its own dimension), then our village and outpost pieces and vanilla villages and
+    outposts that use them (after checking the vanilla jigsaw names they rely on in the server jar),
   * summons every entity and every item,
   * breaks mod blocks (loot tables + Forge loot modifiers),
   * spawns every loot table,
@@ -22,6 +23,7 @@ import subprocess
 import sys
 import threading
 import time
+import zipfile
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 RES = os.path.join(ROOT, "src", "main", "resources")
@@ -193,6 +195,8 @@ class Phase:
 def exercise_mod(srv, failures):
     with Phase("structures"):
         place_structures(srv, failures)
+    with Phase("vanilla villages and outposts"):
+        vanilla_villages(srv, failures)
     with Phase("entities and items"):
         summon_all(srv, failures)
     with Phase("creatures fighting"):
@@ -229,6 +233,110 @@ def place_structures(srv, failures):
         if not res or "Generated structure" not in res:
             failures.append(f"place structure {sid} in {dim}: {res}")
         srv.run(f"execute in {dim} run forceload remove all", r"Unmarked|forceload|No chunks", 30)
+
+
+VILLAGES = ["plains", "desert", "savanna", "snowy", "taiga"]
+
+
+def our_templates(sub):
+    """Template ids of ours under data/wayfarers/structure/<sub>."""
+    root = os.path.join(DATA, "structure")
+    return sorted("wayfarers:" + os.path.relpath(p, root)[:-4].replace(os.sep, "/")
+                  for p in glob.glob(os.path.join(root, sub, "**", "*.nbt"), recursive=True))
+
+
+def vanilla_villages(srv, failures):
+    """Our village and outpost pieces (tools/wf/village.py): every template loads and places, then vanilla villages
+    of the five types and pillager outposts assemble with our pieces in their pools (bad jigsaws or missing
+    templates show up as log errors)."""
+    x = -3000
+    srv.run(f"execute in minecraft:overworld run forceload add {x} 0 {x + 399} 127",
+            r"Marked|forceload|No chunks|too many|Too many", 120)
+    for i, tid in enumerate(our_templates("village") + our_templates("pillager_outpost")):
+        check_budget(f"template {tid}")
+        res = srv.run(f"execute in minecraft:overworld run place template {tid} {x + (i % 20) * 20} 100 {(i // 20) * 32}",
+                      r"Loaded template|Failed to place|no template|not loaded|Not all chunks|Unknown|Invalid|Incorrect", 60)
+        if not res or "Loaded template" not in res:
+            failures.append(f"place template {tid}: {res}")
+    srv.run("execute in minecraft:overworld run forceload remove all", r"Unmarked|forceload|No chunks", 30)
+    spots = [(vt, k) for vt in VILLAGES for k in range(3)] + [("outpost", k) for k in range(3)]
+    for i, (vt, k) in enumerate(spots):
+        check_budget(f"village {vt}")
+        cx, cz = -6000 - 400 * i, 0
+        r = 112
+        res = srv.run(f"execute in minecraft:overworld run forceload add {cx - r} {cz - r} {cx + r - 1} {cz + r - 1}",
+                      r"Marked|forceload|No chunks|too many|Too many", 120)
+        sid = "minecraft:pillager_outpost" if vt == "outpost" else f"minecraft:village_{vt}"
+        for attempt in range(12):
+            res = srv.run(f"execute in minecraft:overworld run place structure {sid} {cx} 100 {cz}",
+                          r"Generated structure|Failed to place|not loaded|commands\.place|Unknown|Invalid|Incorrect", 120)
+            if not res or "not loaded" not in res:
+                break
+            time.sleep(5)
+        if not res or "Generated structure" not in res:
+            failures.append(f"place structure {sid}: {res}")
+        srv.run("execute in minecraft:overworld run forceload remove all", r"Unmarked|forceload|No chunks", 30)
+
+
+def _jigsaws(raw):
+    """(name, target, pool) of every jigsaw in a template (old 1.14 data upgraded like JigsawPropertiesFix)."""
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from wf import nbt
+    t = nbt.loads(raw)
+    pal = t["palette"]
+    out = []
+    for b in t["blocks"]:
+        if pal[b["state"]]["Name"] == "minecraft:jigsaw" and b.get("nbt"):
+            d = b["nbt"]
+            if "attachement_type" in d:
+                name = target = d["attachement_type"]
+                pool = d.get("target_pool", "minecraft:empty")
+            else:
+                name, target, pool = d.get("name"), d.get("target"), d.get("pool")
+            out.append((name, target, pool))
+    return out
+
+
+def check_vanilla_jigsaws(server_dir, failures):
+    """Our village pieces copy the vanilla jigsaw conventions (tools/wf/village.py): read the vanilla street and
+    outpost templates from the server jar and check they still connect the way our pieces expect."""
+    probe = "data/minecraft/structure/village/plains/streets/straight_01.nbt"
+    jar = None
+    for path in glob.glob(os.path.join(server_dir, "**", "*.jar"), recursive=True):
+        try:
+            with zipfile.ZipFile(path) as z:
+                if probe in z.namelist():
+                    jar = path
+                    break
+        except (zipfile.BadZipFile, OSError):
+            continue
+    if not jar:
+        print("[smoke] vanilla jigsaw check skipped: no jar with the vanilla village templates", flush=True)
+        return
+    with zipfile.ZipFile(jar) as z:
+        names = z.namelist()
+        for vt in VILLAGES:
+            js = []
+            for n in names:
+                if n.startswith(f"data/minecraft/structure/village/{vt}/streets/") and n.endswith(".nbt"):
+                    js += _jigsaws(z.read(n))
+            houses = {t for _, t, p in js if p == f"minecraft:village/{vt}/houses"}
+            streets = {(nm, t) for nm, t, p in js if p == f"minecraft:village/{vt}/streets"}
+            decor = {t for _, t, p in js if p == f"minecraft:village/{vt}/decor"}
+            if "minecraft:building_entrance" not in houses:
+                failures.append(f"vanilla {vt} streets reach houses through {houses}, our houses answer to "
+                                f"minecraft:building_entrance")
+            if not any(nm == "minecraft:street" for nm, _ in streets) or \
+                    not any(t == "minecraft:street" for _, t in streets):
+                failures.append(f"vanilla {vt} streets join through {streets}, our plaza and avenue use minecraft:street")
+            if decor and "minecraft:bottom" not in decor:
+                failures.append(f"vanilla {vt} street decorations hang on {decor}, ours on minecraft:bottom")
+        plate = "data/minecraft/structure/pillager_outpost/feature_plate.nbt"
+        if plate in names:
+            feats = {t for _, t, p in _jigsaws(z.read(plate)) if p == "minecraft:pillager_outpost/features"}
+            if "minecraft:bottom" not in feats:
+                failures.append(f"vanilla outpost feature plates hold features by {feats}, ours hang on minecraft:bottom")
+    print(f"[smoke] vanilla jigsaw conventions checked in {os.path.basename(jar)}", flush=True)
 
 
 def load_origin(srv):
@@ -342,6 +450,8 @@ def main():
     overhaul = "--overhaul" in sys.argv[2:]
     prepare(server_dir, overhaul)
     failures = []
+    if not overhaul:
+        check_vanilla_jigsaws(server_dir, failures)
     srv = Server(server_dir, server_command(server_dir), "smoke-console-overhaul.log" if overhaul else "smoke-console.log")
     # stop waiting as soon as the server gives up (a broken data pack used to cost the whole 15 minutes)
     started = srv.wait_for(r"Done \(|Failed to load datapacks|Crashing|Encountered an unexpected exception",

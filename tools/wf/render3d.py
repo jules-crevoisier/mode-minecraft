@@ -22,6 +22,10 @@ _ICON_DIRS = [
 
 # 1.20 template names -> 26.2 names
 RENAMED = {"chain": "iron_chain", "grass": "short_grass"}
+# blocks without an item of their own: the icon of the closest item
+ICON_ALIASES = {"farmland": "dirt", "sweet_berry_bush": "sweet_berries", "carrots": "carrot", "potatoes": "potato",
+                "beetroots": "beetroot", "melon_stem": "melon_seeds", "pumpkin_stem": "pumpkin_seeds",
+                "cocoa": "cocoa_beans", "water_cauldron": "cauldron"}
 # blocks whose icon is not useful (flat sprites) or missing: solid colour fallbacks
 FLUIDS = {"water": (40, 80, 200, 150), "lava": (240, 110, 20, 255), "bubble_column": (40, 80, 200, 150)}
 SKIP = {"air", "structure_void", "jigsaw", "cave_air", "void_air", "barrier", "light"}
@@ -188,6 +192,63 @@ def _boxes_icon(colors, boxes):
     return img
 
 
+def _is_furniture(name):
+    try:
+        from . import furniture
+    except ImportError:
+        return False
+    return name in furniture.FURNITURE
+
+
+def _furniture_icon(name, props):
+    """Mod furniture (wf/furniture.py): its model boxes, each in the average colour of its texture, turned to
+    the block's facing/axis."""
+    try:
+        from . import furniture
+    except ImportError:
+        return None
+    f = furniture.FURNITURE.get(name)
+    if not f:
+        return None
+    from PIL import ImageDraw
+    props = props or {}
+    turn = {"north": 0, "east": 1, "south": 2, "west": 3}.get(props.get("facing", "north"), 0)
+    axis = props.get("axis", "y")
+    img = Image.new("RGBA", (32, 32), (0, 0, 0, 0))
+    dr = ImageDraw.Draw(img)
+    cache = {}
+
+    def colour(tex):
+        if tex not in cache:
+            p = os.path.join(MOD_TEX, tex + ".png")
+            c = Image.open(p).convert("RGBA").resize((1, 1), Image.BOX).getpixel((0, 0)) if os.path.exists(p) \
+                else (150, 120, 60, 255)
+            cache[tex] = c[:3] + (255,)
+        return cache[tex]
+
+    def shade(c, k):
+        return (int(c[0] * k), int(c[1] * k), int(c[2] * k), 255)
+
+    def P(u, v, w):
+        return (16 + (u - w) * 14, 1 + (u + w) * 7 + (1 - v) * 16)
+
+    boxes = []
+    for x0, y0, z0, x1, y1, z1, tex in f["boxes"]:
+        b = [x0 / 16, y0 / 16, z0 / 16, x1 / 16, y1 / 16, z1 / 16]
+        if axis == "x":
+            b = [b[1], b[0], b[2], b[4], b[3], b[5]]
+        elif axis == "z":
+            b = [b[0], b[2], b[1], b[3], b[5], b[4]]
+        for _ in range(turn):  # clockwise quarter turns seen from above: (x, z) -> (1 - z, x)
+            b = [1 - b[5], b[1], b[0], 1 - b[2], b[4], b[3]]
+        boxes.append((b, colour(tex)))
+    for (u0, v0, w0, u1, v1, w1), c in sorted(boxes, key=lambda e: sum(e[0])):
+        dr.polygon([P(u0, v0, w1), P(u1, v0, w1), P(u1, v1, w1), P(u0, v1, w1)], fill=shade(c, 0.82))
+        dr.polygon([P(u1, v0, w0), P(u1, v0, w1), P(u1, v1, w1), P(u1, v1, w0)], fill=shade(c, 0.62))
+        dr.polygon([P(u0, v1, w0), P(u1, v1, w0), P(u1, v1, w1), P(u0, v1, w1)], fill=c)
+    return img
+
+
 def _shaped_icon(name, props, base_icon):
     colors = _face_colors(base_icon)
     if name.endswith("_slab"):
@@ -236,7 +297,8 @@ def icon(block_id, props=None):
 def _icon(block_id, props=None):
     ns, name = block_id.split(":")
     name = RENAMED.get(name, name)
-    key = (ns, name, tuple(sorted((props or {}).items())) if name.endswith("_slab") else ())
+    keep_props = name.endswith("_slab") or (ns == "wayfarers" and _is_furniture(name))
+    key = (ns, name, tuple(sorted((props or {}).items())) if keep_props else ())
     if key in _icons:
         return _icons[key]
     img = None
@@ -255,13 +317,13 @@ def _icon(block_id, props=None):
         from PIL import ImageDraw
         ImageDraw.Draw(img).polygon([(16, 1), (30, 8), (16, 15), (2, 8)], fill=rgba)
     elif ns == "wayfarers":
-        img = _mod_icon(name)
+        img = _furniture_icon(name, props) or _mod_icon(name)
     else:
         path = _manifest_map().get(f"minecraft:{name}")
         if path is None:
             # blocks without an item (e.g. wall_torch, potted_x, *_plant): try the base item
-            for alt in (name.replace("wall_", ""), name.replace("potted_", ""), name.replace("_plant", ""),
-                        name.replace("_cauldron", "") if "cauldron" in name else name):
+            for alt in (ICON_ALIASES.get(name, name), name.replace("wall_", ""), name.replace("potted_", ""),
+                        name.replace("_plant", ""), name.replace("_cauldron", "") if "cauldron" in name else name):
                 path = _manifest_map().get(f"minecraft:{alt}")
                 if path:
                     break
@@ -280,7 +342,8 @@ def _icon(block_id, props=None):
 OPAQUE_HINTS = ("slab", "stairs", "fence", "wall", "pane", "bars", "glass", "leaves", "door", "trapdoor", "torch",
                 "lantern", "chain", "flower", "grass", "fern", "carpet", "rail", "ladder", "vine", "sign", "button",
                 "plate", "water", "lava", "candle", "rod", "pot", "head", "skull", "banner", "bed", "chest", "campfire",
-                "cluster", "bud", "coral", "kelp", "sapling", "mushroom", "roots", "web", "snow", "cauldron")
+                "cluster", "bud", "coral", "kelp", "sapling", "mushroom", "roots", "web", "snow", "cauldron",
+                "railing", "_pipe", "cog", "valve", "shelf", "chandelier", "chair", "table", "hanging")
 
 
 def _opaque(name):
