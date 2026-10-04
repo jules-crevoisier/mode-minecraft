@@ -195,6 +195,8 @@ def exercise_mod(srv, failures):
         place_structures(srv, failures)
     with Phase("entities and items"):
         summon_all(srv, failures)
+    with Phase("creatures fighting"):
+        creatures_fight(srv, failures)
     with Phase("blocks and loot"):
         blocks_and_loot(srv, failures)
     with Phase("reload"):
@@ -245,6 +247,26 @@ def summon_all(srv, failures):
                       r"Summoned|Unable|Unknown|Invalid|Incorrect|Expected", 60)
         if not res or "Summoned" not in res:
             failures.append(f"item {iid}: {res}")
+
+
+def creatures_fight(srv, failures):
+    """Every creature of the mod on the ground next to a villager, then 600 ticks at full speed: AI goals, attacks,
+    projectiles, summons and boss phases all run, and any exception in them lands in the log."""
+    srv.run("execute in minecraft:overworld run forceload add -64 -64 64 64", r"Marked|forceload|No chunks|already", 300)
+    ground = -60  # the flat test world: bedrock, 2 dirt, grass on top at y -61
+    for i, eid in enumerate(lang_ids("entity.wayfarers.")):
+        x, z = (i % 8) * 14 - 49, (i // 8) * 14 - 49
+        res = srv.run(f"execute in minecraft:overworld run summon wayfarers:{eid} {x} {ground} {z}",
+                      r"Summoned|Unable|Unknown|Invalid|Incorrect|not loaded", 60)
+        if not res or "Summoned" not in res:
+            failures.append(f"summon {eid} on the ground: {res}")
+        srv.run(f"execute in minecraft:overworld run summon minecraft:villager {x + 3} {ground} {z}",
+                r"Summoned|Unable|Invalid|not loaded", 30)
+    srv.run("execute in minecraft:overworld run summon minecraft:zombie 0 -60 0", r"Summoned|Unable|Invalid", 30)
+    res = srv.run("tick sprint 600", r"Sprint completed|Unknown|Incorrect", 600)
+    if not res or "Sprint completed" not in res:
+        failures.append(f"tick sprint: {res}")
+    srv.run("execute in minecraft:overworld run kill @e[type=!minecraft:player]", r"Killed|No entity", 60)
 
 
 def blocks_and_loot(srv, failures):
