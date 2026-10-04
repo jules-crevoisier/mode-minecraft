@@ -12,6 +12,19 @@ The noises are the game's noises (same octaves and amplitudes) with other random
 right but this is not the map of any real seed.
 
   python3 tools/world_preview.py [--size 4096] [--step 8] [--seed 1] [--center X Z] [--sections-only]
+
+Biome statistics (2D only, ~15 s a seed): the share of the land each biome takes on 8192 x 8192 blocks around 0,0
+for several seeds, checked against the targets (every land biome 1-8% on average, the SHOWCASE biomes 3-6%, none
+above 10% on any seed), the distance /locate needs for each biome, and the land biomes within 1500 blocks of spawn:
+  build/world_preview/stats.txt, stats_relief_<seed>.png, stats_biomes_<seed>.png (1 px = step blocks)
+
+  python3 tools/world_preview.py --stats [--seeds 1 2 3] [--stats-size 8192] [--stats-step 16]
+
+Postcards (needs Pillow): an isometric render of a 96 x 96 sample of each showcase biome (the window where it covers
+the most ground) with its surface blocks and decoration (wf/postcard.py), on the biome's fog colour:
+  build/world_preview/postcard_<biome>.png, postcards.txt
+
+  python3 tools/world_preview.py --postcards [BIOME ...] [--seed 1]
 """
 import argparse
 import colorsys
@@ -98,11 +111,11 @@ def climate(ev, xs, zs):
     return out
 
 
-def biome_lookup(points, cl):
+def biome_lookup(points, cl, depth=None, names=None):
     """Climate.ParameterList: the point nearest to the sampled parameters (surface: depth 0)."""
     keys = ["temperature", "humidity", "continentalness", "erosion", "weirdness"]
     vals = [cl["t"], cl["h"], cl["c"], cl["e"], cl["w"]]
-    names = sorted({p["biome"] for p in points})
+    names = names or sorted({p["biome"] for p in points})
     idx_of = {n: i for i, n in enumerate(names)}
     lo = np.zeros((len(points), 6), np.float32)
     hi = np.zeros((len(points), 6), np.float32)
@@ -113,13 +126,34 @@ def biome_lookup(points, cl):
             a, b = (v, v) if isinstance(v, (int, float)) else v
             lo[i, j], hi[i, j] = a, b
         bid[i] = idx_of[p["biome"]]
-    flat = np.stack([v.ravel() for v in vals] + [np.zeros(vals[0].size)], axis=1).astype(np.float32)
+    dep = np.zeros(vals[0].size) if depth is None else np.broadcast_to(depth, vals[0].shape).ravel()
+    flat = np.stack([v.ravel() for v in vals] + [dep], axis=1).astype(np.float32)
+    if depth is None:
+        # the 5 climate axes are cut by the points' bounds into cells whose nearest point is the same for every
+        # sample inside: find it once per cell (at the cell's centre), then look the samples up
+        edges, centres = [], []
+        for j in range(5):
+            e = np.unique(np.concatenate([lo[:, j], hi[:, j]]))
+            edges.append(e)
+            centres.append(np.concatenate([[e[0] - 0.01], (e[:-1] + e[1:]) / 2, [e[-1] + 0.01]]))
+        cells = np.stack([np.searchsorted(edges[j], flat[:, j], side="right") for j in range(5)], axis=1)
+        uniq, inv = np.unique(cells, axis=0, return_inverse=True)
+        centre = np.stack([centres[j][uniq[:, j]] for j in range(5)] + [np.zeros(len(uniq))], axis=1)
+        table = _nearest(centre.astype(np.float32), lo, hi, bid)
+        return table[inv.ravel()].reshape(vals[0].shape), names
+    return _nearest(flat, lo, hi, bid).reshape(vals[0].shape), names
+
+
+def _nearest(flat, lo, hi, bid, chunk=512):
     best = np.zeros(flat.shape[0], np.int32)
-    for s in range(0, flat.shape[0], 2048):
-        f = flat[s:s + 2048, None, :]
-        d = np.maximum(0, np.maximum(lo[None] - f, f - hi[None]))
-        best[s:s + 2048] = bid[np.argmin((d * d).sum(axis=2), axis=1)]
-    return best.reshape(vals[0].shape), names
+    for s in range(0, flat.shape[0], chunk):
+        f = flat[s:s + chunk]
+        acc = np.zeros((f.shape[0], lo.shape[0]), np.float32)
+        for j in range(lo.shape[1]):
+            d = np.maximum(0, np.maximum(lo[None, :, j] - f[:, j, None], f[:, j, None] - hi[None, :, j]))
+            acc += d * d
+        best[s:s + chunk] = bid[np.argmin(acc, axis=1)]
+    return best
 
 
 # ------------------------------------------------------------------ colours
@@ -207,6 +241,229 @@ def section(ev, settings, x0, z0, x1, z1, step=2):
     return img
 
 
+# ------------------------------------------------------------------ biome-share statistics (2D, fast)
+# the Dregora-like biomes the overhaul is judged on: 3-6% of the land each
+SHOWCASE = ["crimson_mire", "volcanic_highlands", "ashen_wastes", "alpine_peaks", "pale_dunes", "geyser_basin",
+            "rimefrost_fjords", "aetherblight_grove"]
+
+
+def biome_kinds():
+    """Our biome id -> 'cave', 'water' (oceans, rivers, the mushroom isles), 'shore' (beaches) or 'land'."""
+    from wf import biomes as B
+    out = {}
+    for bid, b in B.BIOMES.items():
+        if b["cave"]:
+            out[bid] = "cave"
+        elif b["mobs"] in ("ocean", "cold_ocean", "frozen_ocean", "warm_ocean", "mushroom", "river"):
+            out[bid] = "water"
+        elif b["surface"] in ("beach", "snowy_beach", "basalt"):
+            out[bid] = "shore"
+        else:
+            out[bid] = "land"
+    return out
+
+
+def climate_2d(ev, xs, zs, extra=()):
+    """The five climate values (and the 2D terrain height in blocks) on a grid, tile by tile."""
+    out = {k: np.zeros((len(zs), len(xs))) for k in ("t", "h", "c", "e", "w", "y") + tuple(extra)}
+    weird = T.WEIRD if T.WEIRD in ev.functions else "minecraft:overworld/ridges"      # (older packs)
+    ids = {"t": T.TEMP, "h": T.VEG, "c": T.CONT, "e": T.EROS, "w": weird, "y": T.DF + "terrain"}
+    ids.update({k: T.DF + k for k in extra})
+    tile = 256
+    for tz in range(0, len(zs), tile):
+        for tx in range(0, len(xs), tile):
+            x = xs[None, tx:tx + tile, None].astype(np.float64)
+            z = zs[tz:tz + tile, None, None].astype(np.float64)
+            ev.begin(x, 0.0, z)
+            for k, fid in ids.items():
+                v = np.broadcast_to(ev.ev(fid), (z.shape[0], x.shape[1], 1))[..., 0]
+                out[k][tz:tz + tile, tx:tx + tile] = v
+    out["y"] = T.y_of(out["y"])
+    return out
+
+
+def run_stats(seeds, size, step, locate_size=12800, locate_step=64, near=1500):
+    """Per-seed biome shares of the land on size x size blocks around 0,0, the nearest spot of every biome
+    (what /locate biome finds within its 6400 radius) and the distinct land biomes within `near` blocks of spawn.
+    Writes build/world_preview/stats.txt."""
+    global SEED
+    kinds = biome_kinds()
+    lines = [f"biome shares of the land (ground above sea level), {size}x{size} around 0,0, step {step}; "
+             f"seeds {' '.join(map(str, seeds))}", ""]
+    dim = json.load(open(os.path.join(DATA, "minecraft", "dimension", "overworld.json")))
+    points = dim["generator"]["biome_source"]["biomes"]
+    names = sorted({p["biome"] for p in points})
+    surf = [p for p in points if (lambda d: d if isinstance(d, (int, float)) else d[0])(p["parameters"]["depth"]) <= 0.0]
+    shares, nearest, near_count, extra = {}, {}, {}, {}
+    for seed in seeds:
+        SEED = seed
+        ev, _, _ = load_pack()
+        t0 = time.time()
+        n = size // step
+        xs = -size // 2 + np.arange(n) * step + step // 2
+        cl = climate_2d(ev, xs, xs, extra=tuple(k for k in ("mire_mask", "fjord_mask") if T.DF + k in ev.functions))
+        bmap, _ = biome_lookup(surf, cl, names=names)
+        land = cl["y"] >= SEA + 0.5
+        cnt = np.bincount(bmap[land].ravel(), minlength=len(names))
+        shares[seed] = cnt / max(1, land.sum())
+        # water features: inland water (below sea level, continentalness above the coast) and the river biomes
+        inland = (cl["y"] < SEA + 0.5) & (cl["c"] > -0.11)
+        # where that water comes from: river lines (|weirdness| < 0.05), mires, fjords, else lakes
+        river = np.abs(cl["w"]) < 0.05
+        mire = cl.get("mire_mask", np.zeros_like(cl["y"])) > 0.5
+        fjord = cl.get("fjord_mask", np.zeros_like(cl["y"])) > 0.5
+        lakes = inland & ~river & ~mire & ~fjord
+        # buildable ground: dry land whose height varies by at most 6 blocks over 48 x 48 blocks (3 x 3 samples
+        # at step 16; the 2D height, without the 3D noise)
+        yy = np.pad(cl["y"], 1, mode="edge")
+        win = np.stack([yy[1 + dz:yy.shape[0] - 1 + dz, 1 + dx:yy.shape[1] - 1 + dx]
+                        for dz in (-1, 0, 1) for dx in (-1, 0, 1)])
+        flat = land & (win.max(0) - win.min(0) <= 6 * step / 16.0) & (win.min(0) >= SEA + 0.5)
+        extra[seed] = (100 * land.mean(), 100 * inland.mean(), 100 * (inland & river).mean(),
+                       100 * (inland & mire).mean(), 100 * (inland & fjord).mean(), 100 * lakes.mean(),
+                       100 * flat.sum() / max(1, land.sum()))
+        # quick maps from the 2D height (no 3D noise, caves or spires): relief and biomes
+        shade = hillshade(cl["y"], step)[..., None]
+        rel = relief_colour(cl["y"]) * np.where(land[..., None], shade, 0.92)
+        write_png(os.path.join(OUT, f"stats_relief_{seed}.png"), np.clip(rel, 0, 255).astype(np.uint8))
+        cols = biome_colours(names)
+        pal = np.array([cols[nm] for nm in names], float)
+        bio = pal[bmap] * (0.45 + 0.55 * shade)
+        bio[~land] = bio[~land] * 0.4 + np.array([30, 70, 150]) * 0.6
+        write_png(os.path.join(OUT, f"stats_biomes_{seed}.png"), np.clip(bio, 0, 255).astype(np.uint8))
+        # biomes near spawn
+        zz, xx = np.meshgrid(xs, xs, indexing="ij")
+        disc = (xx * xx + zz * zz <= near * near) & land
+        c2 = np.bincount(bmap[disc].ravel(), minlength=len(names))
+        near_count[seed] = sorted(names[i].split(":")[1] for i in range(len(names))
+                                  if c2[i] >= 0.003 * disc.sum() and kinds.get(names[i].split(":")[1]) == "land")
+        # /locate: the nearest sample of each biome on a coarser, larger grid (surface, and caves at y 0 and -40)
+        m = locate_size // locate_step
+        lx = -locate_size // 2 + np.arange(m) * locate_step
+        cl2 = climate_2d(ev, lx, lx)
+        bm2, _ = biome_lookup(surf, cl2, names=names)
+        zz, xx = np.meshgrid(lx, lx, indexing="ij")
+        dist = np.sqrt(xx * xx + zz * zz)
+        best = np.full(len(names), np.inf)
+        for layer in [bm2] + [_cave_layer(ev, points, names, lx, cl2, y) for y in (0, -40)]:
+            for i in range(len(names)):
+                m_ = layer == i
+                if m_.any():
+                    best[i] = min(best[i], dist[m_].min())
+        nearest[seed] = best
+        print(f"  seed {seed}: {time.time() - t0:.0f}s", flush=True)
+    rows = []
+    for i, nm in enumerate(names):
+        bid = nm.split(":")[1]
+        sh = [100 * shares[s][i] for s in seeds]
+        far = max(nearest[s][i] for s in seeds)
+        rows.append((kinds.get(bid, "?"), -np.mean(sh), bid, sh, far))
+    rows.sort()
+    bad = []
+    for kind, _, bid, sh, far in rows:
+        tag = "SHOWCASE" if bid in SHOWCASE else ""
+        lo_, hi_ = (3.0, 6.0) if bid in SHOWCASE else (1.0, 8.0)
+        flag = ""
+        # the target is on the mean over the seeds (one 8192-block sample holds only a few climate cycles, so a
+        # single seed can be off by 2x); no biome may take more than 10% of any sample
+        if kind == "land" and (max(sh) > 10.0 or not lo_ <= np.mean(sh) <= hi_):
+            flag = "  <-- out of range"
+            bad.append(bid)
+        if far > 6400:
+            flag += "  <-- NOT LOCATABLE (6400)"
+            bad.append(bid)
+        lines.append(f"{kind:5s} {bid:24s} " + " ".join(f"{v:5.2f}%" for v in sh) + f"   mean {np.mean(sh):5.2f}%"
+                     f"   locate max {far:6.0f}  {tag}{flag}")
+    lines.append("")
+    for s in seeds:
+        e = extra[s]
+        lines.append(f"seed {s}: land {e[0]:.1f}%, inland water {e[1]:.2f}% of the area (rivers {e[2]:.2f}, mires "
+                     f"{e[3]:.2f}, fjords {e[4]:.2f}, lakes {e[5]:.2f}), flat dry land {e[6]:.1f}% of the land; "
+                     f"{len(near_count[s])} land biomes within {near} blocks of spawn: {' '.join(near_count[s])}")
+    lines.append(f"out of range: {len(set(bad))} {' '.join(sorted(set(bad)))}")
+    open(os.path.join(OUT, "stats.txt"), "w").write("\n".join(lines) + "\n")
+    print("\n".join(lines))
+
+
+def _cave_layer(ev, points, names, lx, cl, y):
+    x = lx[None, :, None].astype(np.float64)
+    z = lx[:, None, None].astype(np.float64)
+    ev.begin(x, float(y), z)
+    depth = np.broadcast_to(ev.ev(T.DF + "depth"), (len(lx), len(lx), 1))[..., 0]
+    bm, _ = biome_lookup(points, cl, depth=depth, names=names)
+    return bm
+
+
+# ------------------------------------------------------------------ postcards (wf/postcard.py)
+RELIEF_LOVERS = {"alpine_peaks": 2.0, "volcanic_highlands": 1.0, "ashen_wastes": 0.6, "rimefrost_fjords": 0.6}
+
+
+def find_sites(ev, wanted, size=6144, step=16):
+    """For each wanted biome: the chunk-aligned 96 x 96 window where it covers the most ground (mountain biomes
+    also favour relief). Returns {biome: (x0, z0, cover)}."""
+    dim = json.load(open(os.path.join(DATA, "minecraft", "dimension", "overworld.json")))
+    points = dim["generator"]["biome_source"]["biomes"]
+    surf = [p for p in points if (lambda d: d if isinstance(d, (int, float)) else d[0])(p["parameters"]["depth"]) <= 0.0]
+    n = size // step
+    xs = -size // 2 + np.arange(n) * step
+    cl = climate_2d(ev, xs, xs)
+    bmap, names = biome_lookup(surf, cl)
+    land = cl["y"] >= SEA + 1
+    w = 96 // step
+
+    def box(a):
+        c = np.pad(np.cumsum(np.cumsum(a, 0), 1), ((1, 0), (1, 0)))
+        return c[w:, w:] - c[:-w, w:] - c[w:, :-w] + c[:-w, :-w]
+    hs = box(cl["y"]) / (w * w)
+    rough = np.sqrt(np.maximum(box(cl["y"] ** 2) / (w * w) - hs ** 2, 0))
+    out = {}
+    for bid in wanted:
+        nm = f"{T.NS}:{bid}"
+        if nm not in names:
+            continue
+        cover = box(((bmap == names.index(nm)) & land).astype(float)) / (w * w)
+        dist = np.hypot(*np.meshgrid(xs[:len(cover)], xs[:len(cover)], indexing="ij")) / size
+        score = cover + RELIEF_LOVERS.get(bid, 0.0) * np.minimum(rough / 40.0, 1.0) * (cover > 0.6) - 0.05 * dist
+        i, j = np.unravel_index(np.argmax(score), score.shape)
+        x0 = int(xs[j]) // 16 * 16
+        z0 = int(xs[i]) // 16 * 16
+        out[bid] = (x0, z0, float(cover[i, j]))
+    return out
+
+
+def run_postcards(seed, wanted, sites=None):
+    from wf import biomes as B
+    from wf import postcard
+    global SEED
+    SEED = seed
+    ev, _, dim = load_pack()
+    points = dim["generator"]["biome_source"]["biomes"]
+    surf = [p for p in points if (lambda d: d if isinstance(d, (int, float)) else d[0])(p["parameters"]["depth"]) <= 0.0]
+    names = sorted({p["biome"] for p in points})
+
+    def biome_at(xs, zs):
+        cl = climate_2d(ev, xs.astype(np.int64), zs.astype(np.int64))
+        bm, _ = biome_lookup(surf, cl, names=names)
+        return np.array([n.split(":")[1] for n in names], dtype=object)[bm]
+    t0 = time.time()
+    sites = sites or find_sites(ev, wanted)
+    lines = []
+    for bid in wanted:
+        if bid not in sites:
+            continue
+        x0, z0, cover = sites[bid]
+        a, blocks, log = postcard.build(ev, DATA, x0, z0, biome_at, seed)
+        b = B.BIOMES[bid]
+        path = os.path.join(OUT, f"postcard_{bid}.png")
+        postcard.render(blocks, path, b["fog"], grass_tint=b["grass"])
+        here = sorted(set(a.biome[1:-1, 1:-1].ravel()))
+        lines.append(f"postcard_{bid}.png: x {x0}..{x0 + 96} z {z0}..{z0 + 96} (seed {seed}), {100 * cover:.0f}% "
+                     f"{bid}, ground y {a.top[1:-1, 1:-1].min()}..{a.top[1:-1, 1:-1].max()}, biomes {' '.join(here)}; "
+                     + ", ".join(f"{k.split(':')[-1]} {v}" for k, v in sorted(log.items())))
+        print(lines[-1], f"({time.time() - t0:.0f}s)", flush=True)
+    open(os.path.join(OUT, "postcards.txt"), "w").write("\n".join(lines) + "\n")
+
+
 GROUND_OF = {"thorn": "mud", "arch": "tuff", "crystal": "gravel", "hoodoo": "white_concrete_powder",
              "hot_spring": "calcite", "flat_mushroom": "crimson_nylium", "ash_column": "tuff"}
 
@@ -237,7 +494,7 @@ def render_objects():
 
 
 def main():
-    global SEED
+    global SEED, DATA
     ap = argparse.ArgumentParser()
     ap.add_argument("--objects", action="store_true", help="only render the natural objects (needs Pillow)")
     ap.add_argument("--size", type=int, default=4096)
@@ -245,11 +502,26 @@ def main():
     ap.add_argument("--seed", type=int, default=1)
     ap.add_argument("--center", type=int, nargs=2, default=(0, 0))
     ap.add_argument("--sections-only", action="store_true")
+    ap.add_argument("--stats", action="store_true", help="only the biome-share statistics (2D, fast)")
+    ap.add_argument("--seeds", type=int, nargs="+", default=[1, 2, 3])
+    ap.add_argument("--stats-size", type=int, default=8192)
+    ap.add_argument("--stats-step", type=int, default=16)
+    ap.add_argument("--pack", help="another pack's data directory (e.g. an older version, to compare)")
+    ap.add_argument("--postcards", nargs="*", metavar="BIOME",
+                    help="isometric 96x96 renders of the showcase biomes (or of the biomes named), needs Pillow")
     args = ap.parse_args()
     SEED = args.seed
+    if args.pack:
+        DATA = os.path.abspath(args.pack)
     os.makedirs(OUT, exist_ok=True)
     if args.objects:
         render_objects()
+        return
+    if args.stats:
+        run_stats(args.seeds, args.stats_size, args.stats_step)
+        return
+    if args.postcards is not None:
+        run_postcards(args.seed, args.postcards or SHOWCASE)
         return
     ev, settings, dim = load_pack()
     t0 = time.time()

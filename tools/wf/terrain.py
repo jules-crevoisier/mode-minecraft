@@ -12,9 +12,12 @@ Shape of the land, from the coast inland (heights are surface y, sea level 63):
   * mountain ranges (low erosion) run along the weirdness "peaks" contours, 160-260, with jagged crests to y 280-330;
   * hot and dry regions (badlands, rust lands, savanna plateaus) are terraced into mesas, with stone hoodoos;
   * warm stony peaks bristle with tall stone spires;
-  * temperate humid regions have rare floating skylands between y 170 and 260.
-Continents are 1.6x larger than vanilla's (the continentalness noise is sampled at 0.15 instead of 0.25); erosion,
-weirdness, temperature and humidity keep vanilla's scale, so biomes keep their size.
+  * temperate humid regions have rare floating skylands between y 170 and 260;
+  * warm wet lowlands sink into mires (Crimson Mire, Glowing Marsh) a few blocks above the sea, with puddles.
+Continents are 1.6x larger than vanilla's (the continentalness noise is sampled at 0.15 instead of 0.25), weirdness
+is at half vanilla's scale (fewer, wider rivers: they run along its zero lines), temperature and humidity are our own
+smooth noises remapped so each climate band gets a set share of the world (TEMP_CDF, VEG_CDF; wf/biomes.py LAYOUT
+places the biomes in those bands). Erosion keeps vanilla's scale.
 
 The world is 448 blocks tall (y -64 to 383, minecraft:dimension_type/overworld is overridden by the pack) so the
 peaks have room; the density gradient keeps vanilla's slope (3/384 per block) all the way up.
@@ -150,15 +153,44 @@ def lerp_f(t, a, b):
 # ------------------------------------------------------------------ climate inputs
 CONT = DF + "continents"
 EROS = "minecraft:overworld/erosion"
-WEIRD = "minecraft:overworld/ridges"            # weirdness
-PV = "minecraft:overworld/ridges_folded"        # peaks and valleys: -1 in valleys (|w| = 0), 1 on the crests
+WEIRD = DF + "ridges"                           # weirdness
+PV = DF + "ridges_folded"                       # peaks and valleys: -1 in valleys (|w| = 0), 1 on the crests
 TEMP = DF + "temperature"
 VEG = DF + "vegetation"
 CONTINENT_SCALE = 0.15                           # vanilla 0.25
+MUSHROOM_C = -0.85                               # the mushroom isles' continentalness (vanilla -1.05)
+GLOWCAP_W = 0.55                                 # ...and their archipelagos in the temperate seas (weirdness)
+# Climate. Vanilla's temperature has a ~4 km wavelength (one climate around spawn) and its humidity ~250-block
+# patches; ours are smooth fractal noises (wayfarers:temperature / wayfarers:humidity, 3 octaves) with wavelengths
+# of ~1.8 and ~1.5 km, so a walk of 2-3 km crosses several climates while each biome patch stays hundreds of blocks
+# wide. Weirdness is vanilla's ridge noise at half its scale: its zero lines are the rivers (and its crests the
+# ranges), so there are half as many rivers, wider ones, and the land between them reads as larger masses.
+TEMP_SCALE = 0.28
+VEG_SCALE = 0.34
+RIDGE_SCALE = 0.125
+# Both climate noises are near-normal (deviations measured with tools/wf/dfeval.py over 4 seeds); they are remapped
+# (quantile splines) so each climate band gets a chosen share of the world instead of vanilla's (8% hot, 7% arid).
+# Targets: (cumulative share, value) at the band edges of the biome layout (wf/biomes.py T_EDGES, H_EDGES).
+TEMP_SIGMA, VEG_SIGMA = 0.237, 0.254
+TEMP_CDF = [(0.005, -1.0), (0.15, -0.45), (0.35, -0.15), (0.59, 0.2), (0.80, 0.55), (0.995, 1.0)]
+VEG_CDF = [(0.005, -1.0), (0.18, -0.35), (0.38, -0.1), (0.59, 0.1), (0.80, 0.3), (0.995, 1.0)]
 
 
 def peaks_and_valleys(w):
     return -(abs(abs(w) - 0.6666667) - 0.33333334) * 3.0
+
+
+def quantile_spline(coord, sigma, cdf):
+    """A monotone spline taking a normal noise (deviation `sigma`) to the values of `cdf` at its quantiles."""
+    from statistics import NormalDist
+    nd = NormalDist(0.0, sigma)
+    pts = [(nd.inv_cdf(q), v) for q, v in cdf]
+    sec = [(pts[i + 1][1] - pts[i][1]) / (pts[i + 1][0] - pts[i][0]) for i in range(len(pts) - 1)]
+    der = [sec[0]] + [2.0 / (1.0 / sec[i - 1] + 1.0 / sec[i]) for i in range(1, len(sec))] + [sec[-1]]
+    s = Spline(coord)
+    for (x, v), d in zip(pts, der):
+        s.add(x, v, d)
+    return s.df()
 
 
 # ------------------------------------------------------------------ offset (2D height), adapted from TerrainProvider
@@ -205,11 +237,22 @@ def mountain_ridge(modulation, saddle, crest=1.0):
     return s
 
 
+RIVER_BANK_PV = -0.93       # river channels: below sea level only while |weirdness| < 0.023 (vanilla: ~0.08)
+
+
 def ridge_spline(valley, low, mid, high, peaks, min_valley_steepness):
-    d1 = max(0.5 * (low - valley), min_valley_steepness)
     d2 = 5.0 * (mid - low)
-    return (Spline(PV).add(-1.0, valley, d1).add(-0.4, low, min(d1, d2)).add(0.0, mid, d2)
-            .add(0.4, high, 2.0 * (high - mid)).add(1.0, peaks, 0.7 * (peaks - high)))
+    s = Spline(PV)
+    if valley < -0.01 and low > 0.0:
+        # a river channel cut in the valley floor: steep banks just above sea level, then the valley slope
+        bank = min(0.012, low)
+        s.add(-1.0, valley, 0.0).add(RIVER_BANK_PV, bank, (bank - valley) / (1.0 + RIVER_BANK_PV) * 0.5)
+        d1 = (low - bank) / (-0.4 - RIVER_BANK_PV)
+        s.add(-0.4, low, min(d1, d2) if d2 > 0 else d1)
+    else:
+        d1 = max(0.5 * (low - valley), min_valley_steepness)
+        s.add(-1.0, valley, d1).add(-0.4, low, min(d1, d2))
+    return s.add(0.0, mid, d2).add(0.4, high, 2.0 * (high - mid)).add(1.0, peaks, 0.7 * (peaks - high))
 
 
 def canyon_plateau(floor, top, mid, high, peaks):
@@ -255,11 +298,15 @@ def erosion_offset(low_valley, hill, tall_hill, mf, plain, swamp, inland):
 
 def offset_spline():
     """overworldOffset, Wayfarers version: the continentalness bands (ocean, coast, near/mid/far inland)."""
+    # swamp flats (the last value, erosion > 0.62) a block or two above the sea, not flooded (vanilla: -0.03):
+    # the mires add their own puddles where it is wet
     beach = erosion_offset(-0.15, 0.0, 0.0, 0.1, 0.0, -0.03, False)
-    low = erosion_offset(-0.1, 0.03, 0.1, 0.1, 0.01, -0.03, False)
-    mid = erosion_offset(-0.1, 0.05, 0.16, 0.8, 0.02, -0.03, True)
+    low = erosion_offset(-0.1, 0.03, 0.1, 0.1, 0.01, 0.002, False)
+    mid = erosion_offset(-0.1, 0.05, 0.16, 0.8, 0.02, 0.006, True)
     high = erosion_offset(-0.05, 0.06, 0.2, 1.0, 0.03, 0.01, True)
-    return (Spline(CONT).add(-1.1, 0.044).add(-1.02, -0.2222).add(-0.51, -0.2222).add(-0.44, -0.12)
+    # mushroom isles below MUSHROOM_C (vanilla -1.05: too rare to be found by /locate with the larger continents)
+    return (Spline(CONT).add(MUSHROOM_C - 0.05, 0.044).add(MUSHROOM_C + 0.03, -0.2222).add(-0.51, -0.2222)
+            .add(-0.44, -0.12)
             .add(-0.18, -0.12).add(-0.16, beach).add(-0.15, beach).add(-0.1, low).add(0.2, mid).add(0.6, high))
 
 
@@ -316,6 +363,9 @@ def jaggedness_spline():
 # ------------------------------------------------------------------ regional features (2D, in terrain value units)
 NOISES = {
     # name: (firstOctave, amplitudes)
+    "temperature": (-9, [0.7, 1.0, 0.35]),
+    "mire": (-5, [1.0, 0.5]),
+    "humidity": (-9, [0.8, 1.0, 0.4]),
     "mega_caverns": (-8, [1.0, 1.0, 0.5]),
     "hills": (-8, [1.0, 0.6, 0.3]),
     "terrace_jitter": (-6, [1.0]),
@@ -345,60 +395,80 @@ def _band(coord, pts):
 
 
 def hot_dry():
-    """1 in the badlands / rust lands / savanna plateaus (temperature > 0.2, humidity < 0.1), 0 elsewhere."""
-    t = _band(TEMP, [(0.15, 0.0), (0.3, 1.0)])
-    h = _band(VEG, [(-0.05, 1.0), (0.15, 0.0)])
-    return mul(t, h)
+    """1 in the hot lands but the wet ones (temperature > 0.55, humidity < 0.3: Pale Dunes, Painted Canyon, Ashen
+    Wastes, Volcanic Highlands, Cogwork Valley) and in the warm arid ones (Dune Sea, Rustlands), 0 elsewhere."""
+    hot = mul(_band(TEMP, [(0.5, 0.0), (0.6, 1.0)]), _band(VEG, [(0.25, 1.0), (0.33, 0.0)]))
+    arid = mul(_band(TEMP, [(0.15, 0.0), (0.25, 1.0)]), _band(VEG, [(-0.4, 1.0), (-0.3, 0.0)]))
+    return dmax(hot, arid)
 
 
 def features():
     """The 2D regional features, as named density functions."""
     out = {}
-    # rolling hills on the lowlands (not on rivers, coasts or swamps)
+    # gentle rolling hills on the lowlands (not on rivers, coasts or swamps): +-12 blocks over ~250, so most of
+    # the lowland stays buildable
     hill_mask = mul(mul(_band(EROS, [(-0.25, 0.0), (-0.05, 1.0), (0.42, 1.0), (0.62, 0.0)]),
                         _band(CONT, [(-0.14, 0.0), (0.02, 1.0)])),
                     _band(PV, [(-0.85, 0.0), (-0.55, 1.0)]))
-    rolling = mul(hill_mask, add(mul(0.13, noise(N("hills"), 1.0, 0.0)), 0.035))
-    # dunes on the hot dry lowlands: long ridged swells (1 - |n|)^2, up to ~11 blocks
+    rolling = mul(hill_mask, add(mul(0.09, noise(N("hills"), 1.0, 0.0)), 0.03))
+    # dunes on the hot dry lowlands: long ridged swells (1 - |n|)^2, up to ~8 blocks
     out["hot_dry"] = flat(hot_dry())
     dune_mask = mul(DF + "hot_dry", mul(_band(EROS, [(-0.1, 0.0), (0.05, 1.0)]), _band(CONT, [(-0.12, 0.0), (0.0, 1.0)])))
-    dunes = mul(dune_mask, mul(0.085, unary("square", add(1.0, mul(-1.0, unary("abs", noise(N("dunes"), 1.0, 0.0)))))))
+    dunes = mul(dune_mask, mul(0.06, unary("square", add(1.0, mul(-1.0, unary("abs", noise(N("dunes"), 1.0, 0.0)))))))
     out["hills"] = flat(add(rolling, dunes))
 
     # the base height: TerrainProvider's offset (Wayfarers version) plus the hills
     out["terrain_base"] = flat(add(offset_spline().df(), DF + "hills"))
     base = DF + "terrain_base"
 
-    # terraces in hot dry lands: 5-block ripples on the low dunes, 14-block mesa steps from y ~96, near-vertical
-    # risers (each step: a flat tread, then the riser over the last 28% of the step)
-    t = Spline(base).add(-0.2, -0.2, 1.0)
-    lv = 0.05
+    # terraces in hot dry lands: 14-block mesa steps from y ~96 with near-vertical risers (each step: a flat tread,
+    # then the riser over the last 28% of the step); the low dunes below stay smooth swells
+    t = Spline(base).add(-0.2, -0.2, 1.0).add(0.24, 0.24, 1.0)
+    lv = 0.25
     while lv < 1.6:
-        step = (5.0 if lv < 0.25 else 14.0) / 128.0
+        step = 14.0 / 128.0
         t.add(lv + 0.004, lv + 0.004, 0.0)
         t.add(lv + step * 0.72, lv + 0.012, 0.0)
         lv += step
     t.add(lv + 0.004, lv + 0.004, 1.0)
     terraced = add(t.df(), mul(0.012, noise(N("terrace_jitter"), 1.0, 0.0)))
-    with_terraces = lerp(DF + "hot_dry", base, terraced)
+    # (each stage is a named, cached function: lerp/dmin read their inputs twice, inlining them would copy the
+    # whole spline tree)
+    out["terrain_terraced"] = flat(lerp(DF + "hot_dry", base, terraced))
+    with_terraces = DF + "terrain_terraced"
+
+    # mires: the warm wet lowlands (Crimson Mire, Glowing Marsh, the wet Emerald Jungle) sink to a few blocks
+    # above sea level, the hills squashed (x 0.15), with puddles and channels where the mire noise dips
+    out["mire_mask"] = flat(mul(mul(_band(TEMP, [(0.15, 0.0), (0.25, 1.0)]), _band(VEG, [(0.24, 0.0), (0.32, 1.0)])),
+                                mul(_band(CONT, [(-0.15, 0.0), (-0.08, 1.0)]),
+                                    dmax(_band(EROS, [(-0.22, 0.0), (-0.08, 1.0)]),     # lowlands, and near the coast
+                                         mul(_band(CONT, [(0.0, 1.0), (0.06, 0.0)]),    # all but the mountains
+                                             _band(EROS, [(-0.34, 0.0), (-0.28, 1.0)]))))))
+    marsh = add(add(mul(0.15, unary("abs", with_terraces)), mul(0.04, noise(N("mire"), 1.0, 0.0))), 0.002)
+    out["terrain_mire"] = flat(lerp(DF + "mire_mask", with_terraces, dmin(with_terraces, marsh)))
+    with_terraces = DF + "terrain_mire"
 
     # fjords: cold coasts become 60-80 block high cliffs cut by sea inlets
-    cold = _band(TEMP, [(-0.5, 1.0), (-0.38, 0.0)])          # the frozen coasts (Rimefrost Fjords)
-    coast = _band(CONT, [(-0.32, 0.0), (-0.2, 1.0), (0.05, 1.0), (0.3, 0.0)])
+    # (the Rimefrost Fjords biome: temperature < -0.15, continentalness < 0.03, weirdness < 0, wf/biomes.py)
+    cold = _band(TEMP, [(-0.22, 1.0), (-0.12, 0.0)])
+    coast = _band(CONT, [(-0.32, 0.0), (-0.2, 1.0), (0.0, 1.0), (0.07, 0.0)])
     r = unary("abs", noise(N("fjords"), 1.0, 0.0))
     channel = spline_df(r, [(0.035, -0.3), (0.11, 4.0)])
     cliffs = spline_df(r, [(0.0, -0.25), (0.04, -0.2), (0.1, 0.3), (0.25, 0.46), (0.6, 0.56)])
-    side = _band(WEIRD, [(-0.08, 1.0), (0.0, 0.0)])               # the fjords biome: weirdness < 0
+    side = _band(WEIRD, [(-0.05, 1.0), (0.0, 0.0)])
     out["fjord_mask"] = flat(mul(mul(cold, coast), side))
     fjord = dmax(dmin(with_terraces, channel), cliffs)
     with_fjords = lerp(DF + "fjord_mask", with_terraces, fjord)
 
-    # archipelagos in the shallow warm oceans (Tidebrass Archipelago: temperature > 0.55, -0.455 < c < -0.19)
+    # archipelagos in the shallow warm oceans (Tidebrass Archipelago: temperature > 0.55, -0.455 < c < -0.19) and
+    # in the temperate ones where the weirdness is high (Glowcap Isles: weirdness > GLOWCAP_W, wf/biomes.py)
     warm = _band(TEMP, [(0.45, 0.0), (0.6, 1.0)])
+    glow = mul(_band(TEMP, [(-0.22, 0.0), (-0.1, 1.0), (0.12, 1.0), (0.25, 0.0)]),
+               _band(WEIRD, [(GLOWCAP_W - 0.08, 0.0), (GLOWCAP_W + 0.04, 1.0)]))
     sea = _band(CONT, [(-0.62, 0.0), (-0.48, 1.0), (-0.3, 1.0), (-0.22, 0.0)])
     isl = spline_df(noise(N("islands"), 1.0, 0.0),
                     [(0.22, -0.6), (0.38, -0.04), (0.46, 0.035), (0.62, 0.16), (0.9, 0.36, 0.6)])
-    islands = add(mul(mul(warm, sea), add(isl, 1.0)), -1.0)
+    islands = add(mul(mul(dmax(warm, glow), sea), add(isl, 1.0)), -1.0)
     # capped at y ~301 (jagged crests add up to ~45 more; the top slide starts at y 360)
     out["terrain"] = flat(clamp(dmax(with_fjords, islands), -1.5, 1.85))
 
@@ -423,10 +493,12 @@ def spires():
     In a pillar region the noise peaks (> 0.36) become columns; the column is solid while
     core > h / H, core = clamp(10 (n - 0.36), -1, 1) (h: height above ground, H: the pillar's height), so it
     narrows to a point at H. Only on land."""
-    hoodoos = mul(DF + "hot_dry", _band(EROS, [(-0.6, 0.0), (-0.42, 1.0)]))
-    stony = mul(mul(_band(TEMP, [(0.12, 0.0), (0.22, 1.0), (0.5, 1.0), (0.6, 0.0)]),
-                    _band(EROS, [(-0.62, 1.0), (-0.5, 0.0)])),
-                _band(VEG, [(0.25, 1.0), (0.4, 0.0)]))
+    # stone pinnacles on the hot mountain flanks (Volcanic Highlands: their cliffs take the ochre bands); not on
+    # the dunes and plateaus, which have their own hoodoo objects
+    hoodoos = mul(DF + "hot_dry", _band(EROS, [(-0.62, 0.0), (-0.48, 1.0), (-0.36, 1.0), (-0.29, 0.0)]))
+    # the Stone Spires biome: the warm mountains (wf/biomes.py LAYOUT)
+    stony = mul(_band(TEMP, [(0.12, 0.0), (0.22, 1.0), (0.5, 1.0), (0.6, 0.0)]),
+                _band(EROS, [(-0.45, 1.0), (-0.33, 0.0)]))
     land = _band(CONT, [(-0.1, 0.0), (0.0, 1.0)])
     out = {}
     out["spire_region"] = flat(mul(land, dmax(mul(0.55, hoodoos), stony)))
@@ -515,8 +587,13 @@ def slide(fn):
 def density_functions():
     out = {}
     out["continents"] = unary("flat_cache", shifted("minecraft:continentalness", CONTINENT_SCALE))
-    out["temperature"] = unary("flat_cache", shifted("minecraft:temperature", 0.25))
-    out["vegetation"] = unary("flat_cache", shifted("minecraft:vegetation", 0.25))
+    out["temperature_noise"] = unary("flat_cache", shifted(N("temperature"), TEMP_SCALE))
+    out["vegetation_noise"] = unary("flat_cache", shifted(N("humidity"), VEG_SCALE))
+    out["temperature"] = unary("flat_cache", quantile_spline(DF + "temperature_noise", TEMP_SIGMA, TEMP_CDF))
+    out["vegetation"] = unary("flat_cache", quantile_spline(DF + "vegetation_noise", VEG_SIGMA, VEG_CDF))
+    out["ridges"] = unary("flat_cache", shifted("minecraft:ridge", RIDGE_SCALE))
+    out["ridges_folded"] = unary("flat_cache", mul(add(unary("abs", add(unary("abs", WEIRD), -0.6666667)),
+                                                       -0.33333334), -3.0))
     out.update(features())
     out.update(spires())
     out.update(skylands())

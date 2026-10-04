@@ -8,243 +8,7 @@
     "type": "minecraft:max",
     "argument1": {
      "type": "minecraft:add",
-     "argument1": {
-      "type": "minecraft:add",
-      "argument1": "wayfarers:overworld/terrain_base",
-      "argument2": {
-       "type": "minecraft:mul",
-       "argument1": "wayfarers:overworld/hot_dry",
-       "argument2": {
-        "type": "minecraft:add",
-        "argument1": {
-         "type": "minecraft:add",
-         "argument1": {
-          "type": "minecraft:spline",
-          "spline": {
-           "coordinate": "wayfarers:overworld/terrain_base",
-           "points": [
-            {
-             "location": -0.2,
-             "value": -0.2,
-             "derivative": 1.0
-            },
-            {
-             "location": 0.054,
-             "value": 0.054,
-             "derivative": 0.0
-            },
-            {
-             "location": 0.078125,
-             "value": 0.062,
-             "derivative": 0.0
-            },
-            {
-             "location": 0.093063,
-             "value": 0.093063,
-             "derivative": 0.0
-            },
-            {
-             "location": 0.117188,
-             "value": 0.101062,
-             "derivative": 0.0
-            },
-            {
-             "location": 0.132125,
-             "value": 0.132125,
-             "derivative": 0.0
-            },
-            {
-             "location": 0.15625,
-             "value": 0.140125,
-             "derivative": 0.0
-            },
-            {
-             "location": 0.171187,
-             "value": 0.171187,
-             "derivative": 0.0
-            },
-            {
-             "location": 0.195312,
-             "value": 0.179187,
-             "derivative": 0.0
-            },
-            {
-             "location": 0.21025,
-             "value": 0.21025,
-             "derivative": 0.0
-            },
-            {
-             "location": 0.234375,
-             "value": 0.21825,
-             "derivative": 0.0
-            },
-            {
-             "location": 0.249312,
-             "value": 0.249312,
-             "derivative": 0.0
-            },
-            {
-             "location": 0.273438,
-             "value": 0.257312,
-             "derivative": 0.0
-            },
-            {
-             "location": 0.288375,
-             "value": 0.288375,
-             "derivative": 0.0
-            },
-            {
-             "location": 0.363125,
-             "value": 0.296375,
-             "derivative": 0.0
-            },
-            {
-             "location": 0.39775,
-             "value": 0.39775,
-             "derivative": 0.0
-            },
-            {
-             "location": 0.4725,
-             "value": 0.40575,
-             "derivative": 0.0
-            },
-            {
-             "location": 0.507125,
-             "value": 0.507125,
-             "derivative": 0.0
-            },
-            {
-             "location": 0.581875,
-             "value": 0.515125,
-             "derivative": 0.0
-            },
-            {
-             "location": 0.6165,
-             "value": 0.6165,
-             "derivative": 0.0
-            },
-            {
-             "location": 0.69125,
-             "value": 0.6245,
-             "derivative": 0.0
-            },
-            {
-             "location": 0.725875,
-             "value": 0.725875,
-             "derivative": 0.0
-            },
-            {
-             "location": 0.800625,
-             "value": 0.733875,
-             "derivative": 0.0
-            },
-            {
-             "location": 0.83525,
-             "value": 0.83525,
-             "derivative": 0.0
-            },
-            {
-             "location": 0.91,
-             "value": 0.84325,
-             "derivative": 0.0
-            },
-            {
-             "location": 0.944625,
-             "value": 0.944625,
-             "derivative": 0.0
-            },
-            {
-             "location": 1.019375,
-             "value": 0.952625,
-             "derivative": 0.0
-            },
-            {
-             "location": 1.054,
-             "value": 1.054,
-             "derivative": 0.0
-            },
-            {
-             "location": 1.12875,
-             "value": 1.062,
-             "derivative": 0.0
-            },
-            {
-             "location": 1.163375,
-             "value": 1.163375,
-             "derivative": 0.0
-            },
-            {
-             "location": 1.238125,
-             "value": 1.171375,
-             "derivative": 0.0
-            },
-            {
-             "location": 1.27275,
-             "value": 1.27275,
-             "derivative": 0.0
-            },
-            {
-             "location": 1.3475,
-             "value": 1.28075,
-             "derivative": 0.0
-            },
-            {
-             "location": 1.382125,
-             "value": 1.382125,
-             "derivative": 0.0
-            },
-            {
-             "location": 1.456875,
-             "value": 1.390125,
-             "derivative": 0.0
-            },
-            {
-             "location": 1.4915,
-             "value": 1.4915,
-             "derivative": 0.0
-            },
-            {
-             "location": 1.56625,
-             "value": 1.4995,
-             "derivative": 0.0
-            },
-            {
-             "location": 1.600875,
-             "value": 1.600875,
-             "derivative": 0.0
-            },
-            {
-             "location": 1.675625,
-             "value": 1.608875,
-             "derivative": 0.0
-            },
-            {
-             "location": 1.71025,
-             "value": 1.71025,
-             "derivative": 1.0
-            }
-           ]
-          }
-         },
-         "argument2": {
-          "type": "minecraft:mul",
-          "argument1": 0.012,
-          "argument2": {
-           "type": "minecraft:noise",
-           "noise": "wayfarers:terrace_jitter",
-           "xz_scale": 1.0,
-           "y_scale": 0.0
-          }
-         }
-        },
-        "argument2": {
-         "type": "minecraft:mul",
-         "argument1": -1.0,
-         "argument2": "wayfarers:overworld/terrain_base"
-        }
-       }
-      }
-     },
+     "argument1": "wayfarers:overworld/terrain_mire",
      "argument2": {
       "type": "minecraft:mul",
       "argument1": "wayfarers:overworld/fjord_mask",
@@ -254,243 +18,7 @@
         "type": "minecraft:max",
         "argument1": {
          "type": "minecraft:min",
-         "argument1": {
-          "type": "minecraft:add",
-          "argument1": "wayfarers:overworld/terrain_base",
-          "argument2": {
-           "type": "minecraft:mul",
-           "argument1": "wayfarers:overworld/hot_dry",
-           "argument2": {
-            "type": "minecraft:add",
-            "argument1": {
-             "type": "minecraft:add",
-             "argument1": {
-              "type": "minecraft:spline",
-              "spline": {
-               "coordinate": "wayfarers:overworld/terrain_base",
-               "points": [
-                {
-                 "location": -0.2,
-                 "value": -0.2,
-                 "derivative": 1.0
-                },
-                {
-                 "location": 0.054,
-                 "value": 0.054,
-                 "derivative": 0.0
-                },
-                {
-                 "location": 0.078125,
-                 "value": 0.062,
-                 "derivative": 0.0
-                },
-                {
-                 "location": 0.093063,
-                 "value": 0.093063,
-                 "derivative": 0.0
-                },
-                {
-                 "location": 0.117188,
-                 "value": 0.101062,
-                 "derivative": 0.0
-                },
-                {
-                 "location": 0.132125,
-                 "value": 0.132125,
-                 "derivative": 0.0
-                },
-                {
-                 "location": 0.15625,
-                 "value": 0.140125,
-                 "derivative": 0.0
-                },
-                {
-                 "location": 0.171187,
-                 "value": 0.171187,
-                 "derivative": 0.0
-                },
-                {
-                 "location": 0.195312,
-                 "value": 0.179187,
-                 "derivative": 0.0
-                },
-                {
-                 "location": 0.21025,
-                 "value": 0.21025,
-                 "derivative": 0.0
-                },
-                {
-                 "location": 0.234375,
-                 "value": 0.21825,
-                 "derivative": 0.0
-                },
-                {
-                 "location": 0.249312,
-                 "value": 0.249312,
-                 "derivative": 0.0
-                },
-                {
-                 "location": 0.273438,
-                 "value": 0.257312,
-                 "derivative": 0.0
-                },
-                {
-                 "location": 0.288375,
-                 "value": 0.288375,
-                 "derivative": 0.0
-                },
-                {
-                 "location": 0.363125,
-                 "value": 0.296375,
-                 "derivative": 0.0
-                },
-                {
-                 "location": 0.39775,
-                 "value": 0.39775,
-                 "derivative": 0.0
-                },
-                {
-                 "location": 0.4725,
-                 "value": 0.40575,
-                 "derivative": 0.0
-                },
-                {
-                 "location": 0.507125,
-                 "value": 0.507125,
-                 "derivative": 0.0
-                },
-                {
-                 "location": 0.581875,
-                 "value": 0.515125,
-                 "derivative": 0.0
-                },
-                {
-                 "location": 0.6165,
-                 "value": 0.6165,
-                 "derivative": 0.0
-                },
-                {
-                 "location": 0.69125,
-                 "value": 0.6245,
-                 "derivative": 0.0
-                },
-                {
-                 "location": 0.725875,
-                 "value": 0.725875,
-                 "derivative": 0.0
-                },
-                {
-                 "location": 0.800625,
-                 "value": 0.733875,
-                 "derivative": 0.0
-                },
-                {
-                 "location": 0.83525,
-                 "value": 0.83525,
-                 "derivative": 0.0
-                },
-                {
-                 "location": 0.91,
-                 "value": 0.84325,
-                 "derivative": 0.0
-                },
-                {
-                 "location": 0.944625,
-                 "value": 0.944625,
-                 "derivative": 0.0
-                },
-                {
-                 "location": 1.019375,
-                 "value": 0.952625,
-                 "derivative": 0.0
-                },
-                {
-                 "location": 1.054,
-                 "value": 1.054,
-                 "derivative": 0.0
-                },
-                {
-                 "location": 1.12875,
-                 "value": 1.062,
-                 "derivative": 0.0
-                },
-                {
-                 "location": 1.163375,
-                 "value": 1.163375,
-                 "derivative": 0.0
-                },
-                {
-                 "location": 1.238125,
-                 "value": 1.171375,
-                 "derivative": 0.0
-                },
-                {
-                 "location": 1.27275,
-                 "value": 1.27275,
-                 "derivative": 0.0
-                },
-                {
-                 "location": 1.3475,
-                 "value": 1.28075,
-                 "derivative": 0.0
-                },
-                {
-                 "location": 1.382125,
-                 "value": 1.382125,
-                 "derivative": 0.0
-                },
-                {
-                 "location": 1.456875,
-                 "value": 1.390125,
-                 "derivative": 0.0
-                },
-                {
-                 "location": 1.4915,
-                 "value": 1.4915,
-                 "derivative": 0.0
-                },
-                {
-                 "location": 1.56625,
-                 "value": 1.4995,
-                 "derivative": 0.0
-                },
-                {
-                 "location": 1.600875,
-                 "value": 1.600875,
-                 "derivative": 0.0
-                },
-                {
-                 "location": 1.675625,
-                 "value": 1.608875,
-                 "derivative": 0.0
-                },
-                {
-                 "location": 1.71025,
-                 "value": 1.71025,
-                 "derivative": 1.0
-                }
-               ]
-              }
-             },
-             "argument2": {
-              "type": "minecraft:mul",
-              "argument1": 0.012,
-              "argument2": {
-               "type": "minecraft:noise",
-               "noise": "wayfarers:terrace_jitter",
-               "xz_scale": 1.0,
-               "y_scale": 0.0
-              }
-             }
-            },
-            "argument2": {
-             "type": "minecraft:mul",
-             "argument1": -1.0,
-             "argument2": "wayfarers:overworld/terrain_base"
-            }
-           }
-          }
-         },
+         "argument1": "wayfarers:overworld/terrain_mire",
          "argument2": {
           "type": "minecraft:spline",
           "spline": {
@@ -563,243 +91,7 @@
        "argument2": {
         "type": "minecraft:mul",
         "argument1": -1.0,
-        "argument2": {
-         "type": "minecraft:add",
-         "argument1": "wayfarers:overworld/terrain_base",
-         "argument2": {
-          "type": "minecraft:mul",
-          "argument1": "wayfarers:overworld/hot_dry",
-          "argument2": {
-           "type": "minecraft:add",
-           "argument1": {
-            "type": "minecraft:add",
-            "argument1": {
-             "type": "minecraft:spline",
-             "spline": {
-              "coordinate": "wayfarers:overworld/terrain_base",
-              "points": [
-               {
-                "location": -0.2,
-                "value": -0.2,
-                "derivative": 1.0
-               },
-               {
-                "location": 0.054,
-                "value": 0.054,
-                "derivative": 0.0
-               },
-               {
-                "location": 0.078125,
-                "value": 0.062,
-                "derivative": 0.0
-               },
-               {
-                "location": 0.093063,
-                "value": 0.093063,
-                "derivative": 0.0
-               },
-               {
-                "location": 0.117188,
-                "value": 0.101062,
-                "derivative": 0.0
-               },
-               {
-                "location": 0.132125,
-                "value": 0.132125,
-                "derivative": 0.0
-               },
-               {
-                "location": 0.15625,
-                "value": 0.140125,
-                "derivative": 0.0
-               },
-               {
-                "location": 0.171187,
-                "value": 0.171187,
-                "derivative": 0.0
-               },
-               {
-                "location": 0.195312,
-                "value": 0.179187,
-                "derivative": 0.0
-               },
-               {
-                "location": 0.21025,
-                "value": 0.21025,
-                "derivative": 0.0
-               },
-               {
-                "location": 0.234375,
-                "value": 0.21825,
-                "derivative": 0.0
-               },
-               {
-                "location": 0.249312,
-                "value": 0.249312,
-                "derivative": 0.0
-               },
-               {
-                "location": 0.273438,
-                "value": 0.257312,
-                "derivative": 0.0
-               },
-               {
-                "location": 0.288375,
-                "value": 0.288375,
-                "derivative": 0.0
-               },
-               {
-                "location": 0.363125,
-                "value": 0.296375,
-                "derivative": 0.0
-               },
-               {
-                "location": 0.39775,
-                "value": 0.39775,
-                "derivative": 0.0
-               },
-               {
-                "location": 0.4725,
-                "value": 0.40575,
-                "derivative": 0.0
-               },
-               {
-                "location": 0.507125,
-                "value": 0.507125,
-                "derivative": 0.0
-               },
-               {
-                "location": 0.581875,
-                "value": 0.515125,
-                "derivative": 0.0
-               },
-               {
-                "location": 0.6165,
-                "value": 0.6165,
-                "derivative": 0.0
-               },
-               {
-                "location": 0.69125,
-                "value": 0.6245,
-                "derivative": 0.0
-               },
-               {
-                "location": 0.725875,
-                "value": 0.725875,
-                "derivative": 0.0
-               },
-               {
-                "location": 0.800625,
-                "value": 0.733875,
-                "derivative": 0.0
-               },
-               {
-                "location": 0.83525,
-                "value": 0.83525,
-                "derivative": 0.0
-               },
-               {
-                "location": 0.91,
-                "value": 0.84325,
-                "derivative": 0.0
-               },
-               {
-                "location": 0.944625,
-                "value": 0.944625,
-                "derivative": 0.0
-               },
-               {
-                "location": 1.019375,
-                "value": 0.952625,
-                "derivative": 0.0
-               },
-               {
-                "location": 1.054,
-                "value": 1.054,
-                "derivative": 0.0
-               },
-               {
-                "location": 1.12875,
-                "value": 1.062,
-                "derivative": 0.0
-               },
-               {
-                "location": 1.163375,
-                "value": 1.163375,
-                "derivative": 0.0
-               },
-               {
-                "location": 1.238125,
-                "value": 1.171375,
-                "derivative": 0.0
-               },
-               {
-                "location": 1.27275,
-                "value": 1.27275,
-                "derivative": 0.0
-               },
-               {
-                "location": 1.3475,
-                "value": 1.28075,
-                "derivative": 0.0
-               },
-               {
-                "location": 1.382125,
-                "value": 1.382125,
-                "derivative": 0.0
-               },
-               {
-                "location": 1.456875,
-                "value": 1.390125,
-                "derivative": 0.0
-               },
-               {
-                "location": 1.4915,
-                "value": 1.4915,
-                "derivative": 0.0
-               },
-               {
-                "location": 1.56625,
-                "value": 1.4995,
-                "derivative": 0.0
-               },
-               {
-                "location": 1.600875,
-                "value": 1.600875,
-                "derivative": 0.0
-               },
-               {
-                "location": 1.675625,
-                "value": 1.608875,
-                "derivative": 0.0
-               },
-               {
-                "location": 1.71025,
-                "value": 1.71025,
-                "derivative": 1.0
-               }
-              ]
-             }
-            },
-            "argument2": {
-             "type": "minecraft:mul",
-             "argument1": 0.012,
-             "argument2": {
-              "type": "minecraft:noise",
-              "noise": "wayfarers:terrace_jitter",
-              "xz_scale": 1.0,
-              "y_scale": 0.0
-             }
-            }
-           },
-           "argument2": {
-            "type": "minecraft:mul",
-            "argument1": -1.0,
-            "argument2": "wayfarers:overworld/terrain_base"
-           }
-          }
-         }
-        }
+        "argument2": "wayfarers:overworld/terrain_mire"
        }
       }
      }
@@ -811,21 +103,73 @@
       "argument1": {
        "type": "minecraft:mul",
        "argument1": {
-        "type": "minecraft:spline",
-        "spline": {
-         "coordinate": "wayfarers:overworld/temperature",
-         "points": [
-          {
-           "location": 0.45,
-           "value": 0.0,
-           "derivative": 0.0
-          },
-          {
-           "location": 0.6,
-           "value": 1.0,
-           "derivative": 0.0
+        "type": "minecraft:max",
+        "argument1": {
+         "type": "minecraft:spline",
+         "spline": {
+          "coordinate": "wayfarers:overworld/temperature",
+          "points": [
+           {
+            "location": 0.45,
+            "value": 0.0,
+            "derivative": 0.0
+           },
+           {
+            "location": 0.6,
+            "value": 1.0,
+            "derivative": 0.0
+           }
+          ]
+         }
+        },
+        "argument2": {
+         "type": "minecraft:mul",
+         "argument1": {
+          "type": "minecraft:spline",
+          "spline": {
+           "coordinate": "wayfarers:overworld/temperature",
+           "points": [
+            {
+             "location": -0.22,
+             "value": 0.0,
+             "derivative": 0.0
+            },
+            {
+             "location": -0.1,
+             "value": 1.0,
+             "derivative": 0.0
+            },
+            {
+             "location": 0.12,
+             "value": 1.0,
+             "derivative": 0.0
+            },
+            {
+             "location": 0.25,
+             "value": 0.0,
+             "derivative": 0.0
+            }
+           ]
           }
-         ]
+         },
+         "argument2": {
+          "type": "minecraft:spline",
+          "spline": {
+           "coordinate": "wayfarers:overworld/ridges",
+           "points": [
+            {
+             "location": 0.47,
+             "value": 0.0,
+             "derivative": 0.0
+            },
+            {
+             "location": 0.59,
+             "value": 1.0,
+             "derivative": 0.0
+            }
+           ]
+          }
+         }
         }
        },
        "argument2": {

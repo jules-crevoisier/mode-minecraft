@@ -43,7 +43,7 @@ DECOR = {k: _mc(v) for k, v in {
     "blue_ice_chunks": ["blue_ice"],
     "frost_pines": ["trees_grove"],
     "berry_bushes": ["patch_berry_common"],
-    "frost_pines_sparse": ["trees_snowy"],
+    "frost_pines_sparse": ["wayfarers:frost_pines_sparse"],
     "ice_spires_small": ["ice_patch"],
     "calcite_veins": ["wayfarers:calcite_veins"],
     "meadow_flowers": ["flower_meadow", "wildflowers_meadow"],
@@ -115,7 +115,7 @@ DECOR = {k: _mc(v) for k, v in {
     "fallen_oak_logs": ["wayfarers:fallen_oak_logs"],
     "fallen_glowwood_logs": ["wayfarers:fallen_glowwood_logs"],
     "fallen_rustwood_logs": ["wayfarers:fallen_rustwood_logs"],
-    "autumn_spruces": ["wayfarers:autumn_spruces", "trees_taiga"],
+    "autumn_spruces": ["wayfarers:autumn_spruces"],
     "tall_spruces": ["wayfarers:giant_spruce_sparse", "trees_old_growth_spruce_taiga"],
     "autumn_oaks": ["wayfarers:autumn_oaks"],
     "sparse_autumn_oaks": ["wayfarers:autumn_oaks_sparse"],
@@ -142,7 +142,7 @@ EXTRA_STEPS = {
     "wayfarers:rust_boulders": 2, "wayfarers:basalt_boulders": 2,
     "wayfarers:fallen_spruce_logs": 9, "wayfarers:fallen_oak_logs": 9, "wayfarers:fallen_glowwood_logs": 9,
     "wayfarers:fallen_rustwood_logs": 9, "wayfarers:autumn_spruces": 9, "wayfarers:giant_spruce_sparse": 9,
-    "wayfarers:autumn_oaks": 9, "wayfarers:autumn_oaks_sparse": 9,
+    "wayfarers:autumn_oaks": 9, "wayfarers:autumn_oaks_sparse": 9, "wayfarers:frost_pines_sparse": 9,
 }
 
 # mobs: our key -> vanilla template whose spawners we copy
@@ -447,24 +447,24 @@ def _oak_like(base, rand_a):
 
 
 OURS.update({
-    # curved blackstone thorns of the Crimson Mire, 10-28 blocks
-    "thorn_spikes": (_objects("thorn"), _object_placement(rarity=2, sink=2)),
+    # slim curved blackstone horns of the Crimson Mire, 15-30 blocks tall (one per chunk: a field of thorns)
+    "thorn_spikes": (_objects("thorn"), _object_placement(count=1, sink=2)),
     # natural arches of banded grey rock (Ashen Wastes)
-    "stone_arches": (_objects("arch"), _object_placement(rarity=14, sink=3)),
+    "stone_arches": (_objects("arch"), _object_placement(rarity=5, sink=3)),
     # leaning aether crystal shards
     "crystal_shards": (_objects("crystal"), _object_placement(rarity=3, sink=1)),
     # banded terracotta hoodoos (Pale Dunes, Painted Canyon)
-    "hoodoos": (_objects("hoodoo"), _object_placement(count=1, sink=2)),
+    "hoodoos": (_objects("hoodoo"), _object_placement(rarity=2, sink=2)),
     "hoodoos_sparse": (_objects("hoodoo"), _object_placement(rarity=4, sink=2)),
     # hot-spring terraces with coloured rims (Geyser Basin)
     "hot_springs": (_objects("hot_spring"), _object_placement(rarity=3, sink=3)),
-    # giant flat-capped red mushrooms with weeping vines (Crimson Mire)
-    "flat_mushrooms": (_objects("flat_mushroom"), _object_placement(count=2, sink=1)),
+    # giant flat-capped red mushrooms with weeping vines (Crimson Mire): one chunk in two, caps 10-18 wide
+    "flat_mushrooms": (_objects("flat_mushroom"), _object_placement(rarity=2, sink=1)),
     "ash_columns": (_objects("ash_column"), _object_placement(rarity=3, sink=2)),
     # lava springs just under the surface of slopes: lava streams run down the mountainsides
     "lava_streams": ({"type": "minecraft:spring_feature", "config": {
         "state": {"Name": "minecraft:lava", "Properties": {"falling": "false"}}, "requires_block_below": True,
-        "rock_count": 3, "hole_count": 1, "valid_blocks": SPRING_ROCK}},
+        "rock_count": 4, "hole_count": 1, "valid_blocks": SPRING_ROCK}},
         [{"type": "minecraft:count", "count": 12}, {"type": "minecraft:in_square"},
          {"type": "minecraft:heightmap", "heightmap": "WORLD_SURFACE_WG"},
          {"type": "minecraft:random_offset", "xz_spread": 0, "y_spread": -2}, BIOME]),
@@ -490,8 +490,11 @@ OURS.update({
     "fallen_glowwood_logs": _fallen("wayfarers:glowwood_log", "oak_sapling", 4),
     "fallen_rustwood_logs": _fallen("wayfarers:rustwood_log", "oak_sapling", 5),
     # autumn trees: oak leaves take the biome's (orange) foliage colour, spruce leaves stay green
-    "autumn_spruces": (_spruce_like("oak_leaves", 6, 3, 2), _tree_placement(4, "spruce_sapling")),
+    "autumn_spruces": (_spruce_like("oak_leaves", 6, 3, 2), _tree_placement(7, "spruce_sapling")),
     "giant_spruce_sparse": ("wayfarers:giant_spruce", _tree_placement(0, "spruce_sapling", rarity=3)),
+    # a lone spruce or two per chunk on the fjord tops and snowy slopes (vanilla's spruce; the snow comes from
+    # freeze_top_layer)
+    "frost_pines_sparse": ("minecraft:spruce", _tree_placement(1, "spruce_sapling")),
     "autumn_oaks": (_oak_like(5, 3), _tree_placement(3, "oak_sapling")),
     "autumn_oaks_sparse": (_oak_like(4, 2), _tree_placement(0, "oak_sapling", rarity=4)),
 })

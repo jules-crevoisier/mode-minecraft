@@ -22,7 +22,7 @@
          {
           "location": -0.62,
           "value": {
-           "coordinate": "minecraft:overworld/ridges_folded",
+           "coordinate": "wayfarers:overworld/ridges_folded",
            "points": [
             {
              "location": 0.2,
@@ -37,7 +37,7 @@
             {
              "location": 1.0,
              "value": {
-              "coordinate": "minecraft:overworld/ridges",
+              "coordinate": "wayfarers:overworld/ridges",
               "points": [
                {
                 "location": -0.01,
@@ -60,7 +60,7 @@
          {
           "location": -0.5,
           "value": {
-           "coordinate": "minecraft:overworld/ridges_folded",
+           "coordinate": "wayfarers:overworld/ridges_folded",
            "points": [
             {
              "location": 0.2,
@@ -75,7 +75,7 @@
             {
              "location": 1.0,
              "value": {
-              "coordinate": "minecraft:overworld/ridges",
+              "coordinate": "wayfarers:overworld/ridges",
               "points": [
                {
                 "location": -0.01,
@@ -98,7 +98,7 @@
          {
           "location": -0.4,
           "value": {
-           "coordinate": "minecraft:overworld/ridges_folded",
+           "coordinate": "wayfarers:overworld/ridges_folded",
            "points": [
             {
              "location": 0.2,
@@ -113,7 +113,7 @@
             {
              "location": 1.0,
              "value": {
-              "coordinate": "minecraft:overworld/ridges",
+              "coordinate": "wayfarers:overworld/ridges",
               "points": [
                {
                 "location": -0.01,
@@ -150,7 +150,7 @@
          {
           "location": -0.62,
           "value": {
-           "coordinate": "minecraft:overworld/ridges_folded",
+           "coordinate": "wayfarers:overworld/ridges_folded",
            "points": [
             {
              "location": 0.2,
@@ -160,7 +160,7 @@
             {
              "location": 0.45,
              "value": {
-              "coordinate": "minecraft:overworld/ridges",
+              "coordinate": "wayfarers:overworld/ridges",
               "points": [
                {
                 "location": -0.01,
@@ -179,7 +179,7 @@
             {
              "location": 1.0,
              "value": {
-              "coordinate": "minecraft:overworld/ridges",
+              "coordinate": "wayfarers:overworld/ridges",
               "points": [
                {
                 "location": -0.01,
@@ -202,7 +202,7 @@
          {
           "location": -0.5,
           "value": {
-           "coordinate": "minecraft:overworld/ridges_folded",
+           "coordinate": "wayfarers:overworld/ridges_folded",
            "points": [
             {
              "location": 0.2,
@@ -212,7 +212,7 @@
             {
              "location": 0.45,
              "value": {
-              "coordinate": "minecraft:overworld/ridges",
+              "coordinate": "wayfarers:overworld/ridges",
               "points": [
                {
                 "location": -0.01,
@@ -231,7 +231,7 @@
             {
              "location": 1.0,
              "value": {
-              "coordinate": "minecraft:overworld/ridges",
+              "coordinate": "wayfarers:overworld/ridges",
               "points": [
                {
                 "location": -0.01,
@@ -254,7 +254,7 @@
          {
           "location": -0.4,
           "value": {
-           "coordinate": "minecraft:overworld/ridges_folded",
+           "coordinate": "wayfarers:overworld/ridges_folded",
            "points": [
             {
              "location": 0.2,
@@ -264,7 +264,7 @@
             {
              "location": 0.45,
              "value": {
-              "coordinate": "minecraft:overworld/ridges",
+              "coordinate": "wayfarers:overworld/ridges",
               "points": [
                {
                 "location": -0.01,
@@ -283,7 +283,7 @@
             {
              "location": 1.0,
              "value": {
-              "coordinate": "minecraft:overworld/ridges",
+              "coordinate": "wayfarers:overworld/ridges",
               "points": [
                {
                 "location": -0.01,

@@ -37,6 +37,18 @@
      "id": "wayfarers:worldobjects/thorn_5"
     },
     "weight": 1
+   },
+   {
+    "data": {
+     "id": "wayfarers:worldobjects/thorn_6"
+    },
+    "weight": 1
+   },
+   {
+    "data": {
+     "id": "wayfarers:worldobjects/thorn_7"
+    },
+    "weight": 1
    }
   ]
  }

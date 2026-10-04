@@ -13,7 +13,7 @@ import random
 
 from .blueprint import Blueprint
 
-VARIANTS = {"thorn": 6, "arch": 3, "crystal": 4, "hoodoo": 5, "hot_spring": 3, "flat_mushroom": 4,
+VARIANTS = {"thorn": 8, "arch": 3, "crystal": 4, "hoodoo": 5, "hot_spring": 3, "flat_mushroom": 6,
             "ash_column": 3}
 
 
@@ -21,42 +21,70 @@ def _put(bp, x, y, z, spec):
     bp.set(int(round(x)), int(round(y)), int(round(z)), spec)
 
 
+def _horn_path(height, lean, bend, az, ds=0.2):
+    """Points (x, y, z, s) along a horn rising `height` blocks: it leaves the ground leaning `lean` radians from
+    the vertical and curls over (the angle grows as s^1.7, so the bend is strongest near the tip) to lean + bend."""
+    pts, x, y = [], 0.0, 0.0
+    n = 400
+    for i in range(n + 1):                       # a unit-length curve, scaled to the height below
+        s = i / n
+        a = lean + bend * s ** 1.7
+        pts.append((x, y, s))
+        x += math.sin(a) / n
+        y += math.cos(a) / n
+    k = height / max(p[1] for p in pts)
+    step = max(1, int(n * ds / (k * 1.0)))      # about one point every `ds` blocks
+    return [(math.cos(az) * px * k, py * k, math.sin(az) * px * k, s) for px, py, s in pts[::step]]
+
+
+def _horn_blocks(bp, rng, path, r0, x0=0.0, z0=0.0, y0=2.0):
+    """A horn along `path`: radius r0 at the foot tapering to a single block at the tip (the centre line is kept
+    face-connected, so the thin tip never breaks into diagonal steps)."""
+    prev = None
+    for px, py, pz, s in path:
+        c = (int(round(x0 + px)), int(round(y0 + py)), int(round(z0 + pz)))
+        if prev and sum(a != b for a, b in zip(c, prev)) > 1:
+            for k in range(3):                  # step one axis at a time
+                if c[k] != prev[k]:
+                    prev = tuple(c[j] if j == k else prev[j] for j in range(3))
+                    if prev != c:
+                        bp.set(*prev, "blackstone")
+        prev = c
+        r = r0 * (1.0 - s) ** 1.15 + 0.32
+        ri = int(math.ceil(r))
+        for dx in range(-ri, ri + 1):
+            for dy in range(-ri, ri + 1):
+                for dz in range(-ri, ri + 1):
+                    if dx * dx + dy * dy + dz * dz <= r * r:
+                        v = rng.random()
+                        blk = ("crying_obsidian" if v < 0.02 else "basalt[axis=y]" if v < 0.22
+                               else "polished_blackstone" if v < 0.4 else "blackstone")
+                        _put(bp, x0 + px + dx, y0 + py + dy, z0 + pz + dz, blk)
+
+
 def thorn(bp, rng):
-    """A curved horn of blackstone and basalt: its axis follows a circular arc (40-110 degrees) from a thick foot
-    to a sharp tip, 12-30 blocks long, with crying-obsidian veins. Some fork a smaller horn."""
-    def horn(x0, z0, length, r0, az, bend):
-        R = length / bend
-        steps = int(length * 3)
-        for i in range(steps + 1):
-            s_ = i / steps
-            a = bend * s_
-            off, up = R * (1 - math.cos(a)), R * math.sin(a)
-            cx, cz = x0 + math.cos(az) * off, z0 + math.sin(az) * off
-            r = r0 * (1.0 - s_) ** 1.1 + 0.35
-            ri = int(math.ceil(r))
-            for dx in range(-ri, ri + 1):
-                for dy in range(-ri, ri + 1):
-                    for dz in range(-ri, ri + 1):
-                        if dx * dx + dy * dy + dz * dz <= r * r:
-                            v = rng.random()
-                            blk = ("crying_obsidian" if v < 0.05 else "basalt[axis=y]" if v < 0.3
-                                   else "polished_blackstone" if v < 0.42 else "blackstone")
-                            _put(bp, cx + dx, up + 2 + dy, cz + dz, blk)
-    length = rng.uniform(12, 30)
+    """A slim curved horn of blackstone and basalt, 15-30 blocks tall: 3-4 blocks thick at the foot, it rises
+    almost straight, then curls over like a ram's horn and ends in a 1-block point. Some grow a second, smaller
+    horn from the same foot."""
+    height = rng.uniform(17, 31)
     az = rng.uniform(0, 2 * math.pi)
-    r0 = 1.6 + length / 14.0
-    horn(0, 0, length, r0, az, math.radians(rng.uniform(35, 85)))
-    if rng.random() < 0.5:
-        horn(0, 0, length * 0.5, r0 * 0.6, az + rng.uniform(1.8, 4.4), math.radians(rng.uniform(30, 70)))
+    r0 = rng.uniform(1.25, 1.75) + height / 40.0
+    path = _horn_path(height, math.radians(rng.uniform(4, 14)), math.radians(rng.uniform(55, 95)), az)
+    reach = max(math.hypot(p[0], p[2]) for p in path)
+    # shift the foot back so the whole horn stays centred (the template is centred on its placement point)
+    x0, z0 = -math.cos(az) * reach / 2.0, -math.sin(az) * reach / 2.0
+    _horn_blocks(bp, rng, path, r0, x0, z0)
+    if rng.random() < 0.45:
+        az2 = az + rng.uniform(2.0, 4.3)
+        small = _horn_path(height * rng.uniform(0.35, 0.55), math.radians(rng.uniform(10, 25)),
+                           math.radians(rng.uniform(40, 80)), az2)
+        _horn_blocks(bp, rng, small, r0 * 0.6, x0 + math.cos(az2) * r0 * 0.6, z0 + math.sin(az2) * r0 * 0.6)
     for y in range(0, 3):                       # buried foot
-        for dx in range(-int(r0) - 1, int(r0) + 2):
-            for dz in range(-int(r0) - 1, int(r0) + 2):
+        ri = int(r0) + 2
+        for dx in range(-ri, ri + 1):
+            for dz in range(-ri, ri + 1):
                 if dx * dx + dz * dz <= (r0 + 0.8) ** 2:
-                    bp.set(dx, y, dz, "blackstone")
-    (lo, hi) = bp.bounds()
-    if hi[0] - lo[0] > 28 or hi[2] - lo[2] > 28:          # keep the template inside the neighbouring chunks
-        for p in [p for p in bp.blocks if abs(p[0]) > 14 or abs(p[2]) > 14]:
-            bp.remove(*p)
+                    bp.set(int(round(x0)) + dx, y, int(round(z0)) + dz, "blackstone")
 
 
 STRATA = ["tuff", "andesite", "deepslate[axis=y]", "stone", "polished_andesite", "tuff", "cobbled_deepslate",
@@ -186,35 +214,50 @@ def hot_spring(bp, rng):
     bp.set(0, top - 1, 0, "magma_block")
 
 
-def flat_mushroom(bp, rng):
-    """A giant red mushroom with a broad flat cap (radius 4-7) on a leaning stem, weeping vines under the rim."""
-    h = rng.randint(7, 13)
-    rc = rng.randint(4, 7)
-    lean = rng.uniform(0, 2.5)
+def flat_mushroom(bp, rng, size=None):
+    """A giant red mushroom: a broad, gently domed cap (radius 5-9) on a thick leaning stem 10-22 tall, the rim
+    turned down, curtains of weeping vines (2-8 long) hanging from under it, a few shroomlights in the gills."""
+    big = rng.random() < 0.6 if size is None else size
+    h = rng.randint(14, 22) if big else rng.randint(9, 14)
+    rc = rng.uniform(7.0, 9.0) if big else rng.uniform(5.0, 6.8)
+    lean = rng.uniform(0.5, 3.0)
     az = rng.uniform(0, 6.28)
+    sr = 1.5 if big else 1.0                          # stem radius: 3 or 2 blocks thick
     for y in range(0, h):
         t = y / h
         x, z = math.cos(az) * lean * t * t, math.sin(az) * lean * t * t
-        for dx in (-0.5, 0.5):
-            for dz in (-0.5, 0.5):
-                _put(bp, x + dx * (1 if h > 9 else 0), y, z + dz * (1 if h > 9 else 0), "mushroom_stem")
+        rr = sr + (0.8 if y < 2 else 0.0)              # a flared foot
+        ri = int(math.ceil(rr))
+        for dx in range(-ri, ri + 1):
+            for dz in range(-ri, ri + 1):
+                if dx * dx + dz * dz <= rr * rr:
+                    _put(bp, x + dx, y, z + dz, "mushroom_stem")
     tx, tz = math.cos(az) * lean, math.sin(az) * lean
-    for dx in range(-rc - 1, rc + 2):
-        for dz in range(-rc - 1, rc + 2):
+    R = int(math.ceil(rc)) + 1
+    for dx in range(-R, R + 1):
+        for dz in range(-R, R + 1):
             d = math.hypot(dx, dz)
             x, z = int(round(tx + dx)), int(round(tz + dz))
             if d <= rc:
+                dome = int(1.6 * (1.0 - (d / rc) ** 2) + 0.5)        # 0-2 blocks higher in the middle
+                for k in range(dome + 1):
+                    bp.set(x, h + k, z, "red_mushroom_block")
+                if d > 1.8 and rng.random() < 0.05:
+                    bp.set(x, h - 1, z, "shroomlight")
+            elif d <= rc + 1.0:
                 bp.set(x, h, z, "red_mushroom_block")
-            elif d <= rc + 1:
                 bp.set(x, h - 1, z, "red_mushroom_block")                 # down-turned rim
-                if rng.random() < 0.45:
-                    n = rng.randint(1, 4)
+                if rng.random() < 0.7:
+                    n = rng.randint(2, 8)
                     for k in range(n):
                         bp.set(x, h - 2 - k, z, "weeping_vines" if k == n - 1 else "weeping_vines_plant")
-    for dx in range(-1, 2):
-        for dz in range(-1, 2):
-            if rng.random() < 0.5:
-                bp.set(int(round(tx)) + dx, h + 1, int(round(tz)) + dz, "red_mushroom_block")
+    for _ in range(int(rc * 2)):                      # a few vines under the cap too
+        a, d = rng.uniform(0, 6.28), rng.uniform(sr + 1.5, rc - 0.5)
+        x, z = int(round(tx + math.cos(a) * d)), int(round(tz + math.sin(a) * d))
+        if (x, h - 1, z) not in bp.blocks:
+            n = rng.randint(1, 5)
+            for k in range(n):
+                bp.set(x, h - 1 - k, z, "weeping_vines" if k == n - 1 else "weeping_vines_plant")
 
 
 def ash_column(bp, rng):
