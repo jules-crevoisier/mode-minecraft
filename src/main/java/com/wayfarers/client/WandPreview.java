@@ -60,6 +60,7 @@ public final class WandPreview {
             }
             plan = cachedPlan;
         }
+        BuilderWandItem.Plan shown = plan;
         event.setCustomRenderer((collector, poseStack, state) -> {
             Vec3 cam = state.cameraRenderState.pos;
             if (settingCentre) {
@@ -67,10 +68,10 @@ public final class WandPreview {
             } else {
                 outline(collector, poseStack, pos, Shapes.block(), cam, 0x66000000);
             }
-            for (BuilderWandItem.Placement p : plan.primary()) {
+            for (BuilderWandItem.Placement p : shown.primary()) {
                 outline(collector, poseStack, p.pos(), Shapes.block(), cam, GOLD);
             }
-            for (BuilderWandItem.Placement p : plan.mirrored()) {
+            for (BuilderWandItem.Placement p : shown.mirrored()) {
                 outline(collector, poseStack, p.pos(), Shapes.block(), cam, MIRRORED);
             }
             if (centre != null) {
