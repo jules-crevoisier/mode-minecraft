@@ -9,16 +9,17 @@ Usage:
 import argparse
 import json
 import os
+import shutil
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from wf import defs, render, support, foundation  # noqa: E402
+from wf import defs, render, support, foundation, chunking, nbt  # noqa: E402
 try:
     from wf import render3d  # noqa: E402  (optional: needs Pillow + minecraft-textures)
 except ImportError:
     render3d = None
-from wf.blueprint import Blueprint  # noqa: E402
+from wf.blueprint import Blueprint, template_nbt  # noqa: E402
 import wf.structures  # noqa: E402,F401  (registers every structure)
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -36,6 +37,37 @@ def needs_foundation(sdef):
     """Surface structures projected on the terrain (not sky islands, not ocean-floor wrecks)."""
     return sdef.height is None and sdef.heightmap == "WORLD_SURFACE_WG" and sdef.height_offset == 0 \
         and sdef.foundation
+
+
+def prunes_sky_air(sdef, start):
+    """Surface structures projected on the terrain (sky air above them only carves hills, see wf/chunking.py)."""
+    return start and sdef.height is None and sdef.heightmap == "WORLD_SURFACE_WG"
+
+
+def save_piece(sdef, piece, bp, start, report):
+    """Write the piece as one template, or as column templates when it is big (wf/chunking.py).
+    Returns (size, normalized blocks, origin, number of columns or 0, entries written, biggest template)."""
+    bp.resolve_shapes()
+    size, blocks, ents, origin = bp.normalized()
+    path = os.path.join(DATA, "structure", sdef.id, f"{piece.name}.nbt")
+    cell_dir = os.path.join(DATA, "structure", sdef.id, piece.name)
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    piece.chunks = None
+    if not chunking.needs_split(size, len(blocks)):
+        nbt.save(path, template_nbt(size, blocks, ents))
+        if os.path.isdir(cell_dir):
+            shutil.rmtree(cell_dir)
+        return size, blocks, origin, 0, len(blocks), len(blocks)
+    dropped = chunking.sky_air(blocks, sdef.ground - origin[1]) if prunes_sky_air(sdef, start) else set()
+    kept = {p: b for p, b in blocks.items() if p not in dropped}
+    cells = chunking.split(size, kept, ents)
+    records = chunking.write_cells(cell_dir, defs.rl(f"{sdef.id}/{piece.name}"), cells)
+    for msg in chunking.verify(cell_dir, records, size, blocks, ents, dropped):
+        report.append((sdef.id, piece.name, "chunks", (0, 0, 0), msg))
+    if os.path.exists(path):
+        os.remove(path)
+    piece.chunks = (size, records)
+    return size, blocks, origin, len(cells), len(kept), max(len(c.blocks) for c in cells)
 
 
 def build_piece(sdef, piece, start=False):
@@ -68,20 +100,17 @@ def main():
         for pool_name, pieces in pools.items():
             for piece in pieces:
                 bp = build_piece(sdef, piece, start=pool_name == "start")
-                path = os.path.join(DATA, "structure", sdef.id, f"{piece.name}.nbt")
-                os.makedirs(os.path.dirname(path), exist_ok=True)
                 ctx = support.context_for(sdef) if pool_name == "start" else support.Context(unset_solid=True)
                 bp.resolve_shapes()
                 for what, n in support.repair(bp, ctx).items():
                     repairs[what] = repairs.get(what, 0) + n
-                bp.save(path)
+                size, blocks, (mx, my, mz), ncells, written, biggest = save_piece(sdef, piece, bp, pool_name == "start", report)
                 if not args.no_check:
                     for kind, pos, msg in support.check(bp.blocks, ctx):
                         report.append((sdef.id, piece.name, kind, pos, msg))
-                size, blocks, _, (mx, my, mz) = bp.normalized()
                 if pool_name == "start" and piece is pieces[0]:
                     ground_offset = my - sdef.ground
-                summary.append((f"{sdef.id}/{piece.name}", size, len(blocks)))
+                summary.append((f"{sdef.id}/{piece.name}", size, len(blocks), ncells, written, biggest))
                 if args.preview:
                     os.makedirs(preview_dir, exist_ok=True)
                     stem = os.path.join(preview_dir, f"{sdef.id}__{piece.name}")
@@ -109,9 +138,13 @@ def main():
         for src in support.stair_rules_ok(defs.processor_list(kind)):
             report.append(("processor_list", kind, "processor", (0, 0, 0), f"rule rewrites {src} without its properties"))
 
-    for name, size, n in summary:
-        print(f"{name:45s} {size[0]:3d}x{size[1]:3d}x{size[2]:3d}  {n:6d} blocks")
-    print(f"{len(summary)} templates, {len({s.split('/')[0] for s, _, _ in summary})} structures")
+    for name, size, n, ncells, written, _ in summary:
+        split = f"  -> {ncells} columns, {written} entries ({n - written} sky air dropped)" if ncells else ""
+        print(f"{name:45s} {size[0]:3d}x{size[1]:3d}x{size[2]:3d}  {n:6d} blocks{split}")
+    files = sum(s[3] or 1 for s in summary)
+    biggest = max((s[5] for s in summary), default=0)
+    print(f"{len(summary)} pieces in {files} templates, {len({s.split('/')[0] for s, *_ in summary})} structures, "
+          f"{sum(1 for s in summary if s[3])} pieces chunked, biggest template {biggest} entries")
     for what, n in sorted(repairs.items()):
         print(f"auto-repair: {what}: {n}")
     if not args.no_check:

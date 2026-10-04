@@ -4,8 +4,140 @@
     {
       "weight": 1,
       "element": {
-        "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:mountain_monastery/monastery",
+        "element_type": "wayfarers:chunked_template",
+        "size": [
+          79,
+          107,
+          72
+        ],
+        "cells": [
+          {
+            "location": "wayfarers:mountain_monastery/monastery/x0_z0",
+            "offset": [
+              0,
+              26,
+              0
+            ],
+            "size": [
+              26,
+              57,
+              24
+            ],
+            "blocks": 9142
+          },
+          {
+            "location": "wayfarers:mountain_monastery/monastery/x0_z1",
+            "offset": [
+              0,
+              0,
+              24
+            ],
+            "size": [
+              26,
+              73,
+              24
+            ],
+            "blocks": 19918
+          },
+          {
+            "location": "wayfarers:mountain_monastery/monastery/x0_z2",
+            "offset": [
+              0,
+              0,
+              48
+            ],
+            "size": [
+              26,
+              77,
+              24
+            ],
+            "blocks": 7625
+          },
+          {
+            "location": "wayfarers:mountain_monastery/monastery/x1_z0",
+            "offset": [
+              26,
+              19,
+              0
+            ],
+            "size": [
+              27,
+              53,
+              24
+            ],
+            "blocks": 12945
+          },
+          {
+            "location": "wayfarers:mountain_monastery/monastery/x1_z1",
+            "offset": [
+              26,
+              0,
+              24
+            ],
+            "size": [
+              27,
+              107,
+              24
+            ],
+            "blocks": 25051
+          },
+          {
+            "location": "wayfarers:mountain_monastery/monastery/x1_z2",
+            "offset": [
+              26,
+              0,
+              48
+            ],
+            "size": [
+              27,
+              93,
+              24
+            ],
+            "blocks": 19442
+          },
+          {
+            "location": "wayfarers:mountain_monastery/monastery/x2_z0",
+            "offset": [
+              53,
+              20,
+              0
+            ],
+            "size": [
+              26,
+              39,
+              24
+            ],
+            "blocks": 10852
+          },
+          {
+            "location": "wayfarers:mountain_monastery/monastery/x2_z1",
+            "offset": [
+              53,
+              0,
+              24
+            ],
+            "size": [
+              26,
+              58,
+              24
+            ],
+            "blocks": 12810
+          },
+          {
+            "location": "wayfarers:mountain_monastery/monastery/x2_z2",
+            "offset": [
+              53,
+              0,
+              48
+            ],
+            "size": [
+              26,
+              44,
+              24
+            ],
+            "blocks": 7017
+          }
+        ],
         "projection": "rigid",
         "processors": "wayfarers:aging"
       }

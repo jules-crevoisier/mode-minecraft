@@ -4,8 +4,238 @@
     {
       "weight": 1,
       "element": {
-        "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:tesla_observatory/campus",
+        "element_type": "wayfarers:chunked_template",
+        "size": [
+          109,
+          102,
+          112
+        ],
+        "cells": [
+          {
+            "location": "wayfarers:tesla_observatory/campus/x0_z0",
+            "offset": [
+              8,
+              0,
+              8
+            ],
+            "size": [
+              19,
+              39,
+              20
+            ],
+            "blocks": 1440
+          },
+          {
+            "location": "wayfarers:tesla_observatory/campus/x0_z1",
+            "offset": [
+              0,
+              0,
+              28
+            ],
+            "size": [
+              27,
+              49,
+              28
+            ],
+            "blocks": 8664
+          },
+          {
+            "location": "wayfarers:tesla_observatory/campus/x0_z2",
+            "offset": [
+              2,
+              0,
+              56
+            ],
+            "size": [
+              25,
+              44,
+              28
+            ],
+            "blocks": 6958
+          },
+          {
+            "location": "wayfarers:tesla_observatory/campus/x0_z3",
+            "offset": [
+              10,
+              0,
+              84
+            ],
+            "size": [
+              17,
+              23,
+              14
+            ],
+            "blocks": 751
+          },
+          {
+            "location": "wayfarers:tesla_observatory/campus/x1_z0",
+            "offset": [
+              27,
+              0,
+              0
+            ],
+            "size": [
+              27,
+              51,
+              28
+            ],
+            "blocks": 8400
+          },
+          {
+            "location": "wayfarers:tesla_observatory/campus/x1_z1",
+            "offset": [
+              27,
+              18,
+              28
+            ],
+            "size": [
+              27,
+              47,
+              28
+            ],
+            "blocks": 20976
+          },
+          {
+            "location": "wayfarers:tesla_observatory/campus/x1_z2",
+            "offset": [
+              27,
+              18,
+              56
+            ],
+            "size": [
+              27,
+              37,
+              28
+            ],
+            "blocks": 17001
+          },
+          {
+            "location": "wayfarers:tesla_observatory/campus/x1_z3",
+            "offset": [
+              27,
+              0,
+              84
+            ],
+            "size": [
+              27,
+              39,
+              28
+            ],
+            "blocks": 5790
+          },
+          {
+            "location": "wayfarers:tesla_observatory/campus/x2_z0",
+            "offset": [
+              54,
+              0,
+              0
+            ],
+            "size": [
+              28,
+              93,
+              28
+            ],
+            "blocks": 8910
+          },
+          {
+            "location": "wayfarers:tesla_observatory/campus/x2_z1",
+            "offset": [
+              54,
+              18,
+              28
+            ],
+            "size": [
+              28,
+              84,
+              28
+            ],
+            "blocks": 18114
+          },
+          {
+            "location": "wayfarers:tesla_observatory/campus/x2_z2",
+            "offset": [
+              54,
+              16,
+              56
+            ],
+            "size": [
+              28,
+              40,
+              28
+            ],
+            "blocks": 19556
+          },
+          {
+            "location": "wayfarers:tesla_observatory/campus/x2_z3",
+            "offset": [
+              54,
+              0,
+              84
+            ],
+            "size": [
+              28,
+              39,
+              28
+            ],
+            "blocks": 6228
+          },
+          {
+            "location": "wayfarers:tesla_observatory/campus/x3_z0",
+            "offset": [
+              82,
+              0,
+              9
+            ],
+            "size": [
+              19,
+              39,
+              19
+            ],
+            "blocks": 1340
+          },
+          {
+            "location": "wayfarers:tesla_observatory/campus/x3_z1",
+            "offset": [
+              82,
+              0,
+              28
+            ],
+            "size": [
+              27,
+              39,
+              28
+            ],
+            "blocks": 8043
+          },
+          {
+            "location": "wayfarers:tesla_observatory/campus/x3_z2",
+            "offset": [
+              82,
+              0,
+              56
+            ],
+            "size": [
+              26,
+              47,
+              28
+            ],
+            "blocks": 7093
+          },
+          {
+            "location": "wayfarers:tesla_observatory/campus/x3_z3",
+            "offset": [
+              82,
+              0,
+              84
+            ],
+            "size": [
+              16,
+              22,
+              15
+            ],
+            "blocks": 760
+          }
+        ],
         "projection": "rigid",
         "processors": "wayfarers:none"
       }

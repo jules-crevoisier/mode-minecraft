@@ -4,8 +4,238 @@
     {
       "weight": 1,
       "element": {
-        "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:jungle_ziggurat/ziggurat",
+        "element_type": "wayfarers:chunked_template",
+        "size": [
+          99,
+          99,
+          100
+        ],
+        "cells": [
+          {
+            "location": "wayfarers:jungle_ziggurat/ziggurat/x0_z0",
+            "offset": [
+              0,
+              21,
+              4
+            ],
+            "size": [
+              25,
+              51,
+              21
+            ],
+            "blocks": 2976
+          },
+          {
+            "location": "wayfarers:jungle_ziggurat/ziggurat/x0_z1",
+            "offset": [
+              2,
+              3,
+              25
+            ],
+            "size": [
+              23,
+              69,
+              25
+            ],
+            "blocks": 5385
+          },
+          {
+            "location": "wayfarers:jungle_ziggurat/ziggurat/x0_z2",
+            "offset": [
+              1,
+              3,
+              50
+            ],
+            "size": [
+              24,
+              64,
+              25
+            ],
+            "blocks": 4229
+          },
+          {
+            "location": "wayfarers:jungle_ziggurat/ziggurat/x0_z3",
+            "offset": [
+              0,
+              30,
+              75
+            ],
+            "size": [
+              25,
+              38,
+              25
+            ],
+            "blocks": 2046
+          },
+          {
+            "location": "wayfarers:jungle_ziggurat/ziggurat/x1_z0",
+            "offset": [
+              25,
+              4,
+              2
+            ],
+            "size": [
+              25,
+              65,
+              23
+            ],
+            "blocks": 3871
+          },
+          {
+            "location": "wayfarers:jungle_ziggurat/ziggurat/x1_z1",
+            "offset": [
+              25,
+              0,
+              25
+            ],
+            "size": [
+              25,
+              99,
+              25
+            ],
+            "blocks": 27521
+          },
+          {
+            "location": "wayfarers:jungle_ziggurat/ziggurat/x1_z2",
+            "offset": [
+              25,
+              0,
+              50
+            ],
+            "size": [
+              25,
+              87,
+              25
+            ],
+            "blocks": 29543
+          },
+          {
+            "location": "wayfarers:jungle_ziggurat/ziggurat/x1_z3",
+            "offset": [
+              25,
+              4,
+              75
+            ],
+            "size": [
+              25,
+              60,
+              25
+            ],
+            "blocks": 4564
+          },
+          {
+            "location": "wayfarers:jungle_ziggurat/ziggurat/x2_z0",
+            "offset": [
+              50,
+              4,
+              0
+            ],
+            "size": [
+              24,
+              70,
+              25
+            ],
+            "blocks": 3192
+          },
+          {
+            "location": "wayfarers:jungle_ziggurat/ziggurat/x2_z1",
+            "offset": [
+              50,
+              0,
+              25
+            ],
+            "size": [
+              24,
+              97,
+              25
+            ],
+            "blocks": 27333
+          },
+          {
+            "location": "wayfarers:jungle_ziggurat/ziggurat/x2_z2",
+            "offset": [
+              50,
+              0,
+              50
+            ],
+            "size": [
+              24,
+              87,
+              25
+            ],
+            "blocks": 28065
+          },
+          {
+            "location": "wayfarers:jungle_ziggurat/ziggurat/x2_z3",
+            "offset": [
+              50,
+              4,
+              75
+            ],
+            "size": [
+              24,
+              60,
+              25
+            ],
+            "blocks": 4911
+          },
+          {
+            "location": "wayfarers:jungle_ziggurat/ziggurat/x3_z0",
+            "offset": [
+              74,
+              30,
+              8
+            ],
+            "size": [
+              22,
+              44,
+              17
+            ],
+            "blocks": 1477
+          },
+          {
+            "location": "wayfarers:jungle_ziggurat/ziggurat/x3_z1",
+            "offset": [
+              74,
+              3,
+              25
+            ],
+            "size": [
+              25,
+              70,
+              25
+            ],
+            "blocks": 4888
+          },
+          {
+            "location": "wayfarers:jungle_ziggurat/ziggurat/x3_z2",
+            "offset": [
+              74,
+              3,
+              50
+            ],
+            "size": [
+              24,
+              66,
+              25
+            ],
+            "blocks": 4971
+          },
+          {
+            "location": "wayfarers:jungle_ziggurat/ziggurat/x3_z3",
+            "offset": [
+              74,
+              30,
+              75
+            ],
+            "size": [
+              22,
+              40,
+              23
+            ],
+            "blocks": 2205
+          }
+        ],
         "projection": "rigid",
         "processors": "wayfarers:aging"
       }

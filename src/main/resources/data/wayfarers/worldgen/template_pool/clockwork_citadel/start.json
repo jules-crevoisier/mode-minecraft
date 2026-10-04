@@ -4,8 +4,140 @@
     {
       "weight": 1,
       "element": {
-        "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:clockwork_citadel/citadel",
+        "element_type": "wayfarers:chunked_template",
+        "size": [
+          76,
+          109,
+          82
+        ],
+        "cells": [
+          {
+            "location": "wayfarers:clockwork_citadel/citadel/x0_z0",
+            "offset": [
+              5,
+              11,
+              2
+            ],
+            "size": [
+              20,
+              52,
+              25
+            ],
+            "blocks": 9158
+          },
+          {
+            "location": "wayfarers:clockwork_citadel/citadel/x0_z1",
+            "offset": [
+              5,
+              0,
+              27
+            ],
+            "size": [
+              20,
+              49,
+              28
+            ],
+            "blocks": 15988
+          },
+          {
+            "location": "wayfarers:clockwork_citadel/citadel/x0_z2",
+            "offset": [
+              0,
+              0,
+              55
+            ],
+            "size": [
+              25,
+              63,
+              27
+            ],
+            "blocks": 9475
+          },
+          {
+            "location": "wayfarers:clockwork_citadel/citadel/x1_z0",
+            "offset": [
+              25,
+              11,
+              0
+            ],
+            "size": [
+              26,
+              62,
+              27
+            ],
+            "blocks": 20725
+          },
+          {
+            "location": "wayfarers:clockwork_citadel/citadel/x1_z1",
+            "offset": [
+              25,
+              0,
+              27
+            ],
+            "size": [
+              26,
+              109,
+              28
+            ],
+            "blocks": 36672
+          },
+          {
+            "location": "wayfarers:clockwork_citadel/citadel/x1_z2",
+            "offset": [
+              25,
+              0,
+              55
+            ],
+            "size": [
+              26,
+              49,
+              27
+            ],
+            "blocks": 19008
+          },
+          {
+            "location": "wayfarers:clockwork_citadel/citadel/x2_z0",
+            "offset": [
+              51,
+              11,
+              0
+            ],
+            "size": [
+              25,
+              52,
+              27
+            ],
+            "blocks": 12543
+          },
+          {
+            "location": "wayfarers:clockwork_citadel/citadel/x2_z1",
+            "offset": [
+              51,
+              6,
+              27
+            ],
+            "size": [
+              25,
+              43,
+              28
+            ],
+            "blocks": 19757
+          },
+          {
+            "location": "wayfarers:clockwork_citadel/citadel/x2_z2",
+            "offset": [
+              51,
+              0,
+              55
+            ],
+            "size": [
+              19,
+              63,
+              16
+            ],
+            "blocks": 6493
+          }
+        ],
         "projection": "rigid",
         "processors": "wayfarers:none"
       }

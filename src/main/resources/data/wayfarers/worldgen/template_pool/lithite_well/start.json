@@ -4,8 +4,140 @@
     {
       "weight": 1,
       "element": {
-        "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:lithite_well/layout_0",
+        "element_type": "wayfarers:chunked_template",
+        "size": [
+          65,
+          72,
+          65
+        ],
+        "cells": [
+          {
+            "location": "wayfarers:lithite_well/layout_0/x0_z0",
+            "offset": [
+              0,
+              0,
+              0
+            ],
+            "size": [
+              22,
+              36,
+              22
+            ],
+            "blocks": 12160
+          },
+          {
+            "location": "wayfarers:lithite_well/layout_0/x0_z1",
+            "offset": [
+              0,
+              0,
+              22
+            ],
+            "size": [
+              22,
+              63,
+              21
+            ],
+            "blocks": 9588
+          },
+          {
+            "location": "wayfarers:lithite_well/layout_0/x0_z2",
+            "offset": [
+              0,
+              0,
+              43
+            ],
+            "size": [
+              22,
+              72,
+              22
+            ],
+            "blocks": 11280
+          },
+          {
+            "location": "wayfarers:lithite_well/layout_0/x1_z0",
+            "offset": [
+              22,
+              0,
+              0
+            ],
+            "size": [
+              21,
+              36,
+              22
+            ],
+            "blocks": 9161
+          },
+          {
+            "location": "wayfarers:lithite_well/layout_0/x1_z1",
+            "offset": [
+              22,
+              0,
+              22
+            ],
+            "size": [
+              21,
+              61,
+              21
+            ],
+            "blocks": 8090
+          },
+          {
+            "location": "wayfarers:lithite_well/layout_0/x1_z2",
+            "offset": [
+              22,
+              0,
+              43
+            ],
+            "size": [
+              21,
+              71,
+              22
+            ],
+            "blocks": 10502
+          },
+          {
+            "location": "wayfarers:lithite_well/layout_0/x2_z0",
+            "offset": [
+              43,
+              0,
+              0
+            ],
+            "size": [
+              22,
+              36,
+              22
+            ],
+            "blocks": 9432
+          },
+          {
+            "location": "wayfarers:lithite_well/layout_0/x2_z1",
+            "offset": [
+              43,
+              0,
+              22
+            ],
+            "size": [
+              22,
+              36,
+              21
+            ],
+            "blocks": 8352
+          },
+          {
+            "location": "wayfarers:lithite_well/layout_0/x2_z2",
+            "offset": [
+              43,
+              0,
+              43
+            ],
+            "size": [
+              22,
+              36,
+              22
+            ],
+            "blocks": 7808
+          }
+        ],
         "projection": "rigid",
         "processors": "wayfarers:none"
       }
@@ -13,8 +145,140 @@
     {
       "weight": 1,
       "element": {
-        "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:lithite_well/layout_1",
+        "element_type": "wayfarers:chunked_template",
+        "size": [
+          65,
+          72,
+          65
+        ],
+        "cells": [
+          {
+            "location": "wayfarers:lithite_well/layout_1/x0_z0",
+            "offset": [
+              0,
+              0,
+              0
+            ],
+            "size": [
+              22,
+              72,
+              22
+            ],
+            "blocks": 11484
+          },
+          {
+            "location": "wayfarers:lithite_well/layout_1/x0_z1",
+            "offset": [
+              0,
+              0,
+              22
+            ],
+            "size": [
+              22,
+              61,
+              21
+            ],
+            "blocks": 10954
+          },
+          {
+            "location": "wayfarers:lithite_well/layout_1/x0_z2",
+            "offset": [
+              0,
+              0,
+              43
+            ],
+            "size": [
+              22,
+              36,
+              22
+            ],
+            "blocks": 9838
+          },
+          {
+            "location": "wayfarers:lithite_well/layout_1/x1_z0",
+            "offset": [
+              22,
+              0,
+              0
+            ],
+            "size": [
+              21,
+              71,
+              22
+            ],
+            "blocks": 11005
+          },
+          {
+            "location": "wayfarers:lithite_well/layout_1/x1_z1",
+            "offset": [
+              22,
+              0,
+              22
+            ],
+            "size": [
+              21,
+              63,
+              21
+            ],
+            "blocks": 9260
+          },
+          {
+            "location": "wayfarers:lithite_well/layout_1/x1_z2",
+            "offset": [
+              22,
+              0,
+              43
+            ],
+            "size": [
+              21,
+              36,
+              22
+            ],
+            "blocks": 7576
+          },
+          {
+            "location": "wayfarers:lithite_well/layout_1/x2_z0",
+            "offset": [
+              43,
+              0,
+              0
+            ],
+            "size": [
+              22,
+              36,
+              22
+            ],
+            "blocks": 12592
+          },
+          {
+            "location": "wayfarers:lithite_well/layout_1/x2_z1",
+            "offset": [
+              43,
+              0,
+              22
+            ],
+            "size": [
+              22,
+              36,
+              21
+            ],
+            "blocks": 8988
+          },
+          {
+            "location": "wayfarers:lithite_well/layout_1/x2_z2",
+            "offset": [
+              43,
+              0,
+              43
+            ],
+            "size": [
+              22,
+              36,
+              22
+            ],
+            "blocks": 9528
+          }
+        ],
         "projection": "rigid",
         "processors": "wayfarers:none"
       }
@@ -22,8 +286,140 @@
     {
       "weight": 1,
       "element": {
-        "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:lithite_well/layout_2",
+        "element_type": "wayfarers:chunked_template",
+        "size": [
+          65,
+          72,
+          65
+        ],
+        "cells": [
+          {
+            "location": "wayfarers:lithite_well/layout_2/x0_z0",
+            "offset": [
+              0,
+              0,
+              0
+            ],
+            "size": [
+              22,
+              72,
+              22
+            ],
+            "blocks": 10876
+          },
+          {
+            "location": "wayfarers:lithite_well/layout_2/x0_z1",
+            "offset": [
+              0,
+              0,
+              22
+            ],
+            "size": [
+              22,
+              61,
+              21
+            ],
+            "blocks": 10539
+          },
+          {
+            "location": "wayfarers:lithite_well/layout_2/x0_z2",
+            "offset": [
+              0,
+              0,
+              43
+            ],
+            "size": [
+              22,
+              36,
+              22
+            ],
+            "blocks": 13700
+          },
+          {
+            "location": "wayfarers:lithite_well/layout_2/x1_z0",
+            "offset": [
+              22,
+              0,
+              0
+            ],
+            "size": [
+              21,
+              71,
+              22
+            ],
+            "blocks": 10986
+          },
+          {
+            "location": "wayfarers:lithite_well/layout_2/x1_z1",
+            "offset": [
+              22,
+              0,
+              22
+            ],
+            "size": [
+              21,
+              63,
+              21
+            ],
+            "blocks": 8422
+          },
+          {
+            "location": "wayfarers:lithite_well/layout_2/x1_z2",
+            "offset": [
+              22,
+              0,
+              43
+            ],
+            "size": [
+              21,
+              36,
+              22
+            ],
+            "blocks": 9584
+          },
+          {
+            "location": "wayfarers:lithite_well/layout_2/x2_z0",
+            "offset": [
+              43,
+              0,
+              0
+            ],
+            "size": [
+              22,
+              36,
+              22
+            ],
+            "blocks": 9684
+          },
+          {
+            "location": "wayfarers:lithite_well/layout_2/x2_z1",
+            "offset": [
+              43,
+              0,
+              22
+            ],
+            "size": [
+              22,
+              36,
+              21
+            ],
+            "blocks": 8288
+          },
+          {
+            "location": "wayfarers:lithite_well/layout_2/x2_z2",
+            "offset": [
+              43,
+              0,
+              43
+            ],
+            "size": [
+              22,
+              36,
+              22
+            ],
+            "blocks": 10450
+          }
+        ],
         "projection": "rigid",
         "processors": "wayfarers:none"
       }

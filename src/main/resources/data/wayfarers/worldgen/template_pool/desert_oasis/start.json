@@ -4,8 +4,182 @@
     {
       "weight": 1,
       "element": {
-        "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:desert_oasis/oasis",
+        "element_type": "wayfarers:chunked_template",
+        "size": [
+          98,
+          77,
+          90
+        ],
+        "cells": [
+          {
+            "location": "wayfarers:desert_oasis/oasis/x0_z0",
+            "offset": [
+              6,
+              47,
+              8
+            ],
+            "size": [
+              18,
+              7,
+              22
+            ],
+            "blocks": 893
+          },
+          {
+            "location": "wayfarers:desert_oasis/oasis/x0_z1",
+            "offset": [
+              0,
+              1,
+              30
+            ],
+            "size": [
+              24,
+              59,
+              30
+            ],
+            "blocks": 3723
+          },
+          {
+            "location": "wayfarers:desert_oasis/oasis/x0_z2",
+            "offset": [
+              0,
+              1,
+              60
+            ],
+            "size": [
+              24,
+              66,
+              23
+            ],
+            "blocks": 8892
+          },
+          {
+            "location": "wayfarers:desert_oasis/oasis/x1_z0",
+            "offset": [
+              24,
+              33,
+              0
+            ],
+            "size": [
+              25,
+              41,
+              30
+            ],
+            "blocks": 7735
+          },
+          {
+            "location": "wayfarers:desert_oasis/oasis/x1_z1",
+            "offset": [
+              24,
+              0,
+              30
+            ],
+            "size": [
+              25,
+              75,
+              30
+            ],
+            "blocks": 17455
+          },
+          {
+            "location": "wayfarers:desert_oasis/oasis/x1_z2",
+            "offset": [
+              24,
+              0,
+              60
+            ],
+            "size": [
+              25,
+              64,
+              30
+            ],
+            "blocks": 9502
+          },
+          {
+            "location": "wayfarers:desert_oasis/oasis/x2_z0",
+            "offset": [
+              49,
+              33,
+              0
+            ],
+            "size": [
+              25,
+              44,
+              30
+            ],
+            "blocks": 9934
+          },
+          {
+            "location": "wayfarers:desert_oasis/oasis/x2_z1",
+            "offset": [
+              49,
+              0,
+              30
+            ],
+            "size": [
+              25,
+              75,
+              30
+            ],
+            "blocks": 22624
+          },
+          {
+            "location": "wayfarers:desert_oasis/oasis/x2_z2",
+            "offset": [
+              49,
+              0,
+              60
+            ],
+            "size": [
+              25,
+              63,
+              30
+            ],
+            "blocks": 11584
+          },
+          {
+            "location": "wayfarers:desert_oasis/oasis/x3_z0",
+            "offset": [
+              74,
+              47,
+              10
+            ],
+            "size": [
+              18,
+              7,
+              20
+            ],
+            "blocks": 892
+          },
+          {
+            "location": "wayfarers:desert_oasis/oasis/x3_z1",
+            "offset": [
+              74,
+              1,
+              30
+            ],
+            "size": [
+              24,
+              61,
+              30
+            ],
+            "blocks": 2871
+          },
+          {
+            "location": "wayfarers:desert_oasis/oasis/x3_z2",
+            "offset": [
+              74,
+              21,
+              60
+            ],
+            "size": [
+              22,
+              39,
+              25
+            ],
+            "blocks": 4151
+          }
+        ],
         "projection": "rigid",
         "processors": "wayfarers:aging"
       }

@@ -59,6 +59,7 @@ public final class Wayfarers {
         ModTabs.TABS.register(modBus);
         ModDataComponents.COMPONENTS.register(modBus);
         com.wayfarers.registry.ModMenus.MENUS.register(modBus);
+        com.wayfarers.registry.ModWorldgen.POOL_ELEMENTS.register(modBus);
         com.wayfarers.network.WayfarersNet.init();
 
         EntityAttributeCreationEvent.BUS.addListener(ModEntities::registerAttributes);
