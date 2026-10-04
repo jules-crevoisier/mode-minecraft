@@ -52,6 +52,8 @@ public final class WayfarersClient {
                             com.wayfarers.client.gui.TerminalScreen::new);
                     net.minecraft.client.gui.screens.MenuScreens.register(com.wayfarers.registry.ModMenus.CHISEL_TABLE.get(),
                             com.wayfarers.client.gui.ChiselTableScreen::new);
+                    net.minecraft.client.gui.screens.MenuScreens.register(com.wayfarers.registry.ModMenus.MACHINE.get(),
+                            com.wayfarers.client.gui.MachineScreen::new);
                 }));
         AddGuiOverlayLayersEvent.BUS.addListener(TipCards::register);
         AddGuiOverlayLayersEvent.BUS.addListener(ManaHud::register);
@@ -91,6 +93,7 @@ public final class WayfarersClient {
     private static void onClientTick() {
         EldenBossBar.tick();
         TipCards.tick();
+        MachineAreaPreview.tick();
         Minecraft mc = Minecraft.getInstance();
         ClientPacketListener connection = mc.getConnection();
         while (SORT_KEY.consumeClick()) {

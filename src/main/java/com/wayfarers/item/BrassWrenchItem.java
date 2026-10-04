@@ -64,9 +64,9 @@ public class BrassWrenchItem extends GadgetItem {
         }
         boolean sneaking = player.isShiftKeyDown();
         if (sneaking && state.getBlock() instanceof MachineBlock) {
-            // the machine's own sneak-click: change its setting (radius, interval, detector mode...)
-            if (!level.isClientSide() && level.getBlockEntity(pos) instanceof MachineBlockEntity machine) {
-                machine.use(player);
+            // quick setting change without opening the screen (radius, interval, detector target...)
+            if (player instanceof ServerPlayer sp && level.getBlockEntity(pos) instanceof MachineBlockEntity machine) {
+                machine.quickCycle(sp);
             }
             return InteractionResult.SUCCESS;
         }

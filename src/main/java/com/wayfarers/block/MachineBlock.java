@@ -74,6 +74,21 @@ public class MachineBlock extends BaseEntityBlock {
         public boolean readsRedstone() {
             return this == BREAKER || this == PLACER || this == TRANSMITTER;
         }
+
+        /** Machines that can be told to run always, only with a redstone signal, or only without one. */
+        public boolean hasRedstoneMode() {
+            return this == HARVESTER || this == SPRINKLER || this == VACUUM || this == TIMER;
+        }
+
+        /** Machines that work in an area around them (with a "show area" outline in their screen). */
+        public boolean hasArea() {
+            return this == HARVESTER || this == SPRINKLER || this == VACUUM || this == DETECTOR;
+        }
+
+        public static Kind byId(int id) {
+            Kind[] all = values();
+            return all[Math.floorMod(id, all.length)];
+        }
     }
 
     private final Kind kind;
@@ -130,8 +145,8 @@ public class MachineBlock extends BaseEntityBlock {
     // ------------------------------------------------------------------ interaction
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
-        if (!level.isClientSide() && level.getBlockEntity(pos) instanceof MachineBlockEntity machine) {
-            machine.use(player);
+        if (player instanceof net.minecraft.server.level.ServerPlayer sp && level.getBlockEntity(pos) instanceof MachineBlockEntity machine) {
+            machine.openScreen(sp);
         }
         return InteractionResult.SUCCESS;
     }
@@ -142,7 +157,7 @@ public class MachineBlock extends BaseEntityBlock {
         DyeColor dye = stack.get(DataComponents.DYE);
         if ((kind == Kind.TRANSMITTER || kind == Kind.RECEIVER) && dye != null) {
             if (!level.isClientSide() && level.getBlockEntity(pos) instanceof MachineBlockEntity machine) {
-                machine.setChannel(player, dye.getId());
+                machine.setChannel(player, dye.getId(), true);
             }
             return InteractionResult.SUCCESS;
         }

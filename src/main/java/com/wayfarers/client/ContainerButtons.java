@@ -35,6 +35,12 @@ public final class ContainerButtons {
 
     private ContainerButtons() {}
 
+    /**
+     * Mod screens with their own layout (title plate on the top edge, their own take-all button...): no button row
+     * or search box above them. Middle-click sorting still works.
+     */
+    public interface Exempt {}
+
     public static void register() {
         ScreenEvent.Init.Post.BUS.addListener(ContainerButtons::onInit);
         ScreenEvent.Render.Post.BUS.addListener(ContainerButtons::onRender);
@@ -79,7 +85,7 @@ public final class ContainerButtons {
     }
 
     private static void onInit(ScreenEvent.Init.Post event) {
-        if (!supported(event.getScreen())) {
+        if (!supported(event.getScreen()) || event.getScreen() instanceof Exempt) {
             return;
         }
         AbstractContainerScreen<?> screen = (AbstractContainerScreen<?>) event.getScreen();

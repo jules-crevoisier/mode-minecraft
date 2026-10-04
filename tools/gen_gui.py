@@ -820,10 +820,15 @@ def main():
     icons()
     bars()
     small_buttons()
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from wf import gui_machines
+    gui_machines.sprites(sys.modules[__name__])
     if "--mockup" in sys.argv:
         mockup_waystones()
         mockup_quests()
         mockup_guide()
+        gui_machines.mockups(sys.modules[__name__])
+        gui_machines.mockups(sys.modules[__name__], li=0)
     print("gui sprites written to", os.path.relpath(OUT, ROOT))
 
 
