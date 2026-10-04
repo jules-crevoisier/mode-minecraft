@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "key": {
+    "#": "wayfarers:polished_rust_rock"
+  },
+  "result": {
+    "id": "wayfarers:rust_rock_bricks",
+    "count": 4
+  }
+}

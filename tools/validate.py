@@ -46,10 +46,11 @@ def mod_ids(kind):
     import re
     java = os.path.join(ROOT, "src", "main", "java", "com", "wayfarers")
     files = {"blocks": ["registry/ModBlocks.java", "generated/ModDecor.java", "generated/GeneratedMetals.java",
-                        "generated/GeneratedMachines.java", "generated/GeneratedFurniture.java"],
+                        "generated/GeneratedMachines.java", "generated/GeneratedFurniture.java",
+                        "generated/GeneratedWorldBlocks.java"],
              "items": ["registry/ModItems.java", "generated/ModDecor.java", "generated/BossGear.java",
                        "generated/GeneratedMetals.java", "generated/GeneratedMachines.java",
-                       "generated/GeneratedFurniture.java"],
+                       "generated/GeneratedFurniture.java", "generated/GeneratedWorldBlocks.java"],
              "entities": ["registry/ModEntities.java"]}[kind]
     ids = set()
     for f in files:
@@ -57,7 +58,7 @@ def mod_ids(kind):
         if kind == "blocks" and f.endswith("GeneratedMetals.java"):
             ids |= set(re.findall(r'\bblock\("([a-z0-9_]+)"', text))
             continue
-        ids |= set(re.findall(r'(?:register|simple|armor|block|egg|stairs|slab|wall|weapon|remembrance|spell|item|gear|machine|furniture)\("([a-z0-9_]+)"', text))
+        ids |= set(re.findall(r'(?:register|simple|armor|block|pillar|door|egg|stairs|slab|wall|weapon|remembrance|spell|item|gear|machine|furniture)\("([a-z0-9_]+)"', text))
     return ids
 
 

@@ -59,7 +59,8 @@ BIOMES = {
     "glacial_sea": B("Glacial Sea", "Mer glaciaire", 0.0, 0.5, "#7fa1ff", "#c0d8ff", "#3938c9", "#050533",
                      surface="ocean_cold", decor=["icebergs", "ocean_floor_cold", "kelp_cold"], mobs="frozen_ocean"),
     "slate_sea": B("Slate Sea", "Mer d'ardoise", 0.5, 0.5, "#7ba4ff", "#b6c8e8", "#3d57d6", "#050533",
-                   surface="ocean_cold", decor=["ocean_floor_cold", "kelp_cold", "seagrass_deep"], mobs="cold_ocean"),
+                   surface="slate_ocean", decor=["ocean_floor_cold", "kelp_cold", "seagrass_deep", "blue_slate_veins"],
+                   mobs="cold_ocean"),
     "azure_ocean": B("Azure Ocean", "Océan d'azur", 0.5, 0.5, "#78a7ff", "#c0d8ff", "#2b79e6", "#04294f",
                      surface="ocean", decor=["ocean_floor", "seagrass_deep", "kelp"], mobs="ocean"),
     "coral_lagoon": B("Coral Lagoon", "Lagon de corail", 0.8, 0.5, "#80cfff", "#d6f4ff", "#1fd6c8", "#0a5c63",
@@ -89,16 +90,18 @@ BIOMES = {
     "snowcap_slopes": B("Snowcap Slopes", "Pentes enneigées", -0.3, 0.9, "#839dff", "#dfe9ff", "#3d57d6", "#050533",
                         surface="snow_slopes", decor=["frost_pines_sparse"], mobs="snowy"),
     "majestic_peaks": B("Majestic Peaks", "Pics majestueux", -0.7, 0.9, "#8cb3ff", "#eef4ff", "#3d57d6", "#050533",
-                        surface="peaks", decor=["ice_spires_small"], mobs="peaks", particles="minecraft:white_ash"),
+                        surface="peaks", decor=["ice_spires_small", "marble_strata"], mobs="peaks",
+                        particles="minecraft:white_ash"),
     "stone_spires": B("Stone Spires", "Aiguilles de pierre", 1.0, 0.3, "#76a8ff", "#d6d6d6", "#3f76e4", "#050533",
-                      surface="spires", decor=["calcite_veins"], mobs="peaks"),
+                      surface="spires", decor=["calcite_veins", "marble_strata"], mobs="peaks"),
     # ---------------------------------------------------------------- temperate
     "verdant_meadows": B("Verdant Meadows", "Prairies verdoyantes", 0.8, 0.4, "#78a7ff", "#c0d8ff", "#3f76e4", "#050533",
                          grass="#79c05a", foliage="#59ae30", decor=["meadow_flowers", "lone_oaks", "tall_grass"], mobs="plains"),
     "wildflower_fields": B("Wildflower Fields", "Champs de fleurs sauvages", 0.8, 0.5, "#78a7ff", "#c0d8ff", "#3f76e4", "#050533",
                            grass="#86cc5e", foliage="#59ae30", decor=["wildflowers", "tall_grass", "bee_trees"], mobs="plains"),
     "highland_meadow": B("Highland Meadow", "Alpage", 0.5, 0.8, "#7ba4ff", "#c0d8ff", "#0e4ecf", "#050533",
-                         grass="#83bb6d", foliage="#63a948", decor=["meadow_flowers", "tall_grass", "boulders"], mobs="meadow"),
+                         grass="#83bb6d", foliage="#63a948", surface="alpine",
+                         decor=["meadow_flowers", "tall_grass", "boulders", "marble_strata"], mobs="meadow"),
     "enchanted_forest": B("Enchanted Forest", "Forêt enchantée", 0.7, 0.8, "#8f9bff", "#c9b8ff", "#7a63e8", "#1d1452",
                           grass="#4fd1a1", foliage="#3fc4c0", decor=["glowwood_trees", "glow_flowers", "glow_lichen"],
                           mobs="enchanted", particles="minecraft:firefly"),
@@ -107,13 +110,15 @@ BIOMES = {
     "silver_birch_wood": B("Silver Birch Wood", "Bois de bouleaux d'argent", 0.6, 0.6, "#7aa5ff", "#d0e0ff", "#3f76e4", "#050533",
                            grass="#88bb67", foliage="#6ba941", decor=["tall_birches", "forest_floor"], mobs="forest"),
     "crystal_woods": B("Crystal Woods", "Bois de cristal", 0.6, 0.6, "#8fb0ff", "#cdeeff", "#3ad2ff", "#06375a",
-                       grass="#6fcfb0", foliage="#7fe0d8", decor=["tall_birches", "surface_crystals", "glow_flowers"],
+                       grass="#6fcfb0", foliage="#7fe0d8",
+                       decor=["tall_birches", "glowwood_sparse", "surface_crystals", "glow_flowers"],
                        mobs="forest", particles="minecraft:end_rod"),
     "shadow_woods": B("Shadow Woods", "Bois des ombres", 0.6, 0.8, "#6f7aa8", "#7d8496", "#3a4f6b", "#050533",
                       grass="#4e7a3a", foliage="#3b6a2a", decor=["shadow_oaks", "mushrooms_dense"], mobs="dark_forest",
                       particles="minecraft:ash"),
     "pine_highlands": B("Pine Highlands", "Hautes terres de pins", 0.25, 0.8, "#7fa1ff", "#c8d8ff", "#287082", "#050533",
-                        grass="#86b783", foliage="#68a464", surface="podzol_patches", decor=["pines", "berry_bushes"], mobs="taiga"),
+                        grass="#86b783", foliage="#68a464", surface="pine_slate",
+                        decor=["pines", "berry_bushes", "blue_slate_veins"], mobs="taiga"),
     "giant_sylvan": B("Giant Sylvan Forest", "Sylve géante", 0.3, 0.8, "#7fa1ff", "#bcd0e8", "#287082", "#050533",
                       grass="#6ea85b", foliage="#4f8f3a", surface="podzol_patches", decor=["giant_trees", "ferns", "mossy_boulders"],
                       mobs="taiga", particles="minecraft:spore_blossom_air"),
@@ -127,9 +132,11 @@ BIOMES = {
                        mobs="swamp", particles="minecraft:firefly"),
     # ---------------------------------------------------------------- warm
     "ashen_savanna": B("Ashen Savanna", "Savane cendrée", 1.4, 0.0, "#6eb1ff", "#e0d6c4", "#3f76e4", "#050533",
-                       grass="#b0a456", foliage="#a69a46", rain=False, surface="savanna", decor=["acacias", "dry_grass"], mobs="savanna"),
+                       grass="#b0a456", foliage="#a69a46", rain=False, surface="savanna",
+                       decor=["acacias", "rustwood_sparse", "dry_grass", "rust_rock_veins"], mobs="savanna"),
     "rustlands": B("Rustlands", "Terres rouillées", 1.2, 0.0, "#8aa8d8", "#d8a07a", "#4f8f8a", "#1b2f2c",
-                   grass="#a08646", foliage="#8f7436", rain=False, surface="rust", decor=["steam_vents", "rusted_wrecks", "dry_grass"],
+                   grass="#a08646", foliage="#8f7436", rain=False, surface="rust",
+                   decor=["steam_vents", "rusted_wrecks", "rustwood_trees", "dry_grass", "rust_rock_veins"],
                    mobs="savanna", particles="minecraft:ash"),
     "emerald_jungle": B("Emerald Jungle", "Jungle d'émeraude", 0.95, 0.9, "#77a8ff", "#c6e8c0", "#14a2c5", "#0a4a55",
                         grass="#59c93c", foliage="#30bb0b", decor=["jungle_giants", "jungle_floor", "melons"], mobs="jungle"),
@@ -138,7 +145,8 @@ BIOMES = {
     "painted_canyon": B("Painted Canyon", "Canyon peint", 2.0, 0.0, "#6eb1ff", "#f0c89a", "#3f76e4", "#050533", rain=False,
                         grass="#90814d", foliage="#9e814d", surface="badlands", decor=["dead_bushes", "canyon_cacti"], mobs="badlands"),
     "cogwork_valley": B("Cogwork Valley", "Vallée des engrenages", 1.6, 0.1, "#80a9e0", "#e4c9a0", "#4f8f8a", "#1b2f2c", rain=False,
-                        grass="#9e8f4d", foliage="#9e814d", surface="cogwork", decor=["rusted_wrecks", "steam_vents", "acacias"],
+                        grass="#9e8f4d", foliage="#9e814d", surface="cogwork",
+                        decor=["rusted_wrecks", "steam_vents", "acacias", "rustwood_sparse", "rust_rock_veins"],
                         mobs="badlands"),
     # ---------------------------------------------------------------- caves
     "crystal_caverns": B("Crystal Caverns", "Cavernes de cristal", 0.6, 0.4, "#78a7ff", "#3a2f5a", "#3ad2ff", "#06375a",
@@ -217,6 +225,7 @@ def _above(y, mult=0, add=False):
     return {"type": "minecraft:y_above", "anchor": {"absolute": y}, "surface_depth_multiplier": mult, "add_stone_depth": add}
 
 
+STEEP = {"type": "minecraft:steep"}
 ON_FLOOR = _depth("floor")
 UNDER_FLOOR = _depth("floor", add=True)
 DEEP_UNDER_FLOOR = _depth("floor", add=True, secondary=6)
@@ -224,6 +233,18 @@ ON_CEILING = _depth("ceiling")
 ABOVE_WATER = _water(-1, 0)
 GRASS = _block("grass_block", {"snowy": "false"})
 DIRT = _block("dirt")
+
+
+def _strata(stone, bands, base="stone"):
+    """Horizontal bands of `stone` in a cliff face (the rest `base`): a mountain's rock strata. Each band is shifted
+    by the local surface depth, so it wavers a little along the slope."""
+    rules = [_if(_above(lo, 1), _if(_not(_above(hi, 1)), _block(stone))) for lo, hi in bands]
+    return _seq(*rules, _block(base))
+
+
+MARBLE = "wayfarers:marble"
+MARBLE_BANDS = [(92, 96), (109, 112), (127, 132), (146, 149), (165, 170), (186, 189), (207, 212), (231, 234),
+                (254, 259), (279, 283)]
 
 
 def _land(top, under, underwater=None):
@@ -253,25 +274,44 @@ SURFACES = {
                                        _block("grass_block", {"snowy": "true"})), DIRT),
     "snow_slopes": lambda: _land(_seq(_if(_noise("powder_snow", 0.45, 0.58), _block("powder_snow")), _block("snow_block")),
                                  _block("snow_block"), _block("stone")),
-    "peaks": lambda: _seq(_if(ON_FLOOR, _seq(_if(_noise("packed_ice", 0.0, 0.2), _block("packed_ice")),
+    "peaks": lambda: _seq(_if(STEEP, _if(UNDER_FLOOR, _strata(MARBLE, MARBLE_BANDS))),
+                          _if(ON_FLOOR, _seq(_if(_noise("packed_ice", 0.0, 0.2), _block("packed_ice")),
                                              _if(_noise("ice", 0.0, 0.025), _block("ice")), _block("snow_block"))),
                           _if(UNDER_FLOOR, _block("snow_block"))),
     "spires": lambda: _seq(_if(ON_FLOOR, _seq(_if(_noise("calcite", -0.0125, 0.0125), _block("calcite")),
-                                              _if(_noise("surface", 0.3, 1.0), _block("andesite")), _block("stone"))),
-                           _if(UNDER_FLOOR, _block("stone"))),
+                                              _if(_noise("surface", 0.3, 1.0), _block("andesite")),
+                                              _strata(MARBLE, MARBLE_BANDS))),
+                           _if(UNDER_FLOOR, _strata(MARBLE, MARBLE_BANDS))),
+    # alpine meadow: grass, with marble bands in the steep banks and a few bare marble outcrops
+    "alpine": lambda: _seq(_if(STEEP, _if(UNDER_FLOOR, _strata(MARBLE, MARBLE_BANDS))),
+                           _if(ON_FLOOR, _if(_noise("surface", 0.62, 1.0), _block(MARBLE))),
+                           _land(GRASS, DIRT, _block("dirt"))),
+    # pine highlands: podzol and grass over blue slate, which shows in every steep bank and in a few outcrops
+    "pine_slate": lambda: _seq(_if(STEEP, _if(UNDER_FLOOR, _block("wayfarers:blue_slate"))),
+                               _if(ON_FLOOR, _if(_noise("surface", -0.7, -0.52), _block("wayfarers:blue_slate"))),
+                               _land(_seq(_if(_noise("surface", 0.21, 1.0), _block("podzol", {"snowy": "false"})),
+                                          _if(_noise("surface", -0.95, -0.7), _block("coarse_dirt")), GRASS), DIRT)),
+    # slate sea: a floor of gravel and blue slate (clay in places), blue slate shores
+    "slate_ocean": lambda: _land(_seq(_if(_noise("surface", -0.3, 0.25), _block("wayfarers:blue_slate")), _block("gravel")),
+                                 _block("wayfarers:blue_slate"),
+                                 _seq(_if(_noise("surface", 0.1, 0.4), _block("clay")),
+                                      _if(_noise("gravel", -0.35, 0.3), _block("wayfarers:blue_slate")), _block("gravel"))),
     "podzol_patches": lambda: _land(_seq(_if(_noise("surface", 0.21, 1.0), _block("podzol", {"snowy": "false"})),
                                          _if(_noise("surface", -0.95, -0.4), _block("coarse_dirt")), GRASS), DIRT),
     "crags": lambda: _land(_seq(_if(_noise("gravel", 0.2, 1.0), _block("gravel")),
                                 _if(_noise("surface", 0.4, 1.0), _block("stone")), GRASS), DIRT, _block("gravel")),
     "marsh": lambda: _land(_seq(_if(_noise("surface_swamp", 0.0, 1.0), _block("mud")), GRASS), DIRT, _block("mud")),
     "savanna": lambda: _land(_seq(_if(_noise("surface", 0.25, 1.0), _block("coarse_dirt")), GRASS), DIRT),
-    "rust": lambda: _land(_seq(_if(_noise("surface", 0.3, 1.0), _block("red_terracotta")),
-                               _if(_noise("surface", -1.0, -0.4), _block("gravel")), _block("coarse_dirt")),
-                          _block("terracotta")),
+    "rust": lambda: _seq(_if(STEEP, _if(UNDER_FLOOR, _block("wayfarers:rust_rock"))),
+                         _land(_seq(_if(_noise("surface", 0.3, 1.0), _block("wayfarers:rust_rock")),
+                                    _if(_noise("surface", 0.15, 0.3), _block("red_terracotta")),
+                                    _if(_noise("surface", -1.0, -0.4), _block("gravel")), _block("coarse_dirt")),
+                               _seq(_if(_noise("surface", -0.2, 0.2), _block("terracotta")), _block("wayfarers:rust_rock")))),
     "desert": lambda: _land(_block("sand"), _seq(_if(DEEP_UNDER_FLOOR, _block("sandstone")), _block("sand")), _block("sand")),
     "badlands": lambda: _seq(_if(ON_FLOOR, _seq(_if(_above(74, 1), _block("orange_terracotta")), _block("red_sand"))),
                              _if(UNDER_FLOOR, {"type": "minecraft:bandlands"})),
     "cogwork": lambda: _seq(_if(ON_FLOOR, _seq(_if(_noise("surface", 0.2, 1.0), _block("smooth_sandstone")),
+                                               _if(_noise("surface", -1.0, -0.6), _block("wayfarers:rust_rock")),
                                                _block("red_sand"))),
                             _if(UNDER_FLOOR, {"type": "minecraft:bandlands"})),
 }

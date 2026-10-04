@@ -144,6 +144,24 @@ FAMILIES.update(_shapes(
     "mahogany", _mod("mahogany_panelling", "mahogany_parquet"),
     stairs=[_v("mahogany_panelling", "stairs"), _v("mahogany_parquet", "stairs")],
     slabs=[_v("mahogany_panelling", "slab"), _v("mahogany_parquet", "slab")]))
+# ---------------------------------------------------------------- world stones (decor.py WORLD_STONES)
+FAMILIES.update(_shapes(
+    "marble", _mod("marble", "polished_marble", "marble_bricks", "marble_pillar", "chiseled_marble"),
+    stairs=[_v("marble", "stairs"), _v("polished_marble", "stairs"), _v("marble_bricks", "stairs")],
+    slabs=[_v("marble", "slab"), _v("polished_marble", "slab"), _v("marble_bricks", "slab")],
+    walls=[_v("marble", "wall"), _v("marble_bricks", "wall")]))
+FAMILIES.update(_shapes(
+    "rust_rock", _mod("rust_rock", "polished_rust_rock", "rust_rock_bricks"),
+    stairs=[_v("rust_rock", "stairs"), _v("polished_rust_rock", "stairs"), _v("rust_rock_bricks", "stairs")],
+    slabs=[_v("rust_rock", "slab"), _v("polished_rust_rock", "slab"), _v("rust_rock_bricks", "slab")],
+    walls=[_v("rust_rock", "wall"), _v("rust_rock_bricks", "wall")]))
+FAMILIES.update(_shapes(
+    "blue_slate", _mod("blue_slate", "polished_blue_slate", "blue_slate_bricks", "blue_slate_tiles"),
+    stairs=[_v("blue_slate", "stairs"), _v("polished_blue_slate", "stairs"), _v("blue_slate_bricks", "stairs"),
+            _v("blue_slate_tiles", "stairs")],
+    slabs=[_v("blue_slate", "slab"), _v("polished_blue_slate", "slab"), _v("blue_slate_bricks", "slab"),
+           _v("blue_slate_tiles", "slab")],
+    walls=[_v("blue_slate", "wall"), _v("blue_slate_bricks", "wall"), _v("blue_slate_tiles", "wall")]))
 
 
 def all_ids():

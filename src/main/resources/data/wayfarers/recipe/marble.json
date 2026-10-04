@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "CD",
+    "DC"
+  ],
+  "key": {
+    "C": "minecraft:calcite",
+    "D": "minecraft:diorite"
+  },
+  "result": {
+    "id": "wayfarers:marble",
+    "count": 4
+  }
+}

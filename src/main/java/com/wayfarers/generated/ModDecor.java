@@ -5,6 +5,7 @@ import com.wayfarers.registry.ModItems;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.StairBlock;
@@ -113,6 +114,45 @@ public final class ModDecor {
     public static final RegistryObject<Block> MAHOGANY_PARQUET = block("mahogany_parquet", MapColor.COLOR_BROWN, SoundType.WOOD, 2.0F, 0, false);
     public static final RegistryObject<Block> MAHOGANY_PARQUET_STAIRS = stairs("mahogany_parquet_stairs", MAHOGANY_PARQUET);
     public static final RegistryObject<Block> MAHOGANY_PARQUET_SLAB = slab("mahogany_parquet_slab", MAHOGANY_PARQUET);
+    public static final RegistryObject<Block> MARBLE = block("marble", MapColor.QUARTZ, SoundType.CALCITE, 1.5F, 0, true);
+    public static final RegistryObject<Block> MARBLE_STAIRS = stairs("marble_stairs", MARBLE);
+    public static final RegistryObject<Block> MARBLE_SLAB = slab("marble_slab", MARBLE);
+    public static final RegistryObject<Block> MARBLE_WALL = wall("marble_wall", MARBLE);
+    public static final RegistryObject<Block> POLISHED_MARBLE = block("polished_marble", MapColor.QUARTZ, SoundType.CALCITE, 1.5F, 0, true);
+    public static final RegistryObject<Block> POLISHED_MARBLE_STAIRS = stairs("polished_marble_stairs", POLISHED_MARBLE);
+    public static final RegistryObject<Block> POLISHED_MARBLE_SLAB = slab("polished_marble_slab", POLISHED_MARBLE);
+    public static final RegistryObject<Block> MARBLE_BRICKS = block("marble_bricks", MapColor.QUARTZ, SoundType.CALCITE, 1.5F, 0, true);
+    public static final RegistryObject<Block> MARBLE_BRICK_STAIRS = stairs("marble_brick_stairs", MARBLE_BRICKS);
+    public static final RegistryObject<Block> MARBLE_BRICK_SLAB = slab("marble_brick_slab", MARBLE_BRICKS);
+    public static final RegistryObject<Block> MARBLE_BRICK_WALL = wall("marble_brick_wall", MARBLE_BRICKS);
+    public static final RegistryObject<Block> MARBLE_PILLAR = pillar("marble_pillar", MapColor.QUARTZ, SoundType.CALCITE, 1.5F, 0, true);
+    public static final RegistryObject<Block> CHISELED_MARBLE = block("chiseled_marble", MapColor.QUARTZ, SoundType.CALCITE, 1.5F, 0, true);
+    public static final RegistryObject<Block> RUST_ROCK = block("rust_rock", MapColor.TERRACOTTA_ORANGE, SoundType.STONE, 1.5F, 0, true);
+    public static final RegistryObject<Block> RUST_ROCK_STAIRS = stairs("rust_rock_stairs", RUST_ROCK);
+    public static final RegistryObject<Block> RUST_ROCK_SLAB = slab("rust_rock_slab", RUST_ROCK);
+    public static final RegistryObject<Block> RUST_ROCK_WALL = wall("rust_rock_wall", RUST_ROCK);
+    public static final RegistryObject<Block> POLISHED_RUST_ROCK = block("polished_rust_rock", MapColor.TERRACOTTA_ORANGE, SoundType.STONE, 1.5F, 0, true);
+    public static final RegistryObject<Block> POLISHED_RUST_ROCK_STAIRS = stairs("polished_rust_rock_stairs", POLISHED_RUST_ROCK);
+    public static final RegistryObject<Block> POLISHED_RUST_ROCK_SLAB = slab("polished_rust_rock_slab", POLISHED_RUST_ROCK);
+    public static final RegistryObject<Block> RUST_ROCK_BRICKS = block("rust_rock_bricks", MapColor.TERRACOTTA_ORANGE, SoundType.STONE, 1.5F, 0, true);
+    public static final RegistryObject<Block> RUST_ROCK_BRICK_STAIRS = stairs("rust_rock_brick_stairs", RUST_ROCK_BRICKS);
+    public static final RegistryObject<Block> RUST_ROCK_BRICK_SLAB = slab("rust_rock_brick_slab", RUST_ROCK_BRICKS);
+    public static final RegistryObject<Block> RUST_ROCK_BRICK_WALL = wall("rust_rock_brick_wall", RUST_ROCK_BRICKS);
+    public static final RegistryObject<Block> BLUE_SLATE = block("blue_slate", MapColor.TERRACOTTA_BLUE, SoundType.DEEPSLATE, 2.5F, 0, true);
+    public static final RegistryObject<Block> BLUE_SLATE_STAIRS = stairs("blue_slate_stairs", BLUE_SLATE);
+    public static final RegistryObject<Block> BLUE_SLATE_SLAB = slab("blue_slate_slab", BLUE_SLATE);
+    public static final RegistryObject<Block> BLUE_SLATE_WALL = wall("blue_slate_wall", BLUE_SLATE);
+    public static final RegistryObject<Block> POLISHED_BLUE_SLATE = block("polished_blue_slate", MapColor.TERRACOTTA_BLUE, SoundType.POLISHED_DEEPSLATE, 2.5F, 0, true);
+    public static final RegistryObject<Block> POLISHED_BLUE_SLATE_STAIRS = stairs("polished_blue_slate_stairs", POLISHED_BLUE_SLATE);
+    public static final RegistryObject<Block> POLISHED_BLUE_SLATE_SLAB = slab("polished_blue_slate_slab", POLISHED_BLUE_SLATE);
+    public static final RegistryObject<Block> BLUE_SLATE_BRICKS = block("blue_slate_bricks", MapColor.TERRACOTTA_BLUE, SoundType.DEEPSLATE_BRICKS, 2.5F, 0, true);
+    public static final RegistryObject<Block> BLUE_SLATE_BRICK_STAIRS = stairs("blue_slate_brick_stairs", BLUE_SLATE_BRICKS);
+    public static final RegistryObject<Block> BLUE_SLATE_BRICK_SLAB = slab("blue_slate_brick_slab", BLUE_SLATE_BRICKS);
+    public static final RegistryObject<Block> BLUE_SLATE_BRICK_WALL = wall("blue_slate_brick_wall", BLUE_SLATE_BRICKS);
+    public static final RegistryObject<Block> BLUE_SLATE_TILES = block("blue_slate_tiles", MapColor.TERRACOTTA_BLUE, SoundType.DEEPSLATE_TILES, 2.5F, 0, true);
+    public static final RegistryObject<Block> BLUE_SLATE_TILE_STAIRS = stairs("blue_slate_tile_stairs", BLUE_SLATE_TILES);
+    public static final RegistryObject<Block> BLUE_SLATE_TILE_SLAB = slab("blue_slate_tile_slab", BLUE_SLATE_TILES);
+    public static final RegistryObject<Block> BLUE_SLATE_TILE_WALL = wall("blue_slate_tile_wall", BLUE_SLATE_TILES);
 
     /** Forces class initialisation so every block/item is queued on the deferred registers. */
     public static void init() {}
@@ -127,6 +167,13 @@ public final class ModDecor {
     private static RegistryObject<Block> block(String name, MapColor color, SoundType sound, float strength, int light,
                                               boolean needsPickaxe) {
         return item(name, ModBlocks.BLOCKS.register(name, () -> new Block(props(name, color, sound, strength, light, needsPickaxe))));
+    }
+
+    /** A column that turns with the face it is placed on, like a log or a quartz pillar. */
+    private static RegistryObject<Block> pillar(String name, MapColor color, SoundType sound, float strength, int light,
+                                               boolean needsPickaxe) {
+        return item(name, ModBlocks.BLOCKS.register(name, () -> new RotatedPillarBlock(
+                props(name, color, sound, strength, light, needsPickaxe))));
     }
 
     private static RegistryObject<Block> stairs(String name, Supplier<Block> base) {

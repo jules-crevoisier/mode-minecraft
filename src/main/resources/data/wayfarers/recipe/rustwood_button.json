@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "redstone",
+  "group": "wooden_button",
+  "ingredients": [
+    "wayfarers:rustwood_planks"
+  ],
+  "result": {
+    "id": "wayfarers:rustwood_button",
+    "count": 1
+  }
+}

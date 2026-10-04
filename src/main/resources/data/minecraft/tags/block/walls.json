@@ -9,6 +9,13 @@
     "wayfarers:dark_iron_plating_wall",
     "wayfarers:smokestack_brick_wall",
     "wayfarers:dark_iron_brick_wall",
-    "wayfarers:sooty_smokestack_brick_wall"
+    "wayfarers:sooty_smokestack_brick_wall",
+    "wayfarers:marble_wall",
+    "wayfarers:marble_brick_wall",
+    "wayfarers:rust_rock_wall",
+    "wayfarers:rust_rock_brick_wall",
+    "wayfarers:blue_slate_wall",
+    "wayfarers:blue_slate_brick_wall",
+    "wayfarers:blue_slate_tile_wall"
   ]
 }

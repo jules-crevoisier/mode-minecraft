@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "#  ",
+    "## ",
+    "###"
+  ],
+  "key": {
+    "#": "wayfarers:rustwood_planks"
+  },
+  "result": {
+    "id": "wayfarers:rustwood_stairs",
+    "count": 4
+  },
+  "group": "wooden_stairs"
+}

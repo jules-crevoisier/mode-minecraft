@@ -67,6 +67,8 @@ public final class GeneratedGuide {
             new Page("ores", "gear", "wayfarers:zinc_ingot", 2, List.of("wayfarers:zinc_ingot", "wayfarers:brass_ingot", "wayfarers:mithril_ingot", "wayfarers:aether_crystal", "wayfarers:orichalcum_ingot")),
             new Page("metal_armor", "gear", "wayfarers:brass_helmet", 3, List.of("wayfarers:brass_helmet", "wayfarers:mithril_chestplate", "wayfarers:aether_chestplate", "wayfarers:arcane_chestplate")),
             new Page("steam_blocks", "gear", "wayfarers:gear_panel", 2, List.of("wayfarers:brass_plating", "wayfarers:gear_panel", "wayfarers:copper_pipes", "wayfarers:edison_lamp", "wayfarers:aether_conduit", "wayfarers:mahogany_panelling")),
+            new Page("world_woods", "gear", "wayfarers:glowwood_sapling", 3, List.of("wayfarers:glowwood_sapling", "wayfarers:rustwood_sapling", "wayfarers:glowwood_log", "wayfarers:rustwood_log", "wayfarers:glowwood_planks", "wayfarers:rustwood_planks", "wayfarers:glowwood_leaves", "wayfarers:rustwood_leaves")),
+            new Page("world_stones", "gear", "wayfarers:marble_pillar", 3, List.of("wayfarers:marble", "wayfarers:marble_pillar", "wayfarers:chiseled_marble", "wayfarers:rust_rock", "wayfarers:rust_rock_bricks", "wayfarers:blue_slate", "wayfarers:blue_slate_tiles")),
             new Page("tools", "gear", "wayfarers:excavator_pickaxe", 2, List.of("wayfarers:excavator_pickaxe", "wayfarers:lumber_axe")),
             new Page("wand", "building", "wayfarers:builder_wand", 3, List.of("wayfarers:builder_wand", "wayfarers:master_builder_wand")),
             new Page("symmetry", "building", "wayfarers:master_builder_wand", 4, List.of()),

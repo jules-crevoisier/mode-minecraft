@@ -71,7 +71,8 @@
    "minecraft:underwater_magma",
    "minecraft:disk_sand",
    "minecraft:disk_clay",
-   "minecraft:disk_gravel"
+   "minecraft:disk_gravel",
+   "wayfarers:rust_rock_veins"
   ],
   [],
   [
@@ -81,7 +82,8 @@
   [
    "minecraft:glow_lichen",
    "minecraft:patch_grass_savanna",
-   "wayfarers:steam_vents"
+   "wayfarers:steam_vents",
+   "wayfarers:rustwood"
   ],
   [
    "minecraft:freeze_top_layer"

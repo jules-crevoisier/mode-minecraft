@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    " G ",
+    "GIG",
+    " G "
+  ],
+  "key": {
+    "G": "minecraft:granite",
+    "I": "minecraft:iron_nugget"
+  },
+  "result": {
+    "id": "wayfarers:rust_rock",
+    "count": 4
+  }
+}

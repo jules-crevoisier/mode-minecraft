@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "wayfarers:block/marble_brick_slab"
+    },
+    "type=top": {
+      "model": "wayfarers:block/marble_brick_slab_top"
+    },
+    "type=double": {
+      "model": "wayfarers:block/marble_bricks"
+    }
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/wall_inventory",
+  "textures": {
+    "wall": "wayfarers:block/blue_slate_bricks"
+  }
+}

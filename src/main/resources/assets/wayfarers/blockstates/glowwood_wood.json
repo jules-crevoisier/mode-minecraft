@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=y": {
+      "model": "wayfarers:block/glowwood_wood"
+    },
+    "axis=z": {
+      "model": "wayfarers:block/glowwood_wood_horizontal",
+      "x": 90
+    },
+    "axis=x": {
+      "model": "wayfarers:block/glowwood_wood_horizontal",
+      "x": 90,
+      "y": 90
+    }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column_horizontal",
+  "textures": {
+    "end": "wayfarers:block/glowwood_log_top",
+    "side": "wayfarers:block/glowwood_log"
+  }
+}

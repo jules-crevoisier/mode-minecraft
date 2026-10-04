@@ -49,6 +49,7 @@ public final class Wayfarers {
         com.wayfarers.generated.GeneratedMetals.init();
         com.wayfarers.generated.GeneratedMachines.init();
         com.wayfarers.generated.GeneratedFurniture.init();
+        com.wayfarers.generated.GeneratedWorldBlocks.init();
         ModBlocks.BLOCKS.register(modBus);
         ModItems.ITEMS.register(modBus);
         ModBlockEntities.BLOCK_ENTITIES.register(modBus);

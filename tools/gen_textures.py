@@ -394,6 +394,8 @@ def main():
     written.update(held3d.textures())
     from wf import gadgets
     written.update(gadgets.textures())
+    from wf import worldblocks
+    written.update(worldblocks.textures())
     from wf import decor
     for bid, d in decor.DECOR.items():
         names = decor.texture_names(bid)

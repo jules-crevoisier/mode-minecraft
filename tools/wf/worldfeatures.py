@@ -53,6 +53,7 @@ DECOR = {k: _mc(v) for k, v in {
     "bee_trees": ["trees_plains"],
     "boulders": ["forest_rock"],
     "glowwood_trees": ["wayfarers:glowwood", "trees_flower_forest"],
+    "glowwood_sparse": ["wayfarers:glowwood_sparse"],
     "glow_flowers": ["flower_flower_forest"],
     "great_oaks": ["trees_birch_and_oak_leaf_litter", "fallen_oak_tree"],
     "forest_floor": ["forest_flowers", "patch_grass_forest", "patch_leaf_litter"],
@@ -72,6 +73,8 @@ DECOR = {k: _mc(v) for k, v in {
     "acacias": ["trees_savanna"],
     "dry_grass": ["patch_grass_savanna"],
     "steam_vents": ["wayfarers:steam_vents"],
+    "rustwood_trees": ["wayfarers:rustwood"],
+    "rustwood_sparse": ["wayfarers:rustwood_sparse"],
     "rusted_wrecks": ["wayfarers:rusted_wrecks"],
     "jungle_giants": ["trees_jungle", "bamboo_light"],
     "jungle_floor": ["patch_grass_jungle", "vines", "flower_warm"],
@@ -88,6 +91,10 @@ DECOR = {k: _mc(v) for k, v in {
     "cave_magma_pools": ["wayfarers:cave_magma"],
     "basalt_columns_cave": ["wayfarers:basalt_columns_cave"],
     "mithril_veins": ["wayfarers:mithril_veins"],
+    # our stones (wf/decor.py WORLD_STONES), as big veins that show in cliffs and cave walls
+    "marble_strata": ["wayfarers:marble_strata"],
+    "rust_rock_veins": ["wayfarers:rust_rock_veins"],
+    "blue_slate_veins": ["wayfarers:blue_slate_veins"],
 }.items()}
 
 # generation step of features that no vanilla template places (the rest come from the templates)
@@ -99,6 +106,8 @@ EXTRA_STEPS = {
     "wayfarers:basalt_columns": 4, "wayfarers:basalt_columns_cave": 7,
     "wayfarers:calcite_veins": 6, "wayfarers:cave_magma": 6, "wayfarers:mithril_veins": 6,
     "wayfarers:giant_spruce": 9, "wayfarers:glowwood": 9, "wayfarers:rusted_wrecks": 4,
+    "wayfarers:glowwood_sparse": 9, "wayfarers:rustwood": 9, "wayfarers:rustwood_sparse": 9,
+    "wayfarers:marble_strata": 6, "wayfarers:rust_rock_veins": 6, "wayfarers:blue_slate_veins": 6,
     "wayfarers:surface_crystals": 9, "wayfarers:river_crystals": 9, "wayfarers:steam_vents": 9,
 }
 
@@ -245,13 +254,34 @@ def _tree(trunk, trunk_placer, foliage, foliage_placer, size):
         "below_trunk_provider": BELOW_TRUNK}}
 
 
-def _tree_placement(count, sapling):
-    return [{"type": "minecraft:count", "count": count}, {"type": "minecraft:in_square"},
-            {"type": "minecraft:surface_water_depth_filter", "max_water_depth": 0},
-            {"type": "minecraft:heightmap", "heightmap": "OCEAN_FLOOR"},
-            {"type": "minecraft:block_predicate_filter",
-             "predicate": {"type": "minecraft:would_survive", "state": {"Name": f"minecraft:{sapling}", "Properties": {"stage": "0"}}}},
-            BIOME]
+def _tree_placement(count, sapling, rarity=None):
+    """Trees on dry ground where `sapling` (an id; vanilla's without namespace) could grow."""
+    sapling = sapling if ":" in sapling else f"minecraft:{sapling}"
+    head = [{"type": "minecraft:rarity_filter", "chance": rarity}] if rarity else [{"type": "minecraft:count", "count": count}]
+    return head + [{"type": "minecraft:in_square"},
+                   {"type": "minecraft:surface_water_depth_filter", "max_water_depth": 0},
+                   {"type": "minecraft:heightmap", "heightmap": "OCEAN_FLOOR"},
+                   {"type": "minecraft:block_predicate_filter",
+                    "predicate": {"type": "minecraft:would_survive", "state": {"Name": sapling, "Properties": {"stage": "0"}}}},
+                   BIOME]
+
+
+# dry, rusty ground a Rustwood takes root in (the sapling itself needs dirt; the wild trees are less picky)
+RUST_GROUND = {"type": "minecraft:any_of", "predicates": [
+    {"type": "minecraft:matching_block_tag", "offset": [0, -1, 0], "tag": "minecraft:dirt"},
+    {"type": "minecraft:matching_blocks", "offset": [0, -1, 0],
+     "blocks": ["minecraft:red_sand", "minecraft:terracotta", "minecraft:red_terracotta", "minecraft:smooth_sandstone",
+                "wayfarers:rust_rock"]}]}
+
+
+def _rust_tree_placement(count=None, rarity=None):
+    head = [{"type": "minecraft:rarity_filter", "chance": rarity}] if rarity else [{"type": "minecraft:count", "count": count}]
+    return head + [{"type": "minecraft:in_square"},
+                   {"type": "minecraft:surface_water_depth_filter", "max_water_depth": 0},
+                   {"type": "minecraft:heightmap", "heightmap": "OCEAN_FLOOR"},
+                   {"type": "minecraft:block_predicate_filter", "predicate": {"type": "minecraft:all_of", "predicates": [
+                       {"type": "minecraft:matching_blocks", "blocks": "minecraft:air"}, RUST_GROUND]}},
+                   BIOME]
 
 
 def _provider(name):
@@ -275,17 +305,20 @@ OURS = {
                             "crown_height": _uniform(15, 20)},
                            {"type": "minecraft:two_layers_feature_size", "limit": 1, "lower_size": 1, "upper_size": 2}),
                      _tree_placement(4, "spruce_sapling")),
-    # Enchanted Forest: round azalea crowns dotted with glowing shroomlights
-    "glowwood": (_tree(_provider("oak_log"),
-                       {"type": "minecraft:fancy_trunk_placer", "base_height": 8, "height_rand_a": 6, "height_rand_b": 0},
-                       {"type": "minecraft:weighted_state_provider", "entries": [
-                           {"data": {"Name": "minecraft:azalea_leaves"}, "weight": 6},
-                           {"data": {"Name": "minecraft:flowering_azalea_leaves"}, "weight": 4},
-                           {"data": {"Name": "minecraft:shroomlight"}, "weight": 1}]},
-                       {"type": "minecraft:fancy_foliage_placer", "radius": 2, "offset": 4, "height": 4},
-                       {"type": "minecraft:two_layers_feature_size", "limit": 0, "lower_size": 0, "upper_size": 0,
-                        "min_clipped_height": 4}),
-                 _tree_placement(5, "oak_sapling")),
+    # Glowwoods (wf/worldblocks.py): pale trunks under glowing teal crowns. The tree itself is
+    # data/wayfarers/worldgen/configured_feature/glowwood_tree.json (always loaded: its sapling grows it too)
+    "glowwood": ("wayfarers:glowwood_tree", _tree_placement(5, "wayfarers:glowwood_sapling")),
+    "glowwood_sparse": ("wayfarers:glowwood_tree", _tree_placement(0, "wayfarers:glowwood_sapling", rarity=3)),
+    # Rustwoods: dark red forking trunks with rust-orange crowns, on dry and rusty ground
+    "rustwood": ("wayfarers:rustwood_tree", _rust_tree_placement(count=1)),
+    "rustwood_sparse": ("wayfarers:rustwood_tree", _rust_tree_placement(rarity=5)),
+    # stone veins, large like vanilla's granite/diorite blobs, high up where cliffs and peaks expose them
+    "marble_strata": (_ore(_state("wayfarers:marble"), "minecraft:base_stone_overworld", 64),
+                      [{"type": "minecraft:count", "count": 5}, {"type": "minecraft:in_square"}, _height(70, 300), BIOME]),
+    "rust_rock_veins": (_ore(_state("wayfarers:rust_rock"), "minecraft:base_stone_overworld", 56),
+                        [{"type": "minecraft:count", "count": 4}, {"type": "minecraft:in_square"}, _height(30, 200), BIOME]),
+    "blue_slate_veins": (_ore(_state("wayfarers:blue_slate"), "minecraft:base_stone_overworld", 56),
+                         [{"type": "minecraft:count", "count": 4}, {"type": "minecraft:in_square"}, _height(-10, 160), BIOME]),
     "basalt_columns": ({"type": "minecraft:basalt_columns", "config": {"reach": 1, "height": _uniform(2, 6)}},
                        [{"type": "minecraft:count", "count": 3}] + SURFACE + [BIOME]),
     "basalt_columns_cave": ({"type": "minecraft:basalt_columns", "config": {"reach": 2, "height": _uniform(3, 9)}},
@@ -312,6 +345,9 @@ OURS = {
 def write_features(write):
     """Our configured and placed features (data/wayfarers/worldgen/... inside the overhaul pack)."""
     for fid, (configured, placement) in OURS.items():
+        if isinstance(configured, str):  # a configured feature of the mod's own data (always loaded)
+            write(f"wayfarers/worldgen/placed_feature/{fid}.json", {"feature": configured, "placement": placement})
+            continue
         write(f"wayfarers/worldgen/configured_feature/{fid}.json", configured)
         write(f"wayfarers/worldgen/placed_feature/{fid}.json", {"feature": f"wayfarers:{fid}", "placement": placement})
     return len(OURS)

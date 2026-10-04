@@ -529,6 +529,43 @@ PAGES = [
          "avec des lampes Edison. Le burin du graveur débloque d'autres variantes."),
     ], ["wayfarers:brass_plating", "wayfarers:gear_panel", "wayfarers:copper_pipes", "wayfarers:edison_lamp",
         "wayfarers:aether_conduit", "wayfarers:mahogany_panelling"]),
+    ("world_woods", "gear", "wayfarers:glowwood_sapling", ("Woods of the new world", "Bois du nouveau monde"), [
+        ("The new world grows two woods of its own. Glowwood, in the Enchanted Forest and the Crystal Woods: pale "
+         "trunks under teal leaves that glow at night. Rustwood, in the Rustlands, the Cogwork Valley and the Ashen "
+         "Savanna: dark red bark and rust-orange leaves.",
+         "Le nouveau monde a ses propres bois. Le bois-lueur, dans la Forêt enchantée et le Bois de cristal : troncs "
+         "pâles sous des feuilles turquoise qui luisent la nuit. Le bois rouillé, dans les Terres rouillées, la Vallée "
+         "des engrenages et la Savane cendrée : écorce rouge sombre et feuilles couleur de rouille."),
+        ("Each gives a full set like oak: logs, bark, planks, stairs, slabs, fences, gates, doors, trapdoors, buttons "
+         "and pressure plates. An axe strips the logs; the leaves drop saplings that grow the same tree.",
+         "Chacun donne un ensemble complet comme le chêne : bûches, écorce, planches, escaliers, dalles, barrières, "
+         "portillons, portes, trappes, boutons et plaques de pression. La hache écorce les bûches ; les feuilles "
+         "donnent des pousses qui font repousser le même arbre."),
+        ("No new world? Craft a sapling: an oak sapling, glow berries and glowstone dust (Glowwood); an acacia "
+         "sapling and raw iron (Rustwood).",
+         "Pas de nouveau monde ? Fabrique une pousse : une pousse de chêne, des baies lumineuses et de la poudre de "
+         "pierre lumineuse (bois-lueur) ; une pousse d'acacia et du fer brut (bois rouillé)."),
+    ], ["wayfarers:glowwood_sapling", "wayfarers:rustwood_sapling", "wayfarers:glowwood_log", "wayfarers:rustwood_log",
+        "wayfarers:glowwood_planks", "wayfarers:rustwood_planks", "wayfarers:glowwood_leaves",
+        "wayfarers:rustwood_leaves"]),
+    ("world_stones", "gear", "wayfarers:marble_pillar", ("Stones of the new world", "Pierres du nouveau monde"), [
+        ("Three stones: marble in bands across the cliffs of the Majestic Peaks, the Stone Spires and the Highland "
+         "Meadow; rust rock in the Rustlands; blue slate on the floor of the Slate Sea and in the banks of the Pine "
+         "Highlands.",
+         "Trois pierres : le marbre, en bandes dans les falaises des Pics majestueux, des Aiguilles de pierre et de "
+         "l'Alpage ; la roche rouillée dans les Terres rouillées ; l'ardoise bleue au fond de la Mer d'ardoise et dans "
+         "les talus des Hautes terres de pins."),
+        ("Polished, bricks, pillar, tiles, stairs, slabs and walls come from the stonecutter, and the Engraver's "
+         "Chisel switches between them.",
+         "Poli, briques, pilier, carreaux, escaliers, dalles et murets sortent du tailleur de pierre, et le burin du "
+         "graveur passe de l'un à l'autre."),
+        ("No new world? Two calcite and two diorite make 4 marble; four granite around an iron nugget, 4 rust rock; "
+         "four cobbled deepslate around a lapis lazuli, 4 blue slate.",
+         "Pas de nouveau monde ? Deux calcites et deux diorites donnent 4 marbres ; quatre granites autour d'une "
+         "pépite de fer, 4 roches rouillées ; quatre pierres des abîmes taillées autour d'un lapis-lazuli, 4 ardoises "
+         "bleues."),
+    ], ["wayfarers:marble", "wayfarers:marble_pillar", "wayfarers:chiseled_marble", "wayfarers:rust_rock",
+        "wayfarers:rust_rock_bricks", "wayfarers:blue_slate", "wayfarers:blue_slate_tiles"]),
     ("tools", "gear", "wayfarers:excavator_pickaxe", ("Special tools", "Outils spéciaux"), [
         ("The Excavator Pickaxe mines 3x3 and the Lumber Axe fells whole trees. Sneak to break a single block.",
          "La pioche d'excavation mine en 3x3 et la hache de bûcheron abat l'arbre entier. Accroupi : un seul bloc."),

@@ -174,7 +174,15 @@ def decor_assets(lang_en, lang_fr):
             write(f"models/block/{bid}.json", {"parent": "minecraft:block/cube_all", "textures": {"all": top}})
         else:
             write(f"models/block/{bid}.json", {"parent": "minecraft:block/cube_column", "textures": {"end": top, "side": side}})
-        write(f"blockstates/{bid}.json", {"variants": {"": {"model": f"{NS}:block/{bid}"}}})
+        if d.get("pillar"):  # turns with the face it is placed on (vanilla createRotatedPillarWithHorizontalVariant)
+            m = f"{NS}:block/{bid}"
+            write(f"models/block/{bid}_horizontal.json", {"parent": "minecraft:block/cube_column_horizontal",
+                                                          "textures": {"end": top, "side": side}})
+            write(f"blockstates/{bid}.json", {"variants": {"axis=y": {"model": m},
+                                                           "axis=z": {"model": m + "_horizontal", "x": 90},
+                                                           "axis=x": {"model": m + "_horizontal", "x": 90, "y": 90}}})
+        else:
+            write(f"blockstates/{bid}.json", {"variants": {"": {"model": f"{NS}:block/{bid}"}}})
         item_definition(bid, f"{NS}:block/{bid}")
         lang_en[f"block.{NS}.{bid}"], lang_fr[f"block.{NS}.{bid}"] = d["en"], d["fr"]
         tex3 = {"bottom": top, "top": top, "side": side}
@@ -268,6 +276,8 @@ def main():
         if ten:
             lang_en[f"block.{NS}.{bid}.desc"], lang_fr[f"block.{NS}.{bid}.desc"] = ten, tfr
     decor_assets(lang_en, lang_fr)
+    from wf import worldblocks
+    worldblocks.assets(write, item_definition, stairs_blockstate)
     metal_assets()
     machine_assets()
     furniture_assets()
@@ -286,7 +296,7 @@ def main():
     for key, (en, fr) in content.MESSAGES.items():
         lang_en[key], lang_fr[key] = en, fr
     from wf import guide, skills, metals, machines, furniture, biomes, gadgets
-    for mod in (guide, skills, metals, machines, furniture, biomes, gadgets):
+    for mod in (guide, skills, metals, machines, furniture, biomes, gadgets, worldblocks):
         g_en, g_fr = mod.lang()
         lang_en.update(g_en)
         lang_fr.update(g_fr)

@@ -95,6 +95,7 @@ Le pack intégré **wayfarers:world_overhaul** remplace l'Overworld des **nouvea
 - montagnes ~65 % plus hautes, pics jusque vers y 300 ;
 - méga-cavernes entre y -40 et 10 ;
 - **41 biomes** : forêt enchantée, sylve géante, vallée des cerisiers, toundra aurorale, glacier brisé, pics majestueux, terres rouillées, vallée des engrenages, canyon peint, mer de dunes, marais luminescent, cavernes de cristal, jungle souterraine, grottes thermales, abîme…
+- **ses propres bois et pierres** : le **bois-lueur** (troncs pâles, feuilles turquoise qui luisent la nuit ; forêt enchantée, bois de cristal) et le **bois rouillé** (écorce rouge sombre, feuilles rouille ; terres rouillées, vallée des engrenages, savane cendrée), chacun avec bûches, planches, escaliers, dalles, barrières, portillons, portes, trappes, boutons, plaques de pression, feuilles et pousses ; le **marbre** en strates dans les falaises des montagnes, la **roche rouillée** des terres rouillées et l'**ardoise bleue** de la mer d'ardoise et des hautes terres de pins, avec leurs formes polies, briques, pilier, carreaux, escaliers, dalles et murets. Tous se fabriquent aussi dans un monde vanilla (voir le manuel, pages « Bois du nouveau monde » et « Pierres du nouveau monde »).
 
 Villages, forteresses et structures du mod y apparaissent comme avant.
 
@@ -371,6 +372,7 @@ Le code Java vit dans `src/main/java/com/wayfarers` :
 - [ ] `/wayfarers tp guild_outpost` puis `/wayfarers tp sunken_citadel` : les structures sont bien posées au sol ou au fond de l'eau.
 - [ ] Une pierre de voyage : l'écran de voyage s'ouvre et la téléportation fonctionne.
 - [ ] Nouveau monde : le relief et les biomes du mod (F3 affiche `wayfarers:…`) ; `/locate biome wayfarers:enchanted_forest`.
+- [ ] Bois et pierres : bois-lueur dans la forêt enchantée (feuilles lumineuses la nuit), bois rouillé dans `wayfarers:rustlands` ; écorcer une bûche à la hache, faire pousser une pousse à la poudre d'os, mettre le feu à des planches ; strates de marbre sur les falaises de `wayfarers:majestic_peaks`, ardoise bleue au fond de `wayfarers:slate_sea`.
 - [ ] `/wayfarers tp clockwork_citadel` : la citadelle, ses cadrans et ses cheminées fumantes.
 - [ ] Touche **K** (talents), **J** (quêtes), clic droit sur le Manuel ; maintenir **W** sur un objet du mod.
 - [ ] Une machine : moissonneuse au bord d'un champ avec un coffre collé ; minuteur relié à un casseur.

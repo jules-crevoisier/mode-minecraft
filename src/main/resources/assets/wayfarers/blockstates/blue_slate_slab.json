@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "wayfarers:block/blue_slate_slab"
+    },
+    "type=top": {
+      "model": "wayfarers:block/blue_slate_slab_top"
+    },
+    "type=double": {
+      "model": "wayfarers:block/blue_slate"
+    }
+  }
+}

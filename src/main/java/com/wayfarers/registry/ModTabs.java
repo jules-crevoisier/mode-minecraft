@@ -20,6 +20,7 @@ public final class ModTabs {
             .displayItems((params, output) -> {
                 ModItems.ALL.forEach(item -> output.accept(item.get()));
                 ModDecor.ITEMS.forEach(item -> output.accept(item.get()));
+                com.wayfarers.generated.GeneratedWorldBlocks.ITEMS.forEach(item -> output.accept(item.get()));
             })
             .build());
 
