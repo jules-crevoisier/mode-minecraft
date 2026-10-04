@@ -2,6 +2,7 @@
   "replace": false,
   "values": [
     "wayfarers:waystone",
+    "wayfarers:storage_relay",
     "wayfarers:lithite_ore",
     "wayfarers:deepslate_lithite_ore",
     "wayfarers:guild_bricks",

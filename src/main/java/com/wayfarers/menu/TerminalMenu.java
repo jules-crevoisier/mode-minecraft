@@ -1,6 +1,8 @@
 package com.wayfarers.menu;
 
+import com.wayfarers.block.GuildTerminalBlockEntity;
 import com.wayfarers.network.TerminalContentsMsg;
+import com.wayfarers.network.TerminalLinksMsg;
 import com.wayfarers.network.WayfarersNet;
 import com.wayfarers.registry.ModBlocks;
 import com.wayfarers.registry.ModMenus;
@@ -14,26 +16,34 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The Guild Terminal's menu: the player's inventory as real slots; the storage network is shown as a
- * virtual grid that the server keeps in sync ({@link TerminalContentsMsg}). Shift-clicking an inventory
- * slot stores it in the network; clicks on the grid are sent as {@code TerminalClickMsg}.
+ * The Guild Terminal's menu: the player's inventory as real slots; the storage network is shown as a virtual grid
+ * that the server keeps in sync ({@link TerminalContentsMsg}, and {@link TerminalLinksMsg} for the list of linked
+ * containers). Shift-clicking an inventory slot stores it in the network; clicks on the grid are sent as
+ * {@code TerminalClickMsg}. Every take/store works on the live containers, on the server thread, so two players on
+ * the same terminal (or a chest opened meanwhile) can never duplicate items.
  */
 public class TerminalMenu extends AbstractContainerMenu {
     public static final int INV_X = 17;
-    public static final int INV_Y = 142;
+    public static final int INV_Y = 154;
 
     private final BlockPos pos;
     private final Player player;
     private int syncTimer;
-    private int lastHash;
+    private int lastHash = Integer.MIN_VALUE;
+    private int lastLinksHash = Integer.MIN_VALUE;
 
-    /** Client copy of the network contents. */
+    /** Client copy of the network contents and status. */
     public List<StorageNetwork.Entry> clientContents = new ArrayList<>();
+    public int clientLinked;
+    public int clientFree;
+    /** Client copy of the linked containers (null until the server sent them). */
+    public @Nullable TerminalLinksMsg clientLinks;
 
     public TerminalMenu(int id, Inventory inv, BlockPos pos) {
         super(ModMenus.TERMINAL.get(), id);
@@ -46,8 +56,23 @@ public class TerminalMenu extends AbstractContainerMenu {
         return pos;
     }
 
+    private @Nullable GuildTerminalBlockEntity terminal() {
+        return player.level() instanceof ServerLevel level && level.getBlockEntity(pos) instanceof GuildTerminalBlockEntity t
+                ? t : null;
+    }
+
+    /** The containers to take from and store in (server side; empty on the client). */
     public List<Container> network() {
-        return player.level() instanceof ServerLevel level ? StorageNetwork.containers(level, pos) : List.of();
+        GuildTerminalBlockEntity t = terminal();
+        return t == null ? List.of() : t.network();
+    }
+
+    public void toggle(BlockPos key) {
+        GuildTerminalBlockEntity t = terminal();
+        if (t != null && t.toggle(key)) {
+            dirty();
+            broadcastChanges();
+        }
     }
 
     @Override
@@ -71,23 +96,50 @@ public class TerminalMenu extends AbstractContainerMenu {
     @Override
     public void broadcastChanges() {
         super.broadcastChanges();
-        if (player instanceof ServerPlayer sp && --syncTimer <= 0) {
-            syncTimer = 10;
-            List<StorageNetwork.Entry> contents = StorageNetwork.contents(network());
-            int hash = 1;
-            for (StorageNetwork.Entry e : contents) {
-                hash = 31 * hash + ItemStack.hashItemAndComponents(e.type()) * 17 + e.count();
+        if (!(player instanceof ServerPlayer sp) || --syncTimer > 0) {
+            return;
+        }
+        syncTimer = 10;
+        GuildTerminalBlockEntity t = terminal();
+        if (t == null) {
+            return;
+        }
+        List<Container> net = t.network();
+        StorageNetwork.Scan scan = t.scan(false);
+        List<StorageNetwork.Entry> contents = StorageNetwork.contents(net);
+        int linked = 0;
+        int linksHash = scan.relays() * 31 + (scan.capped() ? 1 : 0);
+        for (StorageNetwork.Link link : scan.links()) {
+            boolean excluded = t.isExcluded(link.key);
+            if (!excluded) {
+                linked++;
             }
-            if (hash != lastHash) {
-                lastHash = hash;
-                WayfarersNet.toPlayer(sp, new TerminalContentsMsg(containerId, contents));
+            linksHash = 31 * linksHash + link.key.hashCode() * 7 + link.parts.size() * 2 + (excluded ? 1 : 0);
+        }
+        int free = StorageNetwork.freeSlots(net);
+        int hash = linked * 31 + free;
+        for (StorageNetwork.Entry e : contents) {
+            hash = 31 * hash + ItemStack.hashItemAndComponents(e.type()) * 17 + e.count();
+        }
+        if (linksHash != lastLinksHash) {
+            lastLinksHash = linksHash;
+            List<TerminalLinksMsg.Info> infos = new ArrayList<>(scan.links().size());
+            for (StorageNetwork.Link link : scan.links()) {
+                infos.add(new TerminalLinksMsg.Info(link.key, new ItemStack(link.first().getBlockState().getBlock().asItem()),
+                        link.slots(), link.parts.size() > 1, t.isExcluded(link.key)));
             }
+            WayfarersNet.toPlayer(sp, new TerminalLinksMsg(containerId, StorageNetwork.terminalRange(), scan.relays(),
+                    scan.capped(), infos));
+        }
+        if (hash != lastHash) {
+            lastHash = hash;
+            WayfarersNet.toPlayer(sp, new TerminalContentsMsg(containerId, contents, linked, free));
         }
     }
 
     /** Forces a resync on the next tick (after a take/insert). */
     public void dirty() {
         syncTimer = 0;
-        lastHash = 0;
+        lastHash = Integer.MIN_VALUE;
     }
 }

@@ -33,6 +33,12 @@ public final class ModBlockEntities {
     public static final RegistryObject<BlockEntityType<MachineBlockEntity>> MACHINE =
             BLOCK_ENTITIES.register("machine",
                     () -> new BlockEntityType<>(MachineBlockEntity::new, Set.of(GeneratedMachines.blocks())));
+    public static final RegistryObject<BlockEntityType<com.wayfarers.block.GuildTerminalBlockEntity>> GUILD_TERMINAL =
+            BLOCK_ENTITIES.register("guild_terminal", () -> new BlockEntityType<>(com.wayfarers.block.GuildTerminalBlockEntity::new,
+                    Set.of(ModBlocks.GUILD_TERMINAL.get())));
+    public static final RegistryObject<BlockEntityType<com.wayfarers.block.StorageRelayBlockEntity>> STORAGE_RELAY =
+            BLOCK_ENTITIES.register("storage_relay", () -> new BlockEntityType<>(com.wayfarers.block.StorageRelayBlockEntity::new,
+                    Set.of(ModBlocks.STORAGE_RELAY.get())));
 
     private ModBlockEntities() {}
 }

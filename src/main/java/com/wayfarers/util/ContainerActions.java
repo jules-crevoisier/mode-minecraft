@@ -65,7 +65,7 @@ public final class ContainerActions {
             case QUICK_STACK_NEARBY -> {
                 ServerLevel level = player.level();
                 List<Container> chests = new ArrayList<>();
-                for (Container c : GuildTerminalBlock.nearbyStorage(level, player.blockPosition())) {
+                for (Container c : GuildTerminalBlock.nearbyStorage(level, player.blockPosition(), NEARBY_RANGE + 1)) {
                     if (c instanceof net.minecraft.world.level.block.entity.BlockEntity be
                             && be.getBlockPos().closerToCenterThan(player.position(), NEARBY_RANGE + 1)) {
                         chests.add(c);

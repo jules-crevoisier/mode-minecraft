@@ -66,7 +66,7 @@ GitHub recompile le mod à chaque modification : voir l'onglet *Releases* ou *Ac
 |---|---|
 | **Boutons dans tous les coffres** | Trier, Tout prendre, Déposer les identiques, Ranger dans les coffres proches ; barre de recherche ; clic molette pour trier. |
 | **Confort** | Réapprovisionnement automatique de la barre d'action ; récolte au clic droit avec replantation. |
-| **Terminal de guilde** | Tous les coffres à 12 blocs dans une seule grille, avec recherche. |
+| **Terminal de guilde** | Tous les coffres de la base (48 blocs autour, plus loin avec des **relais de stockage** qui s'enchaînent) dans une seule grille : recherche, tri, coffres exclus au choix, « Montrer » encadre les coffres reliés. |
 | **Caisse compacte** | 32 piles d'un seul objet, affiché en façade avec le total. Clic droit pour ranger (double clic : tout), clic gauche pour prendre. |
 | **Baguettes du bâtisseur** | Prolongent une face (16 ou 64 blocs) avec un aperçu ; accroupi dans le vide pour annuler. **Symétrie** : accroupi + clic sur un bloc pour placer le centre du miroir, touche **G** pour choisir miroir X, Z ou les deux (4 côtés) ; les copies en miroir s'affichent en bleu. |
 | **Burin du graveur** | Clic droit : le bloc passe à la variante suivante de sa famille (pierre → briques → moussues → fissurées → sculptées...), accroupi pour revenir. Escaliers et dalles gardent leur forme, le cuivre son oxydation. Pierre, ardoise, tuf, grès, quartz, prismarine, pierre noire, terre cuite, cuivre et blocs du mod (familles en données : `data/<ns>/chisel/*.json`). |
@@ -161,7 +161,8 @@ La quête est un onglet de progrès (touche **L**). Clic droit avec l'**Atlas** 
 |---|---|
 | **Pierre de voyage** | Clic droit : écran de voyage vers toutes les pierres découvertes, dans toutes les dimensions (recherche, favoris, renommage). Une pierre découverte l'est **pour tout le monde**. |
 | **Coffre de tri** | 54 emplacements. Il aspire les objets au sol dans un rayon de 6 blocs et se trie tout seul quand personne ne regarde dedans. |
-| **Terminal de guilde** | Clic droit : tous les coffres à 12 blocs dans une seule grille avec recherche. Accroupi : trie tous les coffres. |
+| **Terminal de guilde** | Clic droit : tous les coffres de la base (48 blocs autour) dans une seule grille avec recherche. Accroupi : trie tous les coffres. |
+| **Relais de stockage** | Étend le terminal : relie les coffres à 32 blocs autour de lui ; à poser à portée du terminal ou d'un autre relais. |
 | **Tombe** | À la mort, tes objets sont rangés dans une tombe, et ses coordonnées s'affichent dans le chat. N'importe quel membre du groupe peut les récupérer. |
 | **Sac du Voyageur** | 27 emplacements qui voyagent avec toi. |
 | **Anneau aimanté** | Attire objets et expérience. Se bascule au clic droit ou avec la touche **M**. |

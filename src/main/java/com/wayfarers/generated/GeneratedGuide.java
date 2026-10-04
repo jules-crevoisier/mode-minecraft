@@ -46,6 +46,8 @@ public final class GeneratedGuide {
             new Page("sorting_chest", "storage", "wayfarers:sorting_chest", 3, List.of("wayfarers:sorting_chest")),
             new Page("crate", "storage", "wayfarers:compacting_crate", 3, List.of("wayfarers:compacting_crate")),
             new Page("guild_terminal", "storage", "wayfarers:guild_terminal", 4, List.of("wayfarers:guild_terminal")),
+            new Page("terminal_network", "storage", "wayfarers:guild_terminal", 2, List.of()),
+            new Page("storage_relay", "storage", "wayfarers:storage_relay", 3, List.of("wayfarers:storage_relay")),
             new Page("backpack", "storage", "wayfarers:travel_backpack", 2, List.of("wayfarers:travel_backpack", "wayfarers:explorer_backpack")),
             new Page("magnet", "storage", "wayfarers:magnet_ring", 3, List.of("wayfarers:magnet_ring")),
             new Page("storage_buttons", "storage", "minecraft:barrel", 2, List.of()),

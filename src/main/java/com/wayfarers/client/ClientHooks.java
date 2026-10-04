@@ -24,6 +24,16 @@ public final class ClientHooks {
         if (mc.player != null && mc.player.containerMenu instanceof com.wayfarers.menu.TerminalMenu menu
                 && menu.containerId == msg.containerId()) {
             menu.clientContents = msg.entries();
+            menu.clientLinked = msg.linked();
+            menu.clientFree = msg.freeSlots();
+        }
+    }
+
+    public static void terminalLinks(com.wayfarers.network.TerminalLinksMsg msg) {
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.player != null && mc.player.containerMenu instanceof com.wayfarers.menu.TerminalMenu menu
+                && menu.containerId == msg.containerId()) {
+            menu.clientLinks = msg;
         }
     }
 

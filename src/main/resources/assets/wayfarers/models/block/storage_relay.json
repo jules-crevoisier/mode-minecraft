@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "wayfarers:block/storage_relay_top",
+    "side": "wayfarers:block/storage_relay_side"
+  }
+}
