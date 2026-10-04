@@ -1,12 +1,17 @@
 {
-  "type": "minecraft:crafting_shapeless",
-  "category": "misc",
-  "ingredients": [
-    "minecraft:stick",
-    "minecraft:phantom_membrane",
-    "minecraft:feather",
-    "minecraft:amethyst_shard"
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "EFE",
+    " C ",
+    " S "
   ],
+  "key": {
+    "E": "minecraft:feather",
+    "F": "minecraft:amethyst_shard",
+    "C": "minecraft:phantom_membrane",
+    "S": "minecraft:stick"
+  },
   "result": {
     "id": "wayfarers:levitation_wand",
     "count": 1

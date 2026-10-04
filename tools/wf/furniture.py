@@ -66,7 +66,8 @@ FURNITURE = {
         en="Copper Pipe", fr="Tuyau en cuivre", mount="axis", sound="COPPER", color="COLOR_ORANGE",
         boxes=[(5, 0, 5, 11, 16, 11, "f_copper"), (4, 0, 4, 12, 2, 12, "f_brass"), (4, 14, 4, 12, 16, 12, "f_brass")],
         shape=[(4, 0, 4, 12, 16, 12)],
-        recipe=(["C", "C", "C"], {"C": "copper_ingot"}, 6)),
+        # a row, not a column: three copper ingots in a column are the vanilla lightning rod
+        recipe=(["CCC"], {"C": "copper_ingot"}, 6)),
     "brass_railing": dict(
         en="Brass Railing", fr="Garde-corps en laiton", mount="away", sound="METAL", color="GOLD",
         boxes=[(0, 14, 0, 16, 16, 2, "f_brass"), (0, 6, 0.5, 16, 7, 1.5, "f_iron")]
@@ -78,7 +79,8 @@ FURNITURE = {
         boxes=[(2, 2, 15, 14, 14, 16, "f_brass"), (6, 0, 15, 10, 16, 16, "f_brass"), (0, 6, 15, 16, 10, 16, "f_brass"),
                (3, 3, 14.5, 13, 13, 15, "f_copper"), (6, 6, 13.5, 10, 10, 14.5, "f_iron")],
         shape=[(0, 0, 13, 16, 16, 16)],
-        recipe=([" N ", "NBN", " N "], {"N": "wayfarers:brass_nugget", "B": "wayfarers:brass_ingot"}, 2)),
+        # a Brass Gear framed by nuggets (an ingot there would be the Brass Gear's own recipe)
+        recipe=([" N ", "NGN", " N "], {"N": "wayfarers:brass_nugget", "G": "wayfarers:brass_gear"}, 2)),
     "valve_wheel": dict(
         en="Steam Valve", fr="Vanne à vapeur", mount="wall", sound="METAL", color="COLOR_RED",
         boxes=[(3, 3, 13, 13, 4, 14, "f_red"), (3, 12, 13, 13, 13, 14, "f_red"), (3, 4, 13, 4, 12, 14, "f_red"),

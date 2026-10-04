@@ -1,15 +1,16 @@
 {
-  "type": "minecraft:crafting_shapeless",
+  "type": "minecraft:crafting_shaped",
   "category": "equipment",
-  "ingredients": [
-    "wayfarers:remembrance_void_warden",
-    "wayfarers:void_shard",
-    "wayfarers:void_shard",
-    "wayfarers:void_shard",
-    "wayfarers:void_shard",
-    "minecraft:diamond",
-    "minecraft:diamond"
+  "pattern": [
+    " M ",
+    "MRM",
+    "DMD"
   ],
+  "key": {
+    "M": "wayfarers:void_shard",
+    "R": "wayfarers:remembrance_void_warden",
+    "D": "minecraft:diamond"
+  },
   "result": {
     "id": "wayfarers:void_greatblade",
     "count": 1

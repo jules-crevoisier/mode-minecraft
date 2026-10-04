@@ -2,9 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "redstone",
   "pattern": [
+    "BBB",
     "BEB",
-    "BRB",
-    "BBB"
+    "BRB"
   ],
   "key": {
     "B": "wayfarers:brass_ingot",

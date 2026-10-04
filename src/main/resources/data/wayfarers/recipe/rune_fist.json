@@ -1,15 +1,16 @@
 {
-  "type": "minecraft:crafting_shapeless",
+  "type": "minecraft:crafting_shaped",
   "category": "equipment",
-  "ingredients": [
-    "wayfarers:remembrance_rune_colossus",
-    "wayfarers:map_fragment",
-    "wayfarers:map_fragment",
-    "wayfarers:map_fragment",
-    "wayfarers:map_fragment",
-    "minecraft:diamond",
-    "minecraft:diamond"
+  "pattern": [
+    " M ",
+    "MRM",
+    "DMD"
   ],
+  "key": {
+    "M": "wayfarers:map_fragment",
+    "R": "wayfarers:remembrance_rune_colossus",
+    "D": "minecraft:diamond"
+  },
   "result": {
     "id": "wayfarers:rune_fist",
     "count": 1

@@ -2,9 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "pattern": [
-    "  T",
-    " C ",
-    "BB "
+    "T",
+    "C",
+    "B"
   ],
   "key": {
     "T": "minecraft:tripwire_hook",

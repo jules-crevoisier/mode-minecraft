@@ -28,13 +28,13 @@ MACHINES = {
         desc=[("On a redstone pulse, breaks the block in front.", "Sur une impulsion de redstone, casse le bloc devant."),
               ("Drops go into the chest behind it.", "Les objets vont dans le coffre derrière."),
               ("Click it to see what it breaks next.", "Clic : voir ce qu'il cassera ensuite.")],
-        recipe=(["BPB", "BRB", "BBB"], {"B": "wayfarers:brass_ingot", "P": "iron_pickaxe", "R": "redstone"}, 1)),
+        recipe=(["BBB", "BPB", "BRB"], {"B": "wayfarers:brass_ingot", "P": "iron_pickaxe", "R": "redstone"}, 1)),
     "block_placer": dict(
         kind="PLACER", glyph="placer", en="Block Placer", fr="Poseur de blocs", color="COLOR_GRAY",
         desc=[("On a redstone pulse, places a block in front.", "Sur une impulsion de redstone, pose un bloc devant."),
               ("Takes blocks from the chest behind, or its own slots.", "Prend les blocs dans le coffre derrière, ou dans ses cases."),
               ("Click it to see which block it places next.", "Clic : voir quel bloc il posera ensuite.")],
-        recipe=(["BDB", "BRB", "BBB"], {"B": "wayfarers:brass_ingot", "D": "dispenser", "R": "redstone"}, 1)),
+        recipe=(["BBB", "BDB", "BRB"], {"B": "wayfarers:brass_ingot", "D": "dispenser", "R": "redstone"}, 1)),
     "redstone_timer": dict(
         kind="TIMER", glyph="timer", en="Redstone Timer", fr="Minuteur de redstone", color="COLOR_RED",
         desc=[("Sends a short redstone pulse every few seconds.", "Envoie une courte impulsion de redstone toutes les quelques secondes."),
@@ -58,7 +58,7 @@ MACHINES = {
         desc=[("Outputs redstone while something is near (1 per creature, max 15).", "Émet de la redstone quand quelque chose approche (1 par créature, max 15)."),
               ("Click it: target (players, monsters, animals, items, all).", "Clic : cible (joueurs, monstres, animaux, objets, tous)."),
               ("Range 2 to 16 blocks; the output can be inverted.", "Portée de 2 à 16 blocs ; la sortie peut être inversée.")],
-        recipe=(["BEB", "BRB", "BBB"], {"B": "wayfarers:brass_ingot", "E": "ender_eye", "R": "redstone"}, 1)),
+        recipe=(["BBB", "BEB", "BRB"], {"B": "wayfarers:brass_ingot", "E": "ender_eye", "R": "redstone"}, 1)),
 }
 
 GUIDE = [

@@ -86,33 +86,50 @@ def recipes():
     write(f"{NS}/recipe/explorer_backpack.json", {"type": "minecraft:crafting_transmute", "category": "equipment",
                                                  "input": f"{NS}:travel_backpack", "material": f"{NS}:brass_ingot",
                                                  "result": {"id": f"{NS}:explorer_backpack"}})
+    # rings: the stone set on top of a hollow band of metal
     shaped("magnet_ring", ["MRM", "I I", " I "], {"M": "map_fragment", "R": "redstone", "I": "iron_ingot"}, category="equipment")
+    shaped("arcane_ring", ["LAL", "G G", " G "], {"L": "lapis_lazuli", "A": "amethyst_shard", "G": "gold_ingot"},
+           category="equipment")
     shaped("structure_compass", [" M ", "MCM", " M "], {"M": "map_fragment", "C": "compass"}, category="equipment")
     shapeless("recall_scroll", ["paper", "map_fragment", "ender_pearl"], count=2)
     shapeless("wayfarer_atlas", ["book", "map_fragment"])
     shapeless("wayfarer_manual", ["book", "feather"])
-    shapeless("builder_wand", ["stick", "gold_ingot", "gold_ingot", "amethyst_shard"])
-    shapeless("fire_staff", ["stick", "blaze_powder", "blaze_powder", "amethyst_shard", "gold_ingot"])
-    shapeless("frost_staff", ["stick", "packed_ice", "snowball", "amethyst_shard", "gold_ingot"])
-    shapeless("thunder_staff", ["stick", "copper_ingot", "copper_ingot", "lightning_rod", "amethyst_shard"])
-    shapeless("healing_staff", ["stick", "glistering_melon_slice", "ghast_tear", "amethyst_shard", "gold_ingot"])
-    shapeless("levitation_wand", ["stick", "phantom_membrane", "feather", "amethyst_shard"])
-    shapeless("ward_orb", ["amethyst_shard", "amethyst_shard", "iron_ingot", "lapis_lazuli", "lithite_shard"])
-    shapeless("steam_cane", ["stick", "copper_ingot", "copper_ingot", "campfire", "iron_ingot"])
-    shapeless("arcane_ring", ["gold_ingot", "gold_ingot", "amethyst_shard", "lapis_lazuli"])
-    shapeless("mana_amulet", ["gold_ingot", "string", "amethyst_shard", "amethyst_shard", "lithite_shard"])
+    # wands and staffs stand upright like vanilla tools: the head on top, the stick at the bottom of the middle column
+    shaped("builder_wand", ["A", "G", "S"], {"A": "amethyst_shard", "G": "gold_ingot", "S": "stick"}, category="equipment")
+    shaped("master_builder_wand", [" D ", "LWL"], {"D": "diamond", "L": "lithite_shard", "W": "builder_wand"},
+           category="equipment")
+    # spell staffs: the head across the top (element, focus, element), a collar, the stick
+    def staff(sid, element, focus, collar):
+        shaped(sid, ["EFE", " C ", " S "], {"E": element, "F": focus, "C": collar, "S": "stick"}, category="equipment")
+    staff("fire_staff", "blaze_powder", "amethyst_shard", "gold_ingot")
+    staff("frost_staff", "packed_ice", "amethyst_shard", "gold_ingot")
+    staff("healing_staff", "glistering_melon_slice", "amethyst_shard", "ghast_tear")
+    staff("levitation_wand", "feather", "amethyst_shard", "phantom_membrane")
+    staff("steam_cane", "copper_ingot", "campfire", "iron_ingot")
+    shaped("thunder_staff", [" R ", "CAC", " S "], {"R": "lightning_rod", "C": "copper_ingot", "A": "amethyst_shard",
+                                                    "S": "stick"}, category="equipment")
+    # the ward orb: an amethyst sphere around a Lithite core
+    shaped("ward_orb", [" A ", "PLP", " A "], {"A": "amethyst_shard", "P": "lapis_lazuli", "L": "lithite_shard"},
+           category="equipment")
+    # the amulet: a string loop, a gold setting between two amethysts, the Lithite stone hanging below
+    shaped("mana_amulet", ["S S", "AGA", " L "], {"S": "string", "A": "amethyst_shard", "G": "gold_ingot",
+                                                  "L": "lithite_shard"}, category="equipment")
     shapeless("oblivion_vial", ["glass_bottle", "ghast_tear", "amethyst_shard"])
-    shapeless("master_builder_wand", ["builder_wand", "lithite_shard", "lithite_shard", "diamond"])
     # building tools (Lot 2e): the chisel cycles block variants (wf/chisel.py), the table converts whole stacks
-    shaped("chisel", ["  I", " B ", "S  "], {"I": "iron_ingot", "B": "brass_ingot", "S": "stick"}, category="equipment")
+    shaped("chisel", ["I", "B", "S"], {"I": "iron_ingot", "B": "brass_ingot", "S": "stick"}, category="equipment")
     shaped("chisel_table", ["BCB", "PPP", "P P"], {"B": "brass_ingot", "C": "chisel", "P": "#planks"})
     # tier 1 — map fragments (Overworld)
     shaped("cartographer_blade", [" I ", "MIM", " S "], {"I": "iron_ingot", "M": "map_fragment", "S": "stick"}, category="equipment")
     armor_set("explorer", "leather", {"X": "map_fragment"})
-    # tier 2 — lithite (underground)
+    # tier 2 — lithite (underground); a Silk-Touched ore smelts into a shard like a vanilla gem ore
+    for ore in ("lithite_ore", "deepslate_lithite_ore"):
+        for kind, time in (("smelting", 200), ("blasting", 100)):
+            write(f"{NS}/recipe/lithite_shard_from_{ore}_{kind}.json", {
+                "type": f"minecraft:{kind}", "category": "misc", "ingredient": f"{NS}:{ore}",
+                "result": {"id": f"{NS}:lithite_shard"}, "experience": 1.0, "cookingtime": time})
     shaped("telluric_hammer", ["LLL", "LSL", " S "], {"L": "lithite_shard", "S": "stick"}, category="equipment")
     shaped("frost_blade", [" L ", "PLP", " S "], {"L": "lithite_shard", "P": "packed_ice", "S": "stick"}, category="equipment")
-    shaped("boomerang", ["PPL", "  P"], {"P": "#planks", "L": "lithite_shard"}, category="equipment")
+    shaped("boomerang", ["PLP", "P P"], {"P": "#planks", "L": "lithite_shard"}, category="equipment")  # a V, Lithite at the elbow
     shaped("excavator_pickaxe", ["LLL", " S ", " S "], {"L": "lithite_shard", "S": "stick"}, category="equipment")
     shaped("lumber_axe", ["LL", "LS", " S"], {"L": "lithite_shard", "S": "stick"}, category="equipment")
     shaped("light_staff", [" G ", " L ", " S "], {"G": "glowstone", "L": "lithite_shard", "S": "stick"}, category="equipment")
@@ -128,11 +145,12 @@ def recipes():
     gadgets.recipes(shaped, shapeless)
     # living oceans (wf/ocean.py)
     __import__("wf.ocean", fromlist=["recipes"]).recipes(shaped, shapeless, write)
-    # boss weapons: remembrance + four tier materials + two diamonds
+    # boss weapons: the remembrance in the centre, four tier materials around it, two diamonds below
     from wf.bossgear import BOSS_GEAR, TIER_MATERIAL, remembrance_id
     for row in BOSS_GEAR:
         boss, tier, wid = row[:3]
-        shapeless(wid, [remembrance_id(boss)] + [TIER_MATERIAL[tier]] * 4 + ["diamond", "diamond"], category="equipment")
+        shaped(wid, [" M ", "MRM", "DMD"], {"M": TIER_MATERIAL[tier], "R": remembrance_id(boss), "D": "diamond"},
+               category="equipment")
 
 
 def tags():
@@ -169,15 +187,18 @@ def block_loot():
                        "entries": [{"type": "minecraft:item", "name": f"{NS}:{b}"}]}],
             "random_sequence": f"{NS}:blocks/{b}",
         })
-    for b in ("lithite_ore", "deepslate_lithite_ore"):
+    for b in ("lithite_ore", "deepslate_lithite_ore"):  # Silk Touch keeps the ore, like vanilla ores and metals.py
         write(f"{NS}/loot_table/blocks/{b}.json", {
             "type": "minecraft:block",
-            "pools": [{"rolls": 1.0, "bonus_rolls": 0.0, "entries": [{
-                "type": "minecraft:item", "name": f"{NS}:lithite_shard",
-                "functions": [
-                    {"function": "minecraft:apply_bonus", "enchantment": "minecraft:fortune", "formula": "minecraft:ore_drops"},
-                    {"function": "minecraft:explosion_decay"},
-                ]}]}],
+            "pools": [{"rolls": 1.0, "bonus_rolls": 0.0, "entries": [{"type": "minecraft:alternatives", "children": [
+                {"type": "minecraft:item", "name": f"{NS}:{b}", "conditions": [{"condition": "minecraft:match_tool",
+                 "predicate": {"predicates": {"minecraft:enchantments": [{"enchantments": "minecraft:silk_touch",
+                                                                          "levels": {"min": 1}}]}}}]},
+                {"type": "minecraft:item", "name": f"{NS}:lithite_shard",
+                 "functions": [
+                     {"function": "minecraft:apply_bonus", "enchantment": "minecraft:fortune", "formula": "minecraft:ore_drops"},
+                     {"function": "minecraft:explosion_decay"},
+                 ]}]}]}],
             "random_sequence": f"{NS}:blocks/{b}",
         })
 
@@ -460,6 +481,7 @@ def decor_data():
     craft("slate_roof_tiles", ["XX", "XX"], {"X": "deepslate_tiles"}, 4)
     craft("rune_lamp", ["GMG", "MLM", "GMG"], {"G": "wayfarers:guild_bricks", "M": "map_fragment", "L": "glowstone"}, 4)
     craft("lithite_block", ["XXX", "XXX", "XXX"], {"X": "lithite_shard"}, 1)
+    shapeless_named("lithite_shard_from_block", "lithite_shard", ["wayfarers:lithite_block"], 9)
     craft("lithite_bricks", ["LS", "SL"], {"L": "lithite_shard", "S": "stone_bricks"}, 4)
     craft("ember_bricks", ["NM", "MN"], {"N": "polished_blackstone_bricks", "M": "magma_cream"}, 4)
     craft("ember_lamp", [" B ", "BGB", " B "], {"B": "wayfarers:ember_bricks", "G": "glowstone"}, 2)
@@ -468,7 +490,8 @@ def decor_data():
     craft("starlight_block", [" R ", "RCR", " R "], {"R": "end_rod", "C": "amethyst_block"}, 2)
     # steampunk
     craft("brass_plating", ["XX", "XX"], {"X": "wayfarers:brass_ingot"}, 8)
-    craft("copper_plating", ["XX", "XX"], {"X": "copper_ingot"}, 8)
+    # not 2x2 copper ingots: that is the vanilla copper trapdoor; checkered with nuggets like the Diamond Plate
+    craft("copper_plating", ["IN", "NI"], {"I": "copper_ingot", "N": "copper_nugget"}, 4)
     shapeless("verdigris_plating", ["wayfarers:copper_plating", "clay_ball"], category="building")
     craft("dark_iron_plating", ["IC", "CI"], {"I": "iron_ingot", "C": "coal"}, 8)
     craft("diamond_plate", ["IN", "NI"], {"I": "iron_ingot", "N": "iron_nugget"}, 4)

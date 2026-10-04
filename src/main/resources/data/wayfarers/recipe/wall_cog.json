@@ -3,12 +3,12 @@
   "category": "building",
   "pattern": [
     " N ",
-    "NBN",
+    "NGN",
     " N "
   ],
   "key": {
     "N": "wayfarers:brass_nugget",
-    "B": "wayfarers:brass_ingot"
+    "G": "wayfarers:brass_gear"
   },
   "result": {
     "id": "wayfarers:wall_cog",

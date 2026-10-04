@@ -1,13 +1,17 @@
 {
-  "type": "minecraft:crafting_shapeless",
-  "category": "misc",
-  "ingredients": [
-    "minecraft:stick",
-    "minecraft:copper_ingot",
-    "minecraft:copper_ingot",
-    "minecraft:lightning_rod",
-    "minecraft:amethyst_shard"
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    " R ",
+    "CAC",
+    " S "
   ],
+  "key": {
+    "R": "minecraft:lightning_rod",
+    "C": "minecraft:copper_ingot",
+    "A": "minecraft:amethyst_shard",
+    "S": "minecraft:stick"
+  },
   "result": {
     "id": "wayfarers:thunder_staff",
     "count": 1

@@ -799,7 +799,7 @@ OCEAN_FLOOR = [
     ("Anémones lumineuses", "Elles éclairent le fond la nuit, en trois couleurs. Casse-les pour les ramasser : de "
      "quoi décorer un aquarium.", "wayfarers:glow_anemone", "toutes les mers"),
     ("Huîtres perlières", "Clic droit sur une coquille entrouverte pour prendre sa perle ; sous l'eau, elle en refait "
-     "une avec le temps. Deux perles valent une émeraude à l'établi.", "wayfarers:pearl_oyster",
+     "une avec le temps. Quatre perles valent une émeraude à l'établi.", "wayfarers:pearl_oyster",
      "mers tempérées et chaudes"),
     ("Cheminées à bulles", "Des cheminées de basalte sur du magma soufflent une colonne de bulles jusqu'à la "
      "surface : entre dedans pour remonter d'un coup et reprendre ton souffle.", "minecraft:magma_block",

@@ -1,12 +1,16 @@
 {
-  "type": "minecraft:crafting_shapeless",
-  "category": "misc",
-  "ingredients": [
-    "minecraft:stick",
-    "minecraft:gold_ingot",
-    "minecraft:gold_ingot",
-    "minecraft:amethyst_shard"
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "A",
+    "G",
+    "S"
   ],
+  "key": {
+    "A": "minecraft:amethyst_shard",
+    "G": "minecraft:gold_ingot",
+    "S": "minecraft:stick"
+  },
   "result": {
     "id": "wayfarers:builder_wand",
     "count": 1

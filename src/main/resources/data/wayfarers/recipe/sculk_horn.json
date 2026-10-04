@@ -1,15 +1,16 @@
 {
-  "type": "minecraft:crafting_shapeless",
+  "type": "minecraft:crafting_shaped",
   "category": "equipment",
-  "ingredients": [
-    "wayfarers:remembrance_sculk_spawn",
-    "wayfarers:lithite_shard",
-    "wayfarers:lithite_shard",
-    "wayfarers:lithite_shard",
-    "wayfarers:lithite_shard",
-    "minecraft:diamond",
-    "minecraft:diamond"
+  "pattern": [
+    " M ",
+    "MRM",
+    "DMD"
   ],
+  "key": {
+    "M": "wayfarers:lithite_shard",
+    "R": "wayfarers:remembrance_sculk_spawn",
+    "D": "minecraft:diamond"
+  },
   "result": {
     "id": "wayfarers:sculk_horn",
     "count": 1

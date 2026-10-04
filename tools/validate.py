@@ -7,9 +7,11 @@ and biome ids (against 26.1 data, the closest release to 26.2), plus every
 cross-reference between worldgen files, textures, models and translations.
 Exit code is non-zero when anything is wrong.
 """
+import functools
 import glob
 import json
 import os
+import re
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -31,6 +33,7 @@ UPGRADED = {"grass": "short_grass", "chain": "iron_chain"}
 errors = []
 warnings = []
 TEMPLATES = {}  # "ns:path" -> (size, number of block entries), filled by check_templates
+TEMPLATE_BLOCKS = set()  # every block id in a structure template palette, filled by check_templates
 
 
 def err(msg):
@@ -95,6 +98,7 @@ def check_templates():
         size = d["size"]
         ns_dir, sub = rel.split(os.sep, 2)[0], rel.split(os.sep, 2)[2]
         TEMPLATES[f"{ns_dir}:{sub[:-4].replace(os.sep, '/')}"] = (size, len(d["blocks"]))
+        TEMPLATE_BLOCKS.update(e["Name"] for e in d["palette"])
         for entry in d["palette"]:
             ns, name = entry["Name"].split(":")
             props = entry.get("Properties", {})
@@ -190,6 +194,10 @@ def check_template_entity(rel, e, err):
         err(f"{rel}: a level-1 villager with no xp loses its {prof} profession until it finds a job site")
 
 
+# blocks placed only by the game itself (graves, boss arenas): no loot table, no survival source
+TECHNICAL_BLOCKS = {"grave", "sealed_bars", "warden_altar", "void_altar", "mist_gate", "boss_seal"}
+
+
 def check_tags():
     for path in glob.glob(os.path.join(DATA, "*", "tags", "item", "**", "*.json"), recursive=True):
         for v in json.load(open(path))["values"]:
@@ -202,7 +210,7 @@ def check_tags():
             if v.startswith("wayfarers:") and v.split(":")[1] not in mod_ids("blocks"):
                 err(f"{os.path.relpath(path, DATA)}: unknown mod block {v}")
     for b in mod_ids("blocks"):
-        if b not in ("grave", "sealed_bars", "warden_altar", "void_altar", "mist_gate", "boss_seal") and \
+        if b not in TECHNICAL_BLOCKS and \
                 not os.path.exists(os.path.join(DATA, "wayfarers", "loot_table", "blocks", b + ".json")):
             err(f"block {b} has no loot table (would drop nothing)")
 
@@ -571,9 +579,314 @@ def check_pack_meta():
         err("pack.mcmeta: min_format/max_format must cover 88 (resources) to 107 (data)")
 
 
+# ------------------------------------------------------------------ recipes: conflicts and survival obtainability
+WORLD_DATA = os.path.join(RES, "worldgen_pack", "data")
+VANILLA_RECIPES = os.path.join(ROOT, "tools", "data", "vanilla_recipes_26.2.json")
+# vanilla items a survival player can never get
+CREATIVE_ONLY = {"bedrock", "barrier", "command_block", "chain_command_block", "repeating_command_block",
+                 "command_block_minecart", "structure_block", "structure_void", "jigsaw", "light", "debug_stick",
+                 "knowledge_book", "spawner", "trial_spawner", "vault", "end_portal_frame", "reinforced_deepslate",
+                 "test_block", "test_instance_block", "petrified_oak_slab", "player_head", "budding_amethyst"}
+# mod items handed out by Java code rather than a recipe or a loot table
+JAVA_SOURCES = {
+    "pearl": "right-click an open Pearl Oyster (PearlOysterBlock)",
+    "reef_fish_bucket": "a water bucket on a Reef Fish",
+    "wayfarer_manual": "given on first join",
+    "wayfarer_atlas": "given on first join",
+    "structure_compass": "given on first arrival at a Guild Outpost",
+}
+# vanilla item tags used by recipes: a test telling whether an item id belongs to the tag (no tag files for vanilla)
+VANILLA_TAGS = {
+    "planks": lambda i: i.endswith("_planks"), "wooden_slabs": lambda i: i.endswith("_slab") and "planks" not in i,
+    "logs": lambda i: i.endswith(("_log", "_wood", "_stem", "_hyphae")), "wool": lambda i: i.endswith("_wool"),
+    "coals": lambda i: i in ("coal", "charcoal"), "candles": lambda i: i.endswith("candle"),
+    "stone_tool_materials": lambda i: i in ("cobblestone", "cobbled_deepslate", "blackstone"),
+    "stone_crafting_materials": lambda i: i in ("cobblestone", "cobbled_deepslate", "blackstone"),
+    "wooden_tool_materials": lambda i: i.endswith("_planks"),
+    "copper_tool_materials": lambda i: i == "copper_ingot", "iron_tool_materials": lambda i: i == "iron_ingot",
+    "gold_tool_materials": lambda i: i == "gold_ingot", "diamond_tool_materials": lambda i: i == "diamond",
+}
+
+
+def _short(i):
+    """Canonical ingredient id: vanilla ids without namespace, mod ids with it, tags with a leading #."""
+    if i.startswith("#"):
+        return "#" + _short(i[1:])
+    return i[len("minecraft:"):] if i.startswith("minecraft:") else i
+
+
+def _options(v):
+    """A recipe ingredient (string, tag, list or legacy dict) as a tuple of canonical ids."""
+    if isinstance(v, list):
+        return tuple(o for x in v for o in _options(x))
+    if isinstance(v, dict):
+        return _options(v.get("item") or ("#" + v["tag"]))
+    return (_short(v),)
+
+
+@functools.lru_cache(maxsize=None)
+def _mod_tag(tag):
+    """Members of one of our item tags (wayfarers namespace or vanilla tags we add to), recursively."""
+    ns, path = tag.split(":") if ":" in tag else ("minecraft", tag)
+    out = set()
+    for root in (DATA, WORLD_DATA):
+        p = os.path.join(root, ns, "tags", "item", path + ".json")
+        if os.path.exists(p):
+            for v in json.load(open(p))["values"]:
+                v = v["id"] if isinstance(v, dict) else v
+                out |= _mod_tag(v[1:]) if v.startswith("#") else {_short(v)}
+    return out
+
+
+def _overlap(a, b):
+    """Can one item satisfy both ingredient options a and b (tuples)?"""
+    def members_test(x):
+        if not x.startswith("#"):
+            return lambda i: i == x
+        name = x[1:]
+        test = VANILLA_TAGS.get(name)
+        mod = _mod_tag(name)
+        return lambda i: i in mod or (test is not None and test(i)) or i == x
+    for x in a:
+        for y in b:
+            if x == y:
+                return True
+            if x.startswith("#") and y.startswith("#"):
+                tx, ty = members_test(x), members_test(y)
+                if any(tx(m) for m in _mod_tag(y[1:])) or any(ty(m) for m in _mod_tag(x[1:])) or \
+                        (x[1:] in VANILLA_TAGS and y[1:] in VANILLA_TAGS and x[1:].split("_")[0] == y[1:].split("_")[0]):
+                    return True
+            elif x.startswith("#") and members_test(x)(y) or y.startswith("#") and members_test(y)(x):
+                return True
+    return False
+
+
+def _shrink(pattern):
+    rows = [r for r in pattern if r.strip()]
+    if not rows:
+        return []
+    w = max(len(r) for r in rows)
+    rows = [r.ljust(w) for r in rows]
+    cols = [c for c in range(w) if any(r[c] != " " for r in rows)]
+    return [r[cols[0]:cols[-1] + 1] for r in rows]
+
+
+def _crafting_shape(r):
+    """("shaped", grid of option tuples or None) or ("shapeless", [option tuples]) or None (not a crafting recipe)."""
+    t = r["type"].split(":")[-1]
+    if t == "crafting_shaped" or r["type"] == "shaped":
+        pat = _shrink(r["pattern"])
+        key = {k: _options(v) for k, v in r["key"].items()}
+        return "shaped", [[key[c] if c != " " else None for c in row] for row in pat]
+    if t == "crafting_shapeless" or r["type"] == "shapeless":
+        return "shapeless", [_options(v) for v in r["ingredients"]]
+    if t == "crafting_transmute":
+        return "shapeless", [_options(r["input"]), _options(r["material"])]
+    return None
+
+
+def _match_multiset(xs, ys):
+    if len(xs) != len(ys):
+        return False
+    if not xs:
+        return True
+    for j, y in enumerate(ys):
+        if _overlap(xs[0], y) and _match_multiset(xs[1:], ys[:j] + ys[j + 1:]):
+            return True
+    return False
+
+
+def _conflict(a, b):
+    """Could one crafting grid match both shapes a and b (shaped recipes also match mirrored)?"""
+    (ka, ga), (kb, gb) = a, b
+    if ka == "shaped" and kb == "shaped":
+        if len(ga) != len(gb) or len(ga[0]) != len(gb[0]):
+            return False
+        for cand in (gb, [row[::-1] for row in gb]):
+            if all((x is None) == (y is None) and (x is None or _overlap(x, y))
+                   for ra, rb in zip(ga, cand) for x, y in zip(ra, rb)):
+                return True
+        return False
+    flat = lambda k, g: [c for row in g for c in row if c is not None] if k == "shaped" else g  # noqa: E731
+    return _match_multiset(flat(ka, ga), flat(kb, gb))
+
+
+def _all_recipes():
+    out = {}
+    for path in sorted(glob.glob(os.path.join(DATA, "wayfarers", "recipe", "*.json"))):
+        out[os.path.basename(path)[:-5]] = json.load(open(path))
+    return out
+
+
+def check_recipe_conflicts(recipes):
+    """Two crafting recipes that one grid can match: ours against ours, and ours against vanilla 26.2 (a shapeless
+    recipe that steals a shaped pattern counts). Two cooking recipes of one input in one kind of furnace."""
+    shapes = {n: _crafting_shape(r) for n, r in recipes.items()}
+    shapes = {n: s for n, s in shapes.items() if s}
+    names = sorted(shapes)
+    res = lambda r: _short(r["result"]["id"] if isinstance(r["result"], dict) else r["result"])  # noqa: E731
+    for i, a in enumerate(names):
+        for b in names[i + 1:]:
+            if _conflict(shapes[a], shapes[b]):
+                (err if res(recipes[a]) != res(recipes[b]) else warnings.append)(
+                    f"recipe {a} and recipe {b} match the same crafting grid")
+    vanilla = json.load(open(VANILLA_RECIPES))["recipes"] if os.path.exists(VANILLA_RECIPES) else []
+    for v in vanilla:
+        sv = _crafting_shape(v)
+        for n in names:
+            if _conflict(shapes[n], sv) and res(recipes[n]) != v["result"]:
+                err(f"recipe {n} matches the same grid as vanilla {v['result']}")
+    cooked = {}
+    for n, r in recipes.items():
+        t = r["type"].split(":")[-1]
+        if t in ("smelting", "blasting", "smoking", "campfire_cooking"):
+            for o in _options(r["ingredient"]):
+                if (t, o) in cooked:
+                    err(f"recipes {cooked[(t, o)]} and {n}: two {t} results for {o}")
+                cooked[(t, o)] = n
+
+
+def _ingredient_groups(r):
+    """[option tuples] every one of which must be obtainable to use recipe r."""
+    t = r["type"].split(":")[-1]
+    if t == "crafting_shaped":
+        return [_options(v) for v in r["key"].values()]
+    if t == "crafting_shapeless":
+        return [_options(v) for v in r["ingredients"]]
+    if t == "crafting_transmute":
+        return [_options(r["input"]), _options(r["material"])]
+    return [_options(r[k]) for k in ("template", "base", "addition", "ingredient") if r.get(k)]
+
+
+def _loot_names(obj):
+    """Every item a loot table (or any JSON) can give: the "name" of item entries, nested anywhere."""
+    out = set()
+    if isinstance(obj, dict):
+        if obj.get("type") == "minecraft:item" and "name" in obj:
+            out.add(_short(obj["name"]))
+        for v in obj.values():
+            out |= _loot_names(v)
+    elif isinstance(obj, list):
+        for v in obj:
+            out |= _loot_names(v)
+    return out
+
+
+def check_obtainable(recipes):
+    """Dependency graph of every recipe: each mod item an ingredient needs must have a survival source (a loot table
+    that is not a block's, a block placed by worldgen or a structure, a Java hand-out, or a recipe whose own
+    ingredients are obtainable). Reports what is left, and cycles of items that only make each other."""
+    have = {i for i in MC_GAME["items"] if i not in CREATIVE_ONLY}
+    have |= {f"wayfarers:{i}" for i in JAVA_SOURCES}
+    block_drops, placed = {}, set()
+    for root in (DATA, WORLD_DATA):
+        for path in glob.glob(os.path.join(root, "*", "loot_table", "**", "*.json"), recursive=True):
+            rel = os.path.relpath(path, root).replace(os.sep, "/")
+            names = _loot_names(json.load(open(path)))
+            if "/loot_table/blocks/" in "/" + rel:
+                block_drops["wayfarers:" + os.path.basename(path)[:-5] if rel.startswith("wayfarers/") else rel] = names
+            else:
+                have |= names
+        for path in glob.glob(os.path.join(root, "*", "worldgen", "**", "*.json"), recursive=True):
+            placed |= set(re.findall(r'"(wayfarers:[a-z0-9_]+)"', open(path).read()))
+    if not TEMPLATE_BLOCKS:  # run on its own, without check_templates() having read the templates
+        for path in glob.glob(os.path.join(DATA, "*", "structure", "**", "*.nbt"), recursive=True):
+            TEMPLATE_BLOCKS.update(e["Name"] for e in nbt.load(path)["palette"])
+    placed |= {b for b in TEMPLATE_BLOCKS if b.startswith("wayfarers:")}
+    # in-world conversions: the Engraver's Chisel turns any block of a family into the others; an axe strips logs
+    families = [{_short(b) for b in json.load(open(p))["blocks"]}
+                for p in glob.glob(os.path.join(DATA, "*", "chisel", "*.json"))]
+    java = os.path.join(ROOT, "src", "main", "java", "com", "wayfarers", "generated", "GeneratedWorldBlocks.java")
+    strips = re.findall(r'block\("([a-z0-9_]+)", p -> new WoodBlocks\.Log\(GeneratedWorldBlocks\.([A-Z0-9_]+),',
+                        open(java).read()) if os.path.exists(java) else []
+    strips = [(f"wayfarers:{a}", f"wayfarers:{b.lower()}") for a, b in strips]
+    tag_cache = {}
+
+    def ok(options):
+        for o in options:
+            if o.startswith("#"):
+                if o[1:] in VANILLA_TAGS or ":" not in o[1:]:
+                    return True
+                members = tag_cache.setdefault(o, _mod_tag(o[1:]))
+                if any(m in have for m in members):
+                    return True
+            elif o in have:
+                return True
+        return False
+    changed = True
+    while changed:
+        changed = False
+        for fam in families:
+            if fam & have and not fam <= have:
+                have |= fam
+                changed = True
+        for log, stripped in strips:
+            if log in have and stripped not in have:
+                have.add(stripped)
+                changed = True
+        for b, drops in block_drops.items():
+            if (b in placed or b in have) and not drops <= have:
+                have |= drops
+                changed = True
+        for r in recipes.values():
+            out = _short(r["result"]["id"] if isinstance(r["result"], dict) else r["result"])
+            if out not in have and all(ok(g) for g in _ingredient_groups(r)):
+                have.add(out)
+                changed = True
+    needs = {}  # unobtainable ingredient -> recipes needing it
+    edges = {}  # result -> its unobtainable ingredients
+    for n, r in sorted(recipes.items()):
+        out = _short(r["result"]["id"] if isinstance(r["result"], dict) else r["result"])
+        for g in _ingredient_groups(r):
+            if not ok(g):
+                needs.setdefault(" or ".join(g), []).append(n)
+                edges.setdefault(out, set()).update(g)
+    for ing, users in sorted(needs.items()):
+        err(f"{ing} has no survival source (no loot, worldgen, recipe chain); needed by {', '.join(users)}")
+    # cycles among the unobtainable: items that only come from recipes needing each other
+    index, low, stack, on, sccs = {}, {}, [], set(), []
+
+    def visit(v):
+        index[v] = low[v] = len(index)
+        stack.append(v)
+        on.add(v)
+        for w in edges.get(v, ()):
+            if w not in index:
+                visit(w)
+                low[v] = min(low[v], low[w])
+            elif w in on:
+                low[v] = min(low[v], index[w])
+        if low[v] == index[v]:
+            comp = []
+            while True:
+                w = stack.pop()
+                on.discard(w)
+                comp.append(w)
+                if w == v:
+                    break
+            if len(comp) > 1 or v in edges.get(v, ()):
+                sccs.append(sorted(comp))
+    for v in list(edges):
+        if v not in index:
+            visit(v)
+    for comp in sccs:
+        err(f"recipe cycle without a base source: {' -> '.join(comp + comp[:1])}")
+    return have
+
+
+def check_recipes():
+    recipes = _all_recipes()
+    check_recipe_conflicts(recipes)
+    have = check_obtainable(recipes)
+    for i in sorted(mod_ids("items")):
+        if f"wayfarers:{i}" not in have and not i.endswith("_spawn_egg") and i not in TECHNICAL_BLOCKS:
+            warnings.append(f"wayfarers:{i} cannot be obtained in survival (creative or commands only)")
+
+
 def main():
     check_pack_meta()
     check_templates()
+    check_recipes()
     check_loot()
     check_worldgen()
     check_assets()

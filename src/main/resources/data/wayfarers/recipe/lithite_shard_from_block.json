@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "wayfarers:lithite_block"
+  ],
+  "result": {
+    "id": "wayfarers:lithite_shard",
+    "count": 9
+  }
+}

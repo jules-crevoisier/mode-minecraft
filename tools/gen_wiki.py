@@ -2290,7 +2290,7 @@ def section_oceans(ctx):
         ctx.idx.add(name(iid), "Plongée", "plongee", text)
     extras = []
     for res, label in (("wayfarers:jelly_lamp", "Lampe de gelée (gelée des méduses)"),
-                       ("minecraft:emerald", "Deux perles = une émeraude")):
+                       ("minecraft:emerald", "Quatre perles = une émeraude")):
         r = next((r for r in ctx.recipes if r["result"] == res and r["file"] in ("jelly_lamp", "emerald_from_pearls")), None)
         if r:
             extras.append(f'<div class="card mini"><h4>{E(label)}</h4>{render_recipe(atlas, r, ctx.item_link)}</div>')
@@ -2385,13 +2385,26 @@ TAG_ICON ={"planks": "minecraft:oak_planks", "logs": "minecraft:oak_log", "wool"
             "copper_ores": "minecraft:copper_ore", "iron_ores": "minecraft:iron_ore", "chests": "minecraft:chest"}
 
 
+def tag_icon(tag):
+    """A readable item for an item tag: a known vanilla stand-in, else the first value of the tag file."""
+    ns, path = tag.split(":", 1) if ":" in tag else ("minecraft", tag)
+    rep = TAG_ICON.get(path.split("/")[-1]) if ns in ("minecraft", "c") else None
+    if rep:
+        return rep
+    d = load_json(os.path.join(RES, "data", ns, "tags", "item", path + ".json")) or {}
+    for v in d.get("values", []):
+        v = v["id"] if isinstance(v, dict) else v
+        return tag_icon(v[1:]) if v.startswith("#") else v
+    return None
+
+
 def slot(atlas, ids, item_link, count=None):
     if not ids:
         return '<span class="slot"></span>'
     i = ids[0]
     if i.startswith("#"):
         tag = i[1:].split(":")[-1].split("/")[-1]
-        rep = TAG_ICON.get(tag)
+        rep = tag_icon(i[1:])
         label = f"n'importe quel(le) {tag.replace('_', ' ')}"
         inner = atlas.icon(rep, 32, label=label) if rep else f'<i class="ic ic-none" style="--s:32px" title="{E(label, quote=True)}">#</i>'
         return f'<span class="slot tag" title="{E(label, quote=True)}">{inner}</span>'
@@ -2403,25 +2416,41 @@ def slot(atlas, ids, item_link, count=None):
     return f'<a class="slot" href="#{a}">{inner}</a>' if a else f'<span class="slot">{inner}</span>'
 
 
+def placed_pattern(pattern, size=3):
+    """A shaped pattern as the 3x3 crafting grid shows it: the game trims empty rows and columns
+    (ShapedRecipePattern), then the recipe book centres a pattern narrower or shorter than half the grid
+    (PlaceRecipeHelper: a 1-wide pattern goes in the middle column, a 1-high one in the middle row) and puts the
+    rest in the top-left corner."""
+    rows = [r for r in pattern if r.strip()]
+    if not rows:
+        return [" " * size] * size
+    width = max(len(r) for r in rows)
+    rows = [r.ljust(width) for r in rows]
+    cols = [c for c in range(width) if any(r[c] != " " for r in rows)]
+    rows = [r[cols[0]:cols[-1] + 1] for r in rows]
+    h, w = len(rows), len(rows[0])
+    top = (size - h) // 2 if h < size / 2 else 0
+    left = (size - w) // 2 if w < size / 2 else 0
+    grid = [[" "] * size for _ in range(size)]
+    for y, r in enumerate(rows):
+        for x, ch in enumerate(r):
+            grid[top + y][left + x] = ch
+    return ["".join(r) for r in grid]
+
+
 def render_recipe(atlas, r, item_link):
     d, t = r["data"], r["type"]
     res = slot(atlas, [r["result"]], item_link, r["count"])
     arrow = '<span class="arrow" aria-hidden="true"></span>'
     if t.endswith("crafting_shaped"):
-        pat = d["pattern"]
-        cells = []
-        for row in range(3):
-            for col in range(3):
-                ch = pat[row][col] if row < len(pat) and col < len(pat[row]) else " "
-                cells.append(slot(atlas, ingredient_ids(d["key"].get(ch)) if ch != " " else [], item_link))
+        grid = placed_pattern(d["pattern"])
+        cells = [slot(atlas, ingredient_ids(d["key"].get(ch)) if ch != " " else [], item_link) for row in grid for ch in row]
         return f'<div class="recipe"><div class="grid3">{"".join(cells)}</div>{arrow}{res}</div>'
-    if t.endswith("crafting_shapeless"):
-        ings = d.get("ingredients", [])
+    if t.endswith(("crafting_shapeless", "crafting_transmute")):
+        ings = d.get("ingredients") or [d.get("input"), d.get("material")]
         cells = [slot(atlas, ingredient_ids(x), item_link) for x in ings] + ['<span class="slot"></span>'] * (9 - len(ings))
-        return f'<div class="recipe"><div class="grid3">{"".join(cells[:9])}</div>{arrow}{res}</div>'
-    if t.endswith("crafting_transmute"):
-        cells = [slot(atlas, ingredient_ids(d.get("input")), item_link), slot(atlas, ingredient_ids(d.get("material")), item_link)]
-        return f'<div class="recipe"><div class="row">{"".join(cells)}</div>{arrow}{res}<small class="rnote">le contenu est gardé</small></div>'
+        note = '<small class="rnote">le contenu est gardé</small>' if t.endswith("transmute") else ""
+        return f'<div class="recipe"><div class="grid3">{"".join(cells[:9])}</div>{arrow}{res}{note}</div>'
     if t.endswith(("smelting", "blasting", "smoking", "campfire_cooking")):
         ic = {"smelting": "minecraft:furnace", "blasting": "minecraft:blast_furnace", "smoking": "minecraft:smoker"}.get(t.split(":")[-1], "minecraft:campfire")
         return (f'<div class="recipe"><div class="row">{slot(atlas, ingredient_ids(d.get("ingredient")), item_link)}'

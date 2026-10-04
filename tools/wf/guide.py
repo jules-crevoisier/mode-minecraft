@@ -117,12 +117,12 @@ PAGES = [
          "your experience; it refills by itself.",
          "Chaque bâton contient un sort : tiens-le et fais clic droit pour le lancer. Les sorts coûtent du mana, "
          "affiché dans la barre bleue au-dessus de l'expérience ; il se recharge tout seul."),
-        ("Spells: fire bolt, frost nova, Tesla lightning, mending, levitation, ward and steam blast. Each is crafted "
-         "from an amethyst shard and the ingredients of its element (blaze powder, packed ice, copper, ghast "
-         "tear...).",
-         "Sorts : trait de feu, nova de givre, éclair Tesla, soin, lévitation, protection et jet de vapeur. Chacun se "
-         "fabrique avec un éclat d'améthyste et les ingrédients de son élément (poudre de blaze, glace compactée, "
-         "cuivre, larme de ghast...)."),
+        ("Spells: fire bolt, frost nova, Tesla lightning, mending, levitation, ward and steam blast. Each staff is "
+         "crafted upright: an amethyst shard between two of its element (blaze powder, packed ice, copper...) on "
+         "top, a collar, a stick.",
+         "Sorts : trait de feu, nova de givre, éclair Tesla, soin, lévitation, protection et jet de vapeur. Chaque "
+         "bâton se fabrique debout : un éclat d'améthyste entre deux ingrédients de son élément (poudre de blaze, "
+         "glace compactée, cuivre...) en haut, une bague, un bâton."),
         ("More mana: an Arcane Ring (+50 mana) or a Mana Amulet (faster regeneration) work just by being in your "
          "inventory. Arcanist talents and robes make spells stronger.",
          "Plus de mana : un Anneau arcanique (+50 mana) ou une Amulette de mana (recharge plus rapide) agissent "
@@ -648,10 +648,10 @@ PAGES = [
          "inventaire (16 à la fois, 64 avec la baguette du maître)."),
         ("Made a mistake? Sneak-right-click in the air to undo the last use: the blocks come back to you.",
          "Une erreur ? Accroupi + clic droit dans le vide pour annuler : les blocs te reviennent."),
-        ("Craft: a stick, two gold ingots and an amethyst shard. Master wand: the wand, two Lithite shards and a "
-         "diamond.",
-         "Fabrication : un bâton, deux lingots d'or et un éclat d'améthyste. Baguette du maître : la baguette, deux "
-         "éclats de lithite et un diamant."),
+        ("Craft, in a column: an amethyst shard, a gold ingot, a stick. Master wand: the wand between two Lithite "
+         "shards, a diamond above it.",
+         "Fabrication, en colonne : un éclat d'améthyste, un lingot d'or, un bâton. Baguette du maître : la baguette "
+         "entre deux éclats de lithite, un diamant au-dessus."),
     ], ["wayfarers:builder_wand", "wayfarers:master_builder_wand"]),
     ("symmetry", "building", "wayfarers:master_builder_wand", ("Wand symmetry", "Symétrie de la baguette"), [
         ("Build in mirror: every block the wand places is copied on the other side of a plane.",
@@ -670,10 +670,10 @@ PAGES = [
          "escaliers sont retournés). Chaque copie coûte un bloc ; annuler les retire toutes."),
     ], []),
     ("chisel", "building", "wayfarers:chisel", ("Engraver's Chisel", "Burin du graveur"), [
-        ("It carves a placed block into another variant of its family. Craft: an iron ingot, a brass ingot and a "
-         "stick, on a diagonal.",
-         "Il taille un bloc posé en une autre variante de sa famille. Fabrication : un lingot de fer, un lingot de "
-         "laiton et un bâton, en diagonale."),
+        ("It carves a placed block into another variant of its family. Craft, in a column: an iron ingot, a brass "
+         "ingot, a stick.",
+         "Il taille un bloc posé en une autre variante de sa famille. Fabrication, en colonne : un lingot de fer, un "
+         "lingot de laiton, un bâton."),
         ("Right-click a block: next variant (stone, bricks, mossy, cracked, chiseled...). Sneak-right-click: the "
          "previous one. Each cut uses one durability.",
          "Clic droit sur un bloc : variante suivante (pierre, briques, moussues, fissurées, sculptées...). Accroupi + "

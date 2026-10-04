@@ -104,8 +104,8 @@ def recipes(shaped, shapeless, write):
     shaped("flippers", ["L L", "K K"], {"L": "leather", "K": "dried_kelp_block"}, category="equipment")
     shaped("jelly_lamp", [" J ", "JGJ", " J "], {"J": "glow_jelly", "G": "glass"}, category="building")
     write(f"{NS}/recipe/emerald_from_pearls.json", {
-        "type": "minecraft:crafting_shapeless", "category": "misc",
-        "ingredients": [f"{NS}:pearl"] * 4, "result": {"id": "minecraft:emerald", "count": 1}})
+        "type": "minecraft:crafting_shaped", "category": "misc", "pattern": ["PP", "PP"],
+        "key": {"P": f"{NS}:pearl"}, "result": {"id": "minecraft:emerald", "count": 1}})
 
 
 def tags(write):

@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "ingredient": "wayfarers:lithite_ore",
+  "result": {
+    "id": "wayfarers:lithite_shard"
+  },
+  "experience": 1.0,
+  "cookingtime": 200
+}

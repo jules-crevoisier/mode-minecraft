@@ -92,7 +92,7 @@ def lang():
 # ------------------------------------------------------------------ recipes (gen_data.py)
 def recipes(shaped, shapeless):
     shaped("brass_wrench", ["B B", " B ", " I "], {"B": "brass_ingot", "I": "iron_ingot"}, category="equipment")
-    shaped("grappling_hook", ["  T", " C ", "BB "], {"T": "tripwire_hook", "C": "iron_chain", "B": "brass_ingot"},
+    shaped("grappling_hook", ["T", "C", "B"], {"T": "tripwire_hook", "C": "iron_chain", "B": "brass_ingot"},
            category="equipment")
     shaped("brass_glider", ["BBB", "LML", "L L"], {"B": "brass_ingot", "L": "leather", "M": "phantom_membrane"},
            category="equipment")
@@ -132,8 +132,8 @@ PAGES = [
          "bond à l'arrivée te hisse sur le rebord."),
         ("Sneak or right-click again to let go. No fall damage while reeled in, nor just after.",
          "Accroupi ou clic droit à nouveau pour lâcher. Aucun dégât de chute pendant la traction, ni juste après."),
-        ("Craft: a tripwire hook, an iron chain and two brass ingots.",
-         "Fabrication : un crochet, une chaîne en fer et deux lingots de laiton."),
+        ("Craft, in a column: a tripwire hook, an iron chain, a brass ingot.",
+         "Fabrication, en colonne : un crochet, une chaîne en fer, un lingot de laiton."),
     ], ["wayfarers:grappling_hook"]),
     ("glider", "wayfarers:brass_glider", ("Brass Glider", "Planeur en laiton"), [
         ("Hold it in either hand and jump from somewhere high: it opens by itself. You sink slowly and glide where "

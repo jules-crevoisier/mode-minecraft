@@ -2,14 +2,15 @@
   "type": "minecraft:crafting_shaped",
   "category": "building",
   "pattern": [
-    "XX",
-    "XX"
+    "IN",
+    "NI"
   ],
   "key": {
-    "X": "minecraft:copper_ingot"
+    "I": "minecraft:copper_ingot",
+    "N": "minecraft:copper_nugget"
   },
   "result": {
     "id": "wayfarers:copper_plating",
-    "count": 8
+    "count": 4
   }
 }

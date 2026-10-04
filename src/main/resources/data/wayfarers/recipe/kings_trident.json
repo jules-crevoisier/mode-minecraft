@@ -1,15 +1,16 @@
 {
-  "type": "minecraft:crafting_shapeless",
+  "type": "minecraft:crafting_shaped",
   "category": "equipment",
-  "ingredients": [
-    "wayfarers:remembrance_drowned_warden",
-    "wayfarers:lithite_shard",
-    "wayfarers:lithite_shard",
-    "wayfarers:lithite_shard",
-    "wayfarers:lithite_shard",
-    "minecraft:diamond",
-    "minecraft:diamond"
+  "pattern": [
+    " M ",
+    "MRM",
+    "DMD"
   ],
+  "key": {
+    "M": "wayfarers:lithite_shard",
+    "R": "wayfarers:remembrance_drowned_warden",
+    "D": "minecraft:diamond"
+  },
   "result": {
     "id": "wayfarers:kings_trident",
     "count": 1
