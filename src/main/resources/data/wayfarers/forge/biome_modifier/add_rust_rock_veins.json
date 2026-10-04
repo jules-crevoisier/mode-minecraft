@@ -1,0 +1,6 @@
+{
+  "type": "forge:add_features",
+  "biomes": "#wayfarers:stone_veins/rust_rock",
+  "features": "wayfarers:rust_rock_vein",
+  "step": "underground_ores"
+}

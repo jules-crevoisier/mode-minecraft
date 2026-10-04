@@ -9,7 +9,8 @@
 - **10 créatures** et **20 boss façon Elden Ring** (16 grands boss et 4 champions de donjon), tous avec un vrai modèle 3D animé ;
 - **15 blocs de construction exclusifs** (briques de la Guilde, tuiles de toit, lampes runiques, briques de braise, briques du vide…), utilisés dans les structures et fabricables ;
 - **une vraie difficulté** : plus on s'éloigne du spawn, plus les monstres sont forts, avec des monstres d'élite et des lunes de sang ;
-- **un nouveau monde** (désactivable) : relief spectaculaire (chaînes de montagnes jusque vers y 320, falaises, canyons, mesas, fjords, archipels, îles célestes), méga-cavernes, rivières souterraines et **52 biomes** propres au mod ;
+- **des océans vivants** : méduses, poissons de récif, raies manta, baleines, serpent de mer, récifs, huîtres perlières et épaves ;
+- **deux bois et trois pierres** à construire : bois-lueur et bois rouillé à faire pousser, marbre, roche rouillée et ardoise bleue en veines dans le monde ;
 - **un univers steampunk** : laiton, zinc, mithril, éther, 13 blocs de déco, 9 meubles en 3D, 9 machines simples et la **Citadelle d'horlogerie** ;
 - **des talents RPG et de la magie simple** : arbre de 36 talents (touche **K**), capacité active (touche **V**), mana et 7 bâtons de sort ;
 - **une carte du monde et une mini-carte** (touche **M**) partagées sur un serveur, avec repères, signaux et pierres de voyage ;
@@ -95,25 +96,14 @@ Points gagnés par quête, par boss et tous les 10 niveaux. Arbre de **4 branche
   - **Boussole de dirigeable** : son aiguille d'éther pointe vers le Port céleste le plus proche.
 
 ### Océans vivants (manuel, catégorie « Océans vivants »)
-Méduses lumineuses (4 couleurs, piquent un peu, gelée → lampe ou vision nocturne), bancs de poissons de récif, raies manta qui sautent hors de l'eau, baleines à bosse qui chantent au large, et la nuit, près des bateaux, le **Serpent de mer** (mini-boss : morsure, charge qui brise les bateaux, tourbillon ; ses écailles font le **Casque de scaphandre**, qui donne la force de conduit sous l'eau). Palmes. Au fond : forêts de varech, jardins et coraux géants, anémones lumineuses, huîtres perlières, cheminées à bulles, arches rocheuses, ruines, et quatre petites structures (sous-marin englouti, cloche de plongée avec poche d'air, sanctuaire de corail, débris de naufrage). Tout cela existe avec ou sans le nouveau monde.
+Méduses lumineuses (4 couleurs, piquent un peu, gelée → lampe ou vision nocturne), bancs de poissons de récif, raies manta qui sautent hors de l'eau, baleines à bosse qui chantent au large, et la nuit, près des bateaux, le **Serpent de mer** (mini-boss : morsure, charge qui brise les bateaux, tourbillon ; ses écailles font le **Casque de scaphandre**, qui donne la force de conduit sous l'eau). Palmes. Au fond : forêts de varech, jardins et coraux géants, anémones lumineuses, huîtres perlières, cheminées à bulles, arches rocheuses, ruines, et quatre petites structures (sous-marin englouti, cloche de plongée avec poche d'air, sanctuaire de corail, débris de naufrage). Tout cela vient s'ajouter aux océans de Minecraft.
 
-### Nouveau monde (option `world.overhaul`)
-Le pack intégré **wayfarers:world_overhaul** remplace l'Overworld des **nouveaux** mondes :
-- un monde de 448 blocs de haut (y -64 à 383) et des continents 1,6 fois plus grands ;
-- de vraies chaînes de montagnes aux crêtes aiguës (sommets vers y 280-320), des plaines vallonnées, un escarpement qui monte vers des plateaux entaillés de canyons au fond desquels coulent les rivières ;
-- des mesas en gradins et des cheminées de fée dans les terres chaudes, des aiguilles de pierre, des fjords sur les côtes gelées, des archipels dans les mers chaudes et de rares îles célestes (y 170-260) au-dessus des forêts ;
-- méga-cavernes entre y -40 et 10 et rivières souterraines (galeries inondées vers y 6-24) ;
-- des sous-biomes qui alternent dans un même climat, des brouillards et couleurs propres à chaque biome, et des objets naturels : cornes de pierre noire, arches, éclats de cristal d'éther, sources chaudes en terrasses, champignons géants, coulées de lave, rochers et troncs tombés ;
-- **52 biomes** : marais pourpre, hautes terres volcaniques, désolation cendrée, pics alpins, dunes pâles, bassin des geysers, bosquet astral, bosquet de l'éther corrompu, taïga aux feuilles de braise, fjords de givre, archipel d'airain, forêt enchantée, sylve géante, vallée des cerisiers, toundra aurorale, glacier brisé, pics majestueux, terres rouillées, vallée des engrenages, canyon peint, mer de dunes, marais luminescent, cavernes de cristal, jungle souterraine, grottes thermales, abîme…
-- **ses propres bois et pierres** : le **bois-lueur** (troncs pâles, feuilles turquoise qui luisent la nuit ; forêt enchantée, bois de cristal) et le **bois rouillé** (écorce rouge sombre, feuilles rouille ; terres rouillées, vallée des engrenages, savane cendrée), chacun avec bûches, planches, escaliers, dalles, barrières, portillons, portes, trappes, boutons, plaques de pression, feuilles et pousses ; le **marbre** en strates dans les falaises des montagnes, la **roche rouillée** des terres rouillées et l'**ardoise bleue** de la mer d'ardoise et des hautes terres de pins, avec leurs formes polies, briques, pilier, carreaux, escaliers, dalles et murets. Tous se fabriquent aussi dans un monde vanilla (voir le manuel, pages « Bois du nouveau monde » et « Pierres du nouveau monde »).
+### Génération du monde
+Wayfarers garde la génération de **Minecraft** : relief, grottes et biomes vanilla. Le mod y ajoute ses structures (chacune dans les biomes qui lui vont, et seulement là où le terrain lui convient : option `world.structureFit`), ses minerais (zinc, mithril, cristal d'éther, lithite, orichalque dans le Nether), les créatures et les fonds des océans vivants, et les veines de ses trois pierres. La refonte du relief et des biomes deviendra un mod à part.
 
-Villages, forteresses et structures du mod y apparaissent comme avant.
-
-Aperçu hors jeu du relief et des biomes : `python3 tools/world_preview.py` (numpy, cartes et coupes dans `build/world_preview/`).
-
-Crédits : certaines techniques de relief (splines de falaises, aiguilles, îles célestes) s'inspirent de [Terralith](https://github.com/Stardust-Labs-MC/Terralith) de Stardust Labs (licence MIT) ; l'ambiance des biomes s'inspire de Dregora.
-
-Pour garder le monde vanilla : mettre `world.overhaul = false` dans `config/wayfarers-common.toml`, ou décocher le pack dans l'écran « Packs de données » à la création du monde. Comme Terralith, Minecraft affiche un avertissement « expérimental » à la création du monde : c'est normal.
+### Bois et pierres
+- **bois-lueur** (troncs pâles, feuilles turquoise qui luisent la nuit) et **bois rouillé** (écorce rouge sombre, feuilles rouille), chacun avec bûches, planches, escaliers, dalles, barrières, portillons, portes, trappes, boutons, plaques de pression, feuilles et pousses. Les pousses se fabriquent (pousse de chêne + baies lumineuses + poudre de pierre lumineuse ; pousse d'acacia + fer brut) et se trouvent dans les coffres de l'Arbre-monde et du Palais sylvain (bois-lueur), de la Citadelle d'horlogerie, du Port céleste, des Bas-fonds et de la Fonderie géothermique (bois rouillé) ;
+- **marbre** en veines dans les montagnes, **roche rouillée** dans les badlands et les hautes savanes, **ardoise bleue** dans l'ardoise des abîmes, avec leurs formes polies, briques, pilier, carreaux, escaliers, dalles et murets ; chacune se fabrique aussi à partir de pierres vanilla (manuel, page « Marbre, roche rouillée, ardoise bleue »).
 
 ### Méga-structures
 **Citadelle d'horlogerie** (71×71 blocs) : tour-horloge de 75 blocs avec quatre cadrans, beffroi et flèche de cuivre oxydé ; sept étages meublés ; quatre ateliers ; quatre cheminées fumantes ; fontaines. On la trouve dans les badlands, savanes, déserts et plaines.
@@ -347,13 +337,13 @@ Le contenu est généré par des scripts Python sans aucune dépendance, rangés
 ```bash
 python3 tools/generate_all.py            # régénère tout puis valide
 python3 tools/generate_all.py --preview  # + aperçus isométriques des structures dans build/previews/
-python3 tools/gen_wiki.py                # wiki illustré en français (GIF 3D, recettes, biomes) → build/wiki/index.html (~5 min, rendus en cache)
+python3 tools/gen_wiki.py                # wiki illustré en français (GIF 3D, recettes, structures) → build/wiki/index.html (~5 min, rendus en cache)
 ```
 
 | Script | Ce qu'il génère |
 |---|---|
 | `gen_structures.py` + `wf/structures/*.py` | Les plans des 35 structures (dont les repaires `lair_*.py` et les donjons `wf/dungeon.py`) (éditeur de blocs en Python) → modèles `.nbt`, pools, ensembles de structures, tags de biomes. Une pièce de plus de 48 blocs de large ou de 60 000 entrées est découpée en colonnes (`wf/chunking.py`), vérifiées bloc par bloc et posées par un seul élément de pool `wayfarers:chunked_template` (`world/ChunkedPoolElement.java`) qui ne place que les colonnes du chunk généré |
-| `gen_loot.py`, `gen_quests.py`, `gen_data.py` | Butin, quêtes (progrès), recettes, tags, minerai |
+| `gen_loot.py`, `gen_quests.py`, `gen_data.py` | Butin, quêtes (progrès), recettes, tags, minerais et veines de pierre (modificateurs de biomes Forge, biomes vanilla) |
 | `gen_textures.py`, `gen_assets.py` | Textures pixel-art, modèles, traductions fr/en |
 | `gen_models.py` + `wf/mobs/*.py` | Les 30 modèles 3D animés (`wf/models.py`) → classes Java, textures, aperçus (`--preview`, voir `tools/BOSSES.md`) |
 | `gen_java.py` | Le catalogue Java partagé (`GeneratedContent.java`) |
@@ -386,8 +376,7 @@ Le code Java vit dans `src/main/java/com/wayfarers` :
 - [ ] Le jeu démarre sans erreur de données (structures, butin, quêtes) dans `logs/latest.log`.
 - [ ] `/wayfarers tp guild_outpost` puis `/wayfarers tp sunken_citadel` : les structures sont bien posées au sol ou au fond de l'eau.
 - [ ] Une pierre de voyage : l'écran de voyage s'ouvre et la téléportation fonctionne.
-- [ ] Nouveau monde : le relief et les biomes du mod (F3 affiche `wayfarers:…`) ; `/locate biome wayfarers:enchanted_forest`.
-- [ ] Bois et pierres : bois-lueur dans la forêt enchantée (feuilles lumineuses la nuit), bois rouillé dans `wayfarers:rustlands` ; écorcer une bûche à la hache, faire pousser une pousse à la poudre d'os, mettre le feu à des planches ; strates de marbre sur les falaises de `wayfarers:majestic_peaks`, ardoise bleue au fond de `wayfarers:slate_sea`.
+- [ ] Bois et pierres : fabriquer une pousse de bois-lueur et la faire pousser à la poudre d'os (feuilles lumineuses la nuit) ; écorcer une bûche à la hache, mettre le feu à des planches ; veines de marbre dans les montagnes, de roche rouillée dans les badlands, d'ardoise bleue sous y 0.
 - [ ] `/wayfarers tp clockwork_citadel` : la citadelle, ses cadrans et ses cheminées fumantes.
 - [ ] Touche **K** (talents), **J** (quêtes), clic droit sur le Manuel ; maintenir **W** sur un objet du mod.
 - [ ] Une machine : moissonneuse au bord d'un champ avec un coffre collé ; minuteur relié à un casseur.

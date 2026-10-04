@@ -3,9 +3,8 @@
 
 Used by CI (.github/workflows/build.yml) after `./gradlew build`:
     python3 tools/ci_smoke.py <server_dir>                    # flat world: every structure, mob, item, loot table
-    python3 tools/ci_smoke.py <server_dir> --overhaul         # overhaul world: biomes, world map, biome renders
-    python3 tools/ci_smoke.py <server_dir> --overhaul --fit   # overhaul world: how every structure sits on the terrain
-    python3 tools/ci_smoke.py <server_dir> --overhaul --fit --shard 0/2   # ...every second structure from the first
+    python3 tools/ci_smoke.py <server_dir> --fit              # vanilla world: how every structure sits on the terrain
+    python3 tools/ci_smoke.py <server_dir> --fit --shard 0/2  # ...every second structure from the first
 
 The server directory must already contain an installed Forge server and the mod jar in mods/.
 The script accepts the EULA, starts the server, waits for "Done", then from the console:
@@ -15,17 +14,17 @@ The script accepts the EULA, starts the server, waits for "Done", then from the 
   * breaks mod blocks (loot tables + Forge loot modifiers),
   * spawns every loot table,
   * reloads data packs,
-  * measures how fast chunks generate (/wayfarers genbench: vanilla's noise settings, and the overhaul's when on),
 and stops the server. Any ERROR line, exception, crash report or failed command fails the run.
+With --fit the server makes a fresh world with Minecraft's own generator instead (the mod adds no terrain or biome)
+and /wayfarers fitcheck locates, generates and measures every Overworld structure there.
 
-Every run writes a short diagnostic summary, wayfarers-ci-<job>.txt, into the server folder: phase durations, chunk
-generation speed, FAIL lines, suspicious log lines, slow commands. CI publishes it with the world previews, so the
-next diagnosis needs no log download.
+Every run writes a short diagnostic summary, wayfarers-ci-<job>.txt, into the server folder: phase durations, FAIL
+lines, suspicious log lines, slow commands. CI publishes it with the previews, so the next diagnosis needs no log
+download.
 
 Time: the server runs one command at a time, so a command the script stopped waiting for still blocks the ones after
-it. The long commands (/wayfarers worldmap, biomeshots, fitcheck) keep to their own budgets (in the Java commands)
-and the script waits that budget plus a margin; if one still does not answer, the remaining phases are skipped and
-reported, not run behind it. Anything skipped for time is listed in the summary, never counted as a pass.
+it. /wayfarers fitcheck keeps to its own budget (in the Java command) and the script waits that budget plus a margin;
+anything skipped for time is listed in the summary, never counted as a pass.
 """
 import glob
 import json
@@ -69,23 +68,16 @@ BAD = [re.compile(p) for p in (
 
 FEEDBACK_TIMEOUT = 180
 BUDGET = 36 * 60  # seconds per test; past it the remaining phases are skipped and the run fails with a clear message
-# Java-side budgets (keep in step): WorldMapCommand.BUDGET_MS 10 min, BiomeShotsCommand.BUDGET_MS 9 min,
-# FitCheckCommand.BUDGET_MS 22 min (+ LOCATE_BUDGET_MS 5 min for the structure in progress). The script waits each
-# budget plus a margin for the item in progress, so the server answers before the script gives up.
-WORLDMAP_WAIT = 10 * 60 + 300
-BIOMESHOTS_WAIT = 9 * 60 + 300
+# Java-side budget (keep in step): FitCheckCommand.BUDGET_MS 22 min (+ LOCATE_BUDGET_MS 5 min for the structure in
+# progress). The script waits the budget plus a margin for the item in progress, so the server answers first.
 FIT_BUDGET = 22 * 60
 FIT_WAIT = FIT_BUDGET + 5 * 60 + 180
-GENBENCH_WAIT = 600
-# a fresh area far from spawn and from everything else the tests generate
-BENCH_X, BENCH_Z, BENCH_SIZE = 20000, 20000, 12
 
 
 class Summary:
     """What wayfarers-ci-<job>.txt says (see the module docstring)."""
     job = "smoke"
     phases = []      # (name, seconds, note)
-    bench = []       # "Genbench ..." lines
     notes = []       # skips, partial results, anything a reader must know
     slow = []        # "[smoke] slow: ..." lines
 
@@ -95,11 +87,6 @@ class Summary:
                  f"run {os.environ.get('GITHUB_RUN_ID', '?')} attempt {os.environ.get('GITHUB_RUN_ATTEMPT', '?')}",
                  f"result: {'FAILED' if failures else 'OK'}", "", "phases (seconds):"]
         lines += [f"  {name:34s} {sec:6.0f}  {note}".rstrip() for name, sec, note in cls.phases]
-        if cls.bench:
-            lines += ["", "chunk generation:"] + ["  " + b for b in cls.bench]
-            ratio = bench_ratio(cls.bench)
-            if ratio:
-                lines.append(f"  overhaul / vanilla (noise, ms per chunk): {ratio:.2f}x (target <= 1.5x)")
         lines += list(extra)
         if cls.notes:
             lines += ["", "notes (skipped or partial items, never counted as passed):"] + ["  " + n for n in cls.notes]
@@ -111,18 +98,6 @@ class Summary:
         with open(path, "w", encoding="utf-8") as f:
             f.write("\n".join(lines) + "\n")
         print(f"[smoke] summary written to {path}", flush=True)
-
-
-def bench_ratio(bench):
-    """overhaul ms/chunk over vanilla ms/chunk from the genbench noise lines (None when one is missing)."""
-    per = {}
-    for b in bench:
-        m = re.match(r"Genbench (vanilla|world \S+): ([\d.]+) ms/chunk", b)
-        if m:
-            per["vanilla" if m.group(1) == "vanilla" else "world"] = float(m.group(2))
-    if "vanilla" in per and "world" in per and per["vanilla"] > 0:
-        return per["world"] / per["vanilla"]
-    return None
 
 
 def structure_dims():
@@ -216,14 +191,14 @@ def server_command(server_dir):
     return ["java", "-Xmx4G", "-jar", os.path.basename(jars[0]), "nogui"]
 
 
-def prepare(server_dir, overhaul):
+def prepare(server_dir, fit):
     with open(os.path.join(server_dir, "eula.txt"), "w") as f:
         f.write("eula=true\n")
     props = ("online-mode=false\nspawn-protection=0\nlevel-seed=wayfarers-ci\nmax-tick-time=-1\n"
              "view-distance=4\nsimulation-distance=4\nsync-chunk-writes=false\n")
-    if overhaul:
-        # a fresh world with the default generator, so the overhaul pack replaces the Overworld
-        props += "level-name=world_overhaul\n"
+    if fit:
+        # a fresh world with Minecraft's default generator: the structures are measured on real vanilla terrain
+        props += "level-name=world_fit\n"
     else:
         # a flat Overworld generates in a blink; /place structure ignores biomes, so every structure
         # still assembles (full noise terrain made the run take over an hour on CI runners)
@@ -233,9 +208,6 @@ def prepare(server_dir, overhaul):
                   '"biome":"minecraft:plains"}\n')
     with open(os.path.join(server_dir, "server.properties"), "w") as f:
         f.write(props)
-    os.makedirs(os.path.join(server_dir, "config"), exist_ok=True)
-    with open(os.path.join(server_dir, "config", "wayfarers-common.toml"), "w") as f:
-        f.write(f"[world]\noverhaul = {'true' if overhaul else 'false'}\n")
     jvm = os.path.join(server_dir, "user_jvm_args.txt")
     if os.path.exists(jvm) and "-Xmx4G" not in open(jvm).read():
         with open(jvm, "a") as f:
@@ -266,31 +238,6 @@ class Phase:
         Summary.phases.append((self.name, sec, "interrupted" if exc and exc[0] else ""))
 
 
-def skip_phase(name, why):
-    """A phase not run: printed and listed in the summary (never a silent pass)."""
-    print(f"[smoke] {name}: SKIPPED ({why})", flush=True)
-    Summary.phases.append((name, 0, f"SKIPPED: {why}"))
-    Summary.notes.append(f"phase '{name}' skipped: {why}")
-
-
-def genbench(srv, failures, area=True):
-    """/wayfarers genbench: chunk generation speed (noise settings side by side, and a fresh area for real)."""
-    with Phase("chunk generation benchmark"):
-        if area:
-            res = srv.run(f"wayfarers genbench area {BENCH_X} {BENCH_Z} {BENCH_SIZE}", r"Genbench area|Unknown|Incorrect",
-                          GENBENCH_WAIT)
-            if not res or "Genbench area" not in res:
-                failures.append(f"genbench area: {res}")
-        res = srv.run("wayfarers genbench noise", r"Genbench world|Unknown|Incorrect", GENBENCH_WAIT)
-        if not res or "Genbench world" not in res:
-            failures.append(f"genbench noise: {res}")
-        time.sleep(0.5)
-        for line in list(srv.lines):
-            m = re.search(r"(Genbench .*)$", line)
-            if m and "/wayfarers" not in line and ">>>" not in line and m.group(1) not in Summary.bench:
-                Summary.bench.append(m.group(1))
-
-
 def exercise_mod(srv, failures):
     with Phase("structures"):
         place_structures(srv, failures)
@@ -305,8 +252,6 @@ def exercise_mod(srv, failures):
     with Phase("reload"):
         srv.run("reload", r"Reloading|Failed", 120)
         time.sleep(20)
-    # the flat test world has no noise terrain: the area is flat chunks, the noise line is vanilla's generator
-    genbench(srv, failures)
     srv.run("say smoke test finished")
     time.sleep(2)
 
@@ -501,67 +446,12 @@ def blocks_and_loot(srv, failures):
     srv.run("execute in minecraft:overworld run kill @e[type=minecraft:item]", r"Killed|No entity", 60)
 
 
-def exercise_overhaul(srv, failures):
-    """The overhaul pack is on, every biome of ours can be found, the world map and the biome renders are drawn,
-    and nothing logs an error."""
-    res = srv.run("datapack list enabled", r"data pack", 60)
-    if not res or "wayfarers:world_overhaul" not in res:
-        failures.append(f"world overhaul pack not enabled: {res}")
-    biomes = sorted(os.path.splitext(n)[0] for n in os.listdir(
-        os.path.join(RES, "worldgen_pack", "data", "wayfarers", "worldgen", "biome")))
-    missing = []
-    with Phase("locate biomes"):
-        found = locate_all(srv, biomes, missing)
-    print(f"biomes found: {found}", flush=True)
-    print(f"biomes not found nearby: {missing}", flush=True)
-    if len(missing) > len(biomes) // 3:
-        failures.append(f"{len(missing)} of {len(biomes)} biomes not found: {missing}")
-    genbench(srv, failures)
-    with Phase("world map"):
-        res = srv.run("wayfarers worldmap", r"World map written|worldmap:|Unknown|Incorrect", WORLDMAP_WAIT)
-        if not res or "World map written" not in res:
-            failures.append(f"world map: no answer in {WORLDMAP_WAIT} s ({res})")
-        elif "partial" in res:
-            Summary.notes.append("world map partial: " + res.split("World map written", 1)[1].strip()[:200])
-    if not res:
-        # the server is still drawing the map: everything sent now would wait behind it
-        skip_phase("biome shots", "the world map did not answer, the server is still busy with it")
-        skip_phase("generate terrain around spawn", "the server is busy")
-        return
-    with Phase("biome shots"):
-        # really generates 5 x 5 chunks per biome and draws them (wayfarers-biome-<id>.png, published with the map);
-        # the command keeps to about 9 minutes and skips what is left past that (listed in wayfarers-biomes.txt)
-        res = srv.run("wayfarers biomeshots", r"Biome shots (written|failed)|Unknown|Incorrect", BIOMESHOTS_WAIT)
-        m = re.search(r"written: (\d+) of (\d+)", res or "")
-        if not res or "Biome shots written" not in res or not m:
-            failures.append(f"biome shots: {res}")
-        else:
-            done, total = int(m.group(1)), int(m.group(2))
-            legend = os.path.join(srv.cwd, "wayfarers-biomes.txt")
-            skipped = [ln.strip() for ln in open(legend, encoding="utf-8")] if os.path.exists(legend) else []
-            skipped = [ln for ln in skipped if "skipped:" in ln]
-            for ln in skipped:
-                Summary.notes.append("biome shot " + re.sub(r"\s+", " ", ln))
-            if done * 2 < total:
-                failures.append(f"biome shots: only {done} of {total} drawn ({len(skipped)} skipped, see wayfarers-biomes.txt)")
-    if not res:
-        skip_phase("generate terrain around spawn", "the biome shots did not answer, the server is still busy")
-        return
-    with Phase("generate terrain around spawn"):
-        srv.run("execute in minecraft:overworld run forceload add -64 -64 64 64", r"Marked|forceload|No chunks", 600)
-    srv.run("say overhaul test finished")
-    time.sleep(2)
-
-
 def exercise_fit(srv, failures, shard=None):
-    """Every Overworld structure of the mod (or every n-th with --shard i/n), located in the overhaul world and really
-    generated: /wayfarers fitcheck measures floating edges, buried edges and flooding at each, draws it in place
-    (wayfarers-fit-<id>.png) and writes wayfarers-fit.txt (wayfarers-fit-shard<i>.txt). A MISFIT or ERROR line fails
-    the run, so any change of the terrain is checked against every structure. A structure skipped for time is listed
-    in the summary; the run fails for that only when more than half of the structures were skipped."""
-    res = srv.run("datapack list enabled", r"data pack", 60)
-    if not res or "wayfarers:world_overhaul" not in res:
-        failures.append(f"world overhaul pack not enabled: {res}")
+    """Every Overworld structure of the mod (or every n-th with --shard i/n), located in a fresh vanilla world and
+    really generated: /wayfarers fitcheck measures floating edges, buried edges and flooding at each, draws it in
+    place (wayfarers-fit-<id>.png) and writes wayfarers-fit.txt (wayfarers-fit-shard<i>.txt). A MISFIT or ERROR line
+    fails the run, so every structure is checked on real terrain. A structure skipped for time is listed in the
+    summary; the run fails for that only when more than half of the structures were skipped."""
     command = "wayfarers fitcheck" + (f" shard {shard[0]} {shard[1]}" if shard else "")
     name = f"wayfarers-fit-shard{shard[0]}.txt" if shard else "wayfarers-fit.txt"
     with Phase("structure fit" + (f" (shard {shard[0] + 1} of {shard[1]})" if shard else "")):
@@ -600,42 +490,26 @@ def exercise_fit(srv, failures, shard=None):
     return ["", f"structure fit ({name}):"] + ["  " + ln for ln in lines]
 
 
-def locate_all(srv, biomes, missing):
-    found = {}
-    for b in biomes:
-        check_budget(f"biome {b}")
-        res = srv.run(f"execute in minecraft:overworld run locate biome wayfarers:{b}",
-                      r"nearest|Could not find|Unknown|Invalid|not found|Incorrect", 300)
-        if not res or "nearest" not in res:
-            missing.append(b)
-        else:
-            m = re.search(r"\((\d+) blocks away\)", res)
-            found[b] = int(m.group(1)) if m else -1
-    return found
-
-
 def main():
     server_dir = os.path.abspath(sys.argv[1])
     args = sys.argv[2:]
-    overhaul = "--overhaul" in args
     fit = "--fit" in args
-    overhaul = overhaul or fit
     shard = None
     if "--shard" in args:
         i, n = args[args.index("--shard") + 1].split("/")
         shard = (int(i), int(n))
-    Summary.job = (f"fit-{shard[0] + 1}of{shard[1]}" if shard else "fit") if fit else "world" if overhaul else "smoke"
-    prepare(server_dir, overhaul)
+    Summary.job = (f"fit-{shard[0] + 1}of{shard[1]}" if shard else "fit") if fit else "smoke"
+    prepare(server_dir, fit)
     failures = []
     extra = []
-    if not overhaul:
+    if not fit:
         check_vanilla_jigsaws(server_dir, failures)
-    log_name = "smoke-console-fit.log" if fit else "smoke-console-overhaul.log" if overhaul else "smoke-console.log"
+    log_name = "smoke-console-fit.log" if fit else "smoke-console.log"
     srv = Server(server_dir, server_command(server_dir), log_name)
     boot = time.time()
     # stop waiting as soon as the server gives up (a broken data pack used to cost the whole 15 minutes)
     started = srv.wait_for(r"Done \(|Failed to load datapacks|Crashing|Encountered an unexpected exception",
-                           1800 if overhaul else 900)
+                           1200 if fit else 900)
     Summary.phases.append(("server start (spawn area included)", time.time() - boot, ""))
     if not started or "Done (" not in started:
         failures.append("server did not finish starting")
@@ -645,13 +519,13 @@ def main():
             if fit:
                 extra = exercise_fit(srv, failures, shard)
             else:
-                (exercise_overhaul if overhaul else exercise_mod)(srv, failures)
+                exercise_mod(srv, failures)
         except TimeoutError as e:
             failures.append(str(e))
             Summary.notes.append(str(e))
     srv.run("stop")
     try:
-        srv.proc.wait(timeout=300 if overhaul else 180)  # the overhaul test saves the biome render areas
+        srv.proc.wait(timeout=300 if fit else 180)  # the fit test saves the areas it generated
     except subprocess.TimeoutExpired:
         srv.proc.kill()
         failures.append("server did not stop")

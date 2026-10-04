@@ -229,8 +229,6 @@ MESSAGES = {
     "message.wayfarers.crate.empty": ("Empty crate: put any item in to choose its kind.",
                                       "Caisse vide : range un objet pour choisir son type."),
     "message.wayfarers.crate.count": ("%s: %s / %s", "%s : %s / %s"),
-    "pack.wayfarers.world_overhaul": ("Wayfarers: new world (terrain, caves, biomes)",
-                                      "Wayfarers : nouveau monde (relief, grottes, biomes)"),
     "itemGroup.wayfarers": ("Wayfarers", "Wayfarers"),
     "key.category.wayfarers.main": ("Wayfarers", "Wayfarers"),
     "key.wayfarers.sort_inventory": ("Sort inventory", "Trier l'inventaire"),

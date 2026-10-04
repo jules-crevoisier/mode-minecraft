@@ -2,7 +2,7 @@
   "replace": false,
   "values": [
     {
-      "id": "minecraft:windswept_savanna",
+      "id": "#minecraft:is_badlands",
       "required": false
     },
     {
@@ -10,11 +10,7 @@
       "required": false
     },
     {
-      "id": "minecraft:wooded_badlands",
-      "required": false
-    },
-    {
-      "id": "minecraft:eroded_badlands",
+      "id": "minecraft:windswept_savanna",
       "required": false
     }
   ]

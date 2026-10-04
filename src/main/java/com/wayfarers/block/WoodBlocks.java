@@ -22,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.function.Supplier;
 
 /**
- * Wood blocks of the world overhaul (Glowwood, Rustwood; registered by the generated GeneratedWorldBlocks).
+ * Wood blocks of the mod (Glowwood, Rustwood; registered by the generated GeneratedWorldBlocks).
  *
  * <p>They burn like vanilla wood: vanilla's own table (FireBlock#setFlammable) is private, so each block answers
  * Forge's IForgeBlock#getFlammability / #getFireSpreadSpeed itself, with vanilla's numbers. Logs are stripped by

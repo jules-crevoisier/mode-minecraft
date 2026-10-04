@@ -115,21 +115,6 @@ public final class WayfarersCommand {
                                 .suggests((ctx, b) -> SharedSuggestionProvider.suggest(
                                         ModEntities.bosses().stream().map(r -> r.getId().getPath()), b))
                                 .executes(ctx -> boss(ctx, StringArgumentType.getString(ctx, "boss")))))
-                .then(Commands.literal("worldmap").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
-                        .executes(WorldMapCommand::run))
-                .then(Commands.literal("biomeshots").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
-                        .executes(BiomeShotsCommand::run)
-                        .then(Commands.argument("biome", StringArgumentType.word())
-                                .executes(ctx -> BiomeShotsCommand.run(ctx, StringArgumentType.getString(ctx, "biome")))))
-                .then(Commands.literal("genbench").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
-                        .then(Commands.literal("noise").executes(GenBenchCommand::noise))
-                        .then(Commands.literal("area")
-                                .then(Commands.argument("x", IntegerArgumentType.integer())
-                                        .then(Commands.argument("z", IntegerArgumentType.integer())
-                                                .then(Commands.argument("size", IntegerArgumentType.integer(1, 32))
-                                                        .executes(ctx -> GenBenchCommand.area(ctx, IntegerArgumentType.getInteger(ctx, "x"),
-                                                                IntegerArgumentType.getInteger(ctx, "z"),
-                                                                IntegerArgumentType.getInteger(ctx, "size"))))))))
                 .then(Commands.literal("fitcheck").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                         .executes(ctx -> FitCheckCommand.run(ctx, null))
                         .then(Commands.literal("shard")

@@ -215,8 +215,8 @@ PAGES = [
         ("A walled steampunk town around a clock tower over 70 blocks tall, with workshops and smoking chimneys.",
          "Une ville steampunk fortifiée autour d'une tour-horloge de plus de 70 blocs, avec ateliers et cheminées "
          "fumantes."),
-        ("Where: badlands, savannas, Rustlands, deserts and plains.",
-         "Où : badlands, savanes, Terres rouillées, déserts et plaines."),
+        ("Where: badlands, savannas, deserts and plains.",
+         "Où : badlands, savanes, déserts et plaines."),
         ("Clockwork Spiders and Steam Drones guard it. A stair in the tower's entrance hall leads down to the Clock "
          "Vault, lair of the Grand Clockmaker (see Automatons).",
          "Des araignées-horloges et des drones à vapeur la gardent. Un escalier dans le hall de la tour descend au "
@@ -297,8 +297,8 @@ PAGES = [
          "four 55-block chimneys.",
          "Des forges steampunk bâties dans un volcan fumant : une caldeira de lave sous un pont roulant, des halles "
          "de coulée et quatre cheminées de 55 blocs."),
-        ("Where: badlands, savanna plateaus and Rustlands.",
-         "Où : badlands, plateaux de savane et Terres rouillées."),
+        ("Where: badlands, savanna plateaus and windswept savannas.",
+         "Où : badlands, plateaux de savane et savanes battues par les vents."),
         ("Inside the mountain lies the Forge of the Deep: steam hammers, blast furnaces and, at the back, the Heart "
          "around a lava well. Fire resistance helps.",
          "Dans la montagne se cache la Forge des Profondeurs : marteaux-pilons, hauts fourneaux et, au fond, le "
@@ -512,10 +512,10 @@ PAGES = [
          "et du laiton : tu peux le reconstruire."),
     ], ["wayfarers:brass_block"]),
     ("clockwork_spider", "automatons", "wayfarers:brass_gear", ("Clockwork Spider", "Araignée-horloge"), [
-        ("Hostile clockwork spiders that roam in packs in the Rustlands, the Cogwork Valley, the Clockwork Citadel "
-         "and the Undercity. They climb walls.",
-         "Des araignées mécaniques hostiles qui rôdent en bande dans les Terres rouillées, la Vallée des engrenages, "
-         "la Citadelle d'horlogerie et les Bas-fonds. Elles grimpent aux murs."),
+        ("Hostile clockwork spiders that roam in packs at night in the badlands and the savanna highlands, and in "
+         "the Clockwork Citadel and the Undercity. They climb walls.",
+         "Des araignées mécaniques hostiles qui rôdent en bande la nuit dans les badlands et les hautes savanes, "
+         "ainsi que dans la Citadelle d'horlogerie et les Bas-fonds. Elles grimpent aux murs."),
         ("When one stops and its key whirs, it is about to leap: step aside. They drop brass nuggets, redstone and "
          "sometimes a brass gear.",
          "Quand l'une s'arrête et que sa clé s'emballe, elle va bondir : écarte-toi. Elles lâchent des pépites de "
@@ -609,41 +609,39 @@ PAGES = [
          "avec des lampes Edison. Le burin du graveur débloque d'autres variantes."),
     ], ["wayfarers:brass_plating", "wayfarers:gear_panel", "wayfarers:copper_pipes", "wayfarers:edison_lamp",
         "wayfarers:aether_conduit", "wayfarers:mahogany_panelling"]),
-    ("world_woods", "gear", "wayfarers:glowwood_sapling", ("Woods of the new world", "Bois du nouveau monde"), [
-        ("The new world grows two woods of its own. Glowwood, in the Enchanted Forest and the Crystal Woods: pale "
-         "trunks under teal leaves that glow at night. Rustwood, in the Rustlands, the Cogwork Valley and the Ashen "
-         "Savanna: dark red bark and rust-orange leaves.",
-         "Le nouveau monde a ses propres bois. Le bois-lueur, dans la Forêt enchantée et le Bois de cristal : troncs "
-         "pâles sous des feuilles turquoise qui luisent la nuit. Le bois rouillé, dans les Terres rouillées, la Vallée "
-         "des engrenages et la Savane cendrée : écorce rouge sombre et feuilles couleur de rouille."),
+    ("world_woods", "gear", "wayfarers:glowwood_sapling", ("Glowwood and Rustwood", "Bois-lueur et bois rouillé"), [
+        ("Two woods to grow yourself. Glowwood: pale trunks under teal leaves that glow at night. Rustwood: dark red "
+         "bark and rust-orange leaves on forked trees.",
+         "Deux bois à faire pousser soi-même. Le bois-lueur : troncs pâles sous des feuilles turquoise qui luisent "
+         "la nuit. Le bois rouillé : écorce rouge sombre et feuilles couleur de rouille sur des arbres fourchus."),
+        ("Craft a sapling: an oak sapling, glow berries and glowstone dust (Glowwood); an acacia sapling and raw iron "
+         "(Rustwood). Elven and forest ruins hide Glowwood saplings in their chests, steampunk workshops Rustwood "
+         "ones.",
+         "Fabrique une pousse : une pousse de chêne, des baies lumineuses et de la poudre de pierre lumineuse "
+         "(bois-lueur) ; une pousse d'acacia et du fer brut (bois rouillé). Les ruines elfiques et forestières "
+         "cachent des pousses de bois-lueur dans leurs coffres, les ateliers steampunk des pousses de bois rouillé."),
         ("Each gives a full set like oak: logs, bark, planks, stairs, slabs, fences, gates, doors, trapdoors, buttons "
          "and pressure plates. An axe strips the logs; the leaves drop saplings that grow the same tree.",
          "Chacun donne un ensemble complet comme le chêne : bûches, écorce, planches, escaliers, dalles, barrières, "
          "portillons, portes, trappes, boutons et plaques de pression. La hache écorce les bûches ; les feuilles "
          "donnent des pousses qui font repousser le même arbre."),
-        ("No new world? Craft a sapling: an oak sapling, glow berries and glowstone dust (Glowwood); an acacia "
-         "sapling and raw iron (Rustwood).",
-         "Pas de nouveau monde ? Fabrique une pousse : une pousse de chêne, des baies lumineuses et de la poudre de "
-         "pierre lumineuse (bois-lueur) ; une pousse d'acacia et du fer brut (bois rouillé)."),
     ], ["wayfarers:glowwood_sapling", "wayfarers:rustwood_sapling", "wayfarers:glowwood_log", "wayfarers:rustwood_log",
         "wayfarers:glowwood_planks", "wayfarers:rustwood_planks", "wayfarers:glowwood_leaves",
         "wayfarers:rustwood_leaves"]),
-    ("world_stones", "gear", "wayfarers:marble_pillar", ("Stones of the new world", "Pierres du nouveau monde"), [
-        ("Three stones: marble in bands across the cliffs of the Majestic Peaks, the Stone Spires and the Highland "
-         "Meadow; rust rock in the Rustlands; blue slate on the floor of the Slate Sea and in the banks of the Pine "
-         "Highlands.",
-         "Trois pierres : le marbre, en bandes dans les falaises des Pics majestueux, des Aiguilles de pierre et de "
-         "l'Alpage ; la roche rouillée dans les Terres rouillées ; l'ardoise bleue au fond de la Mer d'ardoise et dans "
-         "les talus des Hautes terres de pins."),
+    ("world_stones", "gear", "wayfarers:marble_pillar", ("Marble, rust rock, blue slate", "Marbre, roche rouillée, ardoise bleue"), [
+        ("Three stones, found in big veins like granite: marble in the mountains (from y 32 up), rust rock in the "
+         "badlands and the savanna highlands, blue slate deep down in the deepslate (below y 0).",
+         "Trois pierres, en grosses veines comme le granite : le marbre dans les montagnes (dès y 32), la roche "
+         "rouillée dans les badlands et les hautes savanes, l'ardoise bleue tout en bas dans l'ardoise des abîmes "
+         "(sous y 0)."),
         ("Polished, bricks, pillar, tiles, stairs, slabs and walls come from the stonecutter, and the Engraver's "
          "Chisel switches between them.",
          "Poli, briques, pilier, carreaux, escaliers, dalles et murets sortent du tailleur de pierre, et le burin du "
          "graveur passe de l'un à l'autre."),
-        ("No new world? Two calcite and two diorite make 4 marble; four granite around an iron nugget, 4 rust rock; "
+        ("Or craft them: two calcite and two diorite make 4 marble; four granite around an iron nugget, 4 rust rock; "
          "four cobbled deepslate around a lapis lazuli, 4 blue slate.",
-         "Pas de nouveau monde ? Deux calcites et deux diorites donnent 4 marbres ; quatre granites autour d'une "
-         "pépite de fer, 4 roches rouillées ; quatre pierres des abîmes taillées autour d'un lapis-lazuli, 4 ardoises "
-         "bleues."),
+         "Ou fabrique-les : deux calcites et deux diorites donnent 4 marbres ; quatre granites autour d'une pépite de "
+         "fer, 4 roches rouillées ; quatre pierres des abîmes taillées autour d'un lapis-lazuli, 4 ardoises bleues."),
     ], ["wayfarers:marble", "wayfarers:marble_pillar", "wayfarers:chiseled_marble", "wayfarers:rust_rock",
         "wayfarers:rust_rock_bricks", "wayfarers:blue_slate", "wayfarers:blue_slate_tiles"]),
     ("tools", "gear", "wayfarers:excavator_pickaxe", ("Special tools", "Outils spéciaux"), [

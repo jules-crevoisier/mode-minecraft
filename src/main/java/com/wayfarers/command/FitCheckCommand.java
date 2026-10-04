@@ -55,7 +55,7 @@ import java.util.Optional;
  * </ul>
  * Each one is drawn in place as an isometric diorama (wayfarers-fit-&lt;id&gt;.png, {@link IsoRenderer}); the report
  * wayfarers-fit.txt gives one line per structure with OK / MISFIT / NOT_FOUND / SKIPPED. CI (tools/ci_smoke.py
- * --fit) fails on a MISFIT, so every change of the terrain generator is checked against every structure.
+ * --fit) runs it in a fresh vanilla world and fails on a MISFIT, so every structure is checked on real terrain.
  *
  * <p>{@code /wayfarers fitcheck shard <i> <n>} checks every n-th structure from the i-th (CI runs two shards on two
  * machines) and writes wayfarers-fit-shard&lt;i&gt;.txt. The whole command keeps to {@link #BUDGET_MS} and each
@@ -386,8 +386,8 @@ public final class FitCheckCommand {
         int y0 = mode.equals("sky") ? Math.min(box.minY(), lowest) - 4 : Math.min(g, lowest) - 12;
         y0 = Math.max(level.getMinY(), Math.max(y0, y1 - MAX_HEIGHT));
         try {
-            int[] vox = BiomeShotsCommand.sample(level, x0, z0, sx, sz, y0, y1, -1);
-            BufferedImage img = new IsoRenderer(sx, y1 - y0 + 1, sz, vox, false).render();
+            int[] vox = BlockSampler.sample(level, x0, z0, sx, sz, y0, y1);
+            BufferedImage img = new IsoRenderer(sx, y1 - y0 + 1, sz, vox).render();
             String name = "wayfarers-fit-" + id + ".png";
             ImageIO.write(IsoRenderer.frame(img, FRAME_W, FRAME_H), "png", dir.resolve(name).toFile());
             return name;

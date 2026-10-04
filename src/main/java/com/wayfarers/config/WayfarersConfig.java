@@ -6,11 +6,6 @@ import net.minecraftforge.common.ForgeConfigSpec;
 public final class WayfarersConfig {
     private static final ForgeConfigSpec.Builder B = new ForgeConfigSpec.Builder();
 
-    public static final ForgeConfigSpec.BooleanValue WORLD_OVERHAUL = B
-            .comment("New worlds use the Wayfarers terrain, caves and biomes (a built-in data pack, \"wayfarers:world_overhaul\").",
-                    "Set to false to keep the vanilla Overworld; the pack then stays available, unticked, in the Data Packs screen.",
-                    "Existing worlds keep whatever they were created with.")
-            .define("world.overhaul", true);
     public static final ForgeConfigSpec.BooleanValue STRUCTURE_FIT = B
             .comment("Wayfarers structures only start where the terrain suits them: flat enough dry ground for buildings,",
                     "a shore for the lighthouse, open sea floor for wrecks, clear sky under floating isles. A site that does not",

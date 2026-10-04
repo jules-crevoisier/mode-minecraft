@@ -1,13 +1,13 @@
-"""World blocks: the two woods of the world overhaul (Glowwood, Rustwood).
+"""World blocks: the two woods of the mod (Glowwood, Rustwood) and the recipes and veins of its three stones.
 
 One table drives the Java registration (GeneratedWorldBlocks.java), textures, models, blockstates, recipes, loot,
-tags and translations, like metals.py. The three new stones (marble, rust rock, blue slate) are plain building
-blocks and live in decor.py (stairs, slabs and walls come with it); their surface rules and veins are in
-biomes.py / worldfeatures.py.
+tags and translations, like metals.py. The three stones (marble, rust rock, blue slate) are plain building blocks
+and live in decor.py (stairs, slabs and walls come with it); STONE_VEINS below scatters them as ore-like blobs in the
+vanilla Overworld (Forge biome modifiers), and a crafting recipe makes each from vanilla stones.
 
 Woods use vanilla's oak BlockSetType / WoodType (sounds, door rules), so no custom set has to be registered; no signs
-or boats. Trees: data/wayfarers/worldgen/configured_feature/<wood>_tree.json (always loaded, the saplings grow
-them); the overhaul's placed features plant them in the biomes.
+or boats. Trees: data/wayfarers/worldgen/configured_feature/<wood>_tree.json, grown from the saplings; a sapling is
+crafted from a vanilla one (sapling_recipe) and turns up in the chests of the structures that suit it (gen_loot.py).
 """
 from . import texgen_world as W
 
@@ -164,7 +164,7 @@ def java():
     for w, d in WOODS.items():
         W_ = w.upper()
         wood, bark, leaves = d["color_wood"], d["color_bark"], d["color_leaves"]
-        L.append(f'    /** Grows {NS}:{w}_tree (data/{NS}/worldgen/configured_feature), also planted by the world overhaul. */')
+        L.append(f'    /** Grows {NS}:{w}_tree (data/{NS}/worldgen/configured_feature). */')
         L.append(f'    public static final TreeGrower {W_}_GROWER = new TreeGrower("{NS}_{w}", Optional.empty(), '
                  f'Optional.of(feature("{w}_tree")), Optional.empty());')
         for bid, kind in ids(w).items():
@@ -543,7 +543,7 @@ def data(write):
         write(f"{NS}/recipe/{w}_button.json", {"type": "minecraft:crafting_shapeless", "category": "redstone",
                                               "group": "wooden_button", "ingredients": [P],
                                               "result": {"id": f"{NS}:{w}_button", "count": 1}})
-        # a sapling from vanilla ones, so the trees can be grown in any world (with or without the overhaul)
+        # a sapling from a vanilla one: the trees do not grow wild, so this (and structure loot) is their source
         write(f"{NS}/recipe/{w}_sapling.json", {"type": "minecraft:crafting_shapeless", "category": "misc",
                                                "ingredients": d["sapling_recipe"],
                                                "result": {"id": f"{NS}:{w}_sapling", "count": 1}})
@@ -558,7 +558,7 @@ STONE_SETS = {
     "rust_rock": ["polished_rust_rock", "rust_rock_bricks"],
     "blue_slate": ["polished_blue_slate", "blue_slate_bricks", "blue_slate_tiles"],
 }
-# the raw stone from vanilla blocks, for worlds without the overhaul: (pattern, key, count)
+# the raw stone from vanilla blocks, besides the veins below: (pattern, key, count)
 STONE_CRAFT = {
     "marble": (["CD", "DC"], {"C": "minecraft:calcite", "D": "minecraft:diorite"}, 4),
     "rust_rock": ([" G ", "GIG", " G "], {"G": "minecraft:granite", "I": "minecraft:iron_nugget"}, 4),
@@ -566,10 +566,46 @@ STONE_CRAFT = {
 }
 
 
+# Veins of the raw stones in the vanilla Overworld, like granite or tuff blobs: stone -> (biomes, replaced blocks,
+# blob size, blobs per chunk, (min y, max y)). Biomes are vanilla ids or tags (a wayfarers:stone_veins/<stone> biome
+# tag is written for them); the blob replaces stone or deepslate like an ore.
+STONE_VEINS = {
+    # white marble in the mountains and their meadows, from the valleys to the peaks
+    "marble": (["#minecraft:is_mountain", "minecraft:windswept_hills", "minecraft:windswept_gravelly_hills",
+                "minecraft:windswept_forest"], "stone", 48, 3, (32, 192)),
+    # rust rock in the red lands: badlands and the windswept savannas
+    "rust_rock": (["#minecraft:is_badlands", "minecraft:savanna_plateau", "minecraft:windswept_savanna"],
+                  "stone", 48, 3, (32, 160)),
+    # blue slate deep down, in the deepslate of every Overworld biome
+    "blue_slate": (["#minecraft:is_overworld"], "deepslate", 40, 2, (-64, 0)),
+}
+
+
+def stone_veins(write):
+    """Configured and placed ore features, biome tags and Forge biome modifiers for STONE_VEINS."""
+    for base, (biomes, host, size, count, (lo, hi)) in STONE_VEINS.items():
+        write(f"{NS}/tags/worldgen/biome/stone_veins/{base}.json", {
+            "replace": False, "values": [{"id": b, "required": False} for b in biomes]})
+        write(f"{NS}/worldgen/configured_feature/{base}_vein.json", {"type": "minecraft:ore", "config": {
+            "size": size, "discard_chance_on_air_exposure": 0.0, "targets": [
+                {"target": {"predicate_type": "minecraft:tag_match", "tag": f"minecraft:{host}_ore_replaceables"},
+                 "state": {"Name": f"{NS}:{base}"}}]}})
+        write(f"{NS}/worldgen/placed_feature/{base}_vein.json", {"feature": f"{NS}:{base}_vein", "placement": [
+            {"type": "minecraft:count", "count": count}, {"type": "minecraft:in_square"},
+            {"type": "minecraft:height_range", "height": {"type": "minecraft:uniform",
+                                                          "min_inclusive": {"absolute": lo},
+                                                          "max_inclusive": {"absolute": hi}}},
+            {"type": "minecraft:biome"}]})
+        write(f"{NS}/forge/biome_modifier/add_{base}_veins.json", {
+            "type": "forge:add_features", "biomes": f"#{NS}:stone_veins/{base}",
+            "features": f"{NS}:{base}_vein", "step": "underground_ores"})
+
+
 def stone_data(write):
     """Crafting and stonecutter recipes between the forms of each stone (decor_data already cuts every block into
-    its own stairs, slab and wall)."""
+    its own stairs, slab and wall), and their veins in the world."""
     from . import decor
+    stone_veins(write)
 
     def cut(src, dst, count=1):
         write(f"{NS}/recipe/{dst}_from_{src}_stonecutting.json", {

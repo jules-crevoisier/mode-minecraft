@@ -36,7 +36,7 @@ import java.util.EnumSet;
 
 /**
  * Drone à vapeur (Steam Drone): a flying copper boiler with two rotors and a rivet gun. It hunts at night in the
- * Rustlands and the Cogwork Valley, and in the dark of the Undercity.
+ * badlands and the savanna highlands, and in the dark of the Undercity.
  * <ul>
  *     <li>Hovers without gravity (vanilla {@link FlyingMoveControl}, like the allay), keeps 6 to 11 blocks from its
  *     prey and 3 to 5 blocks above it, slowly circling.</li>

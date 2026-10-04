@@ -2,15 +2,10 @@ package com.wayfarers.registry;
 
 import com.wayfarers.Wayfarers;
 import com.wayfarers.world.ChunkedPoolElement;
-import com.wayfarers.world.ClearOfStructuresFilter;
 import com.wayfarers.world.CuratedSpreadPlacement;
 import com.wayfarers.world.FittedJigsawStructure;
 import com.wayfarers.world.GroundedPoolElement;
-import com.wayfarers.world.SharedColumnFunction;
-import com.mojang.serialization.MapCodec;
-import net.minecraft.world.level.levelgen.DensityFunction;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
 import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraft.world.level.levelgen.structure.placement.StructurePlacementType;
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElementType;
@@ -19,7 +14,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 /**
  * Worldgen codecs the data pack refers to: the column-split and grounded template pool elements, the structure placement and the
- * terrain-fitted jigsaw structure type, and the shared column stage of the overhaul terrain.
+ * terrain-fitted jigsaw structure type.
  */
 public final class ModWorldgen {
     public static final DeferredRegister<StructurePoolElementType<?>> POOL_ELEMENTS =
@@ -29,20 +24,6 @@ public final class ModWorldgen {
 
     public static final DeferredRegister<StructureType<?>> STRUCTURE_TYPES =
             DeferredRegister.create(Registries.STRUCTURE_TYPE, Wayfarers.MODID);
-
-    public static final DeferredRegister<MapCodec<? extends DensityFunction>> DENSITY_FUNCTION_TYPES =
-            DeferredRegister.create(Registries.DENSITY_FUNCTION_TYPE, Wayfarers.MODID);
-
-    public static final DeferredRegister<PlacementModifierType<?>> PLACEMENT_MODIFIERS =
-            DeferredRegister.create(Registries.PLACEMENT_MODIFIER_TYPE, Wayfarers.MODID);
-
-    /** {@code "type": "wayfarers:clear_of_structures"} on the overhaul's surface features (tools/wf/worldfeatures.py). */
-    public static final RegistryObject<PlacementModifierType<ClearOfStructuresFilter>> CLEAR_OF_STRUCTURES =
-            PLACEMENT_MODIFIERS.register("clear_of_structures", () -> () -> ClearOfStructuresFilter.CODEC);
-
-    /** {@code "type": "wayfarers:shared_2d"} around each named 2D stage of the overhaul terrain (tools/wf/terrain.py). */
-    public static final RegistryObject<MapCodec<SharedColumnFunction>> SHARED_2D =
-            DENSITY_FUNCTION_TYPES.register("shared_2d", () -> SharedColumnFunction.MAP_CODEC);
 
     /** {@code "element_type": "wayfarers:chunked_template"} (written by tools/wf/chunking.py). */
     public static final RegistryObject<StructurePoolElementType<ChunkedPoolElement>> CHUNKED_TEMPLATE =

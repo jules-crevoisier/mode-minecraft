@@ -263,9 +263,9 @@ def entity_loot():
                                                         "random_sequence": f"{NS}:entities/{name}"})
 
 
-# biomes where automatons roam: the overhaul's Rustlands and Cogwork Valley, and the vanilla biomes they replace
-# (so the mobs exist with or without the world overhaul pack)
-AUTOMATON_BIOMES = ["minecraft:windswept_savanna", "minecraft:wooded_badlands", f"{NS}:rustlands", f"{NS}:cogwork_valley"]
+# biomes where automatons roam: the red, rocky lands around the Clockwork Citadel and the Geothermal Foundry
+AUTOMATON_BIOMES = ["minecraft:windswept_savanna", "minecraft:savanna_plateau", "minecraft:wooded_badlands",
+                    "minecraft:eroded_badlands"]
 
 
 def automaton_spawns():

@@ -1,10 +1,6 @@
 {
   "replace": false,
   "values": [
-    "minecraft:warm_ocean",
-    {
-      "id": "wayfarers:coral_lagoon",
-      "required": false
-    }
+    "minecraft:warm_ocean"
   ]
 }

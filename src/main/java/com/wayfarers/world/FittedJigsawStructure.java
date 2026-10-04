@@ -121,8 +121,8 @@ public final class FittedJigsawStructure extends Structure {
 
     /**
      * Chunk offsets tried when the grid cell's own spot does not fit: the start may slide up to two chunks (32 blocks)
-     * to a flatter or drier spot nearby, instead of the whole cell being lost (on the overhaul's hills and lakes most
-     * cells failed by a few blocks). Two chunks keep the pieces well inside the reach of structure references.
+     * to a flatter or drier spot nearby, instead of the whole cell being lost (on hills and by lakes most failing cells
+     * miss by a few blocks). Two chunks keep the pieces well inside the reach of structure references.
      */
     private static final int[][] NUDGES = {{0, 0}, {2, 0}, {-2, 0}, {0, 2}, {0, -2}};
     /** Jigsaw assemblies plus full terrain checks per grid cell, at most (the expensive part of a site check). */

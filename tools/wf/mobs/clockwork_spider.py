@@ -1,4 +1,4 @@
-"""Clockwork Spider (Araignée-horloge): a small, fast brass automaton of the Rustlands and the Cogwork Valley.
+"""Clockwork Spider (Araignée-horloge): a small, fast brass automaton of the badlands and the savanna highlands.
 
 Silhouette idea: a wind-up toy gone feral. A riveted brass thorax on eight needle legs that bend at little cog
 joints, a dark iron head with two big ruby lenses and copper pincers, and a banded spring barrel for an abdomen

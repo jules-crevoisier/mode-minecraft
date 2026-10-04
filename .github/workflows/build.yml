@@ -74,7 +74,7 @@ jobs:
             server/crash-reports/
             server/smoke-console*.log
 
-      # the diagnostic summary (phases, chunk generation speed, FAIL lines) goes to the previews release
+      # the diagnostic summary (phases, FAIL lines) goes to the previews release
       - name: Upload the test summary
         if: always()
         uses: actions/upload-artifact@v4
@@ -83,12 +83,11 @@ jobs:
           if-no-files-found: ignore
           path: server/wayfarers-ci-*.txt
 
-  # The overhaul world, in three parts on three machines: "world" checks every biome, measures the chunk generation
-  # speed, draws the world map and a render of each biome; "fit-1" and "fit-2" (every second structure each) locate
-  # the Overworld structures of the mod, generate them and measure how they sit on the terrain (/wayfarers fitcheck:
-  # floating edges, buried edges, flooding), with a render of each in place. A misfit fails the job, so every change
-  # of the terrain generator is checked against every structure. Each part keeps to ~35 minutes of test.
-  world-test:
+  # The structure fit test, in a fresh world with Minecraft's own generator (the mod adds no terrain or biome), in two
+  # shards on two machines (every second structure each): /wayfarers fitcheck locates the Overworld structures of the
+  # mod, generates them and measures how they sit on the vanilla terrain (floating edges, buried edges, flooding),
+  # with a render of each in place. A misfit fails the job. Each shard keeps to ~35 minutes of test.
+  fit-test:
     needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 50
@@ -96,7 +95,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - part: world
           - part: fit-1
             shard: "0/2"
           - part: fit-2
@@ -121,39 +119,29 @@ jobs:
           java -jar installer.jar --installServer server > install.log 2>&1 || (tail -50 install.log; exit 1)
           cp jar/wayfarers-*.jar server/mods/
 
-      - name: Run the world overhaul test (new world, every biome, world map, biome renders)
-        if: matrix.part == 'world'
-        run: python3 tools/ci_smoke.py server --overhaul
-
-      - name: Run the structure fit test (every Overworld structure located, generated and measured in the overhaul world)
-        if: matrix.part != 'world'
-        run: python3 tools/ci_smoke.py server --overhaul --fit --shard ${{ matrix.shard }}
+      - name: Run the structure fit test (every Overworld structure located, generated and measured in a vanilla world)
+        run: python3 tools/ci_smoke.py server --fit --shard ${{ matrix.shard }}
 
       - name: Upload the server logs
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: world-test-logs-${{ matrix.part }}
+          name: fit-test-logs-${{ matrix.part }}
           path: |
             server/logs/
             server/crash-reports/
             server/smoke-console*.log
 
-      - name: Upload the world previews
+      - name: Upload the fit renders and reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: world-previews-${{ matrix.part }}
           if-no-files-found: ignore
           path: |
-            server/wayfarers-worldmap*.png
-            server/wayfarers-worldmap.txt
-            server/wayfarers-biome-*.png
-            server/wayfarers-biomes.txt
             server/wayfarers-fit-*.png
             server/wayfarers-fit*.txt
             server/wayfarers-ci-*.txt
-            server/wayfarers-genbench.txt
 
   # Runs the real client (software OpenGL under Xvfb) through ForgeGradle's runClient. client/CiDriver creates a
   # world, opens every screen of the mod, places machines, summons creatures and the Clockwork Citadel, and saves a
@@ -210,9 +198,9 @@ jobs:
             run/ci-client-console.log
 
   previews:
-    # the world map images and the client screenshots go to their own pre-release, even when a test failed,
-    # so they can be looked at
-    needs: [smoke-test, world-test, client-test]
+    # the structure fit renders, the test summaries and the client screenshots go to their own pre-release, even when
+    # a test failed, so they can be looked at
+    needs: [smoke-test, fit-test, client-test]
     if: always()
     runs-on: ubuntu-latest
     steps:
@@ -240,19 +228,19 @@ jobs:
           fi
           ls previews/wayfarers-ci-*.txt 2>/dev/null || echo "no test summaries"
 
-      - name: Publish the world previews
+      - name: Publish the previews
         if: hashFiles('previews/*') != ''
         uses: softprops/action-gh-release@v2
         with:
           tag_name: previews-${{ github.ref_name }}
-          name: Wayfarers — aperçus du monde (${{ github.ref_name }})
+          name: Wayfarers — aperçus (${{ github.ref_name }})
           prerelease: true
           make_latest: false
-          body: Carte des biomes, biomes souterrains et coupe du relief générés par /wayfarers worldmap, un rendu 3D de chaque biome par /wayfarers biomeshots, chaque structure en place sur le relief avec sa mesure d'intégration (wayfarers-fit-*.png, wayfarers-fit.txt, /wayfarers fitcheck), le résumé de chaque test serveur (wayfarers-ci-*.txt, durée des phases, vitesse de génération des chunks en ms/chunk face au vanilla, lignes FAIL), et des captures du vrai client (wayfarers-shot-*.png — écrans, HUD, créatures, Citadelle) prises par le job client-test (commit ${{ github.sha }}).
+          body: Chaque structure en place sur le relief d'un monde vanilla avec sa mesure d'intégration (wayfarers-fit-*.png, wayfarers-fit.txt, /wayfarers fitcheck), le résumé de chaque test serveur (wayfarers-ci-*.txt, durée des phases, lignes FAIL), et des captures du vrai client (wayfarers-shot-*.png — écrans, HUD, créatures, Citadelle) prises par le job client-test (commit ${{ github.sha }}).
           files: previews/*
 
   release:
-    needs: [build, smoke-test, world-test]
+    needs: [build, smoke-test, fit-test]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v4

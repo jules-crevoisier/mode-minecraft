@@ -12,10 +12,6 @@
     {
       "id": "minecraft:deep_lukewarm_ocean",
       "required": false
-    },
-    {
-      "id": "wayfarers:coral_lagoon",
-      "required": false
     }
   ]
 }

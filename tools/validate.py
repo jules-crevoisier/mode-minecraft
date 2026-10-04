@@ -284,15 +284,7 @@ def check_worldgen():
                     f"({chunking.SPLIT_AXIS} blocks wide / {chunking.SPLIT_ENTRIES} entries): gen_structures should split it")
             if not os.path.exists(res_path(e["processors"], "worldgen/processor_list", ".json")):
                 err(f"{path}: processor list {e['processors']} missing")
-    biomes = set(MC_GAME["biomes"])
-    for path in glob.glob(os.path.join(ns_dir, "tags", "worldgen", "biome", "**", "*.json"), recursive=True):
-        for v in json.load(open(path))["values"]:
-            rid = v["id"] if isinstance(v, dict) else v
-            if rid.startswith("#minecraft:"):
-                if rid[11:] not in VANILLA_BIOME_TAGS:
-                    err(f"{path}: unknown biome tag {rid}")
-            elif rid.startswith("minecraft:") and rid[10:] not in biomes:
-                err(f"{path}: unknown biome {rid}")
+    check_biome_refs()
     # codec ranges the game enforces when it loads features (a value out of range stops the server from starting)
     def walk(node, path):
         if isinstance(node, dict):
@@ -309,15 +301,65 @@ def check_worldgen():
         elif isinstance(node, list):
             for v in node:
                 walk(v, path)
-    for root in (DATA, os.path.join(os.path.dirname(DATA), "worldgen_pack", "data")):
-        for path in glob.glob(os.path.join(root, "*", "worldgen", "*_feature", "*.json")):
-            walk(json.load(open(path)), path)
+    for path in glob.glob(os.path.join(DATA, "*", "worldgen", "*_feature", "*.json")):
+        walk(json.load(open(path)), path)
     sets = {}
     for path in glob.glob(os.path.join(ns_dir, "worldgen", "structure_set", "*.json")):
         salt = json.load(open(path))["placement"]["salt"]
         if salt in sets:
             err(f"duplicate structure_set salt {salt}: {path} / {sets[salt]}")
         sets[salt] = path
+
+
+def check_biome_refs():
+    """Every biome a data file names (biome tags, Forge biome modifiers, structures, predicates) is a vanilla biome or a tag that
+    exists: the mod adds no biome of its own (world generation stays vanilla), so a wayfarers: biome id is an error."""
+    biomes = set(MC_GAME["biomes"])
+
+    def check(where, rid):
+        if rid.startswith("#"):
+            ns, path = rid[1:].split(":", 1)
+            if ns == "minecraft":
+                if path not in VANILLA_BIOME_TAGS:
+                    err(f"{where}: unknown biome tag {rid}")
+            elif not os.path.exists(os.path.join(DATA, ns, "tags", "worldgen", "biome", path + ".json")):
+                err(f"{where}: biome tag {rid} missing")
+        elif ":" in rid and not rid.startswith("minecraft:"):
+            err(f"{where}: biome {rid} is not a vanilla biome (the mod adds none)")
+        elif rid.split(":")[-1] not in biomes:
+            err(f"{where}: unknown biome {rid}")
+
+    def values(v):
+        v = v if isinstance(v, list) else [v]
+        return [x.get("id") if isinstance(x, dict) else x for x in v]
+    for path in glob.glob(os.path.join(DATA, "*", "tags", "worldgen", "biome", "**", "*.json"), recursive=True):
+        for rid in values(json.load(open(path))["values"]):
+            check(path, rid)
+    # every "biome" / "biomes" field of every other data file: Forge biome modifiers, structures, advancement and
+    # loot location predicates...
+    def walk(node, path):
+        if isinstance(node, dict):
+            for k, v in node.items():
+                if k in ("biome", "biomes") and (isinstance(v, str) or isinstance(v, list)
+                                                 and all(isinstance(x, (str, dict)) for x in v)):
+                    for rid in values(v):
+                        if isinstance(rid, str):
+                            check(path, rid)
+                else:
+                    walk(v, path)
+        elif isinstance(node, list):
+            for v in node:
+                walk(v, path)
+    for path in glob.glob(os.path.join(DATA, "**", "*.json"), recursive=True):
+        if os.sep + os.path.join("tags", "worldgen", "biome") + os.sep not in path:
+            walk(json.load(open(path)), path)
+    # and the biome lists the structure tags are written from
+    from wf import defs
+    import wf.structures  # noqa: F401
+    for sdef in defs.STRUCTURES:
+        for b in sdef.biomes:
+            if b.startswith("wayfarers:"):
+                err(f"structure {sdef.id}: biome {b} is not vanilla (tools/wf/structures, tools/wf/placement.py)")
 
 
 def check_vanilla_overrides():
@@ -629,7 +671,6 @@ def check_pack_meta():
 
 
 # ------------------------------------------------------------------ recipes: conflicts and survival obtainability
-WORLD_DATA = os.path.join(RES, "worldgen_pack", "data")
 VANILLA_RECIPES = os.path.join(ROOT, "tools", "data", "vanilla_recipes_26.2.json")
 # vanilla items a survival player can never get
 CREATIVE_ONLY = {"bedrock", "barrier", "command_block", "chain_command_block", "repeating_command_block",
@@ -678,12 +719,11 @@ def _mod_tag(tag):
     """Members of one of our item tags (wayfarers namespace or vanilla tags we add to), recursively."""
     ns, path = tag.split(":") if ":" in tag else ("minecraft", tag)
     out = set()
-    for root in (DATA, WORLD_DATA):
-        p = os.path.join(root, ns, "tags", "item", path + ".json")
-        if os.path.exists(p):
-            for v in json.load(open(p))["values"]:
-                v = v["id"] if isinstance(v, dict) else v
-                out |= _mod_tag(v[1:]) if v.startswith("#") else {_short(v)}
+    p = os.path.join(DATA, ns, "tags", "item", path + ".json")
+    if os.path.exists(p):
+        for v in json.load(open(p))["values"]:
+            v = v["id"] if isinstance(v, dict) else v
+            out |= _mod_tag(v[1:]) if v.startswith("#") else {_short(v)}
     return out
 
 
@@ -828,16 +868,36 @@ def check_obtainable(recipes):
     have = {i for i in MC_GAME["items"] if i not in CREATIVE_ONLY}
     have |= {f"wayfarers:{i}" for i in JAVA_SOURCES}
     block_drops, placed = {}, set()
-    for root in (DATA, WORLD_DATA):
-        for path in glob.glob(os.path.join(root, "*", "loot_table", "**", "*.json"), recursive=True):
-            rel = os.path.relpath(path, root).replace(os.sep, "/")
-            names = _loot_names(json.load(open(path)))
-            if "/loot_table/blocks/" in "/" + rel:
-                block_drops["wayfarers:" + os.path.basename(path)[:-5] if rel.startswith("wayfarers/") else rel] = names
-            else:
-                have |= names
-        for path in glob.glob(os.path.join(root, "*", "worldgen", "**", "*.json"), recursive=True):
-            placed |= set(re.findall(r'"(wayfarers:[a-z0-9_]+)"', open(path).read()))
+    for path in glob.glob(os.path.join(DATA, "*", "loot_table", "**", "*.json"), recursive=True):
+        rel = os.path.relpath(path, DATA).replace(os.sep, "/")
+        names = _loot_names(json.load(open(path)))
+        if "/loot_table/blocks/" in "/" + rel:
+            block_drops["wayfarers:" + os.path.basename(path)[:-5] if rel.startswith("wayfarers/") else rel] = names
+        else:
+            have |= names
+    # blocks a feature places: only features some biome modifier adds to the world count (a feature no biome
+    # uses, like a tree only a sapling grows, is not a source)
+    used = set()
+    for path in glob.glob(os.path.join(DATA, "*", "forge", "biome_modifier", "*.json")):
+        f = json.load(open(path)).get("features", [])
+        used |= set([f] if isinstance(f, str) else f)
+    for fid in sorted(used):
+        ns, name_ = fid.split(":", 1)
+        pf = os.path.join(DATA, ns, "worldgen", "placed_feature", name_ + ".json")
+        if not os.path.exists(pf):
+            continue
+        text = open(pf).read()
+        for cf in re.findall(r'"feature": "([a-z0-9_]+:[a-z0-9_/]+)"', text):
+            cns, cname = cf.split(":", 1)
+            cpath = os.path.join(DATA, cns, "worldgen", "configured_feature", cname + ".json")
+            if os.path.exists(cpath):
+                text += open(cpath).read()
+        placed |= set(re.findall(r'"Name": "(wayfarers:[a-z0-9_]+)"', text))
+    # a sapling grows its tree (configured_feature <wood>_tree, GeneratedWorldBlocks)
+    trees = {}
+    for path in glob.glob(os.path.join(DATA, "wayfarers", "worldgen", "configured_feature", "*_tree.json")):
+        sapling = "wayfarers:" + os.path.basename(path)[:-len("_tree.json")] + "_sapling"
+        trees[sapling] = set(re.findall(r'"Name": "(wayfarers:[a-z0-9_]+)"', open(path).read()))
     if not TEMPLATE_BLOCKS:  # run on its own, without check_templates() having read the templates
         for path in glob.glob(os.path.join(DATA, "*", "structure", "**", "*.nbt"), recursive=True):
             TEMPLATE_BLOCKS.update(e["Name"] for e in nbt.load(path)["palette"])
@@ -868,6 +928,10 @@ def check_obtainable(recipes):
         for fam in families:
             if fam & have and not fam <= have:
                 have |= fam
+                changed = True
+        for sapling, blocks in trees.items():
+            if sapling in have and not blocks <= placed:
+                placed |= blocks
                 changed = True
         for log, stripped in strips:
             if log in have and stripped not in have:
@@ -950,9 +1014,6 @@ def main():
     from wf import machines
     for e in machines.check_gui():
         err(e)
-    import validate_world
-    if validate_world.main() != 0:
-        err("world overhaul pack: see the errors above")
     for w in sorted(set(warnings)):
         print("warning:", w)
     for e in errors:

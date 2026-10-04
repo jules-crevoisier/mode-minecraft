@@ -177,9 +177,9 @@ DECOR.update(CHISEL_ONLY)
 
 
 def _world_stones():
-    """Stones of the world overhaul (wf/worldblocks.py has the woods): marble in the mountains, rust rock in the
-    Rustlands, blue slate on the cold coasts and pine highlands (surface rules in biomes.py, veins in
-    worldfeatures.py). Crafted too (gen_data), so they exist in any world. pillar=True: a log-like block that turns
+    """The mod's three stones (wf/worldblocks.py has the woods, their recipes and their veins): marble in the
+    mountains, rust rock in the badlands and savanna highlands, blue slate in the deepslate. Crafted too from vanilla
+    stones. pillar=True: a log-like block that turns
     with the face it is placed on."""
     from . import texgen_world as G
     marble = lambda: G.marble(seed=80)  # noqa: E731

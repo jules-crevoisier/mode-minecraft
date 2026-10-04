@@ -1,12 +1,12 @@
 """French editorial text for the illustrated wiki (tools/gen_wiki.py).
 
-Everything else in the wiki comes from the data tables (content, guide, machines, metals, skills, biomes,
-structures, recipes, loot...). This file only adds the plain-language explanations that the data does not
+Everything else in the wiki comes from the data tables (content, guide, machines, metals, skills, structures,
+recipes, loot...). This file only adds the plain-language explanations that the data does not
 carry. Every table is optional: an id missing here still gets a card, with an automatic description.
 """
 
 TAGLINE = ("Un mod d'exploration à plusieurs pour Minecraft 26.2 : des dizaines de structures géantes, des boss "
-           "façon Elden Ring, un monde neuf, de la magie, des machines simples et tout le confort pour ranger "
+           "façon Elden Ring, des océans vivants, de la magie, des machines simples et tout le confort pour ranger "
            "moins et explorer plus.")
 
 # "Par où commencer" : (titre, texte, [ids d'objets illustrés])
@@ -68,13 +68,14 @@ COMMANDS = {
     "locate": ("op", "Indique où se trouve la structure demandée."),
     "tp": ("op", "Téléporte vers la structure demandée (la génère si besoin)."),
     "boss": ("op", "Fait apparaître un boss devant toi, pour le tester."),
-    "worldmap": ("op", "Écrit une carte des biomes autour de toi (images PNG dans le dossier du monde)."),
-    "biomeshots": ("op", "Génère un coin de chaque biome du mod et le dessine en 3D (une image PNG par biome dans le dossier du serveur). Prend plusieurs minutes ; ajoute un nom de biome pour n'en faire qu'un."),
+    "fitcheck": ("op", "Trouve chaque structure de la Surface, la génère et mesure comment elle se pose sur le relief (rapport et images PNG dans le dossier du serveur). Sert aux tests ; prend plusieurs minutes."),
     "progress": ("op", "reset : remet la quête à zéro ; complete : accorde toutes les quêtes."),
 }
 
 CONFIG_FR = {
-    "world.overhaul": "Les nouveaux mondes utilisent le relief, les grottes et les 52 biomes de Wayfarers.",
+    "world.structureFit": "Les structures du mod ne démarrent que là où le terrain leur convient : sol assez plat et "
+                          "sec pour les bâtiments, un rivage pour le phare, un fond marin dégagé pour les épaves. Sur "
+                          "false, elles apparaissent partout où la grille le dit.",
     "danger.enabled": "Les monstres deviennent plus forts en s'éloignant du spawn, et dans le Nether et l'End.",
     "danger.blocksPerLevel": "Nombre de blocs depuis le spawn pour gagner un niveau de danger.",
     "danger.maxLevel": "Niveau de danger maximal.",
@@ -445,7 +446,7 @@ NEW_INTRO = ("Tout ce qui est arrivé dans le mod cette nuit, rangé par thème.
              "détaillée ; la check-list « Tester en jeu » juste en dessous donne les commandes pour tout essayer en "
              "quelques minutes.")
 # Thèmes : (titre, phrase, [(titre, texte, ancre, vignette)]). Vignette : "mob:<id>", "struct:<id>",
-# "items:<id>,<id>,...", "img:<chemin>" (une capture d'écran publiée avec le wiki) ou "biome:<id>" (son rendu 3D).
+# "items:<id>,<id>,..." ou "img:<chemin>" (une capture d'écran publiée avec le wiki).
 # Le thème dont le titre commence par « Merveilles » s'affiche en grandes cartes.
 NEW_GROUPS = [
     ("Carte, écrans et rangement", "Se repérer à plusieurs, régler chaque machine sans deviner, et toute la base "
@@ -476,15 +477,13 @@ NEW_GROUPS = [
         ("Casque de scaphandre et palmes", "Respirer, voir clair et miner à pleine vitesse sous l'eau ; nager bien "
          "plus vite.", "plongee", "items:diving_helmet,flippers,serpent_scale"),
     ]),
-    ("Le monde et ses blocs", "De nouveaux matériaux à récolter, et les biomes montrés tels qu'en jeu.", [
-        ("Bois-lueur et bois rouillé", "Deux essences complètes (bûches, planches, portes, trappes…) qui poussent "
-         "dans les biomes du nouveau monde.", "bois",
+    ("Nouveaux matériaux", "De quoi construire, à récolter ou à faire pousser.", [
+        ("Bois-lueur et bois rouillé", "Deux essences complètes (bûches, planches, portes, trappes…) à faire "
+         "pousser à partir d'une pousse fabriquée ou trouvée dans un coffre.", "bois",
          "items:glowwood_log,glowwood_planks,glowwood_leaves,rustwood_log,rustwood_planks,rustwood_leaves"),
-        ("Marbre, roche rouillée, ardoise bleue", "Trois pierres de construction avec leurs versions polie, en "
-         "briques, en pilier ou en carreaux.", "pierres",
+        ("Marbre, roche rouillée, ardoise bleue", "Trois pierres de construction en grosses veines dans le monde, "
+         "avec leurs versions polie, en briques, en pilier ou en carreaux.", "pierres",
          "items:marble,marble_pillar,chiseled_marble,rust_rock_bricks,blue_slate,blue_slate_tiles"),
-        ("Les biomes en vrai", "Chaque fiche de biome montre maintenant un vrai coin du biome généré par le jeu et "
-         "dessiné en 3D.", "monde", "biome:enchanted_forest"),
         ("Nouveaux dessins et modèles 3D", "Beaucoup d'objets redessinés et 14 nouveaux modèles 3D tenus en main : "
          "outils de laiton et de mithril, pioche excavatrice, hache de bûcheron…", "armes3d",
          "items:excavator_pickaxe,lumber_axe,brass_pickaxe,mithril_axe,bell_hammer,magnet_ring"),
@@ -521,8 +520,8 @@ NEW_GROUPS = [
     ("Automates", "La mécanique vivante : un compagnon, deux ennemis et un boss.", [
         ("Le golem de laiton", "Un compagnon à construire : deux blocs de laiton et un cœur mécanique. Il te suit et "
          "cogne les monstres.", "golem", "mob:brass_golem"),
-        ("Araignées-horloges et drones", "Deux automates ennemis dans les Terres rouillées, la Vallée des "
-         "engrenages, la Citadelle et les Bas-fonds.", "automates", "mob:clockwork_spider"),
+        ("Araignées-horloges et drones", "Deux automates ennemis la nuit dans les badlands et les hautes "
+         "savanes, et dans la Citadelle et les Bas-fonds.", "automates", "mob:clockwork_spider"),
         ("Le Grand Horloger", "Un nouveau boss sous la Citadelle d'horlogerie, avec arrêt du temps et sonnerie de "
          "minuit. Son Souvenir forge le Pendule du Grand Horloger.", "horloger", "mob:grand_clockmaker"),
     ]),
@@ -629,114 +628,16 @@ TEST_CHECKLIST = [
                                  "/give @s wayfarers:pearl_oyster 2", "/give @s wayfarers:glow_anemone 4"],
      "Avec le casque, la tête sous l'eau : force de conduit (respiration, vue dégagée, minage normal). Avec les "
      "palmes, tu nages bien plus vite. Pose l'huître sous l'eau, clic droit quand elle est entrouverte : une perle."),
-    ("Bois et pierres du nouveau monde", ["/locate biome wayfarers:rustlands",
-                                          "/locate biome wayfarers:enchanted_forest",
-                                          "/give @s wayfarers:glowwood_sapling", "/give @s wayfarers:marble 16"],
-     "Les Terres rouillées ont des arbres de bois rouillé et de la roche rouillée ; la Forêt enchantée des arbres "
-     "de bois-lueur qui luisent la nuit. Plante la pousse avec de la poudre d'os ; mets le marbre dans un tailleur "
-     "de pierre : poli, briques, pilier, sculpté."),
+    ("Bois et pierres", ["/give @s wayfarers:glowwood_sapling", "/give @s minecraft:bone_meal 8",
+                         "/give @s wayfarers:marble 16", "/locate biome minecraft:badlands"],
+     "Plante la pousse et donne-lui de la poudre d'os : un arbre de bois-lueur aux feuilles qui luisent la nuit. "
+     "Mets le marbre dans un tailleur de pierre : poli, briques, pilier, sculpté. Dans les badlands, creuse une "
+     "falaise : des veines de roche rouillée."),
     ("Villages enrichis", ["/place structure minecraft:village_plains", "/place structure minecraft:village_desert",
                            "/place structure minecraft:village_snowy", "/place structure minecraft:pillager_outpost"],
      "Recommence quelques fois (chaque village est tiré au sort) : auberge, atelier à cheminée, tour de guet, "
      "marché, verger, cottages et manoirs dans le style du village, lampes en laiton dans les rues ; parfois une "
      "place avec une pierre de voyage. Les avant-postes ont des balistes à vapeur et des barricades."),
-]
-
-BIOMES = {
-    "glacial_sea": "Mer gelée semée d'icebergs.",
-    "slate_sea": "Mer froide aux fonds de gravier et d'argile.",
-    "azure_ocean": "Grand océan bleu profond, forêts de varech.",
-    "coral_lagoon": "Lagon tiède et turquoise, coraux et cornichons de mer.",
-    "glowcap_isles": "Îles de mycélium couvertes de champignons géants qui brillent. Aucun monstre n'y apparaît.",
-    "golden_beach": "Plage de sable doré bordée de palmiers.",
-    "frost_shore": "Rivage enneigé et rochers givrés.",
-    "basalt_cliffs": "Côte de colonnes de basalte noir et d'aiguilles marines.",
-    "crystal_river": "Rivière claire aux roseaux et aux cristaux.",
-    "ice_river": "Rivière gelée.",
-    "aurora_tundra": "Plaine enneigée sous les aurores, quelques sapins isolés.",
-    "shattered_glacier": "Glace bleue brisée en flèches et en blocs.",
-    "frostpine_forest": "Forêt de pins givrés et de buissons à baies.",
-    "snowcap_slopes": "Pentes de neige poudreuse sous les sommets.",
-    "majestic_peaks": "Les plus hauts sommets du monde, jusque vers y 320, coiffés de glace.",
-    "stone_spires": "Aiguilles de pierre nue veinées de calcite.",
-    "verdant_meadows": "Prairies douces, fleurs et chênes solitaires : un bon endroit pour s'installer.",
-    "wildflower_fields": "Champs de fleurs sauvages et arbres à abeilles.",
-    "highland_meadow": "Alpage d'altitude, fleurs et rochers.",
-    "enchanted_forest": "Forêt aux feuillages turquoise, arbres lumineux et lucioles.",
-    "elderwood": "Vieille forêt de grands chênes.",
-    "silver_birch_wood": "Bois de grands bouleaux argentés.",
-    "crystal_woods": "Bouleaux et cristaux qui sortent du sol.",
-    "shadow_woods": "Bois sombre et brumeux plein de champignons.",
-    "pine_highlands": "Hautes terres de pins et de podzol.",
-    "giant_sylvan": "Sylve de conifères géants, fougères et rochers moussus.",
-    "sakura_valley": "Vallée de grands cerisiers en fleurs et de pétales roses.",
-    "windswept_crags": "Escarpements venteux, gravier et épicéas tordus.",
-    "glowing_marsh": "Marais boueux aux lichens luisants et aux lucioles.",
-    "ashen_savanna": "Savane sèche d'acacias et d'herbes rases.",
-    "rustlands": "Terres rouillées : terre cuite rouge, évents de vapeur et épaves steampunk à moitié enterrées.",
-    "emerald_jungle": "Jungle dense aux arbres géants et aux melons.",
-    "dune_sea": "Mer de dunes, cactus et os fossiles.",
-    "painted_canyon": "Canyon de terre cuite aux couches colorées.",
-    "cogwork_valley": "Vallée de sable rouge et de grès, épaves d'engrenages géants et évents de vapeur.",
-    "crystal_caverns": "Cavernes de calcite et de cristaux, géodes d'améthyste.",
-    "underground_jungle": "Grottes luxuriantes de mousse et de lianes.",
-    "deep_abyss": "Abîme de sculk tout au fond du monde.",
-    "thermal_caves": "Grottes chaudes de magma et de colonnes de basalte.",
-    "fungal_grotto": "Grotte de mycélium et de champignons géants lumineux.",
-    "mithril_hollows": "Creux d'ardoise des abîmes veinés de mithril, le meilleur endroit pour en miner.",
-    "crimson_mire": "Marais corrompu sous un brouillard pâle : cornes de pierre noire recourbées, champignons rouges géants aux chapeaux plats, roseaux et sol pourpre.",
-    "volcanic_highlands": "Montagnes de terre cuite brune en gradins, herbe rase et arbres d'automne ; des coulées de lave descendent les pentes.",
-    "ashen_wastes": "Plateaux gris stratifiés sous un ciel sépia, cendre blanche, arches naturelles, éclats de cristal d'éther et mares de lave.",
-    "alpine_peaks": "Pics aiguisés striés de roche et de mousse, forêt d'épicéas verts et dorés, rochers moussus.",
-    "pale_dunes": "Dunes de sable blanc ridées par le vent, cheminées de fée en terre cuite rayée.",
-    "geyser_basin": "Bassins de sources chaudes en terrasses aux rebords jaunes et orange, croûtes de travertin et vapeur.",
-    "starlight_grove": "Bosquet lavande de bouleaux et de bois-lueur, cristaux d'éther et poussière d'étoiles.",
-    "aetherblight_grove": "Bois sombre corrompu par l'éther : brume violette, feuillage pourpre, cristaux et obsidienne pleureuse.",
-    "emberleaf_taiga": "Taïga d'automne : épicéas verts et orangés, troncs tombés, rochers moussus.",
-    "rimefrost_fjords": "Bras de mer étroits entre de hautes falaises d'ardoise bleue enneigées.",
-    "tidebrass_archipelago": "Mer tiède turquoise semée de petites îles herbeuses bordées de sable.",
-}
-
-DECOR = {
-    "acacias": "acacias", "amethyst_geodes": "géodes d'améthyste", "basalt_columns": "colonnes de basalte",
-    "basalt_columns_cave": "colonnes de basalte", "beach_grass": "herbes de plage", "bee_trees": "arbres à abeilles",
-    "berry_bushes": "buissons à baies", "blue_ice_chunks": "blocs de glace bleue", "boulders": "rochers",
-    "calcite_veins": "veines de calcite", "canyon_cacti": "cactus", "cave_crystals": "cristaux",
-    "cave_magma_pools": "mares de magma", "dead_bushes": "buissons morts", "dry_grass": "herbes sèches",
-    "dune_cacti": "cactus", "ferns": "fougères", "forest_floor": "sous-bois", "fossil_bones": "os fossiles",
-    "frost_pines": "pins givrés", "frost_pines_sparse": "pins givrés épars", "frost_rocks": "rochers givrés",
-    "giant_glowcaps": "champignons géants lumineux", "giant_trees": "conifères géants", "glow_flowers": "fleurs lumineuses",
-    "glow_lichen": "lichen luisant", "glowwood_trees": "arbres de bois-lueur", "great_cherries": "grands cerisiers",
-    "glowwood_sparse": "quelques arbres de bois-lueur", "rustwood_trees": "arbres de bois rouillé",
-    "rustwood_sparse": "quelques arbres de bois rouillé", "marble_strata": "bandes de marbre",
-    "rust_rock_veins": "veines de roche rouillée", "blue_slate_veins": "veines d'ardoise bleue",
-    "great_oaks": "grands chênes", "ice_spires": "flèches de glace", "ice_spires_small": "petites flèches de glace",
-    "icebergs": "icebergs", "jungle_floor": "sous-bois de jungle", "jungle_giants": "arbres géants",
-    "kelp": "varech", "kelp_cold": "varech", "lily_pads": "nénuphars", "lone_oaks": "chênes isolés",
-    "lush_cave_vegetation": "végétation luxuriante", "marsh_trees": "arbres de marais", "meadow_flowers": "fleurs",
-    "melons": "melons", "mithril_veins": "veines de mithril", "mossy_boulders": "rochers moussus",
-    "mushrooms_dense": "champignons", "ocean_floor": "fonds marins", "ocean_floor_cold": "fonds marins froids",
-    "palms": "palmiers", "pines": "pins", "pink_petals": "pétales roses", "reeds": "roseaux",
-    "river_crystals": "cristaux de rivière", "river_reeds": "roseaux", "rusted_wrecks": "épaves rouillées",
-    "sculk_growth": "sculk", "sea_pickles": "cornichons de mer", "sea_stacks": "aiguilles marines",
-    "seagrass": "herbes marines", "seagrass_deep": "herbes marines", "seagrass_warm": "herbes marines",
-    "shadow_oaks": "chênes sombres", "snowy_spruces_sparse": "épicéas enneigés", "steam_vents": "évents de vapeur",
-    "surface_crystals": "cristaux", "tall_birches": "grands bouleaux", "tall_grass": "hautes herbes",
-    "warm_ocean_vegetation": "coraux", "wildflowers": "fleurs sauvages", "windswept_spruces": "épicéas tordus",
-    "thorn_spikes": "cornes de pierre noire", "stone_arches": "arches de pierre", "crystal_shards": "éclats de cristal",
-    "hoodoos": "cheminées de fée", "hoodoos_sparse": "cheminées de fée", "hot_springs": "sources chaudes en terrasses",
-    "flat_mushrooms": "champignons géants", "ash_columns": "colonnes de cendre", "lava_streams": "coulées de lave",
-    "lava_pools": "mares de lave", "mossy_boulders_many": "rochers moussus", "marble_boulders": "rochers de marbre",
-    "slate_boulders": "rochers d'ardoise", "rust_boulders": "rochers rouillés", "basalt_boulders": "rochers de pierre noire",
-    "fallen_spruce_logs": "troncs tombés", "fallen_oak_logs": "troncs tombés", "fallen_glowwood_logs": "troncs de bois-lueur",
-    "fallen_rustwood_logs": "troncs de bois rouillé", "autumn_spruces": "épicéas d'automne", "tall_spruces": "grands épicéas",
-    "autumn_oaks": "chênes d'automne", "sparse_autumn_oaks": "chênes d'automne", "crimson_reeds": "roseaux",
-    "ripple_grass": "herbes sèches",
-}
-
-BIOME_GROUPS = [
-    ("ocean", "Océans et côtes"), ("cold", "Terres froides"), ("temperate", "Terres tempérées"),
-    ("warm", "Terres chaudes et sèches"), ("cave", "Biomes de grottes"),
 ]
 
 RECIPE_TYPES = {
@@ -822,12 +723,11 @@ TERMINAL_DIAGRAM = ("Vue du dessus : le carré doré est la portée du terminal 
 
 # ------------------------------------------------------------------ océans vivants
 OCEANS_INTRO = ("Les mers ne sont plus vides : créatures, récifs, forêts de varech, huîtres perlières, cheminées à "
-                "bulles et petites épaves à fouiller. Tout cela fait partie du mod lui-même, pas du nouveau monde : "
-                "les océans normaux de Minecraft en profitent aussi, dans les régions jamais générées.")
+                "bulles et petites épaves à fouiller, dans tous les océans de Minecraft, dans les régions jamais "
+                "générées.")
 OCEANS_WHERE = ("Partout en mer : méduses, anémones, cheminées à bulles, arches rocheuses et ruines. Mers froides "
                 "et tempérées : grandes forêts de varech. Mers tempérées et chaudes : prairies d'herbes marines et "
-                "bancs d'huîtres. Mers chaudes et Lagon de corail : poissons de récif, jardins de corail et coraux "
-                "géants. Au large, dans les océans profonds : baleines et serpent de mer.")
+                "bancs d'huîtres. Mers chaudes : poissons de récif, jardins de corail et coraux géants. Au large, dans les océans profonds : baleines et serpent de mer.")
 # (titre, texte, icône, où)
 OCEAN_FLOOR = [
     ("Forêts de varech", "Le varech pousse en bosquets serrés qui montent jusqu'à la surface : on s'y perd "
@@ -861,7 +761,7 @@ DIVING_TEXT = {
 # où vit chaque créature, quand les données ne le disent pas simplement
 MOB_WHERE = {
     "glow_jellyfish": "Toutes les mers, par groupes de 2 à 4.",
-    "reef_fish": "Mers chaudes et Lagon de corail, en bancs.",
+    "reef_fish": "Mers chaudes et tièdes, en bancs.",
     "manta_ray": "Océans tempérés et chauds, près de la surface.",
     "whale": "Océans profonds, seule. Rare.",
     "sea_serpent": "La nuit, au-dessus des eaux profondes, attiré par un bateau ou un nageur. Replonge à l'aube.",
@@ -870,28 +770,29 @@ MOB_HP = {"reef_fish": 3}  # vie par défaut de Minecraft, quand la classe ne la
 MOB_BADGE = {"sea_serpent": "Mini-boss"}
 
 # ------------------------------------------------------------------ blocs du monde
-WORLDBLOCKS_INTRO = ("Le nouveau monde a ses propres matériaux : deux bois et trois pierres, chacun décliné en "
-                     "ensemble complet pour construire. On les récolte dans leurs biomes, ou on les fabrique à partir "
-                     "de blocs ordinaires si ton monde n'a pas le nouveau relief.")
-# bois -> (biomes, texte)
+WORLDBLOCKS_INTRO = ("Deux bois et trois pierres propres au mod, chacun décliné en ensemble complet pour construire. "
+                     "Les bois se font pousser à partir d'une pousse ; les pierres se minent en veines ou se "
+                     "fabriquent à partir de pierres ordinaires.")
+# bois -> (où, texte)
 WOODS = {
-    "glowwood": (["enchanted_forest", "crystal_woods"],
-                 "Troncs pâles et feuilles turquoise piquées de points lumineux qui luisent la nuit. Grands arbres "
-                 "touffus dans la Forêt enchantée, plus rares dans le Bois de cristal."),
-    "rustwood": (["rustlands", "cogwork_valley", "ashen_savanna"],
-                 "Écorce rouge sombre et feuilles couleur de rouille, sur des arbres fourchus. Partout dans les "
-                 "Terres rouillées, quelques-uns dans la Vallée des engrenages et la Savane cendrée."),
+    "glowwood": ("Pousse à fabriquer ; coffres de l'Arbre géant et du Palais sylvain.",
+                 "Troncs pâles et feuilles turquoise piquées de points lumineux qui luisent la nuit, sur de grands "
+                 "arbres touffus."),
+    "rustwood": ("Pousse à fabriquer ; coffres de la Citadelle d'horlogerie, du Port céleste, des Bas-fonds et de "
+                 "la Fonderie géothermique.",
+                 "Écorce rouge sombre et feuilles couleur de rouille, sur des arbres fourchus."),
 }
 WOOD_HOW = ("Un ensemble complet, comme le chêne : bûches, écorce, planches, escaliers, dalles, barrières, "
             "portillons, portes, trappes, boutons et plaques de pression. La hache écorce les bûches ; les feuilles "
             "donnent des pousses qui font repousser le même arbre.")
-# pierre -> (biomes, texte)
+# pierre -> (où, texte)
 STONES = {
-    "marble": (["majestic_peaks", "stone_spires", "highland_meadow"],
-               "Blanc veiné de gris, en bandes dans les falaises des montagnes et en affleurements dans l'Alpage."),
-    "rust_rock": (["rustlands"], "Une roche rouge et orangée, dans le sol et les talus des Terres rouillées."),
-    "blue_slate": (["slate_sea", "pine_highlands"],
-                   "Ardoise d'un bleu profond, au fond de la Mer d'ardoise et dans les talus des Hautes terres de pins."),
+    "marble": ("Veines dans les montagnes et les collines battues par les vents, de y 32 aux sommets.",
+               "Blanc veiné de gris, en grosses poches dans la roche des montagnes."),
+    "rust_rock": ("Veines dans les badlands, les plateaux de savane et les savanes battues par les vents (y 32 à 160).",
+                  "Une roche rouge et orangée, en grosses poches sous les terres rouges."),
+    "blue_slate": ("Veines dans l'ardoise des abîmes, sous y 0, partout.",
+                   "Ardoise d'un bleu profond, en grosses poches tout au fond du monde."),
 }
 STONE_HOW = ("Le tailleur de pierre transforme la pierre brute en version polie, briques, pilier, carreaux ou "
              "sculptée, avec leurs escaliers, dalles et murets ; le burin du graveur passe de l'une à l'autre.")
@@ -918,7 +819,8 @@ PERF_POINTS = [
         "image ; la recherche de la page du Manuel derrière chaque infobulle est mémorisée.",
     ]),
     ("Génération du monde", [
-        "Le relief du nouveau monde utilise les mêmes caches que Minecraft : les chunks se créent plus vite.",
+        "Les structures vérifient d'abord le biome, puis quelques colonnes de terrain, avant d'assembler quoi que "
+        "ce soit : un emplacement qui ne convient pas coûte très peu.",
     ]),
 ]
 # (option, conseil)
@@ -930,8 +832,8 @@ PERF_OPTIONS = [
     ("map.sharedExploration", "Carte commune (true) ou personnelle (false). Ne change pas le coût : le serveur "
                               "garde les deux."),
     ("hud.healthBarRange", "Chez chaque joueur : distance des barres de vie. Baisse-la dans les fermes à monstres."),
-    ("world.overhaul", "Nouveau relief et biomes. Sur false, les nouveaux mondes gardent la génération de "
-                       "Minecraft ; tout le reste du mod marche pareil."),
+    ("world.structureFit", "Les structures ne se posent que là où le terrain leur convient. Sur false, elles "
+                           "apparaissent partout où la grille le dit."),
 ]
 
 # « En jeu » : les vraies captures d'écran du client de test (CI), juste après les nouveautés.

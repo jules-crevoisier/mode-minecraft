@@ -387,8 +387,7 @@ def coral_shrine(bp):
 
 
 register(StructureDef(
-    "coral_shrine", "overworld", ["minecraft:warm_ocean", "minecraft:lukewarm_ocean", "minecraft:deep_lukewarm_ocean",
-                                  "wayfarers:coral_lagoon"],
+    "coral_shrine", "overworld", ["minecraft:warm_ocean", "minecraft:lukewarm_ocean", "minecraft:deep_lukewarm_ocean"],
     [Piece("shrine", coral_shrine)], spacing=22, separation=7, heightmap="OCEAN_FLOOR_WG", adaptation="none",
     processors="none", title_fr="Sanctuaire de corail", title_en="Coral Shrine"))
 

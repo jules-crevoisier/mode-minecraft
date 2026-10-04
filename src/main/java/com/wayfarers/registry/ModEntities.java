@@ -161,7 +161,7 @@ public final class ModEntities {
     public static final RegistryObject<EntityType<com.wayfarers.entity.RivetEntity>> RIVET = ENTITIES.register("rivet",
             () -> EntityType.Builder.<com.wayfarers.entity.RivetEntity>of(com.wayfarers.entity.RivetEntity::new, MobCategory.MISC)
                     .sized(0.2F, 0.2F).clientTrackingRange(4).updateInterval(5).build(ENTITIES.key("rivet")));
-    // ---- automatons (Clockwork Citadel, Rustlands, Cogwork Valley, Undercity)
+    // ---- automatons (Clockwork Citadel, badlands and savanna highlands, Undercity)
     public static final RegistryObject<EntityType<ClockworkSpider>> CLOCKWORK_SPIDER = ENTITIES.register("clockwork_spider",
             () -> EntityType.Builder.<ClockworkSpider>of(ClockworkSpider::new, MobCategory.MONSTER)
                     .sized(ClockworkSpider.WIDTH, ClockworkSpider.HEIGHT).clientTrackingRange(8).build(ENTITIES.key("clockwork_spider")));

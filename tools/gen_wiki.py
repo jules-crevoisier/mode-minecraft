@@ -2,19 +2,17 @@
 """Build the illustrated French wiki of the mod: build/wiki/index.html + img/ + gif/.
 
 Everything is read from the data tables and generated resources (lang files, guide pages, machines, metals,
-talents, boss gear, biomes, structures, recipes, loot tables, quests, Java key bindings / commands / config),
+talents, boss gear, structures, recipes, loot tables, quests, Java key bindings / commands / config),
 so new content shows up by re-running the script. French explanations that the data does not carry live in
 tools/wf/wiki_text.py.
 
 Slow (3D renders): it is not part of generate_all.py. Renders are cached in build/wiki_cache, so a second run
-only re-renders what changed. The world map, the biome renders and the real in-game screenshots
-(wayfarers-shot-<name>.png, or a local folder in $WAYFARERS_SHOTS / build/shots) come from the CI pre-release.
+only re-renders what changed. The real in-game screenshots (wayfarers-shot-<name>.png, or a local folder in
+$WAYFARERS_SHOTS / build/shots) come from the CI pre-release; the wiki builds without them.
 
 Usage:
     python3 tools/gen_wiki.py                 # -> build/wiki/
     python3 tools/gen_wiki.py --jobs 4 --out /tmp/wiki --no-cache
-    python3 tools/gen_wiki.py --worldmap DIR  # folder with wayfarers-worldmap{,-caves,-slice}.png and .txt
-                                              # (and optionally wayfarers-biomes.txt + wayfarers-biome-<id>.png)
 """
 import argparse
 import glob
@@ -40,10 +38,7 @@ DATA = os.path.join(RES, "data", "wayfarers")
 JAVA = os.path.join(ROOT, "src", "main", "java", "com", "wayfarers")
 CACHE = os.path.join(ROOT, "build", "wiki_cache")
 RENDER_VERSION = "4"
-WORLDMAP_URL = ("https://github.com/jules-crevoisier/mode-minecraft/releases/download/previews-ccr-127dc262-tsdn10/"
-                "wayfarers-worldmap{}")
 PREVIEWS_URL = "https://github.com/jules-crevoisier/mode-minecraft/releases/download/previews-ccr-127dc262-tsdn10/{}"
-BIOME_CELL = (480, 360)  # one biome render in the packed sheets (the CI renders are 672 x 504)
 VANILLA_LANG_URL = "https://raw.githubusercontent.com/InventivetalentDev/minecraft-assets/{}/assets/minecraft/lang/fr_fr.json"
 
 from PIL import Image  # noqa: E402
@@ -453,10 +448,7 @@ def biome_spawns():
 
 
 def biome_name(bid):
-    ns, path = bid.split(":", 1) if ":" in bid else ("minecraft", bid)
-    if ns == "wayfarers":
-        return FR.get(f"biome.wayfarers.{path}", pretty(path))
-    return vname("biome", path)
+    return vname("biome", bid.split(":")[-1])
 
 
 def new_ids_since(ref):
@@ -475,29 +467,6 @@ def new_ids_since(ref):
         if len(parts) == 3 and parts[1] == "wayfarers" and k not in old and parts[0] in ("item", "block", "entity", "structure"):
             out.setdefault(parts[0], []).append(parts[2])
     return out
-
-
-def surface_blocks(surface_key):
-    from wf import biomes as B
-    fn = B.SURFACES.get(surface_key) or B.CAVE_SURFACES.get(surface_key)
-    if not fn:
-        return []
-    names = []
-
-    def walk(o):
-        if isinstance(o, dict):
-            if "Name" in o and isinstance(o["Name"], str):
-                if o["Name"] not in names:
-                    names.append(o["Name"])
-            for v in o.values():
-                walk(v)
-        elif isinstance(o, list):
-            for v in o:
-                walk(v)
-    walk(fn())
-    if not names and surface_key == "badlands":
-        names = ["minecraft:red_sand", "minecraft:terracotta"]
-    return names
 
 
 # =============================================================================================== render jobs
@@ -718,130 +687,6 @@ def sheet_job(args):
     return dict(kind=kind, file=f"gif/{fname}", cols=cols, rows=rows, cell=cell, ids=[i for i, _ in refs])
 
 
-# =============================================================================================== world map
-def find_worldmap(arg):
-    cands = [arg] if arg else []
-    cands += [os.environ.get("WAYFARERS_WORLDMAP", ""), os.path.join(ROOT, "build", "worldmap"),
-              os.path.join(CACHE, "worldmap")]
-    for d in cands:
-        if d and os.path.exists(os.path.join(d, "wayfarers-worldmap.png")):
-            return d
-    d = os.path.join(CACHE, "worldmap")
-    os.makedirs(d, exist_ok=True)
-    try:
-        for suf in (".png", "-caves.png", "-slice.png", ".txt"):
-            data = urllib.request.urlopen(WORLDMAP_URL.format(suf), timeout=40).read()
-            open(os.path.join(d, "wayfarers-worldmap" + suf), "wb").write(data)
-        log("world map downloaded from the CI release")
-        return d
-    except Exception as e:  # noqa: BLE001
-        log(f"world map not available: {e}")
-        return None
-
-
-def map_caption(head):
-    m = re.search(r"area (\d+) x (\d+) blocks around ([-\d]+),([-\d]+) \(1 px = (\d+) blocks\)(?:; height ([-\d]+)\.\.([-\d]+))?", head)
-    if not m:
-        return head
-    t = f"Zone de {m.group(1)} × {m.group(2)} blocs autour de {m.group(3)}, {m.group(4)} (1 pixel = {m.group(5)} blocs)"
-    if m.group(6):
-        t += f", relief de y {m.group(6)} à y {m.group(7)}"
-    return t + "."
-
-
-def parse_worldmap_txt(path):
-    head, legend = "", []
-    if not path or not os.path.exists(path):
-        return head, legend
-    for line in open(path, encoding="utf-8"):
-        m = re.match(r"(#[0-9a-fA-F]{6})\s+([\w:]+)\s+([\d.]+)%", line.strip())
-        if m:
-            legend.append((m.group(1), m.group(2), float(m.group(3))))
-        elif line.strip() and not head:
-            head = line.strip()
-    return head, legend
-
-
-# =============================================================================================== biome renders
-def parse_biomeshots_txt(path):
-    """{biome: (kind, x, z, y0, y1)} for each biome the CI drew (lines of wayfarers-biomes.txt, /wayfarers biomeshots)."""
-    out = {}
-    if not path or not os.path.exists(path):
-        return out
-    for line in open(path, encoding="utf-8"):
-        m = re.match(r"wayfarers:(\w+)\s+(surface|cave)\s+at\s+(-?\d+)\s+(-?\d+)\s+y\s+(-?\d+)\.\.(-?\d+)", line.strip())
-        if m:
-            out[m.group(1)] = (m.group(2), int(m.group(3)), int(m.group(4)), int(m.group(5)), int(m.group(6)))
-    return out
-
-
-def find_biomeshots(arg):
-    """Folder holding wayfarers-biomes.txt and the wayfarers-biome-<id>.png renders: a local folder when given, else
-    the CI pre-release (cached in build/wiki_cache/biomeshots, the legend re-checked every 3 hours). None if absent."""
-    for d in (arg, os.environ.get("WAYFARERS_BIOMESHOTS", ""), os.path.join(ROOT, "build", "worldmap"),
-              os.path.join(ROOT, "build", "biomeshots")):
-        if d and os.path.exists(os.path.join(d, "wayfarers-biomes.txt")):
-            return d
-    d = os.path.join(CACHE, "biomeshots")
-    os.makedirs(d, exist_ok=True)
-    txt = os.path.join(d, "wayfarers-biomes.txt")
-    if not os.path.exists(txt) or time.time() - os.path.getmtime(txt) > 3 * 3600:
-        try:
-            data = urllib.request.urlopen(PREVIEWS_URL.format("wayfarers-biomes.txt"), timeout=40).read()
-            old = open(txt, "rb").read() if os.path.exists(txt) else None
-            open(txt, "wb").write(data)
-            if old != data:  # a new CI run: drop the old renders so they are fetched again
-                for f in glob.glob(os.path.join(d, "wayfarers-biome-*.png")):
-                    os.remove(f)
-        except Exception as e:  # noqa: BLE001
-            if not os.path.exists(txt):
-                log(f"biome renders not available: {e}")
-                return None
-            os.utime(txt)
-    got = 0
-    for bid in parse_biomeshots_txt(txt):
-        png = os.path.join(d, f"wayfarers-biome-{bid}.png")
-        if not os.path.exists(png):
-            try:
-                data = urllib.request.urlopen(PREVIEWS_URL.format(f"wayfarers-biome-{bid}.png"), timeout=40).read()
-                open(png, "wb").write(data)
-            except Exception as e:  # noqa: BLE001
-                log(f"biome render {bid} not available: {e}")
-                continue
-        got += 1
-    log(f"biome renders: {got} available")
-    return d
-
-
-def biome_sheets(shot_dir, order, out):
-    """Packs the renders of each group of biomes into one webp strip (img/biomes-<group>.webp), to keep the number
-    of files down. order: {group: [biome ids in card order]}. Returns {biome: (file, index, count)}."""
-    res = {}
-    if not shot_dir:
-        return res
-    cdir = os.path.join(CACHE, "biomesheets")
-    os.makedirs(cdir, exist_ok=True)
-    cw, ch = BIOME_CELL
-    for g, ids in order.items():
-        pngs = [(b, os.path.join(shot_dir, f"wayfarers-biome-{b}.png")) for b in ids]
-        pngs = [(b, p) for b, p in pngs if os.path.exists(p)]
-        if not pngs:
-            continue
-        key = sha(RENDER_VERSION, cw, ch, *[b for b, _ in pngs], file_bytes(*[p for _, p in pngs]))
-        cached = os.path.join(cdir, f"{g}-{key}.webp")
-        if not os.path.exists(cached):
-            sheet = Image.new("RGBA", (cw * len(pngs), ch), (0, 0, 0, 0))
-            for k, (b, p) in enumerate(pngs):
-                im = Image.open(p).convert("RGBA").convert("RGBa").resize((cw, ch), Image.LANCZOS).convert("RGBA")
-                sheet.paste(im, (k * cw, 0))
-            sheet.save(cached, "WEBP", quality=80, method=6)
-        name_ = f"img/biomes-{g}.webp"
-        shutil.copyfile(cached, os.path.join(out, name_))
-        for k, (b, _) in enumerate(pngs):
-            res[b] = (name_, k, len(pngs))
-    return res
-
-
 # =============================================================================================== in-game screenshots
 SHOT_MAX_W = 960  # published width of the real client screenshots (1280 x 720 from the CI)
 SHOT_REFRESH = 3 * 3600  # seconds between two checks of the same screenshot on the CI release
@@ -969,13 +814,6 @@ def plaque(sid, kicker, title, intro=""):
             + (f'<p class="lede">{intro}</p>' if intro else "") + "</header>")
 
 
-def climate(b):
-    t = b["temp"]
-    word = "glacial" if t < 0.15 else "froid" if t < 0.45 else "tempéré" if t < 0.95 else "chaud" if t < 1.5 else "torride"
-    wet = ("neige" if t < 0.15 else "pluie") if b["rain"] else "sec"
-    return f"{word}, {wet}"
-
-
 def fmt_num(v):
     if v is None:
         return "?"
@@ -992,7 +830,6 @@ def main():
     ap.add_argument("--out", default=os.path.join(ROOT, "build", "wiki"))
     ap.add_argument("--jobs", type=int, default=max(1, min(6, os.cpu_count() or 2)))
     ap.add_argument("--no-cache", action="store_true")
-    ap.add_argument("--worldmap", default=None)
     args = ap.parse_args()
     t0 = time.time()
     out = os.path.abspath(args.out)
@@ -1006,8 +843,8 @@ def main():
         os.makedirs(os.path.join(out, d), exist_ok=True)
     load_vanilla_lang()
 
-    from wf import (content, guide, machines, metals, skills, bossgear, biomes as B, decor, furniture, defs, mobs,
-                    worldfeatures as WF, wikirender as W)
+    from wf import (content, guide, machines, metals, skills, bossgear, decor, furniture, defs, mobs,
+                    wikirender as W)
     import wf.structures  # noqa: F401
 
     # ------------------------------------------------------------------ renders (parallel)
@@ -1077,7 +914,7 @@ def main():
     # ================================================================== ACCUEIL
     n_items = sum(1 for i in entries if f"item.wayfarers.{i}" in FR)
     n_blocks = sum(1 for i in entries if f"block.wayfarers.{i}" in FR)
-    stats = [(len(defs.STRUCTURES), "structures"), (len(mob_info), "créatures et boss"), (len(B.BIOMES), "biomes"),
+    stats = [(len(defs.STRUCTURES), "structures"), (len(mob_info), "créatures et boss"),
              (n_items, "objets"), (n_blocks, "blocs"), (len(recipes), "recettes"), (len(skills.SKILLS), "talents"),
              (sum(len(json.load(open(os.path.join(DATA, "quests.json")))[c]) for c in json.load(open(os.path.join(DATA, "quests.json")))), "quêtes")]
     steps = []
@@ -1113,43 +950,6 @@ def main():
   {f'<figure class="vitrine hero-fig"><img src="{struct_info[hero]["files"]["gif"]}" alt="{E(hero_name, quote=True)}, rotation à 360°" loading="eager"><figcaption>{E(hero_name)}</figcaption></figure>' if hero else ""}
 </section>
 <nav class="tiles" aria-label="Sections">__TILES__</nav>''')
-    # biome groups and the real in-game biome renders (CI), used by the biome cards and the world-block cards
-    inv = B.sources()
-
-    def biome_group(bid, b):
-        src = inv.get(bid, [])
-        if b["cave"] or bid in [c[0] for c in B.EXTRA_CAVES]:
-            return "cave"
-        if any(w in v for v in src for w in ("ocean", "beach", "river", "shore", "mushroom")):
-            return "ocean"
-        if b["temp"] < 0.3:
-            return "cold"
-        if b["temp"] >= 1.0:
-            return "warm"
-        return "temperate"
-
-    shot_dir = find_biomeshots(args.worldmap)
-    shots = parse_biomeshots_txt(os.path.join(shot_dir, "wayfarers-biomes.txt") if shot_dir else None)
-    sheet_order = {}
-    for bid, b in B.BIOMES.items():
-        if bid in shots:
-            sheet_order.setdefault(biome_group(bid, b), []).append(bid)
-    sheets = biome_sheets(shot_dir, sheet_order, out)
-
-    def biome_shot(bid, caption=True):
-        """The biome's render (one cell of its group's strip), or "" when the CI render is missing."""
-        if bid not in sheets:
-            return ""
-        b = B.BIOMES[bid]
-        fname, k, n = sheets[bid]
-        kind, sx_, sz_ = shots[bid][0], shots[bid][1], shots[bid][2]
-        alt = f"{b['fr']} : rendu 3D d'un coin du biome généré en jeu" + (" (vue en écorché)" if kind == "cave" else "")
-        where_ = f"x {sx_}, z {sz_}".replace("-", "−") + (" · écorché" if kind == "cave" else "")
-        pos = k * 100 / (n - 1) if n > 1 else 0
-        return (f'<div class="shot{" cave" if kind == "cave" else ""}"><i role="img" aria-label="{E(alt, quote=True)}" '
-                f'style="background-image:url({fname});background-size:{n * 100}% 100%;'
-                f'background-position:{pos:.4f}% 0"></i>{f"<small>{E(where_)}</small>" if caption else ""}</div>')
-
     gui = gui_images(out)
     shot_dir, shot_dates = find_ingame_shots(None)
     ingame = ingame_images(shot_dir, out)
@@ -1157,7 +957,7 @@ def main():
                                 struct_info=struct_info, sheet_info=sheet_info, all_ids=all_ids, lives=lives,
                                 gear=gear, weapon_of=weapon_of, remembrance_of=remembrance_of, defs=defs,
                                 wonder_ids=wonder_ids, recipes=recipes, spawn_biomes=spawn_biomes,
-                                biome_shot=biome_shot, gui=gui, biomes=B.BIOMES, shots=ingame, shot_dates=shot_dates)
+                                gui=gui, shots=ingame, shot_dates=shot_dates)
     sec.append(section_news(ctx))
     sec.append(section_ingame(ctx))
     sec.append(section_tests(ctx))
@@ -1358,7 +1158,8 @@ def main():
 
     # ================================================================== WORLD BLOCKS, DECOR + FURNITURE
     sec.append(section_worldblocks(ctx))
-    dgroups ={"Guilde et régions": [], "Steampunk": [], "Pierres du nouveau monde": [], "Au burin seulement": []}
+    dgroups ={"Guilde et régions": [], "Steampunk": [], "Marbre, roche rouillée, ardoise bleue": [],
+              "Au burin seulement": []}
     steam = False
     chisel_only = set(getattr(decor, "CHISEL_ONLY", {}))
     from wf import worldblocks as WB
@@ -1367,7 +1168,7 @@ def main():
         if bid == "brass_plating":
             steam = True
         variants = [decor.variant_id(bid, v) for v in d["variants"]]
-        g = ("Pierres du nouveau monde" if bid in world_stones else "Au burin seulement" if bid in chisel_only
+        g = ("Marbre, roche rouillée, ardoise bleue" if bid in world_stones else "Au burin seulement" if bid in chisel_only
              else "Steampunk" if steam else "Guilde et régions")
         light = f'<small class="glow">lumière {d["light"]}</small>' if d.get("light") else ""
         dgroups[g].append(f'''<article class="deco" id="{anchor_item(bid)}d">{atlas.icon(bid, 64)}<div><b>{E(name(bid))}</b>{light}
@@ -1389,7 +1190,7 @@ def main():
             idx.add(name(iid), "Bloc 3D", anchor_item(iid) + "f", extra)
     sec.append(f'''<section class="block" id="deco">
   {plaque("deco-h", "Construction", "Blocs de déco et meubles", "Les blocs qui bâtissent les structures du mod, utilisables pour ta base. La plupart existent en escaliers, dalles et murets (petites icônes). Astuce steampunk : le laiton pour les finitions, le fer sombre et l'acajou pour la masse, des lampes Edison pour la lumière.")}
-  {"".join(f'<h3 class="subhead">{E(g)}</h3>' + (f'<p class="note">{E(TXT.CHISEL_ONLY_TEXT)} <a href="#construction">Voir le burin</a>.</p>' if g == "Au burin seulement" else '<p class="note">Où les trouver et comment les fabriquer : <a href="#pierres">les pierres du nouveau monde</a>.</p>' if g == "Pierres du nouveau monde" else "") + f'<div class="grid decos">{"".join(v)}</div>' for g, v in dgroups.items() if v)}
+  {"".join(f'<h3 class="subhead">{E(g)}</h3>' + (f'<p class="note">{E(TXT.CHISEL_ONLY_TEXT)} <a href="#construction">Voir le burin</a>.</p>' if g == "Au burin seulement" else '<p class="note">Où les trouver et comment les fabriquer : <a href="#pierres">les trois pierres</a>.</p>' if g == "Marbre, roche rouillée, ardoise bleue" else "") + f'<div class="grid decos">{"".join(v)}</div>' for g, v in dgroups.items() if v)}
   <h3 class="subhead">Meubles et blocs en 3D</h3>
   <div class="grid spins">{"".join(fcards)}</div>
 </section>''')
@@ -1512,83 +1313,6 @@ def main():
   {ingame_feature(ctx, "mega_structure")}
   {"".join(wcards)}
   {"".join(f'<h3 class="subhead">{E(t)}</h3><div class="grid structs">{"".join(scards[k])}</div>' for k, t in (("overworld", "Surface et profondeurs"), ("sea", "Sous les mers"), ("nether", "Nether"), ("end", "End")) if scards[k])}
-</section>''')
-
-    # ================================================================== NEW WORLD
-    wm = find_worldmap(args.worldmap)
-    head, legend = parse_worldmap_txt(os.path.join(wm, "wayfarers-worldmap.txt") if wm else None)
-    map_html = ""
-    share = {b.split(":")[-1]: (c, p) for c, b, p in legend}
-    if wm:
-        imgs = []
-        for suf, cap in (("", "Surface : les biomes vus du ciel"), ("-caves", "Grottes : les biomes souterrains"),
-                         ("-slice", "Coupe verticale : relief, grottes et méga-cavernes")):
-            p = os.path.join(wm, f"wayfarers-worldmap{suf}.png")
-            if os.path.exists(p):
-                shutil.copyfile(p, os.path.join(out, "img", f"worldmap{suf}.png"))
-                imgs.append(f'<figure class="map"><img src="img/worldmap{suf}.png" alt="{E(cap, quote=True)}" loading="lazy"><figcaption>{E(cap)}</figcaption></figure>')
-        leg = "".join(f'<li><a href="#bi-{b.split(":")[-1]}"><i style="background:{c}"></i>{E(FR.get("biome." + b.replace(":", "."), pretty(b)))}</a><small>{fmt_num(p)} %</small></li>'
-                      for c, b, p in sorted(legend, key=lambda x: -x[2]))
-        map_html = f'''<div class="maps">{"".join(imgs)}</div>
-  <p class="note">{E(map_caption(head))} Carte générée en jeu par <code>/wayfarers worldmap</code>.</p>
-  <details class="legend-box"><summary>Légende des couleurs de la carte ({len(legend)} biomes)</summary><ul class="maplegend">{leg}</ul></details>'''
-    bgroups = {k: [] for k, _ in TXT.BIOME_GROUPS}
-    if sheets:
-        map_html += ('\n  <p class="note">Chaque biome ci-dessous est dessiné bloc par bloc à partir d’un vrai coin de '
-                     'monde de 80 × 80 blocs généré par le serveur de test (commande <code>/wayfarers biomeshots</code>) : '
-                     'arbres, plantes, minerais et structures compris. Pour les grottes, la roche au-dessus du sol des '
-                     'cavernes est retirée ; les coupes dans la roche sont plus sombres.</p>')
-    for bid, b in B.BIOMES.items():
-        src = inv.get(bid, [])
-        g = biome_group(bid, b)
-        sw = [("carte", share.get(bid, (None,))[0]), ("herbe", b.get("grass")), ("feuillage", b.get("foliage")),
-              ("eau", b.get("water")), ("ciel", b.get("sky")), ("brume", b.get("fog"))]
-        swatch = "".join(f'<i style="background:{c}" title="{l}"></i>' for l, c in sw if c)
-        surf = surface_blocks(b["surface"])[:5]
-        decor_ = ", ".join(dict.fromkeys(TXT.DECOR.get(d, d.replace("_", " ")) for d in b["decor"]))
-        animals = []
-        try:
-            sp = WF.spawners(b["mobs"])
-            for cat in (("water_creature", "creature") if g == "ocean" else ("creature",)):
-                for e in sp.get(cat, []):
-                    nm = vname("entity", e["type"].split(":")[-1])
-                    if nm not in animals:
-                        animals.append(nm)
-        except Exception:  # noqa: BLE001
-            pass
-        # the mod's own creatures added by biome modifiers (sea life), first
-        animals = [name(e) for e, bl in spawn_biomes.items()
-                   if e.startswith("wayfarers:") and "wayfarers:" + bid in bl and name(e) not in animals] + animals
-        monsters = []
-        try:
-            for e in WF.spawners(b["mobs"]).get("monster", []):
-                nm = vname("entity", e["type"].split(":")[-1])
-                if nm not in monsters:
-                    monsters.append(nm)
-        except Exception:  # noqa: BLE001
-            pass
-        replaces = ", ".join(vname("biome", v) for v in src) or ("biome de grotte en plus" if g == "cave" else "")
-        pct = share.get(bid, (None, None))[1]
-        shot_html = ctx.biome_shot(bid)
-        bgroups[g].append(f'''<article class="biome" id="bi-{bid}">
-  {shot_html}<div class="swatch">{swatch}</div>
-  <h4>{E(b["fr"])}<small>{E(b["en"])}</small></h4>
-  <p>{E(TXT.BIOMES.get(bid, ""))}</p>
-  <dl>
-    {f"<dt>Remplace</dt><dd>{E(replaces)}</dd>" if replaces else ""}
-    {f'<dt>Sol</dt><dd class="icons">{"".join(atlas.icon(x, 26) for x in surf)}</dd>' if surf else ""}
-    {f"<dt>Décor</dt><dd>{E(decor_)}</dd>" if decor_ else ""}
-    {f"<dt>Animaux</dt><dd>{E(', '.join(animals[:8]))}</dd>" if animals else ""}
-    {f"<dt>Monstres</dt><dd>{E(', '.join(monsters[:8]))}</dd>" if monsters and g != "ocean" else ""}
-    <dt>Climat</dt><dd>{climate(b)}{f" · {fmt_num(pct)} % de la carte" if pct else ""}</dd>
-  </dl>
-</article>''')
-        idx.add(b["fr"], "Biome", f"bi-{bid}", TXT.BIOMES.get(bid, "") + " " + b["en"])
-    sec.append(f'''<section class="block" id="monde">
-  {plaque("monde-h", "Le Nouveau Monde", "Relief, grottes et 52 biomes", "Le pack intégré <code>wayfarers:world_overhaul</code> remplace la génération de la Surface des <b>nouveaux</b> mondes : chaînes de montagnes jusque vers y 320, falaises, canyons, mesas, fjords, archipels et îles célestes, méga-cavernes entre y −40 et 10 et rivières souterraines, et des biomes propres au mod. Villages, forteresses et structures apparaissent comme avant.")}
-  <div class="callout"><b>Le désactiver :</b> mets <code>world.overhaul = false</code> dans <code>config/wayfarers-common.toml</code>, ou décoche le pack « Wayfarers : nouveau monde » dans l'écran Packs de données à la création du monde. Minecraft affiche un avertissement « expérimental » : c'est normal. Pour vérifier qu'il est actif : F3 affiche <code>wayfarers:…</code> comme biome, ou <code>/locate biome wayfarers:enchanted_forest</code>.</div>
-  {map_html}
-  {"".join(f'<h3 class="subhead">{E(t)}</h3><div class="grid biomes">{"".join(bgroups[k])}</div>' for k, t in TXT.BIOME_GROUPS if bgroups[k])}
 </section>''')
 
     # ================================================================== ITEMS CATALOGUE
@@ -1715,10 +1439,7 @@ def manual_paras(pid=None, item=None):
 def mob_where(ctx, mid):
     """HTML list of the structures and biomes a creature lives in."""
     parts = [f'<a href="#s-{w}">{E(FR.get("structure.wayfarers." + w, w))}</a>' for w in ctx.lives.get("wayfarers:" + mid, [])]
-    for b in ctx.spawn_biomes.get("wayfarers:" + mid, []):
-        bid = b.split(":")[-1]
-        nm = E(biome_name(b))
-        parts.append(f'<a href="#bi-{bid}">{nm}</a>' if b.startswith("wayfarers:") else nm)
+    parts += [E(biome_name(b)) for b in ctx.spawn_biomes.get("wayfarers:" + mid, [])]
     return ", ".join(parts)
 
 
@@ -1763,8 +1484,6 @@ def thumb(ctx, spec, label):
         return f'<img src="{ctx.mob_info[ref]["gif"]}" alt="{E(label, quote=True)}" loading="lazy">'
     if kind == "struct" and ref in ctx.struct_info:
         return f'<img src="{ctx.struct_info[ref]["files"]["gif"]}" alt="{E(label, quote=True)}" loading="lazy">'
-    if kind == "biome" and ctx.biome_shot(ref, caption=False):
-        return ctx.biome_shot(ref, caption=False)
     if kind == "img" and ref in ctx.gui.values():
         return f'<img src="{ref}" alt="{E(label, quote=True)}" loading="lazy">'
     if kind == "items":
@@ -1832,8 +1551,6 @@ def check_command(ctx, cmd, subs):
                 ok = i in ctx.all_ids
             elif parts[0] == "/summon":
                 ok = i in ctx.mob_info
-            elif parts[:2] == ["/locate", "biome"]:
-                ok = i in ctx.biomes
             else:
                 ok = i in sids
             if not ok:
@@ -2312,44 +2029,32 @@ def section_oceans(ctx):
 def section_worldblocks(ctx):
     from wf import worldblocks as WB
     atlas = ctx.atlas
-
-    def where(biomes):
-        return ", ".join(f'<a href="#bi-{b}">{E(biome_name("wayfarers:" + b))}</a>' for b in biomes if b in ctx.biomes)
-
-    def shot(biomes):
-        for b in biomes:
-            h = ctx.biome_shot(b, caption=False)
-            if h:
-                return h.replace('<div class="shot', '<div class="shot wbshot', 1) + f'<span class="shotcap">{E(biome_name("wayfarers:" + b))}</span>'
-        return ""
     woods = []
-    for w, (biomes, text) in TXT.WOODS.items():
+    for w, (where, text) in TXT.WOODS.items():
         if w not in WB.WOODS:
             continue
         ids = list(WB.ids(w))
         fr = WB.WOODS[w]["fr"]
         sap = f"{w}_sapling"
         woods.append(f'''<article class="card wb" id="bois-{w}">
-  <div class="wb-shot">{shot(biomes)}</div>
   <div class="wb-body"><h4>{atlas.icon(w + "_log", 36)}{E(fr[0].upper() + fr[1:])}</h4><p>{E(text)}</p>
-  <p class="where">{SVG["pin"]}<span>{where(biomes)}</span></p>
+  <p class="where">{SVG["pin"]}<span>{E(where)}</span></p>
   <div class="wb-icons">{"".join(f'<a href="#{anchor_item(i)}">{atlas.icon(i, 40)}</a>' for i in ids)}</div>
-  {recipe_block(ctx, sap, "Sans nouveau monde : la pousse")}</div>
+  {recipe_block(ctx, sap, "La pousse")}</div>
 </article>''')
         ctx.idx.add(fr.capitalize(), "Bois", f"bois-{w}", text)
     stones = []
-    for base, (biomes, text) in TXT.STONES.items():
+    for base, (where, text) in TXT.STONES.items():
         forms = [base] + WB.STONE_SETS.get(base, [])
         stones.append(f'''<article class="card wb" id="pierre-{base}">
-  <div class="wb-shot">{shot(biomes)}</div>
   <div class="wb-body"><h4>{atlas.icon(base, 36)}{E(name(base))}</h4><p>{E(text)}</p>
-  <p class="where">{SVG["pin"]}<span>{where(biomes)}</span></p>
+  <p class="where">{SVG["pin"]}<span>{E(where)}</span></p>
   <div class="wb-icons">{"".join(f'<a href="#{anchor_item(i)}d">{atlas.icon(i, 40)}</a>' for i in forms)}</div>
-  {recipe_block(ctx, base, "Sans nouveau monde")}</div>
+  {recipe_block(ctx, base, "Fabrication")}</div>
 </article>''')
         ctx.idx.add(name(base), "Pierre", f"pierre-{base}", text)
     return f'''<section class="block" id="blocs-monde">
-  {plaque("blocs-monde-h", "Nouveau · matériaux", "Bois et pierres du nouveau monde", E(TXT.WORLDBLOCKS_INTRO))}
+  {plaque("blocs-monde-h", "Matériaux", "Bois et pierres", E(TXT.WORLDBLOCKS_INTRO))}
   <h3 class="subhead" id="bois">Deux bois</h3>
   <p>{E(TXT.WOOD_HOW)}</p>
   <div class="grid wbs">{"".join(woods)}</div>
@@ -2492,7 +2197,6 @@ SECTIONS = {
     "oceans": ("Océans vivants", "Océans vivants", "wayfarers:diving_helmet"),
     "bestiaire": ("Bestiaire", "Bestiaire", "minecraft:skeleton_skull"),
     "structures": ("Structures", "Structures", "wayfarers:structure_compass"),
-    "monde": ("Nouveau Monde", "Nouveau Monde", "minecraft:grass_block"),
     "objets": ("Tous les objets", "Tous les objets", "wayfarers:travel_backpack"),
     "recettes": ("Recettes", "Recettes", "minecraft:crafting_table"),
 }
@@ -2506,7 +2210,7 @@ def render_page(sections, idx, atlas_rows, nav):
     nav_html = "".join(f'<a href="#{a}"{" class=new" if a in NEW_SECTIONS else ""}>{E(t)}</a>' for a, t in nav)
     data = json.dumps(idx.rows, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
     return f"""<title>Wayfarers Wiki</title>
-<meta name="description" content="Le guide illustré du mod Wayfarers : systèmes, bestiaire, structures, biomes et recettes.">
+<meta name="description" content="Le guide illustré du mod Wayfarers : systèmes, bestiaire, structures et recettes.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="{FONTS}">
@@ -2515,7 +2219,7 @@ def render_page(sections, idx, atlas_rows, nav):
 <header class="top">
   <a class="brand" href="#accueil">{SVG["cog"]}<span><b>Wayfarers</b><small>le grand manuel illustré</small></span></a>
   <div class="search" role="search">
-    {SVG["search"]}<input id="q" type="search" placeholder="Chercher un objet, un boss, un biome…" autocomplete="off" aria-label="Rechercher dans le wiki">
+    {SVG["search"]}<input id="q" type="search" placeholder="Chercher un objet, un boss, une structure…" autocomplete="off" aria-label="Rechercher dans le wiki">
     <div id="results" class="results" role="listbox" hidden></div>
   </div>
   <button id="theme" class="theme" type="button" aria-label="Changer de thème">{SVG["moon"]}</button>
@@ -2538,21 +2242,18 @@ CSS = r"""
   --rule:#cdb98f;--brass:#a8761f;--brass-hi:#e4b75a;--brass-lo:#6e4b12;--verd:#2f7d6d;--verd-2:#d6e9e2;
   --rust:#a4472b;--case:#181b1f;--case-rim:#3a3226;--link:#1f6a5c;--shadow:0 1px 0 rgba(255,255,255,.6) inset,0 2px 10px rgba(60,40,10,.12);
   --plate-ink:#2a1d08;--kbd:#fbf6ea;--chip:#efe5cd;--focus:#1f6a5c;
-  --sky-a:#d3e3ec;--sky-b:#f1eadb;--deep-a:#3b3631;--deep-b:#1f1c19;
   color-scheme:light;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   --paper:#121416;--paper-2:#181b1e;--card:#1d2024;--card-2:#23272c;--ink:#ece2cc;--ink-2:#b9ab90;--ink-3:#8c8068;
   --rule:#3b352a;--brass:#d6a64b;--brass-hi:#f0c977;--brass-lo:#8a6320;--verd:#62bba7;--verd-2:#1d3530;
   --rust:#d77452;--case:#181b1f;--case-rim:#4a4030;--link:#7fcfbd;--shadow:0 2px 14px rgba(0,0,0,.45);
-  --plate-ink:#22180a;--kbd:#2a2e33;--chip:#262a2f;--focus:#f0c977;
-  --sky-a:#22313b;--sky-b:#1d2024;--deep-a:#141416;--deep-b:#0c0c0e;color-scheme:dark}}
+  --plate-ink:#22180a;--kbd:#2a2e33;--chip:#262a2f;--focus:#f0c977;color-scheme:dark}}
 :root[data-theme="dark"]{
   --paper:#121416;--paper-2:#181b1e;--card:#1d2024;--card-2:#23272c;--ink:#ece2cc;--ink-2:#b9ab90;--ink-3:#8c8068;
   --rule:#3b352a;--brass:#d6a64b;--brass-hi:#f0c977;--brass-lo:#8a6320;--verd:#62bba7;--verd-2:#1d3530;
   --rust:#d77452;--case:#181b1f;--case-rim:#4a4030;--link:#7fcfbd;--shadow:0 2px 14px rgba(0,0,0,.45);
-  --plate-ink:#22180a;--kbd:#2a2e33;--chip:#262a2f;--focus:#f0c977;
-  --sky-a:#22313b;--sky-b:#1d2024;--deep-a:#141416;--deep-b:#0c0c0e;color-scheme:dark}
+  --plate-ink:#22180a;--kbd:#2a2e33;--chip:#262a2f;--focus:#f0c977;color-scheme:dark}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:84px}
 body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.55 "Alegreya Sans",system-ui,sans-serif;
@@ -2766,30 +2467,6 @@ a.chip:hover{border-color:var(--brass)}
 .views{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:12px}
 .views .vitrine{aspect-ratio:1/1}.views img{width:100%;height:100%;object-fit:contain;cursor:zoom-in}
 /* world */
-.maps{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;margin:14px 0}
-.map{margin:0;background:var(--case);border:3px solid var(--case-rim);border-radius:10px;padding:8px}
-.map img{width:100%;image-rendering:pixelated;display:block;border-radius:4px}
-.map figcaption{color:#d8c69c;font-size:14px;padding:6px 2px 0}
-.legend-box{background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:10px 14px;margin:0 0 10px}
-.legend-box summary{cursor:pointer;font-weight:700}
-.maplegend{list-style:none;padding:0;margin:10px 0 0;columns:220px;column-gap:18px;font-size:14.5px}
-.maplegend li{display:flex;align-items:center;gap:8px;break-inside:avoid;padding:2px 0}
-.maplegend a{display:flex;align-items:center;gap:8px;color:var(--ink);text-decoration:none;flex:1}
-.maplegend i{width:14px;height:14px;border-radius:3px;flex:none;border:1px solid rgba(0,0,0,.3)}
-.maplegend small{color:var(--ink-3)}
-.biomes{grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
-.biome{background:var(--card);border:1px solid var(--rule);border-radius:10px;overflow:hidden;box-shadow:var(--shadow);min-width:0}
-.swatch{display:flex;height:16px}.swatch i{flex:1}
-.shot{position:relative;aspect-ratio:4/3;background:linear-gradient(var(--sky-a),var(--sky-b))}
-.shot.cave{background:linear-gradient(var(--deep-a),var(--deep-b))}
-.shot i{position:absolute;inset:0;background-repeat:no-repeat}
-.shot small{position:absolute;right:8px;bottom:6px;padding:1px 7px;border-radius:4px;background:var(--card);color:var(--ink-3);font:600 11px "Pixelify Sans",monospace;opacity:.92}
-.biome h4{margin:10px 14px 2px;font:700 19px "Zilla Slab",serif;display:flex;flex-wrap:wrap;align-items:baseline;gap:8px}
-.biome h4 small{font:500 13px "Alegreya Sans",sans-serif;color:var(--ink-3)}
-.biome p{margin:0 14px 6px;font-size:15px;color:var(--ink-2)}
-.biome dl{display:grid;grid-template-columns:auto 1fr;gap:3px 10px;margin:6px 14px 14px;font-size:14px}
-.biome dt{font:600 11px "Pixelify Sans",monospace;text-transform:uppercase;color:var(--ink-3);padding-top:3px}
-.biome dd{margin:0}.biome dd.icons{display:flex;gap:3px}
 /* items */
 .items{grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px}
 .item{display:flex;gap:10px;align-items:flex-start;background:var(--card-2);border:1px solid var(--rule);border-radius:8px;padding:8px;min-width:0}
@@ -2921,8 +2598,6 @@ a.chip:hover{border-color:var(--brass)}
 .theme-n{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;flex:none;font:700 15px "Pixelify Sans",monospace;
   color:#2a1d08;background:radial-gradient(circle at 35% 30%,#f6d98e,#b98a2e 70%)}
 .theme-lede{margin:-6px 0 12px;color:var(--ink-2)}
-.news-thumb .shot{position:absolute;inset:0;aspect-ratio:auto}
-.news-thumb .shot i{inset:0 auto;left:50%;height:100%;aspect-ratio:4/3;transform:translateX(-50%)}
 .news-thumb.shotthumb img{inset:0;width:100%;height:100%;object-fit:cover;object-position:top left;image-rendering:auto}
 .newtag{position:absolute;right:6px;top:6px;z-index:3;font:700 10px "Pixelify Sans",monospace;text-transform:uppercase;letter-spacing:.05em;
   padding:1px 6px;border-radius:4px;background:var(--rust);color:#fff4e6}
@@ -3019,9 +2694,6 @@ a.chip:hover{border-color:var(--brass)}
 .wbs{grid-template-columns:repeat(auto-fill,minmax(min(100%,420px),1fr))}
 .wbs.three{grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr))}
 .wb{padding:0;overflow:hidden;display:flex;flex-direction:column}
-.wb-shot{position:relative}
-.wb-shot .shot{border-bottom:3px solid var(--case-rim)}
-.shotcap{position:absolute;left:8px;bottom:8px;padding:1px 8px;border-radius:4px;background:rgba(0,0,0,.6);color:#f1e4c4;font:600 12px "Pixelify Sans",monospace}
 .wb-body{padding:12px 16px 16px}
 .wb-icons{display:flex;flex-wrap:wrap;gap:4px;margin:8px 0}
 .wb-icons a{display:inline-flex;border-radius:6px;padding:2px;background:var(--card-2);border:1px solid var(--rule)}
@@ -3049,7 +2721,7 @@ a.chip:hover{border-color:var(--brass)}
   .plaque{padding:14px 16px}
   .tbl{font-size:14px}.tbl th,.tbl td{padding:6px 7px}
   .tbl td:first-child code{white-space:normal;word-break:break-word}
-  .steps,.pages,.minis,.quests,.branches,.rows,.machines,.metals,.decos,.mobs,.structs,.biomes,.items,.recipes{grid-template-columns:minmax(0,1fr)}
+  .steps,.pages,.minis,.quests,.branches,.rows,.machines,.metals,.decos,.mobs,.structs,.items,.recipes{grid-template-columns:minmax(0,1fr)}
   .spins{grid-template-columns:repeat(2,minmax(0,1fr))}
   .views{grid-template-columns:repeat(3,minmax(0,1fr))}
   body{font-size:16px}

@@ -4,9 +4,8 @@ textures and manual pages, like gadgets.py).
 Java: registry/ModOcean.java (blocks, items, spawn eggs, the bubble_vent feature), entity/ocean/* and
 ModEntities (creatures), event/OceanEvents.java (the Sea Serpent rises near boats at night; Glow Jelly brewing).
 
-Everything placed in the world is in the mod's own data (not the world-overhaul pack), so vanilla oceans get it too:
-Forge biome modifiers add the spawns and the features to biome tags (data/wayfarers/tags/worldgen/biome/ocean/*)
-that list the vanilla oceans and the overhaul's seas (glacial_sea, slate_sea, azure_ocean, coral_lagoon).
+Everything placed in the world is in the mod's own data: Forge biome modifiers add the spawns and the features to
+biome tags (data/wayfarers/tags/worldgen/biome/ocean/*) that list the vanilla oceans.
 """
 import math
 import random
@@ -162,19 +161,16 @@ def loot(write):
 
 
 # ------------------------------------------------------------------ worldgen (gen_data.py)
-# biome tags: vanilla oceans + the overhaul's seas (absent when the overhaul is off: required false)
+# biome tags of vanilla oceans
 OCEAN_TAGS = {
     "all": ["ocean", "deep_ocean", "cold_ocean", "deep_cold_ocean", "lukewarm_ocean", "deep_lukewarm_ocean",
-            "warm_ocean", f"{NS}:slate_sea", f"{NS}:azure_ocean", f"{NS}:coral_lagoon"],
-    "cold": ["cold_ocean", "deep_cold_ocean", "frozen_ocean", "deep_frozen_ocean", f"{NS}:glacial_sea",
-             f"{NS}:slate_sea"],
-    "temperate": ["ocean", "deep_ocean", f"{NS}:azure_ocean"],
-    "warm": ["warm_ocean", "lukewarm_ocean", "deep_lukewarm_ocean", f"{NS}:coral_lagoon"],
-    "coral": ["warm_ocean", f"{NS}:coral_lagoon"],
-    "manta": ["ocean", "deep_ocean", "warm_ocean", "lukewarm_ocean", "deep_lukewarm_ocean", f"{NS}:azure_ocean",
-              f"{NS}:coral_lagoon"],
-    "deep": ["deep_ocean", "deep_cold_ocean", "deep_lukewarm_ocean", "deep_frozen_ocean", f"{NS}:azure_ocean",
-             f"{NS}:slate_sea", f"{NS}:glacial_sea"],
+            "warm_ocean"],
+    "cold": ["cold_ocean", "deep_cold_ocean", "frozen_ocean", "deep_frozen_ocean"],
+    "temperate": ["ocean", "deep_ocean"],
+    "warm": ["warm_ocean", "lukewarm_ocean", "deep_lukewarm_ocean"],
+    "coral": ["warm_ocean"],
+    "manta": ["ocean", "deep_ocean", "warm_ocean", "lukewarm_ocean", "deep_lukewarm_ocean"],
+    "deep": ["deep_ocean", "deep_cold_ocean", "deep_lukewarm_ocean", "deep_frozen_ocean"],
 }
 
 # spawns per biome tag: (tag, entity, weight, min, max). Balance: vanilla oceans have cod 10-15 and squid 1-10
@@ -275,7 +271,7 @@ def features():
 # biome-modifier tags of the features (a feature may need a tag of its own)
 FEATURE_TAGS = {
     # whales stay out of frozen seas: there squid are the only other big swimmer, so whales would be half of all spawns
-    "whales": [b for b in OCEAN_TAGS["deep"] if "frozen" not in b and "glacial" not in b],
+    "whales": [b for b in OCEAN_TAGS["deep"] if "frozen" not in b],
     "kelp": OCEAN_TAGS["cold"] + OCEAN_TAGS["temperate"],
     "meadow": OCEAN_TAGS["temperate"] + OCEAN_TAGS["warm"],
     "oysters": OCEAN_TAGS["temperate"] + OCEAN_TAGS["warm"],
@@ -283,11 +279,7 @@ FEATURE_TAGS = {
 
 
 def _tag_values(ids):
-    out = []
-    for b in ids:
-        rid = b if ":" in b else f"minecraft:{b}"
-        out.append(rid if rid.startswith("minecraft:") else {"id": rid, "required": False})
-    return {"replace": False, "values": out}
+    return {"replace": False, "values": [b if ":" in b else f"minecraft:{b}" for b in ids]}
 
 
 def worldgen(write):

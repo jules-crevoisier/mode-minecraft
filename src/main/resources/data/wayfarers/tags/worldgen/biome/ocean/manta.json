@@ -5,14 +5,6 @@
     "minecraft:deep_ocean",
     "minecraft:warm_ocean",
     "minecraft:lukewarm_ocean",
-    "minecraft:deep_lukewarm_ocean",
-    {
-      "id": "wayfarers:azure_ocean",
-      "required": false
-    },
-    {
-      "id": "wayfarers:coral_lagoon",
-      "required": false
-    }
+    "minecraft:deep_lukewarm_ocean"
   ]
 }

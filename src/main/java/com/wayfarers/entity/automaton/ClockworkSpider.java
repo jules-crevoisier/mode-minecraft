@@ -37,7 +37,7 @@ import net.minecraft.world.phys.Vec3;
 import java.util.EnumSet;
 
 /**
- * Araignée-horloge (Clockwork Spider): a small, fast brass automaton of the Rustlands, the Cogwork Valley and the
+ * Araignée-horloge (Clockwork Spider): a small, fast brass automaton of the badlands, the savanna highlands and the
  * Clockwork Citadel, with a wind-up key turning on its back.
  * <ul>
  *     <li>Weak alone (14 health, 3 damage) but quick (speed 0.36) and usually in packs; climbs walls like a spider

@@ -1,0 +1,6 @@
+{
+  "type": "forge:add_features",
+  "biomes": "#wayfarers:stone_veins/blue_slate",
+  "features": "wayfarers:blue_slate_vein",
+  "step": "underground_ores"
+}

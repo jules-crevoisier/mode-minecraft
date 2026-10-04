@@ -139,6 +139,22 @@
           "type": "minecraft:item",
           "name": "minecraft:spyglass",
           "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wayfarers:rustwood_sapling",
+          "weight": 5,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 1,
+                "max": 2
+              },
+              "add": false
+            }
+          ]
         }
       ]
     },

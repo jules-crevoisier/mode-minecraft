@@ -5,19 +5,7 @@
     "minecraft:deep_cold_ocean",
     "minecraft:frozen_ocean",
     "minecraft:deep_frozen_ocean",
-    {
-      "id": "wayfarers:glacial_sea",
-      "required": false
-    },
-    {
-      "id": "wayfarers:slate_sea",
-      "required": false
-    },
     "minecraft:ocean",
-    "minecraft:deep_ocean",
-    {
-      "id": "wayfarers:azure_ocean",
-      "required": false
-    }
+    "minecraft:deep_ocean"
   ]
 }

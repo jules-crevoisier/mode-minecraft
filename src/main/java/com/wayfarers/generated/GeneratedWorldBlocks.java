@@ -41,7 +41,7 @@ public final class GeneratedWorldBlocks {
     /** Block items in creative-tab order. */
     public static final List<RegistryObject<Item>> ITEMS = new ArrayList<>();
 
-    /** Grows wayfarers:glowwood_tree (data/wayfarers/worldgen/configured_feature), also planted by the world overhaul. */
+    /** Grows wayfarers:glowwood_tree (data/wayfarers/worldgen/configured_feature). */
     public static final TreeGrower GLOWWOOD_GROWER = new TreeGrower("wayfarers_glowwood", Optional.empty(), Optional.of(feature("glowwood_tree")), Optional.empty());
     public static final RegistryObject<Block> GLOWWOOD_LOG = block("glowwood_log", p -> new WoodBlocks.Log(GeneratedWorldBlocks.STRIPPED_GLOWWOOD_LOG, p), () -> log(MapColor.COLOR_LIGHT_GRAY, MapColor.TERRACOTTA_WHITE));
     public static final RegistryObject<Block> GLOWWOOD_WOOD = block("glowwood_wood", p -> new WoodBlocks.Log(GeneratedWorldBlocks.STRIPPED_GLOWWOOD_WOOD, p), () -> log(MapColor.TERRACOTTA_WHITE, MapColor.TERRACOTTA_WHITE));
@@ -59,7 +59,7 @@ public final class GeneratedWorldBlocks {
     public static final RegistryObject<Block> GLOWWOOD_LEAVES = block("glowwood_leaves", p -> new WoodBlocks.Leaves(0.01F, ColorParticleOption.create(ParticleTypes.TINTED_LEAVES, -10495800), p), () -> leaves(MapColor.COLOR_CYAN, 6));
     public static final RegistryObject<Block> GLOWWOOD_SAPLING = block("glowwood_sapling", p -> new SaplingBlock(GLOWWOOD_GROWER, p), () -> BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollision().randomTicks().instabreak().sound(SoundType.GRASS).pushReaction(PushReaction.DESTROY).lightLevel(s -> 3));
 
-    /** Grows wayfarers:rustwood_tree (data/wayfarers/worldgen/configured_feature), also planted by the world overhaul. */
+    /** Grows wayfarers:rustwood_tree (data/wayfarers/worldgen/configured_feature). */
     public static final TreeGrower RUSTWOOD_GROWER = new TreeGrower("wayfarers_rustwood", Optional.empty(), Optional.of(feature("rustwood_tree")), Optional.empty());
     public static final RegistryObject<Block> RUSTWOOD_LOG = block("rustwood_log", p -> new WoodBlocks.Log(GeneratedWorldBlocks.STRIPPED_RUSTWOOD_LOG, p), () -> log(MapColor.TERRACOTTA_RED, MapColor.TERRACOTTA_BROWN));
     public static final RegistryObject<Block> RUSTWOOD_WOOD = block("rustwood_wood", p -> new WoodBlocks.Log(GeneratedWorldBlocks.STRIPPED_RUSTWOOD_WOOD, p), () -> log(MapColor.TERRACOTTA_BROWN, MapColor.TERRACOTTA_BROWN));

@@ -3,16 +3,8 @@
   "values": [
     "minecraft:ocean",
     "minecraft:deep_ocean",
-    {
-      "id": "wayfarers:azure_ocean",
-      "required": false
-    },
     "minecraft:warm_ocean",
     "minecraft:lukewarm_ocean",
-    "minecraft:deep_lukewarm_ocean",
-    {
-      "id": "wayfarers:coral_lagoon",
-      "required": false
-    }
+    "minecraft:deep_lukewarm_ocean"
   ]
 }

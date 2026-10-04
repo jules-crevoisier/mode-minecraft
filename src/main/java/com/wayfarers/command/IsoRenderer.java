@@ -6,8 +6,8 @@ import java.awt.image.BufferedImage;
  * Draws a box of blocks as an isometric voxel diorama (plain Java, no game classes, so it can be tried out on a fake
  * grid). Each block is an 8 x 8 px hexagon: top face lit, left face (+z) a little darker, right face (+x) in shade.
  * The sun comes from -x at 45 degrees and casts block shadows; water is drawn see-through on top of the ground below
- * it; plants are small sprites; carpets and snow layers are thin plates. For caves the top layer of the box is the
- * cut: rock there is drawn darker so the holes into the caverns read at a glance.
+ * it; plants are small sprites; carpets and snow layers are thin plates. {@link BlockSampler} reads the voxels from
+ * the world.
  *
  * <p>A voxel is an int: bits 0-23 colour, bits 24-26 the kind, then flags (see the constants).
  */
@@ -21,8 +21,6 @@ final class IsoRenderer {
     static final int WET = 1 << 28;
     static final int GRASSY = 1 << 29;
     static final int FLOWER = 1 << 30;
-    /** The top of this block is a section through the rock (cave cutaway): drawn darker. */
-    static final int CUT = 1 << 31;
 
     private static final int CELL = 8;
     private static final int DIRT = 0x8C6444;
@@ -59,21 +57,16 @@ final class IsoRenderer {
     private final int sy;
     private final int sz;
     private final int[] vox;
-    private final boolean cut;
     private int[] px;
     private int w;
     private int h;
 
-    /**
-     * @param vox voxels indexed {@code (y * sz + z) * sx + x}; outside the box counts as air
-     * @param cut true for a cave cutaway (see {@link #peel}): deeper blocks fade a little
-     */
-    IsoRenderer(int sx, int sy, int sz, int[] vox, boolean cut) {
+    /** @param vox voxels indexed {@code (y * sz + z) * sx + x}; outside the box counts as air */
+    IsoRenderer(int sx, int sy, int sz, int[] vox) {
         this.sx = sx;
         this.sy = sy;
         this.sz = sz;
         this.vox = vox;
-        this.cut = cut;
     }
 
     static int voxel(int kind, int rgb, int flags) {
@@ -129,15 +122,11 @@ final class IsoRenderer {
         int oy = (x + z) * CELL / 4 - y * CELL / 2 + (sy - 1) * CELL / 2;
         int rgb = v & 0xFFFFFF;
         boolean glow = (v & GLOW) != 0;
-        double fog = 1.0;
-        if (cut && !glow) {
-            fog = Math.max(0.55, 1.0 - 0.014 * (sy - 1 - y));
-        }
         double blockNoise = 1.0 + (((hash(x, y, z) & 255) / 255.0) - 0.5) * 0.10;
         switch (kind(v)) {
-            case SOLID -> drawSolid(x, y, z, v, rgb, glow, fog * blockNoise, ox, oy);
-            case PLANT -> drawPlant(x, y, z, v, rgb, glow, fog * blockNoise, ox, oy);
-            case CARPET -> drawCarpet(x, y, z, rgb, glow, fog * blockNoise, ox, oy);
+            case SOLID -> drawSolid(x, y, z, v, rgb, glow, blockNoise, ox, oy);
+            case PLANT -> drawPlant(x, y, z, v, rgb, glow, blockNoise, ox, oy);
+            case CARPET -> drawCarpet(x, y, z, rgb, glow, blockNoise, ox, oy);
             default -> { }
         }
         if (wet(v)) {
@@ -153,18 +142,13 @@ final class IsoRenderer {
             return;
         }
         double topF = glow ? 1.15 : 1.0;
-        boolean section = (v & CUT) != 0;
         if (top && !glow) {
-            if (section) {
-                topF = 0.58;
-            } else {
-                if (shadowed(x, y + 1, z)) {
-                    topF *= 0.70;
-                }
-                int occ = (opaque(x - 1, y + 1, z) ? 1 : 0) + (opaque(x, y + 1, z - 1) ? 1 : 0)
-                        + (opaque(x + 1, y + 1, z) ? 1 : 0) + (opaque(x, y + 1, z + 1) ? 1 : 0);
-                topF *= 1.0 - 0.07 * occ;
+            if (shadowed(x, y + 1, z)) {
+                topF *= 0.70;
             }
+            int occ = (opaque(x - 1, y + 1, z) ? 1 : 0) + (opaque(x, y + 1, z - 1) ? 1 : 0)
+                    + (opaque(x + 1, y + 1, z) ? 1 : 0) + (opaque(x, y + 1, z + 1) ? 1 : 0);
+            topF *= 1.0 - 0.07 * occ;
         }
         double leftF = glow ? 1.0 : 0.80 * (left && shadowed(x, y, z + 1) ? 0.78 : 1.0);
         double rightF = glow ? 0.88 : 0.60;
@@ -175,7 +159,7 @@ final class IsoRenderer {
                 int col;
                 double k;
                 if (face == 1 && top) {
-                    col = section ? mix(rgb, 0x45454E, 0.25) : rgb;
+                    col = rgb;
                     k = topF;
                 } else if (face == 2 && left) {
                     col = grassy && BELOW_EDGE[r][c] > 1.0 ? DIRT : rgb;
@@ -277,90 +261,6 @@ final class IsoRenderer {
             return;
         }
         px[i] = 0xFF000000 | mix(under & 0xFFFFFF, rgb, alpha);
-    }
-
-    // ------------------------------------------------------------------ cave cutaway
-
-    /**
-     * Opens a block of rock so its caves can be seen from above. In each column the rock above the highest cave
-     * opening is taken away (the cave floor shows); columns of solid rock keep a wall that starts 3 blocks above the
-     * nearest cave floor and rises one block per block away from it. Seen from the isometric camera those slopes run
-     * along the line of sight, so they never hide the floors behind them. The new tops of the rock get {@link #CUT}.
-     */
-    static int[] peel(int[] vox, int sx, int sy, int sz) {
-        int[] out = vox.clone();
-        int[] height = new int[sx * sz];
-        int big = 1 << 20;
-        boolean any = false;
-        for (int z = 0; z < sz; z++) {
-            for (int x = 0; x < sx; x++) {
-                int open = -1;
-                for (int y = sy - 1; y >= 0; y--) {
-                    if (kind(vox[(y * sz + z) * sx + x]) != SOLID) {
-                        open = y;
-                        break;
-                    }
-                }
-                if (open < 0) {
-                    height[z * sx + x] = big;
-                    continue;
-                }
-                any = true;
-                int floor = open;
-                while (floor >= 0 && kind(vox[(floor * sz + z) * sx + x]) != SOLID) {
-                    floor--;
-                }
-                for (int y = open + 1; y < sy; y++) {
-                    out[(y * sz + z) * sx + x] = 0;
-                }
-                height[z * sx + x] = -(floor + 3) - 1;  // negative: a cave column (fixed), value floor + 3
-            }
-        }
-        if (!any) {
-            return out;
-        }
-        // chamfer pass over the solid columns: lowest neighbour + 1, cave columns seed at floor + 3
-        int[] hh = new int[sx * sz];
-        for (int i = 0; i < hh.length; i++) {
-            hh[i] = height[i] < 0 ? -height[i] - 1 : big;
-        }
-        for (int pass = 0; pass < 4; pass++) {
-            boolean back = (pass & 1) == 1;
-            for (int k = 0; k < sx * sz; k++) {
-                int i = back ? sx * sz - 1 - k : k;
-                if (height[i] < 0) {
-                    continue;
-                }
-                int x = i % sx;
-                int z = i / sx;
-                int best = hh[i];
-                for (int dz = -1; dz <= 1; dz++) {
-                    for (int dx = -1; dx <= 1; dx++) {
-                        int nx = x + dx;
-                        int nz = z + dz;
-                        if ((dx != 0 || dz != 0) && nx >= 0 && nz >= 0 && nx < sx && nz < sz) {
-                            best = Math.min(best, hh[nz * sx + nx] + 1);
-                        }
-                    }
-                }
-                hh[i] = best;
-            }
-        }
-        for (int z = 0; z < sz; z++) {
-            for (int x = 0; x < sx; x++) {
-                if (height[z * sx + x] < 0) {
-                    continue;
-                }
-                int top = Math.min(sy - 1, hh[z * sx + x]);
-                for (int y = top + 1; y < sy; y++) {
-                    out[(y * sz + z) * sx + x] = 0;
-                }
-                if (top >= 0) {
-                    out[(top * sz + z) * sx + x] |= CUT;
-                }
-            }
-        }
-        return out;
     }
 
     // ------------------------------------------------------------------ framing

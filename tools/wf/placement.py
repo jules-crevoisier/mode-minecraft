@@ -174,9 +174,6 @@ BIOMES = {
     "dwarven_mine": ["#minecraft:is_mountain", "#minecraft:is_hill", "windswept_hills", "windswept_gravelly_hills",
                      "#minecraft:is_taiga"],
 }
-# the overhaul's extra cave biomes (they replace no vanilla biome, so no vanilla tag lists them)
-EXTRA_CAVES = ["wayfarers:fungal_grotto", "wayfarers:mithril_hollows"]
-DEEP_EVERYWHERE = ("dwarven_forge", "crystal_grotto", "undercity", "dwarven_city", "crystal_cathedral")
 
 # ------------------------------------------------------------------ site fit (see "Site selection" above)
 FIT_MODES = ("land", "wetland", "coast", "seabed", "sky", "underground", "cavern")
@@ -297,8 +294,6 @@ def apply_overrides():
             sdef.foundation = FOUNDATION[sdef.id]
         if sdef.id in BIOMES:
             sdef.biomes = list(BIOMES[sdef.id])
-        if sdef.id in DEEP_EVERYWHERE:
-            sdef.biomes = list(sdef.biomes) + [b for b in EXTRA_CAVES if b not in sdef.biomes]
 
 
 # ------------------------------------------------------------------ site fit
@@ -382,19 +377,6 @@ def write_sets(ns_dir, write_json):
     for f in os.listdir(out_dir):
         if f.endswith(".json") and f not in keep:
             os.remove(os.path.join(out_dir, f))
-    write_json(os.path.join(ns_dir, "tags", "worldgen", "structure", "clears_decoration.json"), clears_decoration())
-
-
-# vanilla surface structures whose chunks keep the overhaul's big decorations (thorns, hoodoos, boulders) away
-VANILLA_CLEARS = ["#minecraft:village", "minecraft:pillager_outpost", "minecraft:desert_pyramid",
-                  "minecraft:jungle_pyramid", "minecraft:swamp_hut", "minecraft:igloo", "minecraft:mansion"]
-
-
-def clears_decoration():
-    """Tag wayfarers:clears_decoration (com.wayfarers.world.ClearOfStructuresFilter): the structures standing on the
-    ground, ours (land, wetland, coast) and vanilla's, so no surface feature grows through them."""
-    ours = sorted(f"wayfarers:{sid}" for sid, fit in FIT.items() if fit["mode"] in ("land", "wetland", "coast"))
-    return {"replace": False, "values": ours + [{"id": v, "required": False} for v in VANILLA_CLEARS]}
 
 
 # ------------------------------------------------------------------ terrain fit
@@ -428,11 +410,7 @@ def _vanilla_tags():
 
 
 def biome_set(sdef):
-    """Vanilla biome ids a structure may start in (tags expanded, our biomes mapped back to the vanilla ones)."""
-    from .biomes import VANILLA_TO_OURS
-    ours = {}
-    for v, o in VANILLA_TO_OURS.items():
-        ours.setdefault(o, set()).add(v)
+    """Vanilla biome ids a structure may start in (tags expanded)."""
     def tag_biomes(name, seen=()):
         tag = _vanilla_tags().get(name)
         if not tag or name in seen:
@@ -446,8 +424,6 @@ def biome_set(sdef):
     for b in sdef.biomes:
         if b.startswith("#"):
             out |= tag_biomes(b.split(":")[-1])
-        elif b.startswith(defs.MODID + ":"):
-            out |= ours.get(b.split(":")[1], set())
         else:
             out.add(b.split(":")[-1])
     return out
