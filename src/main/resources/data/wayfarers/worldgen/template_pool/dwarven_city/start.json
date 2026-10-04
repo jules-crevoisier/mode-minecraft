@@ -75,11 +75,11 @@
               0
             ],
             "size": [
-              29,
+              28,
               34,
               24
             ],
-            "blocks": 16812
+            "blocks": 16740
           },
           {
             "location": "wayfarers:dwarven_city/city/x1_z1",
@@ -89,11 +89,11 @@
               24
             ],
             "size": [
-              29,
+              28,
               24,
               25
             ],
-            "blocks": 16100
+            "blocks": 15650
           },
           {
             "location": "wayfarers:dwarven_city/city/x1_z2",
@@ -103,11 +103,11 @@
               49
             ],
             "size": [
-              29,
+              28,
               46,
               25
             ],
-            "blocks": 29517
+            "blocks": 28525
           },
           {
             "location": "wayfarers:dwarven_city/city/x1_z3",
@@ -117,67 +117,67 @@
               74
             ],
             "size": [
-              29,
+              28,
               45,
               24
             ],
-            "blocks": 27918
+            "blocks": 26979
           },
           {
             "location": "wayfarers:dwarven_city/city/x2_z0",
             "offset": [
-              57,
+              56,
               9,
               20
             ],
             "size": [
-              2,
+              3,
               18,
               4
             ],
-            "blocks": 84
+            "blocks": 156
           },
           {
             "location": "wayfarers:dwarven_city/city/x2_z1",
             "offset": [
-              57,
+              56,
               9,
               24
             ],
             "size": [
-              2,
+              3,
               18,
               25
             ],
-            "blocks": 525
+            "blocks": 975
           },
           {
             "location": "wayfarers:dwarven_city/city/x2_z2",
             "offset": [
-              57,
+              56,
               5,
               49
             ],
             "size": [
-              28,
+              29,
               43,
               25
             ],
-            "blocks": 25294
+            "blocks": 26286
           },
           {
             "location": "wayfarers:dwarven_city/city/x2_z3",
             "offset": [
-              57,
+              56,
               5,
               74
             ],
             "size": [
-              28,
+              29,
               43,
               24
             ],
-            "blocks": 24874
+            "blocks": 25813
           }
         ],
         "projection": "rigid",

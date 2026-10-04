@@ -16,6 +16,7 @@ Ground y = 0, house floor y = 1, front (south) facade at z = 9:
 """
 import math
 
+from .. import interior as INT
 from ..arch import Palette, stair, slab
 from ..defs import Piece, StructureDef, register
 from ..parts import LOOT
@@ -752,6 +753,24 @@ def manor(bp):
     conservatory(bp)
     workshop(bp)
     garden(bp)
+    household(bp)
+
+
+def household(bp):
+    """The inventor's household: an apprentice in the workshop, a librarian in the study, a cook, an alchemist in
+    the cellar laboratory, a gardener; every room cluttered with gadgets, books and half-built machines."""
+    ws = ((X0 - 15, 1, -6), (X0 - 2, 8, 6))
+    lab = ((-13, -9, -8), (9, -2, 6))
+    house = ((X0, F0, Z0), (X1, TOP + 8, Z1))
+    INT.populate(bp, [("toolsmith", 3), "armorer"], region=ws, seed=1)
+    INT.populate(bp, [("cleric", 3)], region=lab, seed=2)
+    INT.populate(bp, [("librarian", 3), "butcher", "cartographer", "farmer"], region=house, seed=3,
+                 bell=None, guard=("brass", (X1 + 6, 1, 0)))
+    INT.decorate(bp, "workshop", seed=1, region=ws)
+    INT.decorate(bp, "lab", seed=2, region=lab)
+    INT.decorate(bp, "steampunk", seed=3, region=house)
+    INT.decorate(bp, "steampunk", seed=4)
+    INT.yard(bp, (X0 - 20, Z0 - 20, X1 + 20, Z1 + 25), 1, "garden", count=6, seed=1)
 
 
 register(StructureDef(

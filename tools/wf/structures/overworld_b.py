@@ -4,6 +4,7 @@ import math
 import random
 
 from .. import arch
+from .. import interior as I
 from ..arch import Palette, slab, stair
 from ..blueprint import with_props
 from ..defs import Piece, StructureDef, register
@@ -729,6 +730,9 @@ def giant_tree(v):
         for x, z, s in ((-20, 12, 1), (18, -16, 2), (-15, -20, 3), (21, 14, 4)):
             arch.boulder(bp, x, 1, z, r=2, seed=s, blocks=("mossy_cobblestone", "cobblestone", "andesite", "tuff"))
 
+        # ---------------------------------------------------------------- lived-in rooms in the hollow trunk
+        I.decorate(bp, dict(I.THEMES["home"], wood=deck), seed=v["seed"])
+
     return build
 
 
@@ -1312,6 +1316,16 @@ def oasis(bp):
     # deeper still: the hypostyle, the Well of Souls and the Sand Pharaoh's great burial hall
     lair_sand_pharaoh.build(bp)
 
+    # ---------------------------------------------------------------- caravan folk, traders, the tomb's dust
+    serai = ((X0, 1, ZB), (X1, 30, ZF))
+    I.populate(bp, [("cartographer", 3), "leatherworker", "butcher", "shepherd"], region=serai, vtype="desert",
+               seed=1, bell=(4, 1, -12))
+    I.wandering_trader(bp, 29, 1, 4, facing="south")
+    I.wandering_trader(bp, 20, 1, -12, facing="west")
+    I.decorate(bp, dict(I.THEMES["home"], wood="jungle", rugs=["orange", "red", "yellow"]), seed=1, region=serai)
+    I.decorate(bp, "crypt", seed=2, region=((-60, TY - 40, -80), (60, -1, 60)), loot=LOOT + "desert_tomb")
+    I.decorate(bp, "storage", seed=3)
+
 
 register(StructureDef(
     "desert_oasis", "overworld", ["desert"], [Piece("oasis", oasis)],
@@ -1665,6 +1679,9 @@ def witch_huts(bp):
         bp.lantern(x + 1, 3, z, hanging=True, soul=True)
     _hang_under(bp, ((-30, 2, -30), (30, 40, 30)), 0.10, 7, ("moss", "moss", "vine"),
                 on=("_leaves", "_planks", "roof_tile"))
+    # cluttered witch kitchens: cauldrons, brewing stands, jars of things best left alone
+    I.decorate(bp, dict(I.THEMES["lab"], wood="mangrove", rugs=["green", "brown", "purple"], ceiling="soul_lantern"),
+               seed=1)
 
 
 register(StructureDef(
@@ -2092,6 +2109,7 @@ def sky_island(bp):
                 bp.set(x, main[(x, z)], z, "calcite" if (x + z) % 3 else "polished_diorite")
     arch.vines_on(bp, ((X0 - 3, Y, Z0 - 3), (X1 + 3, H1 + 12, ZP + 3)), chance=0.03, seed=7, max_len=5)
     lair_gryphon_knight.build(bp, Y, main)      # the sky plaza arena of the Gryphon Knight
+    I.decorate(bp, "ruin", seed=1, loot=LOOT + "sky_island", ground=-999)
 
 
 register(StructureDef(
@@ -2492,6 +2510,9 @@ def ziggurat(bp):
 
     # ---------------------------------------------------------------- under the pyramid: the Jade Jaguar's cenote
     lair_jade_jaguar.build(bp)
+    # an abandoned temple: dust, webs, moss and fallen stones in every chamber
+    I.decorate(bp, dict(I.THEMES["ruin"], rubble=["mossy_cobblestone", "cobblestone", "mossy_stone_bricks"]), seed=1,
+               loot=LOOT + "ziggurat")
 
 
 register(StructureDef(

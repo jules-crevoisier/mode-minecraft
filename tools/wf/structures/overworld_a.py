@@ -9,6 +9,7 @@ import math
 import random
 
 from .. import arch as A
+from .. import interior as I
 from ..arch import Palette
 from ..blueprint import OPPOSITE, with_props
 from ..defs import Piece, StructureDef, register
@@ -1016,6 +1017,22 @@ def guild_outpost(style):
         A.landscape(bp, 0, 0, 51, 47, 1, density=0.2, seed=9)
         skirt(bp, 0, depth=6, spread=2, seed=1)
 
+        # ---------------------------------------------------------- the people of the outpost
+        vt = {"azure": "taiga", "crimson": "plains", "slate": "plains"}[style]
+        I.populate(bp, ["cartographer", "librarian"], region=((hx0, 1, hz0), (hx1, 1, hz1)), vtype=vt, seed=1,
+                   bell=(29, 1, 29))
+        I.populate(bp, ["cartographer"], region=((tcx - 5, 1, tcz - 5), (tcx + 5, 26, tcz + 5)), vtype=vt, seed=2)
+        I.populate(bp, ["armorer", "weaponsmith"], region=((gx0, 1, gz0), (gx1, 12, gz1)), vtype=vt, seed=3)
+        I.populate(bp, ["fletcher"], region=((qx0, 1, qz0), (qx1, 11, qz1)), vtype=vt, seed=4)
+        I.populate(bp, ["farmer", "shepherd"], region=((sx0, 1, sz0), (sx1, 4, sz1)), vtype=vt, seed=5)
+        I.decorate(bp, "hall", seed=1, region=((hx0, 1, hz0), (hx1, 1, hz1)))
+        I.decorate(bp, "library", seed=2, region=((hx0, 7, hz0), (hx1, 7, hz1)))
+        I.decorate(bp, "barracks", seed=3, region=((gx0, 1, gz0), (gx1, 12, gz1)))
+        I.decorate(bp, "library", seed=4, region=((tcx - 5, 1, tcz - 5), (tcx + 5, 26, tcz + 5)))
+        I.decorate(bp, "storage", seed=5, region=((sx0, 1, sz0), (sx1, 4, sz1)))
+        I.decorate(bp, "home", seed=6)
+        I.yard(bp, (4, 4, 42, 42), 1, "village", count=10, seed=1)
+
     return build
 
 
@@ -1521,6 +1538,21 @@ def monastery(bp):
     A.landscape(bp, -3, -3, 75, 68, 1, density=0.25, seed=12)
     lair_bell_keeper.build(bp)          # crypt stair -> catacombs -> bell chamber (the Bell Keeper)
 
+    # ---------------------------------------------------------- the brothers: clerics, a librarian, a cook
+    library_r = ((lx0, P + 1, lz0), (lx1, P + 8, lz1))
+    dorm_r = ((dx0, P + 1, dz0), (dx1, P + 7, dz1))
+    refectory_r = ((sx0, P + 1, sz0), (sx1, P + 1, sz1))
+    I.populate(bp, [("librarian", 3), "librarian"], region=library_r, vtype="snow", seed=1)
+    I.populate(bp, [("cleric", 3), "cleric", "farmer"], region=dorm_r, vtype="snow", seed=2)
+    I.populate(bp, ["butcher"], region=refectory_r, vtype="snow", seed=3,
+               guard=("iron", (40, P + 1, 22)))
+    I.decorate(bp, "library", seed=1, region=library_r)
+    I.decorate(bp, "home", seed=2, region=dorm_r)
+    I.decorate(bp, "kitchen", seed=3, region=refectory_r)
+    I.decorate(bp, "storage", seed=4, region=((bx0, P + 1, bz0), (bx1, BH, bz1)))
+    I.decorate(bp, "crypt", seed=5, region=((11, 0, 9), (23, 3, 23)), loot=LOOT + "monastery")
+    I.decorate(bp, "chapel", seed=6, region=((AX0, P + 1, Z0 - 7), (AX1, P + 1, Z1)), rugs=False, centre=False)
+
 
 register(StructureDef(
     "mountain_monastery", "overworld",
@@ -1948,6 +1980,19 @@ def library(bp):
     skirt(bp, 0, depth=5, spread=2, seed=31)
     lair_archivist.build(bp)            # secret study stair -> buried scriptorium -> Forbidden Archive
 
+    # ---------------------------------------------------------- the last keepers of the books
+    ruin_r = ((-4, 1, -6), (30, 40, CZ - 2))
+    hall_r = ((HX0, 1, HZ0), (HX1, HE, HZ1))
+    map_r = ((ox - orr, 1, oz - orr), (ox + orr, OH, oz + orr))
+    I.populate(bp, [("librarian", 4), "librarian", ("librarian", 3)], region=hall_r, seed=1,
+               guard=("iron", (NX + 5, 1, CZ + 2)))
+    I.populate(bp, [("cartographer", 3)], region=map_r, seed=2)
+    I.wandering_trader(bp, NX + 9, 1, CZ - 1, facing="west")
+    I.decorate(bp, "ruin", seed=1, region=ruin_r, loot=LOOT + "library")
+    I.decorate(bp, "library", seed=2, region=hall_r)
+    I.decorate(bp, "library", seed=3, region=map_r)
+    I.decorate(bp, "library", seed=4)
+
 
 register(StructureDef(
     "forgotten_library", "overworld",
@@ -2275,6 +2320,14 @@ def lighthouse(bp):
         bp.set(x, 1, 2, "stripped_oak_log[axis=x]")  # driftwood
     A.moss_on(bp, ((-30, -6, -18), (34, TOP + 30, 32)), chance=0.12, seed=9)
     A.vines_on(bp, ((-30, -2, -18), (34, TOP, 32)), chance=0.05, seed=3, max_len=4)
+
+    # ---------------------------------------------------------- the keeper and his catch
+    cottage = ((kx0, TOP + 1, kz0), (kx1, TOP + 6, kz1))
+    I.populate(bp, [("fisherman", 3)], region=cottage, beds=False, seed=1)
+    I.decorate(bp, "home", seed=1, region=cottage)
+    I.decorate(bp, "storage", seed=2)
+    I.yard(bp, (-20, -16, 20, 10), TOP + 1, {"crates": 3, "cart": 1, "woodpile": 2, "bench": 1, "garden": 1},
+           count=5, seed=1)
 
 
 register(StructureDef(

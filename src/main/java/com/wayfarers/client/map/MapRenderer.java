@@ -8,13 +8,10 @@ import com.wayfarers.map.MapProtocol;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.PlayerFaceExtractor;
-import net.minecraft.client.gui.render.TextureSetup;
 import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.client.renderer.state.gui.BlitRenderState;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.resources.Identifier;
-import org.joml.Matrix3x2f;
 
 /**
  * Drawing shared by the minimap and the world map: the explored regions (full textures up close, thumbnails when
@@ -25,7 +22,29 @@ final class MapRenderer {
     /** Below this scale (GUI pixels per block) the thumbnails are drawn instead of the full regions. */
     static final float THUMBNAIL_SCALE = 0.5F;
 
+    private static final java.util.Map<DynamicTexture, Identifier> IDS = new java.util.IdentityHashMap<>();
+    private static int nextId;
+
     private MapRenderer() {}
+
+    /** The id {@code tex} is registered under with the texture manager (registered on first use). */
+    private static Identifier textureId(DynamicTexture tex) {
+        return IDS.computeIfAbsent(tex, t -> {
+            Identifier id = Wayfarers.id("map_region/" + nextId++);
+            Minecraft.getInstance().getTextureManager().register(id, t);
+            return id;
+        });
+    }
+
+    /** Closes a region texture, through the texture manager when it was registered there. */
+    static void close(DynamicTexture tex) {
+        Identifier id = IDS.remove(tex);
+        if (id != null) {
+            Minecraft.getInstance().getTextureManager().release(id);
+        } else {
+            tex.close();
+        }
+    }
 
     static Identifier markerSprite(ClientMap.Marker m) {
         if (m.kind() == ClientMap.Kind.WAYPOINT && m.ref() instanceof MapProtocol.Waypoint w) {
@@ -99,14 +118,12 @@ final class MapRenderer {
         g.pose().translate((float) (((double) rx * MapTile.SIZE - cx) * scale), (float) (((double) rz * MapTile.SIZE - cz) * scale));
         float s = scale * MapTile.SIZE / size;
         g.pose().scale(s, s);
-        GpuSampler sampler = RenderSystem.getSamplerCache().getClampToEdge(FilterMode.NEAREST);
         if (color == -1) {
+            GpuSampler sampler = RenderSystem.getSamplerCache().getClampToEdge(FilterMode.NEAREST);
             g.blit(tex.getTextureView(), sampler, 0, 0, size, size, 0, 1, 0, 1);
         } else {
-            // GuiGraphicsExtractor.blit(GpuTextureView, ...) takes no colour: the same blit state it builds, tinted
-            g.guiRenderState.addGuiElement(new BlitRenderState(RenderPipelines.GUI_TEXTURED,
-                    TextureSetup.singleTexture(tex.getTextureView(), sampler), new Matrix3x2f(g.pose()), 0, 0, size, size,
-                    0, 1, 0, 1, color, g.scissorStack.peek()));
+            // only the Identifier blit takes a colour: the region textures are registered under an id on first use
+            g.blit(RenderPipelines.GUI_TEXTURED, textureId(tex), 0, 0, 0.0F, 0.0F, size, size, size, size, color);
         }
         g.pose().popMatrix();
     }

@@ -72,14 +72,14 @@ final class MapTile {
 
     void closeTexture() {
         if (texture != null) {
-            texture.close();
+            MapRenderer.close(texture);
             texture = null;
         }
     }
 
     void closeMiniTexture() {
         if (miniTexture != null) {
-            miniTexture.close();
+            MapRenderer.close(miniTexture);
             miniTexture = null;
         }
     }

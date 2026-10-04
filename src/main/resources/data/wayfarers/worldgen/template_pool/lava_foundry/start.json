@@ -51,7 +51,7 @@
               52,
               29
             ],
-            "blocks": 12029
+            "blocks": 12031
           },
           {
             "location": "wayfarers:lava_foundry/foundry/x1_z1",
@@ -65,7 +65,7 @@
               49,
               29
             ],
-            "blocks": 3419
+            "blocks": 3420
           }
         ],
         "projection": "rigid",

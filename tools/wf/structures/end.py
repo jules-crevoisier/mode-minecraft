@@ -11,6 +11,7 @@ obsidian...). Starlight blocks and end rods carry the light.
 import math
 import random
 
+from .. import interior as INT
 from ..arch import Palette, slab, stair
 from ..blueprint import OPPOSITE, Blueprint
 from ..defs import Piece, StructureDef, register
@@ -795,6 +796,7 @@ def void_observatory(bp):
     bp.set(-2, -9, 2, "amethyst_cluster[facing=up,waterlogged=false]")
     hang_star(bp, -4, -5, 0, 1, STAR)
     bp.spawner(-5, -9, -2, MOB["void_stalker"])
+    INT.decorate(bp, "end", seed=1)
 
 
 register(StructureDef(
@@ -1107,6 +1109,7 @@ def chorus_garden(bp):
     bp.fill(pc[0], -7, pc[1] - 1, pc[0], 8, pc[1] - 1, "end_stone")
     bp.ladder(pc[0], -7, pc[1], 8, "south")
     bp.set(pc[0], 9, pc[1], STAR)
+    INT.decorate(bp, dict(INT.THEMES["end"], density=0.25), seed=1, centre=False)
 
 
 register(StructureDef(
@@ -1449,6 +1452,10 @@ def end_archive(bp):
     rim = [p for p in main if p not in plaza and bp.get(p[0], main[p][1], p[1]) == "minecraft:end_stone"]
     rng.shuffle(rim)
     chorus_patch(bp, main, rim[:18], rng, 3, 6)
+    # reading tables, lecterns and stacks of forbidden books in every gallery
+    INT.decorate(bp, dict(INT.THEMES["library"], wood="warped", ceiling="end_rod", rugs=["purple", "magenta", "black"],
+                          shelf_items=["book", "enchanted_book", "ender_pearl", "paper", "ender_eye"],
+                          banners=["purple", "magenta", "black"]), seed=1)
 
 
 register(StructureDef(
@@ -1763,6 +1770,9 @@ def void_ship(bp):
     rim = [p for p in cols if abs(p[0]) > 8]
     rng.shuffle(rim)
     chorus_patch(bp, cols, rim[:16], rng, 3, 6)
+    # below decks: cargo, bunks and the crew's long-abandoned clutter
+    INT.decorate(bp, dict(INT.THEMES["end"], floor={"crates": 3, "barrel": 2, "shulker": 2, "bed": 2, "end_rod": 1}),
+                 seed=1, loot=LOOT + "void_ship")
 
 
 register(StructureDef(

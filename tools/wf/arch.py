@@ -765,7 +765,8 @@ def furnish(bp, x0, y, z0, x1, z1, kind, *, wood="spruce", loot=None, seed=0, ce
             bp.barrel(x0 + 1, y, z1, "up", loot)
     elif kind == "armory":
         for x in range(x0, x1 + 1, 2):
-            bp.entity(x, y, z0, {"id": "minecraft:armor_stand"})
+            if bp.get(x, y, z0) in (None, "minecraft:air") and bp.get(x, y + 1, z0) in (None, "minecraft:air"):
+                bp.entity(x, y, z0, {"id": "minecraft:armor_stand"})
         bp.set(x0, y, z1, "anvil[facing=east]")
         bp.set(x0 + 1, y, z1, "grindstone[face=floor,facing=east]")
         bp.set(x0 + 2, y, z1, "smithing_table")

@@ -14,6 +14,7 @@ Ground y = 0, the great tree at (0, 0):
 """
 import math
 
+from .. import interior as INT
 from ..arch import Palette, stair, slab
 from ..defs import Piece, StructureDef, register
 from ..parts import LOOT
@@ -636,6 +637,13 @@ def sylvan_palace(bp):
     satellites(bp)
     moon_lantern(bp)
     moon_pool(bp)
+    # furnished pods and trunk halls: beds of moss and wool, shelves of seeds and books, potted saplings
+    INT.decorate(bp, dict(INT.THEMES["home"], wood="birch", rugs=["green", "lime", "white"],
+                          floor={"plant": 4, "bookshelf": 2, "barrel": 2, "pot": 2, "workbench": 1, "bed": 1,
+                                 "chiseled": 1},
+                          shelf_items=["wheat_seeds", "pumpkin_seeds", "book", "honey_bottle", "glow_berries",
+                                       "sweet_berries", "oak_sapling"],
+                          banners=["green", "lime", "white"]), seed=1)
 
 
 register(StructureDef(

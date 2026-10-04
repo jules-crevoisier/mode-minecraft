@@ -37,7 +37,7 @@
               23,
               20
             ],
-            "blocks": 3322
+            "blocks": 3325
           },
           {
             "location": "wayfarers:ruined_watchtower/tower_ruined/x1_z0",
@@ -51,7 +51,7 @@
               43,
               26
             ],
-            "blocks": 6523
+            "blocks": 6526
           },
           {
             "location": "wayfarers:ruined_watchtower/tower_ruined/x1_z1",
@@ -65,7 +65,7 @@
               44,
               27
             ],
-            "blocks": 5574
+            "blocks": 5577
           },
           {
             "location": "wayfarers:ruined_watchtower/tower_ruined/x2_z0",
@@ -123,7 +123,7 @@
               51,
               23
             ],
-            "blocks": 4082
+            "blocks": 4087
           },
           {
             "location": "wayfarers:ruined_watchtower/tower_intact/x0_z1",
@@ -151,7 +151,7 @@
               62,
               24
             ],
-            "blocks": 7067
+            "blocks": 7089
           },
           {
             "location": "wayfarers:ruined_watchtower/tower_intact/x1_z1",
@@ -165,7 +165,7 @@
               57,
               24
             ],
-            "blocks": 5202
+            "blocks": 5226
           }
         ],
         "projection": "rigid",

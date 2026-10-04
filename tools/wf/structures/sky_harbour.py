@@ -6,6 +6,7 @@ engines, held under a striped envelope by chains.
 """
 import math
 
+from .. import interior as INT
 from ..arch import stair
 from ..defs import Piece, StructureDef, register
 from ..parts import LOOT
@@ -239,6 +240,12 @@ def harbour(bp):
     cabin(bp)
     engines(bp)
     envelope(bp)
+    # the crew: a navigator at the chart table, an engineer in the hold, a quartermaster; a trader at the
+    # foot of the tower waiting for the next flight
+    INT.populate(bp, [("cartographer", 3), ("toolsmith", 2), "armorer", "fisherman"], seed=1, bell=(-6, 1, 0))
+    INT.decorate(bp, dict(INT.THEMES["steampunk"], density=0.35), seed=1)
+    INT.wandering_trader(bp, *INT.open_spot(bp, (8, 1, 2), height=2), facing="west")
+    INT.yard(bp, (-14, -14, 14, 14), 1, "harbour", count=5, seed=1)
 
 
 register(StructureDef(

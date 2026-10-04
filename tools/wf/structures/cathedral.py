@@ -12,6 +12,7 @@ and the nave floor:
 """
 import math
 
+from .. import interior as INT
 from ..arch import stair
 from ..defs import Piece, StructureDef, register
 from ..megakit import fbm, hash01, hash3, out_facing, vnoise
@@ -876,6 +877,10 @@ def cathedral(bp):
     crypt(bp)
     geode_crystals(bp)
     processional(bp)
+    # two clerics keep the candles lit; chapels and sacristies get their furniture
+    INT.populate(bp, [("cleric", 4), ("cleric", 2)], seed=1, void_solid=True, beds=True)
+    INT.decorate(bp, dict(INT.THEMES["chapel"], ceiling=None), seed=1, void_solid=True, density=0.25, rugs=False,
+                 centre=False)
 
 
 register(StructureDef(

@@ -23,7 +23,7 @@
               30,
               30
             ],
-            "blocks": 7058
+            "blocks": 7069
           },
           {
             "location": "wayfarers:ice_observatory/observatory/x0_z1",
@@ -37,7 +37,7 @@
               29,
               29
             ],
-            "blocks": 6385
+            "blocks": 6387
           },
           {
             "location": "wayfarers:ice_observatory/observatory/x1_z0",
@@ -51,7 +51,7 @@
               36,
               30
             ],
-            "blocks": 5774
+            "blocks": 5779
           },
           {
             "location": "wayfarers:ice_observatory/observatory/x1_z1",
@@ -65,7 +65,7 @@
               29,
               22
             ],
-            "blocks": 4945
+            "blocks": 4953
           }
         ],
         "projection": "rigid",

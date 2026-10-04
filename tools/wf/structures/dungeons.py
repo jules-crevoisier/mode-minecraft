@@ -4,6 +4,7 @@ import math
 import random
 
 from .. import arch
+from .. import interior as INT
 from ..arch import stair
 from ..blueprint import with_props
 from ..defs import Piece, StructureDef, register
@@ -847,6 +848,10 @@ def _register(sid, theme, entrance, biomes, title_fr, title_en, boss, loot, leve
         def builder(bp, i=i):
             build(bp, theme, f"{sid}-{i}", boss, Dungeon(LOOT + loot, LOOT + loot + "_treasure", LOOT + loot + "_reward"),
                   levels=levels, entrance_fn=entrance)
+            # dust of ages: webs in the corners, bones and skulls, rubble, guttering candles (boss halls excepted)
+            INT.decorate(bp, dict(INT.THEMES["crypt"], rubble=[theme.cracked, theme.cracked, "gravel"]
+                                  if ":" not in theme.cracked else [theme.cracked, "gravel", "cobblestone"]),
+                         seed=i, density=0.25)
         pieces.append(Piece(f"layout_{i}", builder))
     register(StructureDef(sid, kw.pop("dimension", "overworld"), biomes, pieces, spacing=spacing, separation=12,
                           processors="none", title_fr=title_fr, title_en=title_en, **kw))

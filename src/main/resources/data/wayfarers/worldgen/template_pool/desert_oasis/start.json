@@ -79,7 +79,7 @@
               75,
               30
             ],
-            "blocks": 17063
+            "blocks": 17064
           },
           {
             "location": "wayfarers:desert_oasis/oasis/x1_z2",
@@ -93,7 +93,7 @@
               64,
               30
             ],
-            "blocks": 9499
+            "blocks": 9504
           },
           {
             "location": "wayfarers:desert_oasis/oasis/x2_z0",
@@ -121,7 +121,7 @@
               75,
               30
             ],
-            "blocks": 21894
+            "blocks": 21897
           },
           {
             "location": "wayfarers:desert_oasis/oasis/x2_z2",
@@ -135,7 +135,7 @@
               63,
               30
             ],
-            "blocks": 11575
+            "blocks": 11578
           },
           {
             "location": "wayfarers:desert_oasis/oasis/x3_z0",
@@ -163,7 +163,7 @@
               61,
               30
             ],
-            "blocks": 2869
+            "blocks": 2876
           },
           {
             "location": "wayfarers:desert_oasis/oasis/x3_z2",
@@ -177,7 +177,7 @@
               39,
               25
             ],
-            "blocks": 4149
+            "blocks": 4156
           }
         ],
         "projection": "rigid",
