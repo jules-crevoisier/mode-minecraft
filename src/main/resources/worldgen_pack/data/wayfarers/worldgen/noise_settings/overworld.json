@@ -5786,7 +5786,10 @@
                               {
                                "type": "minecraft:block",
                                "result_state": {
-                                "Name": "minecraft:basalt[axis=y]"
+                                "Name": "minecraft:basalt",
+                                "Properties": {
+                                 "axis": "y"
+                                }
                                }
                               }
                              ]
@@ -6065,7 +6068,10 @@
                                "then_run": {
                                 "type": "minecraft:block",
                                 "result_state": {
-                                 "Name": "minecraft:basalt[axis=y]"
+                                 "Name": "minecraft:basalt",
+                                 "Properties": {
+                                  "axis": "y"
+                                 }
                                 }
                                }
                               },
@@ -6299,7 +6305,10 @@
                              "then_run": {
                               "type": "minecraft:block",
                               "result_state": {
-                               "Name": "minecraft:basalt[axis=y]"
+                               "Name": "minecraft:basalt",
+                               "Properties": {
+                                "axis": "y"
+                               }
                               }
                              }
                             },
@@ -6578,7 +6587,10 @@
                               {
                                "type": "minecraft:block",
                                "result_state": {
-                                "Name": "minecraft:basalt[axis=y]"
+                                "Name": "minecraft:basalt",
+                                "Properties": {
+                                 "axis": "y"
+                                }
                                }
                               }
                              ]
@@ -6842,7 +6854,10 @@
                               "then_run": {
                                "type": "minecraft:block",
                                "result_state": {
-                                "Name": "minecraft:basalt[axis=y]"
+                                "Name": "minecraft:basalt",
+                                "Properties": {
+                                 "axis": "y"
+                                }
                                }
                               }
                              },
@@ -7414,7 +7429,10 @@
                              {
                               "type": "minecraft:block",
                               "result_state": {
-                               "Name": "minecraft:basalt[axis=y]"
+                               "Name": "minecraft:basalt",
+                               "Properties": {
+                                "axis": "y"
+                               }
                               }
                              }
                             ]
@@ -7693,7 +7711,10 @@
                               "then_run": {
                                "type": "minecraft:block",
                                "result_state": {
-                                "Name": "minecraft:basalt[axis=y]"
+                                "Name": "minecraft:basalt",
+                                "Properties": {
+                                 "axis": "y"
+                                }
                                }
                               }
                              },
@@ -7927,7 +7948,10 @@
                             "then_run": {
                              "type": "minecraft:block",
                              "result_state": {
-                              "Name": "minecraft:basalt[axis=y]"
+                              "Name": "minecraft:basalt",
+                              "Properties": {
+                               "axis": "y"
+                              }
                              }
                             }
                            },
@@ -8206,7 +8230,10 @@
                              {
                               "type": "minecraft:block",
                               "result_state": {
-                               "Name": "minecraft:basalt[axis=y]"
+                               "Name": "minecraft:basalt",
+                               "Properties": {
+                                "axis": "y"
+                               }
                               }
                              }
                             ]
@@ -8470,7 +8497,10 @@
                              "then_run": {
                               "type": "minecraft:block",
                               "result_state": {
-                               "Name": "minecraft:basalt[axis=y]"
+                               "Name": "minecraft:basalt",
+                               "Properties": {
+                                "axis": "y"
+                               }
                               }
                              }
                             },
@@ -8880,7 +8910,10 @@
                                     {
                                      "type": "minecraft:block",
                                      "result_state": {
-                                      "Name": "minecraft:basalt[axis=y]"
+                                      "Name": "minecraft:basalt",
+                                      "Properties": {
+                                       "axis": "y"
+                                      }
                                      }
                                     }
                                    ]
@@ -8924,7 +8957,10 @@
                                     {
                                      "type": "minecraft:block",
                                      "result_state": {
-                                      "Name": "minecraft:deepslate[axis=y]"
+                                      "Name": "minecraft:deepslate",
+                                      "Properties": {
+                                       "axis": "y"
+                                      }
                                      }
                                     }
                                    ]
@@ -9041,7 +9077,10 @@
                                    {
                                     "type": "minecraft:block",
                                     "result_state": {
-                                     "Name": "minecraft:deepslate[axis=y]"
+                                     "Name": "minecraft:deepslate",
+                                     "Properties": {
+                                      "axis": "y"
+                                     }
                                     }
                                    }
                                   ]
@@ -9131,7 +9170,10 @@
                                  {
                                   "type": "minecraft:block",
                                   "result_state": {
-                                   "Name": "minecraft:basalt[axis=y]"
+                                   "Name": "minecraft:basalt",
+                                   "Properties": {
+                                    "axis": "y"
+                                   }
                                   }
                                  }
                                 ]
@@ -9173,7 +9215,10 @@
                                    {
                                     "type": "minecraft:block",
                                     "result_state": {
-                                     "Name": "minecraft:deepslate[axis=y]"
+                                     "Name": "minecraft:deepslate",
+                                     "Properties": {
+                                      "axis": "y"
+                                     }
                                     }
                                    }
                                   ]
@@ -9290,7 +9335,10 @@
                                   {
                                    "type": "minecraft:block",
                                    "result_state": {
-                                    "Name": "minecraft:deepslate[axis=y]"
+                                    "Name": "minecraft:deepslate",
+                                    "Properties": {
+                                     "axis": "y"
+                                    }
                                    }
                                   }
                                  ]
@@ -9395,7 +9443,10 @@
                                  {
                                   "type": "minecraft:block",
                                   "result_state": {
-                                   "Name": "minecraft:basalt[axis=y]"
+                                   "Name": "minecraft:basalt",
+                                   "Properties": {
+                                    "axis": "y"
+                                   }
                                   }
                                  }
                                 ]
@@ -9437,7 +9488,10 @@
                                    {
                                     "type": "minecraft:block",
                                     "result_state": {
-                                     "Name": "minecraft:deepslate[axis=y]"
+                                     "Name": "minecraft:deepslate",
+                                     "Properties": {
+                                      "axis": "y"
+                                     }
                                     }
                                    }
                                   ]
@@ -9554,7 +9608,10 @@
                                   {
                                    "type": "minecraft:block",
                                    "result_state": {
-                                    "Name": "minecraft:deepslate[axis=y]"
+                                    "Name": "minecraft:deepslate",
+                                    "Properties": {
+                                     "axis": "y"
+                                    }
                                    }
                                   }
                                  ]
@@ -9644,7 +9701,10 @@
                                 {
                                  "type": "minecraft:block",
                                  "result_state": {
-                                  "Name": "minecraft:basalt[axis=y]"
+                                  "Name": "minecraft:basalt",
+                                  "Properties": {
+                                   "axis": "y"
+                                  }
                                  }
                                 }
                                ]
@@ -9686,7 +9746,10 @@
                                   {
                                    "type": "minecraft:block",
                                    "result_state": {
-                                    "Name": "minecraft:deepslate[axis=y]"
+                                    "Name": "minecraft:deepslate",
+                                    "Properties": {
+                                     "axis": "y"
+                                    }
                                    }
                                   }
                                  ]
@@ -9803,7 +9866,10 @@
                                  {
                                   "type": "minecraft:block",
                                   "result_state": {
-                                   "Name": "minecraft:deepslate[axis=y]"
+                                   "Name": "minecraft:deepslate",
+                                   "Properties": {
+                                    "axis": "y"
+                                   }
                                   }
                                  }
                                 ]
@@ -9923,7 +9989,10 @@
                                  {
                                   "type": "minecraft:block",
                                   "result_state": {
-                                   "Name": "minecraft:basalt[axis=y]"
+                                   "Name": "minecraft:basalt",
+                                   "Properties": {
+                                    "axis": "y"
+                                   }
                                   }
                                  }
                                 ]
@@ -9965,7 +10034,10 @@
                                    {
                                     "type": "minecraft:block",
                                     "result_state": {
-                                     "Name": "minecraft:deepslate[axis=y]"
+                                     "Name": "minecraft:deepslate",
+                                     "Properties": {
+                                      "axis": "y"
+                                     }
                                     }
                                    }
                                   ]
@@ -10082,7 +10154,10 @@
                                   {
                                    "type": "minecraft:block",
                                    "result_state": {
-                                    "Name": "minecraft:deepslate[axis=y]"
+                                    "Name": "minecraft:deepslate",
+                                    "Properties": {
+                                     "axis": "y"
+                                    }
                                    }
                                   }
                                  ]
@@ -10172,7 +10247,10 @@
                                 {
                                  "type": "minecraft:block",
                                  "result_state": {
-                                  "Name": "minecraft:basalt[axis=y]"
+                                  "Name": "minecraft:basalt",
+                                  "Properties": {
+                                   "axis": "y"
+                                  }
                                  }
                                 }
                                ]
@@ -10214,7 +10292,10 @@
                                   {
                                    "type": "minecraft:block",
                                    "result_state": {
-                                    "Name": "minecraft:deepslate[axis=y]"
+                                    "Name": "minecraft:deepslate",
+                                    "Properties": {
+                                     "axis": "y"
+                                    }
                                    }
                                   }
                                  ]
@@ -10331,7 +10412,10 @@
                                  {
                                   "type": "minecraft:block",
                                   "result_state": {
-                                   "Name": "minecraft:deepslate[axis=y]"
+                                   "Name": "minecraft:deepslate",
+                                   "Properties": {
+                                    "axis": "y"
+                                   }
                                   }
                                  }
                                 ]
@@ -10436,7 +10520,10 @@
                                 {
                                  "type": "minecraft:block",
                                  "result_state": {
-                                  "Name": "minecraft:basalt[axis=y]"
+                                  "Name": "minecraft:basalt",
+                                  "Properties": {
+                                   "axis": "y"
+                                  }
                                  }
                                 }
                                ]
@@ -10478,7 +10565,10 @@
                                   {
                                    "type": "minecraft:block",
                                    "result_state": {
-                                    "Name": "minecraft:deepslate[axis=y]"
+                                    "Name": "minecraft:deepslate",
+                                    "Properties": {
+                                     "axis": "y"
+                                    }
                                    }
                                   }
                                  ]
@@ -10595,7 +10685,10 @@
                                  {
                                   "type": "minecraft:block",
                                   "result_state": {
-                                   "Name": "minecraft:deepslate[axis=y]"
+                                   "Name": "minecraft:deepslate",
+                                   "Properties": {
+                                    "axis": "y"
+                                   }
                                   }
                                  }
                                 ]
@@ -10685,7 +10778,10 @@
                                {
                                 "type": "minecraft:block",
                                 "result_state": {
-                                 "Name": "minecraft:basalt[axis=y]"
+                                 "Name": "minecraft:basalt",
+                                 "Properties": {
+                                  "axis": "y"
+                                 }
                                 }
                                }
                               ]
@@ -10727,7 +10823,10 @@
                                  {
                                   "type": "minecraft:block",
                                   "result_state": {
-                                   "Name": "minecraft:deepslate[axis=y]"
+                                   "Name": "minecraft:deepslate",
+                                   "Properties": {
+                                    "axis": "y"
+                                   }
                                   }
                                  }
                                 ]
@@ -10844,7 +10943,10 @@
                                 {
                                  "type": "minecraft:block",
                                  "result_state": {
-                                  "Name": "minecraft:deepslate[axis=y]"
+                                  "Name": "minecraft:deepslate",
+                                  "Properties": {
+                                   "axis": "y"
+                                  }
                                  }
                                 }
                                ]
@@ -11080,7 +11182,10 @@
                                    {
                                     "type": "minecraft:block",
                                     "result_state": {
-                                     "Name": "minecraft:basalt[axis=y]"
+                                     "Name": "minecraft:basalt",
+                                     "Properties": {
+                                      "axis": "y"
+                                     }
                                     }
                                    }
                                   ]
@@ -11124,7 +11229,10 @@
                                    {
                                     "type": "minecraft:block",
                                     "result_state": {
-                                     "Name": "minecraft:deepslate[axis=y]"
+                                     "Name": "minecraft:deepslate",
+                                     "Properties": {
+                                      "axis": "y"
+                                     }
                                     }
                                    }
                                   ]
@@ -11241,7 +11349,10 @@
                                   {
                                    "type": "minecraft:block",
                                    "result_state": {
-                                    "Name": "minecraft:deepslate[axis=y]"
+                                    "Name": "minecraft:deepslate",
+                                    "Properties": {
+                                     "axis": "y"
+                                    }
                                    }
                                   }
                                  ]
@@ -11331,7 +11442,10 @@
                                 {
                                  "type": "minecraft:block",
                                  "result_state": {
-                                  "Name": "minecraft:basalt[axis=y]"
+                                  "Name": "minecraft:basalt",
+                                  "Properties": {
+                                   "axis": "y"
+                                  }
                                  }
                                 }
                                ]
@@ -11373,7 +11487,10 @@
                                   {
                                    "type": "minecraft:block",
                                    "result_state": {
-                                    "Name": "minecraft:deepslate[axis=y]"
+                                    "Name": "minecraft:deepslate",
+                                    "Properties": {
+                                     "axis": "y"
+                                    }
                                    }
                                   }
                                  ]
@@ -11490,7 +11607,10 @@
                                  {
                                   "type": "minecraft:block",
                                   "result_state": {
-                                   "Name": "minecraft:deepslate[axis=y]"
+                                   "Name": "minecraft:deepslate",
+                                   "Properties": {
+                                    "axis": "y"
+                                   }
                                   }
                                  }
                                 ]
@@ -11595,7 +11715,10 @@
                                 {
                                  "type": "minecraft:block",
                                  "result_state": {
-                                  "Name": "minecraft:basalt[axis=y]"
+                                  "Name": "minecraft:basalt",
+                                  "Properties": {
+                                   "axis": "y"
+                                  }
                                  }
                                 }
                                ]
@@ -11637,7 +11760,10 @@
                                   {
                                    "type": "minecraft:block",
                                    "result_state": {
-                                    "Name": "minecraft:deepslate[axis=y]"
+                                    "Name": "minecraft:deepslate",
+                                    "Properties": {
+                                     "axis": "y"
+                                    }
                                    }
                                   }
                                  ]
@@ -11754,7 +11880,10 @@
                                  {
                                   "type": "minecraft:block",
                                   "result_state": {
-                                   "Name": "minecraft:deepslate[axis=y]"
+                                   "Name": "minecraft:deepslate",
+                                   "Properties": {
+                                    "axis": "y"
+                                   }
                                   }
                                  }
                                 ]
@@ -11844,7 +11973,10 @@
                                {
                                 "type": "minecraft:block",
                                 "result_state": {
-                                 "Name": "minecraft:basalt[axis=y]"
+                                 "Name": "minecraft:basalt",
+                                 "Properties": {
+                                  "axis": "y"
+                                 }
                                 }
                                }
                               ]
@@ -11886,7 +12018,10 @@
                                  {
                                   "type": "minecraft:block",
                                   "result_state": {
-                                   "Name": "minecraft:deepslate[axis=y]"
+                                   "Name": "minecraft:deepslate",
+                                   "Properties": {
+                                    "axis": "y"
+                                   }
                                   }
                                  }
                                 ]
@@ -12003,7 +12138,10 @@
                                 {
                                  "type": "minecraft:block",
                                  "result_state": {
-                                  "Name": "minecraft:deepslate[axis=y]"
+                                  "Name": "minecraft:deepslate",
+                                  "Properties": {
+                                   "axis": "y"
+                                  }
                                  }
                                 }
                                ]
@@ -12123,7 +12261,10 @@
                                 {
                                  "type": "minecraft:block",
                                  "result_state": {
-                                  "Name": "minecraft:basalt[axis=y]"
+                                  "Name": "minecraft:basalt",
+                                  "Properties": {
+                                   "axis": "y"
+                                  }
                                  }
                                 }
                                ]
@@ -12165,7 +12306,10 @@
                                   {
                                    "type": "minecraft:block",
                                    "result_state": {
-                                    "Name": "minecraft:deepslate[axis=y]"
+                                    "Name": "minecraft:deepslate",
+                                    "Properties": {
+                                     "axis": "y"
+                                    }
                                    }
                                   }
                                  ]
@@ -12282,7 +12426,10 @@
                                  {
                                   "type": "minecraft:block",
                                   "result_state": {
-                                   "Name": "minecraft:deepslate[axis=y]"
+                                   "Name": "minecraft:deepslate",
+                                   "Properties": {
+                                    "axis": "y"
+                                   }
                                   }
                                  }
                                 ]
@@ -12372,7 +12519,10 @@
                                {
                                 "type": "minecraft:block",
                                 "result_state": {
-                                 "Name": "minecraft:basalt[axis=y]"
+                                 "Name": "minecraft:basalt",
+                                 "Properties": {
+                                  "axis": "y"
+                                 }
                                 }
                                }
                               ]
@@ -12414,7 +12564,10 @@
                                  {
                                   "type": "minecraft:block",
                                   "result_state": {
-                                   "Name": "minecraft:deepslate[axis=y]"
+                                   "Name": "minecraft:deepslate",
+                                   "Properties": {
+                                    "axis": "y"
+                                   }
                                   }
                                  }
                                 ]
@@ -12531,7 +12684,10 @@
                                 {
                                  "type": "minecraft:block",
                                  "result_state": {
-                                  "Name": "minecraft:deepslate[axis=y]"
+                                  "Name": "minecraft:deepslate",
+                                  "Properties": {
+                                   "axis": "y"
+                                  }
                                  }
                                 }
                                ]
@@ -12636,7 +12792,10 @@
                                {
                                 "type": "minecraft:block",
                                 "result_state": {
-                                 "Name": "minecraft:basalt[axis=y]"
+                                 "Name": "minecraft:basalt",
+                                 "Properties": {
+                                  "axis": "y"
+                                 }
                                 }
                                }
                               ]
@@ -12678,7 +12837,10 @@
                                  {
                                   "type": "minecraft:block",
                                   "result_state": {
-                                   "Name": "minecraft:deepslate[axis=y]"
+                                   "Name": "minecraft:deepslate",
+                                   "Properties": {
+                                    "axis": "y"
+                                   }
                                   }
                                  }
                                 ]
@@ -12795,7 +12957,10 @@
                                 {
                                  "type": "minecraft:block",
                                  "result_state": {
-                                  "Name": "minecraft:deepslate[axis=y]"
+                                  "Name": "minecraft:deepslate",
+                                  "Properties": {
+                                   "axis": "y"
+                                  }
                                  }
                                 }
                                ]
@@ -12885,7 +13050,10 @@
                               {
                                "type": "minecraft:block",
                                "result_state": {
-                                "Name": "minecraft:basalt[axis=y]"
+                                "Name": "minecraft:basalt",
+                                "Properties": {
+                                 "axis": "y"
+                                }
                                }
                               }
                              ]
@@ -12927,7 +13095,10 @@
                                 {
                                  "type": "minecraft:block",
                                  "result_state": {
-                                  "Name": "minecraft:deepslate[axis=y]"
+                                  "Name": "minecraft:deepslate",
+                                  "Properties": {
+                                   "axis": "y"
+                                  }
                                  }
                                 }
                                ]
@@ -13044,7 +13215,10 @@
                                {
                                 "type": "minecraft:block",
                                 "result_state": {
-                                 "Name": "minecraft:deepslate[axis=y]"
+                                 "Name": "minecraft:deepslate",
+                                 "Properties": {
+                                  "axis": "y"
+                                 }
                                 }
                                }
                               ]
@@ -13246,7 +13420,10 @@
                                  {
                                   "type": "minecraft:block",
                                   "result_state": {
-                                   "Name": "minecraft:basalt[axis=y]"
+                                   "Name": "minecraft:basalt",
+                                   "Properties": {
+                                    "axis": "y"
+                                   }
                                   }
                                  }
                                 ]
@@ -13290,7 +13467,10 @@
                                  {
                                   "type": "minecraft:block",
                                   "result_state": {
-                                   "Name": "minecraft:deepslate[axis=y]"
+                                   "Name": "minecraft:deepslate",
+                                   "Properties": {
+                                    "axis": "y"
+                                   }
                                   }
                                  }
                                 ]
@@ -13407,7 +13587,10 @@
                                 {
                                  "type": "minecraft:block",
                                  "result_state": {
-                                  "Name": "minecraft:deepslate[axis=y]"
+                                  "Name": "minecraft:deepslate",
+                                  "Properties": {
+                                   "axis": "y"
+                                  }
                                  }
                                 }
                                ]
@@ -13497,7 +13680,10 @@
                               {
                                "type": "minecraft:block",
                                "result_state": {
-                                "Name": "minecraft:basalt[axis=y]"
+                                "Name": "minecraft:basalt",
+                                "Properties": {
+                                 "axis": "y"
+                                }
                                }
                               }
                              ]
@@ -13539,7 +13725,10 @@
                                 {
                                  "type": "minecraft:block",
                                  "result_state": {
-                                  "Name": "minecraft:deepslate[axis=y]"
+                                  "Name": "minecraft:deepslate",
+                                  "Properties": {
+                                   "axis": "y"
+                                  }
                                  }
                                 }
                                ]
@@ -13656,7 +13845,10 @@
                                {
                                 "type": "minecraft:block",
                                 "result_state": {
-                                 "Name": "minecraft:deepslate[axis=y]"
+                                 "Name": "minecraft:deepslate",
+                                 "Properties": {
+                                  "axis": "y"
+                                 }
                                 }
                                }
                               ]
@@ -13761,7 +13953,10 @@
                               {
                                "type": "minecraft:block",
                                "result_state": {
-                                "Name": "minecraft:basalt[axis=y]"
+                                "Name": "minecraft:basalt",
+                                "Properties": {
+                                 "axis": "y"
+                                }
                                }
                               }
                              ]
@@ -13803,7 +13998,10 @@
                                 {
                                  "type": "minecraft:block",
                                  "result_state": {
-                                  "Name": "minecraft:deepslate[axis=y]"
+                                  "Name": "minecraft:deepslate",
+                                  "Properties": {
+                                   "axis": "y"
+                                  }
                                  }
                                 }
                                ]
@@ -13920,7 +14118,10 @@
                                {
                                 "type": "minecraft:block",
                                 "result_state": {
-                                 "Name": "minecraft:deepslate[axis=y]"
+                                 "Name": "minecraft:deepslate",
+                                 "Properties": {
+                                  "axis": "y"
+                                 }
                                 }
                                }
                               ]
@@ -14010,7 +14211,10 @@
                              {
                               "type": "minecraft:block",
                               "result_state": {
-                               "Name": "minecraft:basalt[axis=y]"
+                               "Name": "minecraft:basalt",
+                               "Properties": {
+                                "axis": "y"
+                               }
                               }
                              }
                             ]
@@ -14052,7 +14256,10 @@
                                {
                                 "type": "minecraft:block",
                                 "result_state": {
-                                 "Name": "minecraft:deepslate[axis=y]"
+                                 "Name": "minecraft:deepslate",
+                                 "Properties": {
+                                  "axis": "y"
+                                 }
                                 }
                                }
                               ]
@@ -14169,7 +14376,10 @@
                               {
                                "type": "minecraft:block",
                                "result_state": {
-                                "Name": "minecraft:deepslate[axis=y]"
+                                "Name": "minecraft:deepslate",
+                                "Properties": {
+                                 "axis": "y"
+                                }
                                }
                               }
                              ]
@@ -14289,7 +14499,10 @@
                               {
                                "type": "minecraft:block",
                                "result_state": {
-                                "Name": "minecraft:basalt[axis=y]"
+                                "Name": "minecraft:basalt",
+                                "Properties": {
+                                 "axis": "y"
+                                }
                                }
                               }
                              ]
@@ -14331,7 +14544,10 @@
                                 {
                                  "type": "minecraft:block",
                                  "result_state": {
-                                  "Name": "minecraft:deepslate[axis=y]"
+                                  "Name": "minecraft:deepslate",
+                                  "Properties": {
+                                   "axis": "y"
+                                  }
                                  }
                                 }
                                ]
@@ -14448,7 +14664,10 @@
                                {
                                 "type": "minecraft:block",
                                 "result_state": {
-                                 "Name": "minecraft:deepslate[axis=y]"
+                                 "Name": "minecraft:deepslate",
+                                 "Properties": {
+                                  "axis": "y"
+                                 }
                                 }
                                }
                               ]
@@ -14538,7 +14757,10 @@
                              {
                               "type": "minecraft:block",
                               "result_state": {
-                               "Name": "minecraft:basalt[axis=y]"
+                               "Name": "minecraft:basalt",
+                               "Properties": {
+                                "axis": "y"
+                               }
                               }
                              }
                             ]
@@ -14580,7 +14802,10 @@
                                {
                                 "type": "minecraft:block",
                                 "result_state": {
-                                 "Name": "minecraft:deepslate[axis=y]"
+                                 "Name": "minecraft:deepslate",
+                                 "Properties": {
+                                  "axis": "y"
+                                 }
                                 }
                                }
                               ]
@@ -14697,7 +14922,10 @@
                               {
                                "type": "minecraft:block",
                                "result_state": {
-                                "Name": "minecraft:deepslate[axis=y]"
+                                "Name": "minecraft:deepslate",
+                                "Properties": {
+                                 "axis": "y"
+                                }
                                }
                               }
                              ]
@@ -14802,7 +15030,10 @@
                              {
                               "type": "minecraft:block",
                               "result_state": {
-                               "Name": "minecraft:basalt[axis=y]"
+                               "Name": "minecraft:basalt",
+                               "Properties": {
+                                "axis": "y"
+                               }
                               }
                              }
                             ]
@@ -14844,7 +15075,10 @@
                                {
                                 "type": "minecraft:block",
                                 "result_state": {
-                                 "Name": "minecraft:deepslate[axis=y]"
+                                 "Name": "minecraft:deepslate",
+                                 "Properties": {
+                                  "axis": "y"
+                                 }
                                 }
                                }
                               ]
@@ -14961,7 +15195,10 @@
                               {
                                "type": "minecraft:block",
                                "result_state": {
-                                "Name": "minecraft:deepslate[axis=y]"
+                                "Name": "minecraft:deepslate",
+                                "Properties": {
+                                 "axis": "y"
+                                }
                                }
                               }
                              ]
@@ -15051,7 +15288,10 @@
                             {
                              "type": "minecraft:block",
                              "result_state": {
-                              "Name": "minecraft:basalt[axis=y]"
+                              "Name": "minecraft:basalt",
+                              "Properties": {
+                               "axis": "y"
+                              }
                              }
                             }
                            ]
@@ -15093,7 +15333,10 @@
                               {
                                "type": "minecraft:block",
                                "result_state": {
-                                "Name": "minecraft:deepslate[axis=y]"
+                                "Name": "minecraft:deepslate",
+                                "Properties": {
+                                 "axis": "y"
+                                }
                                }
                               }
                              ]
@@ -15210,7 +15453,10 @@
                              {
                               "type": "minecraft:block",
                               "result_state": {
-                               "Name": "minecraft:deepslate[axis=y]"
+                               "Name": "minecraft:deepslate",
+                               "Properties": {
+                                "axis": "y"
+                               }
                               }
                              }
                             ]

@@ -42,6 +42,8 @@ TYPES = ["plains", "desert", "savanna", "snowy", "taiga"]
 ENTRANCE = "minecraft:building_entrance"
 STREET = "minecraft:street"
 BOTTOM = "minecraft:bottom"
+# the outpost feature plates' upward jigsaws target minecraft:feature (checked against the server jar in CI)
+FEATURE = "minecraft:feature"
 EMPTY = "minecraft:empty"
 GROUNDED = W + "grounded_single"
 
@@ -1151,9 +1153,9 @@ OUTPOST_GROUND = Palette({"coarse_dirt": 3, "gravel": 1, "dirt": 2}, seed=21)
 
 
 def feature_base(bp, x, z):
-    """Outpost features hang on the feature plate's upward jigsaw: a downward ``minecraft:bottom`` jigsaw at
+    """Outpost features hang on the feature plate's upward jigsaw: a downward ``minecraft:feature`` jigsaw at
     walking level, ground layer under it."""
-    bp.jigsaw(x, 1, z, "down_south", BOTTOM, EMPTY, EMPTY, final_state="minecraft:air", joint="rollable")
+    bp.jigsaw(x, 1, z, "down_south", FEATURE, EMPTY, EMPTY, final_state="minecraft:air", joint="rollable")
 
 
 def siege_engine(bp):
@@ -1259,8 +1261,8 @@ def build_all():
 
 def check(bp, kind):
     """Jigsaw sanity of a piece (problems as strings): houses have one entrance at walking level on their north
-    edge with nothing further north, the plaza and the avenue leave through their box edges, decorations and
-    outpost features hang on one downward ``minecraft:bottom`` jigsaw."""
+    edge with nothing further north, the plaza and the avenue leave through their box edges, decorations hang on
+    one downward ``minecraft:bottom`` jigsaw, outpost features on one downward ``minecraft:feature`` jigsaw."""
     out = []
     (x0, y0, z0), (x1, y1, z1) = bp.bounds()
     jig = [(p, b[1]["orientation"], b[2]) for p, b in bp.blocks.items() if b[0] == "minecraft:jigsaw"]

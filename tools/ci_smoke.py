@@ -337,8 +337,8 @@ def check_vanilla_jigsaws(server_dir, failures):
         plate = "data/minecraft/structure/pillager_outpost/feature_plate.nbt"
         if plate in names:
             feats = {t for _, t, p in _jigsaws(z.read(plate)) if p == "minecraft:pillager_outpost/features"}
-            if "minecraft:bottom" not in feats:
-                failures.append(f"vanilla outpost feature plates hold features by {feats}, ours hang on minecraft:bottom")
+            if "minecraft:feature" not in feats:
+                failures.append(f"vanilla outpost feature plates hold features by {feats}, ours hang on minecraft:feature")
     print(f"[smoke] vanilla jigsaw conventions checked in {os.path.basename(jar)}", flush=True)
 
 

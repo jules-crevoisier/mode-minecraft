@@ -285,6 +285,9 @@ def climate_points():
 
 # ------------------------------------------------------------------ surface rules
 def _block(name, props=None):
+    if "[" in name:  # "basalt[axis=y]": the properties go in "Properties", never in the id
+        name, _, rest = name.partition("[")
+        props = dict(kv.split("=", 1) for kv in rest.rstrip("]").split(",") if kv) | (props or {})
     state = {"Name": name if ":" in name else f"minecraft:{name}"}
     if props:
         state["Properties"] = props

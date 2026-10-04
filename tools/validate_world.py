@@ -252,6 +252,20 @@ def main():
                            for r in (os.path.join(res, "data"), PACK)):
                     err(f"{path}: missing structure template {t['data']['id']}")
 
+    # every block state "Name" in the pack is a plain id: properties belong in "Properties"
+    ident = re.compile(r"^[a-z0-9_.-]+:[a-z0-9_/.-]+$")
+    for path in glob.glob(os.path.join(PACK, "**", "*.json"), recursive=True):
+        def check_name(node, path=path):
+            if isinstance(node, dict):
+                if isinstance(node.get("Name"), str) and not ident.match(node["Name"]):
+                    err(f"{os.path.relpath(path, PACK)}: block state Name {node['Name']!r} is not a valid id")
+                for v in node.values():
+                    check_name(v)
+            elif isinstance(node, list):
+                for v in node:
+                    check_name(v)
+        check_name(json.load(open(path)))
+
     for e in errors[:100]:
         print("ERROR:", e)
     print(f"world pack: {len(ours_biomes)} biomes, {len(dim['generator']['biome_source']['biomes'])} climate points, "
