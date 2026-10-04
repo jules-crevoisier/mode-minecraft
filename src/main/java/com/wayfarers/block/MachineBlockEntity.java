@@ -11,6 +11,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -962,10 +963,24 @@ public class MachineBlockEntity extends BaseContainerBlockEntity {
         }
     }
 
+    @Override
+    public void preRemoveSideEffects(BlockPos pos, BlockState state) {
+        super.preRemoveSideEffects(pos, state);
+        // a Vacuum Hopper's stored experience is dropped as orbs, not lost
+        if (xp > 0 && level instanceof ServerLevel server) {
+            ExperienceOrb.award(server, Vec3.atCenterOf(pos), xp);
+            xp = 0;
+        }
+    }
+
     // ------------------------------------------------------------------ breaker / placer (on a redstone pulse)
     private static boolean breakable(ServerLevel level, BlockPos front, BlockState target) {
+        // never the mod's special blocks (waystones, graves, boss seals, terminals...): on a server a breaker
+        // must not become a way to grief or wreck shared things
+        boolean special = target.getBlock() instanceof WaystoneBlock || target.hasBlockEntity()
+                && net.minecraft.core.registries.BuiltInRegistries.BLOCK.getKey(target.getBlock()).getNamespace().equals("wayfarers");
         return !target.isAir() && !(target.getBlock() instanceof LiquidBlock) && target.getDestroySpeed(level, front) >= 0
-                && !(target.getBlock() instanceof MachineBlock);
+                && !(target.getBlock() instanceof MachineBlock) && !special;
     }
 
     void pulse(ServerLevel level) {

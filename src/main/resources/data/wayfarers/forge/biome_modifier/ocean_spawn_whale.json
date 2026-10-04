@@ -1,6 +1,6 @@
 {
   "type": "forge:add_spawns",
-  "biomes": "#wayfarers:ocean/deep",
+  "biomes": "#wayfarers:ocean/whales",
   "spawners": [
     {
       "type": "wayfarers:whale",

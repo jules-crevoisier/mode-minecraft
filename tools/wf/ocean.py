@@ -22,8 +22,8 @@ ITEMS = {
     "glow_jelly": ("Glow Jelly", "Gelée lumineuse",
                    "Dropped by Glow Jellyfish. Brews Night Vision; four around glass make a Jelly Lamp.",
                    "Lâchée par les méduses lumineuses. Infusée : vision nocturne ; quatre autour d'un verre : une lampe."),
-    "pearl": ("Pearl", "Perle", "From a Pearl Oyster. Two pearls trade for an emerald at the crafting table.",
-              "Tirée d'une huître perlière. Deux perles valent une émeraude à l'établi."),
+    "pearl": ("Pearl", "Perle", "From a Pearl Oyster. Four pearls trade for an emerald at the crafting table.",
+              "Tirée d'une huître perlière. Quatre perles valent une émeraude à l'établi."),
     "serpent_scale": ("Sea Serpent Scale", "Écaille de serpent de mer",
                       "Trophy of the Sea Serpent. Four make a Diving Helmet.",
                       "Trophée du serpent de mer. Quatre font un casque de scaphandre."),
@@ -105,7 +105,7 @@ def recipes(shaped, shapeless, write):
     shaped("jelly_lamp", [" J ", "JGJ", " J "], {"J": "glow_jelly", "G": "glass"}, category="building")
     write(f"{NS}/recipe/emerald_from_pearls.json", {
         "type": "minecraft:crafting_shapeless", "category": "misc",
-        "ingredients": [f"{NS}:pearl", f"{NS}:pearl"], "result": {"id": "minecraft:emerald", "count": 1}})
+        "ingredients": [f"{NS}:pearl"] * 4, "result": {"id": "minecraft:emerald", "count": 1}})
 
 
 def tags(write):
@@ -183,7 +183,7 @@ SPAWNS = [
     ("all", "glow_jellyfish", 8, 2, 4),
     ("warm", "reef_fish", 22, 5, 9),
     ("manta", "manta_ray", 2, 1, 1),
-    ("deep", "whale", 1, 1, 1),
+    ("whales", "whale", 1, 1, 1),
 ]
 
 FLOOR = [{"type": "minecraft:in_square"}, {"type": "minecraft:heightmap", "heightmap": "OCEAN_FLOOR_WG"}]
@@ -274,6 +274,8 @@ def features():
 
 # biome-modifier tags of the features (a feature may need a tag of its own)
 FEATURE_TAGS = {
+    # whales stay out of frozen seas: there squid are the only other big swimmer, so whales would be half of all spawns
+    "whales": [b for b in OCEAN_TAGS["deep"] if "frozen" not in b and "glacial" not in b],
     "kelp": OCEAN_TAGS["cold"] + OCEAN_TAGS["temperate"],
     "meadow": OCEAN_TAGS["temperate"] + OCEAN_TAGS["warm"],
     "oysters": OCEAN_TAGS["temperate"] + OCEAN_TAGS["warm"],
@@ -367,10 +369,10 @@ PAGES = [
     ], ["wayfarers:diving_helmet", "wayfarers:flippers"]),
     ("sea_floor", "wayfarers:pearl_oyster", ("The sea floor", "Les fonds marins"), [
         ("Pearl Oysters lie in beds in temperate and warm seas. Right-click an open shell to take its pearl; it grows "
-         "a new one in time. Two pearls trade for an emerald at the crafting table.",
+         "a new one in time. Four pearls trade for an emerald at the crafting table.",
          "Les huîtres perlières forment des bancs dans les mers tempérées et chaudes. Clic droit sur une coquille "
-         "entrouverte pour prendre sa perle ; elle en refait une avec le temps. Deux perles valent une émeraude à "
-         "l'établi."),
+         "entrouverte pour prendre sa perle ; elle en refait une avec le temps. Quatre perles valent une émeraude "
+         "à l'établi."),
         ("Bubble vents rise from basalt chimneys: swim into the column to shoot up to the surface and breathe. Glow "
          "Anemones light the floor at night; pick them up to decorate an aquarium.",
          "Les cheminées de basalte soufflent des colonnes de bulles : entre dedans pour remonter d'un coup et "
