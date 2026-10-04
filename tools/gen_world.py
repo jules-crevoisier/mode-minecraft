@@ -196,6 +196,9 @@ def main():
         json.dump({"pack": {"description": "Wayfarers: world overhaul (terrain, caves and biomes)",
                             "min_format": 88, "max_format": 107}}, f, indent=1)
         f.write("\n")
+    icon = os.path.join(ROOT, "src", "main", "resources", "pack.png")
+    if os.path.exists(icon):
+        shutil.copy(icon, os.path.join(PACK, "pack.png"))
     write(f"{NS}/worldgen/noise/mega_caverns.json", {"firstOctave": -8, "amplitudes": [1.0, 1.0, 0.5]})
     for name, fn in density_functions().items():
         write(f"{NS}/worldgen/density_function/overworld/{name}.json", fn)
