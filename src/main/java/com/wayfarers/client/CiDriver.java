@@ -425,7 +425,6 @@ public final class CiDriver {
         step("stage")
                 .cmd(() -> List.of(
                         "fill " + at(-14, 0, -6) + " " + at(14, 0, 22) + " minecraft:smooth_stone",
-                        "fill " + at(-14, 1, -6) + " " + at(14, 15, 22) + " minecraft:air",
                         "tp @s " + (bx + 0.5) + " " + (STAGE_Y + 1) + " " + (bz + 0.5) + " 0 25"))
                 .run("fly", CiDriver::fly)
                 .waitTicks(40);
