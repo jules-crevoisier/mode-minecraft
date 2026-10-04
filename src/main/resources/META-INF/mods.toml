@@ -6,6 +6,7 @@ license="MIT"
 modId="wayfarers"
 version="${mod_version}"
 displayName="Wayfarers"
+logoFile="logo.png"
 authors="Wayfarers Guild"
 description='''Exploration-first co-op survival with a cyber-steampunk soul.
 45 hand-built structures in every dimension, including ten colossal Wonders (Clockwork Citadel, Undercity,
