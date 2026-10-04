@@ -4,8 +4,126 @@
     {
       "weight": 1,
       "element": {
-        "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:void_observatory/observatory",
+        "element_type": "wayfarers:chunked_template",
+        "size": [
+          67,
+          93,
+          66
+        ],
+        "cells": [
+          {
+            "location": "wayfarers:void_observatory/observatory/x0_z0",
+            "offset": [
+              2,
+              20,
+              0
+            ],
+            "size": [
+              20,
+              47,
+              22
+            ],
+            "blocks": 1877
+          },
+          {
+            "location": "wayfarers:void_observatory/observatory/x0_z1",
+            "offset": [
+              0,
+              3,
+              22
+            ],
+            "size": [
+              22,
+              71,
+              22
+            ],
+            "blocks": 5858
+          },
+          {
+            "location": "wayfarers:void_observatory/observatory/x0_z2",
+            "offset": [
+              21,
+              31,
+              44
+            ],
+            "size": [
+              1,
+              6,
+              1
+            ],
+            "blocks": 4
+          },
+          {
+            "location": "wayfarers:void_observatory/observatory/x1_z0",
+            "offset": [
+              22,
+              17,
+              13
+            ],
+            "size": [
+              23,
+              72,
+              9
+            ],
+            "blocks": 2904
+          },
+          {
+            "location": "wayfarers:void_observatory/observatory/x1_z1",
+            "offset": [
+              22,
+              0,
+              22
+            ],
+            "size": [
+              23,
+              93,
+              22
+            ],
+            "blocks": 21085
+          },
+          {
+            "location": "wayfarers:void_observatory/observatory/x1_z2",
+            "offset": [
+              22,
+              16,
+              44
+            ],
+            "size": [
+              19,
+              35,
+              22
+            ],
+            "blocks": 2059
+          },
+          {
+            "location": "wayfarers:void_observatory/observatory/x2_z0",
+            "offset": [
+              45,
+              30,
+              19
+            ],
+            "size": [
+              20,
+              24,
+              3
+            ],
+            "blocks": 146
+          },
+          {
+            "location": "wayfarers:void_observatory/observatory/x2_z1",
+            "offset": [
+              45,
+              25,
+              22
+            ],
+            "size": [
+              22,
+              35,
+              14
+            ],
+            "blocks": 1966
+          }
+        ],
         "projection": "rigid",
         "processors": "wayfarers:aging"
       }

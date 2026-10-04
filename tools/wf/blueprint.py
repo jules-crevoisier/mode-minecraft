@@ -559,36 +559,42 @@ class Blueprint:
     def to_nbt(self):
         self.resolve_shapes()
         size, blocks, ents, _ = self.normalized()
-        palette, index = [], {}
-        out_blocks = []
-        # Sort for deterministic output; block entities are emitted last like vanilla.
-        for pos in sorted(blocks, key=lambda p: (blocks[p][2] is not None, p[1], p[2], p[0])):
-            name, props, data = blocks[pos]
-            key = block_str(name, props)
-            if key not in index:
-                index[key] = len(palette)
-                entry = {"Name": nbt.String(name)}
-                if props:
-                    entry["Properties"] = nbt.Compound({k: nbt.String(v) for k, v in sorted(props.items())})
-                palette.append(nbt.Compound(entry))
-            b = {"pos": nbt.List([nbt.Int(c) for c in pos], nbt.Int), "state": nbt.Int(index[key])}
-            if data is not None:
-                b["nbt"] = nbt.wrap(data)
-            out_blocks.append(nbt.Compound(b))
-        entities = []
-        for (x, y, z), d in ents:
-            entities.append(nbt.Compound({
-                "pos": nbt.List([nbt.Double(x + 0.5), nbt.Double(float(y)), nbt.Double(z + 0.5)], nbt.Double),
-                "blockPos": nbt.List([nbt.Int(x), nbt.Int(y), nbt.Int(z)], nbt.Int),
-                "nbt": nbt.wrap(d),
-            }))
-        return nbt.Compound({
-            "DataVersion": nbt.Int(DATA_VERSION),
-            "size": nbt.List([nbt.Int(s) for s in size], nbt.Int),
-            "palette": nbt.List(palette, nbt.Compound),
-            "blocks": nbt.List(out_blocks, nbt.Compound),
-            "entities": nbt.List(entities, nbt.Compound),
-        })
+        return template_nbt(size, blocks, ents)
 
     def save(self, path):
         nbt.save(path, self.to_nbt())
+
+
+def template_nbt(size, blocks, ents):
+    """Structure template compound for normalized ``blocks`` {(x, y, z): (name, props, nbt)} and ``ents``
+    [((x, y, z), nbt)] inside a box of ``size``."""
+    palette, index = [], {}
+    out_blocks = []
+    # Sort for deterministic output; block entities are emitted last like vanilla.
+    for pos in sorted(blocks, key=lambda p: (blocks[p][2] is not None, p[1], p[2], p[0])):
+        name, props, data = blocks[pos]
+        key = block_str(name, props)
+        if key not in index:
+            index[key] = len(palette)
+            entry = {"Name": nbt.String(name)}
+            if props:
+                entry["Properties"] = nbt.Compound({k: nbt.String(v) for k, v in sorted(props.items())})
+            palette.append(nbt.Compound(entry))
+        b = {"pos": nbt.List([nbt.Int(c) for c in pos], nbt.Int), "state": nbt.Int(index[key])}
+        if data is not None:
+            b["nbt"] = nbt.wrap(data)
+        out_blocks.append(nbt.Compound(b))
+    entities = []
+    for (x, y, z), d in ents:
+        entities.append(nbt.Compound({
+            "pos": nbt.List([nbt.Double(x + 0.5), nbt.Double(float(y)), nbt.Double(z + 0.5)], nbt.Double),
+            "blockPos": nbt.List([nbt.Int(x), nbt.Int(y), nbt.Int(z)], nbt.Int),
+            "nbt": nbt.wrap(d),
+        }))
+    return nbt.Compound({
+        "DataVersion": nbt.Int(DATA_VERSION),
+        "size": nbt.List([nbt.Int(s) for s in size], nbt.Int),
+        "palette": nbt.List(palette, nbt.Compound),
+        "blocks": nbt.List(out_blocks, nbt.Compound),
+        "entities": nbt.List(entities, nbt.Compound),
+    })

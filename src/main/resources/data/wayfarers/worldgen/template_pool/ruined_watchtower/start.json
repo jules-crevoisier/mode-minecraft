@@ -4,8 +4,98 @@
     {
       "weight": 3,
       "element": {
-        "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:ruined_watchtower/tower_ruined",
+        "element_type": "wayfarers:chunked_template",
+        "size": [
+          68,
+          44,
+          53
+        ],
+        "cells": [
+          {
+            "location": "wayfarers:ruined_watchtower/tower_ruined/x0_z0",
+            "offset": [
+              0,
+              0,
+              8
+            ],
+            "size": [
+              23,
+              22,
+              18
+            ],
+            "blocks": 2567
+          },
+          {
+            "location": "wayfarers:ruined_watchtower/tower_ruined/x0_z1",
+            "offset": [
+              0,
+              0,
+              26
+            ],
+            "size": [
+              23,
+              23,
+              20
+            ],
+            "blocks": 3385
+          },
+          {
+            "location": "wayfarers:ruined_watchtower/tower_ruined/x1_z0",
+            "offset": [
+              23,
+              0,
+              0
+            ],
+            "size": [
+              22,
+              43,
+              26
+            ],
+            "blocks": 6550
+          },
+          {
+            "location": "wayfarers:ruined_watchtower/tower_ruined/x1_z1",
+            "offset": [
+              23,
+              0,
+              26
+            ],
+            "size": [
+              22,
+              44,
+              27
+            ],
+            "blocks": 5622
+          },
+          {
+            "location": "wayfarers:ruined_watchtower/tower_ruined/x2_z0",
+            "offset": [
+              45,
+              0,
+              0
+            ],
+            "size": [
+              19,
+              20,
+              26
+            ],
+            "blocks": 3497
+          },
+          {
+            "location": "wayfarers:ruined_watchtower/tower_ruined/x2_z1",
+            "offset": [
+              45,
+              0,
+              26
+            ],
+            "size": [
+              23,
+              20,
+              27
+            ],
+            "blocks": 4398
+          }
+        ],
         "projection": "rigid",
         "processors": "wayfarers:ruin"
       }
@@ -13,8 +103,70 @@
     {
       "weight": 1,
       "element": {
-        "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:ruined_watchtower/tower_intact",
+        "element_type": "wayfarers:chunked_template",
+        "size": [
+          55,
+          62,
+          48
+        ],
+        "cells": [
+          {
+            "location": "wayfarers:ruined_watchtower/tower_intact/x0_z0",
+            "offset": [
+              0,
+              0,
+              1
+            ],
+            "size": [
+              28,
+              51,
+              23
+            ],
+            "blocks": 4082
+          },
+          {
+            "location": "wayfarers:ruined_watchtower/tower_intact/x0_z1",
+            "offset": [
+              3,
+              0,
+              24
+            ],
+            "size": [
+              25,
+              49,
+              24
+            ],
+            "blocks": 3210
+          },
+          {
+            "location": "wayfarers:ruined_watchtower/tower_intact/x1_z0",
+            "offset": [
+              28,
+              0,
+              0
+            ],
+            "size": [
+              24,
+              62,
+              24
+            ],
+            "blocks": 7067
+          },
+          {
+            "location": "wayfarers:ruined_watchtower/tower_intact/x1_z1",
+            "offset": [
+              28,
+              0,
+              24
+            ],
+            "size": [
+              27,
+              57,
+              24
+            ],
+            "blocks": 5202
+          }
+        ],
         "projection": "rigid",
         "processors": "wayfarers:aging"
       }

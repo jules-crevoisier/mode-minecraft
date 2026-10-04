@@ -4,8 +4,70 @@
     {
       "weight": 2,
       "element": {
-        "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:guild_outpost/outpost_spruce",
+        "element_type": "wayfarers:chunked_template",
+        "size": [
+          62,
+          56,
+          53
+        ],
+        "cells": [
+          {
+            "location": "wayfarers:guild_outpost/outpost_spruce/x0_z0",
+            "offset": [
+              0,
+              0,
+              0
+            ],
+            "size": [
+              31,
+              34,
+              26
+            ],
+            "blocks": 10762
+          },
+          {
+            "location": "wayfarers:guild_outpost/outpost_spruce/x0_z1",
+            "offset": [
+              4,
+              0,
+              26
+            ],
+            "size": [
+              27,
+              34,
+              27
+            ],
+            "blocks": 7982
+          },
+          {
+            "location": "wayfarers:guild_outpost/outpost_spruce/x1_z0",
+            "offset": [
+              31,
+              0,
+              0
+            ],
+            "size": [
+              28,
+              56,
+              26
+            ],
+            "blocks": 10919
+          },
+          {
+            "location": "wayfarers:guild_outpost/outpost_spruce/x1_z1",
+            "offset": [
+              31,
+              0,
+              26
+            ],
+            "size": [
+              31,
+              36,
+              27
+            ],
+            "blocks": 8828
+          }
+        ],
         "projection": "rigid",
         "processors": "wayfarers:aging"
       }
@@ -13,8 +75,70 @@
     {
       "weight": 1,
       "element": {
-        "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:guild_outpost/outpost_oak",
+        "element_type": "wayfarers:chunked_template",
+        "size": [
+          62,
+          56,
+          53
+        ],
+        "cells": [
+          {
+            "location": "wayfarers:guild_outpost/outpost_oak/x0_z0",
+            "offset": [
+              0,
+              0,
+              0
+            ],
+            "size": [
+              31,
+              34,
+              26
+            ],
+            "blocks": 10785
+          },
+          {
+            "location": "wayfarers:guild_outpost/outpost_oak/x0_z1",
+            "offset": [
+              4,
+              0,
+              26
+            ],
+            "size": [
+              27,
+              34,
+              27
+            ],
+            "blocks": 7989
+          },
+          {
+            "location": "wayfarers:guild_outpost/outpost_oak/x1_z0",
+            "offset": [
+              31,
+              0,
+              0
+            ],
+            "size": [
+              28,
+              56,
+              26
+            ],
+            "blocks": 10918
+          },
+          {
+            "location": "wayfarers:guild_outpost/outpost_oak/x1_z1",
+            "offset": [
+              31,
+              0,
+              26
+            ],
+            "size": [
+              31,
+              36,
+              27
+            ],
+            "blocks": 8829
+          }
+        ],
         "projection": "rigid",
         "processors": "wayfarers:aging"
       }
@@ -22,8 +146,70 @@
     {
       "weight": 1,
       "element": {
-        "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:guild_outpost/outpost_birch",
+        "element_type": "wayfarers:chunked_template",
+        "size": [
+          61,
+          56,
+          53
+        ],
+        "cells": [
+          {
+            "location": "wayfarers:guild_outpost/outpost_birch/x0_z0",
+            "offset": [
+              0,
+              0,
+              0
+            ],
+            "size": [
+              30,
+              34,
+              26
+            ],
+            "blocks": 10786
+          },
+          {
+            "location": "wayfarers:guild_outpost/outpost_birch/x0_z1",
+            "offset": [
+              3,
+              0,
+              26
+            ],
+            "size": [
+              27,
+              34,
+              27
+            ],
+            "blocks": 7999
+          },
+          {
+            "location": "wayfarers:guild_outpost/outpost_birch/x1_z0",
+            "offset": [
+              30,
+              0,
+              0
+            ],
+            "size": [
+              28,
+              56,
+              26
+            ],
+            "blocks": 10919
+          },
+          {
+            "location": "wayfarers:guild_outpost/outpost_birch/x1_z1",
+            "offset": [
+              30,
+              0,
+              26
+            ],
+            "size": [
+              31,
+              36,
+              27
+            ],
+            "blocks": 8828
+          }
+        ],
         "projection": "rigid",
         "processors": "wayfarers:aging"
       }

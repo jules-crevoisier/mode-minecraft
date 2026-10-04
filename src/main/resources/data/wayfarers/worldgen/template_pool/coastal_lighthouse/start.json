@@ -4,8 +4,98 @@
     {
       "weight": 1,
       "element": {
-        "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:coastal_lighthouse/lighthouse",
+        "element_type": "wayfarers:chunked_template",
+        "size": [
+          66,
+          69,
+          51
+        ],
+        "cells": [
+          {
+            "location": "wayfarers:coastal_lighthouse/lighthouse/x0_z0",
+            "offset": [
+              0,
+              2,
+              0
+            ],
+            "size": [
+              22,
+              26,
+              26
+            ],
+            "blocks": 3829
+          },
+          {
+            "location": "wayfarers:coastal_lighthouse/lighthouse/x0_z1",
+            "offset": [
+              1,
+              0,
+              26
+            ],
+            "size": [
+              21,
+              21,
+              25
+            ],
+            "blocks": 3537
+          },
+          {
+            "location": "wayfarers:coastal_lighthouse/lighthouse/x1_z0",
+            "offset": [
+              22,
+              2,
+              0
+            ],
+            "size": [
+              22,
+              67,
+              26
+            ],
+            "blocks": 12317
+          },
+          {
+            "location": "wayfarers:coastal_lighthouse/lighthouse/x1_z1",
+            "offset": [
+              22,
+              0,
+              26
+            ],
+            "size": [
+              22,
+              22,
+              25
+            ],
+            "blocks": 4451
+          },
+          {
+            "location": "wayfarers:coastal_lighthouse/lighthouse/x2_z0",
+            "offset": [
+              44,
+              2,
+              0
+            ],
+            "size": [
+              22,
+              33,
+              26
+            ],
+            "blocks": 2860
+          },
+          {
+            "location": "wayfarers:coastal_lighthouse/lighthouse/x2_z1",
+            "offset": [
+              44,
+              0,
+              26
+            ],
+            "size": [
+              22,
+              19,
+              25
+            ],
+            "blocks": 3366
+          }
+        ],
         "projection": "rigid",
         "processors": "wayfarers:aging"
       }

@@ -4,8 +4,140 @@
     {
       "weight": 1,
       "element": {
-        "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:void_crypt/layout_0",
+        "element_type": "wayfarers:chunked_template",
+        "size": [
+          65,
+          41,
+          65
+        ],
+        "cells": [
+          {
+            "location": "wayfarers:void_crypt/layout_0/x0_z0",
+            "offset": [
+              0,
+              0,
+              0
+            ],
+            "size": [
+              22,
+              22,
+              22
+            ],
+            "blocks": 5576
+          },
+          {
+            "location": "wayfarers:void_crypt/layout_0/x0_z1",
+            "offset": [
+              0,
+              0,
+              22
+            ],
+            "size": [
+              22,
+              40,
+              21
+            ],
+            "blocks": 7291
+          },
+          {
+            "location": "wayfarers:void_crypt/layout_0/x0_z2",
+            "offset": [
+              0,
+              0,
+              43
+            ],
+            "size": [
+              22,
+              22,
+              22
+            ],
+            "blocks": 6204
+          },
+          {
+            "location": "wayfarers:void_crypt/layout_0/x1_z0",
+            "offset": [
+              22,
+              0,
+              0
+            ],
+            "size": [
+              21,
+              40,
+              22
+            ],
+            "blocks": 7061
+          },
+          {
+            "location": "wayfarers:void_crypt/layout_0/x1_z1",
+            "offset": [
+              22,
+              0,
+              22
+            ],
+            "size": [
+              21,
+              41,
+              21
+            ],
+            "blocks": 12847
+          },
+          {
+            "location": "wayfarers:void_crypt/layout_0/x1_z2",
+            "offset": [
+              22,
+              0,
+              43
+            ],
+            "size": [
+              21,
+              40,
+              22
+            ],
+            "blocks": 5708
+          },
+          {
+            "location": "wayfarers:void_crypt/layout_0/x2_z0",
+            "offset": [
+              43,
+              0,
+              0
+            ],
+            "size": [
+              22,
+              22,
+              22
+            ],
+            "blocks": 10276
+          },
+          {
+            "location": "wayfarers:void_crypt/layout_0/x2_z1",
+            "offset": [
+              43,
+              0,
+              22
+            ],
+            "size": [
+              22,
+              40,
+              21
+            ],
+            "blocks": 6479
+          },
+          {
+            "location": "wayfarers:void_crypt/layout_0/x2_z2",
+            "offset": [
+              43,
+              0,
+              43
+            ],
+            "size": [
+              22,
+              22,
+              22
+            ],
+            "blocks": 5756
+          }
+        ],
         "projection": "rigid",
         "processors": "wayfarers:none"
       }
@@ -13,8 +145,140 @@
     {
       "weight": 1,
       "element": {
-        "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:void_crypt/layout_1",
+        "element_type": "wayfarers:chunked_template",
+        "size": [
+          65,
+          41,
+          65
+        ],
+        "cells": [
+          {
+            "location": "wayfarers:void_crypt/layout_1/x0_z0",
+            "offset": [
+              0,
+              0,
+              0
+            ],
+            "size": [
+              22,
+              22,
+              22
+            ],
+            "blocks": 9888
+          },
+          {
+            "location": "wayfarers:void_crypt/layout_1/x0_z1",
+            "offset": [
+              0,
+              0,
+              22
+            ],
+            "size": [
+              22,
+              22,
+              21
+            ],
+            "blocks": 5127
+          },
+          {
+            "location": "wayfarers:void_crypt/layout_1/x0_z2",
+            "offset": [
+              0,
+              0,
+              43
+            ],
+            "size": [
+              22,
+              22,
+              22
+            ],
+            "blocks": 6028
+          },
+          {
+            "location": "wayfarers:void_crypt/layout_1/x1_z0",
+            "offset": [
+              22,
+              0,
+              0
+            ],
+            "size": [
+              21,
+              22,
+              22
+            ],
+            "blocks": 6096
+          },
+          {
+            "location": "wayfarers:void_crypt/layout_1/x1_z1",
+            "offset": [
+              22,
+              0,
+              22
+            ],
+            "size": [
+              21,
+              41,
+              21
+            ],
+            "blocks": 6106
+          },
+          {
+            "location": "wayfarers:void_crypt/layout_1/x1_z2",
+            "offset": [
+              22,
+              0,
+              43
+            ],
+            "size": [
+              21,
+              41,
+              22
+            ],
+            "blocks": 7675
+          },
+          {
+            "location": "wayfarers:void_crypt/layout_1/x2_z0",
+            "offset": [
+              43,
+              0,
+              0
+            ],
+            "size": [
+              22,
+              22,
+              22
+            ],
+            "blocks": 5596
+          },
+          {
+            "location": "wayfarers:void_crypt/layout_1/x2_z1",
+            "offset": [
+              43,
+              0,
+              22
+            ],
+            "size": [
+              22,
+              41,
+              21
+            ],
+            "blocks": 7744
+          },
+          {
+            "location": "wayfarers:void_crypt/layout_1/x2_z2",
+            "offset": [
+              43,
+              0,
+              43
+            ],
+            "size": [
+              22,
+              41,
+              22
+            ],
+            "blocks": 10722
+          }
+        ],
         "projection": "rigid",
         "processors": "wayfarers:none"
       }
@@ -22,8 +286,140 @@
     {
       "weight": 1,
       "element": {
-        "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:void_crypt/layout_2",
+        "element_type": "wayfarers:chunked_template",
+        "size": [
+          65,
+          41,
+          65
+        ],
+        "cells": [
+          {
+            "location": "wayfarers:void_crypt/layout_2/x0_z0",
+            "offset": [
+              0,
+              0,
+              0
+            ],
+            "size": [
+              22,
+              22,
+              22
+            ],
+            "blocks": 10452
+          },
+          {
+            "location": "wayfarers:void_crypt/layout_2/x0_z1",
+            "offset": [
+              0,
+              0,
+              22
+            ],
+            "size": [
+              22,
+              22,
+              21
+            ],
+            "blocks": 6060
+          },
+          {
+            "location": "wayfarers:void_crypt/layout_2/x0_z2",
+            "offset": [
+              0,
+              0,
+              43
+            ],
+            "size": [
+              22,
+              22,
+              22
+            ],
+            "blocks": 5280
+          },
+          {
+            "location": "wayfarers:void_crypt/layout_2/x1_z0",
+            "offset": [
+              22,
+              0,
+              0
+            ],
+            "size": [
+              21,
+              40,
+              22
+            ],
+            "blocks": 6312
+          },
+          {
+            "location": "wayfarers:void_crypt/layout_2/x1_z1",
+            "offset": [
+              22,
+              0,
+              22
+            ],
+            "size": [
+              21,
+              41,
+              21
+            ],
+            "blocks": 8216
+          },
+          {
+            "location": "wayfarers:void_crypt/layout_2/x1_z2",
+            "offset": [
+              22,
+              0,
+              43
+            ],
+            "size": [
+              21,
+              40,
+              20
+            ],
+            "blocks": 4992
+          },
+          {
+            "location": "wayfarers:void_crypt/layout_2/x2_z0",
+            "offset": [
+              43,
+              0,
+              0
+            ],
+            "size": [
+              22,
+              40,
+              22
+            ],
+            "blocks": 7332
+          },
+          {
+            "location": "wayfarers:void_crypt/layout_2/x2_z1",
+            "offset": [
+              43,
+              0,
+              22
+            ],
+            "size": [
+              22,
+              41,
+              21
+            ],
+            "blocks": 10760
+          },
+          {
+            "location": "wayfarers:void_crypt/layout_2/x2_z2",
+            "offset": [
+              43,
+              0,
+              43
+            ],
+            "size": [
+              22,
+              40,
+              22
+            ],
+            "blocks": 7510
+          }
+        ],
         "projection": "rigid",
         "processors": "wayfarers:none"
       }

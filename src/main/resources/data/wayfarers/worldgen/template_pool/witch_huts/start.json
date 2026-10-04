@@ -4,8 +4,70 @@
     {
       "weight": 1,
       "element": {
-        "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:witch_huts/huts",
+        "element_type": "wayfarers:chunked_template",
+        "size": [
+          55,
+          65,
+          64
+        ],
+        "cells": [
+          {
+            "location": "wayfarers:witch_huts/huts/x0_z0",
+            "offset": [
+              2,
+              0,
+              0
+            ],
+            "size": [
+              26,
+              55,
+              32
+            ],
+            "blocks": 12492
+          },
+          {
+            "location": "wayfarers:witch_huts/huts/x0_z1",
+            "offset": [
+              0,
+              0,
+              32
+            ],
+            "size": [
+              28,
+              51,
+              32
+            ],
+            "blocks": 10036
+          },
+          {
+            "location": "wayfarers:witch_huts/huts/x1_z0",
+            "offset": [
+              28,
+              0,
+              10
+            ],
+            "size": [
+              27,
+              65,
+              22
+            ],
+            "blocks": 6732
+          },
+          {
+            "location": "wayfarers:witch_huts/huts/x1_z1",
+            "offset": [
+              28,
+              0,
+              32
+            ],
+            "size": [
+              27,
+              54,
+              32
+            ],
+            "blocks": 9227
+          }
+        ],
         "projection": "rigid",
         "processors": "wayfarers:none"
       }

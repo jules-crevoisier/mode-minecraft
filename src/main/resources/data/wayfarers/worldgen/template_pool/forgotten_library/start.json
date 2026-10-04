@@ -4,8 +4,126 @@
     {
       "weight": 1,
       "element": {
-        "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:forgotten_library/library",
+        "element_type": "wayfarers:chunked_template",
+        "size": [
+          99,
+          97,
+          64
+        ],
+        "cells": [
+          {
+            "location": "wayfarers:forgotten_library/library/x0_z0",
+            "offset": [
+              1,
+              2,
+              4
+            ],
+            "size": [
+              24,
+              76,
+              28
+            ],
+            "blocks": 9298
+          },
+          {
+            "location": "wayfarers:forgotten_library/library/x0_z1",
+            "offset": [
+              0,
+              2,
+              32
+            ],
+            "size": [
+              25,
+              73,
+              32
+            ],
+            "blocks": 8420
+          },
+          {
+            "location": "wayfarers:forgotten_library/library/x1_z0",
+            "offset": [
+              25,
+              1,
+              0
+            ],
+            "size": [
+              25,
+              78,
+              32
+            ],
+            "blocks": 28213
+          },
+          {
+            "location": "wayfarers:forgotten_library/library/x1_z1",
+            "offset": [
+              25,
+              1,
+              32
+            ],
+            "size": [
+              25,
+              74,
+              32
+            ],
+            "blocks": 26839
+          },
+          {
+            "location": "wayfarers:forgotten_library/library/x2_z0",
+            "offset": [
+              50,
+              1,
+              4
+            ],
+            "size": [
+              24,
+              96,
+              28
+            ],
+            "blocks": 22005
+          },
+          {
+            "location": "wayfarers:forgotten_library/library/x2_z1",
+            "offset": [
+              50,
+              0,
+              32
+            ],
+            "size": [
+              24,
+              88,
+              32
+            ],
+            "blocks": 22180
+          },
+          {
+            "location": "wayfarers:forgotten_library/library/x3_z0",
+            "offset": [
+              74,
+              23,
+              1
+            ],
+            "size": [
+              25,
+              69,
+              31
+            ],
+            "blocks": 7745
+          },
+          {
+            "location": "wayfarers:forgotten_library/library/x3_z1",
+            "offset": [
+              74,
+              13,
+              32
+            ],
+            "size": [
+              25,
+              79,
+              32
+            ],
+            "blocks": 12299
+          }
+        ],
         "projection": "rigid",
         "processors": "wayfarers:aging"
       }

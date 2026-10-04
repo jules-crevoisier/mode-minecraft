@@ -4,8 +4,140 @@
     {
       "weight": 1,
       "element": {
-        "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:forgotten_catacombs/layout_0",
+        "element_type": "wayfarers:chunked_template",
+        "size": [
+          65,
+          61,
+          68
+        ],
+        "cells": [
+          {
+            "location": "wayfarers:forgotten_catacombs/layout_0/x0_z0",
+            "offset": [
+              0,
+              0,
+              0
+            ],
+            "size": [
+              22,
+              36,
+              23
+            ],
+            "blocks": 9360
+          },
+          {
+            "location": "wayfarers:forgotten_catacombs/layout_0/x0_z1",
+            "offset": [
+              0,
+              0,
+              23
+            ],
+            "size": [
+              22,
+              36,
+              22
+            ],
+            "blocks": 9936
+          },
+          {
+            "location": "wayfarers:forgotten_catacombs/layout_0/x0_z2",
+            "offset": [
+              0,
+              0,
+              45
+            ],
+            "size": [
+              22,
+              36,
+              20
+            ],
+            "blocks": 11428
+          },
+          {
+            "location": "wayfarers:forgotten_catacombs/layout_0/x1_z0",
+            "offset": [
+              22,
+              0,
+              0
+            ],
+            "size": [
+              21,
+              36,
+              23
+            ],
+            "blocks": 9834
+          },
+          {
+            "location": "wayfarers:forgotten_catacombs/layout_0/x1_z1",
+            "offset": [
+              22,
+              0,
+              23
+            ],
+            "size": [
+              21,
+              57,
+              22
+            ],
+            "blocks": 8277
+          },
+          {
+            "location": "wayfarers:forgotten_catacombs/layout_0/x1_z2",
+            "offset": [
+              22,
+              0,
+              45
+            ],
+            "size": [
+              21,
+              57,
+              23
+            ],
+            "blocks": 8350
+          },
+          {
+            "location": "wayfarers:forgotten_catacombs/layout_0/x2_z0",
+            "offset": [
+              43,
+              0,
+              0
+            ],
+            "size": [
+              22,
+              36,
+              23
+            ],
+            "blocks": 10180
+          },
+          {
+            "location": "wayfarers:forgotten_catacombs/layout_0/x2_z1",
+            "offset": [
+              43,
+              0,
+              23
+            ],
+            "size": [
+              22,
+              60,
+              22
+            ],
+            "blocks": 10711
+          },
+          {
+            "location": "wayfarers:forgotten_catacombs/layout_0/x2_z2",
+            "offset": [
+              43,
+              0,
+              45
+            ],
+            "size": [
+              22,
+              61,
+              20
+            ],
+            "blocks": 9515
+          }
+        ],
         "projection": "rigid",
         "processors": "wayfarers:none"
       }
@@ -13,8 +145,140 @@
     {
       "weight": 1,
       "element": {
-        "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:forgotten_catacombs/layout_1",
+        "element_type": "wayfarers:chunked_template",
+        "size": [
+          65,
+          61,
+          68
+        ],
+        "cells": [
+          {
+            "location": "wayfarers:forgotten_catacombs/layout_1/x0_z0",
+            "offset": [
+              0,
+              0,
+              0
+            ],
+            "size": [
+              22,
+              36,
+              23
+            ],
+            "blocks": 9260
+          },
+          {
+            "location": "wayfarers:forgotten_catacombs/layout_1/x0_z1",
+            "offset": [
+              0,
+              0,
+              23
+            ],
+            "size": [
+              22,
+              42,
+              22
+            ],
+            "blocks": 9632
+          },
+          {
+            "location": "wayfarers:forgotten_catacombs/layout_1/x0_z2",
+            "offset": [
+              0,
+              0,
+              45
+            ],
+            "size": [
+              22,
+              56,
+              23
+            ],
+            "blocks": 13475
+          },
+          {
+            "location": "wayfarers:forgotten_catacombs/layout_1/x1_z0",
+            "offset": [
+              22,
+              0,
+              0
+            ],
+            "size": [
+              21,
+              36,
+              23
+            ],
+            "blocks": 8372
+          },
+          {
+            "location": "wayfarers:forgotten_catacombs/layout_1/x1_z1",
+            "offset": [
+              22,
+              0,
+              23
+            ],
+            "size": [
+              21,
+              60,
+              22
+            ],
+            "blocks": 9025
+          },
+          {
+            "location": "wayfarers:forgotten_catacombs/layout_1/x1_z2",
+            "offset": [
+              22,
+              0,
+              45
+            ],
+            "size": [
+              21,
+              61,
+              22
+            ],
+            "blocks": 8743
+          },
+          {
+            "location": "wayfarers:forgotten_catacombs/layout_1/x2_z0",
+            "offset": [
+              43,
+              0,
+              0
+            ],
+            "size": [
+              22,
+              36,
+              23
+            ],
+            "blocks": 10670
+          },
+          {
+            "location": "wayfarers:forgotten_catacombs/layout_1/x2_z1",
+            "offset": [
+              43,
+              0,
+              23
+            ],
+            "size": [
+              22,
+              54,
+              22
+            ],
+            "blocks": 8029
+          },
+          {
+            "location": "wayfarers:forgotten_catacombs/layout_1/x2_z2",
+            "offset": [
+              43,
+              0,
+              45
+            ],
+            "size": [
+              22,
+              42,
+              19
+            ],
+            "blocks": 7021
+          }
+        ],
         "projection": "rigid",
         "processors": "wayfarers:none"
       }
@@ -22,8 +286,140 @@
     {
       "weight": 1,
       "element": {
-        "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:forgotten_catacombs/layout_2",
+        "element_type": "wayfarers:chunked_template",
+        "size": [
+          65,
+          61,
+          65
+        ],
+        "cells": [
+          {
+            "location": "wayfarers:forgotten_catacombs/layout_2/x0_z0",
+            "offset": [
+              0,
+              0,
+              0
+            ],
+            "size": [
+              22,
+              60,
+              22
+            ],
+            "blocks": 8392
+          },
+          {
+            "location": "wayfarers:forgotten_catacombs/layout_2/x0_z1",
+            "offset": [
+              1,
+              0,
+              22
+            ],
+            "size": [
+              21,
+              61,
+              21
+            ],
+            "blocks": 8665
+          },
+          {
+            "location": "wayfarers:forgotten_catacombs/layout_2/x0_z2",
+            "offset": [
+              0,
+              0,
+              43
+            ],
+            "size": [
+              22,
+              60,
+              22
+            ],
+            "blocks": 10353
+          },
+          {
+            "location": "wayfarers:forgotten_catacombs/layout_2/x1_z0",
+            "offset": [
+              22,
+              0,
+              0
+            ],
+            "size": [
+              21,
+              57,
+              22
+            ],
+            "blocks": 9185
+          },
+          {
+            "location": "wayfarers:forgotten_catacombs/layout_2/x1_z1",
+            "offset": [
+              22,
+              0,
+              22
+            ],
+            "size": [
+              21,
+              57,
+              21
+            ],
+            "blocks": 8057
+          },
+          {
+            "location": "wayfarers:forgotten_catacombs/layout_2/x1_z2",
+            "offset": [
+              22,
+              0,
+              43
+            ],
+            "size": [
+              21,
+              57,
+              22
+            ],
+            "blocks": 8564
+          },
+          {
+            "location": "wayfarers:forgotten_catacombs/layout_2/x2_z0",
+            "offset": [
+              43,
+              0,
+              0
+            ],
+            "size": [
+              22,
+              36,
+              22
+            ],
+            "blocks": 13918
+          },
+          {
+            "location": "wayfarers:forgotten_catacombs/layout_2/x2_z1",
+            "offset": [
+              43,
+              0,
+              22
+            ],
+            "size": [
+              22,
+              36,
+              21
+            ],
+            "blocks": 9168
+          },
+          {
+            "location": "wayfarers:forgotten_catacombs/layout_2/x2_z2",
+            "offset": [
+              43,
+              0,
+              43
+            ],
+            "size": [
+              20,
+              36,
+              22
+            ],
+            "blocks": 7912
+          }
+        ],
         "projection": "rigid",
         "processors": "wayfarers:none"
       }

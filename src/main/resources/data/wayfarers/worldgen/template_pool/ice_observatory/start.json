@@ -4,8 +4,70 @@
     {
       "weight": 1,
       "element": {
-        "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:ice_observatory/observatory",
+        "element_type": "wayfarers:chunked_template",
+        "size": [
+          61,
+          36,
+          59
+        ],
+        "cells": [
+          {
+            "location": "wayfarers:ice_observatory/observatory/x0_z0",
+            "offset": [
+              0,
+              0,
+              0
+            ],
+            "size": [
+              30,
+              30,
+              30
+            ],
+            "blocks": 7172
+          },
+          {
+            "location": "wayfarers:ice_observatory/observatory/x0_z1",
+            "offset": [
+              0,
+              0,
+              30
+            ],
+            "size": [
+              30,
+              29,
+              29
+            ],
+            "blocks": 6387
+          },
+          {
+            "location": "wayfarers:ice_observatory/observatory/x1_z0",
+            "offset": [
+              30,
+              0,
+              0
+            ],
+            "size": [
+              31,
+              36,
+              30
+            ],
+            "blocks": 5777
+          },
+          {
+            "location": "wayfarers:ice_observatory/observatory/x1_z1",
+            "offset": [
+              30,
+              0,
+              30
+            ],
+            "size": [
+              31,
+              29,
+              22
+            ],
+            "blocks": 4946
+          }
+        ],
         "projection": "rigid",
         "processors": "wayfarers:none"
       }

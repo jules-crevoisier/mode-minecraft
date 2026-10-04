@@ -4,8 +4,140 @@
     {
       "weight": 1,
       "element": {
-        "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:sky_island/island",
+        "element_type": "wayfarers:chunked_template",
+        "size": [
+          86,
+          112,
+          81
+        ],
+        "cells": [
+          {
+            "location": "wayfarers:sky_island/island/x0_z0",
+            "offset": [
+              1,
+              9,
+              0
+            ],
+            "size": [
+              28,
+              103,
+              27
+            ],
+            "blocks": 2280
+          },
+          {
+            "location": "wayfarers:sky_island/island/x0_z1",
+            "offset": [
+              0,
+              53,
+              27
+            ],
+            "size": [
+              29,
+              50,
+              27
+            ],
+            "blocks": 2525
+          },
+          {
+            "location": "wayfarers:sky_island/island/x0_z2",
+            "offset": [
+              27,
+              59,
+              54
+            ],
+            "size": [
+              2,
+              17,
+              9
+            ],
+            "blocks": 75
+          },
+          {
+            "location": "wayfarers:sky_island/island/x1_z0",
+            "offset": [
+              29,
+              41,
+              1
+            ],
+            "size": [
+              28,
+              68,
+              26
+            ],
+            "blocks": 11591
+          },
+          {
+            "location": "wayfarers:sky_island/island/x1_z1",
+            "offset": [
+              29,
+              0,
+              27
+            ],
+            "size": [
+              28,
+              103,
+              27
+            ],
+            "blocks": 13255
+          },
+          {
+            "location": "wayfarers:sky_island/island/x1_z2",
+            "offset": [
+              29,
+              35,
+              54
+            ],
+            "size": [
+              28,
+              47,
+              27
+            ],
+            "blocks": 8037
+          },
+          {
+            "location": "wayfarers:sky_island/island/x2_z0",
+            "offset": [
+              57,
+              44,
+              7
+            ],
+            "size": [
+              29,
+              39,
+              20
+            ],
+            "blocks": 3186
+          },
+          {
+            "location": "wayfarers:sky_island/island/x2_z1",
+            "offset": [
+              57,
+              9,
+              27
+            ],
+            "size": [
+              22,
+              78,
+              27
+            ],
+            "blocks": 2371
+          },
+          {
+            "location": "wayfarers:sky_island/island/x2_z2",
+            "offset": [
+              57,
+              63,
+              54
+            ],
+            "size": [
+              3,
+              20,
+              10
+            ],
+            "blocks": 127
+          }
+        ],
         "projection": "rigid",
         "processors": "wayfarers:none"
       }

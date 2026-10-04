@@ -4,8 +4,98 @@
     {
       "weight": 1,
       "element": {
-        "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:sealed_lab/lab",
+        "element_type": "wayfarers:chunked_template",
+        "size": [
+          75,
+          45,
+          60
+        ],
+        "cells": [
+          {
+            "location": "wayfarers:sealed_lab/lab/x0_z0",
+            "offset": [
+              0,
+              0,
+              16
+            ],
+            "size": [
+              25,
+              40,
+              14
+            ],
+            "blocks": 5552
+          },
+          {
+            "location": "wayfarers:sealed_lab/lab/x0_z1",
+            "offset": [
+              0,
+              0,
+              30
+            ],
+            "size": [
+              25,
+              40,
+              30
+            ],
+            "blocks": 8525
+          },
+          {
+            "location": "wayfarers:sealed_lab/lab/x1_z0",
+            "offset": [
+              25,
+              0,
+              0
+            ],
+            "size": [
+              25,
+              45,
+              30
+            ],
+            "blocks": 12283
+          },
+          {
+            "location": "wayfarers:sealed_lab/lab/x1_z1",
+            "offset": [
+              25,
+              0,
+              30
+            ],
+            "size": [
+              25,
+              45,
+              25
+            ],
+            "blocks": 12690
+          },
+          {
+            "location": "wayfarers:sealed_lab/lab/x2_z0",
+            "offset": [
+              50,
+              0,
+              23
+            ],
+            "size": [
+              25,
+              42,
+              7
+            ],
+            "blocks": 1330
+          },
+          {
+            "location": "wayfarers:sealed_lab/lab/x2_z1",
+            "offset": [
+              50,
+              0,
+              30
+            ],
+            "size": [
+              25,
+              42,
+              8
+            ],
+            "blocks": 1781
+          }
+        ],
         "projection": "rigid",
         "processors": "wayfarers:aging"
       }

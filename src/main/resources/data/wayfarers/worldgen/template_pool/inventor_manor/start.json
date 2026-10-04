@@ -4,8 +4,70 @@
     {
       "weight": 1,
       "element": {
-        "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:inventor_manor/manor",
+        "element_type": "wayfarers:chunked_template",
+        "size": [
+          63,
+          46,
+          39
+        ],
+        "cells": [
+          {
+            "location": "wayfarers:inventor_manor/manor/x0_z0",
+            "offset": [
+              0,
+              0,
+              0
+            ],
+            "size": [
+              32,
+              43,
+              20
+            ],
+            "blocks": 15685
+          },
+          {
+            "location": "wayfarers:inventor_manor/manor/x0_z1",
+            "offset": [
+              0,
+              0,
+              20
+            ],
+            "size": [
+              32,
+              35,
+              19
+            ],
+            "blocks": 8841
+          },
+          {
+            "location": "wayfarers:inventor_manor/manor/x1_z0",
+            "offset": [
+              32,
+              0,
+              0
+            ],
+            "size": [
+              31,
+              42,
+              20
+            ],
+            "blocks": 13731
+          },
+          {
+            "location": "wayfarers:inventor_manor/manor/x1_z1",
+            "offset": [
+              32,
+              0,
+              20
+            ],
+            "size": [
+              31,
+              46,
+              19
+            ],
+            "blocks": 9671
+          }
+        ],
         "projection": "rigid",
         "processors": "wayfarers:none"
       }

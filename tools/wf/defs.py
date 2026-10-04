@@ -13,6 +13,7 @@ class Piece:
         self.processors = processors
         self.projection = projection
         self.blueprint = None
+        self.chunks = None  # (size, [cell records]) once gen_structures split it into columns (wf/chunking.py)
 
 
 class StructureDef:
@@ -116,18 +117,24 @@ def _rules_for(block, p, out):
             for st in STAIR_STATES]
 
 
+def pool_element(sdef, p):
+    processors = rl(p.processors or sdef.processors)
+    if p.chunks:
+        from . import chunking
+        size, cells = p.chunks
+        return chunking.element(size, cells, p.projection, processors)
+    return {
+        "element_type": "minecraft:single_pool_element",
+        "location": rl(f"{sdef.id}/{p.name}"),
+        "projection": p.projection,
+        "processors": processors,
+    }
+
+
 def template_pool(sdef, pieces, pool_name):
     return {
         "fallback": "minecraft:empty",
-        "elements": [{
-            "weight": p.weight,
-            "element": {
-                "element_type": "minecraft:single_pool_element",
-                "location": rl(f"{sdef.id}/{p.name}"),
-                "projection": p.projection,
-                "processors": rl(p.processors or sdef.processors),
-            },
-        } for p in pieces],
+        "elements": [{"weight": p.weight, "element": pool_element(sdef, p)} for p in pieces],
     }
 
 

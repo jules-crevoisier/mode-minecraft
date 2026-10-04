@@ -4,8 +4,98 @@
     {
       "weight": 1,
       "element": {
-        "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:void_nest/nest",
+        "element_type": "wayfarers:chunked_template",
+        "size": [
+          59,
+          86,
+          72
+        ],
+        "cells": [
+          {
+            "location": "wayfarers:void_nest/nest/x0_z0",
+            "offset": [
+              0,
+              13,
+              0
+            ],
+            "size": [
+              30,
+              73,
+              24
+            ],
+            "blocks": 9571
+          },
+          {
+            "location": "wayfarers:void_nest/nest/x0_z1",
+            "offset": [
+              2,
+              10,
+              24
+            ],
+            "size": [
+              28,
+              67,
+              24
+            ],
+            "blocks": 11297
+          },
+          {
+            "location": "wayfarers:void_nest/nest/x0_z2",
+            "offset": [
+              21,
+              30,
+              48
+            ],
+            "size": [
+              9,
+              31,
+              24
+            ],
+            "blocks": 836
+          },
+          {
+            "location": "wayfarers:void_nest/nest/x1_z0",
+            "offset": [
+              30,
+              4,
+              0
+            ],
+            "size": [
+              29,
+              82,
+              24
+            ],
+            "blocks": 13122
+          },
+          {
+            "location": "wayfarers:void_nest/nest/x1_z1",
+            "offset": [
+              30,
+              0,
+              24
+            ],
+            "size": [
+              28,
+              77,
+              24
+            ],
+            "blocks": 14288
+          },
+          {
+            "location": "wayfarers:void_nest/nest/x1_z2",
+            "offset": [
+              30,
+              18,
+              48
+            ],
+            "size": [
+              18,
+              45,
+              24
+            ],
+            "blocks": 1593
+          }
+        ],
         "projection": "rigid",
         "processors": "wayfarers:none"
       }

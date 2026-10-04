@@ -4,8 +4,140 @@
     {
       "weight": 1,
       "element": {
-        "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:basalt_fortress/fortress",
+        "element_type": "wayfarers:chunked_template",
+        "size": [
+          89,
+          93,
+          89
+        ],
+        "cells": [
+          {
+            "location": "wayfarers:basalt_fortress/fortress/x0_z0",
+            "offset": [
+              0,
+              0,
+              0
+            ],
+            "size": [
+              30,
+              93,
+              30
+            ],
+            "blocks": 19348
+          },
+          {
+            "location": "wayfarers:basalt_fortress/fortress/x0_z1",
+            "offset": [
+              0,
+              0,
+              30
+            ],
+            "size": [
+              30,
+              54,
+              29
+            ],
+            "blocks": 16584
+          },
+          {
+            "location": "wayfarers:basalt_fortress/fortress/x0_z2",
+            "offset": [
+              0,
+              0,
+              59
+            ],
+            "size": [
+              30,
+              75,
+              30
+            ],
+            "blocks": 18476
+          },
+          {
+            "location": "wayfarers:basalt_fortress/fortress/x1_z0",
+            "offset": [
+              30,
+              0,
+              0
+            ],
+            "size": [
+              29,
+              72,
+              30
+            ],
+            "blocks": 21408
+          },
+          {
+            "location": "wayfarers:basalt_fortress/fortress/x1_z1",
+            "offset": [
+              30,
+              0,
+              30
+            ],
+            "size": [
+              29,
+              88,
+              29
+            ],
+            "blocks": 30291
+          },
+          {
+            "location": "wayfarers:basalt_fortress/fortress/x1_z2",
+            "offset": [
+              30,
+              0,
+              59
+            ],
+            "size": [
+              29,
+              65,
+              30
+            ],
+            "blocks": 22180
+          },
+          {
+            "location": "wayfarers:basalt_fortress/fortress/x2_z0",
+            "offset": [
+              59,
+              0,
+              0
+            ],
+            "size": [
+              30,
+              79,
+              30
+            ],
+            "blocks": 18042
+          },
+          {
+            "location": "wayfarers:basalt_fortress/fortress/x2_z1",
+            "offset": [
+              59,
+              0,
+              30
+            ],
+            "size": [
+              30,
+              54,
+              29
+            ],
+            "blocks": 16551
+          },
+          {
+            "location": "wayfarers:basalt_fortress/fortress/x2_z2",
+            "offset": [
+              59,
+              0,
+              59
+            ],
+            "size": [
+              30,
+              81,
+              30
+            ],
+            "blocks": 19510
+          }
+        ],
         "projection": "rigid",
         "processors": "wayfarers:aging"
       }

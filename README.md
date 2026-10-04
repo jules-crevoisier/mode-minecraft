@@ -345,7 +345,7 @@ python3 tools/gen_wiki.py                # wiki illustré en français (GIF 3D, 
 
 | Script | Ce qu'il génère |
 |---|---|
-| `gen_structures.py` + `wf/structures/*.py` | Les plans des 35 structures (dont les repaires `lair_*.py` et les donjons `wf/dungeon.py`) (éditeur de blocs en Python) → modèles `.nbt`, pools, ensembles de structures, tags de biomes |
+| `gen_structures.py` + `wf/structures/*.py` | Les plans des 35 structures (dont les repaires `lair_*.py` et les donjons `wf/dungeon.py`) (éditeur de blocs en Python) → modèles `.nbt`, pools, ensembles de structures, tags de biomes. Une pièce de plus de 48 blocs de large ou de 60 000 entrées est découpée en colonnes (`wf/chunking.py`), vérifiées bloc par bloc et posées par un seul élément de pool `wayfarers:chunked_template` (`world/ChunkedPoolElement.java`) qui ne place que les colonnes du chunk généré |
 | `gen_loot.py`, `gen_quests.py`, `gen_data.py` | Butin, quêtes (progrès), recettes, tags, minerai |
 | `gen_textures.py`, `gen_assets.py` | Textures pixel-art, modèles, traductions fr/en |
 | `gen_models.py` + `wf/mobs/*.py` | Les 30 modèles 3D animés (`wf/models.py`) → classes Java, textures, aperçus (`--preview`, voir `tools/BOSSES.md`) |

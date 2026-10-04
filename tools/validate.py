@@ -13,7 +13,7 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from wf import nbt  # noqa: E402
+from wf import nbt, chunking  # noqa: E402
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 RES = os.path.join(ROOT, "src", "main", "resources")
@@ -30,6 +30,7 @@ UPGRADED = {"grass": "short_grass", "chain": "iron_chain"}
 
 errors = []
 warnings = []
+TEMPLATES = {}  # "ns:path" -> (size, number of block entries), filled by check_templates
 
 
 def err(msg):
@@ -92,6 +93,8 @@ def check_templates():
         rel = os.path.relpath(path, DATA)
         d = nbt.load(path)
         size = d["size"]
+        ns_dir, sub = rel.split(os.sep, 2)[0], rel.split(os.sep, 2)[2]
+        TEMPLATES[f"{ns_dir}:{sub[:-4].replace(os.sep, '/')}"] = (size, len(d["blocks"]))
         for entry in d["palette"]:
             ns, name = entry["Name"].split(":")
             props = entry.get("Properties", {})
@@ -200,8 +203,15 @@ def check_worldgen():
         pool = json.load(open(path))
         for el in pool["elements"]:
             e = el["element"]
-            if not os.path.exists(res_path(e["location"], "structure", ".nbt")):
+            if e["element_type"] == chunking.ELEMENT_TYPE:
+                check_chunked(path, e)
+            elif e["element_type"] != "minecraft:single_pool_element":
+                err(f"{path}: unexpected element type {e['element_type']}")
+            elif e["location"] not in TEMPLATES:
                 err(f"{path}: template {e['location']} missing")
+            elif not chunking.cell_ok(*TEMPLATES[e["location"]]):
+                err(f"{path}: template {e['location']} {TEMPLATES[e['location']]} is over the chunking threshold "
+                    f"({chunking.SPLIT_AXIS} blocks wide / {chunking.SPLIT_ENTRIES} entries): gen_structures should split it")
             if not os.path.exists(res_path(e["processors"], "worldgen/processor_list", ".json")):
                 err(f"{path}: processor list {e['processors']} missing")
     biomes = set(MC_GAME["biomes"])
@@ -219,6 +229,39 @@ def check_worldgen():
         if salt in sets:
             err(f"duplicate structure_set salt {salt}: {path} / {sets[salt]}")
         sets[salt] = path
+
+
+def check_chunked(path, e):
+    """A wayfarers:chunked_template element (wf/chunking.py, ChunkedPoolElement.java): every column exists, matches
+    the size and entry count the element declares, stays under the threshold, lies inside the piece and no two
+    columns overlap."""
+    size, cells = e.get("size"), e.get("cells") or []
+    if not (isinstance(size, list) and len(size) == 3 and all(isinstance(v, int) and v > 0 for v in size)):
+        err(f"{path}: chunked element with a bad size {size}")
+        return
+    if not cells:
+        err(f"{path}: chunked element without columns")
+    for key in ("projection", "processors"):
+        if key not in e:
+            err(f"{path}: chunked element without {key}")
+    boxes = []
+    for c in cells:
+        loc, off, sz = c.get("location"), c.get("offset"), c.get("size")
+        if loc not in TEMPLATES:
+            err(f"{path}: column template {loc} missing")
+            continue
+        real_size, entries = TEMPLATES[loc]
+        if list(real_size) != sz or entries != c.get("blocks"):
+            err(f"{path}: column {loc} is {real_size} / {entries} entries, the element says {sz} / {c.get('blocks')}")
+        if not chunking.cell_ok(real_size, entries):
+            err(f"{path}: column {loc} {real_size} / {entries} entries is over the chunking threshold")
+        if any(off[k] < 0 or off[k] + sz[k] > size[k] for k in range(3)):
+            err(f"{path}: column {loc} at {off} sticks out of the piece {size}")
+        boxes.append((off, sz, loc))
+    for i, (o1, s1, l1) in enumerate(boxes):
+        for o2, s2, l2 in boxes[i + 1:]:
+            if all(o1[k] < o2[k] + s2[k] and o2[k] < o1[k] + s1[k] for k in (0, 2)):
+                err(f"{path}: columns {l1} and {l2} overlap")
 
 
 def check_item_id(where, rid):

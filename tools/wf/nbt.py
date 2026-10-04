@@ -175,8 +175,13 @@ def _read_payload(inp, t):
 
 
 def load(path):
-    with gzip.open(path, "rb") as f:
-        inp = io.BytesIO(f.read())
+    with open(path, "rb") as f:
+        return loads(f.read())
+
+
+def loads(data):
+    """Read gzipped NBT bytes (as written by ``dumps``) into plain Python values."""
+    inp = io.BytesIO(gzip.decompress(data))
     t = struct.unpack(">b", inp.read(1))[0]
     n = struct.unpack(">H", inp.read(2))[0]
     inp.read(n)
