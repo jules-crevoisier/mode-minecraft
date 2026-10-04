@@ -50,7 +50,11 @@ public final class WayfarersClient {
 
     private WayfarersClient() {}
 
-    public static void init(BusGroup modBus) {
+    public static void init(BusGroup modBus, net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext context) {
+        // the manual key only means something with an inventory open: as a GUI-only binding it doesn't show up as
+        // a conflict with "Walk Forwards" (also W) in the controls screen
+        ((net.minecraftforge.client.extensions.IForgeKeyMapping) MANUAL_KEY).setKeyConflictContext(
+                net.minecraftforge.client.settings.KeyConflictContext.GUI);
         EntityRenderersEvent.RegisterLayerDefinitions.BUS.addListener(ModelRegistry::registerLayers);
         EntityRenderersEvent.RegisterRenderers.BUS.addListener(WayfarersClient::registerRenderers);
         AddGuiOverlayLayersEvent.BUS.addListener(EldenBossBar::register);
@@ -80,7 +84,7 @@ public final class WayfarersClient {
         net.minecraftforge.event.entity.player.ItemTooltipEvent.BUS.addListener(TipCards::onTooltip);
         TipCards.registerKeys();
         // "Config" button of the mods list: the display settings in the mod's own theme
-        net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext.get().registerExtensionPoint(
+        context.registerExtensionPoint(
                 net.minecraftforge.client.ConfigScreenHandler.ConfigScreenFactory.class,
                 () -> new net.minecraftforge.client.ConfigScreenHandler.ConfigScreenFactory(
                         (mc, parent) -> new com.wayfarers.client.gui.SettingsScreen(parent)));

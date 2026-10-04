@@ -81,7 +81,7 @@ public final class Wayfarers {
         context.registerConfig(ModConfig.Type.CLIENT, com.wayfarers.config.WayfarersClientConfig.SPEC);
 
         if (FMLEnvironment.dist == Dist.CLIENT) {
-            com.wayfarers.client.WayfarersClient.init(modBus);
+            com.wayfarers.client.WayfarersClient.init(modBus, context);
         }
     }
 

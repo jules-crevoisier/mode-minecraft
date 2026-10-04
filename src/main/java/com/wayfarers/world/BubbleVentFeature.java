@@ -48,6 +48,13 @@ public class BubbleVentFeature extends Feature<NoneFeatureConfiguration> {
         if (!isWater(level, base) || !isWater(level, base.above(4))) {
             return false;
         }
+        // not on top of a vent placed just before: its chimney would cut that one's column in two (the cut-off
+        // top would float over rock, an invalid bubble column)
+        for (BlockPos p : BlockPos.betweenClosed(base.offset(-1, -1, -1), base.offset(1, 3, 1))) {
+            if (level.getBlockState(p).is(Blocks.BUBBLE_COLUMN)) {
+                return false;
+            }
+        }
         BlockState rock = Blocks.BASALT.defaultBlockState();
         BlockState smooth = Blocks.SMOOTH_BASALT.defaultBlockState();
         BlockState magma = Blocks.MAGMA_BLOCK.defaultBlockState();
