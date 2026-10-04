@@ -116,6 +116,10 @@ public final class WayfarersCommand {
                                 .executes(ctx -> boss(ctx, StringArgumentType.getString(ctx, "boss")))))
                 .then(Commands.literal("worldmap").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                         .executes(WorldMapCommand::run))
+                .then(Commands.literal("biomeshots").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
+                        .executes(BiomeShotsCommand::run)
+                        .then(Commands.argument("biome", StringArgumentType.word())
+                                .executes(ctx -> BiomeShotsCommand.run(ctx, StringArgumentType.getString(ctx, "biome")))))
                 .then(Commands.literal("progress").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                         .then(Commands.literal("reset").executes(ctx -> progress(ctx, false)))
                         .then(Commands.literal("complete").executes(ctx -> progress(ctx, true)))));

@@ -287,7 +287,8 @@ def blocks_and_loot(srv, failures):
 
 
 def exercise_overhaul(srv, failures):
-    """The overhaul pack is on, every biome of ours can be found, and nothing logs an error."""
+    """The overhaul pack is on, every biome of ours can be found, the world map and the biome renders are drawn,
+    and nothing logs an error."""
     res = srv.run("datapack list enabled", r"data pack", 60)
     if not res or "wayfarers:world_overhaul" not in res:
         failures.append(f"world overhaul pack not enabled: {res}")
@@ -304,6 +305,12 @@ def exercise_overhaul(srv, failures):
         res = srv.run("wayfarers worldmap", r"World map written|worldmap:|Unknown|Incorrect", 900)
         if not res or "World map written" not in res:
             failures.append(f"world map: {res}")
+    with Phase("biome shots"):
+        # really generates 5 x 5 chunks per biome and draws them (wayfarers-biome-<id>.png, published with the map);
+        # the command keeps to about 9 minutes and skips what is left past that
+        res = srv.run("wayfarers biomeshots", r"Biome shots (written|failed)|Unknown|Incorrect", 1200)
+        if not res or "Biome shots written" not in res or "written: 0 of" in res:
+            failures.append(f"biome shots: {res}")
     with Phase("generate terrain around spawn"):
         srv.run("execute in minecraft:overworld run forceload add -64 -64 64 64", r"Marked|forceload|No chunks", 600)
     srv.run("say overhaul test finished")
@@ -340,7 +347,7 @@ def main():
             failures.append(str(e))
     srv.run("stop")
     try:
-        srv.proc.wait(timeout=180)
+        srv.proc.wait(timeout=300 if overhaul else 180)  # the overhaul test saves the biome render areas
     except subprocess.TimeoutExpired:
         srv.proc.kill()
         failures.append("server did not stop")

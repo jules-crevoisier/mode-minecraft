@@ -13,6 +13,7 @@ Usage:
     python3 tools/gen_wiki.py                 # -> build/wiki/
     python3 tools/gen_wiki.py --jobs 4 --out /tmp/wiki --no-cache
     python3 tools/gen_wiki.py --worldmap DIR  # folder with wayfarers-worldmap{,-caves,-slice}.png and .txt
+                                              # (and optionally wayfarers-biomes.txt + wayfarers-biome-<id>.png)
 """
 import argparse
 import glob
@@ -40,6 +41,8 @@ CACHE = os.path.join(ROOT, "build", "wiki_cache")
 RENDER_VERSION = "3"
 WORLDMAP_URL = ("https://github.com/jules-crevoisier/mode-minecraft/releases/download/previews-ccr-127dc262-tsdn10/"
                 "wayfarers-worldmap{}")
+PREVIEWS_URL = "https://github.com/jules-crevoisier/mode-minecraft/releases/download/previews-ccr-127dc262-tsdn10/{}"
+BIOME_CELL = (480, 360)  # one biome render in the packed sheets (the CI renders are 672 x 504)
 VANILLA_LANG_URL = "https://raw.githubusercontent.com/InventivetalentDev/minecraft-assets/{}/assets/minecraft/lang/fr_fr.json"
 
 from PIL import Image  # noqa: E402
@@ -744,6 +747,86 @@ def parse_worldmap_txt(path):
     return head, legend
 
 
+# =============================================================================================== biome renders
+def parse_biomeshots_txt(path):
+    """{biome: (kind, x, z, y0, y1)} for each biome the CI drew (lines of wayfarers-biomes.txt, /wayfarers biomeshots)."""
+    out = {}
+    if not path or not os.path.exists(path):
+        return out
+    for line in open(path, encoding="utf-8"):
+        m = re.match(r"wayfarers:(\w+)\s+(surface|cave)\s+at\s+(-?\d+)\s+(-?\d+)\s+y\s+(-?\d+)\.\.(-?\d+)", line.strip())
+        if m:
+            out[m.group(1)] = (m.group(2), int(m.group(3)), int(m.group(4)), int(m.group(5)), int(m.group(6)))
+    return out
+
+
+def find_biomeshots(arg):
+    """Folder holding wayfarers-biomes.txt and the wayfarers-biome-<id>.png renders: a local folder when given, else
+    the CI pre-release (cached in build/wiki_cache/biomeshots, the legend re-checked every 3 hours). None if absent."""
+    for d in (arg, os.environ.get("WAYFARERS_BIOMESHOTS", ""), os.path.join(ROOT, "build", "worldmap"),
+              os.path.join(ROOT, "build", "biomeshots")):
+        if d and os.path.exists(os.path.join(d, "wayfarers-biomes.txt")):
+            return d
+    d = os.path.join(CACHE, "biomeshots")
+    os.makedirs(d, exist_ok=True)
+    txt = os.path.join(d, "wayfarers-biomes.txt")
+    if not os.path.exists(txt) or time.time() - os.path.getmtime(txt) > 3 * 3600:
+        try:
+            data = urllib.request.urlopen(PREVIEWS_URL.format("wayfarers-biomes.txt"), timeout=40).read()
+            old = open(txt, "rb").read() if os.path.exists(txt) else None
+            open(txt, "wb").write(data)
+            if old != data:  # a new CI run: drop the old renders so they are fetched again
+                for f in glob.glob(os.path.join(d, "wayfarers-biome-*.png")):
+                    os.remove(f)
+        except Exception as e:  # noqa: BLE001
+            if not os.path.exists(txt):
+                log(f"biome renders not available: {e}")
+                return None
+            os.utime(txt)
+    got = 0
+    for bid in parse_biomeshots_txt(txt):
+        png = os.path.join(d, f"wayfarers-biome-{bid}.png")
+        if not os.path.exists(png):
+            try:
+                data = urllib.request.urlopen(PREVIEWS_URL.format(f"wayfarers-biome-{bid}.png"), timeout=40).read()
+                open(png, "wb").write(data)
+            except Exception as e:  # noqa: BLE001
+                log(f"biome render {bid} not available: {e}")
+                continue
+        got += 1
+    log(f"biome renders: {got} available")
+    return d
+
+
+def biome_sheets(shot_dir, order, out):
+    """Packs the renders of each group of biomes into one webp strip (img/biomes-<group>.webp), to keep the number
+    of files down. order: {group: [biome ids in card order]}. Returns {biome: (file, index, count)}."""
+    res = {}
+    if not shot_dir:
+        return res
+    cdir = os.path.join(CACHE, "biomesheets")
+    os.makedirs(cdir, exist_ok=True)
+    cw, ch = BIOME_CELL
+    for g, ids in order.items():
+        pngs = [(b, os.path.join(shot_dir, f"wayfarers-biome-{b}.png")) for b in ids]
+        pngs = [(b, p) for b, p in pngs if os.path.exists(p)]
+        if not pngs:
+            continue
+        key = sha(RENDER_VERSION, cw, ch, *[b for b, _ in pngs], file_bytes(*[p for _, p in pngs]))
+        cached = os.path.join(cdir, f"{g}-{key}.webp")
+        if not os.path.exists(cached):
+            sheet = Image.new("RGBA", (cw * len(pngs), ch), (0, 0, 0, 0))
+            for k, (b, p) in enumerate(pngs):
+                im = Image.open(p).convert("RGBA").convert("RGBa").resize((cw, ch), Image.LANCZOS).convert("RGBA")
+                sheet.paste(im, (k * cw, 0))
+            sheet.save(cached, "WEBP", quality=80, method=6)
+        name_ = f"img/biomes-{g}.webp"
+        shutil.copyfile(cached, os.path.join(out, name_))
+        for k, (b, _) in enumerate(pngs):
+            res[b] = (name_, k, len(pngs))
+    return res
+
+
 # =============================================================================================== HTML helpers
 SVG = {
     "heart": '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 14 2 8.2A3.6 3.6 0 0 1 8 3.6a3.6 3.6 0 0 1 6 4.6Z"/></svg>',
@@ -1273,18 +1356,34 @@ def main():
     for v, o in B.VANILLA_TO_OURS.items():
         inv.setdefault(o, []).append(v)
     bgroups = {k: [] for k, _ in TXT.BIOME_GROUPS}
-    for bid, b in B.BIOMES.items():
+
+    def biome_group(bid, b):
         src = inv.get(bid, [])
         if b["cave"] or bid in [c[0] for c in B.EXTRA_CAVES]:
-            g = "cave"
-        elif any(w in v for v in src for w in ("ocean", "beach", "river", "shore", "mushroom")):
-            g = "ocean"
-        elif b["temp"] < 0.3:
-            g = "cold"
-        elif b["temp"] >= 1.0:
-            g = "warm"
-        else:
-            g = "temperate"
+            return "cave"
+        if any(w in v for v in src for w in ("ocean", "beach", "river", "shore", "mushroom")):
+            return "ocean"
+        if b["temp"] < 0.3:
+            return "cold"
+        if b["temp"] >= 1.0:
+            return "warm"
+        return "temperate"
+
+    shot_dir = find_biomeshots(args.worldmap)
+    shots = parse_biomeshots_txt(os.path.join(shot_dir, "wayfarers-biomes.txt") if shot_dir else None)
+    sheet_order = {}
+    for bid, b in B.BIOMES.items():
+        if bid in shots:
+            sheet_order.setdefault(biome_group(bid, b), []).append(bid)
+    sheets = biome_sheets(shot_dir, sheet_order, out)
+    if sheets:
+        map_html += ('\n  <p class="note">Chaque biome ci-dessous est dessiné bloc par bloc à partir d’un vrai coin de '
+                     'monde de 80 × 80 blocs généré par le serveur de test (commande <code>/wayfarers biomeshots</code>) : '
+                     'arbres, plantes, minerais et structures compris. Pour les grottes, la roche au-dessus du sol des '
+                     'cavernes est retirée ; les coupes dans la roche sont plus sombres.</p>')
+    for bid, b in B.BIOMES.items():
+        src = inv.get(bid, [])
+        g = biome_group(bid, b)
         sw = [("carte", share.get(bid, (None,))[0]), ("herbe", b.get("grass")), ("feuillage", b.get("foliage")),
               ("eau", b.get("water")), ("ciel", b.get("sky")), ("brume", b.get("fog"))]
         swatch = "".join(f'<i style="background:{c}" title="{l}"></i>' for l, c in sw if c)
@@ -1310,8 +1409,18 @@ def main():
             pass
         replaces = ", ".join(vname("biome", v) for v in src) or ("biome de grotte en plus" if g == "cave" else "")
         pct = share.get(bid, (None, None))[1]
+        shot_html = ""
+        if bid in sheets:
+            fname, k, n = sheets[bid]
+            kind, sx_, sz_ = shots[bid][0], shots[bid][1], shots[bid][2]
+            alt = f"{b['fr']} : rendu 3D d'un coin du biome généré en jeu" + (" (vue en écorché)" if kind == "cave" else "")
+            where_ = f"x {sx_}, z {sz_}".replace("-", "−") + (" · écorché" if kind == "cave" else "")
+            pos = k * 100 / (n - 1) if n > 1 else 0
+            shot_html = (f'<div class="shot{" cave" if kind == "cave" else ""}"><i role="img" aria-label="{E(alt, quote=True)}" '
+                         f'style="background-image:url({fname});background-size:{n * 100}% 100%;'
+                         f'background-position:{pos:.4f}% 0"></i><small>{E(where_)}</small></div>')
         bgroups[g].append(f'''<article class="biome" id="bi-{bid}">
-  <div class="swatch">{swatch}</div>
+  {shot_html}<div class="swatch">{swatch}</div>
   <h4>{E(b["fr"])}<small>{E(b["en"])}</small></h4>
   <p>{E(TXT.BIOMES.get(bid, ""))}</p>
   <dl>
@@ -1879,18 +1988,21 @@ CSS = r"""
   --rule:#cdb98f;--brass:#a8761f;--brass-hi:#e4b75a;--brass-lo:#6e4b12;--verd:#2f7d6d;--verd-2:#d6e9e2;
   --rust:#a4472b;--case:#181b1f;--case-rim:#3a3226;--link:#1f6a5c;--shadow:0 1px 0 rgba(255,255,255,.6) inset,0 2px 10px rgba(60,40,10,.12);
   --plate-ink:#2a1d08;--kbd:#fbf6ea;--chip:#efe5cd;--focus:#1f6a5c;
+  --sky-a:#d3e3ec;--sky-b:#f1eadb;--deep-a:#3b3631;--deep-b:#1f1c19;
   color-scheme:light;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   --paper:#121416;--paper-2:#181b1e;--card:#1d2024;--card-2:#23272c;--ink:#ece2cc;--ink-2:#b9ab90;--ink-3:#8c8068;
   --rule:#3b352a;--brass:#d6a64b;--brass-hi:#f0c977;--brass-lo:#8a6320;--verd:#62bba7;--verd-2:#1d3530;
   --rust:#d77452;--case:#181b1f;--case-rim:#4a4030;--link:#7fcfbd;--shadow:0 2px 14px rgba(0,0,0,.45);
-  --plate-ink:#22180a;--kbd:#2a2e33;--chip:#262a2f;--focus:#f0c977;color-scheme:dark}}
+  --plate-ink:#22180a;--kbd:#2a2e33;--chip:#262a2f;--focus:#f0c977;
+  --sky-a:#22313b;--sky-b:#1d2024;--deep-a:#141416;--deep-b:#0c0c0e;color-scheme:dark}}
 :root[data-theme="dark"]{
   --paper:#121416;--paper-2:#181b1e;--card:#1d2024;--card-2:#23272c;--ink:#ece2cc;--ink-2:#b9ab90;--ink-3:#8c8068;
   --rule:#3b352a;--brass:#d6a64b;--brass-hi:#f0c977;--brass-lo:#8a6320;--verd:#62bba7;--verd-2:#1d3530;
   --rust:#d77452;--case:#181b1f;--case-rim:#4a4030;--link:#7fcfbd;--shadow:0 2px 14px rgba(0,0,0,.45);
-  --plate-ink:#22180a;--kbd:#2a2e33;--chip:#262a2f;--focus:#f0c977;color-scheme:dark}
+  --plate-ink:#22180a;--kbd:#2a2e33;--chip:#262a2f;--focus:#f0c977;
+  --sky-a:#22313b;--sky-b:#1d2024;--deep-a:#141416;--deep-b:#0c0c0e;color-scheme:dark}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:84px}
 body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.55 "Alegreya Sans",system-ui,sans-serif;
@@ -2118,6 +2230,10 @@ a.chip:hover{border-color:var(--brass)}
 .biomes{grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
 .biome{background:var(--card);border:1px solid var(--rule);border-radius:10px;overflow:hidden;box-shadow:var(--shadow);min-width:0}
 .swatch{display:flex;height:16px}.swatch i{flex:1}
+.shot{position:relative;aspect-ratio:4/3;background:linear-gradient(var(--sky-a),var(--sky-b))}
+.shot.cave{background:linear-gradient(var(--deep-a),var(--deep-b))}
+.shot i{position:absolute;inset:0;background-repeat:no-repeat}
+.shot small{position:absolute;right:8px;bottom:6px;padding:1px 7px;border-radius:4px;background:var(--card);color:var(--ink-3);font:600 11px "Pixelify Sans",monospace;opacity:.92}
 .biome h4{margin:10px 14px 2px;font:700 19px "Zilla Slab",serif;display:flex;flex-wrap:wrap;align-items:baseline;gap:8px}
 .biome h4 small{font:500 13px "Alegreya Sans",sans-serif;color:var(--ink-3)}
 .biome p{margin:0 14px 6px;font-size:15px;color:var(--ink-2)}

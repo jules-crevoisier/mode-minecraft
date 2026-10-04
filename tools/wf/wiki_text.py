@@ -58,6 +58,7 @@ COMMANDS = {
     "tp": ("op", "Téléporte vers la structure demandée (la génère si besoin)."),
     "boss": ("op", "Fait apparaître un boss devant toi, pour le tester."),
     "worldmap": ("op", "Écrit une carte des biomes autour de toi (images PNG dans le dossier du monde)."),
+    "biomeshots": ("op", "Génère un coin de chaque biome du mod et le dessine en 3D (une image PNG par biome dans le dossier du serveur). Prend plusieurs minutes ; ajoute un nom de biome pour n'en faire qu'un."),
     "progress": ("op", "reset : remet la quête à zéro ; complete : accorde toutes les quêtes."),
 }
 
