@@ -227,8 +227,8 @@ def check_worldgen():
     def walk(node, path):
         if isinstance(node, dict):
             off = node.get("offset")
-            if isinstance(off, list) and len(off) == 3 and any(abs(v) > 16 for v in off if isinstance(v, int)):
-                err(f"{path}: block predicate offset {off} outside -16..16")
+            if isinstance(off, list) and len(off) == 3 and any(abs(v) > 15 for v in off if isinstance(v, int)):
+                err(f"{path}: block predicate offset {off} outside -15..15")
             if node.get("type") == "minecraft:random_offset":
                 for k in ("xz_spread", "y_spread"):
                     v = node.get(k)
