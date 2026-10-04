@@ -2,6 +2,8 @@
  "replace": false,
  "values": [
   "wayfarers:painted_canyon",
-  "wayfarers:cogwork_valley"
+  "wayfarers:ashen_wastes",
+  "wayfarers:cogwork_valley",
+  "wayfarers:volcanic_highlands"
  ]
 }

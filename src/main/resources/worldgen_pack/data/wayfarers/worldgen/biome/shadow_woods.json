@@ -87,7 +87,8 @@
    "minecraft:glow_lichen",
    "minecraft:dark_forest_vegetation",
    "minecraft:brown_mushroom_old_growth",
-   "minecraft:red_mushroom_old_growth"
+   "minecraft:red_mushroom_old_growth",
+   "wayfarers:fallen_oak_logs"
   ],
   [
    "minecraft:freeze_top_layer"

@@ -1,0 +1,21 @@
+{
+ "type": "minecraft:range_choice",
+ "input": {
+  "type": "minecraft:y_clamped_gradient",
+  "from_y": -1024,
+  "to_y": 1024,
+  "from_value": -1024.0,
+  "to_value": 1024.0
+ },
+ "min_inclusive": 2.0,
+ "max_exclusive": 32.0,
+ "when_in_range": {
+  "type": "minecraft:range_choice",
+  "input": "wayfarers:overworld/underground_river_line",
+  "min_inclusive": 0.0,
+  "max_exclusive": 0.07,
+  "when_in_range": 0.7,
+  "when_out_of_range": -1.0
+ },
+ "when_out_of_range": -1.0
+}

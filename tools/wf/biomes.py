@@ -38,6 +38,45 @@ VANILLA_TO_OURS = {
     "sulfur_caves": "thermal_caves",
 }
 
+# sub-biomes: some vanilla climate cells are split between two of ours (by weirdness or temperature), so the land
+# changes more often while staying coherent. Each rule: vanilla -> (test on the point's parameters, our biome);
+# the points that fail the test keep VANILLA_TO_OURS. Parameters are [min, max] ranges.
+def _lo(r):
+    return r if isinstance(r, (int, float)) else r[0]
+
+
+SPLITS = {
+    "mangrove_swamp": (lambda p: True, "crimson_mire"),
+    "wooded_badlands": (lambda p: True, "volcanic_highlands"),
+    "badlands": (lambda p: _lo(p["weirdness"]) >= 0.0, "ashen_wastes"),
+    "desert": (lambda p: _lo(p["weirdness"]) >= 0.05, "pale_dunes"),
+    "jagged_peaks": (lambda p: _lo(p["temperature"]) >= -0.15, "alpine_peaks"),
+    "windswept_savanna": (lambda p: True, "geyser_basin"),
+    "birch_forest": (lambda p: _lo(p["weirdness"]) >= 0.0, "starlight_grove"),
+    "pale_garden": (lambda p: True, "aetherblight_grove"),
+    "taiga": (lambda p: _lo(p["weirdness"]) >= 0.0, "emberleaf_taiga"),
+    "snowy_beach": (lambda p: _lo(p["weirdness"]) < 0.0, "rimefrost_fjords"),
+    "warm_ocean": (lambda p: _lo(p["continentalness"]) >= -0.455, "tidebrass_archipelago"),
+}
+
+
+def ours_for(vanilla, params):
+    rule = SPLITS.get(vanilla)
+    if rule and rule[0](params):
+        return rule[1]
+    return VANILLA_TO_OURS[vanilla]
+
+
+def sources():
+    """Our biome -> the vanilla biomes whose cells it takes (wiki grouping, biome tags)."""
+    out = {}
+    for v, o in VANILLA_TO_OURS.items():
+        out.setdefault(o, []).append(v)
+    for v, (_, o) in SPLITS.items():
+        out.setdefault(o, []).append(v)
+    return out
+
+
 # extra cave biomes: (biome, temperature, humidity, continentalness, erosion, weirdness) with depth 0.2..0.9
 EXTRA_CAVES = [
     ("fungal_grotto", [-1.0, 1.0], [0.3, 0.7], [-1.0, 1.0], [-1.0, 1.0], [-1.0, -0.6]),
@@ -47,10 +86,11 @@ EXTRA_CAVES = [
 
 
 def B(en, fr, temp, downfall, sky, fog, water, water_fog, grass=None, foliage=None, rain=True, surface="grass",
-      decor=(), mobs="plains", music=None, particles=None, cave=False):
+      decor=(), mobs="plains", music=None, particles=None, cave=False, fog_end=None, particle_rate=0.004):
+    """fog_end: a fog distance in blocks (thick fog in mires and wastes), None for the default."""
     return dict(en=en, fr=fr, temp=temp, downfall=downfall, sky=sky, fog=fog, water=water, water_fog=water_fog,
                 grass=grass, foliage=foliage, rain=rain, surface=surface, decor=list(decor), mobs=mobs, music=music,
-                particles=particles, cave=cave)
+                particles=particles, cave=cave, fog_end=fog_end, particle_rate=particle_rate)
 
 
 # id -> design. decor: keys of worldfeatures.DECOR (vanilla placed features + ours), mobs: worldfeatures.SPAWNS key
@@ -148,6 +188,52 @@ BIOMES = {
                         grass="#9e8f4d", foliage="#9e814d", surface="cogwork",
                         decor=["rusted_wrecks", "steam_vents", "acacias", "rustwood_sparse", "rust_rock_veins"],
                         mobs="badlands"),
+    # ---------------------------------------------------------------- sub-biomes (SPLITS): Dregora-like moods
+    "crimson_mire": B("Crimson Mire", "Marais pourpre", 0.8, 0.9, "#b49494", "#dcc6c2", "#6b2b33", "#2a0c10",
+                      grass="#8e4038", foliage="#7a2c2c", surface="crimson_mire",
+                      decor=["thorn_spikes", "flat_mushrooms", "crimson_reeds", "lily_pads", "mushrooms_dense"],
+                      mobs="swamp", particles="minecraft:crimson_spore", fog_end=96, particle_rate=0.02),
+    "volcanic_highlands": B("Volcanic Highlands", "Hautes terres volcaniques", 1.6, 0.0, "#c09878", "#a8826a",
+                            "#b0603a", "#3a1a0a", grass="#bba86a", foliage="#d4782a", rain=False, surface="volcanic",
+                            decor=["lava_streams", "lava_pools", "sparse_autumn_oaks", "rustwood_sparse", "dry_grass",
+                                   "basalt_boulders"],
+                            mobs="badlands", particles="minecraft:ash", fog_end=240, particle_rate=0.01),
+    "ashen_wastes": B("Ashen Wastes", "Désolation cendrée", 2.0, 0.0, "#a8977e", "#8c7a62", "#5a5a4a", "#1e1c16",
+                      grass="#8f8a70", foliage="#7f7a60", rain=False, surface="ashen",
+                      decor=["stone_arches", "crystal_shards", "ash_columns", "lava_pools", "lava_streams", "dead_bushes"],
+                      mobs="badlands", particles="minecraft:white_ash", fog_end=170, particle_rate=0.03),
+    "alpine_peaks": B("Alpine Peaks", "Pics alpins", 0.1, 0.6, "#7fa6ff", "#d8e4f0", "#3d6fd6", "#050533",
+                      grass="#76a85c", foliage="#d89a30", surface="alpine_peak",
+                      decor=["tall_spruces", "autumn_spruces", "mossy_boulders_many", "fallen_spruce_logs", "ferns"],
+                      mobs="peaks"),
+    "pale_dunes": B("Pale Dunes", "Dunes pâles", 2.0, 0.0, "#9cc0ff", "#f0e6d4", "#3fa0a8", "#0a3a3e", rain=False,
+                    surface="pale_dunes", decor=["hoodoos", "ripple_grass", "dead_bushes"], mobs="desert",
+                    fog_end=260),
+    "geyser_basin": B("Geyser Basin", "Bassin des geysers", 1.2, 0.4, "#8fb0d8", "#e0dcd0", "#3fd0c8", "#0a4a48",
+                      grass="#aaa862", foliage="#9a9a50", surface="geyser",
+                      decor=["hot_springs", "steam_vents", "dry_grass", "rust_boulders"], mobs="savanna",
+                      particles="minecraft:white_smoke", particle_rate=0.006),
+    "starlight_grove": B("Starlight Grove", "Bosquet astral", 0.6, 0.8, "#9a90ff", "#d0c4f0", "#7a6ae0", "#1d1452",
+                         grass="#9a86d8", foliage="#b48ae8", surface="starlight",
+                         decor=["tall_birches", "glowwood_sparse", "glow_flowers", "surface_crystals",
+                                "fallen_glowwood_logs", "crystal_shards"],
+                         mobs="enchanted", particles="minecraft:end_rod"),
+    "aetherblight_grove": B("Aetherblight Grove", "Bosquet de l'éther corrompu", 0.6, 0.8, "#5a4a7a", "#3e3450",
+                            "#3a2a5a", "#120a1e", grass="#4c3a5c", foliage="#5c2c6c", surface="blight",
+                            decor=["shadow_oaks", "crystal_shards", "mushrooms_dense", "fallen_glowwood_logs",
+                                   "glow_lichen"],
+                            mobs="dark_forest", particles="minecraft:portal", fog_end=110, particle_rate=0.02),
+    "emberleaf_taiga": B("Emberleaf Taiga", "Taïga aux feuilles de braise", 0.25, 0.8, "#7fa1ff", "#e0d0b8",
+                         "#287082", "#050533", grass="#a2a85a", foliage="#e08a28", surface="podzol_patches",
+                         decor=["autumn_spruces", "fallen_spruce_logs", "mossy_boulders_many", "berry_bushes", "ferns"],
+                         mobs="taiga", particles="minecraft:pale_oak_leaves"),
+    "rimefrost_fjords": B("Rimefrost Fjords", "Fjords de givre", -0.3, 0.6, "#7d9bff", "#d6e2f0", "#2f4fa8", "#050533",
+                          grass="#80a890", foliage="#60a17b", surface="fjord",
+                          decor=["frost_pines_sparse", "slate_boulders", "frost_rocks"], mobs="snowy"),
+    "tidebrass_archipelago": B("Tidebrass Archipelago", "Archipel d'airain", 0.9, 0.6, "#7fd0ff", "#d6f6ff",
+                               "#20d8c8", "#0a5c63", grass="#5cd04a", foliage="#40c030", surface="archipelago",
+                               decor=["warm_ocean_vegetation", "seagrass_warm", "sea_pickles", "palms", "beach_grass"],
+                               mobs="warm_ocean"),
     # ---------------------------------------------------------------- caves
     "crystal_caverns": B("Crystal Caverns", "Cavernes de cristal", 0.6, 0.4, "#78a7ff", "#3a2f5a", "#3ad2ff", "#06375a",
                          surface="cave_calcite", decor=["cave_crystals", "amethyst_geodes"], mobs="cave", cave=True,
@@ -169,12 +255,25 @@ BIOMES = {
 }
 
 
+# scenery added to the original biomes: boulders, fallen logs, rock objects
+for _bid, _extra in {
+    "elderwood": ["fallen_oak_logs", "mossy_boulders_many"], "giant_sylvan": ["fallen_spruce_logs"],
+    "pine_highlands": ["slate_boulders", "fallen_spruce_logs"], "highland_meadow": ["marble_boulders"],
+    "painted_canyon": ["hoodoos_sparse"], "rustlands": ["rust_boulders"], "majestic_peaks": ["marble_boulders"],
+    "stone_spires": ["marble_boulders"], "shadow_woods": ["fallen_oak_logs"],
+    "enchanted_forest": ["fallen_glowwood_logs"], "crystal_woods": ["crystal_shards"],
+    "windswept_crags": ["mossy_boulders_many"], "frostpine_forest": ["fallen_spruce_logs"],
+    "cogwork_valley": ["rust_boulders"], "silver_birch_wood": ["fallen_oak_logs"],
+}.items():
+    BIOMES[_bid]["decor"] += [d for d in _extra if d not in BIOMES[_bid]["decor"]]
+
+
 # ------------------------------------------------------------------ placement
 def climate_points():
     rows = json.load(open(os.path.join(os.path.dirname(__file__), "world_points.json")))
     out = []
     for b, t, h, c, e, d, w, o in rows:
-        ours = VANILLA_TO_OURS[b]
+        ours = ours_for(b, {"temperature": t, "humidity": h, "continentalness": c, "erosion": e, "weirdness": w})
         out.append({"biome": f"{NS}:{ours}", "parameters": {
             "temperature": t, "humidity": h, "continentalness": c, "erosion": e, "depth": d, "weirdness": w, "offset": o}})
     for biome, t, h, c, e, w in EXTRA_CAVES:
@@ -225,6 +324,30 @@ def _above(y, mult=0, add=False):
     return {"type": "minecraft:y_above", "anchor": {"absolute": y}, "surface_depth_multiplier": mult, "add_stone_depth": add}
 
 
+def _wnoise(nid, lo, hi):
+    """A threshold on one of our surface noises (wf/terrain.py NOISES). Surface noises are 2D (sampled at y 0),
+    so on a cliff they draw vertical stripes."""
+    return {"type": "minecraft:noise_threshold", "noise": f"{NS}:{nid}", "min_threshold": lo, "max_threshold": hi}
+
+
+def _ybands(blocks, y0, y1, step, base):
+    """Horizontal rock bands cycling through `blocks` from y0 to y1, `step` blocks each (wavering with the surface
+    depth), `base` elsewhere: stratified cliffs."""
+    bands = []
+    y, i = y0, 0
+    while y < y1:
+        bands.append((y, blocks[i % len(blocks)]))
+        y += step
+        i += 1
+
+    def tree(lo, hi):          # bands[lo:hi], the y is known to be inside them: one check per level
+        if hi - lo == 1:
+            return _block(bands[lo][1])
+        mid = (lo + hi) // 2
+        return _seq(_if(_above(bands[mid][0], 1), tree(mid, hi)), tree(lo, mid))
+    return _seq(_if(_above(y0, 1), _if(_not(_above(y, 1)), tree(0, len(bands)))), _block(base))
+
+
 STEEP = {"type": "minecraft:steep"}
 ON_FLOOR = _depth("floor")
 UNDER_FLOOR = _depth("floor", add=True)
@@ -245,6 +368,27 @@ def _strata(stone, bands, base="stone"):
 MARBLE = "wayfarers:marble"
 MARBLE_BANDS = [(92, 96), (109, 112), (127, 132), (146, 149), (165, 170), (186, 189), (207, 212), (231, 234),
                 (254, 259), (279, 283)]
+
+
+VOLCANIC_BANDS = ["brown_terracotta", "red_terracotta", "brown_terracotta", "orange_terracotta", "terracotta",
+                  "brown_terracotta", "blackstone", "red_terracotta", "coarse_dirt", "brown_terracotta",
+                  "orange_terracotta", "basalt[axis=y]"]
+ASH_BANDS = ["tuff", "deepslate[axis=y]", "andesite", "smooth_basalt", "tuff", "cobbled_deepslate", "stone",
+             "deepslate[axis=y]", "polished_andesite", "basalt[axis=y]", "tuff", "light_gray_terracotta"]
+CLIFF_BANDS = ["stone", "andesite", "stone", "tuff", "stone", "stone", "andesite", "wayfarers:marble", "stone",
+               "cobblestone", "stone", "tuff"]
+
+# land biomes that get the generic highland look: bare banded rock on cliffs above y ~100, snow above y ~205
+HIGHLAND_SURFACES = {"grass", "alpine", "pine_slate", "podzol_patches", "crags", "snowy_grass", "snowy_podzol",
+                     "starlight", "blight", "marsh", "crimson_mire", "mycelium", "river", "fjord", "savanna"}
+
+
+def highland():
+    snow = _seq(_if(_noise("powder_snow", 0.45, 0.58), _block("powder_snow")), _block("snow_block"))
+    return _seq(
+        _if(STEEP, _if(_above(96, 2), _if(UNDER_FLOOR, _ybands(CLIFF_BANDS, 96, 340, 5, "stone")))),
+        _if(ON_FLOOR, _if(_above(205, 3), snow)),
+        _if(UNDER_FLOOR, _if(_above(215, 3), _block("snow_block"))))
 
 
 def _land(top, under, underwater=None):
@@ -308,8 +452,81 @@ SURFACES = {
                                     _if(_noise("surface", -1.0, -0.4), _block("gravel")), _block("coarse_dirt")),
                                _seq(_if(_noise("surface", -0.2, 0.2), _block("terracotta")), _block("wayfarers:rust_rock")))),
     "desert": lambda: _land(_block("sand"), _seq(_if(DEEP_UNDER_FLOOR, _block("sandstone")), _block("sand")), _block("sand")),
-    "badlands": lambda: _seq(_if(ON_FLOOR, _seq(_if(_above(74, 1), _block("orange_terracotta")), _block("red_sand"))),
+    "badlands": lambda: _seq(_if(STEEP, {"type": "minecraft:bandlands"}),
+                             _if(ON_FLOOR, _seq(_if(_above(74, 1), _block("orange_terracotta")), _block("red_sand"))),
                              _if(UNDER_FLOOR, {"type": "minecraft:bandlands"})),
+    # Crimson Mire: mud and blood-red nylium patches, podzol, mud under shallow water
+    "crimson_mire": lambda: _land(_seq(_if(_noise("surface", 0.05, 1.0), _block("crimson_nylium")),
+                                       _if(_noise("surface_swamp", 0.0, 1.0), _block("mud")),
+                                       _if(_noise("surface", -1.0, -0.55), _block("podzol", {"snowy": "false"})), GRASS),
+                                  _block("mud"), _block("mud")),
+    # Volcanic Highlands: brown terracotta cliffs banded with red, orange and blackstone; tan grass, coarse dirt,
+    # blackstone and magma on the slopes
+    "volcanic": lambda: _seq(
+        _if(STEEP, _if(UNDER_FLOOR, _ybands(VOLCANIC_BANDS, 60, 330, 4, "brown_terracotta"))),
+        _if(ON_FLOOR, _seq(_if(_noise("surface", -1.0, -0.62), _block("blackstone")),
+                           _if(_noise("surface", -0.62, -0.57), _block("magma_block")),
+                           _if(_noise("surface", 0.35, 1.0), _block("coarse_dirt")),
+                           _if(_above(150, 2), _block("brown_terracotta")),
+                           _if(ABOVE_WATER, GRASS), _block("blackstone"))),
+        _if(UNDER_FLOOR, _ybands(VOLCANIC_BANDS, 60, 330, 4, "brown_terracotta"))),
+    # Ashen Wastes: stratified dark grey plateaus, white ash streaks on the tops, gravel and tuff
+    "ashen": lambda: _seq(
+        _if(ON_FLOOR, _seq(_if(STEEP, _ybands(ASH_BANDS, 40, 330, 3, "tuff")),
+                           _if(_wnoise("striation", 0.25, 1.0), _block("calcite")),
+                           _if(_noise("surface", 0.3, 1.0), _block("light_gray_concrete_powder")),
+                           _if(_noise("surface", -1.0, -0.4), _block("gravel")),
+                           _ybands(ASH_BANDS, 40, 330, 3, "tuff"))),
+        _if(UNDER_FLOOR, _ybands(ASH_BANDS, 40, 330, 3, "tuff"))),
+    # Alpine Peaks: vertical striations of stone, andesite, gravel and tuff on the faces, moss in the gullies,
+    # meadow grass and podzol below, snow from y ~200
+    "alpine_peak": lambda: _seq(
+        _if(STEEP, _if(UNDER_FLOOR, _seq(_if(_wnoise("moss_streak", 0.42, 1.0), _block("moss_block")),
+                                         _if(_wnoise("striation", -1.0, -0.3), _block("andesite")),
+                                         _if(_wnoise("striation", -0.3, -0.12), _block("gravel")),
+                                         _if(_wnoise("striation", 0.25, 0.5), _block("tuff")),
+                                         _block("stone")))),
+        _if(ON_FLOOR, _seq(_if(_above(200, 3), _seq(_if(_noise("powder_snow", 0.45, 0.58), _block("powder_snow")),
+                                                     _block("snow_block"))),
+                           _if(_wnoise("moss_streak", 0.5, 1.0), _block("moss_block")),
+                           _if(_noise("surface", 0.3, 1.0), _block("podzol", {"snowy": "false"})),
+                           _if(_above(170, 2), _block("stone")),
+                           _if(ABOVE_WATER, GRASS), _block("gravel"))),
+        _if(UNDER_FLOOR, _seq(_if(_above(170, 2), _block("stone")), DIRT))),
+    # Pale Dunes: pale white sand rippled with ordinary sand, sandstone underneath
+    "pale_dunes": lambda: _seq(
+        _if(ON_FLOOR, _seq(_if(_wnoise("striation", -0.2, 0.25), _block("sand")),
+                           _block("white_concrete_powder"))),
+        _if(UNDER_FLOOR, _seq(_if(DEEP_UNDER_FLOOR, _block("smooth_sandstone")), _block("white_concrete_powder")))),
+    # Geyser Basin: travertine (calcite) crusts ringed with yellow and orange, tan grass between the springs
+    "geyser": lambda: _seq(
+        _if(ON_FLOOR, _seq(_if(_noise("surface", -0.12, -0.04), _block("orange_terracotta")),
+                           _if(_noise("surface", -0.04, 0.04), _block("yellow_terracotta")),
+                           _if(_noise("surface", 0.04, 0.3), _block("calcite")),
+                           _if(_noise("surface", 0.3, 0.36), _block("white_terracotta")),
+                           _if(ABOVE_WATER, GRASS), _block("calcite"))),
+        _if(UNDER_FLOOR, _block("calcite"))),
+    # Starlight Grove: lavender grass, moss and amethyst-flecked ground
+    "starlight": lambda: _land(_seq(_if(_noise("surface", 0.4, 1.0), _block("moss_block")),
+                                    _if(_noise("surface", -0.05, 0.0), _block("amethyst_block")), GRASS), DIRT),
+    # Aetherblight Grove: corrupted ground: mycelium and podzol, blackstone in the banks
+    "blight": lambda: _seq(_if(STEEP, _if(UNDER_FLOOR, _block("blackstone"))),
+                           _land(_seq(_if(_noise("surface", 0.15, 1.0), _block("mycelium", {"snowy": "false"})),
+                                      _if(_noise("surface", -1.0, -0.4), _block("podzol", {"snowy": "false"})),
+                                      _if(_noise("surface", -0.05, 0.0), _block("crying_obsidian")), GRASS),
+                                 DIRT)),
+    # Rimefrost Fjords: blue slate and stone cliffs, snowy tops, gravel shores
+    "fjord": lambda: _seq(
+        _if(STEEP, _if(UNDER_FLOOR, _ybands(["wayfarers:blue_slate", "stone", "wayfarers:blue_slate", "andesite"],
+                                            30, 200, 5, "stone"))),
+        _if(ON_FLOOR, _seq(_if(_not(_above(66, 1)), _block("gravel")),
+                           _if(_noise("powder_snow", 0.35, 0.6), _block("snow_block")),
+                           _block("grass_block", {"snowy": "true"}))),
+        _if(UNDER_FLOOR, _seq(_if(_not(_above(66, 1)), _block("gravel")), DIRT))),
+    # Tidebrass Archipelago: grassy island tops with sand beaches, sand sea floor
+    "archipelago": lambda: _seq(
+        _if(ON_FLOOR, _seq(_if(_above(67, 2), _if(ABOVE_WATER, GRASS)), _block("sand"))),
+        _if(UNDER_FLOOR, _seq(_if(_above(67, 2), DIRT), _block("sandstone")))),
     "cogwork": lambda: _seq(_if(ON_FLOOR, _seq(_if(_noise("surface", 0.2, 1.0), _block("smooth_sandstone")),
                                                _if(_noise("surface", -1.0, -0.6), _block("wayfarers:rust_rock")),
                                                _block("red_sand"))),
@@ -332,7 +549,9 @@ def surface_rule():
     cave = {}
     for bid, b in BIOMES.items():
         (cave if b["surface"] in CAVE_SURFACES else by_surface).setdefault(b["surface"], []).append(bid)
-    surface_rules = [_if(_biomes(*ids), SURFACES[s]()) for s, ids in by_surface.items() if s != "grass"]
+    high = sorted(bid for s, ids in by_surface.items() if s in HIGHLAND_SURFACES for bid in ids)
+    surface_rules = [_if(_biomes(*high), highland())]
+    surface_rules += [_if(_biomes(*ids), SURFACES[s]()) for s, ids in by_surface.items() if s != "grass"]
     surface_rules.append(SURFACES["grass"]())
     cave_rules = [_if(_biomes(*ids), CAVE_SURFACES[s]()) for s, ids in cave.items()]
     return _seq(
@@ -376,9 +595,11 @@ def biome_json(bid):
 def _ours(vanilla_ids):
     out = []
     for v in vanilla_ids:
-        o = VANILLA_TO_OURS.get(v.split(":")[-1])
-        if o and f"{NS}:{o}" not in out:
-            out.append(f"{NS}:{o}")
+        short = v.split(":")[-1]
+        targets = [VANILLA_TO_OURS.get(short)] + ([SPLITS[short][1]] if short in SPLITS else [])
+        for o in targets:
+            if o and f"{NS}:{o}" not in out:
+                out.append(f"{NS}:{o}")
     return out
 
 

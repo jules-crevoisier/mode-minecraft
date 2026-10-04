@@ -2,7 +2,10 @@
  "replace": false,
  "values": [
   "wayfarers:dune_sea",
+  "wayfarers:pale_dunes",
   "wayfarers:coral_lagoon",
-  "wayfarers:glowing_marsh"
+  "wayfarers:tidebrass_archipelago",
+  "wayfarers:glowing_marsh",
+  "wayfarers:crimson_mire"
  ]
 }

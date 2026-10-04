@@ -1,0 +1,31 @@
+{
+ "type": "minecraft:template",
+ "config": {
+  "templates": [
+   {
+    "data": {
+     "id": "wayfarers:worldobjects/crystal_0"
+    },
+    "weight": 1
+   },
+   {
+    "data": {
+     "id": "wayfarers:worldobjects/crystal_1"
+    },
+    "weight": 1
+   },
+   {
+    "data": {
+     "id": "wayfarers:worldobjects/crystal_2"
+    },
+    "weight": 1
+   },
+   {
+    "data": {
+     "id": "wayfarers:worldobjects/crystal_3"
+    },
+    "weight": 1
+   }
+  ]
+ }
+}

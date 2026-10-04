@@ -2,6 +2,7 @@
  "replace": false,
  "values": [
   "wayfarers:rustlands",
+  "wayfarers:geyser_basin",
   "wayfarers:basalt_cliffs"
  ]
 }

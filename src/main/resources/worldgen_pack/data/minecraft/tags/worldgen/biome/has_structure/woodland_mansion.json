@@ -1,6 +1,7 @@
 {
  "replace": false,
  "values": [
-  "wayfarers:shadow_woods"
+  "wayfarers:shadow_woods",
+  "wayfarers:aetherblight_grove"
  ]
 }

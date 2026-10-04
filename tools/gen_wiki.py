@@ -1113,9 +1113,7 @@ def main():
 </section>
 <nav class="tiles" aria-label="Sections">__TILES__</nav>''')
     # biome groups and the real in-game biome renders (CI), used by the biome cards and the world-block cards
-    inv = {}
-    for v, o in B.VANILLA_TO_OURS.items():
-        inv.setdefault(o, []).append(v)
+    inv = B.sources()
 
     def biome_group(bid, b):
         src = inv.get(bid, [])
@@ -1586,7 +1584,7 @@ def main():
 </article>''')
         idx.add(b["fr"], "Biome", f"bi-{bid}", TXT.BIOMES.get(bid, "") + " " + b["en"])
     sec.append(f'''<section class="block" id="monde">
-  {plaque("monde-h", "Le Nouveau Monde", "Relief, grottes et 41 biomes", "Le pack intégré <code>wayfarers:world_overhaul</code> remplace la génération de la Surface des <b>nouveaux</b> mondes : montagnes environ 65 % plus hautes (pics vers y 300), méga-cavernes entre y −40 et 10, et des biomes propres au mod. Villages, forteresses et structures apparaissent comme avant.")}
+  {plaque("monde-h", "Le Nouveau Monde", "Relief, grottes et 52 biomes", "Le pack intégré <code>wayfarers:world_overhaul</code> remplace la génération de la Surface des <b>nouveaux</b> mondes : chaînes de montagnes jusque vers y 320, falaises, canyons, mesas, fjords, archipels et îles célestes, méga-cavernes entre y −40 et 10 et rivières souterraines, et des biomes propres au mod. Villages, forteresses et structures apparaissent comme avant.")}
   <div class="callout"><b>Le désactiver :</b> mets <code>world.overhaul = false</code> dans <code>config/wayfarers-common.toml</code>, ou décoche le pack « Wayfarers : nouveau monde » dans l'écran Packs de données à la création du monde. Minecraft affiche un avertissement « expérimental » : c'est normal. Pour vérifier qu'il est actif : F3 affiche <code>wayfarers:…</code> comme biome, ou <code>/locate biome wayfarers:enchanted_forest</code>.</div>
   {map_html}
   {"".join(f'<h3 class="subhead">{E(t)}</h3><div class="grid biomes">{"".join(bgroups[k])}</div>' for k, t in TXT.BIOME_GROUPS if bgroups[k])}

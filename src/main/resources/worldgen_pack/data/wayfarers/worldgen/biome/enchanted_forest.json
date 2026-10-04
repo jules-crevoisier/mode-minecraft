@@ -87,7 +87,8 @@
    "minecraft:glow_lichen",
    "minecraft:flower_flower_forest",
    "wayfarers:glowwood",
-   "minecraft:trees_flower_forest"
+   "minecraft:trees_flower_forest",
+   "wayfarers:fallen_glowwood_logs"
   ],
   [
    "minecraft:freeze_top_layer"

@@ -82,7 +82,8 @@
    "minecraft:patch_large_fern",
    "wayfarers:giant_spruce",
    "minecraft:trees_old_growth_spruce_taiga",
-   "minecraft:patch_grass_taiga"
+   "minecraft:patch_grass_taiga",
+   "wayfarers:fallen_spruce_logs"
   ],
   [
    "minecraft:freeze_top_layer"

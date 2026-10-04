@@ -71,7 +71,8 @@
   [
    "minecraft:glow_lichen",
    "minecraft:patch_berry_common",
-   "minecraft:trees_grove"
+   "minecraft:trees_grove",
+   "wayfarers:fallen_spruce_logs"
   ],
   [
    "minecraft:freeze_top_layer"
