@@ -105,6 +105,14 @@ public class MachineBlockEntity extends BaseContainerBlockEntity {
     private static final Map<String, Set<BlockPos>> TRANSMITTERS = new HashMap<>();
     private static final Map<String, Set<BlockPos>> RECEIVERS = new HashMap<>();
 
+    /** The wireless index outlives a world in singleplayer: forget it when the server stops. */
+    public static void registerEvents() {
+        net.minecraftforge.event.server.ServerStoppedEvent.BUS.addListener(e -> {
+            TRANSMITTERS.clear();
+            RECEIVERS.clear();
+        });
+    }
+
     private NonNullList<ItemStack> items = NonNullList.withSize(SIZE, ItemStack.EMPTY);
     /** Vacuum Hopper item filter: ghost copies, never real items. */
     public final SimpleContainer filter = new SimpleContainer(FILTER_SIZE) {
@@ -1097,14 +1105,22 @@ public class MachineBlockEntity extends BaseContainerBlockEntity {
     // ------------------------------------------------------------------ detector
     private void detect(ServerLevel level, BlockState state) {
         AABB area = new AABB(worldPosition).inflate(radius());
-        Predicate<Entity> filter = switch (DETECTOR_MODES[mode % DETECTOR_MODES.length]) {
+        String detectorMode = DETECTOR_MODES[mode % DETECTOR_MODES.length];
+        Predicate<Entity> filter = switch (detectorMode) {
             case "players" -> e -> e instanceof Player p && !p.isSpectator();
             case "monsters" -> e -> e instanceof Enemy;
             case "animals" -> e -> e instanceof Animal;
             case "items" -> e -> e instanceof ItemEntity;
             default -> e -> e instanceof LivingEntity && !(e instanceof Player p && p.isSpectator());
         };
-        detected = level.getEntitiesOfClass(Entity.class, area, e -> e.isAlive() && filter.test(e)).size();
+        // search only the entity class the mode can match (players and items are far fewer than all entities)
+        Class<? extends Entity> type = switch (detectorMode) {
+            case "players" -> Player.class;
+            case "items" -> ItemEntity.class;
+            case "monsters", "animals" -> net.minecraft.world.entity.Mob.class;
+            default -> LivingEntity.class;
+        };
+        detected = level.getEntitiesOfClass(type, area, e -> e.isAlive() && filter.test(e)).size();
         int newSignal = inverted ? (detected == 0 ? 15 : 0) : Math.min(15, detected);
         if (newSignal != signal) {
             signal = newSignal;

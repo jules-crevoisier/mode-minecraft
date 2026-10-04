@@ -75,6 +75,7 @@ public final class Wayfarers {
         com.wayfarers.skill.SkillEvents.register();
         com.wayfarers.chisel.ChiselFamilies.register();
         com.wayfarers.util.StructureLocator.register();
+        com.wayfarers.block.MachineBlockEntity.registerEvents();
         SpawnPlacementRegisterEvent.BUS.addListener(ModEntities::registerSpawnPlacements);
         context.registerConfig(ModConfig.Type.COMMON, WayfarersConfig.SPEC);
         context.registerConfig(ModConfig.Type.CLIENT, com.wayfarers.config.WayfarersClientConfig.SPEC);
