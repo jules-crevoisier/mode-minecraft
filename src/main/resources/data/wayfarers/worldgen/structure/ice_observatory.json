@@ -14,9 +14,9 @@
   "project_start_to_heightmap": "WORLD_SURFACE_WG",
   "fit": {
     "mode": "land",
-    "spread": 10,
-    "slope": 0.8,
-    "wet": 0.05,
+    "spread": 16,
+    "slope": 1.1,
+    "wet": 0.12,
     "min_wet": 0.0,
     "land": 0.5,
     "drop": 10,
