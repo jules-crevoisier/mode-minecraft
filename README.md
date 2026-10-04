@@ -321,6 +321,7 @@ Le contenu est généré par des scripts Python sans aucune dépendance, rangés
 ```bash
 python3 tools/generate_all.py            # régénère tout puis valide
 python3 tools/generate_all.py --preview  # + aperçus isométriques des structures dans build/previews/
+python3 tools/gen_wiki.py                # wiki illustré en français (GIF 3D, recettes, biomes) → build/wiki/index.html (~5 min, rendus en cache)
 ```
 
 | Script | Ce qu'il génère |
