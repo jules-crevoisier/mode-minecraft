@@ -68,7 +68,7 @@ def sword(length=20, width=3.0, guard=7):
 
 
 def greatsword():
-    return sword(length=22, width=4.0, guard=9)
+    return sword(length=21, width=4.0, guard=9)  # the blade tip must stay under y 32 (model bounds)
 
 
 def blade():

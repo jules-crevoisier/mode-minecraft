@@ -363,6 +363,16 @@ def check_lang():
                         err(f"{lang}: missing key {key} (used in {f})")
 
 
+def check_model_bounds():
+    """Minecraft refuses a model whose elements leave the -16..32 box (the item then shows as missing)."""
+    for path in glob.glob(os.path.join(ASSETS, "*", "models", "**", "*.json"), recursive=True):
+        for el in json.load(open(path, encoding="utf-8")).get("elements", []):
+            for key in ("from", "to"):
+                if any(v < -16 or v > 32 for v in el.get(key, [])):
+                    err(f"{path}: element '{key}' {el[key]} outside -16..32")
+                    break
+
+
 def check_assets():
     """Models -> textures, items/blocks -> models, lang keys (only once assets exist)."""
     a = os.path.join(ASSETS, "wayfarers")
@@ -447,6 +457,7 @@ def main():
     check_loot()
     check_worldgen()
     check_assets()
+    check_model_bounds()
     check_advancements()
     check_lang()
     check_tags()
