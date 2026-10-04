@@ -186,6 +186,14 @@ def noise_tile(base, var=14, seed=0, size=16):
     return cv
 
 
+def frame(cv, c, inset=0):
+    for i in range(inset, 16 - inset):
+        cv.set(i, inset, c)
+        cv.set(i, 15 - inset, c)
+        cv.set(inset, i, c)
+        cv.set(15 - inset, i, c)
+
+
 def block_textures():
     out = {}
     from wf import texgen_chisel
