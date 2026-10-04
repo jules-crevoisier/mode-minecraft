@@ -31,6 +31,11 @@ def save_gif(frames, path, ms=90, colors=192):
     for i, f in enumerate(picks):
         mosaic.paste(f, (0, i * h))
     pal = mosaic.quantize(colors=colors, method=Image.Quantize.MEDIANCUT, dither=Image.Dither.NONE)
+    # keep the background exactly BG, so the GIF melts into the page's display case (no lighter rectangle)
+    p = pal.getpalette()[:3 * colors]
+    near = min(range(len(p) // 3), key=lambda i: sum((p[3 * i + k] - BG[k]) ** 2 for k in range(3)))
+    p[3 * near:3 * near + 3] = list(BG)
+    pal.putpalette(p)
     out = [f.quantize(palette=pal, dither=Image.Dither.NONE) for f in frames]
     out[0].save(path, save_all=True, append_images=out[1:], duration=ms, loop=0, optimize=False, disposal=1)
 
@@ -244,6 +249,38 @@ TEMPLATES = {
 FLAT = ("item/generated", "item/handheld", "item/handheld_rod", "builtin/generated")
 
 
+def _pick_model(node, context, depth=0):
+    """Model reference an item definition (items/<id>.json "model" node) shows in a display context: follows
+    select (display_context cases, else the fallback), range_dispatch (first entry), condition and composite."""
+    if not isinstance(node, dict) or depth > 8:
+        return None
+    t = node.get("type", "").split(":")[-1]
+    if t == "model":
+        return node.get("model")
+    if t == "select":
+        if node.get("property", "").endswith("display_context"):
+            for case in node.get("cases", []):
+                when = case.get("when", [])
+                if context in (when if isinstance(when, list) else [when]):
+                    return _pick_model(case.get("model"), context, depth + 1)
+        if node.get("fallback"):
+            return _pick_model(node["fallback"], context, depth + 1)
+        cases = node.get("cases", [])
+        return _pick_model(cases[0].get("model"), context, depth + 1) if cases else None
+    if t == "range_dispatch":
+        entries = node.get("entries", [])
+        if entries:
+            return _pick_model(entries[0].get("model"), context, depth + 1)
+        return _pick_model(node.get("fallback"), context, depth + 1)
+    if t == "condition":
+        return _pick_model(node.get("on_false") or node.get("on_true"), context, depth + 1)
+    if t == "composite":
+        models = node.get("models", [])
+        return _pick_model(models[0], context, depth + 1) if models else None
+    return _pick_model(node.get("fallback") or node.get("model"), context, depth + 1) if isinstance(
+        node.get("fallback") or node.get("model"), dict) else node.get("model") if isinstance(node.get("model"), str) else None
+
+
 def _strip(ref):
     return ref.split(":", 1)[1] if ":" in ref else ref
 
@@ -301,18 +338,9 @@ class JsonModels:
         if not os.path.exists(path):
             return None, None
         d = json.load(open(path, encoding="utf-8"))["model"]
-        gui, hand = None, None
-        if d.get("type", "").endswith("select"):
-            for case in d.get("cases", []):
-                if "gui" in case.get("when", []):
-                    gui = case["model"].get("model")
-            hand = d.get("fallback", {}).get("model")
-        else:
-            gui = d.get("model")
-            while gui is None and isinstance(d, dict):
-                d = d.get("fallback") or d.get("on_false") or d.get("model")
-                gui = d.get("model") if isinstance(d, dict) and isinstance(d.get("model"), str) else None
-        return gui, hand
+        gui = _pick_model(d, "gui")
+        hand = _pick_model(d, "thirdperson_righthand")
+        return gui, (hand if hand != gui else None)
 
     def texture(self, ref):
         if ref not in self._tex:
