@@ -84,6 +84,17 @@ public final class SiteFit {
         }
     }
 
+    /** Runs {@code task} on this thread with the site check off, like {@code /place structure} (the CI driver). */
+    public static <T> T unchecked(java.util.function.Supplier<T> task) {
+        boolean was = BYPASS.get();
+        BYPASS.set(true);
+        try {
+            return task.get();
+        } finally {
+            BYPASS.set(was);
+        }
+    }
+
     static boolean active() {
         if (BYPASS.get()) {
             return false;

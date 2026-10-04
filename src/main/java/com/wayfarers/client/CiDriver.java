@@ -582,9 +582,10 @@ public final class CiDriver {
                 .get(Wayfarers.id("clockwork_citadel"))
                 .orElseThrow(() -> new IllegalStateException("no structure wayfarers:clockwork_citadel"));
         ChunkGenerator generator = level.getChunkSource().getGenerator();
-        StructureStart start = holder.value().generate(holder, level.dimension(), level.registryAccess(), generator,
-                generator.getBiomeSource(), level.getChunkSource().randomState(), level.getStructureManager(), level.getSeed(),
-                ChunkPos.containing(pos), 0, level, b -> true);
+        // like /place structure: the spot is chosen here, so the terrain site check is skipped
+        StructureStart start = com.wayfarers.world.SiteFit.unchecked(() -> holder.value().generate(holder, level.dimension(),
+                level.registryAccess(), generator, generator.getBiomeSource(), level.getChunkSource().randomState(),
+                level.getStructureManager(), level.getSeed(), ChunkPos.containing(pos), 0, level, b -> true));
         if (!start.isValid()) {
             throw new IllegalStateException("the citadel did not generate at " + pos);
         }
