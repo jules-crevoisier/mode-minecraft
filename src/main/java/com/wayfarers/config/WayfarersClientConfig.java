@@ -17,6 +17,10 @@ public final class WayfarersClientConfig {
     public static final ForgeConfigSpec.EnumValue<HealthBars> HEALTH_BARS = B
             .comment("Health bars above creatures: ALWAYS, DAMAGED (hurt or targeted) or NEVER.")
             .defineEnum("hud.healthBars", HealthBars.DAMAGED);
+    public static final ForgeConfigSpec.IntValue HEALTH_BAR_RANGE = B
+            .comment("Health bars and damage numbers are drawn for creatures up to this many blocks away.",
+                    "Lower it to save frames in crowded places (mob farms, big fights).")
+            .defineInRange("hud.healthBarRange", 24, 4, 64);
     public static final ForgeConfigSpec.BooleanValue DAMAGE_NUMBERS = B
             .comment("Floating damage numbers when you hit a creature.")
             .define("hud.damageNumbers", true);

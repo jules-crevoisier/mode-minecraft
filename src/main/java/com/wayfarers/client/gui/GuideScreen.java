@@ -81,15 +81,24 @@ public class GuideScreen extends Screen {
         }
     }
 
+    /**
+     * Item -> manual page (empty: none). Asked for every tooltip frame and every tick in inventories, so memoized;
+     * concurrent because tooltips are also built off-thread (creative search).
+     */
+    private static final java.util.Map<net.minecraft.world.item.Item, java.util.Optional<String>> PAGE_OF =
+            new java.util.concurrent.ConcurrentHashMap<>();
+
     /** Opens the page about this item, if there is one. */
     public static String pageFor(ItemStack stack) {
-        String id = BuiltInRegistries.ITEM.getKey(stack.getItem()).toString();
-        for (GeneratedGuide.Page p : GeneratedGuide.PAGES) {
-            if (p.items().contains(id)) {
-                return p.id();
+        return PAGE_OF.computeIfAbsent(stack.getItem(), item -> {
+            String id = BuiltInRegistries.ITEM.getKey(item).toString();
+            for (GeneratedGuide.Page p : GeneratedGuide.PAGES) {
+                if (p.items().contains(id)) {
+                    return java.util.Optional.of(p.id());
+                }
             }
-        }
-        return null;
+            return java.util.Optional.empty();
+        }).orElse(null);
     }
 
     private int tocX() { return left + 14; }

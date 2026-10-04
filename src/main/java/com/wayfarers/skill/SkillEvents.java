@@ -66,18 +66,20 @@ public final class SkillEvents {
             }
         });
         TickEvent.PlayerTickEvent.Post.BUS.addListener(SkillEvents::onTick);
+        PlayerEvent.PlayerLoggedOutEvent.BUS.addListener(e -> LAST_SYNC.remove(e.getEntity().getUUID()));
     }
 
     private static void onTick(TickEvent.PlayerTickEvent.Post event) {
         if (event.side() != LogicalSide.SERVER || !(event.player() instanceof ServerPlayer p) || p.tickCount % 10 != 0) {
             return;
         }
+        // maxMana scans the inventory and parses the talent list: compute it once per check, not three times
         float max = PlayerSkills.maxMana(p);
         float mana = PlayerSkills.mana(p);
         if (mana < max) {
-            PlayerSkills.setMana(p, mana + PlayerSkills.regenPerSecond(p) * 0.5F);
+            mana = PlayerSkills.setMana(p, mana + PlayerSkills.regenPerSecond(p) * 0.5F, max);
         } else if (mana > max) {
-            PlayerSkills.setMana(p, max);
+            mana = PlayerSkills.setMana(p, max, max);
         }
         int repair = PlayerSkills.repairInterval(p);
         if (repair > 0 && p.tickCount % (repair * 20) < 10) {
@@ -87,7 +89,7 @@ public final class SkillEvents {
             }
         }
         // keep the client's mana bar fresh while it changes
-        int key = (int) PlayerSkills.mana(p) * 1000 + (int) PlayerSkills.maxMana(p);
+        int key = (int) mana * 1000 + (int) max;
         Integer last = LAST_SYNC.put(p.getUUID(), key);
         if (last == null || last != key) {
             sync(p);

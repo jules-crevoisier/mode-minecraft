@@ -101,8 +101,11 @@ def density_functions():
     """Our registered density functions (data/wayfarers/worldgen/density_function/overworld/*)."""
     out = {}
     vanilla_offset = "minecraft:overworld/offset"
-    # higher land: above sea level the offset spline is stretched by 65%
-    out["offset"] = add(vanilla_offset, mul(0.65, dmax(add(vanilla_offset, 0.50375), 0.0)))
+    # higher land: above sea level the offset spline is stretched by 65%. Wrapped like vanilla's own offset
+    # (NoiseRouterData.splineWithBlending: flat_cache(cache_2d(...))): it is a 2D value read by depth, sloped_cheese
+    # and the climate sampler, so it is computed once per 4x4 column instead of at every lookup.
+    out["offset"] = unary("flat_cache", unary("cache_2d",
+                                              add(vanilla_offset, mul(0.65, dmax(add(vanilla_offset, 0.50375), 0.0)))))
     out["depth"] = add(ygrad(-64, 320, 1.5, -1.5), DF + "offset")
     jagged = unary("half_negative", noise("minecraft:jagged", 1500.0, 0.0))
     out["jaggedness"] = unary("flat_cache", mul(mul(1.5, "minecraft:overworld/jaggedness"), jagged))

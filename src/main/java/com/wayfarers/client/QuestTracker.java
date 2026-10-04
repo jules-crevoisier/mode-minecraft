@@ -11,6 +11,7 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.event.AddGuiOverlayLayersEvent;
 import net.minecraftforge.client.gui.overlay.ForgeLayeredDraw;
 
@@ -20,7 +21,28 @@ import java.util.List;
 public final class QuestTracker {
     private static final int W = 150;
 
+    // the HUD is drawn every frame: word-wrap the description and build the icon once per quest (and language)
+    private static String cachedKey = "";
+    private static List<FormattedCharSequence> cachedDesc = List.of();
+    private static String cachedTitle = "";
+    private static ItemStack cachedIcon = ItemStack.EMPTY;
+    private static boolean iconResolved;
+
     private QuestTracker() {}
+
+    private static void refreshCache(Minecraft mc, String q) {
+        String key = q + '|' + mc.getLanguageManager().getSelected() + '|' + System.identityHashCode(mc.getConnection());
+        if (!key.equals(cachedKey)) {
+            cachedKey = key;
+            cachedDesc = mc.font.split(ClientQuests.description(q), W - 28);
+            cachedTitle = ClientQuests.title(q).getString();
+            iconResolved = false;
+        }
+        if (!iconResolved) { // the advancement tree (with the icon) may arrive after the first frames
+            iconResolved = ClientQuests.display(q).isPresent();
+            cachedIcon = ClientQuests.icon(q);
+        }
+    }
 
     public static void register(AddGuiOverlayLayersEvent event) {
         event.getLayeredDraw().addAbove(ForgeLayeredDraw.PRE_SLEEP_STACK, Wayfarers.id("quest_tracker"),
@@ -36,15 +58,16 @@ public final class QuestTracker {
         }
         Font font = mc.font;
         QuestSnapshotMsg.State s = ClientQuests.state(q);
-        List<FormattedCharSequence> desc = font.split(ClientQuests.description(q), W - 28);
+        refreshCache(mc, q);
+        List<FormattedCharSequence> desc = cachedDesc;
         int lines = Math.min(desc.size(), 3);
         int h = 34 + lines * 9;
         int x = g.guiWidth() - W - 6;
         int y = 6;
         WfGui.sprite(g, WfGui.CARD, x, y, W, h);
-        g.item(ClientQuests.icon(q), x + 5, y + 5);
+        g.item(cachedIcon, x + 5, y + 5);
         g.text(font, Component.translatable("gui.wayfarers.quests.tracker"), x + 25, y + 4, WfGui.INK_SOFT, false);
-        WfGui.textClipped(g, font, ClientQuests.title(q).getString(), x + 25, y + 13, W - 30, WfGui.INK, false);
+        WfGui.textClipped(g, font, cachedTitle, x + 25, y + 13, W - 30, WfGui.INK, false);
         for (int i = 0; i < lines; i++) {
             g.text(font, desc.get(i), x + 5, y + 25 + i * 9, WfGui.INK_SOFT, false);
         }

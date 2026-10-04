@@ -132,7 +132,8 @@ public class Gargoyle extends Monster implements AnimatedMob {
 
     /** True when a survival player can see this gargoyle (enderman-style gaze test, wider cone). */
     private boolean watched(ServerLevel level) {
-        for (Player p : level.getEntitiesOfClass(Player.class, getBoundingBox().inflate(40.0),
+        // every tick for every gargoyle: walk the player list, not every entity section of an 80-block box
+        for (Player p : com.wayfarers.util.NearbyPlayers.in(level, getBoundingBox().inflate(40.0),
                 p -> p.isAlive() && !p.isSpectator() && !p.isCreative())) {
             if (p.hasEffect(MobEffects.BLINDNESS) || p.hasEffect(MobEffects.DARKNESS)) {
                 continue;

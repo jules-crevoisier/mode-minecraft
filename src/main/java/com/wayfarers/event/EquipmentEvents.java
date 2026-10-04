@@ -106,8 +106,12 @@ public final class EquipmentEvents {
         if (player.onGround() && !player.isSpectator()) {
             LAST_SAFE.put(player.getUUID(), player.blockPosition());
         }
+        boolean inVoid = player.getY() < level.getMinY() - 6;
+        if (!inVoid && player.tickCount % 20 != 0) {
+            return; // the armour set only matters for a void rescue (every tick) or the bonuses (every second)
+        }
         ArmorSet set = fullSet(player);
-        if (set == ArmorSet.VOID && player.getY() < level.getMinY() - 6 && player instanceof ServerPlayer serverPlayer) {
+        if (set == ArmorSet.VOID && inVoid && player instanceof ServerPlayer serverPlayer) {
             rescueFromVoid(level, serverPlayer);
             return;
         }

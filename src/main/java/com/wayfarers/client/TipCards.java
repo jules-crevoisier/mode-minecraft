@@ -40,6 +40,9 @@ public final class TipCards {
     private static String current;
     private static int age;
     private static int holdW;
+    private static String shownId;
+    private static List<FormattedCharSequence> shownLines = List.of();
+    private static ItemStack shownIcon = ItemStack.EMPTY;
 
     private TipCards() {}
 
@@ -65,6 +68,7 @@ public final class TipCards {
         if (current == null && !QUEUE.isEmpty()) {
             current = QUEUE.poll();
             age = 0;
+            shownId = null;
         }
         // hold W over an item with a manual page (in any inventory screen) to open it
         Minecraft mc = Minecraft.getInstance();
@@ -100,16 +104,20 @@ public final class TipCards {
             return;
         }
         Font font = mc.font;
-        List<FormattedCharSequence> lines = font.split(Component.translatable("tip.wayfarers." + t.id()), W - 30);
+        if (!t.id().equals(shownId)) { // drawn every frame for ten seconds: wrap the text and build the icon once
+            shownId = t.id();
+            shownLines = font.split(Component.translatable("tip.wayfarers." + t.id()), W - 30);
+            shownIcon = BuiltInRegistries.ITEM.getOptional(Identifier.parse(t.icon())).map(ItemStack::new)
+                    .orElse(new ItemStack(Items.BOOK));
+        }
+        List<FormattedCharSequence> lines = shownLines;
         int h = 20 + lines.size() * 9;
         // slide in from the right during the first 8 ticks, out during the last 8
         float slide = Math.min(1F, Math.min(age, SHOW_TICKS - age) / 8F);
         int x = g.guiWidth() - (int) ((W + 6) * slide);
         int y = g.guiHeight() / 2 - h / 2 - 20;
         WfGui.sprite(g, WfGui.CARD, x, y, W, h);
-        ItemStack icon = BuiltInRegistries.ITEM.getOptional(Identifier.parse(t.icon())).map(ItemStack::new)
-                .orElse(new ItemStack(Items.BOOK));
-        g.item(icon, x + 5, y + 5);
+        g.item(shownIcon, x + 5, y + 5);
         g.text(font, Component.translatable("gui.wayfarers.tip.title"), x + 25, y + 5, WfGui.INK_SOFT, false);
         for (int i = 0; i < lines.size(); i++) {
             g.text(font, lines.get(i), x + 25, y + 15 + i * 9, WfGui.INK, false);

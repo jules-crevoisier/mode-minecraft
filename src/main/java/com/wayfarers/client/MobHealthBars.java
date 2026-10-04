@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
@@ -21,9 +22,11 @@ import net.minecraftforge.event.TickEvent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Health bars floating above creatures (with a yellow "recent damage" trail and a star for elites) and
@@ -32,11 +35,12 @@ import java.util.Map;
 public final class MobHealthBars {
     private static final float SCALE = 0.025F;
     private static final int BAR_W = 40;
-    private static final int RANGE = 24;
     private static final int FULL_BRIGHT = 0xF000F0;
 
     /** Per entity id: last seen health, trailing health, tick of last damage, floating numbers. */
     private static final Map<Integer, Track> TRACKS = new HashMap<>();
+    /** Some tracked creature has damage numbers floating (lets the NEVER-bars mode skip every other creature). */
+    private static boolean anyNumbers;
 
     private MobHealthBars() {}
 
@@ -54,15 +58,17 @@ public final class MobHealthBars {
 
     private static void tick() {
         Minecraft mc = Minecraft.getInstance();
-        if (mc.level == null || mc.player == null) {
+        if (mc.level == null || mc.player == null || !enabled()) {
             TRACKS.clear();
+            anyNumbers = false;
             return;
         }
         long now = mc.level.getGameTime();
-        AABB box = mc.player.getBoundingBox().inflate(RANGE);
-        Map<Integer, Boolean> seen = new HashMap<>();
+        AABB box = mc.player.getBoundingBox().inflate(range());
+        Set<Integer> seen = new HashSet<>();
+        boolean numbers = false;
         for (LivingEntity e : mc.level.getEntitiesOfClass(LivingEntity.class, box, e -> e != mc.player)) {
-            seen.put(e.getId(), true);
+            seen.add(e.getId());
             Track t = TRACKS.computeIfAbsent(e.getId(), id -> {
                 Track nt = new Track();
                 nt.health = e.getHealth();
@@ -91,17 +97,30 @@ public final class MobHealthBars {
                     it.remove();
                 }
             }
+            numbers |= !t.numbers.isEmpty();
         }
-        TRACKS.keySet().removeIf(id -> !seen.containsKey(id));
+        TRACKS.keySet().removeIf(id -> !seen.contains(id));
+        anyNumbers = numbers;
+    }
+
+    private static boolean enabled() {
+        return WayfarersClientConfig.HEALTH_BARS.get() != WayfarersClientConfig.HealthBars.NEVER
+                || WayfarersClientConfig.DAMAGE_NUMBERS.get();
+    }
+
+    private static int range() {
+        return WayfarersClientConfig.HEALTH_BAR_RANGE.get();
     }
 
     private static void onRender(RenderLivingEvent.Post<?, ?, ?> event) {
         WayfarersClientConfig.HealthBars mode = WayfarersClientConfig.HEALTH_BARS.get();
         LivingEntityRenderState state = event.getState();
         Minecraft mc = Minecraft.getInstance();
-        if (mode == WayfarersClientConfig.HealthBars.NEVER && !WayfarersClientConfig.DAMAGE_NUMBERS.get()
-                || mc.level == null || mc.player == null || state.isInvisible || state.distanceToCameraSq > RANGE * RANGE) {
-            return;
+        int range = range();
+        if (mode == WayfarersClientConfig.HealthBars.NEVER && (!WayfarersClientConfig.DAMAGE_NUMBERS.get() || !anyNumbers)
+                || mc.level == null || mc.player == null || state.isInvisible || state.distanceToCameraSq > range * range
+                || state.entityType == EntityTypes.PLAYER) {
+            return; // cheap checks first: finding the entity behind a render state is an entity search
         }
         LivingEntity entity = find(mc, state);
         if (entity == null || entity instanceof Player || entity instanceof WayfarerBoss || !entity.isAlive()) {
