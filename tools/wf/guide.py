@@ -97,15 +97,28 @@ PAGES = [
          "Tu peux fabriquer et poser tes propres pierres : à la base, aux fermes ou à l'entrée d'un donjon."),
     ], ["wayfarers:waystone"]),
     ("wonders", "travel", "wayfarers:structure_compass", ("Wonders of the world", "Merveilles du monde"), [
-        ("Three giant places wait to be found. The Clockwork Citadel: a steampunk town around a 75-block clock "
+        ("Giant places wait to be found. The Clockwork Citadel: a steampunk town around a 75-block clock "
          "tower, in badlands, savannas, deserts and plains.",
-         "Trois lieux gigantesques attendent d'être trouvés. La Citadelle d'horlogerie : une ville steampunk autour "
+         "Des lieux gigantesques attendent d'être trouvés. La Citadelle d'horlogerie : une ville steampunk autour "
          "d'une tour-horloge de 75 blocs, dans les badlands, savanes, déserts et plaines."),
         ("The Sky Harbour: an airship moored to an iron tower, seen from far away above the plains. The Undercity: a "
          "town on stilts in a vast cavern 12 to 30 blocks underground, around a glowing lake.",
          "Le Port céleste : un dirigeable amarré à une tour de fer, visible de loin au-dessus des plaines. Les "
          "Bas-fonds : une ville sur pilotis dans une immense caverne, de 12 à 30 blocs sous terre, autour d'un lac "
          "luminescent."),
+        ("The Deep Dwarven City: a lost kingdom carved 40 to 50 blocks underground, behind a gate guarded by two "
+         "giant dwarf kings, with forges, rivers of lava, a throne room and a hidden treasure vault.",
+         "La Cité naine des profondeurs : un royaume perdu taillé de 40 à 50 blocs sous terre, derrière une porte "
+         "gardée par deux rois nains géants, avec ses forges, ses rivières de lave, sa salle du trône et un trésor caché."),
+        ("The Sylvan Palace: an elven palace grown around a colossal silver tree in the dark and ancient forests. The "
+         "Inventor's Manor: a Victorian steampunk mansion on the meadows, with a conservatory and a secret laboratory.",
+         "Le Palais sylvain : un palais elfique bâti autour d'un arbre d'argent colossal, dans les forêts sombres et "
+         "anciennes. Le Manoir de l'inventeur : une demeure victorienne steampunk dans les prairies, avec sa serre et "
+         "son laboratoire secret."),
+        ("The Sky Isles: an archipelago floating 200 blocks high above the oceans and plains, linked by rope "
+         "bridges, with waterfalls and a ruined shrine. Bring blocks to climb, or a way to fly.",
+         "Les Îles célestes : un archipel flottant à 200 blocs de haut au-dessus des océans et des plaines, relié par "
+         "des ponts de corde, avec des cascades et un sanctuaire en ruine. Prévois des blocs pour grimper, ou de quoi voler."),
         ("Sneak-use the Structure Compass to pick one of them, then use it to see the distance and direction.",
          "Accroupi + clic droit sur la boussole des structures pour en choisir une, puis clic droit pour voir la "
          "distance et la direction."),

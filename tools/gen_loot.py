@@ -134,6 +134,28 @@ THEMES = {
     "citadel": [item("prismarine_shard", 10, (6, 16)), item("heart_of_the_sea", 4), item("trident", 4, enchant=(20, 30)),
                 item("diamond", 10, (2, 5)), item("diamond_chestplate", 3, enchant=(20, 30)),
                 item("enchanted_golden_apple", 2), item("tide_armor_trim_smithing_template", 3)],
+    # batch 2 wonders
+    "dwarf_city": [item("wayfarers:mithril_ingot", 18, (2, 6)), item("wayfarers:raw_mithril", 12, (3, 8)),
+                   item("wayfarers:mithril_sword", 4, enchant=(15, 25)), item("wayfarers:mithril_axe", 4, enchant=(15, 25)),
+                   item("wayfarers:mithril_pickaxe", 4, enchant=(15, 25)), item("wayfarers:mithril_helmet", 3, enchant=(10, 20)),
+                   item("wayfarers:mithril_chestplate", 2, enchant=(10, 20)), item("diamond", 10, (1, 4)),
+                   item("emerald", 12, (2, 8)), item("amethyst_shard", 10, (4, 10)), item("gold_ingot", 14, (3, 9)),
+                   item("wayfarers:excavator_pickaxe", 1), item("wayfarers:telluric_hammer", 1)],
+    "sylvan": [item("wayfarers:healing_staff", 3), item("wayfarers:light_staff", 3), item("wayfarers:rootmother_staff", 1),
+               item("wayfarers:mana_amulet", 3), item("wayfarers:arcane_ring", 2), item("wayfarers:arcane_cloth", 10, (2, 5)),
+               item("golden_apple", 8, (1, 2)), item("glow_berries", 14, (4, 12)), item("experience_bottle", 12, (3, 8)),
+               item("book", 10, enchant=(15, 30)), item("bow", 6, enchant=(20, 30)), item("totem_of_undying", 1),
+               item("flowering_azalea", 8, (1, 3)), item("cherry_sapling", 6, (1, 3))],
+    "inventor": [item("wayfarers:brass_ingot", 18, (4, 12)), item("wayfarers:zinc_ingot", 12, (3, 8)),
+                 item("wayfarers:aether_crystal", 8, (1, 4)), item("wayfarers:steam_cane", 3), item("wayfarers:builder_wand", 3),
+                 item("wayfarers:redstone_timer", 6), item("wayfarers:block_breaker", 4), item("wayfarers:block_placer", 4),
+                 item("wayfarers:vacuum_hopper", 3), item("wayfarers:entity_detector", 3),
+                 item("wayfarers:wireless_transmitter", 3), item("wayfarers:magnet_ring", 2), item("redstone", 14, (6, 16)),
+                 item("comparator", 6, (1, 3)), item("observer", 6, (1, 3)), item("clock", 6), item("spyglass", 5)],
+    "sky_isles": [item("feather", 14, (4, 12)), item("phantom_membrane", 8, (1, 4)), item("wayfarers:aether_crystal", 10, (1, 4)),
+                  item("wayfarers:levitation_wand", 2), item("elytra", 1), item("firework_rocket", 12, (6, 16)),
+                  item("amethyst_shard", 12, (4, 10)), item("ender_pearl", 8, (1, 3)), item("diamond", 6, (1, 3)),
+                  item("wayfarers:storm_staff", 1)],
 }
 
 # Progression materials from the Java side, by tier.
@@ -209,6 +231,16 @@ TABLES = {
     "void_crypt": ("end", (2, 4), (1, 2), (0, 1), "end"),
     "void_crypt_treasure": ("end", (1, 2), (1, 3), (1, 2), "end"),
     "void_crypt_reward": ("end", (1, 2), (1, 2), (3, 5), "end"),
+    # batch 2 wonders
+    "dwarven_city": ("dwarf_city", (2, 4), (1, 2), (0, 1), "deep"),
+    "dwarven_city_forge": ("dwarf_city", (1, 3), (1, 2), (0, 1), "deep"),
+    "dwarven_city_vault": ("dwarf_city", (1, 2), (1, 2), (3, 5), "deep"),
+    "sylvan_palace": ("sylvan", (2, 4), (1, 2), (0, 1), "overworld"),
+    "sylvan_palace_royal": ("sylvan", (1, 2), (1, 3), (2, 3), "overworld"),
+    "inventor_manor": ("inventor", (2, 4), (1, 2), (0, 1), "overworld"),
+    "inventor_lab": ("inventor", (1, 2), (1, 3), (2, 3), "overworld"),
+    "sky_isles": ("sky_isles", (1, 3), (1, 2), (0, 1), "overworld"),
+    "sky_isles_shrine": ("sky_isles", (1, 2), (1, 2), (2, 4), "overworld"),
 }
 
 

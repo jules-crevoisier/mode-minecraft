@@ -1,0 +1,10 @@
+{
+ "replace": false,
+ "values": [
+  "wayfarers:azure_ocean",
+  "wayfarers:coral_lagoon",
+  "wayfarers:verdant_meadows",
+  "wayfarers:wildflower_fields",
+  "wayfarers:highland_meadow"
+ ]
+}
