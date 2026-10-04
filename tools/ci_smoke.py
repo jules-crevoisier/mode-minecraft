@@ -210,8 +210,8 @@ def place_structures(srv, failures):
     dims = structure_dims()
     for i, (sid, dim) in enumerate(dims.items()):
         check_budget(f"structure {sid}")
-        x = 2000 + 400 * i
-        r = 96
+        x = 2000 + 500 * i
+        r = 160  # the biggest wonders reach 120+ blocks from their origin
         srv.run(f"execute in {dim} run forceload add {x - r} {-r} {x + r} {r}", r"Marked|forceload|No chunks|too many", 30)
         res = None
         for attempt in range(12):
