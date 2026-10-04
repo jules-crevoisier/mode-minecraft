@@ -23,7 +23,7 @@
               93,
               30
             ],
-            "blocks": 19348
+            "blocks": 19457
           },
           {
             "location": "wayfarers:basalt_fortress/fortress/x0_z1",
@@ -37,7 +37,7 @@
               54,
               29
             ],
-            "blocks": 16584
+            "blocks": 16593
           },
           {
             "location": "wayfarers:basalt_fortress/fortress/x0_z2",
@@ -51,7 +51,7 @@
               75,
               30
             ],
-            "blocks": 18476
+            "blocks": 18569
           },
           {
             "location": "wayfarers:basalt_fortress/fortress/x1_z0",
@@ -65,7 +65,7 @@
               72,
               30
             ],
-            "blocks": 21408
+            "blocks": 21445
           },
           {
             "location": "wayfarers:basalt_fortress/fortress/x1_z1",
@@ -79,7 +79,7 @@
               88,
               29
             ],
-            "blocks": 30291
+            "blocks": 30399
           },
           {
             "location": "wayfarers:basalt_fortress/fortress/x1_z2",
@@ -93,7 +93,7 @@
               65,
               30
             ],
-            "blocks": 22180
+            "blocks": 22223
           },
           {
             "location": "wayfarers:basalt_fortress/fortress/x2_z0",
@@ -107,7 +107,7 @@
               79,
               30
             ],
-            "blocks": 18042
+            "blocks": 18129
           },
           {
             "location": "wayfarers:basalt_fortress/fortress/x2_z1",
@@ -121,7 +121,7 @@
               54,
               29
             ],
-            "blocks": 16551
+            "blocks": 16556
           },
           {
             "location": "wayfarers:basalt_fortress/fortress/x2_z2",
@@ -135,7 +135,7 @@
               81,
               30
             ],
-            "blocks": 19510
+            "blocks": 19599
           }
         ],
         "projection": "rigid",

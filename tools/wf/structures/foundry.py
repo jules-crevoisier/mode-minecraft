@@ -11,6 +11,7 @@ Style: tools/STYLE_STEAMPUNK.md (dark iron, soot bricks and basalt for mass; bra
 """
 import math
 
+from .. import interior as INT
 from ..arch import stair
 from ..defs import Piece, StructureDef, register
 from ..megakit import (BARS, BRASS, BRASS_SLAB, BRASS_STAIRS, CHANDELIER, COPPER, EDISON, GAUGE, GEAR, HANG_LAMP,
@@ -1028,6 +1029,14 @@ def foundry(bp):
     ore_yard(bp)
     gate(bp)
     lights(bp)
+    # the foundry crew: smiths in both casting halls, a mason at the ore yard
+    for s in (-1, 1):
+        xa, xb = sorted((s * HX0, s * HX1))
+        hall_r = ((xa, 1, HZ0), (xb, HWALL, HZ1))
+        INT.populate(bp, [("armorer", "toolsmith")[s > 0], ("weaponsmith", "mason")[s > 0]], region=hall_r,
+                     vtype="savanna", seed=s + 2)
+        INT.decorate(bp, dict(INT.THEMES["forge"], ceiling="edison"), seed=s + 2, region=hall_r)
+    INT.decorate(bp, "steampunk", seed=5, density=0.3)
 
 
 register(StructureDef(

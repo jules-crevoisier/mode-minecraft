@@ -13,6 +13,7 @@ Style: Piltover cream stone, brass and verdigris (tools/STYLE_STEAMPUNK.md), cya
 """
 import math
 
+from .. import interior as INT
 from ..arch import spruce, stair
 from ..defs import Piece, StructureDef, register
 from ..megakit import (AETHER, BRASS, BRASS_SLAB, BRASS_STAIRS, CHANDELIER, COPPER, EDISON, GAUGE, GEAR, HANG_LAMP,
@@ -1089,6 +1090,12 @@ def campus(bp):
     for (x, z) in ((-8, -6), (12, -4), (-4, 30), (6, 31), (-36, 2), (34, -2), (-24, -26), (8, -30), (30, 36)):
         if open_ground(bp, x, z, 3) and math.hypot(x, z - 2) < edge_r(x, z) - 4:
             planter(bp, x, z, tree=(x + z) % 2 == 0)
+    # the fellows of the observatory: astronomers, librarians, an electrician
+    lib = ((LIB_X0, -10, LIB_Z0), (LIB_X1, 40, LIB_Z1))
+    INT.populate(bp, [("librarian", 3), "librarian"], region=lib, seed=1)
+    INT.decorate(bp, "library", seed=1, region=lib)
+    INT.populate(bp, [("cartographer", 3), "toolsmith", "cleric"], seed=2)
+    INT.decorate(bp, "steampunk", seed=2)
 
 
 register(StructureDef(

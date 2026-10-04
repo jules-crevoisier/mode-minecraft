@@ -9,6 +9,7 @@ Origin y = 0 is the cavern floor level (the lake surface).
 """
 import math
 
+from .. import interior as INT
 from ..defs import Piece, StructureDef, register
 from ..parts import LOOT
 
@@ -198,11 +199,13 @@ def undercity(bp):
     pillar(bp)
     pipes(bp)
     seed = 0
+    homes = []
     for li, ly in enumerate(LEVELS):
         for k in range(6):
             ang = math.radians(k * 60 + li * 20 + 10)
             cx, cz = _ring_point(ang, ly, 8)
             door = shack(bp, cx, ly, cz, ang, seed)
+            homes.append((cx, ly, cz))
             seed += 1
             # catwalk from the house door to the pillar platform
             px, pz = round(math.cos(ang) * (PILLAR_R + 4)), round(math.sin(ang) * (PILLAR_R + 4))
@@ -210,6 +213,16 @@ def undercity(bp):
     lights(bp)
     # the boss of the place lives in the top tier's biggest shack: a vault on the pillar top
     bp.chest(0, LEVELS[-1] + 1, PILLAR_R + 2, "north", loot=LOOT + "undercity_vault")
+    # the people of the deep: one family per stilt house, scavengers and tinkerers
+    trades = ["fisherman", "toolsmith", "leatherworker", "butcher", "mason", "armorer", "cleric", "fisherman",
+              "weaponsmith", "librarian", "farmer", "cartographer"]
+    homey = dict(INT.THEMES["home"], ceiling=None, density=0.5, centre=None, rugs=["brown", "gray", "orange"],
+                 floor={"barrel": 3, "crates": 2, "workbench": 2, "kitchen": 2, "plant": 1, "machine": 1})
+    for i, (cx, ly, cz) in enumerate(homes):
+        inside = ((cx - 2, ly + 1, cz - 2), (cx + 2, ly + 1, cz + 2))
+        if i < len(trades):
+            INT.populate(bp, [trades[i]], region=inside, seed=i, void_solid=True)
+        INT.decorate(bp, homey, seed=i, region=inside, void_solid=True, min_area=6)
 
 
 register(StructureDef(

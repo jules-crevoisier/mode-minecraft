@@ -8,6 +8,7 @@ import math
 import random
 
 from .. import arch
+from .. import interior as INT
 from ..arch import FACE_VEC, OPPOSITE, Palette, _pos, fill_pal, slab, stair
 from ..defs import Piece, StructureDef, register
 from ..parts import LOOT, MOB, MOD
@@ -713,6 +714,9 @@ def basalt_fortress(bp):
         for x in (-4, 4):
             brazier(bp, x, 1, z)
     ash_lord_lair(bp)
+    # a garrison's mess: weapon racks, crates, bunks, skulls on the shelves
+    INT.decorate(bp, dict(INT.THEMES["barracks"], wood="crimson", ceiling="soul_lantern", rugs=["red", "black"],
+                        banners=["black", "red", "gray"]), seed=1, density=0.35)
 
 
 register(StructureDef(
@@ -1391,6 +1395,7 @@ def piglin_sanctuary(bp):
         for (x, z) in ((k, 26), (k, -26), (26, k), (-26, k)):
             brazier(bp, x, 0, z)
     piglin_king_lair(bp)
+    INT.decorate(bp, "nether", seed=1)
 
 
 register(StructureDef(
@@ -1702,6 +1707,7 @@ def lava_foundry(bp):
         bp.set(x, 2, z, "nether_gold_ore" if (x + z) % 2 else "magma_block")
     brazier(bp, 27, 1, 0)
     brazier(bp, 27, 1, -14)
+    INT.decorate(bp, dict(INT.THEMES["forge"], wood="crimson", ceiling="soul_lantern"), seed=1)
 
 
 register(StructureDef(
@@ -1992,6 +1998,8 @@ def soul_tower(bp):
     # ---------------- the summit arena of the Soul Reaper (grace floor, turret, reliquary)
     from . import lair_soul_reaper
     lair_soul_reaper.build(bp, cx, cz)
+    INT.decorate(bp, dict(INT.THEMES["crypt"], rubble=["soul_soil", "blackstone", "basalt[axis=y]"]), seed=1,
+               loot=LOOT + "soul_tower")
 
 
 register(StructureDef(
@@ -2273,6 +2281,9 @@ def piglin_market(bp):
     bp.fill(-1, 0, 20, 1, 0, 22, GBS)
     for x in (-2, 2):
         bp.set(x, 1, 21, "soul_lantern[hanging=false,waterlogged=false]")
+    # the market halls: piles of gold, crates of wares, and more piglins haggling inside
+    INT.decorate(bp, "nether", seed=1)
+    INT.crowd(bp, {"id": "minecraft:piglin", "PersistenceRequired": True}, 6, seed=1)
 
 
 register(StructureDef(

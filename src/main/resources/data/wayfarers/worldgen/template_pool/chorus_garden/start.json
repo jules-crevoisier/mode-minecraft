@@ -51,7 +51,7 @@
               70,
               30
             ],
-            "blocks": 9469
+            "blocks": 9480
           },
           {
             "location": "wayfarers:chorus_garden/garden/x1_z1",
@@ -65,7 +65,7 @@
               63,
               20
             ],
-            "blocks": 9830
+            "blocks": 9832
           },
           {
             "location": "wayfarers:chorus_garden/garden/x2_z0",
@@ -93,7 +93,7 @@
               41,
               19
             ],
-            "blocks": 2700
+            "blocks": 2706
           }
         ],
         "projection": "rigid",

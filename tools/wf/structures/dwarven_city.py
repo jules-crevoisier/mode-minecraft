@@ -16,6 +16,7 @@ Layout (x east, z south, y up; origin y = 0 is the cavern floor):
 """
 import math
 
+from .. import interior as INT
 from ..arch import Palette, stair, slab
 from ..defs import Piece, StructureDef, register
 from ..parts import LOOT, MOD
@@ -1058,6 +1059,31 @@ def dwarven_city(bp):
     gem_hall(bp)
     terraces(bp)
     ceiling_details(bp)
+    citizens(bp)
+
+
+def citizens(bp):
+    """The dwarves who never left: smiths at the forge and smelter, a brewer at the tavern, gem cutters, families
+    in the wall houses, and two iron sentinels on the avenue."""
+    v = dict(void_solid=True)
+    zones = [
+        ((-30, 1, 3), (-14, 9, 15), [("armorer", 3), "weaponsmith", "toolsmith"], "forge"),
+        ((-30, 1, 24), (-14, 8, 35), ["armorer", "mason"], "forge"),
+        ((14, 1, 3), (30, 9, 15), ["butcher", "farmer", "leatherworker"], "kitchen"),
+        ((14, 1, 24), (30, 8, 35), [("mason", 3), "librarian"], "workshop"),
+    ]
+    for i, (a, b, people, theme) in enumerate(zones):
+        INT.populate(bp, people, region=(a, b), seed=i, **v)
+        INT.decorate(bp, dict(INT.THEMES[theme], banners=["black", "yellow", "gray"]), seed=i, region=(a, b), **v)
+    houses = ((-HX - 6, 0, Z0 - 2), (-HX - 1, 30, Z1 + 2)), ((HX + 1, 0, Z0 - 2), (HX + 6, 30, Z1 + 2))
+    for i, h in enumerate(houses):
+        INT.populate(bp, ["toolsmith", "cleric", "shepherd", "fisherman"][i * 2:i * 2 + 2], region=h, seed=10 + i,
+                     **v)
+        INT.decorate(bp, dict(INT.THEMES["home"], centre=None), seed=10 + i, region=h, min_area=6, **v)
+    INT.populate(bp, [], guard=("iron", (-4, 1, 20)), **v)
+    INT.iron_golem(bp, *INT.open_spot(bp, (4, 1, 8), **v))
+    INT.decorate(bp, dict(INT.THEMES["hall"], banners=["black", "yellow", "gray"]), seed=20,
+                 region=((-40, -10, -60), (40, 20, -1)), **v)
 
 
 register(StructureDef(

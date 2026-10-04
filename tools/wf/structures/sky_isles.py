@@ -16,6 +16,7 @@ Template y = 0 is the lowest point of the lowest underside.
 import math
 
 from .. import arch
+from .. import interior as INT
 from ..arch import Palette, stair, slab
 from ..defs import Piece, StructureDef, register
 from ..parts import LOOT
@@ -509,6 +510,7 @@ def sky_isles(bp):
         cx, top, cz, R, depth = ISLES[name]
         arch.vines_on(bp, ((cx - R - 2, top - depth, cz - R - 2), (cx + R + 2, top, cz + R + 2)), chance=0.025,
                       seed=len(name) + cx, max_len=6)
+    INT.decorate(bp, dict(INT.THEMES["ruin"], loot_barrels=0), seed=1, density=0.3)
 
 
 register(StructureDef(

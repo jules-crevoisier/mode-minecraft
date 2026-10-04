@@ -7,6 +7,7 @@ import math
 import random
 
 from .. import arch
+from .. import interior as I
 from ..arch import Palette, slab, stair
 from ..blueprint import OPPOSITE, Blueprint, family, with_props
 from ..defs import Piece, StructureDef, register
@@ -597,6 +598,13 @@ def watchtower(ruined):
                             "minecraft:cobblestone", "minecraft:mossy_cobblestone") and y >= 3 \
                         and bp.get(x, y + 1, z) is None and rng.random() < 0.35:
                     bp.set(x, y + 1, z, rng.choice(["moss_carpet", "moss_carpet", "short_grass", "fern"]))
+        # ---- interiors: a garrison still at its post, or the dust of one long gone
+        if ruined:
+            I.decorate(bp, "ruin", seed=1, loot=LOOT + "watchtower")
+        else:
+            I.decorate(bp, "barracks", seed=1)
+            I.yard(bp, (-32, -24, 36, 30), 1, {"hay": 2, "crates": 2, "woodpile": 2, "cart": 1, "lamp": 1},
+                   count=6, seed=1)
     return build
 
 
@@ -993,6 +1001,9 @@ def bandit_camp(bp):
         arch.bush(bp, x, 1, z, leaves="spruce_leaves", r=1)
     skirt(bp, 0, depth=5, spread=3, seed=9)
     scatter_plants(bp, -30, -30, 30, 30, 1, 0.25, 6, FLOWERS + ["fern", "fern"])
+    # bandits' clutter: crates of stolen goods, bedrolls, hay, woodpiles (a hostile camp: no villagers)
+    I.decorate(bp, "camp", seed=1, sky_ok=False)
+    I.yard(bp, (-22, -22, 22, 22), 1, "camp", count=7, seed=1)
 
 
 register(StructureDef(
@@ -1226,6 +1237,7 @@ def rune_circle(bp):
                    FLOWERS + ["allium", "lily_of_the_valley", "pink_petals[facing=east,flower_amount=4]",
                               "wildflowers[facing=north,flower_amount=3]", "red_mushroom", "brown_mushroom"])
     lair_rune_colossus.build(bp)     # rune well, gallery of guardians, grace and the rune vault (y -30)
+    I.decorate(bp, "crypt", seed=1, loot=LOOT + "rune_circle")
 
 
 register(StructureDef(
@@ -1594,6 +1606,11 @@ def ice_observatory(bp):
     for x, z in ring_cells(0, 0, -1, R - 1.5):
         if bp.get(x, 1, z) == "minecraft:snow":
             bp.remove(x, 1, z)
+    # ---- the wintering scholars: an astronomer-cartographer, a librarian, a cleric brewing in the lab
+    I.populate(bp, [("cartographer", 3), "librarian", "cleric", "fletcher"], vtype="snow", seed=1)
+    I.decorate(bp, dict(I.THEMES["lab"], rugs=["light_blue", "white", "blue"]), seed=1, region=((-60, -30, -60),
+                                                                                                (60, 0, 60)))
+    I.decorate(bp, dict(I.THEMES["home"], rugs=["light_blue", "white", "gray"]), seed=2)
 
 
 register(StructureDef(
@@ -1950,6 +1967,7 @@ def galleon(bp):
         arch.boulder(bp, x, 1, z, r=2, blocks=("stone", "andesite", "gravel", "tube_coral_block"), seed=x * z)
     skirt(bp, 0, depth=5, spread=3, seed=21, top="sand", soil="sand", rock="sandstone",
           rubble=("gravel", "stone", "clay"))
+    I.decorate(bp, "wreck", seed=1, loot=LOOT + "galleon_cargo")
 
 
 register(StructureDef(
@@ -2242,6 +2260,7 @@ def sunken_temple(bp):
                 bp.set(x, y, z, "kelp_plant" if y < h else "kelp[age=20]")
     skirt(bp, 0, depth=5, spread=3, seed=31, top="sand", soil="sand", rock="sandstone",
           rubble=("gravel", "prismarine", "clay"))
+    I.decorate(bp, "wreck", seed=1, loot=LOOT + "sunken_temple")
 
 
 register(StructureDef(
@@ -2728,6 +2747,15 @@ def dwarven_mine(bp):
                 bp.set(x + (w if x == hx else 0), y, z + (w if z == hz else 0), "air")
     bp.spawner(hx, hy, hz + 20, "minecraft:cave_spider")
     bp.spawner(hx - 20, hy, hz, MOB["ruin_walker"])
+    # ---- the miners up top (the deep galleries below belong to the monsters)
+    surface = ((-60, 1, -60), (60, 60, 60))
+    I.populate(bp, [("toolsmith", 3), "mason", "armorer", "weaponsmith"], region=surface, seed=1,
+               bell=None, guard=("iron", (2, DM_UP + 1, -12)))
+    I.decorate(bp, "workshop", seed=1, region=surface)
+    I.decorate(bp, "mine", seed=2, region=((-80, -80, -80), (80, 0, 80)), loot=LOOT + "dwarven_mine")
+    I.yard(bp, (-30, -30, 30, 30), DM_UP + 1, {"crates": 3, "cart": 2, "woodpile": 2, "hay": 1, "lamp": 1},
+           count=6, seed=1)
+    I.yard(bp, (-30, -30, 30, 30), 1, {"crates": 2, "cart": 2, "woodpile": 2, "smithy": 1}, count=4, seed=2)
 
 
 register(StructureDef(

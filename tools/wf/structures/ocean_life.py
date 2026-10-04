@@ -17,6 +17,7 @@ import math
 import random
 
 from .. import arch
+from .. import interior as INT
 from ..arch import Palette
 from ..defs import Piece, StructureDef, register
 from ..parts import LOOT
@@ -187,6 +188,7 @@ def submarine(bp):
     bp.set(L + 3, CY, 0, GEAR)
     kelp_and_grass(bp, rng, 70, 15, 8, keep_out=lambda x, z: abs(x) <= L + 3 and abs(z) <= 4)
     skirt(bp, 413)
+    INT.decorate(bp, "wreck", seed=1, loot=LOOT + "sunken_submarine", min_area=6)
 
 
 register(StructureDef(

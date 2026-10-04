@@ -23,7 +23,7 @@
               34,
               26
             ],
-            "blocks": 10762
+            "blocks": 10796
           },
           {
             "location": "wayfarers:guild_outpost/outpost_spruce/x0_z1",
@@ -37,7 +37,7 @@
               34,
               27
             ],
-            "blocks": 7982
+            "blocks": 7990
           },
           {
             "location": "wayfarers:guild_outpost/outpost_spruce/x1_z0",
@@ -51,7 +51,7 @@
               56,
               26
             ],
-            "blocks": 10919
+            "blocks": 10923
           },
           {
             "location": "wayfarers:guild_outpost/outpost_spruce/x1_z1",
@@ -65,7 +65,7 @@
               36,
               27
             ],
-            "blocks": 8828
+            "blocks": 8829
           }
         ],
         "projection": "rigid",
@@ -94,7 +94,7 @@
               34,
               26
             ],
-            "blocks": 10785
+            "blocks": 10813
           },
           {
             "location": "wayfarers:guild_outpost/outpost_oak/x0_z1",
@@ -108,7 +108,7 @@
               34,
               27
             ],
-            "blocks": 7989
+            "blocks": 8003
           },
           {
             "location": "wayfarers:guild_outpost/outpost_oak/x1_z0",
@@ -122,7 +122,7 @@
               56,
               26
             ],
-            "blocks": 10918
+            "blocks": 10920
           },
           {
             "location": "wayfarers:guild_outpost/outpost_oak/x1_z1",
@@ -136,7 +136,7 @@
               36,
               27
             ],
-            "blocks": 8829
+            "blocks": 8830
           }
         ],
         "projection": "rigid",
@@ -165,7 +165,7 @@
               34,
               26
             ],
-            "blocks": 10786
+            "blocks": 10815
           },
           {
             "location": "wayfarers:guild_outpost/outpost_birch/x0_z1",
@@ -179,7 +179,7 @@
               34,
               27
             ],
-            "blocks": 7999
+            "blocks": 8007
           },
           {
             "location": "wayfarers:guild_outpost/outpost_birch/x1_z0",
@@ -193,7 +193,7 @@
               56,
               26
             ],
-            "blocks": 10919
+            "blocks": 10921
           },
           {
             "location": "wayfarers:guild_outpost/outpost_birch/x1_z1",
@@ -207,7 +207,7 @@
               36,
               27
             ],
-            "blocks": 8828
+            "blocks": 8829
           }
         ],
         "projection": "rigid",

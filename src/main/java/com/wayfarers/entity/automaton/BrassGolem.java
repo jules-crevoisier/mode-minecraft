@@ -129,6 +129,9 @@ public class BrassGolem extends AbstractGolem implements AnimatedMob {
     /** Where it belongs: the guarded spot, or its owner (alive, in this dimension); null when neither. */
     private @Nullable Vec3 anchor() {
         if (guarding) {
+            if (guardPos == null && !level().isClientSide()) {
+                guardPos = blockPosition(); // placed by a structure template: guard the spot it stands on
+            }
             return guardPos == null ? null : Vec3.atBottomCenterOf(guardPos);
         }
         Player o = getOwner();

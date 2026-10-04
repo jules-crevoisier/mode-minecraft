@@ -22,6 +22,7 @@ in barrels.
 import math
 import random
 
+from .. import interior as I
 from ..arch import Palette, stair
 from ..defs import Piece, StructureDef, register
 from ..parts import LOOT, MOD
@@ -898,6 +899,10 @@ def citadel(variant):
                         bp.set(x, y, z, "air")
                 bp.set(x, 0, z, TRIM)
         arena_mist(bp)
+        # the drowned halls: crates and barnacled pots in the corners, a few webs of kelp-dust
+        I.decorate(bp, dict(I.THEMES["storage"], ceiling=None, density=0.25,
+                            floor={"crates": 2, "barrel": 2, "pot": 3, "sea_pickle": 2, "coral": 1}),
+                   seed=1, rugs=False, centre=False)
     return build
 
 

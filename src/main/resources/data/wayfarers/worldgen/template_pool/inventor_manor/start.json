@@ -23,7 +23,7 @@
               43,
               20
             ],
-            "blocks": 15685
+            "blocks": 15693
           },
           {
             "location": "wayfarers:inventor_manor/manor/x0_z1",
@@ -37,7 +37,7 @@
               35,
               19
             ],
-            "blocks": 8841
+            "blocks": 8843
           },
           {
             "location": "wayfarers:inventor_manor/manor/x1_z0",
@@ -51,7 +51,7 @@
               42,
               20
             ],
-            "blocks": 13731
+            "blocks": 13738
           },
           {
             "location": "wayfarers:inventor_manor/manor/x1_z1",
@@ -65,7 +65,7 @@
               46,
               19
             ],
-            "blocks": 9671
+            "blocks": 9692
           }
         ],
         "projection": "rigid",

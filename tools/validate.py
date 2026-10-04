@@ -146,12 +146,48 @@ def check_templates():
                 if not os.path.exists(res_path(data["pool"], "worldgen/template_pool", ".json")):
                     err(f"{rel}: jigsaw pool {data['pool']} missing")
         for e in d["entities"]:
-            eid = e["nbt"]["id"].split(":")[1]
-            if eid not in MC_GAME["entities"]:
-                err(f"{rel}: entity {eid} unknown")
+            check_template_entity(rel, e, err)
     for ref, rel in sorted(loot_refs):
         if ref.startswith("wayfarers:") and not os.path.exists(res_path(ref, "loot_table", ".json")):
             err(f"{rel}: loot table {ref} missing")
+
+
+# vanilla 26.2 registries (VillagerProfession / VillagerType keys)
+PROFESSIONS = {"none", "armorer", "butcher", "cartographer", "cleric", "farmer", "fisherman", "fletcher", "leatherworker",
+               "librarian", "mason", "nitwit", "shepherd", "toolsmith", "weaponsmith"}
+VILLAGER_TYPES = {"desert", "jungle", "plains", "savanna", "snow", "swamp", "taiga"}
+# block-attached entities keep an absolute block_pos: copied from a template it no longer matches their position
+# and the game logs "Block-attached entity at invalid position" (an ERROR the CI smoke test fails on)
+HANGING = {"item_frame", "glow_item_frame", "painting", "leash_knot"}
+
+
+def check_template_entity(rel, e, err):
+    """Entities saved in structure templates: known ids, no block-attached ones, sane villager data."""
+    data = e["nbt"]
+    ns, eid = data["id"].split(":")
+    known = eid in MC_GAME["entities"] if ns == "minecraft" else ns == "wayfarers" and eid in mod_ids("entities")
+    if not known:
+        err(f"{rel}: entity {data['id']} unknown")
+    if eid in HANGING:
+        err(f"{rel}: {eid} in a template (its absolute block_pos makes the game log an error)")
+    if len(e.get("pos", ())) != 3 or len(e.get("blockPos", ())) != 3:
+        err(f"{rel}: entity {eid} without pos/blockPos")
+    if "Rotation" in data and len(data["Rotation"]) != 2:
+        err(f"{rel}: entity {eid} rotation must be [yaw, pitch]")
+    if eid != "villager":
+        return
+    vd = data.get("VillagerData", {})
+    prof = vd.get("profession", "minecraft:none").split(":")[-1]
+    vtype = vd.get("type", "minecraft:plains").split(":")[-1]
+    level = vd.get("level", 1)
+    if prof not in PROFESSIONS:
+        err(f"{rel}: villager profession {prof} unknown")
+    if vtype not in VILLAGER_TYPES:
+        err(f"{rel}: villager type {vtype} unknown")
+    if not 1 <= level <= 5:
+        err(f"{rel}: villager level {level} out of 1..5")
+    if prof not in ("none", "nitwit") and level <= 1 and not data.get("Xp"):
+        err(f"{rel}: a level-1 villager with no xp loses its {prof} profession until it finds a job site")
 
 
 def check_tags():

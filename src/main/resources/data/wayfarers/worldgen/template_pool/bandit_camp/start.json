@@ -23,7 +23,7 @@
               21,
               22
             ],
-            "blocks": 2820
+            "blocks": 2834
           },
           {
             "location": "wayfarers:bandit_camp/camp/x0_z1",
@@ -37,7 +37,7 @@
               21,
               21
             ],
-            "blocks": 4147
+            "blocks": 4150
           },
           {
             "location": "wayfarers:bandit_camp/camp/x0_z2",
@@ -93,7 +93,7 @@
               25,
               21
             ],
-            "blocks": 2374
+            "blocks": 2377
           }
         ],
         "projection": "rigid",

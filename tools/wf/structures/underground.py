@@ -10,6 +10,7 @@
 import math
 import random
 
+from .. import interior as I
 from ..arch import Palette, stair
 from ..defs import Piece, StructureDef, register
 from ..parts import LOOT, MOB
@@ -458,6 +459,12 @@ def dwarven_forge(bp):
     bp.spawner(44, 1, 0, MOB["ruin_walker"])
     # the King's Stair down to the Forge King's crucible (lair_forge_king.py)
     lair_forge_king.build(bp)
+    # an abandoned dwarven forge: tools left on the benches, crates of ore, dust and webs
+    I.decorate(bp, dict(I.THEMES["forge"], ceiling=None, loot_barrels=1, rubble=["cobbled_deepslate", "deepslate",
+                                                                                    "tuff", "gravel"]),
+               seed=1, void_solid=True, loot=LOOT + "dwarven_vault")
+    I.decorate(bp, dict(I.THEMES["ruin"], rubble=["cobbled_deepslate", "deepslate", "tuff", "gravel"]), seed=2,
+               void_solid=True, density=0.2)
 
 
 def dwarf_chandelier(bp, x, yc, z, drop):
@@ -1183,6 +1190,7 @@ def crystal_grotto(bp):
                 break
     # the Crystal Stair down to the Crystal Matriarch's nest (lair_crystal_spider.py)
     lair_crystal_spider.build(bp)
+    I.decorate(bp, "mine", seed=1, void_solid=True, density=0.2, rugs=False, centre=False)
 
 
 register(StructureDef(
@@ -1482,6 +1490,10 @@ def sealed_lab(bp):
     # the boss lair below: shaft from the breached cell down to the Containment Core
     from . import lair_sculk_spawn
     lair_sculk_spawn.build(bp)
+    # the lab as it was left: benches, brewing stands, notes on the shelves, then dust and webs
+    I.decorate(bp, dict(I.THEMES["lab"], ceiling=None, loot_barrels=1), seed=1, void_solid=True,
+               loot=LOOT + "sealed_lab")
+    I.decorate(bp, "ruin", seed=2, void_solid=True, density=0.15)
 
 
 def fill_cells(bp, cells, rng):
