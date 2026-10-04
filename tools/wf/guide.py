@@ -60,16 +60,19 @@ PAGES = [
     ], []),
     ("keys", "start", "minecraft:oak_sign", ("Keys", "Touches"), [
         ("J: quest journal\nK: talent tree\nV: use your active talent\nR: sort your inventory\nM: world map\n"
-         "H: show/hide the minimap\nZ: minimap zoom\nB: ping the spot you look at\nN: magnet ring on/off\n"
+         "H: show/hide the minimap\nShift + H: minimap size\nZ: minimap zoom\nB: ping the spot you look at\nN: magnet ring on/off\n"
          "G: Builder's Wand symmetry\nW (held over an item): its manual page",
          "J : journal de quêtes\nK : arbre de talents\nV : utiliser le talent actif\nR : trier l'inventaire\n"
-         "M : carte du monde\nH : afficher/masquer la mini-carte\nZ : zoom de la mini-carte\nB : signaler l'endroit visé\n"
+         "M : carte du monde\nH : afficher/masquer la mini-carte\nMaj + H : taille de la mini-carte\n"
+         "Z : zoom de la mini-carte\nB : signaler l'endroit visé\n"
          "N : allumer/éteindre l'aimant\nG : symétrie de la baguette\nW (maintenu sur un objet) : sa page du manuel"),
         ("These are the keys of a QWERTY keyboard: Options > Controls, Wayfarers section, shows yours and changes "
-         "them. Display settings (health bars, damage numbers, tracker, tips): Config button of Wayfarers in the mods list.",
+         "them. Display settings (health bars, damage numbers, tracker, tips, and the minimap's size, corner, shape, "
+         "rotation, coordinates and opacity): Config button of Wayfarers in the mods list.",
          "Ce sont les touches d'un clavier QWERTY (en AZERTY : W devient Z, Z devient W et M devient la virgule) : "
          "Options > Commandes, rubrique Wayfarers, montre les tiennes et les change. Réglages d'affichage (barres de "
-         "vie, chiffres de dégâts, suivi, astuces) : bouton Config de Wayfarers dans la liste des mods."),
+         "vie, chiffres de dégâts, suivi, astuces, et taille, coin, forme, rotation, coordonnées et opacité de "
+         "la mini-carte) : bouton Config de Wayfarers dans la liste des mods."),
     ], []),
     ("compass", "start", "wayfarers:structure_compass", ("Structure Compass", "Boussole des structures"), [
         ("It finds Wayfarers structures. You get one when you first arrive; craft more with a compass surrounded by "
@@ -144,9 +147,9 @@ PAGES = [
     ], ["wayfarers:waystone"]),
     ("map", "travel", "minecraft:filled_map", ("Map and minimap", "Carte et mini-carte"), [
         ("The minimap in the corner shows the land around you, where you face, and the nearby waystones, waypoints, "
-         "players, pings, graves and your last death. H hides it, Z changes its zoom.",
+         "players, pings, graves and your last death. H hides it, Shift + H: size, Z: zoom.",
          "La mini-carte montre le terrain autour de toi, ta direction, les pierres de voyage, repères, joueurs, "
-         "signaux, tombes et ta dernière mort. H la masque, Z change son zoom."),
+         "signaux, tombes et ta dernière mort. H la masque, Maj + H : taille, Z : zoom."),
         ("M (or the Wayfarer's Atlas, sneaking) opens the world map. Drag to move it, wheel to zoom, Space to come "
          "back to you. Click a marker for its card.",
          "M (ou l'Atlas du Voyageur, accroupi) ouvre la carte du monde. Glisse pour la déplacer, molette pour "
@@ -161,8 +164,8 @@ PAGES = [
          "modifier, partager ou supprimer."),
         ("Middle-click the map, or press B while looking at a spot, to ping it: everyone sees it for a minute.",
          "Clic molette sur la carte, ou B en visant un endroit : un signal que tous voient une minute."),
-        ("Corner, size, shape and rotation: config/wayfarers-client.toml.",
-         "Coin, taille, forme et rotation : config/wayfarers-client.toml."),
+        ("More settings: Mods > Wayfarers > Config, Minimap tab.",
+         "Autres réglages : Mods > Wayfarers > Config, onglet Mini-carte."),
     ], ["wayfarers:wayfarer_atlas"]),
     ("recall", "travel", "wayfarers:recall_scroll", ("Recall Scroll", "Parchemin de rappel"), [
         ("Use it to return instantly to the nearest waystone of your dimension. It is used up.",
@@ -722,10 +725,10 @@ TIPS = [
                                             "Le niveau de danger augmente : les monstres sont plus forts ici."),
      "danger"),
     # first login: the minimap has just appeared in the corner
-    ("map", "minecraft:filled_map", ("The minimap shows the land around you. M: world map, H: hide it, Z: zoom, "
-                                     "B: ping the spot you look at.",
+    ("map", "minecraft:filled_map", ("The minimap shows the land around you. M: world map, H: hide it, Shift + H: its "
+                                     "size, Z: zoom, B: ping the spot you look at.",
                                      "La mini-carte montre les alentours. M : carte du monde, H : la masquer, "
-                                     "Z : zoom, B : signaler l'endroit visé."), "map"),
+                                     "Maj + H : sa taille, Z : zoom, B : signaler l'endroit visé."), "map"),
 ]
 
 
@@ -787,34 +790,36 @@ TEXT_W = 384 - 156 - 14  # pageW() - 14
 TEXT_LINE, PARA_GAP, ITEMS_ROW = 9, 5, 22
 
 
-def char_width(c):
-    return _ADVANCE.get(c, 6)
+def char_width(c, bold=False):
+    """Advance of a glyph of Minecraft's font; bold glyphs are 1 px wider (WfGui.bold titles)."""
+    return _ADVANCE.get(c, 6) + (1 if bold else 0)
 
 
-def text_width(s):
-    return sum(char_width(c) for c in s)
+def text_width(s, bold=False):
+    return sum(char_width(c, bold) for c in s)
 
 
-def wrap(text, width):
+def wrap(text, width, bold=False):
     """Line-wrap like Minecraft's StringSplitter: breaks at spaces and newlines, cuts words longer than a line."""
     lines = []
+    space = char_width(" ", bold)
     for raw in text.split("\n"):
         line, w = "", 0
         for word in raw.split(" "):
-            ww = text_width(word)
-            if line and w + 4 + ww > width:
+            ww = text_width(word, bold)
+            if line and w + space + ww > width:
                 lines.append(line)
                 line, w = "", 0
             if not line and ww > width:  # a word wider than the line is cut
                 part, pw = "", 0
                 for c in word:
-                    if pw + char_width(c) > width:
+                    if pw + char_width(c, bold) > width:
                         lines.append(part)
                         part, pw = "", 0
-                    part, pw = part + c, pw + char_width(c)
+                    part, pw = part + c, pw + char_width(c, bold)
                 line, w = part, pw
                 continue
-            line, w = (line + " " + word, w + 4 + ww) if line else (word, ww)
+            line, w = (line + " " + word, w + space + ww) if line else (word, ww)
         lines.append(line)
     return lines
 
@@ -824,7 +829,7 @@ def _split(title, paras, has_items, compact_first, book_h, lang):
 
     def body(part, compact):
         t = title if part == 0 else title + " " + UI["guide.wayfarers.continued"][lang]
-        tl = len(wrap(t, TEXT_W - 38 if compact else TEXT_W + 2))
+        tl = len(wrap(t, TEXT_W - 38 if compact else TEXT_W + 2, bold=True))  # GuideScreen titles are bold
         top = 25 + max(1, tl) * 10 + 6 if compact else 60 + tl * 10 + 4
         return top, card_bottom - 4 - (ITEMS_ROW if part == 0 and has_items else 0)
 

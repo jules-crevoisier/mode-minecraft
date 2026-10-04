@@ -169,8 +169,9 @@ public final class MobHealthBars {
                 FormattedCharSequence seq = Component.literal(label).getVisualOrderText();
                 ps.pushPose();
                 ps.scale(0.5F, 0.5F, 0.5F);
-                out.order(1).submitText(ps, -font.width(seq) / 2.0F, -12, seq, true, Font.DisplayMode.NORMAL, FULL_BRIGHT,
-                        elite ? 0xFFF6C343 : 0xFFF3E3C0, 0, 0);
+                // a dark outline all around (the shadow alone vanished against bright skies and snow)
+                out.order(1).submitText(ps, -font.width(seq) / 2.0F, -12, seq, false, Font.DisplayMode.NORMAL, FULL_BRIGHT,
+                        elite ? 0xFFF6C343 : 0xFFFFF5DC, 0, 0xFF1A120C);
                 ps.popPose();
             }
         }
@@ -183,7 +184,8 @@ public final class MobHealthBars {
                 int color = (alpha << 24) | (n[0] >= 8 ? 0xFF8A3D : 0xFFE27A);
                 ps.pushPose();
                 ps.translate(12 + age * 0.4F, -10 - age * 1.1F, -0.02F);
-                out.order(2).submitText(ps, 0, 0, seq, true, Font.DisplayMode.NORMAL, FULL_BRIGHT, color, 0, 0);
+                out.order(2).submitText(ps, 0, 0, seq, false, Font.DisplayMode.NORMAL, FULL_BRIGHT, color, 0,
+                        (alpha << 24) | 0x1A120C);
                 ps.popPose();
             }
         }

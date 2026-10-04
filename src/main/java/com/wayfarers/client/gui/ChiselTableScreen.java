@@ -60,7 +60,7 @@ public class ChiselTableScreen extends AbstractContainerScreen<ChiselTableMenu> 
             y -= 4;
         }
         for (int i = 0; i < Math.min(2, lines.size()); i++) {
-            WfGui.centered(g, font, lines.get(i), imageWidth / 2, y + i * 9, WfGui.INK_SOFT);
+            WfGui.centered(g, font, lines.get(i), imageWidth / 2, y + i * 9, WfGui.INK);
         }
     }
 }

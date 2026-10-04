@@ -82,7 +82,7 @@ public class TerminalScreen extends AbstractContainerScreen<TerminalMenu> {
         search = new EditBox(font, leftPos + 19, topPos + 17, 96, 11, Component.translatable("gui.wayfarers.storage.search"));
         search.setBordered(false);
         search.setTextColor(WfGui.CREAM);
-        search.setHint(Component.translatable("gui.wayfarers.storage.search"));
+        search.setHint(Component.translatable("gui.wayfarers.storage.search").withColor(WfGui.MUTED));
         search.setMaxLength(32);
         addRenderableWidget(search);
         sortButton = addRenderableWidget(new WfButton(leftPos + 122, topPos + 15, 38, 14, sortLabel(), b -> {
@@ -299,7 +299,7 @@ public class TerminalScreen extends AbstractContainerScreen<TerminalMenu> {
         }
         Component status = Component.translatable("gui.wayfarers.terminal.status", menu.clientLinked, shortCount(menu.clientFree));
         WfGui.textClipped(g, font, status.getString(), leftPos + GRID_X, topPos + STATUS_Y, COLS * 18 + 10,
-                menu.clientFree == 0 && menu.clientLinked > 0 ? 0xFFB0302A : WfGui.INK_SOFT, false);
+                menu.clientFree == 0 && menu.clientLinked > 0 ? WfGui.INK_RED : WfGui.INK_SOFT, false);
         if (hovered != null && menu.getCarried().isEmpty()) {
             List<Component> lines = new ArrayList<>(getTooltipFromContainerItem(hovered.type()));
             lines.add(Component.translatable("gui.wayfarers.terminal.stored", String.format(Locale.ROOT, "%,d", hovered.count()))
@@ -312,7 +312,8 @@ public class TerminalScreen extends AbstractContainerScreen<TerminalMenu> {
 
     private void renderNetwork(GuiGraphicsExtractor g, int mouseX, int mouseY) {
         TerminalLinksMsg links = menu.clientLinks;
-        g.text(font, Component.translatable("gui.wayfarers.terminal.network"), leftPos + 18, topPos + 18, WfGui.GOLD, false);
+        // on the parchment: bold dark ink (gold was unreadable there)
+        g.text(font, WfGui.bold(Component.translatable("gui.wayfarers.terminal.network")), leftPos + 18, topPos + 18, WfGui.INK, false);
         Row hovered = rowAt(mouseX, mouseY);
         for (int r = 0; r < ROWS; r++) {
             int i = linkScroll + r;
@@ -323,7 +324,7 @@ public class TerminalScreen extends AbstractContainerScreen<TerminalMenu> {
             int x = leftPos + GRID_X;
             int y = topPos + GRID_Y + r * 18;
             if (row.info == null) {
-                WfGui.textClipped(g, font, row.label.getString(), x + 2, y + 5, COLS * 18 - 4, WfGui.GOLD, false);
+                WfGui.textClipped(g, font, row.label.getString(), x + 2, y + 5, COLS * 18 - 4, WfGui.GOLD, true);
                 g.fill(x + 1, y + 15, x + COLS * 18 - 1, y + 16, 0x40F6C343);
                 continue;
             }
@@ -335,8 +336,8 @@ public class TerminalScreen extends AbstractContainerScreen<TerminalMenu> {
             String dist = Math.round(row.distance) + " m";
             int distW = font.width(dist);
             WfGui.textClipped(g, font, row.label.getString(), x + 20, y + 5, COLS * 18 - 42 - distW,
-                    excluded ? 0xFF8A7D6A : WfGui.CREAM, false);
-            g.text(font, dist, x + COLS * 18 - 20 - distW, y + 5, WfGui.CREAM_SOFT, false);
+                    excluded ? WfGui.MUTED : WfGui.CREAM, true);
+            g.text(font, dist, x + COLS * 18 - 20 - distW, y + 5, WfGui.CREAM_SOFT, true);
             WfGui.sprite(g, WfGui.icon(excluded ? "excluded" : "done"), x + COLS * 18 - 18, y + 1, 16, 16);
         }
         scrollbar(g, rows.size(), ROWS, linkScroll);
@@ -349,7 +350,7 @@ public class TerminalScreen extends AbstractContainerScreen<TerminalMenu> {
             Component status = Component.translatable("gui.wayfarers.terminal.network_status", menu.clientLinked,
                     links.relays(), links.range());
             WfGui.textClipped(g, font, status.getString(), leftPos + GRID_X, topPos + STATUS_Y, COLS * 18 + 10,
-                    links.capped() ? 0xFFB0302A : WfGui.INK_SOFT, false);
+                    links.capped() ? WfGui.INK_RED : WfGui.INK_SOFT, false);
         }
         if (hovered != null && hovered.info != null) {
             var p = hovered.info.pos();

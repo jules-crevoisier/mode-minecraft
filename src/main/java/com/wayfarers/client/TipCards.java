@@ -146,7 +146,7 @@ public final class TipCards {
         int y = g.guiHeight() / 2 - h / 2 - 20;
         WfGui.sprite(g, WfGui.CARD, x, y, W, h);
         g.item(shownIcon, x + 5, y + 5);
-        g.text(font, Component.translatable("gui.wayfarers.tip.title"), x + 25, y + 5, WfGui.INK_SOFT, false);
+        g.text(font, WfGui.bold(Component.translatable("gui.wayfarers.tip.title")), x + 25, y + 5, WfGui.INK_SOFT, false);
         for (int i = 0; i < lines.size(); i++) {
             g.text(font, lines.get(i), x + 25, y + 15 + i * 9, WfGui.INK, false);
         }

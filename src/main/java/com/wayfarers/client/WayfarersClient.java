@@ -170,7 +170,12 @@ public final class WayfarersClient {
             }
         }
         while (MINIMAP_KEY.consumeClick()) {
-            com.wayfarers.client.map.MinimapHud.toggle();
+            // H shows / hides the minimap, Shift + H steps through its four sizes
+            if (mc.hasShiftDown()) {
+                com.wayfarers.client.map.MinimapHud.cycleSize();
+            } else {
+                com.wayfarers.client.map.MinimapHud.toggle();
+            }
         }
         while (MINIMAP_ZOOM_KEY.consumeClick()) {
             com.wayfarers.client.map.MinimapHud.cycleZoom();

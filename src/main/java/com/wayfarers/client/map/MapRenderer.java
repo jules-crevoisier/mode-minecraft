@@ -2,15 +2,19 @@ package com.wayfarers.client.map;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.textures.FilterMode;
+import com.mojang.blaze3d.textures.GpuSampler;
 import com.wayfarers.Wayfarers;
 import com.wayfarers.map.MapProtocol;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.PlayerFaceExtractor;
+import net.minecraft.client.gui.render.TextureSetup;
 import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.client.renderer.state.gui.BlitRenderState;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.resources.Identifier;
+import org.joml.Matrix3x2f;
 
 /**
  * Drawing shared by the minimap and the world map: the explored regions (full textures up close, thumbnails when
@@ -36,6 +40,12 @@ final class MapRenderer {
      * caller sets the scissor.
      */
     static void tiles(GuiGraphicsExtractor g, double cx, double cz, float scale, float sx, float sy, float angle, float radius) {
+        tiles(g, cx, cz, scale, sx, sy, angle, radius, -1);
+    }
+
+    /** As above, tinted by {@code color} (ARGB: its alpha fades the terrain, for the minimap's opacity setting). */
+    static void tiles(GuiGraphicsExtractor g, double cx, double cz, float scale, float sx, float sy, float angle, float radius,
+                      int color) {
         MapLayer base = ClientMap.layer();
         if (base == null) {
             return;
@@ -65,7 +75,7 @@ final class MapRenderer {
                     size = MapTile.MINI;
                 }
                 if (tex != null) {
-                    blitRegion(g, tex, size, rx, rz, cx, cz, scale);
+                    blitRegion(g, tex, size, rx, rz, cx, cz, scale, color);
                 }
             }
         }
@@ -75,7 +85,7 @@ final class MapRenderer {
                 if (t.rx >= rx0 && t.rx <= rx1 && t.rz >= rz0 && t.rz <= rz1) {
                     DynamicTexture tex = cave.texture(t);
                     if (tex != null) {
-                        blitRegion(g, tex, MapTile.SIZE, t.rx, t.rz, cx, cz, scale);
+                        blitRegion(g, tex, MapTile.SIZE, t.rx, t.rz, cx, cz, scale, color);
                     }
                 }
             }
@@ -83,12 +93,21 @@ final class MapRenderer {
         g.pose().popMatrix();
     }
 
-    private static void blitRegion(GuiGraphicsExtractor g, DynamicTexture tex, int size, int rx, int rz, double cx, double cz, float scale) {
+    private static void blitRegion(GuiGraphicsExtractor g, DynamicTexture tex, int size, int rx, int rz, double cx, double cz, float scale,
+                                   int color) {
         g.pose().pushMatrix();
         g.pose().translate((float) (((double) rx * MapTile.SIZE - cx) * scale), (float) (((double) rz * MapTile.SIZE - cz) * scale));
         float s = scale * MapTile.SIZE / size;
         g.pose().scale(s, s);
-        g.blit(tex.getTextureView(), RenderSystem.getSamplerCache().getClampToEdge(FilterMode.NEAREST), 0, 0, size, size, 0, 1, 0, 1);
+        GpuSampler sampler = RenderSystem.getSamplerCache().getClampToEdge(FilterMode.NEAREST);
+        if (color == -1) {
+            g.blit(tex.getTextureView(), sampler, 0, 0, size, size, 0, 1, 0, 1);
+        } else {
+            // GuiGraphicsExtractor.blit(GpuTextureView, ...) takes no colour: the same blit state it builds, tinted
+            g.guiRenderState.addGuiElement(new BlitRenderState(RenderPipelines.GUI_TEXTURED,
+                    TextureSetup.singleTexture(tex.getTextureView(), sampler), new Matrix3x2f(g.pose()), 0, 0, size, size,
+                    0, 1, 0, 1, color, g.scissorStack.peek()));
+        }
         g.pose().popMatrix();
     }
 

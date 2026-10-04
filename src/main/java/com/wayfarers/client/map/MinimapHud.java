@@ -17,13 +17,19 @@ import java.util.List;
 
 /**
  * The minimap: a brass porthole (or square bezel) in a corner of the screen, north-up or turning with you, with the
- * explored terrain, markers, your coordinates and the biome you stand in.
+ * explored terrain, markers, and under it a compact plate with your coordinates and the biome you stand in.
+ *
+ * <p>Four sizes (56, 68, 96 and 128 GUI px, frame included; 68 by default), changed with Shift + the minimap key or
+ * in the settings screen. Every round frame is a sprite drawn for its own size, pixel for pixel, and the square one is
+ * a nine-slice: both stay crisp at any GUI scale.
  */
 public final class MinimapHud {
     /** GUI pixels per block for each zoom level. */
     static final float[] ZOOMS = {0.5F, 1.0F, 2.0F, 4.0F};
     private static final int BORDER = 6;
     private static final int MARGIN = 4;
+    /** Height of the coordinates / biome plate under the map. */
+    private static final int PLATE_H = 20;
     private static final Identifier SQUARE = Wayfarers.id("map/frame_square");
     private static final Identifier PLATE = Wayfarers.id("map/plate");
     private static final String[] CARDINALS = {"n", "e", "s", "w"};
@@ -35,12 +41,9 @@ public final class MinimapHud {
                 ForgeLayeredDraw.BOSS_OVERLAY, MinimapHud::extract);
     }
 
+    /** Diameter of the map itself (inside the frame) in GUI pixels. */
     static int mapSize() {
-        return switch (WayfarersClientConfig.MINIMAP_SIZE.get()) {
-            case SMALL -> 64;
-            case LARGE -> 128;
-            default -> 96;
-        };
+        return WayfarersClientConfig.MINIMAP_SIZE.get().outer - BORDER * 2;
     }
 
     private static boolean visible(Minecraft mc) {
@@ -54,7 +57,8 @@ public final class MinimapHud {
         if (!visible(mc) || WayfarersClientConfig.MINIMAP_CORNER.get() != WayfarersClientConfig.Corner.TOP_RIGHT) {
             return 0;
         }
-        return mapSize() + BORDER * 2 + MARGIN + (WayfarersClientConfig.MINIMAP_COORDS.get() ? 24 : 2);
+        // the tracker goes at 6 + this: 4 px under the minimap (which starts MARGIN px down) and its plate
+        return mapSize() + BORDER * 2 + (WayfarersClientConfig.MINIMAP_COORDS.get() ? PLATE_H + 1 : 0) + 2;
     }
 
     private static void extract(GuiGraphicsExtractor g, DeltaTracker dt) {
@@ -67,7 +71,7 @@ public final class MinimapHud {
         int size = mapSize();
         int outer = size + BORDER * 2;
         boolean coords = WayfarersClientConfig.MINIMAP_COORDS.get();
-        int textH = coords ? 22 : 0;
+        int textH = coords ? PLATE_H + 1 : 0;
         WayfarersClientConfig.Corner corner = WayfarersClientConfig.MINIMAP_CORNER.get();
         boolean right = corner == WayfarersClientConfig.Corner.TOP_RIGHT || corner == WayfarersClientConfig.Corner.BOTTOM_RIGHT;
         boolean bottom = corner == WayfarersClientConfig.Corner.BOTTOM_LEFT || corner == WayfarersClientConfig.Corner.BOTTOM_RIGHT;
@@ -76,6 +80,7 @@ public final class MinimapHud {
         boolean round = WayfarersClientConfig.MINIMAP_SHAPE.get() == WayfarersClientConfig.MinimapShape.ROUND;
         boolean rotate = WayfarersClientConfig.MINIMAP_ROTATE.get();
         float scale = ZOOMS[Math.max(0, Math.min(ZOOMS.length - 1, WayfarersClientConfig.MINIMAP_ZOOM.get()))];
+        int alpha = Math.round(255 * Math.max(30, Math.min(100, WayfarersClientConfig.MINIMAP_OPACITY.get())) / 100F);
 
         double px = net.minecraft.util.Mth.lerp(pt, player.xo, player.getX());
         double pz = net.minecraft.util.Mth.lerp(pt, player.zo, player.getZ());
@@ -86,10 +91,10 @@ public final class MinimapHud {
         float cxs = ix + size / 2.0F;
         float cys = iy + size / 2.0F;
 
-        // backdrop, terrain, then the frame on top
-        g.fill(ix, iy, ix + size, iy + size, 0xFF2A221C);
+        // backdrop, terrain (faded by the opacity setting), then the frame on top
+        g.fill(ix, iy, ix + size, iy + size, alpha << 24 | 0x2A221C);
         g.enableScissor(ix, iy, ix + size, iy + size);
-        MapRenderer.tiles(g, px, pz, scale, cxs, cys, angle, size * 0.75F);
+        MapRenderer.tiles(g, px, pz, scale, cxs, cys, angle, size * 0.75F, alpha >= 255 ? -1 : alpha << 24 | 0xFFFFFF);
         g.disableScissor();
 
         // markers (inside the map; a few kinds stick to the rim when off the map)
@@ -117,6 +122,7 @@ public final class MinimapHud {
         MapRenderer.arrow(g, cxs, cys, rotate ? 0.0F : (float) Math.toRadians(yaw + 180.0));
 
         if (round) {
+            // one sprite per size, drawn 1:1: no stretched pixels
             g.blitSprite(net.minecraft.client.renderer.RenderPipelines.GUI_TEXTURED, Wayfarers.id("map/frame_round_" + size), x, y, outer, outer);
         } else {
             WfGui.sprite(g, SQUARE, x, y, outer, outer);
@@ -136,17 +142,18 @@ public final class MinimapHud {
         }
 
         if (coords) {
+            // a compact dark plate as wide as its text (at least the map's width), on the screen-edge side
             Font font = mc.font;
             int ty = y + outer + 1;
             String pos = player.getBlockX() + ", " + player.getBlockY() + ", " + player.getBlockZ();
-            Component biome = player.level().getBiome(player.blockPosition()).unwrapKey()
-                    .map(k -> MapPalette.biomeName(k.identifier().toString())).orElse(Component.empty());
-            int w = Math.max(font.width(pos), font.width(biome)) + 8;
-            int tw = Math.max(outer, Math.min(w, outer + 40));
+            String biome = player.level().getBiome(player.blockPosition()).unwrapKey()
+                    .map(k -> MapPalette.biomeName(k.identifier().toString())).orElse(Component.empty()).getString();
+            int max = Math.max(outer, Math.min(g.guiWidth() / 3, 150));
+            int tw = Math.min(max, Math.max(outer, Math.max(font.width(pos), font.width(biome)) + 8));
             int tx = right ? x + outer - tw : x;
-            WfGui.sprite(g, PLATE, tx, ty, tw, 21);
-            g.centeredText(font, pos, tx + tw / 2, ty + 2, WfGui.CREAM);
-            WfGui.textClipped(g, font, biome.getString(), tx + Math.max(4, (tw - font.width(biome)) / 2), ty + 11, tw - 8, WfGui.CREAM_SOFT, false);
+            WfGui.sprite(g, PLATE, tx, ty, tw, PLATE_H);
+            WfGui.textClipped(g, font, pos, tx + Math.max(4, (tw - font.width(pos)) / 2), ty + 2, tw - 6, WfGui.CREAM, true);
+            WfGui.textClipped(g, font, biome, tx + Math.max(4, (tw - font.width(biome)) / 2), ty + 11, tw - 6, WfGui.CREAM_SOFT, true);
         }
     }
 
@@ -155,10 +162,48 @@ public final class MinimapHud {
         int z = WayfarersClientConfig.MINIMAP_ZOOM.get() + 1;
         WayfarersClientConfig.MINIMAP_ZOOM.set(z >= ZOOMS.length ? 0 : z);
         WayfarersClientConfig.MINIMAP_ZOOM.save();
+        float s = ZOOMS[WayfarersClientConfig.MINIMAP_ZOOM.get()];
+        overlay(Component.translatable("message.wayfarers.minimap.zoom",
+                s >= 1 ? Component.translatable("gui.wayfarers.map.scale_in", (int) s)
+                        : Component.translatable("gui.wayfarers.map.scale_out", (int) (1 / s))));
+    }
+
+    /** Next size preset (wraps around); Shift + the minimap key. Shows the minimap if it was hidden. */
+    public static void cycleSize() {
+        WayfarersClientConfig.MinimapSize[] sizes = WayfarersClientConfig.MinimapSize.values();
+        WayfarersClientConfig.MinimapSize next = sizes[(WayfarersClientConfig.MINIMAP_SIZE.get().ordinal() + 1) % sizes.length];
+        setSize(next);
+        if (!WayfarersClientConfig.MINIMAP.get()) {
+            WayfarersClientConfig.MINIMAP.set(true);
+            WayfarersClientConfig.MINIMAP.save();
+        }
+        overlay(Component.translatable("message.wayfarers.minimap.size", sizeName(next), next.outer,
+                com.wayfarers.client.WayfarersClient.MINIMAP_KEY.getTranslatedKeyMessage()));
+    }
+
+    public static void setSize(WayfarersClientConfig.MinimapSize size) {
+        WayfarersClientConfig.MINIMAP_SIZE.set(size);
+        WayfarersClientConfig.MINIMAP_SIZE.save();
+    }
+
+    public static Component sizeName(WayfarersClientConfig.MinimapSize size) {
+        return Component.translatable("gui.wayfarers.settings.minimap_size." + size.name().toLowerCase(java.util.Locale.ROOT));
     }
 
     public static void toggle() {
         WayfarersClientConfig.MINIMAP.set(!WayfarersClientConfig.MINIMAP.get());
         WayfarersClientConfig.MINIMAP.save();
+        Component key = com.wayfarers.client.WayfarersClient.MINIMAP_KEY.getTranslatedKeyMessage();
+        overlay(WayfarersClientConfig.MINIMAP.get()
+                ? Component.translatable("message.wayfarers.minimap.shown", key)
+                : Component.translatable("message.wayfarers.minimap.hidden", key));
+    }
+
+    /** A short line above the hotbar (the action bar). */
+    private static void overlay(Component message) {
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player != null) {
+            player.sendOverlayMessage(message);
+        }
     }
 }

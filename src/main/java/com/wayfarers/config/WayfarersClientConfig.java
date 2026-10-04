@@ -6,7 +6,16 @@ import net.minecraftforge.common.ForgeConfigSpec;
 public final class WayfarersClientConfig {
     public enum HealthBars { ALWAYS, DAMAGED, NEVER }
     public enum Corner { TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT }
-    public enum MinimapSize { SMALL, MEDIUM, LARGE }
+    /** Minimap presets, by their size on screen in GUI pixels, frame included (the map inside is 12 px less). */
+    public enum MinimapSize {
+        SMALL(56), MEDIUM(68), LARGE(96), XLARGE(128);
+
+        public final int outer;
+
+        MinimapSize(int outer) {
+            this.outer = outer;
+        }
+    }
     public enum MinimapShape { ROUND, SQUARE }
 
     private static final ForgeConfigSpec.Builder B = new ForgeConfigSpec.Builder();
@@ -32,13 +41,14 @@ public final class WayfarersClientConfig {
             .define("hud.tips", true);
 
     public static final ForgeConfigSpec.BooleanValue MINIMAP = B
-            .comment("Show the minimap (toggle in game with H).")
+            .comment("Show the minimap (toggle in game with H; Shift + H changes its size).")
             .define("map.minimap", true);
     public static final ForgeConfigSpec.EnumValue<Corner> MINIMAP_CORNER = B
             .comment("Screen corner of the minimap: TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT or BOTTOM_RIGHT.")
             .defineEnum("map.corner", Corner.TOP_LEFT);
     public static final ForgeConfigSpec.EnumValue<MinimapSize> MINIMAP_SIZE = B
-            .comment("Minimap size: SMALL, MEDIUM or LARGE.")
+            .comment("Minimap size on screen, frame included: SMALL (56 px), MEDIUM (68 px), LARGE (96 px) or XLARGE (128 px).",
+                    "Cycle it in game with Shift + H, or in the mod's settings (Mods > Wayfarers > Config).")
             .defineEnum("map.size", MinimapSize.MEDIUM);
     public static final ForgeConfigSpec.EnumValue<MinimapShape> MINIMAP_SHAPE = B
             .comment("Minimap shape: ROUND (brass porthole) or SQUARE.")
@@ -52,6 +62,9 @@ public final class WayfarersClientConfig {
     public static final ForgeConfigSpec.BooleanValue MINIMAP_COORDS = B
             .comment("Show your coordinates and the biome under the minimap.")
             .define("map.showCoordinates", true);
+    public static final ForgeConfigSpec.IntValue MINIMAP_OPACITY = B
+            .comment("Opacity of the minimap's terrain, in percent (lower it to see the world through the map).")
+            .defineInRange("map.opacity", 100, 30, 100);
     public static final ForgeConfigSpec.BooleanValue CAVE_MAP = B
             .comment("Underground, map the cave around you (a slice at your height) instead of the surface far above.")
             .define("map.caveMode", true);

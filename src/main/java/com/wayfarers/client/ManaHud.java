@@ -81,8 +81,16 @@ public final class ManaHud {
             long remaining = ClientSkills.cooldownTicks - (now - ClientSkills.syncedAt) / 50;
             String v = remaining > 0 ? (remaining / 20 + 1) + "s" : WayfarersClient.ABILITY_KEY.getTranslatedKeyMessage().getString();
             int w = Math.max(12, font.width(v) + 5);
-            WfGui.sprite(g, WfGui.id("button_small"), x + 10, bottom - 11, w, 12);
-            g.text(font, v, x + 10 + (w - font.width(v) + 1) / 2, bottom - 9, remaining > 0 ? 0xFF6E5A40 : 0xFF2B1B0C, false);
+            // ready: a brass key cap engraved with the key; recharging: a dark cap with the seconds in cream
+            // (brown on brass was hard to read)
+            if (remaining > 0) {
+                g.fill(x + 10, bottom - 11, x + 10 + w, bottom + 1, 0xFF0F0C0A);
+                g.fill(x + 11, bottom - 10, x + 9 + w, bottom, 0xFF3E3430);
+                g.text(font, v, x + 10 + (w - font.width(v) + 1) / 2, bottom - 9, WfGui.CREAM, false);
+            } else {
+                WfGui.sprite(g, WfGui.id("button_small"), x + 10, bottom - 11, w, 12);
+                g.text(font, v, x + 10 + (w - font.width(v) + 1) / 2, bottom - 9, WfGui.PLATE_INK, false);
+            }
         }
     }
 }

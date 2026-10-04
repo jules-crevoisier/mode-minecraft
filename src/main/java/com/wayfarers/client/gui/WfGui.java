@@ -23,14 +23,28 @@ public final class WfGui {
     public static final Identifier SCROLL_THUMB = Wayfarers.id("scroll_thumb");
     public static final Identifier SCROLL_TRACK = Wayfarers.id("scroll_track");
 
-    /** Text on parchment. */
-    public static final int INK = 0xFF3B2A1A;
-    public static final int INK_SOFT = 0xFF6E5A40;
-    /** Text on dark iron. */
-    public static final int CREAM = 0xFFF3E3C0;
-    public static final int CREAM_SOFT = 0xFFB9A98E;
+    /*
+     * Text colours. Contrast ratios (WCAG) against the calm parchment (#EBDDBE) or the dark iron wells (#221B18):
+     * every body text is above 7:1, secondary text above 4.5:1. Dark text never gets a drop shadow (it smudges);
+     * light text on iron always does.
+     */
+    /** Body text and titles on parchment: near-black brown, 12:1. */
+    public static final int INK = 0xFF2A1C10;
+    /** Secondary text on parchment (labels, hints, page numbers): still a dark brown, 8.6:1. */
+    public static final int INK_SOFT = 0xFF4A3520;
+    /** "Done" / good news on parchment, 5.4:1. */
+    public static final int INK_GREEN = 0xFF1F6418;
+    /** Warnings on parchment (locked, full), 7.9:1. */
+    public static final int INK_RED = 0xFF7A1810;
+    /** Text on dark iron, 15:1. */
+    public static final int CREAM = 0xFFFFF5DC;
+    /** Secondary text on dark iron (distances, hints), 10:1. */
+    public static final int CREAM_SOFT = 0xFFDCCDB0;
+    /** Unavailable entries on dark iron (locked quests, hidden layers): dimmed but readable, 6:1. */
+    public static final int MUTED = 0xFFA89C8A;
     public static final int AETHER = 0xFF9FE6FF;
     public static final int GOLD = 0xFFF6C343;
+    /** Engraved text on the brass title plates. */
     public static final int PLATE_INK = 0xFF2B1B0C;
 
     public static Identifier id(String sprite) {
@@ -48,9 +62,15 @@ public final class WfGui {
     /** The main window frame with an engraved title plate centred on its top edge. */
     public static void window(GuiGraphicsExtractor g, Font font, Component title, int x, int y, int w, int h) {
         sprite(g, PANEL, x, y, w, h);
-        int tw = Math.max(90, font.width(title) + 24);
+        Component t = bold(title);
+        int tw = Math.max(90, font.width(t) + 24);
         sprite(g, TITLE_PLATE, x + (w - tw) / 2, y - 5, tw, 18);
-        centered(g, font, title, x + w / 2, y, PLATE_INK);
+        centered(g, font, t, x + w / 2, y, PLATE_INK);
+    }
+
+    /** A title in bold (Minecraft's bold: each glyph drawn twice, 1 px apart, and 1 px wider). */
+    public static Component bold(Component text) {
+        return text.copy().withStyle(net.minecraft.ChatFormatting.BOLD);
     }
 
     /**
@@ -73,6 +93,17 @@ public final class WfGui {
     public static void centered(GuiGraphicsExtractor g, Font font, net.minecraft.util.FormattedCharSequence text, int x, int y,
                                 int color) {
         g.text(font, text, x - font.width(text) / 2, y, color, false);
+    }
+
+    /** A bold title centred on {@code cx}, cut to {@code width} pixels with an ellipsis. No shadow (ink on parchment). */
+    public static void titleClipped(GuiGraphicsExtractor g, Font font, String text, int cx, int y, int width, int color) {
+        Component t = bold(Component.literal(text));
+        if (font.width(t) > width) {
+            Component dots = bold(Component.literal("..."));
+            String cut = font.substrByWidth(t, width - font.width(dots)).getString();
+            t = bold(Component.literal(cut + "..."));
+        }
+        centered(g, font, t, cx, y, color);
     }
 
     /** Draws ``text`` cut to ``width`` pixels with an ellipsis. */

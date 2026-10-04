@@ -1089,6 +1089,7 @@ def main():
         return f'<kbd class="az">{E(a)}</kbd>' if a else '<span class="same">idem</span>'
     keys = "".join(f'<tr><td><kbd>{E(k)}</kbd></td><td>{azerty(k)}</td><td>{E(v)}</td></tr>'
                    for k, v in java_keys())
+    keys += f'<tr><td><kbd>Maj + H</kbd></td><td><span class="same">idem</span></td><td>{E(TXT.KEY_TEXT["Maj + H"])}</td></tr>'
     keys += f'<tr><td colspan="2"><kbd>Clic molette</kbd></td><td>{E(TXT.KEY_TEXT["Clic molette"])}</td></tr>'
     cmds = []
     for sub, a, subs, op in java_commands():

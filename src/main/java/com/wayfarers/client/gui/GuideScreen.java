@@ -150,7 +150,8 @@ public class GuideScreen extends Screen {
         if (part > 0) {
             t = Component.empty().append(t).append(" ").append(Component.translatable("guide.wayfarers.continued"));
         }
-        return font.split(t, compact ? pageW() - 52 : pageW() - 12);
+        // bold, wrapped at its bold width (tools/wf/guide.py wraps titles the same way, 1 px wider per glyph)
+        return font.split(WfGui.bold(t), compact ? pageW() - 52 : pageW() - 12);
     }
 
     /** Y of the first text line of a sheet. */
@@ -351,7 +352,7 @@ public class GuideScreen extends Screen {
             if (line == null) {
                 y += PARA_GAP;
             } else {
-                g.text(font, line, textX(), y, WfGui.INK_SOFT, false);
+                g.text(font, line, textX(), y, WfGui.INK, false);
                 y += TEXT_LINE;
             }
         }

@@ -43,6 +43,7 @@ KEY_TEXT = {
     "M": "Carte du monde (partagée sur un serveur : repères, signaux, pierres de voyage, joueurs)",
     "N": "Allumer / éteindre l'anneau aimanté",
     "H": "Afficher / masquer la mini-carte",
+    "Maj + H": "Changer la taille de la mini-carte (petite, moyenne, grande, énorme)",
     "Z": "Changer le zoom de la mini-carte",
     "B": "Signaler l'endroit visé à tous les joueurs (visible une minute sur les cartes)",
     "W": "Maintenir sur un objet du mod : ouvrir sa page du Manuel",
@@ -100,9 +101,12 @@ CONFIG_FR = {
     "map.sharedExploration": "Carte du monde partagée : chacun voit ce que tous ont exploré. Sur false, chaque joueur "
                              "ne voit que ce qu'il a vu lui-même (le serveur garde les deux, on peut changer à tout moment).",
     "map.showPlayers": "Montre les autres joueurs sur la mini-carte et la carte du monde (même dimension).",
-    "map.minimap": "Affiche la mini-carte (touche H en jeu).",
+    "map.minimap": "Affiche la mini-carte (touche H en jeu ; Maj + H change sa taille).",
     "map.corner": "Coin de l'écran de la mini-carte : TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT ou BOTTOM_RIGHT.",
-    "map.size": "Taille de la mini-carte : SMALL, MEDIUM ou LARGE.",
+    "map.size": "Taille de la mini-carte à l'écran, cadre compris : SMALL (56 px), MEDIUM (68 px), LARGE (96 px) ou "
+                "XLARGE (128 px). En jeu : Maj + H, ou Mods → Wayfarers → Config, onglet Mini-carte.",
+    "map.opacity": "Opacité du terrain de la mini-carte, en pourcentage (30 à 100) : baisse-la pour voir le monde à "
+                   "travers.",
     "map.shape": "Forme : ROUND (hublot de laiton) ou SQUARE (cadre carré).",
     "map.rotate": "La mini-carte tourne avec toi (ta direction toujours en haut). Sur false : le nord est en haut.",
     "map.zoom": "Zoom de la mini-carte, de 0 (le plus large) à 3 (le plus proche). Touche Z en jeu.",
@@ -751,9 +755,10 @@ MINIMAP_TEXT = [
     "La mini-carte est un hublot de laiton dans un coin de l'écran (en haut à gauche au départ). Elle montre le "
     "terrain autour de toi, la flèche de ta direction, et les pierres de voyage, repères, joueurs, signaux, tombes "
     "et ta dernière mort. En dessous : tes coordonnées et le biome où tu es.",
-    "H la masque ou la réaffiche. Z change son zoom (4 niveaux) ; en AZERTY c'est la touche W. Coin de l'écran, "
-    "taille (petite, moyenne, grande), forme (ronde ou carrée) et rotation se règlent dans "
-    "config/wayfarers-client.toml.",
+    "H la masque ou la réaffiche, Maj + H change sa taille (petite, moyenne par défaut, grande, énorme : 56 à "
+    "128 px). Z change son zoom (4 niveaux) ; en AZERTY c'est la touche W. Taille, coin de l'écran, forme (ronde "
+    "ou carrée), rotation, coordonnées et opacité se règlent aussi dans Mods → Wayfarers → Config, onglet "
+    "Mini-carte (ou config/wayfarers-client.toml).",
 ]
 
 # ------------------------------------------------------------------ machines : écrans
