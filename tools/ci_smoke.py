@@ -154,6 +154,9 @@ def prepare(server_dir, overhaul):
         # a flat Overworld generates in a blink; /place structure ignores biomes, so every structure
         # still assembles (full noise terrain made the run take over an hour on CI runners)
         props += "level-name=world\nlevel-type=minecraft\\:flat\ngenerate-structures=false\n"
+        props += ('generator-settings={"layers":[{"block":"minecraft:bedrock","height":1},'
+                  '{"block":"minecraft:dirt","height":2},{"block":"minecraft:grass_block","height":1}],'
+                  '"biome":"minecraft:plains"}\n')
     with open(os.path.join(server_dir, "server.properties"), "w") as f:
         f.write(props)
     os.makedirs(os.path.join(server_dir, "config"), exist_ok=True)
