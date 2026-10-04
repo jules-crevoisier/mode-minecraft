@@ -213,6 +213,25 @@ def check_worldgen():
                     err(f"{path}: unknown biome tag {rid}")
             elif rid.startswith("minecraft:") and rid[10:] not in biomes:
                 err(f"{path}: unknown biome {rid}")
+    # codec ranges the game enforces when it loads features (a value out of range stops the server from starting)
+    def walk(node, path):
+        if isinstance(node, dict):
+            off = node.get("offset")
+            if isinstance(off, list) and len(off) == 3 and any(abs(v) > 16 for v in off if isinstance(v, int)):
+                err(f"{path}: block predicate offset {off} outside -16..16")
+            if node.get("type") == "minecraft:random_offset":
+                for k in ("xz_spread", "y_spread"):
+                    v = node.get(k)
+                    if isinstance(v, int) and abs(v) > 16:
+                        err(f"{path}: random_offset {k} {v} outside -16..16")
+            for v in node.values():
+                walk(v, path)
+        elif isinstance(node, list):
+            for v in node:
+                walk(v, path)
+    for root in (DATA, os.path.join(os.path.dirname(DATA), "worldgen_pack", "data")):
+        for path in glob.glob(os.path.join(root, "*", "worldgen", "*_feature", "*.json")):
+            walk(json.load(open(path)), path)
     sets = {}
     for path in glob.glob(os.path.join(ns_dir, "worldgen", "structure_set", "*.json")):
         salt = json.load(open(path))["placement"]["salt"]

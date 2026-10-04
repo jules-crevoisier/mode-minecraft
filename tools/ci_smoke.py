@@ -337,7 +337,10 @@ def main():
     prepare(server_dir, overhaul)
     failures = []
     srv = Server(server_dir, server_command(server_dir), "smoke-console-overhaul.log" if overhaul else "smoke-console.log")
-    if not srv.wait_for(r"Done \(", 1800 if overhaul else 900):
+    # stop waiting as soon as the server gives up (a broken data pack used to cost the whole 15 minutes)
+    started = srv.wait_for(r"Done \(|Failed to load datapacks|Crashing|Encountered an unexpected exception",
+                           1800 if overhaul else 900)
+    if not started or "Done (" not in started:
         failures.append("server did not finish starting")
     else:
         Phase.start = time.time()

@@ -261,7 +261,7 @@ def features():
         "ocean_rock_formations": (_templates(["rock_arch", "rock_pillars", "rock_stack", "rock_ring"]),
                                   [{"type": "minecraft:rarity_filter", "chance": 9}] + FLOOR
                                   + [{"type": "minecraft:random_offset", "xz_spread": 0, "y_spread": -4},
-                                     {"type": "minecraft:block_predicate_filter", "predicate": _water_at(17)}, BIOME],
+                                     {"type": "minecraft:block_predicate_filter", "predicate": _water_at(16)}, BIOME],
                                   "local_modifications", "all"),
         # small sunken ruins: broken colonnades, a fallen statue, a sunken stair, an amphora heap
         "ocean_sunken_ruins": (_templates(["ruin_colonnade", "ruin_statue", "ruin_stair", "ruin_amphorae"]),
