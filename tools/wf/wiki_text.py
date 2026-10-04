@@ -888,3 +888,40 @@ PERF_OPTIONS = [
     ("world.overhaul", "Nouveau relief et biomes. Sur false, les nouveaux mondes gardent la génération de "
                        "Minecraft ; tout le reste du mod marche pareil."),
 ]
+
+# « En jeu » : les vraies captures d'écran du client de test (CI), juste après les nouveautés.
+INGAME_TITLE = "En jeu"
+INGAME_INTRO = ("Ces images ne sont pas des maquettes : ce sont de vraies captures du jeu. À chaque compilation, le "
+                "serveur de test lance le vrai Minecraft avec le mod, ouvre chaque écran, pose des machines et des "
+                "créatures, puis prend la photo tout seul. Clique une image pour l'agrandir.")
+INGAME_NOTE = ("Le client de test tourne en anglais : dans ta partie en français, les textes des écrans sont "
+               "traduits. Les images se mettent à jour à chaque nouvelle compilation.")
+# (nom de la capture, titre, légende, ancre de la section liée). L'ordre est celui de la galerie ; la première
+# capture s'affiche en grand.
+INGAME_SHOTS = [
+    ("hud_minimap", "La mini-carte", "Le hublot de laiton en haut à gauche : le terrain autour de toi, ta direction, "
+     "tes coordonnées et le nom du biome.", "mini-carte"),
+    ("world_map", "La carte du monde", "Touche M. À droite la légende et tes repères, sur le bord les boutons de "
+     "zoom, de vue des grottes et de liste.", "carte"),
+    ("quest_journal", "Le journal de quêtes", "Touche J. Les cinq chapitres à gauche, leurs étapes au milieu, et "
+     "à droite l'objectif et les récompenses de la quête choisie.", "quetes"),
+    ("talent_tree", "L'arbre de talents", "Touche K. Les quatre branches : Guerrier, Explorateur, Arcaniste et "
+     "Mécaniste. Le talent du bas de chaque branche est un pouvoir actif.", "talents"),
+    ("manual_welcome", "Le Manuel du Voyageur", "La page d'accueil. Le sommaire à gauche range les 81 pages par "
+     "thème.", "manuel"),
+    ("manual_machines", "Le Manuel, page machines", "Chaque système a sa page, avec les objets concernés en bas.",
+     "manuel"),
+    ("machine_harvester", "L'écran d'une machine", "La moissonneuse automatique : ce qu'elle fait en ce moment, sa "
+     "zone, la replantation, la sortie et le mode redstone.", "ecrans-machines"),
+    ("guild_terminal", "Le terminal de guilde", "Le contenu de tous les coffres reliés dans une seule grille, avec "
+     "la recherche et les boutons pour tout ranger.", "terminal"),
+    ("waystone", "Une pierre de voyage", "La liste des pierres découvertes ; à droite, la destination choisie et "
+     "les boutons Voyager, Épingler et Renommer.", "m-waystones"),
+    ("creative_tab", "L'onglet créatif", "Tous les objets du mod dans leur onglet. L'infobulle rappelle la touche "
+     "qui ouvre la page du Manuel.", "objets"),
+    ("creatures", "Automates sur la scène de test", "Le golem de laiton au centre, une araignée-horloge devant, le "
+     "bassin de verre d'une méduse lumineuse à gauche ; le Grand Horloger se tient au fond, à droite.",
+     "automates"),
+    ("mega_structure", "La Citadelle d'horlogerie", "Une merveille posée par le serveur de test et vue du ciel : la "
+     "tour-horloge, ses toits de cuivre et ses cheminées.", "s-clockwork_citadel"),
+]

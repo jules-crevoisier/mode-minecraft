@@ -7,7 +7,8 @@ so new content shows up by re-running the script. French explanations that the d
 tools/wf/wiki_text.py.
 
 Slow (3D renders): it is not part of generate_all.py. Renders are cached in build/wiki_cache, so a second run
-only re-renders what changed.
+only re-renders what changed. The world map, the biome renders and the real in-game screenshots
+(wayfarers-shot-<name>.png, or a local folder in $WAYFARERS_SHOTS / build/shots) come from the CI pre-release.
 
 Usage:
     python3 tools/gen_wiki.py                 # -> build/wiki/
@@ -841,6 +842,98 @@ def biome_sheets(shot_dir, order, out):
     return res
 
 
+# =============================================================================================== in-game screenshots
+SHOT_MAX_W = 960  # published width of the real client screenshots (1280 x 720 from the CI)
+SHOT_REFRESH = 3 * 3600  # seconds between two checks of the same screenshot on the CI release
+
+
+def find_ingame_shots(arg):
+    """Folder holding the real client screenshots wayfarers-shot-<name>.png (tools/ci_client.py, CiDriver), and
+    {name: date of the capture or ""}. A local folder when given, else the CI pre-release, cached in
+    build/wiki_cache/ingame: each screenshot is fetched again when its copy is more than 3 hours old (kept when the
+    release cannot be reached). Missing screenshots are skipped. (None, {}) when there is none."""
+    names = [n for n, *_ in TXT.INGAME_SHOTS]
+    for d in (arg, os.environ.get("WAYFARERS_SHOTS", ""), os.path.join(ROOT, "build", "shots")):
+        if d and any(os.path.exists(os.path.join(d, f"wayfarers-shot-{n}.png")) for n in names):
+            return d, {n: "" for n in names}
+    d = os.path.join(CACHE, "ingame")
+    os.makedirs(d, exist_ok=True)
+    meta_path = os.path.join(d, "shots.json")
+    meta = load_json(meta_path, {})
+    got = 0
+    for n in names:
+        png = os.path.join(d, f"wayfarers-shot-{n}.png")
+        m = meta.setdefault(n, {})
+        if not os.path.exists(png) or time.time() - m.get("checked", 0) > SHOT_REFRESH:
+            try:
+                r = urllib.request.urlopen(PREVIEWS_URL.format(f"wayfarers-shot-{n}.png"), timeout=40)
+                data = r.read()
+                if data[:8] != b"\x89PNG\r\n\x1a\n":
+                    raise ValueError("not a PNG")
+                open(png, "wb").write(data)
+                m["date"] = r.headers.get("Last-Modified", "")
+            except Exception as e:  # noqa: BLE001
+                if not os.path.exists(png):
+                    log(f"in-game screenshot {n} not available: {e}")
+            m["checked"] = time.time()
+        if os.path.exists(png):
+            got += 1
+    with open(meta_path, "w", encoding="utf-8") as fh:
+        json.dump(meta, fh, indent=1)
+    log(f"in-game screenshots: {got} of {len(names)} available")
+    return (d, {n: meta.get(n, {}).get("date", "") for n in names}) if got else (None, {})
+
+
+def ingame_images(shot_dir, out):
+    """Converts each real screenshot to WebP (quality 80, at most SHOT_MAX_W wide) into img/jeu/<name>.webp; the
+    WebP is cached by the PNG's bytes. Returns {name: (published path, width, height)}."""
+    res = {}
+    if not shot_dir:
+        return res
+    cdir = os.path.join(CACHE, "ingameweb")
+    os.makedirs(cdir, exist_ok=True)
+    os.makedirs(os.path.join(out, "img", "jeu"), exist_ok=True)
+    for n, *_ in TXT.INGAME_SHOTS:
+        png = os.path.join(shot_dir, f"wayfarers-shot-{n}.png")
+        if not os.path.exists(png):
+            continue
+        cached = os.path.join(cdir, f"{n}-{sha(SHOT_MAX_W, file_bytes(png))}.webp")
+        try:
+            if not os.path.exists(cached):
+                im = Image.open(png).convert("RGB")
+                if im.width > SHOT_MAX_W:
+                    im = im.resize((SHOT_MAX_W, round(im.height * SHOT_MAX_W / im.width)), Image.LANCZOS)
+                im.save(cached, "WEBP", quality=80, method=6)
+                for old in glob.glob(os.path.join(cdir, f"{n}-*.webp")):
+                    if old != cached:
+                        os.remove(old)
+            w, h = Image.open(cached).size
+        except Exception as e:  # noqa: BLE001
+            log(f"in-game screenshot {n} unreadable: {e}")
+            continue
+        rel = f"img/jeu/{n}.webp"
+        shutil.copyfile(cached, os.path.join(out, rel))
+        res[n] = (rel, w, h)
+    return res
+
+
+def shot_date(dates):
+    """The most recent capture date, in French ("" when unknown)."""
+    from email.utils import parsedate_to_datetime
+    best = None
+    for v in dates.values():
+        try:
+            t = parsedate_to_datetime(v)
+        except (TypeError, ValueError):
+            continue
+        best = t if best is None or t > best else best
+    if not best:
+        return ""
+    mois = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre",
+            "novembre", "décembre"]
+    return f"{best.day} {mois[best.month - 1]} {best.year} à {best:%H:%M} UTC"
+
+
 # =============================================================================================== HTML helpers
 SVG = {
     "heart": '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 14 2 8.2A3.6 3.6 0 0 1 8 3.6a3.6 3.6 0 0 1 6 4.6Z"/></svg>',
@@ -1059,12 +1152,15 @@ def main():
                 f'background-position:{pos:.4f}% 0"></i>{f"<small>{E(where_)}</small>" if caption else ""}</div>')
 
     gui = gui_images(out)
+    shot_dir, shot_dates = find_ingame_shots(None)
+    ingame = ingame_images(shot_dir, out)
     ctx = types.SimpleNamespace(atlas=atlas, idx=idx, item_link=item_link, by_result=by_result, mob_info=mob_info,
                                 struct_info=struct_info, sheet_info=sheet_info, all_ids=all_ids, lives=lives,
                                 gear=gear, weapon_of=weapon_of, remembrance_of=remembrance_of, defs=defs,
                                 wonder_ids=wonder_ids, recipes=recipes, spawn_biomes=spawn_biomes,
-                                biome_shot=biome_shot, gui=gui, biomes=B.BIOMES)
+                                biome_shot=biome_shot, gui=gui, biomes=B.BIOMES, shots=ingame, shot_dates=shot_dates)
     sec.append(section_news(ctx))
+    sec.append(section_ingame(ctx))
     sec.append(section_tests(ctx))
     sec.append(f'''
 <section class="block" id="commencer">
@@ -1109,6 +1205,7 @@ def main():
                      f'<small>{len(qids)} étapes</small></summary><ul class="quests">{"".join(rows)}</ul></details>')
     sec.append(f'''<section class="block" id="quetes">
   {plaque("quetes-h", "Système", "Quêtes et journal", "Touche <kbd>J</kbd> ou clic droit avec l'Atlas. Chaque étape réussie par un joueur est accordée à tout le groupe, même aux absents. Les quêtes donnent de l'expérience, du butin et des points de talent.")}
+  {ingame_feature(ctx, "quest_journal")}
   {"".join(qhtml)}
 </section>''')
 
@@ -1126,12 +1223,14 @@ def main():
             rel = chips(atlas, items, 26, item_link) if items else ""
             cards.append(f'<article class="card page" id="m-{pid}"><h4>{atlas.icon(picon, 32)}{E(tfr)}</h4>{body}{rel}</article>')
             idx.add(tfr, "Manuel", f"m-{pid}", " ".join(pf for _pe, pf in paras))
-        mhtml.append(f'<h3 class="subhead">{atlas.icon(icon, 28)}{E(cfr)}</h3><div class="grid pages">{"".join(cards)}</div>')
+        shot = ingame_feature(ctx, "waystone") if cat == "travel" else ""
+        mhtml.append(f'<h3 class="subhead">{atlas.icon(icon, 28)}{E(cfr)}</h3>{shot}<div class="grid pages">{"".join(cards)}</div>')
     qol = "".join(f'<article class="card mini"><h4>{E(t)}</h4><p>{E(x)}</p></article>' for t, x in TXT.QOL)
     for t, x in TXT.QOL:
         idx.add(t, "Confort", "confort", x)
     sec.append(f'''<section class="block" id="manuel">
   {plaque("manuel-h", "Le Manuel du Voyageur", "Chaque système, page par page", "Le texte du Manuel en jeu, avec les objets concernés. Clique sur un objet pour voir sa fiche et sa recette.")}
+  {('<div class="ingame-pair">' + shot_fig(ctx, "manual_welcome") + shot_fig(ctx, "manual_machines") + '</div>') if any(n in ctx.shots for n in ("manual_welcome", "manual_machines")) else ""}
   {"".join(mhtml)}
   <h3 class="subhead" id="confort">Le confort de jeu, sans objet à fabriquer</h3>
   <div class="grid minis">{qol}</div>
@@ -1170,6 +1269,7 @@ def main():
                 spells.append(f'<li>{atlas.icon(i, 36)}<div><b>{E(name(i))}</b><span>{E(" ".join(desc(ii)))}</span></div></li>')
     sec.append(f'''<section class="block" id="talents">
   {plaque("talents-h", "Système", "Talents, mana et sorts", "Touche <kbd>K</kbd>. Un point par quête, trois par boss, un tous les 10 niveaux d'expérience. Chaque talent demande un des talents reliés au-dessus. Le talent du bas de chaque branche est un pouvoir actif : clique dessus pour l'équiper, puis <kbd>V</kbd> pour le lancer. La Fiole d'oubli rend tous les points.")}
+  {ingame_feature(ctx, "talent_tree")}
   <div class="branches">{"".join(branches)}</div>
   <h3 class="subhead">Les sorts (clic droit, coûtent du mana)</h3>
   <p>Le mana s'affiche dans la barre bleue au-dessus de l'expérience et se recharge tout seul. Chaque bâton contient un seul sort.</p>
@@ -1196,6 +1296,7 @@ def main():
     sec.append(f'''<section class="block" id="machines">
   {plaque("machines-h", "Système", "Machines simples", "Ni câble, ni énergie : chaque machine est un bloc qui fait une seule chose. Elles se fabriquent presque toutes avec du laiton.")}
   <div class="callout" id="ecrans-machines"><b>Nouveau : un écran pour chaque machine.</b> {E(TXT.MACHINE_SCREENS_INTRO)}</div>
+  {ingame_feature(ctx, "machine_harvester")}
   <div class="grid machines">{"".join(mcards)}</div>
   <div class="grid pages">{farm}</div>
 </section>''')
@@ -1409,6 +1510,7 @@ def main():
     sec.append(f'''<section class="block" id="structures">
   {plaque("structures-h", "Exploration", "Structures et merveilles", "Elles n'apparaissent que dans les régions jamais générées : le plus simple est un nouveau monde. La boussole des structures (accroupi + clic droit pour choisir la cible) donne la distance et la direction. Survole ou touche une image pour passer de la rotation à la vue détaillée.")}
   <h3 class="subhead">Les merveilles du monde</h3>
+  {ingame_feature(ctx, "mega_structure")}
   {"".join(wcards)}
   {"".join(f'<h3 class="subhead">{E(t)}</h3><div class="grid structs">{"".join(scards[k])}</div>' for k, t in (("overworld", "Surface et profondeurs"), ("sea", "Sous les mers"), ("nether", "Nether"), ("end", "End")) if scards[k])}
 </section>''')
@@ -1916,6 +2018,7 @@ def section_automatons(ctx):
     ctx.idx.add("Construire le golem de laiton", "Automate", "golem", " ".join(x for _t, x in TXT.GOLEM_STEPS))
     return f'''<section class="block" id="automates">
   {plaque("automates-h", "Nouveau · mécanique vivante", "Automates", E(TXT.AUTOMATONS_INTRO))}
+  {ingame_feature(ctx, "creatures")}
   <h3 class="subhead" id="golem">Le golem de laiton, ton compagnon</h3>
   <div class="golem">
     <figure class="vitrine golem-fig"><img src="{golem_gif}" alt="Le golem de laiton en rotation" loading="lazy"><figcaption>{fmt_num(gst["hp"])} PV · coup de {fmt_num(gst["dmg"])}</figcaption></figure>
@@ -1978,6 +2081,54 @@ def screen_fig(gui, key, caption, anchor=None, cls=""):
             f'loading="lazy"><figcaption>{E(caption)}</figcaption></figure>')
 
 
+INGAME = {n: (t, x, a) for n, t, x, a in TXT.INGAME_SHOTS}
+
+
+def shot_fig(ctx, n, caption=None, cls="", tag=True, eager=False):
+    """<figure> of one real in-game screenshot (opens large on click), or "" when the CI did not publish it."""
+    if n not in ctx.shots:
+        return ""
+    rel, w, h = ctx.shots[n]
+    t, x, _a = INGAME[n]
+    cap = caption if caption is not None else f"{t} : {x}"
+    alt = f"Capture en jeu · {t} : {x}"
+    return (f'<figure class="screen ingame {cls}">{"<span class=livetag>Capture en jeu</span>" if tag else ""}'
+            f'<img src="{rel}" alt="{E(alt, quote=True)}" width="{w}" height="{h}" tabindex="0" '
+            f'loading="{"eager" if eager else "lazy"}">'
+            f'{f"<figcaption>{cap}</figcaption>" if cap else ""}</figure>')
+
+
+def ingame_feature(ctx, n, anchor=None):
+    """A real screenshot beside a short note on what it shows, for the top of a section. "" when it is missing."""
+    fig = shot_fig(ctx, n, caption="", tag=True)
+    if not fig:
+        return ""
+    t, x, _a = INGAME[n]
+    aid = f' id="{anchor}"' if anchor else ""
+    return (f'<div class="ingame-row"{aid}>{fig}<div class="ingame-note"><span class="kicker">Vu en jeu</span>'
+            f'<h4>{E(t)}</h4><p>{E(x)}</p><p class="small">Vraie capture du client de test, prise toute seule à chaque '
+            f'compilation (jeu en anglais). <a href="#en-jeu">Toutes les captures</a>.</p></div></div>')
+
+
+def section_ingame(ctx):
+    if not ctx.shots:
+        return ""
+    figs = []
+    for k, (n, t, x, a) in enumerate(TXT.INGAME_SHOTS):
+        if n not in ctx.shots:
+            continue
+        cap = (f'<b>{E(t)}</b><span>{E(x)}</span>'
+               + (f'<a href="#{a}">Voir la section</a>' if a else ""))
+        figs.append(shot_fig(ctx, n, caption=cap, cls="lead" if not figs else "", tag=False, eager=k < 3))
+        ctx.idx.add(f"En jeu : {t}", "Capture", "en-jeu", x)
+    when = shot_date(ctx.shot_dates)
+    return f'''<section class="block ingame-sec" id="en-jeu">
+  {plaque("en-jeu-h", "Captures réelles · serveur de test", TXT.INGAME_TITLE, E(TXT.INGAME_INTRO))}
+  <div class="gallery">{"".join(figs)}</div>
+  <p class="note">{E(TXT.INGAME_NOTE)}{f" Dernières captures : {E(when)}." if when else ""}</p>
+</section>'''
+
+
 def new_held_ids(ref, ids):
     """Items whose 3D in-hand model is new since a git commit (their item definition had no display-context
     switch then). Empty without git."""
@@ -2018,13 +2169,13 @@ def section_map(ctx):
     return f'''<section class="block" id="carte">
   {plaque("carte-h", "Nouveau · se repérer", "Carte du monde et mini-carte", E(TXT.MAP_INTRO))}
   <div class="map-hero">
-    {screen_fig(gui, "worldmap", "La carte du monde : un repère partagé ouvert, la légende et tes repères à droite", cls="big")}
+    {shot_fig(ctx, "world_map", cls="big") or screen_fig(gui, "worldmap", "La carte du monde : un repère partagé ouvert, la légende et tes repères à droite", cls="big")}
     <div class="map-side">{what}</div>
   </div>
   <ul class="keyrow">{keyrow}</ul>
   <div class="grid feats">{feats}</div>
   <h3 class="subhead" id="mini-carte">La mini-carte</h3>
-  <div class="mini-row">{screen_fig(gui, "minimap", "Le hublot rond (par défaut) et le cadre carré")}
+  <div class="mini-row"><div>{shot_fig(ctx, "hud_minimap")}{screen_fig(gui, "minimap", "Maquette : le hublot rond (par défaut) et le cadre carré" if "hud_minimap" in ctx.shots else "Le hublot rond (par défaut) et le cadre carré")}</div>
     <div>{"".join(f"<p>{E(p)}</p>" for p in TXT.MINIMAP_TEXT)}
     <h4 class="minihead">Sur l'écran de la carte</h4>
     <div class="scroll"><table class="tbl ctl"><tbody>{controls}</tbody></table></div></div>
@@ -2083,6 +2234,7 @@ def section_terminal(ctx):
     ctx.idx.add("Réseau du terminal : exclure un coffre, Montrer", "Rangement", "terminal-reseau", " ".join(network))
     return f'''<section class="block" id="terminal">
   {plaque("terminal-h", "Nouveau · rangement", "Le terminal de guilde, pour toute la base", E(TXT.TERMINAL_INTRO))}
+  {ingame_feature(ctx, "guild_terminal")}
   <div class="grid tools">
     {card("wayfarers:guild_terminal", "guild_terminal", "terminal-carte")}
     {card("wayfarers:storage_relay", "storage_relay", "relais")}
@@ -2290,6 +2442,7 @@ FONTS = ("https://fonts.googleapis.com/css2?family=Zilla+Slab:ital,wght@0,500;0,
 SECTIONS = {
     "accueil": ("Accueil", None, None),
     "nouveautes": ("Nouveautés de la nuit", "Nouveautés", "wayfarers:pocket_watch"),
+    "en-jeu": ("En jeu (captures)", "En jeu", "minecraft:spyglass"),
     "tester": ("Tester en jeu", "Tester en jeu", "minecraft:command_block"),
     "commencer": ("Par où commencer", None, None),
     "touches": ("Touches & commandes", None, None),
@@ -2318,7 +2471,7 @@ SECTIONS = {
 
 
 # sections marked with a dot in the menu and the tiles (what changed tonight)
-NEW_SECTIONS = {"nouveautes", "tester", "carte", "terminal", "oceans", "blocs-monde", "performances"}
+NEW_SECTIONS = {"nouveautes", "en-jeu", "tester", "carte", "terminal", "oceans", "blocs-monde", "performances"}
 
 
 def render_page(sections, idx, atlas_rows, nav):
@@ -2757,6 +2910,39 @@ a.chip:hover{border-color:var(--brass)}
 .lightbox figcaption{color:#efe3c8;margin-top:8px;text-align:center;font-size:15px}
 .mscreen{margin:10px 0 4px}
 .mscreen img{max-height:330px;width:auto;max-width:100%}
+/* real in-game screenshots (CI client) */
+.ingame{position:relative}
+.ingame img{aspect-ratio:16/9;object-fit:cover;border-color:var(--brass-lo)}
+.livetag{position:absolute;left:10px;top:10px;z-index:2;pointer-events:none;display:inline-flex;align-items:center;gap:6px;
+  font:700 11px/1 "Pixelify Sans",monospace;letter-spacing:.06em;text-transform:uppercase;color:#f6e7c2;
+  background:rgba(20,16,12,.78);border:1px solid rgba(228,183,90,.6);border-radius:4px;padding:4px 7px}
+.livetag::before{content:"";width:7px;height:7px;border-radius:50%;background:#d9563a;box-shadow:0 0 0 2px rgba(217,86,58,.3)}
+.gallery{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:0 0 6px}
+.gallery .screen{margin:0;display:flex;flex-direction:column;background:var(--card);border:1px solid var(--rule);border-radius:10px;
+  padding:8px;box-shadow:var(--shadow)}
+.gallery .screen img{border-radius:6px}
+.gallery .lead{grid-column:span 2;grid-row:span 2}
+.gallery .lead img{flex:1;min-height:0;object-position:left center}
+.gallery figcaption{display:flex;flex-direction:column;gap:2px;padding:8px 4px 2px;color:var(--ink-2);font-size:14.5px;line-height:1.4}
+.gallery figcaption b{font:700 17px/1.2 "Zilla Slab",serif;color:var(--ink)}
+.gallery .lead figcaption b{font-size:21px}
+.gallery figcaption a{font-size:13.5px;font-weight:600;margin-top:2px}
+.ingame-row{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(0,1fr);gap:18px;align-items:center;margin:0 0 20px}
+.ingame-row .screen{margin:0}
+.ingame-note{background:var(--card);border:1px solid var(--rule);border-left:4px solid var(--rust);border-radius:8px;padding:12px 16px;box-shadow:var(--shadow)}
+.ingame-note .kicker{color:var(--rust)}
+.ingame-note h4{margin:4px 0 6px;font:700 20px/1.2 "Zilla Slab",serif}
+.ingame-note p{margin:0 0 6px;color:var(--ink-2)}
+.ingame-note .small{font-size:14px;color:var(--ink-3);margin:0}
+.ingame-pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:0 0 8px}
+.ingame-pair .screen{margin:0}
+.mini-row .screen+.screen{margin-top:14px}
+@media (max-width:1060px){.gallery{grid-template-columns:repeat(2,minmax(0,1fr))}.gallery .lead{grid-row:auto}
+  .gallery .screen:last-child:nth-child(even){grid-column:span 2}
+  .ingame-row{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:560px){.gallery{gap:8px}.gallery .screen{padding:5px}.gallery figcaption{font-size:13px;padding:6px 2px 0}
+  .gallery figcaption b{font-size:15px}.gallery .lead figcaption b{font-size:17px}.gallery figcaption span{display:none}
+  .gallery .lead figcaption span{display:block}.ingame-pair{grid-template-columns:minmax(0,1fr)}.livetag{left:6px;top:6px;font-size:10px}}
 /* world map */
 .map-hero{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:20px;align-items:start}
 .map-hero .screen{margin:0}
@@ -2914,7 +3100,8 @@ JS = r"""
     var i=e.target.closest('.screen img,.views img');
     if(i){var im=lb.querySelector('img');im.src=i.currentSrc||i.src;im.alt=i.alt;lb.querySelector('figcaption').textContent=i.alt;lb.hidden=false;return;}
     if(e.target.closest('.lightbox'))lb.hidden=true;});
-  document.addEventListener('keydown',function(e){if(e.key==='Escape')lb.hidden=true;});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')lb.hidden=true;
+    if(e.key==='Enter'&&document.activeElement&&document.activeElement.matches('.ingame img'))document.activeElement.click();});
   // tap to flip structure views on touch screens
   document.querySelectorAll('.flip').forEach(function(f){f.addEventListener('click',function(){f.classList.toggle('on');});});
   // nav highlight
