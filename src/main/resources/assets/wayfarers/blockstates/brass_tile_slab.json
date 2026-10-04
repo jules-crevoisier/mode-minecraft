@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "wayfarers:block/brass_tile_slab"
+    },
+    "type=top": {
+      "model": "wayfarers:block/brass_tile_slab_top"
+    },
+    "type=double": {
+      "model": "wayfarers:block/brass_tiles"
+    }
+  }
+}

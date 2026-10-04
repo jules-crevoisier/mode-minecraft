@@ -129,6 +129,53 @@ DECOR = {
 }
 
 
+def _chisel_decor():
+    """Variants only the Engraver's Chisel makes (tools/wf/chisel.py families); no crafting recipe of their own."""
+    from . import texgen_chisel as C
+    return {
+        "guild_tiles": dict(en="Guild Tiles", fr="Dallage de la Guilde",
+                            tex={"all": lambda: C.tiles(T.mul(GUILD, 1.02), seed=60, grout=GUILD_MORTAR)},
+                            color="SAND", sound="STONE", strength=2.0, variants=()),
+        "chiseled_lithite_bricks": dict(en="Chiseled Lithite Bricks", fr="Briques de lithite sculptées",
+                                        tex={"all": lambda: C.carved_bricks(LITHITE_STONE, (56, 62, 66), "crystal",
+                                                                            glow=(120, 236, 214), seed=61)},
+                                        color="COLOR_GRAY", sound="DEEPSLATE_BRICKS", strength=3.0, light=5, variants=()),
+        "chiseled_ember_bricks": dict(en="Chiseled Ember Bricks", fr="Briques de braise sculptées",
+                                      tex={"all": lambda: C.carved_bricks(EMBER_STONE, (24, 20, 24), "flame",
+                                                                          glow=EMBER_GLOW, seed=62)},
+                                      color="COLOR_BLACK", sound="NETHER_BRICKS", strength=3.0, light=7, variants=()),
+        "chiseled_void_bricks": dict(en="Chiseled Void Bricks", fr="Briques du vide sculptées",
+                                     tex={"all": lambda: C.carved_bricks(VOID_STONE, (22, 14, 32), "star",
+                                                                         glow=STAR, seed=63)},
+                                     color="COLOR_PURPLE", sound="STONE", strength=3.0, light=4, variants=()),
+        "brass_tiles": dict(en="Brass Tiles", fr="Carreaux de laiton",
+                            tex={"all": lambda: C.tiles(S.BRASS, seed=64)},
+                            color="GOLD", sound="METAL", strength=4.0, variants=("stairs", "slab")),
+        "engraved_brass": dict(en="Engraved Brass", fr="Laiton gravé",
+                               tex={"all": lambda: C.engraved(S.BRASS, seed=65)},
+                               color="GOLD", sound="METAL", strength=4.0, variants=()),
+        "brass_grille": dict(en="Brass Grille", fr="Grille en laiton",
+                             tex={"all": lambda: C.grille(S.BRASS, (34, 28, 26), seed=66)},
+                             color="GOLD", sound="METAL", strength=4.0, variants=()),
+        "copper_tiles": dict(en="Copper Tiles", fr="Carreaux de cuivre",
+                             tex={"all": lambda: C.tiles(S.COPPER, seed=67)},
+                             color="COLOR_ORANGE", sound="COPPER", strength=4.0, variants=("stairs", "slab")),
+        "dark_iron_bricks": dict(en="Dark Iron Bricks", fr="Briques de fer sombre",
+                                 tex={"all": lambda: C.iron_bricks(T.mul(S.DARK_IRON, 1.15), seed=68)},
+                                 color="COLOR_BLACK", sound="METAL", strength=5.0, variants=("stairs", "slab", "wall")),
+        "sooty_smokestack_bricks": dict(en="Sooty Smokestack Bricks", fr="Briques de cheminée encrassées",
+                                        tex={"all": lambda: C.sooty_bricks((140, 62, 48), (60, 50, 46), seed=69)},
+                                        color="COLOR_RED", sound="STONE", strength=2.0, variants=("stairs", "slab", "wall")),
+        "mahogany_parquet": dict(en="Mahogany Parquet", fr="Parquet d'acajou",
+                                 tex={"all": lambda: C.parquet(S.MAHOGANY, seed=70)},
+                                 color="COLOR_BROWN", sound="WOOD", strength=2.0, tool="axe", variants=("stairs", "slab")),
+    }
+
+
+CHISEL_ONLY = _chisel_decor()
+DECOR.update(CHISEL_ONLY)
+
+
 def all_block_ids():
     ids = []
     for bid, d in DECOR.items():

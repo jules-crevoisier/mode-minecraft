@@ -67,6 +67,7 @@ public final class Wayfarers {
         DangerEvents.register();
         com.wayfarers.event.QolEvents.register();
         com.wayfarers.skill.SkillEvents.register();
+        com.wayfarers.chisel.ChiselFamilies.register();
         SpawnPlacementRegisterEvent.BUS.addListener(ModEntities::registerSpawnPlacements);
         context.registerConfig(ModConfig.Type.COMMON, WayfarersConfig.SPEC);
         context.registerConfig(ModConfig.Type.CLIENT, com.wayfarers.config.WayfarersClientConfig.SPEC);

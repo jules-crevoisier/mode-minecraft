@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/outer_stairs",
+  "textures": {
+    "bottom": "wayfarers:block/dark_iron_bricks",
+    "top": "wayfarers:block/dark_iron_bricks",
+    "side": "wayfarers:block/dark_iron_bricks"
+  }
+}

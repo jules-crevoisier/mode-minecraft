@@ -23,7 +23,8 @@ def rid(x):
 
 
 MOD_ITEMS = {"map_fragment", "lithite_shard", "ancient_ember", "void_shard", "warden_scale", "void_heart",
-             "sorting_chest", "waystone", "guild_terminal", "compacting_crate", "explorer_backpack"}
+             "sorting_chest", "waystone", "guild_terminal", "compacting_crate", "explorer_backpack",
+             "chisel", "chisel_table"}
 MOD_ITEMS |= {f"remembrance_{row[0]}" for row in __import__("wf.bossgear", fromlist=["BOSS_GEAR"]).BOSS_GEAR}
 MOD_ITEMS |= __import__("wf.metals", fromlist=["all_item_ids"]).all_item_ids()
 MOD_ITEMS |= set(__import__("wf.machines", fromlist=["MACHINES"]).MACHINES)
@@ -93,6 +94,9 @@ def recipes():
     shapeless("mana_amulet", ["gold_ingot", "string", "amethyst_shard", "amethyst_shard", "lithite_shard"])
     shapeless("oblivion_vial", ["glass_bottle", "ghast_tear", "amethyst_shard"])
     shapeless("master_builder_wand", ["builder_wand", "lithite_shard", "lithite_shard", "diamond"])
+    # building tools (Lot 2e): the chisel cycles block variants (wf/chisel.py), the table converts whole stacks
+    shaped("chisel", ["  I", " B ", "S  "], {"I": "iron_ingot", "B": "brass_ingot", "S": "stick"}, category="equipment")
+    shaped("chisel_table", ["BCB", "PPP", "P P"], {"B": "brass_ingot", "C": "chisel", "P": "#planks"})
     # tier 1 — map fragments (Overworld)
     shaped("cartographer_blade", [" I ", "MIM", " S "], {"I": "iron_ingot", "M": "map_fragment", "S": "stick"}, category="equipment")
     armor_set("explorer", "leather", {"X": "map_fragment"})
@@ -134,14 +138,15 @@ def tags():
     from wf import decor
     axe_decor = [f"{NS}:{i}" for bid, d in decor.DECOR.items() if d.get("tool") == "axe"
                  for i in [bid] + [decor.variant_id(bid, v) for v in d["variants"]]]
-    write("minecraft/tags/block/mineable/axe.json", {"replace": False, "values": [f"{NS}:sorting_chest", f"{NS}:guild_terminal", f"{NS}:compacting_crate"]
+    write("minecraft/tags/block/mineable/axe.json", {"replace": False, "values": [f"{NS}:sorting_chest", f"{NS}:guild_terminal", f"{NS}:compacting_crate",
+                                                                                f"{NS}:chisel_table"]
                                                                                + axe_decor})
     write("minecraft/tags/block/needs_iron_tool.json", {"replace": False, "values": [
         f"{NS}:lithite_ore", f"{NS}:deepslate_lithite_ore"]})
 
 
 def block_loot():
-    for b in ("waystone", "sorting_chest", "guild_terminal", "compacting_crate"):
+    for b in ("waystone", "sorting_chest", "guild_terminal", "compacting_crate", "chisel_table"):
         write(f"{NS}/loot_table/blocks/{b}.json", {
             "type": "minecraft:block",
             "pools": [{"rolls": 1.0, "bonus_rolls": 0.0,
@@ -434,6 +439,17 @@ def decor_data():
     craft("smokestack_bricks", ["BC", "CB"], {"B": "brick", "C": "coal"}, 4)
 
 
+def chisel_data():
+    """data/wayfarers/chisel/<family>.json, one file per family of tools/wf/chisel.py (old files removed)."""
+    from wf import chisel
+    folder = os.path.join(DATA, NS, "chisel")
+    if os.path.isdir(folder):
+        for f in os.listdir(folder):
+            os.remove(os.path.join(folder, f))
+    for rel, obj in chisel.data_files().items():
+        write(rel, obj)
+
+
 def machines_data():
     """Recipes and loot for machines.py; returns their pickaxe tag values."""
     from wf import machines
@@ -466,6 +482,7 @@ def main():
     decor_data()
     recipes()
     tags()
+    chisel_data()
     block_loot()
     entity_loot()
     ore_worldgen()

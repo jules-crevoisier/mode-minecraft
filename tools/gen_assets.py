@@ -11,7 +11,7 @@ import wf.structures  # noqa: E402,F401
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 ASSETS = os.path.join(ROOT, "src", "main", "resources", "assets", "wayfarers")
 NS = "wayfarers"
-HANDHELD = {"builder_wand", "master_builder_wand", "fire_staff", "frost_staff", "thunder_staff", "healing_staff",
+HANDHELD = {"builder_wand", "master_builder_wand", "chisel", "fire_staff", "frost_staff", "thunder_staff", "healing_staff",
             "levitation_wand", "steam_cane", "cartographer_blade", "telluric_hammer", "storm_staff", "ember_scythe", "void_spear", "frost_blade",
             "light_staff", "excavator_pickaxe", "lumber_axe"}
 HANDHELD |= {row[2] for row in __import__("wf.bossgear", fromlist=["BOSS_GEAR"]).BOSS_GEAR}
@@ -59,6 +59,11 @@ def block_models(bid, kind):
                  "faces": {f: {"texture": "#top" if f in ("up", "down") else "#side"}
                            for f in ("north", "south", "east", "west", "up", "down")}},
             ]})
+    elif kind == "table":
+        # minecraft:block/cube with the front on north, like orientable (the blockstate turns it)
+        write(f"models/block/{bid}.json", {"parent": "minecraft:block/cube", "textures": {
+            "particle": t + bid + "_side", "up": t + bid + "_top", "down": "minecraft:block/spruce_planks",
+            "north": t + bid + "_front", "south": t + bid + "_side", "east": t + bid + "_side", "west": t + bid + "_side"}})
     elif kind == "mist":
         write(f"models/block/{bid}.json", {"parent": "minecraft:block/cube_all", "render_type": "minecraft:translucent",
                                            "textures": {"all": t + bid}})
@@ -79,7 +84,7 @@ def blockstate(bid, kind):
     model = f"{NS}:block/{bid}"
     if kind == "mist":
         variants = {f"sealed={v}": {"model": model} for v in ("false", "true")}
-    elif kind in ("front", "grave"):
+    elif kind in ("front", "grave", "table"):
         variants = {f"facing={f}": {"model": model, **({"y": r} if r else {})}
                     for f, r in (("north", 0), ("east", 90), ("south", 180), ("west", 270))}
     else:

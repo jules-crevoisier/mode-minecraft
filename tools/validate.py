@@ -68,7 +68,7 @@ def _mod_states():
     """Block-state properties of the mod's machines, furniture and crate (wf tables)."""
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     from wf import furniture, machines
-    out = {"compacting_crate": {"facing": HORIZONTAL}}
+    out = {"compacting_crate": {"facing": HORIZONTAL}, "chisel_table": {"facing": HORIZONTAL}}
     for mid in machines.MACHINES:
         out[mid] = {"facing": HORIZONTAL + ["up", "down"], "powered": ["false", "true"]}
     for fid, f in furniture.FURNITURE.items():
@@ -262,6 +262,18 @@ def check_advancements():
                 check_item_id(rel, v)
 
 
+def check_chisel():
+    """Chisel families (wf/chisel.py): known blocks, one family per block, data files in sync."""
+    from wf import chisel
+    for problem in chisel.check(set(MC_GAME["blocks"]), mod_ids("blocks")):
+        err(problem)
+    folder = os.path.join(DATA, "wayfarers", "chisel")
+    expected = {os.path.basename(rel) for rel in chisel.data_files()}
+    present = set(os.listdir(folder)) if os.path.isdir(folder) else set()
+    for f in sorted(expected ^ present):
+        err(f"chisel data file {f} out of date: run gen_data.py")
+
+
 def check_lang():
     """Every registered id has a translation in both languages."""
     a = os.path.join(ASSETS, "wayfarers", "lang")
@@ -325,6 +337,7 @@ def main():
     check_advancements()
     check_lang()
     check_tags()
+    check_chisel()
     import validate_world
     if validate_world.main() != 0:
         err("world overhaul pack: see the errors above")

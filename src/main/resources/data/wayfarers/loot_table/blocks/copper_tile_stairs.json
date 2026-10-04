@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "wayfarers:copper_tile_stairs"
+        }
+      ]
+    }
+  ],
+  "random_sequence": "wayfarers:blocks/copper_tile_stairs"
+}

@@ -1,0 +1,10 @@
+{
+  "blocks": [
+    "minecraft:stone",
+    "minecraft:stone_bricks",
+    "minecraft:mossy_stone_bricks",
+    "minecraft:cracked_stone_bricks",
+    "minecraft:chiseled_stone_bricks",
+    "minecraft:smooth_stone"
+  ]
+}

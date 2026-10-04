@@ -3,18 +3,31 @@ package com.wayfarers.client;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.wayfarers.item.BuilderWandItem;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.client.event.RenderHighlightEvent;
 
-import java.util.List;
 import java.util.function.Consumer;
 
-/** While holding a Builder's Wand, outlines every block it would place on the face you look at. */
+/**
+ * While holding a Builder's Wand, outlines every block it would place on the face you look at: gold for the
+ * copies of the face, aether blue for their mirrored copies. With symmetry on, the mirror centre block is
+ * framed in amber and each mirror plane is drawn as a thin frame through it. Sneaking shows where a sneak-click
+ * would put the centre.
+ */
 public final class WandPreview {
+    private static final int GOLD = 0xFFF6C343;
+    private static final int MIRRORED = 0xFF3FD0FF;
+    private static final int CENTRE = 0xFFFFB347;
+    private static final int PLANE = 0x993FD0FF;
+    /** Half size of the drawn mirror planes, in blocks. */
+    private static final int PLANE_HALF = 5;
+
     private WandPreview() {}
 
     public static void register() {
@@ -31,21 +44,41 @@ public final class WandPreview {
             return;
         }
         BlockPos pos = event.getTarget().getBlockPos();
-        List<BlockPos> targets = BuilderWandItem.targets(mc.level, mc.player, pos, event.getTarget().getDirection(), wand.maxBlocks());
+        BlockPos centre = BuilderWandItem.mirrorCentre(mc.level, held);
+        BuilderWandItem.Symmetry symmetry = BuilderWandItem.symmetry(held);
+        boolean settingCentre = mc.player.isShiftKeyDown();
+        BuilderWandItem.Plan plan = settingCentre ? BuilderWandItem.Plan.EMPTY
+                : BuilderWandItem.plan(mc.level, mc.player, held, pos, event.getTarget().getDirection(), wand.maxBlocks());
         event.setCustomRenderer((collector, poseStack, state) -> {
             Vec3 cam = state.cameraRenderState.pos;
-            outline(collector, poseStack, pos, cam, 0x66000000);
-            for (BlockPos t : targets) {
-                outline(collector, poseStack, t, cam, 0xFFF6C343);
+            if (settingCentre) {
+                outline(collector, poseStack, pos, Shapes.block(), cam, CENTRE);
+            } else {
+                outline(collector, poseStack, pos, Shapes.block(), cam, 0x66000000);
+            }
+            for (BuilderWandItem.Placement p : plan.primary()) {
+                outline(collector, poseStack, p.pos(), Shapes.block(), cam, GOLD);
+            }
+            for (BuilderWandItem.Placement p : plan.mirrored()) {
+                outline(collector, poseStack, p.pos(), Shapes.block(), cam, MIRRORED);
+            }
+            if (centre != null) {
+                outline(collector, poseStack, centre, Shapes.box(-0.02, -0.02, -0.02, 1.02, 1.02, 1.02), cam, CENTRE);
+                double lo = -PLANE_HALF, hi = PLANE_HALF + 1;
+                if (symmetry == BuilderWandItem.Symmetry.X || symmetry == BuilderWandItem.Symmetry.XZ) {
+                    outline(collector, poseStack, centre, Shapes.box(0.49, lo + 2, lo, 0.51, hi - 2, hi), cam, PLANE);
+                }
+                if (symmetry == BuilderWandItem.Symmetry.Z || symmetry == BuilderWandItem.Symmetry.XZ) {
+                    outline(collector, poseStack, centre, Shapes.box(lo, lo + 2, 0.49, hi, hi - 2, 0.51), cam, PLANE);
+                }
             }
         });
     }
 
-    private static void outline(net.minecraft.client.renderer.SubmitNodeCollector collector, PoseStack ps, BlockPos p,
-                                Vec3 cam, int color) {
+    private static void outline(SubmitNodeCollector collector, PoseStack ps, BlockPos p, VoxelShape shape, Vec3 cam, int color) {
         ps.pushPose();
         ps.translate(p.getX() - cam.x, p.getY() - cam.y, p.getZ() - cam.z);
-        collector.submitShapeOutline(ps, Shapes.block(), RenderTypes.lines(), color, 2.0F, false);
+        collector.submitShapeOutline(ps, shape, RenderTypes.lines(), color, 2.0F, false);
         ps.popPose();
     }
 }

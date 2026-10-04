@@ -4,9 +4,13 @@
     "wayfarers:sorting_chest",
     "wayfarers:guild_terminal",
     "wayfarers:compacting_crate",
+    "wayfarers:chisel_table",
     "wayfarers:mahogany_panelling",
     "wayfarers:mahogany_panelling_stairs",
     "wayfarers:mahogany_panelling_slab",
+    "wayfarers:mahogany_parquet",
+    "wayfarers:mahogany_parquet_stairs",
+    "wayfarers:mahogany_parquet_slab",
     "wayfarers:mahogany_table",
     "wayfarers:mahogany_chair",
     "wayfarers:wall_shelf"

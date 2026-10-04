@@ -574,6 +574,54 @@
           }
         ]
       }
+    },
+    "clockwork_citadel": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "wayfarers:clockwork_citadel"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "sky_harbour": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "wayfarers:sky_harbour"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "undercity": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "wayfarers:undercity"
+              }
+            }
+          }
+        ]
+      }
     }
   },
   "parent": "wayfarers:end/void_warden",

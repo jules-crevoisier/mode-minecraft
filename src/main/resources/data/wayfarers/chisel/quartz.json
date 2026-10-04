@@ -1,0 +1,9 @@
+{
+  "blocks": [
+    "minecraft:quartz_block",
+    "minecraft:quartz_bricks",
+    "minecraft:chiseled_quartz_block",
+    "minecraft:quartz_pillar",
+    "minecraft:smooth_quartz"
+  ]
+}

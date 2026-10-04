@@ -16,6 +16,11 @@
     "wayfarers:dark_iron_plating_stairs",
     "wayfarers:diamond_plate_stairs",
     "wayfarers:mahogany_panelling_stairs",
-    "wayfarers:smokestack_brick_stairs"
+    "wayfarers:smokestack_brick_stairs",
+    "wayfarers:brass_tile_stairs",
+    "wayfarers:copper_tile_stairs",
+    "wayfarers:dark_iron_brick_stairs",
+    "wayfarers:sooty_smokestack_brick_stairs",
+    "wayfarers:mahogany_parquet_stairs"
   ]
 }

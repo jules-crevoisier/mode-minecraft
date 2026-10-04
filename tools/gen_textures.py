@@ -35,6 +35,7 @@ ITEMS = {
     "magnet_ring": ("ring", "iron", "wood", "ruby"),
     "recall_scroll": ("scroll", "map", "wood", "sapphire"),
     "builder_wand": ("staff", "gold", "wood", "emerald"),
+    "chisel": ("chisel", "iron", "wood", "gold"),
     "fire_staff": ("staff_flame", "ember", "dark", "ember"),
     "frost_staff": ("staff_snow", "frost", "bone", "ice"),
     "thunder_staff": ("staff_bolt", "storm", "dark", "gold"),
@@ -204,6 +205,8 @@ def rune(cv, color, seed):
 
 def block_textures():
     out = {}
+    from wf import texgen_chisel
+    out.update(texgen_chisel.chisel_table())
     stone = (118, 118, 124)
     # waystone
     side = noise_tile(stone, 10, 1)

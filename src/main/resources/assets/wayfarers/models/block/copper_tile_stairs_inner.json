@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/inner_stairs",
+  "textures": {
+    "bottom": "wayfarers:block/copper_tiles",
+    "top": "wayfarers:block/copper_tiles",
+    "side": "wayfarers:block/copper_tiles"
+  }
+}

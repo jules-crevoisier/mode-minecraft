@@ -147,6 +147,17 @@ def wand():
     return out
 
 
+def chisel():
+    """Engraver's Chisel: wooden grip with a struck brass cap, brass ferrule, steel shank, flat blade."""
+    out = [box(6.8, -3, 6.8, 9.2, 9, 9.2, "handle"), box(7.0, -2.5, 9.0, 9.0, 8.5, 9.3, "handle_dark"),
+           box(6.5, -4.5, 6.5, 9.5, -3, 9.5, "accent"), box(6.5, 9, 6.5, 9.5, 11, 9.5, "accent"),
+           box(6.7, 10.5, 6.7, 9.3, 11.5, 9.3, "accent_dark"),
+           box(7.4, 11.5, 7.4, 8.6, 16, 8.6, "mid"),
+           box(6.6, 16, 7.5, 9.4, 21, 8.5, "light"), box(6.6, 16, 8.5, 9.4, 20, 8.7, "dark"),
+           box(6.6, 21, 7.75, 9.4, 21.6, 8.25, "light")]
+    return out
+
+
 def orb():
     return [box(5, 5, 5, 11, 11, 11, "glow"), box(4.5, 7, 7, 11.5, 9, 9, "accent"), box(7, 4, 7, 9, 5, 9, "accent_dark")]
 
@@ -154,7 +165,7 @@ def orb():
 ARCHETYPES = {"sword": sword, "greatsword": greatsword, "blade": blade, "spear": spear,
               "trident": lambda: spear("trident"), "lance": lambda: spear("lance"), "hammer": hammer,
               "mace": mace, "staff": staff, "cane": cane, "scythe": scythe, "book": book, "fist": fist,
-              "horn": horn, "wand": wand, "orb": orb}
+              "horn": horn, "wand": wand, "orb": orb, "chisel": chisel}
 
 # item id -> (archetype, material, handle, accent)
 HELD = {
@@ -190,6 +201,7 @@ HELD = {
     "builder_wand": ("wand", "gold", "wood", "emerald"),
     "master_builder_wand": ("wand", "lithite", "dark", "amethyst"),
     "ward_orb": ("orb", "void", "gold", "amethyst"),
+    "chisel": ("chisel", "iron", "wood", "gold"),
 }
 
 DISPLAY = {

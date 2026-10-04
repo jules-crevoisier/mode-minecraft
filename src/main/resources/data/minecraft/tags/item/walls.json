@@ -7,6 +7,8 @@
     "wayfarers:ember_brick_wall",
     "wayfarers:void_brick_wall",
     "wayfarers:dark_iron_plating_wall",
-    "wayfarers:smokestack_brick_wall"
+    "wayfarers:smokestack_brick_wall",
+    "wayfarers:dark_iron_brick_wall",
+    "wayfarers:sooty_smokestack_brick_wall"
   ]
 }
