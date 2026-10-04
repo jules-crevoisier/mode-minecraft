@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "wayfarers:block/dark_iron_brick_slab"
+    },
+    "type=top": {
+      "model": "wayfarers:block/dark_iron_brick_slab_top"
+    },
+    "type=double": {
+      "model": "wayfarers:block/dark_iron_bricks"
+    }
+  }
+}

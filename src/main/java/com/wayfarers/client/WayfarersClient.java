@@ -32,6 +32,9 @@ public final class WayfarersClient {
             InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_K, CATEGORY);
     public static final KeyMapping ABILITY_KEY = new KeyMapping("key.wayfarers.ability",
             InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_V, CATEGORY);
+    /** Builder's Wand in hand: cycle its symmetry (off, mirror X, mirror Z, both). */
+    public static final KeyMapping WAND_KEY = new KeyMapping("key.wayfarers.wand_symmetry",
+            InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_G, CATEGORY);
 
     private WayfarersClient() {}
 
@@ -44,8 +47,12 @@ public final class WayfarersClient {
         ContainerButtons.register();
         WandPreview.register();
         net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent.getBus(modBus).addListener(event -> event.enqueueWork(() ->
-                net.minecraft.client.gui.screens.MenuScreens.register(com.wayfarers.registry.ModMenus.TERMINAL.get(),
-                        com.wayfarers.client.gui.TerminalScreen::new)));
+                {
+                    net.minecraft.client.gui.screens.MenuScreens.register(com.wayfarers.registry.ModMenus.TERMINAL.get(),
+                            com.wayfarers.client.gui.TerminalScreen::new);
+                    net.minecraft.client.gui.screens.MenuScreens.register(com.wayfarers.registry.ModMenus.CHISEL_TABLE.get(),
+                            com.wayfarers.client.gui.ChiselTableScreen::new);
+                }));
         AddGuiOverlayLayersEvent.BUS.addListener(TipCards::register);
         AddGuiOverlayLayersEvent.BUS.addListener(ManaHud::register);
         net.minecraftforge.event.entity.player.ItemTooltipEvent.BUS.addListener(TipCards::onTooltip);
@@ -55,6 +62,7 @@ public final class WayfarersClient {
             event.register(QUESTS_KEY);
             event.register(SKILLS_KEY);
             event.register(ABILITY_KEY);
+            event.register(WAND_KEY);
         });
         TickEvent.ClientTickEvent.Post.BUS.addListener(event -> onClientTick());
     }
@@ -105,6 +113,12 @@ public final class WayfarersClient {
         }
         if (mc.player != null && mc.player.tickCount % 20 == 0) {
             QuestTracker.tick();
+        }
+        while (WAND_KEY.consumeClick()) {
+            if (connection != null && mc.player != null && (mc.player.getMainHandItem().getItem() instanceof com.wayfarers.item.BuilderWandItem
+                    || mc.player.getOffhandItem().getItem() instanceof com.wayfarers.item.BuilderWandItem)) {
+                com.wayfarers.network.WayfarersNet.toServer(new com.wayfarers.network.WandModeMsg());
+            }
         }
         while (MAGNET_KEY.consumeClick()) {
             if (connection != null && mc.player != null) {

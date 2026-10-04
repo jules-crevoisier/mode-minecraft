@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "particle": "wayfarers:block/chisel_table_side",
+    "up": "wayfarers:block/chisel_table_top",
+    "down": "minecraft:block/spruce_planks",
+    "north": "wayfarers:block/chisel_table_front",
+    "south": "wayfarers:block/chisel_table_side",
+    "east": "wayfarers:block/chisel_table_side",
+    "west": "wayfarers:block/chisel_table_side"
+  }
+}

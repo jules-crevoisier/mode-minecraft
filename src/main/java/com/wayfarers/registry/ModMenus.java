@@ -13,6 +13,8 @@ public final class ModMenus {
 
     public static final RegistryObject<MenuType<TerminalMenu>> TERMINAL = MENUS.register("terminal",
             () -> IForgeMenuType.create((id, inv, buf) -> new TerminalMenu(id, inv, buf.readBlockPos())));
+    public static final RegistryObject<MenuType<com.wayfarers.menu.ChiselTableMenu>> CHISEL_TABLE = MENUS.register("chisel_table",
+            () -> IForgeMenuType.create((id, inv, buf) -> new com.wayfarers.menu.ChiselTableMenu(id, inv, buf.readBlockPos())));
 
     private ModMenus() {}
 }

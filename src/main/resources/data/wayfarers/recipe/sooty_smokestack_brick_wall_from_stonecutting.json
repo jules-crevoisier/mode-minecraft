@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "wayfarers:sooty_smokestack_bricks",
+  "result": {
+    "id": "wayfarers:sooty_smokestack_brick_wall",
+    "count": 1
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "blocks": [
+    "minecraft:copper_block",
+    "minecraft:cut_copper",
+    "minecraft:chiseled_copper",
+    "minecraft:copper_grate"
+  ]
+}

@@ -42,8 +42,10 @@ PAGES = [
          "les absents."),
     ], []),
     ("keys", "start", "minecraft:oak_sign", ("Keys", "Touches"), [
-        ("J: quest journal.  K: talent tree.  V: active talent.  R: sort your inventory.  M: magnet ring.",
-         "J : journal de quêtes.  K : arbre de talents.  V : talent actif.  R : trier l'inventaire.  M : aimant."),
+        ("J: quest journal.  K: talent tree.  V: active talent.  R: sort your inventory.  M: magnet ring.  "
+         "G: Builder's Wand symmetry.",
+         "J : journal de quêtes.  K : arbre de talents.  V : talent actif.  R : trier l'inventaire.  M : aimant.  "
+         "G : symétrie de la baguette."),
         ("All keys can be changed in Options > Controls > Wayfarers.",
          "Toutes les touches se changent dans Options > Commandes > Wayfarers."),
     ], []),
@@ -279,6 +281,44 @@ PAGES = [
         ("Made a mistake? Sneak-right-click in the air to undo the last use: the blocks come back to you.",
          "Une erreur ? Accroupi + clic droit dans le vide pour annuler : les blocs te reviennent."),
     ], ["wayfarers:builder_wand", "wayfarers:master_builder_wand"]),
+    ("symmetry", "gear", "wayfarers:master_builder_wand", ("Wand symmetry", "Symétrie de la baguette"), [
+        ("1. Sneak-right-click a block with the wand: it becomes the mirror centre (sparks show the plane) and "
+         "mirror X turns on.",
+         "1. Accroupi + clic droit sur un bloc avec la baguette : il devient le centre du miroir (des étincelles "
+         "montrent le plan) et le miroir X s'active."),
+        ("2. Press G (or sneak-click the centre again) to switch: off, mirror X (east/west), mirror Z "
+         "(north/south), mirror X + Z (4 ways).",
+         "2. Appuie sur G (ou accroupi + clic sur le centre) pour changer : désactivée, miroir X (est/ouest), "
+         "miroir Z (nord/sud), miroir X + Z (4 côtés)."),
+        ("3. Build as usual: gold outlines are your blocks, blue ones their mirrored copies (stairs turn the right "
+         "way). Each copy costs a block; undo removes them all.",
+         "3. Construis comme d'habitude : contours dorés pour tes blocs, bleus pour leurs copies en miroir (les "
+         "escaliers sont retournés). Chaque copie coûte un bloc ; annuler les retire toutes."),
+    ], ["wayfarers:builder_wand", "wayfarers:master_builder_wand"]),
+    ("chisel", "gear", "wayfarers:chisel", ("Engraver's Chisel", "Burin du graveur"), [
+        ("Right-click a block to carve it into the next variant of its family: stone, bricks, mossy, cracked, "
+         "chiseled... Sneak-right-click goes back. Each cut uses one durability.",
+         "Clic droit sur un bloc pour le tailler en la variante suivante de sa famille : pierre, briques, moussues, "
+         "fissurées, sculptées... Accroupi : retour en arrière. Chaque taille use le burin d'un point."),
+        ("Stairs, slabs and walls keep their shape; copper keeps its age and wax. Works on vanilla stone, deepslate, "
+         "tuff, sandstone, quartz, prismarine, blackstone, terracotta, copper and the Wayfarers blocks.",
+         "Escaliers, dalles et murets gardent leur forme ; le cuivre garde son oxydation et sa cire. Marche sur la "
+         "pierre, l'ardoise des abîmes, le tuf, le grès, le quartz, la prismarine, la pierre noire, la terre cuite, "
+         "le cuivre et les blocs Wayfarers."),
+        ("Some steampunk variants only exist through the chisel: brass tiles, engraved brass, brass grille, copper "
+         "tiles, dark iron bricks, mahogany parquet...",
+         "Certaines variantes steampunk n'existent que par le burin : carreaux et grille en laiton, laiton gravé, "
+         "carreaux de cuivre, briques de fer sombre, parquet d'acajou..."),
+    ], ["wayfarers:chisel", "wayfarers:engraved_brass", "wayfarers:brass_tiles", "wayfarers:dark_iron_bricks",
+        "wayfarers:mahogany_parquet"]),
+    ("chisel_table", "gear", "wayfarers:chisel_table", ("Chisel Table", "Table de taille"), [
+        ("Right-click the table and put a whole stack of blocks in its slot: every variant of the family appears "
+         "on the right.",
+         "Clic droit sur la table et pose une pile entière de blocs dans sa case : toutes les variantes de la "
+         "famille apparaissent à droite."),
+        ("Click a variant to turn the whole stack into it. It is free and the table never wears out.",
+         "Clique une variante pour y transformer toute la pile. C'est gratuit et la table ne s'use jamais."),
+    ], ["wayfarers:chisel_table", "wayfarers:chisel"]),
     ("tools", "gear", "wayfarers:excavator_pickaxe", ("Special tools", "Outils spéciaux"), [
         ("The Excavator Pickaxe mines 3x3 and the Lumber Axe fells whole trees. Sneak to break a single block.",
          "La pioche d'excavation mine en 3x3 et la hache de bûcheron abat l'arbre entier. Accroupi : un seul bloc."),

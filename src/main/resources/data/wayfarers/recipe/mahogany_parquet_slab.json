@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "XXX"
+  ],
+  "key": {
+    "X": "wayfarers:mahogany_parquet"
+  },
+  "result": {
+    "id": "wayfarers:mahogany_parquet_slab",
+    "count": 6
+  }
+}

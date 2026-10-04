@@ -58,6 +58,8 @@ public final class ModBlocks {
     public static final RegistryObject<Block> DEEPSLATE_LITHITE_ORE = register("deepslate_lithite_ore", Block::new,
             BlockBehaviour.Properties.of().mapColor(MapColor.DEEPSLATE).strength(4.5F, 3.0F)
                     .sound(SoundType.DEEPSLATE).requiresCorrectToolForDrops().lightLevel(s -> 3));
+    public static final RegistryObject<Block> CHISEL_TABLE = register("chisel_table", com.wayfarers.block.ChiselTableBlock::new,
+            BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).strength(2.5F).sound(SoundType.WOOD));
 
     private static <B extends Block> RegistryObject<B> register(String name, Function<BlockBehaviour.Properties, B> factory,
                                                                BlockBehaviour.Properties props) {

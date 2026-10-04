@@ -68,7 +68,9 @@ GitHub recompile le mod à chaque modification : voir l'onglet *Releases* ou *Ac
 | **Confort** | Réapprovisionnement automatique de la barre d'action ; récolte au clic droit avec replantation. |
 | **Terminal de guilde** | Tous les coffres à 12 blocs dans une seule grille, avec recherche. |
 | **Caisse compacte** | 32 piles d'un seul objet, affiché en façade avec le total. Clic droit pour ranger (double clic : tout), clic gauche pour prendre. |
-| **Baguettes du bâtisseur** | Prolongent une face (16 ou 64 blocs) avec un aperçu ; accroupi dans le vide pour annuler. |
+| **Baguettes du bâtisseur** | Prolongent une face (16 ou 64 blocs) avec un aperçu ; accroupi dans le vide pour annuler. **Symétrie** : accroupi + clic sur un bloc pour placer le centre du miroir, touche **G** pour choisir miroir X, Z ou les deux (4 côtés) ; les copies en miroir s'affichent en bleu. |
+| **Burin du graveur** | Clic droit : le bloc passe à la variante suivante de sa famille (pierre → briques → moussues → fissurées → sculptées...), accroupi pour revenir. Escaliers et dalles gardent leur forme, le cuivre son oxydation. Pierre, ardoise, tuf, grès, quartz, prismarine, pierre noire, terre cuite, cuivre et blocs du mod (familles en données : `data/<ns>/chisel/*.json`). |
+| **Table de taille** | Pose une pile, clique une variante : toute la pile est transformée, gratuitement. |
 | **Machines simples** (sans énergie ni câble) | Moissonneuse, arroseur, trémie aspirante, casseur et poseur de blocs, minuteur, émetteur et récepteur sans fil, détecteur de créatures. |
 
 ### Talents et magie
@@ -295,6 +297,7 @@ Les structures sont bâties avec des blocs propres au mod, qu'on peut aussi util
 | Profondeurs | Briques de lithite · Bloc de cristal de lithite (lumineux) |
 | Nether | Briques de braise · Lampe de braise · Frise dorée |
 | End | Briques du vide · Bloc de lumière stellaire |
+| Au burin seulement | Dallage de la Guilde · Briques de lithite, de braise et du vide sculptées · Carreaux, grille et laiton gravé · Carreaux de cuivre · Briques de fer sombre · Briques de cheminée encrassées · Parquet d'acajou |
 
 ---
 
@@ -364,6 +367,8 @@ Le code Java vit dans `src/main/java/com/wayfarers` :
 - [ ] Touche **K** (talents), **J** (quêtes), clic droit sur le Manuel ; maintenir **W** sur un objet du mod.
 - [ ] Une machine : moissonneuse au bord d'un champ avec un coffre collé ; minuteur relié à un casseur.
 - [ ] Une caisse compacte : l'objet et le total s'affichent en façade.
+- [ ] Burin : clic droit sur de la pierre (puis accroupi), sur un escalier en briques de pierre (l'orientation est gardée) et sur du cuivre ciré. Table de taille : une pile de pierre devient une pile de briques.
+- [ ] Baguette : accroupi + clic sur un bloc (centre), **G** pour changer de miroir ; les contours bleus montrent les copies, un escalier posé ressort retourné de l'autre côté ; accroupi dans le vide annule tout.
 - [ ] Une arme de boss en main : le modèle 3D s'affiche à la 1re et à la 3e personne.
 - [ ] Une mort : une tombe apparaît et rend les objets.
 - [ ] Citadelle engloutie : en entrant dans l'arène, le boss apparaît, la brume se ferme, la barre de vie s'affiche en bas de l'écran, et les barreaux et la brume tombent à sa mort (« ENNEMI ABATTU »).
