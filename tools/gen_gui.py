@@ -691,6 +691,122 @@ def mockup_quests():
     m.save("quests")
 
 
+def mockup_guide(shots=(("wonders", 0), ("wonders", 1), ("brass_golem", 0), ("keys", 0), ("chisel", 1)), lang="fr"):
+    """The Wayfarer's Manual (GuideScreen) at its smallest size (384 x 232), one PNG per (page, sheet): the page
+    split into sheets by wf.guide.layout(), which mirrors GuideScreen.paginate() with Minecraft's glyph advances.
+    Text is drawn glyph by glyph on those advances, so line breaks and lengths match the game."""
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from wf import guide
+    S = 3
+    W, H = 384, guide.BOOK_H
+    li = 1 if lang == "fr" else 0
+    pages = {p[0]: p for p in guide.PAGES}
+    cats = [(c, t[li]) for c, _i, t in guide.CATEGORIES]
+    toc = []
+    for c, ct in cats:
+        toc.append(("cat", c, ct))
+        toc += [("page", p[0], p[3][li]) for p in guide.PAGES if p[1] == c]
+    try:
+        ttf = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 26)
+    except OSError:
+        ttf = ImageFont.load_default()
+    item_dir = os.path.join(ROOT, "src", "main", "resources", "assets", "wayfarers", "textures", "item")
+    total = sum(len(guide.layout(p[3][li], [x[li] for x in p[4]], bool(p[5]), lang=li)) for p in guide.PAGES)
+    for pid, part in shots:
+        _pid, _cat, icon_id, titles, paras, items = pages[pid]
+        sheets, compact = guide.layout(titles[li], [x[li] for x in paras], bool(items), lang=li, with_header=True)
+        part = min(part, len(sheets) - 1)
+        m = Mock(W + 40, H + 40)
+        ox, oy = 20, 20
+        m.nine("panel", ox, oy, W, H, 9)
+        m.nine("title_plate", ox + W // 2 - 60, oy - 5, 120, 18, 6)
+        tx, ty, tw, th = ox + 14, oy + 24, 120, H - 36
+        m.nine("inset", tx, ty, tw, th, 4)
+        rows_ = (th - 6) // 11
+        sel = [i for i, r in enumerate(toc) if r[1] == pid and r[0] == "page"][0]
+        scroll = max(0, min(len(toc) - rows_, sel - rows_ // 2))
+        px, pw = ox + 142, W - 156
+        card_bottom = oy + H - 36
+        m.nine("card", px, oy + 18, pw, card_bottom - oy - 18, 4)
+        m.nine("scroll_track", tx + tw - 9, ty + 3, 6, th - 6, 2)
+        thumb = max(12, (th - 6) * rows_ // len(toc))
+        m.nine("scroll_thumb", tx + tw - 9, ty + 3 + (th - 6 - thumb) * scroll // max(1, len(toc) - rows_), 6, thumb, 2)
+        if scroll <= sel < scroll + rows_:
+            m.nine("row_selected", tx + 3, ty + 4 + (sel - scroll) * 11 - 1, tw - 12, 11, 2)
+        last = part == len(sheets) - 1
+        m.nine("button", px + 4, oy + H - 32, 60, 18, 4)
+        m.nine("button" if total > 1 else "button_disabled", px + pw - 64, oy + H - 32, 60, 18, 4)
+        texts = []  # (x, y, text, colour, shadow) at GUI scale 1
+
+        def icon_at(rid, x, y, scale=1):
+            name = rid.split(":")[1]
+            path = os.path.join(item_dir, name + ".png")
+            if rid.startswith("wayfarers:") and os.path.exists(path):
+                im = Image.open(path).convert("RGBA").crop((0, 0, 16, 16)).resize((16 * scale, 16 * scale), Image.NEAREST)
+                m.im.alpha_composite(im, (x, y))
+            else:
+                m.d.rectangle((x + 1, y + 1, x + 16 * scale - 2, y + 16 * scale - 2), outline=(110, 90, 64, 255))
+                texts.append((x + 2, y + 4 * scale, name[:3], (110, 90, 64, 255), False))
+
+        if part == 0 and not compact:
+            icon_at(icon_id, px + pw // 2 - 16, oy + 24, 2)
+            title_lines = guide.wrap(titles[li], pw - 12)
+            y = oy + 60
+            for t in title_lines:
+                texts.append((px + pw // 2 - guide.text_width(t) // 2, y, t, INK, False))
+                y += 10
+            body = oy + 60 + len(title_lines) * 10 + 4
+        else:
+            icon_at(icon_id, px + 6, oy + 23)
+            title_lines = guide.wrap(titles[li] + (" " + guide.UI["guide.wayfarers.continued"][li] if part else ""), pw - 52)
+            y = oy + 25
+            for t in title_lines:
+                texts.append((px + 26, y, t, INK, False))
+                y += 10
+            body = oy + 25 + max(1, len(title_lines)) * 10 + 6
+        if len(sheets) > 1:
+            s = f"{part + 1}/{len(sheets)}"
+            texts.append((px + pw - 6 - guide.text_width(s), oy + (25 if part or compact else 23), s, hexc("6E5A40"), False))
+        y = body
+        for line in sheets[part]:
+            if line is None:
+                y += guide.PARA_GAP
+            else:
+                texts.append((px + 7, y, line, hexc("6E5A40"), False))
+                y += guide.TEXT_LINE
+        if part == 0 and items:
+            for i, rid in enumerate(items):
+                icon_at(rid, px + 7 + i * 20, card_bottom - 22)
+        for i in range(rows_):
+            if scroll + i >= len(toc):
+                break
+            kind, _id, label = toc[scroll + i]
+            yy = ty + 4 + i * 11 + 1
+            if kind == "cat":
+                texts.append((tx + 5, yy, label, hexc("F6C343"), True))
+            else:
+                while guide.text_width(label) > tw - 24 and len(label) > 1:
+                    label = label[:-4] + "..."
+                texts.append((tx + 12, yy, label, hexc("9FE6FF") if i + scroll == sel else hexc("F3E3C0"), True))
+        texts.append((ox + W // 2 - guide.text_width("Manuel du Voyageur") // 2, oy, "Manuel du Voyageur", hexc("2B1B0C"), False))
+        texts.append((px + 34 - 3, oy + H - 27, "<", hexc("FFF4DC"), True))
+        nxt = ">" if last else guide.UI["guide.wayfarers.more"][li]
+        texts.append((px + pw - 34 - guide.text_width(nxt) // 2, oy + H - 27, nxt, hexc("FFF4DC"), True))
+        pg = f"{sum(len(guide.layout(p[3][li], [x[li] for x in p[4]], bool(p[5]), lang=li)) for p in guide.PAGES[:guide.PAGES.index(pages[pid])]) + part + 1} / {total}"
+        texts.append((px + pw // 2 - guide.text_width(pg) // 2, oy + H - 27, pg, hexc("6E5A40"), False))
+        big = m.im.resize((m.im.width * S, m.im.height * S), Image.NEAREST)
+        d = ImageDraw.Draw(big)
+        for x, y, s, c, shadow in texts:
+            cx = x
+            for ch in s:
+                if shadow:
+                    d.text(((cx + 1) * S, (y + 1) * S - 3), ch, font=ttf, fill=(0, 0, 0, 160))
+                d.text((cx * S, y * S - 3), ch, font=ttf, fill=c)
+                cx += guide.char_width(ch)
+        os.makedirs(PREVIEW, exist_ok=True)
+        big.save(os.path.join(PREVIEW, f"guide_{pid}_{part + 1}.png"))
+
+
 def main():
     panel()
     inset()
@@ -707,6 +823,7 @@ def main():
     if "--mockup" in sys.argv:
         mockup_waystones()
         mockup_quests()
+        mockup_guide()
     print("gui sprites written to", os.path.relpath(OUT, ROOT))
 
 

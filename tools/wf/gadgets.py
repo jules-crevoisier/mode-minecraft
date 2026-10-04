@@ -123,6 +123,7 @@ PAGES = [
          "your inventory.",
          "Accroupi + clic droit : une machine Wayfarers change de réglage ; un bloc déco ou un meuble Wayfarers "
          "revient dans ton inventaire."),
+        ("Craft: three brass ingots and an iron ingot.", "Fabrication : trois lingots de laiton et un lingot de fer."),
     ], ["wayfarers:brass_wrench"]),
     ("grapple", "wayfarers:grappling_hook", ("Grappling Hook", "Grappin"), [
         ("Right-click to fire the claw up to 32 blocks. When it bites a block, the chain reels you in; a small hop at "
@@ -131,6 +132,8 @@ PAGES = [
          "bond à l'arrivée te hisse sur le rebord."),
         ("Sneak or right-click again to let go. No fall damage while reeled in, nor just after.",
          "Accroupi ou clic droit à nouveau pour lâcher. Aucun dégât de chute pendant la traction, ni juste après."),
+        ("Craft: a tripwire hook, an iron chain and two brass ingots.",
+         "Fabrication : un crochet, une chaîne en fer et deux lingots de laiton."),
     ], ["wayfarers:grappling_hook"]),
     ("glider", "wayfarers:brass_glider", ("Brass Glider", "Planeur en laiton"), [
         ("Hold it in either hand and jump from somewhere high: it opens by itself. You sink slowly and glide where "
@@ -141,26 +144,34 @@ PAGES = [
          "brass.",
          "Avec le grappin : grimpe sur une tour, puis plane jusqu'à la suivante. Il s'use en vol ; répare-le avec du "
          "laiton."),
+        ("Craft: three brass ingots, four leather and a phantom membrane.",
+         "Fabrication : trois lingots de laiton, quatre cuirs et une membrane de phantom."),
     ], ["wayfarers:brass_glider"]),
     ("rivet_gun", "wayfarers:rivet_gun", ("Rivet Gun", "Pistolet à rivets"), [
         ("Right-click to fire a hot rivet: 5 damage, fast and nearly straight. Ammo: Rivets from your inventory, or "
          "iron nuggets.",
          "Clic droit : tire un rivet brûlant (5 dégâts), rapide et presque droit. Munitions : les rivets de ton "
          "inventaire, sinon des pépites de fer."),
-        ("12 Rivets: an iron ingot, a copper ingot and a zinc nugget.",
-         "12 rivets : un lingot de fer, un lingot de cuivre et une pépite de zinc."),
+        ("Craft: three brass ingots, a copper ingot, a piston and a plank. 12 Rivets: an iron ingot, a copper ingot "
+         "and a zinc nugget.",
+         "Fabrication : trois lingots de laiton, un lingot de cuivre, un piston et une planche. 12 rivets : un lingot "
+         "de fer, un lingot de cuivre et une pépite de zinc."),
     ], ["wayfarers:rivet_gun", "wayfarers:rivet"]),
     ("watch", "wayfarers:pocket_watch", ("Pocket Watch", "Montre à gousset"), [
         ("Its hand follows the sun, and a little window shows the sun by day and the moon by night.",
          "Son aiguille suit le soleil, et une petite fenêtre montre le soleil le jour et la lune la nuit."),
         ("Right-click: time, day number, moon phase and the biome you stand in.",
          "Clic droit : heure, numéro du jour, phase de lune et biome où tu te trouves."),
+        ("Craft: a brass nugget, three brass ingots and a redstone.",
+         "Fabrication : une pépite de laiton, trois lingots de laiton et une redstone."),
     ], ["wayfarers:pocket_watch"]),
     ("airship_compass", "wayfarers:airship_compass", ("Airship Compass", "Boussole de dirigeable"), [
         ("Right-click to find the nearest Sky Harbour (in the End: the Void Ship Wreck). Its aether needle then keeps "
          "pointing there.",
          "Clic droit pour trouver le Port céleste le plus proche (dans l'End : l'Épave du vide). Son aiguille "
          "d'éther pointe ensuite vers lui."),
+        ("Craft: a compass, an aether crystal and three brass ingots.",
+         "Fabrication : une boussole, un cristal d'éther et trois lingots de laiton."),
     ], ["wayfarers:airship_compass"]),
 ]
 
