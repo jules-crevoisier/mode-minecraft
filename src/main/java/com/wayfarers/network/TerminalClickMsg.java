@@ -1,7 +1,6 @@
 package com.wayfarers.network;
 
 import com.wayfarers.menu.TerminalMenu;
-import com.wayfarers.util.InventoryUtil;
 import com.wayfarers.util.StorageNetwork;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
@@ -47,7 +46,7 @@ public record TerminalClickMsg(Action action, ItemStack type) {
                 }
                 int amount = switch (msg.action) {
                     case TAKE_ONE -> 1;
-                    case TAKE_HALF -> Math.max(1, Math.min(msg.type.getMaxStackSize(), countOf(net, msg.type)) / 2);
+                    case TAKE_HALF -> Math.max(1, Math.min(msg.type.getMaxStackSize(), StorageNetwork.count(net, msg.type)) / 2);
                     default -> msg.type.getMaxStackSize();
                 };
                 menu.setCarried(StorageNetwork.extract(net, msg.type, amount));
@@ -70,32 +69,19 @@ public record TerminalClickMsg(Action action, ItemStack type) {
                 }
             }
             case STORE_ALL, STORE_MATCHING -> {
+                // one index of the network for the whole inventory (huge bases: no pass per stack)
+                StorageNetwork.Inserter inserter = new StorageNetwork.Inserter(net);
                 var inv = player.getInventory();
                 for (int i = 9; i < 36; i++) {
                     ItemStack s = inv.getItem(i);
-                    if (s.isEmpty()) {
+                    if (s.isEmpty() || (msg.action == Action.STORE_MATCHING && !inserter.holds(s))) {
                         continue;
                     }
-                    if (msg.action == Action.STORE_MATCHING && net.stream().noneMatch(c -> InventoryUtil.contains(c, s))) {
-                        continue;
-                    }
-                    inv.setItem(i, StorageNetwork.insert(net, s));
+                    inv.setItem(i, inserter.insert(s));
                 }
             }
         }
         menu.dirty();
         menu.broadcastChanges();
-    }
-
-    private static int countOf(List<Container> net, ItemStack type) {
-        int n = 0;
-        for (Container c : net) {
-            for (int i = 0; i < c.getContainerSize(); i++) {
-                if (ItemStack.isSameItemSameComponents(c.getItem(i), type)) {
-                    n += c.getItem(i).getCount();
-                }
-            }
-        }
-        return n;
     }
 }

@@ -22,23 +22,21 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
-import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.BlockHitResult;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The Guild Terminal: use it to open one storage screen for every chest within range
- * ({@link StorageNetwork}); sneak-use sorts every chest in range instead.
+ * The Guild Terminal: use it to open one storage screen for every container of its network
+ * ({@link StorageNetwork}: its reach plus Storage Relays); sneak-use sorts every linked container instead.
  */
-public class GuildTerminalBlock extends HorizontalDirectionalBlock {
+public class GuildTerminalBlock extends HorizontalDirectionalBlock implements EntityBlock {
     public static final MapCodec<GuildTerminalBlock> CODEC = simpleCodec(GuildTerminalBlock::new);
-    public static final int RANGE = StorageNetwork.RANGE;
 
     public GuildTerminalBlock(Properties properties) {
         super(properties);
@@ -61,12 +59,21 @@ public class GuildTerminalBlock extends HorizontalDirectionalBlock {
     }
 
     @Override
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return new GuildTerminalBlockEntity(pos, state);
+    }
+
+    @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
         if (!(level instanceof ServerLevel serverLevel) || !(player instanceof ServerPlayer serverPlayer)) {
             return InteractionResult.SUCCESS;
         }
+        if (!(level.getBlockEntity(pos) instanceof GuildTerminalBlockEntity terminal)) {
+            return InteractionResult.SUCCESS;
+        }
         if (player.isShiftKeyDown()) {
-            List<Container> chests = StorageNetwork.containers(serverLevel, pos);
+            terminal.scan(true);
+            List<Container> chests = terminal.network();
             chests.forEach(InventoryUtil::sortContainer);
             player.sendSystemMessage(Component.translatable("message.wayfarers.terminal.sorted", chests.size())
                     .withStyle(ChatFormatting.GOLD));
@@ -75,6 +82,7 @@ public class GuildTerminalBlock extends HorizontalDirectionalBlock {
             level.playSound(null, pos, SoundEvents.BARREL_CLOSE, SoundSource.BLOCKS, 0.8F, 1.2F);
             return InteractionResult.SUCCESS;
         }
+        terminal.scan(true);
         ((net.minecraftforge.common.extensions.IForgeServerPlayer) serverPlayer).openMenu(new SimpleMenuProvider((id, inv, p) -> new TerminalMenu(id, inv, pos),
                 Component.translatable("block.wayfarers.guild_terminal")), buf -> buf.writeBlockPos(pos));
         com.wayfarers.util.Tips.show(serverPlayer, "guild_terminal");
@@ -111,14 +119,8 @@ public class GuildTerminalBlock extends HorizontalDirectionalBlock {
         return new int[]{moved, touched.size()};
     }
 
-    public static List<Container> nearbyStorage(ServerLevel level, BlockPos center) {
-        List<Container> result = new ArrayList<>();
-        for (BlockPos p : BlockPos.betweenClosed(center.offset(-RANGE, -RANGE / 2, -RANGE), center.offset(RANGE, RANGE / 2, RANGE))) {
-            BlockEntity be = level.getBlockEntity(p);
-            if (be instanceof BaseContainerBlockEntity container && container.getContainerSize() >= 27) {
-                result.add(container);
-            }
-        }
-        return result;
+    /** Storage containers within {@code range} blocks of a player (quick-stack key); no relays. */
+    public static List<Container> nearbyStorage(ServerLevel level, BlockPos center, int range) {
+        return StorageNetwork.nearby(level, center, range);
     }
 }

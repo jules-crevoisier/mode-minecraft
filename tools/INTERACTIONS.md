@@ -6,7 +6,8 @@ Every block and item of the mod must react visibly when a player uses it: a scre
 |---|---|---|
 | Waystone | Opens the travel screen (search, favourites, rename). Travel is only allowed while standing at a waystone; the server checks it. | Screen. On discovery: server message, chime, particles, tip card |
 | Sorting Chest | Opens a 54-slot chest. Sneak with an empty hand: sort it now. | Screen |
-| Guild Terminal | Storage screen for every container within 12 blocks. Sneak: sort all of them. | Screen; message, sound and particles |
+| Guild Terminal | Storage screen for every container of its network (48 blocks around, 32 up/down, plus Storage Relays; config `storage.*`). Network page: exclude a container, "Show in world" outlines them for 10 s. Sneak: sort all of them. | Screen; message, sound and particles; outlines and sparkles |
+| Storage Relay | Says whether it is linked to a Guild Terminal (and where), or how close it must be. | Message above the hotbar; particles when linked |
 | Grave | Gives the items back (anyone can open it). | Message, sound, particles |
 | Warden / Void altar | Right offering (in either hand): summons the boss. Wrong item: "needs X". Boss already awake nearby: "already awake". | Message, sound, particles |
 | Boss Seal / Mist Gate / Sealed Bars | No right-click; they react to players entering the arena. | Ambient particles |

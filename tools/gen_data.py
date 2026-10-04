@@ -23,7 +23,7 @@ def rid(x):
 
 
 MOD_ITEMS = {"map_fragment", "lithite_shard", "ancient_ember", "void_shard", "warden_scale", "void_heart",
-             "sorting_chest", "waystone", "guild_terminal", "compacting_crate", "explorer_backpack",
+             "sorting_chest", "waystone", "guild_terminal", "storage_relay", "compacting_crate", "explorer_backpack",
              "chisel", "chisel_table", "brass_gear",
              "clockwork_heart"}
 MOD_ITEMS |= {f"remembrance_{row[0]}" for row in __import__("wf.bossgear", fromlist=["BOSS_GEAR"]).BOSS_GEAR}
@@ -78,6 +78,8 @@ def recipes():
     shaped("compacting_crate", ["PIP", "IBI", "PIP"], {"P": "#planks", "I": "iron_ingot", "B": "barrel"})
     shaped("guild_terminal", ["GMG", "PCP", "PRP"], {"G": "gold_ingot", "M": "map_fragment", "P": "#planks",
                                                     "C": "chest", "R": "redstone"})
+    shaped("storage_relay", [" E ", "BRB", "BCB"], {"E": "ender_pearl", "B": "brass_ingot", "R": "redstone",
+                                                   "C": "copper_ingot"}, count=2)
     shaped("travel_backpack", ["LSL", "LCL", "LLL"], {"L": "leather", "S": "string", "C": "chest"}, category="equipment")
     # transmute keeps the bag's contents (container component) when it is upgraded
     write(f"{NS}/recipe/explorer_backpack.json", {"type": "minecraft:crafting_transmute", "category": "equipment",
@@ -156,7 +158,7 @@ def tags():
 
 
 def block_loot():
-    for b in ("waystone", "sorting_chest", "guild_terminal", "compacting_crate", "chisel_table"):
+    for b in ("waystone", "sorting_chest", "guild_terminal", "storage_relay", "compacting_crate", "chisel_table"):
         write(f"{NS}/loot_table/blocks/{b}.json", {
             "type": "minecraft:block",
             "pools": [{"rolls": 1.0, "bonus_rolls": 0.0,
@@ -430,7 +432,7 @@ def decor_data():
                 "type": "minecraft:stonecutting", "ingredient": f"{NS}:{bid}",
                 "result": {"id": f"{NS}:{vid}", "count": 2 if v == "slab" else 1}})
     write("minecraft/tags/block/mineable/pickaxe.json", {"replace": False, "values": [
-        f"{NS}:waystone", f"{NS}:lithite_ore", f"{NS}:deepslate_lithite_ore"] + pick})
+        f"{NS}:waystone", f"{NS}:storage_relay", f"{NS}:lithite_ore", f"{NS}:deepslate_lithite_ore"] + pick})
     write("minecraft/tags/block/stairs.json", {"replace": False, "values": stairs})
     write("minecraft/tags/block/slabs.json", {"replace": False, "values": slabs})
     write("minecraft/tags/block/walls.json", {"replace": False, "values": walls})

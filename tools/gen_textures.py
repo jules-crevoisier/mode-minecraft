@@ -258,6 +258,34 @@ def block_textures():
     gs = noise_tile((96, 86, 76), 8, 6)
     frame(gs, (50, 44, 40))
     out["guild_terminal_side"] = gs
+    # storage relay: a brass housing with copper coils and an ender-pearl lens on top
+    brass, brass_dk, copper = (196, 150, 70), (112, 78, 34), (190, 104, 64)
+    pearl = ((22, 64, 58), (40, 120, 104), (98, 204, 170), (190, 255, 228))
+    rs = noise_tile(brass, 9, 41)
+    frame(rs, brass_dk)
+    for y in range(2, 14):
+        for x in (3, 4, 11, 12):
+            rs.set(x, y, copper if y % 2 == 0 else (150, 78, 44))
+    for y in range(5, 11):
+        for x in range(6, 10):
+            rs.set(x, y, pearl[1] if 6 < y < 10 and 6 < x < 9 else pearl[0])
+    rs.set(7, 7, pearl[3])
+    for x in range(16):
+        rs.set(x, 1, (226, 186, 96))
+        rs.set(x, 14, brass_dk)
+    out["storage_relay_side"] = rs
+    rt = noise_tile(brass, 9, 42)
+    frame(rt, brass_dk)
+    frame(rt, (226, 186, 96), 1)
+    for y in range(16):
+        for x in range(16):
+            d = (x - 7.5) ** 2 + (y - 7.5) ** 2
+            if d <= 5.5 ** 2:
+                rt.set(x, y, pearl[0] if d > 4.5 ** 2 else pearl[1] if d > 2.5 ** 2 else pearl[2])
+    rt.set(6, 6, pearl[3])
+    rt.set(7, 6, pearl[3])
+    rt.set(6, 7, pearl[3])
+    out["storage_relay_top"] = rt
     # compacting crate: banded planks, iron corners, a recessed front panel where the item is drawn
     cs = noise_tile((150, 104, 60), 9, 31)
     for y in (0, 15):

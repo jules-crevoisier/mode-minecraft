@@ -419,7 +419,49 @@ FLAG = [
 ]
 
 
+# Guild Terminal: its Network button (three linked chests) and an excluded container (red cross)
+NETWORK = [
+    "................",
+    "....oooooooo....",
+    "....obbbbbbo....",
+    "....ohhhhhho....",
+    "....obbybbbo....",
+    "....oooooooo....",
+    ".......ll.......",
+    "..llllllllllll..",
+    "..ll........ll..",
+    "oooooo....oooooo",
+    "obbbbo....obbbbo",
+    "ohhhho....ohhhho",
+    "obbybo....obbybo",
+    "oooooo....oooooo",
+    "................",
+    "................",
+]
+CROSS = [
+    "................",
+    "..oo........oo..",
+    ".orro......orro.",
+    ".orrro....orrro.",
+    "..orrro..orrro..",
+    "...orrroorrro...",
+    "....orrrrrro....",
+    ".....orrrro.....",
+    ".....orrrro.....",
+    "....orrrrrro....",
+    "...orrroorrro...",
+    "..orrro..orrro..",
+    ".orrro....orrro.",
+    ".orro......orro.",
+    "..oo........oo..",
+    "................",
+]
+
+
 def icons():
+    icon("network", NETWORK, {"o": SOOT, "b": hexc("B58A45"), "h": hexc("D9B25E"), "y": hexc("F6C343"),
+                              "l": hexc("9FE6FF")})
+    icon("excluded", CROSS, {"o": SOOT, "r": hexc("E0483B")})
     icon("done", CHECK, {"o": SOOT, "g": hexc("7CE35A"), "d": hexc("2F8A2A")})
     icon("lock", [r.replace("о", "o") for r in LOCK], {"o": SOOT, "s": hexc("A8A8B0"), "b": hexc("B58A45"),
                                                        "h": hexc("D9B25E"), "k": hexc("2B1B0C")})

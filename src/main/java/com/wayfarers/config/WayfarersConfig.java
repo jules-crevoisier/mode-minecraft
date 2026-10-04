@@ -35,6 +35,20 @@ public final class WayfarersConfig {
     public static final ForgeConfigSpec.IntValue BLOOD_MOON_INTERVAL = B
             .comment("A Blood Moon happens every N nights.")
             .defineInRange("bloodMoon.interval", 7, 2, 100);
+    public static final ForgeConfigSpec.IntValue TERMINAL_RANGE = B
+            .comment("Guild Terminal reach, in blocks around it (horizontally): every chest, barrel, shulker box, sorting",
+                    "chest and compacting crate in that square is part of its storage network.")
+            .defineInRange("storage.terminalRange", 48, 8, 128);
+    public static final ForgeConfigSpec.IntValue TERMINAL_HEIGHT = B
+            .comment("Guild Terminal and Storage Relay reach up and down, in blocks (384 = the whole height of the world).")
+            .defineInRange("storage.terminalHeight", 32, 4, 384);
+    public static final ForgeConfigSpec.IntValue RELAY_RANGE = B
+            .comment("Storage Relay reach, in blocks around it (horizontally). A relay joins the network when it is within",
+                    "reach of the terminal or of another relay of the network.")
+            .defineInRange("storage.relayRange", 32, 8, 128);
+    public static final ForgeConfigSpec.IntValue MAX_CONTAINERS = B
+            .comment("Most containers one terminal network can link (protects the server on huge bases).")
+            .defineInRange("storage.maxContainers", 2048, 64, 16384);
 
     public static final ForgeConfigSpec SPEC = B.build();
 

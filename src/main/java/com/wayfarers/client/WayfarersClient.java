@@ -46,6 +46,7 @@ public final class WayfarersClient {
         MobHealthBars.register();
         ContainerButtons.register();
         WandPreview.register();
+        StorageHighlight.register();
         net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent.getBus(modBus).addListener(event -> event.enqueueWork(() ->
                 {
                     net.minecraft.client.gui.screens.MenuScreens.register(com.wayfarers.registry.ModMenus.TERMINAL.get(),

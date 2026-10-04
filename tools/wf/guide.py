@@ -303,21 +303,54 @@ PAGES = [
          "Fabrication : un tonneau, quatre lingots de fer et quatre planches."),
     ], ["wayfarers:compacting_crate"]),
     ("guild_terminal", "storage", "wayfarers:guild_terminal", ("Guild Terminal", "Terminal de guilde"), [
-        ("Place it in your storage room: it shows everything stored in the chests within 12 blocks as one grid, "
-         "with a search box. No cables, no power.",
-         "Pose-le dans ta salle de stockage : il affiche tout le contenu des coffres à 12 blocs dans une seule "
-         "grille, avec une recherche. Ni câble, ni énergie."),
+        ("One screen for every chest of your base. The terminal links every chest, barrel, shulker box, sorting chest "
+         "and compacting crate up to 48 blocks around it (32 up and down). No cables, no power.",
+         "Un seul écran pour tous les coffres de ta base. Le terminal relie chaque coffre, tonneau, boîte de shulker, "
+         "coffre de tri et caisse compacte jusqu'à 48 blocs autour de lui (32 en haut et en bas). Ni câble, ni énergie."),
+        ("Craft: a chest, two gold ingots, a Map Fragment, redstone and four planks. Bigger base? Add Storage Relays "
+         "instead of more terminals.",
+         "Fabrication : un coffre, deux lingots d'or, un fragment de carte, une redstone et quatre planches. Base plus "
+         "grande ? Ajoute des relais de stockage plutôt que d'autres terminaux."),
         ("Take: click an item for a stack (right-click: half, middle-click: one, shift: straight into your "
          "inventory). Store: click the grid with an item, or shift-click it in your inventory. Store all and Store "
          "matching empty your inventory in one click.",
          "Prendre : clic sur un objet pour une pile (clic droit : la moitié, molette : un seul, Maj : directement "
          "dans l'inventaire). Ranger : clic sur la grille avec un objet, ou Maj + clic dans ton inventaire. "
          "« Tout ranger » et « Ranger identiques » vident ton inventaire d'un clic."),
-        ("Sneak-right-click the terminal to sort every chest around it at once.",
-         "Accroupi + clic droit sur le terminal pour trier d'un coup tous les coffres autour."),
-        ("Craft: a chest, two gold ingots, a Map Fragment, redstone and four planks.",
-         "Fabrication : un coffre, deux lingots d'or, un fragment de carte, une redstone et quatre planches."),
+        ("Sneak-right-click the terminal to sort every linked chest at once. Chests in unloaded chunks, unopened loot "
+         "chests, hoppers and machines are never linked.",
+         "Accroupi + clic droit sur le terminal pour trier d'un coup tous les coffres reliés. Les coffres des chunks "
+         "non chargés, les coffres de butin jamais ouverts, les entonnoirs et les machines ne sont jamais reliés."),
     ], ["wayfarers:guild_terminal"]),
+    ("terminal_network", "storage", "wayfarers:guild_terminal", ("Terminal: network & sorting",
+                                                                 "Terminal : réseau et tri"), [
+        ("Items go first into a chest that already holds the same item, then into sorting chests, then into any free "
+         "slot. Search by name (@name: by mod); the sort button cycles count, name and mod.",
+         "Les objets vont d'abord dans un coffre qui contient déjà le même objet, puis dans les coffres de tri, puis "
+         "dans n'importe quelle place libre. Recherche par nom (@nom : par mod) ; le bouton de tri alterne quantité, "
+         "nom et mod."),
+        ("The chest-network button (top right) lists the linked containers by type. Click one to exclude it, like a "
+         "trash chest or a furnace input chest; click again to link it back. \"Show in world\" outlines them all "
+         "for 10 seconds: gold linked, red excluded.",
+         "Le bouton réseau (en haut à droite) liste les conteneurs reliés par type. Clique sur l'un d'eux pour "
+         "l'exclure, comme un coffre poubelle ou le coffre d'entrée d'un four ; reclique pour le relier. « Montrer » "
+         "les encadre tous pendant 10 secondes : en or s'ils sont reliés, en rouge s'ils sont exclus."),
+    ], []),
+    ("storage_relay", "storage", "wayfarers:storage_relay", ("Storage Relay", "Relais de stockage"), [
+        ("A small brass beacon that stretches a Guild Terminal's reach: every chest up to 32 blocks around the relay "
+         "joins the terminal's network. One terminal can then reach the whole base, even several buildings.",
+         "Une petite balise en laiton qui étend la portée d'un terminal de guilde : chaque coffre jusqu'à 32 blocs "
+         "autour du relais rejoint le réseau du terminal. Un seul terminal atteint alors toute la base, même plusieurs "
+         "bâtiments."),
+        ("Craft (makes two): an ender pearl, four brass ingots, a redstone and a copper ingot.",
+         "Fabrication (en donne deux) : une perle de l'Ender, quatre lingots de laiton, une redstone et un lingot de "
+         "cuivre."),
+        ("Place it within 48 blocks of the terminal, or within 32 blocks of another linked relay: relays chain, so "
+         "you can reach a far storage hall step by step. Right-click a relay to check that it is linked.",
+         "Pose-le à moins de 48 blocs du terminal, ou à moins de 32 blocs d'un autre relais relié : les relais "
+         "s'enchaînent, pour atteindre pas à pas une réserve lointaine. Clic droit sur un relais pour vérifier qu'il "
+         "est relié."),
+    ], ["wayfarers:storage_relay"]),
     ("backpack", "storage", "wayfarers:travel_backpack", ("Backpacks", "Sacs"), [
         ("Travel Backpack: hold it and right-click to open 27 extra slots that travel with you. Craft: a chest, a "
          "string and seven leather.",
@@ -608,9 +641,9 @@ TIPS = [
     ("sorting_chest", "wayfarers:sorting_chest", ("Sorting chest: it sorts itself and pulls in nearby drops.",
                                                   "Coffre de tri : il se trie seul et aspire les objets proches."),
      "sorting_chest"),
-    ("guild_terminal", "wayfarers:guild_terminal", ("Terminal: every chest within 12 blocks in one searchable grid.",
-                                                    "Terminal : tous les coffres à 12 blocs dans une seule grille, "
-                                                    "avec recherche."), "guild_terminal"),
+    ("guild_terminal", "wayfarers:guild_terminal", ("Terminal: every chest of your base (48 blocks around) in one grid.",
+                                                    "Terminal : tous les coffres de ta base (48 blocs autour) dans "
+                                                    "une seule grille."), "guild_terminal"),
     ("elite", "minecraft:gold_ingot", ("An Elite! Gold name, hits hard, drops good loot.",
                                        "Un élite ! Nom doré, frappe fort, bon butin."), "danger"),
     ("blood_moon", "minecraft:redstone", ("A Blood Moon rises: monsters are much stronger tonight.",

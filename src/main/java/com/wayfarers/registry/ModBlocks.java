@@ -60,6 +60,8 @@ public final class ModBlocks {
                     .sound(SoundType.DEEPSLATE).requiresCorrectToolForDrops().lightLevel(s -> 3));
     public static final RegistryObject<Block> CHISEL_TABLE = register("chisel_table", com.wayfarers.block.ChiselTableBlock::new,
             BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).strength(2.5F).sound(SoundType.WOOD));
+    public static final RegistryObject<Block> STORAGE_RELAY = register("storage_relay", com.wayfarers.block.StorageRelayBlock::new,
+            BlockBehaviour.Properties.of().mapColor(MapColor.GOLD).strength(2.5F).sound(SoundType.COPPER).lightLevel(s -> 4));
 
     private static <B extends Block> RegistryObject<B> register(String name, Function<BlockBehaviour.Properties, B> factory,
                                                                BlockBehaviour.Properties props) {

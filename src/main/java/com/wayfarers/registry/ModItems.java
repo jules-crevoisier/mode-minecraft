@@ -140,6 +140,7 @@ public final class ModItems {
     public static final RegistryObject<Item> SORTING_CHEST = block("sorting_chest", ModBlocks.SORTING_CHEST, p -> p);
     public static final RegistryObject<Item> GUILD_TERMINAL = block("guild_terminal", ModBlocks.GUILD_TERMINAL, p -> p);
     public static final RegistryObject<Item> COMPACTING_CRATE = block("compacting_crate", ModBlocks.COMPACTING_CRATE, p -> p);
+    public static final RegistryObject<Item> STORAGE_RELAY = block("storage_relay", ModBlocks.STORAGE_RELAY, p -> p);
     public static final RegistryObject<Item> CHISEL_TABLE = block("chisel_table", ModBlocks.CHISEL_TABLE, p -> p);
     public static final RegistryObject<Item> GRAVE = block("grave", ModBlocks.GRAVE, p -> p);
     public static final RegistryObject<Item> SEALED_BARS = block("sealed_bars", ModBlocks.SEALED_BARS, p -> p);
