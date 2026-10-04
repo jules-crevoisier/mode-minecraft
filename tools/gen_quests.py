@@ -120,6 +120,7 @@ BOSS_HOME = {
     "piglin_king": "piglin_sanctuary", "soul_reaper": "soul_tower",
     "grave_knight": "forgotten_catacombs", "bone_matriarch": "sand_hypogeum", "weeping_lady": "lithite_well",
     "larva_mother": "void_crypt",
+    "grand_clockmaker": "clockwork_citadel",
 }
 CHAPTER = {}
 for s in defs.STRUCTURES:

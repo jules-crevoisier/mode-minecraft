@@ -38,7 +38,8 @@
     "explorer/boss_gryphon_knight",
     "explorer/boss_rune_colossus",
     "explorer/boss_grave_knight",
-    "explorer/boss_bone_matriarch"
+    "explorer/boss_bone_matriarch",
+    "explorer/boss_grand_clockmaker"
   ],
   "depths": [
     "depths/lithite",

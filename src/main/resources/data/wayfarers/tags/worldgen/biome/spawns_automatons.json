@@ -1,0 +1,21 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "minecraft:windswept_savanna",
+      "required": false
+    },
+    {
+      "id": "minecraft:wooded_badlands",
+      "required": false
+    },
+    {
+      "id": "wayfarers:rustlands",
+      "required": false
+    },
+    {
+      "id": "wayfarers:cogwork_valley",
+      "required": false
+    }
+  ]
+}

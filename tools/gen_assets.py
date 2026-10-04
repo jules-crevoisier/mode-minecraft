@@ -18,6 +18,15 @@ HANDHELD |= {row[2] for row in __import__("wf.bossgear", fromlist=["BOSS_GEAR"])
 HANDHELD |= __import__("wf.gadgets", fromlist=["HANDHELD"]).HANDHELD
 
 
+def _de(name):
+    """French "de" + a creature name, with the article contracted: du Grand Horloger, de la Dame, d'araignée."""
+    low = name[0].lower() + name[1:]
+    for art, de in (("le ", "du "), ("la ", "de la "), ("les ", "des "), ("l'", "de l'")):
+        if low.startswith(art):
+            return de + low[len(art):]
+    return ("d'" if low[0] in "aeiouyàâéèêîïôûœh" else "de ") + low
+
+
 def write(rel, obj):
     path = os.path.join(ASSETS, rel)
     os.makedirs(os.path.dirname(path), exist_ok=True)
@@ -250,7 +259,7 @@ def main():
         item_definition(iid, f"{NS}:item/{iid}")
         en, fr = content.ENTITIES[mob]
         lang_en[f"item.{NS}.{iid}"] = f"{en} Spawn Egg"
-        lang_fr[f"item.{NS}.{iid}"] = f"Œuf d'apparition de {fr.lower()}"
+        lang_fr[f"item.{NS}.{iid}"] = f"Œuf d'apparition {_de(fr)}"
     for bid, (en, fr, ten, tfr, kind) in content.BLOCKS.items():
         block_models(bid, kind)
         blockstate(bid, kind)

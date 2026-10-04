@@ -24,7 +24,8 @@ def rid(x):
 
 MOD_ITEMS = {"map_fragment", "lithite_shard", "ancient_ember", "void_shard", "warden_scale", "void_heart",
              "sorting_chest", "waystone", "guild_terminal", "compacting_crate", "explorer_backpack",
-             "chisel", "chisel_table"}
+             "chisel", "chisel_table", "brass_gear",
+             "clockwork_heart"}
 MOD_ITEMS |= {f"remembrance_{row[0]}" for row in __import__("wf.bossgear", fromlist=["BOSS_GEAR"]).BOSS_GEAR}
 MOD_ITEMS |= __import__("wf.metals", fromlist=["all_item_ids"]).all_item_ids()
 MOD_ITEMS |= set(__import__("wf.machines", fromlist=["MACHINES"]).MACHINES)
@@ -68,6 +69,10 @@ def armor_set(prefix, material, extra=None):
 
 
 def recipes():
+    # automatons: brass gears, and the Clockwork Heart that wakes a Brass Golem (two stacked Blocks of Brass)
+    shaped("brass_gear", [" N ", "NIN", " N "], {"N": "brass_nugget", "I": "brass_ingot"}, count=2)
+    shaped("clockwork_heart", [" G ", "IRI", " C "], {"G": "brass_gear", "I": "brass_ingot", "R": "redstone_block",
+                                                      "C": "clock"})
     shaped("waystone", [" E ", "MCM", "SSS"], {"E": "ender_pearl", "M": "map_fragment", "C": "compass", "S": "stone_bricks"})
     shaped("sorting_chest", ["PHP", "PCP", "PPP"], {"P": "#planks", "H": "hopper", "C": "chest"})
     shaped("compacting_crate", ["PIP", "IBI", "PIP"], {"P": "#planks", "I": "iron_ingot", "B": "barrel"})
@@ -215,6 +220,14 @@ def entity_loot():
         "ash_lord": [entry("ancient_ember", 6, 10), entry("emerald", 4, 8), entry("experience_bottle", 3, 6), entry("golden_apple", 1, 2)],
         "piglin_king": [entry("ancient_ember", 6, 10), entry("emerald", 4, 8), entry("experience_bottle", 3, 6), entry("golden_apple", 1, 2)],
         "soul_reaper": [entry("ancient_ember", 6, 10), entry("emerald", 4, 8), entry("experience_bottle", 3, 6), entry("golden_apple", 1, 2)],
+        # automatons
+        "clockwork_spider": [entry("brass_nugget", 1, 3), entry("brass_gear", chance=0.35), entry("redstone", 0, 1)],
+        "steam_drone": [entry("brass_nugget", 1, 3), entry("copper_ingot", 0, 2), entry("brass_gear", chance=0.3),
+                        entry("coal", 0, 1)],
+        "brass_golem": [entry("clockwork_heart"), entry("brass_ingot", 3, 6)],
+        "grand_clockmaker": [entry("brass_gear", 4, 8), entry("map_fragment", 6, 10), entry("emerald", 4, 8),
+                             entry("experience_bottle", 3, 6), entry("golden_apple", 1, 2), entry("clockwork_heart"),
+                             entry("clock")],
     }
     from wf.bossgear import BOSS_GEAR, remembrance_id
     for row in BOSS_GEAR:  # every great boss always drops its remembrance
@@ -222,6 +235,26 @@ def entity_loot():
     for name, pools in tables.items():
         write(f"{NS}/loot_table/entities/{name}.json", {"type": "minecraft:entity", "pools": pools,
                                                         "random_sequence": f"{NS}:entities/{name}"})
+
+
+# biomes where automatons roam: the overhaul's Rustlands and Cogwork Valley, and the vanilla biomes they replace
+# (so the mobs exist with or without the world overhaul pack)
+AUTOMATON_BIOMES = ["minecraft:windswept_savanna", "minecraft:wooded_badlands", f"{NS}:rustlands", f"{NS}:cogwork_valley"]
+
+
+def automaton_spawns():
+    """Clockwork Spiders and Steam Drones join the monster spawns of the steampunk biomes (at night or in the dark, like
+    any monster); the Clockwork Citadel and the Undercity add their own through their structure spawn lists."""
+    write(f"{NS}/tags/worldgen/biome/spawns_automatons.json", {
+        "replace": False, "values": [{"id": b, "required": False} for b in AUTOMATON_BIOMES]})
+    write(f"{NS}/forge/biome_modifier/add_automatons.json", {
+        "type": "forge:add_spawns",
+        "biomes": f"#{NS}:spawns_automatons",
+        "spawners": [
+            {"type": f"{NS}:clockwork_spider", "weight": 45, "minCount": 2, "maxCount": 4},
+            {"type": f"{NS}:steam_drone", "weight": 20, "minCount": 1, "maxCount": 2},
+        ],
+    })
 
 
 def ore_worldgen():
@@ -490,6 +523,7 @@ def main():
     chisel_data()
     block_loot()
     entity_loot()
+    automaton_spawns()
     ore_worldgen()
     metals_data()
     # merge the metals' tag values into tag files written above (or create them)

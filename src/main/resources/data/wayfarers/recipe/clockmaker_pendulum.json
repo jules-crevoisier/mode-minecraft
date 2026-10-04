@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "equipment",
+  "ingredients": [
+    "wayfarers:remembrance_grand_clockmaker",
+    "wayfarers:map_fragment",
+    "wayfarers:map_fragment",
+    "wayfarers:map_fragment",
+    "wayfarers:map_fragment",
+    "minecraft:diamond",
+    "minecraft:diamond"
+  ],
+  "result": {
+    "id": "wayfarers:clockmaker_pendulum",
+    "count": 1
+  }
+}

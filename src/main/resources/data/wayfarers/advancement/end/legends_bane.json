@@ -238,6 +238,20 @@
           }
         ]
       }
+    },
+    "grand_clockmaker": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "entity_type": "wayfarers:grand_clockmaker"
+            }
+          }
+        ]
+      }
     }
   },
   "parent": "wayfarers:end/void_warden",

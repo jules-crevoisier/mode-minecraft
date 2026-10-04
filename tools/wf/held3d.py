@@ -185,6 +185,7 @@ HELD = {
     "golden_mace": ("mace", "gold", "gold", "ruby"),
     "soul_scythe": ("scythe", "void", "bone", "ice"),
     "void_greatblade": ("greatsword", "void", "purpur", "amethyst"),
+    "clockmaker_pendulum": ("cane", "brass", "dark", "aether"),
     "cartographer_blade": ("sword", "cartographer", "wood", "emerald"),
     "telluric_hammer": ("hammer", "lithite", "wood", "emerald"),
     "storm_staff": ("staff", "storm", "dark", "sapphire"),

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " N ",
+    "NIN",
+    " N "
+  ],
+  "key": {
+    "N": "wayfarers:brass_nugget",
+    "I": "wayfarers:brass_ingot"
+  },
+  "result": {
+    "id": "wayfarers:brass_gear",
+    "count": 2
+  }
+}

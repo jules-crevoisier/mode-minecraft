@@ -156,3 +156,35 @@ The user wants **depth**: the boss waits at the bottom of a descent, not in the 
   - the moveset (phase 1 / 2, with numbers);
   - the lair (levels, rooms, arena size);
   - the preview paths.
+
+## 5. Champion of the Clockwork Citadel: The Grand Clockmaker (Le Grand Horloger)
+Files: `tools/wf/mobs/grand_clockmaker.py` (model, shared steampunk paint in `tools/wf/mobs/brasswork.py`),
+`src/main/java/com/wayfarers/entity/boss/GrandClockmaker.java` (moveset),
+`tools/wf/structures/lair_grand_clockmaker.py` (lair, called at the end of `clockwork.py`'s citadel builder).
+Reward: `remembrance_grand_clockmaker` → **Clockmaker's Pendulum** (`clockmaker_pendulum`, ARC sweep that slows),
+plus brass gears, a Clockwork Heart and a clock (`gen_data.py`). Quest: `explorer/boss_grand_clockmaker`.
+
+**Concept.** A 4.4-block Victorian automaton gentleman: stilt legs on cog knees, brass tailcoat, a chest that *is*
+a clock face (cream dial, aether hour marks that glow, iron hands that always turn), a brass mask with a waxed
+moustache and a glowing monocle under a top hat, two wings of spinning cogs, and a pendulum cane.
+
+**Stats.** 400 health (Overworld range), armour 12, toughness 4, poise 75, yellow bar, phase 2 at 50%.
+
+| Move | Phase | Wind-up / active / recovery | Range | What it does |
+|---|---|---|---|---|
+| sweep | 1-2 | 18 / 3 / 13 | 0-6.5 | Pendulum swing over 220°, 15 damage. P2: 35% chains into slam. |
+| slam | 1-2 | 20 / 3 / 13 | 0-7 | Cane slam 3.5 ahead (18) + a spark ring to jump (8). P2: second ring, 40% chains into gears. |
+| gears | 1-2 | 12 / 4 / 10 | 4-24 | Fan of 3 (P2: 5) brass cogs, 7 damage each (`RivetEntity`). |
+| summon | 1-2 | 16 / 2 / 14 | any | 2 (P2: 3) Clockwork Spiders, never more than 4 alive; they wind down when he dies. |
+| timestop | 1-2 | 24 / 4 / 12 | 0-14 | Hands rewind, a 9-block ring closes; whoever is inside at the chime: Slowness IV + Mining Fatigue III, 2 s. |
+| blink | 2 | 10 / 2 / 6 | 6-26 | "Time skip": teleports 2.5 blocks behind the target, then chains a sweep. |
+| chime | 2 | 20 / 24 / 12 | 0-20 | Midnight: 12 bells toll in turn on a 6-block circle (11 each), then one under every player (12). |
+
+**Lair (the Clock Vault).** A stair opens in the floor of the clock tower's entrance hall (east side) → level 1,
+the **Gearworks** (y -10: machines, wall cogs, a Clockwork Spider spawner, two workshop chests) → a second stair →
+the **site of grace** (y -21: waystone on a brass dais, benches, lamps) → mist → the **Clock Vault** arena (radius
+13, 12-block walls, dome to 18 blocks): a floor that is a giant clock face stopped at midnight, twelve brass
+pilasters with Edison lamps, wall cogs, and a great pendulum hanging high over the seal → mist → the
+**Clockmaker's study** (reward chests).
+
+Previews: `python3 tools/gen_models.py --preview --only grand_clockmaker` → `build/previews/models/grand_clockmaker.png`.

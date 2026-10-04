@@ -217,4 +217,7 @@ register(StructureDef(
     [Piece("cavern", undercity)],
     spacing=72, separation=28, adaptation="none", height=("uniform", -30, -12), processors="none",
     step="underground_structures", max_distance=100, foundation=False,
+    # steam drones patrol the dark corners of the cavern, clockwork spiders scuttle on the catwalks
+    spawns=[("wayfarers:steam_drone", 35, 1, 2), ("wayfarers:clockwork_spider", 30, 2, 3),
+            ("minecraft:zombie", 40, 1, 3), ("minecraft:skeleton", 30, 1, 2), ("minecraft:creeper", 20, 1, 1)],
     title_fr="Les Bas-fonds", title_en="The Undercity"))

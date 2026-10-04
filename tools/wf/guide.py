@@ -12,6 +12,7 @@ CATEGORIES = [
     ("travel", "wayfarers:waystone", ("Travel", "Voyage")),
     ("storage", "wayfarers:sorting_chest", ("Storage", "Rangement")),
     ("danger", "minecraft:iron_sword", ("Danger & bosses", "Danger et boss")),
+    ("automatons", "wayfarers:clockwork_heart", ("Automatons", "Automates")),
     ("gear", "wayfarers:lithite_shard", ("Gear & materials", "Équipement et matériaux")),
     ("machines", "wayfarers:auto_harvester", ("Machines & redstone", "Machines et redstone")),
     ("gadgets", "wayfarers:brass_wrench", ("Steam gadgets", "Gadgets à vapeur")),
@@ -223,6 +224,43 @@ PAGES = [
          "unique weapon, with a special right-click power.",
          "Chaque boss lâche son Souvenir. Fabrique-le avec quatre matériaux de sa région et deux diamants pour forger "
          "son arme unique, avec un pouvoir au clic droit."),
+    ], []),
+
+    ("brass_golem", "automatons", "wayfarers:clockwork_heart", ("Brass Golem", "Golem de laiton"), [
+        ("Stack two Blocks of Brass and use a Clockwork Heart on them: a Brass Golem wakes up and follows you.",
+         "Empile deux blocs de laiton et utilise un cœur mécanique dessus : un golem de laiton se réveille et te suit."),
+        ("Heart: a brass gear, two brass ingots, a block of redstone and a clock.",
+         "Cœur : un engrenage, deux lingots de laiton, un bloc de redstone et une horloge."),
+    ], ["wayfarers:clockwork_heart", "wayfarers:brass_golem_spawn_egg"]),
+    ("brass_golem_orders", "automatons", "wayfarers:brass_ingot", ("Golem orders", "Ordres du golem"), [
+        ("It punches every monster but creepers, and never hurts players, villagers or pets.",
+         "Il frappe tous les monstres sauf les creepers, et ne blesse jamais joueurs, villageois ni animaux."),
+        ("Sneak-use, empty hand: guard here / follow. Brass ingots repair it. Destroyed, it drops its heart.",
+         "Accroupi + clic droit main vide : garder ici / suivre. Le laiton le répare. Détruit, il rend son cœur."),
+    ], ["wayfarers:brass_ingot", "wayfarers:brass_block"]),
+    ("clockwork_spider", "automatons", "wayfarers:brass_gear", ("Clockwork Spider", "Araignée-horloge"), [
+        ("Packs of them roam the Rustlands, the Cogwork Valley and the Clockwork Citadel. They climb walls.",
+         "Elles rôdent en bande dans les Terres rouillées, la Vallée des engrenages et la Citadelle d'horlogerie."),
+        ("When one stops and its key whirs, it is about to leap. They drop brass and gears.",
+         "Quand l'une s'arrête et que sa clé s'emballe, elle va bondir. Elles lâchent laiton et engrenages."),
+    ], ["wayfarers:brass_gear", "wayfarers:clockwork_spider_spawn_egg"]),
+    ("steam_drone", "automatons", "wayfarers:brass_nugget", ("Steam Drone", "Drone à vapeur"), [
+        ("They fly at night over the steampunk lands and in the Undercity, circling and firing hot rivets.",
+         "Ils volent la nuit sur les terres steampunk et dans les Bas-fonds, et tirent des rivets brûlants."),
+        ("When one rears up, it is about to dive at you: step aside. A bow brings them down.",
+         "Quand l'un se cabre, il va plonger sur toi : écarte-toi. Un arc les abat facilement."),
+    ], ["wayfarers:steam_drone_spawn_egg"]),
+    ("grand_clockmaker", "automatons", "wayfarers:remembrance_grand_clockmaker",
+     ("The Grand Clockmaker", "Le Grand Horloger"), [
+        ("Under the Clockwork Citadel's tower, a stair leads to the Clock Vault, where its maker keeps time.",
+         "Sous la tour de la Citadelle d'horlogerie, un escalier mène au Caveau où veille son créateur."),
+        ("His hands rewind and a ring closes: get out of it or be frozen in time. Jump his rings of sparks.",
+         "Ses aiguilles reculent, un cercle se referme : sors-en ou sois figé. Saute ses anneaux d'étincelles."),
+    ], ["wayfarers:remembrance_grand_clockmaker", "wayfarers:clockmaker_pendulum"]),
+    ("grand_clockmaker_midnight", "automatons", "minecraft:clock", ("Midnight", "Minuit"), [
+        ("Wounded, he skips through time behind you, then tolls midnight: twelve bells around him, one under you.",
+         "Blessé, il saute dans le temps derrière toi, puis sonne minuit : douze cloches, puis une sous tes pieds."),
+        ("His Remembrance forges the Clockmaker's Pendulum.", "Son Souvenir forge le Pendule du Grand Horloger."),
     ], []),
 
     ("materials", "gear", "wayfarers:lithite_shard", ("Materials", "Matériaux"), [
