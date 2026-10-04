@@ -72,6 +72,9 @@ public class GuildTerminalBlock extends HorizontalDirectionalBlock implements En
             return InteractionResult.SUCCESS;
         }
         if (player.isShiftKeyDown()) {
+            if (!terminal.trySort()) {
+                return InteractionResult.SUCCESS;
+            }
             terminal.scan(true);
             List<Container> chests = terminal.network();
             chests.forEach(InventoryUtil::sortContainer);
@@ -100,7 +103,8 @@ public class GuildTerminalBlock extends HorizontalDirectionalBlock implements En
                 continue;
             }
             for (Container chest : chests) {
-                if (!InventoryUtil.contains(chest, stack)) {
+                if (!InventoryUtil.contains(chest, stack) || chest instanceof net.minecraft.world.level.block.entity.ShulkerBoxBlockEntity
+                        && !stack.getItem().canFitInsideContainerItems()) {
                     continue;
                 }
                 ItemStack rest = InventoryUtil.insert(chest, stack, false);

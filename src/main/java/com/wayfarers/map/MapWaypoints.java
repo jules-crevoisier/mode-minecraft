@@ -23,6 +23,8 @@ final class MapWaypoints {
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     static final int MAX_PER_PLAYER = 250;
+    /** Every player's together (bounds the file, memory and the POINTS message). */
+    static final int MAX_TOTAL = 10_000;
 
     private final Path file;
     private final List<MapProtocol.Waypoint> list = new ArrayList<>();
@@ -37,7 +39,9 @@ final class MapWaypoints {
                 if (read != null) {
                     for (MapProtocol.Waypoint w : read) {
                         if (w != null && w.id() != null && w.owner() != null && w.dim() != null && w.name() != null) {
-                            list.add(w);
+                            // a hand-edited file may lack the owner's name: writeUTF(null) would fail every login
+                            list.add(w.ownerName() != null ? w : new MapProtocol.Waypoint(w.id(), w.owner(), "?", w.name(),
+                                    w.dim(), w.x(), w.y(), w.z(), w.color(), w.icon(), w.shared()));
                         }
                     }
                 }
@@ -49,9 +53,15 @@ final class MapWaypoints {
 
     List<MapProtocol.Waypoint> visibleTo(UUID player) {
         String id = player.toString();
+        // the player's own first: a POINTS message that would be too big drops the others' shared ones
         List<MapProtocol.Waypoint> out = new ArrayList<>();
         for (MapProtocol.Waypoint w : list) {
-            if (w.shared() || w.owner().equals(id)) {
+            if (w.owner().equals(id)) {
+                out.add(w);
+            }
+        }
+        for (MapProtocol.Waypoint w : list) {
+            if (w.shared() && !w.owner().equals(id)) {
                 out.add(w);
             }
         }
@@ -69,7 +79,7 @@ final class MapWaypoints {
 
     boolean add(MapProtocol.Waypoint w) {
         long mine = list.stream().filter(o -> o.owner().equals(w.owner())).count();
-        if (mine >= MAX_PER_PLAYER) {
+        if (mine >= MAX_PER_PLAYER || list.size() >= MAX_TOTAL) {
             return false;
         }
         list.add(w);

@@ -118,21 +118,41 @@ public final class MapProtocol {
                 in.readInt(), in.readInt() & 0xFFFFFF, Math.floorMod(in.readByte(), ICONS.length), in.readBoolean());
     }
 
+    /** Most bytes of waypoints / waystones in one POINTS message (a custom payload may not exceed 1 MiB). */
+    private static final int MAX_POINTS_BYTES = 600_000;
+    private static final int MAX_STONES_BYTES = 300_000;
+
+    /** {@code waypoints} should list the player's own first: what does not fit in the message is left out. */
     public static byte[] points(List<Waypoint> waypoints, List<Waystone> waystones) {
-        return bytes(out -> {
-            out.writeInt(waypoints.size());
+        int[] counts = new int[2];
+        byte[] wps = bytes(out -> {
             for (Waypoint w : waypoints) {
+                if (out.size() > MAX_POINTS_BYTES) {
+                    break;
+                }
                 writeWaypoint(out, w);
+                counts[0]++;
             }
-            out.writeInt(waystones.size());
+        });
+        byte[] stones = bytes(out -> {
             for (Waystone s : waystones) {
+                if (out.size() > MAX_STONES_BYTES) {
+                    break;
+                }
                 out.writeUTF(s.id());
                 out.writeUTF(s.name());
                 out.writeUTF(s.dim());
                 out.writeInt(s.x());
                 out.writeInt(s.y());
                 out.writeInt(s.z());
+                counts[1]++;
             }
+        });
+        return bytes(out -> {
+            out.writeInt(counts[0]);
+            out.write(wps);
+            out.writeInt(counts[1]);
+            out.write(stones);
         });
     }
 

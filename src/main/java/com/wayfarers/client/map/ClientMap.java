@@ -178,6 +178,12 @@ public final class ClientMap {
     }
 
     public static void onLogout() {
+        // textures are closed in reset(): only ever on the render thread
+        Minecraft mc = Minecraft.getInstance();
+        if (!mc.isSameThread()) {
+            mc.execute(ClientMap::reset);
+            return;
+        }
         reset();
     }
 
@@ -194,12 +200,22 @@ public final class ClientMap {
         if (lvl != level) {
             String id = worldId(mc);
             if (!id.equals(worldId)) {
+                // the server sends the waypoints right at login, often before this first tick in the world: keep them
+                List<MapProtocol.Waypoint> keepWaypoints = waypoints;
+                List<MapProtocol.Waystone> keepWaystones = waystones;
                 reset();
+                waypoints = keepWaypoints;
+                waystones = keepWaystones;
                 worldId = id;
                 local = new MapPoints(mc.gameDirectory.toPath().resolve("wayfarers").resolve("maps").resolve(id).resolve("points.json"));
             }
             level = lvl;
             dim = lvl.dimension().identifier().toString();
+            for (MapLayer l : LAYERS.values()) {
+                if (!l.dim.equals(dim)) {
+                    l.closeTextures();
+                }
+            }
             if (cave != null) {
                 cave.clear();
             }
@@ -278,6 +294,19 @@ public final class ClientMap {
 
     // ------------------------------------------------------------------ data from the server
     public static void receive(MapDataMsg msg) {
+        if (msg.kind() == MapDataMsg.POINTS) {
+            // accepted before the world is set up here (it is sent at login)
+            Object[] p = MapProtocol.readPoints(msg.data());
+            if (p != null) {
+                @SuppressWarnings("unchecked")
+                List<MapProtocol.Waypoint> w = (List<MapProtocol.Waypoint>) p[0];
+                @SuppressWarnings("unchecked")
+                List<MapProtocol.Waystone> s = (List<MapProtocol.Waystone>) p[1];
+                waypoints = Collections.unmodifiableList(w);
+                waystones = Collections.unmodifiableList(s);
+            }
+            return;
+        }
         if (level == null) {
             return;
         }
@@ -294,17 +323,6 @@ public final class ClientMap {
                     l.receiveMini(msg.a(), msg.b(), d);
                 } else {
                     l.receiveChunk(msg.a(), msg.b(), d);
-                }
-            }
-            case MapDataMsg.POINTS -> {
-                Object[] p = MapProtocol.readPoints(msg.data());
-                if (p != null) {
-                    @SuppressWarnings("unchecked")
-                    List<MapProtocol.Waypoint> w = (List<MapProtocol.Waypoint>) p[0];
-                    @SuppressWarnings("unchecked")
-                    List<MapProtocol.Waystone> s = (List<MapProtocol.Waystone>) p[1];
-                    waypoints = Collections.unmodifiableList(w);
-                    waystones = Collections.unmodifiableList(s);
                 }
             }
             case MapDataMsg.PLAYERS -> {

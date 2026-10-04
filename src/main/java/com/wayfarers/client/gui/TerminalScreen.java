@@ -58,6 +58,9 @@ public class TerminalScreen extends AbstractContainerScreen<TerminalMenu> {
     private int scroll;
     private int linkScroll;
     private final List<StorageNetwork.Entry> shown = new ArrayList<>();
+    private List<StorageNetwork.Entry> shownFrom;
+    private String shownQuery;
+    private Sort shownSort;
     private final List<Row> rows = new ArrayList<>();
     private TerminalLinksMsg rowsFrom;
 
@@ -85,10 +88,11 @@ public class TerminalScreen extends AbstractContainerScreen<TerminalMenu> {
             networkPage = !networkPage;
         }));
         networkButton.setTooltip(Tooltip.create(Component.translatable("gui.wayfarers.terminal.network.tip")));
-        itemButtons.add(addRenderableWidget(new WfButton(leftPos + 15, topPos + BUTTONS_Y, 80, 14,
+        // widths fit the French labels ("Tout ranger", "Ranger identiques") without scrolling text
+        itemButtons.add(addRenderableWidget(new WfButton(leftPos + 15, topPos + BUTTONS_Y, 66, 14,
                 Component.translatable("gui.wayfarers.terminal.store_all"),
                 b -> WayfarersNet.toServer(new TerminalClickMsg(TerminalClickMsg.Action.STORE_ALL, ItemStack.EMPTY)))));
-        itemButtons.add(addRenderableWidget(new WfButton(leftPos + 99, topPos + BUTTONS_Y, 82, 14,
+        itemButtons.add(addRenderableWidget(new WfButton(leftPos + 85, topPos + BUTTONS_Y, 96, 14,
                 Component.translatable("gui.wayfarers.terminal.store_matching"),
                 b -> WayfarersNet.toServer(new TerminalClickMsg(TerminalClickMsg.Action.STORE_MATCHING, ItemStack.EMPTY)))));
         WfButton show = addRenderableWidget(new WfButton(leftPos + 15, topPos + BUTTONS_Y, 100, 14,
@@ -125,8 +129,15 @@ public class TerminalScreen extends AbstractContainerScreen<TerminalMenu> {
 
     // ------------------------------------------------------------------ items page
     private void refresh() {
-        shown.clear();
+        // filtering and sorting thousands of entries every frame is costly: only redo it when something changed
         String q = search == null ? "" : search.getValue().toLowerCase(Locale.ROOT).strip();
+        if (menu.clientContents == shownFrom && q.equals(shownQuery) && sort == shownSort) {
+            return;
+        }
+        shownFrom = menu.clientContents;
+        shownQuery = q;
+        shownSort = sort;
+        shown.clear();
         boolean byMod = q.startsWith("@");
         String needle = byMod ? q.substring(1) : q;
         for (StorageNetwork.Entry e : menu.clientContents) {
@@ -281,7 +292,7 @@ public class TerminalScreen extends AbstractContainerScreen<TerminalMenu> {
             g.textWithWordWrap(font, msg, leftPos + GRID_X + 4, topPos + GRID_Y + 18, COLS * 18 - 8, WfGui.CREAM_SOFT, true);
         }
         Component status = Component.translatable("gui.wayfarers.terminal.status", menu.clientLinked, shortCount(menu.clientFree));
-        WfGui.textClipped(g, font, status.getString(), leftPos + GRID_X, topPos + STATUS_Y, COLS * 18 + 4,
+        WfGui.textClipped(g, font, status.getString(), leftPos + GRID_X, topPos + STATUS_Y, COLS * 18 + 10,
                 menu.clientFree == 0 && menu.clientLinked > 0 ? 0xFFFF8A7A : WfGui.CREAM_SOFT, false);
         if (hovered != null && menu.getCarried().isEmpty()) {
             List<Component> lines = new ArrayList<>(getTooltipFromContainerItem(hovered.type()));
@@ -331,7 +342,7 @@ public class TerminalScreen extends AbstractContainerScreen<TerminalMenu> {
         if (links != null) {
             Component status = Component.translatable("gui.wayfarers.terminal.network_status", menu.clientLinked,
                     links.relays(), links.range());
-            WfGui.textClipped(g, font, status.getString(), leftPos + GRID_X, topPos + STATUS_Y, COLS * 18 + 4,
+            WfGui.textClipped(g, font, status.getString(), leftPos + GRID_X, topPos + STATUS_Y, COLS * 18 + 10,
                     links.capped() ? 0xFFFF8A7A : WfGui.CREAM_SOFT, false);
         }
         if (hovered != null && hovered.info != null) {

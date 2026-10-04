@@ -180,8 +180,12 @@ public final class RegionData {
                 hh[o] = (byte) (height[s] >> 8);
                 hl[o] = (byte) height[s];
                 d[o] = depth[s];
-                b[o] = biome[s];
-                used[biome[s] & 0xFF] = true;
+                int bi = biome[s] & 0xFF;
+                if (bi >= used.length) {
+                    bi = 0;
+                }
+                b[o] = (byte) bi;
+                used[bi] = true;
             }
         }
         // only the palette entries this grid uses (chunks then carry 1-3 names, not the whole region's)
@@ -291,6 +295,13 @@ public final class RegionData {
             }
             in.readFully(r.depth);
             in.readFully(r.biome);
+            // a damaged file (or duplicate palette names) must not point past the palette: encode() indexes by it
+            int pal = r.palette.size();
+            for (int i = 0; i < count; i++) {
+                if ((r.biome[i] & 0xFF) > pal) {
+                    r.biome[i] = 0;
+                }
+            }
             return r;
         } catch (IOException | RuntimeException e) {
             return null;

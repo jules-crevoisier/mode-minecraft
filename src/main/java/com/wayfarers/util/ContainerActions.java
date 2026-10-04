@@ -31,6 +31,11 @@ public final class ContainerActions {
 
     public static void run(ServerPlayer player, Action action) {
         AbstractContainerMenu menu = player.containerMenu;
+        // a container broken (or left) since the screen opened: vanilla closes the menu on the player's next tick,
+        // a click arriving before that must not move items in or out of it
+        if (!(menu instanceof InventoryMenu) && !menu.stillValid(player)) {
+            return;
+        }
         switch (action) {
             case SORT_PLAYER -> InventoryUtil.sortPlayer(player);
             case SORT_CONTAINER -> {

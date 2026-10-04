@@ -369,12 +369,38 @@ public class WorldMapScreen extends Screen {
                 left = Component.translatable("gui.wayfarers.map.cursor_unknown", wx, wz).getString();
             }
         } else {
-            left = Component.translatable("gui.wayfarers.map.hint").getString();
+            left = hint(mx1 - mx0 - 90);
         }
         WfGui.textClipped(g, font, left, mx0, y, mx1 - mx0 - 90, WfGui.PLATE_INK, false);
         String sc = scale >= 1.0F ? Component.translatable("gui.wayfarers.map.scale_in", (int) scale).getString()
                 : Component.translatable("gui.wayfarers.map.scale_out", Math.round(1.0F / scale)).getString();
         g.text(font, sc, mx1 - font.width(sc), y, WfGui.INK_SOFT, false);
+    }
+
+    /**
+     * The controls hint. When it is wider than the status bar (narrow windows, French), its " - " separated parts
+     * are shown a few at a time, in turn, instead of being cut off.
+     */
+    private String hint(int width) {
+        String full = Component.translatable("gui.wayfarers.map.hint").getString();
+        if (font.width(full) <= width) {
+            return full;
+        }
+        List<String> pages = new ArrayList<>();
+        StringBuilder line = new StringBuilder();
+        for (String part : full.split(" - ")) {
+            String next = line.isEmpty() ? part : line + " - " + part;
+            if (!line.isEmpty() && font.width(next) > width) {
+                pages.add(line.toString());
+                line = new StringBuilder(part);
+            } else {
+                line = new StringBuilder(next);
+            }
+        }
+        if (!line.isEmpty()) {
+            pages.add(line.toString());
+        }
+        return pages.get((int) (System.currentTimeMillis() / 3000 % pages.size()));
     }
 
     // ------------------------------------------------------------------ side panel
@@ -474,7 +500,7 @@ public class WorldMapScreen extends Screen {
             return;
         }
         boolean ownWaypoint = m.ref() instanceof MapProtocol.Waypoint w && (ClientMap.mine(w) || isOp(player));
-        int w = 168;
+        int w = 180; // three buttons that fit "Supprimer" / "Partager"
         int h = ownWaypoint ? 66 : 46;
         int x = mx0 + 6;
         int y = my1 - h - 6;

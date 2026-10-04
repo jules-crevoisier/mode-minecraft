@@ -83,10 +83,13 @@ final class MapExplorers {
         }
         try (DataInputStream in = new DataInputStream(new InflaterInputStream(new ByteArrayInputStream(Files.readAllBytes(f))))) {
             int dims = in.readInt();
-            for (int d = 0; d < dims; d++) {
+            for (int d = 0; d < dims && d < 256; d++) {
                 String dim = in.readUTF();
                 int n = in.readInt();
-                Long2ObjectOpenHashMap<long[]> m = new Long2ObjectOpenHashMap<>(n);
+                if (n < 0 || n > 4_000_000) {
+                    throw new IOException("bad region count " + n); // damaged file: never allocate from it
+                }
+                Long2ObjectOpenHashMap<long[]> m = new Long2ObjectOpenHashMap<>(Math.min(n, 4096));
                 for (int i = 0; i < n; i++) {
                     long key = in.readLong();
                     m.put(key, new long[] {in.readLong(), in.readLong(), in.readLong(), in.readLong()});
