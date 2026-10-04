@@ -386,6 +386,14 @@ public abstract class WayfarerBoss extends Monster implements AnimatedMob {
         lockedYaw = newYaw;
     }
 
+    /** Turn to {@code yaw} at once and keep facing it for the rest of the move (after a teleport, for instance). */
+    public void snapFacing(float yaw) {
+        setYRot(yaw);
+        yBodyRot = yaw;
+        yHeadRot = yaw;
+        lockedYaw = yaw;
+    }
+
     private void lockRotation() {
         setYRot(lockedYaw);
         yBodyRot = lockedYaw;
@@ -523,6 +531,15 @@ public abstract class WayfarerBoss extends Monster implements AnimatedMob {
         entityData.set(DATA_PHASE, 1);
         entityData.set(DATA_STAGGERED, false);
         setTarget(null);
+        // phase 2 speed-ups (onPhaseTwo) are permanent modifiers: back in phase 1, the boss walks at its base pace again
+        var speed = getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.MOVEMENT_SPEED);
+        if (speed != null) {
+            for (var modifier : List.copyOf(speed.getPermanentModifiers())) {
+                if (modifier.id().getNamespace().equals(com.wayfarers.Wayfarers.MODID)) {
+                    speed.removeModifier(modifier.id());
+                }
+            }
+        }
         setHealth(getMaxHealth());
         teleportHome(level);
         if (bossBar != null) {

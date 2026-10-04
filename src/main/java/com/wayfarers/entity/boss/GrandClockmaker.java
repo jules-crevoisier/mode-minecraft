@@ -279,10 +279,8 @@ public class GrandClockmaker extends WayfarerBoss {
             Vec3 dir = rotate(look, side).scale(-2.5);
             Vec3 to = target.position().add(dir);
             if (randomTeleport(to.x, target.getY(), to.z, false)) {
-                float yaw = (float) (Mth.atan2(target.getZ() - getZ(), target.getX() - getX()) * Mth.RAD_TO_DEG) - 90.0F;
-                setYRot(yaw);
-                yBodyRot = yaw;
-                yHeadRot = yaw;
+                // the move's locked facing too, or the active frames would turn him back to where he stood before
+                snapFacing((float) (Mth.atan2(target.getZ() - getZ(), target.getX() - getX()) * Mth.RAD_TO_DEG) - 90.0F);
                 level.sendParticles(ParticleTypes.REVERSE_PORTAL, from.x, from.y + 2, from.z, 40, 0.5, 1.5, 0.5, 0.1);
                 level.sendParticles(ParticleTypes.ELECTRIC_SPARK, getX(), getY() + 2, getZ(), 30, 0.5, 1.5, 0.5, 0.2);
                 level.playSound(null, from.x, from.y, from.z, SoundEvents.ENDERMAN_TELEPORT, SoundSource.HOSTILE, 1.5F, 0.6F);

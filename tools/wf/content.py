@@ -365,6 +365,10 @@ MESSAGES = {
     "message.wayfarers.brass_golem.follow": ("Brass Golem: following you.", "Golem de laiton : il te suit."),
     "message.wayfarers.brass_golem.need": ("A Brass Golem needs two Blocks of Brass stacked on top of each other.",
                                            "Un golem de laiton demande deux blocs de laiton empilés l'un sur l'autre."),
+    "message.wayfarers.brass_golem.room": ("No room for a Brass Golem here: it needs a little space around and above "
+                                           "the two blocks.",
+                                           "Pas assez de place pour un golem de laiton : il lui faut un peu d'espace autour "
+                                           "et au-dessus des deux blocs."),
     "message.wayfarers.void_saved": ("The void spits you back out.", "Le vide te recrache."),
     "message.wayfarers.cooldown": ("Recharging...", "Recharge..."),
     "message.wayfarers.kit": ("Kit '%s' given.", "Kit « %s » donné."),

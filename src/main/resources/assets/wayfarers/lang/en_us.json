@@ -952,6 +952,7 @@
   "message.wayfarers.brass_golem.follow": "Brass Golem: following you.",
   "message.wayfarers.brass_golem.guard": "Brass Golem: guarding this spot.",
   "message.wayfarers.brass_golem.need": "A Brass Golem needs two Blocks of Brass stacked on top of each other.",
+  "message.wayfarers.brass_golem.room": "No room for a Brass Golem here: it needs a little space around and above the two blocks.",
   "message.wayfarers.chisel.none": "The chisel can't carve %s",
   "message.wayfarers.chisel.variant": "%s (%s/%s)",
   "message.wayfarers.compass.any": "any structure",
