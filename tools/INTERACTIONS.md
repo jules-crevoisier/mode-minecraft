@@ -30,5 +30,12 @@ Every block and item of the mod must react visibly when a player uses it: a scre
 | Rivet Gun | Fires a rivet (5 damage): Rivets first, then iron nuggets; free in creative. Never hits the shooter or their pets. 0.7 s cooldown. | Shot and piston hiss, muzzle smoke, smoking rivet; "Out of rivets" + click |
 | Pocket Watch | Time (hh:mm, Overworld clock), day number, moon phase, biome. Its hand follows the sun (spins outside the Overworld). | Above the hotbar, tick sound |
 | Airship Compass | Nearest Sky Harbour (Void Ship Wreck in the End); stores it as a lodestone target so the needle points there. Nothing found: says so and the needle spins. | Message, spark trail, lodestone sound |
+| Pearl Oyster | Shell ajar (`pearl=true`): gives a Pearl and closes; under water it reopens with a new pearl after a while (random ticks). Closed: nothing (normal block use). Broken: drops itself, and its pearl if it had one. | Pearl pops out, shulker-shell click, bubbles (end-rod sparks out of water) |
+| Glow Anemone / Jelly Lamp | Decoration; no right-click. The anemone glows (light 10) and needs a solid floor; the lamp gives light 15. | Glow |
+| Diving Helmet | Worn with the head under water: Conduit Power (refreshed every second, lasts 13 s after leaving the water), plus full mining speed under water from its attributes. | Effect icon |
+| Flippers | Worn: faster swimming (water movement efficiency +0.66). | — |
+| Bucket of Reef Fish | Releases the fish (its livery is kept). Use an empty water bucket on a Reef Fish to catch it. | Bucket sound |
+| Glow Jellyfish | Touching it stings: 1 damage and 2.5 s of poison (once per 1.5 s), not in creative. | Glow particles, slime sound |
+| Sea Serpent | Rises at night near a player boating or swimming over deep water (each 10 s: 1 in 30, deep-ocean biome, 18+ blocks of water, none within 96 blocks; not in peaceful). Bite knocks riders out of boats; lunge breaks boats; whirlpool drags swimmers and boats and tips riders. Sinks away at dawn when nobody fights it. | Boss bar, message above the hotbar, elder-guardian sounds, bubbles and splashes |
 
 Commands: `/wayfarers warp` is for game masters only. Players travel through the waystone screen.

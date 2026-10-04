@@ -1,0 +1,12 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": "#wayfarers:ocean/all",
+  "spawners": [
+    {
+      "type": "wayfarers:glow_jellyfish",
+      "weight": 8,
+      "minCount": 2,
+      "maxCount": 4
+    }
+  ]
+}

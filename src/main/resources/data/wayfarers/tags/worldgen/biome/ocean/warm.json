@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:warm_ocean",
+    "minecraft:lukewarm_ocean",
+    "minecraft:deep_lukewarm_ocean",
+    {
+      "id": "wayfarers:coral_lagoon",
+      "required": false
+    }
+  ]
+}

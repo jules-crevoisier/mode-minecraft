@@ -144,7 +144,7 @@ public final class {cls} extends EntityModel<WayfarerRenderState> {{
 {chr(10).join(fields)}
 
     public {cls}(ModelPart root) {{
-        super(root, RenderTypes::entityCutout);
+        super(root, RenderTypes::{m.render});
 {chr(10).join(ctor)}
     }}
 
@@ -167,11 +167,15 @@ public final class {cls} extends EntityModel<WayfarerRenderState> {{
 def java_registry(models):
     layers = "\n".join(f"        event.registerLayerDefinition({camel(m.name)}Model.LAYER, {camel(m.name)}Model::createBodyLayer);"
                        for m in models)
-    rends = "\n".join(
-        f"        event.registerEntityRenderer(ModEntities.{m.name.upper()}.get(), ctx -> new WayfarerModelRenderer<>(ctx,\n"
-        f"                new {camel(m.name)}Model(ctx.bakeLayer({camel(m.name)}Model.LAYER)), {f(m.shadow)}, \"{m.name}\", "
-        f"{'true' if m._has_glow else 'false'}));"
-        for m in models)
+    def renderer(m):
+        head = (f"        event.registerEntityRenderer(ModEntities.{m.name.upper()}.get(), ctx -> new WayfarerModelRenderer<>(ctx,\n"
+                f"                new {camel(m.name)}Model(ctx.bakeLayer({camel(m.name)}Model.LAYER)), {f(m.shadow)}, ")
+        glow = 'true' if m._has_glow else 'false'
+        if not m.variants and not m.glow_pulse:
+            return head + f"\"{m.name}\", {glow}));"
+        names = ", ".join(f'"{n}"' for n in texture_names(m))
+        return head + f"new String[] {{{names}}},\n                {glow}, {f(m.glow_pulse)}));"
+    rends = "\n".join(renderer(m) for m in models)
     names = ", ".join(f'"{m.name}"' for m in models)
     return f"""package com.wayfarers.generated.model;
 
@@ -197,6 +201,13 @@ public final class ModelRegistry {{
     }}
 }}
 """
+
+
+def texture_names(m):
+    """Texture of each variant: <name> for the first, <name>_<variant> for the others."""
+    if not m.variants:
+        return [m.name]
+    return [m.name] + [f"{m.name}_{v}" for v in m.variants[1:]]
 
 
 def java_anims(models):
@@ -252,12 +263,20 @@ def main():
         if args.only and m.name != args.only:
             continue
         os.makedirs(TEX, exist_ok=True)
-        tex.save(os.path.join(TEX, f"{m.name}.png"))
-        glow_path = os.path.join(TEX, f"{m.name}_glow.png")
-        if glow is not None:
-            glow.save(glow_path)
-        elif os.path.exists(glow_path):
-            os.remove(glow_path)
+        painted = [(m.name, tex, glow)]
+        for v, tname in zip(m.variants[1:], texture_names(m)[1:]):
+            mv = builder(v)
+            mv.pack()
+            if [c.uv for c in mv.all_cubes()] != [c.uv for c in m.all_cubes()]:
+                raise ValueError(f"{m.name}: variant {v} must keep the same cubes")
+            painted.append((tname, *mv.textures()))
+        for tname, t, g in painted:
+            t.save(os.path.join(TEX, f"{tname}.png"))
+            glow_path = os.path.join(TEX, f"{tname}_glow.png")
+            if g is not None:
+                g.save(glow_path)
+            elif os.path.exists(glow_path):
+                os.remove(glow_path)
         os.makedirs(os.path.join(JAVA, "model"), exist_ok=True)
         with open(os.path.join(JAVA, "model", f"{camel(m.name)}Model.java"), "w") as fh:
             fh.write(java_model(m))
@@ -266,6 +285,8 @@ def main():
             os.makedirs(PREVIEW, exist_ok=True)
             model_render.sheet(m, tex, glow, os.path.join(PREVIEW, f"{m.name}.png"))
             model_render.texture_preview(m, tex, glow, os.path.join(PREVIEW, f"{m.name}_tex.png"))
+            for tname, t, g in painted[1:]:
+                model_render.sheet(m, t, g, os.path.join(PREVIEW, f"{tname}.png"))
         n_cubes = len(m.all_cubes())
         print(f"{m.name:22s} {n_cubes:4d} cubes  tex {m.tex_size[0]}x{m.tex_size[1]}  "
               f"anims: {', '.join(m.anims)}")

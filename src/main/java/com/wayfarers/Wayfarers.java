@@ -49,10 +49,12 @@ public final class Wayfarers {
         com.wayfarers.generated.GeneratedMetals.init();
         com.wayfarers.generated.GeneratedMachines.init();
         com.wayfarers.generated.GeneratedFurniture.init();
+        com.wayfarers.registry.ModOcean.init();
         ModBlocks.BLOCKS.register(modBus);
         ModItems.ITEMS.register(modBus);
         ModBlockEntities.BLOCK_ENTITIES.register(modBus);
         ModEntities.ENTITIES.register(modBus);
+        com.wayfarers.registry.ModOcean.FEATURES.register(modBus);
         ModTabs.TABS.register(modBus);
         ModDataComponents.COMPONENTS.register(modBus);
         com.wayfarers.registry.ModMenus.MENUS.register(modBus);
@@ -67,6 +69,7 @@ public final class Wayfarers {
         DangerEvents.register();
         com.wayfarers.event.QolEvents.register();
         com.wayfarers.event.GadgetEvents.register();
+        com.wayfarers.event.OceanEvents.register();
         com.wayfarers.skill.SkillEvents.register();
         com.wayfarers.chisel.ChiselFamilies.register();
         SpawnPlacementRegisterEvent.BUS.addListener(ModEntities::registerSpawnPlacements);

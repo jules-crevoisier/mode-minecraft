@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:template",
+  "config": {
+    "templates": [
+      {
+        "data": {
+          "id": "wayfarers:ocean/rock_arch"
+        },
+        "weight": 1
+      },
+      {
+        "data": {
+          "id": "wayfarers:ocean/rock_pillars"
+        },
+        "weight": 1
+      },
+      {
+        "data": {
+          "id": "wayfarers:ocean/rock_stack"
+        },
+        "weight": 1
+      },
+      {
+        "data": {
+          "id": "wayfarers:ocean/rock_ring"
+        },
+        "weight": 1
+      }
+    ]
+  }
+}

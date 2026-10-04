@@ -4,3 +4,4 @@ from . import sylvan_palace  # noqa: F401
 from . import inventor_manor  # noqa: F401
 from . import sky_isles  # noqa: F401
 from . import foundry, observatory, cathedral  # noqa: F401
+from . import ocean_life  # noqa: F401

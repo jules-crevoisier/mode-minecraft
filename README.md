@@ -90,6 +90,9 @@ Points gagnés par quête, par boss et tous les 10 niveaux. Arbre de **4 branche
   - **Montre à gousset** : aiguille qui suit le soleil ; clic droit : heure, jour, lune et biome.
   - **Boussole de dirigeable** : son aiguille d'éther pointe vers le Port céleste le plus proche.
 
+### Océans vivants (manuel, catégorie « Océans vivants »)
+Méduses lumineuses (4 couleurs, piquent un peu, gelée → lampe ou vision nocturne), bancs de poissons de récif, raies manta qui sautent hors de l'eau, baleines à bosse qui chantent au large, et la nuit, près des bateaux, le **Serpent de mer** (mini-boss : morsure, charge qui brise les bateaux, tourbillon ; ses écailles font le **Casque de scaphandre**, qui donne la force de conduit sous l'eau). Palmes. Au fond : forêts de varech, jardins et coraux géants, anémones lumineuses, huîtres perlières, cheminées à bulles, arches rocheuses, ruines, et quatre petites structures (sous-marin englouti, cloche de plongée avec poche d'air, sanctuaire de corail, débris de naufrage). Tout cela existe avec ou sans le nouveau monde.
+
 ### Nouveau monde (option `world.overhaul`)
 Le pack intégré **wayfarers:world_overhaul** remplace l'Overworld des **nouveaux** mondes :
 - montagnes ~65 % plus hautes, pics jusque vers y 300 ;

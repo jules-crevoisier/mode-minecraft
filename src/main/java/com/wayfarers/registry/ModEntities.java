@@ -37,6 +37,11 @@ import com.wayfarers.entity.automaton.BrassGolem;
 import com.wayfarers.entity.automaton.ClockworkSpider;
 import com.wayfarers.entity.automaton.HotRivetEntity;
 import com.wayfarers.entity.automaton.SteamDrone;
+import com.wayfarers.entity.ocean.GlowJellyfish;
+import com.wayfarers.entity.ocean.MantaRay;
+import com.wayfarers.entity.ocean.ReefFish;
+import com.wayfarers.entity.ocean.SeaSerpent;
+import com.wayfarers.entity.ocean.Whale;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.SpawnPlacementTypes;
@@ -173,6 +178,23 @@ public final class ModEntities {
             () -> EntityType.Builder.<HotRivetEntity>of(HotRivetEntity::new, MobCategory.MISC)
                     .sized(0.25F, 0.25F).clientTrackingRange(6).updateInterval(2).build(ENTITIES.key("hot_rivet")));
 
+    // ---- living oceans (spawns: tools/wf/ocean.py biome modifiers; the Sea Serpent rises near boats, OceanEvents)
+    public static final RegistryObject<EntityType<GlowJellyfish>> GLOW_JELLYFISH = ENTITIES.register("glow_jellyfish",
+            () -> EntityType.Builder.<GlowJellyfish>of(GlowJellyfish::new, MobCategory.WATER_AMBIENT)
+                    .sized(GlowJellyfish.WIDTH, GlowJellyfish.HEIGHT).clientTrackingRange(6).build(ENTITIES.key("glow_jellyfish")));
+    public static final RegistryObject<EntityType<ReefFish>> REEF_FISH = ENTITIES.register("reef_fish",
+            () -> EntityType.Builder.<ReefFish>of(ReefFish::new, MobCategory.WATER_AMBIENT)
+                    .sized(ReefFish.WIDTH, ReefFish.HEIGHT).clientTrackingRange(4).build(ENTITIES.key("reef_fish")));
+    public static final RegistryObject<EntityType<MantaRay>> MANTA_RAY = ENTITIES.register("manta_ray",
+            () -> EntityType.Builder.<MantaRay>of(MantaRay::new, MobCategory.WATER_CREATURE)
+                    .sized(MantaRay.WIDTH, MantaRay.HEIGHT).clientTrackingRange(8).build(ENTITIES.key("manta_ray")));
+    public static final RegistryObject<EntityType<SeaSerpent>> SEA_SERPENT = ENTITIES.register("sea_serpent",
+            () -> EntityType.Builder.<SeaSerpent>of(SeaSerpent::new, MobCategory.MONSTER)
+                    .sized(SeaSerpent.WIDTH, SeaSerpent.HEIGHT).clientTrackingRange(10).build(ENTITIES.key("sea_serpent")));
+    public static final RegistryObject<EntityType<Whale>> WHALE = ENTITIES.register("whale",
+            () -> EntityType.Builder.<Whale>of(Whale::new, MobCategory.WATER_CREATURE)
+                    .sized(Whale.WIDTH, Whale.HEIGHT).clientTrackingRange(10).build(ENTITIES.key("whale")));
+
     /** Every boss with an Elden Ring style fight (demo command, quests). */
     public static List<RegistryObject<? extends EntityType<? extends com.wayfarers.boss.WayfarerBoss>>> bosses() {
         return List.of(DROWNED_WARDEN, VOID_WARDEN, GRAVE_KNIGHT, BONE_MATRIARCH, WEEPING_LADY, LARVA_MOTHER, BELL_KEEPER, ARCHIVIST, SAND_PHARAOH, JADE_JAGUAR, ROOT_MOTHER, SWAMP_CRONE, GRYPHON_KNIGHT, RUNE_COLOSSUS, FORGE_KING, CRYSTAL_SPIDER, SCULK_SPAWN, ASH_LORD, PIGLIN_KING, SOUL_REAPER, GRAND_CLOCKMAKER);
@@ -213,6 +235,11 @@ public final class ModEntities {
         event.put(STEAM_DRONE.get(), SteamDrone.attributes().build());
         event.put(BRASS_GOLEM.get(), BrassGolem.attributes().build());
         event.put(GRAND_CLOCKMAKER.get(), GrandClockmaker.attributes().build());
+        event.put(GLOW_JELLYFISH.get(), GlowJellyfish.attributes().build());
+        event.put(REEF_FISH.get(), ReefFish.attributes().build());
+        event.put(MANTA_RAY.get(), MantaRay.attributes().build());
+        event.put(SEA_SERPENT.get(), SeaSerpent.attributes().build());
+        event.put(WHALE.get(), Whale.attributes().build());
     }
 
     /** Natural/structure spawning rules: on the ground, in the dark, like vanilla monsters. */
@@ -221,6 +248,16 @@ public final class ModEntities {
                 SKELETON_KNIGHT.get(), CRYPT_CRAWLER.get(), BANSHEE.get(), GARGOYLE.get(), EMBER_IMP.get(), VOID_LARVA.get(), CLOCKWORK_SPIDER.get(), STEAM_DRONE.get())) {
             register(event, type);
         }
+        // sea creatures: in water, each with its own depth rules
+        event.register(GLOW_JELLYFISH.get(), SpawnPlacementTypes.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                GlowJellyfish::checkSpawnRules, SpawnPlacementRegisterEvent.Operation.REPLACE);
+        event.register(REEF_FISH.get(), SpawnPlacementTypes.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                net.minecraft.world.entity.animal.fish.WaterAnimal::checkSurfaceWaterAnimalSpawnRules,
+                SpawnPlacementRegisterEvent.Operation.REPLACE);
+        event.register(MANTA_RAY.get(), SpawnPlacementTypes.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                MantaRay::checkSpawnRules, SpawnPlacementRegisterEvent.Operation.REPLACE);
+        event.register(WHALE.get(), SpawnPlacementTypes.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                Whale::checkSpawnRules, SpawnPlacementRegisterEvent.Operation.REPLACE);
     }
 
     private static <T extends Monster> void register(SpawnPlacementRegisterEvent event, EntityType<T> type) {

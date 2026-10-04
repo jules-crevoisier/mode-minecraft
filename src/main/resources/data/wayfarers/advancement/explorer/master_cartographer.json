@@ -382,9 +382,73 @@
           }
         ]
       }
+    },
+    "sunken_submarine": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "wayfarers:sunken_submarine"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "diving_bell": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "wayfarers:diving_bell"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "coral_shrine": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "wayfarers:coral_shrine"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "shipwreck_debris": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "wayfarers:shipwreck_debris"
+              }
+            }
+          }
+        ]
+      }
     }
   },
-  "parent": "wayfarers:explorer/tesla_observatory",
+  "parent": "wayfarers:explorer/shipwreck_debris",
   "rewards": {
     "experience": 300,
     "loot": [

@@ -1,0 +1,8 @@
+{
+  "type": "forge:add_features",
+  "biomes": "#wayfarers:ocean/kelp",
+  "features": [
+    "wayfarers:ocean_kelp_forest"
+  ],
+  "step": "vegetal_decoration"
+}

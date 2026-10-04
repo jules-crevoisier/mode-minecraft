@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:cold_ocean",
+    "minecraft:deep_cold_ocean",
+    "minecraft:frozen_ocean",
+    "minecraft:deep_frozen_ocean",
+    {
+      "id": "wayfarers:glacial_sea",
+      "required": false
+    },
+    {
+      "id": "wayfarers:slate_sea",
+      "required": false
+    }
+  ]
+}
