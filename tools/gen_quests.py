@@ -109,6 +109,9 @@ STRUCTURE_ICONS = {
     "void_nest": "crying_obsidian", "sunken_citadel": "conduit",
     "forgotten_catacombs": "skeleton_skull", "sand_hypogeum": "chiseled_sandstone",
     "lithite_well": "deepslate_bricks", "void_crypt": "purpur_pillar",
+    "clockwork_citadel": "clock", "sky_harbour": "wayfarers:brass_plating", "undercity": "verdant_froglight",
+    "dwarven_city": "wayfarers:mithril_block", "sylvan_palace": "flowering_azalea_leaves",
+    "inventor_manor": "wayfarers:redstone_timer", "sky_isles": "wayfarers:aether_crystal",
 }
 # where each boss lives (its quest follows the discovery of that structure)
 BOSS_HOME = {

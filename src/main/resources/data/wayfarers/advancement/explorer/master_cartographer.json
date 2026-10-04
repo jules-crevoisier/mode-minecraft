@@ -270,9 +270,89 @@
           }
         ]
       }
+    },
+    "clockwork_citadel": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "wayfarers:clockwork_citadel"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "sky_harbour": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "wayfarers:sky_harbour"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "sylvan_palace": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "wayfarers:sylvan_palace"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "inventor_manor": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "wayfarers:inventor_manor"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "sky_isles": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "wayfarers:sky_isles"
+              }
+            }
+          }
+        ]
+      }
     }
   },
-  "parent": "wayfarers:explorer/sand_hypogeum",
+  "parent": "wayfarers:explorer/sky_isles",
   "rewards": {
     "experience": 300,
     "loot": [
