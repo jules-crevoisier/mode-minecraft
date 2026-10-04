@@ -58,15 +58,17 @@ PAGES = [
          "les absents. Chaque quête rapporte aussi des points de talent."),
     ], []),
     ("keys", "start", "minecraft:oak_sign", ("Keys", "Touches"), [
-        ("J: quest journal\nK: talent tree\nV: use your active talent\nR: sort your inventory\nM: magnet ring on/off\n"
+        ("J: quest journal\nK: talent tree\nV: use your active talent\nR: sort your inventory\nM: world map\n"
+         "H: show/hide the minimap\nZ: minimap zoom\nB: ping the spot you look at\nN: magnet ring on/off\n"
          "G: Builder's Wand symmetry\nW (held over an item): its manual page",
          "J : journal de quêtes\nK : arbre de talents\nV : utiliser le talent actif\nR : trier l'inventaire\n"
-         "M : allumer/éteindre l'aimant\nG : symétrie de la baguette\nW (maintenu sur un objet) : sa page du manuel"),
+         "M : carte du monde\nH : afficher/masquer la mini-carte\nZ : zoom de la mini-carte\nB : signaler l'endroit visé\n"
+         "N : allumer/éteindre l'aimant\nG : symétrie de la baguette\nW (maintenu sur un objet) : sa page du manuel"),
         ("These are the keys of a QWERTY keyboard: Options > Controls, Wayfarers section, shows yours and changes "
          "them. Display settings (health bars, damage numbers, tracker, tips): Config button of Wayfarers in the mods list.",
-         "Ce sont les touches d'un clavier QWERTY (en AZERTY, W devient Z et M devient la virgule) : Options > "
-         "Commandes, rubrique Wayfarers, montre les tiennes et les change. Réglages d'affichage (barres de vie, "
-         "chiffres de dégâts, suivi, astuces) : bouton Config de Wayfarers dans la liste des mods."),
+         "Ce sont les touches d'un clavier QWERTY (en AZERTY : W devient Z, Z devient W et M devient la virgule) : "
+         "Options > Commandes, rubrique Wayfarers, montre les tiennes et les change. Réglages d'affichage (barres de "
+         "vie, chiffres de dégâts, suivi, astuces) : bouton Config de Wayfarers dans la liste des mods."),
     ], []),
     ("compass", "start", "wayfarers:structure_compass", ("Structure Compass", "Boussole des structures"), [
         ("It finds Wayfarers structures. You get one when you first arrive; craft more with a compass surrounded by "
@@ -139,6 +141,28 @@ PAGES = [
          "Fabrique les tiennes pour ta base, tes fermes ou l'entrée d'un donjon : une perle de l'Ender, deux "
          "fragments de carte, une boussole et trois briques de pierre."),
     ], ["wayfarers:waystone"]),
+    ("map", "travel", "minecraft:filled_map", ("Map and minimap", "Carte et mini-carte"), [
+        ("The minimap in the corner shows the land around you, where you face, and the nearby waystones, waypoints, "
+         "players, pings, graves and your last death. H hides it, Z changes its zoom.",
+         "La mini-carte montre le terrain autour de toi, ta direction, les pierres de voyage, repères, joueurs, "
+         "signaux, tombes et ta dernière mort. H la masque, Z change son zoom."),
+        ("M (or the Wayfarer's Atlas, sneaking) opens the world map. Drag to move it, wheel to zoom, Space to come "
+         "back to you. Click a marker for its card.",
+         "M (ou l'Atlas du Voyageur, accroupi) ouvre la carte du monde. Glisse pour la déplacer, molette pour "
+         "zoomer, Espace pour revenir sur toi. Clique un repère pour sa fiche."),
+        ("On a server the map is shared: what anyone explores appears on everyone's map. Underground, the map shows "
+         "the cave around you instead of the surface.",
+         "Sur un serveur, la carte est partagée : ce qu'un joueur explore apparaît chez tous. Sous terre, elle "
+         "montre la grotte autour de toi."),
+        ("Right-click the map: add a waypoint (name, colour, icon, private or shared). Its card lets you edit, share "
+         "or delete it.",
+         "Clic droit sur la carte : poser un repère (nom, couleur, icône, privé ou partagé). Sa fiche permet de le "
+         "modifier, partager ou supprimer."),
+        ("Middle-click the map, or press B while looking at a spot, to ping it: everyone sees it for a minute.",
+         "Clic molette sur la carte, ou B en visant un endroit : un signal que tous voient une minute."),
+        ("Corner, size, shape and rotation: config/wayfarers-client.toml.",
+         "Coin, taille, forme et rotation : config/wayfarers-client.toml."),
+    ], ["wayfarers:wayfarer_atlas"]),
     ("recall", "travel", "wayfarers:recall_scroll", ("Recall Scroll", "Parchemin de rappel"), [
         ("Use it to return instantly to the nearest waystone of your dimension. It is used up.",
          "Utilise-le pour revenir aussitôt à la pierre de voyage la plus proche de ta dimension. Il est consommé."),

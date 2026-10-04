@@ -16,7 +16,7 @@ Every block and item of the mod must react visibly when a player uses it: a scre
 | Travel Backpack | Opens 27 slots. The open backpack can't be moved, and backpacks can't go inside backpacks. | Screen, sound |
 | Magnet Ring | Toggles the magnet. | Message, sound, glint |
 | Recall Scroll | Teleports to the nearest waystone; says so when there is none. | Particles, sound, message |
-| Wayfarer's Atlas | Quest journal. | Screen, sound |
+| Wayfarer's Atlas | Quest journal. Sneak: world map (also key M). | Screen, sound |
 | Wayfarer's Manual | Guide (client). Hold the manual key (W by default, Z on AZERTY, rebindable; the item tooltip names it) over an item in any inventory: opens its page. From the player's inventory, closing the manual goes back to it; from a chest or machine, the container is closed first. | Screen, sound |
 | Structure Compass | Distance and direction to the nearest structure. Sneak: change the target. | Message, particle trail, sound |
 | Builder's Wands | Extend a face. Sneak in the air: undo. Sneak on a block: mirror centre there (turns symmetry on at mirror X); sneak on the centre again, or key G: off / mirror X / mirror Z / X + Z. Mirrored copies follow the same rules and cost a block each; a block and its copies go in together or not at all; copies further than 96 blocks or in unloaded chunks are skipped. Refuses doors, beds and tall plants. A double slab costs 2 slabs. No water copied. Respects spawn protection and adventure mode. | Gold outline (blocks), blue outline (mirrored copies), amber centre and plane frames; sound; message above the hotbar; sparks on the plane |
@@ -31,6 +31,11 @@ Every block and item of the mod must react visibly when a player uses it: a scre
 | Rivet Gun | Fires a rivet (5 damage): Rivets first, then iron nuggets; free in creative. Never hits the shooter or their pets. 0.7 s cooldown. | Shot and piston hiss, muzzle smoke, smoking rivet; "Out of rivets" + click |
 | Pocket Watch | Time (hh:mm, Overworld clock), day number, moon phase, biome. Its hand follows the sun (spins outside the Overworld). | Above the hotbar, tick sound |
 | Airship Compass | Nearest Sky Harbour (Void Ship Wreck in the End); stores it as a lodestone target so the needle points there. Nothing found: says so and the needle spins. | Message, spark trail, lodestone sound |
+
+| World map (key M) | Drag, wheel zoom, Space: back to you. Click a marker: its card (own waypoint: edit / share / delete; ops: any). Right-click: add waypoint, ping, copy coordinates. Middle-click: ping. Legend rows hide a kind. | Screen; pings: chat line for everyone, bell, pulsing marker for 60 s |
+| Minimap (H show/hide, Z zoom, B ping what you look at) | HUD only. | Markers, coordinates, biome |
+
+Keys: M world map, H minimap, Z minimap zoom, B ping, N magnet ring (was M), J journal, K talents, V active talent, R sort, G wand symmetry.
 
 Display settings (health bars, damage numbers, quest tracker, tip cards, key bindings): the Config button of Wayfarers in the mods list opens a settings screen in the mod's theme; every change is saved at once.
 

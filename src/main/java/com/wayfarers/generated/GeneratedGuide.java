@@ -31,6 +31,7 @@ public final class GeneratedGuide {
             new Page("talents", "talents", "minecraft:enchanted_book", 4, List.of("wayfarers:oblivion_vial")),
             new Page("magic", "talents", "wayfarers:fire_staff", 3, List.of("wayfarers:fire_staff", "wayfarers:frost_staff", "wayfarers:thunder_staff", "wayfarers:healing_staff", "wayfarers:levitation_wand", "wayfarers:ward_orb", "wayfarers:steam_cane", "wayfarers:arcane_ring", "wayfarers:mana_amulet")),
             new Page("waystones", "travel", "wayfarers:waystone", 3, List.of("wayfarers:waystone")),
+            new Page("map", "travel", "minecraft:filled_map", 6, List.of("wayfarers:wayfarer_atlas")),
             new Page("recall", "travel", "wayfarers:recall_scroll", 2, List.of("wayfarers:recall_scroll")),
             new Page("wonders", "wonders", "wayfarers:structure_compass", 4, List.of()),
             new Page("clockwork_citadel", "wonders", "minecraft:clock", 3, List.of()),

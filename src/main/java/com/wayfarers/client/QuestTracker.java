@@ -63,7 +63,7 @@ public final class QuestTracker {
         int lines = Math.min(desc.size(), 3);
         int h = 34 + lines * 9;
         int x = g.guiWidth() - W - 6;
-        int y = 6 + effectRows(mc) * 26;
+        int y = 6 + Math.max(effectRows(mc) * 26, com.wayfarers.client.map.MinimapHud.reservedTopRight());
         WfGui.sprite(g, WfGui.CARD, x, y, W, h);
         g.item(cachedIcon, x + 5, y + 5);
         g.text(font, Component.translatable("gui.wayfarers.quests.tracker"), x + 25, y + 4, WfGui.INK_SOFT, false);

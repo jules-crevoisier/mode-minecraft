@@ -50,6 +50,14 @@ public final class WayfarersConfig {
             .comment("Most containers one terminal network can link (protects the server on huge bases).")
             .defineInRange("storage.maxContainers", 2048, 64, 16384);
 
+    public static final ForgeConfigSpec.BooleanValue MAP_SHARED = B
+            .comment("World map: everyone sees what anyone explored. False: each player only sees the places they saw themselves",
+                    "(the server keeps track of both, so this can be switched at any time).")
+            .define("map.sharedExploration", true);
+    public static final ForgeConfigSpec.BooleanValue MAP_PLAYERS = B
+            .comment("Show online players on each other's minimap and world map (same dimension).")
+            .define("map.showPlayers", true);
+
     public static final ForgeConfigSpec SPEC = B.build();
 
     private WayfarersConfig() {}
