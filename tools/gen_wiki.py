@@ -38,7 +38,7 @@ ASSETS = os.path.join(RES, "assets", "wayfarers")
 DATA = os.path.join(RES, "data", "wayfarers")
 JAVA = os.path.join(ROOT, "src", "main", "java", "com", "wayfarers")
 CACHE = os.path.join(ROOT, "build", "wiki_cache")
-RENDER_VERSION = "3"
+RENDER_VERSION = "4"
 WORLDMAP_URL = ("https://github.com/jules-crevoisier/mode-minecraft/releases/download/previews-ccr-127dc262-tsdn10/"
                 "wayfarers-worldmap{}")
 PREVIEWS_URL = "https://github.com/jules-crevoisier/mode-minecraft/releases/download/previews-ccr-127dc262-tsdn10/{}"
@@ -620,9 +620,10 @@ def structure_job(args):
             render3d.render(view, tmp, max_side=1100, max_y=cut, bg=W.BG + (255,))
             Image.open(tmp).save(os.path.join(cdir, f"{sid}_cut.webp"), quality=82, method=5)
         os.remove(tmp)
-        frames = W.voxel_frames(view, n=24 if wonder else 16, size=440 if wonder else 300)
+        frames = W.voxel_frames(view, n=24 if wonder else 20, size=440 if wonder else 300)
         frames = W.crop_frames(frames)
-        W.save_gif(frames, os.path.join(cdir, f"{sid}.gif"), ms=110 if wonder else 130)
+        # a slow turntable (about 10 s per turn): faster spins were tiring to watch
+        W.save_gif(frames, os.path.join(cdir, f"{sid}.gif"), ms=420 if wonder else 480)
     for f in files.values():
         dst = os.path.join(out, f)
         os.makedirs(os.path.dirname(dst), exist_ok=True)
@@ -645,7 +646,7 @@ def mob_job(args):
         tex, glow = m.textures()
         os.makedirs(cdir, exist_ok=True)
         frames = W.mob_frames(m, tex, glow, n=24, size=260)
-        W.save_gif(frames, os.path.join(cdir, name_ + ".gif"), ms=90)
+        W.save_gif(frames, os.path.join(cdir, name_ + ".gif"), ms=340)
         W.mob_still(m, tex, glow, size=CELL).save(os.path.join(cdir, name_ + "_icon.png"))
     os.makedirs(os.path.join(out, "gif", "m"), exist_ok=True)
     shutil.copyfile(os.path.join(cdir, name_ + ".gif"), os.path.join(out, "gif", "m", name_ + ".gif"))
@@ -697,7 +698,7 @@ def sheet_job(args):
                 im = J.render(md, size=cell, yaw=yaw, pitch=22, bg=W.BG, ss=2, centre=fits[i][0], ppb=fits[i][1])
                 sheet.paste(im, ((i % cols) * cell, (i // cols) * cell))
             frames.append(sheet)
-        W.save_gif(frames, os.path.join(cdir, fname), ms=100, colors=224)
+        W.save_gif(frames, os.path.join(cdir, fname), ms=340, colors=224)
     os.makedirs(os.path.join(out, "gif"), exist_ok=True)
     shutil.copyfile(os.path.join(cdir, fname), os.path.join(out, "gif", fname))
     return dict(kind=kind, file=f"gif/{fname}", cols=cols, rows=rows, cell=cell, ids=[i for i, _ in refs])
