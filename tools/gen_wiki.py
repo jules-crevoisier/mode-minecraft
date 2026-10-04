@@ -25,6 +25,7 @@ import re
 import shutil
 import sys
 import time
+import types
 import unicodedata
 import urllib.request
 
@@ -399,6 +400,76 @@ def entity_stats(eid):
     return dict(hp=None, dmg=None, boss=False, doc="")
 
 
+def wonders(guide, defs):
+    """Wonder ids, in display order: TXT.WONDERS first, then every structure named in a "wonders*" manual page."""
+    text = " ".join(e for pid, _c, _i, _t, paras, _it in guide.PAGES if pid.startswith("wonders") for e, _f in paras)
+    out = [w for w in TXT.WONDERS if any(s.id == w for s in defs.STRUCTURES)]
+    for s in defs.STRUCTURES:
+        names = [n for n in (s.title_en, s.title_en.replace("The ", "")) if n]
+        if s.id not in out and any(n in text for n in names):
+            out.append(s.id)
+    return out
+
+
+def start_height(sid):
+    """(min, max) absolute start height of a structure placed at a fixed height (underground, sky), else None."""
+    d = load_json(os.path.join(DATA, "worldgen", "structure", sid + ".json"), {})
+    h = d.get("start_height", {})
+    try:
+        return h["min_inclusive"]["absolute"], h["max_inclusive"]["absolute"]
+    except (KeyError, TypeError):
+        return None
+
+
+def biome_spawns():
+    """{entity id: [biome ids]} from the Forge biome modifiers that add spawns (tags resolved one level)."""
+    out = {}
+    for f in glob.glob(os.path.join(DATA, "forge", "biome_modifier", "*.json")):
+        d = load_json(f, {})
+        if not d.get("type", "").endswith("add_spawns"):
+            continue
+        biomes = d.get("biomes", [])
+        biomes = [biomes] if isinstance(biomes, str) else biomes
+        ids = []
+        for b in biomes:
+            if b.startswith("#"):
+                ns, path = b[1:].split(":", 1)
+                tag = load_json(os.path.join(RES, "data", ns, "tags", "worldgen", "biome", path + ".json"), {})
+                ids += [v["id"] if isinstance(v, dict) else v for v in tag.get("values", [])]
+            else:
+                ids.append(b)
+        sp = d.get("spawners", [])
+        for s in ([sp] if isinstance(sp, dict) else sp):
+            out.setdefault(s["type"], [])
+            out[s["type"]] += [i for i in ids if i not in out[s["type"]]]
+    return out
+
+
+def biome_name(bid):
+    ns, path = bid.split(":", 1) if ":" in bid else ("minecraft", bid)
+    if ns == "wayfarers":
+        return FR.get(f"biome.wayfarers.{path}", pretty(path))
+    return vname("biome", path)
+
+
+def new_ids_since(ref):
+    """Lang keys (item/block/entity/structure) added since a git commit: {"item": [...], ...}. Empty without git."""
+    import subprocess
+    try:
+        old = subprocess.run(["git", "-C", ROOT, "show", f"{ref}:src/main/resources/assets/wayfarers/lang/fr_fr.json"],
+                             capture_output=True, timeout=20, check=True).stdout
+        old = json.loads(old)
+    except Exception as e:  # noqa: BLE001
+        log(f"new since {ref}: {e}")
+        return {}
+    out = {}
+    for k in FR:
+        parts = k.split(".")
+        if len(parts) == 3 and parts[1] == "wayfarers" and k not in old and parts[0] in ("item", "block", "entity", "structure"):
+            out.setdefault(parts[0], []).append(parts[2])
+    return out
+
+
 def surface_blocks(surface_key):
     from wf import biomes as B
     fn = B.SURFACES.get(surface_key) or B.CAVE_SURFACES.get(surface_key)
@@ -427,6 +498,53 @@ UNDERGROUND_ROCK = {"stone", "deepslate", "tuff", "granite", "diorite", "andesit
                     "calcite", "smooth_basalt", "netherrack", "end_stone", "coarse_dirt", "clay", "sand", "sandstone"}
 
 
+SHELL_ROCK = UNDERGROUND_ROCK | {"mud", "smooth_basalt", "basalt", "blackstone", "amethyst_block", "budding_amethyst",
+                                 "cobblestone", "mossy_cobblestone", "moss_block", "rooted_dirt", "dripstone_block",
+                                 "magma_block", "packed_ice", "red_sand", "terracotta", "obsidian", "soul_sand",
+                                 "soul_soil"}
+
+
+def _is_rock(name):
+    n = name.split(":")[-1]
+    return n in SHELL_ROCK or n.endswith("_ore") or n == "raw_iron_block"
+
+
+def cutaway(blocks, floor_y):
+    """Underground structures carve their own cavern inside a thick shell of natural rock, so a plain render is a
+    lump of stone. Remove that shell: every natural-rock block above the floor that is connected (through other
+    rock) to the outside of the template, i.e. to the bounding box or to a position the template leaves to the
+    world. The floor and what is under it stay, like a diorama base; built walls, statues and crystals stay."""
+    if not blocks:
+        return blocks
+    xs = [p[0] for p in blocks]
+    ys = [p[1] for p in blocks]
+    zs = [p[2] for p in blocks]
+    x0, x1, y1, z0, z1 = min(xs), max(xs), max(ys), min(zs), max(zs)
+    rock = {p for p, b in blocks.items() if p[1] > floor_y and _is_rock(b[0])}
+    nbrs = ((1, 0, 0), (-1, 0, 0), (0, 1, 0), (0, -1, 0), (0, 0, 1), (0, 0, -1))
+    stack = []
+    for p in rock:
+        x, y, z = p
+        if x in (x0, x1) or z in (z0, z1) or y == y1 or any((x + dx, y + dy, z + dz) not in blocks for dx, dy, dz in nbrs):
+            stack.append(p)
+    shell = set(stack)
+    while stack:
+        x, y, z = stack.pop()
+        for dx, dy, dz in nbrs:
+            q = (x + dx, y + dy, z + dz)
+            if q in rock and q not in shell:
+                shell.add(q)
+                stack.append(q)
+    # loose rock left floating once the shell is gone (ores, pebbles) goes too
+    view = {p: b for p, b in blocks.items() if p not in shell}
+    solid = {p for p, b in view.items() if b[0] not in ("minecraft:air", "minecraft:cave_air")}
+    for p in [p for p in solid if p[1] > floor_y and _is_rock(view[p][0])]:
+        x, y, z = p
+        if not any((x + dx, y + dy, z + dz) in solid for dx, dy, dz in nbrs):
+            del view[p]
+    return view
+
+
 def _nbt_str(v):
     return str(getattr(v, "value", v))
 
@@ -438,7 +556,7 @@ def _structure_blocks(sdef, piece, xray):
     size, blocks, _, (mx, my, mz) = bp.normalized()
     view = blocks
     if xray:
-        view = {p: b for p, b in blocks.items() if b[0].split(":")[1] not in UNDERGROUND_ROCK}
+        view = cutaway(blocks, sdef.ground - my)
     return size, blocks, view, my
 
 
@@ -479,7 +597,7 @@ def structure_job(args):
     size, blocks, view, my = main
     info["size"] = list(size)
     info["blocks"] = len(blocks)
-    key = sha(RENDER_VERSION, "s2", sid, wonder, xray, repr(sorted((p, b[0], tuple(sorted((b[1] or {}).items()))) for p, b in view.items())))
+    key = sha(RENDER_VERSION, "s3", sid, wonder, xray, repr(sorted((p, b[0], tuple(sorted((b[1] or {}).items()))) for p, b in view.items())))
     cdir = os.path.join(CACHE, "structures", sid + "-" + key)
     files = {"static": f"img/s/{sid}.webp", "gif": f"gif/s/{sid}.gif"}
     if wonder:
@@ -487,16 +605,16 @@ def structure_job(args):
     if not (use_cache and all(os.path.exists(os.path.join(cdir, os.path.basename(f))) for f in files.values())):
         os.makedirs(cdir, exist_ok=True)
         tmp = os.path.join(cdir, "tmp.png")
-        render3d.render(view, tmp, max_side=1100 if wonder else 860)
+        render3d.render(view, tmp, max_side=1100 if wonder else 860, bg=W.BG + (255,))
         Image.open(tmp).save(os.path.join(cdir, f"{sid}.webp"), quality=82, method=5)
         if wonder:
-            render3d.render(view, tmp, max_side=1100, angle=2)
+            render3d.render(view, tmp, max_side=1100, angle=2, bg=W.BG + (255,))
             Image.open(tmp).save(os.path.join(cdir, f"{sid}_back.webp"), quality=82, method=5)
             cut = sdef.ground - my + 2
             if xray:
                 ys = sorted(p[1] for p in view)
                 cut = ys[int(len(ys) * 0.55)]
-            render3d.render(view, tmp, max_side=1100, max_y=cut)
+            render3d.render(view, tmp, max_side=1100, max_y=cut, bg=W.BG + (255,))
             Image.open(tmp).save(os.path.join(cdir, f"{sid}_cut.webp"), quality=82, method=5)
         os.remove(tmp)
         frames = W.voxel_frames(view, n=24 if wonder else 16, size=440 if wonder else 300)
@@ -703,14 +821,7 @@ def main():
     import wf.structures  # noqa: F401
 
     # ------------------------------------------------------------------ renders (parallel)
-    wonder_ids = set(TXT.WONDERS)
-    wonder_text = ""
-    for pid, _cat, _icon, _title, paras, _items in guide.PAGES:
-        if pid == "wonders":
-            wonder_text = " ".join(e for e, _f in paras)
-    for s in defs.STRUCTURES:
-        if s.title_en and s.title_en in wonder_text:
-            wonder_ids.add(s.id)
+    wonder_ids = wonders(guide, defs)
     J = W.JsonModels()
     held, furn = [], []
     for iid in item_entries():
@@ -761,7 +872,7 @@ def main():
     weapon_of = {row[0]: row[2] for row in bossgear.BOSS_GEAR}
     remembrance_of = {row[0]: bossgear.remembrance_id(row[0]) for row in bossgear.BOSS_GEAR}
 
-    # where each creature lives (structures scan + structure spawn lists)
+    # where each creature lives (structures scan + structure spawn lists), and in which biomes it spawns
     lives = {}
     for s in defs.STRUCTURES:
         si = struct_info.get(s.id, {})
@@ -769,6 +880,7 @@ def main():
             lives.setdefault(e, [])
             if s.id not in lives[e]:
                 lives[e].append(s.id)
+    spawn_biomes = biome_spawns()
 
     sec = []  # html sections
 
@@ -794,13 +906,8 @@ def main():
         idx.add("/wayfarers " + sub, "Commande", "commandes", text)
     cfg = "".join(f'<tr><td><code>{E(k)}</code></td><td><code>{E(d)}</code></td><td>{E(c)}<br><small>{E(f)}</small></td></tr>'
                   for k, d, c, f in java_config())
-    tiles = [("quetes", "Quêtes", "wayfarers:wayfarer_atlas"), ("manuel", "Le Manuel", "wayfarers:wayfarer_manual"),
-             ("talents", "Talents & magie", "wayfarers:fire_staff"), ("machines", "Machines", "wayfarers:auto_harvester"),
-             ("metaux", "Métaux & armures", "wayfarers:brass_ingot"), ("deco", "Déco steampunk", "wayfarers:gear_panel"),
-             ("armes3d", "Armes en 3D", "wayfarers:bell_hammer"), ("bestiaire", "Bestiaire", "minecraft:skeleton_skull"),
-             ("structures", "Structures", "wayfarers:structure_compass"), ("monde", "Nouveau Monde", "minecraft:grass_block"),
-             ("objets", "Tous les objets", "wayfarers:travel_backpack"), ("recettes", "Recettes", "minecraft:crafting_table")]
-    tile_html = "".join(f'<a class="tile" href="#{a}">{atlas.icon(ic, 40)}<span>{E(t)}</span></a>' for a, t, ic in tiles)
+    hero = wonder_ids[0] if wonder_ids and wonder_ids[0] in struct_info else None
+    hero_name = FR.get(f"structure.wayfarers.{hero}", "Une merveille du mod") if hero else ""
     sec.append(f'''
 <section class="hero" id="accueil">
   <div class="hero-text">
@@ -809,9 +916,16 @@ def main():
     <p class="lede">{E(TXT.TAGLINE)}</p>
     <ul class="stats">{"".join(f"<li><b>{n}</b><span>{E(l)}</span></li>" for n, l in stats)}</ul>
   </div>
-  <figure class="vitrine hero-fig"><img src="{struct_info[sorted(wonder_ids & set(struct_info))[0]]["files"]["gif"] if wonder_ids & set(struct_info) else ""}" alt="Une merveille du mod en rotation" loading="eager"></figure>
+  {f'<figure class="vitrine hero-fig"><img src="{struct_info[hero]["files"]["gif"]}" alt="{E(hero_name, quote=True)}, rotation à 360°" loading="eager"><figcaption>{E(hero_name)}</figcaption></figure>' if hero else ""}
 </section>
-<nav class="tiles" aria-label="Sections">{tile_html}</nav>
+<nav class="tiles" aria-label="Sections">__TILES__</nav>''')
+    ctx = types.SimpleNamespace(atlas=atlas, idx=idx, item_link=item_link, by_result=by_result, mob_info=mob_info,
+                                struct_info=struct_info, sheet_info=sheet_info, all_ids=all_ids, lives=lives,
+                                gear=gear, weapon_of=weapon_of, remembrance_of=remembrance_of, defs=defs,
+                                wonder_ids=wonder_ids, recipes=recipes, spawn_biomes=spawn_biomes)
+    sec.append(section_news(ctx))
+    sec.append(section_tests(ctx))
+    sec.append(f'''
 <section class="block" id="commencer">
   {plaque("commencer-h", "La première heure", "Par où commencer", "Huit étapes, dans l'ordre, pour bien démarrer une partie à plusieurs.")}
   <ol class="steps">{"".join(steps)}</ol>
@@ -937,6 +1051,9 @@ def main():
   <div class="grid machines">{"".join(mcards)}</div>
   <div class="grid pages">{farm}</div>
 </section>''')
+    sec.append(section_gadgets(ctx))
+    sec.append(section_construction(ctx))
+    sec.append(section_automatons(ctx))
 
     # ================================================================== METALS & ARMOUR
     mt = []
@@ -991,13 +1108,14 @@ def main():
 </section>''')
 
     # ================================================================== DECOR + FURNITURE
-    dgroups = {"Guilde et régions": [], "Steampunk": []}
+    dgroups = {"Guilde et régions": [], "Steampunk": [], "Au burin seulement": []}
     steam = False
+    chisel_only = set(getattr(decor, "CHISEL_ONLY", {}))
     for bid, d in decor.DECOR.items():
         if bid == "brass_plating":
             steam = True
         variants = [decor.variant_id(bid, v) for v in d["variants"]]
-        g = "Steampunk" if steam else "Guilde et régions"
+        g = "Au burin seulement" if bid in chisel_only else "Steampunk" if steam else "Guilde et régions"
         light = f'<small class="glow">lumière {d["light"]}</small>' if d.get("light") else ""
         dgroups[g].append(f'''<article class="deco" id="{anchor_item(bid)}d">{atlas.icon(bid, 64)}<div><b>{E(name(bid))}</b>{light}
   <span class="vars">{"".join(atlas.icon(v, 30) for v in variants)}</span></div></article>''')
@@ -1018,7 +1136,7 @@ def main():
             idx.add(name(iid), "Bloc 3D", anchor_item(iid) + "f", extra)
     sec.append(f'''<section class="block" id="deco">
   {plaque("deco-h", "Construction", "Blocs de déco et meubles", "Les blocs qui bâtissent les structures du mod, utilisables pour ta base. La plupart existent en escaliers, dalles et murets (petites icônes). Astuce steampunk : le laiton pour les finitions, le fer sombre et l'acajou pour la masse, des lampes Edison pour la lumière.")}
-  {"".join(f'<h3 class="subhead">{E(g)}</h3><div class="grid decos">{"".join(v)}</div>' for g, v in dgroups.items() if v)}
+  {"".join(f'<h3 class="subhead">{E(g)}</h3>' + (f'<p class="note">{E(TXT.CHISEL_ONLY_TEXT)} <a href="#construction">Voir le burin</a>.</p>' if g == "Au burin seulement" else "") + f'<div class="grid decos">{"".join(v)}</div>' for g, v in dgroups.items() if v)}
   <h3 class="subhead">Meubles et blocs en 3D</h3>
   <div class="grid spins">{"".join(fcards)}</div>
 </section>''')
@@ -1047,35 +1165,20 @@ def main():
 </section>''')
 
     # ================================================================== BESTIARY
-    groups = {"boss": [], "champion": [], "creature": []}
+    groups = {"boss": [], "champion": [], "creature": [], "companion": []}
     for mid in list(content.ENTITIES) + [m for m in mob_info if m not in content.ENTITIES]:
         if mid not in mob_info:
             continue
         st = entity_stats(mid)
-        kind = "boss" if mid in gear else ("champion" if st["boss"] else "creature")
-        where = lives.get("wayfarers:" + mid, [])
-        where_html = ", ".join(f'<a href="#s-{w}">{E(FR.get("structure.wayfarers." + w, w))}</a>' for w in where) or "—"
-        loot = top_loot([f"wayfarers:entities/{mid}"], 8)
+        kind = ("boss" if mid in gear else "champion" if st["boss"] else
+                "companion" if mid in TXT.COMPANIONS else "creature")
         text = TXT.MOBS.get(mid) or st["doc"]
-        badge = {"boss": "Boss", "champion": "Champion de donjon", "creature": "Créature"}[kind]
-        weapon = ""
-        if mid in weapon_of:
-            weapon = f'<p class="small">Son Souvenir forge : <a href="#{anchor_item(weapon_of[mid])}">{E(name(weapon_of[mid]))}</a>.</p>'
-        groups[kind].append(f'''<article class="card mob {kind}" id="b-{mid}">
-  <figure class="vitrine"><img src="{mob_info[mid]["gif"]}" alt="{E(name(mid), quote=True)} en rotation" width="260" height="260" loading="lazy"></figure>
-  <div class="mob-body"><span class="badge {kind}">{badge}</span><h4>{E(name(mid))}</h4>
-  <p class="statline"><span title="Points de vie">{SVG["heart"]}{fmt_num(st["hp"])} PV</span><span title="Dégâts au corps à corps">{SVG["sword"]}{fmt_num(st["dmg"])}</span></p>
-  <p>{E(text)}</p>
-  <p class="where">{SVG["pin"]} {where_html}</p>
-  {('<div class="drops"><small>Butin</small>' + chips(atlas, loot, 24, item_link) + '</div>') if loot else ""}
-  {weapon}</div>
-</article>''')
+        badge = {"boss": "Boss", "champion": "Champion de donjon", "creature": "Créature", "companion": "Compagnon"}[kind]
+        groups[kind].append(mob_card(ctx, mid, kind, badge, st, text))
         idx.add(name(mid), badge, f"b-{mid}", text)
     sec.append(f'''<section class="block" id="bestiaire">
   {plaque("bestiaire-h", "Danger", "Bestiaire", "Toutes les créatures du mod, avec leur vrai modèle 3D. Les boss ont deux phases : à mi-vie ils rugissent puis changent de rythme. Chaque attaque est annoncée (animation ou cercle au sol) : observe, esquive, punis. Frapper fort et souvent brise leur posture (+50 % de dégâts). En coop, leur vie augmente de 60 % par joueur.")}
-  <h3 class="subhead">Les grands boss</h3><div class="grid mobs">{"".join(groups["boss"])}</div>
-  <h3 class="subhead">Les champions de donjon</h3><div class="grid mobs">{"".join(groups["champion"])}</div>
-  <h3 class="subhead">Les créatures</h3><div class="grid mobs">{"".join(groups["creature"])}</div>
+  {"".join(f'<h3 class="subhead">{t}</h3><div class="grid mobs">{"".join(groups[k])}</div>' for k, t in (("boss", "Les grands boss"), ("champion", "Les champions de donjon"), ("creature", "Les créatures"), ("companion", "Les compagnons")) if groups[k])}
 </section>''')
 
     # ================================================================== STRUCTURES
@@ -1088,7 +1191,8 @@ def main():
         return vname("biome", b.split(":")[-1]) if VFR else pretty(b)
 
     wcards, scards = [], {"overworld": [], "nether": [], "end": []}
-    order = sorted(defs.STRUCTURES, key=lambda s: (s.id not in wonder_ids, ["overworld", "nether", "end"].index(s.dimension)
+    order = sorted(defs.STRUCTURES, key=lambda s: (wonder_ids.index(s.id) if s.id in wonder_ids else len(wonder_ids),
+                                                   ["overworld", "nether", "end"].index(s.dimension)
                                                    if s.dimension in ("overworld", "nether", "end") else 9))
     for s in order:
         si = struct_info.get(s.id)
@@ -1114,6 +1218,10 @@ def main():
             facts.append(f'{si["variants"]} variantes')
         if si["waystones"]:
             facts.append("pierre de voyage")
+        sh = start_height(s.id)
+        if sh:
+            facts.append(f"base vers y {sh[0]} à {sh[1]}".replace("-", "−"))
+        under = s.step == "underground_structures"
         f = si["files"]
         common = f'''<p class="dim">{E(dim)}</p><p>{E(text.strip())}</p>
   <p class="where">{SVG["pin"]} {E(biomes_)}</p>
@@ -1122,17 +1230,17 @@ def main():
   {('<div class="drops"><small>Dans les coffres</small>' + chips(atlas, loot, 24, item_link) + '</div>') if loot else ""}'''
         if s.id in wonder_ids:
             wcards.append(f'''<article class="wonder" id="s-{s.id}">
-  <figure class="vitrine big"><img src="{f["gif"]}" alt="{E(title, quote=True)}, rotation à 360°" loading="lazy"><figcaption>Rotation 360°</figcaption></figure>
+  <figure class="vitrine big"><img src="{f["gif"]}" alt="{E(title, quote=True)}, rotation à 360°" loading="lazy"><figcaption>{"Rotation 360° · roche retirée" if under else "Rotation 360°"}</figcaption></figure>
   <div class="wonder-body"><span class="badge wb">Merveille</span><h3>{E(title)}</h3>{common}
   <div class="views">
     <figure class="vitrine"><img src="{f["static"]}" alt="{E(title, quote=True)}, vue détaillée" loading="lazy"><figcaption>Vue détaillée</figcaption></figure>
     <figure class="vitrine"><img src="{f["back"]}" alt="{E(title, quote=True)}, vue de l'autre côté" loading="lazy"><figcaption>De l'autre côté</figcaption></figure>
     <figure class="vitrine"><img src="{f["cut"]}" alt="{E(title, quote=True)}, vue en coupe" loading="lazy"><figcaption>En coupe</figcaption></figure>
-  </div></div>
+  </div>{'<p class="note">Vues en écorché : la roche naturelle qui entoure la caverne est retirée pour montrer l’intérieur. En jeu, tout est enfoui.</p>' if under else ""}</div>
 </article>''')
         else:
             scards[s.dimension if s.dimension in scards else "overworld"].append(f'''<article class="card struct" id="s-{s.id}">
-  <div class="vitrine flip"><img src="{f["gif"]}" alt="{E(title, quote=True)}, rotation" loading="lazy"><img class="detail" src="{f["static"]}" alt="{E(title, quote=True)}, vue détaillée" loading="lazy"></div>
+  <div class="vitrine flip"><img src="{f["gif"]}" alt="{E(title, quote=True)}, rotation" loading="lazy"><img class="detail" src="{f["static"]}" alt="{E(title, quote=True)}, vue détaillée" loading="lazy">{'<span class="cutnote">roche retirée</span>' if under else ""}</div>
   <div class="struct-body"><h4>{E(title)}</h4>{common}</div>
 </article>''')
         idx.add(title, "Structure", f"s-{s.id}", text + " " + biomes_)
@@ -1229,14 +1337,25 @@ def main():
     mach_ids = set(machines.MACHINES)
     metal_ids = metals.all_item_ids()
     boss_ids = set(weapon_of.values()) | set(remembrance_of.values())
-    cats_order = [("Objets du voyageur", []), ("Armes et magie", []), ("Armes de boss et souvenirs", []),
+    from wf import gadgets as GD
+    gadget_ids = set(GD.GADGETS)
+    tool_ids = {"chisel", "chisel_table", "builder_wand", "master_builder_wand"}
+    automaton_ids = {"clockwork_heart", "brass_gear"}
+    cats_order = [("Objets du voyageur", []), ("Gadgets à vapeur", []), ("Outils de construction", []),
+                  ("Automates", []), ("Armes et magie", []), ("Armes de boss et souvenirs", []),
                   ("Armures", []), ("Métaux et minerais", []), ("Machines", []), ("Blocs de construction", []),
                   ("Meubles", []), ("Blocs spéciaux", [])]
     cat_map = dict(cats_order)
     for iid in entries:
         is_block = f"block.wayfarers.{iid}" in FR
         d_ = desc(iid)
-        if iid in boss_ids:
+        if iid in gadget_ids:
+            c = "Gadgets à vapeur"
+        elif iid in tool_ids:
+            c = "Outils de construction"
+        elif iid in automaton_ids:
+            c = "Automates"
+        elif iid in boss_ids:
             c = "Armes de boss et souvenirs"
         elif iid in mach_ids:
             c = "Machines"
@@ -1267,7 +1386,7 @@ def main():
         idx.add(name(iid), "Bloc" if is_block else "Objet", anchor_item(iid), " ".join(d_) + " " + EN.get(f"item.wayfarers.{iid}", EN.get(f"block.wayfarers.{iid}", "")))
     sec.append(f'''<section class="block" id="objets">
   {plaque("objets-h", "Catalogue", "Tous les objets et blocs", "Chaque objet du mod avec sa description en jeu. « Recette » mène à sa fabrication.")}
-  {"".join(f'<details class="cat" {"open" if i < 2 else ""}><summary><span>{E(c)}</span><small>{len(v)}</small></summary><div class="grid items">{"".join(v)}</div></details>' for i, (c, v) in enumerate(cats_order) if v)}
+  {"".join(f'<details class="cat" {"open" if i < 4 else ""}><summary><span>{E(c)}</span><small>{len(v)}</small></summary><div class="grid items">{"".join(v)}</div></details>' for i, (c, v) in enumerate(cats_order) if v)}
 </section>''')
 
     # ================================================================== RECIPES
@@ -1287,13 +1406,353 @@ def main():
 </section>''')
 
     # ------------------------------------------------------------------ write
+    present = re.findall(r'<section class="[^"]*" id="([\w-]+)"', "".join(sec))
+    nav = [(a, SECTIONS[a][0]) for a in present if a in SECTIONS]
+    for a in present:
+        if a not in SECTIONS:
+            log(f"section #{a} has no entry in SECTIONS: not in the menu")
+    tiles = "".join(f'<a class="tile{" new" if a in ("nouveautes", "tester") else ""}" href="#{a}">{atlas.icon(SECTIONS[a][2], 40)}'
+                    f'<span>{E(SECTIONS[a][1])}</span></a>' for a in present if a in SECTIONS and SECTIONS[a][1])
+    sec = [s.replace("__TILES__", tiles) for s in sec]
     rows = atlas.save(os.path.join(out, "img", "atlas.png"))
-    page = render_page(sec, idx, rows)
+    page = render_page(sec, idx, rows, nav)
     with open(os.path.join(out, "index.html"), "w", encoding="utf-8") as fh:
         fh.write(page)
     files = [os.path.join(dp, f) for dp, _dn, fs in os.walk(out) for f in fs]
     total = sum(os.path.getsize(f) for f in files)
     log(f"wiki: {out}/index.html  {len(files)} files, {total / 1e6:.1f} MB, {time.time() - t0:.0f}s")
+
+
+# =============================================================================================== shared cards
+def spin_sprite(sheet, iid, link=False):
+    """3D turntable cell of a sprite-sheet GIF (held items, furniture), or "" when the item is not on the sheet."""
+    if not sheet or iid not in sheet["ids"]:
+        return ""
+    i = sheet["ids"].index(iid)
+    return (f'<div class="vitrine sprite" style="--w:{sheet["cell"]}px;--sheet:url({sheet["file"]});--cx:{i % sheet["cols"]};'
+            f'--cy:{i // sheet["cols"]};--cols:{sheet["cols"]};--rows:{sheet["rows"]}" role="img" '
+            f'aria-label="{E(name(iid), quote=True)} en 3D"></div>')
+
+
+def recipe_block(ctx, iid, label="Comment l'obtenir"):
+    rec = ctx.by_result.get(iid if ":" in iid else "wayfarers:" + iid, [])
+    if not rec:
+        return ""
+    r = rec[0]
+    return (f'<div class="how-get"><small>{E(label)} · {E(TXT.RECIPE_TYPES.get(r["type"], r["type"].split(":")[-1]))}</small>'
+            f'{render_recipe(ctx.atlas, r, ctx.item_link)}</div>')
+
+
+def manual_paras(pid=None, item=None):
+    """French paragraphs of a manual page, by id or by the first page listing an item."""
+    from wf import guide
+    for p, _cat, _icon, _t, paras, items in guide.PAGES:
+        if (pid and p == pid) or (item and item in items):
+            return [f for _e, f in paras]
+    return []
+
+
+def mob_where(ctx, mid):
+    """HTML list of the structures and biomes a creature lives in."""
+    parts = [f'<a href="#s-{w}">{E(FR.get("structure.wayfarers." + w, w))}</a>' for w in ctx.lives.get("wayfarers:" + mid, [])]
+    for b in ctx.spawn_biomes.get("wayfarers:" + mid, []):
+        bid = b.split(":")[-1]
+        nm = E(biome_name(b))
+        parts.append(f'<a href="#bi-{bid}">{nm}</a>' if b.startswith("wayfarers:") else nm)
+    return ", ".join(parts)
+
+
+def moves_table(mid):
+    rows = TXT.BOSS_MOVES.get(mid, [])
+    if not rows:
+        return ""
+    body = "".join(f'<tr><td><b>{E(n)}</b></td><td><span class="phase p{"2" if ph.strip() == "2" else "1"}">{E(ph)}</span></td>'
+                   f'<td>{E(t)}</td></tr>' for n, ph, t in rows)
+    return (f'<div class="scroll"><table class="tbl moves"><thead><tr><th>Attaque</th><th>Phase</th><th>À faire</th></tr>'
+            f'</thead><tbody>{body}</tbody></table></div>')
+
+
+def mob_card(ctx, mid, kind, badge, st, text):
+    where_html = mob_where(ctx, mid)
+    if not where_html and mid in TXT.COMPANIONS:
+        where_html = '<a href="#golem">Se construit : voir Automates</a>'
+    loot = top_loot([f"wayfarers:entities/{mid}"], 8)
+    weapon = ""
+    if mid in ctx.weapon_of:
+        w = ctx.weapon_of[mid]
+        weapon = f'<p class="small">Son Souvenir forge : <a href="#{anchor_item(w)}">{E(name(w))}</a>.</p>'
+    moves = ""
+    if mid in TXT.BOSS_MOVES:
+        moves = (f'<details class="moves-box"><summary>Ses attaques, phase par phase</summary>'
+                 f'<p class="small">{E(TXT.BOSS_FACTS.get(mid, ""))}</p>{moves_table(mid)}</details>')
+    return f'''<article class="card mob {kind}" id="b-{mid}">
+  <figure class="vitrine"><img src="{ctx.mob_info[mid]["gif"]}" alt="{E(name(mid), quote=True)} en rotation" width="260" height="260" loading="lazy"></figure>
+  <div class="mob-body"><span class="badge {kind}">{badge}</span><h4>{E(name(mid))}</h4>
+  <p class="statline"><span title="Points de vie">{SVG["heart"]}{fmt_num(st["hp"])} PV</span><span title="Dégâts au corps à corps">{SVG["sword"]}{fmt_num(st["dmg"])}</span></p>
+  <p>{E(text)}</p>
+  <p class="where">{SVG["pin"]}<span>{where_html or "—"}</span></p>
+  {('<div class="drops"><small>Butin</small>' + chips(ctx.atlas, loot, 24, ctx.item_link) + '</div>') if loot else ""}
+  {weapon}{moves}</div>
+</article>'''
+
+
+# =============================================================================================== new sections
+def thumb(ctx, spec, label):
+    kind, _, ref = spec.partition(":")
+    if kind == "mob" and ref in ctx.mob_info:
+        return f'<img src="{ctx.mob_info[ref]["gif"]}" alt="{E(label, quote=True)}" loading="lazy">'
+    if kind == "struct" and ref in ctx.struct_info:
+        return f'<img src="{ctx.struct_info[ref]["files"]["gif"]}" alt="{E(label, quote=True)}" loading="lazy">'
+    if kind == "items":
+        ids = [i for i in ref.split(",") if i]
+        size = 56 if len(ids) <= 2 else 44 if len(ids) <= 4 else 40
+        return '<span class="icons">' + "".join(ctx.atlas.icon(i, size) for i in ids) + "</span>"
+    return ""
+
+
+def section_news(ctx):
+    systems, places = [], []
+    for title, text, anchor, spec in TXT.NEW_TONIGHT:
+        group = places if spec.startswith("struct:") else systems
+        wide = " wide" if group is places and not places else ""
+        group.append(f'''<a class="news-card{wide}" href="#{anchor}"><span class="news-thumb vitrine">{thumb(ctx, spec, title)}</span>
+  <span class="news-body"><b>{E(title)}</b><span>{E(text)}</span><em>Voir la section</em></span></a>''')
+        ctx.idx.add(title, "Nouveauté", anchor, text)
+    cards = f'<div class="news-grid">{"".join(systems)}</div>'
+    if places:
+        cards += (f'<h3 class="subhead">{len(places)} nouvelles merveilles à explorer</h3>'
+                  f'<div class="news-grid places">{"".join(places)}</div>')
+    new = new_ids_since(TXT.NEW_SINCE)
+    lists = []
+    items = [i for i in new.get("item", []) + new.get("block", []) if not i.endswith("_spawn_egg")
+             and not i.endswith(("_slab", "_stairs", "_wall"))]
+    if items:
+        lists.append(f'<div class="newlist"><small>Objets et blocs ({len(items)}, sans les escaliers et dalles)</small>'
+                     f'{chips(ctx.atlas, ["wayfarers:" + i for i in items], 26, ctx.item_link)}</div>')
+    mobs = [m for m in new.get("entity", []) if m in ctx.mob_info]
+    if mobs:
+        lists.append('<div class="newlist"><small>Créatures</small><span class="chips">' + "".join(
+            f'<a class="chip" href="#b-{m}">{ctx.atlas.icon("wayfarers:" + m, 26)}<span>{E(name(m))}</span></a>' for m in mobs)
+            + "</span></div>")
+    structs = [s for s in new.get("structure", []) if s in ctx.struct_info]
+    if structs:
+        lists.append('<div class="newlist"><small>Structures</small><span class="chips">' + "".join(
+            f'<a class="chip" href="#s-{s}">{ctx.atlas.icon("wayfarers:structure_compass", 26)}<span>{E(FR.get("structure.wayfarers." + s, s))}</span></a>'
+            for s in structs) + "</span></div>")
+    return f'''<section class="block news" id="nouveautes">
+  {plaque("nouveautes-h", "Mise à jour de la nuit", TXT.NEW_TITLE, E(TXT.NEW_INTRO))}
+  {cards}
+  {('<details class="cat newall"><summary><span>Toute la liste des ajouts</span><small>' + str(len(items) + len(mobs) + len(structs)) + '</small></summary><div class="newlists">' + "".join(lists) + '</div></details>') if lists else ""}
+</section>'''
+
+
+def check_command(ctx, cmd, subs):
+    """Warn about a test command that names an unknown sub-command, item, entity or structure."""
+    parts = cmd.split()
+    sids = {s.id for s in ctx.defs.STRUCTURES}
+    if parts[0] == "/wayfarers":
+        if len(parts) < 2 or parts[1] not in subs:
+            log(f"test checklist: unknown command {cmd}")
+        elif parts[1] in ("tp", "locate") and (len(parts) < 3 or parts[2] not in sids):
+            log(f"test checklist: unknown structure in {cmd}")
+        elif parts[1] == "boss" and (len(parts) < 3 or parts[2] not in ctx.gear):
+            log(f"test checklist: unknown boss in {cmd}")
+    for p in parts:
+        if p.startswith("wayfarers:"):
+            i = p.split(":", 1)[1]
+            ok = i in ctx.all_ids if parts[0] == "/give" else i in ctx.mob_info if parts[0] == "/summon" else i in sids
+            if not ok:
+                log(f"test checklist: unknown id in {cmd}")
+
+
+def section_tests(ctx):
+    subs = {c[0] for c in java_commands()}
+    items = []
+    for n, (title, cmds, expect) in enumerate(TXT.TEST_CHECKLIST, 1):
+        for c in cmds:
+            check_command(ctx, c, subs)
+        key = slug(title)
+        items.append(f'''<li class="check" id="t-{key}"><label><input type="checkbox" data-k="{key}"><span class="box" aria-hidden="true"></span><b>{n}. {E(title)}</b></label>
+  <div class="cmds">{"".join(f'<code class="cmd">{E(c)}</code>' for c in cmds)}</div>
+  <p>{E(expect)}</p></li>''')
+        ctx.idx.add(title, "Test", f"t-{key}", " ".join(cmds) + " " + expect)
+    return f'''<section class="block" id="tester">
+  {plaque("tester-h", "Check-list", "Tester en jeu", E(TXT.TEST_INTRO))}
+  <ol class="checks">{"".join(items)}</ol>
+  <p class="note">Les commandes <code>/wayfarers</code> demandent les droits d'opérateur (sauf atlas, waystones, sort et magnet). Clique une commande pour la sélectionner, puis copie-la.</p>
+</section>'''
+
+
+def section_gadgets(ctx):
+    from wf import gadgets as GD
+    held = ctx.sheet_info.get("held")
+    cards = []
+    # ammunition (an item that is only listed on another gadget's manual page) joins that gadget's card
+    page_of = {p[1].split(":")[-1]: p for p in GD.PAGES}
+    ammo = {}
+    for gid in GD.GADGETS:
+        if gid not in page_of:
+            owner = next((p[1].split(":")[-1] for p in GD.PAGES if "wayfarers:" + gid in p[4]), None)
+            if owner:
+                ammo.setdefault(owner, []).append(gid)
+    for gid, (_en, fr, _ten, tfr) in GD.GADGETS.items():
+        if any(gid in v for v in ammo.values()):
+            continue
+        sprite = spin_sprite(held, gid)
+        visual = sprite or f'<div class="vitrine big-icon">{ctx.atlas.icon(gid, 96)}</div>'
+        paras = [f for _e, f in page_of[gid][3]] if gid in page_of else []
+        tips = [TXT.GADGET_TIPS.get(g, "") for g in [gid] + ammo.get(gid, [])]
+        extra = "".join(recipe_block(ctx, a, name(a)) for a in ammo.get(gid, []))
+        summary = "" if paras else f'<p>{E(" ".join(tfr))}</p>'
+        cards.append(f'''<article class="card gadget" id="g-{gid}">
+  <div class="g-visual">{visual}</div>
+  <div class="g-body"><h4>{ctx.atlas.icon(gid, 32)}{E(fr)}</h4>{summary}
+  {('<div class="g-use"><small>Comment s’en servir</small>' + "".join(f"<p>{E(p)}</p>" for p in paras) + '</div>') if paras else ""}
+  {f'<p class="tip"><b>Astuce :</b> {E(" ".join(t for t in tips if t))}</p>' if any(tips) else ""}
+  {recipe_block(ctx, gid)}{extra}</div>
+</article>''')
+        for a in ammo.get(gid, []):
+            ctx.idx.add(name(a), "Gadget", f"g-{gid}", " ".join(GD.GADGETS[a][3]))
+        ctx.idx.add(fr, "Gadget", f"g-{gid}", " ".join(tfr + paras))
+    return f'''<section class="block" id="gadgets">
+  {plaque("gadgets-h", "Nouveau · laiton et vapeur", "Gadgets à vapeur", E(TXT.GADGETS_INTRO))}
+  <div class="grid gadgets">{"".join(cards)}</div>
+</section>'''
+
+
+def sym_svg(mode):
+    """Top view of the wand symmetry: your blocks in gold, mirrored copies in blue, the centre in amber."""
+    c = 14
+    mine = [(5, 1), (5, 2), (4, 1)]
+    cells = []
+    for x, z in mine:
+        cells.append((x, z, "m"))
+        if mode in ("x", "xz"):
+            cells.append((6 - x, z, "b"))
+        if mode in ("z", "xz"):
+            cells.append((x, 6 - z, "b"))
+        if mode == "xz":
+            cells.append((6 - x, 6 - z, "b"))
+    grid = "".join(f'<rect x="{i * c}" y="{j * c}" width="{c}" height="{c}" class="sg"/>' for i in range(7) for j in range(7))
+    planes = ""
+    if mode in ("x", "xz"):
+        planes += f'<line x1="{3.5 * c}" y1="0" x2="{3.5 * c}" y2="{7 * c}" class="sp"/>'
+    if mode in ("z", "xz"):
+        planes += f'<line x1="0" y1="{3.5 * c}" x2="{7 * c}" y2="{3.5 * c}" class="sp"/>'
+    blocks = "".join(f'<rect x="{x * c + 1}" y="{z * c + 1}" width="{c - 2}" height="{c - 2}" class="s{k}"/>' for x, z, k in cells)
+    return (f'<svg viewBox="-2 -2 {7 * c + 4} {7 * c + 4}" role="img" aria-label="Vue du dessus">{grid}{planes}'
+            f'<rect x="{3 * c + 3}" y="{3 * c + 3}" width="{c - 6}" height="{c - 6}" class="sc"/>{blocks}</svg>')
+
+
+def section_construction(ctx):
+    from wf import chisel as CH, decor
+    atlas, held, furn = ctx.atlas, ctx.sheet_info.get("held"), ctx.sheet_info.get("furniture")
+
+    def tool_card(iid, pid, anchor, extra=""):
+        visual = spin_sprite(held, iid) or spin_sprite(furn, iid) or f'<div class="vitrine big-icon">{atlas.icon(iid, 96)}</div>'
+        paras = manual_paras(pid=pid)
+        ctx.idx.add(name(iid), "Construction", anchor, " ".join(paras))
+        return f'''<article class="card tool" id="{anchor}">
+  <div class="g-visual">{visual}</div>
+  <div class="g-body"><h4>{atlas.icon(iid, 32)}{E(name(iid))}</h4>
+  {"".join(f"<p>{E(p)}</p>" for p in paras)}{extra}
+  {recipe_block(ctx, iid)}</div>
+</article>'''
+
+    full = {k: v for k, v in CH.FAMILIES.items() if not k.endswith(("_stairs", "_slabs", "_walls"))}
+    n_shape = len(CH.FAMILIES) - len(full)
+    fams = "".join(f'<li><span class="fam-icons">{"".join(atlas.icon(b, 30) for b in fam)}</span>'
+                   f'<small>{E(name(fam[0]))} · {len(fam)} variantes</small></li>' for fam in full.values())
+    only = []
+    for bid in getattr(decor, "CHISEL_ONLY", {}):
+        fam = next((f for f in CH.FAMILIES.values() if "wayfarers:" + bid in f), [])
+        src = [b for b in fam if b.split(":")[1] not in decor.CHISEL_ONLY]
+        only.append(f'<li><a href="#{anchor_item(bid)}">{atlas.icon(bid, 48)}</a><div><b>{E(name(bid))}</b>'
+                    f'<small>depuis : {E(", ".join(name(b) for b in src[:3]))}</small></div></li>')
+    sym_steps = manual_paras(pid="symmetry")
+    modes = "".join(f'<figure class="sym">{sym_svg(m)}<figcaption><b>{E(t)}</b><span>{E(x)}</span></figcaption></figure>'
+                    for m, t, x in TXT.SYMMETRY_MODES)
+    wand_extra = f'<div class="chips">{chips(atlas, ["wayfarers:master_builder_wand"], 26, ctx.item_link)}</div>'
+    return f'''<section class="block" id="construction">
+  {plaque("construction-h", "Nouveau · outils de bâtisseur", "Burin, table de taille et baguette", E(TXT.CONSTRUCTION_INTRO))}
+  <div class="grid tools">
+    {tool_card("wayfarers:chisel", "chisel", "burin")}
+    {tool_card("wayfarers:chisel_table", "chisel_table", "table-taille")}
+  </div>
+  <h3 class="subhead" id="burin-seul">{len(only)} blocs qu'on n'obtient qu'au burin</h3>
+  <p>{E(TXT.CHISEL_ONLY_TEXT)}</p>
+  <ul class="only">{"".join(only)}</ul>
+  <details class="cat fams"><summary><span>Les {len(full)} familles du burin</span><small>+ {n_shape} familles d'escaliers, dalles et murets</small></summary>
+  <p class="note">Dans l'ordre du burin : clic droit passe à l'icône suivante, accroupi revient à la précédente. Les familles sont des fichiers de données (<code>data/&lt;ns&gt;/chisel/*.json</code>) : un pack de données peut en ajouter.</p>
+  <ul class="fam-list">{fams}</ul></details>
+  <h3 class="subhead" id="baguette">La baguette du bâtisseur</h3>
+  <div class="grid tools">{tool_card("wayfarers:builder_wand", "wand", "baguette-carte", wand_extra)}
+  <article class="card sym-card" id="symetrie"><h4>{atlas.icon("wayfarers:master_builder_wand", 32)}La symétrie (touche <kbd>G</kbd>)</h4>
+  <ol class="sym-steps">{"".join(f"<li>{E(re.sub(r'^[0-9]+[.] ', '', p))}</li>" for p in sym_steps)}</ol>
+  <p class="tip"><b>Astuce :</b> pose le centre au milieu de ta future tour ou de ta façade, choisis X + Z, puis construis un seul quart : les trois autres se posent tout seuls.</p></article></div>
+  <div class="sym-grid">{modes}</div>
+  <p class="note">Vue du dessus : le carré ambré est le centre du miroir, en doré les blocs que tu poses, en bleu les copies. Chaque copie coûte un bloc ; les copies à plus de 96 blocs sont ignorées ; annuler (accroupi dans le vide) retire tout.</p>
+</section>'''
+
+
+def section_automatons(ctx):
+    atlas = ctx.atlas
+    gst = entity_stats("brass_golem")
+    golem_gif = ctx.mob_info.get("brass_golem", {}).get("gif", "")
+    steps = []
+    for n, (t, x) in enumerate(TXT.GOLEM_STEPS, 1):
+        extra = ""
+        if n == 1:
+            extra = recipe_block(ctx, "wayfarers:clockwork_heart", "Recette") + recipe_block(ctx, "wayfarers:brass_gear", "L'engrenage")
+        elif n == 2:
+            extra = recipe_block(ctx, "wayfarers:brass_block", "Recette")
+        steps.append(f'<li class="step"><span class="num">{n}</span><div><h4>{E(t)}</h4><p>{E(x)}</p>{extra}</div></li>')
+    orders = "".join(f'<li><b>{E(t)}</b><span>{E(x)}</span></li>' for t, x in TXT.GOLEM_ORDERS)
+    foes = []
+    for mid in ("clockwork_spider", "steam_drone"):
+        if mid not in ctx.mob_info:
+            continue
+        st = entity_stats(mid)
+        foes.append(f'''<article class="card foe"><figure class="vitrine"><img src="{ctx.mob_info[mid]["gif"]}" alt="{E(name(mid), quote=True)} en rotation" loading="lazy"></figure>
+  <div><h4><a href="#b-{mid}">{E(name(mid))}</a></h4>
+  <p class="statline"><span>{SVG["heart"]}{fmt_num(st["hp"])} PV</span><span>{SVG["sword"]}{fmt_num(st["dmg"])}</span></p>
+  <p>{E(TXT.MOBS.get(mid, st["doc"]))}</p><p class="where">{SVG["pin"]}<span>{mob_where(ctx, mid)}</span></p></div></article>''')
+    boss = "grand_clockmaker"
+    boss_html = ""
+    if boss in ctx.mob_info:
+        bst = entity_stats(boss)
+        lair = "".join(f'<li><b>{E(t)}</b><span>{E(x)}</span></li>' for t, x in TXT.LAIRS.get(boss, []))
+        loot = top_loot([f"wayfarers:entities/{boss}"], 8)
+        weapon = ctx.weapon_of.get(boss)
+        boss_html = f'''<h3 class="subhead" id="horloger">Le Grand Horloger, boss de la Citadelle</h3>
+  <div class="bossbox">
+    <figure class="vitrine boss-fig"><img src="{ctx.mob_info[boss]["gif"]}" alt="Le Grand Horloger en rotation" loading="lazy"><figcaption>4,4 blocs de haut</figcaption></figure>
+    <div class="boss-body">
+      <p class="statline"><span>{SVG["heart"]}{fmt_num(bst["hp"])} PV</span><span>{SVG["sword"]}{fmt_num(bst["dmg"])}</span></p>
+      <p>{E(TXT.MOBS.get(boss, ""))} {E(TXT.BOSS_FACTS.get(boss, ""))}</p>
+      <h4>La descente vers son repaire</h4>
+      <ol class="lair">{lair}</ol>
+      {('<div class="drops"><small>Il lâche</small>' + chips(atlas, loot, 24, ctx.item_link) + '</div>') if loot else ""}
+      {f'<p class="small">Son Souvenir se forge (4 matériaux de palier + 2 diamants) en <a href="#{anchor_item(weapon)}">{E(name(weapon))}</a> : {E(desc(weapon)[0] if desc(weapon) else "")}</p>' if weapon else ""}
+    </div>
+  </div>
+  <h4 class="movehead">Ses attaques</h4>
+  {moves_table(boss)}'''
+        ctx.idx.add("Le Grand Horloger : attaques et repaire", "Boss", "horloger", " ".join(t for t, _p, _x in TXT.BOSS_MOVES.get(boss, [])))
+    ctx.idx.add("Construire le golem de laiton", "Automate", "golem", " ".join(x for _t, x in TXT.GOLEM_STEPS))
+    return f'''<section class="block" id="automates">
+  {plaque("automates-h", "Nouveau · mécanique vivante", "Automates", E(TXT.AUTOMATONS_INTRO))}
+  <h3 class="subhead" id="golem">Le golem de laiton, ton compagnon</h3>
+  <div class="golem">
+    <figure class="vitrine golem-fig"><img src="{golem_gif}" alt="Le golem de laiton en rotation" loading="lazy"><figcaption>{fmt_num(gst["hp"])} PV · coup de {fmt_num(gst["dmg"])}</figcaption></figure>
+    <div><h4 class="minihead">Le construire en 3 étapes</h4><ol class="steps golem-steps">{"".join(steps)}</ol></div>
+  </div>
+  <h4 class="minihead">Ses ordres</h4>
+  <ul class="orders">{orders}</ul>
+  <h3 class="subhead">Les automates ennemis</h3>
+  <div class="grid foes">{"".join(foes)}</div>
+  {boss_html}
+</section>'''
 
 
 # =============================================================================================== recipes
@@ -1357,13 +1816,35 @@ FONTS = ("https://fonts.googleapis.com/css2?family=Zilla+Slab:ital,wght@0,500;0,
          "&family=JetBrains+Mono:wght@400;600&family=Pixelify+Sans:wght@500;700&display=swap")
 
 
-def render_page(sections, idx, atlas_rows):
-    nav = [("accueil", "Accueil"), ("commencer", "Par où commencer"), ("touches", "Touches & commandes"),
-           ("quetes", "Quêtes"), ("manuel", "Le Manuel"), ("talents", "Talents & magie"), ("machines", "Machines"),
-           ("metaux", "Métaux & armures"), ("deco", "Déco & meubles"), ("armes3d", "Armes en 3D"),
-           ("bestiaire", "Bestiaire"), ("structures", "Structures"), ("monde", "Nouveau Monde"),
-           ("objets", "Tous les objets"), ("recettes", "Recettes")]
-    nav_html = "".join(f'<a href="#{a}">{E(t)}</a>' for a, t in nav)
+# Top-level sections: anchor -> (menu label, tile label or None, tile icon). Menu and tiles list the sections the
+# page really has, in page order.
+SECTIONS = {
+    "accueil": ("Accueil", None, None),
+    "nouveautes": ("Nouveautés de la nuit", "Nouveautés", "wayfarers:pocket_watch"),
+    "tester": ("Tester en jeu", "Tester en jeu", "minecraft:command_block"),
+    "commencer": ("Par où commencer", None, None),
+    "touches": ("Touches & commandes", None, None),
+    "config": ("Configuration", None, None),
+    "quetes": ("Quêtes", "Quêtes", "wayfarers:wayfarer_atlas"),
+    "manuel": ("Le Manuel", "Le Manuel", "wayfarers:wayfarer_manual"),
+    "talents": ("Talents & magie", "Talents & magie", "wayfarers:fire_staff"),
+    "machines": ("Machines", "Machines", "wayfarers:auto_harvester"),
+    "gadgets": ("Gadgets à vapeur", "Gadgets à vapeur", "wayfarers:grappling_hook"),
+    "construction": ("Burin & baguette", "Construction", "wayfarers:chisel"),
+    "automates": ("Automates", "Automates", "wayfarers:clockwork_heart"),
+    "metaux": ("Métaux & armures", "Métaux & armures", "wayfarers:brass_ingot"),
+    "deco": ("Déco & meubles", "Déco steampunk", "wayfarers:gear_panel"),
+    "armes3d": ("Armes en 3D", "Armes en 3D", "wayfarers:bell_hammer"),
+    "bestiaire": ("Bestiaire", "Bestiaire", "minecraft:skeleton_skull"),
+    "structures": ("Structures", "Structures", "wayfarers:structure_compass"),
+    "monde": ("Nouveau Monde", "Nouveau Monde", "minecraft:grass_block"),
+    "objets": ("Tous les objets", "Tous les objets", "wayfarers:travel_backpack"),
+    "recettes": ("Recettes", "Recettes", "minecraft:crafting_table"),
+}
+
+
+def render_page(sections, idx, atlas_rows, nav):
+    nav_html = "".join(f'<a href="#{a}"{" class=new" if a in ("nouveautes", "tester") else ""}>{E(t)}</a>' for a, t in nav)
     data = json.dumps(idx.rows, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
     return f"""<title>Wayfarers Wiki</title>
 <meta name="description" content="Le guide illustré du mod Wayfarers : systèmes, bestiaire, structures, biomes et recettes.">
@@ -1668,6 +2149,96 @@ a.chip:hover{border-color:var(--brass)}
 .rnote{width:100%;color:var(--ink-3);font-size:13px}
 .machine .recipe{margin-top:10px}
 .foot{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);color:var(--ink-3);font-size:14px}
+/* new tonight */
+.side a.new,.tile.new{position:relative}
+.side a.new::after{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--rust);margin-left:7px;vertical-align:middle}
+.tile.new{border-color:var(--brass);background:linear-gradient(160deg,var(--card),var(--card-2))}
+.news-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px}
+.news-card{display:flex;flex-direction:column;background:var(--card);border:1px solid var(--rule);border-radius:10px;overflow:hidden;
+  color:var(--ink);text-decoration:none;box-shadow:var(--shadow);transition:transform .15s,border-color .15s;min-width:0}
+.news-card:hover{transform:translateY(-2px);border-color:var(--brass)}
+.news-thumb{aspect-ratio:16/9;border-radius:0;border-width:0 0 3px}
+.news-thumb img{position:absolute;inset:6px;width:calc(100% - 12px);height:calc(100% - 12px);object-fit:contain}
+.news-grid.places{grid-template-columns:repeat(4,minmax(0,1fr))}
+.news-grid.places .wide{grid-column:span 2}
+.news-grid.places .wide .news-thumb{aspect-ratio:auto;height:0;flex:1 1 auto;min-height:160px}
+.news-grid.places .wide .news-body b{font-size:22px}
+@media (max-width:1060px){.news-grid.places{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:760px){.news-grid.places{grid-template-columns:minmax(0,1fr)}.news-grid.places .wide{grid-column:auto}}
+.news-thumb .icons{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;padding:10px;max-width:92%}
+.news-body{display:flex;flex-direction:column;gap:4px;padding:10px 14px 12px;flex:1}
+.news-body b{font:700 18px/1.2 "Zilla Slab",serif}
+.news-body span{font-size:15px;color:var(--ink-2)}
+.news-body em{margin-top:auto;padding-top:4px;font:600 12px "Pixelify Sans",monospace;font-style:normal;text-transform:uppercase;color:var(--link)}
+.newall{margin-top:14px}.newlists{padding:0 16px 14px}.newlist{margin:6px 0 10px}
+.newlist small{display:block;font:600 11px "Pixelify Sans",monospace;text-transform:uppercase;color:var(--ink-3)}
+/* test checklist */
+.checks{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:10px}
+.check{background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:12px 14px;box-shadow:var(--shadow);min-width:0}
+.check label{display:flex;align-items:center;gap:10px;cursor:pointer;font:700 17px/1.2 "Zilla Slab",serif}
+.check input{position:absolute;opacity:0;width:1px;height:1px}
+.check .box{flex:none;width:22px;height:22px;border-radius:5px;border:2px solid var(--brass);background:var(--card-2);display:grid;place-items:center}
+.check input:checked + .box{background:var(--verd);border-color:var(--verd)}
+.check input:checked + .box::after{content:"";width:6px;height:11px;border:solid #fff;border-width:0 3px 3px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.check input:focus-visible + .box{outline:2px solid var(--focus);outline-offset:2px}
+.check.done{opacity:.62}.check.done b{text-decoration:line-through;text-decoration-color:var(--verd)}
+.cmds{display:flex;flex-direction:column;gap:4px;margin:8px 0 6px}
+.cmd{display:block;user-select:all;-webkit-user-select:all;cursor:text;padding:4px 8px;background:var(--case);color:#e9d9ae;border-color:var(--case-rim);font-size:13.5px;overflow-wrap:anywhere}
+.check p{margin:0;font-size:15px;color:var(--ink-2)}
+/* gadgets, tools */
+.gadgets,.tools{grid-template-columns:repeat(auto-fill,minmax(min(100%,460px),1fr))}
+.gadget,.tool{display:grid;grid-template-columns:150px minmax(0,1fr);gap:16px;align-items:start}
+.g-visual .vitrine{aspect-ratio:1/1;width:100%}
+.big-icon .ic{image-rendering:pixelated}
+.g-body h4{margin-bottom:6px}
+.g-use small,.how-get small{display:block;font:600 11px "Pixelify Sans",monospace;text-transform:uppercase;color:var(--ink-3);margin-top:8px}
+.g-use p{margin:2px 0 6px;font-size:15.5px}
+.tip{padding:7px 10px;background:var(--verd-2);border-radius:6px;font-size:15px}
+.how-get{margin-top:8px}.how-get .recipe{margin-top:4px}
+.only{list-style:none;padding:0;margin:8px 0 14px;display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:8px}
+.only li{display:flex;gap:10px;align-items:center;background:var(--card);border:1px solid var(--rule);border-radius:8px;padding:8px}
+.only b{display:block;line-height:1.2}.only small{display:block;color:var(--ink-3);font-size:13px}
+.fams > p,.fam-list{margin-left:16px;margin-right:16px}
+.fam-list{list-style:none;padding:0 0 14px;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:6px 14px}
+.fam-list li{min-width:0}.fam-icons{display:flex;flex-wrap:wrap;gap:2px}.fam-list small{color:var(--ink-3);font-size:13px}
+.sym-steps{margin:0 0 12px;padding-left:22px;max-width:80ch}.sym-steps li{margin:4px 0}
+.sym-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.sym{margin:0;background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:10px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.sym svg{width:100%;max-width:150px;align-self:center}
+.sym figcaption b{display:block;font:700 16px "Zilla Slab",serif}.sym figcaption span{font-size:14px;color:var(--ink-2)}
+.sg{fill:var(--card-2);stroke:var(--rule);stroke-width:1}
+.sp{stroke:var(--rust);stroke-width:2;stroke-dasharray:4 3}
+.sc{fill:#e8a33a;stroke:#7a4e10;stroke-width:1}
+.sm{fill:#e4b75a;stroke:#6e4b12;stroke-width:1}
+.sb{fill:#58a6e0;stroke:#1f5f8f;stroke-width:1}
+/* automatons */
+.golem{display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:20px;align-items:start}
+.golem-fig,.boss-fig{aspect-ratio:1/1}.golem-fig img,.boss-fig img,.foe img{width:100%;height:100%;object-fit:contain}
+.golem-steps{grid-template-columns:minmax(0,1fr)}
+.minihead{font:700 19px "Zilla Slab",serif;margin:14px 0 8px}
+.orders{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px}
+.orders li{background:var(--card);border:1px solid var(--rule);border-left:4px solid var(--brass);border-radius:8px;padding:8px 12px}
+.orders b{display:block}.orders span{font-size:15px;color:var(--ink-2)}
+.foes{grid-template-columns:repeat(auto-fill,minmax(min(100%,420px),1fr))}
+.foe{display:grid;grid-template-columns:140px minmax(0,1fr);gap:14px;align-items:start}
+.foe .vitrine{aspect-ratio:1/1}.foe h4 a{color:var(--ink)}
+.bossbox{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);gap:22px;background:var(--card);border:1px solid var(--rule);border-top:4px solid var(--rust);
+  border-radius:12px;padding:16px;box-shadow:var(--shadow)}
+.boss-body h4{font:700 19px "Zilla Slab",serif;margin:12px 0 6px}
+.lair{list-style:none;counter-reset:l;padding:0;margin:0;border-left:3px solid var(--brass);margin-left:10px}
+.lair li{counter-increment:l;position:relative;padding:4px 0 10px 22px}
+.lair li::before{content:counter(l);position:absolute;left:-13px;top:4px;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;
+  font:700 12px "Pixelify Sans",monospace;color:#2a1d08;background:radial-gradient(circle at 35% 30%,#f6d98e,#b98a2e 70%)}
+.lair b{display:block}.lair span{font-size:15px;color:var(--ink-2)}
+.movehead{font:700 19px "Zilla Slab",serif;margin:16px 0 8px}
+.moves td:first-child{white-space:nowrap}
+.phase{font:600 11px "Pixelify Sans",monospace;padding:1px 6px;border-radius:4px;white-space:nowrap;background:var(--chip);color:var(--ink-2)}
+.phase.p2{background:var(--rust);color:#fff4e6}
+.moves-box{margin-top:8px;border-top:1px dashed var(--rule);padding-top:6px}
+.moves-box summary{cursor:pointer;font-weight:700;color:var(--link)}
+.moves-box .tbl{font-size:14px}
+.cutnote{position:absolute;right:8px;bottom:6px;z-index:2;font:600 11px "Pixelify Sans",monospace;color:#d8c69c;background:rgba(0,0,0,.55);padding:2px 7px;border-radius:4px}
+.hero-fig figcaption{left:auto;right:8px}
 /* responsive */
 @media (max-width:1060px){
   .layout{grid-template-columns:minmax(0,1fr);padding:0 16px;gap:0}
@@ -1692,6 +2263,16 @@ a.chip:hover{border-color:var(--brass)}
   .spins{grid-template-columns:repeat(2,minmax(0,1fr))}
   .views{grid-template-columns:repeat(3,minmax(0,1fr))}
   body{font-size:16px}
+  .news-grid,.checks,.only,.fam-list,.orders{grid-template-columns:minmax(0,1fr)}
+  .golem,.bossbox{grid-template-columns:minmax(0,1fr)}
+  .golem-fig,.boss-fig{max-width:320px;width:100%;justify-self:center}
+  .sym-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .foe{grid-template-columns:110px minmax(0,1fr)}
+}
+@media (max-width:560px){
+  .gadget,.tool{grid-template-columns:minmax(0,1fr)}
+  .g-visual{width:150px}
+  .news-thumb{aspect-ratio:2/1}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 """
@@ -1738,6 +2319,15 @@ JS = r"""
   window.addEventListener('hashchange',function(){openTarget(location.hash.slice(1));});
   if(location.hash)openTarget(location.hash.slice(1));
   document.addEventListener('click',function(e){var a=e.target.closest('a[href^="#"]');if(a)openTarget(a.getAttribute('href').slice(1));});
+  // test checklist: ticks remembered on this device only (storage may be unavailable)
+  document.querySelectorAll('.check input[data-k]').forEach(function(cb){
+    var k='wf-test-'+cb.getAttribute('data-k'),li=cb.closest('.check');
+    try{if(localStorage.getItem(k)==='1'){cb.checked=true;li.classList.add('done');}}catch(e){}
+    cb.addEventListener('change',function(){li.classList.toggle('done',cb.checked);
+      try{if(cb.checked)localStorage.setItem(k,'1');else localStorage.removeItem(k);}catch(e){}});
+  });
+  document.querySelectorAll('.cmd').forEach(function(c){c.addEventListener('click',function(){
+    try{var r=document.createRange();r.selectNodeContents(c);var s=getSelection();s.removeAllRanges();s.addRange(r);}catch(e){}});});
   // tap to flip structure views on touch screens
   document.querySelectorAll('.flip').forEach(function(f){f.addEventListener('click',function(){f.classList.toggle('on');});});
   // nav highlight

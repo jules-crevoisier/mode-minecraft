@@ -42,6 +42,7 @@ KEY_TEXT = {
     "R": "Trier l'inventaire principal (la barre d'action n'est pas touchée)",
     "M": "Allumer / éteindre l'anneau aimanté",
     "W": "Maintenir sur un objet du mod : ouvrir sa page du Manuel",
+    "G": "Baguette du bâtisseur : changer de symétrie (désactivée, miroir X, miroir Z, X + Z)",
     "Clic molette": "Sur une case d'un coffre : trier ce coffre",
 }
 
@@ -95,7 +96,8 @@ QOL = [
 
 DIMENSIONS = {"overworld": "Surface", "nether": "Nether", "end": "End"}
 
-# Merveilles (méga-structures) : affichées en grand, avec rotation 360° et vue en coupe.
+# Merveilles (méga-structures) : affichées en grand, avec rotation 360° et vue en coupe. Le générateur y ajoute
+# toute structure citée dans les pages « wonders* » du Manuel (tools/wf/guide.py) ; l'ordre ci-dessous passe en premier.
 WONDERS = ["clockwork_citadel", "sky_harbour", "undercity", "sunken_citadel"]
 
 STRUCTURES = {
@@ -154,7 +156,52 @@ STRUCTURES = {
                   "Mère-Larve.",
     "clockwork_citadel": "Une ville steampunk de 71 × 71 blocs autour d'une tour-horloge de 75 blocs : quatre cadrans, "
                          "beffroi, flèche de cuivre oxydé, sept étages meublés, quatre ateliers et quatre cheminées "
-                         "fumantes reliées par des tuyaux.",
+                         "fumantes reliées par des tuyaux. Des araignées-horloges et des drones à vapeur y rôdent. Dans "
+                         "le hall d'entrée de la tour (côté est), un escalier s'enfonce vers la Salle des engrenages, "
+                         "un lieu de grâce, puis le Caveau de l'horloge où attend le Grand Horloger.",
+    "geothermal_foundry": "Des forges steampunk bâties dans le flanc d'un petit volcan fumant (cratère de lave, coulées "
+                          "de magma, évents de vapeur). Devant, une caldeira de lave enjambée par un pont roulant qui "
+                          "porte une louche géante, deux halles de coulée aux toits en dents de scie, quatre cheminées "
+                          "de 55 blocs et une gare de wagonnets. Dans la montagne : la Forge des Profondeurs, une nef "
+                          "voûtée à colonnes de fer avec deux marteaux-pilons au-dessus d'un canal de lave, et au fond "
+                          "le Cœur, une salle en coupole autour d'un puits de lave.",
+    "tesla_observatory": "Un campus scientifique perché sur un piton de montagne. À l'ouest, le Grand Observatoire : "
+                         "un tambour de pierre crème sous une coupole de cuivre vert-de-gris, fendue pour un télescope "
+                         "de laiton de 30 blocs. Au nord-est, la Tour Tesla : 70 blocs de treillis autour d'une bobine "
+                         "de cuivre, coiffés d'un anneau hérissé de paratonnerres. Au sud-est, la Rotonde du "
+                         "planétarium, ses planètes sur des bras de laiton autour d'un soleil lumineux. Entre les deux, "
+                         "bibliothèque, laboratoire et une cour avec cadran solaire.",
+    "crystal_cathedral": "Une cathédrale gothique de calcite, de quartz et d'améthyste au fond d'une géode géante "
+                         "(88 × 46 × 112 blocs), très loin sous terre : le sol est entre y −44 et y −34. Nef voûtée de "
+                         "50 blocs, arcs-boutants à pinacles d'améthyste, deux tours à flèche, une rosace de vitraux et "
+                         "une flèche qui se change en pilier de cristal jusqu'à la voûte. Dans le chœur, l'autel du "
+                         "Cœur-Cristal ; du transept nord, un escalier descend à la crypte, où le reliquaire attend "
+                         "derrière des barreaux.",
+    "dwarven_city": "Un royaume nain perdu, taillé de 40 à 50 blocs sous terre. La ville basse remplit une caverne de "
+                    "69 × 37 blocs : au centre le Foyer, un brasier de 14 blocs nourri par deux rivières de lave qui "
+                    "tombent des parois ; à l'ouest les forges et la fonderie, à l'est la taverne et la salle des "
+                    "tailleurs de gemmes ; trois étages de maisons creusées dans les murs et une voie de wagonnets. Au "
+                    "nord, une porte de 13 blocs gardée par deux rois nains de pierre de 22 blocs mène à la Grande Salle "
+                    "puis à la salle du trône. Le trésor ? Une trappe cachée sous le tapis, derrière le trône.",
+    "sylvan_palace": "Un palais elfique qui pousse dans et autour d'un arbre d'argent colossal : tronc de 11 blocs, 70 "
+                     "blocs de haut, huit racines en arche et une canopée de 46 blocs piquée de fruits lumineux. Un "
+                     "escalier en spirale fait le tour du tronc jusqu'à trois terrasses à pavillons (invités, musique "
+                     "et banquet, chambre de la reine, bibliothèque dans les feuilles). Dans le tronc : la source du "
+                     "Cœur, la salle du trône, le trésor royal et une échelle jusqu'à la Lanterne de lune, un "
+                     "observatoire de verre au-dessus de la cime. Trois cabanes reliées par des ponts de corde et le "
+                     "Bassin de lune au pied de l'arbre.",
+    "inventor_manor": "Une demeure victorienne steampunk dans les prairies : briques rouges, fer sombre, toit mansardé "
+                      "en cuivre vert-de-gris, tourelles, tour d'observation à télescope et trois cheminées qui "
+                      "fument. Dedans : bureau, salle à manger, bibliothèque, chambre, salon et grenier. À l'est, une "
+                      "serre de verre où un arroseur et une moissonneuse tournent tout seuls ; à l'ouest, l'atelier "
+                      "de l'inventeur. Le secret : un tapis du bureau cache une trappe vers le laboratoire souterrain "
+                      "(réacteur d'éther, bobine Tesla, cuves à spécimens) et le meilleur butin.",
+    "sky_isles": "Un archipel qui flotte vers 200 blocs d'altitude au-dessus des océans et des plaines. L'île de la "
+                 "Couronne porte une prairie, un étang qui tombe en cascade et le Sanctuaire céleste, un temple rond "
+                 "en ruine au dôme effondré, avec l'autel du trésor. Autour : l'île du Cerisier (la plus haute, et "
+                 "sa tour de guet hantée par une gargouille), l'île du Bassin, l'île de Cristal (améthyste et minerai "
+                 "d'éther) et l'île de la Cloche, reliées par des ponts de corde. Pour monter : des blocs, ou le "
+                 "grappin et le planeur.",
     "sky_harbour": "Une tour d'amarrage en fer de 44 blocs, avec un dirigeable à vapeur accosté à son sommet : coque "
                    "en acajou, hublots, cabine, hélice et enveloppe rayée. Visible de très loin au-dessus des plaines.",
     "undercity": "Une ville suspendue dans une immense caverne creusée sous terre (12 à 30 blocs de profondeur) : lac "
@@ -221,7 +268,207 @@ MOBS = {
                     "éruptions de lithite, voile aveuglant.",
     "larva_mother": "Championne de la Crypte du vide : reine-larve au sac d'œufs lumineux. Morsure, acide, elle "
                     "s'enfouit, puis roule à travers l'arène.",
+    "clockwork_spider": "Petit automate de laiton à clé de remontage, qui chasse en bande et grimpe aux murs. Faible "
+                        "seule mais rapide : morsure de près, et quand elle s'arrête en faisant ronronner sa clé, elle "
+                        "va bondir (3 à 8 blocs, coup plus fort). Elle lâche du laiton et des engrenages.",
+    "steam_drone": "Chaudière volante à deux rotors, armée d'un pistolet à rivets. Elle tourne à 3 à 5 blocs "
+                   "au-dessus de toi et tire des rivets brûlants ; quand elle se cabre, elle va plonger sur toi : "
+                   "écarte-toi. Un arc ou le pistolet à rivets l'abat vite. Sort la nuit.",
+    "brass_golem": "Ton compagnon : un golem de laiton que tu construis toi-même (deux blocs de laiton + un cœur "
+                   "mécanique). Il te suit, cogne les monstres d'un coup de piston qui les projette, et frappe le sol "
+                   "quand il est encerclé. Jamais les creepers, jamais les joueurs, villageois ni animaux.",
+    "grand_clockmaker": "Champion de la Citadelle d'horlogerie : un gentleman-automate de 4,4 blocs, le torse en "
+                        "cadran d'horloge, le monocle qui luit, des ailes d'engrenages et une canne-pendule. Il arrête "
+                        "le temps, appelle des araignées-horloges et, blessé, sonne minuit.",
 }
+
+# Créatures amies (bestiaire : groupe « Compagnons »)
+COMPANIONS = ["brass_golem"]
+
+# Attaques détaillées des boss : (nom, phase, ce qu'il faut faire). Affichées dans le bestiaire et les Automates.
+BOSS_MOVES = {
+    "grand_clockmaker": [
+        ("Balancier", "1 et 2", "Un grand coup de canne-pendule sur 220° devant lui (15 dégâts, portée 6,5 blocs). "
+                                "Recule ou passe dans son dos. En phase 2, il enchaîne souvent sur le coup de canne."),
+        ("Coup de canne", "1 et 2", "Il frappe le sol 3,5 blocs devant lui (18) et un anneau d'étincelles roule vers "
+                                    "l'extérieur (8) : saute par-dessus. En phase 2, deux anneaux, puis parfois les "
+                                    "engrenages."),
+        ("Éventail d'engrenages", "1 et 2", "À distance (4 à 24 blocs), il lance 3 engrenages de laiton en éventail "
+                                            "(7 chacun), 5 en phase 2. Déplace-toi de côté."),
+        ("Remontage", "1 et 2", "Il remonte 2 araignées-horloges (3 en phase 2), jamais plus de 4 en même temps. "
+                                "Elles s'arrêtent net à sa mort."),
+        ("Arrêt du temps", "1 et 2", "Ses aiguilles reculent pendant 1,2 s et un cercle de 9 blocs se referme autour "
+                                     "de lui. Qui est encore dedans au carillon est figé 2 s (Lenteur IV, Fatigue). "
+                                     "Sors du cercle !"),
+        ("Saut dans le temps", "2", "Il disparaît et réapparaît 2,5 blocs dans ton dos, puis balaie. Retourne-toi "
+                                    "et recule."),
+        ("Minuit", "2", "Douze cloches sonnent l'une après l'autre sur un cercle de 6 blocs autour de lui (11 "
+                        "chacune, un reflet prévient), puis une treizième sous chaque joueur (12) : ne reste pas "
+                        "immobile."),
+    ],
+}
+BOSS_FACTS = {
+    "grand_clockmaker": "400 PV, armure 12, barre jaune. Phase 2 à mi-vie : il rugit, des étincelles crépitent sur "
+                        "lui, il accélère et enchaîne ses coups.",
+}
+
+# Descente vers un repaire : étapes dans l'ordre
+LAIRS = {
+    "grand_clockmaker": [
+        ("Citadelle d'horlogerie", "Entre dans la grande tour-horloge. Dans le hall d'entrée, côté est, un escalier "
+                                   "s'ouvre dans le sol."),
+        ("La Salle des engrenages", "Premier niveau (y −10 sous la place) : les machines qui font tourner l'horloge, "
+                                    "des engrenages muraux, un générateur d'araignées-horloges et deux coffres "
+                                    "d'atelier."),
+        ("Le lieu de grâce", "Un second escalier descend (y −21) vers une petite salle de laiton : pierre de voyage "
+                             "sur une estrade, bancs et lampes. Active la pierre : tu reviendras ici après une mort."),
+        ("Le Caveau de l'horloge", "Derrière la brume : une arène ronde de 13 blocs de rayon dont le sol est un "
+                                   "cadran géant arrêté à minuit, douze pilastres de laiton et un grand pendule "
+                                   "qui se balance sous le dôme."),
+        ("Le cabinet de l'Horloger", "À l'ouest de l'arène, derrière une seconde brume qui tombe à sa mort : les "
+                                     "coffres de récompense."),
+    ],
+}
+
+# ------------------------------------------------------------------ sections ajoutées
+# Gadgets à vapeur : une astuce par gadget (le reste vient de tools/wf/gadgets.py : nom, infobulle, recette, Manuel)
+GADGETS_INTRO = ("Six objets de laiton à fabriquer à l'établi, sans talent ni mana. Ils servent tous les jours : "
+                 "orienter un bloc, grimper, planer, tirer, lire l'heure, trouver le Port céleste. La clé, le grappin, "
+                 "le planeur et le pistolet s'usent ; ils se réparent avec un lingot de laiton sur une enclume.")
+GADGET_TIPS = {
+    "brass_wrench": "Pour orienter un escalier ou un meuble après coup, ou récupérer un bloc déco mal placé sans le "
+                    "casser.",
+    "grappling_hook": "Vise un rebord en hauteur : tours de la Citadelle, falaises, Îles célestes. La griffe ne "
+                      "touche pas les créatures.",
+    "brass_glider": "Le combo du mod : grappin pour monter, planeur pour redescendre de l'autre côté.",
+    "rivet_gun": "Une arme à distance sans arc, rapide et presque droite : parfaite contre les drones à vapeur.",
+    "rivet": "Garde-en une pile sur toi ; sans rivets, le pistolet prend tes pépites de fer.",
+    "pocket_watch": "Pour voir venir la nuit et la lune de sang, et savoir dans quel biome tu te trouves.",
+    "airship_compass": "Le plus simple pour trouver le Port céleste. Dans l'End, elle mène à l'Épave du vide.",
+}
+
+CONSTRUCTION_INTRO = ("Trois outils pour bâtir vite et joli : le burin taille un bloc en ses variantes, la table de "
+                      "taille transforme une pile entière d'un coup, et la baguette du bâtisseur pose des rangées de "
+                      "blocs, en miroir si tu veux.")
+CHISEL_ONLY_TEXT = ("Ces blocs n'ont pas de recette : on les obtient seulement au burin ou à la table de taille, à "
+                    "partir d'un bloc de la même famille (placage de laiton, briques de lithite, lambris d'acajou…).")
+SYMMETRY_MODES = [
+    ("off", "Désactivée", "La baguette pose seulement tes blocs."),
+    ("x", "Miroir X", "Copie de l'autre côté du plan est/ouest."),
+    ("z", "Miroir Z", "Copie de l'autre côté du plan nord/sud."),
+    ("xz", "Miroir X + Z", "Quatre copies, une par quart : idéal pour une tour ou une fontaine."),
+]
+
+AUTOMATONS_INTRO = ("Les automates de laiton : deux ennemis des terres steampunk, un compagnon à construire soi-même "
+                    "et leur créateur, le Grand Horloger, caché sous la Citadelle d'horlogerie.")
+GOLEM_STEPS = [
+    ("Fabrique un cœur mécanique", "À l'établi : un engrenage en laiton, deux lingots de laiton, un bloc de redstone "
+                                   "et une horloge. Les engrenages se fabriquent avec du laiton, ou se ramassent sur les "
+                                   "araignées-horloges."),
+    ("Empile deux blocs de laiton", "Pose un bloc de laiton (9 lingots) et un second dessus, comme une petite "
+                                    "colonne."),
+    ("Utilise le cœur dessus", "Clic droit avec le cœur sur un des deux blocs : les blocs et le cœur disparaissent, "
+                               "le golem se réveille en sifflant et te suit."),
+]
+GOLEM_ORDERS = [
+    ("Suivre / garder", "Accroupi + clic droit main vide sur le golem : il garde l'endroit où il est, ou recommence "
+                        "à te suivre. S'il est à plus de 28 blocs, il te rejoint tout seul."),
+    ("Combat", "Il attaque les monstres à 16 blocs (jamais les creepers) et défend son maître et les villageois. Coup "
+               "de piston : 12 dégâts, l'ennemi s'envole. Encerclé par trois monstres : il frappe le sol (9 autour)."),
+    ("Réparer", "Donne-lui du laiton : un lingot rend 20 PV, une pépite 3. 80 PV et 10 d'armure."),
+    ("S'il est détruit", "Il lâche son cœur mécanique et un peu de laiton : il suffit de le reconstruire."),
+]
+
+# Nouveautés de la nuit (section en haut de page). Le générateur ajoute aussi la liste complète des objets, blocs,
+# créatures et structures apparus depuis le commit NEW_SINCE (lu avec git, si disponible).
+NEW_SINCE = "420854b"
+NEW_TITLE = "Nouveautés de cette nuit"
+NEW_INTRO = ("Tout ce qui est arrivé dans le mod cette nuit, en un coup d'œil. Chaque carte mène à sa section "
+             "détaillée ; la liste « Tester en jeu » juste en dessous donne les commandes pour tout essayer en "
+             "quelques minutes.")
+# (titre, texte, ancre, vignette) — vignette : "mob:<id>", "struct:<id>" ou "items:<id>,<id>,..."
+NEW_TONIGHT = [
+    ("Gadgets à vapeur", "Clé à molette, grappin, planeur, pistolet à rivets, montre à gousset et boussole de "
+     "dirigeable : six objets de laiton pour grimper, planer, tirer et s'orienter.", "gadgets",
+     "items:brass_wrench,grappling_hook,brass_glider,rivet_gun,pocket_watch,airship_compass"),
+    ("Burin et table de taille", "Le burin taille un bloc en sa variante suivante (pierre, briques, moussues, "
+     "sculptées…) ; la table transforme une pile entière, gratuitement. Avec 11 blocs qu'on n'obtient qu'au burin.",
+     "construction", "items:chisel,chisel_table,engraved_brass,brass_grille,chiseled_lithite_bricks,mahogany_parquet"),
+    ("Symétrie de la baguette", "Accroupi + clic sur un bloc pour poser le centre du miroir, touche G pour choisir "
+     "miroir X, Z ou les deux : tes constructions se copient en miroir.", "symetrie",
+     "items:builder_wand,master_builder_wand"),
+    ("Le golem de laiton", "Un compagnon à construire : deux blocs de laiton et un cœur mécanique. Il te suit et "
+     "cogne les monstres.", "golem", "mob:brass_golem"),
+    ("Araignées-horloges et drones", "Deux automates ennemis dans les Terres rouillées, la Vallée des engrenages, "
+     "la Citadelle et les Bas-fonds.", "automates", "mob:clockwork_spider"),
+    ("Le Grand Horloger", "Un nouveau boss sous la Citadelle d'horlogerie, avec arrêt du temps et sonnerie de "
+     "minuit. Son Souvenir forge le Pendule du Grand Horloger.", "horloger", "mob:grand_clockmaker"),
+    ("Cité naine des profondeurs", "Un royaume nain taillé à 40-50 blocs sous terre, rivières de lave et salle du "
+     "trône.", "s-dwarven_city", "struct:dwarven_city"),
+    ("Cathédrale de cristal", "Une cathédrale gothique dans une géode géante, tout au fond du monde.",
+     "s-crystal_cathedral", "struct:crystal_cathedral"),
+    ("Palais sylvain", "Un palais elfique autour d'un arbre d'argent de 70 blocs.", "s-sylvan_palace",
+     "struct:sylvan_palace"),
+    ("Manoir de l'inventeur", "Une demeure victorienne steampunk, sa serre et son laboratoire secret.",
+     "s-inventor_manor", "struct:inventor_manor"),
+    ("Îles célestes", "Un archipel flottant à 200 blocs d'altitude, relié par des ponts de corde.", "s-sky_isles",
+     "struct:sky_isles"),
+    ("Fonderie géothermique", "Des forges bâties dans un volcan fumant, avec pont roulant et caldeira de lave.",
+     "s-geothermal_foundry", "struct:geothermal_foundry"),
+    ("Observatoire Tesla", "Coupole, télescope géant, bobine Tesla de 70 blocs et planétarium sur un piton.",
+     "s-tesla_observatory", "struct:tesla_observatory"),
+]
+
+# « Tester en jeu » : (titre, [commandes], ce qu'on doit voir). Les commandes /wayfarers sont vérifiées par le
+# générateur contre WayfarersCommand.java ; les ids d'objets, d'entités et de structures contre les données du mod.
+TEST_INTRO = ("Une partie en créatif (ou avec les droits d'opérateur), un monde neuf, et ces commandes dans le chat. "
+              "Coche au fur et à mesure : la liste se souvient de tes coches sur cet appareil.")
+TEST_CHECKLIST = [
+    ("Tout recevoir d'un coup", ["/gamemode creative", "/wayfarers demo"],
+     "Tous les objets du mod arrivent dans l'inventaire (le surplus tombe au sol)."),
+    ("Clé à molette", ["/give @s wayfarers:brass_wrench", "/give @s minecraft:oak_stairs 8"],
+     "Pose un escalier, clic droit avec la clé : il tourne. Accroupi : dans l'autre sens. Accroupi sur un bloc déco "
+     "Wayfarers (placage de laiton…) : il revient dans l'inventaire."),
+    ("Grappin et planeur", ["/give @s wayfarers:grappling_hook", "/give @s wayfarers:brass_glider"],
+     "Vise un mur à moins de 32 blocs : la chaîne te tire jusqu'au rebord. En survie (/gamemode survival), saute "
+     "d'en haut avec le planeur en main : tu descends doucement, sans dégâts."),
+    ("Pistolet à rivets", ["/give @s wayfarers:rivet_gun", "/give @s wayfarers:rivet 64",
+                           "/summon minecraft:zombie ~ ~ ~5"],
+     "Clic droit : un rivet fumant part tout droit (5 dégâts). Sans rivets ni pépites de fer : « Plus de rivets »."),
+    ("Montre et boussole", ["/give @s wayfarers:pocket_watch", "/give @s wayfarers:airship_compass"],
+     "La montre affiche l'heure, le jour, la lune et le biome. La boussole cherche le Port céleste le plus proche et "
+     "son aiguille pointe vers lui (sinon elle le dit et tourne)."),
+    ("Burin", ["/give @s wayfarers:chisel", "/give @s minecraft:stone_bricks 16",
+               "/give @s minecraft:stone_brick_stairs 8"],
+     "Clic droit sur des briques de pierre : moussues, fissurées, sculptées… Le nom de la variante et sa place "
+     "dans la famille (ex. 3/6) s'affichent au-dessus de la barre. Sur un escalier, l'orientation est gardée."),
+    ("Table de taille", ["/give @s wayfarers:chisel_table", "/give @s wayfarers:brass_plating 64"],
+     "Pose la table, mets la pile de placage de laiton dans la case : clique « Laiton gravé » ou « Grille en "
+     "laiton », toute la pile change."),
+    ("Symétrie de la baguette", ["/give @s wayfarers:builder_wand", "/give @s minecraft:stone_bricks 64"],
+     "Accroupi + clic droit sur un bloc : centre du miroir (étincelles). G : miroir X, Z, X + Z. Clic droit sur "
+     "un mur : contours dorés pour tes blocs, bleus pour les copies. Accroupi dans le vide : tout s'annule."),
+    ("Golem de laiton", ["/give @s wayfarers:brass_block 2", "/give @s wayfarers:clockwork_heart"],
+     "Empile les deux blocs, clic droit avec le cœur : le golem apparaît et te suit. Accroupi + clic droit main "
+     "vide : « garde ici »."),
+    ("Automates ennemis", ["/time set night", "/summon wayfarers:clockwork_spider ~ ~ ~6",
+                           "/summon wayfarers:steam_drone ~ ~4 ~6"],
+     "L'araignée s'arrête, sa clé ronronne, puis elle bondit. Le drone tourne au-dessus de toi, tire des rivets et "
+     "se cabre avant de plonger."),
+    ("Le Grand Horloger", ["/wayfarers boss grand_clockmaker"],
+     "Il apparaît à 6 blocs (arène de 20 blocs autour de toi). Guette l'arrêt du temps (cercle qui se referme) et, "
+     "à mi-vie, le rugissement puis minuit. Pour le vrai repaire : /wayfarers tp clockwork_citadel."),
+    ("Merveilles en surface", ["/wayfarers tp inventor_manor", "/wayfarers tp sylvan_palace",
+                               "/wayfarers tp geothermal_foundry", "/wayfarers tp tesla_observatory",
+                               "/wayfarers tp sky_isles"],
+     "Téléportation à la plus proche (générée si besoin, quelques secondes ; si aucune n'est assez près, le "
+     "message le dit). Les Îles célestes flottent vers y 160-225 : tu arrives dessus ou dessous ; en dessous, "
+     "passe en /gamemode spectator pour monter."),
+    ("Merveilles souterraines", ["/wayfarers locate dwarven_city", "/wayfarers locate crystal_cathedral",
+                                 "/locate structure wayfarers:dwarven_city", "/gamemode spectator"],
+     "locate donne les coordonnées ; tp t'amène à la surface juste au-dessus. En spectateur, descends à travers la "
+     "roche : la cité est vers y −50, le sol de la cathédrale vers y −40."),
+]
 
 BIOMES = {
     "glacial_sea": "Mer gelée semée d'icebergs.",
