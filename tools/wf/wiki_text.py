@@ -49,6 +49,12 @@ KEY_TEXT = {
     "G": "Baguette du bâtisseur : changer de symétrie (désactivée, miroir X, miroir Z, X + Z)",
     "Clic molette": "Sur une case d'un coffre : trier ce coffre",
 }
+# Touches dont la lettre change sur un clavier AZERTY (Minecraft garde la position de la touche, pas la lettre)
+KEY_AZERTY = {"W": "Z", "Z": "W", "M": ","}
+KEYS_NOTE = ("Les lettres ci-dessus sont celles d'un clavier QWERTY. Minecraft retient l'emplacement de la touche : en "
+             "AZERTY, la touche du Manuel (W) est donc sur Z, le zoom de la mini-carte (Z) sur W et la carte (M) sur la "
+             "virgule. Toutes se changent dans Options → Commandes → rubrique Wayfarers, ou depuis Mods → Wayfarers → "
+             "Config → Touches.")
 
 COMMANDS = {
     "atlas": ("tous", "Affiche le résumé de la guilde (utilisé par l'Atlas)."),
@@ -81,6 +87,28 @@ CONFIG_FR = {
     "hud.healthBars": "Barres de vie au-dessus des créatures : ALWAYS (toujours), DAMAGED (blessées ou ciblées), NEVER.",
     "hud.damageNumbers": "Chiffres de dégâts flottants quand tu frappes.",
     "hud.tips": "Cartes d'astuce la première fois que tu découvres un système.",
+    "hud.healthBarRange": "Distance (en blocs) jusqu'à laquelle on dessine barres de vie et chiffres de dégâts. "
+                          "Baisse-la dans les fermes à monstres ou les grosses batailles pour gagner des images par seconde.",
+    "storage.terminalRange": "Portée du terminal de guilde autour de lui, à l'horizontale : chaque coffre, tonneau, "
+                             "boîte de shulker, coffre de tri et caisse compacte de ce carré rejoint son réseau.",
+    "storage.terminalHeight": "Portée du terminal et des relais vers le haut et vers le bas (384 = toute la hauteur du "
+                              "monde).",
+    "storage.relayRange": "Portée d'un relais de stockage autour de lui. Un relais rejoint le réseau s'il est à portée "
+                          "du terminal ou d'un autre relais relié.",
+    "storage.maxContainers": "Nombre maximal de conteneurs dans un réseau de terminal (protège le serveur sur les "
+                             "bases géantes).",
+    "map.sharedExploration": "Carte du monde partagée : chacun voit ce que tous ont exploré. Sur false, chaque joueur "
+                             "ne voit que ce qu'il a vu lui-même (le serveur garde les deux, on peut changer à tout moment).",
+    "map.showPlayers": "Montre les autres joueurs sur la mini-carte et la carte du monde (même dimension).",
+    "map.minimap": "Affiche la mini-carte (touche H en jeu).",
+    "map.corner": "Coin de l'écran de la mini-carte : TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT ou BOTTOM_RIGHT.",
+    "map.size": "Taille de la mini-carte : SMALL, MEDIUM ou LARGE.",
+    "map.shape": "Forme : ROUND (hublot de laiton) ou SQUARE (cadre carré).",
+    "map.rotate": "La mini-carte tourne avec toi (ta direction toujours en haut). Sur false : le nord est en haut.",
+    "map.zoom": "Zoom de la mini-carte, de 0 (le plus large) à 3 (le plus proche). Touche Z en jeu.",
+    "map.showCoordinates": "Affiche tes coordonnées et le biome sous la mini-carte.",
+    "map.caveMode": "Sous terre, la carte dessine la grotte autour de toi (une tranche à ta hauteur) au lieu de la "
+                    "surface.",
 }
 
 # Confort de jeu qui n'a pas d'objet : (titre, texte)
@@ -409,40 +437,92 @@ GOLEM_ORDERS = [
 # créatures et structures apparus depuis le commit NEW_SINCE (lu avec git, si disponible).
 NEW_SINCE = "420854b"
 NEW_TITLE = "Nouveautés de cette nuit"
-NEW_INTRO = ("Tout ce qui est arrivé dans le mod cette nuit, en un coup d'œil. Chaque carte mène à sa section "
-             "détaillée ; la liste « Tester en jeu » juste en dessous donne les commandes pour tout essayer en "
+NEW_INTRO = ("Tout ce qui est arrivé dans le mod cette nuit, rangé par thème. Chaque carte mène à sa section "
+             "détaillée ; la check-list « Tester en jeu » juste en dessous donne les commandes pour tout essayer en "
              "quelques minutes.")
-# (titre, texte, ancre, vignette) — vignette : "mob:<id>", "struct:<id>" ou "items:<id>,<id>,..."
-NEW_TONIGHT = [
-    ("Gadgets à vapeur", "Clé à molette, grappin, planeur, pistolet à rivets, montre à gousset et boussole de "
-     "dirigeable : six objets de laiton pour grimper, planer, tirer et s'orienter.", "gadgets",
-     "items:brass_wrench,grappling_hook,brass_glider,rivet_gun,pocket_watch,airship_compass"),
-    ("Burin et table de taille", "Le burin taille un bloc en sa variante suivante (pierre, briques, moussues, "
-     "sculptées…) ; la table transforme une pile entière, gratuitement. Avec 11 blocs qu'on n'obtient qu'au burin.",
-     "construction", "items:chisel,chisel_table,engraved_brass,brass_grille,chiseled_lithite_bricks,mahogany_parquet"),
-    ("Symétrie de la baguette", "Accroupi + clic sur un bloc pour poser le centre du miroir, touche G pour choisir "
-     "miroir X, Z ou les deux : tes constructions se copient en miroir.", "symetrie",
-     "items:builder_wand,master_builder_wand"),
-    ("Le golem de laiton", "Un compagnon à construire : deux blocs de laiton et un cœur mécanique. Il te suit et "
-     "cogne les monstres.", "golem", "mob:brass_golem"),
-    ("Araignées-horloges et drones", "Deux automates ennemis dans les Terres rouillées, la Vallée des engrenages, "
-     "la Citadelle et les Bas-fonds.", "automates", "mob:clockwork_spider"),
-    ("Le Grand Horloger", "Un nouveau boss sous la Citadelle d'horlogerie, avec arrêt du temps et sonnerie de "
-     "minuit. Son Souvenir forge le Pendule du Grand Horloger.", "horloger", "mob:grand_clockmaker"),
-    ("Cité naine des profondeurs", "Un royaume nain taillé à 40-50 blocs sous terre, rivières de lave et salle du "
-     "trône.", "s-dwarven_city", "struct:dwarven_city"),
-    ("Cathédrale de cristal", "Une cathédrale gothique dans une géode géante, tout au fond du monde.",
-     "s-crystal_cathedral", "struct:crystal_cathedral"),
-    ("Palais sylvain", "Un palais elfique autour d'un arbre d'argent de 70 blocs.", "s-sylvan_palace",
-     "struct:sylvan_palace"),
-    ("Manoir de l'inventeur", "Une demeure victorienne steampunk, sa serre et son laboratoire secret.",
-     "s-inventor_manor", "struct:inventor_manor"),
-    ("Îles célestes", "Un archipel flottant à 200 blocs d'altitude, relié par des ponts de corde.", "s-sky_isles",
-     "struct:sky_isles"),
-    ("Fonderie géothermique", "Des forges bâties dans un volcan fumant, avec pont roulant et caldeira de lave.",
-     "s-geothermal_foundry", "struct:geothermal_foundry"),
-    ("Observatoire Tesla", "Coupole, télescope géant, bobine Tesla de 70 blocs et planétarium sur un piton.",
-     "s-tesla_observatory", "struct:tesla_observatory"),
+# Thèmes : (titre, phrase, [(titre, texte, ancre, vignette)]). Vignette : "mob:<id>", "struct:<id>",
+# "items:<id>,<id>,...", "img:<chemin>" (une capture d'écran publiée avec le wiki) ou "biome:<id>" (son rendu 3D).
+# Le thème dont le titre commence par « Merveilles » s'affiche en grandes cartes.
+NEW_GROUPS = [
+    ("Carte, écrans et rangement", "Se repérer à plusieurs, régler chaque machine sans deviner, et toute la base "
+     "dans un seul écran.", [
+        ("Carte du monde partagée", "Touche M : tout ce qu'un joueur explore apparaît chez tous. Repères privés ou "
+         "partagés, signaux, pierres de voyage, joueurs, vue des grottes.", "carte", "img:img/gui/worldmap.webp"),
+        ("Mini-carte", "Un hublot de laiton dans un coin de l'écran : terrain, direction, repères, coordonnées et "
+         "biome. H la masque, Z zoome, B envoie un signal.", "mini-carte", "img:img/gui/minimap.webp"),
+        ("Un vrai écran pour chaque machine", "Les neuf machines s'ouvrent au clic : zone, sortie, filtre, mode "
+         "redstone, réglés avec des boutons et des infobulles.", "ecrans-machines",
+         "img:img/gui/machine_harvester.webp"),
+        ("Réglages et touches", "Mods → Wayfarers → Config : barres de vie, chiffres de dégâts, suivi, astuces. La "
+         "touche du Manuel se change (W, donc Z en AZERTY).", "touches", "img:img/gui/settings.webp"),
+        ("Terminal de guilde pour toute la base", "Il relie tous les coffres à 48 blocs. Des relais de stockage "
+         "étendent la portée, une page réseau exclut un coffre, « Montrer » les encadre dans le monde.", "terminal",
+         "items:guild_terminal,storage_relay,sorting_chest,compacting_crate"),
+    ]),
+    ("Océans vivants", "Les mers se remplissent : créatures, fonds marins, épaves et équipement de plongée.", [
+        ("Méduses, poissons, raies et baleines", "Quatre créatures paisibles : méduses lumineuses, bancs de "
+         "poissons de récif, raies manta qui sautent, baleines à bosse au large.", "oceans", "mob:manta_ray"),
+        ("Le serpent de mer", "Un mini-boss qui monte la nuit sous les bateaux, au-dessus des eaux profondes. Ses "
+         "écailles font le casque de scaphandre.", "b-sea_serpent", "mob:sea_serpent"),
+        ("Fonds marins", "Forêts de varech, récifs de corail géants, huîtres perlières, anémones lumineuses et "
+         "cheminées à bulles pour remonter respirer.", "fonds-marins",
+         "items:pearl_oyster,pearl,glow_anemone,jelly_lamp,glow_jelly"),
+        ("Épaves et refuges sous l'eau", "Sous-marin englouti, cloche de plongée pleine d'air, sanctuaire de corail "
+         "et débris de naufrage, chacun avec son butin.", "epaves", "struct:sunken_submarine"),
+        ("Casque de scaphandre et palmes", "Respirer, voir clair et miner à pleine vitesse sous l'eau ; nager bien "
+         "plus vite.", "plongee", "items:diving_helmet,flippers,serpent_scale"),
+    ]),
+    ("Le monde et ses blocs", "De nouveaux matériaux à récolter, et les biomes montrés tels qu'en jeu.", [
+        ("Bois-lueur et bois rouillé", "Deux essences complètes (bûches, planches, portes, trappes…) qui poussent "
+         "dans les biomes du nouveau monde.", "bois",
+         "items:glowwood_log,glowwood_planks,glowwood_leaves,rustwood_log,rustwood_planks,rustwood_leaves"),
+        ("Marbre, roche rouillée, ardoise bleue", "Trois pierres de construction avec leurs versions polie, en "
+         "briques, en pilier ou en carreaux.", "pierres",
+         "items:marble,marble_pillar,chiseled_marble,rust_rock_bricks,blue_slate,blue_slate_tiles"),
+        ("Les biomes en vrai", "Chaque fiche de biome montre maintenant un vrai coin du biome généré par le jeu et "
+         "dessiné en 3D.", "monde", "biome:enchanted_forest"),
+        ("Nouveaux dessins et modèles 3D", "Beaucoup d'objets redessinés et 14 nouveaux modèles 3D tenus en main : "
+         "outils de laiton et de mithril, pioche excavatrice, hache de bûcheron…", "armes3d",
+         "items:excavator_pickaxe,lumber_axe,brass_pickaxe,mithril_axe,bell_hammer,magnet_ring"),
+        ("Serveur et performances", "Moins de calculs à chaque tick, boussoles plus rapides, HUD plus léger ; et "
+         "les options utiles pour un serveur.", "performances", "items:minecraft:comparator,minecraft:clock"),
+    ]),
+    ("Laiton et vapeur", "Des outils de tous les jours et de quoi bâtir vite.", [
+        ("Gadgets à vapeur", "Clé à molette, grappin, planeur, pistolet à rivets, montre à gousset et boussole de "
+         "dirigeable : six objets de laiton pour grimper, planer, tirer et s'orienter.", "gadgets",
+         "items:brass_wrench,grappling_hook,brass_glider,rivet_gun,pocket_watch,airship_compass"),
+        ("Burin et table de taille", "Le burin taille un bloc en sa variante suivante (pierre, briques, moussues, "
+         "sculptées…) ; la table transforme une pile entière, gratuitement. Avec 11 blocs qu'on n'obtient qu'au "
+         "burin.", "construction",
+         "items:chisel,chisel_table,engraved_brass,brass_grille,chiseled_lithite_bricks,mahogany_parquet"),
+        ("Symétrie de la baguette", "Accroupi + clic sur un bloc pour poser le centre du miroir, touche G pour "
+         "choisir miroir X, Z ou les deux : tes constructions se copient en miroir.", "symetrie",
+         "items:builder_wand,master_builder_wand"),
+    ]),
+    ("Automates", "La mécanique vivante : un compagnon, deux ennemis et un boss.", [
+        ("Le golem de laiton", "Un compagnon à construire : deux blocs de laiton et un cœur mécanique. Il te suit et "
+         "cogne les monstres.", "golem", "mob:brass_golem"),
+        ("Araignées-horloges et drones", "Deux automates ennemis dans les Terres rouillées, la Vallée des "
+         "engrenages, la Citadelle et les Bas-fonds.", "automates", "mob:clockwork_spider"),
+        ("Le Grand Horloger", "Un nouveau boss sous la Citadelle d'horlogerie, avec arrêt du temps et sonnerie de "
+         "minuit. Son Souvenir forge le Pendule du Grand Horloger.", "horloger", "mob:grand_clockmaker"),
+    ]),
+    ("Merveilles à explorer", "Sept méga-structures, de 200 blocs d'altitude au fond du monde.", [
+        ("Cité naine des profondeurs", "Un royaume nain taillé à 40-50 blocs sous terre, rivières de lave et salle "
+         "du trône.", "s-dwarven_city", "struct:dwarven_city"),
+        ("Cathédrale de cristal", "Une cathédrale gothique dans une géode géante, tout au fond du monde.",
+         "s-crystal_cathedral", "struct:crystal_cathedral"),
+        ("Palais sylvain", "Un palais elfique autour d'un arbre d'argent de 70 blocs.", "s-sylvan_palace",
+         "struct:sylvan_palace"),
+        ("Manoir de l'inventeur", "Une demeure victorienne steampunk, sa serre et son laboratoire secret.",
+         "s-inventor_manor", "struct:inventor_manor"),
+        ("Îles célestes", "Un archipel flottant à 200 blocs d'altitude, relié par des ponts de corde.",
+         "s-sky_isles", "struct:sky_isles"),
+        ("Fonderie géothermique", "Des forges bâties dans un volcan fumant, avec pont roulant et caldeira de lave.",
+         "s-geothermal_foundry", "struct:geothermal_foundry"),
+        ("Observatoire Tesla", "Coupole, télescope géant, bobine Tesla de 70 blocs et planétarium sur un piton.",
+         "s-tesla_observatory", "struct:tesla_observatory"),
+    ]),
 ]
 
 # « Tester en jeu » : (titre, [commandes], ce qu'on doit voir). Les commandes /wayfarers sont vérifiées par le
@@ -494,6 +574,48 @@ TEST_CHECKLIST = [
                                  "/locate structure wayfarers:dwarven_city", "/gamemode spectator"],
      "locate donne les coordonnées ; tp t'amène à la surface juste au-dessus. En spectateur, descends à travers la "
      "roche : la cité est vers y −50, le sol de la cathédrale vers y −40."),
+    ("Carte du monde et mini-carte", ["/gamemode spectator", "/give @s wayfarers:wayfarer_atlas"],
+     "La mini-carte est en haut à gauche ; H la masque, Z change son zoom (W en AZERTY). Vole un peu puis ouvre la "
+     "carte avec M (la virgule en AZERTY) ou l'Atlas accroupi : le terrain vu est dessiné. Glisse, molette pour "
+     "zoomer, Espace pour revenir sur toi."),
+    ("Repères et signaux", ["/gamemode creative"],
+     "Sur la carte, clic droit : « Poser un repère ici » (nom, couleur, icône, Partager). Clic sur le repère : sa "
+     "fiche (Modifier, Privé/Partager, Supprimer). Clic molette ou B en visant un bloc : un signal visible une "
+     "minute. À deux sur un serveur, l'autre joueur voit tes repères partagés, tes signaux et ce que tu as exploré."),
+    ("Vue des grottes", ["/gamemode spectator", "/tp @s ~ 20 ~"],
+     "Sous terre, la mini-carte et la carte montrent la grotte à ta hauteur (« Vue des grottes ») au lieu de la "
+     "surface. Le bouton à droite de la carte l'active ou la coupe."),
+    ("Écrans des machines", ["/give @s wayfarers:auto_harvester", "/give @s wayfarers:redstone_timer",
+                             "/give @s wayfarers:entity_detector", "/give @s wayfarers:vacuum_hopper"],
+     "Pose chaque machine et fais clic droit : un écran de laiton avec la zone, la sortie, le mode redstone… "
+     "Survole un bouton pour son infobulle. Le minuteur affiche son intervalle, le détecteur sa cible et sa portée."),
+    ("Terminal de guilde et relais", ["/give @s wayfarers:guild_terminal", "/give @s wayfarers:storage_relay 2",
+                                      "/give @s minecraft:chest 8"],
+     "Pose des coffres jusqu'à 48 blocs du terminal, ouvre-le : tous leurs objets sont dans une seule grille. Pose "
+     "un coffre à 70 blocs : absent ; un relais entre les deux : il apparaît. Bouton réseau en haut à droite : "
+     "clique un coffre pour l'exclure, « Montrer » les encadre (or relié, rouge exclu)."),
+    ("Créatures marines", ["/wayfarers tp sunken_submarine", "/time set night",
+                           "/summon wayfarers:glow_jellyfish ~ ~-3 ~4", "/summon wayfarers:reef_fish ~ ~-3 ~4",
+                           "/summon wayfarers:manta_ray ~ ~-4 ~8", "/summon wayfarers:whale ~ ~-8 ~16"],
+     "Tu arrives à la surface de la mer. La méduse pulse et brille la nuit (la toucher pique), les poissons "
+     "nagent en banc, la raie bat des ailes et saute, la baleine remonte souffler."),
+    ("Serpent de mer", ["/time set night", "/give @s minecraft:oak_boat", "/summon wayfarers:sea_serpent ~ ~-4 ~10"],
+     "Une barre de boss apparaît. Il mord, charge (ton bateau se brise) et lève un tourbillon qui t'aspire. Il "
+     "lâche des écailles de serpent de mer."),
+    ("Épaves sous l'eau", ["/wayfarers tp sunken_submarine", "/wayfarers tp diving_bell",
+                           "/wayfarers tp coral_shrine", "/wayfarers tp shipwreck_debris"],
+     "Tu arrives à la surface juste au-dessus : plonge. Le sous-marin a une brèche dans le flanc et deux coffres ; "
+     "dans la cloche de plongée, on respire."),
+    ("Plongée et fonds marins", ["/give @s wayfarers:diving_helmet", "/give @s wayfarers:flippers",
+                                 "/give @s wayfarers:pearl_oyster 2", "/give @s wayfarers:glow_anemone 4"],
+     "Avec le casque, la tête sous l'eau : force de conduit (respiration, vue dégagée, minage normal). Avec les "
+     "palmes, tu nages bien plus vite. Pose l'huître sous l'eau, clic droit quand elle est entrouverte : une perle."),
+    ("Bois et pierres du nouveau monde", ["/locate biome wayfarers:rustlands",
+                                          "/locate biome wayfarers:enchanted_forest",
+                                          "/give @s wayfarers:glowwood_sapling", "/give @s wayfarers:marble 16"],
+     "Les Terres rouillées ont des arbres de bois rouillé et de la roche rouillée ; la Forêt enchantée des arbres "
+     "de bois-lueur qui luisent la nuit. Plante la pousse avec de la poudre d'os ; mets le marbre dans un tailleur "
+     "de pierre : poli, briques, pilier, sculpté."),
 ]
 
 BIOMES = {
@@ -549,7 +671,10 @@ DECOR = {
     "dune_cacti": "cactus", "ferns": "fougères", "forest_floor": "sous-bois", "fossil_bones": "os fossiles",
     "frost_pines": "pins givrés", "frost_pines_sparse": "pins givrés épars", "frost_rocks": "rochers givrés",
     "giant_glowcaps": "champignons géants lumineux", "giant_trees": "conifères géants", "glow_flowers": "fleurs lumineuses",
-    "glow_lichen": "lichen luisant", "glowwood_trees": "arbres lumineux", "great_cherries": "grands cerisiers",
+    "glow_lichen": "lichen luisant", "glowwood_trees": "arbres de bois-lueur", "great_cherries": "grands cerisiers",
+    "glowwood_sparse": "quelques arbres de bois-lueur", "rustwood_trees": "arbres de bois rouillé",
+    "rustwood_sparse": "quelques arbres de bois rouillé", "marble_strata": "bandes de marbre",
+    "rust_rock_veins": "veines de roche rouillée", "blue_slate_veins": "veines d'ardoise bleue",
     "great_oaks": "grands chênes", "ice_spires": "flèches de glace", "ice_spires_small": "petites flèches de glace",
     "icebergs": "icebergs", "jungle_floor": "sous-bois de jungle", "jungle_giants": "arbres géants",
     "kelp": "varech", "kelp_cold": "varech", "lily_pads": "nénuphars", "lone_oaks": "chênes isolés",
@@ -578,3 +703,188 @@ RECIPE_TYPES = {
 }
 RECIPE_CATEGORIES = {"equipment": "Équipement", "building": "Construction", "misc": "Divers", "redstone": "Redstone",
                      "blocks": "Blocs", "food": "Nourriture"}
+
+# ------------------------------------------------------------------ carte du monde et mini-carte
+MAP_INTRO = ("Une carte qui se dessine toute seule pendant que tu explores, comme un carnet de cartographe. Sur un "
+             "serveur, elle est commune : ce que découvre un joueur apparaît sur la carte de tous. Rien à fabriquer, "
+             "elle marche dès la première connexion.")
+# (titre, texte) : ce qu'est la carte du monde, comment l'ouvrir, comment s'en servir
+MAP_WHAT = [
+    ("C'est quoi", "La carte du monde montre en vue du ciel tout ce qui a été exploré, avec les pierres de voyage, "
+                   "les repères, les joueurs, les signaux, ta tombe, ta dernière mort, le point d'apparition et les "
+                   "structures trouvées à la boussole. À droite : la légende (clique une ligne pour masquer ce type de "
+                   "marqueur) et la liste de tes repères avec leur distance."),
+    ("Comment l'ouvrir", "Touche M, ou l'Atlas du Voyageur en main : accroupi + clic droit. Sur un clavier AZERTY, la "
+                         "touche M de Minecraft est la virgule (réglable dans Options → Commandes)."),
+    ("Comment s'en servir", "Glisse pour déplacer la carte, molette (ou + et −) pour zoomer, Espace pour revenir sur "
+                            "toi. Clique un marqueur pour ouvrir sa fiche. En bas, les coordonnées et le biome sous ta "
+                            "souris."),
+]
+# (geste, effet) : commandes de l'écran de la carte
+MAP_CONTROLS = [
+    ("Glisser", "déplacer la carte"),
+    ("Molette, + ou −", "zoomer, dézoomer"),
+    ("Espace", "recentrer sur toi"),
+    ("Clic sur un marqueur", "sa fiche : nom, coordonnées, distance"),
+    ("Clic droit", "poser un repère, signaler l'endroit, copier les coordonnées"),
+    ("Clic molette", "envoyer un signal à tous"),
+    ("M ou Échap", "fermer la carte"),
+]
+# (ancre, titre, texte, icône) : les fonctions de la carte
+MAP_FEATURES = [
+    ("carte-partagee", "Exploration partagée", "Le serveur dessine les chunks autour de chaque joueur et garde la "
+     "carte de chaque dimension. Ce que ton ami a exploré pendant ton absence est déjà sur ta carte. Un serveur qui "
+     "préfère des cartes personnelles met map.sharedExploration à false : chacun ne voit alors que ce qu'il a vu "
+     "lui-même (le serveur garde les deux, on peut basculer à tout moment).", "wayfarers:wayfarer_atlas"),
+    ("reperes", "Repères privés ou partagés", "Clic droit sur la carte, « Poser un repère ici » : un nom, une "
+     "couleur, une icône (maison, pioche, étoile…) et la case « Partager avec tout le monde ». Un repère privé n'est "
+     "visible que par toi ; un repère partagé apparaît chez tous, avec le nom de celui qui l'a posé. Sa fiche permet "
+     "de le modifier, de le rendre privé ou de le supprimer.", "minecraft:red_banner"),
+    ("signaux", "Signaux", "Touche B en visant un endroit, ou clic molette sur la carte : un point d'exclamation "
+     "orange apparaît sur la mini-carte et la carte de tous les joueurs pendant une minute. Parfait pour « viens voir "
+     "ici » ou « le boss est là ».", "minecraft:bell"),
+    ("vue-grottes", "Vue des grottes", "Sous terre, la mini-carte et la carte dessinent la grotte à ta hauteur (une "
+     "tranche du monde) au lieu de la surface loin au-dessus ; les parois sont en sombre. Le bouton sur le côté de la "
+     "carte l'active ou la coupe (option map.caveMode).", "minecraft:lantern"),
+]
+MINIMAP_TEXT = [
+    "La mini-carte est un hublot de laiton dans un coin de l'écran (en haut à gauche au départ). Elle montre le "
+    "terrain autour de toi, la flèche de ta direction, et les pierres de voyage, repères, joueurs, signaux, tombes "
+    "et ta dernière mort. En dessous : tes coordonnées et le biome où tu es.",
+    "H la masque ou la réaffiche. Z change son zoom (4 niveaux) ; en AZERTY c'est la touche W. Coin de l'écran, "
+    "taille (petite, moyenne, grande), forme (ronde ou carrée) et rotation se règlent dans "
+    "config/wayfarers-client.toml.",
+]
+
+# ------------------------------------------------------------------ machines : écrans
+MACHINE_SCREENS_INTRO = ("Clic droit sur une machine : un écran de laiton s'ouvre. En haut, ce qu'elle fait et son "
+                         "état en une ligne ; au milieu, ses réglages en boutons (survole-les pour une infobulle) ; "
+                         "à droite, ses cases quand elle en a. Les images ci-dessous sont dessinées avec les vraies "
+                         "textures du jeu ; touche une image pour l'agrandir.")
+SETTINGS_TEXT = ("Mods → Wayfarers → Config ouvre les réglages du mod dans le même style : barres de vie (toujours, "
+                 "blessées, jamais), chiffres de dégâts, suivi de quête, cartes d'astuce, et un bouton vers les "
+                 "touches. La touche du Manuel (maintenue sur un objet pour ouvrir sa page) se change maintenant : W "
+                 "par défaut, c'est-à-dire Z sur un clavier AZERTY.")
+
+# ------------------------------------------------------------------ terminal de guilde
+TERMINAL_INTRO = ("Un seul écran pour tous les coffres de ta base, sans câble ni énergie. Le terminal voit chaque "
+                  "conteneur à 48 blocs autour de lui ; des relais de stockage prolongent sa portée, 32 blocs par "
+                  "32 blocs, jusqu'à la réserve la plus lointaine.")
+TERMINAL_DIAGRAM = ("Vue du dessus : le carré doré est la portée du terminal (48 blocs de chaque côté, 32 en haut et "
+                    "en bas). Un relais posé dans cette zone ajoute son propre carré de 32 blocs, et un relais posé "
+                    "dans le carré d'un autre relais s'enchaîne à son tour. Les coffres hors de toute zone (en gris) "
+                    "ne sont pas reliés.")
+
+# ------------------------------------------------------------------ océans vivants
+OCEANS_INTRO = ("Les mers ne sont plus vides : créatures, récifs, forêts de varech, huîtres perlières, cheminées à "
+                "bulles et petites épaves à fouiller. Tout cela fait partie du mod lui-même, pas du nouveau monde : "
+                "les océans normaux de Minecraft en profitent aussi, dans les régions jamais générées.")
+OCEANS_WHERE = ("Partout en mer : méduses, anémones, cheminées à bulles, arches rocheuses et ruines. Mers froides "
+                "et tempérées : grandes forêts de varech. Mers tempérées et chaudes : prairies d'herbes marines et "
+                "bancs d'huîtres. Mers chaudes et Lagon de corail : poissons de récif, jardins de corail et coraux "
+                "géants. Au large, dans les océans profonds : baleines et serpent de mer.")
+# (titre, texte, icône, où)
+OCEAN_FLOOR = [
+    ("Forêts de varech", "Le varech pousse en bosquets serrés qui montent jusqu'à la surface : on s'y perd "
+     "facilement, et les poissons s'y cachent.", "minecraft:kelp", "mers froides et tempérées"),
+    ("Prairies marines", "De larges tapis d'herbes marines sur le sable, entre les récifs.", "minecraft:seagrass",
+     "mers tempérées et chaudes"),
+    ("Récifs et coraux géants", "Des jardins de corail bien plus denses, et de grandes formes en blocs de corail : "
+     "tours, éventails, arches, cerveaux.", "minecraft:brain_coral_block", "mers chaudes"),
+    ("Anémones lumineuses", "Elles éclairent le fond la nuit, en trois couleurs. Casse-les pour les ramasser : de "
+     "quoi décorer un aquarium.", "wayfarers:glow_anemone", "toutes les mers"),
+    ("Huîtres perlières", "Clic droit sur une coquille entrouverte pour prendre sa perle ; sous l'eau, elle en refait "
+     "une avec le temps. Deux perles valent une émeraude à l'établi.", "wayfarers:pearl_oyster",
+     "mers tempérées et chaudes"),
+    ("Cheminées à bulles", "Des cheminées de basalte sur du magma soufflent une colonne de bulles jusqu'à la "
+     "surface : entre dedans pour remonter d'un coup et reprendre ton souffle.", "minecraft:magma_block",
+     "toutes les mers (rares)"),
+    ("Arches et aiguilles", "Arches de pierre, piliers et anneaux rocheux posés sur le fond.", "minecraft:stone",
+     "toutes les mers"),
+    ("Ruines englouties", "Colonnades brisées, statue tombée, escalier et tas d'amphores.",
+     "minecraft:chiseled_stone_bricks", "toutes les mers"),
+]
+OCEAN_STRUCTS = ["sunken_submarine", "diving_bell", "coral_shrine", "shipwreck_debris"]
+DIVING_TEXT = {
+    "diving_helmet": ("Un dôme de laiton à hublot. La tête sous l'eau, il donne la force de conduit : tu respires, "
+                      "tu vois clair et tu mines à pleine vitesse. Deux recettes : avec quatre écailles du serpent de "
+                      "mer, ou sans combat avec trois blocs de cuivre. Il se répare avec une écaille ou un lingot de "
+                      "laiton."),
+    "flippers": ("Aux pieds, tu nages bien plus vite, comme avec Agilité aquatique II. Deux cuirs et deux blocs "
+                 "d'algues séchées."),
+}
+# où vit chaque créature, quand les données ne le disent pas simplement
+MOB_WHERE = {
+    "glow_jellyfish": "Toutes les mers, par groupes de 2 à 4.",
+    "reef_fish": "Mers chaudes et Lagon de corail, en bancs.",
+    "manta_ray": "Océans tempérés et chauds, près de la surface.",
+    "whale": "Océans profonds, seule. Rare.",
+    "sea_serpent": "La nuit, au-dessus des eaux profondes, attiré par un bateau ou un nageur. Replonge à l'aube.",
+}
+MOB_HP = {"reef_fish": 3}  # vie par défaut de Minecraft, quand la classe ne la fixe pas
+MOB_BADGE = {"sea_serpent": "Mini-boss"}
+
+# ------------------------------------------------------------------ blocs du monde
+WORLDBLOCKS_INTRO = ("Le nouveau monde a ses propres matériaux : deux bois et trois pierres, chacun décliné en "
+                     "ensemble complet pour construire. On les récolte dans leurs biomes, ou on les fabrique à partir "
+                     "de blocs ordinaires si ton monde n'a pas le nouveau relief.")
+# bois -> (biomes, texte)
+WOODS = {
+    "glowwood": (["enchanted_forest", "crystal_woods"],
+                 "Troncs pâles et feuilles turquoise piquées de points lumineux qui luisent la nuit. Grands arbres "
+                 "touffus dans la Forêt enchantée, plus rares dans le Bois de cristal."),
+    "rustwood": (["rustlands", "cogwork_valley", "ashen_savanna"],
+                 "Écorce rouge sombre et feuilles couleur de rouille, sur des arbres fourchus. Partout dans les "
+                 "Terres rouillées, quelques-uns dans la Vallée des engrenages et la Savane cendrée."),
+}
+WOOD_HOW = ("Un ensemble complet, comme le chêne : bûches, écorce, planches, escaliers, dalles, barrières, "
+            "portillons, portes, trappes, boutons et plaques de pression. La hache écorce les bûches ; les feuilles "
+            "donnent des pousses qui font repousser le même arbre.")
+# pierre -> (biomes, texte)
+STONES = {
+    "marble": (["majestic_peaks", "stone_spires", "highland_meadow"],
+               "Blanc veiné de gris, en bandes dans les falaises des montagnes et en affleurements dans l'Alpage."),
+    "rust_rock": (["rustlands"], "Une roche rouge et orangée, dans le sol et les talus des Terres rouillées."),
+    "blue_slate": (["slate_sea", "pine_highlands"],
+                   "Ardoise d'un bleu profond, au fond de la Mer d'ardoise et dans les talus des Hautes terres de pins."),
+}
+STONE_HOW = ("Le tailleur de pierre transforme la pierre brute en version polie, briques, pilier, carreaux ou "
+             "sculptée, avec leurs escaliers, dalles et murets ; le burin du graveur passe de l'une à l'autre.")
+
+# ------------------------------------------------------------------ serveur et performances
+PERF_INTRO = ("Ce qui a été allégé pour qu'un serveur à plusieurs reste fluide, même avec de grandes bases et "
+              "beaucoup de monstres, et les quelques options utiles à connaître.")
+# (titre, [points])
+PERF_POINTS = [
+    ("Côté serveur", [
+        "Les arènes de boss, les sceaux et les gargouilles ne parcourent plus toutes les créatures autour d'eux à "
+        "chaque tick : ils regardent seulement la liste des joueurs.",
+        "La boussole des structures, la boussole de dirigeable et /wayfarers locate gardent leur réponse en "
+        "mémoire (même « rien trouvé », la recherche la plus lente).",
+        "Le mana, les bonus d'ensemble d'armure et les anneaux aimantés se calculent moins souvent, et les anneaux "
+        "de tous les joueurs ne tombent plus sur le même tick.",
+        "La carte partagée lit quelques chunks par tick (environ une milliseconde au plus) et écrit ses fichiers sur "
+        "un fil à part ; chaque joueur a un débit limité, ouvrir la carte ne sature pas la connexion.",
+    ]),
+    ("Côté joueur", [
+        "Barres de vie : des tests rapides avant de chercher la créature, et plus rien du tout quand barres et "
+        "chiffres de dégâts sont coupés.",
+        "Le suivi de quête et les cartes d'astuce préparent leur texte une fois au lieu de le refaire à chaque "
+        "image ; la recherche de la page du Manuel derrière chaque infobulle est mémorisée.",
+    ]),
+    ("Génération du monde", [
+        "Le relief du nouveau monde utilise les mêmes caches que Minecraft : les chunks se créent plus vite.",
+    ]),
+]
+# (option, conseil)
+PERF_OPTIONS = [
+    ("storage.terminalRange", "Portée du terminal. Baisse-la si les bases sont énormes et serrées."),
+    ("storage.terminalHeight", "Portée en hauteur du terminal et des relais."),
+    ("storage.relayRange", "Portée de chaque relais."),
+    ("storage.maxContainers", "Plafond de conteneurs par réseau : la vraie sécurité pour le serveur."),
+    ("map.sharedExploration", "Carte commune (true) ou personnelle (false). Ne change pas le coût : le serveur "
+                              "garde les deux."),
+    ("hud.healthBarRange", "Chez chaque joueur : distance des barres de vie. Baisse-la dans les fermes à monstres."),
+    ("world.overhaul", "Nouveau relief et biomes. Sur false, les nouveaux mondes gardent la génération de "
+                       "Minecraft ; tout le reste du mod marche pareil."),
+]
