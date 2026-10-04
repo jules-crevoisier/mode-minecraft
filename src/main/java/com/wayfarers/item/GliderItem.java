@@ -47,7 +47,8 @@ public class GliderItem extends GadgetItem {
 
     private static boolean airborne(Player player) {
         return !player.onGround() && !player.isInWater() && !player.isInLava() && !player.isFallFlying()
-                && !player.getAbilities().flying && !player.isPassenger() && !player.onClimbable() && !player.isSpectator();
+                && !player.isAutoSpinAttack() && !player.getAbilities().flying && !player.isPassenger()
+                && !player.onClimbable() && !player.isSpectator();
     }
 
     /** Local player, before its movement: sink slowly and glide forward. */

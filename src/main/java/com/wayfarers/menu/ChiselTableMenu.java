@@ -53,7 +53,8 @@ public class ChiselTableMenu extends AbstractContainerMenu {
     public ChiselTableMenu(int id, Inventory inv, BlockPos pos) {
         super(ModMenus.CHISEL_TABLE.get(), id);
         this.level = inv.player.level();
-        this.access = ContainerLevelAccess.create(level, pos);
+        // like vanilla menus, only the server's copy gives the input back on close (the client's would be a ghost)
+        this.access = level.isClientSide() ? ContainerLevelAccess.NULL : ContainerLevelAccess.create(level, pos);
         addSlot(new Slot(input, 0, INPUT_X, INPUT_Y));
         for (int i = 0; i < VARIANTS; i++) {
             addSlot(new Slot(variants, i, GRID_X + (i % COLS) * 18, GRID_Y + (i / COLS) * 18) {

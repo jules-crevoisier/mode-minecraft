@@ -27,6 +27,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.block.state.properties.SlabType;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.Nullable;
@@ -93,7 +95,8 @@ public class BuilderWandItem extends TooltipItem {
         }
     }
 
-    private record Undo(ResourceKey<Level> dimension, List<Placement> placed) {}
+    /** The last use of a player's wand; {@code paid}: its blocks came from the inventory (not in creative). */
+    private record Undo(ResourceKey<Level> dimension, List<Placement> placed, boolean paid) {}
 
     private static final Map<UUID, Undo> UNDO = new HashMap<>();
     /** Mirrored copies further than this from the player are skipped (keeps far chunks untouched). */
@@ -186,20 +189,51 @@ public class BuilderWandItem extends TooltipItem {
     }
 
     // ------------------------------------------------------------------ placement rules
-    /** Items one copy of this block costs (a double slab is two slabs). */
+    /** Block properties that count items in one block (sea pickles, candles, petals, snow layers...). */
+    private static final List<IntegerProperty> AMOUNTS = List.of(BlockStateProperties.PICKLES, BlockStateProperties.CANDLES,
+            BlockStateProperties.FLOWER_AMOUNT, BlockStateProperties.SEGMENT_AMOUNT, BlockStateProperties.EGGS,
+            BlockStateProperties.LAYERS);
+    /**
+     * Block properties that grow or fill up with time or work (crop age, sapling stage, berries, composter level,
+     * respawn anchor charges, egg hatching...): copies start fresh, so the wand never hands out a free harvest.
+     */
+    private static final Set<String> FRESH = Set.of("age", "stage", "berries", "level", "charges", "hatch", "hydration");
+
+    /** Items one copy of this block costs (a double slab is two slabs, four candles are four candles). */
     private static int cost(BlockState state) {
-        return state.hasProperty(BlockStateProperties.SLAB_TYPE) && state.getValue(BlockStateProperties.SLAB_TYPE) == SlabType.DOUBLE ? 2 : 1;
+        if (state.hasProperty(BlockStateProperties.SLAB_TYPE) && state.getValue(BlockStateProperties.SLAB_TYPE) == SlabType.DOUBLE) {
+            return 2;
+        }
+        for (IntegerProperty amount : AMOUNTS) {
+            if (state.hasProperty(amount)) {
+                return state.getValue(amount);
+            }
+        }
+        return 1;
     }
 
-    /** The state the wand places: the clicked block's, minus water (no free water from waterlogged blocks). */
+    /**
+     * The state the wand places: the clicked block's, minus water (no free water from waterlogged blocks) and with
+     * its growth reset (see {@link #FRESH}).
+     */
     private static BlockState placed(BlockState state) {
+        BlockState fresh = state.getBlock().defaultBlockState();
+        for (Property<?> property : state.getProperties()) {
+            if (FRESH.contains(property.getName())) {
+                state = copyValue(fresh, state, property);
+            }
+        }
         return state.hasProperty(BlockStateProperties.WATERLOGGED) ? state.setValue(BlockStateProperties.WATERLOGGED, false) : state;
     }
 
-    /** Whether the wand may put a block at {@code target}: free, allowed, loaded, nobody standing there. */
-    private static boolean canPlaceAt(Level level, Player player, BlockPos target) {
+    private static <T extends Comparable<T>> BlockState copyValue(BlockState from, BlockState to, Property<T> property) {
+        return to.setValue(property, from.getValue(property));
+    }
+
+    /** Whether the wand may put {@code state} at {@code target}: free, allowed, loaded, supported, nobody standing there. */
+    private static boolean canPlaceAt(Level level, Player player, BlockPos target, BlockState state) {
         return level.isInWorldBounds(target) && level.isLoaded(target) && level.getBlockState(target).canBeReplaced()
-                && level.mayInteract(player, target)
+                && level.mayInteract(player, target) && state.canSurvive(level, target)
                 && level.getEntitiesOfClass(LivingEntity.class, new AABB(target)).isEmpty();
     }
 
@@ -207,8 +241,10 @@ public class BuilderWandItem extends TooltipItem {
     public static Plan plan(Level level, Player player, ItemStack wand, BlockPos pos, Direction face, int max) {
         BlockState source = level.getBlockState(pos);
         Item item = source.getBlock().asItem();
-        // two-block things (doors, beds, tall plants) would only get one half
-        if (source.isAir() || !(item instanceof BlockItem) || source.hasBlockEntity() || !player.mayBuild()
+        // two-block things (doors, beds, tall plants) would only get one half; a block whose item places another
+        // block (wall torch, water or lava cauldron, cave vines...) is not what that item buys
+        if (source.isAir() || !(item instanceof BlockItem blockItem) || blockItem.getBlock() != source.getBlock()
+                || source.hasBlockEntity() || !player.mayBuild()
                 || source.hasProperty(BlockStateProperties.DOUBLE_BLOCK_HALF) || source.hasProperty(BlockStateProperties.BED_PART)) {
             return Plan.EMPTY;
         }
@@ -238,16 +274,17 @@ public class BuilderWandItem extends TooltipItem {
                 spread(p, pos, spread, max, seen, queue);
                 continue;
             }
-            if (!canPlaceAt(level, player, target)) {
+            if (!canPlaceAt(level, player, target, state)) {
                 continue;
             }
             // the block and its mirrored copies go in together, or not at all, so the build stays symmetric
             List<Placement> copies = new ArrayList<>();
             for (Mirror[] m : mirrors) {
                 BlockPos mp = mirror(target, centre, m);
+                BlockState ms = mirror(state, m);
                 if (!mp.equals(target) && !claimed.contains(mp) && copies.stream().noneMatch(c -> c.pos().equals(mp))
-                        && mp.distSqr(player.blockPosition()) <= MIRROR_RANGE * MIRROR_RANGE && canPlaceAt(level, player, mp)) {
-                    copies.add(new Placement(mp, mirror(state, m)));
+                        && mp.distSqr(player.blockPosition()) <= MIRROR_RANGE * MIRROR_RANGE && canPlaceAt(level, player, mp, ms)) {
+                    copies.add(new Placement(mp, ms));
                 }
             }
             if (1 + copies.size() > budget) {
@@ -276,10 +313,15 @@ public class BuilderWandItem extends TooltipItem {
         }
     }
 
+    /** Slots the wand takes blocks from: the main inventory and the off hand, never what is worn (a carved pumpkin...). */
+    private static boolean isSupply(int slot) {
+        return slot < Inventory.INVENTORY_SIZE || slot == Inventory.SLOT_OFFHAND;
+    }
+
     private static int count(Inventory inv, Item item) {
         int n = 0;
         for (int i = 0; i < inv.getContainerSize(); i++) {
-            if (inv.getItem(i).is(item)) {
+            if (isSupply(i) && inv.getItem(i).is(item)) {
                 n += inv.getItem(i).getCount();
             }
         }
@@ -289,7 +331,7 @@ public class BuilderWandItem extends TooltipItem {
     private static void consume(Inventory inv, Item item, int amount) {
         for (int i = 0; i < inv.getContainerSize() && amount > 0; i++) {
             ItemStack s = inv.getItem(i);
-            if (s.is(item)) {
+            if (isSupply(i) && s.is(item)) {
                 int take = Math.min(amount, s.getCount());
                 s.shrink(take);
                 amount -= take;
@@ -325,7 +367,7 @@ public class BuilderWandItem extends TooltipItem {
                 wand.hurtAndBreak(1, player, ctx.getHand() == InteractionHand.MAIN_HAND
                         ? net.minecraft.world.entity.EquipmentSlot.MAINHAND : net.minecraft.world.entity.EquipmentSlot.OFFHAND);
             }
-            UNDO.put(player.getUUID(), new Undo(level.dimension(), List.copyOf(all)));
+            UNDO.put(player.getUUID(), new Undo(level.dimension(), List.copyOf(all), !player.isCreative()));
             var sound = state.getSoundType().getPlaceSound();
             level.playSound(null, pos, sound, SoundSource.BLOCKS, 1.0F, 0.9F);
             if (!plan.mirrored().isEmpty()) {
@@ -377,14 +419,20 @@ public class BuilderWandItem extends TooltipItem {
             int restored = 0;
             Item item = null;
             for (Placement p : undo.placed()) {
-                if (server.getBlockState(p.pos()) == p.state()) {
+                // same block and same worth: its shape may have changed since (stair corners, fences and walls joining)
+                BlockState now = server.getBlockState(p.pos());
+                if (now.is(p.state().getBlock()) && cost(now) == cost(p.state())) {
                     server.removeBlock(p.pos(), false);
                     restored += cost(p.state());
                     item = p.state().getBlock().asItem();
                 }
             }
-            if (!player.isCreative() && restored > 0 && item != null) {
-                player.getInventory().placeItemBackInInventory(new ItemStack(item, restored));
+            // only blocks that were paid for come back (a creative use undone in survival gives nothing), in whole stacks
+            if (undo.paid() && restored > 0 && item != null) {
+                int maxStack = new ItemStack(item).getMaxStackSize();
+                for (int left = restored; left > 0; left -= maxStack) {
+                    player.getInventory().placeItemBackInInventory(new ItemStack(item, Math.min(left, maxStack)));
+                }
             }
             player.sendOverlayMessage(Component.translatable("message.wayfarers.wand.undone", restored).withStyle(ChatFormatting.GOLD));
         }

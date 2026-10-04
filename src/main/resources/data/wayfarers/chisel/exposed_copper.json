@@ -1,6 +1,5 @@
 {
   "blocks": [
-    "minecraft:exposed_copper",
     "minecraft:exposed_cut_copper",
     "minecraft:exposed_chiseled_copper",
     "minecraft:exposed_copper_grate"
