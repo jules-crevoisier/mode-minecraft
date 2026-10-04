@@ -392,7 +392,7 @@ PAGES = [
     ("magnet", "storage", "wayfarers:magnet_ring", ("Magnet Ring", "Anneau aimanté"), [
         ("While it is in your inventory and switched on (it glows), items and experience within 7 blocks fly to you.",
          "Tant qu'il est dans ton inventaire et allumé (il brille), objets et expérience à 7 blocs volent vers toi."),
-        ("Right-click it or press M to switch it on or off.", "Clic droit ou touche M pour l'allumer ou l'éteindre."),
+        ("Right-click it or press N to switch it on or off.", "Clic droit ou touche N pour l'allumer ou l'éteindre."),
         ("Craft: two Map Fragments, a redstone and three iron ingots.",
          "Fabrication : deux fragments de carte, une redstone et trois lingots de fer."),
     ], ["wayfarers:magnet_ring"]),
