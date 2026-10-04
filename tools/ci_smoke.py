@@ -212,7 +212,13 @@ def place_structures(srv, failures):
         check_budget(f"structure {sid}")
         x = 2000 + 500 * i
         r = 160  # the biggest wonders reach 120+ blocks from their origin
-        srv.run(f"execute in {dim} run forceload add {x - r} {-r} {x + r} {r}", r"Marked|forceload|No chunks|too many", 30)
+        # /forceload takes at most 256 chunks per call: load the square in 128-block tiles
+        for x0 in range(x - r, x + r, 128):
+            for z0 in range(-r, r, 128):
+                res = srv.run(f"execute in {dim} run forceload add {x0} {z0} {min(x0 + 127, x + r)} {min(z0 + 127, r)}",
+                              r"Marked|forceload|No chunks|too many|Too many", 60)
+                if res and "oo many" in res:
+                    failures.append(f"forceload for {sid}: {res}")
         res = None
         for attempt in range(12):
             res = srv.run(f"execute in {dim} run place structure wayfarers:{sid} {x} 100 0",
