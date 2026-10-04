@@ -19,13 +19,22 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.bus.BusGroup;
 import org.lwjgl.glfw.GLFW;
 
-/** Client-only wiring: entity models and renderers, HUD layers (boss bars, quest tracker) and key bindings. */
+/** Client-only wiring: entity models and renderers, HUD layers (boss bars, quest tracker, minimap) and key bindings. */
 public final class WayfarersClient {
     private static final KeyMapping.Category CATEGORY = KeyMapping.Category.register(Wayfarers.id("main"));
     public static final KeyMapping SORT_KEY = new KeyMapping("key.wayfarers.sort_inventory",
             InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_R, CATEGORY);
     public static final KeyMapping MAGNET_KEY = new KeyMapping("key.wayfarers.toggle_magnet",
+            InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_N, CATEGORY);
+    /** World map, minimap show/hide, minimap zoom and map ping (see client/map). */
+    public static final KeyMapping MAP_KEY = new KeyMapping("key.wayfarers.world_map",
             InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_M, CATEGORY);
+    public static final KeyMapping MINIMAP_KEY = new KeyMapping("key.wayfarers.toggle_minimap",
+            InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_H, CATEGORY);
+    public static final KeyMapping MINIMAP_ZOOM_KEY = new KeyMapping("key.wayfarers.minimap_zoom",
+            InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_Z, CATEGORY);
+    public static final KeyMapping PING_KEY = new KeyMapping("key.wayfarers.map_ping",
+            InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_B, CATEGORY);
     public static final KeyMapping QUESTS_KEY = new KeyMapping("key.wayfarers.quests",
             InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_J, CATEGORY);
     public static final KeyMapping SKILLS_KEY = new KeyMapping("key.wayfarers.skills",
@@ -55,6 +64,13 @@ public final class WayfarersClient {
                 }));
         AddGuiOverlayLayersEvent.BUS.addListener(TipCards::register);
         AddGuiOverlayLayersEvent.BUS.addListener(ManaHud::register);
+        AddGuiOverlayLayersEvent.BUS.addListener(com.wayfarers.client.map.MinimapHud::register);
+        net.minecraftforge.client.event.ClientPlayerNetworkEvent.LoggingOut.BUS.addListener(e -> com.wayfarers.client.map.ClientMap.onLogout());
+        net.minecraftforge.client.event.SystemMessageReceivedEvent.BUS.addListener(
+                (java.util.function.Predicate<net.minecraftforge.client.event.SystemMessageReceivedEvent>) e -> {
+                    com.wayfarers.client.map.ClientMap.onSystemMessage(e.getMessage());
+                    return false;
+                });
         net.minecraftforge.event.entity.player.ItemTooltipEvent.BUS.addListener(TipCards::onTooltip);
         RegisterKeyMappingsEvent.BUS.addListener(event -> {
             event.register(SORT_KEY);
@@ -63,6 +79,10 @@ public final class WayfarersClient {
             event.register(SKILLS_KEY);
             event.register(ABILITY_KEY);
             event.register(WAND_KEY);
+            event.register(MAP_KEY);
+            event.register(MINIMAP_KEY);
+            event.register(MINIMAP_ZOOM_KEY);
+            event.register(PING_KEY);
         });
         TickEvent.ClientTickEvent.Post.BUS.addListener(event -> onClientTick());
     }
@@ -89,6 +109,7 @@ public final class WayfarersClient {
     }
 
     private static void onClientTick() {
+        com.wayfarers.client.map.ClientMap.tick();
         EldenBossBar.tick();
         TipCards.tick();
         Minecraft mc = Minecraft.getInstance();
@@ -121,6 +142,22 @@ public final class WayfarersClient {
             if (connection != null && mc.player != null && (mc.player.getMainHandItem().getItem() instanceof com.wayfarers.item.BuilderWandItem
                     || mc.player.getOffhandItem().getItem() instanceof com.wayfarers.item.BuilderWandItem)) {
                 com.wayfarers.network.WayfarersNet.toServer(new com.wayfarers.network.WandModeMsg());
+            }
+        }
+        while (MAP_KEY.consumeClick()) {
+            if (mc.player != null && mc.level != null) {
+                ClientHooks.openWorldMap();
+            }
+        }
+        while (MINIMAP_KEY.consumeClick()) {
+            com.wayfarers.client.map.MinimapHud.toggle();
+        }
+        while (MINIMAP_ZOOM_KEY.consumeClick()) {
+            com.wayfarers.client.map.MinimapHud.cycleZoom();
+        }
+        while (PING_KEY.consumeClick()) {
+            if (connection != null && mc.player != null) {
+                com.wayfarers.client.map.ClientMap.pingLook();
             }
         }
         while (MAGNET_KEY.consumeClick()) {

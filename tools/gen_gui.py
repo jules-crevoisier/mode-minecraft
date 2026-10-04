@@ -820,7 +820,11 @@ def main():
     icons()
     bars()
     small_buttons()
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from wf import worldmap  # minimap / world map frames, markers and glyphs
+    worldmap.sprites(sys.modules[__name__])
     if "--mockup" in sys.argv:
+        worldmap.mockups(sys.modules[__name__])
         mockup_waystones()
         mockup_quests()
         mockup_guide()

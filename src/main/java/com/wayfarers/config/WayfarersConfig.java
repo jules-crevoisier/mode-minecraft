@@ -36,6 +36,14 @@ public final class WayfarersConfig {
             .comment("A Blood Moon happens every N nights.")
             .defineInRange("bloodMoon.interval", 7, 2, 100);
 
+    public static final ForgeConfigSpec.BooleanValue MAP_SHARED = B
+            .comment("World map: everyone sees what anyone explored. False: each player only sees the places they saw themselves",
+                    "(the server keeps track of both, so this can be switched at any time).")
+            .define("map.sharedExploration", true);
+    public static final ForgeConfigSpec.BooleanValue MAP_PLAYERS = B
+            .comment("Show online players on each other's minimap and world map (same dimension).")
+            .define("map.showPlayers", true);
+
     public static final ForgeConfigSpec SPEC = B.build();
 
     private WayfarersConfig() {}

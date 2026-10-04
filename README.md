@@ -12,6 +12,7 @@
 - **un nouveau monde** (désactivable) : relief plus haut et plus déchiqueté, méga-cavernes et **41 biomes** propres au mod ;
 - **un univers steampunk** : laiton, zinc, mithril, éther, 13 blocs de déco, 9 meubles en 3D, 9 machines simples et la **Citadelle d'horlogerie** ;
 - **des talents RPG et de la magie simple** : arbre de 36 talents (touche **K**), capacité active (touche **V**), mana et 7 bâtons de sort ;
+- **une carte du monde et une mini-carte** (touche **M**) partagées sur un serveur, avec repères, signaux et pierres de voyage ;
 - **de vraies interfaces** : journal de quêtes, écran de voyage, terminal de stockage, manuel illustré, barres de vie des monstres.
 
 | Cible | Version |
@@ -59,6 +60,9 @@ GitHub recompile le mod à chaque modification : voir l'onglet *Releases* ou *Ac
 | **Manuel du Voyageur** | Donné à la première connexion : une page par système, avec sommaire. Survole un objet du mod et **maintiens W** pour ouvrir sa page. Des cartes d'astuce s'affichent la première fois qu'on rencontre un système. |
 | **Journal de quêtes** (touche **J** ou l'Atlas) | Chapitres, étapes, récompenses ; bouton « Suivre » qui affiche l'objectif à l'écran. |
 | **Écran de voyage** | Clic droit sur une pierre : liste avec recherche, favoris et renommage. On ne voyage que depuis une pierre. |
+| **Mini-carte** | Hublot de laiton dans un coin : terrain, direction, coordonnées, biome, pierres de voyage, repères, joueurs, signaux, tombes et dernière mort. Touche **H** pour la masquer, **Z** pour le zoom ; coin, taille, forme (ronde ou carrée) et rotation dans `wayfarers-client.toml`. Sous terre, elle montre la grotte où l'on se trouve. |
+| **Carte du monde** (touche **M**, ou l'Atlas accroupi) | Glisser pour déplacer, molette pour zoomer, Espace pour revenir sur soi ; légende cliquable (masquer un type), liste des repères. Clic droit : poser un repère (nom, couleur, icône, **privé ou partagé** avec tous) ; clic molette ou touche **B** : un **signal** que tous voient une minute. |
+| **Exploration partagée** | Le serveur dessine la carte à partir des chunks chargés autour des joueurs et l'envoie aux clients par morceaux compressés : sur un serveur, chacun voit ce que les autres ont exploré (option `map.sharedExploration` pour une carte par joueur). |
 | **Barres de vie** | Au-dessus des monstres blessés, avec les dégâts infligés ; étoile pour les élites. Réglable dans la config client. |
 
 ### Rangement, construction et fermes
@@ -163,7 +167,7 @@ La quête est un onglet de progrès (touche **L**). Clic droit avec l'**Atlas** 
 | **Terminal de guilde** | Clic droit : tous les coffres à 12 blocs dans une seule grille avec recherche. Accroupi : trie tous les coffres. |
 | **Tombe** | À la mort, tes objets sont rangés dans une tombe, et ses coordonnées s'affichent dans le chat. N'importe quel membre du groupe peut les récupérer. |
 | **Sac du Voyageur** | 27 emplacements qui voyagent avec toi. |
-| **Anneau aimanté** | Attire objets et expérience. Se bascule au clic droit ou avec la touche **M**. |
+| **Anneau aimanté** | Attire objets et expérience. Se bascule au clic droit ou avec la touche **N**. |
 | **Boussole des structures** | Indique la structure la plus proche (distance + direction). Accroupi : choisir le type de structure. |
 | **Parchemin de rappel** | Téléporte à la pierre de voyage la plus proche. |
 | **Touche R** | Trie l'inventaire principal (la barre d'action n'est pas touchée). |

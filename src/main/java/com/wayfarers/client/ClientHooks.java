@@ -27,6 +27,14 @@ public final class ClientHooks {
         }
     }
 
+    public static void mapData(com.wayfarers.network.MapDataMsg msg) {
+        com.wayfarers.client.map.ClientMap.receive(msg);
+    }
+
+    public static void openWorldMap() {
+        Minecraft.getInstance().gui.setScreen(new com.wayfarers.client.map.WorldMapScreen());
+    }
+
     public static void openGuide(String page) {
         Minecraft.getInstance().gui.setScreen(new com.wayfarers.client.gui.GuideScreen(page));
     }

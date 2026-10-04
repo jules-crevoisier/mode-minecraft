@@ -63,6 +63,7 @@ public final class Wayfarers {
         AddPackFindersEvent.BUS.addListener(WorldOverhaul::addPacks);
         CoopEvents.register();
         GraveEvents.register();
+        com.wayfarers.map.MapServer.register();
         EquipmentEvents.register();
         DangerEvents.register();
         com.wayfarers.event.QolEvents.register();
