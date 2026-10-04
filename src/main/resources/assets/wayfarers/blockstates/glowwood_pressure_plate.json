@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "powered=false": {
+      "model": "wayfarers:block/glowwood_pressure_plate"
+    },
+    "powered=true": {
+      "model": "wayfarers:block/glowwood_pressure_plate_down"
+    }
+  }
+}

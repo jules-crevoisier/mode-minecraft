@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "wayfarers:rust_rock_bricks",
+  "result": {
+    "id": "wayfarers:rust_rock_brick_slab",
+    "count": 2
+  }
+}

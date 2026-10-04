@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "wayfarers:block/rustwood_sapling"
+  }
+}

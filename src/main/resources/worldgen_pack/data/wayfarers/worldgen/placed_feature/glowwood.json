@@ -1,5 +1,5 @@
 {
- "feature": "wayfarers:glowwood",
+ "feature": "wayfarers:glowwood_tree",
  "placement": [
   {
    "type": "minecraft:count",
@@ -21,7 +21,7 @@
    "predicate": {
     "type": "minecraft:would_survive",
     "state": {
-     "Name": "minecraft:oak_sapling",
+     "Name": "wayfarers:glowwood_sapling",
      "Properties": {
       "stage": "0"
      }

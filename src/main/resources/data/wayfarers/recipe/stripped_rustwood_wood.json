@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "key": {
+    "#": "wayfarers:stripped_rustwood_log"
+  },
+  "result": {
+    "id": "wayfarers:stripped_rustwood_wood",
+    "count": 3
+  },
+  "group": "bark"
+}

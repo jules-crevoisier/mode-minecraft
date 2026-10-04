@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "wayfarers:polished_rust_rock"
+        }
+      ]
+    }
+  ],
+  "random_sequence": "wayfarers:blocks/polished_rust_rock"
+}

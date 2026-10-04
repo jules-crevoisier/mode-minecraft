@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    "wayfarers:glowwood_log",
+    "wayfarers:glowwood_wood",
+    "wayfarers:stripped_glowwood_log",
+    "wayfarers:stripped_glowwood_wood",
+    "wayfarers:rustwood_log",
+    "wayfarers:rustwood_wood",
+    "wayfarers:stripped_rustwood_log",
+    "wayfarers:stripped_rustwood_wood"
+  ]
+}

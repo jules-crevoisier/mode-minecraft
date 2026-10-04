@@ -176,6 +176,70 @@ CHISEL_ONLY = _chisel_decor()
 DECOR.update(CHISEL_ONLY)
 
 
+def _world_stones():
+    """Stones of the world overhaul (wf/worldblocks.py has the woods): marble in the mountains, rust rock in the
+    Rustlands, blue slate on the cold coasts and pine highlands (surface rules in biomes.py, veins in
+    worldfeatures.py). Crafted too (gen_data), so they exist in any world. pillar=True: a log-like block that turns
+    with the face it is placed on."""
+    from . import texgen_world as G
+    marble = lambda: G.marble(seed=80)  # noqa: E731
+    rust = lambda: G.speckled(RUST, [(196, 112, 62), (110, 56, 40), (212, 150, 82), (86, 70, 66)], seed=84,  # noqa: E731
+                              streak=((214, 120, 56), 4))
+    slate = lambda: G.layered(SLATE, (40, 48, 66), (120, 136, 162), seed=88, specks=((132, 150, 178), 5))  # noqa: E731
+    return {
+        "marble": dict(en="Marble", fr="Marbre", tex={"all": marble},
+                       color="QUARTZ", sound="CALCITE", strength=1.5, variants=("stairs", "slab", "wall")),
+        "polished_marble": dict(en="Polished Marble", fr="Marbre poli",
+                                tex={"all": lambda: G.polished(marble(), (250, 250, 248), (176, 176, 182))},
+                                color="QUARTZ", sound="CALCITE", strength=1.5, variants=("stairs", "slab")),
+        "marble_bricks": dict(en="Marble Bricks", fr="Briques de marbre",
+                              tex={"all": lambda: G.stone_bricks(G.marble(seed=81, veins=4), (184, 182, 180), seed=82)},
+                              color="QUARTZ", sound="CALCITE", strength=1.5, variants=("stairs", "slab", "wall")),
+        "marble_pillar": dict(en="Marble Pillar", fr="Pilier de marbre", pillar=True,
+                              tex={"top": lambda: G.pillar_top(MARBLE, (252, 252, 250), (170, 170, 176), seed=83),
+                                   "side": lambda: G.pillar_side(MARBLE, (252, 252, 250), (172, 172, 178), seed=83)},
+                              color="QUARTZ", sound="CALCITE", strength=1.5, variants=()),
+        "chiseled_marble": dict(en="Chiseled Marble", fr="Marbre sculpté",
+                                tex={"all": lambda: G.chiseled_marble(MARBLE, (252, 252, 250), (164, 164, 172),
+                                                                      (206, 176, 104), seed=86)},
+                                color="QUARTZ", sound="CALCITE", strength=1.5, variants=()),
+        "rust_rock": dict(en="Rust Rock", fr="Roche rouillée", tex={"all": rust},
+                          color="TERRACOTTA_ORANGE", sound="STONE", strength=1.5, variants=("stairs", "slab", "wall")),
+        "polished_rust_rock": dict(en="Polished Rust Rock", fr="Roche rouillée polie",
+                                   tex={"all": lambda: G.polished(rust(), (206, 128, 82), (88, 46, 32))},
+                                   color="TERRACOTTA_ORANGE", sound="STONE", strength=1.5, variants=("stairs", "slab")),
+        "rust_rock_bricks": dict(en="Rust Rock Bricks", fr="Briques de roche rouillée",
+                                 tex={"all": lambda: G.stone_bricks(
+                                     G.speckled(RUST, [(196, 112, 62), (120, 62, 42)], seed=85, blotch=0.06),
+                                     (78, 44, 34), seed=85)},
+                                 color="TERRACOTTA_ORANGE", sound="STONE", strength=1.5,
+                                 variants=("stairs", "slab", "wall")),
+        "blue_slate": dict(en="Blue Slate", fr="Ardoise bleue", tex={"all": slate},
+                           color="TERRACOTTA_BLUE", sound="DEEPSLATE", strength=2.5, variants=("stairs", "slab", "wall")),
+        "polished_blue_slate": dict(en="Polished Blue Slate", fr="Ardoise bleue polie",
+                                    tex={"all": lambda: G.polished(slate(), (126, 142, 170), (34, 40, 54))},
+                                    color="TERRACOTTA_BLUE", sound="POLISHED_DEEPSLATE", strength=2.5,
+                                    variants=("stairs", "slab")),
+        "blue_slate_bricks": dict(en="Blue Slate Bricks", fr="Briques d'ardoise bleue",
+                                  tex={"all": lambda: G.stone_bricks(
+                                      G.layered(SLATE, (52, 60, 80), (120, 136, 162), seed=89), (36, 42, 56),
+                                      seed=89, rows=4, brick_w=8)},
+                                  color="TERRACOTTA_BLUE", sound="DEEPSLATE_BRICKS", strength=2.5,
+                                  variants=("stairs", "slab", "wall")),
+        "blue_slate_tiles": dict(en="Blue Slate Tiles", fr="Carreaux d'ardoise bleue",
+                                 tex={"all": lambda: G.slate_tiles(SLATE, (36, 42, 56), (124, 140, 168), seed=90)},
+                                 color="TERRACOTTA_BLUE", sound="DEEPSLATE_TILES", strength=2.5,
+                                 variants=("stairs", "slab", "wall")),
+    }
+
+
+MARBLE = (232, 230, 226)
+RUST = (158, 86, 54)
+SLATE = (72, 84, 108)
+WORLD_STONES = _world_stones()
+DECOR.update(WORLD_STONES)
+
+
 def all_block_ids():
     ids = []
     for bid, d in DECOR.items():

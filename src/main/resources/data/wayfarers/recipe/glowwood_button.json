@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "redstone",
+  "group": "wooden_button",
+  "ingredients": [
+    "wayfarers:glowwood_planks"
+  ],
+  "result": {
+    "id": "wayfarers:glowwood_button",
+    "count": 1
+  }
+}

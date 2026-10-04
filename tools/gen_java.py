@@ -24,6 +24,7 @@ def decor_java():
         "import net.minecraft.world.item.BlockItem;",
         "import net.minecraft.world.item.Item;",
         "import net.minecraft.world.level.block.Block;",
+        "import net.minecraft.world.level.block.RotatedPillarBlock;",
         "import net.minecraft.world.level.block.SlabBlock;",
         "import net.minecraft.world.level.block.SoundType;",
         "import net.minecraft.world.level.block.StairBlock;",
@@ -43,8 +44,8 @@ def decor_java():
     ]
     for bid, d in decor.DECOR.items():
         const = bid.upper()
-        L.append(f'    public static final RegistryObject<Block> {const} = block("{bid}", MapColor.{d["color"]}, '
-                 f'SoundType.{d["sound"]}, {d["strength"]}F, {d.get("light", 0)}, '
+        L.append(f'    public static final RegistryObject<Block> {const} = {"pillar" if d.get("pillar") else "block"}('
+                 f'"{bid}", MapColor.{d["color"]}, SoundType.{d["sound"]}, {d["strength"]}F, {d.get("light", 0)}, '
                  f'{str(d.get("tool", "pickaxe") == "pickaxe").lower()});')
         for v in d["variants"]:
             vid = decor.variant_id(bid, v)
@@ -64,6 +65,13 @@ def decor_java():
         "    private static RegistryObject<Block> block(String name, MapColor color, SoundType sound, float strength, int light,",
         "                                              boolean needsPickaxe) {",
         "        return item(name, ModBlocks.BLOCKS.register(name, () -> new Block(props(name, color, sound, strength, light, needsPickaxe))));",
+        "    }",
+        "",
+        "    /** A column that turns with the face it is placed on, like a log or a quartz pillar. */",
+        "    private static RegistryObject<Block> pillar(String name, MapColor color, SoundType sound, float strength, int light,",
+        "                                               boolean needsPickaxe) {",
+        "        return item(name, ModBlocks.BLOCKS.register(name, () -> new RotatedPillarBlock(",
+        "                props(name, color, sound, strength, light, needsPickaxe))));",
         "    }",
         "",
         "    private static RegistryObject<Block> stairs(String name, Supplier<Block> base) {",
@@ -220,8 +228,17 @@ def furniture_java():
     print(f"wrote {os.path.relpath(out, ROOT)}")
 
 
+def worldblocks_java():
+    from wf import worldblocks
+    out = os.path.join(ROOT, "src", "main", "java", "com", "wayfarers", "generated", "GeneratedWorldBlocks.java")
+    with open(out, "w") as f:
+        f.write(worldblocks.java())
+    print(f"wrote {os.path.relpath(out, ROOT)}")
+
+
 def main():
     guide_java()
+    worldblocks_java()
     metals_java()
     machines_java()
     furniture_java()

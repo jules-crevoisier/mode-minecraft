@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "group": "planks",
+  "ingredients": [
+    "#wayfarers:glowwood_logs"
+  ],
+  "result": {
+    "id": "wayfarers:glowwood_planks",
+    "count": 4
+  }
+}

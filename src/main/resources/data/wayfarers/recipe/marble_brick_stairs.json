@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "X  ",
+    "XX ",
+    "XXX"
+  ],
+  "key": {
+    "X": "wayfarers:marble_bricks"
+  },
+  "result": {
+    "id": "wayfarers:marble_brick_stairs",
+    "count": 4
+  }
+}

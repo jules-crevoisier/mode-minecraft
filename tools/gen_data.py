@@ -530,6 +530,9 @@ def main():
     extra_tags = metal_tags()
     for rel, values in machines_data().items():
         extra_tags.setdefault(rel, []).extend(values)
+    from wf import worldblocks
+    for rel, values in worldblocks.data(write).items():
+        extra_tags.setdefault(rel, []).extend(values)
     for rel, values in extra_tags.items():
         path = os.path.join(DATA, rel)
         tag = json.load(open(path)) if os.path.exists(path) else {"replace": False, "values": []}
