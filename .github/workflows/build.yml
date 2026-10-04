@@ -123,9 +123,64 @@ jobs:
             server/wayfarers-biome-*.png
             server/wayfarers-biomes.txt
 
+  # Runs the real client (software OpenGL under Xvfb) through ForgeGradle's runClient. client/CiDriver creates a
+  # world, opens every screen of the mod, places machines, summons creatures and the Clockwork Citadel, and saves a
+  # screenshot of each; tools/ci_client.py enforces the timeouts and fails on client-side errors in the log.
+  # `release` does not wait for it: the jar still ships while this job beds in.
+  client-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      LIBGL_ALWAYS_SOFTWARE: "1"
+      GALLIUM_DRIVER: llvmpipe
+      MESA_GL_VERSION_OVERRIDE: "4.5"
+      MESA_GLSL_VERSION_OVERRIDE: "450"
+      ALSOFT_DRIVERS: "null"
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 25
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Install Xvfb and Mesa (software OpenGL)
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -y -q --no-install-recommends xvfb xauth mesa-utils libgl1 libglx-mesa0 libgl1-mesa-dri \
+            libegl1 libxrandr2 libxcursor1 libxi6 libxinerama1 libxxf86vm1
+          xvfb-run -a -s "-screen 0 1920x1080x24" glxinfo -B || true
+
+      - name: Run the client test (screens, HUD, creatures, Clockwork Citadel)
+        run: xvfb-run -a -s "-screen 0 1920x1080x24" python3 tools/ci_client.py
+
+      - name: Upload the screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: client-screenshots
+          if-no-files-found: ignore
+          path: build/ci-client/
+
+      - name: Upload the client logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: client-test-logs
+          if-no-files-found: ignore
+          path: |
+            run/logs/
+            run/crash-reports/
+            run/hs_err_pid*.log
+            run/ci-client-report.txt
+            run/ci-client-console.log
+
   previews:
-    # the world map images go to their own pre-release, even when a test failed, so they can be looked at
-    needs: world-test
+    # the world map images and the client screenshots go to their own pre-release, even when a test failed,
+    # so they can be looked at
+    needs: [world-test, client-test]
     if: always()
     runs-on: ubuntu-latest
     steps:
@@ -135,6 +190,17 @@ jobs:
           name: world-previews
           path: previews
 
+      - uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: client-screenshots
+          path: client
+
+      - name: Collect the client screenshots
+        run: |
+          mkdir -p previews
+          cp client/wayfarers-shot-*.png previews/ 2>/dev/null || echo "no client screenshots"
+
       - name: Publish the world previews
         if: hashFiles('previews/*') != ''
         uses: softprops/action-gh-release@v2
@@ -143,7 +209,7 @@ jobs:
           name: Wayfarers — aperçus du monde (${{ github.ref_name }})
           prerelease: true
           make_latest: false
-          body: Carte des biomes, biomes souterrains et coupe du relief générés par /wayfarers worldmap, et un rendu 3D de chaque biome par /wayfarers biomeshots (commit ${{ github.sha }}).
+          body: Carte des biomes, biomes souterrains et coupe du relief générés par /wayfarers worldmap, un rendu 3D de chaque biome par /wayfarers biomeshots, et des captures du vrai client (wayfarers-shot-*.png — écrans, HUD, créatures, Citadelle) prises par le job client-test (commit ${{ github.sha }}).
           files: previews/*
 
   release:
