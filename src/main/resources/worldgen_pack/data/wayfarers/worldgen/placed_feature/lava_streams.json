@@ -18,6 +18,9 @@
    "y_spread": -2
   },
   {
+   "type": "wayfarers:clear_of_structures"
+  },
+  {
    "type": "minecraft:biome"
   }
  ]

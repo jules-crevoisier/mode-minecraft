@@ -58,6 +58,9 @@
    }
   },
   {
+   "type": "wayfarers:clear_of_structures"
+  },
+  {
    "type": "minecraft:biome"
   }
  ]
