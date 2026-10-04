@@ -112,6 +112,7 @@ STRUCTURE_ICONS = {
     "clockwork_citadel": "clock", "sky_harbour": "scaffolding", "undercity": "copper_lantern",
     "dwarven_city": "wayfarers:mithril_block", "sylvan_palace": "flowering_azalea_leaves",
     "inventor_manor": "wayfarers:redstone_timer", "sky_isles": "wayfarers:aether_crystal",
+    "geothermal_foundry": "magma_block", "tesla_observatory": "lightning_rod", "crystal_cathedral": "amethyst_block",
 }
 # where each boss lives (its quest follows the discovery of that structure)
 BOSS_HOME = {
