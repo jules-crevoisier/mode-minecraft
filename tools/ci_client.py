@@ -107,6 +107,9 @@ def ensure_display(argv):
 
 def prepare(early_window):
     os.makedirs(os.path.join(RUN, "config"), exist_ok=True)
+    # no tutorial toast over the screenshots, no cloud layer between the viewpoint and the wonders
+    with open(os.path.join(RUN, "options.txt"), "w") as f:
+        f.write("tutorialStep:none\nrenderClouds:\"false\"\nonboardAccessibility:false\nskipMultiplayerWarning:true\n")
     fml = os.path.join(RUN, "config", "fml.toml")
     if not early_window and not os.path.exists(fml):
         # FML fills in every other key with its default (and logs a warning about it)

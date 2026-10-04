@@ -93,7 +93,9 @@ final class MapPalette {
             case MapScan.BIRCH -> scale(0xFF80A755, 0.74F);
             case MapScan.WATER -> scale(t[2], 0.86F);
             case MapScan.WALL -> WALL;
-            default -> m - 2 < 64 ? 0xFF000000 | MapColor.byId(m - 2).col : WALL;
+            // MapColor.NONE (col 0: air-like, glass, barriers, columns scanned before they were filled in) is
+            // left transparent, so the parchment shows instead of black holes
+            default -> m - 2 < 64 ? (MapColor.byId(m - 2).col == 0 ? 0 : 0xFF000000 | MapColor.byId(m - 2).col) : WALL;
         };
     }
 

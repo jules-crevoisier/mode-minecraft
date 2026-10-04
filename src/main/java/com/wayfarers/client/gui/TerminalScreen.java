@@ -293,7 +293,7 @@ public class TerminalScreen extends AbstractContainerScreen<TerminalMenu> {
         }
         Component status = Component.translatable("gui.wayfarers.terminal.status", menu.clientLinked, shortCount(menu.clientFree));
         WfGui.textClipped(g, font, status.getString(), leftPos + GRID_X, topPos + STATUS_Y, COLS * 18 + 10,
-                menu.clientFree == 0 && menu.clientLinked > 0 ? 0xFFFF8A7A : WfGui.CREAM_SOFT, false);
+                menu.clientFree == 0 && menu.clientLinked > 0 ? 0xFFB0302A : WfGui.INK_SOFT, false);
         if (hovered != null && menu.getCarried().isEmpty()) {
             List<Component> lines = new ArrayList<>(getTooltipFromContainerItem(hovered.type()));
             lines.add(Component.translatable("gui.wayfarers.terminal.stored", String.format(Locale.ROOT, "%,d", hovered.count()))
@@ -343,7 +343,7 @@ public class TerminalScreen extends AbstractContainerScreen<TerminalMenu> {
             Component status = Component.translatable("gui.wayfarers.terminal.network_status", menu.clientLinked,
                     links.relays(), links.range());
             WfGui.textClipped(g, font, status.getString(), leftPos + GRID_X, topPos + STATUS_Y, COLS * 18 + 10,
-                    links.capped() ? 0xFFFF8A7A : WfGui.CREAM_SOFT, false);
+                    links.capped() ? 0xFFB0302A : WfGui.INK_SOFT, false);
         }
         if (hovered != null && hovered.info != null) {
             var p = hovered.info.pos();
