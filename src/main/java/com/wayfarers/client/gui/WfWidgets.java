@@ -141,7 +141,7 @@ public final class WfWidgets {
                 cx += iconSize + 2;
             }
             if (hasLabel) {
-                int color = on ? WfGui.GOLD : !active ? 0xFF8C8278 : 0xFFFFFFFF;
+                int color = on ? WfGui.GOLD : !active ? 0xFFC9C0B4 : 0xFFFFFFFF;
                 g.text(font, label, cx, y + (h - 8) / 2, color, true);
             }
             if (marker != null && marker.getAsBoolean()) {

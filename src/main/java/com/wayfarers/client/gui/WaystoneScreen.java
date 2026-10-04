@@ -87,7 +87,7 @@ public class WaystoneScreen extends Screen {
         search.setBordered(false);
         search.setMaxLength(32);
         search.setTextColor(WfGui.CREAM);
-        search.setHint(Component.translatable("gui.wayfarers.waystones.search"));
+        search.setHint(Component.translatable("gui.wayfarers.waystones.search").withColor(WfGui.MUTED));
         search.setValue(pendingSearch);
         search.setResponder(s -> refilter());
         addRenderableWidget(search);
@@ -247,7 +247,7 @@ public class WaystoneScreen extends Screen {
         if (e != null) {
             WfGui.sprite(g, WfGui.icon(dimIcon(e.dimension())), cx - 8, cardY() + 6, 16, 16);
             if (!renaming) {
-                WfGui.textClipped(g, font, e.name(), cardX() + 5, cardY() + 26, cardW() - 10, WfGui.INK, false);
+                WfGui.titleClipped(g, font, e.name(), cx, cardY() + 26, cardW() - 10, WfGui.INK);
             }
             WfGui.centered(g, font, Component.translatable("gui.wayfarers.dim." + e.dimension()), cx, cardY() + 40, WfGui.INK_SOFT);
             // far-off or negative coordinates are wider than the card: they wrap onto a second line
@@ -261,7 +261,7 @@ public class WaystoneScreen extends Screen {
                 WfGui.centered(g, font, Component.translatable("gui.wayfarers.waystones.distance", (int) distance(e)), cx, ty + 2, WfGui.INK_SOFT);
             }
         }
-        g.centeredText(font, Component.translatable("gui.wayfarers.waystones.hint"), left + W / 2, top + H + 4, WfGui.CREAM_SOFT);
+        g.centeredText(font, Component.translatable("gui.wayfarers.waystones.hint"), left + W / 2, top + H + 4, WfGui.CREAM);
         super.extractRenderState(g, mouseX, mouseY, a);
     }
 

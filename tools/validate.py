@@ -499,7 +499,7 @@ def check_screen_fit(sw=427, sh=240):
     rows = max(int(y) for _, y in cells) + 1
     branch_w = (w - 2 * c["MARGIN"] + c["GAP"]) // max(1, skills.count("new Branch("))
     col_w = min(c["MAX_COL_W"], (branch_w - c["GAP"] - 8 - c["NODE"]) // max(1, cols - 1))
-    row_h = min(c["MAX_ROW_H"], (h - 17 - c["NODES_Y"] - c["NODE"]) // max(1, rows - 1))
+    row_h = min(c["MAX_ROW_H"], (h - c["FOOTER"] - 5 - c["NODES_Y"] - c["NODE"]) // max(1, rows - 1))
     # talents side by side need room for the 3 px ring of an active talent
     if min(col_w, row_h) < c["NODE"] + 6:
         err(f"screen fit: talent tree cells are {col_w} x {row_h} px at {sw} x {sh}, under {c['NODE'] + 6}")

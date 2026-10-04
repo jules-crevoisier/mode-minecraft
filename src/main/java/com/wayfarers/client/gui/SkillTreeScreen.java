@@ -34,6 +34,8 @@ public class SkillTreeScreen extends Screen {
     private static final int MARGIN = 14;
     /** Y of the first row of talents, from the window top (under the points line and the branch names). */
     private static final int NODES_Y = 42;
+    /** Space under the branch panels: the mana / active talent line, then the window's 9 px frame. */
+    private static final int FOOTER = 21;
 
     private int w = MAX_W;
     private int h = MAX_H;
@@ -71,8 +73,9 @@ public class SkillTreeScreen extends Screen {
         branchX = left + (w - branches * branchW + GAP) / 2;
         colW = cols > 1 ? Math.min(MAX_COL_W, (panelW - 8 - NODE) / (cols - 1)) : 0;
         pad = (panelW - (cols - 1) * colW - NODE) / 2;
-        // the last row (and the ring of an active talent) stays inside the panel, which ends 12 px above the window's bottom
-        rowH = rows > 1 ? Math.min(MAX_ROW_H, (h - 12 - 5 - NODES_Y - NODE) / (rows - 1)) : 0;
+        // the last row (and the ring of an active talent) stays inside the panel, which ends FOOTER px above the
+        // window's bottom (room for the mana line on the parchment, clear of the brass frame)
+        rowH = rows > 1 ? Math.min(MAX_ROW_H, (h - FOOTER - 5 - NODES_Y - NODE) / (rows - 1)) : 0;
         WayfarersNet.toServer(new SkillActionMsg(SkillActionMsg.Action.REQUEST, ""));
     }
 
@@ -116,8 +119,8 @@ public class SkillTreeScreen extends Screen {
         for (int i = 0; i < GeneratedSkills.BRANCHES.size(); i++) {
             GeneratedSkills.Branch b = GeneratedSkills.BRANCHES.get(i);
             int bx = branchX + i * branchW;
-            WfGui.sprite(g, WfGui.INSET, bx, top + 26, branchW - GAP, h - 38);
-            g.centeredText(font, Component.translatable("skill.wayfarers.branch." + b.id()), bx + (branchW - GAP) / 2, top + 30, b.color());
+            WfGui.sprite(g, WfGui.INSET, bx, top + 26, branchW - GAP, h - 26 - FOOTER);
+            g.centeredText(font, WfGui.bold(Component.translatable("skill.wayfarers.branch." + b.id())), bx + (branchW - GAP) / 2, top + 30, b.color());
         }
         // links first, then nodes on top
         for (GeneratedSkills.Skill s : GeneratedSkills.SKILLS) {
@@ -162,11 +165,13 @@ public class SkillTreeScreen extends Screen {
             }
         }
         // mana / active summary
-        g.text(font, Component.translatable("gui.wayfarers.skills.mana", (int) ClientSkills.maxMana), left + 16, top + h - 11, WfGui.INK_SOFT, false);
+        // on the parchment strip under the panels (it used to sit on the brass frame)
+        int footY = top + h - FOOTER + 2;
+        g.text(font, Component.translatable("gui.wayfarers.skills.mana", (int) ClientSkills.maxMana), left + 16, footY, WfGui.INK, false);
         if (!ClientSkills.active.isEmpty()) {
             WfGui.textClipped(g, font, Component.translatable("gui.wayfarers.skills.active", abilityKey(),
-                    Component.translatable("skill.wayfarers.ability." + ClientSkills.active)).getString(), left + 150, top + h - 11,
-                    w - 150 - 16, WfGui.INK_SOFT, false);
+                    Component.translatable("skill.wayfarers.ability." + ClientSkills.active)).getString(), left + 150, footY,
+                    w - 150 - 16, WfGui.INK, false);
         }
         super.extractRenderState(g, mouseX, mouseY, a);
         if (hovered == null && overPoints) {

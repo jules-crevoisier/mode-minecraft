@@ -379,7 +379,7 @@ class Texts:
 # ---- mockups ------------------------------------------------------------------------------------------------
 DYES = ["F9FFFE", "F9801D", "C74EBD", "3AB3DA", "FED83D", "80C71F", "F38BAA", "474F52", "9D9D97", "169C9C",
         "8932B8", "3C44AA", "835432", "5E7C16", "B02E26", "1D1D21"]
-INK_SOFT = (0x6E, 0x5A, 0x40, 255)
+INK_SOFT = (0x4A, 0x35, 0x20, 255)  # WfGui.INK_SOFT
 
 
 class Screen:
@@ -399,20 +399,20 @@ class Screen:
         self.texts = []
         m, ox, oy = self.m, self.ox, self.oy
         m.nine("panel", ox, oy, W, self.h, 9)
-        tw = max(90, guide.text_width(title) + 24)
+        tw = max(90, guide.text_width(title, True) + 24)
         m.nine("title_plate", ox + (W - tw) // 2, oy - 5, tw, 18, 6)
-        self.text(title, W // 2 - guide.text_width(title) // 2, 0, G.hexc("2B1B0C"), False)
+        self.text(title, W // 2 - guide.text_width(title, True) // 2, 0, G.PLATE_INK, False, bold=True)
         m.nine("inset", ox + 10, oy + 14, 20, 20, 4)
         self.item(icon or _tex(mid + "_front"), 12, 16)
         desc = machines.WHAT[key][0][li]
         lines = guide.wrap(desc, W - 36 - 10)[:2]
         y = 16 if len(lines) > 1 else 20
         for line in lines:
-            self.text(line, 36, y, INK_SOFT, False)
+            self.text(line, 36, y, G.INK, False)
             y += 9
         m.nine("inset", ox + 10, oy + STATUS_Y, W - 20, 14, 4)
         self.icon("lamp_" + lamp, 15, STATUS_Y + 4)
-        self.text(self.clip(status, W - 20 - 22), 25, STATUS_Y + 3, G.hexc("F3E3C0"), True)
+        self.text(self.clip(status, W - 20 - 22), 25, STATUS_Y + 3, G.CREAM, True)
         if kind in HAS_INV:
             self.text(self.clip(self.gui("stored"), 40), BUF_X, ROW_Y0 + 1, INK_SOFT, False)
             self.button(BUF_X + 54 - 12, ROW_Y0 - 1, 12, 12, icon="glyph/take")
@@ -450,8 +450,8 @@ class Screen:
             s = s[:-1]
         return s + "..."
 
-    def text(self, s, x, y, c, shadow=True):
-        self.texts.append((self.ox + x, self.oy + y, s, c, shadow))
+    def text(self, s, x, y, c, shadow=True, bold=False):
+        self.texts.append((self.ox + x, self.oy + y, s, c, shadow, bold))
 
     def label(self, row, key):
         self.text(self.clip(self.lab(key), CX - 10 - 4), 10, row_y(row) + 5, self.G.INK, False)
@@ -489,7 +489,7 @@ class Screen:
             self.m.im.alpha_composite(im, (self.ox + cx, self.oy + y + (h - im.height) // 2))
             cx += iw + 2
         if label:
-            c = G.hexc("F6C343") if on else G.hexc("8C8278") if disabled else G.hexc("FFFFFF")
+            c = G.hexc("F6C343") if on else G.hexc("C9C0B4") if disabled else G.hexc("FFFFFF")
             self.text(label, cx, y + (h - 8) // 2, c, True)
         return x + w
 
@@ -522,22 +522,8 @@ class Screen:
 
     def save(self, name):
         G = self.G
-        S = 3
-        big = self.m.im.resize((self.m.im.width * S, self.m.im.height * S), G.Image.NEAREST)
-        d = G.ImageDraw.Draw(big)
-        try:
-            ttf = G.ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 26)
-        except OSError:
-            ttf = G.ImageFont.load_default()
-        for x, y, s, c, shadow in self.texts:
-            cx = x
-            for ch in s:
-                if shadow:
-                    d.text(((cx + 1) * S, (y + 1) * S - 3), ch, font=ttf, fill=(0, 0, 0, 160))
-                d.text((cx * S, y * S - 3), ch, font=ttf, fill=c)
-                cx += self.guide.char_width(ch)
         os.makedirs(G.PREVIEW, exist_ok=True)
-        big.save(os.path.join(G.PREVIEW, name + ".png"))
+        G.render_texts(self.m.im, self.texts, 3).save(os.path.join(G.PREVIEW, name + ".png"))
 
 
 def _tex(name):
@@ -621,7 +607,7 @@ def mockups(G, li=1):
     sc.slot(CX, row_y(0), log)
     sc.text(name, CX + 22, row_y(0) + 5, G.INK, False)
     sc.label(1, "drops")
-    sc.text(sc.gui("drops.chest"), CX, row_y(1) + 5, G.hexc("2F6A22"), False)
+    sc.text(sc.gui("drops.chest"), CX, row_y(1) + 5, G.INK_GREEN, False)
     sc.label(2, "facing")
     sc.text(sc.gui("dir.north"), CX, row_y(2) + 5, G.INK, False)
     bag(sc, ["oak_log", "oak_sapling", "stick"])
@@ -725,59 +711,84 @@ def _mc(name):
 
 
 def mockup_settings(G, li=1):
-    """SettingsScreen.java (Mods > Wayfarers > Config): same window, rows and controls."""
-    from . import guide
-    tr = {}
-    for path in ("src/main/resources/assets/wayfarers/lang/fr_fr.json", "src/main/resources/assets/wayfarers/lang/en_us.json"):
-        pass
-    import json
-    root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
-    tr = json.load(open(os.path.join(root, "src/main/resources/assets/wayfarers/lang",
-                                     "fr_fr.json" if li else "en_us.json"), encoding="utf-8"))
+    """SettingsScreen.java (Mods > Wayfarers > Config): same window, tabs, rows and controls. settings.png is the
+    Display tab, settings_minimap.png the Minimap tab (French; ``li=0`` adds _en versions)."""
+    from . import content, guide, machines
     k = "gui.wayfarers.settings."
-    w_, rows_n, row_h, cx = 300, 5, 22, 120
-    h_ = 40 + rows_n * row_h + 30
-    m = G.Mock(w_ + 40, h_ + 40)
-    ox, oy = 20, 22
-    texts = []
-    m.nine("panel", ox, oy, w_, h_, 9)
-    title = tr[k + "title"]
-    tw = max(90, guide.text_width(title) + 24)
-    m.nine("title_plate", ox + (w_ - tw) // 2, oy - 5, tw, 18, 6)
-    texts.append((ox + w_ // 2 - guide.text_width(title) // 2, oy, title, G.hexc("2B1B0C"), False))
 
-    def row_y(i):
-        return oy + 26 + i * row_h
+    def tr(key):
+        return content.MESSAGES[key][li]
 
-    for i, key in enumerate(["health_bars", "damage_numbers", "quest_tracker", "tips", "keys"]):
-        texts.append((ox + 12, row_y(i) + 5, tr[k + key], G.INK, False))
-    x = ox + cx
-    for j, mode in enumerate(["always", "damaged", "never"]):
-        lab = tr[k + "health_bars." + mode]
-        bw = max(18, guide.text_width(lab) + 10)
-        m.nine("button_on" if j == 1 else "button", x, row_y(0), bw, 18, 4)
-        texts.append((x + (bw - guide.text_width(lab) + 1) // 2, row_y(0) + 5, lab,
-                      G.hexc("F6C343") if j == 1 else G.hexc("FFFFFF"), True))
-        x += bw + 2
-    for i, on in ((1, True), (2, True), (3, False)):
-        m.im.alpha_composite(G.Image.open(G.sp("toggle_on" if on else "toggle_off")).convert("RGBA"), (ox + cx, row_y(i) + 2))
-        texts.append((ox + cx + 30, row_y(i) + 5, tr["gui.wayfarers.machine." + ("on" if on else "off")], G.INK, False))
-    kb = tr[k + "keys.button"]
-    bw = max(60, guide.text_width(kb) + 16)
-    m.nine("button", ox + cx, row_y(4), bw, 18, 4)
-    texts.append((ox + cx + (bw - guide.text_width(kb)) // 2, row_y(4) + 5, kb, G.hexc("FFFFFF"), True))
-    done = "Terminé" if li else "Done"
-    m.nine("button", ox + w_ // 2 - 50, oy + h_ - 28, 100, 20, 4)
-    texts.append((ox + w_ // 2 - guide.text_width(done) // 2, oy + h_ - 22, done, G.hexc("FFFFFF"), True))
-    S = 3
-    big = m.im.resize((m.im.width * S, m.im.height * S), G.Image.NEAREST)
-    d = G.ImageDraw.Draw(big)
-    ttf = G.ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 26)
-    for x, y, s, c, shadow in texts:
-        cx_ = x
-        for ch in s:
-            if shadow:
-                d.text(((cx_ + 1) * S, (y + 1) * S - 3), ch, font=ttf, fill=(0, 0, 0, 160))
-            d.text((cx_ * S, y * S - 3), ch, font=ttf, fill=c)
-            cx_ += guide.char_width(ch)
-    big.save(os.path.join(G.PREVIEW, "settings" + ("" if li else "_en") + ".png"))
+    # SettingsScreen constants
+    w_, row_h, rows_n, first, hint, cx = 360, 20, 7, 42, 12, 124
+    h_ = first + rows_n * row_h + hint + 28
+    for tab in (0, 1):
+        m = G.Mock(w_ + 40, h_ + 40)
+        ox, oy = 20, 22
+        m.nine("panel", ox, oy, w_, h_, 9)
+        title = tr(k + "title")
+        tw = max(90, guide.text_width(title, True) + 24)
+        m.nine("title_plate", ox + (w_ - tw) // 2, oy - 5, tw, 18, 6)
+        m.text(title, ox + w_ // 2, oy, G.PLATE_INK, shadow=False, center=True, bold=True)
+
+        def row_y(i):
+            return oy + first + i * row_h
+
+        def choice(x, y, w, h, label, on, icon=None):
+            m.nine("button_on" if on else "button", x, y, w, h, 4)
+            if icon:
+                m.im.alpha_composite(G.Image.open(G.sp(icon)).convert("RGBA"), (x + (w - 12 + 1) // 2, y + (h - 12) // 2))
+            else:
+                m.text(label, x + (w - guide.text_width(label) + 1) // 2, y + (h - 8) // 2, G.GOLD if on else G.hexc("FFFFFF"))
+            return x + w
+
+        def toggle(i, on):
+            m.im.alpha_composite(G.Image.open(G.sp("toggle_on" if on else "toggle_off")).convert("RGBA"), (ox + cx, row_y(i) + 2))
+            m.text(machines.GUI["on" if on else "off"][li], ox + cx + 30, row_y(i) + 5, G.INK_SOFT, shadow=False)
+
+        tabs = [tr(k + "tab.display"), tr(k + "tab.minimap")]
+        tbw = max(80, max(guide.text_width(t) + 16 for t in tabs))
+        for i, t in enumerate(tabs):
+            choice(ox + w_ // 2 - tbw - 2 + i * (tbw + 4), oy + 17, tbw, 16, t, i == tab)
+        names = (["health_bars", "damage_numbers", "quest_tracker", "tips", "keys"] if tab == 0 else
+                 ["minimap", "minimap_size", "minimap_corner", "minimap_shape", "minimap_rotate", "minimap_coords",
+                  "minimap_opacity"])
+        for i, key in enumerate(names):
+            m.text(tr(k + key), ox + 12, row_y(i) + 5, G.INK, shadow=False)
+        if tab == 0:
+            x = ox + cx
+            for j, mode in enumerate(["always", "damaged", "never"]):
+                lab = tr(k + "health_bars." + mode)
+                x = choice(x, row_y(0), max(18, guide.text_width(lab) + 10), 18, lab, j == 1) + 2
+            for i, on in ((1, True), (2, True), (3, False)):
+                toggle(i, on)
+            kb = tr(k + "keys.button")
+            choice(ox + cx, row_y(4), max(60, guide.text_width(kb) + 16), 18, kb, False)
+        else:
+            toggle(0, True)
+            x = ox + cx
+            for j, size in enumerate(["small", "medium", "large", "xlarge"]):
+                lab = tr(k + "minimap_size." + size)
+                x = choice(x, row_y(1), max(18, guide.text_width(lab) + 10), 18, lab, j == 1) + 2
+            x = ox + cx
+            for j, corner in enumerate(["top_left", "top_right", "bottom_left", "bottom_right"]):
+                x = choice(x, row_y(2), 22, 18, "", j == 0, icon="glyph/corner_" + corner) + 2
+            x = ox + cx
+            for j, shape in enumerate(["round", "square"]):
+                lab = tr(k + "minimap_shape." + shape)
+                x = choice(x, row_y(3), max(18, guide.text_width(lab) + 10), 18, lab, j == 0) + 2
+            toggle(4, False)
+            toggle(5, True)
+            # the stepped slider (WfWidgets.Stepper), 8 steps, at 100 %
+            sx, sy, sw = ox + cx, row_y(6), 112
+            m.nine("slider_track", sx, sy + 6, sw, 6, 2)
+            for s in range(8):
+                tx = sx + 4 + round(s * (sw - 8) / 7)
+                m.d.rectangle((tx, sy + 14, tx, sy + 15), fill=G.GOLD if s == 7 else G.BRASS_DK)
+            m.im.alpha_composite(G.Image.open(G.sp("slider_knob")).convert("RGBA"), (sx + sw - 8, sy + 2))
+            m.text("100 %", ox + cx + 118, row_y(6) + 5, G.INK_SOFT, shadow=False)
+            keys = tr(k + "minimap.keys").replace("%1$s", "H").replace("%s", "H", 1).replace("%s", "Z" if li == 0 else "W")
+            m.text(keys, ox + w_ // 2, row_y(rows_n) + 2, G.INK_SOFT, shadow=False, center=True)
+        done = "Terminé" if li else "Done"
+        choice(ox + w_ // 2 - 50, oy + h_ - 26, 100, 20, done, False)
+        m.save("settings" + ("" if tab == 0 else "_minimap") + ("" if li else "_en"))

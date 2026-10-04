@@ -125,7 +125,7 @@ public class QuestJournalScreen extends Screen {
         descCut = false;
         drawCard(g);
         // keyboard hint under the window, like the waystone screen's
-        g.centeredText(font, Component.translatable("gui.wayfarers.quests.keys"), left + W / 2, top + h + 4, WfGui.CREAM_SOFT);
+        g.centeredText(font, Component.translatable("gui.wayfarers.quests.keys"), left + W / 2, top + h + 4, WfGui.CREAM);
         super.extractRenderState(g, mouseX, mouseY, a);
         hoverTips(g, mouseX, mouseY);
     }
@@ -226,7 +226,7 @@ public class QuestJournalScreen extends Screen {
                 g.item(ClientQuests.icon(q), rx + 2, ry + 2);
             }
             String name = hidden ? "???" : ClientQuests.title(q).getString();
-            int color = done ? 0xFFA6F07A : unlocked ? WfGui.CREAM : 0xFF7E7262;
+            int color = done ? 0xFFA6F07A : unlocked ? WfGui.CREAM : WfGui.MUTED;
             WfGui.textClipped(g, font, name, rx + 21, ry + 7, rowW - 40, color, true);
             String status = done ? "done" : !unlocked ? "lock" : ClientQuests.state(q).completed() > 0 ? "progress" : null;
             if (status != null) {
@@ -261,7 +261,7 @@ public class QuestJournalScreen extends Screen {
         boolean unlocked = ClientQuests.unlocked(q);
         g.item(ClientQuests.icon(q), x + w / 2 - 8, y + 6);
         int ty = y + 26;
-        Component name = hidden ? Component.translatable("gui.wayfarers.quests.hidden") : ClientQuests.title(q);
+        Component name = WfGui.bold(hidden ? Component.translatable("gui.wayfarers.quests.hidden") : ClientQuests.title(q));
         for (FormattedCharSequence line : font.split(name, w - 10)) {
             WfGui.centered(g, font, line, x + w / 2, ty, WfGui.INK);
             ty += 10;
@@ -272,22 +272,22 @@ public class QuestJournalScreen extends Screen {
             for (int i = 0; i < Math.min(desc.size(), 6); i++) {
                 if (i == 5 && desc.size() > 6) {
                     // a long (often French) description: end on "..." and show the whole text on hover
-                    g.text(font, "...", x + 5, ty, WfGui.INK_SOFT, false);
+                    g.text(font, "...", x + 5, ty, WfGui.INK, false);
                     descCut = true;
                 } else {
-                    g.text(font, desc.get(i), x + 5, ty, WfGui.INK_SOFT, false);
+                    g.text(font, desc.get(i), x + 5, ty, WfGui.INK, false);
                 }
                 ty += 9;
             }
         }
         ty += 4;
         if (done) {
-            WfGui.centered(g, font, Component.translatable("gui.wayfarers.quests.done"), x + w / 2, ty, 0xFF2F8A2A);
+            WfGui.centered(g, font, WfGui.bold(Component.translatable("gui.wayfarers.quests.done")), x + w / 2, ty, WfGui.INK_GREEN);
         } else if (!unlocked) {
             String parent = ClientQuests.parent(q);
             Component pn = parent == null ? Component.literal("?") : ClientQuests.title(parent);
             for (FormattedCharSequence line : font.split(Component.translatable("gui.wayfarers.quests.locked", pn), w - 10)) {
-                g.text(font, line, x + 5, ty, 0xFF8E1E1E, false);
+                g.text(font, line, x + 5, ty, WfGui.INK_RED, false);
                 ty += 9;
             }
         } else {
@@ -315,12 +315,12 @@ public class QuestJournalScreen extends Screen {
         }
         if (xp > 0 || !items.isEmpty()) {
             int ry = cardY() + cardH() - 52;
-            g.text(font, Component.translatable("gui.wayfarers.quests.rewards"), x + 5, ry, WfGui.INK, false);
+            g.text(font, WfGui.bold(Component.translatable("gui.wayfarers.quests.rewards")), x + 5, ry, WfGui.INK, false);
             int ix = x + 5;
             ry += 10;
             if (xp > 0) {
                 WfGui.sprite(g, WfGui.icon("xp"), ix, ry, 16, 16);
-                g.text(font, String.valueOf(xp), ix + 16, ry + 5, 0xFF3E7E14, false);
+                g.text(font, String.valueOf(xp), ix + 16, ry + 5, WfGui.INK_GREEN, false);
                 ix += 22 + font.width(String.valueOf(xp));
             }
             for (ItemStack stack : items) {

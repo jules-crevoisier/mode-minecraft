@@ -15,6 +15,7 @@ from PIL import Image, ImageDraw, ImageFont
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 OUT = os.path.join(ROOT, "src", "main", "resources", "assets", "wayfarers", "textures", "gui", "sprites")
 PREVIEW = os.path.join(ROOT, "build", "previews", "gui")
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))  # wf.*
 
 
 def hexc(h, a=255):
@@ -32,10 +33,22 @@ IRON = hexc("2B2320")
 IRON_LT = hexc("3E3430")
 IRON_DK = hexc("17120F")
 SOOT = hexc("0F0C0A")
-PARCH = hexc("E3D0A8")
+# parchment behind text: light and calm (it was E3D0A8 with 18 % of its pixels much darker: busy behind small text)
+PARCH = hexc("EBDDBE")
+PARCH_GRAIN = hexc("E0CFAA")
 PARCH_DK = hexc("C9B184")
 PARCH_EDGE = hexc("A88D5E")
-INK = hexc("3B2A1A")
+# text colours, the same as WfGui.java (contrast against PARCH / the iron wells in the comments there)
+INK = hexc("2A1C10")
+INK_SOFT = hexc("4A3520")
+INK_GREEN = hexc("1F6418")
+INK_RED = hexc("7A1810")
+CREAM = hexc("FFF5DC")
+CREAM_SOFT = hexc("DCCDB0")
+MUTED = hexc("A89C8A")
+GOLD = hexc("F6C343")
+AETHER_TXT = hexc("9FE6FF")
+PLATE_INK = hexc("2B1B0C")
 AMBER = hexc("FFB347")
 AETHER = hexc("3FD0FF")
 TEAL = hexc("2EE6C5")
@@ -105,13 +118,17 @@ def brass_band(s, x0, y0, x1, y1, width):
 
 
 def parchment_fill(s, x0, y0, x1, y1, seed):
+    """Calm paper behind text: a flat light tone with a faint, sparse grain. Low amplitude on purpose: the old fill
+    (a fifth of the pixels much darker, plus dark specks) fought with 1 px font strokes."""
     rng = random.Random(seed)
     for y in range(y0, y1 + 1):
         for x in range(x0, x1 + 1):
             n = rng.random()
-            c = PARCH if n > 0.18 else mix(PARCH, PARCH_DK, 0.5 + rng.random() * 0.5)
-            if rng.random() < 0.025:
-                c = mix(c, PARCH_EDGE, 0.5)
+            c = PARCH
+            if n < 0.10:
+                c = mix(PARCH, PARCH_GRAIN, 0.45 + rng.random() * 0.4)
+            elif n > 0.975:
+                c = mix(PARCH, hexc("F6EDD6"), 0.7)
             s.set(x, y, c)
 
 
@@ -147,9 +164,14 @@ def panel():
 
 
 def inset():
-    """Dark iron well for lists and slots. 32x32, border 4."""
+    """Dark iron well for lists and slots. 32x32, border 4. Its grain is faint: cream text sits on it."""
     s = Sprite(32, 32)
-    iron_fill(s, 0, 0, 31, 31, 3, base=hexc("221B18"))
+    rng = random.Random(3)
+    base = hexc("221B18")
+    for y in range(32):
+        for x in range(32):
+            n = rng.random()
+            s.set(x, y, base if n > 0.12 else mix(base, IRON_LT if n > 0.06 else IRON_DK, 0.4))
     s.bevel(0, 0, 31, 31, IRON_DK, BRASS_DK)
     s.bevel(1, 1, 30, 30, SOOT, IRON_LT)
     return s.save("inset", nine=4)
@@ -513,16 +535,47 @@ def sp(name):
     return os.path.join(OUT, name + ".png")
 
 
-class Mock:
-    """Draws at GUI scale 1 then upscales 3x, like Minecraft at GUI scale 3."""
+def text_width(s, bold=False):
+    """Width of a string in Minecraft's font (wf.guide's glyph advances), bold glyphs 1 px wider."""
+    from wf import guide
+    return guide.text_width(s, bold)
 
-    def __init__(self, w, h):
+
+def render_texts(im, texts, scale=3):
+    """Upscales a GUI-scale-1 mockup ``scale`` times, like Minecraft at that GUI scale, and draws its texts glyph by
+    glyph on Minecraft's advances (so lengths and line breaks match the game). ``texts``: (x, y, string, colour,
+    shadow[, bold]) at GUI scale 1. A shadow is Minecraft's: the colour at a quarter brightness, 1 px down-right;
+    bold draws each glyph twice, 1 px apart."""
+    from wf import guide
+    big = im.resize((im.width * scale, im.height * scale), Image.NEAREST)
+    d = ImageDraw.Draw(big)
+    try:
+        ttf = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", round(26 * scale / 3))
+    except OSError:
+        ttf = ImageFont.load_default()
+    for t in texts:
+        x, y, s, c, shadow = t[:5]
+        bold = len(t) > 5 and t[5]
+        cx = x
+        for ch in s:
+            for b in ((0, 1) if bold else (0,)):
+                if shadow:
+                    sh = tuple(int(v * 0.25) for v in c[:3]) + (255,)
+                    d.text(((cx + 1 + b) * scale, (y + 1) * scale - scale), ch, font=ttf, fill=sh)
+                d.text(((cx + b) * scale, y * scale - scale), ch, font=ttf, fill=c)
+            cx += guide.char_width(ch, bold)
+    return big
+
+
+class Mock:
+    """Draws at GUI scale 1 then upscales 3x, like Minecraft at GUI scale 3. Texts are collected and drawn on the
+    upscaled image by render_texts()."""
+
+    def __init__(self, w, h, scale=3):
         self.im = Image.new("RGBA", (w, h), hexc("4A6A3A"))
         self.d = ImageDraw.Draw(self.im)
-        try:
-            self.font = ImageFont.truetype("/mnt/skills/examples/canvas-design/canvas-fonts/PixelifySans-Medium.ttf", 9)
-        except OSError:
-            self.font = ImageFont.load_default()
+        self.texts = []
+        self.scale = scale
 
     def nine(self, name, x, y, w, h, border):
         self.im.alpha_composite(nine(sp(name), w, h, border), (x, y))
@@ -530,20 +583,17 @@ class Mock:
     def icon(self, name, x, y):
         self.im.alpha_composite(Image.open(sp("icon/" + name)).convert("RGBA"), (x, y))
 
-    def text(self, s, x, y, c, shadow=True, center=False, right=False):
-        w = self.d.textlength(s, font=self.font)
+    def text(self, s, x, y, c, shadow=True, center=False, right=False, bold=False):
+        w = text_width(s, bold)
         if center:
-            x -= w / 2
+            x -= w // 2
         if right:
             x -= w
-        if shadow:
-            self.d.text((x + 1, y + 1), s, font=self.font, fill=(0, 0, 0, 140))
-        self.d.text((x, y), s, font=self.font, fill=c)
+        self.texts.append((x, y, s, c, shadow, bold))
 
     def save(self, name):
         os.makedirs(PREVIEW, exist_ok=True)
-        big = self.im.resize((self.im.width * 3, self.im.height * 3), Image.NEAREST)
-        big.save(os.path.join(PREVIEW, name + ".png"))
+        render_texts(self.im, self.texts, self.scale).save(os.path.join(PREVIEW, name + ".png"))
 
 
 def mockup_waystones():
@@ -551,11 +601,12 @@ def mockup_waystones():
     m = Mock(W + 40, H + 40)
     ox, oy = 20, 20
     m.nine("panel", ox, oy, W, H, 9)
-    m.nine("title_plate", ox + W // 2 - 70, oy - 4, 140, 18, 6)
-    m.text("Pierres de passage", ox + W // 2, oy, hexc("2B1B0C"), shadow=False, center=True)
+    tw = max(90, text_width("Pierres de passage", True) + 24)
+    m.nine("title_plate", ox + (W - tw) // 2, oy - 5, tw, 18, 6)
+    m.text("Pierres de passage", ox + W // 2, oy, PLATE_INK, shadow=False, center=True, bold=True)
     lx, ly, lw, lh = ox + 12, oy + 30, 172, H - 44
     m.nine("inset", lx, ly - 14, lw, 13, 4)
-    m.text("Rechercher...", lx + 5, ly - 12, hexc("8C7B66"), shadow=False)
+    m.text("Rechercher...", lx + 5, ly - 11, MUTED)
     m.nine("inset", lx, ly, lw, lh, 4)
     rows_ = [("here", "Avant-poste de la Guilde", "ici", "overworld", True, False),
              ("overworld", "Ferme du Nord", "312 m", "overworld", False, True),
@@ -570,8 +621,11 @@ def mockup_waystones():
         elif i == 3:
             m.nine("row_hover", lx + 3, ry, lw - 12, 19, 2)
         m.icon(ic, lx + 6, ry + 2)
-        m.text(name, lx + 25, ry + 4, hexc("F3E3C0") if not here else hexc("9FE6FF"))
-        m.text(dist, lx + lw - 30, ry + 4, hexc("B9A98E"), right=True)
+        room = lw - 12 - 44 - text_width(dist)  # WaystoneScreen: textClipped(name, rowW - 44 - distW)
+        while text_width(name) > room:
+            name = name[:-4] + "..."
+        m.text(name, lx + 25, ry + 5, CREAM if not here else AETHER_TXT)
+        m.text(dist, lx + lw - 30, ry + 5, CREAM_SOFT, right=True)
         m.icon("pin" if pinned else "pin_off", lx + lw - 27, ry + 2)
     m.nine("scroll_track", lx + lw - 9, ly + 3, 6, lh - 6, 2)
     m.nine("scroll_thumb", lx + lw - 9, ly + 3, 6, 40, 2)
@@ -579,16 +633,21 @@ def mockup_waystones():
     cx, cy, cw, ch = lx + lw + 8, oy + 16, W - lw - 32, H - 30
     m.nine("card", cx, cy, cw, ch, 4)
     m.icon("overworld", cx + cw // 2 - 8, cy + 6)
-    m.text("Ferme du Nord", cx + cw // 2, cy + 26, INK, shadow=False, center=True)
-    m.text("Overworld", cx + cw // 2, cy + 38, hexc("6E5A40"), shadow=False, center=True)
-    m.text("X 412  Y 71  Z -980", cx + cw // 2, cy + 52, hexc("6E5A40"), shadow=False, center=True)
-    m.text("à 312 m", cx + cw // 2, cy + 64, hexc("6E5A40"), shadow=False, center=True)
+    m.text("Ferme du Nord", cx + cw // 2, cy + 26, INK, shadow=False, center=True, bold=True)
+    m.text("Overworld", cx + cw // 2, cy + 40, INK_SOFT, shadow=False, center=True)
+    from wf import guide
+    ty = cy + 52
+    for line in guide.wrap("X 412  Y 71  Z -980", cw - 8):  # the coordinates wrap inside the card
+        m.text(line, cx + cw // 2, ty, INK_SOFT, shadow=False, center=True)
+        ty += 10
+    m.text("à 312 m", cx + cw // 2, ty + 2, INK_SOFT, shadow=False, center=True)
+    m.text("Entrée ou double-clic : voyager - étoile : épingler", ox + W // 2, oy + H + 4, CREAM, center=True)
     m.nine("button_hover", cx + 6, cy + 86, cw - 12, 22, 4)
-    m.text("Voyager", cx + cw // 2, cy + 92, hexc("FFFFFF"), center=True)
+    m.text("Voyager", cx + cw // 2, cy + 93, hexc("FFFFFF"), center=True)
     m.nine("button", cx + 6, cy + 112, cw - 12, 18, 4)
-    m.text("Épingler", cx + cw // 2, cy + 116, hexc("FFF4DC"), center=True)
+    m.text("Épingler", cx + cw // 2, cy + 117, hexc("FFFFFF"), center=True)
     m.nine("button", cx + 6, cy + 134, cw - 12, 18, 4)
-    m.text("Renommer", cx + cw // 2, cy + 138, hexc("FFF4DC"), center=True)
+    m.text("Renommer", cx + cw // 2, cy + 139, hexc("FFFFFF"), center=True)
     m.save("waystones")
 
 
@@ -652,6 +711,17 @@ def small_buttons():
         b.frame(0, 0, 11, 11, SOOT)
         b.bevel(1, 1, 10, 10, mix(hi, (255, 255, 255, 255), 0.35), mix(lo, SOOT, 0.4))
         b.save(name, nine=3)
+    # minimap corner choices (SettingsScreen): a little screen, light with a soot rim (readable on the brass plate
+    # and on the dark "chosen" plate alike), its corner filled with a brass porthole
+    for name, (cx, cy) in (("top_left", (0, 0)), ("top_right", (1, 0)), ("bottom_left", (0, 1)), ("bottom_right", (1, 1))):
+        g = Sprite(12, 12)
+        g.rect(0, 1, 11, 10, SOOT)
+        g.rect(1, 2, 10, 9, hexc("F3E6C6"))
+        x0 = 1 if cx == 0 else 6
+        y0 = 2 if cy == 0 else 6
+        g.rect(x0, y0, x0 + 4, y0 + 3, hexc("7C5A2B"))
+        g.rect(x0 + 1, y0 + 1, x0 + 3, y0 + 2, hexc("4FAE4A"))
+        g.save("glyph/corner_" + name)
     for name, art in (("sort", SORT_G), ("take", TAKE_G), ("deposit", DEPOSIT_G), ("nearby", NEARBY_G)):
         g = Sprite(10, 10)
         for y, row in enumerate(art):
@@ -685,8 +755,9 @@ def mockup_quests():
     m = Mock(W + 40, H + 40)
     ox, oy = 20, 20
     m.nine("panel", ox, oy, W, H, 9)
-    m.nine("title_plate", ox + W // 2 - 60, oy - 5, 120, 18, 6)
-    m.text("Journal de quêtes", ox + W // 2, oy - 1, hexc("2B1B0C"), shadow=False, center=True)
+    tw = max(90, text_width("Journal de quêtes", True) + 24)
+    m.nine("title_plate", ox + (W - tw) // 2, oy - 5, tw, 18, 6)
+    m.text("Journal de quêtes", ox + W // 2, oy, PLATE_INK, shadow=False, center=True, bold=True)
     chapters = [("Premiers pas", 8, 8), ("Explorateur", 9, 27), ("Profondeurs", 3, 17), ("Nether", 0, 15), ("End", 0, 14)]
     for i, (name, d, t) in enumerate(chapters):
         x, y = ox + 12, oy + 22 + i * 34
@@ -694,7 +765,7 @@ def mockup_quests():
         if i == 1:
             m.nine("row_selected", x + 2, y + 2, 100, 26, 2)
         m.icon("overworld" if i < 3 else ("nether" if i == 3 else "end"), x + 4, y + 4)
-        m.text(name, x + 23, y + 4, hexc("F6C343") if i == 1 else hexc("F3E3C0"))
+        m.text(name, x + 23, y + 5, GOLD if i == 1 else CREAM)
         m.nine("bar_back", x + 23, y + 18, 74, 6, 2)
         fill = int(72 * d / t)
         if fill:
@@ -709,8 +780,8 @@ def mockup_quests():
         if i == 2:
             m.nine("row_selected", lx + 3, ry, 120, 21, 2)
         m.icon("overworld", lx + 5, ry + 2)
-        col = hexc("A6F07A") if st == "done" else hexc("7E7262") if st == "lock" else hexc("F3E3C0")
-        m.text(q[:17], lx + 24, ry + 6, col)
+        col = hexc("A6F07A") if st == "done" else MUTED if st == "lock" else CREAM
+        m.text(q[:15] + ("..." if len(q) > 15 else ""), lx + 24, ry + 7, col)
         if st:
             m.icon(st, lx + 105, ry + 2)
         if i == 2:
@@ -718,18 +789,24 @@ def mockup_quests():
     cx, cy, cw, ch = ox + 260, oy + 18, W - 272, H - 28
     m.nine("card", cx, cy, cw, ch, 4)
     m.icon("overworld", cx + cw // 2 - 8, cy + 6)
-    m.text("Monastère des cimes", cx + cw // 2, cy + 26, INK, shadow=False, center=True)
-    for i, l in enumerate(["Trouve le monastère", "perché sur les cimes", "enneigées et sonne", "sa grande cloche."]):
-        m.text(l, cx + 5, cy + 40 + i * 9, hexc("6E5A40"), shadow=False)
+    from wf import guide
+    ty = cy + 26
+    for line in guide.wrap("Monastère des cimes", cw - 10, bold=True):  # QuestJournalScreen: bold, wrapped
+        m.text(line, cx + cw // 2, ty, INK, shadow=False, center=True, bold=True)
+        ty += 10
+    for i, l in enumerate(guide.wrap("Trouve le monastère perché sur les cimes enneigées et sonne sa grande cloche.",
+                                     cw - 10)[:6]):
+        m.text(l, cx + 5, ty + 3 + i * 9, INK, shadow=False)
     m.text("Objectifs : 1 / 2", cx + 5, cy + 82, INK, shadow=False)
     m.nine("bar_back", cx + 5, cy + 92, cw - 10, 6, 2)
     m.nine("bar_fill", cx + 6, cy + 93, (cw - 12) // 2, 4, 1)
-    m.text("Récompenses", cx + 5, cy + ch - 52, INK, shadow=False)
+    m.text("Récompenses", cx + 5, cy + ch - 52, INK, shadow=False, bold=True)
     m.icon("xp", cx + 5, cy + ch - 42)
-    m.text("100", cx + 21, cy + ch - 37, hexc("3E7E14"), shadow=False)
+    m.text("100", cx + 21, cy + ch - 37, INK_GREEN, shadow=False)
     m.icon("pin", cx + 45, cy + ch - 42)
     m.nine("button_hover", cx + 6, cy + ch - 26, cw - 12, 20, 4)
-    m.text("Ne plus suivre", cx + cw // 2, cy + ch - 21, hexc("FFFFFF"), center=True)
+    m.text("Ne plus suivre", cx + cw // 2, cy + ch - 20, hexc("FFFFFF"), center=True)
+    m.text("Flèches : quêtes et chapitres - Entrée : suivre", ox + W // 2, oy + H + 4, CREAM, center=True)
     m.save("quests")
 
 
@@ -761,7 +838,8 @@ def mockup_guide(shots=(("wonders", 0), ("wonders", 1), ("brass_golem", 0), ("ke
         m = Mock(W + 40, H + 40)
         ox, oy = 20, 20
         m.nine("panel", ox, oy, W, H, 9)
-        m.nine("title_plate", ox + W // 2 - 60, oy - 5, 120, 18, 6)
+        pw_ = max(90, guide.text_width("Manuel du Voyageur", True) + 24)  # WfGui.window: bold title + 24
+        m.nine("title_plate", ox + (W - pw_) // 2, oy - 5, pw_, 18, 6)
         tx, ty, tw, th = ox + 14, oy + 24, 120, H - 36
         m.nine("inset", tx, ty, tw, th, 4)
         rows_ = (th - 6) // 11
@@ -792,29 +870,30 @@ def mockup_guide(shots=(("wonders", 0), ("wonders", 1), ("brass_golem", 0), ("ke
 
         if part == 0 and not compact:
             icon_at(icon_id, px + pw // 2 - 16, oy + 24, 2)
-            title_lines = guide.wrap(titles[li], pw - 12)
+            title_lines = guide.wrap(titles[li], pw - 12, bold=True)
             y = oy + 60
             for t in title_lines:
-                texts.append((px + pw // 2 - guide.text_width(t) // 2, y, t, INK, False))
+                texts.append((px + pw // 2 - guide.text_width(t, True) // 2, y, t, INK, False, True))
                 y += 10
             body = oy + 60 + len(title_lines) * 10 + 4
         else:
             icon_at(icon_id, px + 6, oy + 23)
-            title_lines = guide.wrap(titles[li] + (" " + guide.UI["guide.wayfarers.continued"][li] if part else ""), pw - 52)
+            title_lines = guide.wrap(titles[li] + (" " + guide.UI["guide.wayfarers.continued"][li] if part else ""), pw - 52,
+                                     bold=True)
             y = oy + 25
             for t in title_lines:
-                texts.append((px + 26, y, t, INK, False))
+                texts.append((px + 26, y, t, INK, False, True))
                 y += 10
             body = oy + 25 + max(1, len(title_lines)) * 10 + 6
         if len(sheets) > 1:
             s = f"{part + 1}/{len(sheets)}"
-            texts.append((px + pw - 6 - guide.text_width(s), oy + (25 if part or compact else 23), s, hexc("6E5A40"), False))
+            texts.append((px + pw - 6 - guide.text_width(s), oy + (25 if part or compact else 23), s, INK_SOFT, False))
         y = body
         for line in sheets[part]:
             if line is None:
                 y += guide.PARA_GAP
             else:
-                texts.append((px + 7, y, line, hexc("6E5A40"), False))
+                texts.append((px + 7, y, line, INK, False))
                 y += guide.TEXT_LINE
         if part == 0 and items:
             for i, rid in enumerate(items):
@@ -825,28 +904,78 @@ def mockup_guide(shots=(("wonders", 0), ("wonders", 1), ("brass_golem", 0), ("ke
             kind, _id, label = toc[scroll + i]
             yy = ty + 4 + i * 11 + 1
             if kind == "cat":
-                texts.append((tx + 5, yy, label, hexc("F6C343"), True))
+                texts.append((tx + 5, yy, label, GOLD, True))
             else:
                 while guide.text_width(label) > tw - 24 and len(label) > 1:
                     label = label[:-4] + "..."
-                texts.append((tx + 12, yy, label, hexc("9FE6FF") if i + scroll == sel else hexc("F3E3C0"), True))
-        texts.append((ox + W // 2 - guide.text_width("Manuel du Voyageur") // 2, oy, "Manuel du Voyageur", hexc("2B1B0C"), False))
-        texts.append((px + 34 - 3, oy + H - 27, "<", hexc("FFF4DC"), True))
+                texts.append((tx + 12, yy, label, AETHER_TXT if i + scroll == sel else CREAM, True))
+        title = "Manuel du Voyageur"
+        texts.append((ox + W // 2 - guide.text_width(title, True) // 2, oy, title, PLATE_INK, False, True))
+        texts.append((px + 34 - 3, oy + H - 27, "<", hexc("FFFFFF"), True))
         nxt = ">" if last else guide.UI["guide.wayfarers.more"][li]
-        texts.append((px + pw - 34 - guide.text_width(nxt) // 2, oy + H - 27, nxt, hexc("FFF4DC"), True))
+        texts.append((px + pw - 34 - guide.text_width(nxt) // 2, oy + H - 27, nxt, hexc("FFFFFF"), True))
         pg = f"{sum(len(guide.layout(p[3][li], [x[li] for x in p[4]], bool(p[5]), lang=li)) for p in guide.PAGES[:guide.PAGES.index(pages[pid])]) + part + 1} / {total}"
-        texts.append((px + pw // 2 - guide.text_width(pg) // 2, oy + H - 27, pg, hexc("6E5A40"), False))
-        big = m.im.resize((m.im.width * S, m.im.height * S), Image.NEAREST)
-        d = ImageDraw.Draw(big)
-        for x, y, s, c, shadow in texts:
-            cx = x
-            for ch in s:
-                if shadow:
-                    d.text(((cx + 1) * S, (y + 1) * S - 3), ch, font=ttf, fill=(0, 0, 0, 160))
-                d.text((cx * S, y * S - 3), ch, font=ttf, fill=c)
-                cx += guide.char_width(ch)
+        texts.append((px + pw // 2 - guide.text_width(pg) // 2, oy + H - 27, pg, INK_SOFT, False))
         os.makedirs(PREVIEW, exist_ok=True)
-        big.save(os.path.join(PREVIEW, f"guide_{pid}_{part + 1}.png"))
+        render_texts(m.im, texts, S).save(os.path.join(PREVIEW, f"guide_{pid}_{part + 1}.png"))
+
+
+def mockup_hud():
+    """hud.png: the in-game HUD on a 1920 x 1080 screen at GUI scale 4 (480 x 270 GUI px), as in the players'
+    screenshots: the default minimap (68 px) top left, the compact quest tracker top right (QuestTracker.java), a tip
+    card (TipCards.java) and the mana vial with its key cap (ManaHud.java)."""
+    from wf import guide, worldmap
+    W, H = 480, 270
+    m = Mock(W, H, scale=4)
+    for y in range(H):  # dusk sky over a dark forest
+        for x in range(W):
+            m.im.putpixel((x, y), (int(28 + y * 0.12), int(32 + y * 0.10), int(58 + y * 0.05), 255) if y < 120
+                          else (24 + (x * 7 + y * 3) % 9, 34 + (x * 5 + y * 11) % 11, 22, 255))
+    worldmap.draw_minimap(sys.modules[__name__], m, worldmap.fake_world(420, 300), 4, 4, 56,
+                          coords=("-1732, 129, -461", "Champs fleuris"))
+    item = os.path.join(ROOT, "src", "main", "resources", "assets", "wayfarers", "textures", "item")
+
+    def item_icon(name, x, y):
+        m.im.alpha_composite(Image.open(os.path.join(item, name + ".png")).convert("RGBA").crop((0, 0, 16, 16)), (x, y))
+
+    # quest tracker: W 132, PAD 4; icon beside the bold title and the bar, then the objective (3 lines at most)
+    tw_, pad = 132, 4
+    desc = guide.wrap("Fabrique une pierre de voyage et pose-la dans ta base.", tw_ - pad * 2)[:3]
+    th = pad + 18 + len(desc) * 9 + pad - 1
+    tx, ty = W - tw_ - 4, 4
+    m.nine("card", tx, ty, tw_, th, 4)
+    item_icon("structure_compass", tx + pad, ty + pad + 1)
+    title = "Ne jamais marcher deux fois"
+    while text_width(title + "...", True) > tw_ - pad * 2 - 19:
+        title = title[:-1]
+    m.text(title.rstrip() + "...", tx + pad + 19, ty + pad, INK, shadow=False, bold=True)
+    count = "0/1"
+    bw = tw_ - pad * 2 - 19 - text_width(count) - 3
+    m.nine("bar_back", tx + pad + 19, ty + pad + 11, bw, 6, 2)
+    m.text(count, tx + tw_ - pad - text_width(count), ty + pad + 10, INK_SOFT, shadow=False)
+    for i, line in enumerate(desc):
+        m.text(line, tx + pad, ty + pad + 18 + i * 9, INK, shadow=False)
+    # tip card (TipCards: W 170, at mid-height on the right)
+    lines = guide.wrap("Clic droit sur une pierre de voyage pour l'activer : elle rejoint ta liste de voyage.", 170 - 30)
+    ch = 20 + len(lines) * 9
+    cx, cy = W - 170 - 6, H // 2 - ch // 2 - 20
+    m.nine("card", cx, cy, 170, ch, 4)
+    item_icon("map_fragment", cx + 5, cy + 5)
+    m.text("Astuce", cx + 25, cy + 5, INK_SOFT, shadow=False, bold=True)
+    for i, line in enumerate(lines):
+        m.text(line, cx + 25, cy + 15 + i * 9, INK, shadow=False)
+    # mana vial right of the hotbar, label in aether blue, the active talent's key cap (ready, then recharging)
+    vx, bottom = W // 2 + 91 + 4, H - 1
+    m.d.rectangle((W // 2 - 91, H - 22, W // 2 + 90, H - 1), fill=(20, 20, 20, 160), outline=(90, 90, 90, 255))
+    m.d.rectangle((vx - 1, bottom - 22, vx + 6, bottom), fill=(15, 12, 10, 255))
+    m.d.rectangle((vx, bottom - 21, vx + 5, bottom - 1), fill=(0x2F, 0x6F, 0xD8, 255))
+    m.text("100/100", vx + 10, bottom - 21, AETHER_TXT)
+    m.nine("button_small", vx + 10, bottom - 11, 12, 12, 3)
+    m.text("V", vx + 10 + (12 - 6 + 1) // 2, bottom - 9, PLATE_INK, shadow=False)
+    m.d.rectangle((vx + 26, bottom - 11, vx + 26 + 14, bottom), fill=(15, 12, 10, 255))
+    m.d.rectangle((vx + 27, bottom - 10, vx + 26 + 13, bottom - 1), fill=(0x3E, 0x34, 0x30, 255))
+    m.text("4s", vx + 26 + 2, bottom - 9, CREAM, shadow=False)
+    m.save("hud")
 
 
 def main():
@@ -872,6 +1001,7 @@ def main():
         mockup_waystones()
         mockup_quests()
         mockup_guide()
+        mockup_hud()
         gui_machines.mockups(sys.modules[__name__])
         gui_machines.mockups(sys.modules[__name__], li=0)
         gui_machines.mockup_settings(sys.modules[__name__])

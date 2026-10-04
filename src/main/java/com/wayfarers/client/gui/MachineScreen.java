@@ -423,7 +423,7 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> implemen
         }
         int dy = descLines.size() > 1 ? 16 : 20;
         for (FormattedCharSequence line : descLines) {
-            g.text(font, line, 36, dy, WfGui.INK_SOFT, false);
+            g.text(font, line, 36, dy, WfGui.INK, false);
             dy += 9;
         }
         MachineBlockEntity.Status status = menu.status();
@@ -500,7 +500,7 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> implemen
         Direction facing = facing();
         boolean chest = hasContainer(facing.getOpposite());
         Component where = Component.translatable(K + (breaker ? (chest ? "drops.chest" : "drops.self") : (chest ? "source.chest" : "source.self")));
-        g.text(font, clipString(where.getString(), BUF_X - 8 - CX), CX, rowY(1) + 5, chest ? 0xFF2F6A22 : WfGui.INK_SOFT, false);
+        g.text(font, clipString(where.getString(), BUF_X - 8 - CX), CX, rowY(1) + 5, chest ? WfGui.INK_GREEN : WfGui.INK_SOFT, false);
         Component dir = Component.translatable(K + "dir." + facing.getName());
         g.text(font, clipString(dir.getString(), BUF_X - 8 - CX), CX, rowY(2) + 5, WfGui.INK, false);
     }

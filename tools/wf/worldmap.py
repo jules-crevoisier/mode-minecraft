@@ -13,7 +13,13 @@ import random
 # ------------------------------------------------------------------ text
 UI = {
     "key.wayfarers.world_map": ("World map", "Carte du monde"),
-    "key.wayfarers.toggle_minimap": ("Show/hide the minimap", "Afficher/masquer la mini-carte"),
+    "key.wayfarers.toggle_minimap": ("Show/hide the minimap (Shift: its size)", "Afficher/masquer la mini-carte (Maj : sa taille)"),
+    "message.wayfarers.minimap.size": ("Minimap: %s (%s px) - Shift + %s again: next size",
+                                       "Mini-carte : %s (%s px) - Maj + %s encore : taille suivante"),
+    "message.wayfarers.minimap.shown": ("Minimap shown - Shift + %s: change its size",
+                                        "Mini-carte affichée - Maj + %s : changer sa taille"),
+    "message.wayfarers.minimap.hidden": ("Minimap hidden - %s to show it again", "Mini-carte masquée - %s pour la réafficher"),
+    "message.wayfarers.minimap.zoom": ("Minimap zoom: %s", "Zoom de la mini-carte : %s"),
     "key.wayfarers.minimap_zoom": ("Minimap zoom", "Zoom de la mini-carte"),
     "key.wayfarers.map_ping": ("Ping the spot you look at", "Signaler l'endroit visé"),
     "message.wayfarers.map.ping": ("%s marked a point (%s, %s)", "%s a signalé un point (%s, %s)"),
@@ -83,7 +89,9 @@ def lang():
 
 
 # ------------------------------------------------------------------ sprites
-MINIMAP_SIZES = (64, 96, 128)
+# Map diameters inside the frame of WayfarersClientConfig.MinimapSize (56, 68, 96 and 128 px on screen with the
+# 6 px frame): one round frame sprite per size, drawn pixel for pixel so it stays crisp at any GUI scale.
+MINIMAP_SIZES = (44, 56, 84, 116)
 BORDER = 6
 
 
@@ -561,51 +569,71 @@ def _terrain(world, Image, x0, z0, w, h, scale, known=None):
     return im
 
 
-def _mock_minimap(g, world, Image):
-    size = 96
-    outer = size + 12
-    m = g.Mock(260, 170)
-    # a sky-and-hills backdrop standing in for the game view
-    for y in range(170):
-        for x in range(260):
-            m.im.putpixel((x, y), (int(110 + y * 0.3), int(160 + y * 0.2), 220, 255) if y < 90 else (88, 128, 60, 255))
-    x, y = 4, 4
-    m.im.alpha_composite(Image.new("RGBA", (size, size), (0x2A, 0x22, 0x1C, 255)), (x + 6, y + 6))
-    terr = _terrain(world, Image, 210 - size / 2, 150 - size / 2, size, size, 1.0)
-    m.im.alpha_composite(terr, (x + 6, y + 6))
-    cx, cy = x + 6 + size // 2, y + 6 + size // 2
-    # markers
+def draw_minimap(g, m, world, x, y, size, square=False, coords=("212, 71, -148", "Plaines"), right=False, zoom=1.0,
+                 opacity=1.0):
+    """The minimap as MinimapHud draws it, on mockup ``m`` at (x, y): ``size`` is the map inside the 6 px frame.
+    Returns the height taken (frame and coordinates plate)."""
+    from PIL import Image, ImageChops
+    outer = size + BORDER * 2
+    back = Image.new("RGBA", (size, size), (0x2A, 0x22, 0x1C, int(255 * opacity)))
+    terr = _terrain(world, Image, 210 - size / 2 / zoom, 150 - size / 2 / zoom, size, size, zoom)
+    if opacity < 1:
+        terr.putalpha(terr.getchannel("A").point(lambda a: int(a * opacity)))
+    m.im.alpha_composite(back, (x + BORDER, y + BORDER))
+    m.im.alpha_composite(terr, (x + BORDER, y + BORDER))
+    cx, cy = x + BORDER + size // 2, y + BORDER + size // 2
+    k = size / 96
     for name, dx, dy in (("waystone", -20, -30), ("ping", 26, 14), ("spawn", -36, 22), ("grave", 10, -12)):
+        dx, dy = int(dx * k), int(dy * k)
         m.im.alpha_composite(Image.open(g.sp("map/marker/" + name)).convert("RGBA"), (cx + dx - 4, cy + dy - 4))
-    wp = Image.open(g.sp("map/wp/flag")).convert("RGBA")
-    tint = Image.new("RGBA", wp.size, (0x3F, 0xA9, 0xFF, 255))
-    from PIL import ImageChops
-    m.im.alpha_composite(ImageChops.multiply(wp, tint), (cx + 30 - 4, cy - 34 - 4))
     arrow = Image.open(g.sp("map/arrow")).convert("RGBA").rotate(-35, resample=Image.NEAREST)
     m.im.alpha_composite(arrow, (cx - 6, cy - 6))
-    m.im.alpha_composite(Image.open(g.sp(f"map/frame_round_{size}")).convert("RGBA"), (x, y))
-    r = size / 2 + 3
-    for i, n in enumerate("nesw"):
-        a = i * math.pi / 2
-        m.im.alpha_composite(Image.open(g.sp("map/cardinal_" + n)).convert("RGBA"),
-                             (int(round(cx + math.sin(a) * r)) - 4, int(round(cy - math.cos(a) * r)) - 4))
-    ty = y + outer + 1
-    m.nine("map/plate", x, ty, outer, 21, 3)
-    m.text("212, 71, -148", x + outer // 2, ty + 2, g.hexc("F3E3C0"), center=True)
-    m.text("Plaines", x + outer // 2, ty + 11, g.hexc("B9A98E"), shadow=False, center=True)
-    # square variant on the right
-    sx = 140
-    m.im.alpha_composite(Image.new("RGBA", (size, size), (0x2A, 0x22, 0x1C, 255)), (sx + 6, y + 6))
-    m.im.alpha_composite(_terrain(world, Image, 120, 100, size, size, 2.0), (sx + 6, y + 6))
-    m.nine("map/frame_square", sx, y, outer, outer, 6)
+    if square:
+        m.nine("map/frame_square", x, y, outer, outer, 6)
+    else:
+        m.im.alpha_composite(Image.open(g.sp(f"map/frame_round_{size}")).convert("RGBA"), (x, y))
     for i, n in enumerate("nesw"):
         a = i * math.pi / 2
         dx, dy = math.sin(a), -math.cos(a)
-        rr = (size / 2 + 3) / max(abs(dx), abs(dy))
+        r = size / 2 + 3
+        if square:
+            r /= max(abs(dx), abs(dy))
         m.im.alpha_composite(Image.open(g.sp("map/cardinal_" + n)).convert("RGBA"),
-                             (int(round(sx + 6 + size / 2 + dx * rr)) - 4, int(round(y + 6 + size / 2 + dy * rr)) - 4))
-    m.im.alpha_composite(Image.open(g.sp("map/arrow")).convert("RGBA"), (sx + 6 + size // 2 - 6, y + 6 + size // 2 - 6))
+                             (int(round(x + BORDER + size / 2 + dx * r)) - 4, int(round(y + BORDER + size / 2 + dy * r)) - 4))
+    if not coords:
+        return outer
+    # the compact plate: as wide as its text (at least the map), on the screen-edge side
+    ty = y + outer + 1
+    tw = max(outer, max(g.text_width(coords[0]), g.text_width(coords[1])) + 8)
+    tx = x + outer - tw if right else x
+    m.nine("map/plate", tx, ty, tw, 20, 3)
+    m.text(coords[0], tx + tw // 2, ty + 2, g.CREAM, center=True)
+    m.text(coords[1], tx + tw // 2, ty + 11, g.CREAM_SOFT, center=True)
+    return outer + 21
+
+
+def _mock_minimap(g, world, Image):
+    """minimap.png: the four sizes side by side (56, 68 by default, 96 and 128 px on screen), the square frame and
+    a faded one (opacity 60 %), over a stand-in game view."""
+    W, H = 470, 180
+    m = g.Mock(W, H)
+    for y in range(H):
+        for x in range(W):
+            m.im.putpixel((x, y), (int(110 + y * 0.3), int(160 + y * 0.2), 220, 255) if y < 80 else (70, 104, 50, 255))
+    x = 4
+    labels = ("Petite 56", "Moyenne 68", "Grande 96", "Énorme 128")
+    for size, label in zip(MINIMAP_SIZES, labels):
+        draw_minimap(g, m, world, x, 4, size)
+        m.text(label, x + (size + 12) // 2, H - 12, g.CREAM, center=True)
+        x += size + 12 + 10
     m.save("minimap")
+    m = g.Mock(200, 110)
+    for y in range(110):
+        for x in range(200):
+            m.im.putpixel((x, y), (int(110 + y * 0.3), int(160 + y * 0.2), 220, 255) if y < 50 else (70, 104, 50, 255))
+    draw_minimap(g, m, world, 4, 4, 56, square=True, zoom=2.0)
+    draw_minimap(g, m, world, 100, 4, 56, opacity=0.6, coords=("-1732, 129, -461", "Champs fleuris"))
+    m.save("minimap_variants")
 
 
 def _mock_worldmap(g, world, Image):
@@ -615,7 +643,7 @@ def _mock_worldmap(g, world, Image):
     m.im.paste((26, 20, 16, 255), (0, 0, W, H))
     m.nine("panel", 4, 6, W - 8, H - 10, 9)
     m.nine("title_plate", W // 2 - 50, 1, 100, 18, 6)
-    m.text("Carte du monde", W // 2, 5, g.hexc("2B1B0C"), shadow=False, center=True)
+    m.text("Carte du monde", W // 2, 6, g.PLATE_INK, shadow=False, center=True, bold=True)
     sb = 116
     mx0, my0, mx1, my1 = 18, 24, W - 18 - sb - 6, H - 30
     par = Image.open(g.sp("map/parchment")).convert("RGBA")
@@ -640,27 +668,27 @@ def _mock_worldmap(g, world, Image):
     for name, dx, dy, label in marks:
         m.im.alpha_composite(Image.open(g.sp("map/marker/" + name)).convert("RGBA"), (cx + dx - 4, cy + dy - 4))
         if label and name == "waystone":
-            w_ = m.d.textlength(label, font=m.font)
+            w_ = g.text_width(label)
             m.im.alpha_composite(Image.new("RGBA", (int(w_) + 4, 10), (16, 12, 10, 144)), (int(cx + dx - w_ / 2 - 2), cy + dy + 6))
-            m.text(label, cx + dx, cy + dy + 6, g.hexc("9FE6FF"), shadow=False, center=True)
+            m.text(label, cx + dx, cy + dy + 7, g.AETHER_TXT, center=True)
     for icon, col, dx, dy, label in (("house", (0xF6, 0xC3, 0x43), -100, 20, "Base"), ("mine", (0x3F, 0xA9, 0xFF), 90, -70, "Mine de fer")):
         wp = Image.open(g.sp("map/wp/" + icon)).convert("RGBA")
         m.im.alpha_composite(ImageChops.multiply(wp, Image.new("RGBA", wp.size, col + (255,))), (cx + dx - 4, cy + dy - 4))
-        w_ = m.d.textlength(label, font=m.font)
+        w_ = g.text_width(label)
         m.im.alpha_composite(Image.new("RGBA", (int(w_) + 4, 10), (16, 12, 10, 144)), (int(cx + dx - w_ / 2 - 2), cy + dy + 6))
-        m.text(label, cx + dx, cy + dy + 6, col + (255,), shadow=False, center=True)
+        m.text(label, cx + dx, cy + dy + 7, col + (255,), center=True)
     m.im.alpha_composite(Image.open(g.sp("map/arrow")).convert("RGBA"), (cx - 6, cy - 6))
     m.nine("map/frame_square", mx0 - 4, my0 - 4, mx1 - mx0 + 8, my1 - my0 + 8, 6)
     for i, glyph in enumerate(("center", "zoom_in", "zoom_out", "cave", "list")):
         bx, by = mx1 - 20, my0 + 4 + i * 19
         m.nine("button_small", bx, by, 16, 16, 3)
         m.im.alpha_composite(Image.open(g.sp("map/glyph/" + glyph)).convert("RGBA"), (bx + 3, by + 3))
-    m.text("X 231  Y 68  Z -164  -  Forêt", mx0, my1 + 7, g.hexc("2B1B0C"), shadow=False)
-    m.text("1 bloc = 1 px", mx1, my1 + 7, g.hexc("6E5A40"), shadow=False, right=True)
+    m.text("X 231  Y 68  Z -164  -  Forêt", mx0, my1 + 7, g.INK, shadow=False)
+    m.text("1 bloc = 1 px", mx1, my1 + 7, g.INK_SOFT, shadow=False, right=True)
     # sidebar
     sx, sw = mx1 + 6, W - 18 - (mx1 + 6)
     m.nine("inset", sx, my0 - 4, sw, my1 - my0 + 8, 4)
-    m.text("Légende", sx + 6, my0 + 1, g.hexc("F6C343"))
+    m.text("Légende", sx + 6, my0 + 1, g.GOLD, bold=True)
     rows_ = [("player", "Joueurs"), ("waypoint", "Repères"), ("waystone", "Pierres de voyage"), ("ping", "Signaux"),
              ("target", "Cible de boussole"), ("structure", "Structures"), ("grave", "Tombes"), ("death", "Dernière mort"),
              ("spawn", "Apparition")]
@@ -671,28 +699,28 @@ def _mock_worldmap(g, world, Image):
         if name == "waypoint":
             ic = ImageChops.multiply(ic, Image.new("RGBA", ic.size, (0xE0, 0x48, 0x3B, 255)))
         m.im.alpha_composite(ic, (sx + 6, ly + 1))
-        m.text(label, sx + 18, ly + 1, g.hexc("F3E3C0") if name != "grave" else g.hexc("7E7262"), shadow=False)
+        m.text(label, sx + 18, ly + 2, g.CREAM if name != "grave" else g.MUTED)
         ly += 11
     ly += 8
-    m.text("Repères", sx + 6, ly, g.hexc("F6C343"))
+    m.text("Repères", sx + 6, ly, g.GOLD, bold=True)
     ly += 11
     for icon, col, label, dist in (("house", (0xF6, 0xC3, 0x43), "Base", "112 m"), ("mine", (0x3F, 0xA9, 0xFF), "Mine de fer", "340 m"),
                                    ("star", (0x7C, 0xE3, 0x5A), "Village", "1.2 km")):
         wp = Image.open(g.sp("map/wp/" + icon)).convert("RGBA")
         m.im.alpha_composite(ImageChops.multiply(wp, Image.new("RGBA", wp.size, col + (255,))), (sx + 5, ly + 1))
-        m.text(label, sx + 17, ly + 1, g.hexc("F3E3C0"), shadow=False)
-        m.text(dist, sx + sw - 6, ly + 1, g.hexc("B9A98E"), shadow=False, right=True)
+        m.text(label, sx + 17, ly + 2, g.CREAM)
+        m.text(dist, sx + sw - 6, ly + 2, g.CREAM_SOFT, right=True)
         ly += 12
     m.nine("button", sx + 4, my1 - 14, sw - 8, 14, 4)
-    m.text("+ Repère ici", sx + sw // 2, my1 - 12, g.hexc("FFF4DC"), center=True)
+    m.text("+ Repère ici", sx + sw // 2, my1 - 11, g.hexc("FFFFFF"), center=True)
     # card
     m.nine("card", mx0 + 6, my1 - 72, 168, 66, 4)
     wp = Image.open(g.sp("map/wp/mine")).convert("RGBA")
     m.im.alpha_composite(ImageChops.multiply(wp, Image.new("RGBA", wp.size, (0x3F, 0xA9, 0xFF, 255))), (mx0 + 12, my1 - 66))
-    m.text("Mine de fer", mx0 + 25, my1 - 66, g.hexc("3B2A1A"), shadow=False)
-    m.text("Repère - Partagé", mx0 + 12, my1 - 54, g.hexc("6E5A40"), shadow=False)
-    m.text("301, 12, -412   340 m", mx0 + 12, my1 - 42, g.hexc("6E5A40"), shadow=False)
+    m.text("Mine de fer", mx0 + 25, my1 - 66, g.INK, shadow=False, bold=True)
+    m.text("Repère - Partagé", mx0 + 12, my1 - 54, g.INK_SOFT, shadow=False)
+    m.text("301, 12, -412   340 m", mx0 + 12, my1 - 42, g.INK_SOFT, shadow=False)
     for i, label in enumerate(("Modifier", "Privé", "Supprimer")):
         m.nine("button", mx0 + 11 + i * 53, my1 - 25, 50, 14, 4)
-        m.text(label, mx0 + 36 + i * 53, my1 - 23, g.hexc("FFF4DC"), center=True)
+        m.text(label, mx0 + 36 + i * 53, my1 - 22, g.hexc("FFFFFF"), center=True)
     m.save("worldmap")

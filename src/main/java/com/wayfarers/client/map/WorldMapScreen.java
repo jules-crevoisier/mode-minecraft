@@ -371,7 +371,7 @@ public class WorldMapScreen extends Screen {
         } else {
             left = hint(mx1 - mx0 - 90);
         }
-        WfGui.textClipped(g, font, left, mx0, y, mx1 - mx0 - 90, WfGui.PLATE_INK, false);
+        WfGui.textClipped(g, font, left, mx0, y, mx1 - mx0 - 90, WfGui.INK, false);
         String sc = scale >= 1.0F ? Component.translatable("gui.wayfarers.map.scale_in", (int) scale).getString()
                 : Component.translatable("gui.wayfarers.map.scale_out", Math.round(1.0F / scale)).getString();
         g.text(font, sc, mx1 - font.width(sc), y, WfGui.INK_SOFT, false);
@@ -410,7 +410,7 @@ public class WorldMapScreen extends Screen {
         int y = my0 - 4;
         int h = my1 - my0 + 8;
         WfGui.sprite(g, WfGui.INSET, x, y, w, h);
-        g.text(font, Component.translatable("gui.wayfarers.map.legend"), x + 6, y + 5, WfGui.GOLD, true);
+        g.text(font, WfGui.bold(Component.translatable("gui.wayfarers.map.legend")), x + 6, y + 5, WfGui.GOLD, true);
         int ly = y + 16;
         for (ClientMap.Kind k : ClientMap.Kind.values()) {
             boolean hidden = ClientMap.HIDDEN[k.ordinal()];
@@ -423,7 +423,7 @@ public class WorldMapScreen extends Screen {
             g.blitSprite(net.minecraft.client.renderer.RenderPipelines.GUI_TEXTURED, icon, x + 6, ly + 1, 9, 9, hidden ? 0x60FFFFFF & tint : tint);
             Component label = Component.translatable("gui.wayfarers.map.kind." + k.name().toLowerCase(Locale.ROOT));
             g.text(font, hidden ? label.copy().withStyle(ChatFormatting.STRIKETHROUGH) : label, x + 18, ly + 2,
-                    hidden ? 0xFF7E7262 : WfGui.CREAM, false);
+                    hidden ? WfGui.MUTED : WfGui.CREAM, true);
             int kind = k.ordinal();
             buttons.add(new Btn(x + 3, ly, w - 6, 11, () -> ClientMap.HIDDEN[kind] = !ClientMap.HIDDEN[kind]));
             ly += 11;
@@ -431,7 +431,7 @@ public class WorldMapScreen extends Screen {
         ly += 4;
         g.fill(x + 5, ly, x + w - 5, ly + 1, 0xFF7C5A2B);
         ly += 4;
-        g.text(font, Component.translatable("gui.wayfarers.map.waypoints"), x + 6, ly, WfGui.GOLD, true);
+        g.text(font, WfGui.bold(Component.translatable("gui.wayfarers.map.waypoints")), x + 6, ly, WfGui.GOLD, true);
         ly += 11;
         List<MapProtocol.Waypoint> list = new ArrayList<>();
         for (MapProtocol.Waypoint wp : ClientMap.waypoints()) {
@@ -444,7 +444,7 @@ public class WorldMapScreen extends Screen {
         int rows = Math.max(1, (bottom - ly) / ROW);
         listScroll = Math.max(0, Math.min(listScroll, list.size() - rows));
         if (list.isEmpty()) {
-            g.textWithWordWrap(font, Component.translatable("gui.wayfarers.map.no_waypoints"), x + 6, ly + 2, w - 12, WfGui.CREAM_SOFT);
+            g.textWithWordWrap(font, Component.translatable("gui.wayfarers.map.no_waypoints"), x + 6, ly + 2, w - 12, WfGui.CREAM_SOFT, true);
         }
         for (int i = 0; i < rows && i + listScroll < list.size(); i++) {
             MapProtocol.Waypoint wp = list.get(i + listScroll);
@@ -460,8 +460,8 @@ public class WorldMapScreen extends Screen {
                     Wayfarers.id("map/wp/" + MapProtocol.ICONS[wp.icon()]), x + 5, ry + 1, 9, 9, 0xFF000000 | wp.color());
             String dist = distance(player, wp.x(), wp.z());
             int dw = font.width(dist);
-            WfGui.textClipped(g, font, wp.name(), x + 17, ry + 2, w - 26 - dw, ClientMap.mine(wp) ? WfGui.CREAM : WfGui.AETHER, false);
-            g.text(font, dist, x + w - 6 - dw, ry + 2, WfGui.CREAM_SOFT, false);
+            WfGui.textClipped(g, font, wp.name(), x + 17, ry + 2, w - 26 - dw, ClientMap.mine(wp) ? WfGui.CREAM : WfGui.AETHER, true);
+            g.text(font, dist, x + w - 6 - dw, ry + 2, WfGui.CREAM_SOFT, true);
             buttons.add(new Btn(x + 3, ry, w - 6, ROW, () -> {
                 follow = false;
                 centerX = wp.x() + 0.5;
@@ -507,7 +507,9 @@ public class WorldMapScreen extends Screen {
         cardRect = new int[] {x, y, x + w, y + h};
         WfGui.sprite(g, WfGui.CARD, x, y, w, h);
         MapRenderer.marker(g, m, x + 10, y + 10, false);
-        WfGui.textClipped(g, font, m.label() == null ? "" : m.label(), x + 19, y + 6, w - 40, WfGui.INK, false);
+        String label = m.label() == null ? "" : m.label();
+        WfGui.titleClipped(g, font, label, x + 19 + Math.min(w - 40, font.width(WfGui.bold(Component.literal(label)))) / 2, y + 6,
+                w - 40, WfGui.INK);
         buttons.add(new Btn(x + w - 13, y + 3, 10, 10, () -> selected = null));
         g.text(font, "x", x + w - 10, y + 3, WfGui.INK_SOFT, false);
         String line2 = Component.translatable("gui.wayfarers.map.one." + m.kind().name().toLowerCase(Locale.ROOT)).getString()
@@ -563,7 +565,7 @@ public class WorldMapScreen extends Screen {
             lines.add(Component.literal(m.detail()).withStyle(ChatFormatting.GRAY).getVisualOrderText());
         }
         lines.add(Component.literal(ClientMap.coords((int) Math.floor(m.x()), (int) Math.floor(m.y()), (int) Math.floor(m.z()))
-                + " - " + distance(player, m.x(), m.z())).withStyle(ChatFormatting.DARK_GRAY).getVisualOrderText());
+                + " - " + distance(player, m.x(), m.z())).withStyle(ChatFormatting.GRAY).getVisualOrderText());
         g.setTooltipForNextFrame(font, lines, mouseX, mouseY);
     }
 
@@ -642,8 +644,9 @@ public class WorldMapScreen extends Screen {
         int h = 132;
         g.fill(mx0, my0, mx1, my1, 0x60100C0A);
         WfGui.sprite(g, WfGui.PANEL, x, y, w, h);
-        g.centeredText(font, Component.translatable(editor.editing == null ? "gui.wayfarers.map.new_waypoint" : "gui.wayfarers.map.edit_waypoint"),
-                x + w / 2, y + 9, WfGui.PLATE_INK);
+        // bold ink on the parchment, without the drop shadow that smudged it
+        WfGui.centered(g, font, WfGui.bold(Component.translatable(editor.editing == null ? "gui.wayfarers.map.new_waypoint"
+                : "gui.wayfarers.map.edit_waypoint")), x + w / 2, y + 10, WfGui.INK);
         // colours
         int cy = y + 42;
         for (int i = 0; i < WAYPOINT_COLORS.length; i++) {
