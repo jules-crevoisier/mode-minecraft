@@ -17,6 +17,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MoverType;
@@ -35,6 +36,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.boat.AbstractBoat;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.pathfinder.PathType;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
@@ -69,6 +72,8 @@ public class SeaSerpent extends Monster implements AnimatedMob {
     private int lungeCooldown = 80;
     private int roarCooldown = 200;
     private int idleTicks;
+    /** Risen from the deep by OceanEvents: sinks back at dawn if nobody fought it (spawn eggs and summons stay). */
+    private boolean risen;
 
     public SeaSerpent(EntityType<? extends Monster> type, Level level) {
         super(type, level);
@@ -129,6 +134,23 @@ public class SeaSerpent extends Monster implements AnimatedMob {
         return !hasCustomName();
     }
 
+    /** Called by OceanEvents for a serpent that rises at night: it will dive away at dawn. */
+    public void markRisen() {
+        risen = true;
+    }
+
+    @Override
+    protected void addAdditionalSaveData(ValueOutput output) {
+        super.addAdditionalSaveData(output);
+        output.putBoolean("Risen", risen);
+    }
+
+    @Override
+    protected void readAdditionalSaveData(ValueInput input) {
+        super.readAdditionalSaveData(input);
+        risen = input.getBooleanOr("Risen", false);
+    }
+
     // ------------------------------------------------------------------ sounds: a deep, wet growl
 
     @Override
@@ -173,7 +195,7 @@ public class SeaSerpent extends Monster implements AnimatedMob {
         updateBossBar(level);
         // nobody to fight in daylight: it sinks back into the deep
         idleTicks = getTarget() == null ? idleTicks + 1 : 0;
-        if (idleTicks > 400 && level.isBrightOutside() && !isPersistenceRequired() && !hasCustomName()) {
+        if (risen && idleTicks > 400 && level.isBrightOutside() && !isPersistenceRequired() && !hasCustomName()) {
             level.sendParticles(ParticleTypes.BUBBLE_COLUMN_UP, getX(), getY() + 0.5, getZ(), 30, 1.0, 0.5, 1.0, 0.1);
             discard();
         }
@@ -405,7 +427,7 @@ public class SeaSerpent extends Monster implements AnimatedMob {
                 if (!hit) {
                     AABB jaws = s.getBoundingBox().inflate(0.8);
                     for (LivingEntity e : level.getEntitiesOfClass(LivingEntity.class, jaws, e -> e != s && e.isAlive()
-                            && !(e instanceof SeaSerpent))) {
+                            && !(e instanceof SeaSerpent) && EntitySelector.NO_CREATIVE_OR_SPECTATOR.test(e))) {
                         hit = true;
                         DamageSource src = s.damageSources().mobAttack(s);
                         if (e.hurtServer(level, src, 11.0F)) {
@@ -449,7 +471,7 @@ public class SeaSerpent extends Monster implements AnimatedMob {
                 }
                 AABB area = s.getBoundingBox().inflate(11.0, 6.0, 11.0);
                 for (Entity e : level.getEntities(s, area, e -> e.isAlive() && !(e instanceof SeaSerpent)
-                        && (e.isInWater() || e instanceof AbstractBoat))) {
+                        && EntitySelector.NO_CREATIVE_OR_SPECTATOR.test(e) && (e.isInWater() || e instanceof AbstractBoat))) {
                     Vec3 to = c.subtract(e.position());
                     double d = Math.max(1.0, to.horizontalDistance());
                     Vec3 in = new Vec3(to.x / d, 0, to.z / d);
@@ -457,7 +479,9 @@ public class SeaSerpent extends Monster implements AnimatedMob {
                     e.setDeltaMovement(e.getDeltaMovement().add(in.scale(0.06)).add(swirl.scale(0.08)).add(0, -0.02, 0));
                     e.hurtMarked = true;
                     if (e instanceof LivingEntity le) {
-                        le.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 40, 1), s);
+                        if ((k - ROAR_PULL_START) % 10 == 0) { // (each refresh is an effect packet: not every tick)
+                            le.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 40, 1), s);
+                        }
                         if (k == ROAR_PULL_START + 10) {
                             capsize(level, le, 0.0F, s.damageSources().mobAttack(s));
                         }

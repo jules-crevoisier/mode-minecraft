@@ -25,7 +25,12 @@ public class DivingHelmetItem extends TooltipItem {
         super.inventoryTick(stack, level, owner, slot);
         if (slot == EquipmentSlot.HEAD && owner instanceof LivingEntity living && owner.tickCount % 20 == 0
                 && living.isEyeInFluid(FluidTags.WATER)) {
-            living.addEffect(new MobEffectInstance(MobEffects.CONDUIT_POWER, 260, 0, true, false, true));
+            // top it up only when it runs low: every refresh is an effect packet to the client (and a conduit
+            // nearby already keeps it topped up)
+            MobEffectInstance current = living.getEffect(MobEffects.CONDUIT_POWER);
+            if (current == null || current.endsWithin(200)) {
+                living.addEffect(new MobEffectInstance(MobEffects.CONDUIT_POWER, 260, 0, true, false, true));
+            }
         }
     }
 }

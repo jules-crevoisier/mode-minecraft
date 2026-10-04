@@ -77,6 +77,7 @@ public final class OceanEvents {
                 continue;
             }
             serpent.finalizeSpawn(level, level.getCurrentDifficultyAt(pos), EntitySpawnReason.EVENT, null);
+            serpent.markRisen();
             serpent.setTarget(player);
             level.addFreshEntity(serpent);
             level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ELDER_GUARDIAN_CURSE,

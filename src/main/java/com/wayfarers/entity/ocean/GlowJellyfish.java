@@ -28,6 +28,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.fish.WaterAnimal;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.vehicle.boat.AbstractBoat;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -179,8 +180,13 @@ public class GlowJellyfish extends WaterAnimal implements AnimatedMob {
 
     @Override
     public void playerTouch(Player player) {
+        // a player in a boat touches whatever drifts under the hull (the touch box spans the boat): the hull shields them
         if (!(level() instanceof ServerLevel level) || stingCooldown > 0 || player.isCreative() || player.isSpectator()
-                || !player.isAlive()) {
+                || !player.isAlive() || player.getVehicle() instanceof AbstractBoat) {
+            return;
+        }
+        // playerTouch fires for anything within a block of the player: only a real brush with the bell stings
+        if (!player.getBoundingBox().intersects(getBoundingBox().inflate(0.15))) {
             return;
         }
         stingCooldown = 30;

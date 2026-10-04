@@ -20,6 +20,11 @@ public final class MachineAreaPreview {
     private record Shown(AABB box, int color) {}
 
     private static final Map<BlockPos, Shown> SHOWN = new HashMap<>();
+    /**
+     * The client level the shown areas belong to: changing dimension (or server) makes a new one, and the outlines
+     * of the old world must not be drawn at the same coordinates in the new one.
+     */
+    private static Object shownIn;
 
     private MachineAreaPreview() {}
 
@@ -28,6 +33,11 @@ public final class MachineAreaPreview {
     }
 
     public static void toggle(BlockPos pos, MachineBlock.Kind kind, AABB box) {
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.level != shownIn) {
+            SHOWN.clear();
+            shownIn = mc.level;
+        }
         if (SHOWN.remove(pos) == null) {
             SHOWN.put(pos.immutable(), new Shown(box, color(kind)));
         }
@@ -55,8 +65,9 @@ public final class MachineAreaPreview {
             return;
         }
         Minecraft mc = Minecraft.getInstance();
-        if (mc.level == null || mc.player == null) {
+        if (mc.level == null || mc.player == null || mc.level != shownIn) {
             SHOWN.clear();
+            shownIn = null;
             return;
         }
         Iterator<Map.Entry<BlockPos, Shown>> it = SHOWN.entrySet().iterator();
