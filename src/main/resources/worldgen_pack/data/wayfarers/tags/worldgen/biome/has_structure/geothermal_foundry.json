@@ -1,7 +1,6 @@
 {
  "replace": false,
  "values": [
-  "wayfarers:rustlands",
-  "wayfarers:ashen_savanna"
+  "wayfarers:rustlands"
  ]
 }

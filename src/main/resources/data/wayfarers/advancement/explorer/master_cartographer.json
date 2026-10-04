@@ -350,9 +350,41 @@
           }
         ]
       }
+    },
+    "geothermal_foundry": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "wayfarers:geothermal_foundry"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "tesla_observatory": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "wayfarers:tesla_observatory"
+              }
+            }
+          }
+        ]
+      }
     }
   },
-  "parent": "wayfarers:explorer/sky_isles",
+  "parent": "wayfarers:explorer/tesla_observatory",
   "rewards": {
     "experience": 300,
     "loot": [

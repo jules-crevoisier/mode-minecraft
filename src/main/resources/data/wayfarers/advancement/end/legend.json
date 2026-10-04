@@ -686,6 +686,54 @@
           }
         ]
       }
+    },
+    "geothermal_foundry": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "wayfarers:geothermal_foundry"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "tesla_observatory": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "wayfarers:tesla_observatory"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "crystal_cathedral": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "wayfarers:crystal_cathedral"
+              }
+            }
+          }
+        ]
+      }
     }
   },
   "parent": "wayfarers:end/void_warden",
