@@ -45,6 +45,7 @@ def res_path(rl, kind, ext):
     return os.path.join(DATA, ns, kind, path + ext)
 
 
+@functools.lru_cache(maxsize=None)
 def mod_ids(kind):
     """Ids registered by the Java side, read straight from the registry classes."""
     import re
@@ -142,6 +143,10 @@ def check_templates():
                 continue
             if "LootTable" in data:
                 loot_refs.add((data["LootTable"], rel))
+            for stack in data.get("Items", []) if isinstance(data.get("Items"), list) else []:
+                ins, _, iid = str(stack.get("id", "")).rpartition(":")
+                if (ins == "minecraft" and iid not in MC_GAME["items"]) or (ins == "wayfarers" and iid not in mod_ids("items")):
+                    err(f"{rel}: container item {stack.get('id')} unknown (the game rejects the whole template)")
             if "SpawnData" in data:
                 ens, eid = data["SpawnData"]["entity"]["id"].split(":")
                 if (ens == "minecraft" and eid not in MC_GAME["entities"]) or (ens == "wayfarers" and eid not in mod_ids("entities")):

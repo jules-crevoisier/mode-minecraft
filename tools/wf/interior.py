@@ -590,7 +590,7 @@ THEMES = {
                             "stonecutter": 1, "blast_furnace": 1, "furnace": 1},
                      wall={"shelf": 3, "banner": 1}, centre="table", rugs=["gray", "brown"], density=0.5,
                      ceiling="lantern", shelf_items=["iron_ingot", "copper_ingot", "shears", "compass", "clock",
-                                                     "chain", "iron_pickaxe", "bucket"]),
+                                                     "iron_chain", "iron_pickaxe", "bucket"]),
     "forge": dict(floor={"anvil": 2, "smithing": 2, "blast_furnace": 2, "grindstone": 1, "barrel": 2, "crates": 2,
                          "cauldron": 1},
                   wall={"shelf": 2, "banner": 1}, centre=None, rugs=[], density=0.45, ceiling="lantern",
