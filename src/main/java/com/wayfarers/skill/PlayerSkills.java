@@ -64,7 +64,14 @@ public final class PlayerSkills {
     }
 
     public static void setMana(ServerPlayer player, float mana) {
-        data(player).putFloat("mana", Math.max(0, Math.min(maxMana(player), mana)));
+        setMana(player, mana, maxMana(player));
+    }
+
+    /** Same as {@link #setMana(ServerPlayer, float)} with an already computed maximum; returns the stored value. */
+    public static float setMana(ServerPlayer player, float mana, float max) {
+        float stored = Math.max(0, Math.min(max, mana));
+        data(player).putFloat("mana", stored);
+        return stored;
     }
 
     public static int lifetimeLevels(ServerPlayer player) {

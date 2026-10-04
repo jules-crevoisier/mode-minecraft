@@ -21,6 +21,8 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.AABB;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -48,6 +50,7 @@ public class BossSealBlockEntity extends BlockEntity {
     private int missingChecks;
     private final List<BlockPos> gates = new ArrayList<>();
     private boolean scanned;
+    private @Nullable UUID bossUuid;
 
     public BossSealBlockEntity(BlockPos pos, BlockState blockState) {
         super(ModBlockEntities.BOSS_SEAL.get(), pos, blockState);
@@ -57,7 +60,7 @@ public class BossSealBlockEntity extends BlockEntity {
         if (!(level instanceof ServerLevel server) || server.getGameTime() % 10 != 0 || state == DEFEATED) {
             return;
         }
-        List<Player> inside = server.getEntitiesOfClass(Player.class, arena(radius * 0.8),
+        List<Player> inside = com.wayfarers.util.NearbyPlayers.in(server, arena(radius * 0.8),
                 p -> p.isAlive() && !p.isSpectator() && !p.isCreative());
         if (state == READY) {
             if (server.getGameTime() % 40 == 0) {
@@ -68,11 +71,13 @@ public class BossSealBlockEntity extends BlockEntity {
             }
             return;
         }
-        Entity entity = bossId.isEmpty() ? null : server.getEntity(UUID.fromString(bossId));
+        UUID uuid = bossUuid();
+        Entity entity = uuid == null ? null : server.getEntity(uuid);
         if (entity == null) {
             if (++missingChecks > 120) { // the boss vanished (removed by a command...): start over
                 state = READY;
                 bossId = "";
+                bossUuid = null;
                 setGates(server, false);
                 setChanged();
             }
@@ -82,6 +87,14 @@ public class BossSealBlockEntity extends BlockEntity {
         if (!inside.isEmpty()) {
             setGates(server, true); // also closes gates that a player was standing in last time
         }
+    }
+
+    /** The boss's UUID, parsed once instead of every check. */
+    private @Nullable UUID bossUuid() {
+        if (bossUuid == null && !bossId.isEmpty()) {
+            bossUuid = UUID.fromString(bossId);
+        }
+        return bossUuid;
     }
 
     private AABB arena(double r) {
@@ -112,6 +125,7 @@ public class BossSealBlockEntity extends BlockEntity {
         server.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, wb.getX(), wb.getY() + 1, wb.getZ(), 80, 1.0, 1.5, 1.0, 0.05);
         server.playSound(null, worldPosition, SoundEvents.WITHER_SPAWN, SoundSource.HOSTILE, 1.5F, 0.7F);
         bossId = wb.getUUID().toString();
+        bossUuid = wb.getUUID();
         state = FIGHT;
         setGates(server, true);
         setChanged();
@@ -156,6 +170,7 @@ public class BossSealBlockEntity extends BlockEntity {
 
     private void setGates(ServerLevel server, boolean solid) {
         scanGates(server);
+        boolean changed = solid != sealed;
         for (BlockPos p : gates) {
             BlockState st = server.getBlockState(p);
             if (!st.is(ModBlocks.MIST_GATE.get()) || st.getValue(MistGateBlock.SEALED) == solid) {
@@ -165,13 +180,16 @@ public class BossSealBlockEntity extends BlockEntity {
                 continue; // never close the mist on someone standing in it
             }
             server.setBlock(p, st.setValue(MistGateBlock.SEALED, solid), 3);
+            changed = true;
         }
         if (solid != sealed && !gates.isEmpty()) {
             server.playSound(null, worldPosition, solid ? SoundEvents.BEACON_ACTIVATE : SoundEvents.BEACON_DEACTIVATE,
                     SoundSource.BLOCKS, 2.0F, 0.6F);
         }
         sealed = solid;
-        setChanged();
+        if (changed) { // runs every 10 ticks during a fight: only mark the chunk for saving when something changed
+            setChanged();
+        }
     }
 
     @Override
@@ -192,6 +210,7 @@ public class BossSealBlockEntity extends BlockEntity {
         state = input.getIntOr("state", READY);
         sealed = input.getBooleanOr("sealed", false);
         bossId = input.getStringOr("boss_uuid", "");
+        bossUuid = null;
     }
 
     public String bossType() {

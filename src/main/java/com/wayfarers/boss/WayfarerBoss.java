@@ -460,12 +460,9 @@ public abstract class WayfarerBoss extends Monster implements AnimatedMob {
         return new AABB(c).inflate(arenaRadius + 4, 16, arenaRadius + 4);
     }
 
-    private List<Player> playersInArena(ServerLevel level) {
-        return level.getEntitiesOfClass(Player.class, arenaBox(), p -> p.isAlive() && !p.isSpectator() && !p.isCreative());
-    }
-
+    /** Runs every tick: walks the player list rather than every entity section of the (large) arena box. */
     private boolean arenaOccupied(ServerLevel level) {
-        return !playersInArena(level).isEmpty();
+        return com.wayfarers.util.NearbyPlayers.any(level, arenaBox(), p -> p.isAlive() && !p.isSpectator() && !p.isCreative());
     }
 
     private void updateBossBar(ServerLevel level) {
@@ -478,7 +475,7 @@ public abstract class WayfarerBoss extends Monster implements AnimatedMob {
         }
         Set<ServerPlayer> inside = new HashSet<>();
         if (fightStarted) {
-            for (Player p : level.getEntitiesOfClass(Player.class, arenaBox(), Player::isAlive)) {
+            for (Player p : com.wayfarers.util.NearbyPlayers.in(level, arenaBox(), Player::isAlive)) {
                 if (p instanceof ServerPlayer sp) {
                     inside.add(sp);
                 }
@@ -700,6 +697,9 @@ public abstract class WayfarerBoss extends Monster implements AnimatedMob {
     }
 
     private void tickEffects(ServerLevel level) {
+        if (effects.isEmpty()) {
+            return;
+        }
         for (Effect e : new ArrayList<>(effects)) { // effects may queue more effects while ticking
             if (e.tick(this, level)) {
                 effects.remove(e);

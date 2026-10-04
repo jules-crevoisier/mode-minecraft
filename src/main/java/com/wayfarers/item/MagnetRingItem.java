@@ -47,7 +47,8 @@ public class MagnetRingItem extends TooltipItem {
 
     @Override
     public void inventoryTick(ItemStack stack, ServerLevel level, Entity owner, @Nullable EquipmentSlot slot) {
-        if (!(owner instanceof Player player) || !isEnabled(stack) || player.isSpectator() || level.getGameTime() % 4 != 0) {
+        if (!(owner instanceof Player player) || !isEnabled(stack) || player.isSpectator()
+                || (level.getGameTime() + player.getId()) % 4 != 0) { // staggered: not every ring on the same tick
             return;
         }
         for (ItemEntity item : level.getEntitiesOfClass(ItemEntity.class, player.getBoundingBox().inflate(RANGE),

@@ -9,11 +9,17 @@ import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.structure.Structure;
+import net.minecraftforge.event.server.ServerStoppedEvent;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 /** Finds the nearest Wayfarers structure (optionally of one kind) in the player's dimension. */
 public final class StructureLocator {
@@ -21,8 +27,40 @@ public final class StructureLocator {
 
     public record Found(BlockPos pos, String structureId) {}
 
+    private record Query(ResourceKey<Level> dimension, int index, int radiusChunks, long chunk) {}
+
+    private static final int CACHE_SIZE = 256;
+
+    /**
+     * Locating is expensive (it walks structure placements over up to 100+ chunks and may compute structure starts
+     * of ungenerated chunks) and its answer never changes for a given world, so answers are remembered per starting
+     * chunk: compasses used again from the same chunk, or by several players standing together, cost nothing.
+     * "Nothing found" is remembered too: it is the slowest search of all (the whole radius).
+     */
+    private static final Map<Query, Optional<Found>> CACHE = new LinkedHashMap<>(64, 0.75F, true) {
+        @Override
+        protected boolean removeEldestEntry(Map.Entry<Query, Optional<Found>> eldest) {
+            return size() > CACHE_SIZE;
+        }
+    };
+
+    /** Forgets the remembered answers when the server stops (another world may be opened next). */
+    public static void register() {
+        ServerStoppedEvent.BUS.addListener(e -> CACHE.clear());
+    }
+
     /** @param index index in {@link GeneratedContent#STRUCTURES}, or -1 for any structure of this dimension */
     public static @Nullable Found nearest(ServerLevel level, BlockPos from, int index, int radiusChunks) {
+        Query key = new Query(level.dimension(), index, radiusChunks, ChunkPos.containing(from).pack());
+        Optional<Found> cached = CACHE.get(key);
+        if (cached == null) {
+            cached = Optional.ofNullable(search(level, from, index, radiusChunks));
+            CACHE.put(key, cached);
+        }
+        return cached.orElse(null);
+    }
+
+    private static @Nullable Found search(ServerLevel level, BlockPos from, int index, int radiusChunks) {
         var registry = level.registryAccess().lookupOrThrow(Registries.STRUCTURE);
         List<Holder<Structure>> wanted = new ArrayList<>();
         String dim = level.dimension().identifier().getPath().replace("the_", "");

@@ -220,6 +220,8 @@ public class SteamDrone extends Monster implements AnimatedMob {
         private boolean hit;
         private Vec3 diveAt = Vec3.ZERO;
         private float orbit;
+        /** The last orbit point had no path: a failed path also reads as "done", so wait for the next scheduled try. */
+        private boolean noPath;
 
         DroneAttackGoal(SteamDrone d) {
             this.d = d;
@@ -305,11 +307,11 @@ public class SteamDrone extends Monster implements AnimatedMob {
                 return;
             }
             // circle 6 to 11 blocks away, 3 to 5 blocks above the prey
-            if (d.tickCount % 10 == 0 || d.getNavigation().isDone()) {
+            if (d.tickCount % 10 == 0 || (d.getNavigation().isDone() && !noPath)) {
                 orbit += 0.35F;
                 double r = dist > 12 || !sees ? 4.0 : 8.0;
                 double h = 3.0 + d.random.nextDouble() * 2.0;
-                d.getNavigation().moveTo(t.getX() + Mth.cos(orbit) * r, t.getY() + h, t.getZ() + Mth.sin(orbit) * r, 1.0);
+                noPath = !d.getNavigation().moveTo(t.getX() + Mth.cos(orbit) * r, t.getY() + h, t.getZ() + Mth.sin(orbit) * r, 1.0);
             }
         }
 
