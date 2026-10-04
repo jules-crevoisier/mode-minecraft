@@ -49,7 +49,7 @@ import java.util.EnumSet;
  */
 public class SteamDrone extends Monster implements AnimatedMob {
     public static final float WIDTH = 0.8F;
-    public static final float HEIGHT = 0.9F;
+    public static final float HEIGHT = 1.35F; // covers the boiler and smokestack of the model
     private static final int SHOOT_WINDUP = 6;    // 0.3 s, matches steam_drone.py
     private static final int DIVE_WINDUP = 10;    // 0.5 s
 
