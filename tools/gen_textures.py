@@ -31,31 +31,31 @@ ITEMS = {
     "wayfarer_manual": ("book", "map", "gold", "sapphire"),
     "structure_compass": ("compass", "gold", "dark", "ruby"),
     "travel_backpack": ("backpack", "leather", "dark", "gold"),
-    "explorer_backpack": ("backpack", "gold", "dark", "sapphire"),
-    "magnet_ring": ("ring", "iron", "wood", "ruby"),
+    "explorer_backpack": ("backpack_explorer", "leather", "dark", "sapphire"),
+    "magnet_ring": ("ring_magnet", "iron", "wood", "ruby"),
     "recall_scroll": ("scroll", "map", "wood", "sapphire"),
-    "builder_wand": ("staff", "gold", "wood", "emerald"),
+    "builder_wand": ("wand_build", "gold", "wood", "emerald"),
     "chisel": ("chisel", "iron", "wood", "gold"),
     "fire_staff": ("staff_flame", "ember", "dark", "ember"),
     "frost_staff": ("staff_snow", "frost", "bone", "ice"),
     "thunder_staff": ("staff_bolt", "storm", "dark", "gold"),
     "healing_staff": ("staff_cross", "light", "wood", "emerald"),
-    "levitation_wand": ("wand_ring", "void", "bone", "amethyst"),
-    "ward_orb": ("orb", "void", "gold", "amethyst"),
+    "levitation_wand": ("wand_float", "void", "bone", "amethyst"),
+    "ward_orb": ("orb_caged", "void", "gold", "amethyst"),
     "steam_cane": ("cane", "gold", "dark", "gold"),
     "arcane_ring": ("ring", "gold", "wood", "amethyst"),
     "mana_amulet": ("amulet", "lithite", "gold", "sapphire"),
     "oblivion_vial": ("vial", "frost", "wood", "amethyst"),
-    "master_builder_wand": ("staff", "lithite", "dark", "amethyst"),
+    "master_builder_wand": ("wand_master", "lithite", "dark", "amethyst"),
     # weapons
     "cartographer_blade": ("sword", "cartographer", "wood", "emerald"),
     "telluric_hammer": ("hammer", "lithite", "wood", "emerald"),
-    "storm_staff": ("staff_bolt", "storm", "dark", "sapphire"),
+    "storm_staff": ("staff_storm", "storm", "dark", "sapphire"),
     "ember_scythe": ("scythe", "ember", "blaze", "ember"),
     "void_spear": ("spear", "void", "purpur", "amethyst"),
     "boomerang": ("boomerang", "leather", "wood", "gold"),
     "frost_blade": ("blade", "frost", "bone", "ice"),
-    "light_staff": ("staff_cross", "light", "gold", "gold"),
+    "light_staff": ("staff_sun", "light", "gold", "gold"),
     # tools
     "excavator_pickaxe": ("pickaxe", "lithite", "wood", "emerald"),
     "lumber_axe": ("axe", "iron", "wood", "gold"),
@@ -115,6 +115,11 @@ def shade(c, f):
 
 
 def render_sprite(shape, mat, handle, accent):
+    from wf import itemart
+    painted = itemart.sprite(shape, {"M": MATERIALS[mat], "H": itemart.two_tone(*HANDLES[handle]),
+                                     "A": itemart.two_tone(*ACCENTS[accent])})
+    if painted is not None:
+        return painted
     light, mid, dark, outline = MATERIALS[mat]
     hl, hd = HANDLES[handle]
     gl, gd = ACCENTS[accent]
@@ -181,141 +186,16 @@ def noise_tile(base, var=14, seed=0, size=16):
     return cv
 
 
-def bricks(cv, mortar, rows=4):
-    h = 16 // rows
-    for r in range(rows):
-        y = r * h
-        for x in range(16):
-            cv.set(x, y, mortar)
-        off = 0 if r % 2 == 0 else 4
-        for x in range(off, 16, 8):
-            for yy in range(y, y + h):
-                cv.set(x, yy, mortar)
-
-
-def frame(cv, c, inset=0):
-    for i in range(inset, 16 - inset):
-        cv.set(i, inset, c)
-        cv.set(i, 15 - inset, c)
-        cv.set(inset, i, c)
-        cv.set(15 - inset, i, c)
-
-
-def rune(cv, color, seed):
-    rng = random.Random(seed)
-    x, y = 7, 3
-    for _ in range(14):
-        cv.set(x, y, color)
-        dx, dy = rng.choice([(0, 1), (1, 0), (-1, 0), (0, 1), (1, 1), (-1, 1)])
-        x = max(4, min(11, x + dx))
-        y = max(3, min(12, y + dy))
-
-
 def block_textures():
     out = {}
     from wf import texgen_chisel
     out.update(texgen_chisel.chisel_table())
-    stone = (118, 118, 124)
-    # waystone
-    side = noise_tile(stone, 10, 1)
-    bricks(side, (80, 80, 86), rows=2)
-    rune(side, (120, 230, 255), 7)
-    frame(side, (70, 70, 76))
-    out["waystone_side"] = side
-    top = noise_tile((150, 150, 156), 8, 2)
-    frame(top, (90, 90, 96))
-    for i in range(5, 11):
-        top.set(i, 7, (140, 240, 255))
-        top.set(7, i, (140, 240, 255))
-    out["waystone_top"] = top
-    # sorting chest (crate)
-    wood = (156, 112, 66)
-    s = noise_tile(wood, 10, 3)
-    for y in (0, 5, 10, 15):
-        for x in range(16):
-            s.set(x, y, (96, 64, 34))
-    frame(s, (70, 46, 22))
-    for i in range(16):
-        s.set(i, i, (110, 76, 40))
-    # sorting arrows emblem
-    for x, y in ((6, 6), (7, 6), (8, 6), (9, 6), (8, 5), (8, 7), (6, 9), (7, 9), (8, 9), (9, 9), (7, 8), (7, 10)):
-        s.set(x, y, (255, 214, 90))
-    out["sorting_chest_side"] = s
-    t = noise_tile(wood, 10, 4)
-    frame(t, (70, 46, 22))
-    frame(t, (200, 170, 70), 2)
-    out["sorting_chest_top"] = t
-    # guild terminal
-    g = noise_tile((96, 86, 76), 8, 5)
-    frame(g, (50, 44, 40))
-    g.rect(3, 3, 12, 10, (40, 70, 60))
-    for x in range(4, 12):
-        for y in range(4, 10):
-            if (x * 3 + y * 5) % 7 == 0:
-                g.set(x, y, (120, 240, 180))
-    g.rect(4, 12, 11, 13, (200, 170, 70))
-    out["guild_terminal_front"] = g
-    gs = noise_tile((96, 86, 76), 8, 6)
-    frame(gs, (50, 44, 40))
-    out["guild_terminal_side"] = gs
-    # compacting crate: banded planks, iron corners, a recessed front panel where the item is drawn
-    cs = noise_tile((150, 104, 60), 9, 31)
-    for y in (0, 15):
-        for x in range(16):
-            cs.set(x, y, (88, 60, 34))
-    for i in range(16):
-        cs.set(0, i, (88, 60, 34))
-        cs.set(15, i, (88, 60, 34))
-    for x, y in ((1, 1), (14, 1), (1, 14), (14, 14)):
-        cs.set(x, y, (170, 170, 176))
-    for y in (5, 10):
-        for x in range(1, 15):
-            cs.set(x, y, (112, 78, 44))
-    out["compacting_crate_side"] = cs
-    cf = noise_tile((150, 104, 60), 9, 32)
-    frame(cf, (88, 60, 34))
-    frame(cf, (170, 170, 176), 1)
-    cf.rect(3, 2, 12, 11, (64, 44, 26))
-    cf.rect(4, 12, 11, 13, (210, 190, 120))
-    out["compacting_crate_front"] = cf
-    # grave
-    gr = noise_tile((140, 140, 140), 12, 7)
-    frame(gr, (90, 90, 90))
-    for y in range(4, 12):
-        gr.set(7, y, (70, 70, 70))
-        gr.set(8, y, (70, 70, 70))
-    for x in range(5, 11):
-        gr.set(x, 6, (70, 70, 70))
-    out["grave"] = gr
-    # sealed bars
-    sb = Canvas(16, 16)
-    for x in (1, 5, 9, 13):
-        for y in range(16):
-            sb.set(x, y, (60, 150, 140))
-            sb.set(x + 1, y, (30, 90, 90))
-    for y in (2, 13):
-        for x in range(16):
-            sb.set(x, y, (40, 110, 110))
-    out["sealed_bars"] = sb
-    # altars
-    wa = noise_tile((50, 110, 100), 10, 8)
-    bricks(wa, (30, 70, 70), 4)
-    rune(wa, (160, 255, 230), 11)
-    out["warden_altar_side"] = wa
-    wt = noise_tile((60, 130, 120), 10, 9)
-    frame(wt, (30, 70, 70))
-    for a in range(0, 360, 20):
-        wt.set(8 + round(4 * math.cos(math.radians(a))), 8 + round(4 * math.sin(math.radians(a))), (180, 255, 240))
-    out["warden_altar_top"] = wt
-    va = noise_tile((40, 22, 58), 10, 10)
-    bricks(va, (20, 10, 32), 4)
-    rune(va, (240, 140, 255), 13)
-    out["void_altar_side"] = va
-    vt = noise_tile((52, 30, 74), 10, 12)
-    frame(vt, (20, 10, 32))
-    for a in range(0, 360, 20):
-        vt.set(8 + round(4 * math.cos(math.radians(a))), 8 + round(4 * math.sin(math.radians(a))), (250, 170, 255))
-    out["void_altar_top"] = vt
+    from wf import blockart as BA
+    for name in ("waystone_side", "waystone_top", "sorting_chest_side", "sorting_chest_top", "guild_terminal_front",
+                 "guild_terminal_side", "compacting_crate_side", "compacting_crate_front", "grave", "sealed_bars",
+                 "warden_altar_side", "warden_altar_top", "void_altar_side", "void_altar_top", "boss_seal_side",
+                 "boss_seal_top"):
+        out[name] = getattr(BA, name)()
     # boss mist: pale, swirling and translucent
     mist = Canvas(16, 16)
     for y in range(16):
@@ -324,31 +204,10 @@ def block_textures():
             a = int(70 + 70 * v)
             mist.set(x, y, (int(205 + 40 * v), int(215 + 35 * v), 255, a))
     out["mist_gate"] = mist
-    # boss seal: black stone ringed with gold, a burning soul sigil on top
-    ss = noise_tile((34, 32, 38), 8, 21)
-    bricks(ss, (16, 14, 18), 4)
-    for x in range(16):
-        ss.set(x, 0, (190, 150, 60))
-        ss.set(x, 15, (120, 90, 40))
-    rune(ss, (110, 230, 255), 22)
-    out["boss_seal_side"] = ss
-    st = noise_tile((30, 28, 34), 8, 23)
-    frame(st, (190, 150, 60))
-    for a in range(0, 360, 15):
-        st.set(8 + round(5 * math.cos(math.radians(a))), 8 + round(5 * math.sin(math.radians(a))), (110, 230, 255))
-    for d in (-2, -1, 0, 1, 2):
-        st.set(8 + d, 8, (190, 250, 255))
-        st.set(8, 8 + d, (190, 250, 255))
-    out["boss_seal_top"] = st
-    # ores
-    for name, base, seed in (("lithite_ore", stone, 14), ("deepslate_lithite_ore", (72, 72, 78), 15)):
-        o = noise_tile(base, 12, seed)
-        rng = random.Random(seed)
-        for _ in range(5):
-            x, y = rng.randint(2, 12), rng.randint(2, 12)
-            for dx, dy in ((0, 0), (1, 0), (0, 1), (1, 1)):
-                o.set(x + dx, y + dy, (90, 220, 200) if (dx + dy) % 2 == 0 else (40, 150, 150))
-        out[name] = o
+    # ores: lithite crystals in stone and deepslate
+    lithite = ((170, 250, 232), (64, 196, 180), (24, 110, 112))
+    out["lithite_ore"] = BA.crystal_ore((124, 124, 130), 14, *lithite)
+    out["deepslate_lithite_ore"] = BA.crystal_ore((74, 74, 82), 15, *lithite, deep=True)
     return out
 
 
@@ -396,6 +255,10 @@ GEAR_ACCENT = {"brass": "ember", "mithril": "sapphire", "aether": "ice", "arcane
                "orichalcum": "ruby"}
 
 
+# armour pieces with their own silhouette: the Brass Goggles, the Arcanist's hood and robe
+ARMOR_SHAPES = {("brass", "helmet"): "goggles", ("arcane", "helmet"): "hood", ("arcane", "chestplate"): "robe"}
+
+
 def host_tile(host, seed):
     rng = random.Random(f"{host}{seed}")
     base = HOSTS[host]
@@ -435,54 +298,8 @@ def ore_tile(host, palette, gem, seed):
     return cv
 
 
-def storage_tile(palette, mid_id):
-    light, mid, dark, outline = palette
-    cv = noise_tile(mid, 5, sum(map(ord, mid_id)))
-    for i in range(16):
-        cv.set(i, 0, light)
-        cv.set(0, i, light)
-        cv.set(i, 15, dark)
-        cv.set(15, i, dark)
-    for i in range(1, 15):
-        cv.set(i, 1, shade(light, 0.95))
-        cv.set(14, i, shade(dark, 1.1))
-    if mid_id in ("brass", "zinc"):
-        # riveted plate: four rivets and a seam
-        for x, y in ((3, 3), (12, 3), (3, 12), (12, 12)):
-            cv.set(x, y, light)
-            cv.set(x + 1, y + 1, dark)
-            cv.set(x + 1, y, mid)
-        for i in range(2, 14):
-            cv.set(i, 8, dark)
-            cv.set(i, 9, light)
-    elif mid_id == "aether":
-        for i in range(3, 13):
-            cv.set(i, i, light)
-            cv.set(15 - i, i, light)
-        cv.set(7, 7, (255, 255, 255))
-        cv.set(8, 8, (255, 255, 255))
-    else:
-        # forged ingots stacked: horizontal bevels
-        for y in (5, 10):
-            for x in range(1, 15):
-                cv.set(x, y, dark)
-                cv.set(x, y + 1, light)
-    return cv
-
-
-def raw_block_tile(palette, mid_id):
-    light, mid, dark, outline = palette
-    rng = random.Random(f"raw{mid_id}")
-    cv = noise_tile(mid, 18, len(mid_id))
-    for _ in range(26):
-        x, y = rng.randrange(16), rng.randrange(16)
-        cv.set(x, y, rng.choice((light, dark, dark, outline)))
-    frame(cv, dark)
-    return cv
-
-
 def metal_textures():
-    from wf import metals
+    from wf import blockart, metals
     out = {}
     for mid, m in metals.METALS.items():
         pal = metals.PALETTES[m["palette"]]
@@ -492,16 +309,16 @@ def metal_textures():
             if kind == "ore":
                 out[f"block/{bid}"] = ore_tile(host, pal, m["ore"].get("drop") == "gem", len(bid))
             elif kind == "storage":
-                out[f"block/{bid}"] = storage_tile(pal, mid)
+                out[f"block/{bid}"] = blockart.storage_block(pal, mid, sum(map(ord, mid)))
             else:
-                out[f"block/{bid}"] = raw_block_tile(pal, mid)
+                out[f"block/{bid}"] = blockart.raw_block(pal, len(mid))
         for iid, (form, _label) in metals.item_ids(mid).items():
             out[f"item/{iid}"] = render_sprite(form, mid, "wood", accent)
         for gid, (kind, what, _label) in metals.gear_ids(mid).items():
             handle = "dark" if mid in ("mithril", "aether") else "wood"
             if mid == "arcane":
                 handle = "gold"
-            out[f"item/{gid}"] = render_sprite(what, mid, handle, accent)
+            out[f"item/{gid}"] = render_sprite(ARMOR_SHAPES.get((mid, what), what), mid, handle, accent)
         if m.get("armor"):
             out[f"entity/equipment/humanoid/{mid}"] = armor_layer(mid, accent)
             out[f"entity/equipment/humanoid_leggings/{mid}"] = armor_layer(mid, accent, legs=True)
