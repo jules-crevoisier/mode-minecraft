@@ -109,6 +109,7 @@ STRUCTURE_ICONS = {
     "void_nest": "crying_obsidian", "sunken_citadel": "conduit",
     "forgotten_catacombs": "skeleton_skull", "sand_hypogeum": "chiseled_sandstone",
     "lithite_well": "deepslate_bricks", "void_crypt": "purpur_pillar",
+    "clockwork_citadel": "clock", "sky_harbour": "phantom_membrane", "undercity": "lantern",
 }
 # where each boss lives (its quest follows the discovery of that structure)
 BOSS_HOME = {

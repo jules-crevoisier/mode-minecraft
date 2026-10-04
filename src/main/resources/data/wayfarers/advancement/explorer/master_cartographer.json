@@ -270,9 +270,41 @@
           }
         ]
       }
+    },
+    "clockwork_citadel": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "wayfarers:clockwork_citadel"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "sky_harbour": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "wayfarers:sky_harbour"
+              }
+            }
+          }
+        ]
+      }
     }
   },
-  "parent": "wayfarers:explorer/sand_hypogeum",
+  "parent": "wayfarers:explorer/sky_harbour",
   "rewards": {
     "experience": 300,
     "loot": [
