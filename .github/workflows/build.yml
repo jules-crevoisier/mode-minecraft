@@ -98,7 +98,7 @@ jobs:
           java -jar installer.jar --installServer server > install.log 2>&1 || (tail -50 install.log; exit 1)
           cp jar/wayfarers-*.jar server/mods/
 
-      - name: Run the world overhaul test (new world, every biome, world map)
+      - name: Run the world overhaul test (new world, every biome, world map, biome renders)
         run: python3 tools/ci_smoke.py server --overhaul
 
       - name: Upload the server logs
@@ -120,6 +120,8 @@ jobs:
           path: |
             server/wayfarers-worldmap*.png
             server/wayfarers-worldmap.txt
+            server/wayfarers-biome-*.png
+            server/wayfarers-biomes.txt
 
   previews:
     # the world map images go to their own pre-release, even when a test failed, so they can be looked at
@@ -141,7 +143,7 @@ jobs:
           name: Wayfarers — aperçus du monde (${{ github.ref_name }})
           prerelease: true
           make_latest: false
-          body: Carte des biomes, biomes souterrains et coupe du relief générés par /wayfarers worldmap (commit ${{ github.sha }}).
+          body: Carte des biomes, biomes souterrains et coupe du relief générés par /wayfarers worldmap, et un rendu 3D de chaque biome par /wayfarers biomeshots (commit ${{ github.sha }}).
           files: previews/*
 
   release:
