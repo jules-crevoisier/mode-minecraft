@@ -1,20 +1,27 @@
 package com.wayfarers.registry;
 
+import com.mojang.serialization.MapCodec;
 import com.wayfarers.Wayfarers;
 import com.wayfarers.world.ChunkedPoolElement;
+import com.wayfarers.world.ClearOfStructuresFilter;
 import com.wayfarers.world.CuratedSpreadPlacement;
 import com.wayfarers.world.FittedJigsawStructure;
 import com.wayfarers.world.GroundedPoolElement;
+import com.wayfarers.world.ToggledFeaturesModifier;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
 import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraft.world.level.levelgen.structure.placement.StructurePlacementType;
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElementType;
+import net.minecraftforge.common.world.BiomeModifier;
 import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 /**
  * Worldgen codecs the data pack refers to: the column-split and grounded template pool elements, the structure placement and the
- * terrain-fitted jigsaw structure type.
+ * terrain-fitted jigsaw structure type; the placement filter that keeps big decorations out of structures and the
+ * config-switched biome modifier of the terrain touches (tools/wf/worldbiomes.py).
  */
 public final class ModWorldgen {
     public static final DeferredRegister<StructurePoolElementType<?>> POOL_ELEMENTS =
@@ -40,6 +47,20 @@ public final class ModWorldgen {
     /** {@code "type": "wayfarers:fitted_jigsaw"}: every structure of the mod (tools/wf/defs.py structure_json). */
     public static final RegistryObject<StructureType<FittedJigsawStructure>> FITTED_JIGSAW =
             STRUCTURE_TYPES.register("fitted_jigsaw", () -> () -> FittedJigsawStructure.CODEC);
+
+    public static final DeferredRegister<PlacementModifierType<?>> PLACEMENT_MODIFIERS =
+            DeferredRegister.create(Registries.PLACEMENT_MODIFIER_TYPE, Wayfarers.MODID);
+
+    /** {@code "type": "wayfarers:clear_of_structures"} on the big surface decorations (tools/wf/worldbiomes.py). */
+    public static final RegistryObject<PlacementModifierType<ClearOfStructuresFilter>> CLEAR_OF_STRUCTURES =
+            PLACEMENT_MODIFIERS.register("clear_of_structures", () -> () -> ClearOfStructuresFilter.CODEC);
+
+    public static final DeferredRegister<MapCodec<? extends BiomeModifier>> BIOME_MODIFIERS =
+            DeferredRegister.create(ForgeRegistries.Keys.BIOME_MODIFIER_SERIALIZERS, Wayfarers.MODID);
+
+    /** {@code "type": "wayfarers:toggled_features"}: the terrain touches, each behind a world.terrain.* option. */
+    public static final RegistryObject<MapCodec<ToggledFeaturesModifier>> TOGGLED_FEATURES =
+            BIOME_MODIFIERS.register("toggled_features", () -> ToggledFeaturesModifier.CODEC);
 
     private ModWorldgen() {}
 }

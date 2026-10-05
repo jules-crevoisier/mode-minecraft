@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:simple_block",
+  "config": {
+    "to_place": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "minecraft:campfire",
+        "Properties": {
+          "facing": "north",
+          "lit": "true",
+          "signal_fire": "false",
+          "waterlogged": "false"
+        }
+      }
+    }
+  }
+}

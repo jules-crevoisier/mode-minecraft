@@ -17,6 +17,7 @@ import com.wayfarers.registry.ModItems;
 import com.wayfarers.registry.ModTabs;
 import net.minecraft.resources.Identifier;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.event.AddPackFindersEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.entity.SpawnPlacementRegisterEvent;
@@ -60,10 +61,13 @@ public final class Wayfarers {
         com.wayfarers.registry.ModWorldgen.POOL_ELEMENTS.register(modBus);
         com.wayfarers.registry.ModWorldgen.PLACEMENTS.register(modBus);
         com.wayfarers.registry.ModWorldgen.STRUCTURE_TYPES.register(modBus);
+        com.wayfarers.registry.ModWorldgen.PLACEMENT_MODIFIERS.register(modBus);
+        com.wayfarers.registry.ModWorldgen.BIOME_MODIFIERS.register(modBus);
         com.wayfarers.network.WayfarersNet.init();
 
         EntityAttributeCreationEvent.BUS.addListener(ModEntities::registerAttributes);
         RegisterCommandsEvent.BUS.addListener(WayfarersCommand::register);
+        AddPackFindersEvent.BUS.addListener(com.wayfarers.world.CustomBiomesPack::addPacks);
         CoopEvents.register();
         GraveEvents.register();
         com.wayfarers.map.MapServer.register();

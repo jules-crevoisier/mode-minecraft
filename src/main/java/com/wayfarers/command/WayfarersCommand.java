@@ -127,6 +127,19 @@ public final class WayfarersCommand {
                                 .suggests((ctx, b) -> SharedSuggestionProvider.suggest(
                                         GeneratedContent.STRUCTURES.stream().map(GeneratedContent.StructureInfo::id), b))
                                 .executes(ctx -> FitCheckCommand.run(ctx, StringArgumentType.getString(ctx, "structure")))))
+                .then(Commands.literal("biomeshots").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
+                        .executes(BiomeShotsCommand::run)
+                        .then(Commands.argument("biome", StringArgumentType.word())
+                                .executes(ctx -> BiomeShotsCommand.run(ctx, StringArgumentType.getString(ctx, "biome")))))
+                .then(Commands.literal("genbench").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
+                        .then(Commands.literal("noise").executes(GenBenchCommand::noise))
+                        .then(Commands.literal("area")
+                                .then(Commands.argument("x", IntegerArgumentType.integer())
+                                        .then(Commands.argument("z", IntegerArgumentType.integer())
+                                                .then(Commands.argument("size", IntegerArgumentType.integer(1, 32))
+                                                        .executes(ctx -> GenBenchCommand.area(ctx, IntegerArgumentType.getInteger(ctx, "x"),
+                                                                IntegerArgumentType.getInteger(ctx, "z"),
+                                                                IntegerArgumentType.getInteger(ctx, "size"))))))))
                 .then(Commands.literal("progress").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                         .then(Commands.literal("reset").executes(ctx -> progress(ctx, false)))
                         .then(Commands.literal("complete").executes(ctx -> progress(ctx, true)))));

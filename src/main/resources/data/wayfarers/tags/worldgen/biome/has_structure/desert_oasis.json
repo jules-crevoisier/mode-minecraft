@@ -4,6 +4,7 @@
     {
       "id": "minecraft:desert",
       "required": false
-    }
+    },
+    "wayfarers:pale_dunes"
   ]
 }

@@ -24,6 +24,7 @@
     {
       "id": "minecraft:plains",
       "required": false
-    }
+    },
+    "wayfarers:pale_dunes"
   ]
 }

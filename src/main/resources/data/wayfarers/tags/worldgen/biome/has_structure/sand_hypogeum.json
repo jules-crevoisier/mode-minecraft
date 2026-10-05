@@ -16,6 +16,8 @@
     {
       "id": "minecraft:eroded_badlands",
       "required": false
-    }
+    },
+    "wayfarers:volcanic_highlands",
+    "wayfarers:pale_dunes"
   ]
 }
