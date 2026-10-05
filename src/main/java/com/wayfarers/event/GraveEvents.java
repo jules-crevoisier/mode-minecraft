@@ -46,7 +46,10 @@ public final class GraveEvents {
         for (ItemEntity drop : event.getDrops()) {
             stacks.add(drop.getItem());
         }
-        grave.fill(player, stacks);
+        // a grave holds 160 stacks: whatever is beyond (other mods' extra slots...) drops as usual instead of vanishing
+        for (ItemStack rest : grave.fill(player, stacks)) {
+            Block.popResource(level, pos, rest);
+        }
         player.sendSystemMessage(Component.translatable("message.wayfarers.grave", pos.getX(), pos.getY(), pos.getZ(),
                 level.dimension().identifier().getPath()).withStyle(ChatFormatting.YELLOW));
         com.wayfarers.util.Tips.show(player, "grave");

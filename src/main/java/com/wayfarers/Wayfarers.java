@@ -82,6 +82,8 @@ public final class Wayfarers {
         com.wayfarers.release.RegistryRemap.register();
         com.wayfarers.data.DataVersions.register();
         com.wayfarers.release.UpdateChecker.register();
+        com.wayfarers.util.ServerGuard.register();
+        com.wayfarers.util.SpawnCaps.register();
         SpawnPlacementRegisterEvent.BUS.addListener(ModEntities::registerSpawnPlacements);
         context.registerConfig(ModConfig.Type.COMMON, WayfarersConfig.SPEC);
         context.registerConfig(ModConfig.Type.CLIENT, com.wayfarers.config.WayfarersClientConfig.SPEC);

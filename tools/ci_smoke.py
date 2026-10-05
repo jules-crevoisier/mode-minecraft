@@ -11,6 +11,7 @@ The script accepts the EULA, starts the server, waits for "Done", then from the 
   * places every structure (in its own dimension), then our village and outpost pieces and vanilla villages and
     outposts that use them (after checking the vanilla jigsaw names they rely on in the server jar),
   * summons every entity and every item,
+  * measures the server's time per tick with a crowded base of machines and automatons (fails above 25 ms),
   * breaks mod blocks (loot tables + Forge loot modifiers),
   * spawns every loot table,
   * reloads data packs,
@@ -80,6 +81,7 @@ class Summary:
     phases = []      # (name, seconds, note)
     notes = []       # skips, partial results, anything a reader must know
     slow = []        # "[smoke] slow: ..." lines
+    perf = []        # the server performance check (see server_performance)
 
     @classmethod
     def write(cls, server_dir, failures, bad, extra=()):
@@ -87,6 +89,8 @@ class Summary:
                  f"run {os.environ.get('GITHUB_RUN_ID', '?')} attempt {os.environ.get('GITHUB_RUN_ATTEMPT', '?')}",
                  f"result: {'FAILED' if failures else 'OK'}", "", "phases (seconds):"]
         lines += [f"  {name:34s} {sec:6.0f}  {note}".rstrip() for name, sec, note in cls.phases]
+        if cls.perf:
+            lines += ["", "server performance (MSPT = mean milliseconds per server tick):"] + ["  " + p for p in cls.perf]
         lines += list(extra)
         if cls.notes:
             lines += ["", "notes (skipped or partial items, never counted as passed):"] + ["  " + n for n in cls.notes]
@@ -247,6 +251,8 @@ def exercise_mod(srv, failures):
         summon_all(srv, failures)
     with Phase("creatures fighting"):
         creatures_fight(srv, failures)
+    with Phase("server performance"):
+        server_performance(srv, failures)
     with Phase("blocks and loot"):
         blocks_and_loot(srv, failures)
     with Phase("reload"):
@@ -427,6 +433,94 @@ def creatures_fight(srv, failures):
     if not res or "Sprint completed" not in res:
         failures.append(f"tick sprint: {res}")
     srv.run("execute in minecraft:overworld run kill @e[type=!minecraft:player]", r"Killed|No entity", 60)
+
+
+# Server performance check: a crowded base (PERF_MACHINES machines working a wheat field) and PERF_AUTOMATONS
+# automatons fighting each other, then the mean time per tick over PERF_TICKS ticks (/tick sprint measures the real
+# work of each tick, without the sleep between ticks). Above PERF_MAX_MSPT the run fails. The numbers go to the
+# summary (wayfarers-ci-smoke.txt) with a baseline of the same world before anything was added.
+PERF_MACHINES = {"auto_harvester": 24, "sprinkler": 16, "vacuum_hopper": 16, "entity_detector": 16,
+                 "redstone_timer": 8, "wireless_transmitter": 8, "wireless_receiver": 8}
+PERF_AUTOMATONS = {"brass_golem": 20, "clockwork_spider": 20, "steam_drone": 20}
+PERF_TICKS = 600
+PERF_MAX_MSPT = 25.0
+SPRINT_RX = r"Sprint completed with (\d+) ticks per second, or ([\d.]+) ms per tick"
+
+
+def sprint_mspt(srv, ticks, failures, what):
+    res = srv.run(f"tick sprint {ticks}", SPRINT_RX + r"|Unknown|Incorrect", 900)
+    m = re.search(SPRINT_RX, res or "")
+    if not m:
+        failures.append(f"performance: no sprint report for {what}: {res}")
+        return None
+    return float(m.group(2))
+
+
+def tick_query(srv):
+    """(average ms, p50, p95, p99) of the last 100 real-time ticks, from /tick query."""
+    start = len(srv.lines)
+    res = srv.run("tick query", r"Percentiles: P50", 60)
+    avg = None
+    for line in srv.lines[start:]:
+        m = re.search(r"Average time per tick: ([\d.]+) ?ms", line)
+        if m:
+            avg = float(m.group(1))
+    m = re.search(r"P50: ([\d.]+) ?ms P95: ([\d.]+) ?ms P99: ([\d.]+) ?ms", res or "")
+    return (avg,) + (tuple(float(g) for g in m.groups()) if m else (None, None, None))
+
+
+def server_performance(srv, failures):
+    x0, z0 = -1200, -1200            # an area of its own, far from the other phases
+    ground = -61                     # the flat test world: grass on top at y -61
+    srv.run(f"execute in minecraft:overworld run forceload add {x0 - 16} {z0 - 16} {x0 + 112} {z0 + 112}",
+            r"Marked|forceload|No chunks|already|too many|Too many", 300)
+    srv.run("execute in minecraft:overworld run kill @e[type=!minecraft:player]", r"Killed|No entity", 60)
+    base = sprint_mspt(srv, 200, failures, "the baseline")
+    # a 96 x 96 wheat field, ripe, on farmland: harvesters and sprinklers have work, vacuum hoppers collect the rest
+    for dz in range(0, 96, 32):
+        srv.run(f"execute in minecraft:overworld run fill {x0} {ground} {z0 + dz} {x0 + 95} {ground} {z0 + dz + 31} "
+                f"minecraft:farmland[moisture=7]", r"Successfully filled|No blocks|too big|Unknown|Invalid|not loaded", 60)
+        srv.run(f"execute in minecraft:overworld run fill {x0} {ground + 1} {z0 + dz} {x0 + 95} {ground + 1} {z0 + dz + 31} "
+                f"minecraft:wheat[age=7]", r"Successfully filled|No blocks|too big|Unknown|Invalid|not loaded", 60)
+    placed = 0
+    i = 0
+    for bid, n in PERF_MACHINES.items():
+        for _ in range(n):
+            x, z = x0 + 3 + (i % 16) * 6, z0 + 3 + (i // 16) * 6
+            res = srv.run(f"execute in minecraft:overworld run setblock {x} {ground + 1} {z} wayfarers:{bid}",
+                          r"Changed|Could not|Unknown|Invalid|not loaded", 30)
+            placed += 1 if res and "Changed" in res else 0
+            i += 1
+    if placed < sum(PERF_MACHINES.values()):
+        failures.append(f"performance: only {placed} of {sum(PERF_MACHINES.values())} machines placed")
+    summoned = 0
+    i = 0
+    for eid, n in PERF_AUTOMATONS.items():
+        for _ in range(n):
+            x, z = x0 + 8 + (i % 10) * 9, z0 + 8 + (i // 10) * 13
+            res = srv.run(f"execute in minecraft:overworld run summon wayfarers:{eid} {x} {ground + 2} {z}",
+                          r"Summoned|Unable|Unknown|Invalid|not loaded", 30)
+            summoned += 1 if res and "Summoned" in res else 0
+            i += 1
+    if summoned < sum(PERF_AUTOMATONS.values()):
+        failures.append(f"performance: only {summoned} of {sum(PERF_AUTOMATONS.values())} automatons summoned")
+    loaded = sprint_mspt(srv, PERF_TICKS, failures, f"{placed} machines + {summoned} automatons")
+    # then 30 s at the normal rate, for the tick-time percentiles a player would feel
+    time.sleep(32)
+    avg, p50, p95, p99 = tick_query(srv)
+    Summary.perf.append(f"baseline (same world, nothing added), /tick sprint 200: {base} ms")
+    Summary.perf.append(f"{placed} machines + {summoned} automatons, /tick sprint {PERF_TICKS}: {loaded} ms "
+                        f"(limit {PERF_MAX_MSPT} ms)")
+    Summary.perf.append(f"then at 20 TPS, /tick query (last 100 ticks): average {avg} ms, P50 {p50} ms, P95 {p95} ms, "
+                        f"P99 {p99} ms")
+    Summary.perf.append("machines: " + ", ".join(f"{n} {b}" for b, n in PERF_MACHINES.items()))
+    Summary.perf.append("automatons: " + ", ".join(f"{n} {e}" for e, n in PERF_AUTOMATONS.items()))
+    print("[smoke] performance: " + " | ".join(Summary.perf[:3]), flush=True)
+    if loaded is not None and loaded > PERF_MAX_MSPT:
+        failures.append(f"performance: {loaded} ms per tick with {placed} machines and {summoned} automatons "
+                        f"(limit {PERF_MAX_MSPT} ms, baseline {base} ms)")
+    srv.run("execute in minecraft:overworld run kill @e[type=!minecraft:player]", r"Killed|No entity", 60)
+    srv.run("execute in minecraft:overworld run forceload remove all", r"Unmarked|forceload|No chunks", 30)
 
 
 def blocks_and_loot(srv, failures):

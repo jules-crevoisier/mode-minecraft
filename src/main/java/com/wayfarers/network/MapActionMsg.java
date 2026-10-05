@@ -25,7 +25,14 @@ public record MapActionMsg(int kind, byte[] data) {
 
     static void handle(MapActionMsg msg, CustomPayloadEvent.Context ctx) {
         ServerPlayer player = ctx.getSender();
-        if (player != null) {
+        if (player == null || player.hasDisconnected()) {
+            return;
+        }
+        // region requests come in bursts while the map scrolls; waypoint edits rewrite and resend the waypoint list
+        boolean ok = msg.kind() == REQUEST ? com.wayfarers.util.ServerGuard.allow(player, "map_request", 40, 10.0)
+                : msg.kind() == PING ? com.wayfarers.util.ServerGuard.allow(player, "map_ping", 2, 0.5)
+                : com.wayfarers.util.ServerGuard.allow(player, "map_waypoint", 6, 1.0);
+        if (ok) {
             com.wayfarers.map.MapServer.handle(player, msg);
         }
     }

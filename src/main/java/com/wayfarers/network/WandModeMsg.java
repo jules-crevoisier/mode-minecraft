@@ -15,7 +15,7 @@ public record WandModeMsg() {
 
     static void handle(WandModeMsg msg, CustomPayloadEvent.Context ctx) {
         ServerPlayer player = ctx.getSender();
-        if (player == null) {
+        if (!com.wayfarers.util.ServerGuard.canAct(player) || !com.wayfarers.util.ServerGuard.allow(player, "wand_mode", 4, 4.0)) {
             return;
         }
         for (InteractionHand hand : InteractionHand.values()) {

@@ -39,6 +39,11 @@ public class CrateBlock extends BaseEntityBlock {
     public static final MapCodec<CrateBlock> CODEC = simpleCodec(CrateBlock::new);
     private static final Map<UUID, Long> LAST_INSERT = new HashMap<>();
 
+    /** Forgets a player's last insert when they leave (see ServerGuard). */
+    public static void forget(UUID id) {
+        LAST_INSERT.remove(id);
+    }
+
     public CrateBlock(Properties properties) {
         super(properties);
         registerDefaultState(stateDefinition.any().setValue(HorizontalDirectionalBlock.FACING, Direction.NORTH));

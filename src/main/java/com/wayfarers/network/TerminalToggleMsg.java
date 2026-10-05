@@ -14,7 +14,8 @@ public record TerminalToggleMsg(BlockPos pos) {
 
     static void handle(TerminalToggleMsg msg, CustomPayloadEvent.Context ctx) {
         ServerPlayer player = ctx.getSender();
-        if (player != null && player.containerMenu instanceof TerminalMenu menu && menu.stillValid(player)) {
+        if (com.wayfarers.util.ServerGuard.canAct(player) && com.wayfarers.util.ServerGuard.allow(player, "terminal_toggle", 10, 5.0)
+                && player.containerMenu instanceof TerminalMenu menu && menu.stillValid(player)) {
             menu.toggle(msg.pos);
         }
     }

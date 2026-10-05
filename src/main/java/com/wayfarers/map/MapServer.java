@@ -83,6 +83,8 @@ public final class MapServer {
     private static MapWaypoints waypoints;
     private static MapExplorers explorers;
     private static int waystoneHash;
+    /** A shared waypoint changed: everyone gets the new list once, at the next second (edits are coalesced). */
+    private static boolean pointsDirty;
 
     private MapServer() {}
 
@@ -100,6 +102,9 @@ public final class MapServer {
         /** Server tick at which the waypoints are sent once more after login (the first copy can arrive before the
          * client has its world); -1 when done. */
         int resendPointsAt = -1;
+        /** Hash and tick of the last PLAYERS message this player got (identical ones are skipped for a while). */
+        int playersHash;
+        int playersAt = Integer.MIN_VALUE / 2;
 
         Session(UUID id) {
             this.id = id;
@@ -205,6 +210,7 @@ public final class MapServer {
         SESSIONS.clear();
         COMPLETED.clear();
         SCAN.clearCache();
+        pointsDirty = false;
         server = null;
     }
 
@@ -498,7 +504,17 @@ public final class MapServer {
             }
         }
         if (tick % 20 == 0) {
-            sendPlayers(players);
+            sendPlayers(players, tick);
+            if (pointsDirty) {
+                pointsDirty = false;
+                for (ServerPlayer p : players) {
+                    sendPoints(p);
+                }
+            }
+        }
+        // waypoint edits are written by the map worker at most every 30 s (and at every world save)
+        if (tick % 600 == 0) {
+            waypoints.save();
         }
         if (tick % 100 == 0) {
             int h = waystoneHash(s);
@@ -537,7 +553,12 @@ public final class MapServer {
         }
     }
 
-    private static void sendPlayers(List<ServerPlayer> players) {
+    /**
+     * Once a second, the positions of the players of each dimension to the players of that dimension (one payload per
+     * dimension, shared). A payload identical to the last one a player received is skipped, but resent every 3 s:
+     * the client forgets positions older than 5 s.
+     */
+    private static void sendPlayers(List<ServerPlayer> players, int tick) {
         if (players.size() < 2 || !WayfarersConfig.MAP_PLAYERS.get()) {
             return;
         }
@@ -555,8 +576,18 @@ public final class MapServer {
             if (list == null || list.size() < 2 && list.getFirst().name().equals(p.getName().getString())) {
                 continue;
             }
-            WayfarersNet.toPlayer(p, msgs.computeIfAbsent(dim, d -> new MapDataMsg(MapDataMsg.PLAYERS, d, 0, 0,
-                    MapProtocol.players(list))));
+            MapDataMsg msg = msgs.computeIfAbsent(dim, d -> new MapDataMsg(MapDataMsg.PLAYERS, d, 0, 0,
+                    MapProtocol.players(list)));
+            int hash = 31 * dim.hashCode() + java.util.Arrays.hashCode(msg.data());
+            Session s = SESSIONS.get(p.getUUID());
+            if (s != null) {
+                if (s.playersHash == hash && tick - s.playersAt < 60) {
+                    continue;
+                }
+                s.playersHash = hash;
+                s.playersAt = tick;
+            }
+            WayfarersNet.toPlayer(p, msg);
         }
     }
 
@@ -580,13 +611,11 @@ public final class MapServer {
                 MapProtocol.points(waypoints.visibleTo(p.getUUID()), stones)));
     }
 
+    /** The owner sees the change at once; a shared waypoint reaches everyone at the next second (coalesced). */
     private static void syncPoints(ServerPlayer owner, boolean everyone) {
+        sendPoints(owner);
         if (everyone) {
-            for (ServerPlayer p : server.getPlayerList().getPlayers()) {
-                sendPoints(p);
-            }
-        } else {
-            sendPoints(owner);
+            pointsDirty = true;
         }
     }
 
@@ -626,7 +655,6 @@ public final class MapServer {
                             .withStyle(ChatFormatting.RED));
                     return;
                 }
-                waypoints.save();
                 syncPoints(player, w.shared());
             }
             case MapActionMsg.WAYPOINT_EDIT -> {
@@ -639,7 +667,6 @@ public final class MapServer {
                 MapProtocol.Waypoint w = new MapProtocol.Waypoint(old.id(), old.owner(), old.ownerName(), (String) e[1], old.dim(),
                         old.x(), old.y(), old.z(), (Integer) e[2], (Integer) e[3], (Boolean) e[4]);
                 waypoints.replace(old, w);
-                waypoints.save();
                 syncPoints(player, old.shared() || w.shared() || !old.owner().equals(player.getUUID().toString()));
             }
             case MapActionMsg.WAYPOINT_DELETE -> {
@@ -649,7 +676,6 @@ public final class MapServer {
                     return;
                 }
                 waypoints.remove(old);
-                waypoints.save();
                 syncPoints(player, old.shared() || !old.owner().equals(player.getUUID().toString()));
             }
             case MapActionMsg.PING -> {

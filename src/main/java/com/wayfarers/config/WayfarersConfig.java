@@ -2,7 +2,10 @@ package com.wayfarers.config;
 
 import net.minecraftforge.common.ForgeConfigSpec;
 
-/** config/wayfarers-common.toml — every difficulty knob can be tuned or switched off by the server owner. */
+/**
+ * config/wayfarers-common.toml — every difficulty knob can be tuned or switched off by the server owner, plus the
+ * server administration options (anti-grief, anti-exploit, load limits) described in docs/SERVER_ADMIN.md.
+ */
 public final class WayfarersConfig {
     private static final ForgeConfigSpec.Builder B = new ForgeConfigSpec.Builder();
 
@@ -69,6 +72,83 @@ public final class WayfarersConfig {
             .comment("Dedicated server: look for a newer Wayfarers release at start-up (GitHub, in the background) and log it.",
                     "Nothing is ever downloaded.")
             .define("updates.checkForUpdates", true);
+
+    // ------------------------------------------------------------------ server administration (docs/SERVER_ADMIN.md)
+    // Defaults are the safe ones for a public server; a small group of friends can loosen them.
+
+    public static final ForgeConfigSpec.BooleanValue WAYSTONE_CROSS_DIMENSION = B
+            .comment("Waystones may send players to a waystone of another dimension (Nether, End...).")
+            .define("waystones.crossDimension", true);
+    public static final ForgeConfigSpec.IntValue WAYSTONE_COOLDOWN = B
+            .comment("Seconds a player waits between two waystone journeys (each journey loads the chunks at the arrival).",
+                    "0 = no wait. Operators are never held back.")
+            .defineInRange("waystones.cooldownSeconds", 5, 0, 3600);
+    public static final ForgeConfigSpec.IntValue WAYSTONE_COST = B
+            .comment("Experience levels a waystone journey costs (0 = free). A journey to another dimension costs twice as much.")
+            .defineInRange("waystones.costLevels", 0, 0, 100);
+    public static final ForgeConfigSpec.IntValue WAYSTONE_MAX = B
+            .comment("Most waystones the server remembers (each is listed to everyone): further ones can't be activated.")
+            .defineInRange("waystones.maxTotal", 1000, 16, 20000);
+    public static final ForgeConfigSpec.BooleanValue WAYSTONE_RENAME_HERE_ONLY = B
+            .comment("Players may rename or pin only the waystone they stand at (true), or any waystone of the list (false).",
+                    "Waystones are shared by the whole server: true stops anyone from renaming everybody's stones. Operators may always.")
+            .define("waystones.renameOnlyHere", true);
+
+    public static final ForgeConfigSpec.BooleanValue BREAKER_ENABLED = B
+            .comment("The Block Breaker machine works (false: it stays idle).")
+            .define("machines.breakerEnabled", true);
+    public static final ForgeConfigSpec.BooleanValue PLACER_ENABLED = B
+            .comment("The Block Placer machine works (false: it stays idle).")
+            .define("machines.placerEnabled", true);
+    public static final ForgeConfigSpec.BooleanValue MACHINES_ACT_AS_OWNER = B
+            .comment("Block Breakers and Placers act as the player who placed them: spawn protection and claim / protection",
+                    "mods (through Forge's break and place events) apply to them, and they wait while that player is offline.",
+                    "Machines placed before this option existed have no owner and keep working as before.")
+            .define("machines.actAsOwner", true);
+    public static final ForgeConfigSpec.IntValue WIRELESS_RANGE = B
+            .comment("Wireless Redstone reach in blocks: a receiver only hears transmitters this close (0 = the whole dimension).",
+                    "Keeps one player's transmitter from switching other bases' receivers across the map.")
+            .defineInRange("machines.wirelessRange", 128, 0, 30000000);
+    public static final ForgeConfigSpec.IntValue MACHINES_PER_CHUNK = B
+            .comment("Most Wayfarers machines one chunk may hold (0 = no limit). Placing more is refused.")
+            .defineInRange("machines.maxPerChunk", 32, 0, 4096);
+
+    public static final ForgeConfigSpec.DoubleValue MAGNET_RANGE = B
+            .comment("Magnet Ring reach in blocks (0 = the ring does nothing).")
+            .defineInRange("items.magnetRange", 7.0, 0.0, 16.0);
+    public static final ForgeConfigSpec.BooleanValue STORM_STAFF_GRIEF = B
+            .comment("Storm Staff lightning acts like real lightning: it sets fires and hits players, pets and villagers.",
+                    "false: the bolt only hurts monsters and starts no fire.")
+            .define("items.stormStaffRealLightning", false);
+    public static final ForgeConfigSpec.IntValue QUICK_STACK_RANGE = B
+            .comment("Reach in blocks of the quick-stack button (stores your items into nearby chests that hold them). 0 = off.")
+            .defineInRange("storage.quickStackRange", 8, 0, 16);
+
+    public static final ForgeConfigSpec.IntValue GRAVE_PROTECTION = B
+            .comment("Minutes during which only its owner (and operators) can open a grave. 0 = anyone at once, -1 = only the owner, always.")
+            .defineInRange("graves.ownerOnlyMinutes", -1, -1, 100000);
+
+    public static final ForgeConfigSpec.BooleanValue QUESTS_SHARED = B
+            .comment("A quest step reached by one player is reached by everyone online (the quest is shared by the server).",
+                    "Each player still receives the step's rewards once.")
+            .define("quests.shareProgress", true);
+    public static final ForgeConfigSpec.BooleanValue QUESTS_CATCH_UP = B
+            .comment("Players who join later (or were offline) receive, when they log in, every quest step the server already",
+                    "reached (with its rewards).",
+                    "On a public server, false stops new (or alt) accounts from collecting every reward at once.")
+            .define("quests.catchUpOnJoin", true);
+
+    public static final ForgeConfigSpec.BooleanValue SPAWNS_ENABLED = B
+            .comment("Wayfarers creatures spawn naturally (monsters and ocean life). Structures and altars still place theirs.")
+            .define("spawns.natural", true);
+    public static final ForgeConfigSpec.IntValue SPAWNS_MAX_PER_TYPE = B
+            .comment("Most loaded creatures of one Wayfarers kind per dimension before natural spawning of that kind pauses.")
+            .defineInRange("spawns.maxLoadedPerType", 60, 0, 10000);
+
+    public static final ForgeConfigSpec.IntValue LOCATE_PER_MINUTE = B
+            .comment("Structure Compass / Airship Compass searches the whole server may run per minute (each one can take",
+                    "a while on the server thread). Answers are remembered, so repeated uses near the same place are free.")
+            .defineInRange("compass.searchesPerMinute", 30, 1, 1200);
 
     public static final ForgeConfigSpec SPEC = B.build();
 

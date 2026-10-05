@@ -32,6 +32,12 @@ public class GuildTerminalBlockEntity extends BlockEntity {
     private final Set<BlockPos> excluded = new HashSet<>();
     private StorageNetwork.Scan scan = StorageNetwork.Scan.EMPTY;
     private long scannedAt = Long.MIN_VALUE;
+    /** Contents of the network, shared by everyone looking at this terminal (see {@link #snapshot}). */
+    private Snapshot snapshot = new Snapshot(List.of(), 0);
+    private long snapshotAt = Long.MIN_VALUE;
+
+    /** What the network holds and how many slots are free, as sent to the terminal screens. */
+    public record Snapshot(List<StorageNetwork.Entry> contents, int freeSlots) {}
 
     public GuildTerminalBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.GUILD_TERMINAL.get(), pos, state);
@@ -65,6 +71,25 @@ public class GuildTerminalBlockEntity extends BlockEntity {
             }
         }
         return out;
+    }
+
+    /**
+     * The network's contents, counted at most every half second however many players look at this terminal (each
+     * screen used to count a whole base of chests on its own); {@link #invalidateContents} forces a recount after a
+     * take or store.
+     */
+    public Snapshot snapshot() {
+        long now = level == null ? 0 : level.getGameTime();
+        if (snapshotAt == Long.MIN_VALUE || now < snapshotAt || now - snapshotAt >= 10) {
+            List<Container> net = network();
+            snapshot = new Snapshot(StorageNetwork.contents(net), StorageNetwork.freeSlots(net));
+            snapshotAt = now;
+        }
+        return snapshot;
+    }
+
+    public void invalidateContents() {
+        snapshotAt = Long.MIN_VALUE;
     }
 
     /** True (and starts the cooldown) when the whole network may be sorted now: at most once a second. */

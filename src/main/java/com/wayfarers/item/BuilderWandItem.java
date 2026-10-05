@@ -109,6 +109,11 @@ public class BuilderWandItem extends TooltipItem {
         this.maxBlocks = maxBlocks;
     }
 
+    /** Forgets a player's undo when they leave (see ServerGuard). */
+    public static void forget(UUID id) {
+        UNDO.remove(id);
+    }
+
     public int maxBlocks() {
         return maxBlocks;
     }
@@ -359,6 +364,16 @@ public class BuilderWandItem extends TooltipItem {
         if (level instanceof ServerLevel server) {
             List<Placement> all = plan.all();
             BlockState state = plan.primary().get(0).state();
+            // protection mods (claims) hear about every block, like a hand placement; one refusal stops the whole use
+            if (player instanceof net.minecraft.server.level.ServerPlayer sp) {
+                for (Placement p : all) {
+                    if (!com.wayfarers.util.ServerGuard.mayPlace(server, p.pos(), sp)) {
+                        player.sendOverlayMessage(Component.translatable("message.wayfarers.wrench.protected")
+                                .withStyle(ChatFormatting.GRAY));
+                        return InteractionResult.FAIL;
+                    }
+                }
+            }
             for (Placement p : all) {
                 server.setBlock(p.pos(), p.state(), Block.UPDATE_ALL);
             }
@@ -421,7 +436,11 @@ public class BuilderWandItem extends TooltipItem {
             for (Placement p : undo.placed()) {
                 // same block and same worth: its shape may have changed since (stair corners, fences and walls joining)
                 BlockState now = server.getBlockState(p.pos());
-                if (now.is(p.state().getBlock()) && cost(now) == cost(p.state())) {
+                // only near the player, and only where they may still break blocks (a claim made since, spawn...)
+                if (now.is(p.state().getBlock()) && cost(now) == cost(p.state())
+                        && p.pos().distSqr(player.blockPosition()) <= MIRROR_RANGE * MIRROR_RANGE
+                        && player instanceof net.minecraft.server.level.ServerPlayer sp
+                        && com.wayfarers.util.ServerGuard.mayBreak(server, p.pos(), sp)) {
                     server.removeBlock(p.pos(), false);
                     restored += cost(p.state());
                     item = p.state().getBlock().asItem();

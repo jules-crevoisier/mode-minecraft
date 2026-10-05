@@ -98,14 +98,23 @@ public final class WayfarersData extends SavedData {
                 .findFirst();
     }
 
-    /** Registers the waystone if needed and returns its id plus whether it was new. */
-    public String addWaystone(Level level, BlockPos pos, String name) {
+    /** Longest waystone name kept (the travel list and the map send names to every player). */
+    public static final int MAX_NAME = 32;
+
+    /**
+     * Registers the waystone if needed and returns its id, or null when the server already remembers the most
+     * waystones it allows ({@code waystones.maxTotal}).
+     */
+    public @org.jetbrains.annotations.Nullable String addWaystone(Level level, BlockPos pos, String name) {
         Optional<String> existing = findWaystone(level, pos);
         if (existing.isPresent()) {
             return existing.get();
         }
+        if (waystones.size() >= com.wayfarers.config.WayfarersConfig.WAYSTONE_MAX.get()) {
+            return null;
+        }
         String id = "w" + nextId++;
-        waystones.put(id, new Waystone(name, level.dimension().identifier(), pos.immutable()));
+        waystones.put(id, new Waystone(cleanName(name), level.dimension().identifier(), pos.immutable()));
         setDirty();
         return id;
     }
@@ -117,10 +126,16 @@ public final class WayfarersData extends SavedData {
         });
     }
 
+    /** A name safe to send to every client: no control or formatting characters, at most {@link #MAX_NAME}. */
+    public static String cleanName(String name) {
+        String clean = com.wayfarers.map.MapProtocol.clean(name);
+        return clean.isEmpty() ? "?" : clean;
+    }
+
     public void renameWaystone(String id, String name) {
         Waystone w = waystones.get(id);
         if (w != null) {
-            waystones.put(id, new Waystone(name, w.dimension(), w.pos(), w.pinned()));
+            waystones.put(id, new Waystone(cleanName(name), w.dimension(), w.pos(), w.pinned()));
             setDirty();
         }
     }

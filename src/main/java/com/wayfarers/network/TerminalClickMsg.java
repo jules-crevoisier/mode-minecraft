@@ -34,7 +34,13 @@ public record TerminalClickMsg(Action action, ItemStack type) {
 
     static void handle(TerminalClickMsg msg, CustomPayloadEvent.Context ctx) {
         ServerPlayer player = ctx.getSender();
-        if (player == null || !(player.containerMenu instanceof TerminalMenu menu) || !menu.stillValid(player)) {
+        // every click walks the live network: a modified client clicking thousands of times a second must not stall
+        // the server (a person clicks a few times a second; STORE_ALL is rarer still)
+        if (!com.wayfarers.util.ServerGuard.canAct(player) || !(player.containerMenu instanceof TerminalMenu menu)
+                || !menu.stillValid(player)
+                || !com.wayfarers.util.ServerGuard.allow(player, "terminal_click", 30, 15.0)
+                || (msg.action == Action.STORE_ALL || msg.action == Action.STORE_MATCHING)
+                && !com.wayfarers.util.ServerGuard.allow(player, "terminal_store_all", 3, 1.0)) {
             return;
         }
         List<Container> net = menu.network();
@@ -56,7 +62,10 @@ public record TerminalClickMsg(Action action, ItemStack type) {
                     break;
                 }
                 ItemStack taken = StorageNetwork.extract(net, msg.type, msg.type.getMaxStackSize());
-                if (!player.getInventory().add(taken) && !taken.isEmpty()) {
+                // Inventory.add takes what fits and leaves the rest in the stack (it returns true for a partial
+                // fit): whatever is left goes back to the network, or to the floor
+                player.getInventory().add(taken);
+                if (!taken.isEmpty()) {
                     ItemStack back = StorageNetwork.insert(net, taken);
                     if (!back.isEmpty()) {
                         player.drop(back, false);

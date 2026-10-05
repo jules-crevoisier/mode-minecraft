@@ -21,7 +21,15 @@ import java.util.Map;
 import java.util.Set;
 
 public final class Waystones {
+    /** Player -> server tick of their last waystone journey (the cooldown of waystones.cooldownSeconds). */
+    private static final Map<java.util.UUID, Integer> LAST_WARP = new java.util.HashMap<>();
+
     private Waystones() {}
+
+    /** Forgets a player who left (see ServerGuard). */
+    public static void forget(java.util.UUID id) {
+        LAST_WARP.remove(id);
+    }
 
     public static String defaultName(ServerLevel level, BlockPos pos) {
         String biome = level.getBiome(pos).unwrapKey()
@@ -41,6 +49,11 @@ public final class Waystones {
         WayfarersData data = WayfarersData.get(level.getServer());
         boolean known = data.findWaystone(level, pos).isPresent();
         String here = data.addWaystone(level, pos, defaultName(level, pos));
+        if (here == null) {
+            player.sendSystemMessage(Component.translatable("message.wayfarers.waystone.full",
+                    com.wayfarers.config.WayfarersConfig.WAYSTONE_MAX.get()).withStyle(ChatFormatting.RED));
+            return;
+        }
         if (!known) {
             String name = data.waystone(here).map(WayfarersData.Waystone::name).orElse("?");
             level.getServer().getPlayerList().broadcastSystemMessage(
@@ -65,14 +78,23 @@ public final class Waystones {
         WayfarersNet.toPlayer(player, new WaystoneListMsg(currentId, entries));
     }
 
-    /** Validates and runs an action sent from the travel screen. */
+    private static boolean isOp(ServerPlayer player) {
+        return player.permissions().hasPermission(net.minecraft.server.permissions.Permissions.COMMANDS_GAMEMASTER);
+    }
+
+    /**
+     * Validates and runs an action sent from the travel screen. Nothing the client sends is trusted: the player must
+     * stand at the waystone {@code from} (in its dimension), the target must exist, and the server config decides
+     * cooldown, cost, cross-dimension travel and who may rename (docs/SERVER_ADMIN.md).
+     */
     public static void handleAction(ServerPlayer player, WaystoneActionMsg msg) {
         WayfarersData data = WayfarersData.get(player.level().getServer());
+        boolean op = isOp(player);
         boolean atStone = data.waystone(msg.from())
                 .filter(w -> w.levelKey().equals(player.level().dimension())
                         && w.pos().closerToCenterThan(player.position(), 8.0))
                 .isPresent();
-        if (!atStone && !player.permissions().hasPermission(net.minecraft.server.permissions.Permissions.COMMANDS_GAMEMASTER)) {
+        if (!atStone && !op) {
             player.sendSystemMessage(Component.translatable("message.wayfarers.waystone.too_far").withStyle(ChatFormatting.RED));
             return;
         }
@@ -81,22 +103,72 @@ public final class Waystones {
                 if (msg.target().equals(msg.from())) {
                     return;
                 }
+                var target = data.waystone(msg.target());
+                if (target.isPresent() && !op && !mayTravel(player, target.get())) {
+                    return;
+                }
+                int cost = target.map(t -> cost(player, t)).orElse(0); // before the journey: it may change dimension
                 if (!warp(player, msg.target())) {
                     player.sendSystemMessage(Component.translatable("message.wayfarers.waystone.gone").withStyle(ChatFormatting.RED));
                     list(player, msg.from());
+                } else if (!op) {
+                    payForTravel(player, cost);
                 }
             }
-            case RENAME -> {
-                String name = msg.text().strip();
-                if (!name.isEmpty() && name.length() <= 32) {
-                    data.renameWaystone(msg.target(), name);
+            case RENAME, PIN -> {
+                // waystones are shared by the whole server: by default only the stone you stand at can be renamed
+                if (!op && com.wayfarers.config.WayfarersConfig.WAYSTONE_RENAME_HERE_ONLY.get() && !msg.target().equals(msg.from())) {
+                    player.sendSystemMessage(Component.translatable("message.wayfarers.waystone.rename_here")
+                            .withStyle(ChatFormatting.RED));
+                } else if (msg.action() == WaystoneActionMsg.Action.PIN) {
+                    data.togglePinned(msg.target());
+                } else {
+                    String name = msg.text().strip();
+                    if (!name.isEmpty() && name.length() <= WayfarersData.MAX_NAME) {
+                        data.renameWaystone(msg.target(), name);
+                    }
                 }
                 list(player, msg.from());
             }
-            case PIN -> {
-                data.togglePinned(msg.target());
-                list(player, msg.from());
-            }
+        }
+    }
+
+    private static boolean crossDimension(ServerPlayer player, WayfarersData.Waystone target) {
+        return !target.levelKey().equals(player.level().dimension());
+    }
+
+    private static int cost(ServerPlayer player, WayfarersData.Waystone target) {
+        int cost = com.wayfarers.config.WayfarersConfig.WAYSTONE_COST.get();
+        return crossDimension(player, target) ? cost * 2 : cost;
+    }
+
+    /** Cross-dimension rule, cooldown and cost (creative players pay nothing); tells the player why not. */
+    private static boolean mayTravel(ServerPlayer player, WayfarersData.Waystone target) {
+        if (crossDimension(player, target) && !com.wayfarers.config.WayfarersConfig.WAYSTONE_CROSS_DIMENSION.get()) {
+            player.sendSystemMessage(Component.translatable("message.wayfarers.waystone.no_cross_dimension")
+                    .withStyle(ChatFormatting.RED));
+            return false;
+        }
+        int now = player.level().getServer().getTickCount();
+        Integer last = LAST_WARP.get(player.getUUID());
+        int wait = com.wayfarers.config.WayfarersConfig.WAYSTONE_COOLDOWN.get() * 20;
+        if (last != null && now >= last && now - last < wait) {
+            player.sendSystemMessage(Component.translatable("message.wayfarers.waystone.cooldown", (wait - (now - last) + 19) / 20)
+                    .withStyle(ChatFormatting.RED));
+            return false;
+        }
+        int cost = cost(player, target);
+        if (cost > 0 && !player.getAbilities().instabuild && player.experienceLevel < cost) {
+            player.sendSystemMessage(Component.translatable("message.wayfarers.waystone.cost", cost).withStyle(ChatFormatting.RED));
+            return false;
+        }
+        return true;
+    }
+
+    private static void payForTravel(ServerPlayer player, int cost) {
+        LAST_WARP.put(player.getUUID(), player.level().getServer().getTickCount());
+        if (cost > 0 && !player.getAbilities().instabuild) {
+            player.giveExperienceLevels(-cost);
         }
     }
 

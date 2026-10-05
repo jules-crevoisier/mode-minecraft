@@ -193,7 +193,8 @@ public class MachineMenu extends AbstractContainerMenu {
 
     @Override
     public boolean clickMenuButton(Player player, int id) {
-        if (machine == null || !(player instanceof ServerPlayer sp) || id < 0) {
+        if (machine == null || !(player instanceof ServerPlayer sp) || id < 0
+                || !com.wayfarers.util.ServerGuard.allow(sp, "machine_button", 10, 10.0)) {
             return false;
         }
         return machine.applySetting(sp, id / 100, id % 100);

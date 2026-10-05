@@ -142,6 +142,16 @@ public class MachineBlock extends BaseEntityBlock {
         return RenderShape.MODEL;
     }
 
+    /** The placer owns the machine: a Breaker or Placer then acts as them (WayfarersConfig.MACHINES_ACT_AS_OWNER). */
+    @Override
+    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable net.minecraft.world.entity.LivingEntity placer,
+                            ItemStack stack) {
+        super.setPlacedBy(level, pos, state, placer, stack);
+        if (!level.isClientSide() && placer instanceof Player player && level.getBlockEntity(pos) instanceof MachineBlockEntity machine) {
+            machine.setOwner(player.getUUID());
+        }
+    }
+
     // ------------------------------------------------------------------ interaction
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {

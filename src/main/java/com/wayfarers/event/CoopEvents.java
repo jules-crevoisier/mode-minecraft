@@ -32,7 +32,8 @@ public final class CoopEvents {
     /** Shares every single criterion, so partial progress (e.g. "visit every structure") is pooled. */
     private static void onProgress(AdvancementEvent.AdvancementProgressEvent event) {
         AdvancementHolder holder = event.getAdvancement();
-        if (sharing || event.getProgressType() != AdvancementEvent.AdvancementProgressEvent.ProgressType.GRANT
+        if (sharing || !com.wayfarers.config.WayfarersConfig.QUESTS_SHARED.get()
+                || event.getProgressType() != AdvancementEvent.AdvancementProgressEvent.ProgressType.GRANT
                 || !(event.getEntity() instanceof ServerPlayer earner)
                 || !holder.id().getNamespace().equals(Wayfarers.MODID) || holder.id().getPath().equals("root")) {
             return;
@@ -64,7 +65,7 @@ public final class CoopEvents {
 
     /** Placing a storage block for the first time explains it. */
     private static void onPlace(net.minecraftforge.event.level.BlockEvent.EntityPlaceEvent event) {
-        if (event.getEntity() instanceof ServerPlayer player) {
+        if (event.getEntity() instanceof ServerPlayer player && !com.wayfarers.util.ServerGuard.probing()) {
             var block = event.getPlacedBlock().getBlock();
             if (block == com.wayfarers.registry.ModBlocks.SORTING_CHEST.get()) {
                 com.wayfarers.util.Tips.show(player, "sorting_chest");
@@ -80,9 +81,12 @@ public final class CoopEvents {
         }
         MinecraftServer server = player.level().getServer();
         WayfarersData data = WayfarersData.get(server);
+        // quests.catchUpOnJoin: off on a public server, so a new (or alt) account doesn't collect every reward at once
+        boolean catchUp = com.wayfarers.config.WayfarersConfig.QUESTS_SHARED.get()
+                && com.wayfarers.config.WayfarersConfig.QUESTS_CATCH_UP.get();
         sharing = true;
         try {
-            for (String entry : data.quests()) {
+            for (String entry : catchUp ? data.quests() : java.util.Set.<String>of()) {
                 int hash = entry.indexOf('#');
                 if (hash < 0) {
                     continue;

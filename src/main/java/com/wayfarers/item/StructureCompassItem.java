@@ -52,7 +52,12 @@ public class StructureCompassItem extends TooltipItem {
         }
         player.getCooldowns().addCooldown(stack, 60);
         BlockPos from = player.blockPosition();
-        StructureLocator.Found found = StructureLocator.nearest(serverLevel, from, target, 100);
+        StructureLocator.Found found = StructureLocator.nearestBudgeted(serverLevel, from, target, 100);
+        if (found == StructureLocator.BUSY) {
+            player.getCooldowns().addCooldown(stack, 20);
+            player.sendSystemMessage(Component.translatable("message.wayfarers.compass.busy").withStyle(ChatFormatting.GRAY));
+            return InteractionResult.SUCCESS;
+        }
         if (found == null) {
             player.sendSystemMessage(Component.translatable("message.wayfarers.compass.none", targetName(target))
                     .withStyle(ChatFormatting.GRAY));

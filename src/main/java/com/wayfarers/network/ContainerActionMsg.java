@@ -14,7 +14,8 @@ public record ContainerActionMsg(ContainerActions.Action action) {
 
     static void handle(ContainerActionMsg msg, CustomPayloadEvent.Context ctx) {
         ServerPlayer player = ctx.getSender();
-        if (player != null && !player.isSpectator()) {
+        // sorting and quick-stack walk containers (quick-stack: every chest around): a few per second at most
+        if (com.wayfarers.util.ServerGuard.canAct(player) && com.wayfarers.util.ServerGuard.allow(player, "container_action", 6, 3.0)) {
             ContainerActions.run(player, msg.action);
         }
     }

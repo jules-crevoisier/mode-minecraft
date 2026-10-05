@@ -46,18 +46,66 @@ public final class StructureLocator {
 
     /** Forgets the remembered answers when the server stops (another world may be opened next). */
     public static void register() {
-        ServerStoppedEvent.BUS.addListener(e -> CACHE.clear());
+        ServerStoppedEvent.BUS.addListener(e -> {
+            CACHE.clear();
+            tokens = -1;
+        });
     }
+
+    /** Answer of {@link #nearestBudgeted} when the server-wide search budget is used up for now. */
+    public static final Found BUSY = new Found(BlockPos.ZERO, "");
+
+    /** Searches allowed right now, refilled at compass.searchesPerMinute (shared by every player). */
+    private static double tokens = -1;
+    private static long refilledAt;
 
     /** @param index index in {@link GeneratedContent#STRUCTURES}, or -1 for any structure of this dimension */
     public static @Nullable Found nearest(ServerLevel level, BlockPos from, int index, int radiusChunks) {
-        Query key = new Query(level.dimension(), index, radiusChunks, ChunkPos.containing(from).pack());
+        return nearest(level, from, index, radiusChunks, false);
+    }
+
+    /**
+     * Like {@link #nearest}, for players' items: a search that is not remembered yet spends one of the server-wide
+     * searches of compass.searchesPerMinute, and {@link #BUSY} comes back when none is left (a crowd of players each
+     * using a compass every 3 seconds in a different place must not stall the server thread).
+     */
+    public static @Nullable Found nearestBudgeted(ServerLevel level, BlockPos from, int index, int radiusChunks) {
+        return nearest(level, from, index, radiusChunks, true);
+    }
+
+    private static @Nullable Found nearest(ServerLevel level, BlockPos from, int index, int radiusChunks, boolean budgeted) {
+        // answers are shared by 4 x 4 chunk cells (64 blocks): the search starts at the cell's centre, so a player
+        // walking around asks again only every few dozen blocks, and a group shares one answer
+        ChunkPos chunk = ChunkPos.containing(from);
+        int cx = chunk.x() >> 2, cz = chunk.z() >> 2;
+        Query key = new Query(level.dimension(), index, radiusChunks, ChunkPos.pack(cx, cz));
         Optional<Found> cached = CACHE.get(key);
         if (cached == null) {
-            cached = Optional.ofNullable(search(level, from, index, radiusChunks));
+            if (budgeted && !takeToken()) {
+                return BUSY;
+            }
+            BlockPos centre = new BlockPos((cx << 6) + 32, from.getY(), (cz << 6) + 32);
+            cached = Optional.ofNullable(search(level, centre, index, radiusChunks));
             CACHE.put(key, cached);
         }
         return cached.orElse(null);
+    }
+
+    private static boolean takeToken() {
+        double perMinute = com.wayfarers.config.WayfarersConfig.LOCATE_PER_MINUTE.get();
+        double burst = Math.max(3.0, perMinute / 6.0);
+        long now = System.nanoTime();
+        if (tokens < 0) {
+            tokens = burst;
+            refilledAt = now;
+        }
+        tokens = Math.min(burst, tokens + (now - refilledAt) / 60_000_000_000.0 * perMinute);
+        refilledAt = now;
+        if (tokens < 1.0) {
+            return false;
+        }
+        tokens -= 1.0;
+        return true;
     }
 
     private static @Nullable Found search(ServerLevel level, BlockPos from, int index, int radiusChunks) {

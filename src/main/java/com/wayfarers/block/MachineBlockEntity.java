@@ -144,6 +144,9 @@ public class MachineBlockEntity extends BaseContainerBlockEntity {
     private boolean lastInput;
     private boolean outputFull;
     private long lastWork = -1000;
+    /** Harvester / Vacuum Hopper: ticker value of the next scan, and how many scans in a row found nothing. */
+    private long nextRun;
+    private int idleRuns;
     private int detected;
     // live status, refreshed while a screen is open
     private Status status = Status.WAITING_ITEMS;
@@ -152,6 +155,8 @@ public class MachineBlockEntity extends BaseContainerBlockEntity {
     private int countB;
     private int sides;
     private ItemStack preview = ItemStack.EMPTY;
+    /** The player who placed the machine (Breaker and Placer act as them, see machines.actAsOwner); null for old ones. */
+    private @org.jetbrains.annotations.Nullable java.util.UUID owner;
 
     /** Server-side view of the settings and status for the open screens (see MachineMenu.D_*). */
     public final ContainerData data = new ContainerData() {
@@ -190,6 +195,31 @@ public class MachineBlockEntity extends BaseContainerBlockEntity {
 
     public MachineBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.MACHINE.get(), pos, state);
+        // spread the periodic work: machines loaded together (a chunk, a server start) don't all scan on one tick
+        ticker = Math.floorMod(pos.asLong() * 0x9E3779B97F4A7C15L >>> 40, 120);
+        nextRun = ticker + ticker % 40;
+    }
+
+    /**
+     * Idle back-off: a Harvester or Vacuum Hopper that found nothing to do scans less and less often (up to 4 times
+     * slower), and is back to full speed as soon as it works again.
+     */
+    private boolean due() {
+        return ticker >= nextRun;
+    }
+
+    private void ran(int period, boolean worked) {
+        idleRuns = worked ? 0 : Math.min(idleRuns + 1, 12);
+        nextRun = ticker + (long) period * (1 + idleRuns / 4);
+    }
+
+    public void setOwner(@org.jetbrains.annotations.Nullable java.util.UUID owner) {
+        this.owner = owner;
+        setChanged();
+    }
+
+    public @org.jetbrains.annotations.Nullable java.util.UUID owner() {
+        return owner;
     }
 
     public MachineBlock.Kind kind() {
@@ -259,6 +289,9 @@ public class MachineBlockEntity extends BaseContainerBlockEntity {
         output.putInt("interval", interval);
         output.putInt("pulse", pulse);
         output.putInt("countdown", countdown);
+        if (owner != null) {
+            output.store("owner", net.minecraft.core.UUIDUtil.CODEC, owner);
+        }
     }
 
     @Override
@@ -288,6 +321,7 @@ public class MachineBlockEntity extends BaseContainerBlockEntity {
         }
         pulse = Math.floorMod(input.getIntOr("pulse", 1), PULSE_LENGTHS.length);
         countdown = input.getIntOr("countdown", -1);
+        owner = input.read("owner", net.minecraft.core.UUIDUtil.CODEC).orElse(null);
     }
 
     private static int closest(int[] options, int value) {
@@ -535,6 +569,8 @@ public class MachineBlockEntity extends BaseContainerBlockEntity {
             }
         }
         setChanged();
+        idleRuns = 0; // a new setting: work at full speed again at once
+        nextRun = ticker;
         if (action != MachineMenu.A_CHANNEL && action != MachineMenu.A_TAKE_XP) {
             click();
         }
@@ -566,8 +602,8 @@ public class MachineBlockEntity extends BaseContainerBlockEntity {
         ticker++;
         switch (kind()) {
             case HARVESTER -> {
-                if (ticker % 40 == 0 && redstoneAllows(level)) {
-                    harvest(level);
+                if (due()) {
+                    ran(40, redstoneAllows(level) && harvest(level));
                 }
             }
             case SPRINKLER -> {
@@ -576,8 +612,8 @@ public class MachineBlockEntity extends BaseContainerBlockEntity {
                 }
             }
             case VACUUM -> {
-                if (ticker % 5 == 0 && redstoneAllows(level)) {
-                    vacuum(level);
+                if (due()) {
+                    ran(5, redstoneAllows(level) && vacuum(level));
                 }
                 if (ticker % 10 == 0) {
                     pushDown(level);
@@ -684,7 +720,9 @@ public class MachineBlockEntity extends BaseContainerBlockEntity {
                 Direction facing = state.getValue(MachineBlock.FACING);
                 BlockPos front = worldPosition.relative(facing);
                 BlockState target = level.getBlockState(front);
-                if (target.isAir() || target.getBlock() instanceof LiquidBlock) {
+                if (!mayWork(level, true)) {
+                    status = Status.CANT_BREAK;
+                } else if (target.isAir() || target.getBlock() instanceof LiquidBlock) {
                     status = Status.NOTHING_TO_BREAK;
                 } else {
                     preview = new ItemStack(target.getBlock());
@@ -698,7 +736,9 @@ public class MachineBlockEntity extends BaseContainerBlockEntity {
                 Direction facing = state.getValue(MachineBlock.FACING);
                 BlockPos front = worldPosition.relative(facing);
                 preview = nextBlock(level, facing);
-                if (!level.getBlockState(front).canBeReplaced()) {
+                if (!mayWork(level, false)) {
+                    status = Status.FRONT_BLOCKED;
+                } else if (!level.getBlockState(front).canBeReplaced()) {
                     status = Status.FRONT_BLOCKED;
                 } else {
                     status = preview.isEmpty() ? Status.NO_BLOCKS : Status.READY_PLACE;
@@ -754,7 +794,8 @@ public class MachineBlockEntity extends BaseContainerBlockEntity {
         return n;
     }
 
-    private void harvest(ServerLevel level) {
+    /** Harvests ripe crops in the area; true when anything was harvested. */
+    private boolean harvest(ServerLevel level) {
         int r = radius();
         int done = 0;
         for (BlockPos p : BlockPos.betweenClosed(worldPosition.offset(-r, -1, -r), worldPosition.offset(r, 1, r))) {
@@ -804,6 +845,7 @@ public class MachineBlockEntity extends BaseContainerBlockEntity {
             lastWork = level.getGameTime();
             level.playSound(null, worldPosition, SoundEvents.CROP_BREAK, SoundSource.BLOCKS, 0.7F, 1.0F);
         }
+        return done > 0;
     }
 
     private static boolean besideAttachedStem(ServerLevel level, BlockPos p) {
@@ -913,11 +955,14 @@ public class MachineBlockEntity extends BaseContainerBlockEntity {
         return !any || match == whitelist;
     }
 
-    private void vacuum(ServerLevel level) {
+    /** Pulls in items (and XP orbs) around; true when anything was seen to pull. */
+    private boolean vacuum(ServerLevel level) {
         AABB area = new AABB(worldPosition).inflate(radius());
         boolean full = false;
+        boolean seen = false;
         for (ItemEntity drop : level.getEntitiesOfClass(ItemEntity.class, area,
                 e -> e.isAlive() && !e.hasPickUpDelay() && passesFilter(e.getItem()))) {
+            seen = true;
             ItemStack before = drop.getItem();
             ItemStack rest = InventoryUtil.insert(this, before, false);
             if (rest.getCount() != before.getCount()) {
@@ -934,12 +979,14 @@ public class MachineBlockEntity extends BaseContainerBlockEntity {
         outputFull = full;
         if (collectXp) {
             for (ExperienceOrb orb : level.getEntitiesOfClass(ExperienceOrb.class, area, Entity::isAlive)) {
-                xp += orb.getValue();
+                xp = (int) Math.min(Integer.MAX_VALUE / 2, (long) xp + orb.getValue());
                 orb.discard();
                 lastWork = level.getGameTime();
+                seen = true;
                 setChanged();
             }
         }
+        return seen;
     }
 
     private void pushDown(ServerLevel level) {
@@ -983,13 +1030,40 @@ public class MachineBlockEntity extends BaseContainerBlockEntity {
                 && !(target.getBlock() instanceof MachineBlock) && !special;
     }
 
+    /** Whether the Breaker / Placer acts as its owner (it has one and machines.actAsOwner is on). */
+    private boolean actsAsOwner() {
+        return owner != null && com.wayfarers.config.WayfarersConfig.MACHINES_ACT_AS_OWNER.get();
+    }
+
+    /** The online owner a Breaker or Placer acts as; null when it acts as nobody or the owner is offline. */
+    private @org.jetbrains.annotations.Nullable ServerPlayer actor(ServerLevel level) {
+        return actsAsOwner() ? level.getServer().getPlayerList().getPlayer(owner) : null;
+    }
+
+    /** Whether a Breaker / Placer may work at all now: enabled in the config, and its owner online when it acts as them. */
+    private boolean mayWork(ServerLevel level, boolean breaker) {
+        if (!(breaker ? com.wayfarers.config.WayfarersConfig.BREAKER_ENABLED.get() : com.wayfarers.config.WayfarersConfig.PLACER_ENABLED.get())) {
+            return false;
+        }
+        return !actsAsOwner() || actor(level) != null;
+    }
+
     void pulse(ServerLevel level) {
         BlockState state = getBlockState();
         Direction facing = state.getValue(MachineBlock.FACING);
         BlockPos front = worldPosition.relative(facing);
         BlockState target = level.getBlockState(front);
-        if (kind() == MachineBlock.Kind.BREAKER) {
+        boolean breaker = kind() == MachineBlock.Kind.BREAKER;
+        if ((breaker || kind() == MachineBlock.Kind.PLACER) && !mayWork(level, breaker)) {
+            return;
+        }
+        ServerPlayer actor = actor(level); // null: an ownerless machine, no protection to ask
+        if (breaker) {
             if (!breakable(level, front, target)) {
+                return;
+            }
+            // as its owner: spawn protection and claim mods decide (an ownerless old machine skips this)
+            if (actor != null && !com.wayfarers.util.ServerGuard.mayBreak(level, front, actor)) {
                 return;
             }
             // a door, tall plant or bed only drops from one of its halves; the other half goes with it
@@ -1019,7 +1093,10 @@ public class MachineBlockEntity extends BaseContainerBlockEntity {
             if (!target.canBeReplaced()) {
                 return;
             }
-            if (placeFrom(level, behind(level, facing), front, facing) || placeFrom(level, this, front, facing)) {
+            if (actor != null && !com.wayfarers.util.ServerGuard.mayPlace(level, front, actor)) {
+                return;
+            }
+            if (placeFrom(level, behind(level, facing), front, facing, owner) || placeFrom(level, this, front, facing, owner)) {
                 level.sendParticles(ParticleTypes.CLOUD, front.getX() + 0.5, front.getY() + 0.5, front.getZ() + 0.5, 4, 0.3, 0.3, 0.3, 0.01);
             }
         }
@@ -1051,15 +1128,27 @@ public class MachineBlockEntity extends BaseContainerBlockEntity {
      * box: the item's own placement (both halves of doors and beds, contents of shulker boxes, waystone names...)
      * and the item is used up by it.
      */
-    private static boolean placeFrom(ServerLevel level, Container from, BlockPos front, Direction facing) {
+    private static boolean placeFrom(ServerLevel level, Container from, BlockPos front, Direction facing,
+                                     @org.jetbrains.annotations.Nullable java.util.UUID owner) {
         if (from == null) {
             return false;
         }
         Direction clickedFace = level.isEmptyBlock(front.below()) ? facing : Direction.UP;
         for (int i = 0; i < from.getContainerSize(); i++) {
             ItemStack stack = from.getItem(i);
-            if (stack.getItem() instanceof BlockItem bi
-                    && bi.place(new DirectionalPlaceContext(level, front, facing, stack, clickedFace)).consumesAction()) {
+            if (!(stack.getItem() instanceof BlockItem bi)) {
+                continue;
+            }
+            boolean machine = bi.getBlock() instanceof MachineBlock;
+            // the per-chunk machine limit holds for placers too
+            if (machine && !com.wayfarers.util.ServerGuard.machineFits(level, front, false)) {
+                continue;
+            }
+            if (bi.place(new DirectionalPlaceContext(level, front, facing, stack, clickedFace)).consumesAction()) {
+                // a machine placed by a machine belongs to the same player (no way to make an ownerless breaker)
+                if (machine && level.getBlockEntity(front) instanceof MachineBlockEntity placed) {
+                    placed.setOwner(owner);
+                }
                 from.setChanged();
                 return true;
             }
@@ -1102,7 +1191,19 @@ public class MachineBlockEntity extends BaseContainerBlockEntity {
         }
         set.removeIf(p -> !level.isLoaded(p) || !(level.getBlockEntity(p) instanceof MachineBlockEntity m)
                 || m.kind() != kind || m.channel != channel);
-        return set.size();
+        int n = 0;
+        for (BlockPos p : set) {
+            if (inWirelessRange(p)) {
+                n++;
+            }
+        }
+        return n;
+    }
+
+    /** Within machines.wirelessRange of this machine (0 = the whole dimension): one base can't switch another's. */
+    private boolean inWirelessRange(BlockPos other) {
+        long range = com.wayfarers.config.WayfarersConfig.WIRELESS_RANGE.get();
+        return range <= 0 || other.distSqr(worldPosition) <= range * range;
     }
 
     private boolean anyTransmitter(ServerLevel level) {
@@ -1110,7 +1211,7 @@ public class MachineBlockEntity extends BaseContainerBlockEntity {
             return false;
         }
         for (BlockPos p : TRANSMITTERS.get(key(level, channel))) {
-            if (level.getBlockState(p).getValue(MachineBlock.POWERED)) {
+            if (inWirelessRange(p) && level.getBlockState(p).getValue(MachineBlock.POWERED)) {
                 return true;
             }
         }
