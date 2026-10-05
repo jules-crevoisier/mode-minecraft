@@ -30,7 +30,9 @@ import java.util.Locale;
  * right-click for waypoints and pings, middle-click to ping. The side panel holds the legend (click to hide a kind)
  * and your waypoints. A tool button tilts it into a 3D view ({@link MapView3D}); the gear opens the options panel:
  * the minimap's exact size (slider) and presets, corner, shape, rotation, coordinates and opacity, shown live in its
- * corner while the panel is open, and the relief of the maps (hill-shading, contour lines).
+ * corner while the panel is open, the relief of the maps (hill-shading, contour lines), and in a second column the
+ * entity radar (on/off, faces or dots, the kinds shown). Zoomed in near the player, the radar's creatures show on this
+ * map too, named on hover.
  */
 public class WorldMapScreen extends Screen {
     private static final Identifier PARCHMENT = Brasshaven.id("map/parchment");
@@ -51,6 +53,9 @@ public class WorldMapScreen extends Screen {
     private static final int OPT_PAD = 12;
     private static final int OPT_SECTION = 14;
     private static final int OPT_H = OPT_HEAD + OPT_ROWS * OPT_ROW + OPT_SECTION + 10;
+    /** The radar's column, right of the minimap's (the whole panel still fits 427 x 240 beside a 96 px minimap). */
+    private static final int RADAR_W = 104;
+    private static final int PANEL_W = OPT_W + RADAR_W;
     private static final String S = "gui.brasshaven.settings.";
     private static final String O = "gui.brasshaven.map.options.";
 
@@ -293,15 +298,17 @@ public class WorldMapScreen extends Screen {
         }
         markers = visibleMarkers();
         float markerSize = MapRenderer.worldMarker(zoom);
-        ClientMap.Marker hover = inMap(mouseX, mouseY) && menu == null && editor == null && !inOptions(mouseX, mouseY)
-                ? markerAt(mouseX, mouseY) : null;
+        boolean pointing = inMap(mouseX, mouseY) && menu == null && editor == null && !inOptions(mouseX, mouseY);
+        ClientMap.Marker hover = pointing ? markerAt(mouseX, mouseY) : null;
+        net.minecraft.world.entity.Entity creature = radar(g, player, a, markerSize, pointing && hover == null, mouseX, mouseY);
         for (ClientMap.Marker m : markers) {
             int sx = Math.round(screenX(m.x()));
             int sy = Math.round(screenY(m.z(), m.y()));
             if (m == selected || selected != null && m.ref() != null && m.ref().equals(selected.ref()) && m.kind() == selected.kind()) {
                 MapRenderer.ring(g, sx, sy, Math.round(markerSize * 0.75F), 0xFFF6C343);
             }
-            MapRenderer.marker(g, m, sx, sy, false, markerSize);
+            MapRenderer.marker(g, m, sx, sy, false, markerSize,
+                    m.kind() == ClientMap.Kind.PLAYER ? (float) Math.toRadians(m.yaw() + 180.0) : Float.NaN);
             int below = Math.round(markerSize / 2) + 2;
             if (scale >= 1.0F && (m.kind() == ClientMap.Kind.WAYPOINT || m.kind() == ClientMap.Kind.WAYSTONE)) {
                 String label = m.label();
@@ -375,7 +382,62 @@ public class WorldMapScreen extends Screen {
         }
         if (hover != null) {
             tooltip(g, hover, mouseX, mouseY, player);
+        } else if (creature != null) {
+            List<FormattedCharSequence> lines = new ArrayList<>();
+            lines.add(creature.getDisplayName().getVisualOrderText());
+            lines.add(Component.literal(ClientMap.coords(creature.getBlockX(), creature.getBlockY(), creature.getBlockZ())
+                    + " - " + distance(player, creature.getX(), creature.getZ())).withStyle(ChatFormatting.GRAY).getVisualOrderText());
+            g.setTooltipForNextFrame(font, lines, mouseX, mouseY);
         }
+    }
+
+    /**
+     * The radar's creatures, zoomed in near the player only (1 block at least 1 px: further out they would be a
+     * blur of dots, and the client only knows the creatures around it). Returns the one under the mouse when
+     * {@code pick}, else null.
+     */
+    private net.minecraft.world.entity.Entity radar(GuiGraphicsExtractor g, LocalPlayer player, float a, float markerSize,
+                                                    boolean pick, int mouseX, int mouseY) {
+        if (!BrasshavenClientConfig.RADAR.get() || scale() < 1.0F) {
+            return null;
+        }
+        float scale = scale();
+        double halfW = (mx1 - mx0) / 2.0 / scale;
+        double halfH = (my1 - my0) / 2.0 / depthScale();
+        double px = Mth.lerp(a, player.xo, player.getX());
+        double pz = Mth.lerp(a, player.zo, player.getZ());
+        // the farthest corner of the view from the player
+        double reach = Math.hypot(Math.abs(centerX - px) + halfW, Math.abs(centerZ - pz) + halfH);
+        if (reach > 160 + Math.max(halfW, halfH)) {
+            return null; // the view is far from the player: nothing the client knows is on it
+        }
+        MapRadar.want(reach);
+        MapRadar.update();
+        float iconSize = MapRadar.iconSize(markerSize);
+        double py = Mth.lerp(a, player.yo, player.getY());
+        net.minecraft.world.entity.Entity best = null;
+        double bestD = Math.max(5.0, iconSize * 0.7) * Math.max(5.0, iconSize * 0.7);
+        for (int k = 0; k < MapRadar.count(); k++) {
+            net.minecraft.world.entity.Entity e = MapRadar.entity(k);
+            if (e == null || e.isRemoved()) {
+                continue;
+            }
+            double ey = MapRadar.y(e, a);
+            float sx = screenX(MapRadar.x(e, a));
+            float sy = screenY(MapRadar.z(e, a), ey);
+            if (sx < mx0 - iconSize || sx > mx1 + iconSize || sy < my0 - iconSize || sy > my1 + iconSize) {
+                continue;
+            }
+            MapRadar.icon(g, e, MapRadar.kind(k), sx, sy, iconSize, ey - py);
+            if (pick) {
+                double d = (sx - mouseX) * (sx - mouseX) + (sy - mouseY) * (sy - mouseY);
+                if (d <= bestD) {
+                    bestD = d;
+                    best = e;
+                }
+            }
+        }
+        return best;
     }
 
     private List<ClientMap.Marker> visibleMarkers() {
@@ -822,7 +884,7 @@ public class WorldMapScreen extends Screen {
             return true;
         }
         if (optionsOpen && inOptions(x, y)) {
-            if (x >= optX + OPT_W - 22 && y < optY + 22) {
+            if (x >= optX + PANEL_W - 22 && y < optY + 22) {
                 closeOptions();
                 return true;
             }
@@ -1000,7 +1062,7 @@ public class WorldMapScreen extends Screen {
 
     // ------------------------------------------------------------------ options panel
     private boolean inOptions(double x, double y) {
-        return optionsOpen && x >= optX && x < optX + OPT_W && y >= optY && y < optY + OPT_H;
+        return optionsOpen && x >= optX && x < optX + PANEL_W && y >= optY && y < optY + OPT_H;
     }
 
     /** Opens the options panel (the gear button; also the CI client test). */
@@ -1049,7 +1111,7 @@ public class WorldMapScreen extends Screen {
         optionWidgets.clear();
         BrasshavenClientConfig.Corner corner = BrasshavenClientConfig.MINIMAP_CORNER.get();
         boolean minimapLeft = corner == BrasshavenClientConfig.Corner.TOP_LEFT || corner == BrasshavenClientConfig.Corner.BOTTOM_LEFT;
-        optX = minimapLeft ? width - OPT_W - 6 : 6;
+        optX = minimapLeft ? width - PANEL_W - 6 : 6;
         optY = Math.max(2, (height - OPT_H) / 2);
         int cx = optX + OPT_LABEL;
         int cw = OPT_W - OPT_LABEL - OPT_PAD;
@@ -1119,6 +1181,40 @@ public class WorldMapScreen extends Screen {
         }
         option(new WfWidgets.Toggle(cx, optRow(9) + 1, Component.translatable(O + "contours"), Component.translatable(O + "contours.tip"),
                 BrasshavenClientConfig.MAP_CONTOURS::get, () -> flip(BrasshavenClientConfig.MAP_CONTOURS)));
+        // the radar's column: on/off, icon style, then what it shows
+        int rx = optX + OPT_W;
+        int radarW = RADAR_W - OPT_PAD;
+        option(new WfWidgets.Toggle(rx, optRow(0) + 1, Component.translatable(O + "radar.shown"), Component.translatable(O + "radar.tip"),
+                BrasshavenClientConfig.RADAR::get, () -> flip(BrasshavenClientConfig.RADAR)));
+        BrasshavenClientConfig.RadarIcons[] styles = BrasshavenClientConfig.RadarIcons.values();
+        int iw = (radarW - 2) / styles.length;
+        for (int i = 0; i < styles.length; i++) {
+            BrasshavenClientConfig.RadarIcons style = styles[i];
+            String key = style.name().toLowerCase(Locale.ROOT);
+            option(new WfWidgets.Choice(rx + i * (iw + 2), optRow(1), iw, 14, Component.translatable(O + "radar." + key),
+                    Component.translatable(O + "radar." + key + ".tip"), () -> BrasshavenClientConfig.RADAR_ICONS.get() == style, () -> {
+                        BrasshavenClientConfig.RADAR_ICONS.set(style);
+                        BrasshavenClientConfig.RADAR_ICONS.save();
+                    }));
+        }
+        for (int i = 0; i < RADAR_ROWS.length; i++) {
+            net.minecraftforge.common.ForgeConfigSpec.BooleanValue v = radarValue(i);
+            option(new WfWidgets.Toggle(rx, optRow(2 + i) + 1, Component.translatable(O + "radar." + RADAR_ROWS[i]),
+                    Component.translatable(O + "radar." + RADAR_ROWS[i] + ".tip"), v::get, () -> flip(v)));
+        }
+    }
+
+    /** The radar's kinds, one switch each (players: the maps' own player setting). */
+    private static final String[] RADAR_ROWS = {"hostile", "passive", "npcs", "players", "items"};
+
+    private static net.minecraftforge.common.ForgeConfigSpec.BooleanValue radarValue(int i) {
+        return switch (i) {
+            case 0 -> BrasshavenClientConfig.RADAR_HOSTILE;
+            case 1 -> BrasshavenClientConfig.RADAR_PASSIVE;
+            case 2 -> BrasshavenClientConfig.RADAR_NPCS;
+            case 3 -> BrasshavenClientConfig.MAP_PLAYERS;
+            default -> BrasshavenClientConfig.RADAR_ITEMS;
+        };
     }
 
     /** The panel's plate and labels (its widgets are drawn with the screen's). */
@@ -1130,7 +1226,7 @@ public class WorldMapScreen extends Screen {
         if (sizeSlider != null) {
             sizeSlider.sync(sizeStep()); // a preset or Shift + H moved it
         }
-        WfGui.sprite(g, WfGui.PANEL, optX, optY, OPT_W, OPT_H);
+        WfGui.sprite(g, WfGui.PANEL, optX, optY, PANEL_W, OPT_H);
         WfGui.centered(g, font, WfGui.bold(Component.translatable(O + "title")), optX + OPT_W / 2, optY + 10, WfGui.INK);
         String[] labels = {O + "shown", S + "minimap_size", O + "presets", S + "minimap_corner", S + "minimap_shape",
                 O + "rotate", S + "minimap_coords", S + "minimap_opacity", O + "relief", O + "contours"};
@@ -1154,7 +1250,31 @@ public class WorldMapScreen extends Screen {
         int sy = optRow(8) - OPT_SECTION;
         g.fill(optX + OPT_PAD, sy + 3, optX + OPT_W - OPT_PAD, sy + 4, 0xFF7C5A2B);
         WfGui.centered(g, font, WfGui.bold(Component.translatable(O + "relief_title")), optX + OPT_W / 2, sy + 5, WfGui.INK);
+        // the radar's column, behind a thin brass rule: its labels and a legend icon per kind
+        int rx = optX + OPT_W;
+        int rw = RADAR_W - OPT_PAD;
+        g.fill(rx - 7, optY + OPT_HEAD - 2, rx - 6, optY + OPT_H - 12, 0xFF7C5A2B);
+        WfGui.centered(g, font, WfGui.bold(Component.translatable(O + "radar_title")), rx + rw / 2, optY + 10, WfGui.INK);
+        WfGui.textClipped(g, font, Component.translatable(O + "radar.shown").getString(), rx + 30, optRow(0) + 4, rw - 30, WfGui.INK, false);
+        for (int i = 0; i < RADAR_ROWS.length; i++) {
+            int ry = optRow(2 + i);
+            Identifier icon = switch (i) {
+                case 2 -> Brasshaven.id("map/radar/npc");
+                case 3 -> Brasshaven.id("map/marker/player");
+                default -> Brasshaven.id("map/radar/dot");
+            };
+            int tint = switch (i) {
+                case 0 -> MapRadar.COLORS[MapRadar.HOSTILE];
+                case 1 -> MapRadar.COLORS[MapRadar.PASSIVE];
+                case 4 -> MapRadar.COLORS[MapRadar.ITEM];
+                default -> -1;
+            };
+            g.blitSprite(net.minecraft.client.renderer.RenderPipelines.GUI_TEXTURED, icon, rx + 29, ry + 3, 7, 7,
+                    radarValue(i).get() ? tint : 0x60FFFFFF & tint);
+            WfGui.textClipped(g, font, Component.translatable(O + "radar." + RADAR_ROWS[i]).getString(), rx + 39, ry + 4, rw - 39,
+                    WfGui.INK, false);
+        }
         // close (handled in mouseClicked: the panel covers the other buttons)
-        g.text(font, "x", optX + OPT_W - 18, optY + 9, WfGui.INK_SOFT, false);
+        g.text(font, "x", optX + PANEL_W - 18, optY + 9, WfGui.INK_SOFT, false);
     }
 }

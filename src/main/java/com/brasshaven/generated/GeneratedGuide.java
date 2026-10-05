@@ -36,6 +36,7 @@ public final class GeneratedGuide {
             new Page("magic", "talents", "brasshaven:fire_staff", 3, List.of("brasshaven:fire_staff", "brasshaven:frost_staff", "brasshaven:thunder_staff", "brasshaven:healing_staff", "brasshaven:levitation_wand", "brasshaven:ward_orb", "brasshaven:steam_cane", "brasshaven:arcane_ring", "brasshaven:mana_amulet")),
             new Page("waystones", "travel", "brasshaven:waystone", 3, List.of("brasshaven:waystone")),
             new Page("map", "travel", "minecraft:filled_map", 6, List.of("brasshaven:wayfarer_atlas")),
+            new Page("radar", "travel", "minecraft:spyglass", 2, List.of()),
             new Page("recall", "travel", "brasshaven:recall_scroll", 2, List.of("brasshaven:recall_scroll")),
             new Page("villages", "travel", "minecraft:bell", 4, List.of("brasshaven:waystone", "brasshaven:edison_lamp", "minecraft:bell")),
             new Page("biomes", "travel", "minecraft:crimson_nylium", 3, List.of()),

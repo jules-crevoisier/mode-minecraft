@@ -546,6 +546,26 @@ public final class ClientMap {
                 out.add(new Marker(Kind.PLAYER, x, y, z, 0xFFFFFFFF, p.name(), null, p, yaw));
             }
         }
+        if (BrasshavenClientConfig.MAP_PLAYERS.get()) {
+            // players near enough for this client to see them, even when the server shares no positions (another
+            // mod's server, map.showPlayers off, or its once-a-second list not in yet)
+            int shared = out.size();
+            for (net.minecraft.client.player.AbstractClientPlayer seen : level.players()) {
+                if (seen == mc.player || seen.isSpectator() || seen.isInvisible()) {
+                    continue;
+                }
+                String name = seen.getName().getString();
+                boolean listed = false;
+                for (int i = 0; i < shared && !listed; i++) {
+                    Marker m = out.get(i);
+                    listed = m.kind() == Kind.PLAYER && name.equals(m.label());
+                }
+                if (!listed) {
+                    out.add(new Marker(Kind.PLAYER, seen.getX(), seen.getY(), seen.getZ(), 0xFFFFFFFF, name, null, null,
+                            seen.getYRot()));
+                }
+            }
+        }
         return out;
     }
 

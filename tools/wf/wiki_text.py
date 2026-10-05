@@ -138,6 +138,16 @@ CONFIG_FR = {
     "map.showCoordinates": "Affiche tes coordonnées et le biome sous la mini-carte.",
     "map.caveMode": "Sous terre, la carte dessine la grotte autour de toi (une tranche à ta hauteur) au lieu de la "
                     "surface.",
+    "map.radar": "Radar : les créatures autour de toi en petites icônes sur la mini-carte (et sur la carte du monde "
+                 "zoomée près de toi). Tout se passe dans ton jeu : le serveur n'envoie rien de plus.",
+    "map.radarIcons": "Icônes du radar : HEADS (la tête de la créature quand elle est connue, sinon un point) ou DOTS "
+                      "(un point coloré selon le genre).",
+    "map.radarHostile": "Radar : les créatures hostiles (en rouge). Les boss s'affichent toujours tant que le radar "
+                        "est activé.",
+    "map.radarPassive": "Radar : les animaux (en vert) et les créatures neutres (en jaune, en rouge une fois en "
+                        "colère).",
+    "map.radarNpcs": "Radar : villageois, marchands ambulants et personnages du mod.",
+    "map.radarItems": "Radar : les objets posés au sol (petits points gris).",
 }
 
 # Confort de jeu qui n'a pas d'objet : (titre, texte)
@@ -655,6 +665,12 @@ TEST_CHECKLIST = [
      "carte avec M (la virgule en AZERTY) ou l'Atlas accroupi : le terrain vu est dessiné, en relief. Glisse, molette "
      "pour zoomer, Espace pour revenir sur toi. Le bouton cube incline la carte en 3D ; l'engrenage ouvre les "
      "options : fais glisser le curseur de taille, la mini-carte grandit en direct dans son coin."),
+    ("Radar de la mini-carte", ["/summon minecraft:zombie ~6 ~ ~", "/summon minecraft:cow ~-5 ~ ~4",
+                                "/summon minecraft:villager ~3 ~ ~-6"],
+     "Les trois créatures apparaissent sur la mini-carte : la tête du zombie cerclée de rouge, la vache cerclée de "
+     "vert, le villageois cerclé de crème. Options de la carte, colonne Radar : « Points » les change en points "
+     "colorés ; décoche « Animaux » et la vache disparaît. Zoome la carte du monde près de toi : elles y sont aussi, "
+     "avec leur nom au survol."),
     ("Repères et signaux", ["/gamemode creative"],
      "Sur la carte, clic droit : « Poser un repère ici » (nom, couleur, icône, Partager). Clic sur le repère : sa "
      "fiche (Modifier, Privé/Partager, Supprimer). Clic molette ou B en visant un bloc : un signal visible une "
@@ -734,7 +750,8 @@ MAP_CONTROLS = [
     ("Clic droit", "poser un repère, signaler l'endroit, copier les coordonnées"),
     ("Clic molette", "envoyer un signal à tous"),
     ("Bouton cube", "vue 3D inclinée : le terrain en relief, à sa hauteur"),
-    ("Bouton engrenage", "options : taille exacte de la mini-carte, coin, forme, opacité, relief, courbes de niveau"),
+    ("Bouton engrenage", "options : taille exacte de la mini-carte, coin, forme, opacité, radar, relief, courbes de "
+                         "niveau"),
     ("M ou Échap", "fermer la carte"),
 ]
 # (ancre, titre, texte, icône) : les fonctions de la carte
@@ -760,13 +777,24 @@ MAP_FEATURES = [
      "normal, fort) et ajoutent des courbes de niveau.", "minecraft:spyglass"),
     ("options-carte", "Options de la carte", "Le bouton engrenage de la carte du monde ouvre un panneau : taille "
      "exacte de la mini-carte (un curseur de 48 à 160 px, par pas de 4, ou les préréglages 56, 68, 96 et 128), "
-     "coin, forme, rotation, coordonnées et opacité. Tant qu'il est ouvert, la mini-carte s'affiche dans son coin et "
-     "change en direct. Tout est enregistré aussitôt.", "minecraft:compass"),
+     "coin, forme, rotation, coordonnées et opacité, et à droite la colonne du radar. Tant qu'il est ouvert, la "
+     "mini-carte s'affiche dans son coin et change en direct. Tout est enregistré aussitôt.", "minecraft:compass"),
+    ("radar", "Radar des créatures", "Comme les mini-cartes connues, la mini-carte montre les créatures autour de "
+     "toi : leur tête pour les créatures vanilla courantes (zombie, squelette, creeper, araignée, enderman, vache, "
+     "cochon, mouton, poule, loup, villageois…), sinon un point coloré : rouge hostile, vert animal, jaune neutre "
+     "(rouge une fois en colère), gris pour un objet au sol. Villageois et PNJ du mod ont un badge, les boss un "
+     "crâne violet couronné. Une petite flèche au-dessus ou en dessous d'une icône : la créature est loin plus haut "
+     "ou plus bas que toi. Zoomée près de toi, la carte du monde les montre aussi, avec leur nom au survol. Les autres "
+     "joueurs gardent leur tête, une pointe vers où ils regardent, un cadre doré pour tes compagnons, et restent sur "
+     "le bord de la mini-carte quand ils sont plus loin. Tout se passe dans ton jeu, rien de plus ne passe par le "
+     "réseau. Réglages : colonne Radar des options de la carte, ou onglet Radar de Mods → Brasshaven → Config "
+     "(activé, têtes ou points, hostiles, animaux, PNJ, joueurs, objets).", "minecraft:spyglass"),
 ]
 MINIMAP_TEXT = [
     "La mini-carte est un hublot de laiton dans un coin de l'écran (en haut à gauche au départ). Elle montre le "
     "terrain autour de toi, la flèche de ta direction, et les pierres de voyage, repères, joueurs, signaux, tombes "
-    "et ta dernière mort. En dessous : tes coordonnées et le biome où tu es.",
+    "et ta dernière mort. En dessous : tes coordonnées et le biome où tu es. Son radar ajoute les créatures autour "
+    "de toi (leur tête ou un point coloré, voir « Radar des créatures »).",
     "H la masque ou la réaffiche, Maj + H passe à la taille suivante (56, 68 par défaut, 96 ou 128 px). Au "
     "pixel près, de 48 à 160 px : le curseur des options de la carte (M, puis l'engrenage), la mini-carte change en "
     "direct. La flèche et les marqueurs suivent sa taille : petits sur une petite mini-carte. Z change son zoom "
@@ -782,7 +810,8 @@ MACHINE_SCREENS_INTRO = ("Clic droit sur une machine : un écran de laiton s'ouv
                          "textures du jeu ; touche une image pour l'agrandir.")
 SETTINGS_TEXT = ("Mods → Brasshaven → Config ouvre les réglages du mod dans le même style : barres de vie (toujours, "
                  "blessées, jamais), chiffres de dégâts, suivi de quête, cartes d'astuce, et un bouton vers les "
-                 "touches. La touche du Manuel (maintenue sur un objet pour ouvrir sa page) se change maintenant : W "
+                 "touches ; l'onglet Mini-carte règle la mini-carte, l'onglet Radar les créatures et joueurs qu'elle "
+                 "montre. La touche du Manuel (maintenue sur un objet pour ouvrir sa page) se change maintenant : W "
                  "par défaut, c'est-à-dire Z sur un clavier AZERTY.")
 
 # ------------------------------------------------------------------ terminal de guilde
@@ -931,7 +960,7 @@ INGAME_SHOTS = [
      "à droite l'objectif et les récompenses de la quête choisie.", "quetes"),
     ("talent_tree", "L'arbre de talents", "Touche K. Les quatre branches : Guerrier, Explorateur, Arcaniste et "
      "Mécaniste. Le talent du bas de chaque branche est un pouvoir actif.", "talents"),
-    ("manual_welcome", "Le Manuel du Voyageur", "La page d'accueil. Le sommaire à gauche range les 81 pages par "
+    ("manual_welcome", "Le Manuel du Voyageur", "La page d'accueil. Le sommaire à gauche range les 85 pages par "
      "thème.", "manuel"),
     ("manual_machines", "Le Manuel, page machines", "Chaque système a sa page, avec les objets concernés en bas.",
      "manuel"),
@@ -946,6 +975,11 @@ INGAME_SHOTS = [
     ("creatures", "Automates sur la scène de test", "Le golem de laiton au centre, une araignée-horloge devant, le "
      "bassin de verre d'une méduse lumineuse à gauche ; le Grand Horloger se tient au fond, à droite.",
      "automates"),
+    ("health_bars", "Les barres de vie", "Quatre créatures de près : pleine vie (vert), une qui vient d'être "
+     "frappée (la traînée jaune des dégâts et le chiffre qui s'envole), 40 % (jaune) et 15 % (rouge).", ""),
+    ("minimap_radar", "Le radar de la mini-carte", "Treize créatures autour du joueur : têtes des monstres et des "
+     "animaux, points colorés pour les créatures du mod, badge des PNJ, crâne couronné du boss, et la poule loin "
+     "au-dessus avec sa petite flèche.", "radar"),
     ("mega_structure", "La Citadelle d'horlogerie", "Une merveille posée par le serveur de test et vue du ciel : la "
      "tour-horloge, ses toits de cuivre et ses cheminées.", "s-clockwork_citadel"),
 ]

@@ -23,6 +23,9 @@ import java.util.List;
  * four presets (56, 68, 96, 128) cycled with Shift + the minimap key or picked in the settings screen. The round frame
  * is drawn for the exact size ({@link MapFrames}) and the square one is a nine-slice: both stay crisp at any GUI
  * scale. The player arrow and the markers grow with the map (a 7 px arrow on the small ones).
+ *
+ * <p>Under the markers, the entity radar ({@link MapRadar}): the creatures around, as faces or coloured dots. Other
+ * players are markers: their head with a pointer where they look, kept on the rim (faded) when off the map.
  */
 public final class MinimapHud {
     /** GUI pixels per block for each zoom level. */
@@ -111,6 +114,29 @@ public final class MinimapHud {
         float half = size / 2.0F - Math.max(3.0F, markerSize / 2.0F - 0.5F);
         double cos = Math.cos(angle);
         double sin = Math.sin(angle);
+
+        // the radar: the creatures around, under the markers (only those inside the map)
+        if (BrasshavenClientConfig.RADAR.get()) {
+            MapRadar.want(size * 0.75 / scale);
+            MapRadar.update();
+            float iconSize = MapRadar.iconSize(markerSize);
+            float inner = size / 2.0F - iconSize / 2.0F - 1.0F;
+            double py = net.minecraft.util.Mth.lerp(pt, player.yo, player.getY());
+            for (int k = 0; k < MapRadar.count(); k++) {
+                net.minecraft.world.entity.Entity e = MapRadar.entity(k);
+                if (e == null || e.isRemoved()) {
+                    continue;
+                }
+                double dx = (MapRadar.x(e, pt) - px) * scale;
+                double dz = (MapRadar.z(e, pt) - pz) * scale;
+                double sx = dx * cos - dz * sin;
+                double sy = dx * sin + dz * cos;
+                if (round ? sx * sx + sy * sy > inner * inner : Math.abs(sx) > inner || Math.abs(sy) > inner) {
+                    continue;
+                }
+                MapRadar.icon(g, e, MapRadar.kind(k), cxs + (float) sx, cys + (float) sy, iconSize, MapRadar.y(e, pt) - py);
+            }
+        }
         List<ClientMap.Marker> markers = ClientMap.markers();
         for (ClientMap.Marker m : markers) {
             double dx = (m.x() - px) * scale;
@@ -120,14 +146,16 @@ public final class MinimapHud {
             boolean inside = round ? sx * sx + sy * sy <= half * half : Math.abs(sx) <= half && Math.abs(sy) <= half;
             if (!inside) {
                 if (m.kind() != ClientMap.Kind.WAYPOINT && m.kind() != ClientMap.Kind.TARGET && m.kind() != ClientMap.Kind.PING
-                        && m.kind() != ClientMap.Kind.DEATH) {
+                        && m.kind() != ClientMap.Kind.DEATH && m.kind() != ClientMap.Kind.PLAYER) {
                     continue;
                 }
                 double k = round ? half / Math.sqrt(sx * sx + sy * sy) : half / Math.max(Math.abs(sx), Math.abs(sy));
                 sx *= k;
                 sy *= k;
             }
-            MapRenderer.marker(g, m, Math.round(cxs + (float) sx), Math.round(cys + (float) sy), !inside, markerSize);
+            // other players: their facing as a small pointer on the edge of their head (turned with the map)
+            float heading = m.kind() == ClientMap.Kind.PLAYER ? (float) Math.toRadians(m.yaw() + 180.0) + angle : Float.NaN;
+            MapRenderer.marker(g, m, Math.round(cxs + (float) sx), Math.round(cys + (float) sy), !inside, markerSize, heading);
         }
         MapRenderer.arrow(g, cxs, cys, rotate ? 0.0F : (float) Math.toRadians(yaw + 180.0), MapRenderer.minimapArrow(outer));
 

@@ -201,10 +201,23 @@ PAGES = [
         ("Middle-click the map, or press B while looking at a spot, to ping it: everyone sees it for a minute.",
          "Clic molette sur la carte, ou B en visant un endroit : un signal que tous voient une minute."),
         ("The cube button tilts the world map into a 3D view. The gear button: minimap size (48 to 160 px, shown "
-         "live), corner, shape, opacity, relief and contour lines.",
+         "live), corner, shape, opacity, radar, relief and contour lines.",
          "Le bouton cube incline la carte en vue 3D. L'engrenage : taille de la mini-carte (48 à 160 px, en "
-         "direct), coin, forme, opacité, relief et courbes de niveau."),
+         "direct), coin, forme, opacité, radar, relief et courbes de niveau."),
     ], ["brasshaven:wayfarer_atlas"]),
+    ("radar", "travel", "minecraft:spyglass", ("Minimap radar", "Radar de la mini-carte"), [
+        ("The creatures around you show on the minimap (and on the world map zoomed in): their face, or a dot "
+         "- red hostile, green animal, yellow neutral; villagers and NPCs a badge, bosses a purple crowned skull. A "
+         "small tick: far above or below. Other players: their head and where they look, gold for companions.",
+         "Les créatures autour de toi s'affichent sur la mini-carte (et sur la carte zoomée) : leur tête, ou "
+         "un point - rouge hostile, vert animal, jaune neutre ; villageois et PNJ un badge, boss un crâne violet "
+         "couronné. Une petite flèche : loin au-dessus ou en dessous. Les autres joueurs : leur tête et où ils "
+         "regardent, en doré pour tes compagnons."),
+        ("The radar's options are in the gear panel (Radar column) or Mods > Brasshaven > Config, Radar tab: on or "
+         "off, faces or dots, and which kinds to show (hostile, animals, NPCs, players, items).",
+         "Ses options sont dans le panneau de l'engrenage (colonne Radar) ou Mods > Brasshaven > Config, onglet "
+         "Radar : activé ou non, têtes ou points, et quels genres montrer (hostiles, animaux, PNJ, joueurs, objets)."),
+    ], []),
     ("recall", "travel", "brasshaven:recall_scroll", ("Recall Scroll", "Parchemin de rappel"), [
         ("Use it to return instantly to the nearest waystone of your dimension. It is used up.",
          "Utilise-le pour revenir aussitôt à la pierre de voyage la plus proche de ta dimension. Il est consommé."),

@@ -68,7 +68,43 @@ UI = {
     "gui.brasshaven.map.view_3d": ("3D view", "Vue 3D"),
     "gui.brasshaven.map.view3d_on": ("3D view (tilted relief): on", "Vue 3D (relief incliné) : activée"),
     "gui.brasshaven.map.view3d_off": ("3D view (tilted relief): off", "Vue 3D (relief incliné) : désactivée"),
-    "gui.brasshaven.map.options": ("Options: minimap size and look, map relief", "Options : taille et aspect de la mini-carte, relief des cartes"),
+    "gui.brasshaven.map.options": ("Options: minimap size and look, radar, map relief",
+                                   "Options : taille et aspect de la mini-carte, radar, relief des cartes"),
+    "gui.brasshaven.map.options.radar_title": ("Radar", "Radar"),
+    "gui.brasshaven.map.options.radar.shown": ("Shown", "Affiché"),
+    "gui.brasshaven.map.options.radar.tip": ("Creatures around you as small icons on the minimap, and on this map zoomed in "
+                                            "near you. Only what your game already sees.",
+                                            "Les créatures autour de toi en petites icônes sur la mini-carte, et sur cette "
+                                            "carte zoomée près de toi. Seulement ce que ton jeu voit déjà."),
+    "gui.brasshaven.map.options.radar.heads": ("Heads", "Têtes"),
+    "gui.brasshaven.map.options.radar.heads.tip": ("The creature's face when it is known (the common vanilla creatures), "
+                                                  "else a coloured dot.",
+                                                  "La tête de la créature quand elle est connue (les créatures vanilla "
+                                                  "courantes), sinon un point coloré."),
+    "gui.brasshaven.map.options.radar.dots": ("Dots", "Points"),
+    "gui.brasshaven.map.options.radar.dots.tip": ("A dot coloured by kind: red hostile, green animal, yellow neutral, grey item.",
+                                                 "Un point coloré selon le genre : rouge hostile, vert animal, jaune neutre, "
+                                                 "gris objet."),
+    "gui.brasshaven.map.options.radar.hostile": ("Hostile", "Hostiles"),
+    "gui.brasshaven.map.options.radar.hostile.tip": ("Monsters, in red. Bosses always show, as a purple crowned skull.",
+                                                    "Les monstres, en rouge. Les boss s'affichent toujours, en crâne violet "
+                                                    "couronné."),
+    "gui.brasshaven.map.options.radar.passive": ("Animals", "Animaux"),
+    "gui.brasshaven.map.options.radar.passive.tip": ("Animals in green, neutral creatures in yellow (red once angry).",
+                                                    "Les animaux en vert, les créatures neutres en jaune (rouges une fois "
+                                                    "en colère)."),
+    "gui.brasshaven.map.options.radar.npcs": ("NPCs", "PNJ"),
+    "gui.brasshaven.map.options.radar.npcs.tip": ("Villagers, wandering traders and the mod's characters.",
+                                                 "Villageois, marchands ambulants et personnages du mod."),
+    "gui.brasshaven.map.options.radar.players": ("Players", "Joueurs"),
+    "gui.brasshaven.map.options.radar.players.tip": ("Other players: their head, a pointer where they look, a gold frame "
+                                                    "for your companions; on the minimap's edge when further away.",
+                                                    "Les autres joueurs : leur tête, une pointe vers où ils regardent, un "
+                                                    "cadre doré pour tes compagnons ; sur le bord de la mini-carte quand "
+                                                    "ils sont plus loin."),
+    "gui.brasshaven.map.options.radar.items": ("Items", "Objets"),
+    "gui.brasshaven.map.options.radar.items.tip": ("Items lying on the ground, as small grey dots.",
+                                                  "Les objets posés au sol, en petits points gris."),
     "gui.brasshaven.map.options.title": ("Minimap", "Mini-carte"),
     "gui.brasshaven.map.options.size.tip": ("Its exact size on screen, frame included: 48 to 160 px. The minimap shows "
                                            "live in its corner while this panel is open.",
@@ -397,6 +433,43 @@ WAYPOINT_ICONS = {
         "ooooooooo",
     ],
 }
+# the entity radar (MapRadar.java): a white dot tinted by kind (dark rim stays dark), a boss and an NPC badge
+RADAR = {
+    "dot": ([
+        "..ooo..",
+        ".owwwo.",
+        "owwwwso",
+        "owwwwso",
+        "owwwsso",
+        ".ossso.",
+        "..ooo..",
+    ], {"o": "0F0C0A", "w": "FFFFFF", "s": "C8C8C8"}),
+    "boss": ([
+        "y.y.y.y.y",
+        "yyyyyyyyy",
+        "ooooooooo",
+        "owwwwwwwo",
+        "owkkwkkwo",
+        "owkkwkkwo",
+        "owwwkwwwo",
+        ".owkwkwo.",
+        "..ooooo..",
+    ], {"o": "0F0C0A", "w": "EDE3F7", "k": "8E3CFF", "y": "F6C343"}),
+    "npc": ([
+        ".ooooooo.",
+        "ohhhhhhho",
+        "ohsssssho",
+        "osgsnsgso",
+        "osssnssso",
+        "ossnnnsso",
+        "ossssssso",
+        ".ossssso.",
+        "..ooooo..",
+    ], {"o": "0F0C0A", "h": "5A3A22", "s": "C69A72", "g": "2F8A3A", "n": "9C6A50"}),
+}
+# Radar dot colours per kind (MapRadar.COLORS): passive, neutral, item, npc, hostile, boss
+RADAR_COLORS = {"passive": "7CE35A", "neutral": "F6C343", "item": "B9B2A6", "npc": "E8D7AE", "hostile": "E0483B",
+                "boss": "B46CFF"}
 CARDINALS = {
     "n": ["o..o", "oo.o", "o.oo", "o..o", "o..o"],
     "e": ["ooo", "o..", "oo.", "o..", "ooo"],
@@ -500,6 +573,8 @@ def sprites(g):
     _parchment(g)
     for name, (rows, cols) in MARKERS.items():
         _art(g, "map/marker/" + name, rows, {k: g.hexc(v) for k, v in cols.items()})
+    for name, (rows, cols) in RADAR.items():
+        _art(g, "map/radar/" + name, rows, {k: g.hexc(v) for k, v in cols.items()})
     for name, rows in WAYPOINT_ICONS.items():
         _art(g, "map/wp/" + name, rows, {"o": g.hexc("1A1410"), "w": g.hexc("FFFFFF"), "h": g.hexc("D8D8D8"),
                                          "d": g.hexc("8A7A66"), "y": g.hexc("F6C343")})
@@ -753,12 +828,53 @@ def draw_crisp(big, gs, path, x, y, size, tint=None, shadow=True, texels=9):
     big.alpha_composite(im, (bx, by))
 
 
+def draw_radar(big, gs, g, kind, x, y, size, height=0):
+    """MapRadar.icon() as dots (the faces need the game's textures): a tinted dot, the NPC badge, the boss's crowned
+    skull, or for "player" a head with a pointer where it looks; an up / down tick when far above or below."""
+    from PIL import Image
+    tier = abs(height) >= 6
+    if kind == "boss":
+        draw_crisp(big, gs, g.sp("map/radar/boss"), x, y, size * 1.2)
+    elif kind == "npc":
+        draw_crisp(big, gs, g.sp("map/radar/npc"), x, y, size)
+    elif kind == "player":
+        r = max(3, round(size + 2 - 1) // 2)  # MapRenderer.marker: h, from the marker size
+        ox, oy = _round_half(x * gs), _round_half(y * gs)
+        base, tip, wide = (r + 1.5) * gs, (r + 1.5 + max(2.0, (r + 1.5) * 0.6)) * gs, max(2.0, (r + 1.5) * 0.55) * gs
+        a = math.radians(40)
+        rot = lambda px, py: (ox + px * math.cos(a) - py * math.sin(a), oy + px * math.sin(a) + py * math.cos(a))  # noqa: E731
+        _polygon(big, [rot(0, -tip - gs * 1.2), rot(wide + gs, -base + gs), rot(-wide - gs, -base + gs)], (0x0F, 0x0C, 0x0A, 255))
+        _polygon(big, [rot(0, -tip), rot(wide, -base + gs), rot(-wide, -base + gs)], (0xF6, 0xC3, 0x43, 255))
+        from PIL import ImageDraw
+        d = ImageDraw.Draw(big)
+        d.rectangle((ox - (r + 1) * gs, oy - (r + 1) * gs, ox + (r + 1) * gs - 1, oy + (r + 1) * gs - 1), fill=(0xF6, 0xC3, 0x43, 255))
+        head = Image.open(g.sp("map/marker/player")).convert("RGBA").resize((2 * r * gs, 2 * r * gs), Image.NEAREST)
+        d.rectangle((ox - r * gs, oy - r * gs, ox + r * gs - 1, oy + r * gs - 1), fill=(0x6B, 0x4A, 0x2E, 255))
+        big.alpha_composite(head, (ox - r * gs, oy - r * gs))
+    else:
+        dot = size * (0.5 if kind == "item" else 0.72)
+        draw_crisp(big, gs, g.sp("map/radar/dot"), x, y, dot, tint=g.hexc(RADAR_COLORS[kind]), shadow=False, texels=7)
+    if tier:
+        k = max(1, (gs * 2 + 1) // 3)
+        cy = y + (-size * 0.5 - 1.5 if height > 0 else size * 0.5 + 1.5)
+        ox, oy = _round_half(x * gs), _round_half(cy * gs)
+        from PIL import ImageDraw
+        d = ImageDraw.Draw(big)
+        for colour, grow in (((0x10, 0x0C, 0x0A, 255), 1), ((0xFF, 0xF4, 0xDC, 255), 0)):
+            for row in range(3):
+                half = ((row if height > 0 else 2 - row) + 1) * k
+                ry = (row - 1) * k
+                d.rectangle((ox - half - grow * k, oy + ry - grow * k, ox + half + grow * k - 1, oy + ry + k + grow * k - 1),
+                            fill=colour)
+
+
 # ------------------------------------------------------------------ the mockups
 def mockups(g):
     from PIL import Image
     os.makedirs(g.PREVIEW, exist_ok=True)
     world = fake_world(420, 300)
     _mock_minimap(g, world, Image)
+    _mock_radar(g, world, Image)
     _mock_worldmap(g, world, Image)
     _mock_options(g, world, Image)
     _mock_options(g, world, Image, li=0)
@@ -766,9 +882,11 @@ def mockups(g):
 
 
 def draw_minimap(g, m, world, x, y, size, square=False, coords=("212, 71, -148", "Plaines"), right=False, zoom=1.0,
-                 opacity=1.0, relief="normal", contours=False, yaw=-35):
+                 opacity=1.0, relief="normal", contours=False, yaw=-35, marks=None, radar=()):
     """The minimap as MinimapHud draws it, on mockup ``m`` at (x, y): ``size`` is the map inside the 6 px frame.
-    Markers and the arrow are sized to the map and drawn at screen resolution. Returns the height taken."""
+    Markers and the arrow are sized to the map and drawn at screen resolution. ``radar``: entity radar icons
+    (kind, dx, dy, height) at GUI px from the centre (MapRadar.icon: kinds of RADAR_COLORS, "player" a head with
+    its pointer; height in blocks above the player). Returns the height taken."""
     from PIL import Image
     outer = size + BORDER * 2
     back = Image.new("RGBA", (size, size), (0x2A, 0x22, 0x1C, int(255 * opacity)))
@@ -781,9 +899,12 @@ def draw_minimap(g, m, world, x, y, size, square=False, coords=("212, 71, -148",
     cx, cy = x + BORDER + size / 2, y + BORDER + size / 2
     k = size / 96
     ms = minimap_marker(outer)
-    marks = (("waystone", -20, -30), ("ping", 26, 14), ("spawn", -36, 22), ("grave", 10, -12))
+    if marks is None:
+        marks = (("waystone", -20, -30), ("ping", 26, 14), ("spawn", -36, 22), ("grave", 10, -12))
 
     def overlay(big, gs):
+        for kind, dx, dy, height in radar:
+            draw_radar(big, gs, g, kind, cx + dx, cy + dy, max(4.0, ms * 0.8), height)
         for name, dx, dy in marks:
             draw_crisp(big, gs, g.sp("map/marker/" + name), int(cx + dx * k), int(cy + dy * k), ms)
         draw_arrow(big, gs, cx, cy, math.radians(yaw), minimap_arrow(outer))
@@ -842,6 +963,34 @@ def _mock_minimap(g, world, Image):
     draw_minimap(g, m, world, 292, 4, 84, relief="strong", contours=True, coords=None, zoom=0.5)
     m.text("Fort + courbes", 292 + 48, 100, g.CREAM, center=True)
     m.save("minimap_variants")
+
+
+def _mock_radar(g, world, Image):
+    """minimap_radar.png: the entity radar (MapRadar.java) on a 96 px minimap, round and square: hostile red, animals
+    green, a neutral wolf yellow, an item grey, villagers and NPCs as a badge, a boss as a crowned skull, a companion's
+    head with its gold frame and the pointer where it looks, a chicken far above (up tick) and a bat in a cave below
+    (down tick). The legend under it gives the colours. (Dots only: the faces come from the game's own textures.)"""
+    W, H = 260, 150
+    m = g.Mock(W, H)
+    _sky(m, W, H, 70)
+    radar = (("hostile", -18, -10, 0), ("hostile", 22, -6, 0), ("hostile", 8, 20, -9), ("passive", -14, 16, 0),
+             ("passive", -22, 22, 0), ("passive", 16, 26, 0), ("neutral", -26, -2, 0), ("item", 4, -14, 0),
+             ("npc", 26, 10, 0), ("npc", 30, 16, 0), ("boss", 4, -30, 0), ("passive", -6, -22, 11),
+             ("player", -30, -22, 0))
+    marks = (("waystone", -20, -30),)
+    draw_minimap(g, m, world, 4, 4, 84, coords=None, marks=marks, radar=radar)
+    draw_minimap(g, m, world, 104, 4, 84, square=True, coords=None, marks=marks, radar=radar, yaw=20)
+    legend = (("hostile", "Hostile"), ("passive", "Animal"), ("neutral", "Neutre"), ("npc", "PNJ"), ("boss", "Boss"),
+              ("item", "Objet"), ("player", "Joueur"))
+    for i, (kind, label) in enumerate(legend):
+        lx, ly = 204 + (i // 7) * 60, 8 + i * 13
+
+        def one(big, gs, kind=kind, lx=lx, ly=ly):
+            draw_radar(big, gs, g, kind, lx + 4, ly + 4, 7)
+        m.overlays.append(one)
+        m.text(label, lx + 12, ly, g.CREAM)
+    m.text("Points (les têtes viennent des textures du jeu)", W // 2, H - 12, g.CREAM, center=True)
+    m.save("minimap_radar")
 
 
 # MapView3D.java
@@ -1033,6 +1182,8 @@ def _mock_worldmap(g, world, Image, tilted=False):
 # WorldMapScreen's options panel
 OPT_W, OPT_LABEL, OPT_ROW, OPT_ROWS, OPT_HEAD, OPT_SECTION, OPT_PAD = 210, 82, 16, 10, 24, 14, 12
 OPT_H = OPT_HEAD + OPT_ROWS * OPT_ROW + OPT_SECTION + 10
+RADAR_W = 104  # the radar column, right of the minimap one
+PANEL_W = OPT_W + RADAR_W
 
 
 def _mock_options(g, world, Image, li=1):
@@ -1061,10 +1212,10 @@ def _mock_options(g, world, Image, li=1):
         if key in content.MESSAGES:
             return content.MESSAGES[key][li]
         return UI[key][li]
-    ox, oy = W - OPT_W - 6, max(2, (H - OPT_H) // 2)
-    m.nine("panel", ox, oy, OPT_W, OPT_H, 9)
+    ox, oy = W - PANEL_W - 6, max(2, (H - OPT_H) // 2)
+    m.nine("panel", ox, oy, PANEL_W, OPT_H, 9)
     m.text(tr(o + "title"), ox + OPT_W // 2, oy + 10, g.INK, shadow=False, center=True, bold=True)
-    m.text("x", ox + OPT_W - 18, oy + 9, g.INK_SOFT, shadow=False)
+    m.text("x", ox + PANEL_W - 18, oy + 9, g.INK_SOFT, shadow=False)
 
     def row(i):
         return oy + OPT_HEAD + i * OPT_ROW + (OPT_SECTION if i >= 8 else 0)
@@ -1118,6 +1269,34 @@ def _mock_options(g, world, Image, li=1):
     for j, r in enumerate(["flat", "normal", "strong"]):
         choice(cx + j * (rw + 2), row(8), rw, 14, tr(o + "relief." + r), j == 1)
     toggle(9, False)
+    # the radar column (WorldMapScreen.buildOptions / optionsPanel)
+    rx, rw = ox + OPT_W, RADAR_W - OPT_PAD
+    m.d.rectangle((rx - 7, oy + OPT_HEAD - 2, rx - 7, oy + OPT_H - 13), fill=g.BRASS_DK)
+    m.text(tr(o + "radar_title"), rx + rw // 2, oy + 10, g.INK, shadow=False, center=True, bold=True)
+
+    def rtoggle(i, on):
+        m.im.alpha_composite(Image.open(g.sp("toggle_on" if on else "toggle_off")).convert("RGBA"), (rx, row(i) + 1))
+    rtoggle(0, True)
+    m.text(tr(o + "radar.shown"), rx + 30, row(0) + 4, g.INK, shadow=False)
+    iw = (rw - 2) // 2
+    for j, style in enumerate(["heads", "dots"]):
+        choice(rx + j * (iw + 2), row(1), iw, 14, tr(o + "radar." + style), j == 0)
+    icons = [("map/radar/dot", RADAR_COLORS["hostile"]), ("map/radar/dot", RADAR_COLORS["passive"]), ("map/radar/npc", None),
+             ("map/marker/player", None), ("map/radar/dot", RADAR_COLORS["item"])]
+    for i, key in enumerate(["hostile", "passive", "npcs", "players", "items"]):
+        on = key != "items"
+        rtoggle(2 + i, on)
+        icon, tint = icons[i]
+        im = Image.open(g.sp(icon)).convert("RGBA").resize((7, 7), Image.NEAREST)
+        if tint:
+            from PIL import ImageChops
+            im = ImageChops.multiply(im, Image.new("RGBA", im.size, g.hexc(tint)[:3] + (255,)))
+        if not on:
+            im.putalpha(im.getchannel("A").point(lambda a: a * 0x60 // 255))
+        m.im.alpha_composite(im, (rx + 29, row(2 + i) + 3))
+        label = tr(o + "radar." + key)
+        assert guide.text_width(label) <= rw - 39, label
+        m.text(label, rx + 39, row(2 + i) + 4, g.INK, shadow=False)
     assert ox > 4 + outer + 4, "the options panel covers the live minimap"
     assert oy + OPT_H <= H, "the options panel does not fit 240 px"
     m.save("worldmap_options" + ("" if li else "_en"))

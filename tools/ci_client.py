@@ -21,7 +21,9 @@ How it works
    sky with the Auto Harvester, Guild Terminal and waystone screens (opened by right-clicking the placed
    blocks), the multiplayer screens (company, player card, emote wheel, Pneumatic Post and Contract Board filled by
    /brasshaven social demo, a client-side preview of the trade screen), the creative tab, creatures (Grand Clockmaker, Brass Golem, Clockwork Spider, a jellyfish in a
-   water tank) with their health bars, and the Clockwork Citadel placed with /place structure and framed
+   water tank) with their health bars, four creatures at full, hit, 40 % and 15 % health up close (health_bars:
+   the coloured fill, the damage trail and number), thirteen creatures of every kind around the player on a 96 px
+   minimap (minimap_radar: the entity radar), and the Clockwork Citadel placed with /place structure and framed
    from its bounding box. Each step saves run/screenshots/ci/<name>.png with the vanilla screenshot code. An
    exception or timeout in a step is logged as an ERROR and the next step runs anyway. At the end the driver
    writes run/ci-client-report.txt (PASS/FAIL/SKIP per step, SHOT per screenshot) and quits. Its own global
@@ -80,7 +82,7 @@ EXPECTED_SHOTS = [
     "hud_minimap", "world_map", "world_map_options", "world_map_3d", "quest_journal", "talent_tree", "manual_welcome", "manual_machines",
     "machine_harvester", "guild_terminal", "waystone",
     "company", "player_card", "emote_wheel", "pneumatic_post", "contract_board", "trade",
-    "creative_tab", "creatures", "mega_structure",
+    "creative_tab", "creatures", "health_bars", "minimap_radar", "mega_structure",
 ]
 
 DONE_MARK = "[brasshaven-ci] DONE"
