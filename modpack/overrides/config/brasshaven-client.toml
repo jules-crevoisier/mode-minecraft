@@ -57,8 +57,23 @@
 	worldMap3d = false
 	#Underground, map the cave around you (a slice at your height) instead of the surface far above.
 	caveMode = true
-	#Show other players on the maps (only those your client can see, within view distance).
+	#Show other players on the maps: the ones the server shares (its own map.showPlayers) and those near enough
+	#for your client to see them. Their head, and on the minimap an arrow on its edge for those further away.
 	showPlayers = true
+	#Entity radar: creatures around you as small icons on the minimap (and on the world map zoomed in near you).
+	#Client side only: it shows what your game already knows, nothing more is sent by the server.
+	radar = true
+	#Radar icons: HEADS (the creature's face when it is known, else a dot) or DOTS (coloured by kind).
+	#Allowed Values: HEADS, DOTS
+	radarIcons = "HEADS"
+	#Radar: hostile creatures (red). Bosses always show while the radar is on.
+	radarHostile = true
+	#Radar: animals (green) and neutral creatures (yellow, red once angry).
+	radarPassive = true
+	#Radar: villagers, wandering traders and the mod's NPCs.
+	radarNpcs = true
+	#Radar: items lying on the ground (small grey dots).
+	radarItems = false
 
 [updates]
 	#Look for a newer Brasshaven release (GitHub, in the background) and show a notice with the changelog link.

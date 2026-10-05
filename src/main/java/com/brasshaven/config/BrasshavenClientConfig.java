@@ -22,6 +22,8 @@ public final class BrasshavenClientConfig {
     public enum MinimapShape { ROUND, SQUARE }
     /** Hill-shading of the maps: FLAT (plain colours), NORMAL, STRONG. */
     public enum MapRelief { FLAT, NORMAL, STRONG }
+    /** Entity radar icons: HEADS (the creature's face when known, else a dot) or DOTS (coloured by kind). */
+    public enum RadarIcons { HEADS, DOTS }
 
     /** Range of the minimap's exact size (GUI pixels, frame included) and the step of its slider. */
     public static final int MINIMAP_MIN = 48;
@@ -93,8 +95,28 @@ public final class BrasshavenClientConfig {
             .comment("Underground, map the cave around you (a slice at your height) instead of the surface far above.")
             .define("map.caveMode", true);
     public static final ForgeConfigSpec.BooleanValue MAP_PLAYERS = B
-            .comment("Show other players on the maps (only those your client can see, within view distance).")
+            .comment("Show other players on the maps: the ones the server shares (its own map.showPlayers) and those near enough",
+                    "for your client to see them. Their head, and on the minimap an arrow on its edge for those further away.")
             .define("map.showPlayers", true);
+    public static final ForgeConfigSpec.BooleanValue RADAR = B
+            .comment("Entity radar: creatures around you as small icons on the minimap (and on the world map zoomed in near you).",
+                    "Client side only: it shows what your game already knows, nothing more is sent by the server.")
+            .define("map.radar", true);
+    public static final ForgeConfigSpec.EnumValue<RadarIcons> RADAR_ICONS = B
+            .comment("Radar icons: HEADS (the creature's face when it is known, else a dot) or DOTS (coloured by kind).")
+            .defineEnum("map.radarIcons", RadarIcons.HEADS);
+    public static final ForgeConfigSpec.BooleanValue RADAR_HOSTILE = B
+            .comment("Radar: hostile creatures (red). Bosses always show while the radar is on.")
+            .define("map.radarHostile", true);
+    public static final ForgeConfigSpec.BooleanValue RADAR_PASSIVE = B
+            .comment("Radar: animals (green) and neutral creatures (yellow, red once angry).")
+            .define("map.radarPassive", true);
+    public static final ForgeConfigSpec.BooleanValue RADAR_NPCS = B
+            .comment("Radar: villagers, wandering traders and the mod's NPCs.")
+            .define("map.radarNpcs", true);
+    public static final ForgeConfigSpec.BooleanValue RADAR_ITEMS = B
+            .comment("Radar: items lying on the ground (small grey dots).")
+            .define("map.radarItems", false);
 
     public static final ForgeConfigSpec.BooleanValue UPDATE_CHECK = B
             .comment("Look for a newer Brasshaven release (GitHub, in the background) and show a notice with the changelog link.",

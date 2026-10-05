@@ -326,6 +326,40 @@ MESSAGES = {
     "gui.brasshaven.settings.minimap_opacity": ("Opacity", "Opacité"),
     "gui.brasshaven.settings.minimap_opacity.tip": ("Lower it to see the world through the map.",
                                                    "Baisse-la pour voir le monde à travers la carte."),
+    "gui.brasshaven.settings.tab.radar": ("Radar", "Radar"),
+    "gui.brasshaven.settings.tab.radar.tip": ("The creatures and the players on the maps.",
+                                             "Les créatures et les joueurs sur les cartes."),
+    "gui.brasshaven.settings.radar": ("Radar", "Radar"),
+    "gui.brasshaven.settings.radar.tip": ("Creatures around you as small icons on the minimap (and on the world map zoomed "
+                                         "in near you). Only what your game already sees: nothing more comes from the server.",
+                                         "Les créatures autour de toi en petites icônes sur la mini-carte (et sur la carte du "
+                                         "monde zoomée près de toi). Seulement ce que ton jeu voit déjà : rien de plus ne vient "
+                                         "du serveur."),
+    "gui.brasshaven.settings.radar_icons": ("Icons", "Icônes"),
+    "gui.brasshaven.settings.radar_icons.tip": ("Heads: the creature's face when it is known, else a dot. Dots: a dot coloured "
+                                               "by kind.",
+                                               "Têtes : la tête de la créature quand elle est connue, sinon un point. Points : "
+                                               "un point coloré selon le genre."),
+    "gui.brasshaven.settings.radar_hostile": ("Hostile creatures", "Créatures hostiles"),
+    "gui.brasshaven.settings.radar_hostile.tip": ("Monsters, in red. Bosses always show, as a purple crowned skull.",
+                                                 "Les monstres, en rouge. Les boss s'affichent toujours, en crâne violet couronné."),
+    "gui.brasshaven.settings.radar_passive": ("Animals", "Animaux"),
+    "gui.brasshaven.settings.radar_passive.tip": ("Animals in green, neutral creatures (wolves, endermen, golems...) in yellow, "
+                                                 "red once angry.",
+                                                 "Les animaux en vert, les créatures neutres (loups, endermen, golems...) en "
+                                                 "jaune, en rouge une fois en colère."),
+    "gui.brasshaven.settings.radar_npcs": ("Villagers and NPCs", "Villageois et PNJ"),
+    "gui.brasshaven.settings.radar_npcs.tip": ("Villagers, wandering traders and the mod's characters.",
+                                              "Villageois, marchands ambulants et personnages du mod."),
+    "gui.brasshaven.settings.radar_players": ("Players", "Joueurs"),
+    "gui.brasshaven.settings.radar_players.tip": ("Other players on both maps: their head, a pointer where they look, a gold "
+                                                 "frame for your companions; on the minimap's edge when further away.",
+                                                 "Les autres joueurs sur les deux cartes : leur tête, une pointe vers où ils "
+                                                 "regardent, un cadre doré pour tes compagnons ; sur le bord de la mini-carte "
+                                                 "quand ils sont plus loin."),
+    "gui.brasshaven.settings.radar_items": ("Items on the ground", "Objets au sol"),
+    "gui.brasshaven.settings.radar_items.tip": ("Items lying on the ground, as small grey dots.",
+                                               "Les objets posés au sol, en petits points gris."),
     "key.brasshaven.manual_page": ("Manual page of the hovered item (hold)", "Page du manuel de l'objet survolé (maintenir)"),
     "gui.brasshaven.quests.keys": ("Arrows: quests and chapters - Enter: track", "Flèches : quêtes et chapitres - Entrée : suivre"),
     "gui.brasshaven.tip.title": ("Tip", "Astuce"),

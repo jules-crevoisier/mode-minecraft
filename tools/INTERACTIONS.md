@@ -41,11 +41,12 @@ Every block and item of the mod must react visibly when a player uses it: a scre
 | Sea Serpent | Rises at night near a player boating or swimming over deep water (each 10 s: 1 in 30, deep-ocean biome, 18+ blocks of water, none within 96 blocks; not in peaceful). Bite knocks riders out of boats; lunge breaks boats; whirlpool drags swimmers and boats and tips riders. Sinks away at dawn when nobody fights it. | Boss bar, message above the hotbar, elder-guardian sounds, bubbles and splashes |
 
 | World map (key M) | Drag, wheel zoom, Space: back to you. Click a marker: its card (own waypoint: edit / share / delete; ops: any). Right-click: add waypoint, ping, copy coordinates. Middle-click: ping. Legend rows hide a kind. | Screen; pings: chat line for everyone, bell, pulsing marker for 60 s |
-| Minimap (H show/hide, Z zoom, B ping what you look at) | HUD only. | Markers, coordinates, biome |
+| Minimap (H show/hide, Z zoom, B ping what you look at) | HUD only. Entity radar (client side, nothing sent): creatures within the map as faces or dots (red hostile, green animal, yellow neutral, villager badge for NPCs, crowned skull for bosses, up/down tick when far above/below); other players as heads with a facing pointer, gold frame for companions, pinned to the rim when off the map. Options: world map gear panel (Radar column) or Config, Radar tab. | Markers, coordinates, biome, radar icons |
+| Health bars above creatures (config ALWAYS / DAMAGED / NEVER) | Hit a creature. | Green / yellow / red fill by health, yellow trail of recent damage, floating damage number; HP number when aimed or elite (gold frame and star) |
 
 Keys: M world map, H minimap, Z minimap zoom, B ping, N magnet ring (was M), J journal, K talents, V active talent, R sort, G wand symmetry.
 
-Display settings (health bars, damage numbers, quest tracker, tip cards, key bindings): the Config button of Brasshaven in the mods list opens a settings screen in the mod's theme; every change is saved at once.
+Display settings (health bars, damage numbers, quest tracker, tip cards, key bindings; minimap; radar): the Config button of Brasshaven in the mods list opens a settings screen in the mod's theme; every change is saved at once.
 
 Commands: `/brasshaven warp` is for game masters only. Players travel through the waystone screen.
 

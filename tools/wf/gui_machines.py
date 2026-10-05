@@ -712,8 +712,10 @@ def _mc(name):
 
 def mockup_settings(G, li=1):
     """SettingsScreen.java (Mods > Brasshaven > Config): same window, tabs, rows and controls. settings.png is the
-    Display tab, settings_minimap.png the Minimap tab (French; ``li=0`` adds _en versions)."""
+    Display tab, settings_minimap.png the Minimap tab, settings_radar.png the Radar tab (French; ``li=0`` adds _en
+    versions)."""
     from . import content, guide, machines
+    from .worldmap import UI as UI_MAP
     k = "gui.brasshaven.settings."
 
     def tr(key):
@@ -722,7 +724,7 @@ def mockup_settings(G, li=1):
     # SettingsScreen constants
     w_, row_h, rows_n, first, hint, cx = 360, 20, 7, 42, 12, 124
     h_ = first + rows_n * row_h + hint + 28
-    for tab in (0, 1):
+    for tab in (0, 1, 2):
         m = G.Mock(w_ + 40, h_ + 40)
         ox, oy = 20, 22
         m.nine("panel", ox, oy, w_, h_, 9)
@@ -746,13 +748,14 @@ def mockup_settings(G, li=1):
             m.im.alpha_composite(G.Image.open(G.sp("toggle_on" if on else "toggle_off")).convert("RGBA"), (ox + cx, row_y(i) + 2))
             m.text(machines.GUI["on" if on else "off"][li], ox + cx + 30, row_y(i) + 5, G.INK_SOFT, shadow=False)
 
-        tabs = [tr(k + "tab.display"), tr(k + "tab.minimap")]
+        tabs = [tr(k + "tab.display"), tr(k + "tab.minimap"), tr(k + "tab.radar")]
         tbw = max(80, max(guide.text_width(t) + 16 for t in tabs))
         for i, t in enumerate(tabs):
-            choice(ox + w_ // 2 - tbw - 2 + i * (tbw + 4), oy + 17, tbw, 16, t, i == tab)
+            choice(ox + (w_ - len(tabs) * tbw - (len(tabs) - 1) * 4) // 2 + i * (tbw + 4), oy + 17, tbw, 16, t, i == tab)
         names = (["health_bars", "damage_numbers", "quest_tracker", "tips", "keys"] if tab == 0 else
                  ["minimap", "minimap_size", "minimap_corner", "minimap_shape", "minimap_rotate", "minimap_coords",
-                  "minimap_opacity"])
+                  "minimap_opacity"] if tab == 1 else
+                 ["radar", "radar_icons", "radar_hostile", "radar_passive", "radar_npcs", "radar_players", "radar_items"])
         for i, key in enumerate(names):
             m.text(tr(k + key), ox + 12, row_y(i) + 5, G.INK, shadow=False)
         if tab == 0:
@@ -764,6 +767,14 @@ def mockup_settings(G, li=1):
                 toggle(i, on)
             kb = tr(k + "keys.button")
             choice(ox + cx, row_y(4), max(60, guide.text_width(kb) + 16), 18, kb, False)
+        elif tab == 2:
+            toggle(0, True)
+            x = ox + cx
+            for j, style in enumerate(["heads", "dots"]):
+                lab = UI_MAP["gui.brasshaven.map.options.radar." + style][li]
+                x = choice(x, row_y(1), max(18, guide.text_width(lab) + 10), 18, lab, j == 0) + 2
+            for i, on in ((2, True), (3, True), (4, True), (5, True), (6, False)):
+                toggle(i, on)
         else:
             toggle(0, True)
             x = ox + cx
@@ -793,4 +804,4 @@ def mockup_settings(G, li=1):
             m.text(keys, ox + w_ // 2, row_y(rows_n) + 2, G.INK_SOFT, shadow=False, center=True)
         done = "Terminé" if li else "Done"
         choice(ox + w_ // 2 - 50, oy + h_ - 26, 100, 20, done, False)
-        m.save("settings" + ("" if tab == 0 else "_minimap") + ("" if li else "_en"))
+        m.save("settings" + ("", "_minimap", "_radar")[tab] + ("" if li else "_en"))

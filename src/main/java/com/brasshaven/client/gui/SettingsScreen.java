@@ -17,8 +17,9 @@ import java.util.function.BooleanSupplier;
 
 /**
  * Brasshaven display settings (config/brasshaven-client.toml) in the mod's own theme, opened by the "Config" button
- * of the mods list. Two tabs: "Display" (health bars, damage numbers, quest tracker, tip cards, key bindings) and
- * "Minimap" (shown or not, size, corner, shape, rotation, coordinates, opacity). Every change is saved at once.
+ * of the mods list. Three tabs: "Display" (health bars, damage numbers, quest tracker, tip cards, key bindings),
+ * "Minimap" (shown or not, size, corner, shape, rotation, coordinates, opacity) and "Radar" (the creatures and players
+ * on the maps: on or off, faces or dots, which kinds). Every change is saved at once.
  */
 public class SettingsScreen extends Screen {
     private static final String K = "gui.brasshaven.settings.";
@@ -34,7 +35,7 @@ public class SettingsScreen extends Screen {
     private static final int CX = 124;
     private static final int[] OPACITIES = {30, 40, 50, 60, 70, 80, 90, 100};
 
-    /** The open tab (0 display, 1 minimap), kept while the game runs. */
+    /** The open tab (0 display, 1 minimap, 2 radar), kept while the game runs. */
     private static int tab;
 
     private final @Nullable Screen parent;
@@ -61,25 +62,32 @@ public class SettingsScreen extends Screen {
         left = (width - W) / 2;
         top = WfGui.windowTop(height, H, 0);
         rows.clear();
-        // the two tabs, side by side under the title plate
-        Component[] tabs = {Component.translatable(K + "tab.display"), Component.translatable(K + "tab.minimap")};
+        // the tabs, side by side under the title plate
+        String[] tabKeys = {"display", "minimap", "radar"};
+        Component[] tabs = new Component[tabKeys.length];
+        for (int i = 0; i < tabs.length; i++) {
+            tabs[i] = Component.translatable(K + "tab." + tabKeys[i]);
+        }
         int tw = 0;
         for (Component t : tabs) {
             tw = Math.max(tw, font.width(t) + 16);
         }
         tw = Math.max(80, tw);
+        int tabsX = left + (W - tabs.length * tw - (tabs.length - 1) * 4) / 2;
         for (int i = 0; i < tabs.length; i++) {
             int index = i;
-            addRenderableWidget(new WfWidgets.Choice(left + W / 2 - tw - 2 + i * (tw + 4), top + 17, tw, 16, tabs[i],
-                    Component.translatable(K + "tab." + (i == 0 ? "display" : "minimap") + ".tip"), () -> tab == index, () -> {
+            addRenderableWidget(new WfWidgets.Choice(tabsX + i * (tw + 4), top + 17, tw, 16, tabs[i],
+                    Component.translatable(K + "tab." + tabKeys[i] + ".tip"), () -> tab == index, () -> {
                         tab = index;
                         rebuildWidgets();
                     }));
         }
         if (tab == 0) {
             initDisplay();
-        } else {
+        } else if (tab == 1) {
             initMinimap();
+        } else {
+            initRadar();
         }
         addRenderableWidget(new WfButton(left + W / 2 - 50, top + H - 26, 100, 20, Component.translatable("gui.done"), b -> onClose()));
     }
@@ -161,6 +169,28 @@ public class SettingsScreen extends Screen {
                     BrasshavenClientConfig.MINIMAP_OPACITY.set(OPACITIES[s]);
                     BrasshavenClientConfig.MINIMAP_OPACITY.save();
                 }));
+    }
+
+    private void initRadar() {
+        toggle(0, "radar", BrasshavenClientConfig.RADAR);
+        row("radar_icons", null);
+        int x = left + CX;
+        for (BrasshavenClientConfig.RadarIcons style : BrasshavenClientConfig.RadarIcons.values()) {
+            String key = "gui.brasshaven.map.options.radar." + style.name().toLowerCase(Locale.ROOT);
+            Component text = Component.translatable(key);
+            int w = Math.max(18, font.width(text) + 10);
+            addRenderableWidget(new WfWidgets.Choice(x, rowY(1), w, 18, text, Component.translatable(key + ".tip"),
+                    () -> BrasshavenClientConfig.RADAR_ICONS.get() == style, () -> {
+                        BrasshavenClientConfig.RADAR_ICONS.set(style);
+                        BrasshavenClientConfig.RADAR_ICONS.save();
+                    }));
+            x += w + 2;
+        }
+        toggle(2, "radar_hostile", BrasshavenClientConfig.RADAR_HOSTILE);
+        toggle(3, "radar_passive", BrasshavenClientConfig.RADAR_PASSIVE);
+        toggle(4, "radar_npcs", BrasshavenClientConfig.RADAR_NPCS);
+        toggle(5, "radar_players", BrasshavenClientConfig.MAP_PLAYERS);
+        toggle(6, "radar_items", BrasshavenClientConfig.RADAR_ITEMS);
     }
 
     private void row(String key, @Nullable BooleanSupplier on) {

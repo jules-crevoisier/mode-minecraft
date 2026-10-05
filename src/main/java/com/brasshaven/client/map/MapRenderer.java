@@ -159,18 +159,29 @@ final class MapRenderer {
      * edge marker for something off the minimap.
      */
     static void marker(GuiGraphicsExtractor g, ClientMap.Marker m, int x, int y, boolean faded, float size) {
+        marker(g, m, x, y, faded, size, Float.NaN);
+    }
+
+    /**
+     * As above; {@code heading} (radians clockwise from up, NaN: none): for players, a small pointer on the edge of
+     * their head showing where they face.
+     */
+    static void marker(GuiGraphicsExtractor g, ClientMap.Marker m, int x, int y, boolean faded, float size, float heading) {
         int alpha = faded ? 0xB0 : 0xFF;
         if (m.kind() == ClientMap.Kind.PLAYER) {
             PlayerInfo info = Minecraft.getInstance().getConnection() == null ? null
                     : Minecraft.getInstance().getConnection().getPlayerInfo(m.label());
             // companions of your company (com.brasshaven.social) get a gold frame
+            boolean companion = com.brasshaven.client.social.ClientSocial.isCompanion(m.label());
             int h = Math.max(3, Math.round(size - 1) / 2);
+            if (!Float.isNaN(heading)) {
+                pointer(g, x, y, h + 1.5F, heading, companion ? 0xFFF6C343 : 0xFFF3E3C0);
+            }
             g.fill(x - h, y - h, x + h + 2, y + h + 2, 0x50000000);
-            g.fill(x - h - 1, y - h - 1, x + h + 1, y + h + 1,
-                    com.brasshaven.client.social.ClientSocial.isCompanion(m.label()) ? 0xFFF6C343 : 0xFF0F0C0A);
+            g.fill(x - h - 1, y - h - 1, x + h + 1, y + h + 1, companion ? 0xFFF6C343 : 0xFF0F0C0A);
             g.fill(x - h, y - h, x + h, y + h, 0xFFF3E3C0);
             if (info != null) {
-                PlayerFaceExtractor.extractRenderState(g, info.getSkin(), x - h, y - h, h * 2);
+                PlayerFaceExtractor.extractRenderState(g, info.getSkin(), x - h, y - h, h * 2, alpha << 24 | 0xFFFFFF);
             } else {
                 spriteCrisp(g, markerSprite(m), 9, x, y, size, alpha << 24 | 0xFFFFFF, false);
             }
@@ -185,6 +196,36 @@ final class MapRenderer {
             ring(g, x, y, r, (a << 24) | 0xFF7A3C);
         }
         spriteCrisp(g, markerSprite(m), 9, x, y, size, tint, true);
+    }
+
+    /**
+     * A small triangle just outside a head icon of half-size {@code r} (GUI px) at (x, y), pointing {@code angle}
+     * radians clockwise from up: where a player faces. Drawn at the screen's resolution, with a soot rim.
+     */
+    static void pointer(GuiGraphicsExtractor g, float x, float y, float r, float angle, int color) {
+        int gs = guiScale();
+        float cos = (float) Math.cos(angle);
+        float sin = (float) Math.sin(angle);
+        float base = r * gs;
+        float tip = base + Math.max(2.0F, r * 0.6F) * gs;
+        float wide = Math.max(2.0F, r * 0.55F) * gs;
+        // pointing up: tip, right and left of the base (tucked under the head, drawn after); then turned
+        float[] p = {0, -tip, wide, -base + gs, -wide, -base + gs};
+        float[] rim = {0, -tip - gs * 1.2F, wide + gs, -base + gs, -wide - gs, -base + gs};
+        float[] in = new float[6];
+        float[] out = new float[6];
+        for (int i = 0; i < 3; i++) {
+            in[i * 2] = p[i * 2] * cos - p[i * 2 + 1] * sin;
+            in[i * 2 + 1] = p[i * 2] * sin + p[i * 2 + 1] * cos;
+            out[i * 2] = rim[i * 2] * cos - rim[i * 2 + 1] * sin;
+            out[i * 2 + 1] = rim[i * 2] * sin + rim[i * 2 + 1] * cos;
+        }
+        g.pose().pushMatrix();
+        g.pose().translate(Math.round(x * gs) / (float) gs, Math.round(y * gs) / (float) gs);
+        g.pose().scale(1.0F / gs, 1.0F / gs);
+        polygon(g, out, 0, 0, 0xFF0F0C0A);
+        polygon(g, in, 0, 0, color);
+        g.pose().popMatrix();
     }
 
     /** As above at the classic 9 px (cards, legend). */

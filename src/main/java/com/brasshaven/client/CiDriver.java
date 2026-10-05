@@ -571,6 +571,77 @@ public final class CiDriver {
                 .waitTicks(100)
                 .shot("creatures");
 
+        // health bars up close (config ALWAYS, set at boot): full (green), 60 % just hit (green, the yellow trail of
+        // the damage and its floating number), 40 % (yellow), 15 % (red). Husks and creepers: no burning in the sun.
+        String hb = "PersistenceRequired:1b,NoAI:1b,Rotation:[180f,0f]";
+        step("health_bars")
+                .cmd(() -> List.of(
+                        "kill @e[type=!minecraft:player,distance=..64]",
+                        "fill " + at(-4, 1, 0) + " " + at(4, 4, 5) + " minecraft:air",
+                        "summon minecraft:husk " + (bx - 1.75) + " " + (STAGE_Y + 1) + " " + (bz + 3.5) + " {" + hb + ",Health:20f}",
+                        "summon minecraft:husk " + (bx - 0.25) + " " + (STAGE_Y + 1) + " " + (bz + 3.5) + " {" + hb + ",Tags:[\"ci_hit\"]}",
+                        "summon minecraft:creeper " + (bx + 1.25) + " " + (STAGE_Y + 1) + " " + (bz + 3.5) + " {" + hb + ",Health:8f}",
+                        "summon minecraft:husk " + (bx + 2.75) + " " + (STAGE_Y + 1) + " " + (bz + 3.5) + " {" + hb + ",Health:3f}",
+                        "tp @s " + (bx + 0.5) + " " + (STAGE_Y + 1) + " " + (bz - 1.0) + " facing "
+                                + (bx - 0.25) + " " + (STAGE_Y + 1.5) + " " + (bz + 3.5)))
+                .run("fly", CiDriver::fly)
+                .waitTicks(40)
+                // the hit lands a few ticks before the shot: the trail still shows where the health was
+                .server("clear the drops", (server, player) -> {
+                    // what the killed creatures dropped (a /kill with nothing to kill would fail the step)
+                    for (net.minecraft.world.entity.Entity e : player.level().getEntities((net.minecraft.world.entity.Entity) null,
+                            player.getBoundingBox().inflate(64), e -> e instanceof net.minecraft.world.entity.item.ItemEntity
+                                    || e instanceof net.minecraft.world.entity.ExperienceOrb)) {
+                        e.discard();
+                    }
+                    return List.of();
+                })
+                .cmd(() -> List.of("damage @e[tag=ci_hit,limit=1] 8"))
+                .until("the hit on the client", () -> healthRatios().stream().anyMatch(r -> r > 0.45F && r < 0.95F), 40)
+                .run("check", CiDriver::checkHealthBars)
+                .shot("health_bars");
+
+        // the minimap's radar: creatures of every kind around the player, the minimap at 96 px and zoomed in
+        String still2 = "{NoAI:1b,PersistenceRequired:1b,Rotation:[180f,0f]}";
+        step("minimap_radar")
+                .run("minimap", () -> {
+                    BrasshavenClientConfig.setMinimapPixels(96);
+                    BrasshavenClientConfig.MINIMAP_ZOOM.set(2);
+                    BrasshavenClientConfig.RADAR.set(true);
+                })
+                .cmd(() -> List.of(
+                        "kill @e[type=!minecraft:player,distance=..64]",
+                        "summon minecraft:husk " + (bx - 5.5) + " " + (STAGE_Y + 1) + " " + (bz + 3.5) + " " + still2,
+                        "summon minecraft:creeper " + (bx + 6.5) + " " + (STAGE_Y + 1) + " " + (bz + 4.5) + " " + still2,
+                        "summon minecraft:spider " + (bx - 9.5) + " " + (STAGE_Y + 1) + " " + (bz + 12.5) + " " + still2,
+                        "summon minecraft:cow " + (bx - 4.5) + " " + (STAGE_Y + 1) + " " + (bz + 14.5) + " " + still2,
+                        "summon minecraft:sheep " + (bx + 3.5) + " " + (STAGE_Y + 1) + " " + (bz + 15.5) + " " + still2,
+                        "summon minecraft:pig " + (bx + 9.5) + " " + (STAGE_Y + 1) + " " + (bz + 15.5) + " " + still2,
+                        "summon minecraft:wolf " + (bx - 7.5) + " " + (STAGE_Y + 1) + " " + (bz + 8.5) + " " + still2,
+                        "summon minecraft:villager " + (bx + 11.5) + " " + (STAGE_Y + 1) + " " + (bz + 11.5) + " " + still2,
+                        "summon brasshaven:wayfarer_npc " + (bx + 4.5) + " " + (STAGE_Y + 1) + " " + (bz + 1.5) + " " + still2,
+                        "summon brasshaven:clockwork_spider " + (bx + 1.5) + " " + (STAGE_Y + 1) + " " + (bz + 4.5) + " " + still2,
+                        "summon brasshaven:brass_golem " + (bx - 1.5) + " " + (STAGE_Y + 1) + " " + (bz + 13.5) + " " + still2,
+                        "summon brasshaven:grand_clockmaker " + (bx + 11.5) + " " + (STAGE_Y + 1) + " " + (bz + 19.5) + " " + still2,
+                        // high above the stage: an up tick on its icon
+                        "summon minecraft:chicken " + (bx - 3.5) + " " + (STAGE_Y + 14) + " " + (bz + 5.5)
+                                + " {NoAI:1b,NoGravity:1b,PersistenceRequired:1b}",
+                        "tp @s " + (bx + 0.5) + " " + (STAGE_Y + 1) + " " + (bz + 8.5) + " 180 20"))
+                .run("fly", CiDriver::fly)
+                .waitTicks(60)
+                .run("check", () -> {
+                    int seen = com.brasshaven.client.map.MapRadar.count();
+                    LOGGER.info(TAG + "radar: {} creatures around the player", seen);
+                    if (seen < 10) {
+                        throw new IllegalStateException("the radar keeps only " + seen + " of the 13 creatures around the player");
+                    }
+                })
+                .shot("minimap_radar")
+                .run("default minimap", () -> {
+                    BrasshavenClientConfig.setMinimapPixels(BrasshavenClientConfig.MinimapSize.MEDIUM.outer);
+                    BrasshavenClientConfig.MINIMAP_ZOOM.set(1);
+                });
+
         // the Clockwork Citadel well away from the stage, seen from a point worked out from its bounding box
         step("mega_structure")
                 .run("render distance", () -> Minecraft.getInstance().options.renderDistance().set(10))
@@ -641,6 +712,31 @@ public final class CiDriver {
                 .until("TradeScreen", () -> screen() instanceof com.brasshaven.client.social.TradeScreen, 20)
                 .waitTicks(20)
                 .shot("trade");
+    }
+
+    /** Health / max health of the creatures within 8 blocks of the player, as the client knows them, sorted. */
+    private static List<Float> healthRatios() {
+        Minecraft mc = Minecraft.getInstance();
+        List<Float> ratios = new ArrayList<>();
+        for (net.minecraft.world.entity.LivingEntity e : mc.level.getEntitiesOfClass(net.minecraft.world.entity.LivingEntity.class,
+                mc.player.getBoundingBox().inflate(8), e -> e != mc.player)) {
+            ratios.add(e.getHealth() / Math.max(1F, e.getMaxHealth()));
+        }
+        ratios.sort(null);
+        return ratios;
+    }
+
+    /**
+     * The four creatures of the health bar step, as the client sees them: full, hit (below full), 40 % and 15 %.
+     * Fails when the client's health values are not those (the bars draw what the client knows).
+     */
+    private static void checkHealthBars() {
+        List<Float> ratios = healthRatios();
+        LOGGER.info(TAG + "health bars: client health ratios {}", ratios);
+        if (ratios.size() != 4 || Math.abs(ratios.get(0) - 0.15F) > 0.02F || Math.abs(ratios.get(1) - 0.4F) > 0.02F
+                || !(ratios.get(2) < 0.95F && ratios.get(2) > 0.45F) || ratios.get(3) < 0.99F) {
+            throw new IllegalStateException("expected 4 creatures at 15 %, 40 %, hit and full health, got " + ratios);
+        }
     }
 
     /** The trade screen with both offers filled, client side only (a real trade needs a second player). */
