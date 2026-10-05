@@ -808,12 +808,12 @@ def guild_post(bp, st):
     rng = random.Random(bp.name)
     x0, z0, x1, z1 = 1, 3, 10, 10
     base(bp, st, x0, z0, x1, z1)
-    walls(bp, st, x0, z0, x1, z1, 1, 4, st.wall)
+    walls(bp, st, x0, z0, x1, z1, 1, 5, st.wall)
     plinth_course(bp, st, x0, z0, x1, z1, 1, 1)
     floor(bp, x0 + 1, z0 + 1, x1 - 1, z1 - 1, 5, st.planks())
-    walls(bp, st, x0, z0, x1, z1, 5, 7, st.upper, post_every=3)
+    walls(bp, st, x0, z0, x1, z1, 6, 8, st.upper, post_every=3)
     for x in range(x0, x1 + 1):
-        bp.set(x, 4, z0, st.metal[0])
+        bp.set(x, 5, z0, st.metal[0])
     door(bp, st, "north", z0, 5, 1, double=True)
     for u in (3, 8):
         window(bp, st, "north", z0, u, 2)
@@ -824,9 +824,9 @@ def guild_post(bp, st):
     window(bp, st, "east", x1, 8, 2)
     window(bp, st, "south", z1, 4, 2)
     if st.flat:
-        ridge = flat_roof(bp, st, x0, z0, x1, z1, 8)
+        ridge = flat_roof(bp, st, x0, z0, x1, z1, 9)
     else:
-        ridge = roof(bp, st, x0, z0, x1, z1, 8, axis="x")
+        ridge = roof(bp, st, x0, z0, x1, z1, 9, axis="x")
     chimney(bp, x1, 9, 1, ridge + 1, st.plinth)
     # the counter across the hall, the agent behind it, the guild's maps and ledgers around
     for x in range(2, 10):
@@ -849,7 +849,7 @@ def guild_post(bp, st):
     front_garden(bp, st, x0, x1, 0, 2, 5, rng, width=2, fence=False)
     wall_sign(bp, st, 4, 3, z0 - 1, "north", ("post", "post2"))
     entrance(bp, st, 5)
-    residents(bp, st, 0, 1, region=((x0, 5, z0), (x1, 7, z1)), extra=[("cartographer", 2)])
+    residents(bp, st, 0, 1, region=((x0, 6, z0), (x1, 8, z1)), extra=[("cartographer", 2)])
     I.decorate(bp, "home", seed=3, region=((x0, 6, z0), (x1, 6, z1)))
 
 
