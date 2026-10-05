@@ -84,6 +84,7 @@ public class WorldMapScreen extends Screen {
     /** Ground height at the centre line of the 3D view, eased so panning over hills does not jolt the view. */
     private float refY = Float.NaN;
     private boolean optionsOpen;
+    private boolean rebuildOptions;
     private int optX;
     private int optY;
     private final List<AbstractWidget> optionWidgets = new ArrayList<>();
@@ -969,6 +970,9 @@ public class WorldMapScreen extends Screen {
     }
 
     private void terrain3d(GuiGraphicsExtractor g, LocalPlayer player, float scale) {
+        if (MapShade.refresh()) {
+            ClientMap.restyle(); // the relief changed in the options panel
+        }
         MapLayer base = ClientMap.layer();
         if (base == null) {
             return;
@@ -1076,7 +1080,7 @@ public class WorldMapScreen extends Screen {
             option(new WfWidgets.Choice(x, optRow(3), 22, 14, text, text, () -> WayfarersClientConfig.MINIMAP_CORNER.get() == c, () -> {
                 WayfarersClientConfig.MINIMAP_CORNER.set(c);
                 WayfarersClientConfig.MINIMAP_CORNER.save();
-                buildOptions(); // the panel moves away from the minimap
+                rebuildOptions = true; // the panel moves away from the minimap (next frame: not while its click runs)
             }).iconOnly(WfGui.id("glyph/corner_" + key)));
             x += 24;
         }
@@ -1119,6 +1123,10 @@ public class WorldMapScreen extends Screen {
 
     /** The panel's plate and labels (its widgets are drawn with the screen's). */
     private void optionsPanel(GuiGraphicsExtractor g) {
+        if (rebuildOptions) {
+            rebuildOptions = false;
+            buildOptions();
+        }
         if (sizeSlider != null) {
             sizeSlider.sync(sizeStep()); // a preset or Shift + H moved it
         }

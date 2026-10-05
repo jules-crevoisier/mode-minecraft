@@ -33,11 +33,10 @@ final class MapShade {
     private static WayfarersClientConfig.MapRelief relief;
     private static boolean contours;
     private static float strength;
-    private static int version;
 
     private MapShade() {}
 
-    /** Reads the style from the config; true (and a new {@link #version()}) when it changed since the last call. */
+    /** Reads the style from the config; true when it changed since the last call (not on the first one). */
     static boolean refresh() {
         WayfarersClientConfig.MapRelief r = WayfarersClientConfig.MAP_RELIEF.get();
         boolean c = WayfarersClientConfig.MAP_CONTOURS.get();
@@ -52,15 +51,7 @@ final class MapShade {
             case NORMAL -> 0.6F;
             case STRONG -> 1.0F;
         };
-        version++;
         return !first;
-    }
-
-    static int version() {
-        if (relief == null) {
-            refresh();
-        }
-        return version;
     }
 
     static byte kind(int mat) {
@@ -120,6 +111,9 @@ final class MapShade {
     static int shade(int base, Grid g, int o, int step, boolean surface) {
         if (base == 0) {
             return 0;
+        }
+        if (relief == null) {
+            refresh(); // a thumbnail can arrive before the first map is drawn
         }
         byte k = g.kind[o];
         if (k == WALL || k == NONE) {
