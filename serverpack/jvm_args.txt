@@ -1,0 +1,23 @@
+# Wayfarers server JVM flags (read by start.sh / start.bat; Forge's own user_jvm_args.txt is not used).
+# RAM: 6 GB suits 2-10 players. Give -Xms the same value as -Xmx; keep 2 GB or more for the system.
+# 4-5 players on a small machine: -Xms4G -Xmx4G. 20+ players: -Xms10G -Xmx10G.
+-Xms6G
+-Xmx6G
+# G1 tuned for Minecraft (short pauses, many short-lived objects); checked on Java 25 by CI
+-XX:+UseG1GC
+-XX:+ParallelRefProcEnabled
+-XX:MaxGCPauseMillis=200
+-XX:+UnlockExperimentalVMOptions
+-XX:+DisableExplicitGC
+-XX:+AlwaysPreTouch
+-XX:G1NewSizePercent=30
+-XX:G1MaxNewSizePercent=40
+-XX:G1HeapRegionSize=8M
+-XX:G1ReservePercent=20
+-XX:G1HeapWastePercent=5
+-XX:G1MixedGCCountTarget=4
+-XX:InitiatingHeapOccupancyPercent=15
+-XX:G1MixedGCLiveThresholdPercent=90
+-XX:SurvivorRatio=32
+-XX:+PerfDisableSharedMem
+-XX:MaxTenuringThreshold=1

@@ -1,11 +1,13 @@
 modLoader="javafml"
 loaderVersion="[65,)"
 license="MIT"
+issueTrackerURL="https://github.com/jules-crevoisier/mode-minecraft/issues"
 
 [[mods]]
 modId="wayfarers"
 version="${mod_version}"
 displayName="Wayfarers"
+displayURL="https://github.com/jules-crevoisier/mode-minecraft"
 logoFile="logo.png"
 authors="Wayfarers Guild"
 description='''Exploration-first co-op survival with a cyber-steampunk soul.

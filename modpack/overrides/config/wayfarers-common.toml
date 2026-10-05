@@ -1,0 +1,71 @@
+# Wayfarers recommended wayfarers-common.toml (tools/make_modpack.py configs from the mod's config classes).
+# Forge reads it from the config folder; every value is the mod's default unless noted below.
+
+[world]
+	#Wayfarers structures only start where the terrain suits them: flat enough dry ground for buildings,
+	#a shore for the lighthouse, open sea floor for wrecks, clear sky under floating isles. A site that does not
+	#fit is skipped like one with the wrong biome (/locate looks further). False: build wherever the grid says.
+	structureFit = true
+
+[danger]
+	#Monsters get stronger the further you travel from world spawn, and in the Nether/End.
+	enabled = true
+	#Blocks of distance from spawn per danger level in the Overworld.
+	#Range: 100 ~ 100000
+	blocksPerLevel = 900
+	#Highest danger level.
+	#Range: 1 ~ 20
+	maxLevel = 7
+	#Extra max health per danger level (0.15 = +15%).
+	#Range: 0.0 ~ 5.0
+	healthPerLevel = 0.15
+	#Extra attack damage per danger level (0.12 = +12%).
+	#Range: 0.0 ~ 5.0
+	damagePerLevel = 0.12
+
+[elite]
+	#Base chance for a monster to spawn as an Elite (+2% per danger level).
+	#Range: 0.0 ~ 1.0
+	baseChance = 0.03
+
+[bloodMoon]
+	#Every few nights a Blood Moon rises: much stronger monsters and many more Elites.
+	enabled = true
+	#A Blood Moon happens every N nights.
+	#Range: 2 ~ 100
+	interval = 7
+
+[storage]
+	#Guild Terminal reach, in blocks around it (horizontally): every chest, barrel, shulker box, sorting
+	#chest and compacting crate in that square is part of its storage network.
+	#Range: 8 ~ 128
+	terminalRange = 48
+	#Guild Terminal and Storage Relay reach up and down, in blocks (384 = the whole height of the world).
+	#Range: 4 ~ 384
+	terminalHeight = 32
+	#Storage Relay reach, in blocks around it (horizontally). A relay joins the network when it is within
+	#reach of the terminal or of another relay of the network.
+	#Range: 8 ~ 128
+	relayRange = 32
+	#Most containers one terminal network can link (protects the server on huge bases).
+	#Range: 64 ~ 16384
+	maxContainers = 2048
+
+[map]
+	#World map: everyone sees what anyone explored. False: each player only sees the places they saw themselves
+	#(the server keeps track of both, so this can be switched at any time).
+	sharedExploration = true
+	#Show online players on each other's minimap and world map (same dimension).
+	showPlayers = true
+
+[compat]
+	#Refuse players whose Wayfarers version differs from the server's, with a message naming both versions
+	#and the download page. False: only an incompatible network protocol or missing blocks/items refuse them.
+	requireSameVersion = true
+	#Download page given to refused players (your modpack page, for example). Empty: the mod's own page.
+	downloadUrl = ""
+
+[updates]
+	#Dedicated server: look for a newer Wayfarers release at start-up (GitHub, in the background) and log it.
+	#Nothing is ever downloaded.
+	checkForUpdates = true
