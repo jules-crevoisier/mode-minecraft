@@ -264,7 +264,7 @@ PAGES = [
         ("Craft: brass ingots around glass, two copper ingots and a chest.",
          "Fabrication : des lingots de laiton autour d'un verre, deux lingots de cuivre et un coffre."),
     ], ["wayfarers:pneumatic_post", "wayfarers:brass_nugget"]),
-    ("contracts", "multiplayer", "wayfarers:contract_board", ("Guild contracts", "Contrats de guilde"), [
+    ("contract_board", "multiplayer", "wayfarers:contract_board", ("Guild contracts", "Contrats de guilde"), [
         ("Post tab of a Contract Board: click the sample slot with the item you want (a copy, it stays yours), set "
          "how many, put the reward in the reward slots and post. The reward is held by the contract until someone "
          "delivers.",
@@ -322,7 +322,7 @@ TIPS = [
     ("contract_board", "wayfarers:contract_board", ("Contracts: the reward is held until someone delivers; the goods "
                                                     "arrive by post.",
                                                     "Contrats : la récompense est gardée jusqu'à la livraison ; la "
-                                                    "marchandise arrive par la poste."), "contracts"),
+                                                    "marchandise arrive par la poste."), "contract_board"),
     ("duel", "minecraft:iron_sword", ("Duel: stay in the red ring. Nobody dies; the last blow leaves half a heart.",
                                       "Duel : reste dans le cercle rouge. Personne ne meurt ; le dernier coup laisse "
                                       "un demi-cœur."), "duels"),

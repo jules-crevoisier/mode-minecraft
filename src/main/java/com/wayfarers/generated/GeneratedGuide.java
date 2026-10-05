@@ -106,7 +106,7 @@ public final class GeneratedGuide {
             new Page("company_travel", "multiplayer", "wayfarers:waystone", 2, List.of("wayfarers:waystone")),
             new Page("trade", "multiplayer", "minecraft:emerald", 3, List.of()),
             new Page("pneumatic_post", "multiplayer", "wayfarers:pneumatic_post", 3, List.of("wayfarers:pneumatic_post", "wayfarers:brass_nugget")),
-            new Page("contracts", "multiplayer", "wayfarers:contract_board", 3, List.of("wayfarers:contract_board")),
+            new Page("contract_board", "multiplayer", "wayfarers:contract_board", 3, List.of("wayfarers:contract_board")),
             new Page("emotes", "multiplayer", "minecraft:note_block", 2, List.of()),
             new Page("duels", "multiplayer", "minecraft:iron_sword", 3, List.of())
     );
@@ -125,7 +125,7 @@ public final class GeneratedGuide {
             new Tip("company", "minecraft:white_banner", "company"),
             new Tip("trade", "minecraft:emerald", "trade"),
             new Tip("pneumatic_post", "wayfarers:pneumatic_post", "pneumatic_post"),
-            new Tip("contract_board", "wayfarers:contract_board", "contracts"),
+            new Tip("contract_board", "wayfarers:contract_board", "contract_board"),
             new Tip("duel", "minecraft:iron_sword", "duels"),
             new Tip("emotes", "minecraft:note_block", "emotes")
     );
