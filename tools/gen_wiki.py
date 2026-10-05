@@ -1564,6 +1564,8 @@ def check_command(ctx, cmd, subs):
 
 def section_tests(ctx):
     subs = {c[0] for c in java_commands()}
+    # the multiplayer sub-commands are registered by social/SocialCommand.java into the same /wayfarers
+    subs |= set(re.findall(r'literal\("(\w+)"\)', open(os.path.join(JAVA, "social", "SocialCommand.java"), encoding="utf-8").read()))
     items = []
     for n, (title, cmds, expect) in enumerate(TXT.TEST_CHECKLIST, 1):
         for c in cmds:
