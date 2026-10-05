@@ -102,6 +102,14 @@ CONFIG_FR = {
     "map.sharedExploration": "Carte du monde partagée : chacun voit ce que tous ont exploré. Sur false, chaque joueur "
                              "ne voit que ce qu'il a vu lui-même (le serveur garde les deux, on peut changer à tout moment).",
     "map.showPlayers": "Montre les autres joueurs sur la mini-carte et la carte du monde (même dimension).",
+    "compat.requireSameVersion": "Refuse les joueurs dont la version de Wayfarers diffère de celle du serveur, avec un "
+                                 "message qui donne les deux versions et la page de téléchargement. Sur false : seuls "
+                                 "un protocole réseau incompatible ou des blocs/objets manquants les refusent.",
+    "compat.downloadUrl": "Page de téléchargement donnée aux joueurs refusés (la page de ton modpack, par exemple). "
+                          "Vide : la page du mod.",
+    "updates.checkForUpdates": "Cherche une version plus récente de Wayfarers (GitHub, en arrière-plan) : un message "
+                               "avec le lien du changelog en jeu, une ligne dans le journal du serveur. Rien n'est "
+                               "jamais téléchargé.",
     "map.minimap": "Affiche la mini-carte (touche H en jeu ; Maj + H change sa taille).",
     "map.corner": "Coin de l'écran de la mini-carte : TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT ou BOTTOM_RIGHT.",
     "map.size": "Taille de la mini-carte à l'écran, cadre compris : SMALL (56 px), MEDIUM (68 px), LARGE (96 px) ou "

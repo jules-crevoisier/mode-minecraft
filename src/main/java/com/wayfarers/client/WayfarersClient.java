@@ -83,6 +83,7 @@ public final class WayfarersClient {
                 });
         net.minecraftforge.event.entity.player.ItemTooltipEvent.BUS.addListener(TipCards::onTooltip);
         TipCards.registerKeys();
+        ReleaseClient.register();
         // "Config" button of the mods list: the display settings in the mod's own theme
         context.registerExtensionPoint(
                 net.minecraftforge.client.ConfigScreenHandler.ConfigScreenFactory.class,

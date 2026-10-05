@@ -51,8 +51,13 @@ public final class WayfarersData extends SavedData {
             Codec.STRING.listOf().optionalFieldOf("welcomed", List.of()).forGetter(d -> List.copyOf(d.welcomed))
     ).apply(b, WayfarersData::new));
 
+    /**
+     * Saved with a {@code data_version} (DataVersions.GUILD); a migration step per older format goes in the map
+     * (version -> step), e.g. {@code Map.of(1, d -> d.renameField("quests", "criteria"))} for a change to version 2.
+     */
     public static final SavedDataType<WayfarersData> TYPE = new SavedDataType<>(
-            Wayfarers.id("guild"), WayfarersData::new, CODEC, null);
+            Wayfarers.id("guild"), WayfarersData::new,
+            DataVersions.versioned("guild", CODEC, DataVersions.GUILD, Map.of()), null);
 
     private final Map<String, Waystone> waystones;
     private final Set<String> quests;

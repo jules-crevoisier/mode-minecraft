@@ -72,6 +72,11 @@ public final class WayfarersClientConfig {
             .comment("Show other players on the maps (only those your client can see, within view distance).")
             .define("map.showPlayers", true);
 
+    public static final ForgeConfigSpec.BooleanValue UPDATE_CHECK = B
+            .comment("Look for a newer Wayfarers release (GitHub, in the background) and show a notice with the changelog link.",
+                    "Nothing is ever downloaded.")
+            .define("updates.checkForUpdates", true);
+
     public static final ForgeConfigSpec SPEC = B.build();
 
     private WayfarersClientConfig() {}

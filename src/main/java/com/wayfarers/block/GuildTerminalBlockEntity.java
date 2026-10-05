@@ -108,12 +108,16 @@ public class GuildTerminalBlockEntity extends BlockEntity {
     @Override
     protected void saveAdditional(ValueOutput output) {
         super.saveAdditional(output);
+        output.putInt(com.wayfarers.data.DataVersions.FIELD, com.wayfarers.data.DataVersions.TERMINAL);
         output.store("excluded", BlockPos.CODEC.listOf(), List.copyOf(excluded));
     }
 
     @Override
     protected void loadAdditional(ValueInput input) {
         super.loadAdditional(input);
+        // format of the saved settings (0: before versioning, same layout as 1); branch on it when the layout changes
+        com.wayfarers.data.DataVersions.check("guild terminal",
+                input.getIntOr(com.wayfarers.data.DataVersions.FIELD, 0), com.wayfarers.data.DataVersions.TERMINAL);
         excluded.clear();
         input.read("excluded", BlockPos.CODEC.listOf()).ifPresent(excluded::addAll);
         scannedAt = Long.MIN_VALUE;
