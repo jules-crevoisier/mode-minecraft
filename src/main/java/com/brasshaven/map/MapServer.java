@@ -611,6 +611,51 @@ public final class MapServer {
                 MapProtocol.points(waypoints.visibleTo(p.getUUID()), stones)));
     }
 
+    // ------------------------------------------------------------------ guidance waypoints (com.brasshaven.util.Progression)
+
+    private static String guideId(ServerPlayer p, String key) {
+        return "guide-" + key + "-" + p.getUUID();
+    }
+
+    /**
+     * A private waypoint the mod places for a player (where to go next: the Guild Outpost, a contract's structure).
+     * One per {@code key} and player: setting it again moves it. The player can edit or delete it like their own.
+     *
+     * @return false when the player already has the most waypoints allowed
+     */
+    public static boolean guideWaypoint(ServerPlayer p, String key, String name, ServerLevel level, net.minecraft.core.BlockPos pos,
+                                        int color, int icon) {
+        start(p.level().getServer());
+        String id = guideId(p, key);
+        MapProtocol.Waypoint w = new MapProtocol.Waypoint(id, p.getUUID().toString(), p.getName().getString(),
+                MapProtocol.clean(name), dimId(level), pos.getX(), pos.getY(), pos.getZ(), color & 0xFFFFFF,
+                Math.floorMod(icon, MapProtocol.ICONS.length), false);
+        MapProtocol.Waypoint old = waypoints.get(id);
+        if (old != null) {
+            waypoints.replace(old, w);
+        } else if (!waypoints.add(w)) {
+            return false;
+        }
+        syncPoints(p, false);
+        return true;
+    }
+
+    /** Removes a waypoint placed by {@link #guideWaypoint} (nothing when the player already deleted it). */
+    public static void removeGuideWaypoint(ServerPlayer p, String key) {
+        start(p.level().getServer());
+        MapProtocol.Waypoint old = waypoints.get(guideId(p, key));
+        if (old != null) {
+            waypoints.remove(old);
+            syncPoints(p, false);
+        }
+    }
+
+    /** Whether the player still has the waypoint {@code key} placed by {@link #guideWaypoint}. */
+    public static boolean hasGuideWaypoint(ServerPlayer p, String key) {
+        start(p.level().getServer());
+        return waypoints.get(guideId(p, key)) != null;
+    }
+
     /** The owner sees the change at once; a shared waypoint reaches everyone at the next second (coalesced). */
     private static void syncPoints(ServerPlayer owner, boolean everyone) {
         sendPoints(owner);

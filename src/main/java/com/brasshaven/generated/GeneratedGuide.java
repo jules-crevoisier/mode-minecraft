@@ -26,6 +26,7 @@ public final class GeneratedGuide {
 
     public static final List<Page> PAGES = List.of(
             new Page("welcome", "start", "brasshaven:wayfarer_atlas", 4, List.of("brasshaven:wayfarer_atlas", "brasshaven:wayfarer_manual")),
+            new Page("path", "start", "brasshaven:structure_compass", 4, List.of("brasshaven:structure_compass", "brasshaven:map_fragment")),
             new Page("quests", "start", "minecraft:writable_book", 3, List.of()),
             new Page("contracts", "start", "minecraft:emerald", 2, List.of("minecraft:emerald")),
             new Page("contracts_kinds", "start", "minecraft:paper", 3, List.of()),
@@ -121,6 +122,7 @@ public final class GeneratedGuide {
             new Tip("boss_mist", "brasshaven:mist_gate", "bosses"),
             new Tip("danger", "minecraft:skeleton_skull", "danger"),
             new Tip("npc", "minecraft:emerald", "contracts"),
+            new Tip("compass", "brasshaven:structure_compass", "compass"),
             new Tip("map", "minecraft:filled_map", "map"),
             new Tip("company", "minecraft:white_banner", "company"),
             new Tip("trade", "minecraft:emerald", "trade"),

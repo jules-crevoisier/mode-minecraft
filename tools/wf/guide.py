@@ -33,8 +33,11 @@ PAGES = [
          "it together: quests, waystones and discoveries are shared by everyone.",
          "Ce monde cache des dizaines de structures, de donjons, de boss et de merveilles géantes. Ton groupe "
          "l'explore ensemble : quêtes, pierres de voyage et découvertes sont partagées par tous."),
-        ("To begin, press J (or use the Wayfarer's Atlas) and follow the first chapter of quests.",
-         "Pour commencer, appuie sur J (ou utilise l'Atlas du Voyageur) et suis le premier chapitre de quêtes."),
+        ("To begin, follow the card at the top-right: it always shows your next step. First, meet a Guild Agent: "
+         "the nearest Guild Outpost is marked on your map (M). The rest is earned: see \"The road ahead\".",
+         "Pour commencer, suis la carte en haut à droite : elle montre toujours ta prochaine étape. D'abord, "
+         "rencontre un agent de la Guilde : l'avant-poste le plus proche est marqué sur ta carte (M). Le reste se "
+         "mérite : voir « La route du voyageur »."),
         ("This manual explains every system. Click a page in the contents on the left; turn pages with the arrows, "
          "the mouse wheel or the arrow keys. When a page goes on, the button reads \"More >\".",
          "Ce manuel explique chaque système. Clique une page dans le sommaire à gauche ; tourne les pages avec les "
@@ -45,16 +48,38 @@ PAGES = [
          "clavier AZERTY, celle qu'indique l'infobulle ; réglable dans Commandes) pour ouvrir sa page. Manuel "
          "perdu ? Un livre et une plume."),
     ], ["brasshaven:wayfarer_atlas", "brasshaven:wayfarer_manual"]),
+    # the progression ladder (wf/progression.py), in words; docs/PROGRESSION.md has the full table
+    ("path", "start", "brasshaven:structure_compass", ("The road ahead", "La route du voyageur"), [
+        ("1. Meet a Guild Agent: the nearest Guild Outpost is marked on your map (a village's Guild Post works "
+         "too). Lost the mark? Use the Atlas: it shows the way again until you get there.",
+         "1. Rencontre un agent de la Guilde : l'avant-poste le plus proche est marqué sur ta carte (le Relais de "
+         "la Guilde d'un village convient aussi). Repère perdu ? Utilise l'Atlas : il redonne la direction tant que "
+         "tu n'y es pas allé."),
+        ("2. His first contract: bring 12 bread. 3. The second: survey a Ruined Watchtower (he marks one on your "
+         "map). Your reward: the Structure Compass, to find every other structure.",
+         "2. Son premier contrat : apporter 12 pains. 3. Le deuxième : inspecter une tour de guet en ruine (il en "
+         "marque une sur ta carte). Ta récompense : la boussole des structures, pour trouver toutes les autres."),
+        ("4. With Map Fragments from structures: a waystone, a backpack, the Cartographer's Blade and the Explorer "
+         "set. 5. Below y = 0, Lithite: its gear, and more compasses. 6. The Nether, then the End.",
+         "4. Avec les fragments de carte des structures : pierre de voyage, sac, lame du Cartographe et tenue "
+         "d'explorateur. 5. Sous y = 0, la lithite : son équipement, et d'autres boussoles. 6. Le Nether, puis l'End."),
+        ("Each player earns the compass from the contracts for themselves, even on a server where the others went "
+         "far ahead.",
+         "Chaque joueur gagne la boussole par les contrats pour lui-même, même sur un serveur où les autres sont "
+         "déjà loin."),
+    ], ["brasshaven:structure_compass", "brasshaven:map_fragment"]),
     ("quests", "start", "minecraft:writable_book", ("Quests & journal", "Quêtes et journal"), [
         ("Open the journal with J or by using the Wayfarer's Atlas. Five chapters lead you from the first Guild "
          "Outpost to the End; each quest shows its objective, your progress and its rewards.",
          "Ouvre le journal avec J ou en utilisant l'Atlas du Voyageur. Cinq chapitres te mènent du premier "
          "avant-poste de la Guilde jusqu'à l'End ; chaque quête affiche son objectif, ta progression et ses "
          "récompenses."),
-        ("Click Track to pin a quest to the top-right of your screen. When it is done, the tracker moves on to "
-         "the next quest by itself.",
-         "Clique sur Suivre pour épingler une quête en haut à droite de l'écran. Une fois terminée, le suivi passe "
-         "tout seul à la quête suivante."),
+        ("The card at the top-right of your screen follows the road ahead: the next step you have not done, quests "
+         "and contracts alike. Click Track to pin another quest instead; when it is done, the card goes back to "
+         "the next step by itself.",
+         "La carte en haut à droite de l'écran suit la route du voyageur : la prochaine étape que tu n'as pas faite, "
+         "quête ou contrat. Clique sur Suivre pour épingler une autre quête ; une fois terminée, la carte revient "
+         "toute seule à l'étape suivante."),
         ("Progress is shared: when a friend completes a step, it counts for the whole group, even offline players. "
          "Every quest also gives talent points.",
          "La progression est partagée : quand un ami réussit une étape, elle compte pour tout le groupe, même pour "
@@ -74,10 +99,11 @@ PAGES = [
     ], ["minecraft:emerald"]),
     ("contracts_kinds", "start", "minecraft:paper", ("Contracts: kinds & rewards", "Contrats : sortes et récompenses"), [
         ("Four kinds: bring items (they are taken when you hand them in), hunt creatures (kills after accepting "
-         "count), find a structure (just walk into it), and deliver a sealed parcel to another quest giver.",
+         "count), find a structure (the nearest one is marked on your map when you accept; just walk into it), and "
+         "deliver a sealed parcel to another quest giver.",
          "Quatre sortes : apporter des objets (ils sont pris quand tu les rends), chasser des créatures (les "
-         "victimes après avoir accepté comptent), trouver une structure (il suffit d'y entrer), et livrer un colis "
-         "scellé à un autre donneur de quêtes."),
+         "victimes après avoir accepté comptent), trouver une structure (la plus proche est marquée sur ta carte "
+         "quand tu acceptes ; il suffit d'y entrer), et livrer un colis scellé à un autre donneur de quêtes."),
         ("Come back to the giver and press Turn in (Hand over for a parcel) for emeralds, experience and gear. "
          "Lost a parcel? Its giver hands you another. Each player has their own contracts; finishing one unlocks "
          "the next. The journal (J) lists them in its Contracts tab.",
@@ -111,10 +137,11 @@ PAGES = [
          "curseur) et relief des cartes : M, puis le bouton engrenage."),
     ], []),
     ("compass", "start", "brasshaven:structure_compass", ("Structure Compass", "Boussole des structures"), [
-        ("It finds Brasshaven structures. You get one when you first arrive; craft more with a compass surrounded by "
-         "four Map Fragments.",
-         "Elle trouve les structures Brasshaven. Tu en reçois une à ton arrivée ; fabrique-en d'autres avec une "
-         "boussole entourée de quatre fragments de carte."),
+        ("It finds Brasshaven structures. The Guild Agent gives you one for the contract \"Survey the Watchtower\" "
+         "(after \"Provisions for the Road\"). Craft more later: a compass, three Map Fragments and a Lithite Shard.",
+         "Elle trouve les structures Brasshaven. L'agent de la Guilde t'en confie une pour le contrat « Inspecter "
+         "la tour de guet » (après « Des vivres pour la route »). Plus tard, fabrique-en d'autres : une boussole, "
+         "trois fragments de carte et un éclat de lithite."),
         ("Right-click: the chat shows the nearest one (name, distance, direction and coordinates) and sparks show "
          "the way.",
          "Clic droit : le chat affiche la plus proche (nom, distance, direction et coordonnées) et des étincelles "
@@ -831,6 +858,11 @@ TIPS = [
     ("npc", "minecraft:emerald", ("A quest giver! Pick a contract, Accept it, then come back to hand it in.",
                                    "Un donneur de quêtes ! Choisis un contrat, accepte-le, puis reviens le rendre."),
      "contracts"),
+    # the Guild Agent's survey contract (the progression ladder's compass step) was just handed in
+    ("compass", "brasshaven:structure_compass", ("The Guild trusts you with a Structure Compass! Right-click: the "
+                                                 "nearest structure. Sneak: choose which kind.",
+                                                 "La Guilde te confie une boussole des structures ! Clic droit : la "
+                                                 "structure la plus proche. Accroupi : choisis le type."), "compass"),
     # first login: the minimap has just appeared in the corner
     ("map", "minecraft:filled_map", ("The minimap shows the land around you. M: world map, H: hide it, Shift + H: its "
                                      "size, Z: zoom, B: ping the spot you look at.",

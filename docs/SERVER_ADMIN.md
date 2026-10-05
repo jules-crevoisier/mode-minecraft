@@ -125,6 +125,13 @@ fichier quand il change ; en cas de doute, redémarre le serveur.
 | `quests.shareProgress` | `true` | Une étape réussie par un joueur l'est pour tous les joueurs connectés (chacun reçoit une fois la récompense). |
 | `quests.catchUpOnJoin` | `true` | À la connexion, un joueur reçoit les étapes déjà réussies par le serveur (avec les récompenses). **Sur un serveur public, mets `false`** : sinon un nouveau compte (ou un compte secondaire) récupère toutes les récompenses d'un coup. |
 
+Ces deux options ne touchent que les quêtes (progrès). Les **contrats** des donneurs de quêtes sont toujours propres à
+chaque joueur : la **boussole des structures** se gagne au contrat « Inspecter la tour de guet » de l'agent de la
+Guilde, joueur par joueur, même pour un nouveau venu sur un vieux serveur. À sa première connexion, chaque joueur
+reçoit le Manuel et l'Atlas et un repère privé vers l'avant-poste de la Guilde le plus proche. L'échelle complète :
+[PROGRESSION.md](PROGRESSION.md). Boussole perdue : `/brasshaven contracts complete guild_survey <joueur>` ne marche
+qu'une fois par joueur ; sinon `/give`.
+
 ### Créatures et boussoles
 
 | Option | Défaut | Effet |

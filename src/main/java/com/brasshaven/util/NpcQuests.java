@@ -259,6 +259,46 @@ public final class NpcQuests {
         }
         BrasshavenNet.toPlayer(player, new NpcDialogMsg(npc.getId(), role, entries));
         Tips.show(player, "npc");
+        if (role.equals("guild_agent")) {
+            Progression.metAgent(player); // the progression ladder's first step, wherever the agent stands
+        }
+    }
+
+    /** The items a contract gives when it is handed in. */
+    public static List<ItemStack> rewardStacks(GeneratedNpcs.Quest q) {
+        List<ItemStack> out = new ArrayList<>();
+        for (GeneratedNpcs.Reward r : q.rewards()) {
+            Item item = item(r.item());
+            if (item != null) {
+                out.add(new ItemStack(item, r.count()));
+            }
+        }
+        return out;
+    }
+
+    /** Marks the contract finished and gives its rewards (items, experience). */
+    private static void reward(ServerPlayer player, GeneratedNpcs.Quest q) {
+        finish(player, q.id());
+        for (ItemStack stack : rewardStacks(q)) {
+            give(player, stack);
+        }
+        if (q.xp() > 0) {
+            player.giveExperiencePoints(q.xp());
+        }
+        Progression.contractFinished(player, q);
+    }
+
+    /**
+     * Operators ({@code /brasshaven contracts complete}): finishes a contract for a player as if it had been handed
+     * in (rewards included), whatever its state; its parcel, if any, is left alone. False when it was already done.
+     */
+    public static boolean complete(ServerPlayer player, GeneratedNpcs.Quest q) {
+        if (done(player).contains(q.id())) {
+            return false;
+        }
+        reward(player, q);
+        sync(player);
+        return true;
     }
 
     /** A button of the contracts screen: validated here (reach, role, state, items). */
@@ -288,6 +328,7 @@ public final class NpcQuests {
                 npc.nod();
                 player.sendSystemMessage(Component.translatable("message.brasshaven.npc.accepted", title)
                         .withStyle(ChatFormatting.GOLD));
+                Progression.contractAccepted(player, q); // an "explore" contract marks its target on the map
             }
             case TURN_IN -> {
                 boolean mine = q.kind() == GeneratedNpcs.Kind.DELIVER ? q.to().equals(role) : q.giver().equals(role);
@@ -305,16 +346,7 @@ public final class NpcQuests {
                     player.getInventory().getNonEquipmentItems().get(slot).shrink(1);
                     player.getInventory().setChanged();
                 }
-                finish(player, q.id());
-                for (GeneratedNpcs.Reward r : q.rewards()) {
-                    Item item = item(r.item());
-                    if (item != null) {
-                        give(player, new ItemStack(item, r.count()));
-                    }
-                }
-                if (q.xp() > 0) {
-                    player.giveExperiencePoints(q.xp());
-                }
+                reward(player, q);
                 npc.nod();
                 player.sendSystemMessage(Component.translatable("message.brasshaven.npc.completed", title)
                         .withStyle(ChatFormatting.GREEN));

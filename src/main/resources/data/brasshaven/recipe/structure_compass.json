@@ -2,11 +2,12 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "pattern": [
-    " M ",
+    " L ",
     "MCM",
     " M "
   ],
   "key": {
+    "L": "brasshaven:lithite_shard",
     "M": "brasshaven:map_fragment",
     "C": "minecraft:compass"
   },

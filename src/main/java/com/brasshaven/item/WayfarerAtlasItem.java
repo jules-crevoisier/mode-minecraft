@@ -11,7 +11,8 @@ import net.minecraft.world.level.Level;
 
 /**
  * Opens the quest journal: the guild's progress through the five chapters of the quest line. Sneak-use opens the
- * world map instead (client side; the map is also on the M key).
+ * world map instead (client side; the map is also on the M key). Before the first step of the progression ladder is
+ * done, it also marks the way to the nearest Guild Outpost again ({@link com.brasshaven.util.Progression}).
  */
 public class WayfarerAtlasItem extends TooltipItem {
     public WayfarerAtlasItem(Properties properties) {
@@ -31,6 +32,8 @@ public class WayfarerAtlasItem extends TooltipItem {
         if (player instanceof ServerPlayer serverPlayer) {
             com.brasshaven.network.BrasshavenNet.toPlayer(serverPlayer, QuestBook.snapshot(serverPlayer, true));
             level.playSound(null, player, SoundEvents.BOOK_PAGE_TURN, SoundSource.PLAYERS, 1.0F, 1.0F);
+            // until the first Guild Agent is met, the Atlas also shows the way to the nearest Guild Outpost again
+            com.brasshaven.util.Progression.atlasUsed(serverPlayer);
         }
         return InteractionResult.SUCCESS;
     }

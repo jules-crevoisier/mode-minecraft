@@ -721,7 +721,7 @@ JAVA_SOURCES = {
     "reef_fish_bucket": "a water bucket on a Reef Fish",
     "wayfarer_manual": "given on first join",
     "wayfarer_atlas": "given on first join",
-    "structure_compass": "given on first arrival at a Guild Outpost",
+    "structure_compass": "the Guild Agent's survey contract (NpcQuests, wf/progression.py)",
 }
 # vanilla item tags used by recipes: a test telling whether an item id belongs to the tag (no tag files for vanilla)
 VANILLA_TAGS = {
@@ -1109,6 +1109,60 @@ def check_registry_ids(record=True):
         warnings.append("new registry ids are not in tools/data/registry_ids.json yet (python3 tools/validate.py records them)")
 
 
+def check_progression():
+    """The progression ladder (wf/progression.py): every step is a quest or a contract, the first-join kit holds no
+    Structure Compass, the compass comes from its contract and from no earlier reward, its recipe needs Lithite, and
+    docs/PROGRESSION.md names every step."""
+    from wf import progression, npcs
+    adv_dir = os.path.join(DATA, "brasshaven", "advancement")
+    quests = json.load(open(os.path.join(DATA, "brasshaven", "quests.json")))
+    in_chapters = {q for qs in quests.values() for q in qs}
+    items = mod_ids("items")
+    for i in progression.STARTER_KIT:
+        if i not in items:
+            err(f"progression: starter kit item {i} is not registered")
+    if "structure_compass" in progression.STARTER_KIT:
+        err("progression: the Structure Compass must be earned, not in the starter kit")
+    steps = progression.steps()
+    if len(set(steps)) != len(steps):
+        err("progression: a ladder step is listed twice")
+    for step in steps:
+        if step.startswith("npc/"):
+            if step[4:] not in npcs.BY_ID:
+                err(f"progression: unknown contract {step}")
+        elif not os.path.exists(os.path.join(adv_dir, step + ".json")) or step not in in_chapters:
+            err(f"progression: unknown quest {step}")
+    compass = "brasshaven:structure_compass"
+    q = npcs.BY_ID.get(progression.COMPASS_CONTRACT)
+    if q is None or (compass, 1) not in q.rewards:
+        err(f"progression: contract {progression.COMPASS_CONTRACT} must give the Structure Compass")
+    if "npc/" + progression.COMPASS_CONTRACT not in steps:
+        err("progression: the compass contract is not on the ladder")
+    else:
+        # nothing on the ladder before the compass step hands out a compass
+        for step in steps[:steps.index("npc/" + progression.COMPASS_CONTRACT)]:
+            if step.startswith("npc/"):
+                if any(i == compass for i, _c in npcs.BY_ID[step[4:]].rewards):
+                    err(f"progression: {step} gives a Structure Compass before the compass step")
+            else:
+                adv = json.load(open(os.path.join(adv_dir, step + ".json")))
+                for table in adv.get("rewards", {}).get("loot", []):
+                    path = res_path(table, "loot_table", ".json")
+                    if os.path.exists(path) and compass in open(path).read():
+                        err(f"progression: quest {step} gives a Structure Compass before the compass step")
+    recipe = os.path.join(DATA, "brasshaven", "recipe", "structure_compass.json")
+    if os.path.exists(recipe) and "brasshaven:lithite_shard" not in json.dumps(json.load(open(recipe))):
+        err("progression: the Structure Compass recipe must need a Lithite Shard (a later material)")
+    doc = os.path.join(ROOT, "docs", "PROGRESSION.md")
+    if not os.path.exists(doc):
+        err("progression: docs/PROGRESSION.md missing")
+    else:
+        text = open(doc, encoding="utf-8").read()
+        for step in steps:
+            if f"`{step}`" not in text:
+                warnings.append(f"docs/PROGRESSION.md does not name the ladder step `{step}`")
+
+
 def check_release_files():
     """Recommended configs of the packs follow the config classes (tools/make_modpack.py)."""
     import make_modpack
@@ -1139,6 +1193,7 @@ def main():
     check_tags()
     check_chisel()
     check_guide()
+    check_progression()
     check_screen_fit()
     import validate_world  # the Brasshaven biomes and terrain touches (tools/gen_world.py)
     for e in validate_world.check():

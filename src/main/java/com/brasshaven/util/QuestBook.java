@@ -29,15 +29,13 @@ public final class QuestBook {
                     continue;
                 }
                 AdvancementProgress progress = player.getAdvancements().getOrStartProgress(holder);
-                int done = 0;
-                int total = 0;
-                for (String ignored : progress.getCompletedCriteria()) {
-                    done++;
-                    total++;
-                }
-                for (String ignored : progress.getRemainingCriteria()) {
-                    total++;
-                }
+                // objectives are the requirement groups: "find an outpost OR meet a Guild Agent" is one objective
+                var requirements = holder.value().requirements();
+                int total = Math.max(1, requirements.size());
+                int done = progress.isDone() ? total : requirements.count(c -> {
+                    var criterion = progress.getCriterion(c);
+                    return criterion != null && criterion.isDone();
+                });
                 states.add(new QuestSnapshotMsg.State(quest, progress.isDone(), done, total));
             }
         }
@@ -79,7 +77,12 @@ public final class QuestBook {
             player.sendSystemMessage(Component.translatable("message.brasshaven.atlas.chapter",
                     Component.translatable("chapter.brasshaven." + chapter.id()), done, total).withStyle(color));
         }
-        if (all) {
+        // the next goal is the progression ladder's next step while there is one, then the first unfinished quest
+        String step = Progression.next(player);
+        if (!step.isEmpty()) {
+            player.sendSystemMessage(Component.translatable("message.brasshaven.atlas.next", Progression.title(step))
+                    .withStyle(ChatFormatting.AQUA));
+        } else if (all) {
             player.sendSystemMessage(Component.translatable("message.brasshaven.atlas.done").withStyle(ChatFormatting.LIGHT_PURPLE));
         } else if (next != null) {
             player.sendSystemMessage(Component.translatable("message.brasshaven.atlas.next", Component.translatable(next))

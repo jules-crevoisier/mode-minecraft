@@ -59,7 +59,7 @@ public final class StructureLocator {
     private static double tokens = -1;
     private static long refilledAt;
 
-    /** @param index index in {@link GeneratedContent#STRUCTURES}, or -1 for any structure of this dimension */
+    /** @param index index in {@link GeneratedContent#STRUCTURES}, -1 for any structure of this dimension, {@link #VILLAGE} */
     public static @Nullable Found nearest(ServerLevel level, BlockPos from, int index, int radiusChunks) {
         return nearest(level, from, index, radiusChunks, false);
     }
@@ -108,8 +108,30 @@ public final class StructureLocator {
         return true;
     }
 
+    /** Index for {@link #nearest}: any village (the {@code minecraft:village} structure tag), found as "village". */
+    public static final int VILLAGE = -2;
+
+    /** Index of a structure in {@link GeneratedContent#STRUCTURES} by its id (without namespace), or -1. */
+    public static int index(String id) {
+        for (int i = 0; i < GeneratedContent.STRUCTURES.size(); i++) {
+            if (GeneratedContent.STRUCTURES.get(i).id().equals(id)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     private static @Nullable Found search(ServerLevel level, BlockPos from, int index, int radiusChunks) {
         var registry = level.registryAccess().lookupOrThrow(Registries.STRUCTURE);
+        if (index == VILLAGE) {
+            Optional<HolderSet.Named<Structure>> villages = registry.get(net.minecraft.tags.StructureTags.VILLAGE);
+            if (villages.isEmpty()) {
+                return null;
+            }
+            Pair<BlockPos, Holder<Structure>> result = level.getChunkSource().getGenerator()
+                    .findNearestMapStructure(level, villages.get(), from, radiusChunks, false);
+            return result == null ? null : new Found(result.getFirst(), "village");
+        }
         List<Holder<Structure>> wanted = new ArrayList<>();
         String dim = level.dimension().identifier().getPath().replace("the_", "");
         for (int i = 0; i < GeneratedContent.STRUCTURES.size(); i++) {

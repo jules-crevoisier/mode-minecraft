@@ -84,8 +84,8 @@ Guide complet (publication CurseForge/Modrinth, releases, mises à jour joueurs 
 ### Interfaces et aide en jeu
 | Quoi | Comment |
 |---|---|
-| **Manuel du Voyageur** | Donné à la première connexion : une page par système, avec sommaire. Survole un objet du mod et **maintiens W** pour ouvrir sa page. Des cartes d'astuce s'affichent la première fois qu'on rencontre un système. |
-| **Journal de quêtes** (touche **J** ou l'Atlas) | Chapitres, étapes, récompenses ; bouton « Suivre » qui affiche l'objectif à l'écran. |
+| **Manuel du Voyageur** | Donné à la première connexion (avec l'Atlas, et rien d'autre : le reste se gagne, voir [la route du voyageur](docs/PROGRESSION.md)) : une page par système, avec sommaire. Survole un objet du mod et **maintiens W** pour ouvrir sa page. Des cartes d'astuce s'affichent la première fois qu'on rencontre un système. |
+| **Journal de quêtes** (touche **J** ou l'Atlas) | Chapitres, étapes, récompenses. Le suivi en haut à droite montre **toujours la prochaine étape** de la progression (quête ou contrat) ; « Suivre » épingle une autre quête. |
 | **Écran de voyage** | Clic droit sur une pierre : liste avec recherche, favoris et renommage. On ne voyage que depuis une pierre. |
 | **Mini-carte** | Hublot de laiton dans un coin : terrain, direction, coordonnées, biome, pierres de voyage, repères, joueurs, signaux, tombes et dernière mort. Touche **H** pour la masquer, **Maj + H** pour changer sa taille (4 tailles), **Z** pour le zoom ; taille, coin, forme (ronde ou carrée), rotation, coordonnées et opacité dans Mods → Brasshaven → Config (onglet Mini-carte) ou `brasshaven-client.toml`. Sous terre, elle montre la grotte où l'on se trouve. |
 | **Carte du monde** (touche **M**, ou l'Atlas accroupi) | Glisser pour déplacer, molette pour zoomer, Espace pour revenir sur soi ; légende cliquable (masquer un type), liste des repères. Clic droit : poser un repère (nom, couleur, icône, **privé ou partagé** avec tous) ; clic molette ou touche **B** : un **signal** que tous voient une minute. |
@@ -193,13 +193,15 @@ Plusieurs structures contiennent une **pierre de voyage**.
 
 La quête est un onglet de progrès (touche **L**). Clic droit avec l'**Atlas** pour voir le résumé de la guilde.
 
-1. **Premiers pas** : trouver un avant-poste de la Guilde, récupérer des fragments de carte, fabriquer pierre de voyage, coffre de tri, sac et lame.
+1. **Premiers pas** : rencontrer un agent de la Guilde (l'avant-poste le plus proche est marqué sur la carte à l'arrivée), récupérer des fragments de carte, fabriquer pierre de voyage, coffre de tri, sac et lame.
 2. **Explorateur de la Surface** : découvrir chaque structure de la Surface.
 3. **Les profondeurs** : trouver la lithite, les structures souterraines, la Citadelle, et **vaincre le Gardien englouti**.
 4. **Le Nether** : les 6 structures, les braises anciennes, l'armure de braise.
 5. **L'End** : les éclats du vide, le **Gardien du vide**, et le défi final *Légende des Voyageurs* (toutes les structures).
 
 **La progression est commune** : chaque étape franchie par un joueur est accordée à tout le monde, y compris aux joueurs hors ligne quand ils se reconnectent.
+
+**La route du voyageur** ([docs/PROGRESSION.md](docs/PROGRESSION.md)) : à l'arrivée, le Manuel et l'Atlas seulement ; le suivi guide pas à pas. Rencontrer un agent de la Guilde → contrat « Des vivres pour la route » → contrat « Inspecter la tour de guet » : **la boussole des structures se gagne là**, joueur par joueur (les contrats sont personnels, même sur un vieux serveur). D'autres boussoles se fabriquent ensuite avec un éclat de lithite.
 
 ### Donneurs de quêtes et contrats (20 contrats)
 
@@ -227,7 +229,7 @@ Les structures habitées (avant-postes, monastère, bibliothèque, phare, Arbre-
 | **Tombe** | À la mort, tes objets sont rangés dans une tombe, et ses coordonnées s'affichent dans le chat. N'importe quel membre du groupe peut les récupérer. |
 | **Sac du Voyageur** | 27 emplacements qui voyagent avec toi. |
 | **Anneau aimanté** | Attire objets et expérience. Se bascule au clic droit ou avec la touche **N**. |
-| **Boussole des structures** | Indique la structure la plus proche (distance + direction). Accroupi : choisir le type de structure. |
+| **Boussole des structures** | Indique la structure la plus proche (distance + direction). Accroupi : choisir le type de structure. Se gagne au 2e contrat de l'agent de la Guilde ; recette : boussole, 3 fragments de carte, 1 éclat de lithite. |
 | **Parchemin de rappel** | Téléporte à la pierre de voyage la plus proche. |
 | **Touche R** | Trie l'inventaire principal (la barre d'action n'est pas touchée). |
 
@@ -378,6 +380,7 @@ Les structures sont bâties avec des blocs propres au mod, qu'on peut aussi util
 | Commande | Qui | Effet |
 |---|---|---|
 | `/brasshaven atlas` · `waystones` · `sort` · `magnet` | tous | Utilisées par l'Atlas, les pierres de voyage et les touches. |
+| `/brasshaven guide` | tous | Remet sur la carte le repère de l'avant-poste de la Guilde le plus proche (et sa direction dans le chat). |
 | `/brasshaven warp <id>` | op | Téléportation directe vers une pierre. |
 | `/brasshaven demo` | op | Donne tout le contenu du mod (idéal pour une vidéo). |
 | `/brasshaven kit <starter\|explorer\|depths\|nether\|end>` | op | Kits par palier. |
@@ -386,6 +389,8 @@ Les structures sont bâties avec des blocs propres au mod, qu'on peut aussi util
 | `/brasshaven progress reset\|complete` | op | Réinitialiser ou terminer la quête. |
 | `/brasshaven npc spawn <rôle>` · `move` · `role <rôle>` · `remove` | op | Placer, déplacer (nouveau poste), changer ou retirer un donneur de quêtes (le plus proche, 8 blocs). |
 | `/brasshaven contracts reset [joueur]` | op | Effacer les contrats d'un joueur. |
+| `/brasshaven contracts complete <contrat> [joueur]` | op | Rendre un contrat pour un joueur, récompenses comprises (boussole perdue, tests). |
+| `/brasshaven progression selftest` | op | Auto-test des règles de la progression (kit d'arrivée, boussole gagnée par contrat, recette). |
 | `/brasshaven company …` · `/cc <message>` | tous | Compagnie : create, invite, leave, kick, promote, rename, friendlyfire, sharexp, chat, join ; chat de compagnie. |
 | `/brasshaven trade <joueur>` · `/brasshaven duel <joueur>` · `/brasshaven emote <geste>` | tous | Échange, duel, geste (les demandes s'acceptent d'un clic dans le chat). |
 | `/brasshaven social status\|demo\|selftest` | op | État du multijoueur, exemples pour tester, auto-test des règles du serveur. |

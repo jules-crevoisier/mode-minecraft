@@ -28,11 +28,22 @@ public final class ClientContracts {
 
     private ClientContracts() {}
 
+    /** The connection the last contract list came on (the server sends it on every login, even empty). */
+    private static int syncConnection;
+
     public static void update(ContractSyncMsg msg) {
         STATES.clear();
         for (ContractSyncMsg.Entry e : msg.contracts()) {
             STATES.put(e.id(), e);
         }
+        Minecraft mc = Minecraft.getInstance();
+        syncConnection = mc.getConnection() == null ? 0 : System.identityHashCode(mc.getConnection());
+    }
+
+    /** Whether this connection already received the player's contracts (else they are another world's). */
+    public static boolean ready() {
+        Minecraft mc = Minecraft.getInstance();
+        return mc.getConnection() != null && System.identityHashCode(mc.getConnection()) == syncConnection;
     }
 
     public static boolean isContract(String quest) {

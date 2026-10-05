@@ -43,8 +43,8 @@ import java.util.Set;
 
 /**
  * {@code /brasshaven ...}. Player-level sub-commands back the clickable chat menus and key
- * bindings (warp, waystones, sort, magnet, atlas); operator sub-commands are for testing and
- * showcasing (kit, locate, tp, progress, demo).
+ * bindings (warp, waystones, sort, magnet, atlas, guide); operator sub-commands are for testing and
+ * showcasing (kit, locate, tp, progress, demo, progression selftest).
  */
 public final class BrasshavenCommand {
     private static final Map<String, List<java.util.function.Supplier<? extends Item>>> KITS = Map.of(
@@ -91,6 +91,11 @@ public final class BrasshavenCommand {
                 }))
                 .then(Commands.literal("atlas").executes(ctx -> {
                     QuestBook.print(ctx.getSource().getPlayerOrException());
+                    return 1;
+                }))
+                // the way to the nearest Guild Outpost again (a map waypoint and the chat line of the first join)
+                .then(Commands.literal("guide").executes(ctx -> {
+                    com.brasshaven.util.Progression.pointToGuild(ctx.getSource().getPlayerOrException(), true);
                     return 1;
                 }))
                 // ---- operators
@@ -144,7 +149,10 @@ public final class BrasshavenCommand {
                 .then(NpcCommand.contracts(Commands.literal("contracts").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))))
                 .then(Commands.literal("progress").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                         .then(Commands.literal("reset").executes(ctx -> progress(ctx, false)))
-                        .then(Commands.literal("complete").executes(ctx -> progress(ctx, true)))));
+                        .then(Commands.literal("complete").executes(ctx -> progress(ctx, true))))
+                // the progression ladder's server rules, checked without a player (the CI server smoke test)
+                .then(Commands.literal("progression").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
+                        .then(Commands.literal("selftest").executes(com.brasshaven.util.ProgressionSelfTest::run))));
     }
 
     /** Demo: summon a boss 6 blocks in front of you, its arena centred where it appears (radius 20). */

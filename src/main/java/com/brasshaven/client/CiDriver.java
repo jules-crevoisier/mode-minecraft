@@ -399,6 +399,41 @@ public final class CiDriver {
     // ------------------------------------------------------------------ the scenario
 
     private static void buildSteps() {
+        // the first join (Progression.welcome): the Manual and the Atlas only, the way to the first Guild Agent, the
+        // tracker on the ladder's first step; then the compass reward path of the Guild Agent's survey contract
+        step("progression")
+                .server("first-join kit", (server, player) -> {
+                    List<String> wrong = new ArrayList<>();
+                    if (carried(player, com.brasshaven.registry.ModItems.WAYFARER_MANUAL.get()) != 1) {
+                        wrong.add("no Wayfarer's Manual");
+                    }
+                    if (carried(player, com.brasshaven.registry.ModItems.WAYFARER_ATLAS.get()) != 1) {
+                        wrong.add("no Wayfarer's Atlas");
+                    }
+                    if (carried(player, com.brasshaven.registry.ModItems.STRUCTURE_COMPASS.get()) != 0) {
+                        wrong.add("a Structure Compass before it was earned");
+                    }
+                    String guide = com.brasshaven.util.Progression.remembered(player);
+                    if (guide.isEmpty()) {
+                        wrong.add("no first-join directions");
+                    }
+                    if (!wrong.isEmpty()) {
+                        throw new IllegalStateException("first join: " + wrong);
+                    }
+                    LOGGER.info(TAG + "first-join directions: {}", guide);
+                    return List.of();
+                })
+                .until("tracker on the ladder's first step", () ->
+                        com.brasshaven.util.Progression.FIRST_STEP.equals(BrasshavenClientConfig.TRACKED_QUEST.get()), 400)
+                .cmd(() -> List.of("brasshaven contracts complete guild_provisions",
+                        "brasshaven contracts complete " + com.brasshaven.generated.GeneratedContent.COMPASS_CONTRACT))
+                .server("compass earned", (server, player) -> {
+                    if (carried(player, com.brasshaven.registry.ModItems.STRUCTURE_COMPASS.get()) != 1) {
+                        throw new IllegalStateException("the compass contract did not give a Structure Compass");
+                    }
+                    return List.of("clear @s brasshaven:structure_compass", "brasshaven contracts reset @s");
+                });
+
         // creative world from the start; freeze time and weather so every screenshot looks the same
         step("setup")
                 .cmd(() -> List.of("gamerule advance_time false", "gamerule advance_weather false", "gamerule spawn_mobs false",
@@ -783,6 +818,18 @@ public final class CiDriver {
         server.getCommands().performPrefixedCommand(source, command);
         LOGGER.info(TAG + "/{} -> {} {}", command, ok[0] ? "ok" : "FAILED", output);
         return ok[0];
+    }
+
+    /** How many of an item the player carries (main inventory, armour and offhand included). */
+    private static int carried(ServerPlayer player, net.minecraft.world.item.Item item) {
+        int n = 0;
+        for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
+            net.minecraft.world.item.ItemStack stack = player.getInventory().getItem(i);
+            if (stack.is(item)) {
+                n += stack.getCount();
+            }
+        }
+        return n;
     }
 
     // ------------------------------------------------------------------ steps and ops

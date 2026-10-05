@@ -161,8 +161,9 @@ public class NpcDialogScreen extends Screen {
             return;
         }
         send(state(e) == NpcQuests.State.AVAILABLE ? NpcQuests.ACCEPT : NpcQuests.TURN_IN);
-        if (state(e) == NpcQuests.State.AVAILABLE && BrasshavenClientConfig.TRACKED_QUEST.get().isEmpty()) {
-            setTracked(ClientContracts.PREFIX + e.id()); // the first contract taken shows on the HUD at once
+        String tracked = BrasshavenClientConfig.TRACKED_QUEST.get();
+        if (state(e) == NpcQuests.State.AVAILABLE && (tracked.isEmpty() || com.brasshaven.client.QuestTracker.isAuto(tracked))) {
+            setTracked(ClientContracts.PREFIX + e.id()); // the contract just taken shows on the HUD at once
         }
     }
 
@@ -184,6 +185,7 @@ public class NpcDialogScreen extends Screen {
     private static void setTracked(String id) {
         BrasshavenClientConfig.TRACKED_QUEST.set(id);
         BrasshavenClientConfig.TRACKED_QUEST.save();
+        com.brasshaven.client.QuestTracker.chosen(id);
     }
 
     @Override

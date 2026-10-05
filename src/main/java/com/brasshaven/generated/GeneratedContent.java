@@ -68,6 +68,72 @@ public final class GeneratedContent {
             new Chapter("end", List.of("end/enter", "end/void_observatory", "end/chorus_garden", "end/end_archive", "end/void_ship", "end/void_nest", "end/void_crypt", "end/void_shard", "end/void_spear", "end/void_armor", "end/void_warden", "end/boss_larva_mother", "end/legends_bane", "end/legend"))
     );
 
+    /** The progression ladder (tools/wf/progression.py): quest ids ("npc/<id>" for a contract), in order. */
+    public static final List<String> LADDER = List.of("first_steps/guild_outpost", "npc/guild_provisions", "npc/guild_survey", "first_steps/map_fragment", "first_steps/backpack", "first_steps/waystone", "first_steps/blade", "first_steps/explorer_armor", "depths/lithite", "depths/sunken_citadel", "nether/enter", "nether/ancient_ember", "end/enter", "end/void_shard", "end/void_warden");
+
+    /** What a player receives on first join (item ids). */
+    public static final List<String> STARTER_KIT = List.of("brasshaven:wayfarer_manual", "brasshaven:wayfarer_atlas");
+
+    /** The quest giver's contract whose reward is the Structure Compass. */
+    public static final String COMPASS_CONTRACT = "guild_survey";
+
+    /**
+     * Names of the places the mod marks on a player's map (structure id, or "village"): {English, French}.
+     * Waypoint names are plain text kept by the server, which has no translations of its own.
+     */
+    public static final java.util.Map<String, List<String>> PLACE_NAMES = java.util.Map.ofEntries(
+            java.util.Map.entry("guild_outpost", List.of("Guild Outpost", "Avant-poste de la Guilde")),
+            java.util.Map.entry("mountain_monastery", List.of("Mountain Monastery", "Monastère des cimes")),
+            java.util.Map.entry("forgotten_library", List.of("Forgotten Library", "Bibliothèque oubliée")),
+            java.util.Map.entry("coastal_lighthouse", List.of("Coastal Lighthouse", "Phare côtier")),
+            java.util.Map.entry("giant_tree", List.of("Hollow Giant Tree", "Arbre-monde creux")),
+            java.util.Map.entry("desert_oasis", List.of("Desert Oasis", "Oasis et tombeau")),
+            java.util.Map.entry("witch_huts", List.of("Swamp Witch Huts", "Huttes des sorcières")),
+            java.util.Map.entry("sky_island", List.of("Sky Island", "Île céleste")),
+            java.util.Map.entry("jungle_ziggurat", List.of("Jungle Ziggurat", "Ziggourat de la jungle")),
+            java.util.Map.entry("ruined_watchtower", List.of("Ruined Watchtower", "Tour de guet en ruine")),
+            java.util.Map.entry("bandit_camp", List.of("Bandit Camp", "Campement de bandits")),
+            java.util.Map.entry("rune_circle", List.of("Rune Circle", "Cercle de pierres runiques")),
+            java.util.Map.entry("ice_observatory", List.of("Ice Observatory", "Observatoire polaire")),
+            java.util.Map.entry("galleon_wreck", List.of("Galleon Wreck", "Épave de galion")),
+            java.util.Map.entry("sunken_temple", List.of("Sunken Temple", "Temple englouti")),
+            java.util.Map.entry("dwarven_mine", List.of("Abandoned Dwarven Mine", "Mine naine abandonnée")),
+            java.util.Map.entry("dwarven_forge", List.of("Dwarven Forge", "Forge naine")),
+            java.util.Map.entry("crystal_grotto", List.of("Crystal Grotto", "Grotte de cristal")),
+            java.util.Map.entry("sealed_lab", List.of("Sealed Laboratory", "Laboratoire scellé")),
+            java.util.Map.entry("sunken_citadel", List.of("Sunken Citadel", "Citadelle engloutie")),
+            java.util.Map.entry("basalt_fortress", List.of("Basalt Fortress", "Forteresse de basalte")),
+            java.util.Map.entry("chain_bridge", List.of("Chain Bridge", "Pont de chaînes suspendu")),
+            java.util.Map.entry("piglin_sanctuary", List.of("Piglin Sanctuary", "Sanctuaire piglin")),
+            java.util.Map.entry("lava_foundry", List.of("Lava Foundry", "Fonderie de lave")),
+            java.util.Map.entry("soul_tower", List.of("Soul Tower", "Tour des âmes")),
+            java.util.Map.entry("piglin_market", List.of("Piglin Market", "Marché piglin")),
+            java.util.Map.entry("void_observatory", List.of("Void Observatory", "Observatoire du vide")),
+            java.util.Map.entry("chorus_garden", List.of("Floating Chorus Garden", "Jardin flottant de chorus")),
+            java.util.Map.entry("end_archive", List.of("End Archive", "Archive de l'End")),
+            java.util.Map.entry("void_ship", List.of("Void Ship Wreck", "Épave du vide")),
+            java.util.Map.entry("void_nest", List.of("Void Warden's Nest", "Nid du Gardien du Vide")),
+            java.util.Map.entry("forgotten_catacombs", List.of("Forgotten Catacombs", "Catacombes oubliées")),
+            java.util.Map.entry("sand_hypogeum", List.of("Sand Hypogeum", "Hypogée des sables")),
+            java.util.Map.entry("lithite_well", List.of("Lithite Well", "Puits de lithite")),
+            java.util.Map.entry("void_crypt", List.of("Void Crypt", "Crypte du vide")),
+            java.util.Map.entry("clockwork_citadel", List.of("Clockwork Citadel", "Citadelle d'horlogerie")),
+            java.util.Map.entry("sky_harbour", List.of("Sky Harbour", "Port céleste")),
+            java.util.Map.entry("undercity", List.of("The Undercity", "Les Bas-fonds")),
+            java.util.Map.entry("dwarven_city", List.of("Deep Dwarven City", "Cité naine des profondeurs")),
+            java.util.Map.entry("sylvan_palace", List.of("Sylvan Palace", "Palais sylvain")),
+            java.util.Map.entry("inventor_manor", List.of("Inventor's Manor", "Manoir de l'inventeur")),
+            java.util.Map.entry("sky_isles", List.of("Sky Isles", "Îles célestes")),
+            java.util.Map.entry("geothermal_foundry", List.of("Geothermal Foundry", "Fonderie géothermique")),
+            java.util.Map.entry("tesla_observatory", List.of("Tesla Observatory", "Observatoire Tesla")),
+            java.util.Map.entry("crystal_cathedral", List.of("Crystal Cathedral", "Cathédrale de cristal")),
+            java.util.Map.entry("sunken_submarine", List.of("Sunken Submarine", "Sous-marin englouti")),
+            java.util.Map.entry("diving_bell", List.of("Diving Bell", "Cloche de plongée")),
+            java.util.Map.entry("coral_shrine", List.of("Coral Shrine", "Sanctuaire de corail")),
+            java.util.Map.entry("shipwreck_debris", List.of("Shipwreck Debris", "Débris de naufrage")),
+            java.util.Map.entry("village", List.of("Village", "Village"))
+    );
+
     /** Quest rewards shown in the journal: "xp|item*count;item*count". */
     public static final java.util.Map<String, String> REWARDS = java.util.Map.ofEntries(
             java.util.Map.entry("depths/boomerang", "30|"),
@@ -146,7 +212,7 @@ public final class GeneratedContent {
             java.util.Map.entry("first_steps/backpack", "20|"),
             java.util.Map.entry("first_steps/blade", "30|"),
             java.util.Map.entry("first_steps/explorer_armor", "60|"),
-            java.util.Map.entry("first_steps/guild_outpost", "50|brasshaven:map_fragment*3;brasshaven:structure_compass*1"),
+            java.util.Map.entry("first_steps/guild_outpost", "50|brasshaven:map_fragment*3"),
             java.util.Map.entry("first_steps/guild_terminal", "30|"),
             java.util.Map.entry("first_steps/map_fragment", "20|"),
             java.util.Map.entry("first_steps/sorting_chest", "20|"),
@@ -175,10 +241,10 @@ public final class GeneratedContent {
             java.util.Map.entry("npc/elder_runes", "90|minecraft:emerald*12;minecraft:experience_bottle*10"),
             java.util.Map.entry("npc/elder_skeletons", "80|minecraft:emerald*12;minecraft:diamond*1"),
             java.util.Map.entry("npc/guild_bandits", "80|minecraft:emerald*14;brasshaven:recall_scroll*2"),
-            java.util.Map.entry("npc/guild_letter", "80|minecraft:emerald*12;brasshaven:structure_compass*1"),
+            java.util.Map.entry("npc/guild_letter", "80|minecraft:emerald*12;brasshaven:map_fragment*4;minecraft:experience_bottle*4"),
             java.util.Map.entry("npc/guild_provisions", "30|minecraft:emerald*6;brasshaven:map_fragment*2"),
             java.util.Map.entry("npc/guild_roads", "40|minecraft:emerald*8;minecraft:bread*6"),
-            java.util.Map.entry("npc/guild_survey", "50|brasshaven:map_fragment*3;minecraft:emerald*5"),
+            java.util.Map.entry("npc/guild_survey", "50|brasshaven:structure_compass*1;brasshaven:map_fragment*3;minecraft:emerald*5"),
             java.util.Map.entry("npc/scholar_books", "30|minecraft:experience_bottle*6;minecraft:emerald*4"),
             java.util.Map.entry("npc/scholar_library", "60|brasshaven:map_fragment*3;minecraft:experience_bottle*8"),
             java.util.Map.entry("npc/scholar_notes", "70|minecraft:emerald*10;minecraft:experience_bottle*6"),
