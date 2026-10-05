@@ -11,15 +11,19 @@ TAGLINE = ("Un mod d'exploration à plusieurs pour Minecraft 26.2 : des dizaines
 
 # "Par où commencer" : (titre, texte, [ids d'objets illustrés])
 FIRST_HOUR = [
-    ("Ouvre le Manuel", "Tu le reçois à la première connexion. Une page par système, avec sommaire. Astuce : survole "
+    ("Ouvre le Manuel", "Tu le reçois à la première connexion, avec l'Atlas : c'est tout, le reste se gagne en route. Une page par système, avec sommaire. Astuce : survole "
      "n'importe quel objet du mod dans ton inventaire et maintiens la touche du manuel (Z sur un clavier AZERTY, réglable dans Commandes) pour ouvrir directement sa page.",
      ["wayfarer_manual"]),
-    ("Suis les quêtes (touche J)", "Le journal de quêtes te guide pas à pas. Clique sur « Suivre » : l'objectif "
-     "s'affiche en haut à droite de l'écran. La progression est commune à tout le groupe.",
-     ["wayfarer_atlas"]),
-    ("Trouve un Avant-poste de la Guilde", "C'est la première structure à chercher : on y trouve des fragments de "
-     "carte (le matériau de base du mod) et souvent une pierre de voyage. La boussole des structures aide à la "
-     "trouver.", ["map_fragment", "structure_compass"]),
+    ("Suis la carte en haut à droite", "Le suivi de quête montre toujours ta prochaine étape, quête ou contrat, et "
+     "passe tout seul à la suivante. Le journal (touche J) détaille chaque chapitre ; « Suivre » épingle une autre "
+     "quête. Les quêtes sont communes à tout le groupe.", ["wayfarer_atlas"]),
+    ("Rencontre l'agent de la Guilde", "À ton arrivée, l'avant-poste de la Guilde le plus proche est marqué sur ta "
+     "carte (M) et sa direction s'affiche dans le chat ; un agent tient aussi le Relais de la Guilde de nombreux "
+     "villages. L'Atlas redonne la direction tant que tu n'y es pas allé.", ["map_fragment", "wayfarer_atlas"]),
+    ("Gagne ta boussole des structures", "Deux contrats de l'agent : apporter 12 pains, puis inspecter une tour de "
+     "guet en ruine (il la marque sur ta carte). Ta récompense : la boussole qui trouve toutes les autres "
+     "structures. Les contrats sont personnels : chaque joueur gagne la sienne. Plus tard, d'autres se fabriquent "
+     "avec un éclat de lithite.", ["structure_compass"]),
     ("Active les pierres de voyage", "Clic droit sur une pierre : elle est découverte pour tout le groupe. Ensuite, "
      "depuis n'importe quelle pierre, tu voyages vers toutes les autres. Fabrique-en une pour ta base.",
      ["waystone", "recall_scroll"]),
@@ -74,7 +78,11 @@ COMMANDS = {
     "npc": ("op", "Donneurs de quêtes : spawn <rôle> en pose un à tes pieds (guild_agent, scholar, tinkerer, druid, "
                   "dwarf_elder), move amène le plus proche (8 blocs) à ta place et en fait son nouveau poste, role "
                   "<rôle> change son métier, remove le retire."),
-    "contracts": ("op", "reset [joueur] : efface les contrats acceptés et terminés d'un joueur."),
+    "contracts": ("op", "reset [joueur] : efface les contrats acceptés et terminés d'un joueur ; complete <contrat> "
+                        "[joueur] : rend un contrat pour lui, récompenses comprises."),
+    "guide": ("tous", "Remet sur la carte le repère de l'avant-poste de la Guilde le plus proche, avec sa direction."),
+    "progression": ("op", "selftest : vérifie les règles de la progression (kit d'arrivée, boussole gagnée par "
+                          "contrat, recette)."),
 }
 
 CONFIG_FR = {

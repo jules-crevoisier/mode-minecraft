@@ -30,9 +30,18 @@
           }
         ]
       }
+    },
+    "met_agent": {
+      "trigger": "minecraft:impossible"
     }
   },
   "parent": "brasshaven:root",
+  "requirements": [
+    [
+      "found",
+      "met_agent"
+    ]
+  ],
   "rewards": {
     "experience": 50,
     "loot": [

@@ -94,8 +94,10 @@ QUESTS = [
     Q("guild_provisions", "guild_agent", "fetch", "bread", 12,
       ("Provisions for the Road", "Des vivres pour la route"),
       ("Bring 12 Bread to a Guild Agent.", "Apporte 12 pains à un agent de la Guilde."),
-      ("Our scouts leave at dawn with empty bags. Twelve loaves would keep them going for a week.",
-       "Nos éclaireurs partent à l'aube les sacs vides. Douze pains les nourriraient une semaine."),
+      ("Our scouts leave at dawn with empty bags. Twelve loaves would keep them going for a week. Help me, and I "
+       "will have real survey work for you.",
+       "Nos éclaireurs partent à l'aube les sacs vides. Douze pains les nourriraient une semaine. Aide-moi, et "
+       "j'aurai du vrai travail d'arpenteur pour toi."),
       [("emerald", 6), (W + "map_fragment", 2)], 30),
     Q("guild_roads", "guild_agent", "hunt", "zombie", 10,
       ("Clear the Roads", "Dégager les routes"),
@@ -103,13 +105,18 @@ QUESTS = [
       ("The dead walk the trade roads at night. Thin them out and the caravans will thank you.",
        "Les morts arpentent les routes marchandes la nuit. Éclaircis leurs rangs et les caravanes te remercieront."),
       [("emerald", 8), ("bread", 6)], 40),
+    # the progression ladder's compass step (wf/progression.py COMPASS_CONTRACT): the Guild trusts its surveyors
+    # with a Structure Compass. Accepting it marks the nearest watchtower on the player's map.
     Q("guild_survey", "guild_agent", "explore", W + "ruined_watchtower", 1,
       ("Survey the Watchtower", "Inspecter la tour de guet"),
-      ("Find a Ruined Watchtower, then report to a Guild Agent.",
-       "Trouve une tour de guet en ruine, puis fais ton rapport à un agent de la Guilde."),
-      ("One of our old watchtowers went silent. Find one and tell me what is left of it.",
-       "Une de nos vieilles tours de guet ne répond plus. Trouves-en une et dis-moi ce qu'il en reste."),
-      [(W + "map_fragment", 3), ("emerald", 5)], 50, after="guild_provisions"),
+      ("Find a Ruined Watchtower (marked on your map), then report to a Guild Agent.",
+       "Trouve une tour de guet en ruine (marquée sur ta carte), puis fais ton rapport à un agent de la Guilde."),
+      ("One of our old watchtowers went silent. I marked the nearest one on your map: go and tell me what is left "
+       "of it. Do this, and the Guild will trust you with one of its Structure Compasses.",
+       "Une de nos vieilles tours de guet ne répond plus. J'ai marqué la plus proche sur ta carte : va voir ce "
+       "qu'il en reste. Fais-le, et la Guilde te confiera une de ses boussoles des structures."),
+      [(W + "structure_compass", 1), (W + "map_fragment", 3), ("emerald", 5)], 50, after="guild_provisions",
+      icon=W + "structure_compass"),
     Q("guild_bandits", "guild_agent", "hunt", "pillager", 8,
       ("Bounty: Bandits", "Prime : les bandits"),
       ("Defeat 8 Pillagers, then report to a Guild Agent.", "Vaincs 8 pillards, puis fais ton rapport à un agent de la Guilde."),
@@ -122,7 +129,7 @@ QUESTS = [
        "Porte la lettre scellée de la Guilde à une druidesse de l'Arbre-monde."),
       ("The druids of the Hollow Giant Tree have not answered our letters. Bring this one to them in person.",
        "Les druides de l'Arbre-monde creux ne répondent plus à nos lettres. Porte-leur celle-ci en main propre."),
-      [("emerald", 12), (W + "structure_compass", 1)], 80, to="druid", after="guild_survey"),
+      [("emerald", 12), (W + "map_fragment", 4), ("experience_bottle", 4)], 80, to="druid", after="guild_survey"),
     # ---------------------------------------------------------------- the Scholar (village inns, Forgotten Library)
     Q("scholar_books", "scholar", "fetch", "book", 6,
       ("Blank Pages", "Des pages blanches"),

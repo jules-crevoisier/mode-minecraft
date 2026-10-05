@@ -18,6 +18,8 @@ import java.util.Optional;
 /** Client copy of the player's quest progress (pushed by the server) plus display helpers. */
 public final class ClientQuests {
     private static final Map<String, QuestSnapshotMsg.State> STATES = new HashMap<>();
+    /** The connection the last snapshot came on (0: none yet): until then every quest looks unfinished. */
+    private static int snapshotConnection;
 
     private ClientQuests() {}
 
@@ -26,6 +28,32 @@ public final class ClientQuests {
         for (QuestSnapshotMsg.State s : msg.quests()) {
             STATES.put(s.id(), s);
         }
+        snapshotConnection = connectionId();
+    }
+
+    private static int connectionId() {
+        Minecraft mc = Minecraft.getInstance();
+        return mc.getConnection() == null ? 0 : System.identityHashCode(mc.getConnection());
+    }
+
+    /** Whether the server already sent this connection the player's quest progress. */
+    public static boolean ready() {
+        int id = connectionId();
+        return id != 0 && id == snapshotConnection;
+    }
+
+    /** The progression ladder's next step for this player ("" when it is all done or not known yet). */
+    public static String ladderNext() {
+        if (!ready() || !ClientContracts.ready()) {
+            return "";
+        }
+        // the snapshot has every quest (the client's advancement tree only has those near the finished ones)
+        for (String step : GeneratedContent.LADDER) {
+            if (!done(step)) {
+                return step;
+            }
+        }
+        return "";
     }
 
     public static QuestSnapshotMsg.State state(String quest) {

@@ -17,7 +17,9 @@ How it works
    is turned off (run/config/fml.toml) unless --early-window: one less OpenGL context to go wrong.
 3. In game. With -Dbrasshaven.ci=true, com.brasshaven.client.CiDriver waits for the title screen, creates a
    fresh creative world ("brasshaven-ci", normal terrain, no structures), lets it settle, then plays scripted
-   steps on client ticks: HUD + minimap, world map, quest journal, talent tree, two Manual pages, a stage in the
+   steps on client ticks: the first join (only the Manual and the Atlas, directions to a Guild Agent, the tracker
+   on the progression ladder's first step, the Structure Compass earned through /brasshaven contracts complete),
+   HUD + minimap, world map, quest journal, talent tree, two Manual pages, a stage in the
    sky with the Auto Harvester, Guild Terminal and waystone screens (opened by right-clicking the placed
    blocks), the multiplayer screens (company, player card, emote wheel, Pneumatic Post and Contract Board filled by
    /brasshaven social demo, a client-side preview of the trade screen), the creative tab, creatures (Grand Clockmaker, Brass Golem, Clockwork Spider, a jellyfish in a

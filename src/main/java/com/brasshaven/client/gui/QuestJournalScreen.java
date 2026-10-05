@@ -112,8 +112,10 @@ public class QuestJournalScreen extends Screen {
             return;
         }
         String now = BrasshavenClientConfig.TRACKED_QUEST.get();
-        BrasshavenClientConfig.TRACKED_QUEST.set(selected.equals(now) ? "" : selected);
+        String chosen = selected.equals(now) ? "" : selected;
+        BrasshavenClientConfig.TRACKED_QUEST.set(chosen);
         BrasshavenClientConfig.TRACKED_QUEST.save();
+        com.brasshaven.client.QuestTracker.chosen(chosen);
         updateTrack();
     }
 

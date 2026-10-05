@@ -273,6 +273,32 @@ def main():
         ch.append(f'            new Chapter("{cid}", List.of({qs}))')
     lines.append(",\n".join(ch))
     lines += ["    );", ""]
+    from wf import progression
+    ladder = ", ".join(f'"{q}"' for q in progression.steps())
+    kit = ", ".join(f'"brasshaven:{i}"' for i in progression.STARTER_KIT)
+    lines += [
+        "    /** The progression ladder (tools/wf/progression.py): quest ids (\"npc/<id>\" for a contract), in order. */",
+        f"    public static final List<String> LADDER = List.of({ladder});",
+        "",
+        "    /** What a player receives on first join (item ids). */",
+        f"    public static final List<String> STARTER_KIT = List.of({kit});",
+        "",
+        "    /** The quest giver's contract whose reward is the Structure Compass. */",
+        f'    public static final String COMPASS_CONTRACT = "{progression.COMPASS_CONTRACT}";',
+        "",
+        "    /**",
+        "     * Names of the places the mod marks on a player's map (structure id, or \"village\"): {English, French}.",
+        "     * Waypoint names are plain text kept by the server, which has no translations of its own.",
+        "     */",
+        "    public static final java.util.Map<String, List<String>> PLACE_NAMES = java.util.Map.ofEntries(",
+    ]
+    def jstr(t):
+        return t.replace("\\", "\\\\").replace('"', '\\"')
+    names = [(s.id, s.title_en or s.id, s.title_fr or s.title_en or s.id) for s in defs.STRUCTURES]
+    names.append(("village", "Village", "Village"))
+    lines.append(",\n".join(f'            java.util.Map.entry("{i}", List.of("{jstr(en)}", "{jstr(fr)}"))'
+                            for i, en, fr in names))
+    lines += ["    );", ""]
     info_path = os.path.join(ROOT, "build", "quest_info.json")
     info = json.load(open(info_path)) if os.path.exists(info_path) else {}
     lines.append("    /** Quest rewards shown in the journal: \"xp|item*count;item*count\". */")

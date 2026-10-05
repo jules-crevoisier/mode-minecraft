@@ -16,6 +16,7 @@ The script accepts the EULA, starts the server, waits for "Done", then from the 
   * breaks mod blocks (loot tables + Forge loot modifiers),
   * spawns every loot table,
   * runs /brasshaven social selftest (the multiplayer features' server rules, with no player needed),
+  * runs /brasshaven progression selftest (first-join kit, the Structure Compass earned from a contract, the ladder),
   * reloads data packs,
 and stops the server. Any ERROR line, exception, crash report or failed command fails the run.
 With --fit the server makes a fresh world with Minecraft's own terrain instead (and the Brasshaven biomes, on by
@@ -306,6 +307,8 @@ def exercise_mod(srv, failures):
         blocks_and_loot(srv, failures)
     with Phase("multiplayer features"):
         social(srv, failures)
+    with Phase("progression"):
+        progression(srv, failures)
     with Phase("reload"):
         srv.run("reload", r"Reloading|Failed", 120)
         time.sleep(20)
@@ -658,6 +661,23 @@ def social(srv, failures):
             if not res or re.search(r"Unknown|Invalid|not loaded", res):
                 failures.append(f"setblock {bid}[facing={facing}]: {res}")
     srv.run("execute in minecraft:overworld run setblock 1 150 1 minecraft:air destroy", r"Changed|Could not|not loaded", 30)
+
+
+def progression(srv, failures):
+    """The progression ladder (com.brasshaven.util.Progression) on the loaded server: /brasshaven progression selftest
+    checks the first-join kit (Manual and Atlas, no Structure Compass), the compass reward of the Guild Agent's survey
+    contract through the real turn-in reward code, the prerequisites before it, every ladder step, the first quest's
+    "meet a Guild Agent" criterion and the crafting gate (four map fragments and a compass no longer make one; with a
+    Lithite Shard they do). The client test (CiDriver "progression") plays the same path with a real player."""
+    res = srv.run("brasshaven progression selftest", r"Progression self-test (passed|FAILED)|Unknown|Incorrect", 120)
+    if not res or "passed" not in res:
+        failures.append(f"progression self-test: {res}")
+        time.sleep(2)
+        failures += [ln.strip() for ln in srv.lines[-40:] if "Progression self-test FAILED" in ln and ln.strip() not in failures]
+    # the data behind it, as shipped: no compass on the first quest's reward table
+    table = json.load(open(os.path.join(DATA, "loot_table", "rewards", "first_outpost.json")))
+    if "structure_compass" in json.dumps(table):
+        failures.append("progression: the first quest's reward table still gives a Structure Compass")
 
 
 def exercise_fit(srv, failures, shard=None):

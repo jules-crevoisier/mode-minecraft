@@ -31,6 +31,7 @@ import java.util.List;
  *   /brasshaven npc role &lt;role&gt;      the nearest one takes another role (and texture, and contracts)
  *   /brasshaven npc remove             removes the nearest one
  *   /brasshaven contracts reset [player]
+ *   /brasshaven contracts complete &lt;contract&gt; [player]   hands it in for the player, rewards included
  * </pre>
  */
 public final class NpcCommand {
@@ -57,7 +58,29 @@ public final class NpcCommand {
                 .then(Commands.literal("reset")
                         .executes(ctx -> reset(ctx, ctx.getSource().getPlayerOrException()))
                         .then(Commands.argument("player", EntityArgument.player())
-                                .executes(ctx -> reset(ctx, EntityArgument.getPlayer(ctx, "player")))));
+                                .executes(ctx -> reset(ctx, EntityArgument.getPlayer(ctx, "player")))))
+                .then(Commands.literal("complete").then(Commands.argument("contract", StringArgumentType.word())
+                        .suggests((ctx, b) -> SharedSuggestionProvider.suggest(GeneratedNpcs.QUESTS.stream().map(GeneratedNpcs.Quest::id), b))
+                        .executes(ctx -> complete(ctx, StringArgumentType.getString(ctx, "contract"), ctx.getSource().getPlayerOrException()))
+                        .then(Commands.argument("player", EntityArgument.player())
+                                .executes(ctx -> complete(ctx, StringArgumentType.getString(ctx, "contract"),
+                                        EntityArgument.getPlayer(ctx, "player"))))));
+    }
+
+    /** Hands a contract in for a player (rewards included): to replace a lost reward, or to test the progression. */
+    private static int complete(CommandContext<CommandSourceStack> ctx, String id, ServerPlayer target) {
+        GeneratedNpcs.Quest q = NpcQuests.quest(id).orElse(null);
+        if (q == null) {
+            ctx.getSource().sendFailure(Component.translatable("message.brasshaven.contracts.unknown", id));
+            return 0;
+        }
+        if (!NpcQuests.complete(target, q)) {
+            ctx.getSource().sendFailure(Component.translatable("message.brasshaven.contracts.already", id));
+            return 0;
+        }
+        ctx.getSource().sendSuccess(() -> Component.translatable("message.brasshaven.contracts.completed", id,
+                target.getDisplayName()), true);
+        return 1;
     }
 
     private static WayfarerNpc nearest(ServerPlayer player) {

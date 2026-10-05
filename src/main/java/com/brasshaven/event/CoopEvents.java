@@ -2,23 +2,24 @@ package com.brasshaven.event;
 
 import com.brasshaven.Brasshaven;
 import com.brasshaven.data.BrasshavenData;
-import com.brasshaven.registry.ModItems;
 import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.entity.player.AdvancementEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 
 /**
  * Co-op glue: every Brasshaven quest step reached by one player is granted to everybody (now
- * and when others log in later), and new players receive the Atlas plus a short welcome.
+ * and when others log in later), and new players receive the Manual and the Atlas, a short welcome and the way to
+ * the first Guild Agent ({@link com.brasshaven.util.Progression}).
  */
 public final class CoopEvents {
     private static boolean sharing;
+    /** Players whose quest progress changed this tick: their journal and tracker get a fresh snapshot once. */
+    private static final java.util.Set<java.util.UUID> DIRTY = new java.util.HashSet<>();
 
     private CoopEvents() {}
 
@@ -27,11 +28,30 @@ public final class CoopEvents {
         net.minecraftforge.event.level.BlockEvent.EntityPlaceEvent.BUS.addListener(
                 (java.util.function.Consumer<net.minecraftforge.event.level.BlockEvent.EntityPlaceEvent>) CoopEvents::onPlace);
         PlayerEvent.PlayerLoggedInEvent.BUS.addListener(CoopEvents::onLogin);
+        net.minecraftforge.event.TickEvent.ServerTickEvent.Post.BUS.addListener(e -> flush(e.server()));
+    }
+
+    /** One snapshot per changed player at the end of the tick (a catch-up awards dozens of criteria at once). */
+    private static void flush(MinecraftServer server) {
+        if (DIRTY.isEmpty()) {
+            return;
+        }
+        for (java.util.UUID id : DIRTY) {
+            ServerPlayer p = server.getPlayerList().getPlayer(id);
+            if (p != null) {
+                com.brasshaven.network.BrasshavenNet.toPlayer(p, com.brasshaven.util.QuestBook.snapshot(p, false));
+            }
+        }
+        DIRTY.clear();
     }
 
     /** Shares every single criterion, so partial progress (e.g. "visit every structure") is pooled. */
     private static void onProgress(AdvancementEvent.AdvancementProgressEvent event) {
         AdvancementHolder holder = event.getAdvancement();
+        // the HUD tracker follows the player's own progress too (shared or not, and when someone else already did it)
+        if (event.getEntity() instanceof ServerPlayer changed && holder.id().getNamespace().equals(Brasshaven.MODID)) {
+            DIRTY.add(changed.getUUID());
+        }
         if (sharing || !com.brasshaven.config.BrasshavenConfig.QUESTS_SHARED.get()
                 || event.getProgressType() != AdvancementEvent.AdvancementProgressEvent.ProgressType.GRANT
                 || !(event.getEntity() instanceof ServerPlayer earner)
@@ -60,7 +80,6 @@ public final class CoopEvents {
         } finally {
             sharing = false;
         }
-        com.brasshaven.util.QuestBook.pushToAll(server);
     }
 
     /** Placing a storage block for the first time explains it. */
@@ -100,11 +119,8 @@ public final class CoopEvents {
             sharing = false;
         }
         if (data.welcome(player.getUUID())) {
-            player.getInventory().add(new ItemStack(ModItems.WAYFARER_ATLAS.get()));
-            player.getInventory().add(new ItemStack(ModItems.WAYFARER_MANUAL.get()));
-            player.getInventory().add(new ItemStack(ModItems.STRUCTURE_COMPASS.get()));
-            player.sendSystemMessage(Component.translatable("message.brasshaven.welcome", Component.keybind("key.brasshaven.quests"))
-                    .withStyle(ChatFormatting.GOLD));
+            // the Manual and the Atlas only, and the way to the first Guild Agent: the rest is earned (Progression)
+            com.brasshaven.util.Progression.welcome(player);
         }
         com.brasshaven.network.BrasshavenNet.toPlayer(player, com.brasshaven.util.QuestBook.snapshot(player, false));
     }

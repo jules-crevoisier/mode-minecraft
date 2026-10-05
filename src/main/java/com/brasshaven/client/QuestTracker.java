@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * The tracked quest, pinned to the top-right corner of the HUD: a compact parchment card with the quest's icon, its
  * bold title and progress bar side by side, and the objective in dark ink under them (three lines at most, ending on
- * "..." when longer; the journal shows it whole). Moves on to the next quest when done.
+ * "..." when longer; the journal shows it whole). Follows the progression ladder by itself ({@link #tick}).
  */
 public final class QuestTracker {
     private static final int W = 132;
@@ -127,19 +127,70 @@ public final class QuestTracker {
         return bad ? 2 : good ? 1 : 0;
     }
 
-    /** When the tracked quest is completed, follow the next available quest of the same chapter. */
+    /** The quest the tracker picked by itself this session (the progression ladder's next step); "" otherwise. */
+    private static String auto = "";
+    /** The connection on which the player emptied the tracker: it stays empty until the next login. */
+    private static int clearedOn;
+
+    private static int connection() {
+        Minecraft mc = Minecraft.getInstance();
+        return mc.getConnection() == null ? 0 : System.identityHashCode(mc.getConnection());
+    }
+
+    /** The player tracked (or, with "", untracked) a quest themselves: the journal and the quest giver screen. */
+    public static void chosen(String quest) {
+        auto = "";
+        if (quest.isEmpty()) {
+            clearedOn = connection();
+        }
+    }
+
+    /** Whether the tracker picked this quest by itself (a contract just accepted may take its place). */
+    public static boolean isAuto(String quest) {
+        return !quest.isEmpty() && quest.equals(auto);
+    }
+
+    private static void track(String quest, boolean byItself) {
+        auto = byItself ? quest : "";
+        BrasshavenClientConfig.TRACKED_QUEST.set(quest);
+        BrasshavenClientConfig.TRACKED_QUEST.save();
+    }
+
+    /**
+     * Keeps the tracker on the road ahead ({@link GeneratedContent#LADDER}): an empty tracker shows the ladder's next
+     * step (unless the player emptied it on this connection), a step the tracker picked by itself moves on with the
+     * ladder, and a finished quest gives way to the ladder's next step, or, once the ladder is done, to the next
+     * available quest of its chapter.
+     */
     public static void tick() {
+        if (!ClientQuests.ready() || !ClientContracts.ready()) {
+            return; // the progress of this world is not known yet
+        }
         String q = BrasshavenClientConfig.TRACKED_QUEST.get();
-        if (q.isEmpty() || !ClientQuests.done(q)) {
+        String next = ClientQuests.ladderNext();
+        if (q.isEmpty()) {
+            if (!next.isEmpty() && clearedOn != connection()) {
+                track(next, true);
+            }
             return;
         }
-        String next = "";
+        if (q.equals(auto) && !next.isEmpty() && !next.equals(q)) {
+            track(next, true);
+            return;
+        }
+        if (!ClientQuests.done(q)) {
+            return;
+        }
+        if (!next.isEmpty()) {
+            track(next, true);
+            return;
+        }
+        String inChapter = "";
         for (GeneratedContent.Chapter c : GeneratedContent.CHAPTERS) {
             if (c.quests().contains(q)) {
-                next = c.quests().stream().filter(n -> !ClientQuests.done(n) && ClientQuests.unlocked(n)).findFirst().orElse("");
+                inChapter = c.quests().stream().filter(n -> !ClientQuests.done(n) && ClientQuests.unlocked(n)).findFirst().orElse("");
             }
         }
-        BrasshavenClientConfig.TRACKED_QUEST.set(next);
-        BrasshavenClientConfig.TRACKED_QUEST.save();
+        track(inChapter, false);
     }
 }

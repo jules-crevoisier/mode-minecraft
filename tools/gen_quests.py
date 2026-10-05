@@ -146,12 +146,17 @@ def build():
            "Explore chaque recoin de chaque dimension, ensemble."),
           {"start": {"trigger": "minecraft:tick"}})
     # ---------------------------------------------------------------- chapter 1
-    reward("first_outpost", ("map_fragment", 3), ("structure_compass", 1))
+    # the first step of the progression ladder (wf/progression.py): the nearest Guild Outpost is marked on the new
+    # player's map. Talking to any Guild Agent (a village's Guild Post or square) counts too: "met_agent" is granted
+    # by Java (Progression.metAgent). No Structure Compass here: the Guild Agent's second contract gives it.
+    reward("first_outpost", ("map_fragment", 3))
     quest("first_steps/guild_outpost", "root", "cartography_table",
           ("I. The Guild Outpost", "I. L'avant-poste de la Guilde"),
-          ("Find a Guild Outpost: the guild's waystone and maps await.",
-           "Trouve un avant-poste de la Guilde : pierre de voyage et cartes t'attendent."),
-          {"found": in_structure("guild_outpost")}, frame="goal", reward="first_outpost", xp=50)
+          ("Meet a Guild Agent: the nearest Guild Outpost is marked on your map (M). Village Guild Posts have one too.",
+           "Rencontre un agent de la Guilde : l'avant-poste le plus proche est marqué sur ta carte (M). Les Relais de "
+           "la Guilde des villages en ont un aussi."),
+          {"found": in_structure("guild_outpost"), "met_agent": {"trigger": "minecraft:impossible"}},
+          frame="goal", reward="first_outpost", xp=50, requirements=[["found", "met_agent"]])
     quest("first_steps/map_fragment", "first_steps/guild_outpost", f"{NS}:map_fragment",
           ("Pieces of the Map", "Morceaux de carte"),
           ("Get a Map Fragment from any Overworld structure.",

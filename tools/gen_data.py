@@ -91,7 +91,10 @@ def recipes():
     shaped("magnet_ring", ["MRM", "I I", " I "], {"M": "map_fragment", "R": "redstone", "I": "iron_ingot"}, category="equipment")
     shaped("arcane_ring", ["LAL", "G G", " G "], {"L": "lapis_lazuli", "A": "amethyst_shard", "G": "gold_ingot"},
            category="equipment")
-    shaped("structure_compass", [" M ", "MCM", " M "], {"M": "map_fragment", "C": "compass"}, category="equipment")
+    # the first Structure Compass is earned (the Guild Agent's survey contract, wf/progression.py); more are crafted
+    # once the player reaches the depths: a Lithite Shard tops the compass (four map fragments alone no longer do)
+    shaped("structure_compass", [" L ", "MCM", " M "], {"L": "lithite_shard", "M": "map_fragment", "C": "compass"},
+           category="equipment")
     shapeless("recall_scroll", ["paper", "map_fragment", "ender_pearl"], count=2)
     shapeless("wayfarer_atlas", ["book", "map_fragment"])
     shapeless("wayfarer_manual", ["book", "feather"])
