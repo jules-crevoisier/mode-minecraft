@@ -10,7 +10,7 @@ empty, without hand-placing every barrel:
   populate(bp, residents, ...)    villagers with their job-site block, a bed each and a bell to meet at
   yard(bp, area, y, theme, ...)   props on open ground outside: hay, crates, carts, woodpiles, wells,
                                   crop patches, garden beds, signposts, lamp posts, benches
-  villager / wandering_trader / iron_golem / brass_golem    template entities (26.2 NBT)
+  villager / quest_npc / wandering_trader / iron_golem / brass_golem    template entities (26.2 NBT)
 
 Every placement keeps the room walkable: a piece of furniture only goes on a free cell against a wall,
 never next to a door, ladder, stair or opening, and only if every free cell of the room can still reach
@@ -990,6 +990,17 @@ def villager(bp, x, y, z, profession, vtype="plains", level=2, facing=None, baby
         data["Age"] = -24000
     bp.entity(x, y, z, data)
     _log_npc(bp, f"villager:{profession}")
+
+
+def quest_npc(bp, x, y, z, role, facing=None):
+    """A quest giver (wayfarers:wayfarer_npc, roles and contracts in wf/npcs.py): it stays where it is placed,
+    cannot be hurt by players and never despawns. Its name and home are set by the game when it spawns."""
+    from . import nbt, npcs
+    if role not in npcs.ROLES:
+        raise ValueError(f"unknown NPC role {role}")
+    bp.entity(x, y, z, {"id": "wayfarers:wayfarer_npc", "Role": role, "PersistenceRequired": True,
+                        "Rotation": nbt.List([nbt.Float(YAW.get(facing, 0.0)), nbt.Float(0.0)], nbt.Float)})
+    _log_npc(bp, f"npc:{role}")
 
 
 def wandering_trader(bp, x, y, z, facing=None):

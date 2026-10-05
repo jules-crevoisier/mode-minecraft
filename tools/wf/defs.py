@@ -22,7 +22,7 @@ class StructureDef:
                  step="surface_structures", adaptation="beard_thin", heightmap="WORLD_SURFACE_WG",
                  height_offset=0, height=None, size=1, extra_pools=None, processors="aging",
                  max_distance=80, exclusion=None, title_fr="", title_en="", ground=0, spawns=None,
-                 foundation=True):
+                 foundation=True, peaceful=False):
         self.id = sid
         self.dimension = dimension
         self.biomes = biomes
@@ -45,6 +45,11 @@ class StructureDef:
         # monsters that keep spawning inside the structure (like vanilla fortresses):
         # list of (entity id, weight, min, max)
         self.spawns = spawns or []
+        # people live here (villagers, quest givers): no monster spawns naturally inside its pieces (an empty
+        # monster spawn override); spawners and bosses still work
+        self.peaceful = peaceful
+        if peaceful and self.spawns:
+            raise ValueError(f"{sid}: a peaceful structure cannot list monster spawns")
         # extend ground-layer columns downwards so the structure never floats on a slope
         self.foundation = foundation
 
@@ -155,7 +160,7 @@ def structure_json(sdef, ground_offset, fit_info=None):
         "type": rl("fitted_jigsaw"),
         "biomes": f"#{rl('has_structure/' + sdef.id)}",
         "step": sdef.step,
-        "spawn_overrides": {} if not sdef.spawns else {"monster": {
+        "spawn_overrides": {} if not sdef.spawns and not sdef.peaceful else {"monster": {
             "bounding_box": "piece",
             "spawns": [{"type": t, "weight": w, "minCount": a, "maxCount": b} for t, w, a, b in sdef.spawns],
         }},

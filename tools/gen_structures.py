@@ -14,7 +14,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from wf import defs, render, support, foundation, chunking, nbt, placement  # noqa: E402
+from wf import defs, render, support, foundation, chunking, nbt, placement, residents  # noqa: E402
 try:
     from wf import render3d  # noqa: E402  (optional: needs Pillow + minecraft-textures)
 except ImportError:
@@ -128,6 +128,7 @@ def main():
         pools = {"start": sdef.pieces}
         pools.update(sdef.extra_pools)
         ground_offset = 0
+        built = []
         for pool_name, pieces in pools.items():
             for piece in pieces:
                 bp = build_piece(sdef, piece, start=pool_name == "start")
@@ -136,8 +137,11 @@ def main():
                 for what, n in support.repair(bp, ctx).items():
                     repairs[what] = repairs.get(what, 0) + n
                 size, blocks, (mx, my, mz), ncells, written, biggest = save_piece(sdef, piece, bp, pool_name == "start", report)
+                built.append(residents.count([bp]))
                 if not args.no_check:
                     for kind, pos, msg in support.check(bp.blocks, ctx):
+                        report.append((sdef.id, piece.name, kind, pos, msg))
+                    for kind, pos, msg in residents.check_piece(bp, ctx):
                         report.append((sdef.id, piece.name, kind, pos, msg))
                 if pool_name == "start" and piece is pieces[0]:
                     ground_offset = my - sdef.ground
@@ -156,6 +160,9 @@ def main():
                 used_processors.add(piece.processors or sdef.processors)
             write_json(os.path.join(DATA, "worldgen", "template_pool", sdef.id, f"{pool_name}.json"),
                        defs.template_pool(sdef, pieces, pool_name))
+        if not args.no_check:
+            for kind, pos, msg in residents.check_structure(sdef, built):
+                report.append((sdef.id, "*", kind, pos, msg))
         write_json(os.path.join(DATA, "worldgen", "structure", f"{sdef.id}.json"),
                    defs.structure_json(sdef, ground_offset, merged_fit_info(sdef)))
         write_json(os.path.join(DATA, "tags", "worldgen", "biome", "has_structure", f"{sdef.id}.json"),
@@ -210,6 +217,8 @@ def gen_villages(args, report, repairs, summary, preview_dir):
             grounds[tid] = -my + 1  # the ground layer (blueprint y = 0) above the template's lowest layer, + 1
         if not args.no_check:
             for k, pos, msg in support.check(bp.blocks, ctx):
+                report.append(("village", path, k, pos, msg))
+            for k, pos, msg in residents.check_piece(bp, ctx):
                 report.append(("village", path, k, pos, msg))
         for msg in village.check(bp, kind):
             report.append(("village", path, "jigsaw", (0, 0, 0), msg))
