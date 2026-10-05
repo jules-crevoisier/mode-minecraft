@@ -29,6 +29,11 @@ final class MapLayer {
     /** Cave view: scanned on this client, never asked from the server. */
     final boolean local;
     private final Long2ObjectOpenHashMap<MapTile> tiles = new Long2ObjectOpenHashMap<>();
+    /** Scratch of the bakes (render thread only). */
+    private static final MapShade.Grid GRID = new MapShade.Grid();
+    private static int[] scratch = new int[MapTile.SIZE * MapTile.SIZE];
+    /** Texture builds so far, all layers: the 3D view redraws when it changes. */
+    static int bakes;
     private int uploads;
     private long frame;
 
@@ -70,8 +75,8 @@ final class MapLayer {
         t.fullRev = d.revision;
         t.miniRev = Math.max(t.miniRev, d.revision);
         t.lastUse = System.currentTimeMillis();
-        t.markAllDirty();
-        touchNeighbours(rx, rz);
+        // its own columns, and the relief along the edges of the regions around it
+        markDirty(rx << MapTile.SHIFT, rz << MapTile.SHIFT, (rx << MapTile.SHIFT) + MapTile.MASK, (rz << MapTile.SHIFT) + MapTile.MASK);
     }
 
     void receiveMini(int rx, int rz, RegionData d) {
@@ -85,17 +90,19 @@ final class MapLayer {
         }
         int[][] tints = MapPalette.resolve(d.palette());
         int[] out = new int[MapTile.MINI * MapTile.MINI];
+        int r = MapShade.REACH;
+        int w = MapTile.MINI + 2 * r;
+        MapShade.Grid g = GRID;
+        g.size(w, w);
+        for (int z = 0; z < MapTile.MINI; z++) {
+            for (int x = 0; x < MapTile.MINI; x++) {
+                MapShade.column(d, z * MapTile.MINI + x, g, (z + r) * w + x + r);
+            }
+        }
         for (int z = 0; z < MapTile.MINI; z++) {
             for (int x = 0; x < MapTile.MINI; x++) {
                 int i = z * MapTile.MINI + x;
-                int c = MapPalette.color(d, i, tints);
-                if (c != 0) {
-                    int h = d.height[i];
-                    int hn = z > 0 && (d.mat[i - MapTile.MINI] & 0xFF) > MapScan.VOID ? d.height[i - MapTile.MINI] : h;
-                    int hw = x > 0 && (d.mat[i - 1] & 0xFF) > MapScan.VOID ? d.height[i - 1] : h;
-                    c = MapPalette.scale(c, relief(d.mat[i] & 0xFF, d.depth[i], ((h - hn) * 2 + (h - hw)) / 4, x + z));
-                }
-                out[i] = c;
+                out[i] = MapShade.shade(MapPalette.color(d, i, tints), g, (z + r) * w + x + r, 4, !local);
             }
         }
         t.mini = out;
@@ -116,39 +123,42 @@ final class MapLayer {
         markDirty(cx << 4, cz << 4, (cx << 4) + 15, (cz << 4) + 15);
     }
 
-    private void touchNeighbours(int rx, int rz) {
-        MapTile south = peek(rx, rz + 1);
-        if (south != null && south.full != null) {
-            south.markDirty(0, 0, MapTile.MASK, 0);
-        }
-        MapTile east = peek(rx + 1, rz);
-        if (east != null && east.full != null) {
-            east.markDirty(0, 0, 0, MapTile.MASK);
-        }
-    }
-
-    /** A block area changed: its pixels and the relief of the columns just south and east of it. */
+    /** A block area changed: its pixels and the relief of the columns around it (in this region or the next). */
     void markDirty(int x0, int z0, int x1, int z1) {
-        for (int rz = z0 >> MapTile.SHIFT; rz <= (z1 + 1) >> MapTile.SHIFT; rz++) {
-            for (int rx = x0 >> MapTile.SHIFT; rx <= (x1 + 1) >> MapTile.SHIFT; rx++) {
+        int r = MapShade.REACH;
+        x0 -= r;
+        z0 -= r;
+        x1 += r;
+        z1 += r;
+        for (int rz = z0 >> MapTile.SHIFT; rz <= z1 >> MapTile.SHIFT; rz++) {
+            for (int rx = x0 >> MapTile.SHIFT; rx <= x1 >> MapTile.SHIFT; rx++) {
                 MapTile t = peek(rx, rz);
                 if (t != null && t.full != null) {
                     int bx = rx << MapTile.SHIFT;
                     int bz = rz << MapTile.SHIFT;
-                    t.markDirty(x0 - bx, z0 - bz, x1 + 1 - bx, z1 + 1 - bz);
+                    t.markDirty(x0 - bx, z0 - bz, x1 - bx, z1 - bz);
                 }
             }
         }
     }
 
-    // ------------------------------------------------------------------ queries
-    private int heightAt(int wx, int wz, int fallback) {
-        MapTile t = peek(wx >> MapTile.SHIFT, wz >> MapTile.SHIFT);
-        if (t == null || t.full == null) {
-            return fallback;
+    /** The relief settings changed: every texture is shaded again (thumbnails without full data are asked anew). */
+    void restyle() {
+        for (MapTile t : tiles.values()) {
+            if (t.full != null) {
+                t.markAllDirty();
+            } else if (t.mini != null) {
+                t.miniRev = 0;
+                t.miniAsked = 0;
+            }
         }
-        int i = ((wz & MapTile.MASK) << MapTile.SHIFT) | (wx & MapTile.MASK);
-        return (t.full.mat[i] & 0xFF) > MapScan.VOID ? t.full.height[i] : fallback;
+    }
+
+    // ------------------------------------------------------------------ queries
+    /** Full data of the region holding block (wx, wz), or null. */
+    RegionData fullAt(int wx, int wz) {
+        MapTile t = peek(wx >> MapTile.SHIFT, wz >> MapTile.SHIFT);
+        return t == null ? null : t.full;
     }
 
     /** {height, biome id} of a known column, else null. */
@@ -165,32 +175,41 @@ final class MapLayer {
     }
 
     // ------------------------------------------------------------------ shading
-    /** Light from the north-west: slopes facing it are brighter. Water darkens with depth. */
-    private static float relief(int mat, int depth, int slope, int parity) {
-        if (mat == MapScan.WATER) {
-            float f = 1.0F - Math.min(depth, 24) * 0.016F;
-            return depth > 1 && (parity & 1) == 0 ? f - 0.02F : f;
+    /**
+     * Shaded colours (see {@link MapShade}) of the columns x0..x1, z0..z1 of {@code t}'s full data into {@code out},
+     * row by row; the relief reads the neighbouring regions along the edges.
+     */
+    private void bake(MapTile t, int x0, int z0, int x1, int z1, int[] out) {
+        int r = MapShade.REACH;
+        int w = x1 - x0 + 1 + 2 * r;
+        int h = z1 - z0 + 1 + 2 * r;
+        MapShade.Grid g = GRID;
+        g.size(w, h);
+        MapTile[] near = new MapTile[9];
+        for (int dz = -1; dz <= 1; dz++) {
+            for (int dx = -1; dx <= 1; dx++) {
+                near[(dz + 1) * 3 + dx + 1] = dx == 0 && dz == 0 ? t : peek(t.rx + dx, t.rz + dz);
+            }
         }
-        if (mat == MapScan.WALL) {
-            return 1.0F;
+        for (int gz = 0; gz < h; gz++) {
+            int lz = z0 - r + gz;
+            int tz = lz < 0 ? 0 : lz > MapTile.MASK ? 2 : 1;
+            for (int gx = 0; gx < w; gx++) {
+                int lx = x0 - r + gx;
+                MapTile n = near[tz * 3 + (lx < 0 ? 0 : lx > MapTile.MASK ? 2 : 1)];
+                if (n != null && n.full != null) {
+                    MapShade.column(n.full, ((lz & MapTile.MASK) << MapTile.SHIFT) | (lx & MapTile.MASK), g, gz * w + gx);
+                }
+            }
         }
-        return 1.0F + Math.max(-0.34F, Math.min(0.24F, slope * 0.045F));
-    }
-
-    private int shade(MapTile t, int[][] tints, int lx, int lz) {
-        RegionData d = t.full;
-        int i = (lz << MapTile.SHIFT) | lx;
-        int c = MapPalette.color(d, i, tints);
-        if (c == 0) {
-            return 0;
+        int[][] tints = MapPalette.resolve(t.full.palette());
+        int ow = x1 - x0 + 1;
+        for (int z = z0; z <= z1; z++) {
+            for (int x = x0; x <= x1; x++) {
+                int base = MapPalette.color(t.full, (z << MapTile.SHIFT) | x, tints);
+                out[(z - z0) * ow + x - x0] = MapShade.shade(base, g, (z - z0 + r) * w + x - x0 + r, 1, !local);
+            }
         }
-        int h = d.height[i];
-        int bx = t.rx << MapTile.SHIFT;
-        int bz = t.rz << MapTile.SHIFT;
-        int hn = lz > 0 ? ((d.mat[i - MapTile.SIZE] & 0xFF) > MapScan.VOID ? d.height[i - MapTile.SIZE] : h)
-                : heightAt(bx + lx, bz + lz - 1, h);
-        int hw = lx > 0 ? ((d.mat[i - 1] & 0xFF) > MapScan.VOID ? d.height[i - 1] : h) : heightAt(bx + lx - 1, bz + lz, h);
-        return MapPalette.scale(c, relief(d.mat[i] & 0xFF, d.depth[i], (h - hn) * 2 + (h - hw), lx + lz));
     }
 
     // ------------------------------------------------------------------ textures
@@ -221,11 +240,13 @@ final class MapLayer {
         }
         if (t.textureDirty() && (fresh || now - t.lastUpload >= UPLOAD_INTERVAL_MS) && mayUpload()) {
             uploads++;
-            int[][] tints = MapPalette.resolve(t.full.palette());
+            bakes++;
             NativeImage img = t.texture.getPixels();
+            bake(t, t.dirtyMinX, t.dirtyMinZ, t.dirtyMaxX, t.dirtyMaxZ, scratch);
+            int ow = t.dirtyMaxX - t.dirtyMinX + 1;
             for (int z = t.dirtyMinZ; z <= t.dirtyMaxZ; z++) {
                 for (int x = t.dirtyMinX; x <= t.dirtyMaxX; x++) {
-                    img.setPixel(x, z, shade(t, tints, x, z));
+                    img.setPixel(x, z, scratch[(z - t.dirtyMinZ) * ow + x - t.dirtyMinX]);
                 }
             }
             t.clearTextureDirty();
@@ -265,7 +286,7 @@ final class MapLayer {
     }
 
     private void buildMini(MapTile t) {
-        int[][] tints = MapPalette.resolve(t.full.palette());
+        bake(t, 0, 0, MapTile.MASK, MapTile.MASK, scratch);
         int[] out = t.mini != null ? t.mini : new int[MapTile.MINI * MapTile.MINI];
         for (int z = 0; z < MapTile.MINI; z++) {
             for (int x = 0; x < MapTile.MINI; x++) {
@@ -275,7 +296,7 @@ final class MapLayer {
                 int n = 0;
                 for (int dz = 1; dz < 4; dz += 2) {
                     for (int dx = 1; dx < 4; dx += 2) {
-                        int c = shade(t, tints, x * 4 + dx, z * 4 + dz);
+                        int c = scratch[((z * 4 + dz) << MapTile.SHIFT) | (x * 4 + dx)];
                         if (c != 0) {
                             r += (c >> 16) & 0xFF;
                             g += (c >> 8) & 0xFF;

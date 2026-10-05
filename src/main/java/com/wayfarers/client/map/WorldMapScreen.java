@@ -3,11 +3,13 @@ package com.wayfarers.client.map;
 import com.wayfarers.Wayfarers;
 import com.wayfarers.client.WayfarersClient;
 import com.wayfarers.client.gui.WfGui;
+import com.wayfarers.client.gui.WfWidgets;
 import com.wayfarers.config.WayfarersClientConfig;
 import com.wayfarers.map.MapProtocol;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.KeyEvent;
@@ -26,7 +28,9 @@ import java.util.Locale;
 /**
  * The world map (M): the shared explored world on parchment. Drag to pan, wheel to zoom, click a marker for its card,
  * right-click for waypoints and pings, middle-click to ping. The side panel holds the legend (click to hide a kind)
- * and your waypoints.
+ * and your waypoints. A tool button tilts it into a 3D view ({@link MapView3D}); the gear opens the options panel:
+ * the minimap's exact size (slider) and presets, corner, shape, rotation, coordinates and opacity, shown live in its
+ * corner while the panel is open, and the relief of the maps (hill-shading, contour lines).
  */
 public class WorldMapScreen extends Screen {
     private static final Identifier PARCHMENT = Wayfarers.id("map/parchment");
@@ -35,6 +39,18 @@ public class WorldMapScreen extends Screen {
     private static final int ROW = 12;
     private static final int MIN_ZOOM = -6;
     private static final int MAX_ZOOM = 6;
+    /** Closest zoom-out of the 3D view (half a pixel per block: the full regions, which carry the heights). */
+    private static final int MIN_ZOOM_3D = -2;
+    // the options panel: width, label column, row height, rows (8 for the minimap, 2 for the relief) and height
+    private static final int OPT_W = 192;
+    private static final int OPT_LABEL = 78;
+    private static final int OPT_ROW = 16;
+    private static final int OPT_ROWS = 10;
+    private static final int OPT_HEAD = 20;
+    private static final int OPT_SECTION = 14;
+    private static final int OPT_H = OPT_HEAD + OPT_ROWS * OPT_ROW + OPT_SECTION + 4;
+    private static final String S = "gui.wayfarers.settings.";
+    private static final String O = "gui.wayfarers.map.options.";
 
     private static int zoom;
     private static boolean sidebarOpen = true;
@@ -61,6 +77,15 @@ public class WorldMapScreen extends Screen {
     private int my0;
     private int mx1;
     private int my1;
+
+    private final MapView3D view3d = new MapView3D();
+    /** Ground height at the centre line of the 3D view, eased so panning over hills does not jolt the view. */
+    private float refY = Float.NaN;
+    private boolean optionsOpen;
+    private int optX;
+    private int optY;
+    private final List<AbstractWidget> optionWidgets = new ArrayList<>();
+    private WfWidgets.Stepper sizeSlider;
 
     /** A clickable area rebuilt every frame. */
     private record Btn(int x, int y, int w, int h, Runnable action) {
@@ -146,6 +171,19 @@ public class WorldMapScreen extends Screen {
         return sidebarOpen && width >= 360;
     }
 
+    private static boolean is3d() {
+        return WayfarersClientConfig.MAP_3D.get();
+    }
+
+    /** Screen px per block of ground along z: squashed in the 3D view. */
+    private float depthScale() {
+        return scale() * (is3d() ? MapView3D.DEPTH : 1.0F);
+    }
+
+    private int ref() {
+        return Float.isNaN(refY) ? 64 : Math.round(refY);
+    }
+
     private void layout() {
         mx0 = 18;
         my0 = 24;
@@ -160,8 +198,20 @@ public class WorldMapScreen extends Screen {
         return centerX + (sx - (mx0 + mx1) / 2.0) / scale();
     }
 
+    /** The z under a screen row, on flat ground at the reference height (the 3D view's ground plane). */
     private double worldZ(double sy) {
-        return centerZ + (sy - (my0 + my1) / 2.0) / scale();
+        return centerZ + (sy - (my0 + my1) / 2.0) / depthScale();
+    }
+
+    /** The z of the land drawn at a screen point: in the 3D view, the block row actually under the cursor. */
+    private double worldZ(double sx, double sy) {
+        if (is3d()) {
+            int z = view3d.zAt((int) Math.floor(sx) - mx0, (int) Math.floor(sy) - my0);
+            if (z != Integer.MIN_VALUE) {
+                return z + 0.5;
+            }
+        }
+        return worldZ(sy);
     }
 
     private float screenX(double wx) {
@@ -169,7 +219,13 @@ public class WorldMapScreen extends Screen {
     }
 
     private float screenY(double wz) {
-        return (float) ((my0 + my1) / 2.0 + (wz - centerZ) * scale());
+        return (float) ((my0 + my1) / 2.0 + (wz - centerZ) * depthScale());
+    }
+
+    /** Screen y of a point at height wy (raised in the 3D view). */
+    private float screenY(double wz, double wy) {
+        float y = screenY(wz);
+        return is3d() ? y - (float) ((wy - ref()) * scale() * MapView3D.RISE) : y;
     }
 
     private boolean inMap(double x, double y) {
@@ -179,6 +235,9 @@ public class WorldMapScreen extends Screen {
     @Override
     protected void init() {
         layout();
+        if (optionsOpen) {
+            buildOptions(); // the widgets were cleared with the resize
+        }
         LocalPlayer p = Minecraft.getInstance().player;
         if (p != null && follow) {
             centerX = p.getX();
@@ -222,34 +281,44 @@ public class WorldMapScreen extends Screen {
         float cxs = (mx0 + mx1) / 2.0F;
         float cys = (my0 + my1) / 2.0F;
         float radius = (float) Math.hypot(mx1 - mx0, my1 - my0) / 2.0F;
-        MapRenderer.tiles(g, centerX, centerZ, scale, cxs, cys, 0, radius);
-        grid(g, scale);
+        boolean tilted = is3d();
+        if (tilted) {
+            terrain3d(g, player, scale);
+        } else {
+            MapRenderer.tiles(g, centerX, centerZ, scale, cxs, cys, 0, radius);
+            grid(g, scale);
+        }
         markers = visibleMarkers();
-        ClientMap.Marker hover = inMap(mouseX, mouseY) && menu == null && editor == null ? markerAt(mouseX, mouseY) : null;
+        float markerSize = MapRenderer.worldMarker(zoom);
+        ClientMap.Marker hover = inMap(mouseX, mouseY) && menu == null && editor == null && !inOptions(mouseX, mouseY)
+                ? markerAt(mouseX, mouseY) : null;
         for (ClientMap.Marker m : markers) {
             int sx = Math.round(screenX(m.x()));
-            int sy = Math.round(screenY(m.z()));
+            int sy = Math.round(screenY(m.z(), m.y()));
             if (m == selected || selected != null && m.ref() != null && m.ref().equals(selected.ref()) && m.kind() == selected.kind()) {
-                MapRenderer.ring(g, sx, sy, 7, 0xFFF6C343);
+                MapRenderer.ring(g, sx, sy, Math.round(markerSize * 0.75F), 0xFFF6C343);
             }
-            MapRenderer.marker(g, m, sx, sy, false);
+            MapRenderer.marker(g, m, sx, sy, false, markerSize);
+            int below = Math.round(markerSize / 2) + 2;
             if (scale >= 1.0F && (m.kind() == ClientMap.Kind.WAYPOINT || m.kind() == ClientMap.Kind.WAYSTONE)) {
                 String label = m.label();
                 int lw = font.width(label);
-                g.fill(sx - lw / 2 - 2, sy + 6, sx + lw / 2 + 2, sy + 16, 0x90100C0A);
-                g.centeredText(font, label, sx, sy + 7, m.kind() == ClientMap.Kind.WAYPOINT ? 0xFF000000 | m.color() : WfGui.AETHER);
+                g.fill(sx - lw / 2 - 2, sy + below, sx + lw / 2 + 2, sy + below + 10, 0x90100C0A);
+                g.centeredText(font, label, sx, sy + below + 1, m.kind() == ClientMap.Kind.WAYPOINT ? 0xFF000000 | m.color() : WfGui.AETHER);
             }
         }
         float yaw = player.getViewYRot(a);
-        MapRenderer.arrow(g, screenX(Mth.lerp(a, player.xo, player.getX())), screenY(Mth.lerp(a, player.zo, player.getZ())),
-                (float) Math.toRadians(yaw + 180.0));
+        MapRenderer.arrow(g, screenX(Mth.lerp(a, player.xo, player.getX())),
+                screenY(Mth.lerp(a, player.zo, player.getZ()), Mth.lerp(a, player.yo, player.getY())),
+                (float) Math.toRadians(yaw + 180.0), MapRenderer.worldArrow(zoom));
         g.disableScissor();
         WfGui.sprite(g, FRAME, mx0 - 4, my0 - 4, mx1 - mx0 + 8, my1 - my0 + 8);
-        if (ClientMap.caveActive()) {
-            Component cave = Component.translatable("gui.wayfarers.map.cave_view");
-            int cw = font.width(cave) + 10;
+        Component chip = tilted ? Component.translatable("gui.wayfarers.map.view_3d")
+                : ClientMap.caveActive() ? Component.translatable("gui.wayfarers.map.cave_view") : null;
+        if (chip != null) {
+            int cw = font.width(chip) + 10;
             WfGui.sprite(g, Wayfarers.id("map/plate"), mx0 + 4, my0 + 4, cw, 13);
-            g.text(font, cave, mx0 + 9, my0 + 7, WfGui.AETHER, false);
+            g.text(font, chip, mx0 + 9, my0 + 7, WfGui.AETHER, false);
         }
 
         // tool buttons, top right of the map
@@ -262,9 +331,20 @@ public class WorldMapScreen extends Screen {
             WayfarersClientConfig.CAVE_MAP.set(!WayfarersClientConfig.CAVE_MAP.get());
             WayfarersClientConfig.CAVE_MAP.save();
         }, WayfarersClientConfig.CAVE_MAP.get() ? "gui.wayfarers.map.cave_on" : "gui.wayfarers.map.cave_off");
+        int ty = by + 76;
         if (width >= 360) {
-            toolButton(g, "list", bx, by + 76, mouseX, mouseY, () -> sidebarOpen = !sidebarOpen, "gui.wayfarers.map.sidebar");
+            toolButton(g, "list", bx, ty, mouseX, mouseY, () -> sidebarOpen = !sidebarOpen, "gui.wayfarers.map.sidebar");
+            ty += 19;
         }
+        toolButton(g, "view3d", bx, ty, mouseX, mouseY, () -> set3d(!is3d()),
+                tilted ? "gui.wayfarers.map.view3d_on" : "gui.wayfarers.map.view3d_off");
+        toolButton(g, "options", bx, ty + 19, mouseX, mouseY, () -> {
+            if (optionsOpen) {
+                closeOptions();
+            } else {
+                openOptions();
+            }
+        }, "gui.wayfarers.map.options");
 
         statusBar(g, mouseX, mouseY, scale);
         if (showSidebar()) {
@@ -273,6 +353,13 @@ public class WorldMapScreen extends Screen {
         cardRect = null;
         if (selected != null) {
             card(g, mouseX, mouseY, player);
+        }
+        if (optionsOpen) {
+            // the minimap itself, live, in its corner: every change of the panel shows at once
+            if (WayfarersClientConfig.MINIMAP.get()) {
+                MinimapHud.draw(g, a);
+            }
+            optionsPanel(g);
         }
         super.extractRenderState(g, mouseX, mouseY, a);
         if (menu != null) {
@@ -302,10 +389,11 @@ public class WorldMapScreen extends Screen {
 
     private ClientMap.Marker markerAt(double x, double y) {
         ClientMap.Marker best = null;
-        double bestD = 7 * 7;
+        double reach = Math.max(6.0, MapRenderer.worldMarker(zoom) * 0.75);
+        double bestD = reach * reach;
         for (ClientMap.Marker m : markers) {
             double dx = screenX(m.x()) - x;
-            double dy = screenY(m.z()) - y;
+            double dy = screenY(m.z(), m.y()) - y;
             double d = dx * dx + dy * dy;
             if (d <= bestD) {
                 bestD = d;
@@ -334,7 +422,8 @@ public class WorldMapScreen extends Screen {
     }
 
     private void toolButton(GuiGraphicsExtractor g, String glyph, int x, int y, int mouseX, int mouseY, Runnable action, String tip) {
-        boolean hover = mouseX >= x && mouseX < x + 16 && mouseY >= y && mouseY < y + 16 && menu == null && editor == null;
+        boolean hover = mouseX >= x && mouseX < x + 16 && mouseY >= y && mouseY < y + 16 && menu == null && editor == null
+                && !inOptions(mouseX, mouseY);
         WfGui.sprite(g, WfGui.id(hover ? "button_small_hover" : "button_small"), x, y, 16, 16);
         WfGui.sprite(g, Wayfarers.id("map/glyph/" + glyph), x + 3, y + 3, 10, 10);
         buttons.add(new Btn(x, y, 16, 16, action));
@@ -356,7 +445,7 @@ public class WorldMapScreen extends Screen {
         String left;
         if (inMap(mouseX, mouseY)) {
             int wx = Mth.floor(worldX(mouseX));
-            int wz = Mth.floor(worldZ(mouseY));
+            int wz = Mth.floor(worldZ(mouseX, mouseY));
             MapLayer cave = ClientMap.cave();
             Object[] col = cave != null ? cave.columnAt(wx, wz) : null;
             if (col == null && ClientMap.layer() != null) {
@@ -572,7 +661,7 @@ public class WorldMapScreen extends Screen {
     // ------------------------------------------------------------------ context menu and editor
     private void openMenu(int x, int y) {
         int wx = Mth.floor(worldX(x));
-        int wz = Mth.floor(worldZ(y));
+        int wz = Mth.floor(worldZ(x, y));
         int wy = groundY(wx, wz);
         List<Component> labels = new ArrayList<>();
         List<Runnable> actions = new ArrayList<>();
@@ -685,7 +774,7 @@ public class WorldMapScreen extends Screen {
 
     // ------------------------------------------------------------------ input
     private void zoomAt(int delta, double sx, double sy) {
-        int nz = Mth.clamp(zoom + delta, MIN_ZOOM, MAX_ZOOM);
+        int nz = Mth.clamp(zoom + delta, is3d() ? MIN_ZOOM_3D : MIN_ZOOM, MAX_ZOOM);
         if (nz == zoom) {
             return;
         }
@@ -694,7 +783,7 @@ public class WorldMapScreen extends Screen {
         zoom = nz;
         if (!follow) {
             centerX = wx - (sx - (mx0 + mx1) / 2.0) / scale();
-            centerZ = wz - (sy - (my0 + my1) / 2.0) / scale();
+            centerZ = wz - (sy - (my0 + my1) / 2.0) / depthScale();
         }
     }
 
@@ -729,6 +818,14 @@ public class WorldMapScreen extends Screen {
             menu = null;
             return true;
         }
+        if (optionsOpen && inOptions(x, y)) {
+            if (x >= optX + OPT_W - 15 && y < optY + 15) {
+                closeOptions();
+                return true;
+            }
+            super.mouseClicked(event, doubleClick);
+            return true; // the panel's own background: not a click on the map or the buttons under it
+        }
         if (event.button() == 0) {
             for (Btn b : List.copyOf(buttons)) {
                 if (b.hit(x, y)) {
@@ -747,7 +844,7 @@ public class WorldMapScreen extends Screen {
             }
             if (event.button() == 2) {
                 int wx = Mth.floor(worldX(x));
-                int wz = Mth.floor(worldZ(y));
+                int wz = Mth.floor(worldZ(x, y));
                 ClientMap.ping(wx, groundY(wx, wz), wz);
                 return true;
             }
@@ -769,7 +866,7 @@ public class WorldMapScreen extends Screen {
                     follow = false;
                 }
                 centerX -= dx / scale();
-                centerZ -= dy / scale();
+                centerZ -= dy / depthScale();
             }
             return true;
         }
@@ -792,6 +889,9 @@ public class WorldMapScreen extends Screen {
     public boolean mouseScrolled(double x, double y, double scrollX, double scrollY) {
         if (editor != null) {
             return true;
+        }
+        if (optionsOpen && inOptions(x, y)) {
+            return super.mouseScrolled(x, y, scrollX, scrollY);
         }
         if (showSidebar() && x >= mx1 + 6) {
             listScroll = Math.max(0, listScroll - (int) Math.signum(scrollY));
@@ -821,6 +921,10 @@ public class WorldMapScreen extends Screen {
             menu = null;
             return true;
         }
+        if (optionsOpen && event.isEscape()) {
+            closeOptions();
+            return true;
+        }
         if (WayfarersClient.MAP_KEY.matches(event)) {
             onClose();
             return true;
@@ -843,5 +947,204 @@ public class WorldMapScreen extends Screen {
     @Override
     public boolean isPauseScreen() {
         return false;
+    }
+
+    @Override
+    public void removed() {
+        view3d.close();
+        super.removed();
+    }
+
+    // ------------------------------------------------------------------ 3D view
+    /** Turns the tilted view on or off (saved); it shows full regions only, so it zooms in to half a pixel per block. */
+    public void set3d(boolean on) {
+        WayfarersClientConfig.MAP_3D.set(on);
+        WayfarersClientConfig.MAP_3D.save();
+        if (on && zoom < MIN_ZOOM_3D) {
+            zoom = MIN_ZOOM_3D;
+        }
+        refY = Float.NaN;
+    }
+
+    private void terrain3d(GuiGraphicsExtractor g, LocalPlayer player, float scale) {
+        MapLayer base = ClientMap.layer();
+        if (base == null) {
+            return;
+        }
+        if (zoom < MIN_ZOOM_3D) {
+            zoom = MIN_ZOOM_3D;
+            scale = scale();
+        }
+        // the ground at the centre of the view sets the height drawn level with the centre line
+        Object[] col = base.columnAt(Mth.floor(centerX), Mth.floor(centerZ));
+        float target = col != null ? (Integer) col[0] : (float) player.getY();
+        refY = Float.isNaN(refY) ? target : refY + (target - refY) * 0.15F;
+        int[] r = MapView3D.regions(centerX, centerZ, scale, mx1 - mx0, my1 - my0, ref());
+        for (int rz = r[1]; rz <= r[3]; rz++) {
+            for (int rx = r[0]; rx <= r[2]; rx++) {
+                ClientMap.want(rx, rz, true);
+                MapTile t = base.peek(rx, rz);
+                if (t != null && t.full != null) {
+                    base.texture(t); // builds or refreshes it (throttled): the view reads its shaded pixels
+                }
+            }
+        }
+        view3d.draw(g, base, centerX, centerZ, scale, mx0, my0, mx1 - mx0, my1 - my0, ref());
+    }
+
+    // ------------------------------------------------------------------ options panel
+    private boolean inOptions(double x, double y) {
+        return optionsOpen && x >= optX && x < optX + OPT_W && y >= optY && y < optY + OPT_H;
+    }
+
+    /** Opens the options panel (the gear button; also the CI client test). */
+    public void openOptions() {
+        menu = null;
+        optionsOpen = true;
+        buildOptions();
+    }
+
+    private void closeOptions() {
+        optionsOpen = false;
+        for (AbstractWidget w : optionWidgets) {
+            removeWidget(w);
+        }
+        optionWidgets.clear();
+        sizeSlider = null;
+    }
+
+    private int optRow(int i) {
+        return optY + OPT_HEAD + i * OPT_ROW + (i >= 8 ? OPT_SECTION : 0);
+    }
+
+    private <T extends AbstractWidget> T option(T w) {
+        optionWidgets.add(addRenderableWidget(w));
+        return w;
+    }
+
+    private static int sizeStep() {
+        return (WayfarersClientConfig.minimapPixels() - WayfarersClientConfig.MINIMAP_MIN + WayfarersClientConfig.MINIMAP_STEP / 2)
+                / WayfarersClientConfig.MINIMAP_STEP;
+    }
+
+    private static void flip(net.minecraftforge.common.ForgeConfigSpec.BooleanValue v) {
+        v.set(!v.get());
+        v.save();
+    }
+
+    /**
+     * The panel's controls, on the side away from the minimap so the live minimap stays in view: shown, exact size
+     * (slider, 4 px steps), presets, corner, shape, rotation, coordinates, opacity; then the relief and the contours.
+     */
+    private void buildOptions() {
+        for (AbstractWidget w : optionWidgets) {
+            removeWidget(w);
+        }
+        optionWidgets.clear();
+        WayfarersClientConfig.Corner corner = WayfarersClientConfig.MINIMAP_CORNER.get();
+        boolean minimapLeft = corner == WayfarersClientConfig.Corner.TOP_LEFT || corner == WayfarersClientConfig.Corner.BOTTOM_LEFT;
+        optX = minimapLeft ? width - OPT_W - 6 : 6;
+        optY = Math.max(2, (height - OPT_H) / 2);
+        int cx = optX + OPT_LABEL;
+        int cw = OPT_W - OPT_LABEL - 7;
+        option(new WfWidgets.Toggle(cx, optRow(0) + 1, Component.translatable(S + "minimap"), Component.translatable(S + "minimap.tip"),
+                WayfarersClientConfig.MINIMAP::get, () -> flip(WayfarersClientConfig.MINIMAP)));
+        // exact size: 48 .. 160 px in steps of 4, ticks under the presets
+        int min = WayfarersClientConfig.MINIMAP_MIN;
+        int stepPx = WayfarersClientConfig.MINIMAP_STEP;
+        WayfarersClientConfig.MinimapSize[] presets = WayfarersClientConfig.MinimapSize.values();
+        int[] marks = new int[presets.length];
+        for (int i = 0; i < presets.length; i++) {
+            marks[i] = (presets[i].outer - min) / stepPx;
+        }
+        sizeSlider = option(new WfWidgets.Stepper(cx, optRow(1) - 1, cw - 32, (WayfarersClientConfig.MINIMAP_MAX - min) / stepPx + 1,
+                sizeStep(), st -> Component.literal((min + st * stepPx) + " px"), Component.translatable(O + "size.tip"),
+                st -> WayfarersClientConfig.setMinimapPixels(min + st * stepPx)).marks(marks));
+        int bw = (cw - (presets.length - 1) * 2) / presets.length;
+        for (int i = 0; i < presets.length; i++) {
+            WayfarersClientConfig.MinimapSize p = presets[i];
+            option(new WfWidgets.Choice(cx + i * (bw + 2), optRow(2), bw, 14, Component.literal(String.valueOf(p.outer)),
+                    Component.translatable(S + "minimap_size.tip.choice", MinimapHud.sizeName(p), p.outer),
+                    () -> MinimapHud.isSize(p), () -> MinimapHud.setSize(p)));
+        }
+        int x = cx;
+        for (WayfarersClientConfig.Corner c : WayfarersClientConfig.Corner.values()) {
+            String key = c.name().toLowerCase(Locale.ROOT);
+            Component text = Component.translatable(S + "minimap_corner." + key);
+            option(new WfWidgets.Choice(x, optRow(3), 22, 14, text, text, () -> WayfarersClientConfig.MINIMAP_CORNER.get() == c, () -> {
+                WayfarersClientConfig.MINIMAP_CORNER.set(c);
+                WayfarersClientConfig.MINIMAP_CORNER.save();
+                buildOptions(); // the panel moves away from the minimap
+            }).iconOnly(WfGui.id("glyph/corner_" + key)));
+            x += 24;
+        }
+        WayfarersClientConfig.MinimapShape[] shapes = WayfarersClientConfig.MinimapShape.values();
+        int sw = (cw - 2) / shapes.length;
+        for (int i = 0; i < shapes.length; i++) {
+            WayfarersClientConfig.MinimapShape shape = shapes[i];
+            String key = shape.name().toLowerCase(Locale.ROOT);
+            option(new WfWidgets.Choice(cx + i * (sw + 2), optRow(4), sw, 14, Component.translatable(S + "minimap_shape." + key),
+                    Component.translatable(S + "minimap_shape." + key + ".tip"), () -> WayfarersClientConfig.MINIMAP_SHAPE.get() == shape, () -> {
+                        WayfarersClientConfig.MINIMAP_SHAPE.set(shape);
+                        WayfarersClientConfig.MINIMAP_SHAPE.save();
+                    }));
+        }
+        option(new WfWidgets.Toggle(cx, optRow(5) + 1, Component.translatable(S + "minimap_rotate"), Component.translatable(S + "minimap_rotate.tip"),
+                WayfarersClientConfig.MINIMAP_ROTATE::get, () -> flip(WayfarersClientConfig.MINIMAP_ROTATE)));
+        option(new WfWidgets.Toggle(cx, optRow(6) + 1, Component.translatable(S + "minimap_coords"), Component.translatable(S + "minimap_coords.tip"),
+                WayfarersClientConfig.MINIMAP_COORDS::get, () -> flip(WayfarersClientConfig.MINIMAP_COORDS)));
+        int opacity = (Math.max(30, Math.min(100, WayfarersClientConfig.MINIMAP_OPACITY.get())) - 30) / 10;
+        option(new WfWidgets.Stepper(cx, optRow(7) - 1, cw - 32, 8, opacity, st -> Component.literal((30 + st * 10) + " %"),
+                Component.translatable(S + "minimap_opacity.tip"), st -> {
+                    WayfarersClientConfig.MINIMAP_OPACITY.set(30 + st * 10);
+                    WayfarersClientConfig.MINIMAP_OPACITY.save();
+                }));
+        // the maps' relief (both maps; the textures are shaded again at once)
+        WayfarersClientConfig.MapRelief[] reliefs = WayfarersClientConfig.MapRelief.values();
+        int rw = (cw - (reliefs.length - 1) * 2) / reliefs.length;
+        for (int i = 0; i < reliefs.length; i++) {
+            WayfarersClientConfig.MapRelief rel = reliefs[i];
+            String key = rel.name().toLowerCase(Locale.ROOT);
+            option(new WfWidgets.Choice(cx + i * (rw + 2), optRow(8), rw, 14, Component.translatable(O + "relief." + key),
+                    Component.translatable(O + "relief." + key + ".tip"), () -> WayfarersClientConfig.MAP_RELIEF.get() == rel, () -> {
+                        WayfarersClientConfig.MAP_RELIEF.set(rel);
+                        WayfarersClientConfig.MAP_RELIEF.save();
+                    }));
+        }
+        option(new WfWidgets.Toggle(cx, optRow(9) + 1, Component.translatable(O + "contours"), Component.translatable(O + "contours.tip"),
+                WayfarersClientConfig.MAP_CONTOURS::get, () -> flip(WayfarersClientConfig.MAP_CONTOURS)));
+    }
+
+    /** The panel's plate and labels (its widgets are drawn with the screen's). */
+    private void optionsPanel(GuiGraphicsExtractor g) {
+        if (sizeSlider != null) {
+            sizeSlider.sync(sizeStep()); // a preset or Shift + H moved it
+        }
+        WfGui.sprite(g, WfGui.PANEL, optX, optY, OPT_W, OPT_H);
+        WfGui.centered(g, font, WfGui.bold(Component.translatable(O + "title")), optX + OPT_W / 2, optY + 7, WfGui.INK);
+        String[] labels = {S + "minimap", S + "minimap_size", O + "presets", S + "minimap_corner", S + "minimap_shape",
+                S + "minimap_rotate", S + "minimap_coords", S + "minimap_opacity", O + "relief", O + "contours"};
+        for (int i = 0; i < labels.length; i++) {
+            WfGui.textClipped(g, font, Component.translatable(labels[i]).getString(), optX + 8, optRow(i) + 4, OPT_LABEL - 10, WfGui.INK, false);
+        }
+        int cx = optX + OPT_LABEL;
+        int cw = OPT_W - OPT_LABEL - 7;
+        g.text(font, WayfarersClientConfig.minimapPixels() + " px", cx + cw - 29, optRow(1) + 4, WfGui.INK_SOFT, false);
+        g.text(font, WayfarersClientConfig.MINIMAP_OPACITY.get() + " %", cx + cw - 29, optRow(7) + 4, WfGui.INK_SOFT, false);
+        for (int i : new int[] {0, 5, 6, 9}) {
+            boolean on = switch (i) {
+                case 0 -> WayfarersClientConfig.MINIMAP.get();
+                case 5 -> WayfarersClientConfig.MINIMAP_ROTATE.get();
+                case 6 -> WayfarersClientConfig.MINIMAP_COORDS.get();
+                default -> WayfarersClientConfig.MAP_CONTOURS.get();
+            };
+            g.text(font, Component.translatable("gui.wayfarers.machine." + (on ? "on" : "off")), cx + 30, optRow(i) + 4, WfGui.INK_SOFT, false);
+        }
+        // the maps' section, under a thin brass rule
+        int sy = optRow(8) - OPT_SECTION;
+        g.fill(optX + 8, sy + 3, optX + OPT_W - 8, sy + 4, 0xFF7C5A2B);
+        WfGui.centered(g, font, WfGui.bold(Component.translatable(O + "relief_title")), optX + OPT_W / 2, sy + 5, WfGui.INK);
+        // close (handled in mouseClicked: the panel covers the other buttons)
+        g.text(font, "x", optX + OPT_W - 11, optY + 4, WfGui.INK_SOFT, false);
     }
 }

@@ -42,6 +42,8 @@ public class SettingsScreen extends Screen {
     private final List<Row> rows = new ArrayList<>();
     private int left;
     private int top;
+    /** X of the minimap's size in pixels after its presets (-1: no room). */
+    private int sizeTextX = -1;
 
     private record Row(Component name, Component tip, @Nullable BooleanSupplier on) {}
 
@@ -114,9 +116,11 @@ public class SettingsScreen extends Screen {
             Component text = MinimapHud.sizeName(size);
             int w = Math.max(18, font.width(text) + 10);
             addRenderableWidget(new WfWidgets.Choice(x, rowY(1), w, 18, text, Component.translatable(K + "minimap_size.tip.choice", text, size.outer),
-                    () -> WayfarersClientConfig.MINIMAP_SIZE.get() == size, () -> MinimapHud.setSize(size)));
+                    () -> MinimapHud.isSize(size), () -> MinimapHud.setSize(size)));
             x += w + 2;
         }
+        // the exact size (any from the world map's slider) beside the presets, when there is room for it
+        sizeTextX = x + 2 + font.width("160 px") <= left + W - 8 ? x + 2 : -1;
         // corner: four small buttons, each showing a screen with its corner lit
         row("minimap_corner", null);
         x = left + CX;
@@ -185,6 +189,9 @@ public class SettingsScreen extends Screen {
         if (tab == 1) {
             // the slider's own label is only read by the narrator: the value goes beside it
             g.text(font, WayfarersClientConfig.MINIMAP_OPACITY.get() + " %", left + CX + 118, rowY(6) + 5, WfGui.INK_SOFT, false);
+            if (sizeTextX >= 0) {
+                g.text(font, WayfarersClientConfig.minimapPixels() + " px", sizeTextX, rowY(1) + 5, WfGui.INK_SOFT, false);
+            }
             Component hint = Component.translatable(K + "minimap.keys", WayfarersClient.MINIMAP_KEY.getTranslatedKeyMessage(),
                     WayfarersClient.MINIMAP_ZOOM_KEY.getTranslatedKeyMessage());
             WfGui.centered(g, font, hint, left + W / 2, rowY(ROWS) + 2, WfGui.INK_SOFT);

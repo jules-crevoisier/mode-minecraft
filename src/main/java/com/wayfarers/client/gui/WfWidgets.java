@@ -192,6 +192,7 @@ public final class WfWidgets {
         private final IntFunction<Component> label;
         private int step;
         private boolean held;
+        private int[] marks;
 
         public Stepper(int x, int y, int w, int steps, int initial, IntFunction<Component> label, Component tip, IntConsumer onStep) {
             super(x, y, w, 18, label.apply(initial), steps <= 1 ? 0 : initial / (double) (steps - 1));
@@ -204,6 +205,21 @@ public final class WfWidgets {
 
         public int step() {
             return step;
+        }
+
+        /** Draws a tick only under these steps (sliders with many steps: the presets), instead of one per step. */
+        public Stepper marks(int... steps) {
+            this.marks = steps;
+            return this;
+        }
+
+        private boolean marked(int i) {
+            for (int m : marks) {
+                if (m == i) {
+                    return true;
+                }
+            }
+            return false;
         }
 
         /** The server's value, unless the player is dragging the knob right now. */
@@ -261,6 +277,9 @@ public final class WfWidgets {
             int w = getWidth();
             WfGui.sprite(g, WfGui.id("slider_track"), x, y + 6, w, 6);
             for (int i = 0; i < steps; i++) {
+                if (marks != null && i != step && !marked(i)) {
+                    continue;
+                }
                 int tx = x + 4 + Math.round(i * (w - 8) / (float) Math.max(1, steps - 1));
                 g.fill(tx, y + 14, tx + 1, y + 16, i == step ? 0xFFF6C343 : 0xFF7C5A2B);
             }

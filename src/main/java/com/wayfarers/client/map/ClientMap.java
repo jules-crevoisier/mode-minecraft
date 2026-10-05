@@ -121,6 +121,16 @@ public final class ClientMap {
         return caveActive;
     }
 
+    /** The relief settings changed: every map is shaded again. */
+    static void restyle() {
+        for (MapLayer l : LAYERS.values()) {
+            l.restyle();
+        }
+        if (cave != null) {
+            cave.restyle();
+        }
+    }
+
     /** Asks for a region the renderer wants to draw ({@code full}: at full resolution, else its thumbnail). */
     static void want(int rx, int rz, boolean full) {
         (full ? WANT_FULL : WANT_MINI).add(RegionData.key(rx, rz));
