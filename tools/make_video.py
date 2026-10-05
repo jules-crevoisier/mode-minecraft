@@ -4,9 +4,8 @@
     python3 tools/make_video.py --fetch     # CI screenshots, biome renders and showcase clips of the previews release
     python3 tools/make_video.py             # build/video/brasshaven-guide.mp4 (+ -discord.mp4, .jpg)
 
-The "Guide de démarrage" (about 3 minutes): installing (Minecraft 26.2, Forge 65.1.0, the CurseForge modpack, the jar
-in mods/, the server pack), first steps (the Manual, the keys, the quest journal, the minimap), then the world, quests
-and travel, machines and fights, playing together (every multiplayer screen), and where to download.
+The "Guide de démarrage" (about 3 minutes): first steps (the Manual, the keys, the quest journal, the minimap), then the
+world, quests and travel, machines and fights, playing together (every multiplayer screen), and where to download.
 brasshaven-guide.mp4 is the 1920x1080 master; brasshaven-guide-discord.mp4 is the same at 1280x720 in two-pass H.264,
 sized to stay under Discord's 20 MB upload limit (DISCORD_MB).
 
@@ -383,22 +382,6 @@ def card_title(img, t, title, sub=None):
                fill=K.BRASS_DARK + (255,), width=3)
 
 
-def badge(label, colour=K.BRASS):
-    key = ("badge", label, colour)
-    if key not in _TAGS:
-        f = K.font(K.SERIF_BOLD, 40 if len(label) <= 6 else 30)
-        img = Image.new("RGBA", (150, 150), (0, 0, 0, 0))
-        d = ImageDraw.Draw(img)
-        d.ellipse([6, 10, 144, 148], fill=(60, 40, 16, 255))
-        d.ellipse([6, 4, 144, 142], fill=K.BRASS_DARK + (255,))
-        d.ellipse([16, 14, 134, 132], fill=colour + (255,))
-        d.ellipse([24, 20, 126, 80], fill=tuple(min(255, c + 25) for c in colour) + (255,))
-        tw = f.getlength(label)
-        d.text(((150 - tw) / 2, 73 - f.size * 0.62), label, font=f, fill=K.INK + (255,))
-        _TAGS[key] = img
-    return _TAGS[key]
-
-
 def render_card(seg, t):
     img = K.backdrop(t)
     kind = seg["kind"]
@@ -407,46 +390,6 @@ def render_card(seg, t):
     if kind == "outro":
         return outro_frame(img, seg, t)
     card_title(img, t, seg["title"], seg.get("sub"))
-    if kind == "list":
-        if seg.get("art"):
-            art = K.cutout(seg["art"], 560)
-            a = K.ease_out((t - 0.3) / 0.8)
-            glow_layer(img, 0.78, 0.6, 0.3)
-            K.paste(img, art, 1500 - art.width / 2, 300 + (1 - a) * 40 + math.sin(t * 1.2) * 6, a)
-        y = 330
-        for i, (b, text, note) in enumerate(seg["rows"]):
-            t0 = 0.5 + i * seg.get("stagger", 0.55)
-            u = K.ease_out((t - t0) / 0.45)
-            if u <= 0:
-                y += 165
-                continue
-            bx = 150 - (1 - u) * 80
-            K.paste(img, badge(b), bx, y - 8, u)
-            s = K.text_sprite(text, K.SANS_BOLD, 46, fill=K.CREAM, width=1300)
-            K.paste(img, s, bx + 175, y + 4, u)
-            if note:
-                n = K.text_sprite(note, K.SANS, 32, fill=K.PARCHMENT, width=1300)
-                K.paste(img, n, bx + 177, y + 4 + s.height - 30, u)
-            y += 165
-        return img
-    if kind == "steps":
-        illu_right = seg.get("illustration")
-        width = 760 if illu_right else 1560
-        y = 300
-        for i, text in enumerate(seg["steps"]):
-            t0 = 0.6 + i * seg.get("stagger", 0.9)
-            u = K.ease_out((t - t0) / 0.45)
-            s = K.text_sprite(text, K.SANS, 39, fill=K.CREAM, width=width)
-            if u > 0:
-                bx = 150 - (1 - u) * 80
-                n = badge(str(i + 1))
-                small = n.resize((96, 96), Image.LANCZOS)
-                K.paste(img, small, bx, y - 4, u)
-                K.paste(img, s, bx + 125, y - 2, u)
-            y += max(112, s.height + 22)
-        if illu_right:
-            ILLUSTRATIONS[illu_right](img, t, seg)
-        return img
     if kind == "keys":
         keys = seg["keys"]
         cols = 7
@@ -520,99 +463,6 @@ def outro_frame(img, seg, t):
             f2 = f.resize((int(f.width * s), int(f.height * s)), Image.BICUBIC)
             K.paste(img, f2, 90 + (f.width - f2.width) / 2, 760 + (f.height - f2.height) / 2, a)
     return img
-
-
-# ---- illustrations of the install steps (generic, no third-party app drawn)
-
-def _window(w, h, title):
-    img = Image.new("RGBA", (w, h), (0, 0, 0, 0))
-    d = ImageDraw.Draw(img)
-    d.rounded_rectangle([0, 6, w - 1, h - 1], 14, fill=(0, 0, 0, 110))
-    d.rounded_rectangle([0, 0, w - 6, h - 8], 14, fill=(33, 28, 24, 255), outline=K.BRASS_DARK + (255,), width=3)
-    d.rounded_rectangle([0, 0, w - 6, 52], 14, fill=(58, 44, 30, 255))
-    d.rectangle([0, 30, w - 6, 52], fill=(58, 44, 30, 255))
-    for i, c in enumerate(((200, 90, 60), (220, 180, 80), (110, 170, 90))):
-        d.ellipse([20 + i * 28, 17, 38 + i * 28, 35], fill=c + (255,))
-    f = K.font(K.SANS_BOLD, 24)
-    d.text((120, 13), title, font=f, fill=K.CREAM + (255,))
-    return img
-
-
-def _file_icon(label, colour, ext):
-    img = Image.new("RGBA", (150, 190), (0, 0, 0, 0))
-    d = ImageDraw.Draw(img)
-    d.polygon([(10, 4), (100, 4), (140, 44), (140, 172), (10, 172)], fill=(235, 226, 205, 255), outline=(90, 70, 40, 255))
-    d.polygon([(100, 4), (100, 44), (140, 44)], fill=(200, 188, 160, 255), outline=(90, 70, 40, 255))
-    d.rounded_rectangle([18, 96, 132, 140], 8, fill=colour + (255,))
-    f = K.font(K.SANS_BOLD, 28)
-    d.text((75 - f.getlength(ext) / 2, 101), ext, font=f, fill=(255, 250, 235, 255))
-    return img
-
-
-def illu_mods_folder(img, t, seg):
-    win = _window(640, 460, ".minecraft / mods")
-    d = ImageDraw.Draw(win)
-    f = K.font(K.SANS, 26)
-    for i, name in enumerate(("config", "mods", "saves", "options.txt")):
-        y = 80 + i * 44
-        d.text((40, y), ("▸ " if i < 3 else "  ") + name, font=f, fill=(200, 188, 160, 255) if i != 1 else K.BRASS + (255,))
-    x0, y0 = 1200, 330
-    a = K.ease_out((t - 0.4) / 0.5)
-    K.paste(img, win, x0, y0, a)
-    # the jar slides into the window on the third step
-    tj = 0.6 + 2 * seg.get("stagger", 0.9)
-    u = K.ease_out((t - tj) / 0.9)
-    icon = _file_icon("jar", (176, 96, 40), ".jar")
-    if t >= tj - 0.3:
-        x = K.lerp(x0 + 520, x0 + 360, u)
-        y = K.lerp(y0 - 260, y0 + 220, u)
-        K.paste(img, icon, x, y, K.clamp((t - tj + 0.3) / 0.3))
-        lab = K.text_sprite("brasshaven-<version>.jar", K.MONO_BOLD, 22, fill=K.CREAM, shadow=True)
-        K.paste(img, lab, x + 75 - lab.width / 2, y + 180, K.clamp((t - tj) / 0.3))
-
-
-def illu_modpack(img, t, seg):
-    a = K.ease_out((t - 0.5) / 0.5)
-    zip_icon = _file_icon("zip", (90, 120, 150), ".zip")
-    K.paste(img, zip_icon, 1160, 400, a)
-    lab = K.text_sprite("brasshaven-modpack-<version>.zip", K.MONO_BOLD, 19, fill=K.CREAM)
-    K.paste(img, lab, 1255 - lab.width / 2, 590, a)
-    u = K.ease_out((t - 1.6) / 0.8)
-    d = ImageDraw.Draw(img)
-    if u > 0:
-        x1 = 1330 + 100 * u
-        d.line([(1330, 495), (x1, 495)], fill=K.BRASS + (255,), width=8)
-        if u > 0.95:
-            d.polygon([(x1, 475), (x1 + 30, 495), (x1, 515)], fill=K.BRASS + (255,))
-    card = _window(330, 300, "Profil")
-    dc = ImageDraw.Draw(card)
-    f = K.font(K.SANS_BOLD, 30)
-    f2 = K.font(K.SANS, 26)
-    dc.text((28, 80), "Minecraft 26.2", font=f, fill=K.CREAM + (255,))
-    dc.text((28, 124), "Forge 65.1.0", font=f, fill=K.CREAM + (255,))
-    dc.text((28, 176), "+ Brasshaven", font=f2, fill=K.BRASS + (255,))
-    dc.text((28, 214), "+ réglages conseillés", font=f2, fill=K.PARCHMENT + (255,))
-    K.paste(img, card, 1490, 345, K.ease_out((t - 2.4) / 0.6))
-
-
-def illu_server(img, t, seg):
-    win = _window(700, 470, "serveur")
-    # the prompts of serverpack/start.sh
-    lines = ["$ unzip brasshaven-server-<version>.zip", "$ java -version", '  openjdk version "25"', "$ ./start.sh",
-             "== Installation de Forge 26.2-65.1.0", "Acceptes-tu le CLUF de Minecraft ? [o/y/N] o", 'Done! For help, type "help"']
-    f = K.font(K.MONO_BOLD, 22)
-    d = ImageDraw.Draw(win)
-    shown = (t - 0.8) / 0.55
-    for i, l in enumerate(lines):
-        if shown <= i:
-            break
-        part = l if shown >= i + 1 else l[: int(len(l) * (shown - i))]
-        colour = K.BRASS if l.startswith("$") else K.CREAM
-        d.text((30, 80 + i * 50), part, font=f, fill=colour + (255,))
-    K.paste(img, win, 1170, 340, K.ease_out((t - 0.4) / 0.5))
-
-
-ILLUSTRATIONS = {"mods": illu_mods_folder, "modpack": illu_modpack, "server": illu_server}
 
 
 def bosses_frame(t, dur, names):
@@ -766,35 +616,9 @@ def guide_segments():
                    ("Le mod d'exploration coop pour Minecraft 26.2 · Forge 65.1.0", 34, K.PARCHMENT)],
          "lines_at": 1.2})
 
-    # ---- 1. Installer
-    ch = "1 · Installer"
-    add({"kind": "chapter", "dur": 2.5, "number": "1", "title": "Installer", "sub": "Ce qu'il te faut, et comment l'installer",
-         "hit": True})
-    add({"kind": "list", "dur": 6.875, "chapter": ch, "title": "Ce qu'il te faut", "stagger": 0.55, "art": "sky_harbour",
-         "rows": [("26.2", "Minecraft Java Edition 26.2", None),
-                  ("65.1.0", "Forge 65.1.0", "l'installeur forge-26.2-65.1.0"),
-                  ("25", "Java 25", "obligatoire pour un serveur"),
-                  (".jar", "Le mod : brasshaven-<version>.jar", "un seul fichier, aucune autre bibliothèque")]})
-    add({"kind": "steps", "dur": 7.5, "chapter": ch, "title": "Le plus simple : l'app CurseForge", "illustration": "modpack",
-         "stagger": 1.0,
-         "steps": ["Télécharge brasshaven-modpack-<version>.zip (Releases GitHub).",
-                   "Dans CurseForge : Create Custom Profile, puis Import, et choisis le zip.",
-                   "Profil Minecraft 26.2 + Forge 65.1.0 prêt, mod et réglages compris."]})
-    add({"kind": "steps", "dur": 8.75, "chapter": ch, "title": "À la main, avec le launcher", "illustration": "mods",
-         "stagger": 0.9,
-         "steps": ["Lance forge-26.2-65.1.0-installer.jar : « Install client ».",
-                   "Ouvre le dossier mods de ton jeu (.minecraft/mods).",
-                   "Dépose brasshaven-<version>.jar dedans : un seul jar du mod.",
-                   "Lance le profil Forge dans le launcher."]})
-    add({"kind": "steps", "dur": 9.375, "chapter": ch, "title": "Pour un serveur", "illustration": "server", "stagger": 0.9,
-         "steps": ["Décompresse brasshaven-server-<version>.zip dans un dossier vide.",
-                   "Installe Java 25, lance ./start.sh (ou start.bat) et accepte le CLUF.",
-                   "Même version du mod sur le serveur et chez chaque joueur.",
-                   "Crée un nouveau monde : les structures n'apparaissent que là où rien n'a été généré."]})
-
-    # ---- 2. Premiers pas
-    ch = "2 · Premiers pas"
-    add({"kind": "chapter", "dur": 2.5, "number": "2", "title": "Premiers pas", "sub": "Le manuel, les touches, ta première quête",
+    # ---- 1. Premiers pas
+    ch = "1 · Premiers pas"
+    add({"kind": "chapter", "dur": 2.5, "number": "1", "title": "Premiers pas", "sub": "Le manuel, les touches, ta première quête",
          "hit": True})
     add({"kind": "scene", "dur": 8.75, "chapter": ch,
          "parts": [(8.75, first(clip("manual", 8.75, gui=True),
@@ -824,9 +648,9 @@ def guide_segments():
          "captions": [(0.3, 6.1, "La mini-carte : terrain, coordonnées, biome, repères. H la masque, Maj + H change sa taille.",
                        "Mini-carte")]})
 
-    # ---- 3. Explorer
-    ch = "3 · Explorer"
-    add({"kind": "chapter", "dur": 2.5, "number": "3", "title": "Explorer", "sub": "Des merveilles faites à la main", "hit": True})
+    # ---- 2. Explorer
+    ch = "2 · Explorer"
+    add({"kind": "chapter", "dur": 2.5, "number": "2", "title": "Explorer", "sub": "Des merveilles faites à la main", "hit": True})
     add({"kind": "scene", "dur": 6.875, "chapter": ch,
          "parts": [(6.875, first(clip("citadel", 6.875, 5.0), diorama("clockwork_citadel", zoom=(0.98, 1.08), drift=(-20, 20))))],
          "plate": ("Citadelle d'horlogerie",),
@@ -845,9 +669,9 @@ def guide_segments():
                     ("Hautes terres volcaniques", "falaises ocre, magma, évents fumants"),
                     ("Dunes pâles", "sable pâle strié d'or, cheminées de fée")]})
 
-    # ---- 4. Quêtes et voyages
-    ch = "4 · Quêtes et voyages"
-    add({"kind": "chapter", "dur": 2.5, "number": "4", "title": "Quêtes et voyages", "sub": "Contrats, carte, pierres de voyage, talents",
+    # ---- 3. Quêtes et voyages
+    ch = "3 · Quêtes et voyages"
+    add({"kind": "chapter", "dur": 2.5, "number": "3", "title": "Quêtes et voyages", "sub": "Contrats, carte, pierres de voyage, talents",
          "hit": True})
     add({"kind": "scene", "dur": 6.875, "chapter": ch,
          "parts": [(6.875, first(clip("npc_contract", 6.875),
@@ -880,9 +704,9 @@ def guide_segments():
          "captions": [(0.3, 4.5, "Touche K : 36 talents en 4 branches. V lance ta capacité active.", "Talents"),
                       (4.7, 8.0, "Et 7 bâtons de sort, qui consomment du mana.", "Magie")]})
 
-    # ---- 5. Machines et combats
-    ch = "5 · Machines et combats"
-    add({"kind": "chapter", "dur": 2.5, "number": "5", "title": "Machines et combats", "sub": "Fermes, stockage, créatures et boss",
+    # ---- 4. Machines et combats
+    ch = "4 · Machines et combats"
+    add({"kind": "chapter", "dur": 2.5, "number": "4", "title": "Machines et combats", "sub": "Fermes, stockage, créatures et boss",
          "hit": True})
     add({"kind": "scene", "dur": 7.5, "chapter": ch,
          "parts": [(4.4, first(clip("machines", 4.4, 2.0),
@@ -908,9 +732,9 @@ def guide_segments():
          "captions": [(0.3, 3.3, "Automates et créatures, avec leur barre de vie.", "Créatures"),
                       (3.5, 9.25, "20 boss façon Elden Ring. À leur mort : « ENNEMI ABATTU » et un Souvenir.", "Boss")]})
 
-    # ---- 6. Entre amis: every multiplayer screen gets its own scene
-    ch = "6 · Entre amis"
-    add({"kind": "chapter", "dur": 2.5, "number": "6", "title": "Entre amis", "sub": "Le multijoueur de Brasshaven", "hit": True})
+    # ---- 5. Entre amis: every multiplayer screen gets its own scene
+    ch = "5 · Entre amis"
+    add({"kind": "chapter", "dur": 2.5, "number": "5", "title": "Entre amis", "sub": "Le multijoueur de Brasshaven", "hit": True})
     add({"kind": "scene", "dur": 10.0, "chapter": ch,
          "parts": [(10.0, first(clip("company", 10.0, gui=True), still("company", (1.0, 1.04, (0.5, 0.5), (0.5, 0.5)),
                                                                       ([(0.3, 900, 500), (2.0, 764, 222), (5.0, 640, 420)],
@@ -1142,11 +966,11 @@ def discord(src, out):
 
 
 def guide_sections(segments, starts, total):
-    """Music levels: calm under the install chapter, full under the gameplay."""
+    """Music levels: calm under the title and the outro, full under the gameplay."""
     sec = []
     for s, t0 in zip(segments, starts):
         ch = s.get("chapter") or ""
-        lvl = 1 if ch.startswith("1") or s["kind"] in ("hero",) else 2
+        lvl = 1 if s["kind"] in ("hero",) else 2
         if s["kind"] == "outro":
             lvl = 1
         sec.append((t0, t0 + s["dur"], lvl))
