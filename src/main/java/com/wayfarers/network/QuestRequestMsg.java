@@ -13,7 +13,7 @@ public record QuestRequestMsg(boolean open) {
 
     static void handle(QuestRequestMsg msg, CustomPayloadEvent.Context ctx) {
         ServerPlayer player = ctx.getSender();
-        if (player != null) {
+        if (player != null && !player.hasDisconnected() && com.wayfarers.util.ServerGuard.allow(player, "quest_request", 4, 2.0)) {
             WayfarersNet.toPlayer(player, QuestBook.snapshot(player, msg.open));
         }
     }

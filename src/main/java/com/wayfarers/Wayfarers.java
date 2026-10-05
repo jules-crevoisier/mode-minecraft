@@ -77,6 +77,7 @@ public final class Wayfarers {
         com.wayfarers.util.StructureLocator.register();
         com.wayfarers.world.SiteFit.register();
         com.wayfarers.block.MachineBlockEntity.registerEvents();
+        com.wayfarers.util.ServerGuard.register();
         SpawnPlacementRegisterEvent.BUS.addListener(ModEntities::registerSpawnPlacements);
         context.registerConfig(ModConfig.Type.COMMON, WayfarersConfig.SPEC);
         context.registerConfig(ModConfig.Type.CLIENT, com.wayfarers.config.WayfarersClientConfig.SPEC);

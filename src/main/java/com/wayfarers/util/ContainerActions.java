@@ -68,11 +68,15 @@ public final class ContainerActions {
                 }
             }
             case QUICK_STACK_NEARBY -> {
+                int range = com.wayfarers.config.WayfarersConfig.QUICK_STACK_RANGE.get();
+                if (range <= 0) {
+                    return;
+                }
                 ServerLevel level = player.level();
                 List<Container> chests = new ArrayList<>();
-                for (Container c : GuildTerminalBlock.nearbyStorage(level, player.blockPosition(), NEARBY_RANGE + 1)) {
+                for (Container c : GuildTerminalBlock.nearbyStorage(level, player.blockPosition(), range + 1)) {
                     if (c instanceof net.minecraft.world.level.block.entity.BlockEntity be
-                            && be.getBlockPos().closerToCenterThan(player.position(), NEARBY_RANGE + 1)) {
+                            && be.getBlockPos().closerToCenterThan(player.position(), range + 1)) {
                         chests.add(c);
                     }
                 }
@@ -111,6 +115,15 @@ public final class ContainerActions {
             }
         }
         List<ItemStack> sorted = InventoryUtil.compactAndSort(stacks);
+        // never lose an item: every sorted stack must have a slot that takes a stack that big
+        if (sorted.size() > slots.size()) {
+            return;
+        }
+        for (int i = 0; i < sorted.size(); i++) {
+            if (slots.get(i).getMaxStackSize(sorted.get(i)) < sorted.get(i).getCount()) {
+                return;
+            }
+        }
         for (int i = 0; i < slots.size(); i++) {
             slots.get(i).set(i < sorted.size() ? sorted.get(i) : ItemStack.EMPTY);
         }

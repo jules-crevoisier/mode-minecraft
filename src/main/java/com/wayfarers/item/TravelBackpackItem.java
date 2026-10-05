@@ -31,6 +31,16 @@ public class TravelBackpackItem extends TooltipItem {
         this.rows = rows;
     }
 
+    /**
+     * A backpack never goes into a shulker box or a bundle. Backpacks may hold shulker boxes, so without this a
+     * backpack of shulker boxes of backpacks... nests without end: a single item could grow past what a packet or a
+     * chunk can carry (an "NBT bomb" that kicks players or corrupts the chunk it lies in).
+     */
+    @Override
+    public boolean canFitInsideContainerItems() {
+        return false;
+    }
+
     @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack backpack = player.getItemInHand(hand);
@@ -65,7 +75,7 @@ public class TravelBackpackItem extends TooltipItem {
 
         @Override
         public boolean canPlaceItem(int slot, ItemStack stack) {
-            return !(stack.getItem() instanceof TravelBackpackItem);
+            return !(stack.getItem() instanceof TravelBackpackItem) && !containsBackpack(stack);
         }
 
         @Override
@@ -74,8 +84,23 @@ public class TravelBackpackItem extends TooltipItem {
         }
     }
 
+    /** What may never go inside a backpack: a backpack, or a container item (shulker box...) holding one. */
     private static boolean isBackpack(ItemStack stack) {
-        return stack.getItem() instanceof TravelBackpackItem;
+        return stack.getItem() instanceof TravelBackpackItem || containsBackpack(stack);
+    }
+
+    /** A container item (shulker box made before backpacks were kept out of them) that holds a backpack. */
+    static boolean containsBackpack(ItemStack stack) {
+        ItemContainerContents contents = stack.get(DataComponents.CONTAINER);
+        if (contents == null) {
+            return false;
+        }
+        for (var inside : contents.nonEmptyItems()) {
+            if (inside.item().value() instanceof TravelBackpackItem) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

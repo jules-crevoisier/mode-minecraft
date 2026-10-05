@@ -91,11 +91,12 @@ public final class InventoryUtil {
     public static ItemStack insert(Container container, ItemStack stack, boolean mergeOnly) {
         ItemStack remaining = stack.copy();
         int size = container.getContainerSize();
+        // a container may hold less than a full stack per slot (Container#getMaxStackSize)
+        int limit = Math.min(container.getMaxStackSize(remaining), remaining.getMaxStackSize());
         for (int i = 0; i < size && !remaining.isEmpty(); i++) {
             ItemStack target = container.getItem(i);
-            if (!target.isEmpty() && ItemStack.isSameItemSameComponents(target, remaining)
-                    && target.getCount() < target.getMaxStackSize()) {
-                int move = Math.min(remaining.getCount(), target.getMaxStackSize() - target.getCount());
+            if (!target.isEmpty() && ItemStack.isSameItemSameComponents(target, remaining) && target.getCount() < limit) {
+                int move = Math.min(remaining.getCount(), limit - target.getCount());
                 target.grow(move);
                 remaining.shrink(move);
                 container.setItem(i, target);
@@ -104,7 +105,7 @@ public final class InventoryUtil {
         if (!mergeOnly) {
             for (int i = 0; i < size && !remaining.isEmpty(); i++) {
                 if (container.getItem(i).isEmpty() && container.canPlaceItem(i, remaining)) {
-                    int move = Math.min(remaining.getCount(), remaining.getMaxStackSize());
+                    int move = Math.min(remaining.getCount(), limit);
                     container.setItem(i, remaining.copyWithCount(move));
                     remaining.shrink(move);
                 }

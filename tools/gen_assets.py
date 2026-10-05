@@ -301,6 +301,11 @@ def main():
         g_en, g_fr = mod.lang()
         lang_en.update(g_en)
         lang_fr.update(g_fr)
+    # server guard refusals (docs/SERVER_ADMIN.md)
+    from wf import serverguard
+    g_en, g_fr = serverguard.lang()
+    lang_en.update(g_en)
+    lang_fr.update(g_fr)
     # advancement translations are merged in by gen_quests.py
     extra = os.path.join(ROOT, "build", "quest_lang.json")
     if os.path.exists(extra):

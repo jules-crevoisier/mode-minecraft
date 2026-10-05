@@ -41,7 +41,8 @@ import java.util.function.Predicate;
 
 /** Armor set bonuses, the 3x3 Excavator Pickaxe, the tree-felling Lumber Axe and void rescue. */
 public final class EquipmentEvents {
-    private static final Map<UUID, BlockPos> LAST_SAFE = new HashMap<>();
+    /** Last spot each player stood on solid ground, with its dimension (a void rescue never crosses dimensions). */
+    private static final Map<UUID, net.minecraft.core.GlobalPos> LAST_SAFE = new HashMap<>();
     private static boolean breakingArea;
 
     private EquipmentEvents() {}
@@ -50,6 +51,11 @@ public final class EquipmentEvents {
         TickEvent.PlayerTickEvent.Post.BUS.addListener(EquipmentEvents::onPlayerTick);
         LivingFallEvent.BUS.addListener((Predicate<LivingFallEvent>) EquipmentEvents::onFall);
         BlockEvent.BreakEvent.BUS.addListener((Consumer<BlockEvent.BreakEvent>) EquipmentEvents::onBreak);
+    }
+
+    /** Forgets a player who left (see ServerGuard). */
+    public static void forget(UUID id) {
+        LAST_SAFE.remove(id);
     }
 
     public enum ArmorSet { EXPLORER, EMBER, VOID, BRASS, MITHRIL, AETHER, ARCANE, NONE }
@@ -103,8 +109,8 @@ public final class EquipmentEvents {
         if (event.side() != LogicalSide.SERVER || !(player.level() instanceof ServerLevel level)) {
             return;
         }
-        if (player.onGround() && !player.isSpectator()) {
-            LAST_SAFE.put(player.getUUID(), player.blockPosition());
+        if (player.onGround() && !player.isSpectator() && player.tickCount % 5 == 0) {
+            LAST_SAFE.put(player.getUUID(), net.minecraft.core.GlobalPos.of(level.dimension(), player.blockPosition()));
         }
         boolean inVoid = player.getY() < level.getMinY() - 6;
         if (!inVoid && player.tickCount % 20 != 0) {
@@ -167,7 +173,10 @@ public final class EquipmentEvents {
     }
 
     private static void rescueFromVoid(ServerLevel level, ServerPlayer player) {
-        BlockPos safe = LAST_SAFE.getOrDefault(player.getUUID(), level.getRespawnData().pos());
+        net.minecraft.core.GlobalPos last = LAST_SAFE.get(player.getUUID());
+        BlockPos safe = last != null && last.dimension().equals(level.dimension()) ? last.pos()
+                : level.getHeightmapPos(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING,
+                        level.dimension() == net.minecraft.world.level.Level.END ? new BlockPos(100, 0, 0) : level.getRespawnData().pos());
         player.teleportTo(level, safe.getX() + 0.5, safe.getY() + 1, safe.getZ() + 0.5, Set.of(), player.getYRot(), player.getXRot(), true);
         player.setDeltaMovement(0, 0, 0);
         player.resetFallDistance();

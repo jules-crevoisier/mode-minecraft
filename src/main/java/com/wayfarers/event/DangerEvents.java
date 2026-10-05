@@ -60,6 +60,11 @@ public final class DangerEvents {
         TickEvent.PlayerTickEvent.Post.BUS.addListener(DangerEvents::onPlayerTick);
     }
 
+    /** Forgets a player who left (see ServerGuard). */
+    public static void forget(UUID id) {
+        SHOWN_LEVEL.remove(id);
+    }
+
     public static boolean isBloodMoon() {
         return bloodMoon;
     }

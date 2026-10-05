@@ -10,23 +10,26 @@ import net.minecraftforge.event.network.CustomPayloadEvent;
 public record WaystoneActionMsg(Action action, String from, String target, String text) {
     public enum Action { WARP, RENAME, PIN }
 
+    /** Waystone ids are "w" + a number: a longer string is refused while decoding. */
+    private static final int MAX_ID = 16;
+
     public static final StreamCodec<RegistryFriendlyByteBuf, WaystoneActionMsg> STREAM_CODEC =
             StreamCodec.ofMember(WaystoneActionMsg::encode, WaystoneActionMsg::decode);
 
     private static void encode(WaystoneActionMsg msg, RegistryFriendlyByteBuf buf) {
         buf.writeEnum(msg.action);
-        buf.writeUtf(msg.from);
-        buf.writeUtf(msg.target);
+        buf.writeUtf(msg.from, MAX_ID);
+        buf.writeUtf(msg.target, MAX_ID);
         buf.writeUtf(msg.text, 64);
     }
 
     private static WaystoneActionMsg decode(RegistryFriendlyByteBuf buf) {
-        return new WaystoneActionMsg(buf.readEnum(Action.class), buf.readUtf(), buf.readUtf(), buf.readUtf(64));
+        return new WaystoneActionMsg(buf.readEnum(Action.class), buf.readUtf(MAX_ID), buf.readUtf(MAX_ID), buf.readUtf(64));
     }
 
     static void handle(WaystoneActionMsg msg, CustomPayloadEvent.Context ctx) {
         ServerPlayer player = ctx.getSender();
-        if (player != null) {
+        if (com.wayfarers.util.ServerGuard.canAct(player) && com.wayfarers.util.ServerGuard.allow(player, "waystone", 5, 2.0)) {
             Waystones.handleAction(player, msg);
         }
     }
