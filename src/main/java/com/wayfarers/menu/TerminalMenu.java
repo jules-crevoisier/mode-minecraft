@@ -83,7 +83,7 @@ public class TerminalMenu extends AbstractContainerMenu {
         }
         ItemStack rest = StorageNetwork.insert(network(), slot.getItem());
         slot.set(rest);
-        syncTimer = 0;
+        dirty();
         return ItemStack.EMPTY;
     }
 
@@ -104,9 +104,9 @@ public class TerminalMenu extends AbstractContainerMenu {
         if (t == null) {
             return;
         }
-        List<Container> net = t.network();
         StorageNetwork.Scan scan = t.scan(false);
-        List<StorageNetwork.Entry> contents = StorageNetwork.contents(net);
+        GuildTerminalBlockEntity.Snapshot snapshot = t.snapshot();
+        List<StorageNetwork.Entry> contents = snapshot.contents();
         int linked = 0;
         int linksHash = scan.relays() * 31 + (scan.capped() ? 1 : 0);
         for (StorageNetwork.Link link : scan.links()) {
@@ -116,7 +116,7 @@ public class TerminalMenu extends AbstractContainerMenu {
             }
             linksHash = 31 * linksHash + link.key.hashCode() * 7 + link.parts.size() * 2 + (excluded ? 1 : 0);
         }
-        int free = StorageNetwork.freeSlots(net);
+        int free = snapshot.freeSlots();
         int hash = linked * 31 + free;
         for (StorageNetwork.Entry e : contents) {
             hash = 31 * hash + ItemStack.hashItemAndComponents(e.type()) * 17 + e.count();
@@ -141,5 +141,9 @@ public class TerminalMenu extends AbstractContainerMenu {
     public void dirty() {
         syncTimer = 0;
         lastHash = Integer.MIN_VALUE;
+        GuildTerminalBlockEntity t = terminal();
+        if (t != null) {
+            t.invalidateContents();
+        }
     }
 }

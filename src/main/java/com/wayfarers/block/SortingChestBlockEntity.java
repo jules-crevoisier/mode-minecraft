@@ -33,6 +33,8 @@ public class SortingChestBlockEntity extends BaseContainerBlockEntity {
 
     public SortingChestBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.SORTING_CHEST.get(), pos, state);
+        // spread the item pull over the ticks: chests loaded together don't all search for items on the same tick
+        ticker = (int) Math.floorMod(pos.asLong() * 0x9E3779B97F4A7C15L >>> 40, 40);
     }
 
     @Override
