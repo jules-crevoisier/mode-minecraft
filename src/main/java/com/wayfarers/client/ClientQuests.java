@@ -29,6 +29,9 @@ public final class ClientQuests {
     }
 
     public static QuestSnapshotMsg.State state(String quest) {
+        if (ClientContracts.isContract(quest)) {
+            return ClientContracts.state(quest);
+        }
         return STATES.getOrDefault(quest, new QuestSnapshotMsg.State(quest, false, 0, 1));
     }
 
@@ -37,6 +40,9 @@ public final class ClientQuests {
     }
 
     public static Optional<AdvancementHolder> holder(String quest) {
+        if (ClientContracts.isContract(quest)) {
+            return Optional.empty(); // a quest giver's contract, not an advancement
+        }
         Minecraft mc = Minecraft.getInstance();
         if (mc.getConnection() == null) {
             return Optional.empty();
@@ -50,14 +56,23 @@ public final class ClientQuests {
     }
 
     public static Component title(String quest) {
+        if (ClientContracts.isContract(quest)) {
+            return ClientContracts.title(quest);
+        }
         return Component.translatable("advancements.wayfarers." + quest.replace('/', '.') + ".title");
     }
 
     public static Component description(String quest) {
+        if (ClientContracts.isContract(quest)) {
+            return ClientContracts.description(quest);
+        }
         return Component.translatable("advancements.wayfarers." + quest.replace('/', '.') + ".description");
     }
 
     public static ItemStack icon(String quest) {
+        if (ClientContracts.isContract(quest)) {
+            return ClientContracts.icon(quest);
+        }
         return display(quest).map(d -> d.getIcon().create()).orElse(new ItemStack(Items.BOOK));
     }
 

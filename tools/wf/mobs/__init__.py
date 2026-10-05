@@ -39,6 +39,8 @@ from . import reef_fish
 from . import manta_ray
 from . import sea_serpent
 from . import whale
+# quest givers
+from . import wayfarer_npc
 
 MODELS = [
     drowned_warden.build,
@@ -80,4 +82,5 @@ MODELS = [
     manta_ray.build,
     sea_serpent.build,
     whale.build,
+    wayfarer_npc.build,
 ]

@@ -208,6 +208,8 @@ SIGNS = {
     "tinker2": ("Repairs - Gadgets", "Réparations - Gadgets"),
     "lost": ("Lost: a brass cat", "Perdu : un chat en laiton"),
     "bell": ("Ring for the council", "Sonnez pour le conseil"),
+    "post": ("Guild Post", "Relais de la Guilde"),
+    "post2": ("Contracts - Bounties", "Contrats - Primes"),
 }
 
 
@@ -793,9 +795,62 @@ def inn(bp, st):
     front_garden(bp, st, x0, x1, 0, 1, 8, rng, width=2)
     entrance(bp, st, 8)
     residents(bp, st, 0, 1, region=((x0, 6, z0), (x1, 9, z1)), extra=[("cartographer", 3), ("librarian", 2)])
+    # a Scholar of the guild, travelling from inn to inn, hands out contracts in the tavern (wf/npcs.py)
+    I.quest_npc_in(bp, "scholar", region=((x0, 1, z0), (x1, 1, z1)), seed=1)
     I.decorate(bp, dict(I.THEMES["hall"], floor={"barrel": 3, "crates": 1, "plant": 2, "pot": 1}), seed=3,
                region=((x0, 1, z0), (x1, 1, z1)), centre=False, lights=False)
     I.decorate(bp, "home", seed=4, region=((x0, 6, z0), (x1, 6, z1)))
+
+
+def guild_post(bp, st):
+    """The Guild Post: a small office of the Wayfarers' Guild where a Guild Agent hands out contracts across a
+    counter, between a map table and a lectern of ledgers, under the guild's banners; couriers sleep upstairs."""
+    rng = random.Random(bp.name)
+    x0, z0, x1, z1 = 1, 3, 10, 10
+    base(bp, st, x0, z0, x1, z1)
+    walls(bp, st, x0, z0, x1, z1, 1, 4, st.wall)
+    plinth_course(bp, st, x0, z0, x1, z1, 1, 1)
+    floor(bp, x0 + 1, z0 + 1, x1 - 1, z1 - 1, 5, st.planks())
+    walls(bp, st, x0, z0, x1, z1, 5, 7, st.upper, post_every=3)
+    for x in range(x0, x1 + 1):
+        bp.set(x, 4, z0, st.metal[0])
+    door(bp, st, "north", z0, 5, 1, double=True)
+    for u in (3, 8):
+        window(bp, st, "north", z0, u, 2)
+        window(bp, st, "north", z0, u, 6, box=False)
+        window(bp, st, "south", z1, u, 6, box=False)
+    window(bp, st, "west", x0, 5, 2)
+    window(bp, st, "west", x0, 8, 2)
+    window(bp, st, "east", x1, 8, 2)
+    window(bp, st, "south", z1, 4, 2)
+    if st.flat:
+        ridge = flat_roof(bp, st, x0, z0, x1, z1, 8)
+    else:
+        ridge = roof(bp, st, x0, z0, x1, z1, 8, axis="x")
+    chimney(bp, x1, 9, 1, ridge + 1, st.plinth)
+    # the counter across the hall, the agent behind it, the guild's maps and ledgers around
+    for x in range(2, 10):
+        if x not in (5, 6):
+            bp.set(x, 1, 7, MAHOGANY)
+    bp.set(3, 2, 7, "candle[candles=2,lit=true,waterlogged=false]")
+    bp.set(8, 2, 7, "potted_fern")
+    bp.set(2, 1, 9, "cartography_table")
+    bp.set(9, 1, 9, "lectern[facing=north,has_book=false,powered=false]")
+    bp.set(2, 1, 4, "barrel[facing=up,open=false]")
+    bp.set(2, 2, 4, "potted_" + rng.choice(["red_tulip", "cornflower", "fern"]))
+    I.quest_npc(bp, 4, 1, 8, "guild_agent", facing="north")
+    for x in (3, 8):
+        bp.set(x, 3, z1 - 1, f"{st.banner}_wall_banner[facing=north]")
+    wall_sign(bp, st, 6, 3, z1 - 1, "north", ("post", "post2"))
+    bp.set(5, 4, 5, HANG_EDISON)
+    # a ladder up to the couriers' bunk room
+    bp.ladder(9, 1, 5, 5, "west")
+    # outside: a path, flowers and brass lamps, the sign over the door
+    front_garden(bp, st, x0, x1, 0, 2, 5, rng, width=2, fence=False)
+    wall_sign(bp, st, 4, 3, z0 - 1, "north", ("post", "post2"))
+    entrance(bp, st, 5)
+    residents(bp, st, 0, 1, region=((x0, 5, z0), (x1, 7, z1)), extra=[("cartographer", 2)])
+    I.decorate(bp, "home", seed=3, region=((x0, 6, z0), (x1, 6, z1)))
 
 
 def workshop(bp, st):
@@ -854,6 +909,7 @@ def workshop(bp, st):
         bp.set(11, 1, z, W + "copper_pipe[axis=z]")
     # inside: craftsmen, then the steampunk furnishing
     I.populate(bp, [("toolsmith", 3), ("armorer", 2)], vtype=st.vtype, seed=1, beds=False)
+    I.quest_npc_in(bp, "tinkerer", seed=1)
     I.decorate(bp, "steampunk", seed=2)
     ground(bp, st, x0, 0, x1, 2)
     path(bp, st, 5, 0, 2, 2)
@@ -1068,6 +1124,7 @@ def plaza(bp, st):
     for x, z in ((c - 3, c - 3), (c + 3, c - 3), (c - 3, c + 3), (c + 3, c + 3)):
         brass_lamp(bp, st, x, 1, z, h=4)
     notice_board(bp, st, 2, 1, 6, "east")
+    I.quest_npc(bp, 4, 1, 5, "guild_agent", facing="west")   # reads the board out to passers-by
     bp.set(4, 1, 2, st.metal[0])
     bp.set(4, 2, 2, "bell[attachment=floor,facing=east,powered=false]")
     wall_sign(bp, st, 5, 1, 2, "east", ("bell",))
@@ -1222,6 +1279,7 @@ def barricade(bp):
 PIECES = [
     ("plaza", plaza, "town_centers", None, "start"),
     ("inn", inn, "houses", 5, "house"),
+    ("guild_post", guild_post, "houses", 6, "house"),
     ("workshop", workshop, "houses", 4, "house"),
     ("watchtower", watchtower, "houses", 3, "house"),
     ("market", market, "houses", 4, "house"),

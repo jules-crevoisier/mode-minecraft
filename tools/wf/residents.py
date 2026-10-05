@@ -28,6 +28,15 @@ def _short(name):
     return name.split(":", 1)[1]
 
 
+def _clearable(name):
+    """Ground cover a new building may replace: plants, leaves, vines, carpets of moss, mushrooms, snow layers."""
+    if name in support.AIR or support.is_plant(name):
+        return True
+    s = _short(name)
+    return not s.endswith("_block") and any(h in s for h in ("_leaves", "vine", "bamboo", "carpet", "mushroom",
+                                                              "snow", "petals", "leaf_litter", "lichen"))
+
+
 def residents(bp):
     """[(block position, entity id, nbt)] of the people in ``bp``."""
     out = []
@@ -98,8 +107,7 @@ def lodge(bp, x0, y, z0, door="south", w=7, d=5, wood="spruce", wall=None, roof=
         for z in range(z0 - 1, z1 + 2):
             for yy in range(y + 1, y + clear_above):
                 b = bp.blocks.get((x, yy, z))
-                if b is not None and (support.is_plant(b[0]) or "_leaves" in b[0] or "vine" in b[0]
-                                      or "bamboo" in b[0] or b[0].endswith("_log")):
+                if b is not None and _clearable(b[0]):
                     bp.remove(x, yy, z)
     bp.fill(x0, y, z0, x1, y, z1, f"{wood}_planks")
     for x in range(x0, x1 + 1):
@@ -171,8 +179,7 @@ def free_site(bp, area, y, w, d, margin=1, roof=10):
             return False
         for yy in range(y + 1, y + roof):
             b = bp.blocks.get((x, yy, z))
-            if b is not None and not (support.is_plant(b[0]) or "_leaves" in b[0] or "vine" in b[0]
-                                      or b[0] in support.AIR or "bamboo" in b[0]):
+            if b is not None and not _clearable(b[0]):
                 return False
         return True
 

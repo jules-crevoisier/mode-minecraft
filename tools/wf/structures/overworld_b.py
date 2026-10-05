@@ -5,6 +5,7 @@ import random
 
 from .. import arch
 from .. import interior as I
+from .. import residents
 from ..arch import Palette, slab, stair
 from ..blueprint import with_props
 from ..defs import Piece, StructureDef, register
@@ -730,6 +731,19 @@ def giant_tree(v):
         for x, z, s in ((-20, 12, 1), (18, -16, 2), (-15, -20, 3), (21, 14, 4)):
             arch.boulder(bp, x, 1, z, r=2, seed=s, blocks=("mossy_cobblestone", "cobblestone", "andesite", "tuff"))
 
+        # ---------------------------------------------------------------- the forest folk of the World Tree
+        # druid-robed villagers (swamp type) on the trunk floors and the crown deck, each with a bed and a job
+        # site; the Druid gives contracts on the bunk floor (the ground hall sits on the spider cellar)
+        def floor_r(y, r=9):
+            return ((-r, y, -r), (r, y, r))
+        I.quest_npc_in(bp, "druid", region=floor_r(LEVELS[0] + 1), seed=v["seed"])
+        I.populate(bp, [("fletcher", 2), ("farmer", 3)], region=floor_r(LEVELS[0] + 1), vtype="swamp",
+                   seed=1, bed_colour="green")
+        I.populate(bp, [("librarian", 3)], region=floor_r(LEVELS[1] + 1), vtype="swamp", seed=2, bed_colour="lime")
+        I.populate(bp, [("cartographer", 3)], region=floor_r(LEVELS[2] + 1), vtype="swamp", seed=3,
+                   bed_colour="brown")
+        I.populate(bp, [("cleric", 4), ("shepherd", 2)], region=floor_r(TOP + 1, 11), vtype="swamp", seed=4,
+                   bed_colour="green")
         # ---------------------------------------------------------------- lived-in rooms in the hollow trunk
         I.decorate(bp, dict(I.THEMES["home"], wood=deck), seed=v["seed"])
 
@@ -751,7 +765,7 @@ register(StructureDef(
      "old_growth_pine_taiga", "old_growth_spruce_taiga"],
     [Piece("oak", giant_tree(TREE_VARIANTS["oak"]), 2),
      Piece("dark_oak", giant_tree(TREE_VARIANTS["dark_oak"]), 1)],
-    spacing=26, separation=8, processors="none", adaptation="beard_thin",
+    spacing=26, separation=8, processors="none", adaptation="beard_thin", peaceful=True,
     title_fr="Arbre-monde creux", title_en="Hollow Giant Tree"))
 
 
@@ -1329,7 +1343,7 @@ def oasis(bp):
 
 register(StructureDef(
     "desert_oasis", "overworld", ["desert"], [Piece("oasis", oasis)],
-    spacing=26, separation=9, title_fr="Oasis et tombeau", title_en="Desert Oasis"))
+    spacing=26, separation=9, peaceful=True, title_fr="Oasis et tombeau", title_en="Desert Oasis"))
 
 
 # ============================================================ Swamp witch hamlet
@@ -2513,10 +2527,21 @@ def ziggurat(bp):
     # an abandoned temple: dust, webs, moss and fallen stones in every chamber
     I.decorate(bp, dict(I.THEMES["ruin"], rubble=["mossy_cobblestone", "cobblestone", "mossy_stone_bricks"]), seed=1,
                loot=LOOT + "ziggurat")
+    # the keepers: a priest and a mason who watch over the temple live in a lodge in the clearing (the temple
+    # itself stays hostile: its spawners and the Jade Jaguar)
+    site = residents.free_site(bp, (31, -20, 46, 20), 0, 7, 5, margin=1) or \
+        residents.free_site(bp, (-46, -20, -31, 20), 0, 7, 5, margin=1)
+    if site is None:
+        raise ValueError("jungle_ziggurat: no room for the keepers' lodge")
+    lx, lz = site
+    lodge_r = residents.lodge(bp, lx, 0, lz, door="west" if lx > 0 else "east", w=7, d=5, wood="jungle",
+                              residents_=[("cleric", 3), ("mason", 3)], vtype="jungle", seed=1, bed_colour="lime")
+    I.decorate(bp, "home", seed=3, region=lodge_r)
 
 
 register(StructureDef(
     "jungle_ziggurat", "overworld", ["jungle", "sparse_jungle", "bamboo_jungle"],
     [Piece("ziggurat", ziggurat)], spacing=30, separation=10,
-    spawns=[(MOB["ruin_walker"], 10, 1, 3), ("minecraft:skeleton", 5, 1, 2)],
+    # the keepers live in the clearing: no natural monster spawns (the temple keeps its spawners and its boss)
+    peaceful=True,
     title_fr="Ziggourat de la jungle", title_en="Jungle Ziggurat"))

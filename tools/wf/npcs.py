@@ -240,6 +240,8 @@ PARCELS = {
 
 # GUI and message strings of the NPC screen and the contracts
 TEXT = {
+    "entity.wayfarers.wayfarer_npc": ("Wayfarer Quest Giver", "Donneur de contrats"),
+    "chapter.wayfarers.contracts": ("Contracts", "Contrats"),
     "npc.wayfarers.display": ("%s, %s", "%s, %s"),
     "gui.wayfarers.npc.contracts": ("Contracts", "Contrats"),
     "gui.wayfarers.npc.accept": ("Accept", "Accepter"),

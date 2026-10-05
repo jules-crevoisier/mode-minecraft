@@ -23,7 +23,7 @@
               79,
               24
             ],
-            "blocks": 3870
+            "blocks": 3872
           },
           {
             "location": "wayfarers:sylvan_palace/palace/x0_z1",
@@ -37,7 +37,7 @@
               85,
               26
             ],
-            "blocks": 3608
+            "blocks": 3609
           },
           {
             "location": "wayfarers:sylvan_palace/palace/x0_z2",
@@ -51,7 +51,7 @@
               55,
               24
             ],
-            "blocks": 3457
+            "blocks": 3455
           },
           {
             "location": "wayfarers:sylvan_palace/palace/x1_z0",
@@ -65,7 +65,7 @@
               85,
               16
             ],
-            "blocks": 3489
+            "blocks": 3487
           },
           {
             "location": "wayfarers:sylvan_palace/palace/x1_z1",
@@ -79,7 +79,7 @@
               97,
               26
             ],
-            "blocks": 20994
+            "blocks": 20999
           },
           {
             "location": "wayfarers:sylvan_palace/palace/x1_z2",
@@ -93,7 +93,7 @@
               71,
               25
             ],
-            "blocks": 4767
+            "blocks": 4765
           },
           {
             "location": "wayfarers:sylvan_palace/palace/x2_z0",
@@ -121,7 +121,7 @@
               71,
               26
             ],
-            "blocks": 3593
+            "blocks": 3591
           },
           {
             "location": "wayfarers:sylvan_palace/palace/x2_z2",

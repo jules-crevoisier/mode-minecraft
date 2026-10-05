@@ -127,6 +127,8 @@ public final class WayfarersCommand {
                                 .suggests((ctx, b) -> SharedSuggestionProvider.suggest(
                                         GeneratedContent.STRUCTURES.stream().map(GeneratedContent.StructureInfo::id), b))
                                 .executes(ctx -> FitCheckCommand.run(ctx, StringArgumentType.getString(ctx, "structure")))))
+                .then(NpcCommand.npc())
+                .then(NpcCommand.contracts())
                 .then(Commands.literal("progress").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                         .then(Commands.literal("reset").executes(ctx -> progress(ctx, false)))
                         .then(Commands.literal("complete").executes(ctx -> progress(ctx, true)))));

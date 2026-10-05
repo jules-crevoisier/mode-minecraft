@@ -73,6 +73,7 @@ public final class Wayfarers {
         com.wayfarers.event.GadgetEvents.register();
         com.wayfarers.event.OceanEvents.register();
         com.wayfarers.skill.SkillEvents.register();
+        com.wayfarers.util.NpcQuests.register();
         com.wayfarers.chisel.ChiselFamilies.register();
         com.wayfarers.util.StructureLocator.register();
         com.wayfarers.world.SiteFit.register();

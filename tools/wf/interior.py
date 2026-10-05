@@ -1003,6 +1003,27 @@ def quest_npc(bp, x, y, z, role, facing=None):
     _log_npc(bp, f"npc:{role}")
 
 
+def quest_npc_in(bp, role, region=None, seed=0, ground=0, void_solid=False, rooms=None):
+    """Put a quest giver on a free floor cell of the biggest room of ``region``, near its middle, away from doors
+    and stairs and without cutting the room in two. Raises when there is no room for it."""
+    rooms = rooms if rooms is not None else find_rooms(bp, region, ground=ground, void_solid=void_solid)
+    rng = random.Random(f"{bp.name}:npc:{role}:{seed}")
+    for room in sorted(rooms, key=lambda r: -r.area):
+        cx, cz = room.centre()
+        cells = [c for c in room.free - room.keep - room.occupied
+                 if _air_at(bp, room.chk, (c[0], room.y, c[1])) and _air_at(bp, room.chk, (c[0], room.y + 1, c[1]))
+                 and _air_at(bp, room.chk, (c[0], room.y + 2, c[1]))]
+        cells.sort(key=lambda c: (abs(c[0] - cx) + abs(c[1] - cz), rng.random()))
+        for c in cells:
+            if room.connected_without([c]):
+                facing = min(HORIZONTAL, key=lambda d: (c[0] + _dirvec(d)[0] * 3 - cx) ** 2 +
+                             (c[1] + _dirvec(d)[1] * 3 - cz) ** 2) if (c[0], c[1]) != (cx, cz) else "south"
+                quest_npc(bp, c[0], room.y, c[1], role, facing=facing)
+                room.take([c])
+                return (c[0], room.y, c[1])
+    raise ValueError(f"{bp.name}: no room for the {role} in {region}")
+
+
 def wandering_trader(bp, x, y, z, facing=None):
     from . import nbt
     bp.entity(x, y, z, {"id": "minecraft:wandering_trader", "PersistenceRequired": True, "DespawnDelay": 0,
@@ -1432,6 +1453,8 @@ def yard(bp, area, y, theme="village", count=8, seed=0, ring=1, avoid=()):
     rng.shuffle(spots)
     names = sorted(weights)
     avoid = set(avoid)
+    # never on someone's feet (villagers and quest givers placed before the yard)
+    avoid |= {(ex, ez) for ex, ey, ez in _entity_cells(bp) if y - 1 <= ey <= y + 2}
     taken = set()
     placed = []
     singles = {"well": 0, "crops": 0}
