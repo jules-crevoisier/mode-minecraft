@@ -21,6 +21,10 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(25)
 // CI client test (tools/ci_client.py): `./gradlew runClient -Pbrasshaven.ci=true` turns on the scripted screenshot run
 def brasshavenCi = providers.gradleProperty('brasshaven.ci').getOrElse('false') == 'true'
 def brasshavenCiTimeout = providers.gradleProperty('brasshaven.ci.timeout').getOrElse('1080')
+// showcase job (tools/ci_client.py --showcase): the filmed tour of client/CiShowcase instead of the test, window size WxH
+def brasshavenShowcase = providers.gradleProperty('brasshaven.showcase').getOrElse('false') == 'true'
+def brasshavenShowcaseSlowmo = providers.gradleProperty('brasshaven.showcase.slowmo').getOrElse('0')
+def brasshavenCiSize = providers.gradleProperty('brasshaven.ci.size').getOrElse('1280x720').split('x')
 
 minecraft {
     runs {
@@ -34,7 +38,11 @@ minecraft {
             if (brasshavenCi) {
                 systemProperty 'brasshaven.ci', 'true'
                 systemProperty 'brasshaven.ci.timeout', brasshavenCiTimeout
-                args '--width', '1280', '--height', '720', '--graphicsBackend', 'opengl'
+                if (brasshavenShowcase) {
+                    systemProperty 'brasshaven.showcase', 'true'
+                    systemProperty 'brasshaven.showcase.slowmo', brasshavenShowcaseSlowmo
+                }
+                args '--width', brasshavenCiSize[0], '--height', brasshavenCiSize[1], '--graphicsBackend', 'opengl'
             }
         }
         register('server') {

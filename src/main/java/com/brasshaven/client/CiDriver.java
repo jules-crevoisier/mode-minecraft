@@ -70,13 +70,15 @@ import java.util.function.Supplier;
  */
 public final class CiDriver {
     public static final boolean ACTIVE = Boolean.getBoolean("brasshaven.ci");
-    private static final Logger LOGGER = LogUtils.getLogger();
-    private static final String TAG = "[brasshaven-ci] ";
+    /** Showcase mode (-Dbrasshaven.showcase=true, tools/ci_client.py --showcase): a filmed tour instead of the test. */
+    static final boolean SHOWCASE = ACTIVE && Boolean.getBoolean("brasshaven.showcase");
+    static final Logger LOGGER = LogUtils.getLogger();
+    static final String TAG = "[brasshaven-ci] ";
     private static final long TIMEOUT_MS = Long.getLong("brasshaven.ci.timeout", 18 * 60) * 1000L;
     private static final int SETTLE_TICKS = Integer.getInteger("brasshaven.ci.settle", 200);
     private static final String WORLD = "brasshaven-ci";
     /** Floor of the stage built in the sky, away from the terrain (creatures, machines). */
-    private static final int STAGE_Y = 200;
+    static final int STAGE_Y = 200;
     /** Empty hotbar slot used to click blocks with an empty hand. */
     private static final int EMPTY_SLOT = 8;
 
@@ -98,8 +100,8 @@ public final class CiDriver {
     private static final Map<String, Step> SHOT_STEP = new LinkedHashMap<>();
 
     /** Column of the player once the world has settled; the stage and the citadel are placed from it. */
-    private static int bx;
-    private static int bz;
+    static int bx;
+    static int bz;
     /** Viewpoint for the Citadel, worked out on the server once its bounding box is known. */
     private static volatile double[] citadelView;
 
@@ -111,6 +113,10 @@ public final class CiDriver {
         }
         LOGGER.info(TAG + "client test driver active (timeout {}s)", TIMEOUT_MS / 1000);
         TickEvent.ClientTickEvent.Post.BUS.addListener(e -> tick());
+        if (SHOWCASE) {
+            // the camera paths and the cursor move on every rendered frame, not on ticks
+            TickEvent.RenderTickEvent.Pre.BUS.addListener(e -> CiShowcase.frame());
+        }
         Thread watchdog = new Thread(() -> {
             try {
                 Thread.sleep(TIMEOUT_MS + 120_000L);
@@ -179,7 +185,7 @@ public final class CiDriver {
         phaseStart = System.currentTimeMillis();
     }
 
-    private static String secs(long since) {
+    static String secs(long since) {
         return String.format(java.util.Locale.ROOT, "%.1fs", (System.currentTimeMillis() - since) / 1000.0);
     }
 
@@ -200,6 +206,9 @@ public final class CiDriver {
                 BrasshavenClientConfig.HEALTH_BARS.set(BrasshavenClientConfig.HealthBars.ALWAYS);
             } catch (RuntimeException e) {
                 LOGGER.warn(TAG + "could not set the client config (minimap, health bars): {}", e.toString());
+            }
+            if (SHOWCASE) {
+                CiShowcase.options(mc);
             }
             line("PASS boot (" + secs(START) + " to the menu, screen " + mc.gui.screen().getClass().getSimpleName() + ")");
         }
@@ -263,7 +272,11 @@ public final class CiDriver {
         bx = mc.player.blockPosition().getX();
         bz = mc.player.blockPosition().getZ();
         LOGGER.info(TAG + "world settled, player at {}", mc.player.blockPosition());
-        buildSteps();
+        if (SHOWCASE) {
+            CiShowcase.build();
+        } else {
+            buildSteps();
+        }
         setPhase(Phase.RUNNING);
     }
 
@@ -316,6 +329,9 @@ public final class CiDriver {
     }
 
     private static void nextStep(Minecraft mc) {
+        if (SHOWCASE) {
+            CiShowcase.stepEnded(STEPS.get(stepIndex));
+        }
         closeScreen(mc);
         stepIndex++;
         phaseTicks = 0;
@@ -340,6 +356,9 @@ public final class CiDriver {
             }
         }
         writeReport(why);
+        if (SHOWCASE) {
+            CiShowcase.writeLog(why);
+        }
         LOGGER.info(TAG + "DONE ({}), quitting", why);
         Minecraft.getInstance().stop();
     }
@@ -348,7 +367,7 @@ public final class CiDriver {
         return SHOTS.containsValue("pending");
     }
 
-    private static synchronized void line(String s) {
+    static synchronized void line(String s) {
         LINES.add(s);
         LOGGER.info(TAG + "REPORT {}", s);
     }
@@ -590,7 +609,7 @@ public final class CiDriver {
     }
 
     /** The trade screen with both offers filled, client side only (a real trade needs a second player). */
-    private static void previewTrade() {
+    static void previewTrade() {
         Minecraft mc = Minecraft.getInstance();
         net.minecraft.network.FriendlyByteBuf buf = new net.minecraft.network.FriendlyByteBuf(io.netty.buffer.Unpooled.buffer());
         buf.writeUtf("Ada");
@@ -614,11 +633,11 @@ public final class CiDriver {
         return (bx + dx) + " " + (STAGE_Y + dy) + " " + (bz + dz);
     }
 
-    private static Screen screen() {
+    static Screen screen() {
         return Minecraft.getInstance().gui.screen();
     }
 
-    private static void closeScreen(Minecraft mc) {
+    static void closeScreen(Minecraft mc) {
         Screen screen = mc.gui.screen();
         if (screen == null || mc.player == null) {
             return;
@@ -634,7 +653,7 @@ public final class CiDriver {
     }
 
     /** Creative flight, so the camera stays where the teleports put it. */
-    private static void fly() {
+    static void fly() {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player != null && mc.player.getAbilities().mayfly) {
             mc.player.getAbilities().flying = true;
@@ -711,7 +730,7 @@ public final class CiDriver {
     // ------------------------------------------------------------------ server commands
 
     /** Runs commands as the player on the integrated server; returns the ones that failed, with their output. */
-    private static CompletableFuture<List<String>> runCommands(List<String> commands) {
+    static CompletableFuture<List<String>> runCommands(List<String> commands) {
         Minecraft mc = Minecraft.getInstance();
         IntegratedServer server = mc.getSingleplayerServer();
         if (server == null) {
@@ -730,7 +749,7 @@ public final class CiDriver {
         });
     }
 
-    private static boolean runCommand(IntegratedServer server, ServerPlayer player, String command) {
+    static boolean runCommand(IntegratedServer server, ServerPlayer player, String command) {
         boolean[] ok = {false};
         StringBuilder output = new StringBuilder();
         CommandSource sink = new CommandSource() {
@@ -768,23 +787,23 @@ public final class CiDriver {
 
     // ------------------------------------------------------------------ steps and ops
 
-    private static Step step(String name) {
+    static Step step(String name) {
         Step step = new Step(name);
         STEPS.add(step);
         return step;
     }
 
     @FunctionalInterface
-    private interface Action {
+    interface Action {
         void run() throws Exception;
     }
 
     @FunctionalInterface
-    private interface ServerTask {
+    interface ServerTask {
         List<String> run(IntegratedServer server, ServerPlayer player) throws Exception;
     }
 
-    private abstract static class Op {
+    abstract static class Op {
         final String label;
         int age;
 
@@ -795,7 +814,7 @@ public final class CiDriver {
         abstract boolean tick() throws Exception;
     }
 
-    private static final class Step {
+    static final class Step {
         final String name;
         final List<Op> ops = new ArrayList<>();
         final List<String> problems = new ArrayList<>();

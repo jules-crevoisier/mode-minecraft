@@ -40,9 +40,20 @@ How it works
    Mesa chatter.
 6. Output. build/ci-client/ gets brasshaven-shot-<name>.png for each screenshot, the report and the scan
    summary; the workflow uploads it as an artifact and attaches the images to the previews-<branch> release.
+
+Showcase mode (--showcase, the `showcase` job): the same game, but client/CiShowcase plays a filmed tour (French
+client, structures orbited by the camera, screens used with a cursor, machines, creatures, a boss, the biomes)
+instead of the test. The Xvfb screen is the size of the window (--size, 1280x720) and ffmpeg's x11grab records it
+from the moment the driver starts. The driver writes run/showcase/scenes.json: each scene's wall-clock begin and end
+(the clock x11grab stamps its frames with), its slow-motion factor k (the game runs k times slower under /tick rate
+so that software rendering still gives smooth footage) and the cursor track. Afterwards each scene is cut from the
+recording and sped up by k into build/ci-client/showcase/brasshaven-showcase-<scene>.mp4 (30 fps, no sound), with
+a poster frame (.jpg) and brasshaven-showcase-scenes.json (clip durations and cursor tracks in clip seconds), which
+tools/make_video.py uses. The run only fails when no clip at all comes out; errors in the log are listed.
 """
 import argparse
 import glob
+import json
 import os
 import re
 import shutil
@@ -58,6 +69,11 @@ OUT = os.path.join(ROOT, "build", "ci-client")
 CONSOLE = os.path.join(RUN, "ci-client-console.log")
 REPORT = os.path.join(RUN, "ci-client-report.txt")
 SHOTS = os.path.join(RUN, "screenshots", "ci")
+SHOWCASE = os.path.join(RUN, "showcase")
+SHOWCASE_OUT = os.path.join(OUT, "showcase")
+RECORDING = os.path.join(SHOWCASE, "recording.mkv")
+RECORDER_LOG = os.path.join(SHOWCASE, "ffmpeg-x11grab.log")
+DRIVER_MARK = "client test driver active"
 
 # keep in step with CiDriver.buildSteps()
 EXPECTED_SHOTS = [
@@ -95,7 +111,7 @@ def log(msg):
 
 # ------------------------------------------------------------------ launch
 
-def ensure_display(argv):
+def ensure_display(argv, screen="1920x1080"):
     """Re-runs this script under xvfb-run when there is no X display."""
     if os.environ.get("DISPLAY") or os.environ.get("BRASSHAVEN_CI_NO_XVFB"):
         return
@@ -103,22 +119,25 @@ def ensure_display(argv):
     if not xvfb:
         sys.exit("no $DISPLAY and no xvfb-run: install xvfb (apt-get install xvfb) or run under a display")
     os.environ["BRASSHAVEN_CI_NO_XVFB"] = "1"
-    cmd = [xvfb, "-a", "-s", "-screen 0 1920x1080x24", sys.executable, os.path.abspath(__file__)] + argv
+    cmd = [xvfb, "-a", "-s", f"-screen 0 {screen}x24", sys.executable, os.path.abspath(__file__)] + argv
     log("no display: re-running under " + " ".join(cmd))
     os.execv(xvfb, cmd)
 
 
-def prepare(early_window):
+def prepare(early_window, showcase=False):
     os.makedirs(os.path.join(RUN, "config"), exist_ok=True)
     # no tutorial toast over the screenshots, no cloud layer between the viewpoint and the wonders
     with open(os.path.join(RUN, "options.txt"), "w") as f:
         f.write("tutorialStep:none\nrenderClouds:\"false\"\nonboardAccessibility:false\nskipMultiplayerWarning:true\n")
+        if showcase:
+            # the presentation videos are in French: the game too
+            f.write("lang:fr_fr\n")
     fml = os.path.join(RUN, "config", "fml.toml")
     if not early_window and not os.path.exists(fml):
         # FML fills in every other key with its default (and logs a warning about it)
         with open(fml, "w") as f:
             f.write("earlyWindowControl = false\n")
-    for path in [REPORT, CONSOLE, SHOTS, os.path.join(RUN, "crash-reports"), OUT]:
+    for path in [REPORT, CONSOLE, SHOTS, SHOWCASE, os.path.join(RUN, "crash-reports"), OUT]:
         if os.path.isdir(path):
             shutil.rmtree(path)
         elif os.path.exists(path):
@@ -170,12 +189,15 @@ def kill_tree(proc):
 def run_game(args):
     cmd = [os.path.join(ROOT, "gradlew"), "runClient", "-Pbrasshaven.ci=true",
            f"-Pbrasshaven.ci.timeout={args.game_timeout}", "--no-daemon", "--stacktrace", "--console=plain"]
+    if args.showcase:
+        cmd[3:3] = ["-Pbrasshaven.showcase=true", f"-Pbrasshaven.ci.size={args.size}",
+                    f"-Pbrasshaven.showcase.slowmo={args.slowmo}"]
     log("running " + " ".join(cmd))
     start = time.time()
     proc = subprocess.Popen(cmd, cwd=ROOT, env=game_env(), stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
                             stderr=subprocess.STDOUT, text=True, bufsize=1, encoding="utf-8", errors="replace",
                             start_new_session=True)
-    state = {"done_at": None, "lines": [], "killed_after_done": False}
+    state = {"done_at": None, "lines": [], "killed_after_done": False, "recorder": None}
 
     def reader():
         with open(CONSOLE, "w", encoding="utf-8") as out:
@@ -187,6 +209,8 @@ def run_game(args):
                 print(line, flush=True)
                 if DONE_MARK in line and state["done_at"] is None:
                     state["done_at"] = time.time()
+                if args.showcase and DRIVER_MARK in line and state["recorder"] is None:
+                    state["recorder"] = start_recorder(args.size)
 
     t = threading.Thread(target=reader, daemon=True)
     t.start()
@@ -206,9 +230,111 @@ def run_game(args):
             kill_tree(proc)
             break
     t.join(timeout=30)
+    if state["recorder"] is not None:
+        stop_recorder(state["recorder"])
     code = proc.poll()
     log(f"gradle exited with {code} after {time.time() - start:.0f}s")
     return code, state, notes
+
+
+# ------------------------------------------------------------------ showcase: recording and clips
+
+def start_recorder(size):
+    """ffmpeg x11grab on the whole Xvfb screen (the game window fills it), no cursor (the composer draws one)."""
+    ffmpeg = shutil.which("ffmpeg")
+    if not ffmpeg:
+        log("no ffmpeg: the showcase cannot be recorded (apt-get install ffmpeg)")
+        return None
+    os.makedirs(SHOWCASE, exist_ok=True)
+    display = os.environ.get("DISPLAY", ":0")
+    source = (display if "." in display.split(":")[-1] else display + ".0") + "+0,0"
+    cmd = [ffmpeg, "-y", "-hide_banner", "-loglevel", "info", "-f", "x11grab", "-draw_mouse", "0", "-framerate", "30",
+           "-video_size", size, "-i", source, "-c:v", "libx264", "-preset", "ultrafast", "-crf", "16",
+           "-pix_fmt", "yuv420p", "-g", "60", RECORDING]
+    log("recording: " + " ".join(cmd))
+    logf = open(RECORDER_LOG, "w")
+    spawned = time.time()
+    proc = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=logf, stderr=subprocess.STDOUT, start_new_session=True)
+    return {"proc": proc, "log": logf, "spawned": spawned}
+
+
+def stop_recorder(rec):
+    if rec is None:
+        return
+    proc = rec["proc"]
+    try:
+        proc.stdin.write(b"q")
+        proc.stdin.flush()
+        proc.stdin.close()
+    except OSError:
+        pass
+    try:
+        proc.wait(timeout=60)
+    except subprocess.TimeoutExpired:
+        proc.terminate()
+        try:
+            proc.wait(timeout=20)
+        except subprocess.TimeoutExpired:
+            proc.kill()
+    rec["log"].close()
+    log(f"recording stopped ({os.path.getsize(RECORDING) / 1e6:.0f} MB)" if os.path.exists(RECORDING) else "no recording")
+
+
+def recording_start(fallback):
+    """Wall-clock time of the recording's first frame: x11grab stamps its frames with the system clock."""
+    try:
+        with open(RECORDER_LOG, encoding="utf-8", errors="replace") as f:
+            m = re.search(r"start: (\d{9,}\.\d+)", f.read())
+        if m:
+            return float(m.group(1)), "x11grab start"
+    except OSError:
+        pass
+    return fallback, "spawn time (no start stamp in the ffmpeg log)"
+
+
+def cut_clips(spawned):
+    """One clip per filmed scene, sped back up to real time, plus a poster frame and the scene log for make_video.py."""
+    path = os.path.join(SHOWCASE, "scenes.json")
+    if not os.path.exists(path):
+        return [], ["FAIL no run/showcase/scenes.json: the tour never started"]
+    if not os.path.exists(RECORDING):
+        return [], ["FAIL no recording"]
+    with open(path, encoding="utf-8") as f:
+        data = json.load(f)
+    start, how = recording_start(spawned + 0.3)
+    log(f"recording starts at {start:.3f} ({how})")
+    os.makedirs(SHOWCASE_OUT, exist_ok=True)
+    out = {"window": data.get("window"), "gui_scale": data.get("gui_scale"), "language": data.get("language"),
+           "measured_fps": data.get("measured_fps"), "slowmo": data.get("slowmo"), "recording_start": how, "scenes": []}
+    made, notes = [], []
+    for sc in data.get("scenes", []):
+        name, k = sc["name"], float(sc.get("slowmo") or 1.0)
+        begin, end = sc.get("begin_ms", 0) / 1000.0, sc.get("end_ms", 0) / 1000.0
+        if sc.get("calibration") or end <= begin:
+            continue
+        clip = f"brasshaven-showcase-{name}.mp4"
+        dst = os.path.join(SHOWCASE_OUT, clip)
+        ss, dur = max(0.0, begin - start), end - begin
+        cmd = ["ffmpeg", "-y", "-hide_banner", "-loglevel", "error", "-ss", f"{ss:.3f}", "-t", f"{dur:.3f}", "-i", RECORDING,
+               "-vf", f"setpts=(PTS-STARTPTS)/{k},fps=30", "-an", "-c:v", "libx264", "-preset", "medium", "-crf", "18",
+               "-pix_fmt", "yuv420p", "-movflags", "+faststart", dst]
+        r = subprocess.run(cmd, capture_output=True, text=True)
+        if r.returncode != 0 or not os.path.exists(dst):
+            notes.append(f"NOTE clip {name} could not be cut: {r.stderr.strip()[-300:]}")
+            continue
+        length = dur / k
+        subprocess.run(["ffmpeg", "-y", "-hide_banner", "-loglevel", "error", "-ss", f"{length / 2:.2f}", "-i", dst,
+                        "-frames:v", "1", "-q:v", "3", dst[:-4] + ".jpg"], capture_output=True)
+        out["scenes"].append({"name": name, "clip": clip, "duration": round(length, 3), "slowmo": k,
+                              "fps": sc.get("fps"), "status": sc.get("status"), "error": sc.get("error"),
+                              "cursor": sc.get("cursor", [])})
+        made.append(name)
+        log(f"clip {clip}: {length:.1f} s (filmed {dur:.0f} s at x{k:g}, {sc.get('fps')} fps, {sc.get('status')})")
+    with open(os.path.join(SHOWCASE_OUT, "brasshaven-showcase-scenes.json"), "w", encoding="utf-8") as f:
+        json.dump(out, f, indent=1)
+    if not made:
+        notes.append("FAIL no scene was filmed")
+    return made, notes
 
 
 # ------------------------------------------------------------------ log scan
@@ -295,12 +421,22 @@ def main():
     ap.add_argument("--game-timeout", type=int, default=18 * 60, help="in-game limit (CiDriver), seconds")
     ap.add_argument("--early-window", action="store_true", help="keep FML's early loading window")
     ap.add_argument("--strict", action="store_true", help="also fail on ERROR lines that do not mention the mod")
+    ap.add_argument("--showcase", action="store_true", help="film the showcase tour (client/CiShowcase) with ffmpeg")
+    ap.add_argument("--size", default="1280x720", help="window and Xvfb screen size in showcase mode, WxH")
+    ap.add_argument("--slowmo", default="0", help="showcase slow-motion factor (0: picked from the measured fps)")
     args = ap.parse_args()
-    ensure_display(sys.argv[1:])
+    if args.showcase:
+        if args.timeout == 25 * 60:
+            args.timeout = 70 * 60
+        if args.game_timeout == 18 * 60:
+            args.game_timeout = 58 * 60
+    ensure_display(sys.argv[1:], args.size if args.showcase else "1920x1080")
     log(f"display {os.environ.get('DISPLAY')}")
-    prepare(args.early_window)
+    prepare(args.early_window, args.showcase)
 
     code, state, notes = run_game(args)
+    if args.showcase:
+        return showcase_verdict(args, code, state, notes)
     failures = [n for n in notes if n.startswith("FAIL")]
     remarks = [n for n in notes if not n.startswith("FAIL")]
 
@@ -353,6 +489,40 @@ def main():
 
     print(text, flush=True)
     log("client test: " + ("FAILED" if failures else "OK"))
+    sys.exit(1 if failures else 0)
+
+
+def showcase_verdict(args, code, state, notes):
+    """The tour is footage, not a test: only a run without any clip fails. Log problems are listed for the record."""
+    rec = state.get("recorder")
+    made, cut_notes = cut_clips(rec["spawned"] if rec else time.time())
+    notes = notes + cut_notes
+    report = read_report() or ["(no report)"]
+    found, problems = scan_log(args.strict)
+    summary = ["# Brasshaven showcase", "", "## Steps", "```"] + report + ["```", "",
+               "## Clips", ", ".join(made) if made else "none", ""]
+    for kind in ("crash", "brasshaven", "resources"):
+        if found[kind]:
+            summary += [f"## Log: {kind} ({len(found[kind])})", "```"]
+            for e in found[kind][:30]:
+                summary.append(e["head"])
+                summary += e["more"][:8]
+            summary += ["```", ""]
+    failures = [n for n in notes if n.startswith("FAIL")]
+    summary += ["## Notes", ""] + [f"- {n}" for n in notes + problems] + [f"- game exit code {code}"]
+    summary.append("**FAILED**" if failures else "**OK**")
+    text = "\n".join(summary) + "\n"
+    os.makedirs(SHOWCASE_OUT, exist_ok=True)
+    with open(os.path.join(SHOWCASE_OUT, "showcase-summary.md"), "w", encoding="utf-8") as f:
+        f.write(text)
+    for path in (REPORT, CONSOLE, RECORDER_LOG, os.path.join(SHOWCASE, "scenes.json")):
+        if os.path.exists(path):
+            shutil.copyfile(path, os.path.join(SHOWCASE_OUT, os.path.basename(path)))
+    if os.environ.get("GITHUB_STEP_SUMMARY"):
+        with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as f:
+            f.write(text)
+    print(text, flush=True)
+    log("showcase: " + ("FAILED" if failures else f"OK, {len(made)} clips"))
     sys.exit(1 if failures else 0)
 
 

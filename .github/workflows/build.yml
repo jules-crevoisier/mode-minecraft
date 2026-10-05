@@ -293,10 +293,72 @@ jobs:
             run/ci-client-report.txt
             run/ci-client-console.log
 
+  # Films the mod for the presentation videos (tools/make_video.py): the real client under Xvfb at 1280x720, recorded
+  # with ffmpeg x11grab while client/CiShowcase plays a scripted tour in French (structures orbited by the camera, the
+  # screens used with a cursor, machines at work, creatures and a boss with their health bars, the biomes from the air,
+  # the multiplayer screens). Software rendering is slow, so each scene is filmed in slow motion (/tick rate) and sped
+  # up again when it is cut: one clip per scene, brasshaven-showcase-<scene>.mp4, with brasshaven-showcase-scenes.json
+  # (durations, cursor tracks). Branch pushes only; nothing waits for it.
+  showcase:
+    if: github.ref_type == 'branch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 80
+    env:
+      LIBGL_ALWAYS_SOFTWARE: "1"
+      GALLIUM_DRIVER: llvmpipe
+      MESA_GL_VERSION_OVERRIDE: "4.5"
+      MESA_GLSL_VERSION_OVERRIDE: "450"
+      ALSOFT_DRIVERS: "null"
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 25
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Install Xvfb, Mesa (software OpenGL) and ffmpeg
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -y -q --no-install-recommends xvfb xauth mesa-utils libgl1 libglx-mesa0 libgl1-mesa-dri \
+            libegl1 libxrandr2 libxcursor1 libxi6 libxinerama1 libxxf86vm1 ffmpeg
+          ffmpeg -hide_banner -version | head -n 1
+          nproc
+
+      # ci_client.py starts Xvfb at the window size, records it and cuts the clips into build/ci-client/showcase/
+      - name: Film the showcase tour
+        run: python3 tools/ci_client.py --showcase --size 1280x720
+
+      - name: Upload the clips
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: showcase-clips
+          if-no-files-found: ignore
+          path: |
+            build/ci-client/showcase/brasshaven-showcase-*
+            build/ci-client/showcase/showcase-summary.md
+
+      - name: Upload the showcase logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: showcase-logs
+          if-no-files-found: ignore
+          path: |
+            run/logs/
+            run/crash-reports/
+            run/showcase/scenes.json
+            run/showcase/ffmpeg-x11grab.log
+            run/ci-client-report.txt
+            run/ci-client-console.log
+
   previews:
-    # the structure fit renders, the test summaries and the client screenshots go to their own pre-release, even when
-    # a test failed, so they can be looked at
-    needs: [smoke-test, fit-test, world-test, client-test]
+    # the structure fit renders, the test summaries, the client screenshots and the showcase clips go to their own
+    # pre-release, even when a test failed, so they can be looked at
+    needs: [smoke-test, fit-test, world-test, client-test, showcase]
     if: ${{ always() && github.ref_type == 'branch' }}
     runs-on: ubuntu-latest
     steps:
@@ -313,10 +375,17 @@ jobs:
           name: client-screenshots
           path: client
 
+      - uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: showcase-clips
+          path: showcase
+
       - name: Collect the client screenshots
         run: |
           mkdir -p previews
           cp client/brasshaven-shot-*.png previews/ 2>/dev/null || echo "no client screenshots"
+          cp showcase/brasshaven-showcase-* previews/ 2>/dev/null || echo "no showcase clips"
           cp client/ci-client-summary.md previews/ 2>/dev/null || echo "no client summary"
           # the fit test runs in shards: one report for the release, as before
           if ls previews/brasshaven-fit-shard*.txt >/dev/null 2>&1; then
@@ -332,7 +401,7 @@ jobs:
           name: Brasshaven — aperçus (${{ github.ref_name }})
           prerelease: true
           make_latest: false
-          body: Chaque structure en place sur le relief de Minecraft avec sa mesure d'intégration (brasshaven-fit-*.png, brasshaven-fit.txt, /brasshaven fitcheck), un rendu 3D de chaque biome Brasshaven (brasshaven-biome-*.png, /brasshaven biomeshots), le résumé de chaque test serveur (brasshaven-ci-*.txt, durée des phases, vitesse de génération avec et sans les biomes Brasshaven en ms/chunk et leur rapport, lignes FAIL), et des captures du vrai client (brasshaven-shot-*.png — écrans, HUD, créatures, Citadelle) prises par le job client-test (commit ${{ github.sha }}).
+          body: Chaque structure en place sur le relief de Minecraft avec sa mesure d'intégration (brasshaven-fit-*.png, brasshaven-fit.txt, /brasshaven fitcheck), un rendu 3D de chaque biome Brasshaven (brasshaven-biome-*.png, /brasshaven biomeshots), le résumé de chaque test serveur (brasshaven-ci-*.txt, durée des phases, vitesse de génération avec et sans les biomes Brasshaven en ms/chunk et leur rapport, lignes FAIL), et des captures du vrai client (brasshaven-shot-*.png — écrans, HUD, créatures, Citadelle) prises par le job client-test, et les séquences filmées du vrai client pour les vidéos de présentation (brasshaven-showcase-*.mp4 et brasshaven-showcase-scenes.json, job showcase, assemblées par tools/make_video.py) (commit ${{ github.sha }}).
           files: previews/*
 
   # Development build of a branch: the tested jar and the packs on the branch's pre-release (dev-<branch>)
