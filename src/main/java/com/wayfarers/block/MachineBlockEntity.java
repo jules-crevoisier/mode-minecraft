@@ -144,6 +144,9 @@ public class MachineBlockEntity extends BaseContainerBlockEntity {
     private boolean lastInput;
     private boolean outputFull;
     private long lastWork = -1000;
+    /** Harvester / Vacuum Hopper: ticker value of the next scan, and how many scans in a row found nothing. */
+    private long nextRun;
+    private int idleRuns;
     private int detected;
     // live status, refreshed while a screen is open
     private Status status = Status.WAITING_ITEMS;
@@ -194,6 +197,20 @@ public class MachineBlockEntity extends BaseContainerBlockEntity {
         super(ModBlockEntities.MACHINE.get(), pos, state);
         // spread the periodic work: machines loaded together (a chunk, a server start) don't all scan on one tick
         ticker = Math.floorMod(pos.asLong() * 0x9E3779B97F4A7C15L >>> 40, 120);
+        nextRun = ticker + ticker % 40;
+    }
+
+    /**
+     * Idle back-off: a Harvester or Vacuum Hopper that found nothing to do scans less and less often (up to 4 times
+     * slower), and is back to full speed as soon as it works again.
+     */
+    private boolean due() {
+        return ticker >= nextRun;
+    }
+
+    private void ran(int period, boolean worked) {
+        idleRuns = worked ? 0 : Math.min(idleRuns + 1, 12);
+        nextRun = ticker + (long) period * (1 + idleRuns / 4);
     }
 
     public void setOwner(@org.jetbrains.annotations.Nullable java.util.UUID owner) {
@@ -552,6 +569,8 @@ public class MachineBlockEntity extends BaseContainerBlockEntity {
             }
         }
         setChanged();
+        idleRuns = 0; // a new setting: work at full speed again at once
+        nextRun = ticker;
         if (action != MachineMenu.A_CHANNEL && action != MachineMenu.A_TAKE_XP) {
             click();
         }
@@ -583,8 +602,8 @@ public class MachineBlockEntity extends BaseContainerBlockEntity {
         ticker++;
         switch (kind()) {
             case HARVESTER -> {
-                if (ticker % 40 == 0 && redstoneAllows(level)) {
-                    harvest(level);
+                if (due()) {
+                    ran(40, redstoneAllows(level) && harvest(level));
                 }
             }
             case SPRINKLER -> {
@@ -593,8 +612,8 @@ public class MachineBlockEntity extends BaseContainerBlockEntity {
                 }
             }
             case VACUUM -> {
-                if (ticker % 5 == 0 && redstoneAllows(level)) {
-                    vacuum(level);
+                if (due()) {
+                    ran(5, redstoneAllows(level) && vacuum(level));
                 }
                 if (ticker % 10 == 0) {
                     pushDown(level);
@@ -775,7 +794,8 @@ public class MachineBlockEntity extends BaseContainerBlockEntity {
         return n;
     }
 
-    private void harvest(ServerLevel level) {
+    /** Harvests ripe crops in the area; true when anything was harvested. */
+    private boolean harvest(ServerLevel level) {
         int r = radius();
         int done = 0;
         for (BlockPos p : BlockPos.betweenClosed(worldPosition.offset(-r, -1, -r), worldPosition.offset(r, 1, r))) {
@@ -825,6 +845,7 @@ public class MachineBlockEntity extends BaseContainerBlockEntity {
             lastWork = level.getGameTime();
             level.playSound(null, worldPosition, SoundEvents.CROP_BREAK, SoundSource.BLOCKS, 0.7F, 1.0F);
         }
+        return done > 0;
     }
 
     private static boolean besideAttachedStem(ServerLevel level, BlockPos p) {
@@ -934,11 +955,14 @@ public class MachineBlockEntity extends BaseContainerBlockEntity {
         return !any || match == whitelist;
     }
 
-    private void vacuum(ServerLevel level) {
+    /** Pulls in items (and XP orbs) around; true when anything was seen to pull. */
+    private boolean vacuum(ServerLevel level) {
         AABB area = new AABB(worldPosition).inflate(radius());
         boolean full = false;
+        boolean seen = false;
         for (ItemEntity drop : level.getEntitiesOfClass(ItemEntity.class, area,
                 e -> e.isAlive() && !e.hasPickUpDelay() && passesFilter(e.getItem()))) {
+            seen = true;
             ItemStack before = drop.getItem();
             ItemStack rest = InventoryUtil.insert(this, before, false);
             if (rest.getCount() != before.getCount()) {
@@ -958,9 +982,11 @@ public class MachineBlockEntity extends BaseContainerBlockEntity {
                 xp = (int) Math.min(Integer.MAX_VALUE / 2, (long) xp + orb.getValue());
                 orb.discard();
                 lastWork = level.getGameTime();
+                seen = true;
                 setChanged();
             }
         }
+        return seen;
     }
 
     private void pushDown(ServerLevel level) {
