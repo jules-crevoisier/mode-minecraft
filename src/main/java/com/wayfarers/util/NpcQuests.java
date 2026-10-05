@@ -258,6 +258,7 @@ public final class NpcQuests {
             }
         }
         WayfarersNet.toPlayer(player, new NpcDialogMsg(npc.getId(), role, entries));
+        Tips.show(player, "npc");
     }
 
     /** A button of the contracts screen: validated here (reach, role, state, items). */

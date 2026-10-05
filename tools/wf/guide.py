@@ -58,6 +58,36 @@ PAGES = [
          "La progression est partagée : quand un ami réussit une étape, elle compte pour tout le groupe, même pour "
          "les absents. Chaque quête rapporte aussi des points de talent."),
     ], []),
+    ("contracts", "start", "minecraft:emerald", ("Quest givers & contracts", "Donneurs de quêtes et contrats"), [
+        ("People with a name tag hand out contracts: Guild Agents (villages, Guild Outposts), Scholars (village "
+         "inns, the Forgotten Library), Tinkerers (village workshops, the Clockwork Citadel), Druids (the Hollow "
+         "Giant Tree) and Dwarf Elders (the Deep Dwarven City).",
+         "Des personnages au nom affiché proposent des contrats : agents de la Guilde (villages, avant-postes de la "
+         "Guilde), érudites (auberges des villages, Bibliothèque oubliée), bricoleurs (ateliers des villages, "
+         "Citadelle d'horlogerie), druidesses (Arbre-monde creux) et anciens nains (Cité naine des profondeurs)."),
+        ("Right-click one to talk. \"!\" marks a new contract, \"?\" one you can hand in. Pick it, read what they "
+         "ask, then Accept. Track pins it to the top-right of your screen.",
+         "Clic droit pour leur parler. « ! » signale un nouveau contrat, « ? » un contrat à rendre. Choisis-le, lis "
+         "ce qu'on te demande, puis Accepter. Suivre l'épingle en haut à droite de l'écran."),
+        ("Four kinds: bring items (they are taken when you hand them in), hunt creatures (kills after accepting "
+         "count), find a structure (just walk into it), and deliver a sealed parcel to another quest giver.",
+         "Quatre sortes : apporter des objets (ils sont pris quand tu les rends), chasser des créatures (les "
+         "victimes après avoir accepté comptent), trouver une structure (il suffit d'y entrer), et livrer un colis "
+         "scellé à un autre donneur de quêtes."),
+        ("Come back to the giver and press Turn in (Hand over for a parcel) for emeralds, experience and gear. "
+         "Lost a parcel? Its giver hands you another. Each player has their own contracts; finishing one unlocks "
+         "the next. The journal (J) lists them in its Contracts tab.",
+         "Reviens voir le commanditaire et appuie sur Rendre (Remettre pour un colis) : émeraudes, expérience et "
+         "équipement. Colis perdu ? Son expéditeur t'en donne un autre. Chaque joueur a ses propres contrats ; en "
+         "finir un débloque le suivant. Le journal (J) les liste dans l'onglet Contrats."),
+        ("Quest givers stay at their post, cannot be hurt and never leave. Villagers and quest givers live in the "
+         "Guild Outposts, the monastery, the library, the lighthouse, the World Tree, the oasis, the observatories, "
+         "the rune circle and the ziggurat's keepers' lodge, and in most wonders: no monster spawns inside those.",
+         "Les donneurs de quêtes restent à leur poste, sont invulnérables et ne partent jamais. Villageois et "
+         "donneurs de quêtes habitent les avant-postes de la Guilde, le monastère, la bibliothèque, le phare, "
+         "l'Arbre-monde, l'oasis, les observatoires, le cercle runique, la loge des gardiens de la ziggourat et la "
+         "plupart des merveilles : aucun monstre n'apparaît à l'intérieur."),
+    ], ["minecraft:emerald"]),
     ("keys", "start", "minecraft:oak_sign", ("Keys", "Touches"), [
         ("J: quest journal\nK: talent tree\nV: use your active talent\nR: sort your inventory\nM: world map\n"
          "H: show/hide the minimap\nShift + H: minimap size\nZ: minimap zoom\nB: ping the spot you look at\nN: magnet ring on/off\n"
@@ -183,6 +213,11 @@ PAGES = [
          "on the travel map. The notice board and the meeting bell stand beside it.",
          "Environ un village sur quatre se forme autour d'une place avec une pierre de voyage : clic droit pour "
          "mettre le village sur la carte de voyage. Le tableau d'annonces et la cloche sont à côté."),
+        ("Quest givers live there too: a Guild Agent in the Guild Post and by the square's notice board, a Scholar "
+         "in the inn's tavern, a Tinkerer in the workshop. Right-click them for contracts.",
+         "Des donneurs de quêtes y vivent aussi : un agent de la Guilde au Relais de la Guilde et près du tableau "
+         "d'annonces de la place, une érudite dans la taverne de l'auberge, un bricoleur dans l'atelier. Clic droit "
+         "pour leurs contrats."),
         ("Streets get brass lamps, signposts and planters. Pillager outposts now field steam ballistas and spiked "
          "barricades.",
          "Les rues ont des lampes en laiton, des panneaux et des jardinières. Les avant-postes pillards ont des "
@@ -217,10 +252,13 @@ PAGES = [
          "fumantes."),
         ("Where: badlands, savannas, deserts and plains.",
          "Où : badlands, savanes, déserts et plaines."),
-        ("Clockwork Spiders and Steam Drones guard it. A stair in the tower's entrance hall leads down to the Clock "
-         "Vault, lair of the Grand Clockmaker (see Automatons).",
-         "Des araignées-horloges et des drones à vapeur la gardent. Un escalier dans le hall de la tour descend au "
-         "Caveau de l'horloge, l'antre du Grand Horloger (voir Automates)."),
+        ("Its clockmakers still work in the halls, guarded by Brass Golems; a Tinkerer gives contracts in the first "
+         "workshop. A stair in the tower's entrance hall leads down to the Gearworks, where Clockwork Spiders "
+         "swarm, and the Clock Vault, lair of the Grand Clockmaker (see Automatons).",
+         "Ses horlogers travaillent encore dans les halles, gardés par des golems de laiton ; un bricoleur propose "
+         "des contrats dans le premier atelier. Un escalier dans le hall de la tour descend aux Rouages, où "
+         "grouillent les araignées-horloges, puis au Caveau de l'horloge, l'antre du Grand Horloger (voir "
+         "Automates)."),
     ], []),
     ("sky_harbour", "wonders", "wayfarers:airship_compass", ("Sky Harbour", "Port céleste"), [
         ("A steam airship moored at the top of a 44-block iron tower, seen from far away.",
@@ -239,9 +277,10 @@ PAGES = [
          "vert toxique, reliée par des passerelles et éclairée de lampes."),
         ("Where: under any biome, deep down: its lake lies around y -15.",
          "Où : sous n'importe quel biome, en profondeur : son lac est vers y -15."),
-        ("Steam Drones and Clockwork Spiders patrol it. Climb the pillar's ladders to reach the upper levels.",
-         "Des drones à vapeur et des araignées-horloges y patrouillent. Grimpe les échelles du pilier pour "
-         "atteindre les niveaux supérieurs."),
+        ("A family lives in every stilt house and no monster spawns in the cavern. Climb the pillar's ladders to "
+         "reach the upper levels and the vault.",
+         "Une famille vit dans chaque maison sur pilotis et aucun monstre n'apparaît dans la caverne. Grimpe les "
+         "échelles du pilier pour atteindre les niveaux supérieurs et le coffre-fort."),
     ], []),
     ("dwarven_city", "wonders", "wayfarers:mithril_block", ("Deep Dwarven City", "Cité naine des profondeurs"), [
         ("A lost dwarf kingdom carved in the rock: a great cavern with a lava hearth, forges, a tavern, terraces of "
@@ -251,10 +290,12 @@ PAGES = [
         ("Where: under any biome, at the bottom of the world (floor around y -48).",
          "Où : sous n'importe quel biome, tout au fond du monde (sol vers y -48)."),
         ("Behind the great gate and its two 22-block dwarf statues: the Great Hall, the Throne Room and, under a "
-         "carpet behind the throne, a trapdoor to the treasure vault. Skeleton knights and gargoyles roam.",
+         "carpet behind the throne, a trapdoor to the treasure vault, still guarded by skeleton knights. Dwarves "
+         "live in the forges and houses; the Dwarf Elder gives contracts by the tavern hearth.",
          "Derrière la grande porte et ses deux statues naines de 22 blocs : la grande salle, la salle du trône et, "
-         "sous un tapis derrière le trône, une trappe vers la salle du trésor. Chevaliers squelettes et gargouilles "
-         "y rôdent."),
+         "sous un tapis derrière le trône, une trappe vers la salle du trésor, toujours gardée par des chevaliers "
+         "squelettes. Des nains vivent dans les forges et les maisons ; l'ancien nain propose des contrats près du "
+         "foyer de la taverne."),
     ], []),
     ("sylvan_palace", "wonders", "minecraft:flowering_azalea_leaves", ("Sylvan Palace", "Palais sylvain"), [
         ("An elven palace grown around a colossal silver tree 70 blocks tall. A spiral stair climbs around the trunk "
@@ -264,9 +305,11 @@ PAGES = [
         ("Where: dark forests, old-growth taigas, old-growth birch forests and flower forests.",
          "Où : forêts sombres, vieilles taïgas, vieilles forêts de bouleaux et forêts de fleurs."),
         ("Inside the trunk: the throne hall and the royal treasury. Up in the leaves: the library and, at the very "
-         "top, the Moon Lantern. Rope bridges lead to three tree houses.",
+         "top, the Moon Lantern. Rope bridges lead to three tree houses. The sylvan court lives in the pavilions: "
+         "a healer, librarians, a weaver, a cook, a gardener and the royal cartographer.",
          "Dans le tronc : la salle du trône et le trésor royal. Dans les feuilles : la bibliothèque et, tout en "
-         "haut, la Lanterne de lune. Des ponts de corde mènent à trois cabanes."),
+         "haut, la Lanterne de lune. Des ponts de corde mènent à trois cabanes. La cour sylvaine habite les "
+         "pavillons : une guérisseuse, des bibliothécaires, une tisserande, un cuisinier, un jardinier et le cartographe royal."),
     ], []),
     ("inventor_manor", "wonders", "wayfarers:redstone_timer", ("Inventor's Manor", "Manoir de l'inventeur"), [
         ("A Victorian steampunk mansion: turrets, a copper roof, an observatory with a telescope, a glass "
@@ -737,6 +780,9 @@ TIPS = [
     ("danger", "minecraft:skeleton_skull", ("The danger level rose: monsters here are stronger.",
                                             "Le niveau de danger augmente : les monstres sont plus forts ici."),
      "danger"),
+    ("npc", "minecraft:emerald", ("A quest giver! Pick a contract, Accept it, then come back to hand it in.",
+                                   "Un donneur de quêtes ! Choisis un contrat, accepte-le, puis reviens le rendre."),
+     "contracts"),
     # first login: the minimap has just appeared in the corner
     ("map", "minecraft:filled_map", ("The minimap shows the land around you. M: world map, H: hide it, Shift + H: its "
                                      "size, Z: zoom, B: ping the spot you look at.",

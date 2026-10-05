@@ -1133,6 +1133,7 @@ def populate(bp, residents, region=None, vtype="plains", seed=0, rooms=None, bed
         (brass_golem if kind == "brass" else iron_golem)(bp, gx, gy, gz)
     if not rooms:
         return spots
+    beds_before = _count_beds(bp) if beds else 0
     for i, res in enumerate(residents):
         prof, lvl = (res if isinstance(res, tuple) else (res, 2))
         placed = False
@@ -1151,7 +1152,30 @@ def populate(bp, residents, region=None, vtype="plains", seed=0, rooms=None, bed
                 c = rng.choice(free)
                 villager(bp, c[0], room.y, c[1], prof, vtype, lvl)
                 spots.append((c[0], room.y, c[1]))
+    if beds:
+        # a bed for everyone: those whose room had no wall left for one sleep in another room of the region
+        missing = len(spots) - (_count_beds(bp) - beds_before)
+        for _ in range(max(0, missing)):
+            if not _extra_bed(bp, rooms, rng, bed_colour):
+                break
     return spots
+
+
+def _count_beds(bp):
+    return sum(1 for b in bp.blocks.values() if b[0].endswith("_bed") and b[1].get("part") == "head")
+
+
+def _extra_bed(bp, rooms, rng, bed_colour):
+    """One more bed against any free wall of ``rooms`` (biggest first); False when none fits."""
+    for room in rooms:
+        ctx = Ctx(bp, room, {"beds": [bed_colour] if bed_colour else ["red", "white", "light_blue", "lime"]}, rng)
+        for c in sorted(c for c in room.walls if c in room.free and c not in room.keep):
+            for d in room.walls[c]:
+                got = p_bed(ctx, c, d)
+                if got:
+                    room.take(got)
+                    return True
+    return False
 
 
 def _settle_one(bp, room, prof, lvl, vtype, rng, beds, bed_colour):
@@ -1175,7 +1199,12 @@ def _settle_one(bp, room, prof, lvl, vtype, rng, beds, bed_colour):
         for c in sorted(cells, key=lambda c: abs(c[0] - job[0]) + abs(c[1] - job[1])):
             if c in room.free and c not in room.keep:
                 d = rng.choice(room.walls[c])
-                got = p_bed(ctx, c, d)
+                # the head against any wall of that cell (the first pick first)
+                got = None
+                for dd in [d] + [w for w in room.walls[c] if w != d]:
+                    got = p_bed(ctx, c, dd)
+                    if got:
+                        break
                 if got:
                     room.take(got)
                     break

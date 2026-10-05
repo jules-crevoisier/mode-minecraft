@@ -38,8 +38,9 @@ public final class NpcCommand {
 
     private NpcCommand() {}
 
-    public static LiteralArgumentBuilder<CommandSourceStack> npc() {
-        return Commands.literal("npc").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
+    /** {@code /wayfarers npc ...} under {@code root} (the "npc" literal, operators only). */
+    public static LiteralArgumentBuilder<CommandSourceStack> npc(LiteralArgumentBuilder<CommandSourceStack> root) {
+        return root
                 .then(Commands.literal("spawn").then(Commands.argument("role", StringArgumentType.word())
                         .suggests((ctx, b) -> SharedSuggestionProvider.suggest(GeneratedNpcs.ROLES, b))
                         .executes(ctx -> spawn(ctx, StringArgumentType.getString(ctx, "role")))))
@@ -50,8 +51,9 @@ public final class NpcCommand {
                 .then(Commands.literal("remove").executes(NpcCommand::remove));
     }
 
-    public static LiteralArgumentBuilder<CommandSourceStack> contracts() {
-        return Commands.literal("contracts").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
+    /** {@code /wayfarers contracts reset [player]} under {@code root} (the "contracts" literal). */
+    public static LiteralArgumentBuilder<CommandSourceStack> contracts(LiteralArgumentBuilder<CommandSourceStack> root) {
+        return root
                 .then(Commands.literal("reset")
                         .executes(ctx -> reset(ctx, ctx.getSource().getPlayerOrException()))
                         .then(Commands.argument("player", EntityArgument.player())

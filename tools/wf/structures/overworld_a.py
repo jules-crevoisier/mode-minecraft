@@ -1709,12 +1709,11 @@ def library(bp):
         bp.set(x0 + 6, 1, CZ - 1, "lectern[facing=south,has_book=false,powered=false]")
     for xc in (24, 40, 56):
         great_chandelier(bp, xc, 16, CZ, ridge - 1, r=3)
-    # guardians and treasures
-    bp.spawner(40, 1, CZ, MOB["map_wraith"])
+    # treasures (the keepers live in this hall: the wraiths haunt the ruined wing and the Archivist's stacks)
+    bp.set(40, 1, CZ, "enchanting_table")
     for dx, dz in ((1, 0), (-1, 0), (0, 1), (0, -1)):
         bp.set(40 + dx, 1, CZ + dz, "chiseled_tuff_bricks" if dx else "air")
     bp.set(40, 1, CZ - 1, "air")
-    bp.spawner(HX0 + 8, GY1 + 1, HZ0 + 3, MOB["map_wraith"])
     bp.chest(HX0 + 4, 1, HZ0 + 2, "south", LOOT + "library")
     bp.chest(HX1 - 3, GY2 + 1, HZ0 + 2, "south", LOOT + "library")
 

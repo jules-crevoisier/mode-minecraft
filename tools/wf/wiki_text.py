@@ -70,6 +70,10 @@ COMMANDS = {
     "boss": ("op", "Fait apparaître un boss devant toi, pour le tester."),
     "fitcheck": ("op", "Trouve chaque structure de la Surface, la génère et mesure comment elle se pose sur le relief (rapport et images PNG dans le dossier du serveur). Sert aux tests ; prend plusieurs minutes."),
     "progress": ("op", "reset : remet la quête à zéro ; complete : accorde toutes les quêtes."),
+    "npc": ("op", "Donneurs de quêtes : spawn <rôle> en pose un à tes pieds (guild_agent, scholar, tinkerer, druid, "
+                  "dwarf_elder), move amène le plus proche (8 blocs) à ta place et en fait son nouveau poste, role "
+                  "<rôle> change son métier, remove le retire."),
+    "contracts": ("op", "reset [joueur] : efface les contrats acceptés et terminés d'un joueur."),
 }
 
 CONFIG_FR = {
@@ -140,26 +144,33 @@ WONDERS = ["clockwork_citadel", "sky_harbour", "undercity", "sunken_citadel"]
 
 STRUCTURES = {
     "guild_outpost": "Fort de la Guilde avec rempart, châtelet, grande salle et tour des cartes de 46 blocs. "
-                     "Première structure à trouver : fragments de carte et pierre de voyage. Trois variantes.",
+                     "Première structure à trouver : fragments de carte et pierre de voyage. Trois variantes. Une "
+                     "garnison de villageois y vit, et l'agent de la Guilde propose des contrats dans la grande salle.",
     "mountain_monastery": "Église gothique à arcs-boutants avec clocher de 46 blocs, cloître et bibliothèque. Sous la "
                           "crypte secrète, la chambre de la cloche du Sonneur de glas.",
-    "forgotten_library": "Nef gothique, tours jumelles et rotonde effondrée. Derrière un cabinet secret, les archives "
-                         "interdites de l'Archiviste.",
-    "coastal_lighthouse": "Phare de 52 blocs sur un cap, avec quai et grotte marine.",
-    "giant_tree": "Tronc creux de 15 blocs de large, trois terrasses de cabanes reliées par des ponts de corde. La "
-                  "Mère-Racine attend dans la caverne des racines.",
+    "forgotten_library": "Nef gothique, tours jumelles et rotonde effondrée. Les derniers bibliothécaires vivent dans "
+                         "la grande salle avec une érudite qui propose des contrats ; les spectres hantent l'aile en "
+                         "ruine. Derrière un cabinet secret, les archives interdites de l'Archiviste.",
+    "coastal_lighthouse": "Phare de 52 blocs sur un cap, avec quai et grotte marine. Le gardien du phare et un "
+                          "pêcheur vivent dans la maison au pied de la tour.",
+    "giant_tree": "Tronc creux de 15 blocs de large, trois terrasses de cabanes reliées par des ponts de corde. Un "
+                  "peuple de la forêt en robe verte y vit (archer, fermier, bibliothécaire, cartographe, guérisseuse, "
+                  "tisserand) et une druidesse propose des contrats à l'étage des couchettes. La Mère-Racine attend "
+                  "dans la caverne des racines.",
     "desert_oasis": "Caravansérail à coupoles et minarets, bazar et colosse de pharaon à moitié enseveli. Le tombeau "
                     "caché mène à la salle funéraire du Pharaon ensablé.",
     "witch_huts": "Maisons tordues sur pilotis, tour au chapeau pointu et cercle rituel. Sous le marais, la grotte "
                   "inondée de la Grand-Mère du marais.",
     "sky_island": "Temple de quartz flottant à 40 blocs du sol, îlots reliés par des ponts et cascades. Le "
                   "Chevalier-griffon combat sur l'esplanade.",
-    "jungle_ziggurat": "Pyramide à 8 gradins, têtes de serpent à plumes, jeu de balle. Sous la pyramide, le cénote "
-                       "sacré du Jaguar de jade.",
+    "jungle_ziggurat": "Pyramide à 8 gradins, têtes de serpent à plumes, jeu de balle. Les gardiens du temple (un "
+                       "prêtre et un tailleur de pierre) vivent dans une loge de la clairière ; le temple, lui, reste "
+                       "hanté. Sous la pyramide, le cénote sacré du Jaguar de jade.",
     "ruined_watchtower": "Tour de guet : une version en ruine au sommet effondré, une version intacte avec flèche. "
                          "Cave secrète.",
     "bandit_camp": "Palissade, tours de guet et tente du chef, gardés par des pillards.",
-    "rune_circle": "Trilithes de 13 blocs autour d'un autel. La crypte mène à la voûte des runes du Colosse runique.",
+    "rune_circle": "Trilithes de 13 blocs autour d'un autel. Deux gardiens des runes vivent dans une loge sur la "
+                   "prairie. La crypte mène à la voûte des runes du Colosse runique.",
     "ice_observatory": "Dôme de neige, télescope de cuivre et laboratoire en sous-sol.",
     "galleon_wreck": "Galion à trois ponts couché au fond de l'eau, château arrière et mât brisé.",
     "sunken_temple": "Sanctuaire à coupole sous l'océan, obélisques, conduit actif et caveau secret.",
@@ -194,7 +205,8 @@ STRUCTURES = {
                   "Mère-Larve.",
     "clockwork_citadel": "Une ville steampunk de 71 × 71 blocs autour d'une tour-horloge de 75 blocs : quatre cadrans, "
                          "beffroi, flèche de cuivre oxydé, sept étages meublés, quatre ateliers et quatre cheminées "
-                         "fumantes reliées par des tuyaux. Des araignées-horloges et des drones à vapeur y rôdent. Dans "
+                         "fumantes reliées par des tuyaux. Ses horlogers y travaillent encore, gardés par des golems de laiton, "
+                         "et un bricoleur propose des contrats dans le premier atelier. Dans "
                          "le hall d'entrée de la tour (côté est), un escalier s'enfonce vers la Salle des engrenages, "
                          "un lieu de grâce, puis le Caveau de l'horloge où attend le Grand Horloger.",
     "geothermal_foundry": "Des forges steampunk bâties dans le flanc d'un petit volcan fumant (cratère de lave, coulées "
@@ -220,7 +232,8 @@ STRUCTURES = {
                     "tombent des parois ; à l'ouest les forges et la fonderie, à l'est la taverne et la salle des "
                     "tailleurs de gemmes ; trois étages de maisons creusées dans les murs et une voie de wagonnets. Au "
                     "nord, une porte de 13 blocs gardée par deux rois nains de pierre de 22 blocs mène à la Grande Salle "
-                    "puis à la salle du trône. Le trésor ? Une trappe cachée sous le tapis, derrière le trône.",
+                    "puis à la salle du trône. Le trésor ? Une trappe cachée sous le tapis, derrière le trône. Des "
+                    "nains y vivent encore ; l'ancien nain propose des contrats près du foyer de la taverne.",
     "sylvan_palace": "Un palais elfique qui pousse dans et autour d'un arbre d'argent colossal : tronc de 11 blocs, 70 "
                      "blocs de haut, huit racines en arche et une canopée de 46 blocs piquée de fruits lumineux. Un "
                      "escalier en spirale fait le tour du tronc jusqu'à trois terrasses à pavillons (invités, musique "
@@ -244,7 +257,8 @@ STRUCTURES = {
                    "en acajou, hublots, cabine, hélice et enveloppe rayée. Visible de très loin au-dessus des plaines.",
     "undercity": "Une ville suspendue dans une immense caverne creusée sous terre (12 à 30 blocs de profondeur) : lac "
                  "toxique et luminescent, pilier central à trois niveaux de plateformes, maisons sur pilotis "
-                 "accrochées aux parois, passerelles, tuyaux et lampes Edison.",
+                 "accrochées aux parois, passerelles, tuyaux et lampes Edison. Une famille vit dans chaque "
+                 "maison ; aucun monstre n'apparaît dans la caverne.",
     "sunken_submarine": "Un sous-marin steampunk couché sur le sable, la coque de fer sombre cerclée de laiton, une "
                         "brèche dans le flanc. Salle de commandes (table des cartes et coffre du capitaine) et salle "
                         "des machines inondées, kiosque à hublot et périscope.",
@@ -505,6 +519,20 @@ NEW_GROUPS = [
          "pillards ont des balistes à vapeur et des barricades hérissées.", "m-villages",
          "items:brass_railing,dark_iron_plating,minecraft:crossbow"),
     ]),
+    ("Habitants et contrats", "Les structures se peuplent : des villageois chez eux, avec un lit et un métier, et "
+     "des donneurs de quêtes qui proposent des contrats.", [
+        ("Donneurs de quêtes", "Agent de la Guilde, érudite, bricoleur, druidesse et ancien nain : clic droit pour "
+         "leurs contrats (apporter, chasser, explorer, livrer un colis), suivis dans le journal et à l'écran.",
+         "m-contracts", "items:minecraft:emerald,minecraft:paper,map_fragment,brass_gear"),
+        ("L'Arbre-monde habité", "Un peuple de la forêt en robe verte vit sur les étages du tronc creux et sur la "
+         "cime, avec la druidesse.", "s-giant_tree", "struct:giant_tree"),
+        ("Gardiens et ermites", "Une loge pour les gardiens de la ziggourat et pour ceux du cercle runique, le "
+         "gardien du phare, la cour du Palais sylvain.", "s-jungle_ziggurat", "struct:jungle_ziggurat"),
+        ("Relais de la Guilde", "Un nouveau bâtiment dans les villages : l'agent de la Guilde derrière son comptoir. "
+         "Une érudite à l'auberge, un bricoleur à l'atelier.", "m-villages", "items:minecraft:bell,minecraft:lectern"),
+        ("Des lieux sûrs", "Aucun monstre n'apparaît plus là où des gens vivent ; les antres et les donjons restent "
+         "dangereux.", "m-contracts", "items:minecraft:red_bed,minecraft:oak_door"),
+    ]),
     ("Laiton et vapeur", "Des outils de tous les jours et de quoi bâtir vite.", [
         ("Gadgets à vapeur", "Clé à molette, grappin, planeur, pistolet à rivets, montre à gousset et boussole de "
          "dirigeable : six objets de laiton pour grimper, planer, tirer et s'orienter.", "gadgets",
@@ -579,6 +607,16 @@ TEST_CHECKLIST = [
                            "/summon wayfarers:steam_drone ~ ~4 ~6"],
      "L'araignée s'arrête, sa clé ronronne, puis elle bondit. Le drone tourne au-dessus de toi, tire des rivets et "
      "se cabre avant de plonger."),
+    ("Donneurs de quêtes", ["/wayfarers npc spawn guild_agent", "/give @s minecraft:bread 12"],
+     "Un agent de la Guilde apparaît à tes pieds, son nom au-dessus de la tête ; il reste à son poste et ne prend "
+     "aucun dégât. Clic droit : il salue, ses contrats s'affichent. Accepte « Des vivres pour la route », clique "
+     "Rendre : les pains partent, émeraudes et fragments de carte arrivent. Le contrat apparaît dans le journal "
+     "(J), onglet Contrats."),
+    ("Habitants des structures", ["/wayfarers tp giant_tree", "/wayfarers tp jungle_ziggurat",
+                                  "/wayfarers tp clockwork_citadel"],
+     "Dans l'Arbre-monde, des villageois en robe verte vivent sur les étages du tronc (lit et métier chacun) et une "
+     "druidesse attend à l'étage des couchettes. Près de la ziggourat, la loge des gardiens ; dans la Citadelle, "
+     "le bricoleur du premier atelier. La nuit, aucun monstre n'apparaît chez eux."),
     ("Le Grand Horloger", ["/wayfarers boss grand_clockmaker"],
      "Il apparaît à 6 blocs (arène de 20 blocs autour de toi). Guette l'arrêt du temps (cercle qui se referme) et, "
      "à mi-vie, le rugissement puis minuit. Pour le vrai repaire : /wayfarers tp clockwork_citadel."),
