@@ -12,7 +12,11 @@ import net.minecraftforge.network.SimpleChannel;
  * message, and the client answers with small action messages that the server validates.
  */
 public final class WayfarersNet {
-    private static final int VERSION = 1;
+    /**
+     * gradle.properties {@code network_protocol}: bump it when a message is added, removed or changes its encoding
+     * (not for every release; the mod version itself is checked by release.VersionGate).
+     */
+    private static final int VERSION = com.wayfarers.release.BuildInfo.PROTOCOL;
 
     public static final SimpleChannel CHANNEL = ChannelBuilder.named(Wayfarers.id("main"))
             .networkProtocolVersion(VERSION)

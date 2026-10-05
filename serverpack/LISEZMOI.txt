@@ -1,0 +1,50 @@
+WAYFARERS @VERSION@ - SERVEUR / SERVER
+Minecraft @MINECRAFT@ - Forge @FORGE@ - Java 25
+Page du mod / mod page: @DOWNLOAD@
+
+=== Français ===
+
+Installer
+  1. Installe Java 25 (https://adoptium.net/temurin/releases/?version=25).
+  2. Décompresse ce zip dans un dossier vide.
+  3. Linux/macOS : ./start.sh    Windows : double-clic sur start.bat
+     Au premier lancement le script installe Forge, te demande d'accepter le CLUF de Minecraft,
+     puis démarre le serveur. Les lancements suivants démarrent directement.
+  4. Mémoire : modifie -Xms/-Xmx dans jvm_args.txt (6 Go par défaut).
+  5. Réglages : server.properties et config/wayfarers-common.toml (créés au premier lancement
+     depuis defaults/ ; une mise à jour ne les écrase jamais).
+
+Mettre à jour (le monde est conservé)
+  1. Arrête le serveur (commande stop).
+  2. Décompresse le nouveau zip PAR-DESSUS l'ancien dossier (ou remplace seulement mods/wayfarers-*.jar).
+  3. Relance start.sh / start.bat : l'ancien jar part dans old-mods/, et le monde est sauvegardé
+     dans backups/ avant le premier démarrage avec la nouvelle version.
+  4. Préviens les joueurs : ils doivent avoir exactement la même version du mod que le serveur
+     (sinon un message leur indique les deux versions et où télécharger la bonne).
+  En cas de problème : arrête le serveur, remets l'ancien jar (old-mods/) et restaure la sauvegarde.
+
+Hébergeur (panneau Pterodactyl, etc.) : installe Forge @FORGE@ depuis le panneau, puis envoie le
+dossier mods/ et config/ ; mets les options de jvm_args.txt dans le champ "arguments JVM".
+
+=== English ===
+
+Install
+  1. Install Java 25 (https://adoptium.net/temurin/releases/?version=25).
+  2. Unzip this archive into an empty folder.
+  3. Linux/macOS: ./start.sh    Windows: double-click start.bat
+     The first run installs Forge, asks you to accept the Minecraft EULA, then starts the server.
+  4. Memory: edit -Xms/-Xmx in jvm_args.txt (6 GB by default).
+  5. Settings: server.properties and config/wayfarers-common.toml (created on the first run from
+     defaults/; an update never overwrites them).
+
+Update (the world is kept)
+  1. Stop the server (stop command).
+  2. Unzip the new archive OVER the old folder (or only replace mods/wayfarers-*.jar).
+  3. Run start.sh / start.bat again: the old jar moves to old-mods/, and the world is backed up into
+     backups/ before the first start with the new version.
+  4. Tell the players: they need exactly the same mod version as the server (otherwise a message
+     names both versions and where to download the right one).
+  If something goes wrong: stop the server, put the old jar back (old-mods/) and restore the backup.
+
+Hosting panel (Pterodactyl...): install Forge @FORGE@ from the panel, then upload mods/ and config/;
+put the flags of jvm_args.txt into the "JVM arguments" field.

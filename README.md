@@ -26,26 +26,51 @@
 
 ## Télécharger
 
-**[⬇ wayfarers-1.0.0.jar (dernier build)](https://github.com/jules-crevoisier/mode-minecraft/releases/download/dev-ccr-127dc262-tsdn10/wayfarers-1.0.0.jar)**
+| Quoi | Où |
+|---|---|
+| **Dernière version publiée** (jar, pack serveur, modpack, nouveautés) | [Releases GitHub — *Latest*](https://github.com/jules-crevoisier/mode-minecraft/releases/latest) · CurseForge et Modrinth dès que les pages existent |
+| Build de développement (chaque modification, testé sur un serveur) | [pré-release `dev-ccr-127dc262-tsdn10`](https://github.com/jules-crevoisier/mode-minecraft/releases/tag/dev-ccr-127dc262-tsdn10) |
 
-GitHub recompile le mod à chaque modification : voir l'onglet *Releases* ou *Actions* du dépôt.
+Les versions suivent `0.9.0-beta`, `0.9.1-beta`… ; un build de développement s'appelle
+`wayfarers-0.9.0-beta-build.84.jar` (version `0.9.0-beta+build.84`). Le mod prévient (écran titre et chat, avec le
+lien des nouveautés) quand une nouvelle version sort ; il ne télécharge jamais rien tout seul
+(`updates.checkForUpdates` dans `wayfarers-client.toml` pour couper).
 
-## Installation (CurseForge)
+## Installation
 
-1. Dans CurseForge, crée un profil **Minecraft 26.2** avec **Forge 65.1.0**.
-2. Compile le mod (voir plus bas) ou récupère le fichier `wayfarers-1.0.0.jar`.
-3. Ouvre le dossier du profil (`…` → *Open Folder*) et dépose `wayfarers-1.0.0.jar` dans `mods/`.
-4. Le mod est autonome : aucune autre bibliothèque n'est nécessaire.
+### Joueur, avec l'app CurseForge
+- **Le plus simple** : télécharge `wayfarers-modpack-<version>.zip` (release) puis, dans CurseForge, **Create Custom
+  Profile → Import** et choisis le zip : profil Minecraft 26.2 + Forge 65.1.0 avec le mod et les réglages
+  recommandés.
+- **À la main** : crée un profil **Minecraft 26.2** avec **Forge 65.1.0**, ouvre son dossier (`…` → *Open Folder*)
+  et dépose `wayfarers-<version>.jar` dans `mods/`. Le mod est autonome : aucune autre bibliothèque.
 
-**En multijoueur**, le même `.jar` doit être installé **sur le serveur et chez chaque joueur**.
+### Serveur
+Télécharge `wayfarers-server-<version>.zip`, décompresse-le dans un dossier vide, installe **Java 25**, puis lance
+`./start.sh` (Linux/macOS) ou `start.bat` (Windows) : Forge s'installe au premier lancement, le script demande
+d'accepter le CLUF de Minecraft et démarre avec des options JVM réglées (`jvm_args.txt`, 6 Go). Détails dans
+`LISEZMOI.txt` du zip.
+
+**En multijoueur**, la **même version** doit être installée sur le serveur et chez chaque joueur : sinon le joueur
+reçoit un message qui donne les deux versions et le lien de téléchargement.
 
 **Les structures n'apparaissent que dans les régions jamais générées.** Le plus simple est de créer un nouveau monde.
+
+### Mettre à jour sans perdre son monde
+1. Sauvegarde le monde (solo : *Modifier → Faire une sauvegarde* ; serveur : copie `world/`, ou laisse `start.sh`
+   le faire).
+2. Remplace l'ancien `wayfarers-*.jar` par le nouveau (jamais deux jars du mod dans `mods/`) — ou *Update* dans
+   l'app CurseForge, ou décompresse le nouveau pack serveur par-dessus l'ancien dossier.
+3. Relance : le monde est conservé (les ids renommés sont remappés, les données du mod migrées).
+
+Guide complet (publication CurseForge/Modrinth, releases, mises à jour joueurs et admins) :
+[`docs/PUBLISHING.md`](docs/PUBLISHING.md).
 
 ## Compiler le `.jar`
 
 ```bash
 ./gradlew build          # nécessite un JDK 25 (Gradle peut le télécharger tout seul)
-# → build/libs/wayfarers-1.0.0.jar
+# → build/libs/wayfarers-<mod_version>-build.local.jar (version dans gradle.properties)
 ./gradlew runClient      # lancer le jeu en développement
 ./gradlew runServer      # serveur de test
 ```

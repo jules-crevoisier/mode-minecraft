@@ -996,7 +996,98 @@ def check_recipes():
             warnings.append(f"wayfarers:{i} cannot be obtained in survival (creative or commands only)")
 
 
+REGISTRY_IDS = os.path.join(ROOT, "tools", "data", "registry_ids.json")
+REGISTRY_KINDS = ("block", "item", "entity_type", "block_entity_type", "menu")
+REGISTRY_DOC = [
+    "Every registry id the mod ever shipped (worlds and players' inventories keep them). tools/validate.py records new",
+    "ids here by itself and refuses an id that disappears: a renamed id needs an entry in 'aliases' (old -> new, the",
+    "world's blocks/items/creatures become the new one: release/RegistryRemap, Forge MissingMappingsEvent), a deleted",
+    "one an entry in 'removed' (old -> why; the world drops it). Never delete an id from 'ids'.",
+]
+
+
+def current_registry_ids():
+    """{kind: ids registered by the current sources}: the Java registry scan, plus the generated assets of each id."""
+    a = os.path.join(ASSETS, "wayfarers")
+    lang = json.load(open(os.path.join(a, "lang", "en_us.json"), encoding="utf-8"))
+    java = ""
+    for base, _dirs, files in os.walk(os.path.join(ROOT, "src", "main", "java")):
+        for f in files:
+            if f.endswith(".java"):
+                java += open(os.path.join(base, f), encoding="utf-8").read()
+    listing = lambda d: {f[:-5] for f in os.listdir(os.path.join(a, d)) if f.endswith(".json")} \
+        if os.path.isdir(os.path.join(a, d)) else set()
+    return {
+        "block": set(mod_ids("blocks")) | listing("blockstates"),
+        "item": set(mod_ids("items")) | listing("items"),
+        "entity_type": set(mod_ids("entities")) | {k.split(".")[2] for k in lang
+                                                  if k.startswith("entity.wayfarers.") and k.count(".") == 2},
+        "block_entity_type": set(re.findall(r'BLOCK_ENTITIES\.register\(\s*"([a-z0-9_/]+)"', java)),
+        "menu": set(re.findall(r'MENUS\.register\(\s*"([a-z0-9_/]+)"', java)),
+    }
+
+
+def check_registry_ids(record=True):
+    """World compatibility across updates: no registry id silently removed or renamed (tools/data/registry_ids.json)."""
+    data = json.load(open(REGISTRY_IDS, encoding="utf-8")) if os.path.isfile(REGISTRY_IDS) else {}
+    ids, aliases, removed = (data.get(k) or {} for k in ("ids", "aliases", "removed"))
+    current = current_registry_ids()
+    changed = not os.path.isfile(REGISTRY_IDS)
+    for kind in REGISTRY_KINDS:
+        known = set(ids.get(kind, []))
+        cur = current[kind]
+        al, rm = aliases.get(kind, {}), removed.get(kind, {})
+        for old in sorted(known - cur):
+            if old in al:
+                continue
+            if old not in rm:
+                err(f"registry id wayfarers:{old} ({kind}) is gone: worlds and inventories still hold it. Put it back, "
+                    f"or add it to tools/data/registry_ids.json, under \"aliases\" -> \"{kind}\" (\"{old}\": \"new_id\", "
+                    f"remapped in old worlds) or \"removed\" -> \"{kind}\" (\"{old}\": \"why\", dropped from old worlds)")
+        for old, new in sorted(al.items()):
+            target = new.split(":", 1)[1] if new.startswith("wayfarers:") else new
+            if old in cur:
+                err(f"registry_ids.json: alias {kind} {old} -> {new}, but {old} is still registered")
+            elif ":" not in target and target not in cur:
+                err(f"registry_ids.json: alias {kind} {old} -> {new}, but {new} is not registered")
+            if old in rm:
+                err(f"registry_ids.json: {kind} {old} is both an alias and removed")
+        for old in rm:
+            if old in cur:
+                err(f"registry_ids.json: {kind} {old} is listed as removed but is still registered")
+        if not cur <= known:
+            changed = True
+        ids[kind] = sorted(known | cur)
+    if changed and record and not errors:
+        out = {"_doc": REGISTRY_DOC,
+               "aliases": {k: dict(sorted(aliases.get(k, {}).items())) for k in REGISTRY_KINDS},
+               "removed": {k: dict(sorted(removed.get(k, {}).items())) for k in REGISTRY_KINDS},
+               "ids": {k: ids[k] for k in REGISTRY_KINDS}}
+        with open(REGISTRY_IDS, "w", encoding="utf-8", newline="\n") as f:
+            json.dump(out, f, indent=1, ensure_ascii=False)
+            f.write("\n")
+        print("recorded the new registry ids in tools/data/registry_ids.json")
+    elif changed and not record:
+        warnings.append("new registry ids are not in tools/data/registry_ids.json yet (python3 tools/validate.py records them)")
+
+
+def check_release_files():
+    """Recommended configs of the packs follow the config classes (tools/make_modpack.py)."""
+    import make_modpack
+    for p in make_modpack.check_configs():
+        err(p)
+
+
 def main():
+    if "--registry-ids" in sys.argv:
+        # CI: only the world-compatibility check, nothing written
+        check_registry_ids(record=False)
+        for w in sorted(set(warnings)):
+            print("warning:", w)
+        for e in errors:
+            print("ERROR:", e)
+        print(f"{len(errors)} errors")
+        sys.exit(1 if errors else 0)
     check_pack_meta()
     check_templates()
     check_recipes()
@@ -1014,6 +1105,8 @@ def main():
     from wf import machines
     for e in machines.check_gui():
         err(e)
+    check_release_files()
+    check_registry_ids()
     for w in sorted(set(warnings)):
         print("warning:", w)
     for e in errors:

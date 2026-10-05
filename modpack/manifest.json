@@ -1,0 +1,24 @@
+{
+  "minecraft": {
+    "version": "26.2",
+    "modLoaders": [
+      {
+        "id": "forge-65.1.0",
+        "primary": true
+      }
+    ]
+  },
+  "manifestType": "minecraftModpack",
+  "manifestVersion": 1,
+  "name": "Wayfarers",
+  "version": "0.0.0",
+  "author": "Wayfarers Guild",
+  "files": [
+    {
+      "projectID": 0,
+      "fileID": 0,
+      "required": true
+    }
+  ],
+  "overrides": "overrides"
+}

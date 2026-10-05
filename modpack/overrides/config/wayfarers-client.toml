@@ -1,0 +1,54 @@
+# Wayfarers recommended wayfarers-client.toml (tools/make_modpack.py configs from the mod's config classes).
+# Forge reads it from the config folder; every value is the mod's default unless noted below.
+
+[quests]
+	#Quest shown in the on-screen tracker (set from the quest journal).
+	tracked = ""
+	#Show the tracked quest in the top-right corner of the screen.
+	showTracker = true
+
+[hud]
+	#Health bars above creatures: ALWAYS, DAMAGED (hurt or targeted) or NEVER.
+	#Allowed Values: ALWAYS, DAMAGED, NEVER
+	healthBars = "DAMAGED"
+	#Health bars and damage numbers are drawn for creatures up to this many blocks away.
+	#Lower it to save frames in crowded places (mob farms, big fights).
+	#Range: 4 ~ 64
+	healthBarRange = 24
+	#Floating damage numbers when you hit a creature.
+	damageNumbers = true
+	#One-time tips that explain a system the first time you meet it.
+	tips = true
+
+[map]
+	#Show the minimap (toggle in game with H; Shift + H changes its size).
+	minimap = true
+	#Screen corner of the minimap: TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT or BOTTOM_RIGHT.
+	#Allowed Values: TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT
+	corner = "TOP_LEFT"
+	#Minimap size on screen, frame included: SMALL (56 px), MEDIUM (68 px), LARGE (96 px) or XLARGE (128 px).
+	#Cycle it in game with Shift + H, or in the mod's settings (Mods > Wayfarers > Config).
+	#Allowed Values: SMALL, MEDIUM, LARGE, XLARGE
+	size = "MEDIUM"
+	#Minimap shape: ROUND (brass porthole) or SQUARE.
+	#Allowed Values: ROUND, SQUARE
+	shape = "ROUND"
+	#Turn the minimap with you (your facing is always up). Off: north is always up.
+	rotate = false
+	#Minimap zoom level, 0 (widest) to 3 (closest). Cycle it in game with Z.
+	#Range: 0 ~ 3
+	zoom = 1
+	#Show your coordinates and the biome under the minimap.
+	showCoordinates = true
+	#Opacity of the minimap's terrain, in percent (lower it to see the world through the map).
+	#Range: 30 ~ 100
+	opacity = 100
+	#Underground, map the cave around you (a slice at your height) instead of the surface far above.
+	caveMode = true
+	#Show other players on the maps (only those your client can see, within view distance).
+	showPlayers = true
+
+[updates]
+	#Look for a newer Wayfarers release (GitHub, in the background) and show a notice with the changelog link.
+	#Nothing is ever downloaded.
+	checkForUpdates = true

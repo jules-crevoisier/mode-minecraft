@@ -58,6 +58,18 @@ public final class WayfarersConfig {
             .comment("Show online players on each other's minimap and world map (same dimension).")
             .define("map.showPlayers", true);
 
+    public static final ForgeConfigSpec.BooleanValue REQUIRE_SAME_VERSION = B
+            .comment("Refuse players whose Wayfarers version differs from the server's, with a message naming both versions",
+                    "and the download page. False: only an incompatible network protocol or missing blocks/items refuse them.")
+            .define("compat.requireSameVersion", true);
+    public static final ForgeConfigSpec.ConfigValue<String> DOWNLOAD_URL = B
+            .comment("Download page given to refused players (your modpack page, for example). Empty: the mod's own page.")
+            .define("compat.downloadUrl", "");
+    public static final ForgeConfigSpec.BooleanValue UPDATE_CHECK = B
+            .comment("Dedicated server: look for a newer Wayfarers release at start-up (GitHub, in the background) and log it.",
+                    "Nothing is ever downloaded.")
+            .define("updates.checkForUpdates", true);
+
     public static final ForgeConfigSpec SPEC = B.build();
 
     private WayfarersConfig() {}

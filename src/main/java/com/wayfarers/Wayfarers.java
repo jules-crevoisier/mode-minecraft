@@ -77,6 +77,11 @@ public final class Wayfarers {
         com.wayfarers.util.StructureLocator.register();
         com.wayfarers.world.SiteFit.register();
         com.wayfarers.block.MachineBlockEntity.registerEvents();
+        // releases and updates: version check at login, renamed-id remapping, saved-data formats, update notice
+        com.wayfarers.release.VersionGate.register();
+        com.wayfarers.release.RegistryRemap.register();
+        com.wayfarers.data.DataVersions.register();
+        com.wayfarers.release.UpdateChecker.register();
         SpawnPlacementRegisterEvent.BUS.addListener(ModEntities::registerSpawnPlacements);
         context.registerConfig(ModConfig.Type.COMMON, WayfarersConfig.SPEC);
         context.registerConfig(ModConfig.Type.CLIENT, com.wayfarers.config.WayfarersClientConfig.SPEC);

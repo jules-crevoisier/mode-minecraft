@@ -499,6 +499,20 @@ MESSAGES = {
     "tooltip.wayfarers.set_bonus": ("Full set bonus:", "Bonus d'ensemble complet :"),
     "tooltip.wayfarers.magnet.on": ("Active", "Actif"),
     "tooltip.wayfarers.magnet.off": ("Inactive", "Inactif"),
+    # releases and updates (release/VersionGate, client/ReleaseClient)
+    "disconnect.wayfarers.version_mismatch": (
+        "Wayfarers version mismatch\n\nThis server runs Wayfarers %1$s, you have %2$s.\n"
+        "Install the same version as the server (the same .jar), from:\n\n%3$s",
+        "Version de Wayfarers différente\n\nCe serveur utilise Wayfarers %1$s, tu as la %2$s.\n"
+        "Installe la même version que le serveur (le même .jar), depuis :\n\n%3$s"),
+    "message.wayfarers.version.server_differs": (
+        "This server runs Wayfarers %s and you have %s: install the same version to avoid problems.",
+        "Ce serveur utilise Wayfarers %s et tu as la %s : installe la même version pour éviter les problèmes."),
+    "toast.wayfarers.update.title": ("Wayfarers update available", "Mise à jour de Wayfarers"),
+    "toast.wayfarers.update.body": ("%s is out (you have %s)", "La %s est sortie (tu as la %s)"),
+    "message.wayfarers.update.available": ("Wayfarers %s is available (you have %s). %s",
+                                           "Wayfarers %s est disponible (tu as la %s). %s"),
+    "message.wayfarers.update.changelog": ("[Changelog and download]", "[Nouveautés et téléchargement]"),
 }
 
 
