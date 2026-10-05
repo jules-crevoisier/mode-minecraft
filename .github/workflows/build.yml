@@ -15,6 +15,8 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
     steps:
       - uses: actions/checkout@v4
 
@@ -25,14 +27,52 @@ jobs:
 
       - uses: gradle/actions/setup-gradle@v4
 
+      # Versions (docs/PUBLISHING.md): a v<mod_version> tag builds the release itself, any other push a development
+      # build <mod_version>+build.<run number> (jar wayfarers-<mod_version>-build.<run>.jar)
+      - name: Version
+        id: version
+        run: |
+          base=$(sed -n 's/^mod_version=//p' gradle.properties)
+          if [ "$GITHUB_REF_TYPE" = tag ] && [[ "$GITHUB_REF_NAME" == v* ]]; then
+            if [ "${GITHUB_REF_NAME#v}" != "$base" ]; then
+              echo "::error::tag $GITHUB_REF_NAME does not match mod_version=$base in gradle.properties"
+              exit 1
+            fi
+            echo "version=$base" >> "$GITHUB_OUTPUT"
+            echo "GRADLE_VERSION_ARGS=-Prelease=true" >> "$GITHUB_ENV"
+          else
+            echo "version=$base+build.$GITHUB_RUN_NUMBER" >> "$GITHUB_OUTPUT"
+            echo "GRADLE_VERSION_ARGS=-Pbuild_number=$GITHUB_RUN_NUMBER" >> "$GITHUB_ENV"
+          fi
+
+      # an id that disappears breaks the worlds that hold it: it needs an alias or a "removed" entry
+      - name: World compatibility (registry ids, tools/data/registry_ids.json)
+        run: python3 tools/validate.py --registry-ids
+
       - name: Build
-        run: ./gradlew build --no-daemon --stacktrace
+        run: ./gradlew build --no-daemon --stacktrace $GRADLE_VERSION_ARGS
 
       - name: Upload the jar (Actions artifact)
         uses: actions/upload-artifact@v4
         with:
           name: wayfarers-mod
           path: build/libs/wayfarers-*.jar
+
+      - name: Server pack and modpack
+        run: |
+          jar=$(ls build/libs/wayfarers-*.jar | grep -v -- '-sources\.jar$' | head -n 1)
+          python3 tools/make_modpack.py serverpack --jar "$jar" --out build/packs
+          python3 tools/make_modpack.py modpack --jar "$jar" --out build/packs
+
+      # an unknown or removed flag would stop the players' server from starting
+      - name: Check the server pack's JVM flags on Java 25
+        run: java @serverpack/jvm_args.txt -Xms256M -Xmx256M -XX:-AlwaysPreTouch -version
+
+      - name: Upload the packs (Actions artifact)
+        uses: actions/upload-artifact@v4
+        with:
+          name: wayfarers-packs
+          path: build/packs/*.zip
 
   # Boots a real Forge server with the jar, places every structure, summons every mob and item,
   # breaks blocks, spawns every loot table and reloads data packs. Fails on any error in the log.
@@ -201,7 +241,7 @@ jobs:
     # the structure fit renders, the test summaries and the client screenshots go to their own pre-release, even when
     # a test failed, so they can be looked at
     needs: [smoke-test, fit-test, client-test]
-    if: always()
+    if: ${{ always() && github.ref_type == 'branch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v4
@@ -239,14 +279,21 @@ jobs:
           body: Chaque structure en place sur le relief d'un monde vanilla avec sa mesure d'intégration (wayfarers-fit-*.png, wayfarers-fit.txt, /wayfarers fitcheck), le résumé de chaque test serveur (wayfarers-ci-*.txt, durée des phases, lignes FAIL), et des captures du vrai client (wayfarers-shot-*.png — écrans, HUD, créatures, Citadelle) prises par le job client-test (commit ${{ github.sha }}).
           files: previews/*
 
+  # Development build of a branch: the tested jar and the packs on the branch's pre-release (dev-<branch>)
   release:
     needs: [build, smoke-test, fit-test]
+    if: github.ref_type == 'branch'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v4
         with:
           name: wayfarers-mod
           path: jar
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: wayfarers-packs
+          path: packs
 
       - name: Publish the jar as the latest development build
         uses: softprops/action-gh-release@v2
@@ -256,6 +303,127 @@ jobs:
           prerelease: true
           make_latest: false
           body: |
-            Build automatique du commit ${{ github.sha }}, testé sur un serveur Forge (structures, mobs, objets, butins).
-            Mets `wayfarers-1.0.0.jar` dans le dossier `mods` d'un profil CurseForge Minecraft 26.2 + Forge 65.1.0.
-          files: jar/wayfarers-*.jar
+            Build automatique ${{ needs.build.outputs.version }} du commit ${{ github.sha }}, testé sur un serveur Forge (structures, mobs, objets, butins).
+            Mets `wayfarers-*.jar` dans le dossier `mods` d'un profil CurseForge Minecraft 26.2 + Forge 65.1.0 (même jar sur le serveur et chez chaque joueur).
+            `wayfarers-server-*.zip` : serveur prêt à lancer (start.sh / start.bat). `wayfarers-modpack-*.zip` : profil à importer dans l'app CurseForge.
+            Versions publiques : les releases `v*` (docs/PUBLISHING.md).
+          files: |
+            jar/wayfarers-*.jar
+            packs/*.zip
+
+      # jar names carry the build number: drop the previous builds' files so the release holds only this one
+      - name: Remove the previous builds' files
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          tag="dev-$GITHUB_REF_NAME"
+          keep=$(ls jar packs)
+          gh release view "$tag" --repo "$GITHUB_REPOSITORY" --json assets -q '.assets[].name' | while read -r asset; do
+            case "$asset" in
+              wayfarers-*.jar|wayfarers-*.zip)
+                if ! printf '%s\n' "$keep" | grep -qxF "$asset"; then
+                  gh release delete-asset "$tag" "$asset" --repo "$GITHUB_REPOSITORY" -y
+                fi ;;
+            esac
+          done
+
+  # Public release: push a tag v<mod_version> (docs/PUBLISHING.md). After the server tests pass: GitHub release with
+  # the changelog (commits since the previous v* tag), the jar, the server pack and the modpack.
+  github-release:
+    needs: [build, smoke-test, fit-test]
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: wayfarers-mod
+          path: jar
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: wayfarers-packs
+          path: packs
+
+      - name: Changelog (commits since the previous release)
+        run: python3 tools/changelog.py --version "${{ needs.build.outputs.version }}" --to "$GITHUB_REF_NAME" --out build/changelog.md
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: changelog
+          path: build/changelog.md
+
+      - name: Publish the release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: Wayfarers ${{ needs.build.outputs.version }}
+          body_path: build/changelog.md
+          prerelease: false
+          make_latest: true
+          files: |
+            jar/wayfarers-*.jar
+            packs/*.zip
+
+  # Optional: skipped until the repository variable CURSEFORGE_PROJECT_ID exists; the upload itself is skipped (with a
+  # notice) while the secret CURSEFORGE_TOKEN is missing. Release type from the version (0.9.0-beta: beta).
+  curseforge:
+    needs: [build, github-release]
+    if: startsWith(github.ref, 'refs/tags/v') && vars.CURSEFORGE_PROJECT_ID != ''
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: wayfarers-mod
+          path: jar
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: changelog
+          path: build
+
+      - name: Upload to CurseForge (Minecraft 26.2, Forge, Java 25)
+        id: upload
+        env:
+          CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
+          CURSEFORGE_PROJECT_ID: ${{ vars.CURSEFORGE_PROJECT_ID }}
+        run: python3 tools/publish.py curseforge --jar "$(ls jar/wayfarers-*.jar | head -n 1)" --changelog build/changelog.md
+
+      # the modpack that references the CurseForge file (what a modpack project on CurseForge needs)
+      - name: Modpack referencing the CurseForge file
+        if: steps.upload.outputs.file_id != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 tools/make_modpack.py modpack --jar "$(ls jar/wayfarers-*.jar | head -n 1)" --out build/packs \
+            --project-id "${{ vars.CURSEFORGE_PROJECT_ID }}" --file-id "${{ steps.upload.outputs.file_id }}"
+          gh release upload "$GITHUB_REF_NAME" build/packs/*-curseforge.zip --repo "$GITHUB_REPOSITORY" --clobber
+
+  # Optional, like curseforge: repository variable MODRINTH_PROJECT_ID and secret MODRINTH_TOKEN
+  modrinth:
+    needs: [build, github-release]
+    if: startsWith(github.ref, 'refs/tags/v') && vars.MODRINTH_PROJECT_ID != ''
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: wayfarers-mod
+          path: jar
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: changelog
+          path: build
+
+      - name: Upload to Modrinth (Minecraft 26.2, Forge)
+        env:
+          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+          MODRINTH_PROJECT_ID: ${{ vars.MODRINTH_PROJECT_ID }}
+        run: python3 tools/publish.py modrinth --jar "$(ls jar/wayfarers-*.jar | head -n 1)" --changelog build/changelog.md
