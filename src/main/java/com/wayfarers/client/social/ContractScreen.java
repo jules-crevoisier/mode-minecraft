@@ -209,11 +209,11 @@ public class ContractScreen extends AbstractContainerScreen<ContractMenu> implem
                 g.text(font, help.get(i), LIST_X + 2, LIST_Y + 2 + i * 10, WfGui.INK, false);
             }
             g.text(font, WfGui.bold(Component.translatable("gui.wayfarers.contract.wanted")), CARD_X + 8, LIST_Y + 5, WfGui.INK, false);
-            g.text(font, WfGui.bold(Component.translatable("gui.wayfarers.contract.reward")), CARD_X + 8, ContractMenu.REWARD_Y - 13,
+            g.text(font, WfGui.bold(Component.translatable("gui.wayfarers.contract.reward")), CARD_X + 8, ContractMenu.REWARD_Y - 10,
                     WfGui.INK, false);
             ItemStack w = menu.wantedItem();
             WfGui.textClipped(g, font, w.isEmpty() ? Component.translatable("gui.wayfarers.contract.sample_hint").getString()
-                    : w.getHoverName().getString(), CARD_X + 8, LIST_Y + 38, CARD_W - 14, WfGui.INK_SOFT, false);
+                    : w.getHoverName().getString(), CARD_X + 8, ContractMenu.WANT_Y + 19, CARD_W - 14, WfGui.INK_SOFT, false);
             return;
         }
         drawList(g, mouseX - leftPos, mouseY - topPos);

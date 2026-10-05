@@ -872,3 +872,92 @@ INGAME_SHOTS = [
     ("mega_structure", "La Citadelle d'horlogerie", "Une merveille posée par le serveur de test et vue du ciel : la "
      "tour-horloge, ses toits de cuivre et ses cheminées.", "s-clockwork_citadel"),
 ]
+
+
+# ------------------------------------------------------------------ multijoueur (tools/wf/social.py, section #multijoueur)
+SOCIAL_INTRO = ("Pour les serveurs à plusieurs : une Compagnie pour partir ensemble, l'échange sécurisé en face à face, "
+                "la poste pneumatique qui livre même les absents, les contrats de guilde avec récompense en dépôt, des "
+                "gestes que tout le monde voit et des duels où personne ne meurt. Chaque fonction se coupe côté serveur.")
+SOCIAL_CARD = ("Accroupi + clic droit sur un joueur (main vide), ou vise-le et appuie sur U : sa fiche s'ouvre, avec sa "
+               "compagnie, ses duels gagnés et perdus, et les boutons Échanger, Duel, Inviter, Saluer.")
+# ce que le serveur garantit, fonction par fonction
+SOCIAL_SAFETY = [
+    ("Rien n'est jamais dupliqué", "Un objet quitte un inventaire et arrive ailleurs dans le même tick du serveur. "
+     "Les objets d'un échange, d'un colis ou d'une récompense sont tenus par le serveur, jamais par le client."),
+    ("Rien n'est jamais perdu", "Fermer un écran, s'éloigner, mourir, se déconnecter, arrêter le serveur : les objets "
+     "reviennent dans le sac, et ce qui ne rentre pas part dans la boîte de la poste pneumatique, jamais par terre."),
+    ("Le client ne fait que demander", "Il n'envoie que l'action voulue et l'identifiant de ce qu'on lui a montré : "
+     "jamais d'objet, de quantité possédée ou de position. Le serveur vérifie l'écran ouvert, la distance, le rang "
+     "dans la compagnie et l'interrupteur de la fonction."),
+    ("Anti-abus", "Budget de 30 paquets par seconde et par joueur, délais entre deux invitations, défis, envois de "
+     "lettres (6 par minute) ou gestes, 6 demandes en attente au plus, textes nettoyés et limités en longueur."),
+    ("Léger pour le réseau", "La santé et la position des compagnons partent au plus une fois par seconde, et "
+     "seulement quand elles changent ; la boîte et le tableau seulement quand on les ouvre."),
+]
+SOCIAL_COMMANDS = [
+    ("/wayfarers company create|invite|leave|kick|promote|rename|friendlyfire|sharexp|chat|join", "tous",
+     "Tout ce que fait l'écran de Compagnie, en commande."),
+    ("/cc <message>", "tous", "Écrit à ta compagnie seulement."),
+    ("/wayfarers trade <joueur>", "tous", "Propose un échange (à moins de 8 blocs)."),
+    ("/wayfarers duel <joueur>", "tous", "Lance un défi en duel."),
+    ("/wayfarers emote <geste>", "tous", "wave, bow, cheer, clap, point, laugh, thanks ou rally."),
+    ("/wayfarers social accept|decline <type> <joueur>", "tous",
+     "Répond à une demande (les boutons du chat l'écrivent pour toi)."),
+    ("/wayfarers social status", "op", "Joueurs connus, compagnies, colis en attente, contrats ouverts."),
+    ("/wayfarers social demo", "op", "Remplit ta compagnie, ta boîte et le tableau avec des exemples (pour tester ou filmer)."),
+    ("/wayfarers social selftest", "op", "Vérifie les règles du serveur (sauvegarde, échange, contrats, XP partagée...) "
+     "sans joueur ; utilisé par le test automatique du serveur."),
+]
+KEY_TEXT.update({
+    "O": "Écran de la Compagnie (ton groupe : membres, vie, interrupteurs, rejoindre un compagnon)",
+    "Y": "Roue des gestes (saluer, s'incliner, acclamer, applaudir, montrer, rire, remercier, rallier)",
+    "U": "Fiche du joueur visé (échanger, duel, inviter)",
+})
+CONFIG_FR.update({
+    "social.company.enabled": "Compagnies : invitations, chat de compagnie, tirs amis et XP partagée, compagnons à "
+                              "l'écran et sur les cartes, voyage vers un compagnon depuis une pierre.",
+    "social.company.maxSize": "Nombre maximal de membres d'une compagnie.",
+    "social.company.xpShareRange": "L'expérience partagée va aux compagnons à moins de ce nombre de blocs (même dimension).",
+    "social.company.joinCostLevels": "Niveaux d'expérience payés pour rejoindre un compagnon depuis une pierre (gratuit en créatif).",
+    "social.company.joinCooldownSeconds": "Secondes entre deux voyages vers un compagnon.",
+    "social.trade.enabled": "Échange sécurisé : les deux acceptent, 3 s de compte à rebours, puis tout change de mains d'un coup.",
+    "social.trade.maxDistance": "Distance maximale entre les deux joueurs pendant un échange.",
+    "social.post.enabled": "Poste pneumatique : lettres et colis vers tout joueur déjà venu, même absent.",
+    "social.post.postageItem": "Objet payé pour l'affranchissement (identifiant ; vide = poste gratuite).",
+    "social.post.postageBase": "Affranchissement de chaque lettre ou colis.",
+    "social.post.postagePerStack": "Affranchissement en plus pour chaque pile d'objets du colis.",
+    "social.post.inboxLimit": "Lettres en attente dans une boîte avant que la poste refuse (les livraisons de contrat et "
+                              "les objets rendus passent toujours).",
+    "social.post.sendsPerMinute": "Lettres qu'un joueur peut envoyer par minute.",
+    "social.contracts.enabled": "Contrats de guilde sur le tableau des contrats.",
+    "social.contracts.maxPerPlayer": "Contrats ouverts par joueur.",
+    "social.contracts.expiryDays": "Jours (temps réel) avant qu'un contrat expire ; sa récompense revient par la poste.",
+    "social.emotes.enabled": "Gestes vus par les joueurs autour.",
+    "social.emotes.cooldownTicks": "Ticks entre deux gestes d'un joueur (20 ticks = 1 s).",
+    "social.duels.enabled": "Duels : défi, acceptation, compte à rebours, personne ne meurt et rien n'est perdu.",
+    "social.duels.radius": "Rayon du cercle de duel ; en sortir fait perdre.",
+    "social.duels.maxSeconds": "Durée maximale d'un duel, en secondes (ensuite, match nul).",
+    "social.duels.announce": "Annonce le vainqueur de chaque duel à tout le serveur.",
+})
+INGAME_SHOTS += [
+    ("company", "L'écran de la Compagnie", "Touche O. Les membres à gauche (le chef porte la couronne), à droite les "
+     "interrupteurs, l'invitation par nom et les boutons pour rejoindre, nommer chef ou renvoyer un compagnon.",
+     "multijoueur"),
+    ("player_card", "La fiche d'un joueur", "Accroupi + clic droit sur un joueur : sa compagnie, ses duels, et les "
+     "boutons Échanger, Duel, Inviter.", "multijoueur"),
+    ("emote_wheel", "La roue des gestes", "Touche Y : huit gestes, un clic ou une touche de 1 à 8.", "multijoueur"),
+    ("pneumatic_post", "La poste pneumatique", "La boîte de réception : lettres, colis et livraisons de contrat ; la "
+     "lettre choisie se lit sur le parchemin, ses objets en dessous.", "multijoueur"),
+    ("contract_board", "Le tableau des contrats", "Les contrats ouverts du serveur, les tiens en doré ; à droite ce qui "
+     "est demandé, la récompense en dépôt et le temps restant.", "multijoueur"),
+    ("trade", "L'échange sécurisé", "Ton offre à gauche, celle de l'autre à droite (on regarde, on ne touche pas), les "
+     "deux voyants d'accord au milieu.", "multijoueur"),
+]
+TEST_CHECKLIST += [
+    ("Multijoueur (seul)", ["/wayfarers social demo", "/give @s wayfarers:pneumatic_post", "/give @s wayfarers:contract_board"],
+     "Touche O : ta compagnie « Brass Owls » avec Ada. Pose la borne et le tableau : la boîte contient trois envois, le "
+     "tableau trois contrats. Touche Y : la roue des gestes."),
+    ("Multijoueur (à deux)", ["/wayfarers trade <ami>", "/wayfarers duel <ami>", "/wayfarers company invite <ami>"],
+     "L'ami accepte dans le chat. Échange : mettez un objet, acceptez tous les deux, 3 s plus tard les objets changent "
+     "de mains. Duel : le coup fatal laisse un demi-cœur. Compagnie : vos cadres dorés sur la carte, /cc pour vous écrire."),
+]

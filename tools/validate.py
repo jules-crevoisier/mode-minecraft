@@ -60,7 +60,8 @@ def mod_ids(kind):
              "items": ["registry/ModItems.java", "generated/ModDecor.java", "generated/BossGear.java",
                        "generated/GeneratedMetals.java", "generated/GeneratedMachines.java",
                        "generated/GeneratedFurniture.java", "generated/GeneratedWorldBlocks.java"],
-             "entities": ["registry/ModEntities.java"]}[kind] + ["registry/ModOcean.java"] * (kind != "entities")
+             "entities": ["registry/ModEntities.java"]}[kind] + ["registry/ModOcean.java"] * (kind != "entities") \
+        + ["registry/ModSocial.java"] * (kind != "entities")
     ids = set()
     for f in files:
         text = open(os.path.join(java, f), encoding="utf-8").read()
@@ -81,9 +82,10 @@ HORIZONTAL = ["north", "south", "east", "west"]
 def _mod_states():
     """Block-state properties of the mod's machines, furniture and crate (wf tables)."""
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-    from wf import furniture, machines, ocean
+    from wf import furniture, machines, ocean, social
     out = {"compacting_crate": {"facing": HORIZONTAL}, "chisel_table": {"facing": HORIZONTAL}}
     out.update(ocean.MOD_STATES)
+    out.update(social.MOD_STATES)
     for mid in machines.MACHINES:
         out[mid] = {"facing": HORIZONTAL + ["up", "down"], "powered": ["false", "true"]}
     for fid, f in furniture.FURNITURE.items():
@@ -654,6 +656,22 @@ def check_screen_fit(sw=427, sh=240):
         err(f"screen fit: talent tree cells are {col_w} x {row_h} px at {sw} x {sh}, under {c['NODE'] + 6}")
     c = consts(gui + "GuideScreen.java")
     fits("manual", c["MIN_W"], c["MIN_H"] + 3)  # its top is at least 8 px down, 3 more than the plate needs
+    # multiplayer screens (com.wayfarers.social, client/social)
+    c = consts("social/TradeMenu.java")
+    fits("trade screen", c["W"], c["H"])
+    c = consts("social/PostMenu.java")
+    fits("pneumatic post", c["W"], c["H"])
+    if c["INV_Y"] + 76 > c["H"]:
+        err(f"screen fit: the pneumatic post inventory ends at {c['INV_Y'] + 76}, past its {c['H']} px window")
+    c = consts("social/PostMenu.java", "social/ContractMenu.java")
+    if c["REWARD_Y"] + 36 > c["INV_Y"] or c["WANT_Y"] + 18 > c["INV_Y"]:
+        err("screen fit: the contract board slots overlap the inventory")
+    for rel, label in (("CompanyScreen.java", "company screen"), ("PlayerCardScreen.java", "player card")):
+        c = consts("client/social/" + rel)
+        fits(label, c["W"], c["H"], 13)
+    c = consts("client/social/EmoteWheelScreen.java")
+    if 2 * (c["RADIUS"] + c["CELL"] // 2) > sh or 2 * (c["RADIUS"] + c["CELL"] // 2) > sw:
+        err("screen fit: the emote wheel does not fit")
 
 
 def check_pack_meta():

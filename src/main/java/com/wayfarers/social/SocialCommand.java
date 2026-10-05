@@ -11,9 +11,12 @@ import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.event.RegisterCommandsEvent;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
@@ -58,7 +61,9 @@ final class SocialCommand {
                         .then(Commands.literal("selftest").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                                 .executes(SocialSelfTest::run))
                         .then(Commands.literal("status").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
-                                .executes(SocialCommand::status))));
+                                .executes(SocialCommand::status))
+                        .then(Commands.literal("demo").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
+                                .executes(SocialCommand::demo))));
         d.register(Commands.literal("cc").then(Commands.argument("message", StringArgumentType.greedyString())
                 .executes(ctx -> {
                     Companies.say(ctx.getSource().getPlayerOrException(), StringArgumentType.getString(ctx, "message"));
@@ -157,6 +162,51 @@ final class SocialCommand {
                     }
                     return 1;
                 })));
+    }
+
+    /** Two demo wayfarers ("Ada" and "Brunel", never online). */
+    static final UUID ADA = UUID.fromString("0000ada0-0000-4000-8000-000000000001");
+    static final UUID BRUNEL = UUID.fromString("0000b0e1-0000-4000-8000-000000000002");
+
+    private static ItemStack stack(net.minecraft.world.item.Item item, int n) {
+        return new ItemStack(item, n);
+    }
+
+    /**
+     * Operators (showcase, CI screenshots): fills the caller's company, inbox and the contract board with examples
+     * from two demo wayfarers, so every screen has something to show on a server with one player.
+     */
+    private static int demo(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
+        ServerPlayer p = ctx.getSource().getPlayerOrException();
+        SocialData data = SocialData.get(ctx.getSource().getServer());
+        data.rememberName(ADA, "Ada");
+        data.rememberName(BRUNEL, "Brunel");
+        SocialData.Company c = data.companyOf(p.getUUID());
+        if (c == null) {
+            c = data.newCompany("Brass Owls", p.getUUID(), p.getName().getString());
+        }
+        if (c.members.size() < Social.config().companyMaxSize.get() && data.companyOf(ADA) == null) {
+            c.members.put(ADA, new SocialData.Member(ADA, "Ada"));
+        }
+        data.changed();
+        long now = System.currentTimeMillis();
+        data.deliver(p.getUUID(), new SocialData.Parcel(data.nextId(), BRUNEL, "Brunel",
+                "The Contract Board wants iron for the airship hull. Pay is good!", List.of(), now - 3_600_000L, "letter"));
+        data.deliver(p.getUUID(), new SocialData.Parcel(data.nextId(), Post.SYSTEM, "", "Brunel",
+                List.of(stack(Items.OAK_LOG, 64)), now - 600_000L, "delivery"));
+        data.deliver(p.getUUID(), new SocialData.Parcel(data.nextId(), ADA, "Ada",
+                "Meet me at the Sky Harbour at dusk. I found the clockwork map: bring a compass!",
+                List.of(stack(Items.CLOCK, 1), stack(Items.COPPER_INGOT, 24)), now - 120_000L, "letter"));
+        long expires = now + Social.config().contractDays.get() * 86_400_000L;
+        data.addContract(data.newContract(ADA, "Ada", stack(Items.IRON_INGOT, 1), 32, "for the airship hull",
+                List.of(stack(Items.DIAMOND, 3)), now, expires));
+        data.addContract(data.newContract(BRUNEL, "Brunel", stack(Items.GLOWSTONE_DUST, 1), 48, "lamps for the Undercity",
+                List.of(stack(Items.EMERALD, 12)), now - 3_600_000L, expires - 86_400_000L));
+        data.addContract(data.newContract(p.getUUID(), p.getName().getString(), stack(Items.OAK_LOG, 1), 128, "",
+                List.of(stack(Items.GOLD_INGOT, 8)), now - 60_000L, expires));
+        Companies.sync(ctx.getSource().getServer(), c);
+        ctx.getSource().sendSuccess(() -> Component.literal("Social demo ready: company, 3 parcels, 3 contracts"), false);
+        return 1;
     }
 
     private static int status(CommandContext<CommandSourceStack> ctx) {

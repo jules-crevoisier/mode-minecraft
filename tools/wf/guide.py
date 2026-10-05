@@ -789,6 +789,17 @@ def _ocean_pages():
 PAGES += _ocean_pages()
 
 
+def _social():
+    """Multiplayer features (wf/social.py): their own category, pages and tip cards."""
+    from . import social
+    CATEGORIES.append(social.CATEGORY)
+    TIPS.extend(social.TIPS)
+    return social.guide_pages()
+
+
+PAGES += _social()
+
+
 # ------------------------------------------------------------------ page layout estimate (validate.py, gen_gui.py)
 # GuideScreen.java lays the pages out with the real font and splits a page that does not fit into continuation
 # sheets, so nothing is ever cut. This mirrors that layout with Minecraft's default-font advances (glyph width

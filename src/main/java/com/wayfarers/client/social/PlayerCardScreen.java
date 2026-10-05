@@ -77,7 +77,6 @@ public class PlayerCardScreen extends Screen {
                 card.relation() == 1 ? WfGui.INK_GREEN : WfGui.INK_SOFT);
         WfGui.centered(g, font, Component.translatable("gui.wayfarers.card.record", card.wins(), card.losses(), card.draws()), cx,
                 top + 46, WfGui.INK_SOFT);
-        WfGui.sprite(g, WfGui.icon("social_duel"), left + 60, top + 43, 12, 12);
         super.extractRenderState(g, mouseX, mouseY, a);
         g.centeredText(font, Component.translatable("gui.wayfarers.card.hint", ClientSocial.CARD_KEY.getTranslatedKeyMessage()),
                 left + W / 2, top + H + 4, WfGui.CREAM);

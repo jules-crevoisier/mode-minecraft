@@ -134,7 +134,8 @@ final class MapRenderer {
         if (m.kind() == ClientMap.Kind.PLAYER) {
             PlayerInfo info = Minecraft.getInstance().getConnection() == null ? null
                     : Minecraft.getInstance().getConnection().getPlayerInfo(m.label());
-            g.fill(x - 5, y - 5, x + 5, y + 5, 0xFF0F0C0A);
+            // companions of your company (com.wayfarers.social) get a gold frame
+            g.fill(x - 5, y - 5, x + 5, y + 5, com.wayfarers.client.social.ClientSocial.isCompanion(m.label()) ? 0xFFF6C343 : 0xFF0F0C0A);
             g.fill(x - 4, y - 4, x + 4, y + 4, 0xFFF3E3C0);
             if (info != null) {
                 PlayerFaceExtractor.extractRenderState(g, info.getSkin(), x - 4, y - 4, 8);

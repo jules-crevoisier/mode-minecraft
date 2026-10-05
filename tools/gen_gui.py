@@ -996,6 +996,8 @@ def main():
     gui_machines.sprites(sys.modules[__name__])
     from wf import worldmap  # minimap / world map frames, markers and glyphs
     worldmap.sprites(sys.modules[__name__])
+    from wf import gui_social  # multiplayer icons (company, post, contracts, duels, emotes)
+    gui_social.sprites(sys.modules[__name__])
     if "--mockup" in sys.argv:
         worldmap.mockups(sys.modules[__name__])
         mockup_waystones()

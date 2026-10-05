@@ -53,7 +53,6 @@ public final class Social {
     private static final List<Request> REQUESTS = new ArrayList<>();
     private static final Map<UUID, int[]> BUDGET = new HashMap<>();
     private static final Map<UUID, Map<String, Long>> COOLDOWNS = new HashMap<>();
-    private static MinecraftServer server;
 
     private Social() {}
 
@@ -66,14 +65,12 @@ public final class Social {
         Post.register();
         Contracts.register();
         net.minecraftforge.event.RegisterCommandsEvent.BUS.addListener(SocialCommand::register);
-        net.minecraftforge.event.server.ServerStartedEvent.BUS.addListener(e -> server = e.getServer());
         ServerStoppingEvent.BUS.addListener(e -> {
             Trade.cancelAll();
             Duels.stopAll();
             REQUESTS.clear();
             BUDGET.clear();
             COOLDOWNS.clear();
-            server = null;
         });
         PlayerEvent.PlayerLoggedInEvent.BUS.addListener(e -> {
             if (e.getEntity() instanceof ServerPlayer p) {
@@ -367,9 +364,5 @@ public final class Social {
 
     static ServerPlayer online(MinecraftServer srv, UUID id) {
         return srv == null ? null : srv.getPlayerList().getPlayer(id);
-    }
-
-    static MinecraftServer server() {
-        return server;
     }
 }

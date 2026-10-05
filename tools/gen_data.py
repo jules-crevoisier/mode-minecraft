@@ -32,6 +32,7 @@ MOD_ITEMS |= set(__import__("wf.machines", fromlist=["MACHINES"]).MACHINES)
 MOD_ITEMS |= set(__import__("wf.furniture", fromlist=["FURNITURE"]).FURNITURE)
 MOD_ITEMS |= __import__("wf.gadgets", fromlist=["MOD_ITEMS"]).MOD_ITEMS
 MOD_ITEMS |= __import__("wf.ocean", fromlist=["MOD_ITEMS"]).MOD_ITEMS
+MOD_ITEMS |= __import__("wf.social", fromlist=["MOD_ITEMS"]).MOD_ITEMS
 MOD_ITEMS |= {"builder_wand", "master_builder_wand", "wayfarer_manual", "fire_staff", "frost_staff", "thunder_staff",
               "healing_staff", "levitation_wand", "ward_orb", "steam_cane", "arcane_ring", "mana_amulet", "oblivion_vial"}
 
@@ -145,6 +146,8 @@ def recipes():
     gadgets.recipes(shaped, shapeless)
     # living oceans (wf/ocean.py)
     __import__("wf.ocean", fromlist=["recipes"]).recipes(shaped, shapeless, write)
+    # multiplayer blocks (wf/social.py)
+    __import__("wf.social", fromlist=["recipes"]).recipes(shaped, shapeless, write)
     # boss weapons: the remembrance in the centre, four tier materials around it, two diamonds below
     from wf.bossgear import BOSS_GEAR, TIER_MATERIAL, remembrance_id
     for row in BOSS_GEAR:
@@ -566,6 +569,10 @@ def main():
     for rel, values in worldblocks.data(write).items():
         extra_tags.setdefault(rel, []).extend(values)
     for rel, values in ocean.tags(write).items():
+        extra_tags.setdefault(rel, []).extend(values)
+    from wf import social
+    social.loot(write)
+    for rel, values in social.tags().items():
         extra_tags.setdefault(rel, []).extend(values)
     for rel, values in extra_tags.items():
         path = os.path.join(DATA, rel)

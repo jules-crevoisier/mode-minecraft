@@ -19,7 +19,8 @@ How it works
    fresh creative world ("wayfarers-ci", normal terrain, no structures), lets it settle, then plays scripted
    steps on client ticks: HUD + minimap, world map, quest journal, talent tree, two Manual pages, a stage in the
    sky with the Auto Harvester, Guild Terminal and waystone screens (opened by right-clicking the placed
-   blocks), the creative tab, creatures (Grand Clockmaker, Brass Golem, Clockwork Spider, a jellyfish in a
+   blocks), the multiplayer screens (company, player card, emote wheel, Pneumatic Post and Contract Board filled by
+   /wayfarers social demo, a client-side preview of the trade screen), the creative tab, creatures (Grand Clockmaker, Brass Golem, Clockwork Spider, a jellyfish in a
    water tank) with their health bars, and the Clockwork Citadel placed with /place structure and framed
    from its bounding box. Each step saves run/screenshots/ci/<name>.png with the vanilla screenshot code. An
    exception or timeout in a step is logged as an ERROR and the next step runs anyway. At the end the driver
@@ -61,7 +62,9 @@ SHOTS = os.path.join(RUN, "screenshots", "ci")
 # keep in step with CiDriver.buildSteps()
 EXPECTED_SHOTS = [
     "hud_minimap", "world_map", "quest_journal", "talent_tree", "manual_welcome", "manual_machines",
-    "machine_harvester", "guild_terminal", "waystone", "creative_tab", "creatures", "mega_structure",
+    "machine_harvester", "guild_terminal", "waystone",
+    "company", "player_card", "emote_wheel", "pneumatic_post", "contract_board", "trade",
+    "creative_tab", "creatures", "mega_structure",
 ]
 
 DONE_MARK = "[wayfarers-ci] DONE"

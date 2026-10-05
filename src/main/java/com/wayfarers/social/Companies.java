@@ -110,7 +110,7 @@ public final class Companies {
     static Component displayName(SocialData.Company c) {
         return c.name.isEmpty()
                 ? Component.translatable("gui.wayfarers.company.default_name",
-                SocialData.get(Social.server()).name(c.leader))
+                c.members.containsKey(c.leader) ? c.members.get(c.leader).name() : "?")
                 : Component.literal(c.name);
     }
 

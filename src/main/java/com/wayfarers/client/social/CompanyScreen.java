@@ -30,11 +30,11 @@ public class CompanyScreen extends Screen {
     private static final int H = 200;
     private static final int LIST_X = 12;
     private static final int LIST_Y = 30;
-    private static final int LIST_W = 176;
-    private static final int LIST_H = 158;
+    private static final int LIST_W = 172;
+    private static final int LIST_H = 140;
     private static final int ROW = 24;
-    private static final int SIDE_X = 198;
-    private static final int SIDE_W = 110;
+    private static final int SIDE_X = 192;
+    private static final int SIDE_W = 116;
 
     private int left;
     private int top;
@@ -107,14 +107,13 @@ public class CompanyScreen extends Screen {
         rename.active = leader && on;
         rename.setTooltip(Tooltip.create(Component.translatable("gui.wayfarers.company.rename.tip")));
         // the selected companion
-        int third = (SIDE_W - 4) / 3;
-        WfButton join = addRenderableWidget(new WfButton(sx, top + 152, third, 16, Component.translatable("gui.wayfarers.company.join"),
+        WfButton join = addRenderableWidget(new WfButton(sx, top + 152, SIDE_W, 16, Component.translatable("gui.wayfarers.company.join"),
                 b -> send(SocialNet.CompanyAction.Action.JOIN, selected.toString())));
         join.setTooltip(Tooltip.create(Component.translatable("gui.wayfarers.company.join.tip", ClientSocial.hello.joinCost())));
-        WfButton promote = addRenderableWidget(new WfButton(sx + third + 2, top + 152, third, 16, Component.translatable("gui.wayfarers.company.promote"),
+        WfButton promote = addRenderableWidget(new WfButton(sx, top + 172, half, 16, Component.translatable("gui.wayfarers.company.promote"),
                 b -> send(SocialNet.CompanyAction.Action.PROMOTE, selected.toString())));
         promote.setTooltip(Tooltip.create(Component.translatable("gui.wayfarers.company.promote.tip")));
-        WfButton kick = addRenderableWidget(new WfButton(sx + 2 * third + 4, top + 152, third, 16, Component.translatable("gui.wayfarers.company.kick"),
+        WfButton kick = addRenderableWidget(new WfButton(sx + half + 4, top + 172, half, 16, Component.translatable("gui.wayfarers.company.kick"),
                 b -> send(SocialNet.CompanyAction.Action.KICK, selected.toString())));
         kick.setTooltip(Tooltip.create(Component.translatable("gui.wayfarers.company.kick.tip")));
         refreshers.add(() -> {
@@ -125,8 +124,8 @@ public class CompanyScreen extends Screen {
             promote.active = on && leader && other;
             kick.active = on && leader && other;
         });
-        addRenderableWidget(new WfButton(sx, top + 172, SIDE_W, 16, Component.translatable("gui.wayfarers.company.leave"),
-                b -> send(SocialNet.CompanyAction.Action.LEAVE, "")));
+        addRenderableWidget(new WfButton(left + LIST_X, top + LIST_Y + LIST_H + 4, LIST_W, 16,
+                Component.translatable("gui.wayfarers.company.leave"), b -> send(SocialNet.CompanyAction.Action.LEAVE, "")));
     }
 
     private void toggle(int x, int y, String key, java.util.function.BooleanSupplier state, SocialNet.CompanyAction.Action a, boolean active) {
@@ -222,7 +221,7 @@ public class CompanyScreen extends Screen {
             return;
         }
         g.text(font, Component.translatable("gui.wayfarers.company.invites"), rx, top + LIST_Y + 6, WfGui.GOLD, true);
-        for (int i = 0; i < Math.min(5, inv.size()); i++) {
+        for (int i = 0; i < Math.min(4, inv.size()); i++) {
             SocialNet.Invite v = inv.get(i);
             int ry = top + LIST_Y + 20 + i * 26;
             WfGui.textClipped(g, font, v.companyName(), rx, ry, LIST_W - 70, WfGui.CREAM, true);
@@ -258,7 +257,7 @@ public class CompanyScreen extends Screen {
         } else {
             List<SocialNet.Invite> inv = c().invites();
             int rx = left + LIST_X + 6 + LIST_W - 64;
-            for (int i = 0; i < Math.min(5, inv.size()); i++) {
+            for (int i = 0; i < Math.min(4, inv.size()); i++) {
                 int ry = top + LIST_Y + 20 + i * 26;
                 if (mx >= rx && mx < rx + 52) {
                     if (my >= ry && my < ry + 10) {
