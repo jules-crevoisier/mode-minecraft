@@ -60,7 +60,7 @@ SHOTS = os.path.join(RUN, "screenshots", "ci")
 
 # keep in step with CiDriver.buildSteps()
 EXPECTED_SHOTS = [
-    "hud_minimap", "world_map", "quest_journal", "talent_tree", "manual_welcome", "manual_machines",
+    "hud_minimap", "world_map", "world_map_options", "world_map_3d", "quest_journal", "talent_tree", "manual_welcome", "manual_machines",
     "machine_harvester", "guild_terminal", "waystone", "creative_tab", "creatures", "mega_structure",
 ]
 
