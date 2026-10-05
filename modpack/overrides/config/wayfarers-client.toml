@@ -30,6 +30,10 @@
 	#Cycle it in game with Shift + H, or in the mod's settings (Mods > Wayfarers > Config).
 	#Allowed Values: SMALL, MEDIUM, LARGE, XLARGE
 	size = "MEDIUM"
+	#Exact minimap size on screen in GUI pixels, frame included, from 48 to 160 (0: the map.size preset).
+	#Set it in game with the size slider of the world map's options (M, then the gear button).
+	#Range: 0 ~ 160
+	sizePixels = 0
 	#Minimap shape: ROUND (brass porthole) or SQUARE.
 	#Allowed Values: ROUND, SQUARE
 	shape = "ROUND"
@@ -43,6 +47,14 @@
 	#Opacity of the minimap's terrain, in percent (lower it to see the world through the map).
 	#Range: 30 ~ 100
 	opacity = 100
+	#Relief on the maps, shaded from the explored heights (light from the north-west, darker valleys):
+	#FLAT (plain colours), NORMAL or STRONG.
+	#Allowed Values: FLAT, NORMAL, STRONG
+	relief = "NORMAL"
+	#Thin contour lines every 16 blocks of height on the maps (a bolder one every 64).
+	contours = false
+	#The world map opens in its tilted 3D view (relief raised from the explored heights) instead of seen from above.
+	worldMap3d = false
 	#Underground, map the cave around you (a slice at your height) instead of the surface far above.
 	caveMode = true
 	#Show other players on the maps (only those your client can see, within view distance).

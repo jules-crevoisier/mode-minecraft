@@ -6,6 +6,28 @@
 	#a shore for the lighthouse, open sea floor for wrecks, clear sky under floating isles. A site that does not
 	#fit is skipped like one with the wrong biome (/locate looks further). False: build wherever the grid says.
 	structureFit = true
+	#New Default worlds get the Wayfarers biomes: Crimson Mire (in the wettest swamps), Volcanic Highlands
+	#(in badlands mountains) and Pale Dunes (in the driest deserts). Minecraft's terrain is kept: a built-in data
+	#pack ("wayfarers:custom_biomes") only hands these climate slices to the new biomes. Minecraft shows its
+	#"experimental settings" warning when a world is created with it; that is expected. False: new worlds
+	#keep the vanilla biomes (the pack stays available, unticked, in the Data Packs screen). Superflat,
+	#Amplified and Large Biomes worlds, and existing worlds, are never changed.
+	customBiomes = true
+
+[world.terrain]
+	#Terrain touches in vanilla biomes (read when the server starts; new chunks only). Mossy boulders in
+	#plains, meadows, forests, taigas and windswept hills.
+	boulders = true
+	#Fallen logs in dark forests, savannas and cherry groves.
+	fallenLogs = true
+	#Small rock spires in stony peaks and windswept hills.
+	rockSpires = true
+	#Wildflower patches in plains and forests.
+	wildflowers = true
+	#Moss carpets in dark forests and old-growth taigas.
+	mossCarpets = true
+	#Hot-spring terraces in windswept savannas and savanna plateaus.
+	hotSprings = true
 
 [danger]
 	#Monsters get stronger the further you travel from world spawn, and in the Nether/End.
@@ -69,3 +91,77 @@
 	#Dedicated server: look for a newer Wayfarers release at start-up (GitHub, in the background) and log it.
 	#Nothing is ever downloaded.
 	checkForUpdates = true
+
+[waystones]
+	#Waystones may send players to a waystone of another dimension (Nether, End...).
+	crossDimension = true
+	#Seconds a player waits between two waystone journeys (each journey loads the chunks at the arrival).
+	#0 = no wait. Operators are never held back.
+	#Range: 0 ~ 3600
+	cooldownSeconds = 5
+	#Experience levels a waystone journey costs (0 = free). A journey to another dimension costs twice as much.
+	#Range: 0 ~ 100
+	costLevels = 0
+	#Most waystones the server remembers (each is listed to everyone): further ones can't be activated.
+	#Range: 16 ~ 20000
+	maxTotal = 1000
+	#Players may rename or pin only the waystone they stand at (true), or any waystone of the list (false).
+	#Waystones are shared by the whole server: true stops anyone from renaming everybody's stones. Operators may always.
+	renameOnlyHere = true
+
+[machines]
+	#The Block Breaker machine works (false: it stays idle).
+	breakerEnabled = true
+	#The Block Placer machine works (false: it stays idle).
+	placerEnabled = true
+	#Block Breakers and Placers act as the player who placed them: spawn protection and claim / protection
+	#mods (through Forge's break and place events) apply to them, and they wait while that player is offline.
+	#Machines placed before this option existed have no owner and keep working as before.
+	actAsOwner = true
+	#Wireless Redstone reach in blocks: a receiver only hears transmitters this close (0 = the whole dimension).
+	#Keeps one player's transmitter from switching other bases' receivers across the map.
+	#Range: 0 ~ 30000000
+	wirelessRange = 128
+	#Most Wayfarers machines one chunk may hold (0 = no limit). Placing more is refused.
+	#Range: 0 ~ 4096
+	maxPerChunk = 32
+
+[items]
+	#Magnet Ring reach in blocks (0 = the ring does nothing).
+	#Range: 0.0 ~ 16.0
+	magnetRange = 7.0
+	#Storm Staff lightning acts like real lightning: it sets fires and hits players, pets and villagers.
+	#false: the bolt only hurts monsters and starts no fire.
+	stormStaffRealLightning = false
+
+[storage]
+	#Reach in blocks of the quick-stack button (stores your items into nearby chests that hold them). 0 = off.
+	#Range: 0 ~ 16
+	quickStackRange = 8
+
+[graves]
+	#Minutes during which only its owner (and operators) can open a grave. 0 = anyone at once, -1 = only the owner, always.
+	#Range: -1 ~ 100000
+	ownerOnlyMinutes = -1
+
+[quests]
+	#A quest step reached by one player is reached by everyone online (the quest is shared by the server).
+	#Each player still receives the step's rewards once.
+	shareProgress = true
+	#Players who join later (or were offline) receive, when they log in, every quest step the server already
+	#reached (with its rewards).
+	#On a public server, false stops new (or alt) accounts from collecting every reward at once.
+	catchUpOnJoin = true
+
+[spawns]
+	#Wayfarers creatures spawn naturally (monsters and ocean life). Structures and altars still place theirs.
+	natural = true
+	#Most loaded creatures of one Wayfarers kind per dimension before natural spawning of that kind pauses.
+	#Range: 0 ~ 10000
+	maxLoadedPerType = 60
+
+[compass]
+	#Structure Compass / Airship Compass searches the whole server may run per minute (each one can take
+	#a while on the server thread). Answers are remembered, so repeated uses near the same place are free.
+	#Range: 1 ~ 1200
+	searchesPerMinute = 30
