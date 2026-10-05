@@ -83,7 +83,7 @@ jobs:
           if-no-files-found: ignore
           path: server/wayfarers-ci-*.txt
 
-  # The structure fit test, in a fresh world with Minecraft's own generator (the mod adds no terrain or biome), in two
+  # The structure fit test, in a fresh world with Minecraft's own terrain (and the Wayfarers biomes, on by default), in two
   # shards on two machines (every second structure each): /wayfarers fitcheck locates the Overworld structures of the
   # mod, generates them and measures how they sit on the vanilla terrain (floating edges, buried edges, flooding),
   # with a render of each in place. A misfit fails the job. Each shard keeps to ~35 minutes of test.
@@ -143,6 +143,62 @@ jobs:
             server/wayfarers-fit*.txt
             server/wayfarers-ci-*.txt
 
+  # The Wayfarers biomes and the generation speed gate, on one machine: the server runs twice on the same seed in a
+  # fresh normal world, WITH the Wayfarers biomes and terrain touches (config world.customBiomes / world.terrain.*)
+  # and WITHOUT (vanilla generation). Each run really generates the same fresh areas (/wayfarers genbench area: a
+  # fixed 12 x 12 chunk area at 20000 20000 and a 6 x 6 area on each Wayfarers biome); the job fails when WITH is
+  # more than 5 % slower per chunk than WITHOUT (a pair over the gate is measured again, in the other order). The
+  # WITH run also finds each biome with /locate biome and draws it (/wayfarers biomeshots).
+  world-test:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 25
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: wayfarers-mod
+          path: jar
+
+      - name: Install the Forge server
+        run: |
+          mkdir -p server/mods
+          curl -fsSL -o installer.jar https://maven.minecraftforge.net/net/minecraftforge/forge/26.2-65.1.0/forge-26.2-65.1.0-installer.jar
+          java -jar installer.jar --installServer server > install.log 2>&1 || (tail -50 install.log; exit 1)
+          cp jar/wayfarers-*.jar server/mods/
+
+      - name: Run the world test (Wayfarers biomes, generation speed with / without, biome renders)
+        run: python3 tools/ci_smoke.py server --world
+
+      - name: Upload the server logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: world-test-logs
+          path: |
+            server/logs/
+            server/crash-reports/
+            server/smoke-console*.log
+
+      # the summary (with the speed ratio), the genbench lines and the biome renders go to the previews release
+      - name: Upload the biome renders and the speed report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: world-previews-world
+          if-no-files-found: ignore
+          path: |
+            server/wayfarers-biome-*.png
+            server/wayfarers-biomes.txt
+            server/wayfarers-genbench.txt
+            server/wayfarers-ci-*.txt
+
   # Runs the real client (software OpenGL under Xvfb) through ForgeGradle's runClient. client/CiDriver creates a
   # world, opens every screen of the mod, places machines, summons creatures and the Clockwork Citadel, and saves a
   # screenshot of each; tools/ci_client.py enforces the timeouts and fails on client-side errors in the log.
@@ -200,7 +256,7 @@ jobs:
   previews:
     # the structure fit renders, the test summaries and the client screenshots go to their own pre-release, even when
     # a test failed, so they can be looked at
-    needs: [smoke-test, fit-test, client-test]
+    needs: [smoke-test, fit-test, world-test, client-test]
     if: always()
     runs-on: ubuntu-latest
     steps:
@@ -236,11 +292,11 @@ jobs:
           name: Wayfarers — aperçus (${{ github.ref_name }})
           prerelease: true
           make_latest: false
-          body: Chaque structure en place sur le relief d'un monde vanilla avec sa mesure d'intégration (wayfarers-fit-*.png, wayfarers-fit.txt, /wayfarers fitcheck), le résumé de chaque test serveur (wayfarers-ci-*.txt, durée des phases, lignes FAIL), et des captures du vrai client (wayfarers-shot-*.png — écrans, HUD, créatures, Citadelle) prises par le job client-test (commit ${{ github.sha }}).
+          body: Chaque structure en place sur le relief de Minecraft avec sa mesure d'intégration (wayfarers-fit-*.png, wayfarers-fit.txt, /wayfarers fitcheck), un rendu 3D de chaque biome Wayfarers (wayfarers-biome-*.png, /wayfarers biomeshots), le résumé de chaque test serveur (wayfarers-ci-*.txt, durée des phases, vitesse de génération avec et sans les biomes Wayfarers en ms/chunk et leur rapport, lignes FAIL), et des captures du vrai client (wayfarers-shot-*.png — écrans, HUD, créatures, Citadelle) prises par le job client-test (commit ${{ github.sha }}).
           files: previews/*
 
   release:
-    needs: [build, smoke-test, fit-test]
+    needs: [build, smoke-test, fit-test, world-test]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v4

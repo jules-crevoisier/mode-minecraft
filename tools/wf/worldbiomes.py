@@ -1,9 +1,9 @@
 """The Wayfarers biomes and terrain touches (tools/gen_world.py writes them, tools/validate_world.py checks them).
 
 Cheap by design: Minecraft's own terrain is kept as it is (vanilla noise router, density functions, dimension
-type). Three biomes take a slice of the climate cells of a vanilla biome (CLIMATE_SLICES): the dimension's biome
-source is vanilla's own parameter list (world_points.json, dumped from OverworldBiomeBuilder 26.2) with those cells
-split, so the biome lookup costs the same. Their ground comes from a few surface rules put in front of vanilla's,
+type). Three biomes take a slice of the climate cells of a vanilla biome (BIOMES[...]["slice"]): the Overworld of the
+Default world preset uses vanilla's own parameter list (world_points.json, dumped from OverworldBiomeBuilder 26.2)
+with those cells split, so the biome lookup costs the same. Their ground comes from a few surface rules put in front of vanilla's,
 behind one biome test (a chunk without our biomes skips them: SurfaceRules prunes biome tests against the chunk's
 possible biomes). Their decoration is the parent biome's own list (same relative order, so no feature order cycle)
 minus a few plants, plus a handful of our features with rarity filters.
@@ -241,6 +241,15 @@ def surface_rule(vanilla_rule):
             inner["sequence"].insert(0, ours)
             return rule
     raise ValueError("vanilla surface rule: no above_preliminary_surface branch")
+
+
+def world_preset(points):
+    """minecraft:normal, the "Default" world type: vanilla's, but for the Overworld's biome list and settings."""
+    preset = json.loads(json.dumps(VANILLA["world_preset_normal"]))
+    preset["dimensions"]["minecraft:overworld"]["generator"] = {
+        "type": "minecraft:noise", "settings": f"{NS}:overworld",
+        "biome_source": {"type": "minecraft:multi_noise", "biomes": points}}
+    return preset
 
 
 def noise_settings():

@@ -2,14 +2,17 @@
 """Generate the Wayfarers biomes and terrain touches (tools/wf/worldbiomes.py, objects in tools/wf/worldobjects.py).
 
 Minecraft's terrain stays as it is. Written here:
-  * mod data (always loaded): the three biomes (data/wayfarers/worldgen/biome), their features and the terrain
-    touches' features (worldgen/{configured,placed}_feature/world/), the Forge biome modifiers of the touches
-    (forge/biome_modifier/terrain_*.json, type wayfarers:toggled_features, config world.terrain.*), the object
-    templates (structure/worldobjects), the biome tags (our biomes join the vanilla and Wayfarers tags of the
-    vanilla biome they come from: structures, mob variants, ores) and the structure tag wayfarers:clears_decoration;
-  * the built-in data pack custom_biomes_pack (Java: CustomBiomesPack, config world.customBiomes): the Overworld
-    dimension with vanilla's biome parameter list, our slices carved in, and the noise settings wayfarers:overworld
-    = vanilla's minecraft:overworld word for word plus our surface rules.
+  * mod data (always loaded): the three biomes (data/wayfarers/worldgen/biome), the noise settings
+    wayfarers:overworld (vanilla's minecraft:overworld word for word plus our surface rules), the biomes' features and
+    the terrain touches' features (worldgen/{configured,placed}_feature/world/), the Forge biome modifiers of the
+    touches (forge/biome_modifier/terrain_*.json, type wayfarers:toggled_features, config world.terrain.*), the object
+    templates (structure/worldobjects), the biome tags (our biomes join the vanilla and Wayfarers tags of the vanilla
+    biome they come from: structures, mob variants, ores) and the structure tag wayfarers:clears_decoration;
+  * the built-in data pack custom_biomes_pack (Java: CustomBiomesPack, config world.customBiomes), holding one file:
+    the "Default" world preset (minecraft:normal) whose Overworld uses vanilla's biome parameter list with our slices
+    carved in, and wayfarers:overworld. A preset only matters when a world is created: Superflat, Amplified, Large
+    Biomes and existing worlds are left alone, and a world keeps its biomes whatever the pack or config later say
+    (its dimensions are saved with it; everything they refer to is in the always-loaded mod data).
 
 Run after gen_structures.py and gen_data.py (it adds our biomes to the biome tags they write); generate_all.py does.
 """
@@ -52,24 +55,22 @@ def reset_dir(path):
 
 
 def write_pack():
-    """custom_biomes_pack: the Overworld dimension and its noise settings (nothing else)."""
+    """custom_biomes_pack: the Default world preset (nothing else)."""
     reset_dir(PACK)
     write(os.path.join(PACK, "pack.mcmeta"), {"pack": {
-        "description": "Wayfarers: Crimson Mire, Volcanic Highlands and Pale Dunes in the Overworld",
+        "description": "Wayfarers: Crimson Mire, Volcanic Highlands and Pale Dunes in new Default worlds",
         "min_format": 88, "max_format": 107}})
     icon = os.path.join(RES, "pack.png")
     if os.path.exists(icon):
         shutil.copy(icon, os.path.join(PACK, "pack.png"))
     points, counts = WB.climate_points()
-    write(os.path.join(PACK, "data", "minecraft", "dimension", "overworld.json"), {
-        "type": "minecraft:overworld",
-        "generator": {"type": "minecraft:noise", "settings": f"{NS}:overworld",
-                      "biome_source": {"type": "minecraft:multi_noise", "biomes": points}}}, compact=True)
-    write(os.path.join(PACK, "data", NS, "worldgen", "noise_settings", "overworld.json"), WB.noise_settings())
+    write(os.path.join(PACK, "data", "minecraft", "worldgen", "world_preset", "normal.json"),
+          WB.world_preset(points), compact=True)
     return points, counts
 
 
 def write_mod_data():
+    write(os.path.join(DATA, NS, "worldgen", "noise_settings", "overworld.json"), WB.noise_settings())
     for bid in WB.BIOMES:
         write(os.path.join(DATA, NS, "worldgen", "biome", f"{bid}.json"), WB.biome_json(bid))
     biome_dir = os.path.join(DATA, NS, "worldgen", "biome")

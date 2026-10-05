@@ -12,12 +12,12 @@ public final class WayfarersConfig {
                     "fit is skipped like one with the wrong biome (/locate looks further). False: build wherever the grid says.")
             .define("world.structureFit", true);
     public static final ForgeConfigSpec.BooleanValue CUSTOM_BIOMES = B
-            .comment("New worlds get the Wayfarers biomes: Crimson Mire (in the wettest swamps), Volcanic Highlands (in",
-                    "badlands mountains) and Pale Dunes (in the driest deserts). Minecraft's terrain is kept: a built-in data",
+            .comment("New Default worlds get the Wayfarers biomes: Crimson Mire (in the wettest swamps), Volcanic Highlands",
+                    "(in badlands mountains) and Pale Dunes (in the driest deserts). Minecraft's terrain is kept: a built-in data",
                     "pack (\"wayfarers:custom_biomes\") only hands these climate slices to the new biomes. Minecraft shows its",
                     "\"experimental settings\" warning when a world is created with it; that is expected. False: new worlds",
-                    "keep the vanilla biomes (the pack stays available, unticked, in the Data Packs screen). Existing worlds",
-                    "keep whatever they were created with.")
+                    "keep the vanilla biomes (the pack stays available, unticked, in the Data Packs screen). Superflat,",
+                    "Amplified and Large Biomes worlds, and existing worlds, are never changed.")
             .define("world.customBiomes", true);
     public static final ForgeConfigSpec.BooleanValue TERRAIN_BOULDERS = B
             .comment("Terrain touches in vanilla biomes (read when the server starts; new chunks only). Mossy boulders in",

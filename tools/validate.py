@@ -312,9 +312,12 @@ def check_worldgen():
 
 
 def check_biome_refs():
-    """Every biome a data file names (biome tags, Forge biome modifiers, structures, predicates) is a vanilla biome or a tag that
-    exists: the mod adds no biome of its own (world generation stays vanilla), so a wayfarers: biome id is an error."""
+    """Every biome a data file names (biome tags, Forge biome modifiers, structures, predicates) is a vanilla biome, one
+    of the mod's own biomes (data/wayfarers/worldgen/biome, tools/wf/worldbiomes.py: Crimson Mire, Volcanic Highlands,
+    Pale Dunes) or a tag that exists. Any other wayfarers: biome id is an error."""
     biomes = set(MC_GAME["biomes"])
+    ours = {os.path.splitext(os.path.basename(p))[0]
+            for p in glob.glob(os.path.join(DATA, "wayfarers", "worldgen", "biome", "*.json"))}
 
     def check(where, rid):
         if rid.startswith("#"):
@@ -324,8 +327,11 @@ def check_biome_refs():
                     err(f"{where}: unknown biome tag {rid}")
             elif not os.path.exists(os.path.join(DATA, ns, "tags", "worldgen", "biome", path + ".json")):
                 err(f"{where}: biome tag {rid} missing")
+        elif rid.startswith("wayfarers:"):
+            if rid.split(":", 1)[1] not in ours:
+                err(f"{where}: biome {rid} is neither vanilla nor one of the mod's biomes ({sorted(ours)})")
         elif ":" in rid and not rid.startswith("minecraft:"):
-            err(f"{where}: biome {rid} is not a vanilla biome (the mod adds none)")
+            err(f"{where}: biome {rid} is not a vanilla biome")
         elif rid.split(":")[-1] not in biomes:
             err(f"{where}: unknown biome {rid}")
 
@@ -358,8 +364,9 @@ def check_biome_refs():
     import wf.structures  # noqa: F401
     for sdef in defs.STRUCTURES:
         for b in sdef.biomes:
-            if b.startswith("wayfarers:"):
-                err(f"structure {sdef.id}: biome {b} is not vanilla (tools/wf/structures, tools/wf/placement.py)")
+            if b.startswith("wayfarers:") and b.split(":", 1)[1] not in ours:
+                err(f"structure {sdef.id}: biome {b} is neither vanilla nor one of the mod's biomes "
+                    f"(tools/wf/structures, tools/wf/placement.py)")
 
 
 def check_vanilla_overrides():
@@ -1011,6 +1018,9 @@ def main():
     check_chisel()
     check_guide()
     check_screen_fit()
+    import validate_world  # the Wayfarers biomes and terrain touches (tools/gen_world.py)
+    for e in validate_world.check():
+        err(f"world: {e}")
     from wf import machines
     for e in machines.check_gui():
         err(e)

@@ -18,15 +18,17 @@ import java.util.Optional;
 
 /**
  * Offers the Wayfarers biomes (Crimson Mire, Volcanic Highlands, Pale Dunes) as a built-in data pack shipped inside
- * the jar (custom_biomes_pack/, written by tools/gen_world.py). The pack only replaces the Overworld's biome list
- * (vanilla's own parameter list with a few climate cells handed to our biomes) and points it at noise settings that
- * are vanilla's plus our surface rules: the terrain itself is Minecraft's. The biomes, their features and the
- * terrain touches live in the mod's own data and are always loaded.
+ * the jar (custom_biomes_pack/, written by tools/gen_world.py). The pack holds one file: the "Default" world preset
+ * (minecraft:normal), whose Overworld uses vanilla's own biome parameter list with a few climate cells handed to our
+ * biomes, on the noise settings wayfarers:overworld (vanilla's plus our surface rules): the terrain itself is
+ * Minecraft's. A world preset only matters when a world is created, so Superflat, Amplified, Large Biomes and
+ * existing worlds are left alone, and a world keeps its biomes whatever the pack or config say later (its dimensions
+ * are saved with it). The biomes, the noise settings, their features and the terrain touches live in the mod's own
+ * data and are always loaded.
  *
  * <p>With {@code world.customBiomes = true} (default) it is a built-in pack, ticked for every new world; with
- * {@code false} it is a feature pack: listed, but off unless the player ticks it. Like any pack that defines the
- * Overworld, Minecraft shows its "experimental settings" warning when a world is created with it. Existing worlds
- * keep whatever they were created with.
+ * {@code false} it is a feature pack: listed, but off unless the player ticks it. As with any custom Overworld biome
+ * list, Minecraft shows its "experimental settings" warning when a world is created with it.
  */
 public final class CustomBiomesPack {
     public static final String PACK_ID = Wayfarers.MODID + ":custom_biomes";
