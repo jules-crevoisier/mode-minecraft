@@ -911,3 +911,18 @@ INGAME_SHOTS = [
     ("mega_structure", "La Citadelle d'horlogerie", "Une merveille posée par le serveur de test et vue du ciel : la "
      "tour-horloge, ses toits de cuivre et ses cheminées.", "s-clockwork_citadel"),
 ]
+
+
+# ------------------------------------------------------------------ Wayfarers biomes (gen_wiki section_biomes; the
+# biome texts themselves are in wf/worldbiomes.py, shared with the in-game manual)
+BIOMES_INTRO = ("Trois biomes propres au mod, taillés dans des climats vanilla : le relief reste celui de Minecraft, "
+                "mais le sol, les couleurs, le ciel, les particules et les objets naturels changent. Ils apparaissent "
+                "dans les nouveaux mondes de type « Par défaut ».")
+TOUCHES_INTRO = ("Les biomes vanilla gagnent quelques touches naturelles, rares et légères : chacune a son option "
+                 "côté serveur (lue au démarrage, pour les nouveaux chunks seulement).")
+BIOMES_NOTE = ("Option world.customBiomes (vrai par défaut) : un pack de données intégré, « wayfarers:custom_biomes », "
+               "remplace le type de monde « Par défaut » par le même avec ces trois biomes. Minecraft affiche alors son "
+               "avertissement « paramètres expérimentaux » à la création du monde : c'est normal. Les mondes "
+               "Superplat, Amplifié, Grands biomes et les mondes existants ne changent pas. La génération reste au "
+               "moins aussi rapide que la vanilla : la CI la mesure à chaque build (monde avec et sans les biomes, "
+               "mêmes zones, échec au-delà de +5 %).")

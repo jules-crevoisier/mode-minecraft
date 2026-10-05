@@ -14,6 +14,33 @@ public final class WayfarersConfig {
                     "a shore for the lighthouse, open sea floor for wrecks, clear sky under floating isles. A site that does not",
                     "fit is skipped like one with the wrong biome (/locate looks further). False: build wherever the grid says.")
             .define("world.structureFit", true);
+    public static final ForgeConfigSpec.BooleanValue CUSTOM_BIOMES = B
+            .comment("New Default worlds get the Wayfarers biomes: Crimson Mire (in the wettest swamps), Volcanic Highlands",
+                    "(in badlands mountains) and Pale Dunes (in the driest deserts). Minecraft's terrain is kept: a built-in data",
+                    "pack (\"wayfarers:custom_biomes\") only hands these climate slices to the new biomes. Minecraft shows its",
+                    "\"experimental settings\" warning when a world is created with it; that is expected. False: new worlds",
+                    "keep the vanilla biomes (the pack stays available, unticked, in the Data Packs screen). Superflat,",
+                    "Amplified and Large Biomes worlds, and existing worlds, are never changed.")
+            .define("world.customBiomes", true);
+    public static final ForgeConfigSpec.BooleanValue TERRAIN_BOULDERS = B
+            .comment("Terrain touches in vanilla biomes (read when the server starts; new chunks only). Mossy boulders in",
+                    "plains, meadows, forests, taigas and windswept hills.")
+            .define("world.terrain.boulders", true);
+    public static final ForgeConfigSpec.BooleanValue TERRAIN_FALLEN_LOGS = B
+            .comment("Fallen logs in dark forests, savannas and cherry groves.")
+            .define("world.terrain.fallenLogs", true);
+    public static final ForgeConfigSpec.BooleanValue TERRAIN_ROCK_SPIRES = B
+            .comment("Small rock spires in stony peaks and windswept hills.")
+            .define("world.terrain.rockSpires", true);
+    public static final ForgeConfigSpec.BooleanValue TERRAIN_WILDFLOWERS = B
+            .comment("Wildflower patches in plains and forests.")
+            .define("world.terrain.wildflowers", true);
+    public static final ForgeConfigSpec.BooleanValue TERRAIN_MOSS_CARPETS = B
+            .comment("Moss carpets in dark forests and old-growth taigas.")
+            .define("world.terrain.mossCarpets", true);
+    public static final ForgeConfigSpec.BooleanValue TERRAIN_HOT_SPRINGS = B
+            .comment("Hot-spring terraces in windswept savannas and savanna plateaus.")
+            .define("world.terrain.hotSprings", true);
     public static final ForgeConfigSpec.BooleanValue DANGER_SCALING = B
             .comment("Monsters get stronger the further you travel from world spawn, and in the Nether/End.")
             .define("danger.enabled", true);
@@ -153,4 +180,18 @@ public final class WayfarersConfig {
     public static final ForgeConfigSpec SPEC = B.build();
 
     private WayfarersConfig() {}
+
+    /** The world.terrain.&lt;toggle&gt; switch of a terrain touch (world/ToggledFeaturesModifier), null if unknown. */
+    public static Boolean terrainTouch(String toggle) {
+        ForgeConfigSpec.BooleanValue v = switch (toggle) {
+            case "boulders" -> TERRAIN_BOULDERS;
+            case "fallenLogs" -> TERRAIN_FALLEN_LOGS;
+            case "rockSpires" -> TERRAIN_ROCK_SPIRES;
+            case "wildflowers" -> TERRAIN_WILDFLOWERS;
+            case "mossCarpets" -> TERRAIN_MOSS_CARPETS;
+            case "hotSprings" -> TERRAIN_HOT_SPRINGS;
+            default -> null;
+        };
+        return v == null ? null : v.get();
+    }
 }

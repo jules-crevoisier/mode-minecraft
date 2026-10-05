@@ -1,0 +1,11 @@
+{
+  "type": "wayfarers:toggled_features",
+  "toggle": "wildflowers",
+  "biomes": [
+    "minecraft:plains",
+    "minecraft:sunflower_plains",
+    "minecraft:forest"
+  ],
+  "features": "wayfarers:world/wildflower_patches",
+  "step": "vegetal_decoration"
+}

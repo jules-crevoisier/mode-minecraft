@@ -1,0 +1,9 @@
+{
+  "type": "wayfarers:toggled_features",
+  "toggle": "fallenLogs",
+  "biomes": [
+    "minecraft:dark_forest"
+  ],
+  "features": "wayfarers:world/fallen_dark_oak_logs",
+  "step": "vegetal_decoration"
+}

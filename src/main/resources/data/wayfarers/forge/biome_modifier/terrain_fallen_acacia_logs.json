@@ -1,0 +1,10 @@
+{
+  "type": "wayfarers:toggled_features",
+  "toggle": "fallenLogs",
+  "biomes": [
+    "minecraft:savanna",
+    "minecraft:savanna_plateau"
+  ],
+  "features": "wayfarers:world/fallen_acacia_logs",
+  "step": "vegetal_decoration"
+}

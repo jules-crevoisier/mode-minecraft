@@ -8,6 +8,7 @@
     {
       "id": "minecraft:mangrove_swamp",
       "required": false
-    }
+    },
+    "wayfarers:crimson_mire"
   ]
 }

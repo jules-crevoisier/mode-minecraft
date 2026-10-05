@@ -1,0 +1,43 @@
+{
+  "type": "minecraft:template",
+  "config": {
+    "templates": [
+      {
+        "data": {
+          "id": "wayfarers:worldobjects/thorn_0"
+        },
+        "weight": 1
+      },
+      {
+        "data": {
+          "id": "wayfarers:worldobjects/thorn_1"
+        },
+        "weight": 1
+      },
+      {
+        "data": {
+          "id": "wayfarers:worldobjects/thorn_2"
+        },
+        "weight": 1
+      },
+      {
+        "data": {
+          "id": "wayfarers:worldobjects/thorn_3"
+        },
+        "weight": 1
+      },
+      {
+        "data": {
+          "id": "wayfarers:worldobjects/thorn_4"
+        },
+        "weight": 1
+      },
+      {
+        "data": {
+          "id": "wayfarers:worldobjects/thorn_5"
+        },
+        "weight": 1
+      }
+    ]
+  }
+}

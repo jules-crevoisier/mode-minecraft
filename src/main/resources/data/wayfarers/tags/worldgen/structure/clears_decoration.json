@@ -1,0 +1,60 @@
+{
+  "replace": false,
+  "values": [
+    "wayfarers:bandit_camp",
+    "wayfarers:clockwork_citadel",
+    "wayfarers:coastal_lighthouse",
+    "wayfarers:desert_oasis",
+    "wayfarers:dwarven_mine",
+    "wayfarers:forgotten_catacombs",
+    "wayfarers:forgotten_library",
+    "wayfarers:geothermal_foundry",
+    "wayfarers:giant_tree",
+    "wayfarers:guild_outpost",
+    "wayfarers:ice_observatory",
+    "wayfarers:inventor_manor",
+    "wayfarers:jungle_ziggurat",
+    "wayfarers:lithite_well",
+    "wayfarers:mountain_monastery",
+    "wayfarers:ruined_watchtower",
+    "wayfarers:rune_circle",
+    "wayfarers:sand_hypogeum",
+    "wayfarers:sky_harbour",
+    "wayfarers:sky_island",
+    "wayfarers:sylvan_palace",
+    "wayfarers:tesla_observatory",
+    "wayfarers:witch_huts",
+    {
+      "id": "#minecraft:village",
+      "required": false
+    },
+    {
+      "id": "minecraft:pillager_outpost",
+      "required": false
+    },
+    {
+      "id": "minecraft:desert_pyramid",
+      "required": false
+    },
+    {
+      "id": "minecraft:jungle_pyramid",
+      "required": false
+    },
+    {
+      "id": "minecraft:swamp_hut",
+      "required": false
+    },
+    {
+      "id": "minecraft:igloo",
+      "required": false
+    },
+    {
+      "id": "minecraft:mansion",
+      "required": false
+    },
+    {
+      "id": "minecraft:trail_ruins",
+      "required": false
+    }
+  ]
+}

@@ -3,8 +3,9 @@
 
 Used by CI (.github/workflows/build.yml) after `./gradlew build`:
     python3 tools/ci_smoke.py <server_dir>                    # flat world: every structure, mob, item, loot table
-    python3 tools/ci_smoke.py <server_dir> --fit              # vanilla world: how every structure sits on the terrain
+    python3 tools/ci_smoke.py <server_dir> --fit              # normal world: how every structure sits on the terrain
     python3 tools/ci_smoke.py <server_dir> --fit --shard 0/2  # ...every second structure from the first
+    python3 tools/ci_smoke.py <server_dir> --world            # Wayfarers biomes + generation speed gate
 
 The server directory must already contain an installed Forge server and the mod jar in mods/.
 The script accepts the EULA, starts the server, waits for "Done", then from the console:
@@ -16,8 +17,17 @@ The script accepts the EULA, starts the server, waits for "Done", then from the 
   * spawns every loot table,
   * reloads data packs,
 and stops the server. Any ERROR line, exception, crash report or failed command fails the run.
-With --fit the server makes a fresh world with Minecraft's own generator instead (the mod adds no terrain or biome)
-and /wayfarers fitcheck locates, generates and measures every Overworld structure there.
+With --fit the server makes a fresh world with Minecraft's own terrain instead (and the Wayfarers biomes, on by
+default) and /wayfarers fitcheck locates, generates and measures every Overworld structure there.
+
+With --world the server runs twice on the same seed, each time in a fresh normal world: once WITH the Wayfarers biomes
+and terrain touches (config world.customBiomes and world.terrain.* on), once WITHOUT (all off: Minecraft's own
+generation). Each run generates the same fresh areas for real (/wayfarers genbench area: a warm-up area first, then
+a fixed 12 x 12 chunk area at 20000 20000 and a 6 x 6 chunk area on each Wayfarers biome) and the summary gives the
+full-generation ms/chunk of both and their ratio. The job fails when WITH is more than 5 % slower than WITHOUT
+(GATE); a pair over the gate is measured once more, in the other order, on fresh worlds, and the verdict uses both
+pairs together. The WITH run also checks that the pack is on, finds each biome with /locate biome and draws it
+(/wayfarers biomeshots: wayfarers-biome-<id>.png, published with the previews).
 
 Every run writes a short diagnostic summary, wayfarers-ci-<job>.txt, into the server folder: phase durations, FAIL
 lines, suspicious log lines, slow commands. CI publishes it with the previews, so the next diagnosis needs no log
@@ -73,6 +83,16 @@ BUDGET = 36 * 60  # seconds per test; past it the remaining phases are skipped a
 # progress). The script waits the budget plus a margin for the item in progress, so the server answers first.
 FIT_BUDGET = 22 * 60
 FIT_WAIT = FIT_BUDGET + 5 * 60 + 180
+# --world: the generation speed gate (WITH / WITHOUT full-generation ms per chunk) and its areas
+GATE = 1.05
+BENCH_X, BENCH_Z, BENCH_SIZE = 20000, 20000, 12
+WARMUP_X, WARMUP_Z, WARMUP_SIZE = -20000, 20000, 8
+BIOME_BENCH_SIZE = 6
+GENBENCH_WAIT = 900
+BIOMESHOTS_WAIT = 6 * 60 + 300  # BiomeShotsCommand.BUDGET_MS plus a margin
+OUR_BIOMES = sorted(os.path.splitext(n)[0] for n in os.listdir(os.path.join(DATA, "worldgen", "biome"))) \
+    if os.path.isdir(os.path.join(DATA, "worldgen", "biome")) else []
+TERRAIN_TOGGLES = ["boulders", "fallenLogs", "rockSpires", "wildflowers", "mossCarpets", "hotSprings"]
 
 
 class Summary:
@@ -195,13 +215,22 @@ def server_command(server_dir):
     return ["java", "-Xmx4G", "-jar", os.path.basename(jars[0]), "nogui"]
 
 
-def prepare(server_dir, fit):
+def prepare(server_dir, fit, level_name=None, custom=True):
     with open(os.path.join(server_dir, "eula.txt"), "w") as f:
         f.write("eula=true\n")
     props = ("online-mode=false\nspawn-protection=0\nlevel-seed=wayfarers-ci\nmax-tick-time=-1\n"
              "view-distance=4\nsimulation-distance=4\nsync-chunk-writes=false\n")
-    if fit:
-        # a fresh world with Minecraft's default generator: the structures are measured on real vanilla terrain
+    # the Wayfarers biomes and terrain touches: on (the defaults) unless this run measures vanilla generation
+    os.makedirs(os.path.join(server_dir, "config"), exist_ok=True)
+    flag = "true" if custom else "false"
+    with open(os.path.join(server_dir, "config", "wayfarers-common.toml"), "w") as f:
+        f.write(f"[world]\ncustomBiomes = {flag}\n\n[world.terrain]\n"
+                + "".join(f"{t} = {flag}\n" for t in TERRAIN_TOGGLES))
+    if level_name:
+        # a fresh normal world (the --world speed runs)
+        props += f"level-name={level_name}\n"
+    elif fit:
+        # a fresh Default world: the structures are measured on Minecraft's own terrain
         props += "level-name=world_fit\n"
     else:
         # a flat Overworld generates in a blink; /place structure ignores biomes, so every structure
@@ -541,8 +570,8 @@ def blocks_and_loot(srv, failures):
 
 
 def exercise_fit(srv, failures, shard=None):
-    """Every Overworld structure of the mod (or every n-th with --shard i/n), located in a fresh vanilla world and
-    really generated: /wayfarers fitcheck measures floating edges, buried edges and flooding at each, draws it in
+    """Every Overworld structure of the mod (or every n-th with --shard i/n), located in a fresh normal world
+    (Minecraft's terrain) and really generated: /wayfarers fitcheck measures floating edges, buried edges and flooding at each, draws it in
     place (wayfarers-fit-<id>.png) and writes wayfarers-fit.txt (wayfarers-fit-shard<i>.txt). A MISFIT or ERROR line
     fails the run, so every structure is checked on real terrain. A structure skipped for time is listed in the
     summary; the run fails for that only when more than half of the structures were skipped."""
@@ -584,9 +613,201 @@ def exercise_fit(srv, failures, shard=None):
     return ["", f"structure fit ({name}):"] + ["  " + ln for ln in lines]
 
 
+# ================================================================================ --world: biomes and speed gate
+GENBENCH_RX = re.compile(r"Genbench area: (\d+) x \d+ chunks at block (-?\d+) (-?\d+) \((\d+) already loaded\) "
+                         r"in (\d+) ms: ([\d.]+) ms/chunk")
+
+
+def genbench_area(srv, x, z, size, failures, label):
+    """/wayfarers genbench area: {"ms", "chunks", "already", "per_chunk"} or None."""
+    res = srv.run(f"wayfarers genbench area {x} {z} {size}", r"Genbench area|Unknown|Incorrect", GENBENCH_WAIT)
+    m = GENBENCH_RX.search(res or "")
+    if not m:
+        failures.append(f"genbench {label} at {x} {z}: {res}")
+        return None
+    side = int(m.group(1))
+    return {"ms": float(m.group(5)), "chunks": side * side, "already": int(m.group(4)),
+            "per_chunk": float(m.group(6)), "label": label, "x": x, "z": z, "size": side}
+
+
+def locate_biome(srv, biome, x=4000, z=4000):
+    """Nearest (x, z) of a biome from x z (away from spawn, so its area is fresh), or None."""
+    res = srv.run(f"execute in minecraft:overworld positioned {x} 64 {z} run locate biome {biome}",
+                  r"nearest|Could not find|Unknown|Invalid|not found|Incorrect", 300)
+    m = re.search(r"\[(-?\d+), (-?[\d~]+), (-?\d+)\]", res or "")
+    if not res or "nearest" not in res or not m:
+        return None
+    return int(m.group(1)), int(m.group(3))
+
+
+def world_run(server_dir, custom, level_name, biome_spots, failures, bad):
+    """One server start in a fresh normal world: WITH (custom) or WITHOUT the Wayfarers biomes and terrain touches.
+    The same areas are generated in both, in the same order: a warm-up area (not counted), the fixed area, then the
+    biome areas (biome_spots, found by the WITH run). Returns the genbench results."""
+    import shutil
+    shutil.rmtree(os.path.join(server_dir, level_name), ignore_errors=True)
+    prepare(server_dir, False, level_name=level_name, custom=custom)
+    tag = "with" if custom else "without"
+    srv = Server(server_dir, server_command(server_dir), f"smoke-console-world-{tag}-{level_name}.log")
+    boot = time.time()
+    started = srv.wait_for(r"Done \(|Failed to load datapacks|Crashing|Encountered an unexpected exception", 1200)
+    Summary.phases.append((f"server start ({tag}, {level_name})", time.time() - boot, ""))
+    results = []
+    if not started or "Done (" not in started:
+        failures.append(f"server did not finish starting ({tag})")
+    else:
+        Phase.start = time.time()
+        try:
+            res = srv.run("datapack list enabled", r"data pack", 60)
+            on = bool(res) and "wayfarers:custom_biomes" in res
+            if on != custom:
+                failures.append(f"pack wayfarers:custom_biomes {'not ' if custom else ''}enabled in the {tag} world: {res}")
+            with Phase(f"generation benchmark ({tag})"):
+                genbench_area(srv, WARMUP_X, WARMUP_Z, WARMUP_SIZE, failures, "warm-up")
+                r = genbench_area(srv, BENCH_X, BENCH_Z, BENCH_SIZE, failures, "fixed area")
+                if r:
+                    results.append(r)
+            if custom:
+                with Phase("locate biomes"):
+                    first = not biome_spots
+                    for b in OUR_BIOMES:
+                        spot = locate_biome(srv, f"wayfarers:{b}")
+                        if spot is None:
+                            failures.append(f"/locate biome wayfarers:{b}: not found within 6400 blocks of 4000 4000")
+                        elif first:
+                            biome_spots[b] = spot
+            else:
+                # the same lookups as the WITH run (their parents' climate), so both JVMs warm up alike
+                for b in ("minecraft:swamp", "minecraft:badlands", "minecraft:desert"):
+                    locate_biome(srv, b)
+            with Phase(f"biome area benchmark ({tag})"):
+                for b, (x, z) in sorted(biome_spots.items()):
+                    r = genbench_area(srv, x, z, BIOME_BENCH_SIZE, failures, b)
+                    if r:
+                        results.append(r)
+            res = srv.run("wayfarers genbench noise", r"Genbench world|Unknown|Incorrect", GENBENCH_WAIT)
+            for line in list(srv.lines):
+                m = re.search(r"(Genbench (vanilla|world).*)$", line)
+                if m and ">>>" not in line:
+                    Summary.notes.append(f"{tag}: {m.group(1)}")
+            if custom:
+                with Phase("biome shots"):
+                    res = srv.run("wayfarers biomeshots", r"Biome shots (written|failed)|Unknown|Incorrect", BIOMESHOTS_WAIT)
+                    m = re.search(r"written: (\d+) of (\d+)", res or "")
+                    if not res or not m:
+                        failures.append(f"biome shots: {res}")
+                    elif int(m.group(1)) < int(m.group(2)):
+                        failures.append(f"biome shots: only {m.group(1)} of {m.group(2)} drawn (see wayfarers-biomes.txt)")
+        except TimeoutError as e:
+            failures.append(str(e))
+            Summary.notes.append(str(e))
+    srv.run("stop")
+    try:
+        srv.proc.wait(timeout=300)
+    except subprocess.TimeoutExpired:
+        srv.proc.kill()
+        failures.append(f"server did not stop ({tag})")
+    bad += scan_log(server_dir, srv.lines)
+    return results
+
+
+def scan_log(server_dir, lines):
+    """Suspicious lines of a run: its console and logs/latest.log (BAD minus BENIGN)."""
+    text = list(lines)
+    latest = os.path.join(server_dir, "logs", "latest.log")
+    if os.path.exists(latest):
+        text += open(latest, encoding="utf-8", errors="replace").read().splitlines()
+    return [ln for ln in text if not any(b.search(ln) for b in BENIGN) and any(rx.search(ln) for rx in BAD)]
+
+
+def exercise_world(server_dir, failures, bad):
+    """The WITH / WITHOUT pair (twice, the second in the other order, when the first is over the gate). Returns the
+    summary lines."""
+    spots = {}
+    pairs = []
+    for attempt in range(2):
+        order = [True, False] if attempt == 0 else [False, True]
+        got = {}
+        for custom in order:
+            got[custom] = world_run(server_dir, custom, f"world_{'with' if custom else 'without'}_{attempt + 1}",
+                                    spots, failures, bad)
+        pairs.append(got)
+        ratio = pair_ratio(pairs)
+        if ratio is None or ratio <= GATE:
+            break
+        Summary.notes.append(f"generation speed: pair 1 over the gate ({ratio:.3f}), measured again in the other order")
+    return speed_report(pairs, spots, failures)
+
+
+def _match(with_, without):
+    """The areas measured in both runs of a pair, by label."""
+    w = {r["label"]: r for r in with_}
+    o = {r["label"]: r for r in without}
+    return [(w[k], o[k]) for k in w if k in o]
+
+
+def pair_ratio(pairs):
+    """WITH / WITHOUT full-generation time over every area measured in both runs of every pair."""
+    tw = to = 0.0
+    for got in pairs:
+        for a, b in _match(got.get(True, []), got.get(False, [])):
+            tw += a["ms"]
+            to += b["ms"]
+    return tw / to if to > 0 else None
+
+
+def speed_report(pairs, spots, failures):
+    lines = ["", "world generation speed (same seed, same fresh areas, full generation on the server's worker threads;",
+             "  WITH = Wayfarers biomes + terrain touches, WITHOUT = vanilla generation; warm-up area not counted):"]
+    for i, got in enumerate(pairs):
+        lines.append(f"  pair {i + 1}:")
+        for a, b in _match(got.get(True, []), got.get(False, [])):
+            r = a["ms"] / b["ms"] if b["ms"] else float("nan")
+            lines.append(f"    {a['label']:20s} {a['size']}x{a['size']} at {a['x']} {a['z']}: with {a['per_chunk']:.1f} "
+                         f"ms/chunk, without {b['per_chunk']:.1f} ms/chunk, ratio {r:.3f}"
+                         + (f" ({a['already']}/{b['already']} chunks already loaded)" if a["already"] or b["already"] else ""))
+    ratio = pair_ratio(pairs)
+    fixed = [(a, b) for got in pairs for a, b in _match(got.get(True, []), got.get(False, [])) if a["label"] == "fixed area"]
+    if fixed:
+        fr = sum(a["ms"] for a, _ in fixed) / max(1e-9, sum(b["ms"] for _, b in fixed))
+        lines.append(f"  fixed area {BENCH_SIZE}x{BENCH_SIZE} at {BENCH_X} {BENCH_Z}: ratio {fr:.3f}")
+    if spots:
+        lines.append("  biome areas: " + ", ".join(f"{b} at {x} {z}" for b, (x, z) in sorted(spots.items())))
+    if ratio is None:
+        failures.append("generation speed: no area measured in both runs")
+        lines.append("  ratio: not measured")
+    else:
+        verdict = "PASS" if ratio <= GATE else "FAIL"
+        lines.append(f"  RATIO with / without (all areas, all pairs): {ratio:.3f} (gate <= {GATE}) {verdict}")
+        if ratio > GATE:
+            failures.append(f"generation speed: with the Wayfarers biomes and terrain touches {ratio:.3f}x vanilla "
+                            f"(gate {GATE})")
+    print("\n".join(lines), flush=True)
+    return lines
+
+
 def main():
     server_dir = os.path.abspath(sys.argv[1])
     args = sys.argv[2:]
+    if "--world" in args:
+        Summary.job = "world"
+        failures, bad = [], []
+        extra = exercise_world(server_dir, failures, bad)
+        crashes = glob.glob(os.path.join(server_dir, "crash-reports", "*"))
+        if crashes:
+            failures.append(f"crash reports: {crashes}")
+        if bad:
+            failures.append(f"{len(set(bad))} suspicious log lines")
+            for line in sorted(set(bad))[:200]:
+                print("BAD:", line)
+        for f in failures:
+            print("FAIL:", f)
+        try:
+            Summary.write(server_dir, failures, bad, extra)
+        except OSError as e:
+            print(f"[smoke] could not write the summary: {e}", flush=True)
+        print("world test:", "FAILED" if failures else "OK")
+        sys.exit(1 if failures else 0)
     fit = "--fit" in args
     shard = None
     if "--shard" in args:
@@ -624,16 +845,7 @@ def main():
         srv.proc.kill()
         failures.append("server did not stop")
 
-    text = list(srv.lines)
-    latest = os.path.join(server_dir, "logs", "latest.log")
-    if os.path.exists(latest):
-        text += open(latest, encoding="utf-8", errors="replace").read().splitlines()
-    bad = []
-    for line in text:
-        if any(b.search(line) for b in BENIGN):
-            continue
-        if any(rx.search(line) for rx in BAD):
-            bad.append(line)
+    bad = scan_log(server_dir, srv.lines)
     crashes = glob.glob(os.path.join(server_dir, "crash-reports", "*"))
     if crashes:
         failures.append(f"crash reports: {crashes}")

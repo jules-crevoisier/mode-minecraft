@@ -448,6 +448,11 @@ def biome_spawns():
 
 
 def biome_name(bid):
+    if bid.startswith("wayfarers:"):
+        from wf import worldbiomes as WB
+        b = WB.BIOMES.get(bid.split(":", 1)[1])
+        if b:
+            return b["fr"]
     return vname("biome", bid.split(":")[-1])
 
 
@@ -957,7 +962,7 @@ def main():
                                 struct_info=struct_info, sheet_info=sheet_info, all_ids=all_ids, lives=lives,
                                 gear=gear, weapon_of=weapon_of, remembrance_of=remembrance_of, defs=defs,
                                 wonder_ids=wonder_ids, recipes=recipes, spawn_biomes=spawn_biomes,
-                                gui=gui, shots=ingame, shot_dates=shot_dates)
+                                gui=gui, shots=ingame, shot_dates=shot_dates, out=out)
     sec.append(section_news(ctx))
     sec.append(section_ingame(ctx))
     sec.append(section_tests(ctx))
@@ -1158,6 +1163,7 @@ def main():
 
     # ================================================================== WORLD BLOCKS, DECOR + FURNITURE
     sec.append(section_worldblocks(ctx))
+    sec.append(section_biomes(ctx))
     dgroups ={"Guilde et régions": [], "Steampunk": [], "Marbre, roche rouillée, ardoise bleue": [],
               "Au burin seulement": []}
     steam = False
@@ -2066,6 +2072,70 @@ def section_worldblocks(ctx):
 </section>'''
 
 
+def find_biomeshots():
+    """{biome: local png} of the CI renders of the Wayfarers biomes (/wayfarers biomeshots, published with the
+    previews): a local folder ($WAYFARERS_BIOMESHOTS or build/biomeshots) when there is one, else the pre-release,
+    cached in build/wiki_cache/biomeshots and fetched again after 3 hours. Missing renders are skipped."""
+    from wf import worldbiomes as WB
+    for d in (os.environ.get("WAYFARERS_BIOMESHOTS", ""), os.path.join(ROOT, "build", "biomeshots")):
+        if d and os.path.isdir(d):
+            return {b: os.path.join(d, f"wayfarers-biome-{b}.png") for b in WB.BIOMES
+                    if os.path.exists(os.path.join(d, f"wayfarers-biome-{b}.png"))}
+    d = os.path.join(CACHE, "biomeshots")
+    os.makedirs(d, exist_ok=True)
+    out = {}
+    for b in WB.BIOMES:
+        png = os.path.join(d, f"wayfarers-biome-{b}.png")
+        if not os.path.exists(png) or time.time() - os.path.getmtime(png) > 3 * 3600:
+            try:
+                data = urllib.request.urlopen(PREVIEWS_URL.format(f"wayfarers-biome-{b}.png"), timeout=40).read()
+                if data[:8] != b"\x89PNG\r\n\x1a\n":
+                    raise ValueError("not a PNG")
+                open(png, "wb").write(data)
+            except Exception as e:  # noqa: BLE001
+                if not os.path.exists(png):
+                    log(f"biome render {b} not available: {e}")
+        if os.path.exists(png):
+            out[b] = png
+    return out
+
+
+def section_biomes(ctx):
+    """The Wayfarers biomes (tools/wf/worldbiomes.py): a card per biome with the CI render, and the terrain touches."""
+    from wf import worldbiomes as WB
+    shots = find_biomeshots()
+    os.makedirs(os.path.join(ctx.out, "img"), exist_ok=True)
+    cards = []
+    for bid, b in WB.BIOMES.items():
+        img = ""
+        if bid in shots:
+            rel = f"img/biome-{bid}.webp"
+            try:
+                Image.open(shots[bid]).convert("RGB").save(os.path.join(ctx.out, rel), "WEBP", quality=80, method=6)
+                img = (f'<figure class="vitrine"><img src="{rel}" alt="{E(b["fr"], quote=True)}, rendu en jeu" '
+                       f'loading="lazy"><figcaption>Rendu du vrai monde (CI)</figcaption></figure>')
+            except Exception as e:  # noqa: BLE001
+                log(f"biome render {bid} unreadable: {e}")
+        cards.append(f'''<article class="card wb" id="biome-{bid}">
+  {img}<div class="wb-body"><h4>{E(b["fr"])} <small>· {E(b["en"])}</small></h4><p>{E(b["text_fr"])}</p>
+  <p class="where">{SVG["pin"]}<span>{E(b["where_fr"][0].upper() + b["where_fr"][1:])}</span></p>
+  <p class="small"><code>/locate biome wayfarers:{bid}</code></p>
+  <details><summary>In English</summary><p>{E(b["text_en"])}</p><p>Where: {E(b["where_en"])}</p></details></div>
+</article>''')
+        ctx.idx.add(b["fr"], "Biome", f"biome-{bid}", b["text_fr"] + " " + b["en"])
+    touches = "".join(f"<li><code>world.terrain.{t}</code> — {E(fr)}</li>" for t, (_en, fr) in WB.TOUCH_TEXT.items())
+    touches_en = " ".join(en for en, _fr in WB.TOUCH_TEXT.values())
+    ctx.idx.add("Paysages plus sauvages", "Monde", "paysages", touches_en)
+    return f'''<section class="block" id="biomes">
+  {plaque("biomes-h", "Nouveau · monde", "Biomes Wayfarers", E(TXT.BIOMES_INTRO))}
+  <div class="grid wbs three">{"".join(cards)}</div>
+  <h3 class="subhead" id="paysages">Paysages plus sauvages</h3>
+  <p>{E(TXT.TOUCHES_INTRO)}</p>
+  <ul class="ticks">{touches}</ul>
+  <p class="note">{E(TXT.BIOMES_NOTE)}</p>
+</section>'''
+
+
 def section_perf(ctx):
     cfg = {k: (d, f) for k, d, _c, f in java_config()}
     cards = "".join(f'<article class="card perf"><h4>{E(t)}</h4><ul class="ticks">{"".join(f"<li>{E(p)}</li>" for p in pts)}</ul></article>'
@@ -2194,6 +2264,7 @@ SECTIONS = {
     "automates": ("Automates", "Automates", "wayfarers:clockwork_heart"),
     "metaux": ("Métaux & armures", "Métaux & armures", "wayfarers:brass_ingot"),
     "blocs-monde": ("Bois & pierres", "Bois & pierres", "wayfarers:glowwood_log"),
+    "biomes": ("Biomes Wayfarers", "Biomes", "minecraft:crimson_nylium"),
     "deco": ("Déco & meubles", "Déco steampunk", "wayfarers:gear_panel"),
     "armes3d": ("Armes en 3D", "Armes en 3D", "wayfarers:bell_hammer"),
     "oceans": ("Océans vivants", "Océans vivants", "wayfarers:diving_helmet"),
@@ -2205,7 +2276,8 @@ SECTIONS = {
 
 
 # sections marked with a dot in the menu and the tiles (what changed tonight)
-NEW_SECTIONS = {"nouveautes", "en-jeu", "tester", "carte", "terminal", "oceans", "blocs-monde", "performances"}
+NEW_SECTIONS = {"nouveautes", "en-jeu", "tester", "carte", "terminal", "oceans", "blocs-monde", "performances",
+                "biomes"}
 
 
 def render_page(sections, idx, atlas_rows, nav):
