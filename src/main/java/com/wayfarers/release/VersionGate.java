@@ -66,7 +66,14 @@ public final class VersionGate {
             }
             Wayfarers.LOGGER.info("Wayfarers: a client with Wayfarers {} was refused, this server runs {} "
                     + "(compat.requireSameVersion in wayfarers-common.toml)", remote.version(), mine);
-            ctx.getConnection().disconnect(mismatch(mine, remote.version(), downloadUrl()));
+            Component reason = mismatch(mine, remote.version(), downloadUrl());
+            // through the packet listener: it sends the reason to the client before closing (Connection.disconnect
+            // alone would only close, and the player would see a bare "connection lost")
+            if (ctx.getConnection().getPacketListener() instanceof net.minecraft.server.network.ServerCommonPacketListenerImpl listener) {
+                listener.disconnect(reason);
+            } else {
+                ctx.getConnection().disconnect(reason);
+            }
         }
 
         @Override
