@@ -14,6 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.zip.DeflaterOutputStream;
@@ -102,7 +103,13 @@ final class MapExplorers {
         return e;
     }
 
-    /** Writes changed explorers on the worker; {@code forget}: also drop this player from memory (logout). */
+    /**
+     * Writes changed explorers on the worker; {@code forget}: also drop this player from memory (logout).
+     *
+     * <p>The server thread only copies the masks into flat arrays (a few microseconds per thousand regions); the
+     * encoding and the deflate, milliseconds per well-travelled player, run on the map worker. Every world save calls
+     * this for all players at once, so on a busy server the copy keeps that save from stalling the tick.
+     */
     void save(UUID only, boolean forget) {
         for (Map.Entry<UUID, Explorer> en : online.entrySet()) {
             if (only != null && !en.getKey().equals(only) || !en.getValue().dirty) {
@@ -110,29 +117,36 @@ final class MapExplorers {
             }
             Explorer e = en.getValue();
             e.dirty = false;
-            ByteArrayOutputStream b = new ByteArrayOutputStream();
-            try (DataOutputStream out = new DataOutputStream(new DeflaterOutputStream(b))) {
-                out.writeInt(e.dims.size());
-                for (Map.Entry<String, Long2ObjectOpenHashMap<long[]>> d : e.dims.entrySet()) {
-                    out.writeUTF(d.getKey());
-                    out.writeInt(d.getValue().size());
-                    for (Long2ObjectMap.Entry<long[]> r : d.getValue().long2ObjectEntrySet()) {
-                        out.writeLong(r.getLongKey());
-                        for (long l : r.getValue()) {
-                            out.writeLong(l);
-                        }
-                    }
+            // dimension -> {key, 4 mask words} per region, in the file's order
+            Map<String, long[]> copy = new LinkedHashMap<>();
+            for (Map.Entry<String, Long2ObjectOpenHashMap<long[]>> d : e.dims.entrySet()) {
+                long[] flat = new long[d.getValue().size() * 5];
+                int i = 0;
+                for (Long2ObjectMap.Entry<long[]> r : d.getValue().long2ObjectEntrySet()) {
+                    flat[i++] = r.getLongKey();
+                    long[] bits = r.getValue();
+                    System.arraycopy(bits, 0, flat, i, 4);
+                    i += 4;
                 }
-            } catch (IOException ex) {
-                continue;
+                copy.put(d.getKey(), flat);
             }
-            byte[] bytes = b.toByteArray();
             Path f = dir.resolve(en.getKey() + ".bin");
             MapServer.worker().execute(() -> {
                 try {
+                    ByteArrayOutputStream b = new ByteArrayOutputStream();
+                    try (DataOutputStream out = new DataOutputStream(new DeflaterOutputStream(b))) {
+                        out.writeInt(copy.size());
+                        for (Map.Entry<String, long[]> d : copy.entrySet()) {
+                            out.writeUTF(d.getKey());
+                            out.writeInt(d.getValue().length / 5);
+                            for (long l : d.getValue()) {
+                                out.writeLong(l);
+                            }
+                        }
+                    }
                     Files.createDirectories(dir);
                     Path tmp = f.resolveSibling(f.getFileName() + ".tmp");
-                    Files.write(tmp, bytes);
+                    Files.write(tmp, b.toByteArray());
                     Files.move(tmp, f, StandardCopyOption.REPLACE_EXISTING);
                 } catch (IOException ex) {
                     LOGGER.warn("Brasshaven map: could not save {}: {}", f, ex.toString());
