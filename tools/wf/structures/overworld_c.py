@@ -8,6 +8,7 @@ import random
 
 from .. import arch
 from .. import interior as I
+from .. import residents
 from ..arch import Palette, slab, stair
 from ..blueprint import OPPOSITE, Blueprint, family, with_props
 from ..defs import Piece, StructureDef, register
@@ -1238,13 +1239,22 @@ def rune_circle(bp):
                               "wildflowers[facing=north,flower_amount=3]", "red_mushroom", "brown_mushroom"])
     lair_rune_colossus.build(bp)     # rune well, gallery of guardians, grace and the rune vault (y -30)
     I.decorate(bp, "crypt", seed=1, loot=LOOT + "rune_circle")
+    # the rune wardens: two clerics who tend the stones live in a lodge on the meadow, door towards the circle
+    site = residents.free_site(bp, (-24, -24, 24, 26), 0, 7, 5, margin=1)
+    if site is None:
+        raise ValueError("rune_circle: no room for the wardens' lodge")
+    lx, lz = site
+    door = "west" if lx > 0 else "east"
+    lodge_r = residents.lodge(bp, lx, 0, lz, door=door, w=7, d=5, wood="spruce", residents_=[("cleric", 3), ("cleric", 2)],
+                              vtype="plains", seed=1, bed_colour="white")
+    I.decorate(bp, "home", seed=2, region=lodge_r)
 
 
 register(StructureDef(
     "rune_circle", "overworld",
     ["plains", "meadow", "#minecraft:is_taiga", "windswept_hills", "cherry_grove", "sunflower_plains",
      "snowy_plains"],
-    [Piece("circle", rune_circle)], spacing=22, separation=7, processors="none",
+    [Piece("circle", rune_circle)], spacing=22, separation=7, processors="none", peaceful=True,
     title_fr="Cercle de pierres runiques", title_en="Rune Circle"))
 
 
@@ -1607,7 +1617,9 @@ def ice_observatory(bp):
         if bp.get(x, 1, z) == "minecraft:snow":
             bp.remove(x, 1, z)
     # ---- the wintering scholars: an astronomer-cartographer, a librarian, a cleric brewing in the lab
-    I.populate(bp, [("cartographer", 3), "librarian", "cleric", "fletcher"], vtype="snow", seed=1)
+    # (on the surface: the cellar lab below keeps its stray spawner)
+    I.populate(bp, [("cartographer", 3), "librarian", "cleric", "fletcher"], region=((-60, 1, -60), (60, 60, 60)),
+               vtype="snow", seed=1)
     I.decorate(bp, dict(I.THEMES["lab"], rugs=["light_blue", "white", "blue"]), seed=1, region=((-60, -30, -60),
                                                                                                 (60, 0, 60)))
     I.decorate(bp, dict(I.THEMES["home"], rugs=["light_blue", "white", "gray"]), seed=2)
@@ -1616,7 +1628,7 @@ def ice_observatory(bp):
 register(StructureDef(
     "ice_observatory", "overworld",
     ["snowy_plains", "ice_spikes", "snowy_taiga", "grove", "snowy_slopes", "frozen_peaks"],
-    [Piece("observatory", ice_observatory)], spacing=28, separation=9, processors="none",
+    [Piece("observatory", ice_observatory)], spacing=28, separation=9, processors="none", peaceful=True,
     title_fr="Observatoire polaire", title_en="Ice Observatory"))
 
 
@@ -2762,5 +2774,5 @@ register(StructureDef(
     "dwarven_mine", "overworld",
     ["#minecraft:is_mountain", "#minecraft:is_hill", "#minecraft:is_badlands", "windswept_hills",
      "windswept_gravelly_hills", "#minecraft:is_taiga"],
-    [Piece("mine", dwarven_mine)], spacing=30, separation=10, adaptation="beard_thin",
+    [Piece("mine", dwarven_mine)], spacing=30, separation=10, adaptation="beard_thin", peaceful=True,
     title_fr="Mine naine abandonnée", title_en="Abandoned Dwarven Mine"))

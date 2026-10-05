@@ -245,6 +245,11 @@ def main():
     skills_java()
     decor_java()
     boss_gear_java()
+    from wf import npcs
+    npc_out = os.path.join(os.path.dirname(OUT), "GeneratedNpcs.java")
+    with open(npc_out, "w") as f:
+        f.write(npcs.java())
+    print(f"wrote {os.path.relpath(npc_out, ROOT)}")
     chapters = json.load(open(QUESTS))
     lines = [
         "package com.wayfarers.generated;",

@@ -1007,6 +1007,18 @@ def main():
         cname = FR.get(f"chapter.wayfarers.{chap}", chap)
         qhtml.append(f'<details class="chapter" {"open" if ci == 0 else ""}><summary><span>{E(cname)}</span>'
                      f'<small>{len(qids)} étapes</small></summary><ul class="quests">{"".join(rows)}</ul></details>')
+    # the quest givers' contracts (tools/wf/npcs.py): one per row, with who gives it
+    from wf import npcs
+    rows = []
+    for q in npcs.QUESTS:
+        title = FR.get(npcs.title_key(q.id), q.id)
+        dtext = FR.get(f"npcquest.wayfarers.{q.id}.description", "")
+        giver = FR.get(f"npc.wayfarers.role.{q.giver}", q.giver)
+        rows.append(f'<li class="quest task" id="q-npc-{slug(q.id)}">{atlas.icon(q.icon, 36)}<div><b>{E(title)}</b>'
+                    f'<span>{E(giver)} : {E(dtext)}</span><small>+{q.xp} XP</small></div></li>')
+        idx.add(title, "Contrat", f"q-npc-{slug(q.id)}", dtext)
+    qhtml.append(f'<details class="chapter"><summary><span>{E(FR.get("chapter.wayfarers.contracts", "Contrats"))}'
+                 f'</span><small>{len(rows)} contrats</small></summary><ul class="quests">{"".join(rows)}</ul></details>')
     sec.append(f'''<section class="block" id="quetes">
   {plaque("quetes-h", "Système", "Quêtes et journal", "Touche <kbd>J</kbd> ou clic droit avec l'Atlas. Chaque étape réussie par un joueur est accordée à tout le groupe, même aux absents. Les quêtes donnent de l'expérience, du butin et des points de talent.")}
   {ingame_feature(ctx, "quest_journal")}

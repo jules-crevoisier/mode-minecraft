@@ -525,4 +525,13 @@ public final class MobAnims {
 
         private Whale() {}
     }
+    public static final class WayfarerNpc {
+        public static final int GREET = 0;
+        public static final int NOD = 1;
+        public static final int COUNT = 2;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {32, 16};
+
+        private WayfarerNpc() {}
+    }
 }

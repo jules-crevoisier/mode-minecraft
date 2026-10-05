@@ -302,6 +302,12 @@ def build():
 
 def main():
     build()
+    # the quest givers' contracts (wf/npcs.py): their texts, and their rewards for the journal's Contracts tab
+    from wf import npcs
+    npcs.check()
+    en, fr = npcs.lang()
+    LANG_EN.update(en)
+    LANG_FR.update(fr)
     out = os.path.join(DATA, "advancement")
     for qid, adv in ADV.items():
         path = os.path.join(out, qid + ".json")
@@ -323,6 +329,7 @@ def main():
         chapters.setdefault(qid.split("/")[0], []).append(qid)
     # gen_java bakes the rewards into GeneratedContent for the quest journal
     info = {q: {"xp": v["xp"], "items": REWARD_ITEMS.get(v["reward"], []) if v["reward"] else []} for q, v in INFO.items()}
+    info.update(npcs.journal_rewards())
     with open(os.path.join(ROOT, "build", "quest_info.json"), "w", encoding="utf-8") as f:
         json.dump(info, f, indent=1)
     # Java reads this to print chapter progress from the Atlas item

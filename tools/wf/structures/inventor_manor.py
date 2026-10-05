@@ -778,4 +778,5 @@ register(StructureDef(
     ["plains", "sunflower_plains", "meadow", "flower_forest", "cherry_grove"],
     [Piece("manor", manor)],
     spacing=60, separation=22, adaptation="beard_thin", processors="none", max_distance=80,
+    peaceful=True,
     title_fr="Manoir de l'inventeur", title_en="Inventor's Manor"))

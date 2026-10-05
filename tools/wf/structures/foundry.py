@@ -1045,4 +1045,5 @@ register(StructureDef(
     [Piece("foundry", foundry)],
     spacing=72, separation=28, adaptation="beard_thin", processors="none", max_distance=116,
     exclusion=("wayfarers:clockwork_citadel", 8),
+    peaceful=True,
     title_fr="Fonderie géothermique", title_en="Geothermal Foundry"))

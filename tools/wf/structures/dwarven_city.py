@@ -1074,6 +1074,9 @@ def citizens(bp):
     ]
     for i, (a, b, people, theme) in enumerate(zones):
         INT.populate(bp, people, region=(a, b), seed=i, **v)
+        if i == 2:
+            # the Dwarf Elder hands out contracts by the tavern hearth (wf/npcs.py)
+            INT.quest_npc_in(bp, "dwarf_elder", region=(a, b), seed=1, **v)
         INT.decorate(bp, dict(INT.THEMES[theme], banners=["black", "yellow", "gray"]), seed=i, region=(a, b), **v)
     houses = ((-HX - 6, 0, Z0 - 2), (-HX - 1, 30, Z1 + 2)), ((HX + 1, 0, Z0 - 2), (HX + 6, 30, Z1 + 2))
     for i, h in enumerate(houses):
@@ -1091,5 +1094,6 @@ register(StructureDef(
     [Piece("city", dwarven_city)],
     spacing=80, separation=32, adaptation="none", height=("uniform", -58, -54), processors="aging",
     step="underground_structures", max_distance=110, foundation=False,
-    spawns=[("wayfarers:skeleton_knight", 6, 1, 2), ("minecraft:skeleton", 10, 1, 3), ("wayfarers:gargoyle", 3, 1, 1)],
+    # the dwarves still live here: no natural monster spawns (the sealed vault keeps its skeleton knights)
+    peaceful=True,
     title_fr="Cité naine des profondeurs", title_en="Deep Dwarven City"))

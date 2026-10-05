@@ -451,6 +451,9 @@ def citadel():
             INT.populate(bp, [("toolsmith", "armorer", "weaponsmith", "toolsmith")[i],
                               ("mason", "fletcher", "leatherworker", "cartographer")[i]],
                          region=hall_r, vtype="savanna", seed=i)
+            if i == 0:
+                # the master Tinkerer gives contracts in the first workshop hall (wf/npcs.py)
+                INT.quest_npc_in(bp, "tinkerer", region=hall_r, seed=1)
             INT.decorate(bp, "steampunk", seed=i, region=hall_r)
         tower_r = ((-T, 1, -T), (T, CLOCK_Y, T))
         INT.populate(bp, [("librarian", 3), ("cartographer", 3)], region=tower_r, vtype="savanna", seed=9,
@@ -467,7 +470,7 @@ register(StructureDef(
     ["#minecraft:is_badlands", "savanna", "savanna_plateau", "windswept_savanna", "desert", "plains"],
     [Piece("citadel", citadel())],
     spacing=64, separation=24, adaptation="beard_box", processors="none", max_distance=100,
-    # automatons keep stalking the streets at night (darkness rules apply, the lamps keep the plaza safer)
-    spawns=[("wayfarers:clockwork_spider", 60, 2, 4), ("wayfarers:steam_drone", 25, 1, 2),
-            ("minecraft:zombie", 30, 1, 3), ("minecraft:skeleton", 30, 1, 2)],
+    # the clockmakers live here: no natural monster spawns (the Gearworks below keep their spawner and the
+    # Grand Clockmaker; runaway automatons still roam the badlands around)
+    peaceful=True,
     title_fr="Citadelle d'horlogerie", title_en="Clockwork Citadel"))

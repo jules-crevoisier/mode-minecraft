@@ -1103,4 +1103,5 @@ register(StructureDef(
     ["#minecraft:is_mountain", "windswept_hills", "windswept_gravelly_hills", "windswept_forest"],
     [Piece("campus", campus)],
     spacing=64, separation=24, adaptation="beard_thin", processors="none", max_distance=116,
+    peaceful=True,
     title_fr="Observatoire Tesla", title_en="Tesla Observatory"))

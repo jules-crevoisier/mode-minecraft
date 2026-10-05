@@ -188,6 +188,12 @@ La quête est un onglet de progrès (touche **L**). Clic droit avec l'**Atlas** 
 
 **La progression est commune** : chaque étape franchie par un joueur est accordée à tout le monde, y compris aux joueurs hors ligne quand ils se reconnectent.
 
+### Donneurs de quêtes et contrats (20 contrats)
+
+Des personnages au nom affiché, invulnérables et fixés à leur poste, proposent des **contrats** (clic droit) : **agent de la Guilde** (villages : nouveau Relais de la Guilde et place ; avant-postes de la Guilde), **érudite** (auberges des villages, Bibliothèque oubliée), **bricoleur** (ateliers des villages, Citadelle d'horlogerie), **druidesse** (Arbre-monde creux) et **ancien nain** (Cité naine des profondeurs). Quatre sortes : apporter des objets, chasser des créatures, trouver une structure, livrer un colis scellé à un autre donneur. Accepter / Suivre / Rendre depuis leur écran ; le journal (**J**) les liste dans l'onglet **Contrats** et le suivi les affiche à l'écran. Les contrats sont propres à chaque joueur ; récompenses : émeraudes, expérience, fragments de carte, rouages, parchemins…
+
+Les structures habitées (avant-postes, monastère, bibliothèque, phare, Arbre-monde, oasis, observatoires, cercle runique, loge des gardiens de la ziggourat, mine naine, Citadelle, Port céleste, Bas-fonds, Cité naine, Palais sylvain, Manoir, Fonderie, Cathédrale) ont un lit et un poste de travail pour chaque villageois, et **aucun monstre n'y apparaît naturellement** ; les antres, les ruines et les donjons gardent leurs générateurs.
+
 **Chaque palier d'équipement demande le matériau de sa dimension**, ce qui oblige à explorer dans l'ordre :
 
 | Palier | Matériau | Dimension |
@@ -365,6 +371,8 @@ Les structures sont bâties avec des blocs propres au mod, qu'on peut aussi util
 | `/wayfarers locate <structure>` · `/wayfarers tp <structure>` | op | Trouver ou visiter une structure. |
 | `/wayfarers boss <boss>` | op | Fait apparaître un boss devant toi, pour le tester. |
 | `/wayfarers progress reset\|complete` | op | Réinitialiser ou terminer la quête. |
+| `/wayfarers npc spawn <rôle>` · `move` · `role <rôle>` · `remove` | op | Placer, déplacer (nouveau poste), changer ou retirer un donneur de quêtes (le plus proche, 8 blocs). |
+| `/wayfarers contracts reset [joueur]` | op | Effacer les contrats d'un joueur. |
 
 L'onglet créatif **Wayfarers** contient tous les objets, blocs et œufs d'apparition.
 

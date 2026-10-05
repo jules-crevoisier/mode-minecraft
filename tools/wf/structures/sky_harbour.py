@@ -253,4 +253,5 @@ register(StructureDef(
     ["plains", "meadow", "savanna", "sunflower_plains", "#minecraft:is_hill", "windswept_savanna"],
     [Piece("harbour", harbour)],
     spacing=56, separation=20, adaptation="beard_thin", processors="none", max_distance=100,
+    peaceful=True,
     title_fr="Port céleste", title_en="Sky Harbour"))

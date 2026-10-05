@@ -889,4 +889,5 @@ register(StructureDef(
     spacing=80, separation=32, adaptation="none", height=("uniform", -44, -34), processors="none",
     step="underground_structures", max_distance=116, foundation=False,
     exclusion=("minecraft:ancient_cities", 6),
+    peaceful=True,
     title_fr="Cathédrale de cristal", title_en="Crystal Cathedral"))

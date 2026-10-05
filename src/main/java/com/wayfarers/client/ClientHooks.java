@@ -49,6 +49,19 @@ public final class ClientHooks {
         Minecraft.getInstance().gui.setScreen(new com.wayfarers.client.gui.GuideScreen(page));
     }
 
+    public static void npcDialog(com.wayfarers.network.NpcDialogMsg msg) {
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.gui.screen() instanceof com.wayfarers.client.gui.NpcDialogScreen open && open.entityId() == msg.entityId()) {
+            open.refresh(msg);
+        } else {
+            mc.gui.setScreen(new com.wayfarers.client.gui.NpcDialogScreen(msg));
+        }
+    }
+
+    public static void contracts(com.wayfarers.network.ContractSyncMsg msg) {
+        ClientContracts.update(msg);
+    }
+
     public static void questSnapshot(QuestSnapshotMsg msg) {
         ClientQuests.update(msg);
         Minecraft mc = Minecraft.getInstance();

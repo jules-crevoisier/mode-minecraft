@@ -318,6 +318,15 @@
       }
     },
     {
+      "weight": 6,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "wayfarers:village/desert/guild_post",
+        "processors": "wayfarers:village",
+        "projection": "rigid"
+      }
+    },
+    {
       "weight": 4,
       "element": {
         "element_type": "minecraft:single_pool_element",

@@ -39,15 +39,15 @@ public class QuestJournalScreen extends Screen {
         super(Component.translatable("gui.wayfarers.quests.title"));
         String tracked = WayfarersClientConfig.TRACKED_QUEST.get();
         chapter = 0;
-        for (int i = 0; i < GeneratedContent.CHAPTERS.size(); i++) {
-            if (GeneratedContent.CHAPTERS.get(i).quests().contains(tracked)) {
+        for (int i = 0; i < chapters().size(); i++) {
+            if (chapters().get(i).quests().contains(tracked)) {
                 chapter = i;
                 selected = tracked;
                 return;
             }
         }
-        for (int i = 0; i < GeneratedContent.CHAPTERS.size(); i++) {
-            int[] p = ClientQuests.chapterProgress(GeneratedContent.CHAPTERS.get(i));
+        for (int i = 0; i < chapters().size(); i++) {
+            int[] p = ClientQuests.chapterProgress(chapters().get(i));
             if (p[0] < p[1]) {
                 chapter = i;
                 break;
@@ -57,7 +57,7 @@ public class QuestJournalScreen extends Screen {
     }
 
     private List<String> quests() {
-        return GeneratedContent.CHAPTERS.get(chapter).quests();
+        return chapters().get(chapter).quests();
     }
 
     private void selectDefault() {
@@ -66,7 +66,17 @@ public class QuestJournalScreen extends Screen {
         scroll = 0;
     }
 
+    /** The five chapters of the guild's journey, then the Contracts of the quest givers (accepted or finished). */
+    private static List<GeneratedContent.Chapter> chapters() {
+        List<GeneratedContent.Chapter> out = new ArrayList<>(GeneratedContent.CHAPTERS);
+        out.add(new GeneratedContent.Chapter("contracts", com.wayfarers.client.ClientContracts.journal()));
+        return out;
+    }
+
     // ------------------------------------------------------------------ layout
+    /** Tabs share the window's height (six of them fit a small screen too). */
+    private int tabStep() { return Math.min(TAB_H + 4, (h - 30) / chapters().size()); }
+    private int tabH() { return tabStep() - 4; }
     private int tabX() { return left + 12; }
     private int tabY() { return top + 22; }
     private int tabW() { return 104; }
@@ -135,10 +145,10 @@ public class QuestJournalScreen extends Screen {
     /** Tooltips: full names (rows and tabs are clipped), what the status icons mean, a long description. */
     private void hoverTips(GuiGraphicsExtractor g, int mouseX, int mouseY) {
         List<Component> tip = new ArrayList<>();
-        for (int i = 0; i < GeneratedContent.CHAPTERS.size(); i++) {
-            int y = tabY() + i * (TAB_H + 4);
-            if (mouseX >= tabX() && mouseX < tabX() + tabW() && mouseY >= y && mouseY < y + TAB_H) {
-                GeneratedContent.Chapter c = GeneratedContent.CHAPTERS.get(i);
+        for (int i = 0; i < chapters().size(); i++) {
+            int y = tabY() + i * tabStep();
+            if (mouseX >= tabX() && mouseX < tabX() + tabW() && mouseY >= y && mouseY < y + tabH()) {
+                GeneratedContent.Chapter c = chapters().get(i);
                 int[] p = ClientQuests.chapterProgress(c);
                 tip.add(Component.translatable("chapter.wayfarers." + c.id()));
                 tip.add(Component.translatable("gui.wayfarers.quests.objectives", p[0], p[1]).withStyle(net.minecraft.ChatFormatting.GRAY));
@@ -179,16 +189,16 @@ public class QuestJournalScreen extends Screen {
     }
 
     private void drawTabs(GuiGraphicsExtractor g, int mouseX, int mouseY) {
-        for (int i = 0; i < GeneratedContent.CHAPTERS.size(); i++) {
-            GeneratedContent.Chapter c = GeneratedContent.CHAPTERS.get(i);
+        for (int i = 0; i < chapters().size(); i++) {
+            GeneratedContent.Chapter c = chapters().get(i);
             int x = tabX();
-            int y = tabY() + i * (TAB_H + 4);
-            boolean hover = mouseX >= x && mouseX < x + tabW() && mouseY >= y && mouseY < y + TAB_H;
-            WfGui.sprite(g, WfGui.INSET, x, y, tabW(), TAB_H);
+            int y = tabY() + i * tabStep();
+            boolean hover = mouseX >= x && mouseX < x + tabW() && mouseY >= y && mouseY < y + tabH();
+            WfGui.sprite(g, WfGui.INSET, x, y, tabW(), tabH());
             if (i == chapter) {
-                WfGui.sprite(g, WfGui.ROW_SELECTED, x + 2, y + 2, tabW() - 4, TAB_H - 4);
+                WfGui.sprite(g, WfGui.ROW_SELECTED, x + 2, y + 2, tabW() - 4, tabH() - 4);
             } else if (hover) {
-                WfGui.sprite(g, WfGui.ROW_HOVER, x + 2, y + 2, tabW() - 4, TAB_H - 4);
+                WfGui.sprite(g, WfGui.ROW_HOVER, x + 2, y + 2, tabW() - 4, tabH() - 4);
             }
             if (!c.quests().isEmpty()) {
                 g.item(ClientQuests.icon(c.quests().get(0)), x + 4, y + 4);
@@ -208,6 +218,15 @@ public class QuestJournalScreen extends Screen {
     private void drawList(GuiGraphicsExtractor g, int mouseX, int mouseY) {
         WfGui.sprite(g, WfGui.INSET, listX(), listY(), listW(), listH());
         List<String> qs = quests();
+        if (qs.isEmpty()) {
+            // the Contracts tab before talking to anyone: who gives contracts
+            int ty = listY() + 8;
+            for (FormattedCharSequence line : font.split(Component.translatable("gui.wayfarers.quests.contracts.empty"),
+                    listW() - 14)) {
+                g.text(font, line, listX() + 7, ty, WfGui.CREAM_SOFT, true);
+                ty += 10;
+            }
+        }
         int rowW = listW() - 12;
         for (int i = 0; i < rows() && i + scroll < qs.size(); i++) {
             String q = qs.get(i + scroll);
@@ -339,9 +358,9 @@ public class QuestJournalScreen extends Screen {
     public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
         double mx = event.x();
         double my = event.y();
-        for (int i = 0; i < GeneratedContent.CHAPTERS.size(); i++) {
-            int y = tabY() + i * (TAB_H + 4);
-            if (mx >= tabX() && mx < tabX() + tabW() && my >= y && my < y + TAB_H) {
+        for (int i = 0; i < chapters().size(); i++) {
+            int y = tabY() + i * tabStep();
+            if (mx >= tabX() && mx < tabX() + tabW() && my >= y && my < y + tabH()) {
                 chapter = i;
                 selectDefault();
                 updateTrack();
@@ -399,7 +418,7 @@ public class QuestJournalScreen extends Screen {
             return true;
         }
         if (event.isLeft() || event.isRight()) {
-            int c = Math.max(0, Math.min(GeneratedContent.CHAPTERS.size() - 1, chapter + (event.isLeft() ? -1 : 1)));
+            int c = Math.max(0, Math.min(chapters().size() - 1, chapter + (event.isLeft() ? -1 : 1)));
             if (c != chapter) {
                 chapter = c;
                 selectDefault();

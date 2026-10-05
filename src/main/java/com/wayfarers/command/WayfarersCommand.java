@@ -140,6 +140,8 @@ public final class WayfarersCommand {
                                                         .executes(ctx -> GenBenchCommand.area(ctx, IntegerArgumentType.getInteger(ctx, "x"),
                                                                 IntegerArgumentType.getInteger(ctx, "z"),
                                                                 IntegerArgumentType.getInteger(ctx, "size"))))))))
+                .then(NpcCommand.npc(Commands.literal("npc").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))))
+                .then(NpcCommand.contracts(Commands.literal("contracts").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))))
                 .then(Commands.literal("progress").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                         .then(Commands.literal("reset").executes(ctx -> progress(ctx, false)))
                         .then(Commands.literal("complete").executes(ctx -> progress(ctx, true)))));

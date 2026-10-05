@@ -23,7 +23,7 @@
               98,
               19
             ],
-            "blocks": 4757
+            "blocks": 4756
           },
           {
             "location": "wayfarers:giant_tree/oak/x0_z1",
@@ -37,7 +37,7 @@
               110,
               22
             ],
-            "blocks": 20826
+            "blocks": 20814
           },
           {
             "location": "wayfarers:giant_tree/oak/x0_z2",
@@ -65,7 +65,7 @@
               97,
               22
             ],
-            "blocks": 5896
+            "blocks": 5897
           },
           {
             "location": "wayfarers:giant_tree/oak/x1_z1",
@@ -79,7 +79,7 @@
               110,
               22
             ],
-            "blocks": 18665
+            "blocks": 18678
           },
           {
             "location": "wayfarers:giant_tree/oak/x1_z2",
@@ -129,7 +129,7 @@
               98,
               19
             ],
-            "blocks": 4711
+            "blocks": 4708
           },
           {
             "location": "wayfarers:giant_tree/dark_oak/x0_z1",
@@ -143,7 +143,7 @@
               110,
               22
             ],
-            "blocks": 20851
+            "blocks": 20845
           },
           {
             "location": "wayfarers:giant_tree/dark_oak/x0_z2",
@@ -157,7 +157,7 @@
               102,
               22
             ],
-            "blocks": 4564
+            "blocks": 4561
           },
           {
             "location": "wayfarers:giant_tree/dark_oak/x1_z0",
@@ -171,7 +171,7 @@
               97,
               22
             ],
-            "blocks": 5773
+            "blocks": 5774
           },
           {
             "location": "wayfarers:giant_tree/dark_oak/x1_z1",
@@ -185,7 +185,7 @@
               110,
               22
             ],
-            "blocks": 18624
+            "blocks": 18620
           },
           {
             "location": "wayfarers:giant_tree/dark_oak/x1_z2",
@@ -199,7 +199,7 @@
               101,
               22
             ],
-            "blocks": 7259
+            "blocks": 7261
           }
         ],
         "projection": "rigid",

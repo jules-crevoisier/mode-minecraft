@@ -10,7 +10,7 @@ empty, without hand-placing every barrel:
   populate(bp, residents, ...)    villagers with their job-site block, a bed each and a bell to meet at
   yard(bp, area, y, theme, ...)   props on open ground outside: hay, crates, carts, woodpiles, wells,
                                   crop patches, garden beds, signposts, lamp posts, benches
-  villager / wandering_trader / iron_golem / brass_golem    template entities (26.2 NBT)
+  villager / quest_npc / wandering_trader / iron_golem / brass_golem    template entities (26.2 NBT)
 
 Every placement keeps the room walkable: a piece of furniture only goes on a free cell against a wall,
 never next to a door, ladder, stair or opening, and only if every free cell of the room can still reach
@@ -992,6 +992,38 @@ def villager(bp, x, y, z, profession, vtype="plains", level=2, facing=None, baby
     _log_npc(bp, f"villager:{profession}")
 
 
+def quest_npc(bp, x, y, z, role, facing=None):
+    """A quest giver (wayfarers:wayfarer_npc, roles and contracts in wf/npcs.py): it stays where it is placed,
+    cannot be hurt by players and never despawns. Its name and home are set by the game when it spawns."""
+    from . import nbt, npcs
+    if role not in npcs.ROLES:
+        raise ValueError(f"unknown NPC role {role}")
+    bp.entity(x, y, z, {"id": "wayfarers:wayfarer_npc", "Role": role, "PersistenceRequired": True,
+                        "Rotation": nbt.List([nbt.Float(YAW.get(facing, 0.0)), nbt.Float(0.0)], nbt.Float)})
+    _log_npc(bp, f"npc:{role}")
+
+
+def quest_npc_in(bp, role, region=None, seed=0, ground=0, void_solid=False, rooms=None):
+    """Put a quest giver on a free floor cell of the biggest room of ``region``, near its middle, away from doors
+    and stairs and without cutting the room in two. Raises when there is no room for it."""
+    rooms = rooms if rooms is not None else find_rooms(bp, region, ground=ground, void_solid=void_solid)
+    rng = random.Random(f"{bp.name}:npc:{role}:{seed}")
+    for room in sorted(rooms, key=lambda r: -r.area):
+        cx, cz = room.centre()
+        cells = [c for c in room.free - room.keep - room.occupied
+                 if _air_at(bp, room.chk, (c[0], room.y, c[1])) and _air_at(bp, room.chk, (c[0], room.y + 1, c[1]))
+                 and _air_at(bp, room.chk, (c[0], room.y + 2, c[1]))]
+        cells.sort(key=lambda c: (abs(c[0] - cx) + abs(c[1] - cz), rng.random()))
+        for c in cells:
+            if room.connected_without([c]):
+                facing = min(HORIZONTAL, key=lambda d: (c[0] + _dirvec(d)[0] * 3 - cx) ** 2 +
+                             (c[1] + _dirvec(d)[1] * 3 - cz) ** 2) if (c[0], c[1]) != (cx, cz) else "south"
+                quest_npc(bp, c[0], room.y, c[1], role, facing=facing)
+                room.take([c])
+                return (c[0], room.y, c[1])
+    raise ValueError(f"{bp.name}: no room for the {role} in {region}")
+
+
 def wandering_trader(bp, x, y, z, facing=None):
     from . import nbt
     bp.entity(x, y, z, {"id": "minecraft:wandering_trader", "PersistenceRequired": True, "DespawnDelay": 0,
@@ -1101,6 +1133,7 @@ def populate(bp, residents, region=None, vtype="plains", seed=0, rooms=None, bed
         (brass_golem if kind == "brass" else iron_golem)(bp, gx, gy, gz)
     if not rooms:
         return spots
+    beds_before = _count_beds(bp) if beds else 0
     for i, res in enumerate(residents):
         prof, lvl = (res if isinstance(res, tuple) else (res, 2))
         placed = False
@@ -1119,7 +1152,30 @@ def populate(bp, residents, region=None, vtype="plains", seed=0, rooms=None, bed
                 c = rng.choice(free)
                 villager(bp, c[0], room.y, c[1], prof, vtype, lvl)
                 spots.append((c[0], room.y, c[1]))
+    if beds:
+        # a bed for everyone: those whose room had no wall left for one sleep in another room of the region
+        missing = len(spots) - (_count_beds(bp) - beds_before)
+        for _ in range(max(0, missing)):
+            if not _extra_bed(bp, rooms, rng, bed_colour):
+                break
     return spots
+
+
+def _count_beds(bp):
+    return sum(1 for b in bp.blocks.values() if b[0].endswith("_bed") and b[1].get("part") == "head")
+
+
+def _extra_bed(bp, rooms, rng, bed_colour):
+    """One more bed against any free wall of ``rooms`` (biggest first); False when none fits."""
+    for room in rooms:
+        ctx = Ctx(bp, room, {"beds": [bed_colour] if bed_colour else ["red", "white", "light_blue", "lime"]}, rng)
+        for c in sorted(c for c in room.walls if c in room.free and c not in room.keep):
+            for d in room.walls[c]:
+                got = p_bed(ctx, c, d)
+                if got:
+                    room.take(got)
+                    return True
+    return False
 
 
 def _settle_one(bp, room, prof, lvl, vtype, rng, beds, bed_colour):
@@ -1143,7 +1199,12 @@ def _settle_one(bp, room, prof, lvl, vtype, rng, beds, bed_colour):
         for c in sorted(cells, key=lambda c: abs(c[0] - job[0]) + abs(c[1] - job[1])):
             if c in room.free and c not in room.keep:
                 d = rng.choice(room.walls[c])
-                got = p_bed(ctx, c, d)
+                # the head against any wall of that cell (the first pick first)
+                got = None
+                for dd in [d] + [w for w in room.walls[c] if w != d]:
+                    got = p_bed(ctx, c, dd)
+                    if got:
+                        break
                 if got:
                     room.take(got)
                     break
@@ -1421,6 +1482,8 @@ def yard(bp, area, y, theme="village", count=8, seed=0, ring=1, avoid=()):
     rng.shuffle(spots)
     names = sorted(weights)
     avoid = set(avoid)
+    # never on someone's feet (villagers and quest givers placed before the yard)
+    avoid |= {(ex, ez) for ex, ey, ez in _entity_cells(bp) if y - 1 <= ey <= y + 2}
     taken = set()
     placed = []
     singles = {"well": 0, "crops": 0}

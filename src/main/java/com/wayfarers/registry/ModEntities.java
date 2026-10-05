@@ -178,6 +178,12 @@ public final class ModEntities {
             () -> EntityType.Builder.<HotRivetEntity>of(HotRivetEntity::new, MobCategory.MISC)
                     .sized(0.25F, 0.25F).clientTrackingRange(6).updateInterval(2).build(ENTITIES.key("hot_rivet")));
 
+    // ---- quest givers (villages, guild outposts, Clockwork Citadel, World Tree, Dwarven City: tools/wf/npcs.py)
+    public static final RegistryObject<EntityType<com.wayfarers.entity.WayfarerNpc>> WAYFARER_NPC = ENTITIES.register("wayfarer_npc",
+            () -> EntityType.Builder.<com.wayfarers.entity.WayfarerNpc>of(com.wayfarers.entity.WayfarerNpc::new, MobCategory.MISC)
+                    .sized(com.wayfarers.entity.WayfarerNpc.WIDTH, com.wayfarers.entity.WayfarerNpc.HEIGHT).fireImmune()
+                    .clientTrackingRange(10).build(ENTITIES.key("wayfarer_npc")));
+
     // ---- living oceans (spawns: tools/wf/ocean.py biome modifiers; the Sea Serpent rises near boats, OceanEvents)
     public static final RegistryObject<EntityType<GlowJellyfish>> GLOW_JELLYFISH = ENTITIES.register("glow_jellyfish",
             () -> EntityType.Builder.<GlowJellyfish>of(GlowJellyfish::new, MobCategory.WATER_AMBIENT)
@@ -201,6 +207,7 @@ public final class ModEntities {
     }
 
     public static void registerAttributes(EntityAttributeCreationEvent event) {
+        event.put(WAYFARER_NPC.get(), com.wayfarers.entity.WayfarerNpc.attributes().build());
         event.put(RUIN_WALKER.get(), RuinWalker.attributes().build());
         event.put(MAP_WRAITH.get(), MapWraith.attributes().build());
         event.put(BASALT_GUARD.get(), BasaltGuard.attributes().build());

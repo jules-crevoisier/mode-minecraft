@@ -1025,6 +1025,8 @@ def guild_outpost(style):
         I.populate(bp, ["armorer", "weaponsmith"], region=((gx0, 1, gz0), (gx1, 12, gz1)), vtype=vt, seed=3)
         I.populate(bp, ["fletcher"], region=((qx0, 1, qz0), (qx1, 11, qz1)), vtype=vt, seed=4)
         I.populate(bp, ["farmer", "shepherd"], region=((sx0, 1, sz0), (sx1, 4, sz1)), vtype=vt, seed=5)
+        # the Guild Agent hands out contracts in the hall (wf/npcs.py)
+        I.quest_npc_in(bp, "guild_agent", region=((hx0, 1, hz0), (hx1, 1, hz1)), seed=1)
         I.decorate(bp, "hall", seed=1, region=((hx0, 1, hz0), (hx1, 1, hz1)))
         I.decorate(bp, "library", seed=2, region=((hx0, 7, hz0), (hx1, 7, hz1)))
         I.decorate(bp, "barracks", seed=3, region=((gx0, 1, gz0), (gx1, 12, gz1)))
@@ -1041,7 +1043,7 @@ register(StructureDef(
     [Piece("outpost_spruce", guild_outpost("azure"), 2),
      Piece("outpost_oak", guild_outpost("crimson"), 1),
      Piece("outpost_birch", guild_outpost("slate"), 1)],
-    spacing=28, separation=10, exclusion=("minecraft:villages", 4),
+    spacing=28, separation=10, exclusion=("minecraft:villages", 4), peaceful=True,
     title_fr="Avant-poste de la Guilde", title_en="Guild Outpost"))
 
 
@@ -1559,7 +1561,8 @@ register(StructureDef(
     ["meadow", "grove", "snowy_slopes", "cherry_grove", "windswept_hills", "windswept_forest",
      "stony_peaks"],
     [Piece("monastery", monastery)], spacing=40, separation=14,
-    spawns=[("wayfarers:map_wraith", 10, 1, 2), ("wayfarers:ruin_walker", 6, 1, 2)],
+    # the brothers live here: no natural monster spawns (the Bell Keeper's catacombs keep their spawners)
+    peaceful=True,
     title_fr="Monastère des cimes", title_en="Mountain Monastery"))
 
 
@@ -1706,12 +1709,11 @@ def library(bp):
         bp.set(x0 + 6, 1, CZ - 1, "lectern[facing=south,has_book=false,powered=false]")
     for xc in (24, 40, 56):
         great_chandelier(bp, xc, 16, CZ, ridge - 1, r=3)
-    # guardians and treasures
-    bp.spawner(40, 1, CZ, MOB["map_wraith"])
+    # treasures (the keepers live in this hall: the wraiths haunt the ruined wing and the Archivist's stacks)
+    bp.set(40, 1, CZ, "enchanting_table")
     for dx, dz in ((1, 0), (-1, 0), (0, 1), (0, -1)):
         bp.set(40 + dx, 1, CZ + dz, "chiseled_tuff_bricks" if dx else "air")
     bp.set(40, 1, CZ - 1, "air")
-    bp.spawner(HX0 + 8, GY1 + 1, HZ0 + 3, MOB["map_wraith"])
     bp.chest(HX0 + 4, 1, HZ0 + 2, "south", LOOT + "library")
     bp.chest(HX1 - 3, GY2 + 1, HZ0 + 2, "south", LOOT + "library")
 
@@ -1988,6 +1990,8 @@ def library(bp):
                guard=("iron", (NX + 5, 1, CZ + 2)))
     I.populate(bp, [("cartographer", 3)], region=map_r, seed=2)
     I.wandering_trader(bp, NX + 9, 1, CZ - 1, facing="west")
+    # a Scholar of the guild studies the surviving books and hands out contracts (wf/npcs.py)
+    I.quest_npc_in(bp, "scholar", region=hall_r, seed=1)
     I.decorate(bp, "ruin", seed=1, region=ruin_r, loot=LOOT + "library")
     I.decorate(bp, "library", seed=2, region=hall_r)
     I.decorate(bp, "library", seed=3, region=map_r)
@@ -1999,7 +2003,8 @@ register(StructureDef(
     ["forest", "birch_forest", "dark_forest", "flower_forest", "old_growth_birch_forest", "taiga",
      "plains"],
     [Piece("library", library)], spacing=34, separation=12,
-    spawns=[("wayfarers:map_wraith", 10, 1, 2)],
+    # the keepers live in the hall: no natural monster spawns (the ruined wing keeps its wraith spawners)
+    peaceful=True,
     title_fr="Bibliothèque oubliée", title_en="Forgotten Library"))
 
 
@@ -2323,7 +2328,8 @@ def lighthouse(bp):
 
     # ---------------------------------------------------------- the keeper and his catch
     cottage = ((kx0, TOP + 1, kz0), (kx1, TOP + 6, kz1))
-    I.populate(bp, [("fisherman", 3)], region=cottage, beds=False, seed=1)
+    # the lighthouse keeper (who keeps the lamp and the logbook) and a fisherman, a bed each
+    I.populate(bp, [("fisherman", 3), ("cartographer", 3)], region=cottage, seed=1)
     I.decorate(bp, "home", seed=1, region=cottage)
     I.decorate(bp, "storage", seed=2)
     I.yard(bp, (-20, -16, 20, 10), TOP + 1, {"crates": 3, "cart": 1, "woodpile": 2, "bench": 1, "garden": 1},
@@ -2332,5 +2338,5 @@ def lighthouse(bp):
 
 register(StructureDef(
     "coastal_lighthouse", "overworld", ["beach", "stony_shore", "snowy_beach"],
-    [Piece("lighthouse", lighthouse)], spacing=28, separation=10, processors="aging",
+    [Piece("lighthouse", lighthouse)], spacing=28, separation=10, processors="aging", peaceful=True,
     title_fr="Phare côtier", title_en="Coastal Lighthouse"))

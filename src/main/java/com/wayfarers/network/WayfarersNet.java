@@ -33,6 +33,8 @@ public final class WayfarersNet {
                     .addMain(ChiselSyncMsg.class, ChiselSyncMsg.STREAM_CODEC, ChiselSyncMsg::handle)
                     .addMain(TerminalLinksMsg.class, TerminalLinksMsg.STREAM_CODEC, TerminalLinksMsg::handle)
                     .addMain(MapDataMsg.class, MapDataMsg.STREAM_CODEC, MapDataMsg::handle)
+                    .addMain(NpcDialogMsg.class, NpcDialogMsg.STREAM_CODEC, NpcDialogMsg::handle)
+                    .addMain(ContractSyncMsg.class, ContractSyncMsg.STREAM_CODEC, ContractSyncMsg::handle)
                 .serverbound()
                     .addMain(WaystoneActionMsg.class, WaystoneActionMsg.STREAM_CODEC, WaystoneActionMsg::handle)
                     .addMain(QuestRequestMsg.class, QuestRequestMsg.STREAM_CODEC, QuestRequestMsg::handle)
@@ -42,6 +44,7 @@ public final class WayfarersNet {
                     .addMain(WandModeMsg.class, WandModeMsg.STREAM_CODEC, WandModeMsg::handle)
                     .addMain(TerminalToggleMsg.class, TerminalToggleMsg.STREAM_CODEC, TerminalToggleMsg::handle)
                     .addMain(MapActionMsg.class, MapActionMsg.STREAM_CODEC, MapActionMsg::handle)
+                    .addMain(NpcActionMsg.class, NpcActionMsg.STREAM_CODEC, NpcActionMsg::handle)
             .build();
 
     private WayfarersNet() {}
