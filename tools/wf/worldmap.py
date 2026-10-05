@@ -1,9 +1,10 @@
 """World map and minimap: UI text (FR/EN), the brass frame / marker sprites, and review mockups.
 
 gen_gui.py calls sprites() to draw the GUI-atlas sprites under textures/gui/sprites/map/ and, with --mockup,
-mockups() to render build/previews/gui/minimap.png and worldmap.png with a fake terrain. gen_assets.py merges
-lang() into the lang files. The Java side lives in client/map (drawing) and map/ (server: shared exploration,
-waypoints, pings).
+mockups() to render build/previews/gui/minimap*.png and worldmap*.png with a fake terrain: the same relief shading
+(MapShade.java), round frame (MapFrames.java), vector arrow and marker sizes (MapRenderer.java), options panel and
+3D view (WorldMapScreen.java, MapView3D.java) as the game. gen_assets.py merges lang() into the lang files. The Java
+side lives in client/map (drawing) and map/ (server: shared exploration, waypoints, pings).
 """
 import json
 import math
@@ -64,6 +65,32 @@ UI = {
     "gui.wayfarers.map.edit_waypoint": ("Edit waypoint", "Modifier le repère"),
     "gui.wayfarers.map.share_toggle": ("Share with everyone", "Partager avec tout le monde"),
     "gui.wayfarers.map.save": ("Save", "Enregistrer"),
+    "gui.wayfarers.map.view_3d": ("3D view", "Vue 3D"),
+    "gui.wayfarers.map.view3d_on": ("3D view (tilted relief): on", "Vue 3D (relief incliné) : activée"),
+    "gui.wayfarers.map.view3d_off": ("3D view (tilted relief): off", "Vue 3D (relief incliné) : désactivée"),
+    "gui.wayfarers.map.options": ("Options: minimap size and look, map relief", "Options : taille et aspect de la mini-carte, relief des cartes"),
+    "gui.wayfarers.map.options.title": ("Minimap", "Mini-carte"),
+    "gui.wayfarers.map.options.size.tip": ("Its exact size on screen, frame included: 48 to 160 px. The minimap shows "
+                                           "live in its corner while this panel is open.",
+                                           "Sa taille exacte à l'écran, cadre compris : de 48 à 160 px. La mini-carte "
+                                           "s'affiche en direct dans son coin tant que ce panneau est ouvert."),
+    "gui.wayfarers.map.options.shown": ("Shown", "Affichée"),
+    "gui.wayfarers.map.options.presets": ("Presets", "Préréglages"),
+    "gui.wayfarers.map.options.rotate": ("Rotation", "Rotation"),
+    "gui.wayfarers.map.options.relief_title": ("Map relief", "Relief des cartes"),
+    "gui.wayfarers.map.options.relief": ("Relief", "Relief"),
+    "gui.wayfarers.map.options.relief.flat": ("Flat", "Plat"),
+    "gui.wayfarers.map.options.relief.flat.tip": ("Plain colours, no shading (water still darkens with depth).",
+                                                  "Couleurs simples, sans ombrage (l'eau fonce toujours avec la profondeur)."),
+    "gui.wayfarers.map.options.relief.normal": ("Normal", "Normal"),
+    "gui.wayfarers.map.options.relief.normal.tip": ("Hills lit from the north-west, darker valleys, paler high ground.",
+                                                    "Collines éclairées du nord-ouest, vallées plus sombres, hauteurs plus pâles."),
+    "gui.wayfarers.map.options.relief.strong": ("Strong", "Fort"),
+    "gui.wayfarers.map.options.relief.strong.tip": ("The same, deeper: every slope stands out.",
+                                                    "Pareil, en plus marqué : chaque pente ressort."),
+    "gui.wayfarers.map.options.contours": ("Contours", "Courbes"),
+    "gui.wayfarers.map.options.contours.tip": ("Contour lines every 16 blocks of height, a bolder one every 64.",
+                                               "Courbes de niveau tous les 16 blocs de hauteur, une plus marquée tous les 64."),
 }
 KINDS = {
     # kind: (legend en, legend fr, card en, card fr)
@@ -89,8 +116,9 @@ def lang():
 
 
 # ------------------------------------------------------------------ sprites
-# Map diameters inside the frame of WayfarersClientConfig.MinimapSize (56, 68, 96 and 128 px on screen with the
-# 6 px frame): one round frame sprite per size, drawn pixel for pixel so it stays crisp at any GUI scale.
+# Map diameters inside the 6 px frame for the presets of WayfarersClientConfig.MinimapSize (56, 68, 96 and 128 px on
+# screen); the slider allows any outer size from 48 to 160 px in steps of 4. The round frame is not a sprite: the game
+# draws it for the exact size (MapFrames.java), round_frame() below is the same drawing for the mockups.
 MINIMAP_SIZES = (44, 56, 84, 116)
 BORDER = 6
 
@@ -102,8 +130,9 @@ def _save_tile(g, s, name):
         json.dump({"gui": {"scaling": {"type": "tile", "width": s.w, "height": s.h}}}, f, indent=2)
 
 
-def _round_frame(g, size):
-    """Square riveted iron plate with a round brass porthole of diameter ``size`` (the map shows through)."""
+def round_frame(g, size):
+    """Square riveted iron plate with a round brass porthole of diameter ``size`` (the map shows through): the
+    same drawing as MapFrames.build() (the iron grain differs: Java hashes, this draws random numbers)."""
     n = size + BORDER * 2
     s = g.Sprite(n, n)
     c = (n - 1) / 2.0
@@ -146,7 +175,7 @@ def _round_frame(g, size):
     s.bevel(1, 1, n - 2, n - 2, g.IRON_LT, g.IRON_DK)
     for x, y in ((2, 2), (n - 4, 2), (2, n - 4), (n - 4, n - 4)):
         s.rivet(x, y)
-    s.save(f"map/frame_round_{size}")
+    return s
 
 
 def _square_frame(g):
@@ -207,21 +236,8 @@ def _art(g, name, rows, colors):
     s.save(name)
 
 
-ARROW = [
-    "......o......",
-    ".....owo.....",
-    ".....owr.....",
-    "....owwro....",
-    "....owwro....",
-    "...owwwrro...",
-    "...owwwrro...",
-    "..owwwwrrro..",
-    "..owwwwrrro..",
-    ".owwwwwrrrro.",
-    ".owwwoooorro.",
-    "owwoo...oorro",
-    "ooo.......ooo",
-]
+# the player arrow (MapRenderer.ARROW): tip, right barb, notch, left barb, in half-lengths, pointing up
+ARROW = ((0.0, -1.0), (0.76, 0.92), (0.0, 0.44), (-0.76, 0.92))
 MARKERS = {
     "waystone": ([
         "....o....",
@@ -448,17 +464,40 @@ GLYPHS = {
         "..........",
         "..........",
     ],
+    # 3D view: a block seen from above at a slant
+    "view3d": [
+        "....kk....",
+        "..kk..kk..",
+        "kk......kk",
+        "kkkk..kkkk",
+        "k..kkkk..k",
+        "k...kk...k",
+        "k...kk...k",
+        "kk..kk..kk",
+        "..kkkkkk..",
+        "....kk....",
+    ],
+    # options: a gear
+    "options": [
+        "....kk....",
+        ".k.kkkk.k.",
+        "..kkkkkk..",
+        ".kkk..kkk.",
+        "kkk....kkk",
+        "kkk....kkk",
+        ".kkk..kkk.",
+        "..kkkkkk..",
+        ".k.kkkk.k.",
+        "....kk....",
+    ],
 }
 
 
 def sprites(g):
     """Draws every map sprite with gen_gui's helpers (``g`` is the gen_gui module)."""
-    for size in MINIMAP_SIZES:
-        _round_frame(g, size)
     _square_frame(g)
     _plate(g)
     _parchment(g)
-    _art(g, "map/arrow", ARROW, {"o": g.SOOT, "w": g.hexc("FFF8EC"), "r": g.hexc("E0483B")})
     for name, (rows, cols) in MARKERS.items():
         _art(g, "map/marker/" + name, rows, {k: g.hexc(v) for k, v in cols.items()})
     for name, rows in WAYPOINT_ICONS.items():
@@ -507,91 +546,252 @@ def _noise(seed, w, h, cell):
     return at
 
 
+# vanilla map colours (MapColor) and default biome tints, as MapPalette.java gives them
+GRASS = (0x7C, 0xA2, 0x4C)       # grass tint 0x91BD59 x 0.86
+FOLIAGE = (0x58, 0x7E, 0x22)     # foliage tint 0x77AB2F x 0.74
+SAND = (0xF7, 0xE9, 0xA3)
+STONE = (0x70, 0x70, 0x70)
+SNOW = (0xFF, 0xFF, 0xFF)
+WATER_TINT = (0x3F, 0x76, 0xE4)
+
+
+def _scale(c, f):
+    return tuple(max(0, min(255, int(v * f))) for v in c[:3])
+
+
+def _mix(a, b, t):
+    return tuple(int(a[i] * (1 - t) + b[i] * t) for i in range(3))
+
+
+def water_colour(tint, depth, bed=None):
+    """MapPalette.water(): light over the shallows (the bed shows through), deep navy far down."""
+    f = math.sqrt(max(0, min(30, depth - 1)) / 30.0)
+    shallow = _mix(tint, (255, 255, 255), 0.12)
+    deep = _mix(_scale(tint, 0.52), (0x0B, 0x1C, 0x3E), 0.32)
+    c = _mix(shallow, deep, f)
+    if bed and depth <= 4:
+        c = _mix(c, bed, (0.55, 0.38, 0.22, 0.10)[max(1, depth) - 1])
+    return c
+
+
 def fake_world(w, h, seed=3):
-    """{(x, z): (rgb, height, depth)} for a w x h block area: sea, beaches, plains, forest, hills, snow."""
+    """{(x, z): (kind, colour, height, depth)} for a w x h block area: a sea with its shelf, beaches, plains, forest,
+    rolling hills and a snowy ridge. ``kind``: land, tree or water (MapShade's kinds); water's height is its surface."""
     n1, n2, n3 = _noise(seed, w, h, 64), _noise(seed + 1, w, h, 24), _noise(seed + 2, w, h, 9)
     forest = _noise(seed + 3, w, h, 30)
+    ridge = _noise(seed + 4, w, h, 48)
     out = {}
     for z in range(h):
         for x in range(w):
             e = n1(x, z) * 0.62 + n2(x, z) * 0.28 + n3(x, z) * 0.10
-            hgt = int(40 + e * 70)
+            r = max(0.0, 1 - abs(ridge(x, z) - 0.5) * 4) * max(0.0, e - 0.45) * 2
+            hgt = int(34 + e * 64 + r * 70)
             if hgt < 62:
                 depth = 62 - hgt
-                water = (0x3F, 0x76, 0xE4)
-                water = tuple(int(c * 0.86) for c in water)
-                if depth <= 2:
-                    sand = (0xF7, 0xE9, 0xA3)
-                    water = tuple(int(water[i] * 0.66 + sand[i] * 0.34) for i in range(3))
-                out[(x, z)] = (water, 62, depth)
+                out[(x, z)] = ("water", water_colour(WATER_TINT, depth, SAND), 62, depth)
             elif hgt < 64:
-                out[(x, z)] = ((0xF7, 0xE9, 0xA3), hgt, 0)
-            elif hgt < 90:
+                out[(x, z)] = ("land", SAND, hgt, 0)
+            elif hgt < 92:
                 if forest(x, z) > 0.58 and (x * 7 + z * 13) % 5:
-                    out[(x, z)] = ((0x36, 0x86, 0x12), hgt + 5, 0)
+                    out[(x, z)] = ("tree", FOLIAGE, hgt + 5, 0)
                 else:
-                    out[(x, z)] = ((0x7D, 0xA2, 0x4C), hgt, 0)
-            elif hgt < 100:
-                out[(x, z)] = ((0x70, 0x70, 0x70), hgt, 0)
+                    out[(x, z)] = ("land", GRASS, hgt, 0)
+            elif hgt < 118:
+                out[(x, z)] = ("land", STONE, hgt, 0)
             else:
-                out[(x, z)] = ((0xFF, 0xFF, 0xFF), hgt, 0)
+                out[(x, z)] = ("land", SNOW, hgt, 0)
     return out
 
 
-def shade(world, x, z):
-    rgb, hgt, depth = world[(x, z)]
-    if depth:
-        f = 1 - min(depth, 24) * 0.016 - (0.02 if depth > 1 and (x + z) % 2 == 0 else 0)
-    else:
-        hn = world.get((x, z - 1), (None, hgt, 0))[1]
-        hw = world.get((x - 1, z), (None, hgt, 0))[1]
-        slope = (hgt - hn) * 2 + (hgt - hw)
-        f = 1 + max(-0.34, min(0.24, slope * 0.045))
-    return tuple(max(0, min(255, int(c * f))) for c in rgb) + (255,)
+RELIEF = {"flat": 0.0, "normal": 0.6, "strong": 1.0}
 
 
+def _light(h, west, east, north, south, step=1):
+    k = 1.5 if step > 1 else 1.0
+    gx = (east - west) / (2.0 * step) * k
+    gz = (south - north) / (2.0 * step) * k
+    dot = (0.5 * gx + 0.70710678 + 0.5 * gz) / math.sqrt(gx * gx + 1 + gz * gz)
+    return max(0.0, dot) / 0.70710678
+
+
+def shade(world, x, z, relief="normal", contours=False, surface=True):
+    """MapShade.shade() on the fake world: hill-shading from the north-west, valleys, height tint, sea bed relief,
+    shore rim and contour lines. Returns RGBA."""
+    strength = RELIEF[relief]
+    kind, base, h, depth = world[(x, z)]
+    get = world.get
+    f = 1.0
+    if kind == "water":
+        if strength > 0:
+            fh = h - depth
+
+            def bed(dx, dz):
+                c = get((x + dx, z + dz))
+                return c[2] - c[3] if c and c[0] == "water" else fh
+            light = _light(fh, bed(-1, 0), bed(1, 0), bed(0, -1), bed(0, 1))
+            f += strength * 0.35 * max(0.0, 1 - depth / 24.0) * (light - 1)
+            if any((c := get((x + dx, z + dz))) and c[0] in ("land", "tree") for dx, dz in ((-1, 0), (1, 0), (0, -1), (0, 1))):
+                return _mix(_scale(base, f), (0xEF, 0xF6, 0xEE), 0.22 * strength + 0.06) + (255,)
+        return _scale(base, f) + (255,)
+
+    def at(dx, dz):
+        c = get((x + dx, z + dz))
+        return c[2] if c else h
+    if strength > 0:
+        f += strength * 0.62 * (_light(h, at(-1, 0), at(1, 0), at(0, -1), at(0, 1)) - 1)
+        far = [c[2] for c in (get((x - 4, z)), get((x + 4, z)), get((x, z - 4)), get((x, z + 4))) if c]
+        if far:
+            curve = max(-0.6, min(1.0, (sum(far) / len(far) - h) / 10.0))
+            f *= 1 - (0.16 if curve > 0 else 0.08) * strength * curve
+        f = max(0.42, min(1.36, f))
+    c = _scale(base, f)
+    if surface and strength > 0:
+        if h > 68:
+            c = _mix(c, (0xF3, 0xEB, 0xDA), min(1.0, (h - 68) / 150.0) * 0.34)
+        elif h < 62:
+            c = _scale(c, 1 - min(1.0, (62 - h) / 40.0) * 0.14)
+    if contours and kind == "land":
+        line = 0
+        for dx, dz in ((-1, 0), (1, 0), (0, -1), (0, 1)):
+            q = get((x + dx, z + dz))
+            if q and q[0] in ("land", "water") and q[2] // 16 < h // 16:
+                line = max(line, 2 if q[2] // 64 < h // 64 else 1)
+        if line:
+            c = _scale(c, 0.66 if line == 2 else 0.80)
+    return c + (255,)
+
+
+def _terrain(world, Image, x0, z0, w, h, scale, known=None, relief="normal", contours=False):
+    im = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    px = im.load()
+    cache = {}
+    for sy in range(h):
+        for sx in range(w):
+            wx, wz = int(math.floor(x0 + sx / scale)), int(math.floor(z0 + sy / scale))
+            if (wx, wz) in world and (known is None or known(wx, wz)):
+                if (wx, wz) not in cache:
+                    cache[(wx, wz)] = shade(world, wx, wz, relief, contours)
+                px[sx, sy] = cache[(wx, wz)]
+    return im
+
+
+# ------------------------------------------------------------------ the arrow and markers (MapRenderer.java)
+def _round_half(v):
+    return int(math.floor(v + 0.5))
+
+
+def minimap_marker(outer):
+    return max(6.0, min(11.0, outer / 8.5))
+
+
+def minimap_arrow(outer):
+    return max(7.0, min(13.0, 7.0 + (outer - 56) * 0.085))
+
+
+def world_marker(zoom):
+    return max(7.0, min(13.0, 9.0 + zoom * 0.7))
+
+
+def world_arrow(zoom):
+    return max(8.0, min(16.0, 11.0 + zoom * 0.9))
+
+
+def _polygon(big, pts, color, dx=0.0, dy=0.0):
+    """MapRenderer.polygon(): the pixels whose centre is inside, row by row (alpha composited)."""
+    from PIL import Image, ImageDraw
+    layer = Image.new("RGBA", big.size, (0, 0, 0, 0))
+    d = ImageDraw.Draw(layer)
+    ys = [p[1] + dy for p in pts]
+    n = len(pts)
+    for y in range(int(math.floor(min(ys))), int(math.ceil(max(ys))) + 1):
+        yc = y + 0.5
+        xs = []
+        for i in range(n):
+            x0, y0 = pts[i][0] + dx, pts[i][1] + dy
+            x1, y1 = pts[(i + 1) % n][0] + dx, pts[(i + 1) % n][1] + dy
+            if (y0 <= yc) != (y1 <= yc):
+                xs.append(x0 + (yc - y0) * (x1 - x0) / (y1 - y0))
+        xs.sort()
+        for k in range(0, len(xs) - 1, 2):
+            a, b = int(math.ceil(xs[k] - 0.5)), int(math.ceil(xs[k + 1] - 0.5))
+            if b > a:
+                d.rectangle((a, y, b - 1, y), fill=color)
+    big.alpha_composite(layer)
+
+
+def draw_arrow(big, gs, x, y, angle, size):
+    """MapRenderer.arrow() on the upscaled image (``gs`` px per GUI px): shadow, soot outline, cream and red halves."""
+    r = size * gs / 2.0
+    cos, sin = math.cos(angle), math.sin(angle)
+    edge = max(1.0, gs * 0.6)
+    grow = (r + edge * 1.8) / r
+    ox, oy = _round_half(x * gs), _round_half(y * gs)
+    pin = [(px * r * cos - py * r * sin + ox, px * r * sin + py * r * cos + oy) for px, py in ARROW]
+    pout = [(ox + (px - ox) * grow, oy + (py - oy) * grow) for px, py in pin]
+    sh = max(1.0, gs * 0.7)
+    _polygon(big, pout, (0, 0, 0, 0x60), sh, sh)
+    _polygon(big, pout, (0x0F, 0x0C, 0x0A, 255))
+    _polygon(big, [pin[0], pin[2], pin[3]], (0xFF, 0xF8, 0xEC, 255))
+    _polygon(big, [pin[0], pin[1], pin[2]], (0xE0, 0x48, 0x3B, 255))
+
+
+def draw_crisp(big, gs, path, x, y, size, tint=None, shadow=True, texels=9):
+    """MapRenderer.spriteCrisp(): a whole number of screen px per texel, centred on (x, y), with a drop shadow."""
+    from PIL import Image, ImageChops
+    k = max(1, _round_half(size * gs / texels))
+    real = texels * k
+    im = Image.open(path).convert("RGBA").resize((real, real), Image.NEAREST)
+    if tint:
+        im = ImageChops.multiply(im, Image.new("RGBA", im.size, tuple(tint[:3]) + (255,)))
+    o = -(real // 2)
+    bx, by = _round_half(x * gs) + o, _round_half(y * gs) + o
+    if shadow:
+        a = im.getchannel("A").point(lambda v: v * 0x70 // 255)
+        sh = Image.new("RGBA", im.size, (0, 0, 0, 0))
+        sh.putalpha(a)
+        big.alpha_composite(sh, (bx + k, by + k))
+    big.alpha_composite(im, (bx, by))
+
+
+# ------------------------------------------------------------------ the mockups
 def mockups(g):
     from PIL import Image
     os.makedirs(g.PREVIEW, exist_ok=True)
     world = fake_world(420, 300)
     _mock_minimap(g, world, Image)
     _mock_worldmap(g, world, Image)
-
-
-def _terrain(world, Image, x0, z0, w, h, scale, known=None):
-    im = Image.new("RGBA", (w, h), (0, 0, 0, 0))
-    px = im.load()
-    for sy in range(h):
-        for sx in range(w):
-            wx, wz = int(x0 + sx / scale), int(z0 + sy / scale)
-            if (wx, wz) in world and (known is None or known(wx, wz)):
-                px[sx, sy] = shade(world, wx, wz)
-    return im
+    _mock_options(g, world, Image)
+    _mock_options(g, world, Image, li=0)
+    _mock_worldmap(g, world, Image, tilted=True)
 
 
 def draw_minimap(g, m, world, x, y, size, square=False, coords=("212, 71, -148", "Plaines"), right=False, zoom=1.0,
-                 opacity=1.0):
+                 opacity=1.0, relief="normal", contours=False, yaw=-35):
     """The minimap as MinimapHud draws it, on mockup ``m`` at (x, y): ``size`` is the map inside the 6 px frame.
-    Returns the height taken (frame and coordinates plate)."""
-    from PIL import Image, ImageChops
+    Markers and the arrow are sized to the map and drawn at screen resolution. Returns the height taken."""
+    from PIL import Image
     outer = size + BORDER * 2
     back = Image.new("RGBA", (size, size), (0x2A, 0x22, 0x1C, int(255 * opacity)))
-    terr = _terrain(world, Image, 210 - size / 2 / zoom, 150 - size / 2 / zoom, size, size, zoom)
+    terr = _terrain(world, Image, 210 - size / 2 / zoom, 150 - size / 2 / zoom, size, size, zoom, relief=relief,
+                    contours=contours)
     if opacity < 1:
         terr.putalpha(terr.getchannel("A").point(lambda a: int(a * opacity)))
     m.im.alpha_composite(back, (x + BORDER, y + BORDER))
     m.im.alpha_composite(terr, (x + BORDER, y + BORDER))
-    cx, cy = x + BORDER + size // 2, y + BORDER + size // 2
+    cx, cy = x + BORDER + size / 2, y + BORDER + size / 2
     k = size / 96
-    for name, dx, dy in (("waystone", -20, -30), ("ping", 26, 14), ("spawn", -36, 22), ("grave", 10, -12)):
-        dx, dy = int(dx * k), int(dy * k)
-        m.im.alpha_composite(Image.open(g.sp("map/marker/" + name)).convert("RGBA"), (cx + dx - 4, cy + dy - 4))
-    arrow = Image.open(g.sp("map/arrow")).convert("RGBA").rotate(-35, resample=Image.NEAREST)
-    m.im.alpha_composite(arrow, (cx - 6, cy - 6))
+    ms = minimap_marker(outer)
+    marks = (("waystone", -20, -30), ("ping", 26, 14), ("spawn", -36, 22), ("grave", 10, -12))
+
+    def overlay(big, gs):
+        for name, dx, dy in marks:
+            draw_crisp(big, gs, g.sp("map/marker/" + name), int(cx + dx * k), int(cy + dy * k), ms)
+        draw_arrow(big, gs, cx, cy, math.radians(yaw), minimap_arrow(outer))
+    m.overlays.append(overlay)
     if square:
         m.nine("map/frame_square", x, y, outer, outer, 6)
     else:
-        m.im.alpha_composite(Image.open(g.sp(f"map/frame_round_{size}")).convert("RGBA"), (x, y))
+        m.im.alpha_composite(round_frame(g, size).im, (x, y))
     for i, n in enumerate("nesw"):
         a = i * math.pi / 2
         dx, dy = math.sin(a), -math.cos(a)
@@ -612,31 +812,98 @@ def draw_minimap(g, m, world, x, y, size, square=False, coords=("212, 71, -148",
     return outer + 21
 
 
+def _sky(m, w, h, horizon):
+    for y in range(h):
+        for x in range(w):
+            m.im.putpixel((x, y), (int(110 + y * 0.3), int(160 + y * 0.2), 220, 255) if y < horizon else (70, 104, 50, 255))
+
+
 def _mock_minimap(g, world, Image):
-    """minimap.png: the four sizes side by side (56, 68 by default, 96 and 128 px on screen), the square frame and
-    a faded one (opacity 60 %), over a stand-in game view."""
-    W, H = 470, 180
+    """minimap.png: five sizes side by side (48, 56, 68 by default, 96 and 128 px on screen: the arrow and markers grow
+    with the map) over a stand-in game view; minimap_variants.png: the square frame, a faded one (opacity 60 %), and
+    the relief flat / strong with contour lines."""
+    W, H = 474, 180
     m = g.Mock(W, H)
-    for y in range(H):
-        for x in range(W):
-            m.im.putpixel((x, y), (int(110 + y * 0.3), int(160 + y * 0.2), 220, 255) if y < 80 else (70, 104, 50, 255))
+    _sky(m, W, H, 80)
     x = 4
-    labels = ("Petite 56", "Moyenne 68", "Grande 96", "Énorme 128")
-    for size, label in zip(MINIMAP_SIZES, labels):
-        draw_minimap(g, m, world, x, 4, size)
-        m.text(label, x + (size + 12) // 2, H - 12, g.CREAM, center=True)
-        x += size + 12 + 10
+    for outer in (48, 56, 68, 96, 128):
+        size = outer - BORDER * 2
+        draw_minimap(g, m, world, x, 4, size, coords=None)
+        m.text(f"{outer} px", x + outer // 2, H - 12, g.CREAM, center=True)
+        x += outer + 10
     m.save("minimap")
-    m = g.Mock(200, 110)
-    for y in range(110):
-        for x in range(200):
-            m.im.putpixel((x, y), (int(110 + y * 0.3), int(160 + y * 0.2), 220, 255) if y < 50 else (70, 104, 50, 255))
-    draw_minimap(g, m, world, 4, 4, 56, square=True, zoom=2.0)
+    W, H = 400, 110
+    m = g.Mock(W, H)
+    _sky(m, W, H, 50)
+    draw_minimap(g, m, world, 4, 4, 56, square=True, zoom=2.0, yaw=0)
     draw_minimap(g, m, world, 100, 4, 56, opacity=0.6, coords=("-1732, 129, -461", "Champs fleuris"))
+    draw_minimap(g, m, world, 196, 4, 56, relief="flat", coords=None)
+    m.text("Plat", 196 + 34, 74, g.CREAM, center=True)
+    draw_minimap(g, m, world, 292, 4, 84, relief="strong", contours=True, coords=None, zoom=0.5)
+    m.text("Fort + courbes", 292 + 48, 100, g.CREAM, center=True)
     m.save("minimap_variants")
 
 
-def _mock_worldmap(g, world, Image):
+# MapView3D.java
+DEPTH = 0.72
+RISE = 0.9
+
+
+def render3d(world, colour, cx, cz, s, w, h, ref, known=None):
+    """MapView3D.render() on the fake world: each screen column near to far, the top of every cell then the darker
+    wall under it down to the cell in front. ``colour(x, z)``: the shaded colour (RGBA)."""
+    from PIL import Image
+    im = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    px = im.load()
+    mid = h / 2.0
+    depth, rise = s * DEPTH, s * RISE
+    z_near = int(math.ceil(cz + (mid + 128 * rise) / depth))
+    z_far = int(math.floor(cz - (mid + 96 * rise) / depth))
+    step = max(1, int(1.0 / depth))
+    z_near = (z_near // step) * step
+    for sx in range(w):
+        bx = int(math.floor(cx + (sx + 0.5 - w / 2.0) / s))
+        top = h
+        near_h = None
+        bz = z_near
+        while bz >= z_far and top > 0:
+            cell = world.get((bx, bz))
+            if cell is None or (known and not known(bx, bz)):
+                near_h = None
+                bz -= step
+                continue
+            hh = cell[2]
+            c = colour(bx, bz)
+            y_far = mid + (bz - cz) * depth - (hh + 1 - ref) * rise
+            y0 = _round_half(y_far)
+            y_face = max(y0 + 1, _round_half(y_far + step * depth))
+            base = hh - 3 if near_h is None else min(hh, near_h)
+            y_base = _round_half(mid + (bz + step - cz) * depth - (base + 1 - ref) * rise)
+            fr, to = max(0, y0), min(top, max(y_face, y_base))
+            if fr < to:
+                wall = _scale(c, 0.7) if cell[0] == "water" else _scale(_mix(c, (0x5B, 0x46, 0x30), 0.28), 0.6)
+                for yy in range(fr, to):
+                    if yy < y_face:
+                        px[sx, yy] = c[:3] + (255,)
+                    else:
+                        kk = min(1.0, (yy - y_face) / max(4.0, rise * 10))
+                        px[sx, yy] = _scale(wall, 1 - 0.22 * kk) + (255,)
+                top = fr
+            near_h = hh
+            bz -= step
+    return im
+
+
+def _parchment_fill(g, m, Image, x0, y0, x1, y1):
+    par = Image.open(g.sp("map/parchment")).convert("RGBA")
+    for yy in range(y0, y1, 64):
+        for xx in range(x0, x1, 64):
+            m.im.alpha_composite(par.crop((0, 0, min(64, x1 - xx), min(64, y1 - yy))), (xx, yy))
+
+
+def _mock_worldmap(g, world, Image, tilted=False):
+    """worldmap.png (seen from above, relief shading) or worldmap_3d.png (the tilted 3D view): the screen at 480 x 270
+    GUI px with the legend and waypoints on the right."""
     from PIL import ImageChops
     W, H = 480, 270
     m = g.Mock(W, H)
@@ -646,42 +913,77 @@ def _mock_worldmap(g, world, Image):
     m.text("Carte du monde", W // 2, 6, g.PLATE_INK, shadow=False, center=True, bold=True)
     sb = 116
     mx0, my0, mx1, my1 = 18, 24, W - 18 - sb - 6, H - 30
-    par = Image.open(g.sp("map/parchment")).convert("RGBA")
-    for yy in range(my0, my1, 64):
-        for xx in range(mx0, mx1, 64):
-            piece = par.crop((0, 0, min(64, mx1 - xx), min(64, my1 - yy)))
-            m.im.alpha_composite(piece, (xx, yy))
+    _parchment_fill(g, m, Image, mx0, my0, mx1, my1)
     # explored: a blob around the centre
     cxw, czw = 210, 150
+    zoom = 0
     scale = 1.0
 
     def known(x, z):
         return math.hypot(x - cxw, (z - czw) * 1.3) < 120 + 25 * math.sin(x * 0.05) or abs(z - 150) < 8
-    terr = _terrain(world, Image, cxw - (mx1 - mx0) / 2 / scale, czw - (my1 - my0) / 2 / scale, mx1 - mx0, my1 - my0, scale, known)
-    m.im.alpha_composite(terr, (mx0, my0))
-    for gx in range(mx0 + 40, mx1, 128):
-        for yy in range(my0, my1):
-            m.im.alpha_composite(Image.new("RGBA", (1, 1), (0, 0, 0, 40)), (gx, yy))
-    cx, cy = (mx0 + mx1) // 2, (my0 + my1) // 2
+    cx, cy = (mx0 + mx1) / 2, (my0 + my1) / 2
+    mw, mh = mx1 - mx0, my1 - my0
+    if tilted:
+        cache = {}
+
+        def colour(x, z):
+            if (x, z) not in cache:
+                cache[(x, z)] = shade(world, x, z)
+            return cache[(x, z)]
+        ref = world[(cxw, czw)][2]
+        m.im.alpha_composite(render3d(world, colour, cxw, czw, scale, mw, mh, ref, known), (mx0, my0))
+
+        def at(dx, dz):
+            wx, wz = cxw + dx, czw + dz
+            y = world.get((wx, wz), (0, 0, 64))[2] + 1
+            return cx + dx * scale, cy + dz * scale * DEPTH - (y - ref) * scale * RISE
+    else:
+        terr = _terrain(world, Image, cxw - mw / 2 / scale, czw - mh / 2 / scale, mw, mh, scale, known)
+        m.im.alpha_composite(terr, (mx0, my0))
+        for gx in range(mx0 + 40, mx1, 128):
+            for yy in range(my0, my1):
+                m.im.alpha_composite(Image.new("RGBA", (1, 1), (0, 0, 0, 40)), (gx, yy))
+
+        def at(dx, dz):
+            return cx + dx * scale, cy + dz * scale
+    ms = world_marker(zoom)
     marks = [("waystone", -60, -40, "Avant-poste de la Guilde"), ("structure", 70, 30, "Monastère des cimes"),
              ("spawn", -20, 60, None), ("ping", 40, -50, None), ("player", 30, 10, None)]
+    wps = (("house", (0xF6, 0xC3, 0x43), -100, 20, "Base"), ("mine", (0x3F, 0xA9, 0xFF), 90, -70, "Mine de fer"))
+    below = _round_half(ms / 2) + 2
+    pos = {}
     for name, dx, dy, label in marks:
-        m.im.alpha_composite(Image.open(g.sp("map/marker/" + name)).convert("RGBA"), (cx + dx - 4, cy + dy - 4))
+        pos[name] = tuple(int(round(v)) for v in at(dx, dy))
         if label and name == "waystone":
+            sx, sy = pos[name]
             w_ = g.text_width(label)
-            m.im.alpha_composite(Image.new("RGBA", (int(w_) + 4, 10), (16, 12, 10, 144)), (int(cx + dx - w_ / 2 - 2), cy + dy + 6))
-            m.text(label, cx + dx, cy + dy + 7, g.AETHER_TXT, center=True)
-    for icon, col, dx, dy, label in (("house", (0xF6, 0xC3, 0x43), -100, 20, "Base"), ("mine", (0x3F, 0xA9, 0xFF), 90, -70, "Mine de fer")):
-        wp = Image.open(g.sp("map/wp/" + icon)).convert("RGBA")
-        m.im.alpha_composite(ImageChops.multiply(wp, Image.new("RGBA", wp.size, col + (255,))), (cx + dx - 4, cy + dy - 4))
+            m.im.alpha_composite(Image.new("RGBA", (int(w_) + 4, 10), (16, 12, 10, 144)), (int(sx - w_ / 2 - 2), sy + below))
+            m.text(label, sx, sy + below + 1, g.AETHER_TXT, center=True)
+    for icon, col, dx, dy, label in wps:
+        sx, sy = (int(round(v)) for v in at(dx, dy))
+        pos[icon] = (sx, sy)
         w_ = g.text_width(label)
-        m.im.alpha_composite(Image.new("RGBA", (int(w_) + 4, 10), (16, 12, 10, 144)), (int(cx + dx - w_ / 2 - 2), cy + dy + 6))
-        m.text(label, cx + dx, cy + dy + 7, col + (255,), center=True)
-    m.im.alpha_composite(Image.open(g.sp("map/arrow")).convert("RGBA"), (cx - 6, cy - 6))
+        m.im.alpha_composite(Image.new("RGBA", (int(w_) + 4, 10), (16, 12, 10, 144)), (int(sx - w_ / 2 - 2), sy + below))
+        m.text(label, sx, sy + below + 1, col + (255,), center=True)
+    me = at(0, 0)
+
+    def overlay(big, gs):
+        for name, _dx, _dy, _l in marks:
+            if not tilted and mx0 + 6 <= pos[name][0] < mx0 + 174 and pos[name][1] >= my1 - 72:
+                continue  # under the marker card
+            draw_crisp(big, gs, g.sp("map/marker/" + name), pos[name][0], pos[name][1], ms)
+        for icon, col, _dx, _dy, _l in wps:
+            draw_crisp(big, gs, g.sp("map/wp/" + icon), pos[icon][0], pos[icon][1], ms, tint=col)
+        draw_arrow(big, gs, me[0], me[1], math.radians(150), world_arrow(zoom))
+    m.overlays.append(overlay)
     m.nine("map/frame_square", mx0 - 4, my0 - 4, mx1 - mx0 + 8, my1 - my0 + 8, 6)
-    for i, glyph in enumerate(("center", "zoom_in", "zoom_out", "cave", "list")):
+    if tilted:
+        cw = g.text_width("Vue 3D") + 10
+        m.nine("map/plate", mx0 + 4, my0 + 4, cw, 13, 3)
+        m.text("Vue 3D", mx0 + 9, my0 + 7, g.AETHER_TXT, shadow=False)
+    for i, glyph in enumerate(("center", "zoom_in", "zoom_out", "cave", "list", "view3d", "options")):
         bx, by = mx1 - 20, my0 + 4 + i * 19
-        m.nine("button_small", bx, by, 16, 16, 3)
+        m.nine("button_small_hover" if glyph == "view3d" and tilted else "button_small", bx, by, 16, 16, 3)
         m.im.alpha_composite(Image.open(g.sp("map/glyph/" + glyph)).convert("RGBA"), (bx + 3, by + 3))
     m.text("X 231  Y 68  Z -164  -  Forêt", mx0, my1 + 7, g.INK, shadow=False)
     m.text("1 bloc = 1 px", mx1, my1 + 7, g.INK_SOFT, shadow=False, right=True)
@@ -713,14 +1015,108 @@ def _mock_worldmap(g, world, Image):
         ly += 12
     m.nine("button", sx + 4, my1 - 14, sw - 8, 14, 4)
     m.text("+ Repère ici", sx + sw // 2, my1 - 11, g.hexc("FFFFFF"), center=True)
-    # card
-    m.nine("card", mx0 + 6, my1 - 72, 168, 66, 4)
-    wp = Image.open(g.sp("map/wp/mine")).convert("RGBA")
-    m.im.alpha_composite(ImageChops.multiply(wp, Image.new("RGBA", wp.size, (0x3F, 0xA9, 0xFF, 255))), (mx0 + 12, my1 - 66))
-    m.text("Mine de fer", mx0 + 25, my1 - 66, g.INK, shadow=False, bold=True)
-    m.text("Repère - Partagé", mx0 + 12, my1 - 54, g.INK_SOFT, shadow=False)
-    m.text("301, 12, -412   340 m", mx0 + 12, my1 - 42, g.INK_SOFT, shadow=False)
-    for i, label in enumerate(("Modifier", "Privé", "Supprimer")):
-        m.nine("button", mx0 + 11 + i * 53, my1 - 25, 50, 14, 4)
-        m.text(label, mx0 + 36 + i * 53, my1 - 22, g.hexc("FFFFFF"), center=True)
-    m.save("worldmap")
+    if not tilted:
+        # card
+        m.nine("card", mx0 + 6, my1 - 72, 168, 66, 4)
+        wp = Image.open(g.sp("map/wp/mine")).convert("RGBA")
+        m.im.alpha_composite(ImageChops.multiply(wp, Image.new("RGBA", wp.size, (0x3F, 0xA9, 0xFF, 255))), (mx0 + 12, my1 - 66))
+        m.text("Mine de fer", mx0 + 25, my1 - 66, g.INK, shadow=False, bold=True)
+        m.text("Repère - Partagé", mx0 + 12, my1 - 54, g.INK_SOFT, shadow=False)
+        m.text("301, 12, -412   340 m", mx0 + 12, my1 - 42, g.INK_SOFT, shadow=False)
+        for i, label in enumerate(("Modifier", "Privé", "Supprimer")):
+            m.nine("button", mx0 + 11 + i * 53, my1 - 25, 50, 14, 4)
+            m.text(label, mx0 + 36 + i * 53, my1 - 22, g.hexc("FFFFFF"), center=True)
+    m.save("worldmap_3d" if tilted else "worldmap")
+
+
+# WorldMapScreen's options panel
+OPT_W, OPT_LABEL, OPT_ROW, OPT_ROWS, OPT_HEAD, OPT_SECTION, OPT_PAD = 210, 82, 16, 10, 24, 14, 12
+OPT_H = OPT_HEAD + OPT_ROWS * OPT_ROW + OPT_SECTION + 10
+
+
+def _mock_options(g, world, Image, li=1):
+    """worldmap_options.png: the world map at the smallest supported screen (427 x 240 GUI px, 1280 x 720) with the
+    options panel open and the minimap shown live in its corner at 96 px (set with the slider)."""
+    from wf import content, guide, machines
+    W, H = 427, 240
+    m = g.Mock(W, H)
+    m.im.paste((26, 20, 16, 255), (0, 0, W, H))
+    m.nine("panel", 4, 6, W - 8, H - 10, 9)
+    m.nine("title_plate", W // 2 - 50, 1, 100, 18, 6)
+    m.text("Carte du monde", W // 2, 6, g.PLATE_INK, shadow=False, center=True, bold=True)
+    mx0, my0, mx1, my1 = 18, 24, W - 18 - 116 - 6, H - 30
+    _parchment_fill(g, m, Image, mx0, my0, mx1, my1)
+    mw, mh = mx1 - mx0, my1 - my0
+    m.im.alpha_composite(_terrain(world, Image, 210 - mw / 2, 150 - mh / 2, mw, mh, 1.0), (mx0, my0))
+    m.nine("map/frame_square", mx0 - 4, my0 - 4, mw + 8, mh + 8, 6)
+    m.nine("inset", mx1 + 6, my0 - 4, W - 18 - mx1 - 6, mh + 8, 4)
+    # the live minimap, top left, 96 px
+    outer = 96
+    draw_minimap(g, m, world, 4, 4, outer - BORDER * 2, coords=("212, 71, -148", "Plaines"))
+    # the panel, on the other side
+    k, o = "gui.wayfarers.settings.", "gui.wayfarers.map.options."
+
+    def tr(key):
+        if key in content.MESSAGES:
+            return content.MESSAGES[key][li]
+        return UI[key][li]
+    ox, oy = W - OPT_W - 6, max(2, (H - OPT_H) // 2)
+    m.nine("panel", ox, oy, OPT_W, OPT_H, 9)
+    m.text(tr(o + "title"), ox + OPT_W // 2, oy + 10, g.INK, shadow=False, center=True, bold=True)
+    m.text("x", ox + OPT_W - 18, oy + 9, g.INK_SOFT, shadow=False)
+
+    def row(i):
+        return oy + OPT_HEAD + i * OPT_ROW + (OPT_SECTION if i >= 8 else 0)
+    labels = [o + "shown", k + "minimap_size", o + "presets", k + "minimap_corner", k + "minimap_shape", o + "rotate",
+              k + "minimap_coords", k + "minimap_opacity", o + "relief", o + "contours"]
+    for i, key in enumerate(labels):
+        m.text(tr(key), ox + OPT_PAD, row(i) + 4, g.INK, shadow=False)
+        assert guide.text_width(tr(key)) <= OPT_LABEL - OPT_PAD - 2, tr(key)
+    cx, cw = ox + OPT_LABEL, OPT_W - OPT_LABEL - OPT_PAD
+
+    def choice(x, y, w, h, label, on, icon=None):
+        m.nine("button_on" if on else "button", x, y, w, h, 4)
+        if icon:
+            m.im.alpha_composite(Image.open(g.sp(icon)).convert("RGBA"), (x + (w - 12 + 1) // 2, y + (h - 12) // 2))
+        else:
+            assert guide.text_width(label) <= w - 2, label
+            m.text(label, x + (w - guide.text_width(label) + 1) // 2, y + (h - 8) // 2, g.GOLD if on else g.hexc("FFFFFF"))
+
+    def toggle(i, on):
+        m.im.alpha_composite(Image.open(g.sp("toggle_on" if on else "toggle_off")).convert("RGBA"), (cx, row(i) + 1))
+        m.text(machines.GUI["on" if on else "off"][li], cx + 30, row(i) + 4, g.INK_SOFT, shadow=False)
+
+    def slider(i, steps, step, marks=None):
+        sx, sy, sw = cx, row(i) - 1, cw - 32
+        m.nine("slider_track", sx, sy + 6, sw, 6, 2)
+        for s_ in range(steps):
+            if marks is not None and s_ != step and s_ not in marks:
+                continue
+            tx = sx + 4 + round(s_ * (sw - 8) / (steps - 1))
+            m.d.rectangle((tx, sy + 14, tx, sy + 15), fill=g.GOLD if s_ == step else g.BRASS_DK)
+        m.im.alpha_composite(Image.open(g.sp("slider_knob")).convert("RGBA"), (sx + int(step / (steps - 1) * (sw - 8)), sy + 2))
+    toggle(0, True)
+    slider(1, 29, (outer - 48) // 4, marks=[(p - 48) // 4 for p in (56, 68, 96, 128)])
+    m.text(f"{outer} px", cx + cw - 29, row(1) + 4, g.INK_SOFT, shadow=False)
+    bw = (cw - 6) // 4
+    for i, p in enumerate((56, 68, 96, 128)):
+        choice(cx + i * (bw + 2), row(2), bw, 14, str(p), p == outer)
+    for j, corner in enumerate(["top_left", "top_right", "bottom_left", "bottom_right"]):
+        choice(cx + j * 24, row(3), 22, 14, "", j == 0, icon="glyph/corner_" + corner)
+    sw_ = (cw - 2) // 2
+    for j, shape in enumerate(["round", "square"]):
+        choice(cx + j * (sw_ + 2), row(4), sw_, 14, tr(k + "minimap_shape." + shape), j == 0)
+    toggle(5, False)
+    toggle(6, True)
+    slider(7, 8, 7)
+    m.text("100 %", cx + cw - 29, row(7) + 4, g.INK_SOFT, shadow=False)
+    sy = row(8) - OPT_SECTION
+    m.d.rectangle((ox + OPT_PAD, sy + 3, ox + OPT_W - OPT_PAD - 1, sy + 3), fill=g.BRASS_DK)
+    m.text(tr(o + "relief_title"), ox + OPT_W // 2, sy + 5, g.INK, shadow=False, center=True, bold=True)
+    rw = (cw - 4) // 3
+    for j, r in enumerate(["flat", "normal", "strong"]):
+        choice(cx + j * (rw + 2), row(8), rw, 14, tr(o + "relief." + r), j == 1)
+    toggle(9, False)
+    assert ox > 4 + outer + 4, "the options panel covers the live minimap"
+    assert oy + OPT_H <= H, "the options panel does not fit 240 px"
+    m.save("worldmap_options" + ("" if li else "_en"))

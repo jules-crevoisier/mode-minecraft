@@ -770,6 +770,8 @@ def mockup_settings(G, li=1):
             for j, size in enumerate(["small", "medium", "large", "xlarge"]):
                 lab = tr(k + "minimap_size." + size)
                 x = choice(x, row_y(1), max(18, guide.text_width(lab) + 10), 18, lab, j == 1) + 2
+            if x + 2 + guide.text_width("160 px") <= ox + w_ - 8:  # the exact size, when there is room
+                m.text("68 px", x + 2, row_y(1) + 5, G.INK_SOFT, shadow=False)
             x = ox + cx
             for j, corner in enumerate(["top_left", "top_right", "bottom_left", "bottom_right"]):
                 x = choice(x, row_y(2), 22, 18, "", j == 0, icon="glyph/corner_" + corner) + 2

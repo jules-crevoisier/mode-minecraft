@@ -541,13 +541,15 @@ def text_width(s, bold=False):
     return guide.text_width(s, bold)
 
 
-def render_texts(im, texts, scale=3):
+def render_texts(im, texts, scale=3, overlays=()):
     """Upscales a GUI-scale-1 mockup ``scale`` times, like Minecraft at that GUI scale, and draws its texts glyph by
     glyph on Minecraft's advances (so lengths and line breaks match the game). ``texts``: (x, y, string, colour,
     shadow[, bold]) at GUI scale 1. A shadow is Minecraft's: the colour at a quarter brightness, 1 px down-right;
     bold draws each glyph twice, 1 px apart."""
     from wf import guide
     big = im.resize((im.width * scale, im.height * scale), Image.NEAREST)
+    for draw in overlays:  # things the game draws at the screen's own resolution (map arrow, scaled markers)
+        draw(big, scale)
     d = ImageDraw.Draw(big)
     try:
         ttf = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", round(26 * scale / 3))
@@ -576,6 +578,8 @@ class Mock:
         self.d = ImageDraw.Draw(self.im)
         self.texts = []
         self.scale = scale
+        # callables (big image, scale) drawn on the upscaled image before the texts
+        self.overlays = []
 
     def nine(self, name, x, y, w, h, border):
         self.im.alpha_composite(nine(sp(name), w, h, border), (x, y))
@@ -593,7 +597,7 @@ class Mock:
 
     def save(self, name):
         os.makedirs(PREVIEW, exist_ok=True)
-        render_texts(self.im, self.texts, self.scale).save(os.path.join(PREVIEW, name + ".png"))
+        render_texts(self.im, self.texts, self.scale, self.overlays).save(os.path.join(PREVIEW, name + ".png"))
 
 
 def mockup_waystones():

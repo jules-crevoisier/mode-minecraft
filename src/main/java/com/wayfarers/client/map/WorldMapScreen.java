@@ -42,13 +42,15 @@ public class WorldMapScreen extends Screen {
     /** Closest zoom-out of the 3D view (half a pixel per block: the full regions, which carry the heights). */
     private static final int MIN_ZOOM_3D = -2;
     // the options panel: width, label column, row height, rows (8 for the minimap, 2 for the relief) and height
-    private static final int OPT_W = 192;
-    private static final int OPT_LABEL = 78;
+    private static final int OPT_W = 210;
+    private static final int OPT_LABEL = 82;
     private static final int OPT_ROW = 16;
     private static final int OPT_ROWS = 10;
-    private static final int OPT_HEAD = 20;
+    private static final int OPT_HEAD = 24;
+    /** Inside the brass border of the panel. */
+    private static final int OPT_PAD = 12;
     private static final int OPT_SECTION = 14;
-    private static final int OPT_H = OPT_HEAD + OPT_ROWS * OPT_ROW + OPT_SECTION + 4;
+    private static final int OPT_H = OPT_HEAD + OPT_ROWS * OPT_ROW + OPT_SECTION + 10;
     private static final String S = "gui.wayfarers.settings.";
     private static final String O = "gui.wayfarers.map.options.";
 
@@ -819,7 +821,7 @@ public class WorldMapScreen extends Screen {
             return true;
         }
         if (optionsOpen && inOptions(x, y)) {
-            if (x >= optX + OPT_W - 15 && y < optY + 15) {
+            if (x >= optX + OPT_W - 22 && y < optY + 22) {
                 closeOptions();
                 return true;
             }
@@ -1046,7 +1048,7 @@ public class WorldMapScreen extends Screen {
         optX = minimapLeft ? width - OPT_W - 6 : 6;
         optY = Math.max(2, (height - OPT_H) / 2);
         int cx = optX + OPT_LABEL;
-        int cw = OPT_W - OPT_LABEL - 7;
+        int cw = OPT_W - OPT_LABEL - OPT_PAD;
         option(new WfWidgets.Toggle(cx, optRow(0) + 1, Component.translatable(S + "minimap"), Component.translatable(S + "minimap.tip"),
                 WayfarersClientConfig.MINIMAP::get, () -> flip(WayfarersClientConfig.MINIMAP)));
         // exact size: 48 .. 160 px in steps of 4, ticks under the presets
@@ -1121,14 +1123,14 @@ public class WorldMapScreen extends Screen {
             sizeSlider.sync(sizeStep()); // a preset or Shift + H moved it
         }
         WfGui.sprite(g, WfGui.PANEL, optX, optY, OPT_W, OPT_H);
-        WfGui.centered(g, font, WfGui.bold(Component.translatable(O + "title")), optX + OPT_W / 2, optY + 7, WfGui.INK);
-        String[] labels = {S + "minimap", S + "minimap_size", O + "presets", S + "minimap_corner", S + "minimap_shape",
-                S + "minimap_rotate", S + "minimap_coords", S + "minimap_opacity", O + "relief", O + "contours"};
+        WfGui.centered(g, font, WfGui.bold(Component.translatable(O + "title")), optX + OPT_W / 2, optY + 10, WfGui.INK);
+        String[] labels = {O + "shown", S + "minimap_size", O + "presets", S + "minimap_corner", S + "minimap_shape",
+                O + "rotate", S + "minimap_coords", S + "minimap_opacity", O + "relief", O + "contours"};
         for (int i = 0; i < labels.length; i++) {
-            WfGui.textClipped(g, font, Component.translatable(labels[i]).getString(), optX + 8, optRow(i) + 4, OPT_LABEL - 10, WfGui.INK, false);
+            WfGui.textClipped(g, font, Component.translatable(labels[i]).getString(), optX + OPT_PAD, optRow(i) + 4, OPT_LABEL - OPT_PAD - 2, WfGui.INK, false);
         }
         int cx = optX + OPT_LABEL;
-        int cw = OPT_W - OPT_LABEL - 7;
+        int cw = OPT_W - OPT_LABEL - OPT_PAD;
         g.text(font, WayfarersClientConfig.minimapPixels() + " px", cx + cw - 29, optRow(1) + 4, WfGui.INK_SOFT, false);
         g.text(font, WayfarersClientConfig.MINIMAP_OPACITY.get() + " %", cx + cw - 29, optRow(7) + 4, WfGui.INK_SOFT, false);
         for (int i : new int[] {0, 5, 6, 9}) {
@@ -1142,9 +1144,9 @@ public class WorldMapScreen extends Screen {
         }
         // the maps' section, under a thin brass rule
         int sy = optRow(8) - OPT_SECTION;
-        g.fill(optX + 8, sy + 3, optX + OPT_W - 8, sy + 4, 0xFF7C5A2B);
+        g.fill(optX + OPT_PAD, sy + 3, optX + OPT_W - OPT_PAD, sy + 4, 0xFF7C5A2B);
         WfGui.centered(g, font, WfGui.bold(Component.translatable(O + "relief_title")), optX + OPT_W / 2, sy + 5, WfGui.INK);
         // close (handled in mouseClicked: the panel covers the other buttons)
-        g.text(font, "x", optX + OPT_W - 11, optY + 4, WfGui.INK_SOFT, false);
+        g.text(font, "x", optX + OPT_W - 18, optY + 9, WfGui.INK_SOFT, false);
     }
 }
