@@ -615,6 +615,9 @@ register(StructureDef(
      "meadow", "savanna_plateau", "stony_peaks"],
     [Piece("tower_ruined", watchtower(True), 3), Piece("tower_intact", watchtower(False), 1, processors="aging")],
     spacing=24, separation=8, processors="ruin",
+    # bandits squat the old towers (wf/denizens.py): marksmen on the walls, a few undead in the cellars
+    spawns=[("brasshaven:bandit_marksman", 6, 1, 1), ("minecraft:skeleton", 8, 1, 2), ("minecraft:zombie", 8, 1, 2)],
+    creatures=[("bandit_marksman", 2)],
     title_fr="Tour de guet en ruine", title_en="Ruined Watchtower"))
 
 
@@ -1010,7 +1013,8 @@ def bandit_camp(bp):
 register(StructureDef(
     "bandit_camp", "overworld", ["plains", "savanna", "#minecraft:is_taiga", "sparse_jungle", "meadow"],
     [Piece("camp", bandit_camp)], spacing=26, separation=9, processors="none",
-    spawns=[("minecraft:pillager", 10, 1, 3)],
+    spawns=[("minecraft:pillager", 10, 1, 3), ("brasshaven:bandit_marksman", 8, 1, 2)],
+    creatures=[("bandit_marksman", 3)],
     title_fr="Campement de bandits", title_en="Bandit Camp"))
 
 
@@ -1985,7 +1989,9 @@ def galleon(bp):
 register(StructureDef(
     "galleon_wreck", "overworld", ["#minecraft:is_ocean", "#minecraft:is_beach"],
     [Piece("galleon", galleon)], spacing=30, separation=10, heightmap="OCEAN_FLOOR_WG",
-    adaptation="none", processors="none", title_fr="Épave de galion", title_en="Galleon Wreck"))
+    adaptation="none", processors="none",
+    spawns=[("brasshaven:barnacle_crab", 8, 1, 2), ("minecraft:drowned", 8, 1, 2)], creatures=[("barnacle_crab", 3)],
+    title_fr="Épave de galion", title_en="Galleon Wreck"))
 
 
 # ============================================================ 6. Sunken temple (ocean floor)
@@ -2278,6 +2284,7 @@ def sunken_temple(bp):
 register(StructureDef(
     "sunken_temple", "overworld", ["#minecraft:is_ocean"], [Piece("temple", sunken_temple)],
     spacing=30, separation=10, heightmap="OCEAN_FLOOR_WG", adaptation="beard_box", processors="none",
+    spawns=[("brasshaven:barnacle_crab", 8, 1, 2), ("minecraft:drowned", 8, 1, 2)], creatures=[("barnacle_crab", 4)],
     title_fr="Temple englouti", title_en="Sunken Temple"))
 
 
@@ -2759,10 +2766,11 @@ def dwarven_mine(bp):
                 bp.set(x + (w if x == hx else 0), y, z + (w if z == hz else 0), "air")
     bp.spawner(hx, hy, hz + 20, "minecraft:cave_spider")
     bp.spawner(hx - 20, hy, hz, MOB["ruin_walker"])
-    # ---- the miners up top (the deep galleries below belong to the monsters)
+    # ---- the dwarves who came back to the mine (wf/denizens.py) work up top; the deep galleries below belong to the
+    # monsters
     surface = ((-60, 1, -60), (60, 60, 60))
-    I.populate(bp, [("toolsmith", 3), "mason", "armorer", "weaponsmith"], region=surface, seed=1,
-               bell=None, guard=("iron", (2, DM_UP + 1, -12)))
+    I.populate(bp, ["smith", "miner", "miner", "gemcutter"], region=surface, seed=1,
+               bell=None, guard=("dwarf", (2, DM_UP + 1, -12)), folk="dwarf")
     I.decorate(bp, "workshop", seed=1, region=surface)
     I.decorate(bp, "mine", seed=2, region=((-80, -80, -80), (80, 0, 80)), loot=LOOT + "dwarven_mine")
     I.yard(bp, (-30, -30, 30, 30), DM_UP + 1, {"crates": 3, "cart": 2, "woodpile": 2, "hay": 1, "lamp": 1},

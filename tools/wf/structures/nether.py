@@ -723,7 +723,9 @@ register(StructureDef(
     "basalt_fortress", "nether", ["basalt_deltas", "nether_wastes", "soul_sand_valley"],
     [Piece("fortress", basalt_fortress)], spacing=26, separation=9, step="surface_structures",
     adaptation="beard_box", height=("uniform", 22, 24),
-    spawns=[("brasshaven:basalt_guard", 10, 1, 2), ("minecraft:wither_skeleton", 6, 1, 2)],
+    spawns=[("brasshaven:basalt_guard", 10, 1, 2), ("minecraft:wither_skeleton", 6, 1, 2),
+            ("brasshaven:cinder_hound", 8, 2, 3)],
+    creatures=[("cinder_hound", 3)],
     title_fr="Forteresse de basalte", title_en="Basalt Fortress"))
 
 
@@ -953,6 +955,8 @@ register(StructureDef(
     "chain_bridge", "nether", ["nether_wastes", "basalt_deltas", "crimson_forest", "soul_sand_valley"],
     [Piece("bridge", chain_bridge)], spacing=22, separation=7, adaptation="none",
     height=("absolute", 20), processors="none",
+    # a pack of cinder hounds roams the bridge (wf/denizens.py)
+    spawns=[("brasshaven:cinder_hound", 8, 2, 3), ("minecraft:magma_cube", 4, 1, 2)], creatures=[("cinder_hound", 2)],
     title_fr="Pont de chaînes suspendu", title_en="Chain Bridge"))
 
 
@@ -1714,6 +1718,8 @@ register(StructureDef(
     "lava_foundry", "nether", ["nether_wastes", "basalt_deltas", "crimson_forest", "warped_forest"],
     [Piece("foundry", lava_foundry)], spacing=24, separation=8, adaptation="none",
     height=("absolute", 24), processors="aging",
+    spawns=[("brasshaven:cinder_hound", 8, 2, 3), ("minecraft:magma_cube", 6, 1, 2), ("minecraft:blaze", 3, 1, 1)],
+    creatures=[("cinder_hound", 3)],
     title_fr="Fonderie de lave", title_en="Lava Foundry"))
 
 

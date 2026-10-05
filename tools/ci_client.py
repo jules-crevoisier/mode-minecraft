@@ -80,7 +80,7 @@ EXPECTED_SHOTS = [
     "hud_minimap", "world_map", "world_map_options", "world_map_3d", "quest_journal", "talent_tree", "manual_welcome", "manual_machines",
     "machine_harvester", "guild_terminal", "waystone",
     "company", "player_card", "emote_wheel", "pneumatic_post", "contract_board", "trade",
-    "creative_tab", "creatures", "mega_structure",
+    "creative_tab", "creatures", "peoples", "creatures_places", "folk_trade", "mega_structure",
 ]
 
 DONE_MARK = "[brasshaven-ci] DONE"

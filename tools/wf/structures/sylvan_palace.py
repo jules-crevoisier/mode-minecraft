@@ -637,18 +637,22 @@ def sylvan_palace(bp):
     satellites(bp)
     moon_lantern(bp)
     moon_pool(bp)
-    # the sylvan court lives in the pavilions and the heartwood halls: a bed and a job site each
-    court = {"guest": [("librarian", 3)], "banquet": [("butcher", 3)], "music": [("shepherd", 3)],
-             "queen": [("cleric", 5)], "library": [("librarian", 4)]}
+    # the sylvan court (wf/denizens.py) lives in the pavilions and the heartwood halls: a bed and a job block each;
+    # wardens with longbows keep the stair and the moon pool
+    court = {"guest": ["woodwright"], "banquet": ["gardener"], "music": ["woodwright"],
+             "queen": ["herbalist"], "library": ["herbalist"]}
     for i, (L, a, d, r, kind) in enumerate(((14, 330, 10, 4, "guest"), (30, 200, 11, 4, "banquet"),
                                             (30, 330, 11, 4, "music"), (46, 140, 9, 3, "queen"),
                                             (46, 250, 9, 3, "library"))):
         x, z = _lobe_xy(a, d)
         INT.populate(bp, court[kind], region=((x - r, L + 1, z - r), (x + r, L + 1, z + r)), vtype="plains",
-                     seed=i, bed_colour="white")
-    for i, (L, people) in enumerate(((LEVELS[0], [("farmer", 3)]), (LEVELS[1], [("cartographer", 4)]))):
+                     seed=i, bed_colour="white", folk="sylvan")
+    for i, (L, people) in enumerate(((LEVELS[0], ["gardener"]), (LEVELS[1], ["herbalist"]))):
         INT.populate(bp, people, region=((-4, L + 1, -4), (4, L + 1, 4)), vtype="plains", seed=10 + i,
-                     bed_colour="light_blue")
+                     bed_colour="light_blue", folk="sylvan")
+    for i, L in enumerate((LEVELS[0], LEVELS[1])):
+        INT.populate(bp, [], region=((-4, L + 1, -4), (4, L + 1, 4)), seed=20 + i, beds=False,
+                     guard=("sylvan", (3, L + 1, 3)))
     # furnished pods and trunk halls: beds of moss and wool, shelves of seeds and books, potted saplings
     INT.decorate(bp, dict(INT.THEMES["home"], wood="birch", rugs=["green", "lime", "white"],
                           floor={"plant": 4, "bookshelf": 2, "barrel": 2, "pot": 2, "workbench": 1, "bed": 1,

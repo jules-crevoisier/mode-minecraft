@@ -521,4 +521,6 @@ register(StructureDef(
     # absolute height, never projected on the terrain: the lowest underside lands at y 168-174
     spacing=64, separation=24, adaptation="none", height=("uniform", 169, 175), processors="none",
     max_distance=100, foundation=False,
+    # wind pirates nest on the isles (wf/denizens.py)
+    spawns=[("brasshaven:sky_raider", 10, 1, 2), ("minecraft:skeleton", 5, 1, 1)], creatures=[("sky_raider", 4)],
     title_fr="Îles célestes", title_en="Sky Isles"))

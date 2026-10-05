@@ -117,9 +117,8 @@ public abstract class Resident extends PathfinderMob implements AnimatedMob, Mer
     }
 
     /** Base attributes of a people (the guard role raises health, damage and armour, {@link #guardStats}). */
-    protected static AttributeSupplier.Builder residentAttributes(double health, double speed) {
+    protected static AttributeSupplier.Builder residentAttributes(double speed) {
         return Mob.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, health)
                 .add(Attributes.MOVEMENT_SPEED, speed)
                 .add(Attributes.FOLLOW_RANGE, 24.0)
                 .add(Attributes.ATTACK_DAMAGE, 2.0)
@@ -249,8 +248,9 @@ public abstract class Resident extends PathfinderMob implements AnimatedMob, Mer
                                                   EntitySpawnReason reason, @Nullable SpawnGroupData groupData) {
         SpawnGroupData data = super.finalizeSpawn(level, difficulty, reason, groupData);
         if (reason == EntitySpawnReason.SPAWN_ITEM_USE || reason == EntitySpawnReason.SPAWNER
-                || reason == EntitySpawnReason.COMMAND && entityData.get(DATA_ROLE) == 0 && random.nextInt(3) == 0) {
-            // an egg gives a random role, so every look of the people can be met in creative
+                || reason == EntitySpawnReason.COMMAND) {
+            // an egg (or a /summon without NBT) gives a random role, so every look of the people can be met in creative;
+            // templates and /summon with {Role:"..."} keep theirs (finalizeSpawn is not called for NBT summons)
             entityData.set(DATA_ROLE, random.nextInt(people().roles().size()));
         }
         setHomeTo(blockPosition(), homeRadius());

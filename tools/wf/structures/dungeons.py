@@ -18,7 +18,8 @@ CATACOMBS = Theme(
     floor=["polished_tuff", "tuff_bricks", "brasshaven:polished_guild_stone"],
     trim="brasshaven:guild_brick", pillar="brasshaven:polished_guild_stone", ceiling=["tuff_bricks", "stone_bricks"],
     cracked="brasshaven:cracked_guild_bricks", accent="brasshaven:carved_guild_stone", light="lantern",
-    candle="candle", spawners=("brasshaven:skeleton_knight", "brasshaven:crypt_crawler", "minecraft:zombie"),
+    candle="candle", spawners=("brasshaven:skeleton_knight", "brasshaven:crypt_crawler", "minecraft:zombie",
+                              "brasshaven:lantern_wisp"),
 )
 HYPOGEUM = Theme(
     "hypogeum",
@@ -26,7 +27,7 @@ HYPOGEUM = Theme(
     floor=["smooth_sandstone", "cut_sandstone"], trim="sandstone", pillar="cut_sandstone",
     ceiling=["sandstone", "smooth_sandstone"], cracked="chiseled_sandstone", accent="chiseled_red_sandstone",
     light="lantern", candle="orange_candle", skull="skeleton_skull",
-    spawners=("brasshaven:crypt_crawler", "minecraft:husk"),
+    spawners=("brasshaven:crypt_crawler", "minecraft:husk", "brasshaven:lantern_wisp"),
 )
 LITHITE = Theme(
     "lithite",
@@ -861,10 +862,13 @@ _register("forgotten_catacombs", CATACOMBS, mausoleum,
           ["plains", "forest", "birch_forest", "dark_forest", "old_growth_birch_forest", "meadow", "taiga",
            "flower_forest", "cherry_grove"],
           "Catacombes oubliées", "Forgotten Catacombs", "brasshaven:grave_knight", "catacombs",
-          spawns=[("brasshaven:skeleton_knight", 10, 1, 2), ("brasshaven:crypt_crawler", 8, 1, 2), ("minecraft:zombie", 8, 1, 2)])
+          spawns=[("brasshaven:skeleton_knight", 10, 1, 2), ("brasshaven:crypt_crawler", 8, 1, 2), ("minecraft:zombie", 8, 1, 2),
+                  ("brasshaven:lantern_wisp", 6, 1, 1)],
+          creatures=[("lantern_wisp", 3)])
 _register("sand_hypogeum", HYPOGEUM, sand_gate, ["desert", "badlands", "wooded_badlands", "eroded_badlands"],
           "Hypogée des sables", "Sand Hypogeum", "brasshaven:bone_matriarch", "hypogeum",
-          spawns=[("brasshaven:crypt_crawler", 10, 1, 2), ("minecraft:husk", 10, 1, 2)])
+          spawns=[("brasshaven:crypt_crawler", 10, 1, 2), ("minecraft:husk", 10, 1, 2), ("brasshaven:lantern_wisp", 6, 1, 1)],
+          creatures=[("lantern_wisp", 3)])
 _register("lithite_well", LITHITE, well_head,
           ["windswept_hills", "windswept_forest", "windswept_gravelly_hills", "grove", "snowy_slopes", "jagged_peaks",
            "stony_peaks", "old_growth_spruce_taiga"],

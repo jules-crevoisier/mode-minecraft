@@ -1540,14 +1540,14 @@ def monastery(bp):
     A.landscape(bp, -3, -3, 75, 68, 1, density=0.25, seed=12)
     lair_bell_keeper.build(bp)          # crypt stair -> catacombs -> bell chamber (the Bell Keeper)
 
-    # ---------------------------------------------------------- the brothers: clerics, a librarian, a cook
+    # ---------------------------------------------------------- the monks (wf/denizens.py): scribes, healers, a cook
     library_r = ((lx0, P + 1, lz0), (lx1, P + 8, lz1))
     dorm_r = ((dx0, P + 1, dz0), (dx1, P + 7, dz1))
     refectory_r = ((sx0, P + 1, sz0), (sx1, P + 1, sz1))
-    I.populate(bp, [("librarian", 3), "librarian"], region=library_r, vtype="snow", seed=1)
-    I.populate(bp, [("cleric", 3), "cleric", "farmer"], region=dorm_r, vtype="snow", seed=2)
-    I.populate(bp, ["butcher"], region=refectory_r, vtype="snow", seed=3,
-               guard=("iron", (40, P + 1, 22)))
+    I.populate(bp, ["scribe", "scribe"], region=library_r, vtype="snow", seed=1, folk="monk")
+    I.populate(bp, ["healer", "healer", "cook"], region=dorm_r, vtype="snow", seed=2, folk="monk")
+    I.populate(bp, ["cook"], region=refectory_r, vtype="snow", seed=3, folk="monk",
+               guard=("monk", (40, P + 1, 22)))
     I.decorate(bp, "library", seed=1, region=library_r)
     I.decorate(bp, "home", seed=2, region=dorm_r)
     I.decorate(bp, "kitchen", seed=3, region=refectory_r)

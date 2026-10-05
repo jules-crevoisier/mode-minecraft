@@ -992,4 +992,5 @@ register(StructureDef(
     [Piece(f"citadel_{v}", citadel(v)) for v in range(3)],
     spacing=48, separation=16, heightmap="OCEAN_FLOOR_WG", adaptation="beard_box", processors="none",
     exclusion=("minecraft:ocean_monuments", 6), max_distance=100,
+    spawns=[("brasshaven:barnacle_crab", 8, 1, 2), ("minecraft:drowned", 10, 1, 2)], creatures=[("barnacle_crab", 4)],
     title_fr="Citadelle engloutie", title_en="Sunken Citadel"))

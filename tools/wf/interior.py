@@ -1115,10 +1115,13 @@ JOB_SITE = {
 
 
 def populate(bp, residents, region=None, vtype="plains", seed=0, rooms=None, beds=True, bell=None, guard=None,
-             bed_colour=None, ground=0, void_solid=False):
+             bed_colour=None, ground=0, void_solid=False, folk=None):
     """Settle ``residents`` (list of professions, or (profession, level) pairs) in the rooms of ``region``:
     each gets its job-site block against a wall, a bed nearby and stands in the room. ``bell`` (x, y, z):
-    a floor bell as meeting point. ``guard``: ("iron"|"brass", (x, y, z)). Returns the villager spots."""
+    a floor bell as meeting point. ``guard``: ("iron"|"brass"|<people>, (x, y, z)). Returns the resident spots.
+
+    ``folk``: a people of wf/denizens.py ("dwarf", "sylvan", ...): ``residents`` are then its role ids, each takes the
+    job block of its role (denizens.JOB_PROFESSION) and moves in as that people instead of a villager."""
     rng = random.Random(f"{bp.name}:residents:{seed}")
     rooms = rooms if rooms is not None else find_rooms(bp, region, ground=ground, void_solid=void_solid)
     rooms = [r for r in rooms if r.area >= 9]
@@ -1129,17 +1132,26 @@ def populate(bp, residents, region=None, vtype="plains", seed=0, rooms=None, bed
         bp.set(bx, by, bz, "bell[attachment=floor,facing=north,powered=false]")
     if guard:
         kind, at = guard
-        gx, gy, gz = open_spot(bp, at, ground=ground, void_solid=void_solid)
-        (brass_golem if kind == "brass" else iron_golem)(bp, gx, gy, gz)
+        from . import denizens
+        if kind in denizens.PEOPLES:
+            denizens.guards(bp, kind, [at], ground=ground, void_solid=void_solid)
+        else:
+            gx, gy, gz = open_spot(bp, at, ground=ground, void_solid=void_solid)
+            (brass_golem if kind == "brass" else iron_golem)(bp, gx, gy, gz)
     if not rooms:
         return spots
     beds_before = _count_beds(bp) if beds else 0
     for i, res in enumerate(residents):
         prof, lvl = (res if isinstance(res, tuple) else (res, 2))
+        who = None
+        if folk:
+            from . import denizens
+            who = (folk, prof)
+            prof = denizens.JOB_PROFESSION[who]
         placed = False
         for k in range(len(rooms)):
             room = rooms[(i + k) % len(rooms)]
-            spot = _settle_one(bp, room, prof, lvl, vtype, rng, beds, bed_colour)
+            spot = _settle_one(bp, room, prof, lvl, vtype, rng, beds, bed_colour, who)
             if spot:
                 spots.append(spot)
                 placed = True
@@ -1150,7 +1162,11 @@ def populate(bp, residents, region=None, vtype="plains", seed=0, rooms=None, bed
             free = sorted(room.free - room.occupied)
             if free:
                 c = rng.choice(free)
-                villager(bp, c[0], room.y, c[1], prof, vtype, lvl)
+                if who:
+                    from . import denizens
+                    denizens.resident(bp, c[0], room.y, c[1], *who)
+                else:
+                    villager(bp, c[0], room.y, c[1], prof, vtype, lvl)
                 spots.append((c[0], room.y, c[1]))
     if beds:
         # a bed for everyone: those whose room had no wall left for one sleep in another room of the region
@@ -1178,7 +1194,7 @@ def _extra_bed(bp, rooms, rng, bed_colour):
     return False
 
 
-def _settle_one(bp, room, prof, lvl, vtype, rng, beds, bed_colour):
+def _settle_one(bp, room, prof, lvl, vtype, rng, beds, bed_colour, who=None):
     ctx = Ctx(bp, room, {"beds": [bed_colour] if bed_colour else ["red", "white", "light_blue", "lime", "yellow"]},
               rng)
     cells = [c for c in room.walls if c in room.free and c not in room.keep]
@@ -1221,7 +1237,11 @@ def _settle_one(bp, room, prof, lvl, vtype, rng, beds, bed_colour):
         dx, dz = _dirvec(d)
         if (c[0] + dx, c[1] + dz) == job:
             facing = d
-    villager(bp, c[0], room.y, c[1], prof, vtype, lvl, facing=facing)
+    if who:
+        from . import denizens
+        denizens.resident(bp, c[0], room.y, c[1], *who, facing=facing)
+    else:
+        villager(bp, c[0], room.y, c[1], prof, vtype, lvl, facing=facing)
     room.free.discard(c)  # nothing else goes where somebody stands
     return (c[0], room.y, c[1])
 

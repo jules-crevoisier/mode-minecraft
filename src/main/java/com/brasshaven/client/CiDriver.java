@@ -536,6 +536,60 @@ public final class CiDriver {
                 .waitTicks(100)
                 .shot("creatures");
 
+        // the peoples of the places (wf/denizens.py): two roles of each people side by side, frozen
+        step("peoples")
+                .cmd(() -> {
+                    List<String> c = new java.util.ArrayList<>(List.of(
+                            "kill @e[type=!minecraft:player,distance=..48]",
+                            "fill " + at(-9, 1, 0) + " " + at(9, 5, 14) + " minecraft:air"));
+                    String[][] folk = {{"dwarf", "smith"}, {"dwarf", "guard"}, {"sylvan", "gardener"}, {"sylvan", "warden"},
+                            {"clockwork_citizen", "gearwright"}, {"clockwork_citizen", "sentinel"}, {"monk", "scribe"},
+                            {"monk", "warden"}};
+                    for (int i = 0; i < folk.length; i++) {
+                        c.add("summon brasshaven:" + folk[i][0] + " " + (bx - 6.5 + i * 2) + " " + (STAGE_Y + 1) + " "
+                                + (bz + 7.5 - (i % 2)) + " {NoAI:1b,PersistenceRequired:1b,Rotation:[180f,0f],Role:\"" + folk[i][1] + "\"}");
+                    }
+                    c.add("tp @s " + (bx + 0.5) + " " + (STAGE_Y + 2.6) + " " + (bz - 2.5) + " facing "
+                            + (bx + 0.5) + " " + (STAGE_Y + 1.8) + " " + (bz + 8));
+                    return c;
+                })
+                .run("fly", CiDriver::fly)
+                .waitTicks(80)
+                .shot("peoples");
+
+        // the creatures of the hostile places, frozen in a row (the flyers hover)
+        step("creatures_places")
+                .cmd(() -> {
+                    List<String> c = new java.util.ArrayList<>(List.of("kill @e[type=!minecraft:player,distance=..48]"));
+                    String[] mobs = {"bandit_marksman", "sky_raider", "barnacle_crab", "lantern_wisp", "cinder_hound", "rift_sentinel"};
+                    for (int i = 0; i < mobs.length; i++) {
+                        boolean flyer = mobs[i].equals("sky_raider") || mobs[i].equals("lantern_wisp") || mobs[i].equals("rift_sentinel");
+                        c.add("summon brasshaven:" + mobs[i] + " " + (bx - 6.5 + i * 2.6) + " " + (STAGE_Y + (flyer ? 1.6 : 1)) + " "
+                                + (bz + 8.5) + " {NoAI:1b,NoGravity:1b,PersistenceRequired:1b,Rotation:[180f,0f]}");
+                    }
+                    c.add("tp @s " + (bx + 0.5) + " " + (STAGE_Y + 2.6) + " " + (bz - 2.5) + " facing "
+                            + (bx + 0.5) + " " + (STAGE_Y + 2) + " " + (bz + 8));
+                    return c;
+                })
+                .run("fly", CiDriver::fly)
+                .waitTicks(80)
+                .shot("creatures_places");
+
+        // a dwarven smith's trading screen (the vanilla merchant menu with the role's offers)
+        step("folk_trade")
+                .cmd(() -> List.of(
+                        "kill @e[type=!minecraft:player,distance=..48]",
+                        "summon brasshaven:dwarf " + (bx + 0.5) + " " + (STAGE_Y + 1) + " " + (bz + 3.5)
+                                + " {NoAI:1b,PersistenceRequired:1b,Rotation:[180f,0f],Role:\"smith\"}",
+                        "tp @s " + (bx + 0.5) + " " + (STAGE_Y + 1) + " " + (bz + 1.5) + " facing "
+                                + (bx + 0.5) + " " + (STAGE_Y + 1.5) + " " + (bz + 3.5)))
+                .waitTicks(20)
+                .run("trade", () -> useEntity(com.brasshaven.registry.ModEntities.DWARF.get()))
+                .until("MerchantScreen", () -> screen() instanceof net.minecraft.client.gui.screens.inventory.MerchantScreen, 100)
+                .waitTicks(30)
+                .shot("folk_trade")
+                .run("close", () -> closeScreen(Minecraft.getInstance()));
+
         // the Clockwork Citadel well away from the stage, seen from a point worked out from its bounding box
         step("mega_structure")
                 .run("render distance", () -> Minecraft.getInstance().options.renderDistance().set(10))
@@ -669,6 +723,25 @@ public final class CiDriver {
         InteractionResult result = mc.gameMode.useItemOn(mc.player, InteractionHand.MAIN_HAND,
                 new BlockHitResult(Vec3.atCenterOf(pos), Direction.UP, pos, false));
         LOGGER.info(TAG + "used {} at {} -> {}", mc.level.getBlockState(pos), pos, result);
+    }
+
+    /** Right-clicks the nearest entity of ``type`` with an empty hand, through the normal client interaction path. */
+    private static void useEntity(net.minecraft.world.entity.EntityType<?> type) {
+        Minecraft mc = Minecraft.getInstance();
+        net.minecraft.world.entity.Entity best = null;
+        for (net.minecraft.world.entity.Entity e : mc.level.entitiesForRendering()) {
+            if (e.getType() == type && (best == null || e.distanceToSqr(mc.player) < best.distanceToSqr(mc.player))) {
+                best = e;
+            }
+        }
+        if (best == null) {
+            LOGGER.warn(TAG + "no {} to talk to", type);
+            return;
+        }
+        mc.player.getInventory().setSelectedSlot(EMPTY_SLOT);
+        InteractionResult result = mc.gameMode.interact(mc.player, best,
+                new net.minecraft.world.phys.EntityHitResult(best), InteractionHand.MAIN_HAND);
+        LOGGER.info(TAG + "used {} -> {}", best, result);
     }
 
     /** Creative inventory on the mod's tab (the tab to show is a private static field of the screen). */

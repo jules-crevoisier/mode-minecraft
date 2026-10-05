@@ -483,6 +483,15 @@ NEW_INTRO = ("Tout ce qui est arrivé dans le mod cette nuit, rangé par thème.
 # "items:<id>,<id>,..." ou "img:<chemin>" (une capture d'écran publiée avec le wiki).
 # Le thème dont le titre commence par « Merveilles » s'affiche en grandes cartes.
 NEW_GROUPS = [
+    ("Peuples et créatures des lieux", "Les grands lieux ont leurs habitants, et les lieux hostiles leurs propres "
+     "monstres.", [
+        ("Les nains de la Cité naine", "Forgerons, mineurs, brasseurs et lapidaires qui travaillent et commercent ; "
+         "des gardes au casque à cornes défendent les salles.", "b-dwarf", "mob:dwarf"),
+        ("Sylvains, citoyens mécaniques, moines", "Le Palais sylvain et l'Arbre-monde, la Citadelle d'horlogerie et "
+         "le Monastère ont aussi leur peuple, leurs métiers et leurs offres.", "bestiaire-folk", "mob:sylvan"),
+        ("Six créatures à ruse", "Tireur bandit, pillard du ciel, crabe à bernacles, feu follet, molosse de cendre et "
+         "sentinelle de la faille : chacune a son truc, et sa parade.", "bestiaire-creature", "mob:sky_raider"),
+    ]),
     ("Carte, écrans et rangement", "Se repérer à plusieurs, régler chaque machine sans deviner, et toute la base "
      "dans un seul écran.", [
         ("Carte du monde partagée", "Touche M : tout ce qu'un joueur explore apparaît chez tous. Repères privés ou "
@@ -946,6 +955,13 @@ INGAME_SHOTS = [
     ("creatures", "Automates sur la scène de test", "Le golem de laiton au centre, une araignée-horloge devant, le "
      "bassin de verre d'une méduse lumineuse à gauche ; le Grand Horloger se tient au fond, à droite.",
      "automates"),
+    ("peoples", "Les peuples des grands lieux", "De gauche à droite : un forgeron et un garde nains, un jardinier et un "
+     "gardien sylvains, un engrenier et une sentinelle mécaniques, un copiste et un gardien du monastère.",
+     "bestiaire-folk"),
+    ("creatures_places", "Les créatures des lieux hostiles", "Le tireur bandit, le pillard du ciel, le crabe à "
+     "bernacles, le feu follet, le molosse de cendre et la sentinelle de la faille.", "bestiaire-creature"),
+    ("folk_trade", "Commercer avec un nain", "Clic droit sur un forgeron nain : l'écran d'échange de Minecraft, avec "
+     "ses outils, ses armures et le charbon qu'il rachète.", "bestiaire-folk"),
     ("mega_structure", "La Citadelle d'horlogerie", "Une merveille posée par le serveur de test et vue du ciel : la "
      "tour-horloge, ses toits de cuivre et ses cheminées.", "s-clockwork_citadel"),
 ]
@@ -1052,3 +1068,15 @@ TEST_CHECKLIST += [
      "L'ami accepte dans le chat. Échange : mettez un objet, acceptez tous les deux, 3 s plus tard les objets changent "
      "de mains. Duel : le coup fatal laisse un demi-cœur. Compagnie : vos cadres dorés sur la carte, /cc pour vous écrire."),
 ]
+
+
+def _denizen_texts():
+    """Bestiary texts of the peoples and creatures of the places (wf/denizens.py)."""
+    from . import denizens
+    for pid in denizens.PEOPLES:
+        MOBS[pid] = denizens.wiki_folk_text(pid)
+    for cid, c in denizens.CREATURES.items():
+        MOBS[cid] = c["wiki"]
+
+
+_denizen_texts()

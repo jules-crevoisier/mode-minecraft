@@ -569,3 +569,66 @@ def check_trades(known_items):
                     if spec and not 1 <= spec[1] <= 64:
                         out.append(f"{pid}/{r['id']}: trade count {spec[1]} out of range")
     return out
+
+
+# blocks of headroom each creature needs where it waits in a template
+CREATURE_HEIGHT = {"bandit_marksman": 2, "sky_raider": 2, "barnacle_crab": 1, "lantern_wisp": 2, "cinder_hound": 1,
+                   "rift_sentinel": 3}
+_AIR = ("minecraft:air", "minecraft:cave_air")
+_BAD_FLOOR = ("magma_block", "campfire", "fire", "lava", "cactus", "leaves", "powder_snow", "mist_gate", "spawner",
+              "boss_seal", "_bed", "chest", "barrel", "scaffolding", "_slab", "_stairs", "carpet", "_fence", "_wall")
+
+
+def place_creatures(bp, creatures, seed=0, underground=False, ground=0):
+    """Template creatures of a hostile place (StructureDef.creatures = [(creature id, count)]): each waits on a free,
+    sturdy floor cell with headroom (in water for an underwater template), spread at least 6 blocks apart, never in a
+    boss arena (24 blocks around a boss seal) nor next to a mist gate. Returns [(x, y, z, id)]."""
+    import math
+    import random
+    from .blueprint import is_solid
+    if not creatures:
+        return []
+    water = getattr(bp, "underwater", False)
+    blocks = bp.blocks
+    seals = [p for p, b in blocks.items() if b[0] == "brasshaven:boss_seal"]
+    gates = [p for p, b in blocks.items() if b[0] == "brasshaven:mist_gate"]
+
+    def free(p):
+        b = blocks.get(p)
+        if b is None:
+            return water or (not underground and p[1] > ground)
+        name = b[0]
+        return name == "minecraft:water" if water else name in _AIR
+
+    def floor(p):
+        b = blocks.get(p)
+        if b is None:
+            return False
+        short = b[0].split(":", 1)[1]
+        return b[0] not in _AIR and b[0] != "minecraft:water" and is_solid(b[0]) and \
+            not any(h in short for h in _BAD_FLOOR)
+
+    floors = sorted(p for p, b in blocks.items() if floor(p))
+    rng = random.Random(f"{bp.name}:creatures:{seed}")
+    out = []
+    for cid, count in creatures:
+        if cid not in CREATURES:
+            raise ValueError(f"unknown creature {cid}")
+        tall = CREATURE_HEIGHT[cid]
+        cells = []
+        for (x, y, z) in floors:
+            if all(free((x, y + 1 + k, z)) for k in range(tall + 1)) and \
+                    all(math.dist((x, y, z), s) > 24 for s in seals) and \
+                    all(math.dist((x, y, z), g) > 4 for g in gates):
+                cells.append((x, y + 1, z))
+        rng.shuffle(cells)
+        placed = 0
+        for c in cells:
+            if placed >= count:
+                break
+            if any(math.dist(c, o[:3]) < 6 for o in out):
+                continue
+            creature(bp, *c, cid, yaw=rng.choice((0.0, 90.0, 180.0, 270.0)))
+            out.append((*c, cid))
+            placed += 1
+    return out

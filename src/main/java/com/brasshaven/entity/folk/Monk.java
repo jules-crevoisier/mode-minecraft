@@ -7,6 +7,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
 
 /**
@@ -22,7 +23,10 @@ public class Monk extends Resident {
     }
 
     public static AttributeSupplier.Builder attributes() {
-        return residentAttributes(22.0, 0.3);
+        // the guard role raises health and armour (guardStats); only guards fight, with this damage
+        return residentAttributes(0.3)
+                .add(Attributes.MAX_HEALTH, 22.0)
+                .add(Attributes.ATTACK_DAMAGE, 6.0);
     }
 
     @Override
