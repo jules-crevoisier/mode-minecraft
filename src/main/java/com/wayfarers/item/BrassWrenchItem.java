@@ -64,6 +64,10 @@ public class BrassWrenchItem extends GadgetItem {
         }
         boolean sneaking = player.isShiftKeyDown();
         if (sneaking && state.getBlock() instanceof MachineBlock) {
+            if (!canEdit(player, level, pos, context.getClickedFace(), stack)) {
+                tell(player, "message.wayfarers.wrench.protected");
+                return InteractionResult.FAIL;
+            }
             // quick setting change without opening the screen (radius, interval, detector target...)
             if (player instanceof ServerPlayer sp && level.getBlockEntity(pos) instanceof MachineBlockEntity machine) {
                 machine.quickCycle(sp);

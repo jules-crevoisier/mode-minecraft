@@ -72,6 +72,17 @@ public class GraveBlock extends BaseEntityBlock {
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
         if (level instanceof ServerLevel serverLevel && level.getBlockEntity(pos) instanceof GraveBlockEntity grave) {
+            // the owner (and operators) first: on a public server nobody else empties a fresh grave
+            long locked = grave.lockedMinutes();
+            boolean op = player instanceof net.minecraft.server.level.ServerPlayer sp
+                    && sp.permissions().hasPermission(net.minecraft.server.permissions.Permissions.COMMANDS_GAMEMASTER);
+            if (locked != 0 && !player.getUUID().equals(grave.owner()) && !op) {
+                player.sendSystemMessage((locked < 0
+                        ? Component.translatable("message.wayfarers.grave.locked", grave.ownerName())
+                        : Component.translatable("message.wayfarers.grave.locked_for", grave.ownerName(), locked))
+                        .withStyle(ChatFormatting.RED));
+                return InteractionResult.SUCCESS;
+            }
             for (ItemStack stack : grave.takeAll()) {
                 if (!stack.isEmpty() && !player.getInventory().add(stack)) {
                     player.drop(stack, false);

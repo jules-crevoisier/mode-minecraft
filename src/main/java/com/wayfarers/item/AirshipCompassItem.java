@@ -50,7 +50,11 @@ public class AirshipCompassItem extends GadgetItem {
         }
         player.getCooldowns().addCooldown(stack, 60);
         Component name = Component.translatable("structure.wayfarers." + target);
-        StructureLocator.Found found = index < 0 ? null : StructureLocator.nearest(server, player.blockPosition(), index, 100);
+        StructureLocator.Found found = index < 0 ? null : StructureLocator.nearestBudgeted(server, player.blockPosition(), index, 100);
+        if (found == StructureLocator.BUSY) {
+            player.sendSystemMessage(Component.translatable("message.wayfarers.compass.busy").withStyle(ChatFormatting.GRAY));
+            return InteractionResult.SUCCESS;
+        }
         if (found == null) {
             stack.remove(DataComponents.LODESTONE_TRACKER);
             player.sendSystemMessage(Component.translatable("message.wayfarers.compass.none", name).withStyle(ChatFormatting.GRAY));

@@ -121,7 +121,8 @@ public final class WayfarersConfig {
                     "Each player still receives the step's rewards once.")
             .define("quests.shareProgress", true);
     public static final ForgeConfigSpec.BooleanValue QUESTS_CATCH_UP = B
-            .comment("Players who join later receive every quest step the server already reached (with its rewards).",
+            .comment("Players who join later (or were offline) receive, when they log in, every quest step the server already",
+                    "reached (with its rewards).",
                     "On a public server, false stops new (or alt) accounts from collecting every reward at once.")
             .define("quests.catchUpOnJoin", true);
 

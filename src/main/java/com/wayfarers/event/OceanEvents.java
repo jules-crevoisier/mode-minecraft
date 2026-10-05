@@ -45,6 +45,9 @@ public final class OceanEvents {
             return;
         }
         ServerLevel level = player.level();
+        if (!com.wayfarers.config.WayfarersConfig.SPAWNS_ENABLED.get()) {
+            return;
+        }
         if (level.dimension() != Level.OVERWORLD || level.getDifficulty() == Difficulty.PEACEFUL || level.isBrightOutside()) {
             return;
         }

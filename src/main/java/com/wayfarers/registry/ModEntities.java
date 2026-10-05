@@ -258,6 +258,17 @@ public final class ModEntities {
                 MantaRay::checkSpawnRules, SpawnPlacementRegisterEvent.Operation.REPLACE);
         event.register(WHALE.get(), SpawnPlacementTypes.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 Whale::checkSpawnRules, SpawnPlacementRegisterEvent.Operation.REPLACE);
+        // server limits (spawns.natural, spawns.maxLoadedPerType) on top of every creature's own rules
+        for (EntityType<?> type : List.of(RUIN_WALKER.get(), MAP_WRAITH.get(), BASALT_GUARD.get(), VOID_STALKER.get(),
+                SKELETON_KNIGHT.get(), CRYPT_CRAWLER.get(), BANSHEE.get(), GARGOYLE.get(), EMBER_IMP.get(), VOID_LARVA.get(),
+                CLOCKWORK_SPIDER.get(), STEAM_DRONE.get(), GLOW_JELLYFISH.get(), REEF_FISH.get(), MANTA_RAY.get(), WHALE.get())) {
+            capped(event, type);
+        }
+    }
+
+    private static <T extends net.minecraft.world.entity.Entity> void capped(SpawnPlacementRegisterEvent event, EntityType<T> type) {
+        event.register(type, (t, level, reason, pos, random) -> com.wayfarers.util.SpawnCaps.allow(t, level, reason),
+                SpawnPlacementRegisterEvent.Operation.AND);
     }
 
     private static <T extends Monster> void register(SpawnPlacementRegisterEvent event, EntityType<T> type) {

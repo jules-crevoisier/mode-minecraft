@@ -203,7 +203,8 @@ public final class EquipmentEvents {
 
     // ------------------------------------------------------------------ area tools
     private static void onBreak(BlockEvent.BreakEvent event) {
-        if (breakingArea || !(event.getPlayer() instanceof ServerPlayer player) || player.isShiftKeyDown()
+        if (breakingArea || com.wayfarers.util.ServerGuard.probing() || !(event.getPlayer() instanceof ServerPlayer player)
+                || player.isShiftKeyDown()
                 || !(player.level() instanceof ServerLevel level)) {
             return;
         }

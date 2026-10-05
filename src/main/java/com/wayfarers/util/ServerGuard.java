@@ -38,6 +38,9 @@ import java.util.function.Predicate;
  * Everything here runs on the server thread (network handlers are registered with {@code addMain}).
  */
 public final class ServerGuard {
+    /** True while {@link #mayBreak} / {@link #mayPlace} ask the protection mods: our own listeners must not act. */
+    private static boolean probing;
+
     /** Per player: per action key, {tokens * 1000, last refill nanos}. */
     private static final Map<UUID, Map<String, long[]>> BUCKETS = new HashMap<>();
 
@@ -97,8 +100,19 @@ public final class ServerGuard {
         }
         BlockState state = level.getBlockState(pos);
         BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(level, pos, state, player, Result.DEFAULT);
-        boolean cancelled = BlockEvent.BreakEvent.BUS.post(event);
-        return !cancelled && !event.getResult().isDenied();
+        boolean was = probing;
+        probing = true;
+        try {
+            boolean cancelled = BlockEvent.BreakEvent.BUS.post(event);
+            return !cancelled && !event.getResult().isDenied();
+        } finally {
+            probing = was;
+        }
+    }
+
+    /** True while the mod is only asking whether a block may change (listeners must not act on that event). */
+    public static boolean probing() {
+        return probing;
     }
 
     /** May {@code player} place a block at {@code pos} (an empty or replaceable spot)? See {@link #mayBreak}. */
@@ -107,7 +121,13 @@ public final class ServerGuard {
             return false;
         }
         BlockSnapshot snapshot = BlockSnapshot.create(level.dimension(), level, pos);
-        return !ForgeEventFactory.onBlockPlace(player, snapshot, net.minecraft.core.Direction.UP);
+        boolean was = probing;
+        probing = true;
+        try {
+            return !ForgeEventFactory.onBlockPlace(player, snapshot, net.minecraft.core.Direction.UP);
+        } finally {
+            probing = was;
+        }
     }
 
     // ------------------------------------------------------------------ machines per chunk
@@ -135,7 +155,7 @@ public final class ServerGuard {
 
     /** Refuses a machine placed by a player in a chunk that already holds the configured most. */
     private static boolean onPlace(BlockEvent.EntityPlaceEvent event) {
-        if (!(event.getPlacedBlock().getBlock() instanceof MachineBlock) || !(event.getLevel() instanceof ServerLevel level)) {
+        if (probing || !(event.getPlacedBlock().getBlock() instanceof MachineBlock) || !(event.getLevel() instanceof ServerLevel level)) {
             return false;
         }
         if (machineFits(level, event.getPos(), true)) {

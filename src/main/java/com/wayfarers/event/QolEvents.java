@@ -84,7 +84,7 @@ public final class QolEvents {
     }
 
     private static void onPlace(BlockEvent.EntityPlaceEvent event) {
-        if (event.getEntity() instanceof Player player) {
+        if (event.getEntity() instanceof Player player && !com.wayfarers.util.ServerGuard.probing()) {
             for (InteractionHand hand : InteractionHand.values()) {
                 ItemStack held = player.getItemInHand(hand);
                 if (held.getItem() instanceof BlockItem bi && bi.getBlock() == event.getPlacedBlock().getBlock()) {
@@ -134,6 +134,11 @@ public final class QolEvents {
         BlockState state = event.getLevel().getBlockState(pos);
         BlockState replant = replanted(state);
         if (replant == null) {
+            return false;
+        }
+        // like breaking the crop by hand: adventure mode, spawn protection and claim mods apply
+        if (!player.mayBuild() || !event.getLevel().mayInteract(player, pos)
+                || player instanceof ServerPlayer sp && !com.wayfarers.util.ServerGuard.mayBreak(sp.level(), pos, sp)) {
             return false;
         }
         if (event.getLevel() instanceof ServerLevel level) {

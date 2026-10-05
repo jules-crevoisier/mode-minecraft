@@ -19,7 +19,6 @@ import org.jetbrains.annotations.Nullable;
 
 /** While enabled (shown by the enchantment glint) it pulls items and XP orbs to its holder. */
 public class MagnetRingItem extends TooltipItem {
-    private static final double RANGE = 7.0;
 
     public MagnetRingItem(Properties properties) {
         super(properties);
@@ -51,11 +50,15 @@ public class MagnetRingItem extends TooltipItem {
                 || (level.getGameTime() + player.getId()) % 4 != 0) { // staggered: not every ring on the same tick
             return;
         }
-        for (ItemEntity item : level.getEntitiesOfClass(ItemEntity.class, player.getBoundingBox().inflate(RANGE),
+        double range = com.wayfarers.config.WayfarersConfig.MAGNET_RANGE.get(); // server option (items.magnetRange)
+        if (range <= 0 || !player.isAlive()) {
+            return;
+        }
+        for (ItemEntity item : level.getEntitiesOfClass(ItemEntity.class, player.getBoundingBox().inflate(range),
                 e -> e.isAlive() && !e.hasPickUpDelay())) {
             item.setPos(player.getX(), player.getY() + 0.2, player.getZ());
         }
-        for (ExperienceOrb orb : level.getEntitiesOfClass(ExperienceOrb.class, player.getBoundingBox().inflate(RANGE))) {
+        for (ExperienceOrb orb : level.getEntitiesOfClass(ExperienceOrb.class, player.getBoundingBox().inflate(range))) {
             orb.setPos(player.getX(), player.getY() + 0.2, player.getZ());
         }
     }
