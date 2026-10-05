@@ -55,11 +55,15 @@ Options conseillées (G1, éprouvé pour Minecraft) :
 -XX:G1MixedGCCountTarget=4
 -XX:InitiatingHeapOccupancyPercent=15
 -XX:G1MixedGCLiveThresholdPercent=90
--XX:G1RSetUpdatingPauseTimePercent=5
 -XX:SurvivorRatio=32
 -XX:+PerfDisableSharedMem
 -XX:MaxTenuringThreshold=1
+-XX:+UseCompactObjectHeaders
 ```
+
+Ce sont les options du pack serveur (`jvm_args.txt`), avec lesquelles la CI fait tourner ses serveurs de test.
+`-XX:+UseCompactObjectHeaders` (Java 25) réduit la mémoire prise par les objets de 10 à 20 %. Détails, mesures et
+pré-génération : [PERFORMANCE.md](PERFORMANCE.md).
 
 Avec 16 Go ou plus, remplace la partie G1 par le ZGC générationnel de Java 25, qui fait des pauses de moins
 d'une milliseconde : `-XX:+UseZGC -XX:+AlwaysPreTouch -XX:+DisableExplicitGC` (garde `-Xms` = `-Xmx`).
