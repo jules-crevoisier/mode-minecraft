@@ -49,6 +49,7 @@ public final class Wayfarers {
         com.wayfarers.generated.GeneratedFurniture.init();
         com.wayfarers.generated.GeneratedWorldBlocks.init();
         com.wayfarers.registry.ModOcean.init();
+        com.wayfarers.registry.ModSocial.init();
         ModBlocks.BLOCKS.register(modBus);
         ModItems.ITEMS.register(modBus);
         ModBlockEntities.BLOCK_ENTITIES.register(modBus);
@@ -77,12 +78,14 @@ public final class Wayfarers {
         com.wayfarers.util.StructureLocator.register();
         com.wayfarers.world.SiteFit.register();
         com.wayfarers.block.MachineBlockEntity.registerEvents();
+        com.wayfarers.social.Social.register();
         SpawnPlacementRegisterEvent.BUS.addListener(ModEntities::registerSpawnPlacements);
         context.registerConfig(ModConfig.Type.COMMON, WayfarersConfig.SPEC);
         context.registerConfig(ModConfig.Type.CLIENT, com.wayfarers.config.WayfarersClientConfig.SPEC);
 
         if (FMLEnvironment.dist == Dist.CLIENT) {
             com.wayfarers.client.WayfarersClient.init(modBus, context);
+            com.wayfarers.client.social.ClientSocial.init(modBus);
         }
     }
 

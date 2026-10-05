@@ -58,6 +58,9 @@ public final class WayfarersConfig {
             .comment("Show online players on each other's minimap and world map (same dimension).")
             .define("map.showPlayers", true);
 
+    /** Multiplayer features (com.wayfarers.social), in their own "social" section. */
+    public static final SocialConfig SOCIAL = new SocialConfig(B);
+
     public static final ForgeConfigSpec SPEC = B.build();
 
     private WayfarersConfig() {}
