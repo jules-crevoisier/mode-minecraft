@@ -177,6 +177,9 @@ public final class WayfarersConfig {
                     "a while on the server thread). Answers are remembered, so repeated uses near the same place are free.")
             .defineInRange("compass.searchesPerMinute", 30, 1, 1200);
 
+    /** Multiplayer features (com.wayfarers.social), in their own "social" section. */
+    public static final SocialConfig SOCIAL = new SocialConfig(B);
+
     public static final ForgeConfigSpec SPEC = B.build();
 
     private WayfarersConfig() {}

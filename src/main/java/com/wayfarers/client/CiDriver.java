@@ -492,6 +492,8 @@ public final class CiDriver {
                 .waitTicks(30)
                 .shot("waystone");
 
+        socialSteps();
+
         step("creative_tab")
                 .run("open", CiDriver::openCreativeTab)
                 .until("CreativeModeInventoryScreen", () -> screen() instanceof CreativeModeInventoryScreen, 40)
@@ -536,6 +538,76 @@ public final class CiDriver {
                 .settleChunks(2400)
                 .waitTicks(60)
                 .shot("mega_structure");
+    }
+
+    /**
+     * The multiplayer features (com.wayfarers.social). The test has one player, so /wayfarers social demo fills the
+     * company, the inbox and the board from two demo wayfarers; the trade screen and a player card (which need a second
+     * player) are shown as client-side previews, which never reach the server.
+     */
+    private static void socialSteps() {
+        step("company")
+                .cmd(() -> List.of("wayfarers social demo", "wayfarers company sharexp", "wayfarers emote cheer"))
+                .waitTicks(20)
+                .run("open", com.wayfarers.client.social.ClientSocial::openCompany)
+                .until("CompanyScreen", () -> screen() instanceof com.wayfarers.client.social.CompanyScreen, 60)
+                .waitTicks(30)
+                .shot("company");
+
+        step("player_card")
+                .run("open", () -> com.wayfarers.client.social.ClientSocial.card(new com.wayfarers.social.SocialNet.PlayerCard(
+                        UUID.fromString("0000ada0-0000-4000-8000-000000000001"), "Ada", "Brass Owls", 3, 1, 0, 1)))
+                .until("PlayerCardScreen", () -> screen() instanceof com.wayfarers.client.social.PlayerCardScreen, 40)
+                .waitTicks(20)
+                .shot("player_card");
+
+        step("emote_wheel")
+                .run("open", () -> Minecraft.getInstance().gui.setScreen(new com.wayfarers.client.social.EmoteWheelScreen()))
+                .waitTicks(20)
+                .shot("emote_wheel");
+
+        step("pneumatic_post")
+                .cmd(() -> List.of("setblock " + at(3, 1, -2) + " wayfarers:pneumatic_post[facing=west]",
+                        "setblock " + at(-3, 1, -2) + " wayfarers:contract_board[facing=east]",
+                        "give @s minecraft:paper 16", "give @s wayfarers:brass_nugget 8"))
+                .waitTicks(10)
+                .run("use", () -> useBlock(3, 1, -2))
+                .until("PostScreen", () -> screen() instanceof com.wayfarers.client.social.PostScreen, 100)
+                .waitTicks(40)
+                .shot("pneumatic_post");
+
+        step("contract_board")
+                .run("use", () -> useBlock(-3, 1, -2))
+                .until("ContractScreen", () -> screen() instanceof com.wayfarers.client.social.ContractScreen, 100)
+                .waitTicks(40)
+                .shot("contract_board");
+
+        step("trade")
+                .run("open", CiDriver::previewTrade)
+                .until("TradeScreen", () -> screen() instanceof com.wayfarers.client.social.TradeScreen, 20)
+                .waitTicks(20)
+                .shot("trade");
+    }
+
+    /** The trade screen with both offers filled, client side only (a real trade needs a second player). */
+    private static void previewTrade() {
+        Minecraft mc = Minecraft.getInstance();
+        net.minecraft.network.FriendlyByteBuf buf = new net.minecraft.network.FriendlyByteBuf(io.netty.buffer.Unpooled.buffer());
+        buf.writeUtf("Ada");
+        com.wayfarers.social.TradeMenu menu = new com.wayfarers.social.TradeMenu(Integer.MAX_VALUE - 7, mc.player.getInventory(), buf);
+        net.minecraft.world.item.ItemStack[] mine = {new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.IRON_INGOT, 32),
+                new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.BREAD, 12)};
+        net.minecraft.world.item.ItemStack[] theirs = {new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.DIAMOND, 3),
+                new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.COMPASS)};
+        for (int i = 0; i < mine.length; i++) {
+            menu.getSlot(i).set(mine[i]);
+        }
+        for (int i = 0; i < theirs.length; i++) {
+            menu.getSlot(com.wayfarers.social.TradeMenu.OFFER + i).set(theirs[i]);
+        }
+        menu.setData(1, 1);
+        mc.gui.setScreen(new com.wayfarers.client.social.TradeScreen(menu, mc.player.getInventory(),
+                net.minecraft.network.chat.Component.translatable("gui.wayfarers.trade.title", "Ada")));
     }
 
     private static String at(int dx, int dy, int dz) {

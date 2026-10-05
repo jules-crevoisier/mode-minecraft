@@ -326,6 +326,8 @@ def top_loot(tables, n=10):
 def java_keys():
     out = []
     src = open(os.path.join(JAVA, "client", "WayfarersClient.java"), encoding="utf-8").read()
+    # the multiplayer keys (company, emotes, player card) live with the rest of the social client code
+    src += open(os.path.join(JAVA, "client", "social", "ClientSocial.java"), encoding="utf-8").read()
     for key, glfw in re.findall(r'new KeyMapping\("([\w.]+)",\s*InputConstants\.Type\.KEYSYM,\s*GLFW\.GLFW_KEY_(\w+)', src):
         out.append((glfw, FR.get(key, key)))
     for f in glob.glob(os.path.join(JAVA, "client", "*.java")):
@@ -373,12 +375,14 @@ def java_commands():
 def java_config():
     out = []
     for fname, file_label in (("WayfarersConfig.java", "wayfarers-common.toml"),
+                              ("SocialConfig.java", "wayfarers-common.toml"),
                               ("WayfarersClientConfig.java", "wayfarers-client.toml")):
         src = open(os.path.join(JAVA, "config", fname), encoding="utf-8").read()
+        prefix = "social." if fname == "SocialConfig.java" else ""  # its keys sit in the [social] section
         jstr = r'"(?:[^"\\]|\\.)*"'
         for m in re.finditer(r'\.comment\(((?:' + jstr + r'\s*,?\s*)+)\)\s*\.define(\w*)\("([\w.]+)",\s*([^;]+?)\);', src):
             comment = " ".join(x[1:-1].replace('\\"', '"') for x in re.findall(jstr, m.group(1)))
-            key = m.group(3)
+            key = prefix + m.group(3)
             default = m.group(4).split(",")[0].strip()
             default = re.sub(r"^[A-Z]\w*\.(?=[A-Z_]+$)", "", default)  # HealthBars.DAMAGED -> DAMAGED
             out.append((key, default, TXT.CONFIG_FR.get(key, comment), file_label))
@@ -1118,6 +1122,7 @@ def main():
 </section>''')
     sec.append(section_terminal(ctx))
     sec.append(section_gadgets(ctx))
+    sec.append(section_social(ctx))
     sec.append(section_construction(ctx))
     sec.append(section_automatons(ctx))
 
@@ -1577,6 +1582,8 @@ def check_command(ctx, cmd, subs):
 
 def section_tests(ctx):
     subs = {c[0] for c in java_commands()}
+    # the multiplayer sub-commands are registered by social/SocialCommand.java into the same /wayfarers
+    subs |= set(re.findall(r'literal\("(\w+)"\)', open(os.path.join(JAVA, "social", "SocialCommand.java"), encoding="utf-8").read()))
     items = []
     for n, (title, cmds, expect) in enumerate(TXT.TEST_CHECKLIST, 1):
         for c in cmds:
@@ -1627,6 +1634,48 @@ def section_gadgets(ctx):
     return f'''<section class="block" id="gadgets">
   {plaque("gadgets-h", "Nouveau · laiton et vapeur", "Gadgets à vapeur", E(TXT.GADGETS_INTRO))}
   <div class="grid gadgets">{"".join(cards)}</div>
+</section>'''
+
+
+def section_social(ctx):
+    """Multiplayer features (tools/wf/social.py): a card per manual page, the two blocks, what the server guarantees
+    and the commands."""
+    from wf import social as SO
+    atlas = ctx.atlas
+    cards = []
+    for pid, _cat, icon, (_ten, tfr), paras, _items in SO.PAGES:
+        if pid == "multiplayer":
+            continue
+        fr = [f for _e, f in paras]
+        ctx.idx.add(tfr, "Multijoueur", f"mj-{pid}", " ".join(fr))
+        cards.append(f'''<article class="card page" id="mj-{pid}"><h4>{atlas.icon(icon, 32)}{E(tfr)}</h4>
+  {"".join(f"<p>{E(p)}</p>" for p in fr)}</article>''')
+    blocks = []
+    for bid, (_en, fr, _ten, tfr) in SO.BLOCKS.items():
+        iid = "wayfarers:" + bid
+        ctx.idx.add(fr, "Multijoueur", f"mj-b-{bid}", tfr)
+        blocks.append(f'''<article class="card tool" id="mj-b-{bid}">
+  <div class="g-visual"><div class="vitrine big-icon">{atlas.icon(iid, 96)}</div></div>
+  <div class="g-body"><h4>{atlas.icon(iid, 32)}{E(fr)}</h4><p>{E(tfr)}</p>{recipe_block(ctx, iid)}</div>
+</article>''')
+    safety = "".join(f"<li><b>{E(t)}.</b> {E(x)}</li>" for t, x in TXT.SOCIAL_SAFETY)
+    cmds = "".join(f'<tr><td><code>{E(c)}</code></td><td><span class="who {"op" if w == "op" else ""}">{E(w)}</span></td>'
+                   f'<td>{E(x)}</td></tr>' for c, w, x in TXT.SOCIAL_COMMANDS)
+    for c, _w, x in TXT.SOCIAL_COMMANDS:
+        ctx.idx.add(c.split(" <")[0], "Commande", "multijoueur-commandes", x)
+    return f'''<section class="block" id="multijoueur">
+  {plaque("multijoueur-h", "Nouveau · à plusieurs", "Multijoueur", E(TXT.SOCIAL_INTRO))}
+  {ingame_feature(ctx, "company")}
+  <div class="callout"><b>La fiche d'un joueur.</b> {E(TXT.SOCIAL_CARD)}</div>
+  <div class="grid pages">{"".join(cards)}</div>
+  <div class="grid tools">{"".join(blocks)}</div>
+  {ingame_feature(ctx, "pneumatic_post")}
+  <h3 class="subhead">Ce que le serveur garantit</h3>
+  <div class="card"><ul class="ticks">{safety}</ul></div>
+  <h3 class="subhead" id="multijoueur-commandes">Commandes</h3>
+  <div class="scroll"><table class="tbl"><thead><tr><th>Commande</th><th>Qui</th><th>Effet</th></tr></thead><tbody>{cmds}</tbody></table></div>
+  <p class="small">Chaque fonction se coupe dans <code>wayfarers-common.toml</code>, section <code>[social]</code> :
+  <a href="#config">voir la configuration</a>.</p>
 </section>'''
 
 
@@ -2272,6 +2321,7 @@ SECTIONS = {
     "machines": ("Machines", "Machines", "wayfarers:auto_harvester"),
     "terminal": ("Terminal de guilde", "Terminal de guilde", "wayfarers:guild_terminal"),
     "gadgets": ("Gadgets à vapeur", "Gadgets à vapeur", "wayfarers:grappling_hook"),
+    "multijoueur": ("Multijoueur", "Multijoueur", "wayfarers:pneumatic_post"),
     "construction": ("Burin & baguette", "Construction", "wayfarers:chisel"),
     "automates": ("Automates", "Automates", "wayfarers:clockwork_heart"),
     "metaux": ("Métaux & armures", "Métaux & armures", "wayfarers:brass_ingot"),
@@ -2289,7 +2339,7 @@ SECTIONS = {
 
 # sections marked with a dot in the menu and the tiles (what changed tonight)
 NEW_SECTIONS = {"nouveautes", "en-jeu", "tester", "carte", "terminal", "oceans", "blocs-monde", "performances",
-                "biomes"}
+                "biomes", "multijoueur"}
 
 
 def render_page(sections, idx, atlas_rows, nav):

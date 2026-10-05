@@ -15,6 +15,7 @@ The script accepts the EULA, starts the server, waits for "Done", then from the 
   * measures the server's time per tick with a crowded base of machines and automatons (fails above 25 ms),
   * breaks mod blocks (loot tables + Forge loot modifiers),
   * spawns every loot table,
+  * runs /wayfarers social selftest (the multiplayer features' server rules, with no player needed),
   * reloads data packs,
 and stops the server. Any ERROR line, exception, crash report or failed command fails the run.
 With --fit the server makes a fresh world with Minecraft's own terrain instead (and the Wayfarers biomes, on by
@@ -284,6 +285,8 @@ def exercise_mod(srv, failures):
         server_performance(srv, failures)
     with Phase("blocks and loot"):
         blocks_and_loot(srv, failures)
+    with Phase("multiplayer features"):
+        social(srv, failures)
     with Phase("reload"):
         srv.run("reload", r"Reloading|Failed", 120)
         time.sleep(20)
@@ -567,6 +570,29 @@ def blocks_and_loot(srv, failures):
         if not res or "Dropped" not in res and "No loot" not in res:
             failures.append(f"loot {table}: {res}")
     srv.run("execute in minecraft:overworld run kill @e[type=minecraft:item]", r"Killed|No entity", 60)
+
+
+def social(srv, failures):
+    """The multiplayer features have no player on a console server: /wayfarers social selftest checks their server
+    rules instead (saved data round trip, trade space, contract matching and item conservation, shared experience,
+    text cleaning, duel ring, contract expiry with refund by post, config), then the status line and the blocks."""
+    res = srv.run("wayfarers social selftest", r"Social self-test (passed|FAILED)|Unknown|Incorrect", 120)
+    if not res or "passed" not in res:
+        failures.append(f"social self-test: {res}")
+        # the server prints one FAILED line per broken rule: give the next lines a moment to land in the log
+        time.sleep(2)
+        failures += [ln.strip() for ln in srv.lines[-40:] if "Social self-test FAILED" in ln and ln.strip() not in failures]
+    res = srv.run("wayfarers social status", r"Social: |Unknown|Incorrect", 60)
+    if not res or "Social: " not in res:
+        failures.append(f"social status: {res}")
+    load_origin(srv)
+    for bid in ("pneumatic_post", "contract_board"):
+        for facing in ("north", "east", "south", "west"):
+            res = srv.run(f"execute in minecraft:overworld run setblock 1 150 1 wayfarers:{bid}[facing={facing}]",
+                          r"Changed|Could not|Unknown|Invalid|not loaded", 30)
+            if not res or re.search(r"Unknown|Invalid|not loaded", res):
+                failures.append(f"setblock {bid}[facing={facing}]: {res}")
+    srv.run("execute in minecraft:overworld run setblock 1 150 1 minecraft:air destroy", r"Changed|Could not|not loaded", 30)
 
 
 def exercise_fit(srv, failures, shard=None):

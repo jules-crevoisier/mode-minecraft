@@ -163,9 +163,11 @@ final class MapRenderer {
         if (m.kind() == ClientMap.Kind.PLAYER) {
             PlayerInfo info = Minecraft.getInstance().getConnection() == null ? null
                     : Minecraft.getInstance().getConnection().getPlayerInfo(m.label());
+            // companions of your company (com.wayfarers.social) get a gold frame
             int h = Math.max(3, Math.round(size - 1) / 2);
             g.fill(x - h, y - h, x + h + 2, y + h + 2, 0x50000000);
-            g.fill(x - h - 1, y - h - 1, x + h + 1, y + h + 1, 0xFF0F0C0A);
+            g.fill(x - h - 1, y - h - 1, x + h + 1, y + h + 1,
+                    com.wayfarers.client.social.ClientSocial.isCompanion(m.label()) ? 0xFFF6C343 : 0xFF0F0C0A);
             g.fill(x - h, y - h, x + h, y + h, 0xFFF3E3C0);
             if (info != null) {
                 PlayerFaceExtractor.extractRenderState(g, info.getSkin(), x - h, y - h, h * 2);

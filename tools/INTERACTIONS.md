@@ -48,3 +48,14 @@ Keys: M world map, H minimap, Z minimap zoom, B ping, N magnet ring (was M), J j
 Display settings (health bars, damage numbers, quest tracker, tip cards, key bindings): the Config button of Wayfarers in the mods list opens a settings screen in the mod's theme; every change is saved at once.
 
 Commands: `/wayfarers warp` is for game masters only. Players travel through the waystone screen.
+
+## Multiplayer (com.wayfarers.social)
+
+| Block / action | Right-click | Feedback |
+|---|---|---|
+| Pneumatic Post | Inbox (letters, parcels, contract deliveries, items given back) and Write tab (recipient with completion, letter, 6 parcel slots, postage on the Send button). Parcel slots go back to the bag (or the inbox) when the screen closes unsent. | Screen; piston whoosh on send; chat line and chime for the recipient |
+| Contract Board | Board tab (open contracts, yours first; Deliver / Cancel) and Post tab (sample slot: a copy of the clicked item, amount, note, 6 escrowed reward slots). | Screen; page sound on post; broadcast of new contracts (once a minute per player); level-up sound on delivery |
+| Another player, sneaking with an empty hand (or key U while looking at them) | Their card: company, duel record; Trade, Duel, Invite, Wave, Bow. | Screen; requests show [Accept] [Decline] in the target's chat with a bell |
+| Key O | Company screen (members, health, switches, invite, rename, join, lead, remove, leave). | Screen; HUD of companions; gold frames on the maps |
+| Key Y | Emote wheel (8 emotes, keys 1-8). | Arm swings, crouch or hop seen by everyone, particles, sound, line above the hotbar within 24 blocks |
+

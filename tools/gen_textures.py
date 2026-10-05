@@ -435,6 +435,7 @@ def main():
     from wf import worldblocks
     written.update(worldblocks.textures())
     written.update(ocean.textures())
+    written.update(__import__("wf.social", fromlist=["textures"]).textures())  # multiplayer blocks
     from wf import decor
     for bid, d in decor.DECOR.items():
         names = decor.texture_names(bid)

@@ -143,6 +143,19 @@ Les trois biomes passent par un pack de données intégré, **wayfarers:custom_b
 - **bois-lueur** (troncs pâles, feuilles turquoise qui luisent la nuit) et **bois rouillé** (écorce rouge sombre, feuilles rouille), chacun avec bûches, planches, escaliers, dalles, barrières, portillons, portes, trappes, boutons, plaques de pression, feuilles et pousses. Les pousses se fabriquent (pousse de chêne + baies lumineuses + poudre de pierre lumineuse ; pousse d'acacia + fer brut) et se trouvent dans les coffres de l'Arbre-monde et du Palais sylvain (bois-lueur), de la Citadelle d'horlogerie, du Port céleste, des Bas-fonds et de la Fonderie géothermique (bois rouillé) ;
 - **marbre** en veines dans les montagnes, **roche rouillée** dans les badlands et les hautes savanes, **ardoise bleue** dans l'ardoise des abîmes, avec leurs formes polies, briques, pilier, carreaux, escaliers, dalles et murets ; chacune se fabrique aussi à partir de pierres vanilla (manuel, page « Marbre, roche rouillée, ardoise bleue »).
 
+### Multijoueur (manuel, catégorie « Multijoueur »)
+| Quoi | Comment |
+|---|---|
+| **Fiche d'un joueur** | Accroupi + clic droit sur un joueur (main vide), ou le viser et touche **U** : sa compagnie, ses duels, et les boutons Échanger, Duel, Inviter, Saluer. |
+| **Compagnie** (touche **O**) | Groupe de 8 joueurs max : compagnons à gauche de l'écran (vie, distance, direction) et en cadre doré sur les cartes ; tirs amis et XP partagée réglés par le chef ; `/cc <message>` ou interrupteur pour parler à la compagnie ; depuis une pierre de voyage, **rejoindre** un compagnon qui accepte (2 niveaux). |
+| **Échange sécurisé** | Les deux joueurs à moins de 8 blocs, 9 cases chacun, les deux acceptent puis 3 s de compte à rebours ; tout changement annule les accords ; échange atomique, rien n'est perdu (le surplus part par la poste). |
+| **Poste pneumatique** (bloc) | Lettres et colis (6 piles) vers tout joueur déjà venu, même absent ; affranchissement en pépites de laiton ; chaque borne ouvre ta propre boîte. |
+| **Tableau des contrats** (bloc) | « Je veux 32 lingots de fer, je paie 3 diamants » : récompense en dépôt, livraison en un clic, marchandise envoyée par la poste ; expire après 7 jours (récompense rendue). |
+| **Gestes** (touche **Y**) | Saluer, s'incliner, acclamer, applaudir, montrer, rire, remercier, rallier : bras animés, particules et son, vus à 24 blocs. |
+| **Duels** | Défi depuis la fiche, cercle d'arène, compte à rebours, le coup fatal laisse un demi-cœur : personne ne meurt, rien n'est perdu ; vainqueur annoncé. |
+
+Tout est vérifié par le serveur (anti-duplication, distances, limites de débit) et chaque fonction se coupe dans `wayfarers-common.toml`, section `[social]`.
+
 ### Méga-structures
 **Citadelle d'horlogerie** (71×71 blocs) : tour-horloge de 75 blocs avec quatre cadrans, beffroi et flèche de cuivre oxydé ; sept étages meublés ; quatre ateliers ; quatre cheminées fumantes ; fontaines. On la trouve dans les badlands, savanes, déserts et plaines.
 
@@ -373,6 +386,9 @@ Les structures sont bâties avec des blocs propres au mod, qu'on peut aussi util
 | `/wayfarers progress reset\|complete` | op | Réinitialiser ou terminer la quête. |
 | `/wayfarers npc spawn <rôle>` · `move` · `role <rôle>` · `remove` | op | Placer, déplacer (nouveau poste), changer ou retirer un donneur de quêtes (le plus proche, 8 blocs). |
 | `/wayfarers contracts reset [joueur]` | op | Effacer les contrats d'un joueur. |
+| `/wayfarers company …` · `/cc <message>` | tous | Compagnie : create, invite, leave, kick, promote, rename, friendlyfire, sharexp, chat, join ; chat de compagnie. |
+| `/wayfarers trade <joueur>` · `/wayfarers duel <joueur>` · `/wayfarers emote <geste>` | tous | Échange, duel, geste (les demandes s'acceptent d'un clic dans le chat). |
+| `/wayfarers social status\|demo\|selftest` | op | État du multijoueur, exemples pour tester, auto-test des règles du serveur. |
 
 L'onglet créatif **Wayfarers** contient tous les objets, blocs et œufs d'apparition.
 
