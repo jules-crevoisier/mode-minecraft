@@ -463,12 +463,17 @@ def biome_name(bid):
 def new_ids_since(ref):
     """Lang keys (item/block/entity/structure) added since a git commit: {"item": [...], ...}. Empty without git."""
     import subprocess
-    try:
-        old = subprocess.run(["git", "-C", ROOT, "show", f"{ref}:src/main/resources/assets/brasshaven/lang/fr_fr.json"],
-                             capture_output=True, timeout=20, check=True).stdout
-        old = json.loads(old)
-    except Exception as e:  # noqa: BLE001
-        log(f"new since {ref}: {e}")
+    old = None
+    for ns in ("brasshaven", "wayfarers"):  # the mod was called Wayfarers before 0decb4f
+        try:
+            raw = subprocess.run(["git", "-C", ROOT, "show", f"{ref}:src/main/resources/assets/{ns}/lang/fr_fr.json"],
+                                 capture_output=True, timeout=20, check=True).stdout
+            old = {k.replace(f".{ns}.", ".brasshaven."): v for k, v in json.loads(raw).items()}
+            break
+        except Exception as e:  # noqa: BLE001
+            err = e
+    if old is None:
+        log(f"new since {ref}: {err}")
         return {}
     out = {}
     for k in FR:
@@ -2148,14 +2153,16 @@ def find_biomeshots():
     for b in WB.BIOMES:
         png = os.path.join(d, f"brasshaven-biome-{b}.png")
         if not os.path.exists(png) or time.time() - os.path.getmtime(png) > 3 * 3600:
-            try:
-                data = urllib.request.urlopen(PREVIEWS_URL.format(f"brasshaven-biome-{b}.png"), timeout=40).read()
-                if data[:8] != b"\x89PNG\r\n\x1a\n":
-                    raise ValueError("not a PNG")
-                open(png, "wb").write(data)
-            except Exception as e:  # noqa: BLE001
-                if not os.path.exists(png):
-                    log(f"biome render {b} not available: {e}")
+            for prefix in ("brasshaven", "wayfarers"):  # renders published before the rename keep the old prefix
+                try:
+                    data = urllib.request.urlopen(PREVIEWS_URL.format(f"{prefix}-biome-{b}.png"), timeout=40).read()
+                    if data[:8] != b"\x89PNG\r\n\x1a\n":
+                        raise ValueError("not a PNG")
+                    open(png, "wb").write(data)
+                    break
+                except Exception as e:  # noqa: BLE001
+                    if prefix == "wayfarers" and not os.path.exists(png):
+                        log(f"biome render {b} not available: {e}")
         if os.path.exists(png):
             out[b] = png
     return out
