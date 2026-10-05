@@ -187,10 +187,14 @@ public abstract class Resident extends PathfinderMob implements AnimatedMob, Mer
             return;
         }
         double[] s = guardStats();
+        // base values are saved with the entity: a guard loaded from disk keeps its wounds
+        boolean fresh = getAttributeBaseValue(Attributes.MAX_HEALTH) != s[0];
         setBase(Attributes.MAX_HEALTH, s[0]);
         setBase(Attributes.ATTACK_DAMAGE, s[1]);
         setBase(Attributes.ARMOR, s[2]);
-        setHealth(getMaxHealth());
+        if (fresh) {
+            setHealth(getMaxHealth());
+        }
     }
 
     private void setBase(net.minecraft.core.Holder<net.minecraft.world.entity.ai.attributes.Attribute> attr, double v) {
