@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "brasshaven:lithite_bricks",
+  "result": {
+    "id": "brasshaven:lithite_brick_slab",
+    "count": 2
+  }
+}

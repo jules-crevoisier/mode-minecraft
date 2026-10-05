@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "key": {
+    "#": "brasshaven:stripped_rustwood_log"
+  },
+  "result": {
+    "id": "brasshaven:stripped_rustwood_wood",
+    "count": 3
+  },
+  "group": "bark"
+}

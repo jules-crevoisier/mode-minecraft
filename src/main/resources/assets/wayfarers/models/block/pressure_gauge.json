@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:block/cube_column",
-  "textures": {
-    "end": "wayfarers:block/pressure_gauge_top",
-    "side": "wayfarers:block/pressure_gauge_side"
-  }
-}

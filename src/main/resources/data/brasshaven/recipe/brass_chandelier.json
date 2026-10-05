@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    " C ",
+    "NTN",
+    " N "
+  ],
+  "key": {
+    "C": "brasshaven:brass_nugget",
+    "N": "brasshaven:brass_ingot",
+    "T": "minecraft:candle"
+  },
+  "result": {
+    "id": "brasshaven:brass_chandelier",
+    "count": 1
+  }
+}

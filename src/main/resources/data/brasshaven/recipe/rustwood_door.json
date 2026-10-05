@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "##",
+    "##",
+    "##"
+  ],
+  "key": {
+    "#": "brasshaven:rustwood_planks"
+  },
+  "result": {
+    "id": "brasshaven:rustwood_door",
+    "count": 3
+  },
+  "group": "wooden_door"
+}

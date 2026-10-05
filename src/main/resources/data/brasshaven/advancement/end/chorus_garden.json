@@ -1,0 +1,42 @@
+{
+  "display": {
+    "icon": {
+      "id": "minecraft:chorus_flower"
+    },
+    "title": {
+      "translate": "advancements.brasshaven.end.chorus_garden.title"
+    },
+    "description": {
+      "translate": "advancements.brasshaven.end.chorus_garden.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "found": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:chorus_garden"
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "parent": "brasshaven:end/enter",
+  "rewards": {
+    "experience": 80,
+    "loot": [
+      "brasshaven:rewards/discovery"
+    ]
+  }
+}

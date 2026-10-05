@@ -1,0 +1,117 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "brasshaven:block/oyster_top",
+    "top": "brasshaven:block/oyster_top",
+    "side": "brasshaven:block/oyster_side",
+    "inside": "brasshaven:block/oyster_inside",
+    "pearl": "brasshaven:block/oyster_pearl"
+  },
+  "elements": [
+    {
+      "from": [
+        2,
+        0,
+        2
+      ],
+      "to": [
+        14,
+        2,
+        14
+      ],
+      "faces": {
+        "up": {
+          "texture": "#inside"
+        },
+        "down": {
+          "texture": "#top"
+        },
+        "north": {
+          "texture": "#side"
+        },
+        "south": {
+          "texture": "#side"
+        },
+        "east": {
+          "texture": "#side"
+        },
+        "west": {
+          "texture": "#side"
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        2,
+        2
+      ],
+      "to": [
+        14,
+        4,
+        14
+      ],
+      "faces": {
+        "up": {
+          "texture": "#top"
+        },
+        "down": {
+          "texture": "#inside"
+        },
+        "north": {
+          "texture": "#side"
+        },
+        "south": {
+          "texture": "#side"
+        },
+        "east": {
+          "texture": "#side"
+        },
+        "west": {
+          "texture": "#side"
+        }
+      },
+      "rotation": {
+        "origin": [
+          8,
+          2,
+          14
+        ],
+        "axis": "x",
+        "angle": 22.5
+      }
+    },
+    {
+      "from": [
+        7,
+        2,
+        6
+      ],
+      "to": [
+        9,
+        4,
+        8
+      ],
+      "faces": {
+        "up": {
+          "texture": "#pearl"
+        },
+        "down": {
+          "texture": "#pearl"
+        },
+        "north": {
+          "texture": "#pearl"
+        },
+        "south": {
+          "texture": "#pearl"
+        },
+        "east": {
+          "texture": "#pearl"
+        },
+        "west": {
+          "texture": "#pearl"
+        }
+      }
+    }
+  ]
+}

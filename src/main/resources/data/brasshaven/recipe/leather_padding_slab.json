@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "XXX"
+  ],
+  "key": {
+    "X": "brasshaven:leather_padding"
+  },
+  "result": {
+    "id": "brasshaven:leather_padding_slab",
+    "count": 6
+  }
+}

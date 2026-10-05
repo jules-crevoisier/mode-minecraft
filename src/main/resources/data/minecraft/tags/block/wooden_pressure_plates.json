@@ -1,7 +1,7 @@
 {
   "replace": false,
   "values": [
-    "wayfarers:glowwood_pressure_plate",
-    "wayfarers:rustwood_pressure_plate"
+    "brasshaven:glowwood_pressure_plate",
+    "brasshaven:rustwood_pressure_plate"
   ]
 }

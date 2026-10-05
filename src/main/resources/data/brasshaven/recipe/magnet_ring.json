@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "MRM",
+    "I I",
+    " I "
+  ],
+  "key": {
+    "M": "brasshaven:map_fragment",
+    "R": "minecraft:redstone",
+    "I": "minecraft:iron_ingot"
+  },
+  "result": {
+    "id": "brasshaven:magnet_ring",
+    "count": 1
+  }
+}

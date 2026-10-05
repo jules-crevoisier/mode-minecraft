@@ -1,6 +1,6 @@
 """Textured isometric renderer (needs Pillow). Uses the official 26.2 block item icons
 (npm package `minecraft-textures`) so previews look like the game, and synthesizes
-icons for Wayfarers blocks from their own 16x16 textures.
+icons for Brasshaven blocks from their own 16x16 textures.
 
 Projection matches the inventory icon: a block is 28 px wide, top face 14 px tall,
 side faces 16 px tall. Block (x, y, z) has its top-face centre at
@@ -13,7 +13,7 @@ from PIL import Image, ImageEnhance
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 CACHE = os.path.join(ROOT, "build", "icon_cache")
-MOD_TEX = os.path.join(ROOT, "src", "main", "resources", "assets", "wayfarers", "textures", "block")
+MOD_TEX = os.path.join(ROOT, "src", "main", "resources", "assets", "brasshaven", "textures", "block")
 _ICON_DIRS = [
     os.environ.get("MC_TEXTURES", ""),
     "/tmp/claude-0/-home-user-mode-minecraft/56f1bf77-a458-5793-adc7-375815e90045/scratchpad/mctex/package/dist/textures",
@@ -273,7 +273,7 @@ def icon(block_id, props=None):
         k = (ns0, name0, tuple(sorted(props.items())), "shaped")
         if k not in _icons:
             base_name = name0
-            if ns0 == "wayfarers":
+            if ns0 == "brasshaven":
                 base = _decor_base(name0)
                 cube = _mod_icon(base) if base else None
             else:
@@ -297,7 +297,7 @@ def icon(block_id, props=None):
 def _icon(block_id, props=None):
     ns, name = block_id.split(":")
     name = RENAMED.get(name, name)
-    keep_props = name.endswith("_slab") or (ns == "wayfarers" and _is_furniture(name))
+    keep_props = name.endswith("_slab") or (ns == "brasshaven" and _is_furniture(name))
     key = (ns, name, tuple(sorted((props or {}).items())) if keep_props else ())
     if key in _icons:
         return _icons[key]
@@ -316,7 +316,7 @@ def _icon(block_id, props=None):
         img = Image.new("RGBA", (32, 32), (0, 0, 0, 0))
         from PIL import ImageDraw
         ImageDraw.Draw(img).polygon([(16, 1), (30, 8), (16, 15), (2, 8)], fill=rgba)
-    elif ns == "wayfarers":
+    elif ns == "brasshaven":
         img = _furniture_icon(name, props) or _mod_icon(name)
     else:
         path = _manifest_map().get(f"minecraft:{name}")

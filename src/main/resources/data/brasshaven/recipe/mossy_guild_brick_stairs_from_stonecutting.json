@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "brasshaven:mossy_guild_bricks",
+  "result": {
+    "id": "brasshaven:mossy_guild_brick_stairs",
+    "count": 1
+  }
+}

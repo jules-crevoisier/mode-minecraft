@@ -383,7 +383,7 @@ def build_lair(bp, v):
                     "south" if abs(z - AZ) >= abs(x - AX) else "west" if x < AX else "east"
                 opp = {"north": "south", "south": "north", "west": "east", "east": "west"}[f]
                 bp.set(x, FLOOR + 1, z, stair("mossy_stone_brick_stairs", opp))
-    bp.boss_seal(AX, FLOOR + 1, AZ, "wayfarers:root_mother", 16)
+    bp.boss_seal(AX, FLOOR + 1, AZ, "brasshaven:root_mother", 16)
 
     # ------------------------------------------------------------------ dress the vault (reward)
     for x in range(VX0, VX1 + 1):

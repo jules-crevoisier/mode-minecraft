@@ -1,8 +1,0 @@
-{
-  "type": "forge:add_features",
-  "biomes": "#wayfarers:ocean/coral",
-  "features": [
-    "wayfarers:ocean_giant_coral"
-  ],
-  "step": "local_modifications"
-}

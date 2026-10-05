@@ -1,0 +1,23 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "minecraft:desert",
+      "required": false
+    },
+    {
+      "id": "minecraft:badlands",
+      "required": false
+    },
+    {
+      "id": "minecraft:wooded_badlands",
+      "required": false
+    },
+    {
+      "id": "minecraft:eroded_badlands",
+      "required": false
+    },
+    "brasshaven:volcanic_highlands",
+    "brasshaven:pale_dunes"
+  ]
+}

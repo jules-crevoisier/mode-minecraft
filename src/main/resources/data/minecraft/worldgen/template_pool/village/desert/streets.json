@@ -125,7 +125,7 @@
       "weight": 3,
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:village/desert/avenue",
+        "location": "brasshaven:village/desert/avenue",
         "processors": {
           "processors": []
         },

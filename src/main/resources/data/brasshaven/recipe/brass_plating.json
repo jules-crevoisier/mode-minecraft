@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "XX",
+    "XX"
+  ],
+  "key": {
+    "X": "brasshaven:brass_ingot"
+  },
+  "result": {
+    "id": "brasshaven:brass_plating",
+    "count": 8
+  }
+}

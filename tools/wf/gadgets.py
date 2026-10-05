@@ -1,6 +1,6 @@
 """Steam gadgets (Lot 4): Brass Wrench, Grappling Hook, Brass Glider, Rivet Gun (+ Rivets), Pocket Watch and Airship
 Compass. One table drives names, tooltips, sprites, 3D in-hand models, animated item models, recipes and manual
-pages, like metals.py and machines.py. Java behaviour lives in com.wayfarers.item.* (one class per gadget).
+pages, like metals.py and machines.py. Java behaviour lives in com.brasshaven.item.* (one class per gadget).
 
 Sprites are painted from simple shapes (circles, segments, boxes) on a 16x16 material grid, then shaded and outlined
 automatically, so every gadget has the same light (top-left) and the steampunk palette of STYLE_STEAMPUNK.md.
@@ -9,17 +9,17 @@ import math
 
 from .png import Canvas
 
-NS = "wayfarers"
+NS = "brasshaven"
 
 # id -> (english, french, [tooltip lines en], [tooltip lines fr])
 GADGETS = {
     "brass_wrench": ("Brass Wrench", "Clé à molette en laiton",
                      ["Use on a block: turn it (stairs, logs, chests, machines...).",
-                      "Sneak-use on a Wayfarers machine: change its setting.",
-                      "Sneak-use on Wayfarers decoration or furniture: pick it up."],
+                      "Sneak-use on a Brasshaven machine: change its setting.",
+                      "Sneak-use on Brasshaven decoration or furniture: pick it up."],
                      ["Clic droit sur un bloc : le tourne (escaliers, bûches, coffres...).",
-                      "Accroupi sur une machine Wayfarers : change son réglage.",
-                      "Accroupi sur un bloc déco ou un meuble Wayfarers : le ramasse."]),
+                      "Accroupi sur une machine Brasshaven : change son réglage.",
+                      "Accroupi sur un bloc déco ou un meuble Brasshaven : le ramasse."]),
     "grappling_hook": ("Grappling Hook", "Grappin",
                        ["Use: fire the claw (32 blocks); it reels you in.",
                         "Sneak or use again: let go.",
@@ -58,18 +58,18 @@ GADGETS = {
 ENTITIES = {"grappling_hook": ("Grappling Claw", "Griffe de grappin"), "rivet": ("Rivet", "Rivet")}
 
 MESSAGES = {
-    "message.wayfarers.wrench.cannot": ("Nothing to turn on this block.", "Rien à tourner sur ce bloc."),
-    "message.wayfarers.wrench.protected": ("You can't change blocks here.", "Tu ne peux pas modifier les blocs ici."),
-    "message.wayfarers.rivet_gun.empty": ("Out of rivets (Rivets or iron nuggets).", "Plus de rivets (rivets ou pépites de fer)."),
-    "message.wayfarers.watch": ("%s - day %s - %s - %s", "%s - jour %s - %s - %s"),
-    "message.wayfarers.watch.moon.full_moon": ("full moon", "pleine lune"),
-    "message.wayfarers.watch.moon.waning_gibbous": ("waning gibbous", "gibbeuse décroissante"),
-    "message.wayfarers.watch.moon.third_quarter": ("last quarter", "dernier quartier"),
-    "message.wayfarers.watch.moon.waning_crescent": ("waning crescent", "dernier croissant"),
-    "message.wayfarers.watch.moon.new_moon": ("new moon", "nouvelle lune"),
-    "message.wayfarers.watch.moon.waxing_crescent": ("waxing crescent", "premier croissant"),
-    "message.wayfarers.watch.moon.first_quarter": ("first quarter", "premier quartier"),
-    "message.wayfarers.watch.moon.waxing_gibbous": ("waxing gibbous", "gibbeuse croissante"),
+    "message.brasshaven.wrench.cannot": ("Nothing to turn on this block.", "Rien à tourner sur ce bloc."),
+    "message.brasshaven.wrench.protected": ("You can't change blocks here.", "Tu ne peux pas modifier les blocs ici."),
+    "message.brasshaven.rivet_gun.empty": ("Out of rivets (Rivets or iron nuggets).", "Plus de rivets (rivets ou pépites de fer)."),
+    "message.brasshaven.watch": ("%s - day %s - %s - %s", "%s - jour %s - %s - %s"),
+    "message.brasshaven.watch.moon.full_moon": ("full moon", "pleine lune"),
+    "message.brasshaven.watch.moon.waning_gibbous": ("waning gibbous", "gibbeuse décroissante"),
+    "message.brasshaven.watch.moon.third_quarter": ("last quarter", "dernier quartier"),
+    "message.brasshaven.watch.moon.waning_crescent": ("waning crescent", "dernier croissant"),
+    "message.brasshaven.watch.moon.new_moon": ("new moon", "nouvelle lune"),
+    "message.brasshaven.watch.moon.waxing_crescent": ("waxing crescent", "premier croissant"),
+    "message.brasshaven.watch.moon.first_quarter": ("first quarter", "premier quartier"),
+    "message.brasshaven.watch.moon.waxing_gibbous": ("waxing gibbous", "gibbeuse croissante"),
 }
 
 
@@ -114,18 +114,18 @@ def tags(write):
 
 # ------------------------------------------------------------------ manual (guide.py)
 PAGES = [
-    ("wrench", "wayfarers:brass_wrench", ("Brass Wrench", "Clé à molette en laiton"), [
+    ("wrench", "brasshaven:brass_wrench", ("Brass Wrench", "Clé à molette en laiton"), [
         ("Right-click a block to turn it: stairs, logs, chests, hoppers, signs, machines, furniture. Sneak: the other "
          "way. Doors, beds and double chests stay put.",
          "Clic droit sur un bloc pour le tourner : escaliers, bûches, coffres, entonnoirs, panneaux, machines, "
          "meubles. Accroupi : dans l'autre sens. Portes, lits et coffres doubles ne bougent pas."),
-        ("Sneak-right-click: a Wayfarers machine changes its setting; Wayfarers decoration or furniture comes back to "
+        ("Sneak-right-click: a Brasshaven machine changes its setting; Brasshaven decoration or furniture comes back to "
          "your inventory.",
-         "Accroupi + clic droit : une machine Wayfarers change de réglage ; un bloc déco ou un meuble Wayfarers "
+         "Accroupi + clic droit : une machine Brasshaven change de réglage ; un bloc déco ou un meuble Brasshaven "
          "revient dans ton inventaire."),
         ("Craft: three brass ingots and an iron ingot.", "Fabrication : trois lingots de laiton et un lingot de fer."),
-    ], ["wayfarers:brass_wrench"]),
-    ("grapple", "wayfarers:grappling_hook", ("Grappling Hook", "Grappin"), [
+    ], ["brasshaven:brass_wrench"]),
+    ("grapple", "brasshaven:grappling_hook", ("Grappling Hook", "Grappin"), [
         ("Right-click to fire the claw up to 32 blocks. When it bites a block, the chain reels you in; a small hop at "
          "the end lifts you onto the ledge.",
          "Clic droit pour lancer la griffe jusqu'à 32 blocs. Quand elle mord un bloc, la chaîne te tire ; un petit "
@@ -134,8 +134,8 @@ PAGES = [
          "Accroupi ou clic droit à nouveau pour lâcher. Aucun dégât de chute pendant la traction, ni juste après."),
         ("Craft, in a column: a tripwire hook, an iron chain, a brass ingot.",
          "Fabrication, en colonne : un crochet, une chaîne en fer, un lingot de laiton."),
-    ], ["wayfarers:grappling_hook"]),
-    ("glider", "wayfarers:brass_glider", ("Brass Glider", "Planeur en laiton"), [
+    ], ["brasshaven:grappling_hook"]),
+    ("glider", "brasshaven:brass_glider", ("Brass Glider", "Planeur en laiton"), [
         ("Hold it in either hand and jump from somewhere high: it opens by itself. You sink slowly and glide where "
          "you look, and landing never hurts.",
          "Tiens-le en main et saute d'un endroit élevé : il s'ouvre tout seul. Tu descends doucement vers là où tu "
@@ -146,8 +146,8 @@ PAGES = [
          "laiton."),
         ("Craft: three brass ingots, four leather and a phantom membrane.",
          "Fabrication : trois lingots de laiton, quatre cuirs et une membrane de phantom."),
-    ], ["wayfarers:brass_glider"]),
-    ("rivet_gun", "wayfarers:rivet_gun", ("Rivet Gun", "Pistolet à rivets"), [
+    ], ["brasshaven:brass_glider"]),
+    ("rivet_gun", "brasshaven:rivet_gun", ("Rivet Gun", "Pistolet à rivets"), [
         ("Right-click to fire a hot rivet: 5 damage, fast and nearly straight. Ammo: Rivets from your inventory, or "
          "iron nuggets.",
          "Clic droit : tire un rivet brûlant (5 dégâts), rapide et presque droit. Munitions : les rivets de ton "
@@ -156,23 +156,23 @@ PAGES = [
          "and a zinc nugget.",
          "Fabrication : trois lingots de laiton, un lingot de cuivre, un piston et une planche. 12 rivets : un lingot "
          "de fer, un lingot de cuivre et une pépite de zinc."),
-    ], ["wayfarers:rivet_gun", "wayfarers:rivet"]),
-    ("watch", "wayfarers:pocket_watch", ("Pocket Watch", "Montre à gousset"), [
+    ], ["brasshaven:rivet_gun", "brasshaven:rivet"]),
+    ("watch", "brasshaven:pocket_watch", ("Pocket Watch", "Montre à gousset"), [
         ("Its hand follows the sun, and a little window shows the sun by day and the moon by night.",
          "Son aiguille suit le soleil, et une petite fenêtre montre le soleil le jour et la lune la nuit."),
         ("Right-click: time, day number, moon phase and the biome you stand in.",
          "Clic droit : heure, numéro du jour, phase de lune et biome où tu te trouves."),
         ("Craft: a brass nugget, three brass ingots and a redstone.",
          "Fabrication : une pépite de laiton, trois lingots de laiton et une redstone."),
-    ], ["wayfarers:pocket_watch"]),
-    ("airship_compass", "wayfarers:airship_compass", ("Airship Compass", "Boussole de dirigeable"), [
+    ], ["brasshaven:pocket_watch"]),
+    ("airship_compass", "brasshaven:airship_compass", ("Airship Compass", "Boussole de dirigeable"), [
         ("Right-click to find the nearest Sky Harbour (in the End: the Void Ship Wreck). Its aether needle then keeps "
          "pointing there.",
          "Clic droit pour trouver le Port céleste le plus proche (dans l'End : l'Épave du vide). Son aiguille "
          "d'éther pointe ensuite vers lui."),
         ("Craft: a compass, an aether crystal and three brass ingots.",
          "Fabrication : une boussole, un cristal d'éther et trois lingots de laiton."),
-    ], ["wayfarers:airship_compass"]),
+    ], ["brasshaven:airship_compass"]),
 ]
 
 

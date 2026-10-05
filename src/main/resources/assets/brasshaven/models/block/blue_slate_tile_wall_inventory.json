@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/wall_inventory",
+  "textures": {
+    "wall": "brasshaven:block/blue_slate_tiles"
+  }
+}

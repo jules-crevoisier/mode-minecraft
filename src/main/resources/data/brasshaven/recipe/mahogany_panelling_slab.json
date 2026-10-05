@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "XXX"
+  ],
+  "key": {
+    "X": "brasshaven:mahogany_panelling"
+  },
+  "result": {
+    "id": "brasshaven:mahogany_panelling_slab",
+    "count": 6
+  }
+}

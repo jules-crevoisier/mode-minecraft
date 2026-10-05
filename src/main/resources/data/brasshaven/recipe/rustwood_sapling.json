@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:acacia_sapling",
+    "minecraft:raw_iron"
+  ],
+  "result": {
+    "id": "brasshaven:rustwood_sapling",
+    "count": 1
+  }
+}

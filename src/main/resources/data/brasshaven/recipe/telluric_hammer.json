@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "LLL",
+    "LSL",
+    " S "
+  ],
+  "key": {
+    "L": "brasshaven:lithite_shard",
+    "S": "minecraft:stick"
+  },
+  "result": {
+    "id": "brasshaven:telluric_hammer",
+    "count": 1
+  }
+}

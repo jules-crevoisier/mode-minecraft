@@ -1,9 +1,0 @@
-{
-  "type": "forge:add_features",
-  "biomes": "#wayfarers:ocean/all",
-  "features": [
-    "wayfarers:ocean_bubble_vents",
-    "wayfarers:ocean_rock_formations"
-  ],
-  "step": "local_modifications"
-}

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/wall_inventory",
+  "textures": {
+    "wall": "brasshaven:block/sooty_smokestack_bricks"
+  }
+}

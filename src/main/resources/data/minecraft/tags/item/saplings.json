@@ -1,7 +1,7 @@
 {
   "replace": false,
   "values": [
-    "wayfarers:glowwood_sapling",
-    "wayfarers:rustwood_sapling"
+    "brasshaven:glowwood_sapling",
+    "brasshaven:rustwood_sapling"
   ]
 }

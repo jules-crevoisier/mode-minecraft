@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Generate the Wayfarers GUI theme (brass, riveted iron and parchment) as GUI-atlas sprites.
+"""Generate the Brasshaven GUI theme (brass, riveted iron and parchment) as GUI-atlas sprites.
 
-Sprites land in assets/wayfarers/textures/gui/sprites/ (referenced in Java as wayfarers:<name>) with
+Sprites land in assets/brasshaven/textures/gui/sprites/ (referenced in Java as brasshaven:<name>) with
 nine-slice .mcmeta files, so every panel/button scales cleanly to any size. ``--mockup`` also renders
 build/previews/gui/*.png mockups of the screens with the real sprites, for review.
 """
@@ -13,7 +13,7 @@ import sys
 from PIL import Image, ImageDraw, ImageFont
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-OUT = os.path.join(ROOT, "src", "main", "resources", "assets", "wayfarers", "textures", "gui", "sprites")
+OUT = os.path.join(ROOT, "src", "main", "resources", "assets", "brasshaven", "textures", "gui", "sprites")
 PREVIEW = os.path.join(ROOT, "build", "previews", "gui")
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))  # wf.*
 
@@ -833,7 +833,7 @@ def mockup_guide(shots=(("wonders", 0), ("wonders", 1), ("brass_golem", 0), ("ke
         ttf = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 26)
     except OSError:
         ttf = ImageFont.load_default()
-    item_dir = os.path.join(ROOT, "src", "main", "resources", "assets", "wayfarers", "textures", "item")
+    item_dir = os.path.join(ROOT, "src", "main", "resources", "assets", "brasshaven", "textures", "item")
     total = sum(len(guide.layout(p[3][li], [x[li] for x in p[4]], bool(p[5]), lang=li)) for p in guide.PAGES)
     for pid, part in shots:
         _pid, _cat, icon_id, titles, paras, items = pages[pid]
@@ -865,7 +865,7 @@ def mockup_guide(shots=(("wonders", 0), ("wonders", 1), ("brass_golem", 0), ("ke
         def icon_at(rid, x, y, scale=1):
             name = rid.split(":")[1]
             path = os.path.join(item_dir, name + ".png")
-            if rid.startswith("wayfarers:") and os.path.exists(path):
+            if rid.startswith("brasshaven:") and os.path.exists(path):
                 im = Image.open(path).convert("RGBA").crop((0, 0, 16, 16)).resize((16 * scale, 16 * scale), Image.NEAREST)
                 m.im.alpha_composite(im, (x, y))
             else:
@@ -882,7 +882,7 @@ def mockup_guide(shots=(("wonders", 0), ("wonders", 1), ("brass_golem", 0), ("ke
             body = oy + 60 + len(title_lines) * 10 + 4
         else:
             icon_at(icon_id, px + 6, oy + 23)
-            title_lines = guide.wrap(titles[li] + (" " + guide.UI["guide.wayfarers.continued"][li] if part else ""), pw - 52,
+            title_lines = guide.wrap(titles[li] + (" " + guide.UI["guide.brasshaven.continued"][li] if part else ""), pw - 52,
                                      bold=True)
             y = oy + 25
             for t in title_lines:
@@ -916,7 +916,7 @@ def mockup_guide(shots=(("wonders", 0), ("wonders", 1), ("brass_golem", 0), ("ke
         title = "Manuel du Voyageur"
         texts.append((ox + W // 2 - guide.text_width(title, True) // 2, oy, title, PLATE_INK, False, True))
         texts.append((px + 34 - 3, oy + H - 27, "<", hexc("FFFFFF"), True))
-        nxt = ">" if last else guide.UI["guide.wayfarers.more"][li]
+        nxt = ">" if last else guide.UI["guide.brasshaven.more"][li]
         texts.append((px + pw - 34 - guide.text_width(nxt) // 2, oy + H - 27, nxt, hexc("FFFFFF"), True))
         pg = f"{sum(len(guide.layout(p[3][li], [x[li] for x in p[4]], bool(p[5]), lang=li)) for p in guide.PAGES[:guide.PAGES.index(pages[pid])]) + part + 1} / {total}"
         texts.append((px + pw // 2 - guide.text_width(pg) // 2, oy + H - 27, pg, INK_SOFT, False))
@@ -937,7 +937,7 @@ def mockup_hud():
                           else (24 + (x * 7 + y * 3) % 9, 34 + (x * 5 + y * 11) % 11, 22, 255))
     worldmap.draw_minimap(sys.modules[__name__], m, worldmap.fake_world(420, 300), 4, 4, 56,
                           coords=("-1732, 129, -461", "Champs fleuris"))
-    item = os.path.join(ROOT, "src", "main", "resources", "assets", "wayfarers", "textures", "item")
+    item = os.path.join(ROOT, "src", "main", "resources", "assets", "brasshaven", "textures", "item")
 
     def item_icon(name, x, y):
         m.im.alpha_composite(Image.open(os.path.join(item, name + ".png")).convert("RGBA").crop((0, 0, 16, 16)), (x, y))

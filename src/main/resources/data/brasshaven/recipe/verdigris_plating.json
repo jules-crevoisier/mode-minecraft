@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "brasshaven:copper_plating",
+    "minecraft:clay_ball"
+  ],
+  "result": {
+    "id": "brasshaven:verdigris_plating",
+    "count": 1
+  }
+}

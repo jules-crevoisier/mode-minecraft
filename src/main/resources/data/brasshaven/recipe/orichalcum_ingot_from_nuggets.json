@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "XXX",
+    "XXX",
+    "XXX"
+  ],
+  "key": {
+    "X": "brasshaven:orichalcum_nugget"
+  },
+  "result": {
+    "id": "brasshaven:orichalcum_ingot",
+    "count": 1
+  }
+}

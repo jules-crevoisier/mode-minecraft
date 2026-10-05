@@ -101,8 +101,8 @@ def banner(w=1920, h=640):
     title = ImageFont.truetype(SERIF, 130)
     sub = ImageFont.truetype(SERIF, 38)
     small = ImageFont.truetype(SANS, 28)
-    d.text((86, 150), "Wayfarers", font=title, fill=INK)
-    d.text((80, 144), "Wayfarers", font=title, fill=BRASS)
+    d.text((86, 150), "Brasshaven", font=title, fill=INK)
+    d.text((80, 144), "Brasshaven", font=title, fill=BRASS)
     d.line([(84, 300), (700, 300)], fill=BRASS_DARK, width=4)
     d.text((84, 320), "Steampunk adventure for Minecraft", font=sub, fill=(232, 214, 180))
     d.text((84, 390), "Mega-structures · machines · quests · magic\nautomatons · shared server map",
@@ -119,7 +119,7 @@ def gallery():
     for name in SHOTS:
         dest = os.path.join(out, f"{name}.png")
         try:
-            urllib.request.urlretrieve(PREVIEWS + f"wayfarers-shot-{name}.png", dest)
+            urllib.request.urlretrieve(PREVIEWS + f"brasshaven-shot-{name}.png", dest)
             got.append(name)
         except OSError as e:
             print(f"skip {name}: {e}")

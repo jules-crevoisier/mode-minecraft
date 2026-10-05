@@ -385,7 +385,7 @@ def build_lair(bp):
         a = 2 * math.pi * k / 8
         bp.set(round(AX + math.cos(a) * 5.4), FLOOR + 1, round(AZ + math.sin(a) * 5.4),
                "candle[candles=4,lit=true,waterlogged=false]")
-    bp.boss_seal(AX, FLOOR, AZ, "wayfarers:swamp_crone", 16)
+    bp.boss_seal(AX, FLOOR, AZ, "brasshaven:swamp_crone", 16)
 
     # ------------------------------------------------------------------ dress the hoard
     for x in range(HX0, HX1 + 1):

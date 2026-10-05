@@ -21,7 +21,7 @@ from ..arch import Palette
 from ..parts import LOOT, MOD
 from .lair_bell_keeper import cove, hang, hollow, opening, solid
 
-W = "wayfarers:"
+W = "brasshaven:"
 BRASS, COPPER, IRON = W + "brass_plating", W + "copper_plating", W + "dark_iron_plating"
 TREAD, GEAR, PIPES, GAUGE = W + "diamond_plate", W + "gear_panel", W + "copper_pipes", W + "pressure_gauge"
 EDISON, AETHER, MAHOGANY, LEATHER, SMOKE = (W + "edison_lamp", W + "aether_conduit", W + "mahogany_panelling",
@@ -259,7 +259,7 @@ def _furnish_gearworks(bp):
         bp.set(x, L1 + 1, 10, W + "copper_pipe[axis=x]")
     bp.set(7, L1 + 2, 9, W + "valve_wheel[facing=north]")
     # the spider nest among the machines
-    bp.spawner(7, L1 + 1, 7, "wayfarers:clockwork_spider")
+    bp.spawner(7, L1 + 1, 7, "brasshaven:clockwork_spider")
     bp.set(7, L1 + 2, 7, W + "brass_plating_slab[type=bottom,waterlogged=false]")
     bp.chest(x0 + 1, L1 + 1, z1 - 1, "east", loot=LOOT + "clockwork_workshop")
     bp.chest(x1 - 1, L1 + 1, z0 + 1, "west", loot=LOOT + "clockwork_workshop")
@@ -313,7 +313,7 @@ def _furnish_vault(bp):
         top = dome_y(8)
         bp.chain(x, top - 2, z, top)
         bp.set(x, top - 3, z, HANGING)
-    bp.boss_seal(cx, L2, cz, "wayfarers:grand_clockmaker", AR)
+    bp.boss_seal(cx, L2, cz, "brasshaven:grand_clockmaker", AR)
 
 
 def _furnish_study(bp):
@@ -323,7 +323,7 @@ def _furnish_study(bp):
     for x in range(x0 + 2, x0 + 6):
         bp.set(x, L2 + 1, z0 + 1, W + "mahogany_table")
     bp.set(x0 + 3, L2 + 2, z0 + 1, W + "pressure_gauge")
-    bp.set(x0 + 8, L2 + 1, z0 + 2, "wayfarers:brass_block")
+    bp.set(x0 + 8, L2 + 1, z0 + 2, "brasshaven:brass_block")
     bp.set(x0 + 8, L2 + 2, z0 + 2, GEAR)
     bp.set(x0 + 9, L2 + 1, z0 + 2, W + "copper_pipe[axis=y]")
     for z in range(z0 + 3, z1 - 2):

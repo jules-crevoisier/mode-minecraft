@@ -1,0 +1,37 @@
+{
+  "type": "brasshaven:fitted_jigsaw",
+  "biomes": "#brasshaven:has_structure/void_nest",
+  "step": "surface_structures",
+  "spawn_overrides": {},
+  "terrain_adaptation": "none",
+  "start_pool": "brasshaven:void_nest/start",
+  "size": 1,
+  "max_distance_from_center": 80,
+  "use_expansion_hack": false,
+  "start_height": {
+    "type": "minecraft:uniform",
+    "min_inclusive": {
+      "absolute": 58
+    },
+    "max_inclusive": {
+      "absolute": 75
+    }
+  },
+  "fit": {
+    "mode": "sky",
+    "spread": 8,
+    "slope": 0.8,
+    "wet": 0.05,
+    "min_wet": 0.0,
+    "land": 0.5,
+    "drop": 10,
+    "depth": 0,
+    "clearance": 4,
+    "cover": 0,
+    "lift": 32,
+    "open": 0.0,
+    "ground": 49,
+    "pond": 0.0,
+    "theme": "stone"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "XXX",
+    "XXX",
+    "XXX"
+  ],
+  "key": {
+    "X": "brasshaven:brass_ingot"
+  },
+  "result": {
+    "id": "brasshaven:brass_block",
+    "count": 1
+  }
+}

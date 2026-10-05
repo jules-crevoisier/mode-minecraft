@@ -1,0 +1,9 @@
+{
+  "type": "brasshaven:toggled_features",
+  "toggle": "fallenLogs",
+  "biomes": [
+    "minecraft:cherry_grove"
+  ],
+  "features": "brasshaven:world/fallen_cherry_logs",
+  "step": "vegetal_decoration"
+}

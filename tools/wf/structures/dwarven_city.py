@@ -21,7 +21,7 @@ from ..arch import Palette, stair, slab
 from ..defs import Piece, StructureDef, register
 from ..parts import LOOT, MOD
 
-W = "wayfarers:"
+W = "brasshaven:"
 GILD, MITH = W + "gilded_trim", W + "mithril_block"
 POL, TILE, CHIS, BRK = "polished_deepslate", "deepslate_tiles", "chiseled_deepslate", "deepslate_bricks"
 BLACK, BLACK_BR = "polished_blackstone", "polished_blackstone_bricks"
@@ -542,7 +542,7 @@ def throne_room(bp):
     for (x, z) in ((-6, cz), (6, cz)):
         bp.set(x, fy + 1, z, POL_WALL)
         bp.lantern(x, fy + 2, z)
-    bp.spawner(-3, fy + 1, cz + 3, "wayfarers:skeleton_knight")
+    bp.spawner(-3, fy + 1, cz + 3, "brasshaven:skeleton_knight")
 
 
 def secret_way(bp):
@@ -598,7 +598,7 @@ def vault(bp):
     for (x, z) in ((-5, cz), (5, cz)):
         bp.set(x, y0 + 5, z, BLACK_BR)
         bp.lantern(x, y0 + 4, z, hanging=True)
-    bp.spawner(0, y0 + 1, cz + 3, "wayfarers:skeleton_knight")
+    bp.spawner(0, y0 + 1, cz + 3, "brasshaven:skeleton_knight")
 
 
 # ------------------------------------------------------------------ the outer city

@@ -396,7 +396,7 @@ DISPLAY = {
 
 def model(item_id):
     arch, *_ = HELD[item_id]
-    tex = f"wayfarers:item/3d/{item_id}"
+    tex = f"brasshaven:item/3d/{item_id}"
     elements = []
     for x0, y0, z0, x1, y1, z1, key in ARCHETYPES[arch]():
         uv = _cell_uv(key)
@@ -406,10 +406,10 @@ def model(item_id):
 
 
 def item_definition(item_id):
-    flat = {"type": "minecraft:model", "model": f"wayfarers:item/{item_id}"}
+    flat = {"type": "minecraft:model", "model": f"brasshaven:item/{item_id}"}
     return {"model": {"type": "minecraft:select", "property": "minecraft:display_context",
                       "cases": [{"when": ["gui", "ground", "fixed", "on_shelf"], "model": flat}],
-                      "fallback": {"type": "minecraft:model", "model": f"wayfarers:item/{item_id}_3d"}}}
+                      "fallback": {"type": "minecraft:model", "model": f"brasshaven:item/{item_id}_3d"}}}
 
 
 def textures():

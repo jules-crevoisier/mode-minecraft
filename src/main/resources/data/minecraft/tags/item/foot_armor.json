@@ -1,13 +1,13 @@
 {
   "replace": false,
   "values": [
-    "wayfarers:explorer_boots",
-    "wayfarers:ember_boots",
-    "wayfarers:void_boots",
-    "wayfarers:brass_boots",
-    "wayfarers:mithril_boots",
-    "wayfarers:aether_boots",
-    "wayfarers:arcane_boots",
-    "wayfarers:flippers"
+    "brasshaven:explorer_boots",
+    "brasshaven:ember_boots",
+    "brasshaven:void_boots",
+    "brasshaven:brass_boots",
+    "brasshaven:mithril_boots",
+    "brasshaven:aether_boots",
+    "brasshaven:arcane_boots",
+    "brasshaven:flippers"
   ]
 }

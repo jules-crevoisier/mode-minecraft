@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "LL",
+    "LS",
+    " S"
+  ],
+  "key": {
+    "L": "brasshaven:lithite_shard",
+    "S": "minecraft:stick"
+  },
+  "result": {
+    "id": "brasshaven:lumber_axe",
+    "count": 1
+  }
+}

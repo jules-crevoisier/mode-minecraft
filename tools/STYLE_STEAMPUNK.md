@@ -1,4 +1,4 @@
-# Wayfarers steampunk style guide
+# Brasshaven steampunk style guide
 
 This is the reference for every steampunk texture, model and build (blocks in `wf/texgen_steam.py`, decor in `wf/decor.py`, metals in `wf/metals.py`).
 

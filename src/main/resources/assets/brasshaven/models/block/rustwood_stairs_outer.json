@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/outer_stairs",
+  "textures": {
+    "bottom": "brasshaven:block/rustwood_planks",
+    "top": "brasshaven:block/rustwood_planks",
+    "side": "brasshaven:block/rustwood_planks"
+  }
+}

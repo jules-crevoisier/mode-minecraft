@@ -1,12 +1,12 @@
 {
   "replace": false,
   "values": [
-    "wayfarers:zinc_ore",
-    "wayfarers:deepslate_zinc_ore",
-    "wayfarers:zinc_block",
-    "wayfarers:raw_zinc_block",
-    "wayfarers:brass_block",
-    "wayfarers:orichalcum_block",
-    "wayfarers:raw_orichalcum_block"
+    "brasshaven:zinc_ore",
+    "brasshaven:deepslate_zinc_ore",
+    "brasshaven:zinc_block",
+    "brasshaven:raw_zinc_block",
+    "brasshaven:brass_block",
+    "brasshaven:orichalcum_block",
+    "brasshaven:raw_orichalcum_block"
   ]
 }

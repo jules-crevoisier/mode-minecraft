@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "sealed=false": {
+      "model": "brasshaven:block/mist_gate"
+    },
+    "sealed=true": {
+      "model": "brasshaven:block/mist_gate"
+    }
+  }
+}

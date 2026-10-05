@@ -19,10 +19,10 @@ import math
 from ..arch import Palette, slab, stair
 from ..parts import LOOT, MOB, MOD
 
-EB = "wayfarers:ember_bricks"
-EBS = "wayfarers:ember_brick_stairs"
-LAMP = "wayfarers:ember_lamp"
-GILD = "wayfarers:gilded_trim"
+EB = "brasshaven:ember_bricks"
+EBS = "brasshaven:ember_brick_stairs"
+LAMP = "brasshaven:ember_lamp"
+GILD = "brasshaven:gilded_trim"
 PBB = "polished_blackstone_bricks"
 CPBB = "cracked_polished_blackstone_bricks"
 PBBS = "polished_blackstone_brick_stairs"
@@ -443,7 +443,7 @@ def _arena(L):
             bp.lantern(ax_, -5, cz + 3, hanging=True, soul=cz % 10 != 0)
             L.open.add((ax_, -5, cz + 3))
     # the central sigil and the seal of the fight
-    bp.boss_seal(AX, -13, AZ, "wayfarers:ash_lord", AR)
+    bp.boss_seal(AX, -13, AZ, "brasshaven:ash_lord", AR)
     L.open.add((AX, -13, AZ))
     # light: chandeliers over the nave and a ring of lamps around the grate above the centre
     for z in (AZ - 7, AZ + 8):

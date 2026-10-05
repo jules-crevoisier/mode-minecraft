@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "X  ",
+    "XX ",
+    "XXX"
+  ],
+  "key": {
+    "X": "brasshaven:guild_roof_tiles"
+  },
+  "result": {
+    "id": "brasshaven:guild_roof_tile_stairs",
+    "count": 4
+  }
+}

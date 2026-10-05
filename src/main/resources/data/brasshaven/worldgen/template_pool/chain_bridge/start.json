@@ -1,0 +1,132 @@
+{
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "brasshaven:chunked_template",
+        "size": [
+          37,
+          88,
+          101
+        ],
+        "cells": [
+          {
+            "location": "brasshaven:chain_bridge/bridge/x0_z0",
+            "offset": [
+              0,
+              0,
+              0
+            ],
+            "size": [
+              18,
+              78,
+              25
+            ],
+            "blocks": 11500
+          },
+          {
+            "location": "brasshaven:chain_bridge/bridge/x0_z1",
+            "offset": [
+              1,
+              0,
+              25
+            ],
+            "size": [
+              17,
+              49,
+              25
+            ],
+            "blocks": 1642
+          },
+          {
+            "location": "brasshaven:chain_bridge/bridge/x0_z2",
+            "offset": [
+              1,
+              0,
+              50
+            ],
+            "size": [
+              17,
+              48,
+              26
+            ],
+            "blocks": 1695
+          },
+          {
+            "location": "brasshaven:chain_bridge/bridge/x0_z3",
+            "offset": [
+              0,
+              0,
+              76
+            ],
+            "size": [
+              18,
+              88,
+              25
+            ],
+            "blocks": 12205
+          },
+          {
+            "location": "brasshaven:chain_bridge/bridge/x1_z0",
+            "offset": [
+              18,
+              0,
+              0
+            ],
+            "size": [
+              19,
+              78,
+              25
+            ],
+            "blocks": 12142
+          },
+          {
+            "location": "brasshaven:chain_bridge/bridge/x1_z1",
+            "offset": [
+              18,
+              0,
+              25
+            ],
+            "size": [
+              18,
+              49,
+              25
+            ],
+            "blocks": 1778
+          },
+          {
+            "location": "brasshaven:chain_bridge/bridge/x1_z2",
+            "offset": [
+              18,
+              0,
+              50
+            ],
+            "size": [
+              18,
+              48,
+              26
+            ],
+            "blocks": 1804
+          },
+          {
+            "location": "brasshaven:chain_bridge/bridge/x1_z3",
+            "offset": [
+              18,
+              0,
+              76
+            ],
+            "size": [
+              19,
+              88,
+              25
+            ],
+            "blocks": 12749
+          }
+        ],
+        "projection": "rigid",
+        "processors": "brasshaven:none"
+      }
+    }
+  ]
+}

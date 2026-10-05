@@ -1,0 +1,111 @@
+{
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "brasshaven:chunked_template",
+        "size": [
+          63,
+          65,
+          68
+        ],
+        "cells": [
+          {
+            "location": "brasshaven:witch_huts/huts/x0_z0",
+            "offset": [
+              5,
+              0,
+              0
+            ],
+            "size": [
+              27,
+              48,
+              23
+            ],
+            "blocks": 7567
+          },
+          {
+            "location": "brasshaven:witch_huts/huts/x0_z1",
+            "offset": [
+              0,
+              0,
+              23
+            ],
+            "size": [
+              32,
+              55,
+              22
+            ],
+            "blocks": 12468
+          },
+          {
+            "location": "brasshaven:witch_huts/huts/x0_z2",
+            "offset": [
+              1,
+              0,
+              45
+            ],
+            "size": [
+              31,
+              51,
+              23
+            ],
+            "blocks": 4485
+          },
+          {
+            "location": "brasshaven:witch_huts/huts/x1_z0",
+            "offset": [
+              32,
+              0,
+              6
+            ],
+            "size": [
+              28,
+              65,
+              17
+            ],
+            "blocks": 3869
+          },
+          {
+            "location": "brasshaven:witch_huts/huts/x1_z1",
+            "offset": [
+              32,
+              0,
+              23
+            ],
+            "size": [
+              31,
+              62,
+              22
+            ],
+            "blocks": 9706
+          },
+          {
+            "location": "brasshaven:witch_huts/huts/x1_z2",
+            "offset": [
+              32,
+              7,
+              45
+            ],
+            "size": [
+              30,
+              40,
+              23
+            ],
+            "blocks": 4205
+          }
+        ],
+        "projection": "rigid",
+        "processors": "brasshaven:none",
+        "ground_level_delta": 32,
+        "footprint": [
+          4,
+          10,
+          58,
+          63
+        ]
+      }
+    }
+  ]
+}

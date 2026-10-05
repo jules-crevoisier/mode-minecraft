@@ -32,20 +32,20 @@ FURNITURE = {
     "mahogany_table": dict(
         en="Mahogany Table", fr="Table en acajou", mount="none", sound="WOOD", color="COLOR_BROWN", tool="axe",
         boxes=[(0, 13, 0, 16, 16, 16, "f_mahogany"), (1, 12, 1, 15, 13, 15, "f_brass")] + _legs(12),
-        recipe=(["SSS", "P P"], {"S": "wayfarers:mahogany_panelling_slab", "P": "stick"}, 1)),
+        recipe=(["SSS", "P P"], {"S": "brasshaven:mahogany_panelling_slab", "P": "stick"}, 1)),
     "mahogany_chair": dict(
         en="Mahogany Chair", fr="Chaise en acajou", mount="player", sound="WOOD", color="COLOR_BROWN", tool="axe",
         boxes=[(2, 7, 2, 14, 9, 14, "f_mahogany"), (3, 9, 3, 13, 10, 13, "f_leather"),
                (2, 9, 12, 14, 22, 14, "f_mahogany"), (3, 12, 11, 13, 20, 12, "f_leather"),
                (2, 22, 12, 14, 23, 14, "f_brass")] + _legs(7, inset=2),
         shape=[(2, 0, 2, 14, 10, 14), (2, 10, 12, 14, 23, 14)],
-        recipe=(["P  ", "PLP", "S S"], {"P": "wayfarers:mahogany_panelling", "L": "leather", "S": "stick"}, 2)),
+        recipe=(["P  ", "PLP", "S S"], {"P": "brasshaven:mahogany_panelling", "L": "leather", "S": "stick"}, 2)),
     "wall_shelf": dict(
         en="Wall Shelf", fr="Étagère murale", mount="wall", sound="WOOD", color="COLOR_BROWN", tool="axe",
         boxes=[(0, 7, 8, 16, 9, 16, "f_mahogany"), (1, 3, 14, 3, 7, 16, "f_brass"), (13, 3, 14, 15, 7, 16, "f_brass"),
                (1, 5, 12, 3, 7, 14, "f_brass"), (13, 5, 12, 15, 7, 14, "f_brass")],
         shape=[(0, 3, 8, 16, 9, 16)],
-        recipe=(["SSS", "N N"], {"S": "wayfarers:mahogany_panelling_slab", "N": "wayfarers:brass_nugget"}, 2)),
+        recipe=(["SSS", "N N"], {"S": "brasshaven:mahogany_panelling_slab", "N": "brasshaven:brass_nugget"}, 2)),
     "brass_chandelier": dict(
         en="Brass Chandelier", fr="Lustre en laiton", mount="none", sound="METAL", color="GOLD", light=15,
         boxes=[(7, 9, 7, 9, 16, 9, "f_chain"), (6, 8, 6, 10, 10, 10, "f_brass"),
@@ -55,13 +55,13 @@ FURNITURE = {
               + [(x, 7, z, x + 2, 11, z + 2, "f_wax") for x, z in ((2, 7), (12, 7), (7, 2), (7, 12))]
               + [(x + 0.5, 11, z + 0.5, x + 1.5, 12, z + 1.5, "f_bulb") for x, z in ((2, 7), (12, 7), (7, 2), (7, 12))],
         shape=[(2, 6, 2, 14, 16, 14)],
-        recipe=([" C ", "NTN", " N "], {"C": "wayfarers:brass_nugget", "N": "wayfarers:brass_ingot", "T": "candle"}, 1)),
+        recipe=([" C ", "NTN", " N "], {"C": "brasshaven:brass_nugget", "N": "brasshaven:brass_ingot", "T": "candle"}, 1)),
     "hanging_edison_lamp": dict(
         en="Hanging Edison Lamp", fr="Lampe Edison suspendue", mount="none", sound="GLASS", color="COLOR_ORANGE", light=15,
         boxes=[(7.5, 9, 7.5, 8.5, 16, 8.5, "f_iron"), (6, 8, 6, 10, 9, 10, "f_brass"), (6.5, 3, 6.5, 9.5, 8, 9.5, "f_bulb"),
                (7, 2, 7, 9, 3, 9, "f_bulb")],
         shape=[(6, 2, 6, 10, 16, 10)],
-        recipe=(["N", "L"], {"N": "iron_nugget", "L": "wayfarers:edison_lamp"}, 2)),
+        recipe=(["N", "L"], {"N": "iron_nugget", "L": "brasshaven:edison_lamp"}, 2)),
     "copper_pipe": dict(
         en="Copper Pipe", fr="Tuyau en cuivre", mount="axis", sound="COPPER", color="COLOR_ORANGE",
         boxes=[(5, 0, 5, 11, 16, 11, "f_copper"), (4, 0, 4, 12, 2, 12, "f_brass"), (4, 14, 4, 12, 16, 12, "f_brass")],
@@ -73,21 +73,21 @@ FURNITURE = {
         boxes=[(0, 14, 0, 16, 16, 2, "f_brass"), (0, 6, 0.5, 16, 7, 1.5, "f_iron")]
               + [(x, 0, 0.5, x + 1, 14, 1.5, "f_iron") for x in (1, 5, 10, 14)],
         shape=[(0, 0, 0, 16, 16, 2)],
-        recipe=(["BBB", "N N"], {"B": "wayfarers:brass_ingot", "N": "iron_nugget"}, 6)),
+        recipe=(["BBB", "N N"], {"B": "brasshaven:brass_ingot", "N": "iron_nugget"}, 6)),
     "wall_cog": dict(
         en="Wall Cog", fr="Engrenage mural", mount="wall", sound="METAL", color="GOLD",
         boxes=[(2, 2, 15, 14, 14, 16, "f_brass"), (6, 0, 15, 10, 16, 16, "f_brass"), (0, 6, 15, 16, 10, 16, "f_brass"),
                (3, 3, 14.5, 13, 13, 15, "f_copper"), (6, 6, 13.5, 10, 10, 14.5, "f_iron")],
         shape=[(0, 0, 13, 16, 16, 16)],
         # a Brass Gear framed by nuggets (an ingot there would be the Brass Gear's own recipe)
-        recipe=([" N ", "NGN", " N "], {"N": "wayfarers:brass_nugget", "G": "wayfarers:brass_gear"}, 2)),
+        recipe=([" N ", "NGN", " N "], {"N": "brasshaven:brass_nugget", "G": "brasshaven:brass_gear"}, 2)),
     "valve_wheel": dict(
         en="Steam Valve", fr="Vanne à vapeur", mount="wall", sound="METAL", color="COLOR_RED",
         boxes=[(3, 3, 13, 13, 4, 14, "f_red"), (3, 12, 13, 13, 13, 14, "f_red"), (3, 4, 13, 4, 12, 14, "f_red"),
                (12, 4, 13, 13, 12, 14, "f_red"), (7.5, 4, 13, 8.5, 12, 14, "f_iron"), (4, 7.5, 13, 12, 8.5, 14, "f_iron"),
                (7, 7, 13, 9, 9, 16, "f_brass"), (5, 5, 15, 11, 11, 16, "f_copper")],
         shape=[(3, 3, 13, 13, 13, 16)],
-        recipe=(["R", "C"], {"R": "red_dye", "C": "wayfarers:copper_pipe"}, 1)),
+        recipe=(["R", "C"], {"R": "red_dye", "C": "brasshaven:copper_pipe"}, 1)),
 }
 
 
@@ -107,12 +107,12 @@ def model(fid):
         elements.append({"from": [x0, y0, z0], "to": [x1, y1, z1],
                          "faces": {face: {"texture": f"#{tex}"} for face in ("north", "south", "east", "west", "up", "down")}})
     return {"parent": "minecraft:block/block", "render_type": "minecraft:cutout", "ambientocclusion": False,
-            "textures": {"particle": f"wayfarers:block/{used[0]}", **{t: f"wayfarers:block/{t}" for t in used}},
+            "textures": {"particle": f"brasshaven:block/{used[0]}", **{t: f"brasshaven:block/{t}" for t in used}},
             "elements": elements}
 
 
 def blockstate(fid):
-    m = f"wayfarers:block/{fid}"
+    m = f"brasshaven:block/{fid}"
     mount = FURNITURE[fid]["mount"]
     if mount == "none":
         return {"variants": {"": {"model": m}}}
@@ -126,7 +126,7 @@ def blockstate(fid):
 def lang():
     en, fr = {}, {}
     for fid, f in FURNITURE.items():
-        en[f"block.wayfarers.{fid}"], fr[f"block.wayfarers.{fid}"] = f["en"], f["fr"]
+        en[f"block.brasshaven.{fid}"], fr[f"block.brasshaven.{fid}"] = f["en"], f["fr"]
     return en, fr
 
 
@@ -136,12 +136,12 @@ def _num(v):
 
 def java():
     L = [
-        "package com.wayfarers.generated;",
+        "package com.brasshaven.generated;",
         "",
-        "import com.wayfarers.block.FurnitureBlock;",
-        "import com.wayfarers.item.TooltipBlockItem;",
-        "import com.wayfarers.registry.ModBlocks;",
-        "import com.wayfarers.registry.ModItems;",
+        "import com.brasshaven.block.FurnitureBlock;",
+        "import com.brasshaven.item.TooltipBlockItem;",
+        "import com.brasshaven.registry.ModBlocks;",
+        "import com.brasshaven.registry.ModItems;",
         "import net.minecraft.world.item.Item;",
         "import net.minecraft.world.level.block.Block;",
         "import net.minecraft.world.level.block.SoundType;",

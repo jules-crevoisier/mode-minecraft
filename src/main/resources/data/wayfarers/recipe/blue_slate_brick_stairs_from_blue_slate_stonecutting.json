@@ -1,8 +1,0 @@
-{
-  "type": "minecraft:stonecutting",
-  "ingredient": "wayfarers:blue_slate",
-  "result": {
-    "id": "wayfarers:blue_slate_brick_stairs",
-    "count": 1
-  }
-}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "D",
+    "A",
+    "D"
+  ],
+  "key": {
+    "D": "brasshaven:dark_iron_plating",
+    "A": "brasshaven:aether_crystal"
+  },
+  "result": {
+    "id": "brasshaven:aether_conduit",
+    "count": 2
+  }
+}

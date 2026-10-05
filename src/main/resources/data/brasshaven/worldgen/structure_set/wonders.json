@@ -1,0 +1,53 @@
+{
+  "structures": [
+    {
+      "structure": "brasshaven:clockwork_citadel",
+      "weight": 1
+    },
+    {
+      "structure": "brasshaven:sky_harbour",
+      "weight": 1
+    },
+    {
+      "structure": "brasshaven:sylvan_palace",
+      "weight": 1
+    },
+    {
+      "structure": "brasshaven:inventor_manor",
+      "weight": 1
+    },
+    {
+      "structure": "brasshaven:sky_isles",
+      "weight": 1
+    },
+    {
+      "structure": "brasshaven:geothermal_foundry",
+      "weight": 1
+    },
+    {
+      "structure": "brasshaven:tesla_observatory",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "brasshaven:curated_spread",
+    "salt": 8919750,
+    "spacing": 120,
+    "separation": 40,
+    "avoid": [
+      {
+        "set": "minecraft:villages",
+        "chunks": 10
+      },
+      {
+        "set": "minecraft:pillager_outposts",
+        "chunks": 6
+      },
+      {
+        "set": "minecraft:woodland_mansions",
+        "chunks": 8
+      }
+    ],
+    "min_spawn_distance": 32
+  }
+}

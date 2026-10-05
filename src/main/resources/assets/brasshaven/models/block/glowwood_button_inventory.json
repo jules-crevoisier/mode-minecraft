@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/button_inventory",
+  "textures": {
+    "texture": "brasshaven:block/glowwood_planks"
+  }
+}

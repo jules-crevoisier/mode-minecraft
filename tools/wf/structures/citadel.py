@@ -31,8 +31,8 @@ HULL = Palette({"prismarine_bricks": 8, "prismarine": 3}, seed=3, scale=1.6)
 TRIM = "dark_prismarine"
 TRIM_S = "dark_prismarine_stairs"
 BRICK_S = "prismarine_brick_stairs"
-LB = "wayfarers:lithite_bricks"
-LC = "wayfarers:lithite_block"
+LB = "brasshaven:lithite_bricks"
+LC = "brasshaven:lithite_block"
 SEA = "sea_lantern"
 GLASS = "glass"
 AIR = "minecraft:air"
@@ -425,7 +425,7 @@ def arena(bp):
         bp.set(x, 2, z, "prismarine_bricks")
         bp.set(x, 3, z, TRIM)
         bp.set(x, 4, z, SEA)
-    bp.boss_seal(ax, 3, az, "wayfarers:drowned_warden", AR)
+    bp.boss_seal(ax, 3, az, "brasshaven:drowned_warden", AR)
     # exterior flying buttresses around the drum
     for deg in (30, 150, 210, 240, 300, 330):
         a = math.radians(deg)

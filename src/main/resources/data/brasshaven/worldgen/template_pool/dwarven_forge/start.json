@@ -1,0 +1,188 @@
+{
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "brasshaven:chunked_template",
+        "size": [
+          99,
+          83,
+          67
+        ],
+        "cells": [
+          {
+            "location": "brasshaven:dwarven_forge/forge/x0_z0",
+            "offset": [
+              6,
+              12,
+              4
+            ],
+            "size": [
+              19,
+              70,
+              18
+            ],
+            "blocks": 10209
+          },
+          {
+            "location": "brasshaven:dwarven_forge/forge/x0_z1",
+            "offset": [
+              0,
+              1,
+              22
+            ],
+            "size": [
+              25,
+              82,
+              23
+            ],
+            "blocks": 31494
+          },
+          {
+            "location": "brasshaven:dwarven_forge/forge/x0_z2",
+            "offset": [
+              2,
+              1,
+              45
+            ],
+            "size": [
+              23,
+              79,
+              16
+            ],
+            "blocks": 10597
+          },
+          {
+            "location": "brasshaven:dwarven_forge/forge/x1_z0",
+            "offset": [
+              25,
+              0,
+              0
+            ],
+            "size": [
+              25,
+              82,
+              22
+            ],
+            "blocks": 13572
+          },
+          {
+            "location": "brasshaven:dwarven_forge/forge/x1_z1",
+            "offset": [
+              25,
+              0,
+              22
+            ],
+            "size": [
+              25,
+              83,
+              23
+            ],
+            "blocks": 39038
+          },
+          {
+            "location": "brasshaven:dwarven_forge/forge/x1_z2",
+            "offset": [
+              25,
+              0,
+              45
+            ],
+            "size": [
+              25,
+              81,
+              16
+            ],
+            "blocks": 11192
+          },
+          {
+            "location": "brasshaven:dwarven_forge/forge/x2_z0",
+            "offset": [
+              50,
+              0,
+              0
+            ],
+            "size": [
+              24,
+              74,
+              22
+            ],
+            "blocks": 16714
+          },
+          {
+            "location": "brasshaven:dwarven_forge/forge/x2_z1",
+            "offset": [
+              50,
+              0,
+              22
+            ],
+            "size": [
+              24,
+              74,
+              23
+            ],
+            "blocks": 38738
+          },
+          {
+            "location": "brasshaven:dwarven_forge/forge/x2_z2",
+            "offset": [
+              50,
+              0,
+              45
+            ],
+            "size": [
+              24,
+              74,
+              22
+            ],
+            "blocks": 14520
+          },
+          {
+            "location": "brasshaven:dwarven_forge/forge/x3_z0",
+            "offset": [
+              74,
+              0,
+              11
+            ],
+            "size": [
+              25,
+              74,
+              11
+            ],
+            "blocks": 11620
+          },
+          {
+            "location": "brasshaven:dwarven_forge/forge/x3_z1",
+            "offset": [
+              74,
+              0,
+              22
+            ],
+            "size": [
+              25,
+              80,
+              23
+            ],
+            "blocks": 32252
+          },
+          {
+            "location": "brasshaven:dwarven_forge/forge/x3_z2",
+            "offset": [
+              74,
+              0,
+              45
+            ],
+            "size": [
+              25,
+              74,
+              9
+            ],
+            "blocks": 9030
+          }
+        ],
+        "projection": "rigid",
+        "processors": "brasshaven:aging"
+      }
+    }
+  ]
+}

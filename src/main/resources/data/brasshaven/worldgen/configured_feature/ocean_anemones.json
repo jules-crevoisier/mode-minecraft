@@ -1,0 +1,40 @@
+{
+  "type": "minecraft:simple_block",
+  "config": {
+    "to_place": {
+      "type": "minecraft:weighted_state_provider",
+      "entries": [
+        {
+          "data": {
+            "Name": "brasshaven:glow_anemone",
+            "Properties": {
+              "color": "0",
+              "waterlogged": "true"
+            }
+          },
+          "weight": 3
+        },
+        {
+          "data": {
+            "Name": "brasshaven:glow_anemone",
+            "Properties": {
+              "color": "1",
+              "waterlogged": "true"
+            }
+          },
+          "weight": 3
+        },
+        {
+          "data": {
+            "Name": "brasshaven:glow_anemone",
+            "Properties": {
+              "color": "2",
+              "waterlogged": "true"
+            }
+          },
+          "weight": 2
+        }
+      ]
+    }
+  }
+}

@@ -1,6 +1,6 @@
-# Wayfarers — guide de l'administrateur de serveur
+# Brasshaven — guide de l'administrateur de serveur
 
-Ce guide explique comment installer et régler un serveur public (beaucoup de joueurs) avec Wayfarers :
+Ce guide explique comment installer et régler un serveur public (beaucoup de joueurs) avec Brasshaven :
 Java, mémoire, distances, options anti-grief et anti-abus du mod, sauvegardes et mises à jour.
 Le détail technique de l'audit (failles trouvées et corrigées) est dans [SERVER_AUDIT.md](SERVER_AUDIT.md).
 
@@ -14,7 +14,7 @@ Le détail technique de l'audit (failles trouvées et corrigées) est dans [SERV
 
 1. Installe **Java 25** (Temurin conseillé : `java -version` doit afficher `25`).
 2. Télécharge l'installeur Forge 26.2-65.1.0 et lance `java -jar forge-26.2-65.1.0-installer.jar --installServer`.
-3. Dépose `wayfarers-1.0.0.jar` dans `mods/`.
+3. Dépose `brasshaven-1.0.0.jar` dans `mods/`.
 4. Lance une première fois, accepte l'EULA (`eula.txt` → `eula=true`), puis arrête le serveur : les fichiers de
    configuration sont créés.
 5. **Chaque joueur doit avoir exactement le même `.jar`** que le serveur : la version du protocole réseau du mod
@@ -79,12 +79,12 @@ d'une milliseconde : `-XX:+UseZGC -XX:+AlwaysPreTouch -XX:+DisableExplicitGC` (g
 | `enforce-secure-profile` / `online-mode` | `true` | Comptes vérifiés. |
 
 **Pré-générer le monde** (avec un mod comme Chunky) dans un rayon de 5 000 à 10 000 blocs avant l'ouverture évite
-les gros ralentissements quand plusieurs joueurs explorent en même temps. Le placement des structures Wayfarers
+les gros ralentissements quand plusieurs joueurs explorent en même temps. Le placement des structures Brasshaven
 (vérification du terrain) se fait pendant cette génération.
 
 ## 4. Options du mod pour un serveur public
 
-Fichier : `config/wayfarers-common.toml` (un seul fichier pour tout le serveur). Les valeurs par défaut des options
+Fichier : `config/brasshaven-common.toml` (un seul fichier pour tout le serveur). Les valeurs par défaut des options
 ci-dessous sont **déjà celles d'un serveur public** ; un petit groupe d'amis peut les assouplir. Forge relit le
 fichier quand il change ; en cas de doute, redémarre le serveur.
 
@@ -106,7 +106,7 @@ fichier quand il change ; en cas de doute, redémarre le serveur.
 | `machines.placerEnabled` | `true` | Le poseur de blocs fonctionne. |
 | `machines.actAsOwner` | `true` | Le casseur et le poseur agissent au nom du joueur qui les a posés : protection du spawn et mods de protection de zones (claims) s'appliquent, et ils attendent quand ce joueur est hors ligne. Les machines posées avant la mise à jour n'ont pas de propriétaire et fonctionnent comme avant. |
 | `machines.wirelessRange` | `128` | Portée de la redstone sans fil, en blocs (0 = toute la dimension). Empêche un émetteur d'actionner les récepteurs des autres bases. |
-| `machines.maxPerChunk` | `32` | Nombre maximum de machines Wayfarers par chunk (0 = sans limite). |
+| `machines.maxPerChunk` | `32` | Nombre maximum de machines Brasshaven par chunk (0 = sans limite). |
 
 ### Objets, stockage, tombes
 
@@ -148,7 +148,7 @@ les autres ont exploré) et `map.showPlayers` (les joueurs se voient sur la cart
 
 ## 6. Sauvegardes
 
-À sauvegarder : le dossier du monde (`world/`, qui contient aussi `world/data/wayfarers_map/` : carte partagée et
+À sauvegarder : le dossier du monde (`world/`, qui contient aussi `world/data/brasshaven_map/` : carte partagée et
 repères, et les données du mod : pierres de voyage, quêtes), le dossier `config/`, `server.properties`, et la liste
 des mods.
 
@@ -170,10 +170,10 @@ save-on
 
 1. Annonce la mise à jour : tous les joueurs devront installer le nouveau `.jar`.
 2. Arrête le serveur proprement (`stop`) et fais une **sauvegarde complète**.
-3. Remplace l'ancien `wayfarers-*.jar` de `mods/` par le nouveau (ne garde jamais deux versions).
-4. Démarre le serveur : les nouvelles options sont ajoutées automatiquement à `config/wayfarers-common.toml` avec
+3. Remplace l'ancien `brasshaven-*.jar` de `mods/` par le nouveau (ne garde jamais deux versions).
+4. Démarre le serveur : les nouvelles options sont ajoutées automatiquement à `config/brasshaven-common.toml` avec
    leur valeur par défaut ; relis-les (section 4).
-5. Vérifie `logs/latest.log` (aucune ligne `ERROR` liée à `wayfarers`), connecte-toi, teste une pierre de voyage,
+5. Vérifie `logs/latest.log` (aucune ligne `ERROR` liée à `brasshaven`), connecte-toi, teste une pierre de voyage,
    un terminal de guilde et la carte.
 6. En cas de problème : arrête, remets l'ancien `.jar` et la sauvegarde.
 
@@ -184,8 +184,8 @@ Les nouvelles structures n'apparaissent que dans les chunks pas encore généré
 * `/tick query` : temps moyen par tick (au-dessus de 50 ms le serveur prend du retard) et percentiles.
 * `/debug start` puis `/debug stop` : rapport de profilage dans `debug/`.
 * Un mod de profilage (spark) montre quelle entité, quel bloc ou quel chunk coûte cher.
-* Leviers dans Wayfarers : `machines.maxPerChunk`, `spawns.maxLoadedPerType`, `storage.maxContainers`,
+* Leviers dans Brasshaven : `machines.maxPerChunk`, `spawns.maxLoadedPerType`, `storage.maxContainers`,
   `compass.searchesPerMinute` ; côté serveur, `simulation-distance` d'abord.
 
 Le test automatique du dépôt (`tools/ci_smoke.py`) mesure à chaque modification le temps par tick avec 96 machines
-et 60 automates : le résultat est dans `wayfarers-ci-smoke.txt` (publié avec les aperçus de chaque build).
+et 60 automates : le résultat est dans `brasshaven-ci-smoke.txt` (publié avec les aperçus de chaque build).

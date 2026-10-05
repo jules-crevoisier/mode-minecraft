@@ -1,0 +1,807 @@
+{
+  "display": {
+    "icon": {
+      "id": "minecraft:dragon_egg"
+    },
+    "title": {
+      "translate": "advancements.brasshaven.end.legend.title"
+    },
+    "description": {
+      "translate": "advancements.brasshaven.end.legend.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "guild_outpost": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:guild_outpost"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "mountain_monastery": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:mountain_monastery"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "forgotten_library": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:forgotten_library"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "coastal_lighthouse": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:coastal_lighthouse"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "giant_tree": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:giant_tree"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "desert_oasis": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:desert_oasis"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "witch_huts": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:witch_huts"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "sky_island": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:sky_island"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "jungle_ziggurat": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:jungle_ziggurat"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "ruined_watchtower": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:ruined_watchtower"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "bandit_camp": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:bandit_camp"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "rune_circle": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:rune_circle"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "ice_observatory": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:ice_observatory"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "galleon_wreck": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:galleon_wreck"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "sunken_temple": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:sunken_temple"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "dwarven_mine": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:dwarven_mine"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "dwarven_forge": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:dwarven_forge"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "crystal_grotto": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:crystal_grotto"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "sealed_lab": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:sealed_lab"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "sunken_citadel": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:sunken_citadel"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "basalt_fortress": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:basalt_fortress"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "chain_bridge": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:chain_bridge"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "piglin_sanctuary": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:piglin_sanctuary"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "lava_foundry": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:lava_foundry"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "soul_tower": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:soul_tower"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "piglin_market": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:piglin_market"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "void_observatory": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:void_observatory"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "chorus_garden": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:chorus_garden"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "end_archive": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:end_archive"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "void_ship": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:void_ship"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "void_nest": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:void_nest"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "forgotten_catacombs": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:forgotten_catacombs"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "sand_hypogeum": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:sand_hypogeum"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "lithite_well": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:lithite_well"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "void_crypt": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:void_crypt"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "clockwork_citadel": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:clockwork_citadel"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "sky_harbour": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:sky_harbour"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "undercity": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:undercity"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "dwarven_city": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:dwarven_city"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "sylvan_palace": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:sylvan_palace"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "inventor_manor": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:inventor_manor"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "sky_isles": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:sky_isles"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "geothermal_foundry": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:geothermal_foundry"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "tesla_observatory": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:tesla_observatory"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "crystal_cathedral": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:crystal_cathedral"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "sunken_submarine": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:sunken_submarine"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "diving_bell": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:diving_bell"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "coral_shrine": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:coral_shrine"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "shipwreck_debris": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:shipwreck_debris"
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "parent": "brasshaven:end/void_warden",
+  "rewards": {
+    "experience": 2000
+  }
+}

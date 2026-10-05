@@ -9,8 +9,8 @@ from wf import content, defs  # noqa: E402
 import wf.structures  # noqa: E402,F401
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-ASSETS = os.path.join(ROOT, "src", "main", "resources", "assets", "wayfarers")
-NS = "wayfarers"
+ASSETS = os.path.join(ROOT, "src", "main", "resources", "assets", "brasshaven")
+NS = "brasshaven"
 HANDHELD = {"builder_wand", "master_builder_wand", "chisel", "fire_staff", "frost_staff", "thunder_staff", "healing_staff",
             "levitation_wand", "steam_cane", "cartographer_blade", "telluric_hammer", "storm_staff", "ember_scythe", "void_spear", "frost_blade",
             "light_staff", "excavator_pickaxe", "lumber_axe"}

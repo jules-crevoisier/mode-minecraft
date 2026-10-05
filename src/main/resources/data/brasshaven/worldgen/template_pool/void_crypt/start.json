@@ -1,0 +1,449 @@
+{
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "brasshaven:chunked_template",
+        "size": [
+          65,
+          41,
+          65
+        ],
+        "cells": [
+          {
+            "location": "brasshaven:void_crypt/layout_0/x0_z0",
+            "offset": [
+              0,
+              0,
+              0
+            ],
+            "size": [
+              22,
+              25,
+              22
+            ],
+            "blocks": 5600
+          },
+          {
+            "location": "brasshaven:void_crypt/layout_0/x0_z1",
+            "offset": [
+              0,
+              0,
+              22
+            ],
+            "size": [
+              22,
+              32,
+              21
+            ],
+            "blocks": 7144
+          },
+          {
+            "location": "brasshaven:void_crypt/layout_0/x0_z2",
+            "offset": [
+              0,
+              0,
+              43
+            ],
+            "size": [
+              22,
+              22,
+              22
+            ],
+            "blocks": 6204
+          },
+          {
+            "location": "brasshaven:void_crypt/layout_0/x1_z0",
+            "offset": [
+              22,
+              0,
+              0
+            ],
+            "size": [
+              21,
+              32,
+              22
+            ],
+            "blocks": 6938
+          },
+          {
+            "location": "brasshaven:void_crypt/layout_0/x1_z1",
+            "offset": [
+              22,
+              0,
+              22
+            ],
+            "size": [
+              21,
+              41,
+              21
+            ],
+            "blocks": 8571
+          },
+          {
+            "location": "brasshaven:void_crypt/layout_0/x1_z2",
+            "offset": [
+              22,
+              0,
+              43
+            ],
+            "size": [
+              21,
+              31,
+              22
+            ],
+            "blocks": 5458
+          },
+          {
+            "location": "brasshaven:void_crypt/layout_0/x2_z0",
+            "offset": [
+              43,
+              0,
+              0
+            ],
+            "size": [
+              22,
+              24,
+              22
+            ],
+            "blocks": 10286
+          },
+          {
+            "location": "brasshaven:void_crypt/layout_0/x2_z1",
+            "offset": [
+              43,
+              0,
+              22
+            ],
+            "size": [
+              22,
+              33,
+              21
+            ],
+            "blocks": 6440
+          },
+          {
+            "location": "brasshaven:void_crypt/layout_0/x2_z2",
+            "offset": [
+              43,
+              0,
+              43
+            ],
+            "size": [
+              22,
+              26,
+              22
+            ],
+            "blocks": 5798
+          }
+        ],
+        "projection": "rigid",
+        "processors": "brasshaven:none",
+        "ground_level_delta": 28,
+        "footprint": [
+          18,
+          18,
+          48,
+          46
+        ]
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "brasshaven:chunked_template",
+        "size": [
+          65,
+          41,
+          65
+        ],
+        "cells": [
+          {
+            "location": "brasshaven:void_crypt/layout_1/x0_z0",
+            "offset": [
+              0,
+              0,
+              0
+            ],
+            "size": [
+              22,
+              22,
+              22
+            ],
+            "blocks": 9888
+          },
+          {
+            "location": "brasshaven:void_crypt/layout_1/x0_z1",
+            "offset": [
+              0,
+              0,
+              22
+            ],
+            "size": [
+              22,
+              22,
+              21
+            ],
+            "blocks": 5127
+          },
+          {
+            "location": "brasshaven:void_crypt/layout_1/x0_z2",
+            "offset": [
+              0,
+              0,
+              43
+            ],
+            "size": [
+              22,
+              22,
+              22
+            ],
+            "blocks": 6028
+          },
+          {
+            "location": "brasshaven:void_crypt/layout_1/x1_z0",
+            "offset": [
+              22,
+              0,
+              0
+            ],
+            "size": [
+              21,
+              22,
+              22
+            ],
+            "blocks": 6096
+          },
+          {
+            "location": "brasshaven:void_crypt/layout_1/x1_z1",
+            "offset": [
+              22,
+              0,
+              22
+            ],
+            "size": [
+              21,
+              41,
+              21
+            ],
+            "blocks": 5458
+          },
+          {
+            "location": "brasshaven:void_crypt/layout_1/x1_z2",
+            "offset": [
+              22,
+              0,
+              43
+            ],
+            "size": [
+              21,
+              41,
+              22
+            ],
+            "blocks": 6462
+          },
+          {
+            "location": "brasshaven:void_crypt/layout_1/x2_z0",
+            "offset": [
+              43,
+              0,
+              0
+            ],
+            "size": [
+              22,
+              22,
+              22
+            ],
+            "blocks": 5596
+          },
+          {
+            "location": "brasshaven:void_crypt/layout_1/x2_z1",
+            "offset": [
+              43,
+              0,
+              22
+            ],
+            "size": [
+              22,
+              41,
+              21
+            ],
+            "blocks": 6607
+          },
+          {
+            "location": "brasshaven:void_crypt/layout_1/x2_z2",
+            "offset": [
+              43,
+              0,
+              43
+            ],
+            "size": [
+              22,
+              41,
+              22
+            ],
+            "blocks": 8957
+          }
+        ],
+        "projection": "rigid",
+        "processors": "brasshaven:none",
+        "ground_level_delta": 28,
+        "footprint": [
+          31,
+          31,
+          61,
+          59
+        ]
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "brasshaven:chunked_template",
+        "size": [
+          65,
+          41,
+          65
+        ],
+        "cells": [
+          {
+            "location": "brasshaven:void_crypt/layout_2/x0_z0",
+            "offset": [
+              0,
+              0,
+              0
+            ],
+            "size": [
+              22,
+              22,
+              22
+            ],
+            "blocks": 10452
+          },
+          {
+            "location": "brasshaven:void_crypt/layout_2/x0_z1",
+            "offset": [
+              0,
+              0,
+              22
+            ],
+            "size": [
+              22,
+              22,
+              21
+            ],
+            "blocks": 6060
+          },
+          {
+            "location": "brasshaven:void_crypt/layout_2/x0_z2",
+            "offset": [
+              0,
+              0,
+              43
+            ],
+            "size": [
+              22,
+              22,
+              22
+            ],
+            "blocks": 5280
+          },
+          {
+            "location": "brasshaven:void_crypt/layout_2/x1_z0",
+            "offset": [
+              22,
+              0,
+              0
+            ],
+            "size": [
+              21,
+              32,
+              22
+            ],
+            "blocks": 6355
+          },
+          {
+            "location": "brasshaven:void_crypt/layout_2/x1_z1",
+            "offset": [
+              22,
+              0,
+              22
+            ],
+            "size": [
+              21,
+              41,
+              21
+            ],
+            "blocks": 6409
+          },
+          {
+            "location": "brasshaven:void_crypt/layout_2/x1_z2",
+            "offset": [
+              22,
+              0,
+              43
+            ],
+            "size": [
+              21,
+              28,
+              20
+            ],
+            "blocks": 4886
+          },
+          {
+            "location": "brasshaven:void_crypt/layout_2/x2_z0",
+            "offset": [
+              43,
+              0,
+              0
+            ],
+            "size": [
+              22,
+              32,
+              22
+            ],
+            "blocks": 7174
+          },
+          {
+            "location": "brasshaven:void_crypt/layout_2/x2_z1",
+            "offset": [
+              43,
+              0,
+              22
+            ],
+            "size": [
+              22,
+              41,
+              21
+            ],
+            "blocks": 8107
+          },
+          {
+            "location": "brasshaven:void_crypt/layout_2/x2_z2",
+            "offset": [
+              43,
+              0,
+              43
+            ],
+            "size": [
+              22,
+              31,
+              22
+            ],
+            "blocks": 7419
+          }
+        ],
+        "projection": "rigid",
+        "processors": "brasshaven:none",
+        "ground_level_delta": 28,
+        "footprint": [
+          31,
+          18,
+          61,
+          46
+        ]
+      }
+    }
+  ]
+}

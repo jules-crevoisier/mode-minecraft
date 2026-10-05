@@ -1,8 +1,0 @@
-{
-  "type": "forge:add_features",
-  "biomes": "#wayfarers:ocean/meadow",
-  "features": [
-    "wayfarers:ocean_seagrass_meadow"
-  ],
-  "step": "vegetal_decoration"
-}

@@ -1,8 +1,0 @@
-{
-  "type": "minecraft:stonecutting",
-  "ingredient": "wayfarers:brass_plating",
-  "result": {
-    "id": "wayfarers:brass_plating_stairs",
-    "count": 1
-  }
-}

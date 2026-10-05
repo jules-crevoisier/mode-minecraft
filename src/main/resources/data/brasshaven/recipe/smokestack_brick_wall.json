@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "XXX",
+    "XXX"
+  ],
+  "key": {
+    "X": "brasshaven:smokestack_bricks"
+  },
+  "result": {
+    "id": "brasshaven:smokestack_brick_wall",
+    "count": 6
+  }
+}

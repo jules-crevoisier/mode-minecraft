@@ -1,26 +1,26 @@
-# Wayfarers — boss guide (Elden Ring style)
+# Brasshaven — boss guide (Elden Ring style)
 
 Each great structure ends in a boss fight that players remember. A boss is three things, all made here
 without launching the game:
 
 1. a **3D model with animations**: `tools/wf/mobs/<id>.py`, written with the DSL in `tools/wf/models.py`
    and previewed by `tools/wf/model_render.py`;
-2. a **moveset**: `src/main/java/com/wayfarers/entity/boss/<Class>.java`, extending
-   `com.wayfarers.boss.WayfarerBoss`;
+2. a **moveset**: `src/main/java/com/brasshaven/entity/boss/<Class>.java`, extending
+   `com.brasshaven.boss.WayfarerBoss`;
 3. a **lair**: the descent and the arena in the structure, written in its own module
    `tools/wf/structures/lair_<id>.py` and called from the structure builder.
 
 The finished example to copy is the Drowned Warden: `tools/wf/mobs/drowned_warden.py` and
-`src/main/java/com/wayfarers/entity/DrownedWarden.java`. Its arena is in `tools/wf/structures/citadel.py`,
+`src/main/java/com/brasshaven/entity/DrownedWarden.java`. Its arena is in `tools/wf/structures/citadel.py`,
 in `arena()` and `arena_mist()`.
 
 ## 0. What you may edit
-- **Yours:** `tools/wf/mobs/<id>.py`, `src/main/java/com/wayfarers/entity/boss/<Class>.java`,
+- **Yours:** `tools/wf/mobs/<id>.py`, `src/main/java/com/brasshaven/entity/boss/<Class>.java`,
   `tools/wf/structures/lair_<id>.py`, plus the few lines in your structure's builder that call your lair.
-  The entity is already registered, with its name, spawn egg, loot table and `/wayfarers boss <id>` demo
+  The entity is already registered, with its name, spawn egg, loot table and `/brasshaven boss <id>` demo
   command. Its hitbox comes from `WIDTH`/`HEIGHT` in your class.
 - **Never edit shared files**, because other builders work in parallel: `ModEntities`, `ModItems`,
-  `content.py`, `gen_*.py`, `mobs/__init__.py`, `WayfarerBoss`, `BossAttack`, `WayfarersClient`, and
+  `content.py`, `gen_*.py`, `mobs/__init__.py`, `WayfarerBoss`, `BossAttack`, `BrasshavenClient`, and
   other structures. If the engine lacks something, write a private helper in your boss class (static
   methods, inner `Effect`s) and mention it in your report.
 
@@ -132,7 +132,7 @@ The user wants **depth**: the boss waits at the bottom of a descent, not in the 
   - a clear floor with few obstacles;
   - well lit, with architecture that frames the fight (pillars at the edge, a dais, statues, a broken
     dome).
-- **Seal.** `bp.boss_seal(x, y, z, "wayfarers:<id>", radius)` at the centre, on the floor level. The boss
+- **Seal.** `bp.boss_seal(x, y, z, "brasshaven:<id>", radius)` at the centre, on the floor level. The boss
   spawns on top of it when a player walks within 0.8 × radius.
 - **Mist.** `bp.mist(x0, y0, z0, x1, y1, z1)` across **every** entrance, called **after** carving the
   doorways (it only fills open cells).
@@ -159,7 +159,7 @@ The user wants **depth**: the boss waits at the bottom of a descent, not in the 
 
 ## 5. Champion of the Clockwork Citadel: The Grand Clockmaker (Le Grand Horloger)
 Files: `tools/wf/mobs/grand_clockmaker.py` (model, shared steampunk paint in `tools/wf/mobs/brasswork.py`),
-`src/main/java/com/wayfarers/entity/boss/GrandClockmaker.java` (moveset),
+`src/main/java/com/brasshaven/entity/boss/GrandClockmaker.java` (moveset),
 `tools/wf/structures/lair_grand_clockmaker.py` (lair, called at the end of `clockwork.py`'s citadel builder).
 Reward: `remembrance_grand_clockmaker` → **Clockmaker's Pendulum** (`clockmaker_pendulum`, ARC sweep that slows),
 plus brass gears, a Clockwork Heart and a clock (`gen_data.py`). Quest: `explorer/boss_grand_clockmaker`.

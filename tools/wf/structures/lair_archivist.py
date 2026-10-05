@@ -31,10 +31,10 @@ WALL = Palette({"tuff_bricks": 5, "polished_tuff": 1, "tuff": 1, "deepslate_bric
                seed=601, scale=2.0)
 FLOOR = Palette({"polished_deepslate": 2, "polished_tuff": 2, "deepslate_tiles": 1}, seed=602, scale=1.5)
 ROSE = Palette({"polished_tuff": 4, "tuff_bricks": 1, "polished_andesite": 1}, seed=603, scale=1.5)
-PGS = "wayfarers:polished_guild_stone"
-PGS_ST = "wayfarers:polished_guild_stone_stairs"
-CGS = "wayfarers:carved_guild_stone"
-RUNE = "wayfarers:rune_lamp"
+PGS = "brasshaven:polished_guild_stone"
+PGS_ST = "brasshaven:polished_guild_stone_stairs"
+CGS = "brasshaven:carved_guild_stone"
+RUNE = "brasshaven:rune_lamp"
 TS = "tuff_brick_stairs"
 SHELF = "bookshelf"
 RUBBLE = ("tuff", "tuff_bricks", "cobblestone", "mossy_cobblestone", "gravel", "bookshelf", "dark_oak_planks")
@@ -439,7 +439,7 @@ def _furnish_archive(bp):
             continue
         bp.set(x, LA2 + 1, z, PGS)
         bp.set(x, LA2 + 2, z, RUNE)
-    bp.boss_seal(cx, LA2, cz, "wayfarers:archivist", AR)
+    bp.boss_seal(cx, LA2, cz, "brasshaven:archivist", AR)
 
 
 def _furnish_vault(bp):

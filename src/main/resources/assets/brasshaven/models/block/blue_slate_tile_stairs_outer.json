@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/outer_stairs",
+  "textures": {
+    "bottom": "brasshaven:block/blue_slate_tiles",
+    "top": "brasshaven:block/blue_slate_tiles",
+    "side": "brasshaven:block/blue_slate_tiles"
+  }
+}

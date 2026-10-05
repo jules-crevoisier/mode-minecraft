@@ -1,8 +1,0 @@
-{
-  "type": "minecraft:stonecutting",
-  "ingredient": "wayfarers:mossy_guild_bricks",
-  "result": {
-    "id": "wayfarers:mossy_guild_brick_slab",
-    "count": 2
-  }
-}

@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "brasshaven:block/storage_relay_top",
+    "side": "brasshaven:block/storage_relay_side"
+  }
+}

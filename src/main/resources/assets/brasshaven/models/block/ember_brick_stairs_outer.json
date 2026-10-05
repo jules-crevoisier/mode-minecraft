@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/outer_stairs",
+  "textures": {
+    "bottom": "brasshaven:block/ember_bricks",
+    "top": "brasshaven:block/ember_bricks",
+    "side": "brasshaven:block/ember_bricks"
+  }
+}

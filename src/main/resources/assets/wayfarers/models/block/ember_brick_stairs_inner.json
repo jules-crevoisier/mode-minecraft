@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/inner_stairs",
-  "textures": {
-    "bottom": "wayfarers:block/ember_bricks",
-    "top": "wayfarers:block/ember_bricks",
-    "side": "wayfarers:block/ember_bricks"
-  }
-}

@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "###"
+  ],
+  "key": {
+    "#": "brasshaven:glowwood_planks"
+  },
+  "result": {
+    "id": "brasshaven:glowwood_slab",
+    "count": 6
+  },
+  "group": "wooden_slab"
+}

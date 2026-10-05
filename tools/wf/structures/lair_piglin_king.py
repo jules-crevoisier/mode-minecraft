@@ -20,8 +20,8 @@ import math
 from ..arch import Palette, stair
 from ..parts import LOOT, MOD
 
-LAMP = "wayfarers:ember_lamp"
-GILD = "wayfarers:gilded_trim"
+LAMP = "brasshaven:ember_lamp"
+GILD = "brasshaven:gilded_trim"
 PBB = "polished_blackstone_bricks"
 CPBB = "cracked_polished_blackstone_bricks"
 PBBS = "polished_blackstone_brick_stairs"
@@ -401,7 +401,7 @@ def _treasury(L):
     for x in (-6, 6):
         _brazier_gold(L, x, WALK, zt + 1)
     # the seal at the centre of the hall
-    bp.boss_seal(0, WALK, 0, "wayfarers:piglin_king", 14)
+    bp.boss_seal(0, WALK, 0, "brasshaven:piglin_king", 14)
     L.open.add((0, WALK, 0))
     # chandeliers under the sanctum floor
     for (x, z) in ((-4, -6), (4, -6), (-4, 6), (4, 6)):

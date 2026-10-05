@@ -1,0 +1,32 @@
+{
+  "structures": [
+    {
+      "structure": "brasshaven:chorus_garden",
+      "weight": 3
+    },
+    {
+      "structure": "brasshaven:void_observatory",
+      "weight": 2
+    },
+    {
+      "structure": "brasshaven:void_ship",
+      "weight": 2
+    }
+  ],
+  "placement": {
+    "type": "brasshaven:curated_spread",
+    "salt": 229271714,
+    "spacing": 32,
+    "separation": 10,
+    "avoid": [
+      {
+        "set": "brasshaven:end_large",
+        "chunks": 5
+      },
+      {
+        "set": "minecraft:end_cities",
+        "chunks": 3
+      }
+    ]
+  }
+}

@@ -1,4 +1,4 @@
-# Wayfarers — architecture style guide
+# Brasshaven — architecture style guide
 
 Every structure must look like something a skilled builder spent hours on. Players should stop
 and say "wow" from a distance. These rules are mandatory.
@@ -25,11 +25,11 @@ and say "wow" from a distance. These rules are mandatory.
 - 3–5 materials per structure + 1 accent. Main walls use a **Palette** (2–4 similar blocks with
   coherent noise), never a single flat block. Trim is a contrasting, cleaner block. Roof colour
   contrasts with the walls.
-- **Use the Wayfarers blocks** to make the mod unique:
+- **Use the Brasshaven blocks** to make the mod unique:
 
 | Theme | Blocks |
 |---|---|
-| Guild (Overworld) | `wayfarers:guild_bricks` (+ `mossy_`/`cracked_`, `guild_brick_stairs/slab/wall`), `polished_guild_stone` (+`_stairs/_slab`), `carved_guild_stone`, roofs `guild_roof_tiles` (azure), `crimson_roof_tiles`, `slate_roof_tiles` (+`*_roof_tile_stairs/_slab`), light `rune_lamp` |
+| Guild (Overworld) | `brasshaven:guild_bricks` (+ `mossy_`/`cracked_`, `guild_brick_stairs/slab/wall`), `polished_guild_stone` (+`_stairs/_slab`), `carved_guild_stone`, roofs `guild_roof_tiles` (azure), `crimson_roof_tiles`, `slate_roof_tiles` (+`*_roof_tile_stairs/_slab`), light `rune_lamp` |
 | Deep | `lithite_bricks` (+`lithite_brick_stairs/slab/wall`), `lithite_block` (glowing crystal) |
 | Nether | `ember_bricks` (+`ember_brick_stairs/slab/wall`), `ember_lamp`, `gilded_trim` |
 | End | `void_bricks` (+`void_brick_stairs/slab/wall`), `starlight_block` |
@@ -58,7 +58,7 @@ and say "wow" from a distance. These rules are mandatory.
   2–6 loot containers per structure, the best one guarded or hidden.
 - Danger: 1–4 spawners (`bp.spawner(x, y, z, MOB["ruin_walker"])` etc. from `parts.MOB`, or
   vanilla ids) placed where fights make sense. Monumental structures also declare guards with
-  `StructureDef(..., spawns=[("wayfarers:ruin_walker", 10, 1, 3), ...])` (they keep spawning in
+  `StructureDef(..., spawns=[("brasshaven:ruin_walker", 10, 1, 3), ...])` (they keep spawning in
   the dark inside the structure).
 - At least one **secret**: hidden room, collapsed passage, buried vault, puzzle door.
 - Waystones (`MOD["waystone"]`) in hubs: keep the ones that exist, add one where players would

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "X  ",
+    "XX ",
+    "XXX"
+  ],
+  "key": {
+    "X": "brasshaven:marble_bricks"
+  },
+  "result": {
+    "id": "brasshaven:marble_brick_stairs",
+    "count": 4
+  }
+}

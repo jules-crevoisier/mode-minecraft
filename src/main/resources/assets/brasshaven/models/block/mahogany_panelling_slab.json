@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab",
+  "textures": {
+    "bottom": "brasshaven:block/mahogany_panelling",
+    "top": "brasshaven:block/mahogany_panelling",
+    "side": "brasshaven:block/mahogany_panelling"
+  }
+}

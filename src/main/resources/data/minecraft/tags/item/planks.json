@@ -1,7 +1,7 @@
 {
   "replace": false,
   "values": [
-    "wayfarers:glowwood_planks",
-    "wayfarers:rustwood_planks"
+    "brasshaven:glowwood_planks",
+    "brasshaven:rustwood_planks"
   ]
 }

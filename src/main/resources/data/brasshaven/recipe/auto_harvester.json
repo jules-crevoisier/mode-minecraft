@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "BHB",
+    "BCB",
+    "BRB"
+  ],
+  "key": {
+    "B": "brasshaven:brass_ingot",
+    "H": "minecraft:iron_hoe",
+    "C": "minecraft:chest",
+    "R": "minecraft:redstone"
+  },
+  "result": {
+    "id": "brasshaven:auto_harvester",
+    "count": 1
+  }
+}

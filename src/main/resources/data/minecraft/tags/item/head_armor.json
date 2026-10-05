@@ -1,13 +1,13 @@
 {
   "replace": false,
   "values": [
-    "wayfarers:explorer_helmet",
-    "wayfarers:ember_helmet",
-    "wayfarers:void_helmet",
-    "wayfarers:brass_helmet",
-    "wayfarers:mithril_helmet",
-    "wayfarers:aether_helmet",
-    "wayfarers:arcane_helmet",
-    "wayfarers:diving_helmet"
+    "brasshaven:explorer_helmet",
+    "brasshaven:ember_helmet",
+    "brasshaven:void_helmet",
+    "brasshaven:brass_helmet",
+    "brasshaven:mithril_helmet",
+    "brasshaven:aether_helmet",
+    "brasshaven:arcane_helmet",
+    "brasshaven:diving_helmet"
   ]
 }

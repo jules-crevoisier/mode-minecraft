@@ -1,0 +1,36 @@
+{
+  "structures": [
+    {
+      "structure": "brasshaven:crystal_grotto",
+      "weight": 3
+    },
+    {
+      "structure": "brasshaven:dwarven_forge",
+      "weight": 2
+    },
+    {
+      "structure": "brasshaven:sealed_lab",
+      "weight": 2
+    }
+  ],
+  "placement": {
+    "type": "brasshaven:curated_spread",
+    "salt": 73924759,
+    "spacing": 40,
+    "separation": 14,
+    "avoid": [
+      {
+        "set": "brasshaven:deep_wonders",
+        "chunks": 10
+      },
+      {
+        "set": "minecraft:ancient_cities",
+        "chunks": 4
+      },
+      {
+        "set": "brasshaven:dungeons",
+        "chunks": 5
+      }
+    ]
+  }
+}

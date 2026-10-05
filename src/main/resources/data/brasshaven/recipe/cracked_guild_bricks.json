@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:smelting",
+  "category": "blocks",
+  "ingredient": "brasshaven:guild_bricks",
+  "result": {
+    "id": "brasshaven:cracked_guild_bricks"
+  },
+  "experience": 0.1,
+  "cookingtime": 200
+}

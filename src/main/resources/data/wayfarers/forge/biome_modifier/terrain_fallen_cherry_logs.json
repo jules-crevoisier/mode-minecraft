@@ -1,9 +1,0 @@
-{
-  "type": "wayfarers:toggled_features",
-  "toggle": "fallenLogs",
-  "biomes": [
-    "minecraft:cherry_grove"
-  ],
-  "features": "wayfarers:world/fallen_cherry_logs",
-  "step": "vegetal_decoration"
-}

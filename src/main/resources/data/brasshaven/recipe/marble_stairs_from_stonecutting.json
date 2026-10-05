@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "brasshaven:marble",
+  "result": {
+    "id": "brasshaven:marble_stairs",
+    "count": 1
+  }
+}

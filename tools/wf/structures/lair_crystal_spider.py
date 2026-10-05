@@ -21,7 +21,7 @@ import random
 from ..arch import stair
 from ..parts import LOOT, MOD
 
-LC = "wayfarers:lithite_block"
+LC = "brasshaven:lithite_block"
 AIR = "minecraft:air"
 
 NC_Y = -42                 # nest geode centre
@@ -183,7 +183,7 @@ def nest_dressing(bp, rng):
                     if bp.get(x, y - k2, z) == AIR and y - k2 > NF + 3:
                         bp.set(x, y - k2, z, "cobweb")
                 break
-    bp.boss_seal(0, NF, 0, "wayfarers:crystal_spider", ARENA_R)
+    bp.boss_seal(0, NF, 0, "brasshaven:crystal_spider", ARENA_R)
 
 
 # ------------------------------------------------------------------ the crystal window from the chasm

@@ -1,0 +1,42 @@
+{
+  "display": {
+    "icon": {
+      "id": "minecraft:amethyst_block"
+    },
+    "title": {
+      "translate": "advancements.brasshaven.depths.crystal_cathedral.title"
+    },
+    "description": {
+      "translate": "advancements.brasshaven.depths.crystal_cathedral.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "found": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:crystal_cathedral"
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "parent": "brasshaven:depths/lithite",
+  "rewards": {
+    "experience": 50,
+    "loot": [
+      "brasshaven:rewards/discovery"
+    ]
+  }
+}

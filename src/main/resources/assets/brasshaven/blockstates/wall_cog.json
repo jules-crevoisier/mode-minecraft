@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "brasshaven:block/wall_cog"
+    },
+    "facing=east": {
+      "model": "brasshaven:block/wall_cog",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "brasshaven:block/wall_cog",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "brasshaven:block/wall_cog",
+      "y": 270
+    }
+  }
+}

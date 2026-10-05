@@ -1,4 +1,4 @@
-"""The Wayfarers biomes and terrain touches (tools/gen_world.py writes them, tools/validate_world.py checks them).
+"""The Brasshaven biomes and terrain touches (tools/gen_world.py writes them, tools/validate_world.py checks them).
 
 Cheap by design: Minecraft's own terrain is kept as it is (vanilla noise router, density functions, dimension
 type). Three biomes take a slice of the climate cells of a vanilla biome (BIOMES[...]["slice"]): the Overworld of the
@@ -9,7 +9,7 @@ possible biomes). Their decoration is the parent biome's own list (same relative
 minus a few plants, plus a handful of our features with rarity filters.
 
 The terrain touches (TOUCHES) add cheap features to vanilla biomes through Forge biome modifiers
-(wayfarers:toggled_features, one config option world.terrain.<toggle> each): boulders, fallen logs, rock spires,
+(brasshaven:toggled_features, one config option world.terrain.<toggle> each): boulders, fallen logs, rock spires,
 wildflower patches, moss carpets, hot springs.
 """
 import json
@@ -17,7 +17,7 @@ import os
 
 from . import worldobjects
 
-NS = "wayfarers"
+NS = "brasshaven"
 HERE = os.path.dirname(os.path.abspath(__file__))
 VANILLA = json.load(open(os.path.join(HERE, "..", "data", "vanilla_worldgen_26.2.json")))
 POINTS_FILE = os.path.join(HERE, "world_points.json")
@@ -253,7 +253,7 @@ def world_preset(points):
 
 
 def noise_settings():
-    """vanilla's minecraft:overworld noise settings, word for word, with our surface rules: wayfarers:overworld."""
+    """vanilla's minecraft:overworld noise settings, word for word, with our surface rules: brasshaven:overworld."""
     ns = json.loads(json.dumps(VANILLA["noise_settings_overworld"]))
     ns["surface_rule"] = surface_rule(ns["surface_rule"])
     return ns
@@ -261,10 +261,10 @@ def noise_settings():
 
 # ===================================================================================================== features
 BIOME_FILTER = {"type": "minecraft:biome"}
-# keeps big surface decorations out of the chunks a surface structure reaches (com.wayfarers.world
-# .ClearOfStructuresFilter, tag wayfarers:clears_decoration); placed right after the rarity filter, so it runs once
+# keeps big surface decorations out of the chunks a surface structure reaches (com.brasshaven.world
+# .ClearOfStructuresFilter, tag brasshaven:clears_decoration); placed right after the rarity filter, so it runs once
 # per lucky chunk
-CLEAR = {"type": "wayfarers:clear_of_structures"}
+CLEAR = {"type": "brasshaven:clear_of_structures"}
 
 
 def _state(name, **props):
@@ -441,7 +441,7 @@ def fid(name):
 
 
 def touch_modifiers():
-    """{file name: Forge biome modifier}: one wayfarers:toggled_features per feature group."""
+    """{file name: Forge biome modifier}: one brasshaven:toggled_features per feature group."""
     out = {}
     for toggle, groups in TOUCHES.items():
         for name, biomes in groups:
@@ -504,6 +504,6 @@ def lang():
     en, fr = {}, {}
     for bid, b in BIOMES.items():
         en[f"biome.{NS}.{bid}"], fr[f"biome.{NS}.{bid}"] = b["en"], b["fr"]
-    en["pack.wayfarers.custom_biomes"] = "Wayfarers: Crimson Mire, Volcanic Highlands and Pale Dunes"
-    fr["pack.wayfarers.custom_biomes"] = "Wayfarers : Marais pourpre, Hautes terres volcaniques et Dunes pâles"
+    en["pack.brasshaven.custom_biomes"] = "Brasshaven: Crimson Mire, Volcanic Highlands and Pale Dunes"
+    fr["pack.brasshaven.custom_biomes"] = "Brasshaven : Marais pourpre, Hautes terres volcaniques et Dunes pâles"
     return en, fr

@@ -1,8 +1,0 @@
-{
-  "type": "forge:add_features",
-  "biomes": "#wayfarers:ocean/all",
-  "features": [
-    "wayfarers:ocean_sunken_ruins"
-  ],
-  "step": "surface_structures"
-}

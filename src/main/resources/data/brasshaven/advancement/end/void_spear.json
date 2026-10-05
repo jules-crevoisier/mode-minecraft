@@ -1,0 +1,33 @@
+{
+  "display": {
+    "icon": {
+      "id": "brasshaven:void_spear"
+    },
+    "title": {
+      "translate": "advancements.brasshaven.end.void_spear.title"
+    },
+    "description": {
+      "translate": "advancements.brasshaven.end.void_spear.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "brasshaven:void_spear"
+          }
+        ]
+      }
+    }
+  },
+  "parent": "brasshaven:end/void_shard",
+  "rewards": {
+    "experience": 50
+  }
+}

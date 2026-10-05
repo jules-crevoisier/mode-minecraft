@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab_top",
+  "textures": {
+    "bottom": "brasshaven:block/diamond_plate",
+    "top": "brasshaven:block/diamond_plate",
+    "side": "brasshaven:block/diamond_plate"
+  }
+}

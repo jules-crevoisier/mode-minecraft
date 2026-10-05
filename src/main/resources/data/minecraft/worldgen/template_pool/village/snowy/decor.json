@@ -67,8 +67,8 @@
       "weight": 8,
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:village/snowy/brass_lamp",
-        "processors": "wayfarers:none",
+        "location": "brasshaven:village/snowy/brass_lamp",
+        "processors": "brasshaven:none",
         "projection": "rigid"
       }
     },
@@ -76,8 +76,8 @@
       "weight": 3,
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:village/snowy/signpost",
-        "processors": "wayfarers:none",
+        "location": "brasshaven:village/snowy/signpost",
+        "processors": "brasshaven:none",
         "projection": "rigid"
       }
     }

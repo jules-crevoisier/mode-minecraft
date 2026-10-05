@@ -1,8 +1,0 @@
-{
-  "type": "minecraft:stonecutting",
-  "ingredient": "wayfarers:crimson_roof_tiles",
-  "result": {
-    "id": "wayfarers:crimson_roof_tile_stairs",
-    "count": 1
-  }
-}

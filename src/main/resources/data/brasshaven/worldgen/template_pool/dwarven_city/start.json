@@ -1,0 +1,188 @@
+{
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "brasshaven:chunked_template",
+        "size": [
+          85,
+          51,
+          98
+        ],
+        "cells": [
+          {
+            "location": "brasshaven:dwarven_city/city/x0_z0",
+            "offset": [
+              26,
+              9,
+              20
+            ],
+            "size": [
+              2,
+              18,
+              4
+            ],
+            "blocks": 84
+          },
+          {
+            "location": "brasshaven:dwarven_city/city/x0_z1",
+            "offset": [
+              26,
+              9,
+              24
+            ],
+            "size": [
+              2,
+              18,
+              25
+            ],
+            "blocks": 525
+          },
+          {
+            "location": "brasshaven:dwarven_city/city/x0_z2",
+            "offset": [
+              0,
+              5,
+              49
+            ],
+            "size": [
+              28,
+              45,
+              25
+            ],
+            "blocks": 25416
+          },
+          {
+            "location": "brasshaven:dwarven_city/city/x0_z3",
+            "offset": [
+              0,
+              5,
+              74
+            ],
+            "size": [
+              28,
+              43,
+              24
+            ],
+            "blocks": 24946
+          },
+          {
+            "location": "brasshaven:dwarven_city/city/x1_z0",
+            "offset": [
+              28,
+              0,
+              0
+            ],
+            "size": [
+              28,
+              34,
+              24
+            ],
+            "blocks": 16740
+          },
+          {
+            "location": "brasshaven:dwarven_city/city/x1_z1",
+            "offset": [
+              28,
+              9,
+              24
+            ],
+            "size": [
+              28,
+              24,
+              25
+            ],
+            "blocks": 15650
+          },
+          {
+            "location": "brasshaven:dwarven_city/city/x1_z2",
+            "offset": [
+              28,
+              5,
+              49
+            ],
+            "size": [
+              28,
+              46,
+              25
+            ],
+            "blocks": 28525
+          },
+          {
+            "location": "brasshaven:dwarven_city/city/x1_z3",
+            "offset": [
+              28,
+              5,
+              74
+            ],
+            "size": [
+              28,
+              45,
+              24
+            ],
+            "blocks": 26979
+          },
+          {
+            "location": "brasshaven:dwarven_city/city/x2_z0",
+            "offset": [
+              56,
+              9,
+              20
+            ],
+            "size": [
+              3,
+              18,
+              4
+            ],
+            "blocks": 156
+          },
+          {
+            "location": "brasshaven:dwarven_city/city/x2_z1",
+            "offset": [
+              56,
+              9,
+              24
+            ],
+            "size": [
+              3,
+              18,
+              25
+            ],
+            "blocks": 975
+          },
+          {
+            "location": "brasshaven:dwarven_city/city/x2_z2",
+            "offset": [
+              56,
+              5,
+              49
+            ],
+            "size": [
+              29,
+              43,
+              25
+            ],
+            "blocks": 26286
+          },
+          {
+            "location": "brasshaven:dwarven_city/city/x2_z3",
+            "offset": [
+              56,
+              5,
+              74
+            ],
+            "size": [
+              29,
+              43,
+              24
+            ],
+            "blocks": 25813
+          }
+        ],
+        "projection": "rigid",
+        "processors": "brasshaven:aging"
+      }
+    }
+  ]
+}

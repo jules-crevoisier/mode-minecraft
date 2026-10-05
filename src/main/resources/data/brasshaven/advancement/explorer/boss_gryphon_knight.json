@@ -1,0 +1,37 @@
+{
+  "display": {
+    "icon": {
+      "id": "brasshaven:gryphon_lance"
+    },
+    "title": {
+      "translate": "advancements.brasshaven.explorer.boss_gryphon_knight.title"
+    },
+    "description": {
+      "translate": "advancements.brasshaven.explorer.boss_gryphon_knight.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "kill": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "entity_type": "brasshaven:gryphon_knight"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "parent": "brasshaven:explorer/sky_island",
+  "rewards": {
+    "experience": 500
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "brasshaven:block/mahogany_chair"
+    },
+    "facing=east": {
+      "model": "brasshaven:block/mahogany_chair",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "brasshaven:block/mahogany_chair",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "brasshaven:block/mahogany_chair",
+      "y": 270
+    }
+  }
+}

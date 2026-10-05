@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Generate the Wayfarers quest line as an advancement tab + reward loot tables.
+"""Generate the Brasshaven quest line as an advancement tab + reward loot tables.
 
 Five chapters guide the group from the first Guild Outpost to the End. Every
 structure has a discovery quest; materials found there unlock the next tier of
 gear, so the world has to be explored step by step. The Java side shares every
-Wayfarers advancement with all players on the server (coop progression).
+Brasshaven advancement with all players on the server (coop progression).
 """
 import json
 import os
@@ -15,8 +15,8 @@ from wf import defs  # noqa: E402
 import wf.structures  # noqa: E402,F401
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-DATA = os.path.join(ROOT, "src", "main", "resources", "data", "wayfarers")
-NS = "wayfarers"
+DATA = os.path.join(ROOT, "src", "main", "resources", "data", "brasshaven")
+NS = "brasshaven"
 
 ADV = {}
 LANG_EN, LANG_FR = {}, {}
@@ -110,10 +110,10 @@ STRUCTURE_ICONS = {
     "forgotten_catacombs": "skeleton_skull", "sand_hypogeum": "chiseled_sandstone",
     "lithite_well": "deepslate_bricks", "void_crypt": "purpur_pillar",
     "clockwork_citadel": "clock", "sky_harbour": "scaffolding", "undercity": "copper_lantern",
-    "dwarven_city": "wayfarers:mithril_block", "sylvan_palace": "flowering_azalea_leaves",
-    "inventor_manor": "wayfarers:redstone_timer", "sky_isles": "wayfarers:aether_crystal",
+    "dwarven_city": "brasshaven:mithril_block", "sylvan_palace": "flowering_azalea_leaves",
+    "inventor_manor": "brasshaven:redstone_timer", "sky_isles": "brasshaven:aether_crystal",
     "geothermal_foundry": "magma_block", "tesla_observatory": "lightning_rod", "crystal_cathedral": "amethyst_block",
-    "sunken_submarine": "wayfarers:diving_helmet", "diving_bell": "bell", "coral_shrine": "brain_coral_block",
+    "sunken_submarine": "brasshaven:diving_helmet", "diving_bell": "bell", "coral_shrine": "brain_coral_block",
     "shipwreck_debris": "barrel",
 }
 # where each boss lives (its quest follows the discovery of that structure)
@@ -141,7 +141,7 @@ for s in defs.STRUCTURES:
 
 def build():
     # ---------------------------------------------------------------- root
-    quest("root", None, f"{NS}:wayfarer_atlas", ("Wayfarers", "Wayfarers"),
+    quest("root", None, f"{NS}:wayfarer_atlas", ("Brasshaven", "Brasshaven"),
           ("Explore every corner of every dimension, together.",
            "Explore chaque recoin de chaque dimension, ensemble."),
           {"start": {"trigger": "minecraft:tick"}})
@@ -291,12 +291,12 @@ def build():
               {"kill": killed(boss)}, frame="goal" if champion else "challenge", xp=250 if champion else 500)
     great = ["drowned_warden", "void_warden"] + [b for b in BOSS_HOME if b in weapon_of]
     quest("end/legends_bane", "end/void_warden", "nether_star", ("Bane of Legends", "Fléau des Légendes"),
-          ("Defeat every great boss of the Wayfarers.", "Vaincs tous les grands boss des Voyageurs."),
+          ("Defeat every great boss of the Brasshaven.", "Vaincs tous les grands boss des Voyageurs."),
           {b: killed(b) for b in great}, frame="challenge", xp=3000)
     all_ids = [s.id for s in defs.STRUCTURES]
-    quest("end/legend", "end/void_warden", "dragon_egg", ("Legend of the Wayfarers", "Légende des Voyageurs"),
-          ("Discover every single Wayfarers structure in every dimension.",
-           "Découvre absolument toutes les structures Wayfarers, dans toutes les dimensions."),
+    quest("end/legend", "end/void_warden", "dragon_egg", ("Legend of the Brasshaven", "Légende des Voyageurs"),
+          ("Discover every single Brasshaven structure in every dimension.",
+           "Découvre absolument toutes les structures Brasshaven, dans toutes les dimensions."),
           {sid: in_structure(sid) for sid in all_ids}, frame="challenge", xp=2000)
 
 

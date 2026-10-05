@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "key": {
+    "#": "brasshaven:glowwood_log"
+  },
+  "result": {
+    "id": "brasshaven:glowwood_wood",
+    "count": 3
+  },
+  "group": "bark"
+}

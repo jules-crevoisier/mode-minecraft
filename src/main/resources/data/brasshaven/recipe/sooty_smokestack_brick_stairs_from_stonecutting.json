@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "brasshaven:sooty_smokestack_bricks",
+  "result": {
+    "id": "brasshaven:sooty_smokestack_brick_stairs",
+    "count": 1
+  }
+}

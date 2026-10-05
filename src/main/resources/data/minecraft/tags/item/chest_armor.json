@@ -1,12 +1,12 @@
 {
   "replace": false,
   "values": [
-    "wayfarers:explorer_chestplate",
-    "wayfarers:ember_chestplate",
-    "wayfarers:void_chestplate",
-    "wayfarers:brass_chestplate",
-    "wayfarers:mithril_chestplate",
-    "wayfarers:aether_chestplate",
-    "wayfarers:arcane_chestplate"
+    "brasshaven:explorer_chestplate",
+    "brasshaven:ember_chestplate",
+    "brasshaven:void_chestplate",
+    "brasshaven:brass_chestplate",
+    "brasshaven:mithril_chestplate",
+    "brasshaven:aether_chestplate",
+    "brasshaven:arcane_chestplate"
   ]
 }

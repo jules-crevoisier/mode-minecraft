@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    " B ",
+    "BGB",
+    " B "
+  ],
+  "key": {
+    "B": "brasshaven:ember_bricks",
+    "G": "minecraft:glowstone"
+  },
+  "result": {
+    "id": "brasshaven:ember_lamp",
+    "count": 2
+  }
+}

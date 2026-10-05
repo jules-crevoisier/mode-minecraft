@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:template",
+  "config": {
+    "templates": [
+      {
+        "data": {
+          "id": "brasshaven:worldobjects/rock_spire_0"
+        },
+        "weight": 1
+      },
+      {
+        "data": {
+          "id": "brasshaven:worldobjects/rock_spire_1"
+        },
+        "weight": 1
+      },
+      {
+        "data": {
+          "id": "brasshaven:worldobjects/rock_spire_2"
+        },
+        "weight": 1
+      },
+      {
+        "data": {
+          "id": "brasshaven:worldobjects/rock_spire_3"
+        },
+        "weight": 1
+      }
+    ]
+  }
+}

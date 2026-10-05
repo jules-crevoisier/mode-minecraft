@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:crafting_transmute",
+  "category": "equipment",
+  "input": "brasshaven:travel_backpack",
+  "material": "brasshaven:brass_ingot",
+  "result": {
+    "id": "brasshaven:explorer_backpack"
+  }
+}

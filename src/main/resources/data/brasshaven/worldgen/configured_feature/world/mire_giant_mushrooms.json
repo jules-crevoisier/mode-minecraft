@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:template",
+  "config": {
+    "templates": [
+      {
+        "data": {
+          "id": "brasshaven:worldobjects/flat_mushroom_0"
+        },
+        "weight": 1
+      },
+      {
+        "data": {
+          "id": "brasshaven:worldobjects/flat_mushroom_1"
+        },
+        "weight": 1
+      },
+      {
+        "data": {
+          "id": "brasshaven:worldobjects/flat_mushroom_2"
+        },
+        "weight": 1
+      },
+      {
+        "data": {
+          "id": "brasshaven:worldobjects/flat_mushroom_3"
+        },
+        "weight": 1
+      }
+    ]
+  }
+}

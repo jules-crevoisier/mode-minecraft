@@ -253,8 +253,8 @@
       "weight": 5,
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:village/taiga/inn",
-        "processors": "wayfarers:village",
+        "location": "brasshaven:village/taiga/inn",
+        "processors": "brasshaven:village",
         "projection": "rigid"
       }
     },
@@ -262,8 +262,8 @@
       "weight": 6,
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:village/taiga/guild_post",
-        "processors": "wayfarers:village",
+        "location": "brasshaven:village/taiga/guild_post",
+        "processors": "brasshaven:village",
         "projection": "rigid"
       }
     },
@@ -271,8 +271,8 @@
       "weight": 4,
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:village/taiga/workshop",
-        "processors": "wayfarers:village",
+        "location": "brasshaven:village/taiga/workshop",
+        "processors": "brasshaven:village",
         "projection": "rigid"
       }
     },
@@ -280,8 +280,8 @@
       "weight": 3,
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:village/taiga/watchtower",
-        "processors": "wayfarers:village",
+        "location": "brasshaven:village/taiga/watchtower",
+        "processors": "brasshaven:village",
         "projection": "rigid"
       }
     },
@@ -289,8 +289,8 @@
       "weight": 4,
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:village/taiga/market",
-        "processors": "wayfarers:village",
+        "location": "brasshaven:village/taiga/market",
+        "processors": "brasshaven:village",
         "projection": "rigid"
       }
     },
@@ -298,8 +298,8 @@
       "weight": 4,
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:village/taiga/orchard",
-        "processors": "wayfarers:village",
+        "location": "brasshaven:village/taiga/orchard",
+        "processors": "brasshaven:village",
         "projection": "rigid"
       }
     },
@@ -307,8 +307,8 @@
       "weight": 5,
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:village/taiga/cottage",
-        "processors": "wayfarers:village",
+        "location": "brasshaven:village/taiga/cottage",
+        "processors": "brasshaven:village",
         "projection": "rigid"
       }
     },
@@ -316,8 +316,8 @@
       "weight": 3,
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:village/taiga/manor",
-        "processors": "wayfarers:village",
+        "location": "brasshaven:village/taiga/manor",
+        "processors": "brasshaven:village",
         "projection": "rigid"
       }
     },
@@ -325,8 +325,8 @@
       "weight": 3,
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:village/taiga/well_corner",
-        "processors": "wayfarers:village",
+        "location": "brasshaven:village/taiga/well_corner",
+        "processors": "brasshaven:village",
         "projection": "rigid"
       }
     }

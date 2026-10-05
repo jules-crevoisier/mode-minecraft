@@ -1,7 +1,7 @@
 {
   "replace": false,
   "values": [
-    "wayfarers:glowwood_button",
-    "wayfarers:rustwood_button"
+    "brasshaven:glowwood_button",
+    "brasshaven:rustwood_button"
   ]
 }

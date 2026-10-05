@@ -1,6 +1,6 @@
-# Publier et mettre à jour Wayfarers
+# Publier et mettre à jour Brasshaven
 
-Ce guide explique comment publier Wayfarers sur CurseForge (et Modrinth), comment une version part toute seule
+Ce guide explique comment publier Brasshaven sur CurseForge (et Modrinth), comment une version part toute seule
 une fois les comptes branchés, et comment joueurs et admins mettent à jour **sans perdre leur monde**.
 
 En bref, une fois la configuration faite (sections 2 à 4) :
@@ -23,7 +23,7 @@ git push origin main v0.9.1-beta
 | Version publique | `mod_version` dans `gradle.properties` | `0.9.0-beta` |
 | Build de développement (chaque push) | `mod_version` + `+build.<n° du run CI>` | `0.9.0-beta+build.84` |
 | Build sur ta machine | `mod_version` + `+build.local` | `0.9.0-beta+build.local` |
-| Nom du jar | `+` remplacé par `-` (un `+` casse les liens de téléchargement) | `wayfarers-0.9.0-beta-build.84.jar` |
+| Nom du jar | `+` remplacé par `-` (un `+` casse les liens de téléchargement) | `brasshaven-0.9.0-beta-build.84.jar` |
 | Protocole réseau | `network_protocol` dans `gradle.properties` | `1` |
 
 - On suit le [versionnage sémantique](https://semver.org/lang/fr/) : `0.9.0-beta` < `0.9.0-rc.1` < `0.9.0` < `0.9.1-beta`.
@@ -32,9 +32,9 @@ git push origin main v0.9.1-beta
   autre chose. Après une release, passe `mod_version` à la version suivante (`0.9.2-beta`) pour que les builds de
   développement ne portent pas le numéro d'une version déjà publiée.
 - Cette version est écrite dans `mods.toml` (ce que Forge affiche et compare), dans le nom du jar, et dans
-  `META-INF/wayfarers/build.properties` (lu par le mod).
+  `META-INF/brasshaven/build.properties` (lu par le mod).
 - **Protocole réseau** : n'augmente `network_protocol` que si un message réseau est ajouté, retiré ou change de
-  format (`src/main/java/com/wayfarers/network`). Pas à chaque version.
+  format (`src/main/java/com/brasshaven/network`). Pas à chaque version.
 - **Type de release** sur CurseForge/Modrinth : déduit de la version. `-alpha` donne alpha, `-beta` ou `-rc` donne
   beta, rien donne release. `0.9.x-beta` part donc en **beta**.
 
@@ -43,7 +43,7 @@ git push origin main v0.9.1-beta
 Un joueur dont la version diffère de celle du serveur est refusé avec un message clair, en français ou en anglais,
 qui donne les deux versions et le lien de téléchargement (`mod_download_url` dans `gradle.properties`, ou
 `compat.downloadUrl` dans la config du serveur). Avec `compat.requireSameVersion = false`
-(`config/wayfarers-common.toml`), le serveur laisse entrer les versions compatibles : même protocole et mêmes blocs
+(`config/brasshaven-common.toml`), le serveur laisse entrer les versions compatibles : même protocole et mêmes blocs
 et objets. Le joueur voit alors seulement un avertissement dans le chat.
 
 ---
@@ -53,8 +53,8 @@ et objets. Le joueur voit alors seulement un avertissement dans le chat.
 1. Va sur <https://authors.curseforge.com/> et connecte-toi (ou crée un compte CurseForge).
 2. **Create Project**. Jeu **Minecraft**, classe **Mods**.
 3. Remplis le formulaire :
-   - **Name** : `Wayfarers` (si le nom est pris : `Wayfarers Guild`). Le *slug* devient l'adresse de la page,
-     par exemple `curseforge.com/minecraft/mc-mods/wayfarers`.
+   - **Name** : `Brasshaven` (si le nom est pris : `Brasshaven Guild`). Le *slug* devient l'adresse de la page,
+     par exemple `curseforge.com/minecraft/mc-mods/brasshaven`.
    - **Summary** (une phrase, en anglais pour toucher tout le monde) : *Exploration-first co-op survival:
      45 hand-built structures, Elden Ring style bosses, shared quests, steampunk machines, maps and storage.*
    - **Description** : reprends le haut du `README.md`, soit la liste des fonctionnalités et le tableau des
@@ -69,9 +69,9 @@ et objets. Le joueur voit alors seulement un avertissement dans le chat.
 4. **Images (onglet *Images*)** : envoie 6 à 10 captures. Les meilleures sources :
    - `docs/structures/*.png` (vues isométriques de chaque structure) ;
    - `docs/bestiary/*.png` (créatures et boss) ;
-   - les captures du vrai client, sur la pré-release GitHub `previews-<branche>` (`wayfarers-shot-*.png` :
+   - les captures du vrai client, sur la pré-release GitHub `previews-<branche>` (`brasshaven-shot-*.png` :
      écrans, HUD, Citadelle) ;
-   - les rendus en place `wayfarers-fit-*.png` de cette même pré-release.
+   - les rendus en place `brasshaven-fit-*.png` de cette même pré-release.
 5. Enregistre. **Le premier fichier peut être envoyé tout de suite** : la première version part en modération, et
    le projet devient public après validation par CurseForge (en général quelques jours).
 6. Note le **Project ID** : c'est un nombre, affiché sur la page du projet dans le cadre *About Project*.
@@ -79,17 +79,17 @@ et objets. Le joueur voit alors seulement un avertissement dans le chat.
 Après la création, mets l'adresse de la page dans `gradle.properties` :
 
 ```properties
-mod_download_url=https://www.curseforge.com/minecraft/mc-mods/wayfarers
+mod_download_url=https://www.curseforge.com/minecraft/mc-mods/brasshaven
 ```
 
 C'est le lien donné aux joueurs refusés pour version différente. Commit, puis fais une release.
 
 ### Modrinth (facultatif)
 
-1. <https://modrinth.com/dashboard/projects>, **Create a project** : nom `Wayfarers`, type *Mod*, visibilité au choix.
+1. <https://modrinth.com/dashboard/projects>, **Create a project** : nom `Brasshaven`, type *Mod*, visibilité au choix.
 2. Remplis la description, les catégories (*Adventure*, *Worldgen*, *Mobs*, *Equipment*, *Storage*, *Magic*),
    la licence MIT, le lien source et la galerie (mêmes images que pour CurseForge).
-3. Note l'**ID** du projet (page du projet, menu ⋯, *Copy ID*) ou son *slug* (`wayfarers`). Les deux fonctionnent.
+3. Note l'**ID** du projet (page du projet, menu ⋯, *Copy ID*) ou son *slug* (`brasshaven`). Les deux fonctionnent.
 
 ---
 
@@ -100,11 +100,11 @@ C'est le lien donné aux joueurs refusés pour version différente. Commit, puis
 1. Sur CurseForge, menu de ton compte, **API Tokens** (adresse directe :
    <https://legacy.curseforge.com/account/api-tokens>). Si CurseForge a déplacé la page, cherche « API token »
    dans les réglages du compte auteur.
-2. Crée un jeton nommé `GitHub Wayfarers` et copie-le : il ne s'affiche qu'une fois.
+2. Crée un jeton nommé `GitHub Brasshaven` et copie-le : il ne s'affiche qu'une fois.
 
 ### Jeton Modrinth
 
-<https://modrinth.com/settings/pats>, **Create a PAT**, nom `GitHub Wayfarers`, droits **Create versions**,
+<https://modrinth.com/settings/pats>, **Create a PAT**, nom `GitHub Brasshaven`, droits **Create versions**,
 **Read projects** et **Read versions**. Mets l'expiration la plus longue possible et note la date pour le
 renouveler.
 
@@ -144,9 +144,9 @@ Dépôt `jules-crevoisier/mode-minecraft`, **Settings**, **Secrets and variables
      butins). Si un test échoue, rien n'est publié ;
    - **github-release** : release GitHub `v0.9.1-beta`, marquée *Latest*. Son texte vient de
      `tools/changelog.py`, qui liste les commits depuis le tag `v*` précédent. Elle contient le jar, le pack
-     serveur `wayfarers-server-*.zip` et le modpack `wayfarers-modpack-*.zip` ;
+     serveur `brasshaven-server-*.zip` et le modpack `brasshaven-modpack-*.zip` ;
    - **curseforge** : envoie le jar sur CurseForge en *beta*, pour Minecraft 26.2, Forge et Java 25, avec le même
-     changelog. Il ajoute ensuite à la release `wayfarers-modpack-*-curseforge.zip`, qui référence le fichier
+     changelog. Il ajoute ensuite à la release `brasshaven-modpack-*-curseforge.zip`, qui référence le fichier
      CurseForge ;
    - **modrinth** : envoie le jar sur Modrinth en *beta*, pour Minecraft 26.2 et Forge.
 5. Passe `mod_version` à la version suivante (`0.9.2-beta`) et commit.
@@ -162,9 +162,9 @@ jar, le pack serveur et le modpack. Ces builds ne sont pas proposés comme mise 
 ```bash
 python3 tools/changelog.py --version 0.9.1-beta                # changelog depuis le dernier tag v*
 python3 tools/make_modpack.py configs                          # régénère les configs recommandées
-python3 tools/make_modpack.py serverpack --jar build/libs/wayfarers-0.9.1-beta.jar
-python3 tools/make_modpack.py modpack --jar build/libs/wayfarers-0.9.1-beta.jar [--project-id N --file-id N]
-python3 tools/publish.py curseforge --jar build/libs/wayfarers-0.9.1-beta.jar --dry-run
+python3 tools/make_modpack.py serverpack --jar build/libs/brasshaven-0.9.1-beta.jar
+python3 tools/make_modpack.py modpack --jar build/libs/brasshaven-0.9.1-beta.jar [--project-id N --file-id N]
+python3 tools/publish.py curseforge --jar build/libs/brasshaven-0.9.1-beta.jar --dry-run
 ```
 
 ---
@@ -174,11 +174,11 @@ python3 tools/publish.py curseforge --jar build/libs/wayfarers-0.9.1-beta.jar --
 - `modpack/manifest.json` est le modèle de modpack CurseForge (Minecraft 26.2, Forge 65.1.0).
   `modpack/overrides/config/` contient les configs recommandées. `tools/make_modpack.py configs` les écrit à partir
   des classes de config du mod, et `tools/validate.py` vérifie qu'elles restent à jour.
-- `wayfarers-modpack-<version>.zip` contient le jar. Les joueurs l'importent dans l'app CurseForge : **Create
+- `brasshaven-modpack-<version>.zip` contient le jar. Les joueurs l'importent dans l'app CurseForge : **Create
   Custom Profile**, **Import**. Il marche avant même que le projet CurseForge existe.
-- `wayfarers-modpack-<version>-curseforge.zip` référence le fichier CurseForge du mod (ids remplis par le CI). Pour
+- `brasshaven-modpack-<version>-curseforge.zip` référence le fichier CurseForge du mod (ids remplis par le CI). Pour
   publier un **modpack** sur CurseForge, crée un second projet de classe **Modpacks** et envoie-lui ce zip.
-- `wayfarers-server-<version>.zip` est le serveur prêt à lancer : le jar, `start.sh` / `start.bat`, les options JVM
+- `brasshaven-server-<version>.zip` est le serveur prêt à lancer : le jar, `start.sh` / `start.bat`, les options JVM
   (`jvm_args.txt`, 6 Go par défaut), `server.properties` et la config recommandée. Au premier lancement, le script
   installe Forge et demande d'accepter le CLUF de Minecraft. Voir `serverpack/LISEZMOI.txt`.
 
@@ -197,7 +197,7 @@ python3 tools/publish.py curseforge --jar build/libs/wayfarers-0.9.1-beta.jar --
   `"removed": { "block": { "ancien_id": "pourquoi" } }`. Le monde l'efface alors sans ouvrir l'écran
   « missing entries ».
 - **Données sauvegardées.** Les données du mod portent un `data_version` : pierres de voyage et quêtes partagées
-  (`wayfarers_guild.dat`), carte partagée (`data/wayfarers_map/format.json`), réglages du terminal de guilde. Si un
+  (`brasshaven_guild.dat`), carte partagée (`data/brasshaven_map/format.json`), réglages du terminal de guilde. Si un
   format change, augmente la constante dans `data/DataVersions.java` et ajoute une étape de migration depuis
   l'ancienne version. Les étapes s'enchaînent, donc un monde qui a plusieurs versions de retard se met à jour en un
   seul chargement.
@@ -210,7 +210,7 @@ python3 tools/publish.py curseforge --jar build/libs/wayfarers-0.9.1-beta.jar --
    copier le dossier `saves/<monde>`.
 2. Mets la nouvelle version :
    - **installée par CurseForge** : l'app propose la mise à jour, clique **Update** ;
-   - **à la main** : dans le dossier `mods` du profil, supprime l'ancien `wayfarers-*.jar` et dépose le nouveau.
+   - **à la main** : dans le dossier `mods` du profil, supprime l'ancien `brasshaven-*.jar` et dépose le nouveau.
      Il ne doit jamais y en avoir deux.
 3. Lance le jeu et ouvre le monde : il est conservé. Les nouvelles structures n'apparaissent que dans les zones
    encore jamais explorées.
@@ -219,7 +219,7 @@ python3 tools/publish.py curseforge --jar build/libs/wayfarers-0.9.1-beta.jar --
 
 Le mod vérifie lui-même s'il existe une nouvelle version, avec un message sur l'écran titre et une ligne dans le chat
 avec le lien du changelog. Il ne télécharge jamais rien. Pour couper cette vérification :
-`updates.checkForUpdates = false` dans `config/wayfarers-client.toml`.
+`updates.checkForUpdates = false` dans `config/brasshaven-client.toml`.
 
 ## 8. Mettre à jour : admins de serveur
 
@@ -227,14 +227,14 @@ avec le lien du changelog. Il ne télécharge jamais rien. Pour couper cette vé
 2. **Arrête le serveur** (`stop`).
 3. **Sauvegarde le monde** : copie le dossier `world/`. Le `start.sh` / `start.bat` du pack serveur le fait aussi
    tout seul dans `backups/` au premier démarrage d'une nouvelle version.
-4. Remplace le jar : décompresse le nouveau `wayfarers-server-*.zip` **par-dessus** l'ancien dossier, ou remplace
-   seulement `mods/wayfarers-*.jar`. Tes réglages (`server.properties`, `config/`) ne sont jamais écrasés, et
+4. Remplace le jar : décompresse le nouveau `brasshaven-server-*.zip` **par-dessus** l'ancien dossier, ou remplace
+   seulement `mods/brasshaven-*.jar`. Tes réglages (`server.properties`, `config/`) ne sont jamais écrasés, et
    l'ancien jar part dans `old-mods/`.
 5. Relance le serveur. Le journal indique si les données du monde ont été mises à jour (`upgraded the ... data`).
 6. **En cas de problème** : arrête le serveur, remets l'ancien jar et restaure la sauvegarde.
 
 Au démarrage, le serveur écrit dans son journal si une nouvelle version existe. Pour couper ce message :
-`updates.checkForUpdates = false` dans `config/wayfarers-common.toml`. Avec un hébergeur (Pterodactyl, etc.),
+`updates.checkForUpdates = false` dans `config/brasshaven-common.toml`. Avec un hébergeur (Pterodactyl, etc.),
 installe Forge 65.1.0 depuis le panneau, envoie `mods/` et `config/`, et mets les options de `jvm_args.txt` dans le
 champ des arguments JVM.
 

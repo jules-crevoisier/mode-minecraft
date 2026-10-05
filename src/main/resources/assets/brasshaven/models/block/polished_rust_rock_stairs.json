@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/stairs",
+  "textures": {
+    "bottom": "brasshaven:block/polished_rust_rock",
+    "top": "brasshaven:block/polished_rust_rock",
+    "side": "brasshaven:block/polished_rust_rock"
+  }
+}

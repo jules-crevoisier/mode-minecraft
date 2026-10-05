@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "XXX"
+  ],
+  "key": {
+    "X": "brasshaven:guild_bricks"
+  },
+  "result": {
+    "id": "brasshaven:guild_brick_slab",
+    "count": 6
+  }
+}

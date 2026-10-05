@@ -1,7 +1,7 @@
 {
   "replace": false,
   "values": [
-    "wayfarers:glowwood_trapdoor",
-    "wayfarers:rustwood_trapdoor"
+    "brasshaven:glowwood_trapdoor",
+    "brasshaven:rustwood_trapdoor"
   ]
 }

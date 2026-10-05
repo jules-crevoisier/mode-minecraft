@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "brasshaven:block/crimson_roof_tile_slab"
+    },
+    "type=top": {
+      "model": "brasshaven:block/crimson_roof_tile_slab_top"
+    },
+    "type=double": {
+      "model": "brasshaven:block/crimson_roof_tiles"
+    }
+  }
+}

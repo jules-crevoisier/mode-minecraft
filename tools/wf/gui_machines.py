@@ -1,4 +1,4 @@
-"""Machine screens (com.wayfarers.client.gui.MachineScreen): their GUI sprites and the --mockup previews.
+"""Machine screens (com.brasshaven.client.gui.MachineScreen): their GUI sprites and the --mockup previews.
 
 Called from tools/gen_gui.py with that module as ``G`` (Sprite, palette, nine-slice and mockup helpers), so the
 machine widgets share the brass / iron / parchment theme. The mockups mirror MachineMenu / MachineScreen's layout
@@ -528,7 +528,7 @@ class Screen:
 
 def _tex(name):
     root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
-    p = os.path.join(root, "src/main/resources/assets/wayfarers/textures/block", name + ".png")
+    p = os.path.join(root, "src/main/resources/assets/brasshaven/textures/block", name + ".png")
     return p if os.path.exists(p) else None
 
 
@@ -711,10 +711,10 @@ def _mc(name):
 
 
 def mockup_settings(G, li=1):
-    """SettingsScreen.java (Mods > Wayfarers > Config): same window, tabs, rows and controls. settings.png is the
+    """SettingsScreen.java (Mods > Brasshaven > Config): same window, tabs, rows and controls. settings.png is the
     Display tab, settings_minimap.png the Minimap tab (French; ``li=0`` adds _en versions)."""
     from . import content, guide, machines
-    k = "gui.wayfarers.settings."
+    k = "gui.brasshaven.settings."
 
     def tr(key):
         return content.MESSAGES[key][li]

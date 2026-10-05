@@ -1,0 +1,41 @@
+{
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "brasshaven:chunked_template",
+        "size": [
+          21,
+          22,
+          22
+        ],
+        "cells": [
+          {
+            "location": "brasshaven:diving_bell/bell",
+            "offset": [
+              0,
+              0,
+              0
+            ],
+            "size": [
+              21,
+              22,
+              22
+            ],
+            "blocks": 1861
+          }
+        ],
+        "projection": "rigid",
+        "processors": "brasshaven:none",
+        "ground_level_delta": 5,
+        "footprint": [
+          2,
+          2,
+          18,
+          19
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "structures": [
+    {
+      "structure": "brasshaven:galleon_wreck",
+      "weight": 3
+    },
+    {
+      "structure": "brasshaven:shipwreck_debris",
+      "weight": 3
+    },
+    {
+      "structure": "brasshaven:diving_bell",
+      "weight": 2
+    },
+    {
+      "structure": "brasshaven:sunken_submarine",
+      "weight": 2
+    },
+    {
+      "structure": "brasshaven:coral_shrine",
+      "weight": 2
+    }
+  ],
+  "placement": {
+    "type": "brasshaven:curated_spread",
+    "salt": 47574193,
+    "spacing": 32,
+    "separation": 12,
+    "avoid": [
+      {
+        "set": "brasshaven:wonders",
+        "chunks": 10
+      },
+      {
+        "set": "brasshaven:ocean_ruins",
+        "chunks": 5
+      },
+      {
+        "set": "minecraft:ocean_monuments",
+        "chunks": 4
+      },
+      {
+        "set": "brasshaven:coast",
+        "chunks": 3
+      }
+    ]
+  }
+}

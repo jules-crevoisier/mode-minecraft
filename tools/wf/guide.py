@@ -2,25 +2,25 @@
 
 Each page has an id, a category, an icon item, a title, short paragraphs and the items it is about
 (their tooltips get "Hold [W]: manual page"). gen_java bakes the structure into GeneratedGuide.java and
-gen_assets writes the text into the lang files as guide.wayfarers.<page>.title / .p<n>.
+gen_assets writes the text into the lang files as guide.brasshaven.<page>.title / .p<n>.
 Keep paragraphs short: 1-3 sentences, say what to do, not how it works inside.
 """
 
-from . import worldbiomes as _WB  # the Wayfarers biome pages take their text from there (the wiki does too)
+from . import worldbiomes as _WB  # the Brasshaven biome pages take their text from there (the wiki does too)
 
 CATEGORIES = [
     ("start", "minecraft:compass", ("Getting started", "Premiers pas")),
     ("talents", "minecraft:enchanted_book", ("Talents & magic", "Talents et magie")),
-    ("travel", "wayfarers:waystone", ("Travel", "Voyage")),
+    ("travel", "brasshaven:waystone", ("Travel", "Voyage")),
     ("wonders", "minecraft:clock", ("Wonders", "Merveilles du monde")),
-    ("storage", "wayfarers:sorting_chest", ("Storage", "Rangement")),
+    ("storage", "brasshaven:sorting_chest", ("Storage", "Rangement")),
     ("danger", "minecraft:iron_sword", ("Danger & bosses", "Danger et boss")),
-    ("automatons", "wayfarers:clockwork_heart", ("Automatons", "Automates")),
-    ("gear", "wayfarers:lithite_shard", ("Gear & materials", "Équipement")),
-    ("building", "wayfarers:builder_wand", ("Building tools", "Construction")),
-    ("machines", "wayfarers:auto_harvester", ("Redstone machines", "Mécanismes")),
-    ("gadgets", "wayfarers:brass_wrench", ("Steam gadgets", "Gadgets à vapeur")),
-    ("oceans", "wayfarers:diving_helmet", ("Living oceans", "Océans vivants")),
+    ("automatons", "brasshaven:clockwork_heart", ("Automatons", "Automates")),
+    ("gear", "brasshaven:lithite_shard", ("Gear & materials", "Équipement")),
+    ("building", "brasshaven:builder_wand", ("Building tools", "Construction")),
+    ("machines", "brasshaven:auto_harvester", ("Redstone machines", "Mécanismes")),
+    ("gadgets", "brasshaven:brass_wrench", ("Steam gadgets", "Gadgets à vapeur")),
+    ("oceans", "brasshaven:diving_helmet", ("Living oceans", "Océans vivants")),
 ]
 
 # (id, category, icon, (title en, title fr), [(en, fr), ...paragraphs], [related item ids])
@@ -28,7 +28,7 @@ CATEGORIES = [
 # continuation sheets), but validate.py warns when a page needs more than two sheets.
 PAGES = [
     # ------------------------------------------------------------------ getting started
-    ("welcome", "start", "wayfarers:wayfarer_atlas", ("Welcome, Wayfarer", "Bienvenue, Voyageur"), [
+    ("welcome", "start", "brasshaven:wayfarer_atlas", ("Welcome, Wayfarer", "Bienvenue, Voyageur"), [
         ("This world hides dozens of hand-built structures, dungeons, bosses and giant wonders. Your group explores "
          "it together: quests, waystones and discoveries are shared by everyone.",
          "Ce monde cache des dizaines de structures, de donjons, de boss et de merveilles géantes. Ton groupe "
@@ -39,12 +39,12 @@ PAGES = [
          "the mouse wheel or the arrow keys. When a page goes on, the button reads \"More >\".",
          "Ce manuel explique chaque système. Clique une page dans le sommaire à gauche ; tourne les pages avec les "
          "flèches, la molette ou les touches fléchées. Quand une page continue, le bouton affiche « Suite > »."),
-        ("Shortcut: hover a Wayfarers item in your inventory and hold the manual key (W, or the key its tooltip "
+        ("Shortcut: hover a Brasshaven item in your inventory and hold the manual key (W, or the key its tooltip "
          "shows; Controls to change it) to open its page. Lost the manual? Craft a book and a feather.",
-         "Raccourci : survole un objet Wayfarers dans ton inventaire et maintiens la touche du manuel (Z sur un "
+         "Raccourci : survole un objet Brasshaven dans ton inventaire et maintiens la touche du manuel (Z sur un "
          "clavier AZERTY, celle qu'indique l'infobulle ; réglable dans Commandes) pour ouvrir sa page. Manuel "
          "perdu ? Un livre et une plume."),
-    ], ["wayfarers:wayfarer_atlas", "wayfarers:wayfarer_manual"]),
+    ], ["brasshaven:wayfarer_atlas", "brasshaven:wayfarer_manual"]),
     ("quests", "start", "minecraft:writable_book", ("Quests & journal", "Quêtes et journal"), [
         ("Open the journal with J or by using the Wayfarer's Atlas. Five chapters lead you from the first Guild "
          "Outpost to the End; each quest shows its objective, your progress and its rewards.",
@@ -100,20 +100,20 @@ PAGES = [
          "M : carte du monde\nH : afficher/masquer la mini-carte\nMaj + H : taille de la mini-carte\n"
          "Z : zoom de la mini-carte\nB : signaler l'endroit visé\n"
          "N : allumer/éteindre l'aimant\nG : symétrie de la baguette\nW (maintenu sur un objet) : sa page du manuel"),
-        ("These are the keys of a QWERTY keyboard: Options > Controls, Wayfarers section, shows yours and changes "
+        ("These are the keys of a QWERTY keyboard: Options > Controls, Brasshaven section, shows yours and changes "
          "them. Display settings (health bars, damage numbers, tracker, tips, and the minimap's size, corner, shape, "
-         "rotation, coordinates and opacity): Config button of Wayfarers in the mods list. The minimap's exact size "
+         "rotation, coordinates and opacity): Config button of Brasshaven in the mods list. The minimap's exact size "
          "(a slider) and the maps' relief: M, then the gear button.",
          "Ce sont les touches d'un clavier QWERTY (en AZERTY : W devient Z, Z devient W et M devient la virgule) : "
-         "Options > Commandes, rubrique Wayfarers, montre les tiennes et les change. Réglages d'affichage (barres de "
+         "Options > Commandes, rubrique Brasshaven, montre les tiennes et les change. Réglages d'affichage (barres de "
          "vie, chiffres de dégâts, suivi, astuces, et taille, coin, forme, rotation, coordonnées et opacité de "
-         "la mini-carte) : bouton Config de Wayfarers dans la liste des mods. Taille exacte de la mini-carte (un "
+         "la mini-carte) : bouton Config de Brasshaven dans la liste des mods. Taille exacte de la mini-carte (un "
          "curseur) et relief des cartes : M, puis le bouton engrenage."),
     ], []),
-    ("compass", "start", "wayfarers:structure_compass", ("Structure Compass", "Boussole des structures"), [
-        ("It finds Wayfarers structures. You get one when you first arrive; craft more with a compass surrounded by "
+    ("compass", "start", "brasshaven:structure_compass", ("Structure Compass", "Boussole des structures"), [
+        ("It finds Brasshaven structures. You get one when you first arrive; craft more with a compass surrounded by "
          "four Map Fragments.",
-         "Elle trouve les structures Wayfarers. Tu en reçois une à ton arrivée ; fabrique-en d'autres avec une "
+         "Elle trouve les structures Brasshaven. Tu en reçois une à ton arrivée ; fabrique-en d'autres avec une "
          "boussole entourée de quatre fragments de carte."),
         ("Right-click: the chat shows the nearest one (name, distance, direction and coordinates) and sparks show "
          "the way.",
@@ -123,7 +123,7 @@ PAGES = [
          "wonders come at the end of the list.",
          "Accroupi + clic droit : choisis le type de structure recherché, un à la fois, ou « n'importe quelle "
          "structure ». Les merveilles sont à la fin de la liste."),
-    ], ["wayfarers:structure_compass"]),
+    ], ["brasshaven:structure_compass"]),
     ("harvest", "start", "minecraft:wheat", ("Right-click harvest", "Récolte au clic droit"), [
         ("Right-click a ripe crop (wheat, carrots, potatoes, beetroots, nether wart, cocoa...) to harvest it and "
          "replant it in one go.",
@@ -147,8 +147,8 @@ PAGES = [
          "amethyst shard).",
          "Envie de changer ? Bois une Fiole d'oubli pour récupérer tous tes points (fiole, larme de ghast et éclat "
          "d'améthyste)."),
-    ], ["wayfarers:oblivion_vial"]),
-    ("magic", "talents", "wayfarers:fire_staff", ("Magic", "Magie"), [
+    ], ["brasshaven:oblivion_vial"]),
+    ("magic", "talents", "brasshaven:fire_staff", ("Magic", "Magie"), [
         ("Each staff holds one spell: hold it and right-click to cast. Spells cost mana, shown in the blue bar above "
          "your experience; it refills by itself.",
          "Chaque bâton contient un sort : tiens-le et fais clic droit pour le lancer. Les sorts coûtent du mana, "
@@ -163,12 +163,12 @@ PAGES = [
          "inventory. Arcanist talents and robes make spells stronger.",
          "Plus de mana : un Anneau arcanique (+50 mana) ou une Amulette de mana (recharge plus rapide) agissent "
          "simplement en étant dans ton inventaire. Les talents et les robes d'arcaniste renforcent les sorts."),
-    ], ["wayfarers:fire_staff", "wayfarers:frost_staff", "wayfarers:thunder_staff", "wayfarers:healing_staff",
-        "wayfarers:levitation_wand", "wayfarers:ward_orb", "wayfarers:steam_cane", "wayfarers:arcane_ring",
-        "wayfarers:mana_amulet"]),
+    ], ["brasshaven:fire_staff", "brasshaven:frost_staff", "brasshaven:thunder_staff", "brasshaven:healing_staff",
+        "brasshaven:levitation_wand", "brasshaven:ward_orb", "brasshaven:steam_cane", "brasshaven:arcane_ring",
+        "brasshaven:mana_amulet"]),
 
     # ------------------------------------------------------------------ travel
-    ("waystones", "travel", "wayfarers:waystone", ("Waystones", "Pierres de voyage"), [
+    ("waystones", "travel", "brasshaven:waystone", ("Waystones", "Pierres de voyage"), [
         ("Waystones link the world. Right-click one to discover it for the whole group and open the travel map.",
          "Les pierres de voyage relient le monde. Clic droit sur une pierre pour la découvrir pour tout le groupe "
          "et ouvrir la carte de voyage."),
@@ -180,7 +180,7 @@ PAGES = [
          "compass and three stone bricks.",
          "Fabrique les tiennes pour ta base, tes fermes ou l'entrée d'un donjon : une perle de l'Ender, deux "
          "fragments de carte, une boussole et trois briques de pierre."),
-    ], ["wayfarers:waystone"]),
+    ], ["brasshaven:waystone"]),
     ("map", "travel", "minecraft:filled_map", ("Map and minimap", "Carte et mini-carte"), [
         ("The minimap in the corner shows the land around you, where you face, and the nearby waystones, waypoints, "
          "players, pings, graves and your last death. H hides it, Shift + H: size, Z: zoom.",
@@ -204,13 +204,13 @@ PAGES = [
          "live), corner, shape, opacity, relief and contour lines.",
          "Le bouton cube incline la carte en vue 3D. L'engrenage : taille de la mini-carte (48 à 160 px, en "
          "direct), coin, forme, opacité, relief et courbes de niveau."),
-    ], ["wayfarers:wayfarer_atlas"]),
-    ("recall", "travel", "wayfarers:recall_scroll", ("Recall Scroll", "Parchemin de rappel"), [
+    ], ["brasshaven:wayfarer_atlas"]),
+    ("recall", "travel", "brasshaven:recall_scroll", ("Recall Scroll", "Parchemin de rappel"), [
         ("Use it to return instantly to the nearest waystone of your dimension. It is used up.",
          "Utilise-le pour revenir aussitôt à la pierre de voyage la plus proche de ta dimension. Il est consommé."),
         ("Elites sometimes drop one. Craft 2 with paper, a Map Fragment and an ender pearl.",
          "Les élites en lâchent parfois. Fabrique-en 2 avec du papier, un fragment de carte et une perle de l'Ender."),
-    ], ["wayfarers:recall_scroll"]),
+    ], ["brasshaven:recall_scroll"]),
     ("villages", "travel", "minecraft:bell", ("Villages", "Villages"), [
         ("Every kind of village (plains, desert, savanna, snow, taiga) grows new buildings in its own style: an inn "
          "with rooms, a tinkerer's workshop, a watchtower, a market, an orchard, cottages, manors and wells.",
@@ -230,18 +230,18 @@ PAGES = [
          "barricades.",
          "Les rues ont des lampes en laiton, des panneaux et des jardinières. Les avant-postes pillards ont des "
          "balistes à vapeur et des barricades hérissées."),
-    ], ["wayfarers:waystone", "wayfarers:edison_lamp", "minecraft:bell"]),
-    ("biomes", "travel", "minecraft:crimson_nylium", ("Wayfarers biomes", "Biomes Wayfarers"), [
+    ], ["brasshaven:waystone", "brasshaven:edison_lamp", "minecraft:bell"]),
+    ("biomes", "travel", "minecraft:crimson_nylium", ("Brasshaven biomes", "Biomes Brasshaven"), [
         ("New worlds of the Default type get three biomes of their own, carved out of vanilla climates on "
          "Minecraft's usual terrain: the Crimson Mire, the Volcanic Highlands and the Pale Dunes. Each has its "
          "colours, its ground and its natural objects.",
          "Les nouveaux mondes de type « Par défaut » ont trois biomes à eux, taillés dans des climats vanilla sur le "
          "relief habituel de Minecraft : le Marais pourpre, les Hautes terres volcaniques et les Dunes pâles. "
          "Chacun a ses couleurs, son sol et ses objets naturels."),
-        ("To find one: /locate biome wayfarers:crimson_mire (or volcanic_highlands, pale_dunes). Villages, "
-         "temples and Wayfarers structures of the climate they replace appear there too.",
-         "Pour en trouver un : /locate biome wayfarers:crimson_mire (ou volcanic_highlands, pale_dunes). Les "
-         "villages, temples et structures Wayfarers du climat qu'ils remplacent y apparaissent aussi."),
+        ("To find one: /locate biome brasshaven:crimson_mire (or volcanic_highlands, pale_dunes). Villages, "
+         "temples and Brasshaven structures of the climate they replace appear there too.",
+         "Pour en trouver un : /locate biome brasshaven:crimson_mire (ou volcanic_highlands, pale_dunes). Les "
+         "villages, temples et structures Brasshaven du climat qu'ils remplacent y apparaissent aussi."),
         ("Superflat, Amplified and Large Biomes worlds, and worlds created before, keep vanilla's biomes. A server "
          "can turn them off for new worlds (option world.customBiomes).",
          "Les mondes Superplat, Amplifié et Grands biomes, et les mondes déjà créés, gardent les biomes vanilla. Un "
@@ -273,7 +273,7 @@ PAGES = [
     ], []),
 
     # ------------------------------------------------------------------ wonders
-    ("wonders", "wonders", "wayfarers:structure_compass", ("How to find them", "Où les trouver"), [
+    ("wonders", "wonders", "brasshaven:structure_compass", ("How to find them", "Où les trouver"), [
         ("Wonders are giant places, far bigger than other structures: towns, palaces, a volcano, caverns, islands "
          "in the sky... Each one has its page in this chapter, and finding it completes a quest.",
          "Les merveilles sont des lieux gigantesques, bien plus grands que les autres structures : villes, palais, "
@@ -308,7 +308,7 @@ PAGES = [
          "grouillent les araignées-horloges, puis au Caveau de l'horloge, l'antre du Grand Horloger (voir "
          "Automates)."),
     ], []),
-    ("sky_harbour", "wonders", "wayfarers:airship_compass", ("Sky Harbour", "Port céleste"), [
+    ("sky_harbour", "wonders", "brasshaven:airship_compass", ("Sky Harbour", "Port céleste"), [
         ("A steam airship moored at the top of a 44-block iron tower, seen from far away.",
          "Un dirigeable à vapeur amarré au sommet d'une tour de fer de 44 blocs, visible de très loin."),
         ("Where: plains, meadows, savannas and hills. The Airship Compass points to the nearest one.",
@@ -330,7 +330,7 @@ PAGES = [
          "Une famille vit dans chaque maison sur pilotis et aucun monstre n'apparaît dans la caverne. Grimpe les "
          "échelles du pilier pour atteindre les niveaux supérieurs et le coffre-fort."),
     ], []),
-    ("dwarven_city", "wonders", "wayfarers:mithril_block", ("Deep Dwarven City", "Cité naine des profondeurs"), [
+    ("dwarven_city", "wonders", "brasshaven:mithril_block", ("Deep Dwarven City", "Cité naine des profondeurs"), [
         ("A lost dwarf kingdom carved in the rock: a great cavern with a lava hearth, forges, a tavern, terraces of "
          "houses and a mine-cart line. A waystone waits by the hearth.",
          "Un royaume nain perdu, taillé dans la roche : une grande caverne avec un foyer de lave, des forges, une "
@@ -359,7 +359,7 @@ PAGES = [
          "haut, la Lanterne de lune. Des ponts de corde mènent à trois cabanes. La cour sylvaine habite les "
          "pavillons : une guérisseuse, des bibliothécaires, une tisserande, un cuisinier, un jardinier et le cartographe royal."),
     ], []),
-    ("inventor_manor", "wonders", "wayfarers:redstone_timer", ("Inventor's Manor", "Manoir de l'inventeur"), [
+    ("inventor_manor", "wonders", "brasshaven:redstone_timer", ("Inventor's Manor", "Manoir de l'inventeur"), [
         ("A Victorian steampunk mansion: turrets, a copper roof, an observatory with a telescope, a glass "
          "conservatory and a workshop wing.",
          "Une demeure victorienne steampunk : tourelles, toit de cuivre, observatoire avec télescope, serre en verre "
@@ -371,7 +371,7 @@ PAGES = [
          "Secret : dans le bureau, un tapis cache une trappe vers le laboratoire de l'inventeur, où se trouve le "
          "meilleur butin."),
     ], []),
-    ("sky_isles", "wonders", "wayfarers:aether_crystal", ("Sky Isles", "Îles célestes"), [
+    ("sky_isles", "wonders", "brasshaven:aether_crystal", ("Sky Isles", "Îles célestes"), [
         ("An archipelago of floating islands linked by rope bridges: waterfalls, a giant cherry tree, a ruined "
          "watchtower, aether crystals and a ruined shrine with the treasure altar.",
          "Un archipel d'îles flottantes reliées par des ponts de corde : cascades, cerisier géant, tour de guet en "
@@ -419,7 +419,7 @@ PAGES = [
     ], []),
 
     # ------------------------------------------------------------------ storage
-    ("sorting_chest", "storage", "wayfarers:sorting_chest", ("Sorting Chest", "Coffre de tri"), [
+    ("sorting_chest", "storage", "brasshaven:sorting_chest", ("Sorting Chest", "Coffre de tri"), [
         ("A big 54-slot chest that sorts itself when nobody is looking inside, and vacuums items dropped "
          "within 6 blocks.",
          "Un grand coffre de 54 cases qui se trie tout seul quand personne ne regarde dedans, et aspire les objets "
@@ -427,8 +427,8 @@ PAGES = [
         ("Sneak-right-click to sort it right now. Put one next to your mob farm or your mine entrance.",
          "Accroupi + clic droit pour le trier tout de suite. Pose-en un près de ta ferme ou de l'entrée de ta mine."),
         ("Craft: a chest, a hopper and seven planks.", "Fabrication : un coffre, un entonnoir et sept planches."),
-    ], ["wayfarers:sorting_chest"]),
-    ("crate", "storage", "wayfarers:compacting_crate", ("Compacting Crate", "Caisse compacte"), [
+    ], ["brasshaven:sorting_chest"]),
+    ("crate", "storage", "brasshaven:compacting_crate", ("Compacting Crate", "Caisse compacte"), [
         ("A crate holds 32 stacks of a single item and shows it on its front with the count. Right-click with an "
          "item to put it in; right-click twice quickly to put in every one you carry.",
          "Une caisse contient 32 piles d'un seul objet, affiché en façade avec le total. Clic droit avec l'objet pour "
@@ -439,8 +439,8 @@ PAGES = [
          "rangement rapide voient la caisse comme un coffre qui n'accepte que son objet."),
         ("Craft: a barrel, four iron ingots and four planks.",
          "Fabrication : un tonneau, quatre lingots de fer et quatre planches."),
-    ], ["wayfarers:compacting_crate"]),
-    ("guild_terminal", "storage", "wayfarers:guild_terminal", ("Guild Terminal", "Terminal de guilde"), [
+    ], ["brasshaven:compacting_crate"]),
+    ("guild_terminal", "storage", "brasshaven:guild_terminal", ("Guild Terminal", "Terminal de guilde"), [
         ("One screen for every chest of your base. The terminal links every chest, barrel, shulker box, sorting chest "
          "and compacting crate up to 48 blocks around it (32 up and down). No cables, no power.",
          "Un seul écran pour tous les coffres de ta base. Le terminal relie chaque coffre, tonneau, boîte de shulker, "
@@ -459,8 +459,8 @@ PAGES = [
          "chests, hoppers and machines are never linked.",
          "Accroupi + clic droit sur le terminal pour trier d'un coup tous les coffres reliés. Les coffres des chunks "
          "non chargés, les coffres de butin jamais ouverts, les entonnoirs et les machines ne sont jamais reliés."),
-    ], ["wayfarers:guild_terminal"]),
-    ("terminal_network", "storage", "wayfarers:guild_terminal", ("Terminal: network & sorting",
+    ], ["brasshaven:guild_terminal"]),
+    ("terminal_network", "storage", "brasshaven:guild_terminal", ("Terminal: network & sorting",
                                                                  "Terminal : réseau et tri"), [
         ("Items go first into a chest that already holds the same item, then into sorting chests, then into any free "
          "slot. Search by name (@name: by mod); the sort button cycles count, name and mod.",
@@ -474,7 +474,7 @@ PAGES = [
          "l'exclure, comme un coffre poubelle ou le coffre d'entrée d'un four ; reclique pour le relier. « Montrer » "
          "les encadre tous pendant 10 secondes : en or s'ils sont reliés, en rouge s'ils sont exclus."),
     ], []),
-    ("storage_relay", "storage", "wayfarers:storage_relay", ("Storage Relay", "Relais de stockage"), [
+    ("storage_relay", "storage", "brasshaven:storage_relay", ("Storage Relay", "Relais de stockage"), [
         ("A small brass beacon that stretches a Guild Terminal's reach: every chest up to 32 blocks around the relay "
          "joins the terminal's network. One terminal can then reach the whole base, even several buildings.",
          "Une petite balise en laiton qui étend la portée d'un terminal de guilde : chaque coffre jusqu'à 32 blocs "
@@ -488,8 +488,8 @@ PAGES = [
          "Pose-le à moins de 48 blocs du terminal, ou à moins de 32 blocs d'un autre relais relié : les relais "
          "s'enchaînent, pour atteindre pas à pas une réserve lointaine. Clic droit sur un relais pour vérifier qu'il "
          "est relié."),
-    ], ["wayfarers:storage_relay"]),
-    ("backpack", "storage", "wayfarers:travel_backpack", ("Backpacks", "Sacs"), [
+    ], ["brasshaven:storage_relay"]),
+    ("backpack", "storage", "brasshaven:travel_backpack", ("Backpacks", "Sacs"), [
         ("Travel Backpack: hold it and right-click to open 27 extra slots that travel with you. Craft: a chest, a "
          "string and seven leather.",
          "Sac du Voyageur : tiens-le et fais clic droit pour ouvrir 27 cases en plus qui voyagent avec toi. "
@@ -497,14 +497,14 @@ PAGES = [
         ("Explorer's Backpack: 54 slots. Craft your Travel Backpack with a brass ingot: nothing inside is lost.",
          "Sac de l'Explorateur : 54 cases. Fabrique-le avec ton Sac du Voyageur et un lingot de laiton : rien de son "
          "contenu n'est perdu."),
-    ], ["wayfarers:travel_backpack", "wayfarers:explorer_backpack"]),
-    ("magnet", "storage", "wayfarers:magnet_ring", ("Magnet Ring", "Anneau aimanté"), [
+    ], ["brasshaven:travel_backpack", "brasshaven:explorer_backpack"]),
+    ("magnet", "storage", "brasshaven:magnet_ring", ("Magnet Ring", "Anneau aimanté"), [
         ("While it is in your inventory and switched on (it glows), items and experience within 7 blocks fly to you.",
          "Tant qu'il est dans ton inventaire et allumé (il brille), objets et expérience à 7 blocs volent vers toi."),
         ("Right-click it or press N to switch it on or off.", "Clic droit ou touche N pour l'allumer ou l'éteindre."),
         ("Craft: two Map Fragments, a redstone and three iron ingots.",
          "Fabrication : deux fragments de carte, une redstone et trois lingots de fer."),
-    ], ["wayfarers:magnet_ring"]),
+    ], ["brasshaven:magnet_ring"]),
     ("storage_buttons", "storage", "minecraft:barrel", ("Storage buttons", "Boutons de rangement"), [
         ("Every chest, barrel or backpack shows small brass buttons above it: Sort, Take everything, Deposit the "
          "items it already holds, and Quick-stack into the chests around you.",
@@ -525,7 +525,7 @@ PAGES = [
          "Appuie sur R pour trier ton inventaire principal (ni la barre d'action ni l'armure) : les piles sont "
          "fusionnées et regroupées."),
     ], []),
-    ("grave", "storage", "wayfarers:grave", ("Graves", "Tombes"), [
+    ("grave", "storage", "brasshaven:grave", ("Graves", "Tombes"), [
         ("When you die, your belongings are kept in a grave where you fell. Its coordinates are sent in the chat.",
          "Quand tu meurs, tes affaires sont gardées dans une tombe là où tu es tombé. Ses coordonnées s'affichent "
          "dans le chat."),
@@ -533,7 +533,7 @@ PAGES = [
          "inventory.",
          "Clic droit sur la tombe pour tout récupérer. Un ami peut aussi l'ouvrir : les objets vont alors dans son "
          "inventaire."),
-    ], ["wayfarers:grave"]),
+    ], ["brasshaven:grave"]),
 
     # ------------------------------------------------------------------ danger
     ("danger", "danger", "minecraft:skeleton_skull", ("Danger levels", "Niveaux de danger"), [
@@ -552,7 +552,7 @@ PAGES = [
          "Toutes les quelques nuits, une Lune de sang se lève : les monstres sont bien plus forts et les élites bien "
          "plus nombreux. Restez groupés, éclairez la base et attendez l'aube."),
     ], []),
-    ("bosses", "danger", "wayfarers:boss_seal", ("Bosses", "Boss"), [
+    ("bosses", "danger", "brasshaven:boss_seal", ("Bosses", "Boss"), [
         ("The big structures hide a boss arena behind a wall of mist; the journal gives each boss its quest. Walk "
          "through the mist to wake the boss: the mist seals until the fight ends.",
          "Les grandes structures cachent une arène derrière un mur de brume ; le journal donne une quête pour chaque "
@@ -563,7 +563,7 @@ PAGES = [
          "une grosse attaque, et brise sa posture pour l'étourdir."),
         ("If everyone leaves the arena, the boss heals and goes back to sleep.",
          "Si tout le monde quitte l'arène, le boss se soigne et se rendort."),
-    ], ["wayfarers:boss_seal", "wayfarers:mist_gate"]),
+    ], ["brasshaven:boss_seal", "brasshaven:mist_gate"]),
     ("remembrance", "danger", "minecraft:nether_star", ("Boss weapons", "Armes de boss"), [
         ("Every boss drops its Remembrance. Craft it with four materials of its region (Map Fragments, Lithite, "
          "Ancient Embers or Void Shards) and two diamonds to forge its unique weapon, with a special right-click "
@@ -574,7 +574,7 @@ PAGES = [
     ], []),
 
     # ------------------------------------------------------------------ automatons
-    ("brass_golem", "automatons", "wayfarers:clockwork_heart", ("Brass Golem", "Golem de laiton"), [
+    ("brass_golem", "automatons", "brasshaven:clockwork_heart", ("Brass Golem", "Golem de laiton"), [
         ("A clockwork companion: it follows you and fights monsters with a 12-damage piston punch, and slams the "
          "ground when they crowd it. 80 health, 10 armour.",
          "Un compagnon mécanique : il te suit et combat les monstres avec un coup de piston de 12 dégâts, et frappe "
@@ -588,8 +588,8 @@ PAGES = [
          "Cœur mécanique : un engrenage en laiton, deux lingots de laiton, un bloc de redstone et une horloge. "
          "Engrenages : un lingot de laiton entouré de quatre pépites de laiton (en donne 2). Bloc de laiton : neuf "
          "lingots."),
-    ], ["wayfarers:clockwork_heart", "wayfarers:brass_gear", "wayfarers:brass_golem_spawn_egg"]),
-    ("brass_golem_orders", "automatons", "wayfarers:brass_ingot", ("Golem orders", "Ordres du golem"), [
+    ], ["brasshaven:clockwork_heart", "brasshaven:brass_gear", "brasshaven:brass_golem_spawn_egg"]),
+    ("brass_golem_orders", "automatons", "brasshaven:brass_ingot", ("Golem orders", "Ordres du golem"), [
         ("Sneak-right-click it with an empty hand: \"guard here\" (it stays and defends the spot) or \"follow me\". "
          "If it falls 28 blocks behind, it catches up by itself.",
          "Accroupi + clic droit main vide : « garde ici » (il reste et défend l'endroit) ou « suis-moi ». S'il est "
@@ -601,8 +601,8 @@ PAGES = [
          "heart and some brass, so you can rebuild it.",
          "Réparation : clic droit avec un lingot de laiton (+20 PV) ou une pépite (+3). Détruit, il lâche son cœur "
          "et du laiton : tu peux le reconstruire."),
-    ], ["wayfarers:brass_block"]),
-    ("clockwork_spider", "automatons", "wayfarers:brass_gear", ("Clockwork Spider", "Araignée-horloge"), [
+    ], ["brasshaven:brass_block"]),
+    ("clockwork_spider", "automatons", "brasshaven:brass_gear", ("Clockwork Spider", "Araignée-horloge"), [
         ("Hostile clockwork spiders that roam in packs at night in the badlands and the savanna highlands, and in "
          "the Clockwork Citadel and the Undercity. They climb walls.",
          "Des araignées mécaniques hostiles qui rôdent en bande la nuit dans les badlands et les hautes savanes, "
@@ -611,8 +611,8 @@ PAGES = [
          "sometimes a brass gear.",
          "Quand l'une s'arrête et que sa clé s'emballe, elle va bondir : écarte-toi. Elles lâchent des pépites de "
          "laiton, de la redstone et parfois un engrenage."),
-    ], ["wayfarers:clockwork_spider_spawn_egg"]),
-    ("steam_drone", "automatons", "wayfarers:brass_nugget", ("Steam Drone", "Drone à vapeur"), [
+    ], ["brasshaven:clockwork_spider_spawn_egg"]),
+    ("steam_drone", "automatons", "brasshaven:brass_nugget", ("Steam Drone", "Drone à vapeur"), [
         ("Hostile flying drones: at night over the steampunk lands, and in the Undercity. They circle and fire hot "
          "rivets.",
          "Des drones volants hostiles : la nuit au-dessus des terres steampunk, et dans les Bas-fonds. Ils tournent "
@@ -621,8 +621,8 @@ PAGES = [
          "nuggets, copper and sometimes a brass gear.",
          "Quand l'un se cabre, il va plonger sur toi : écarte-toi. Un arc les abat facilement. Ils lâchent des "
          "pépites de laiton, du cuivre et parfois un engrenage."),
-    ], ["wayfarers:steam_drone_spawn_egg"]),
-    ("grand_clockmaker", "automatons", "wayfarers:remembrance_grand_clockmaker",
+    ], ["brasshaven:steam_drone_spawn_egg"]),
+    ("grand_clockmaker", "automatons", "brasshaven:remembrance_grand_clockmaker",
      ("The Grand Clockmaker", "Le Grand Horloger"), [
         ("The boss of the Clockwork Citadel (400 health). A stair in the tower's entrance hall goes down through the "
          "gearworks to a waiting room with a waystone, before the mist of the Clock Vault.",
@@ -632,7 +632,7 @@ PAGES = [
          "his hands rewind and a ring closes around him, get out of it or be frozen in time.",
          "Il balaie avec sa canne-pendule, l'abat au sol (saute l'anneau d'étincelles), lance des engrenages et "
          "remonte des araignées. Quand ses aiguilles reculent et qu'un cercle se referme, sors-en ou tu seras figé."),
-    ], ["wayfarers:remembrance_grand_clockmaker", "wayfarers:clockmaker_pendulum"]),
+    ], ["brasshaven:remembrance_grand_clockmaker", "brasshaven:clockmaker_pendulum"]),
     ("grand_clockmaker_midnight", "automatons", "minecraft:clock", ("Clockmaker: midnight", "Horloger : minuit"), [
         ("At half health he gets faster: he skips through time to reappear behind you, then tolls midnight: twelve "
          "bells burst around him, then a thirteenth under your feet. Move as soon as you see a glint.",
@@ -644,14 +644,14 @@ PAGES = [
     ], []),
 
     # ------------------------------------------------------------------ gear & materials
-    ("materials", "gear", "wayfarers:lithite_shard", ("Materials", "Matériaux"), [
+    ("materials", "gear", "brasshaven:lithite_shard", ("Materials", "Matériaux"), [
         ("Map Fragments come from Overworld ruins, Lithite from deep ores, Ancient Embers from the Nether and Void "
          "Shards from the End. They repair and craft the gear of each region.",
          "Les fragments de carte viennent des ruines de la Surface, la lithite des minerais profonds, les braises "
          "anciennes du Nether et les éclats du vide de l'End. Ils réparent et fabriquent l'équipement de chaque "
          "région."),
-    ], ["wayfarers:map_fragment", "wayfarers:lithite_shard", "wayfarers:ancient_ember", "wayfarers:void_shard"]),
-    ("armor", "gear", "wayfarers:explorer_chestplate", ("Armour sets", "Ensembles d'armure"), [
+    ], ["brasshaven:map_fragment", "brasshaven:lithite_shard", "brasshaven:ancient_ember", "brasshaven:void_shard"]),
+    ("armor", "gear", "brasshaven:explorer_chestplate", ("Armour sets", "Ensembles d'armure"), [
         ("Wear all four pieces of a set to get its bonus: Explorer (speed, soft landings, night vision underground), "
          "Ember (fire immunity) and Void (slow fall, saved from the void).",
          "Porte les quatre pièces d'un ensemble pour son bonus : Explorateur (vitesse, chutes douces, vision "
@@ -660,8 +660,8 @@ PAGES = [
          "Void Shards.",
          "Fabrique-les comme une armure en fer : Explorateur avec du cuir et des fragments de carte, Braise avec des "
          "braises anciennes, Vide avec des éclats du vide."),
-    ], ["wayfarers:explorer_chestplate", "wayfarers:ember_chestplate", "wayfarers:void_chestplate"]),
-    ("ores", "gear", "wayfarers:zinc_ingot", ("Ores & brass", "Minerais et laiton"), [
+    ], ["brasshaven:explorer_chestplate", "brasshaven:ember_chestplate", "brasshaven:void_chestplate"]),
+    ("ores", "gear", "brasshaven:zinc_ingot", ("Ores & brass", "Minerais et laiton"), [
         ("Zinc is common in stone (y -16 to 96). Craft 3 copper ingots + 1 zinc ingot into 4 brass ingots: brass "
          "tools are faster than iron and enchant well.",
          "Le zinc est courant dans la pierre (y -16 à 96). Fabrique 3 lingots de cuivre + 1 lingot de zinc pour "
@@ -671,9 +671,9 @@ PAGES = [
          "Le mithril se cache dans l'ardoise des abîmes (sous y -8, pioche en fer). Les cristaux d'éther luisent "
          "faiblement entre y -48 et 32. L'orichalque se trouve dans le Nether. Les minerais bruts se cuisent comme le "
          "fer."),
-    ], ["wayfarers:zinc_ingot", "wayfarers:brass_ingot", "wayfarers:mithril_ingot", "wayfarers:aether_crystal",
-        "wayfarers:orichalcum_ingot"]),
-    ("metal_armor", "gear", "wayfarers:brass_helmet", ("Advanced armour", "Armures avancées"), [
+    ], ["brasshaven:zinc_ingot", "brasshaven:brass_ingot", "brasshaven:mithril_ingot", "brasshaven:aether_crystal",
+        "brasshaven:orichalcum_ingot"]),
+    ("metal_armor", "gear", "brasshaven:brass_helmet", ("Advanced armour", "Armures avancées"), [
         ("Brass set: night vision and faster mining. Mithril set: +4 health and +10% speed. Aether set: +75 mana, "
          "mana refills twice as fast, no fall damage.",
          "Ensemble en laiton : vision nocturne et minage plus rapide. Mithril : +4 points de vie et +10 % de vitesse. "
@@ -685,9 +685,9 @@ PAGES = [
         ("Craft each piece like iron armour, from brass or mithril ingots, aether crystals or Arcane Cloth.",
          "Chaque pièce se fabrique comme une armure en fer, avec des lingots de laiton ou de mithril, des cristaux "
          "d'éther ou de l'étoffe arcanique."),
-    ], ["wayfarers:brass_helmet", "wayfarers:mithril_chestplate", "wayfarers:aether_chestplate",
-        "wayfarers:arcane_chestplate"]),
-    ("steam_blocks", "gear", "wayfarers:gear_panel", ("Steampunk blocks", "Blocs steampunk"), [
+    ], ["brasshaven:brass_helmet", "brasshaven:mithril_chestplate", "brasshaven:aether_chestplate",
+        "brasshaven:arcane_chestplate"]),
+    ("steam_blocks", "gear", "brasshaven:gear_panel", ("Steampunk blocks", "Blocs steampunk"), [
         ("Brass, copper and dark iron plating, clockwork and gauge panels, pipe bundles, Edison lamps, aether "
          "conduits, mahogany panelling, tufted leather and smokestack bricks. Most plates also come as stairs and "
          "slabs.",
@@ -698,9 +698,9 @@ PAGES = [
          "The Engraver's Chisel unlocks more variants.",
          "Astuce : garde le laiton pour les finitions, laisse le fer sombre et l'acajou porter la masse, et éclaire "
          "avec des lampes Edison. Le burin du graveur débloque d'autres variantes."),
-    ], ["wayfarers:brass_plating", "wayfarers:gear_panel", "wayfarers:copper_pipes", "wayfarers:edison_lamp",
-        "wayfarers:aether_conduit", "wayfarers:mahogany_panelling"]),
-    ("world_woods", "gear", "wayfarers:glowwood_sapling", ("Glowwood and Rustwood", "Bois-lueur et bois rouillé"), [
+    ], ["brasshaven:brass_plating", "brasshaven:gear_panel", "brasshaven:copper_pipes", "brasshaven:edison_lamp",
+        "brasshaven:aether_conduit", "brasshaven:mahogany_panelling"]),
+    ("world_woods", "gear", "brasshaven:glowwood_sapling", ("Glowwood and Rustwood", "Bois-lueur et bois rouillé"), [
         ("Two woods to grow yourself. Glowwood: pale trunks under teal leaves that glow at night. Rustwood: dark red "
          "bark and rust-orange leaves on forked trees.",
          "Deux bois à faire pousser soi-même. Le bois-lueur : troncs pâles sous des feuilles turquoise qui luisent "
@@ -716,10 +716,10 @@ PAGES = [
          "Chacun donne un ensemble complet comme le chêne : bûches, écorce, planches, escaliers, dalles, barrières, "
          "portillons, portes, trappes, boutons et plaques de pression. La hache écorce les bûches ; les feuilles "
          "donnent des pousses qui font repousser le même arbre."),
-    ], ["wayfarers:glowwood_sapling", "wayfarers:rustwood_sapling", "wayfarers:glowwood_log", "wayfarers:rustwood_log",
-        "wayfarers:glowwood_planks", "wayfarers:rustwood_planks", "wayfarers:glowwood_leaves",
-        "wayfarers:rustwood_leaves"]),
-    ("world_stones", "gear", "wayfarers:marble_pillar", ("Marble, rust rock, blue slate", "Marbre, roche rouillée, ardoise bleue"), [
+    ], ["brasshaven:glowwood_sapling", "brasshaven:rustwood_sapling", "brasshaven:glowwood_log", "brasshaven:rustwood_log",
+        "brasshaven:glowwood_planks", "brasshaven:rustwood_planks", "brasshaven:glowwood_leaves",
+        "brasshaven:rustwood_leaves"]),
+    ("world_stones", "gear", "brasshaven:marble_pillar", ("Marble, rust rock, blue slate", "Marbre, roche rouillée, ardoise bleue"), [
         ("Three stones, found in big veins like granite: marble in the mountains (from y 32 up), rust rock in the "
          "badlands and the savanna highlands, blue slate deep down in the deepslate (below y 0).",
          "Trois pierres, en grosses veines comme le granite : le marbre dans les montagnes (dès y 32), la roche "
@@ -733,17 +733,17 @@ PAGES = [
          "four cobbled deepslate around a lapis lazuli, 4 blue slate.",
          "Ou fabrique-les : deux calcites et deux diorites donnent 4 marbres ; quatre granites autour d'une pépite de "
          "fer, 4 roches rouillées ; quatre pierres des abîmes taillées autour d'un lapis-lazuli, 4 ardoises bleues."),
-    ], ["wayfarers:marble", "wayfarers:marble_pillar", "wayfarers:chiseled_marble", "wayfarers:rust_rock",
-        "wayfarers:rust_rock_bricks", "wayfarers:blue_slate", "wayfarers:blue_slate_tiles"]),
-    ("tools", "gear", "wayfarers:excavator_pickaxe", ("Special tools", "Outils spéciaux"), [
+    ], ["brasshaven:marble", "brasshaven:marble_pillar", "brasshaven:chiseled_marble", "brasshaven:rust_rock",
+        "brasshaven:rust_rock_bricks", "brasshaven:blue_slate", "brasshaven:blue_slate_tiles"]),
+    ("tools", "gear", "brasshaven:excavator_pickaxe", ("Special tools", "Outils spéciaux"), [
         ("The Excavator Pickaxe mines 3x3 and the Lumber Axe fells whole trees. Sneak to break a single block.",
          "La pioche d'excavation mine en 3x3 et la hache de bûcheron abat l'arbre entier. Accroupi : un seul bloc."),
         ("Craft each with three Lithite shards and two sticks, shaped like a pickaxe or an axe.",
          "Fabrique-les avec trois éclats de lithite et deux bâtons, en forme de pioche ou de hache."),
-    ], ["wayfarers:excavator_pickaxe", "wayfarers:lumber_axe"]),
+    ], ["brasshaven:excavator_pickaxe", "brasshaven:lumber_axe"]),
 
     # ------------------------------------------------------------------ building tools
-    ("wand", "building", "wayfarers:builder_wand", ("Builder's Wand", "Baguette du bâtisseur"), [
+    ("wand", "building", "brasshaven:builder_wand", ("Builder's Wand", "Baguette du bâtisseur"), [
         ("It lays whole rows of blocks at once. Hold it and look at a block: gold outlines show where the copies "
          "will go. Right-click to extend that face with blocks of the same kind from your inventory (16 at a time, "
          "64 with the Master wand).",
@@ -756,8 +756,8 @@ PAGES = [
          "shards, a diamond above it.",
          "Fabrication, en colonne : un éclat d'améthyste, un lingot d'or, un bâton. Baguette du maître : la baguette "
          "entre deux éclats de lithite, un diamant au-dessus."),
-    ], ["wayfarers:builder_wand", "wayfarers:master_builder_wand"]),
-    ("symmetry", "building", "wayfarers:master_builder_wand", ("Wand symmetry", "Symétrie de la baguette"), [
+    ], ["brasshaven:builder_wand", "brasshaven:master_builder_wand"]),
+    ("symmetry", "building", "brasshaven:master_builder_wand", ("Wand symmetry", "Symétrie de la baguette"), [
         ("Build in mirror: every block the wand places is copied on the other side of a plane.",
          "Construis en miroir : chaque bloc posé par la baguette est copié de l'autre côté d'un plan."),
         ("1. Sneak-right-click a block with the wand: it becomes the mirror centre (sparks show the plane) and "
@@ -773,7 +773,7 @@ PAGES = [
          "3. Construis comme d'habitude : contours dorés pour tes blocs, bleus pour leurs copies en miroir (les "
          "escaliers sont retournés). Chaque copie coûte un bloc ; annuler les retire toutes."),
     ], []),
-    ("chisel", "building", "wayfarers:chisel", ("Engraver's Chisel", "Burin du graveur"), [
+    ("chisel", "building", "brasshaven:chisel", ("Engraver's Chisel", "Burin du graveur"), [
         ("It carves a placed block into another variant of its family. Craft, in a column: an iron ingot, a brass "
          "ingot, a stick.",
          "Il taille un bloc posé en une autre variante de sa famille. Fabrication, en colonne : un lingot de fer, un "
@@ -783,17 +783,17 @@ PAGES = [
          "Clic droit sur un bloc : variante suivante (pierre, briques, moussues, fissurées, sculptées...). Accroupi + "
          "clic droit : la précédente. Chaque taille use le burin d'un point."),
         ("Stairs, slabs and walls keep their shape; copper keeps its age and wax. Works on stone, deepslate, tuff, "
-         "sandstone, quartz, prismarine, blackstone, terracotta, copper and the Wayfarers blocks.",
+         "sandstone, quartz, prismarine, blackstone, terracotta, copper and the Brasshaven blocks.",
          "Escaliers, dalles et murets gardent leur forme ; le cuivre garde son oxydation et sa cire. Marche sur la "
          "pierre, l'ardoise des abîmes, le tuf, le grès, le quartz, la prismarine, la pierre noire, la terre cuite, "
-         "le cuivre et les blocs Wayfarers."),
+         "le cuivre et les blocs Brasshaven."),
         ("Some steampunk variants only exist through the chisel: brass tiles, engraved brass, brass grille, copper "
          "tiles, dark iron bricks, mahogany parquet...",
          "Certaines variantes steampunk n'existent que par le burin : carreaux et grille en laiton, laiton gravé, "
          "carreaux de cuivre, briques de fer sombre, parquet d'acajou..."),
-    ], ["wayfarers:chisel", "wayfarers:engraved_brass", "wayfarers:brass_tiles", "wayfarers:dark_iron_bricks",
-        "wayfarers:mahogany_parquet"]),
-    ("chisel_table", "building", "wayfarers:chisel_table", ("Chisel Table", "Table de taille"), [
+    ], ["brasshaven:chisel", "brasshaven:engraved_brass", "brasshaven:brass_tiles", "brasshaven:dark_iron_bricks",
+        "brasshaven:mahogany_parquet"]),
+    ("chisel_table", "building", "brasshaven:chisel_table", ("Chisel Table", "Table de taille"), [
         ("It carves a whole stack at once. Craft: two brass ingots, a chisel and five planks.",
          "Elle taille une pile entière d'un coup. Fabrication : deux lingots de laiton, un burin et cinq planches."),
         ("Right-click the table and put a stack of blocks in its slot: every variant of the family appears on the "
@@ -801,20 +801,20 @@ PAGES = [
          "Clic droit sur la table et pose une pile de blocs dans sa case : toutes les variantes de la famille "
          "apparaissent à droite. Clique sur l'une d'elles pour y transformer toute la pile."),
         ("It is free and the table never wears out.", "C'est gratuit et la table ne s'use jamais."),
-    ], ["wayfarers:chisel_table"]),
+    ], ["brasshaven:chisel_table"]),
 ]
 
 # Shown once per player, the first time something happens: (id, icon, (en, fr), manual page)
 TIPS = [
-    ("waystone", "wayfarers:waystone", ("Waystone discovered! Right-click it any time to travel.",
+    ("waystone", "brasshaven:waystone", ("Waystone discovered! Right-click it any time to travel.",
                                         "Pierre découverte ! Clic droit dessus pour voyager à tout moment."), "waystones"),
-    ("grave", "wayfarers:grave", ("Your belongings wait in a grave where you fell. Right-click it to get them back.",
+    ("grave", "brasshaven:grave", ("Your belongings wait in a grave where you fell. Right-click it to get them back.",
                                   "Tes affaires t'attendent dans une tombe là où tu es tombé. Clic droit dessus pour "
                                   "les récupérer."), "grave"),
-    ("sorting_chest", "wayfarers:sorting_chest", ("Sorting chest: it sorts itself and pulls in nearby drops.",
+    ("sorting_chest", "brasshaven:sorting_chest", ("Sorting chest: it sorts itself and pulls in nearby drops.",
                                                   "Coffre de tri : il se trie seul et aspire les objets proches."),
      "sorting_chest"),
-    ("guild_terminal", "wayfarers:guild_terminal", ("Terminal: every chest of your base (48 blocks around) in one grid.",
+    ("guild_terminal", "brasshaven:guild_terminal", ("Terminal: every chest of your base (48 blocks around) in one grid.",
                                                     "Terminal : tous les coffres de ta base (48 blocs autour) dans "
                                                     "une seule grille."), "guild_terminal"),
     ("elite", "minecraft:gold_ingot", ("An Elite! Gold name, hits hard, drops good loot.",
@@ -822,7 +822,7 @@ TIPS = [
     ("blood_moon", "minecraft:redstone", ("A Blood Moon rises: monsters are much stronger tonight.",
                                           "Une Lune de sang se lève : les monstres sont bien plus forts cette nuit."),
      "blood_moon"),
-    ("boss_mist", "wayfarers:mist_gate", ("Boss mist: walk through it to start the fight. It seals behind you.",
+    ("boss_mist", "brasshaven:mist_gate", ("Boss mist: walk through it to start the fight. It seals behind you.",
                                           "Brume de boss : traverse-la pour lancer le combat. Elle se referme "
                                           "derrière toi."), "bosses"),
     ("danger", "minecraft:skeleton_skull", ("The danger level rose: monsters here are stronger.",
@@ -841,21 +841,21 @@ TIPS = [
 
 # Words used by the manual screen itself (GuideScreen.java)
 UI = {
-    "guide.wayfarers.continued": ("(continued)", "(suite)"),
-    "guide.wayfarers.more": ("More >", "Suite >"),
+    "guide.brasshaven.continued": ("(continued)", "(suite)"),
+    "guide.brasshaven.more": ("More >", "Suite >"),
 }
 
 
 def lang():
     en, fr = dict((k, v[0]) for k, v in UI.items()), dict((k, v[1]) for k, v in UI.items())
     for cid, _icon, (ten, tfr) in CATEGORIES:
-        en[f"guide.wayfarers.cat.{cid}"], fr[f"guide.wayfarers.cat.{cid}"] = ten, tfr
+        en[f"guide.brasshaven.cat.{cid}"], fr[f"guide.brasshaven.cat.{cid}"] = ten, tfr
     for pid, _cat, _icon, (ten, tfr), paras, _items in PAGES:
-        en[f"guide.wayfarers.{pid}.title"], fr[f"guide.wayfarers.{pid}.title"] = ten, tfr
+        en[f"guide.brasshaven.{pid}.title"], fr[f"guide.brasshaven.{pid}.title"] = ten, tfr
         for i, (pe, pf) in enumerate(paras):
-            en[f"guide.wayfarers.{pid}.p{i}"], fr[f"guide.wayfarers.{pid}.p{i}"] = pe, pf
+            en[f"guide.brasshaven.{pid}.p{i}"], fr[f"guide.brasshaven.{pid}.p{i}"] = pe, pf
     for tid, _icon, (te, tf), _page in TIPS:
-        en[f"tip.wayfarers.{tid}"], fr[f"tip.wayfarers.{tid}"] = te, tf
+        en[f"tip.brasshaven.{tid}"], fr[f"tip.brasshaven.{tid}"] = te, tf
     return en, fr
 
 
@@ -946,7 +946,7 @@ def _split(title, paras, has_items, compact_first, book_h, lang):
     card_bottom = book_h - 36
 
     def body(part, compact):
-        t = title if part == 0 else title + " " + UI["guide.wayfarers.continued"][lang]
+        t = title if part == 0 else title + " " + UI["guide.brasshaven.continued"][lang]
         tl = len(wrap(t, TEXT_W - 38 if compact else TEXT_W + 2, bold=True))  # GuideScreen titles are bold
         top = 25 + max(1, tl) * 10 + 6 if compact else 60 + tl * 10 + 4
         return top, card_bottom - 4 - (ITEMS_ROW if part == 0 and has_items else 0)

@@ -1,0 +1,33 @@
+{
+  "display": {
+    "icon": {
+      "id": "brasshaven:travel_backpack"
+    },
+    "title": {
+      "translate": "advancements.brasshaven.first_steps.backpack.title"
+    },
+    "description": {
+      "translate": "advancements.brasshaven.first_steps.backpack.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "brasshaven:travel_backpack"
+          }
+        ]
+      }
+    }
+  },
+  "parent": "brasshaven:first_steps/map_fragment",
+  "rewards": {
+    "experience": 20
+  }
+}

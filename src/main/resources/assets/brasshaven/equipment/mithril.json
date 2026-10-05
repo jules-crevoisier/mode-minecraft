@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "brasshaven:mithril"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "brasshaven:mithril"
+      }
+    ]
+  }
+}

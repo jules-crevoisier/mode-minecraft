@@ -1,0 +1,37 @@
+{
+  "type": "minecraft:template",
+  "config": {
+    "templates": [
+      {
+        "data": {
+          "id": "brasshaven:worldobjects/hoodoo_0"
+        },
+        "weight": 1
+      },
+      {
+        "data": {
+          "id": "brasshaven:worldobjects/hoodoo_1"
+        },
+        "weight": 1
+      },
+      {
+        "data": {
+          "id": "brasshaven:worldobjects/hoodoo_2"
+        },
+        "weight": 1
+      },
+      {
+        "data": {
+          "id": "brasshaven:worldobjects/hoodoo_3"
+        },
+        "weight": 1
+      },
+      {
+        "data": {
+          "id": "brasshaven:worldobjects/hoodoo_4"
+        },
+        "weight": 1
+      }
+    ]
+  }
+}

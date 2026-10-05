@@ -1,7 +1,7 @@
 {
   "replace": false,
   "values": [
-    "wayfarers:volcanic_highlands",
-    "wayfarers:pale_dunes"
+    "brasshaven:volcanic_highlands",
+    "brasshaven:pale_dunes"
   ]
 }

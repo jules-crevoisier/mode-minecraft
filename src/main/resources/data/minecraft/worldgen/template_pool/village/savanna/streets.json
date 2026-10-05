@@ -175,7 +175,7 @@
       "weight": 3,
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:village/savanna/avenue",
+        "location": "brasshaven:village/savanna/avenue",
         "processors": "minecraft:street_savanna",
         "projection": "terrain_matching"
       }

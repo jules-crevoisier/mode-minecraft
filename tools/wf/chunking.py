@@ -8,7 +8,7 @@ generated cathedral and ~20 MB of heap for good.
 How: a piece wider than SPLIT_AXIS on x or z, or with more than SPLIT_ENTRIES entries, is cut into full-height
 columns of about CELL x CELL blocks (a chunk is a full-height column too, so cutting in y would save nothing).
 Each column is its own template ``<sid>/<piece>/x<i>_z<j>``. The template pool references them through a single
-``wayfarers:chunked_template`` element (com.wayfarers.world.ChunkedPoolElement) that carries the size of the
+``brasshaven:chunked_template`` element (com.brasshaven.world.ChunkedPoolElement) that carries the size of the
 whole piece, so the structure is still ONE piece with the same bounding box: start height, terrain adaptation
 (the beard is computed per piece box), /place and /locate behave exactly as before. When a chunk generates,
 the element only places the columns whose box intersects it, and keeps a bounded number of them loaded.
@@ -32,7 +32,7 @@ import os
 from . import nbt
 from .blueprint import template_nbt
 
-ELEMENT_TYPE = "wayfarers:chunked_template"
+ELEMENT_TYPE = "brasshaven:chunked_template"
 SPLIT_AXIS = 48         # a piece wider than this on x or z is split ...
 SPLIT_ENTRIES = 60000   # ... and so is a piece with more block entries than this
 CELL = 32               # nominal column width; every column ends up <= SPLIT_AXIS wide and <= SPLIT_ENTRIES

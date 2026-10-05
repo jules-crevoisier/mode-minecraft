@@ -5,7 +5,7 @@ import os
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 DATA = os.path.join(ROOT, "src", "main", "resources", "data")
-NS = "wayfarers"
+NS = "brasshaven"
 
 
 def write(rel, obj):
@@ -472,44 +472,44 @@ def decor_data():
                                           "pattern": pattern, "key": {k: rid(v) for k, v in key.items()},
                                           "result": {"id": f"{NS}:{name}", "count": count}})
     craft("guild_bricks", ["SA", "AS"], {"S": "stone_bricks", "A": "sandstone"}, 4)
-    shapeless("mossy_guild_bricks", ["wayfarers:guild_bricks", "vine"], category="building")
+    shapeless("mossy_guild_bricks", ["brasshaven:guild_bricks", "vine"], category="building")
     write(f"{NS}/recipe/cracked_guild_bricks.json", {"type": "minecraft:smelting", "category": "blocks",
                                                     "ingredient": f"{NS}:guild_bricks",
                                                     "result": {"id": f"{NS}:cracked_guild_bricks"},
                                                     "experience": 0.1, "cookingtime": 200})
-    craft("polished_guild_stone", ["XX", "XX"], {"X": "wayfarers:guild_bricks"}, 4)
-    craft("carved_guild_stone", ["X", "X"], {"X": "wayfarers:polished_guild_stone_slab"}, 1)
+    craft("polished_guild_stone", ["XX", "XX"], {"X": "brasshaven:guild_bricks"}, 4)
+    craft("carved_guild_stone", ["X", "X"], {"X": "brasshaven:polished_guild_stone_slab"}, 1)
     craft("guild_roof_tiles", ["XX", "XX"], {"X": "cyan_terracotta"}, 4)
     craft("crimson_roof_tiles", ["XX", "XX"], {"X": "red_terracotta"}, 4)
     craft("slate_roof_tiles", ["XX", "XX"], {"X": "deepslate_tiles"}, 4)
-    craft("rune_lamp", ["GMG", "MLM", "GMG"], {"G": "wayfarers:guild_bricks", "M": "map_fragment", "L": "glowstone"}, 4)
+    craft("rune_lamp", ["GMG", "MLM", "GMG"], {"G": "brasshaven:guild_bricks", "M": "map_fragment", "L": "glowstone"}, 4)
     craft("lithite_block", ["XXX", "XXX", "XXX"], {"X": "lithite_shard"}, 1)
-    shapeless_named("lithite_shard_from_block", "lithite_shard", ["wayfarers:lithite_block"], 9)
+    shapeless_named("lithite_shard_from_block", "lithite_shard", ["brasshaven:lithite_block"], 9)
     craft("lithite_bricks", ["LS", "SL"], {"L": "lithite_shard", "S": "stone_bricks"}, 4)
     craft("ember_bricks", ["NM", "MN"], {"N": "polished_blackstone_bricks", "M": "magma_cream"}, 4)
-    craft("ember_lamp", [" B ", "BGB", " B "], {"B": "wayfarers:ember_bricks", "G": "glowstone"}, 2)
+    craft("ember_lamp", [" B ", "BGB", " B "], {"B": "brasshaven:ember_bricks", "G": "glowstone"}, 2)
     craft("gilded_trim", ["G", "B"], {"G": "gold_ingot", "B": "polished_blackstone"}, 2)
     craft("void_bricks", ["OE", "EO"], {"O": "obsidian", "E": "end_stone_bricks"}, 4)
     craft("starlight_block", [" R ", "RCR", " R "], {"R": "end_rod", "C": "amethyst_block"}, 2)
     # steampunk
-    craft("brass_plating", ["XX", "XX"], {"X": "wayfarers:brass_ingot"}, 8)
+    craft("brass_plating", ["XX", "XX"], {"X": "brasshaven:brass_ingot"}, 8)
     # not 2x2 copper ingots: that is the vanilla copper trapdoor; checkered with nuggets like the Diamond Plate
     craft("copper_plating", ["IN", "NI"], {"I": "copper_ingot", "N": "copper_nugget"}, 4)
-    shapeless("verdigris_plating", ["wayfarers:copper_plating", "clay_ball"], category="building")
+    shapeless("verdigris_plating", ["brasshaven:copper_plating", "clay_ball"], category="building")
     craft("dark_iron_plating", ["IC", "CI"], {"I": "iron_ingot", "C": "coal"}, 8)
     craft("diamond_plate", ["IN", "NI"], {"I": "iron_ingot", "N": "iron_nugget"}, 4)
-    craft("gear_panel", ["B", "D"], {"B": "wayfarers:brass_ingot", "D": "wayfarers:dark_iron_plating"}, 2)
+    craft("gear_panel", ["B", "D"], {"B": "brasshaven:brass_ingot", "D": "brasshaven:dark_iron_plating"}, 2)
     craft("copper_pipes", ["C C", "C C", "C C"], {"C": "copper_ingot"}, 4)
-    craft("pressure_gauge", ["G", "D"], {"G": "clock", "D": "wayfarers:dark_iron_plating"}, 2)
-    craft("edison_lamp", ["N", "G", "L"], {"N": "wayfarers:brass_nugget", "G": "glass", "L": "glowstone_dust"}, 1)
-    craft("aether_conduit", ["D", "A", "D"], {"D": "wayfarers:dark_iron_plating", "A": "wayfarers:aether_crystal"}, 2)
+    craft("pressure_gauge", ["G", "D"], {"G": "clock", "D": "brasshaven:dark_iron_plating"}, 2)
+    craft("edison_lamp", ["N", "G", "L"], {"N": "brasshaven:brass_nugget", "G": "glass", "L": "glowstone_dust"}, 1)
+    craft("aether_conduit", ["D", "A", "D"], {"D": "brasshaven:dark_iron_plating", "A": "brasshaven:aether_crystal"}, 2)
     craft("mahogany_panelling", ["PS", "SP"], {"P": "dark_oak_planks", "S": "stick"}, 4)
     craft("leather_padding", ["LW", "WL"], {"L": "leather", "W": "red_wool"}, 4)
     craft("smokestack_bricks", ["BC", "CB"], {"B": "brick", "C": "coal"}, 4)
 
 
 def chisel_data():
-    """data/wayfarers/chisel/<family>.json, one file per family of tools/wf/chisel.py (old files removed)."""
+    """data/brasshaven/chisel/<family>.json, one file per family of tools/wf/chisel.py (old files removed)."""
     from wf import chisel
     folder = os.path.join(DATA, NS, "chisel")
     if os.path.isdir(folder):

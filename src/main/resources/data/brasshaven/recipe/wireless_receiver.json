@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "B B",
+    "BRB",
+    "BBB"
+  ],
+  "key": {
+    "B": "brasshaven:brass_ingot",
+    "R": "minecraft:redstone"
+  },
+  "result": {
+    "id": "brasshaven:wireless_receiver",
+    "count": 1
+  }
+}

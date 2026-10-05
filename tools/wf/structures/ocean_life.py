@@ -22,7 +22,7 @@ from ..arch import Palette
 from ..defs import Piece, StructureDef, register
 from ..parts import LOOT
 
-W = "wayfarers:"
+W = "brasshaven:"
 BRASS, COPPER, VERD, IRON = W + "brass_plating", W + "copper_plating", W + "verdigris_plating", W + "dark_iron_plating"
 GEAR, GAUGE, LAMP, GRILLE = W + "gear_panel", W + "pressure_gauge", W + "edison_lamp", W + "brass_grille"
 SAND = Palette({"sand": 7, "gravel": 1, "clay": 1}, seed=401, scale=3)

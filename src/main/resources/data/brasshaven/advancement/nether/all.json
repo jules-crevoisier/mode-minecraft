@@ -1,0 +1,122 @@
+{
+  "display": {
+    "icon": {
+      "id": "minecraft:nether_star"
+    },
+    "title": {
+      "translate": "advancements.brasshaven.nether.all.title"
+    },
+    "description": {
+      "translate": "advancements.brasshaven.nether.all.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "basalt_fortress": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:basalt_fortress"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "chain_bridge": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:chain_bridge"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "piglin_sanctuary": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:piglin_sanctuary"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "lava_foundry": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:lava_foundry"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "soul_tower": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:soul_tower"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "piglin_market": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:piglin_market"
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "parent": "brasshaven:nether/ancient_ember",
+  "rewards": {
+    "experience": 300,
+    "loot": [
+      "brasshaven:rewards/cartographer"
+    ]
+  }
+}

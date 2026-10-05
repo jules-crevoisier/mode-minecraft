@@ -1,0 +1,58 @@
+{
+  "feature": "brasshaven:ocean_anemones",
+  "placement": [
+    {
+      "type": "minecraft:count",
+      "count": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 0,
+        "max_inclusive": 2
+      }
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:count",
+      "count": 6
+    },
+    {
+      "type": "minecraft:random_offset",
+      "xz_spread": {
+        "type": "minecraft:uniform",
+        "min_inclusive": -3,
+        "max_inclusive": 3
+      },
+      "y_spread": 0
+    },
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "OCEAN_FLOOR_WG"
+    },
+    {
+      "type": "minecraft:block_predicate_filter",
+      "predicate": {
+        "type": "minecraft:all_of",
+        "predicates": [
+          {
+            "type": "minecraft:matching_blocks",
+            "blocks": "minecraft:water"
+          },
+          {
+            "type": "minecraft:would_survive",
+            "state": {
+              "Name": "brasshaven:glow_anemone",
+              "Properties": {
+                "color": "0",
+                "waterlogged": "true"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

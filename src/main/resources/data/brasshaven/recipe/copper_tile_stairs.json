@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "X  ",
+    "XX ",
+    "XXX"
+  ],
+  "key": {
+    "X": "brasshaven:copper_tiles"
+  },
+  "result": {
+    "id": "brasshaven:copper_tile_stairs",
+    "count": 4
+  }
+}

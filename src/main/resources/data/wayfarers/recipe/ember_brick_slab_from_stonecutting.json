@@ -1,8 +1,0 @@
-{
-  "type": "minecraft:stonecutting",
-  "ingredient": "wayfarers:ember_bricks",
-  "result": {
-    "id": "wayfarers:ember_brick_slab",
-    "count": 2
-  }
-}

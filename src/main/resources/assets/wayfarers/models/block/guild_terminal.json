@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/orientable",
-  "textures": {
-    "top": "wayfarers:block/guild_terminal_side",
-    "front": "wayfarers:block/guild_terminal_front",
-    "side": "wayfarers:block/guild_terminal_side"
-  }
-}

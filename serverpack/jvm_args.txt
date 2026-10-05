@@ -1,4 +1,4 @@
-# Wayfarers server JVM flags (read by start.sh / start.bat; Forge's own user_jvm_args.txt is not used).
+# Brasshaven server JVM flags (read by start.sh / start.bat; Forge's own user_jvm_args.txt is not used).
 # RAM: 6 GB suits 2-10 players. Give -Xms the same value as -Xmx; keep 2 GB or more for the system.
 # 4-5 players on a small machine: -Xms4G -Xmx4G. 20+ players: -Xms10G -Xmx10G.
 -Xms6G

@@ -11,7 +11,7 @@ from ..arch import stair
 from ..defs import Piece, StructureDef, register
 from ..parts import LOOT
 
-W = "wayfarers:"
+W = "brasshaven:"
 BRASS, IRON, TREAD = W + "brass_plating", W + "dark_iron_plating", W + "diamond_plate"
 MAHOGANY, GEAR, PIPES, EDISON = W + "mahogany_panelling", W + "gear_panel", W + "copper_pipes", W + "edison_lamp"
 SMOKE, COPPER = W + "smokestack_bricks", W + "copper_plating"

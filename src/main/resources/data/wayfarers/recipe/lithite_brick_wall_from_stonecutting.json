@@ -1,8 +1,0 @@
-{
-  "type": "minecraft:stonecutting",
-  "ingredient": "wayfarers:lithite_bricks",
-  "result": {
-    "id": "wayfarers:lithite_brick_wall",
-    "count": 1
-  }
-}

@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "ingredient": "brasshaven:raw_orichalcum",
+  "result": {
+    "id": "brasshaven:orichalcum_ingot"
+  },
+  "experience": 0.7,
+  "cookingtime": 200
+}

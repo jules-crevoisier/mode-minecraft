@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "brasshaven:crimson_roof_tiles",
+  "result": {
+    "id": "brasshaven:crimson_roof_tile_slab",
+    "count": 2
+  }
+}

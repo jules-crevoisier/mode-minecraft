@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:book",
+    "brasshaven:map_fragment"
+  ],
+  "result": {
+    "id": "brasshaven:wayfarer_atlas",
+    "count": 1
+  }
+}

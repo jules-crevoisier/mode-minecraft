@@ -18,7 +18,7 @@ GATE_Z = 27          # where the causeway leaves the rock
 
 def seal(bp, ar):
     bp.set(0, 2, 0, "air")
-    bp.boss_seal(0, 1, 0, "wayfarers:void_warden", ar)
+    bp.boss_seal(0, 1, 0, "brasshaven:void_warden", ar)
 
 
 def fang_gate(bp):

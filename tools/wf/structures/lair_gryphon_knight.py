@@ -115,7 +115,7 @@ def build(bp, Y, main):
         elif r < 6.0:
             b = "smooth_quartz" if int(a // 22.5) % 2 else "calcite"
         elif r < 7.0:
-            b = "wayfarers:rune_lamp" if int((a + 11.25) // 22.5) % 4 == 0 and abs((a + 11.25) % 22.5 - 11.25) < 3 \
+            b = "brasshaven:rune_lamp" if int((a + 11.25) // 22.5) % 4 == 0 and abs((a + 11.25) % 22.5 - 11.25) < 3 \
                 else "lapis_block"
         elif r < 7.8:
             b = "chiseled_quartz_block"
@@ -275,7 +275,7 @@ def build(bp, Y, main):
             bp.set(x, Y + 11, z, "campfire[facing=north,lit=true,signal_fire=false,waterlogged=false]")
 
     # ---------------------------------------------------------------- seal and mist (after the gateways)
-    bp.boss_seal(AX, Y, AZ, "wayfarers:gryphon_knight", 15)
+    bp.boss_seal(AX, Y, AZ, "brasshaven:gryphon_knight", 15)
     for (x, z) in north_gate:
         bp.fill(x, Y + 1, z, x, Y + 6, z, "air")
         bp.mist(x, Y + 1, z, x, Y + 6, z)

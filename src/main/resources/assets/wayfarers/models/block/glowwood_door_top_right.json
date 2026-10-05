@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:block/door_top_right",
-  "textures": {
-    "top": "wayfarers:block/glowwood_door_top",
-    "bottom": "wayfarers:block/glowwood_door_bottom"
-  }
-}

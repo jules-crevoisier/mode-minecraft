@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Wayfarers @VERSION@ server - Minecraft @MINECRAFT@, Forge @FORGE@, Java 25.
+# Brasshaven @VERSION@ server - Minecraft @MINECRAFT@, Forge @FORGE@, Java 25.
 # First run: installs Forge, asks you to accept the Minecraft EULA, then starts the server.
-# Every run: copies the default configs if missing, backs the world up when the Wayfarers version changed,
+# Every run: copies the default configs if missing, backs the world up when the Brasshaven version changed,
 # and starts with the JVM flags of jvm_args.txt (RAM: edit -Xms/-Xmx there).
 set -euo pipefail
 cd "$(dirname "$0")"
@@ -37,10 +37,10 @@ fi
 # 2. Default settings, only where the admin has none (an update never overwrites them)
 mkdir -p config
 [ -f server.properties ] || cp defaults/server.properties server.properties
-[ -f config/wayfarers-common.toml ] || cp defaults/config/wayfarers-common.toml config/wayfarers-common.toml
+[ -f config/brasshaven-common.toml ] || cp defaults/config/brasshaven-common.toml config/brasshaven-common.toml
 
-# 3. One Wayfarers jar only: older ones (a new pack unzipped over the old folder) move to old-mods/
-for f in mods/wayfarers-*.jar; do
+# 3. One Brasshaven jar only: older ones (a new pack unzipped over the old folder) move to old-mods/
+for f in mods/brasshaven-*.jar; do
     if [ -f "$f" ] && [ "$(basename "$f")" != "$JAR" ]; then
         mkdir -p old-mods
         echo "== $(basename "$f") -> old-mods/ (remplacé par / replaced by $JAR)"
@@ -48,10 +48,10 @@ for f in mods/wayfarers-*.jar; do
     fi
 done
 
-# 4. Backup of the world before the first start with a new Wayfarers version
+# 4. Backup of the world before the first start with a new Brasshaven version
 WORLD=$(grep -E '^level-name=' server.properties 2>/dev/null | cut -d= -f2- || true)
 WORLD=${WORLD:-world}
-LAST=$(cat .wayfarers-version 2>/dev/null || true)
+LAST=$(cat .brasshaven-version 2>/dev/null || true)
 if [ -d "$WORLD" ] && [ "$LAST" != "@VERSION@" ]; then
     mkdir -p backups
     BACKUP="backups/$WORLD-before-@VERSION@-$(date +%Y%m%d-%H%M%S).tar.gz"
@@ -69,5 +69,5 @@ if ! grep -qs '^eula=true' eula.txt; then
     esac
 fi
 
-echo "@VERSION@" > .wayfarers-version
+echo "@VERSION@" > .brasshaven-version
 exec java @jvm_args.txt @"$ARGS" nogui "$@"

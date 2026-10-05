@@ -1,7 +1,7 @@
 @echo off
-REM Wayfarers @VERSION@ server - Minecraft @MINECRAFT@, Forge @FORGE@, Java 25.
+REM Brasshaven @VERSION@ server - Minecraft @MINECRAFT@, Forge @FORGE@, Java 25.
 REM First run: installs Forge, asks you to accept the Minecraft EULA, then starts the server.
-REM Every run: copies the default configs if missing, backs the world up when the Wayfarers version changed,
+REM Every run: copies the default configs if missing, backs the world up when the Brasshaven version changed,
 REM and starts with the JVM flags of jvm_args.txt (RAM: edit -Xms/-Xmx there).
 setlocal EnableExtensions EnableDelayedExpansion
 cd /d "%~dp0"
@@ -29,10 +29,10 @@ if not exist "%ARGS%" (
 REM 2. Default settings, only where the admin has none (an update never overwrites them)
 if not exist config mkdir config
 if not exist server.properties copy /y defaults\server.properties server.properties >nul
-if not exist config\wayfarers-common.toml copy /y defaults\config\wayfarers-common.toml config\wayfarers-common.toml >nul
+if not exist config\brasshaven-common.toml copy /y defaults\config\brasshaven-common.toml config\brasshaven-common.toml >nul
 
-REM 3. One Wayfarers jar only: older ones (a new pack unzipped over the old folder) move to old-mods\
-for %%F in (mods\wayfarers-*.jar) do (
+REM 3. One Brasshaven jar only: older ones (a new pack unzipped over the old folder) move to old-mods\
+for %%F in (mods\brasshaven-*.jar) do (
     if /i not "%%~nxF"=="%JAR%" (
         if not exist old-mods mkdir old-mods
         echo == %%~nxF -^> old-mods\ ^(remplace par / replaced by %JAR%^)
@@ -40,7 +40,7 @@ for %%F in (mods\wayfarers-*.jar) do (
     )
 )
 
-REM 4. Backup of the world before the first start with a new Wayfarers version
+REM 4. Backup of the world before the first start with a new Brasshaven version
 set "WORLD=world"
 if exist server.properties (
     for /f "usebackq tokens=1,* delims==" %%A in ("server.properties") do (
@@ -48,7 +48,7 @@ if exist server.properties (
     )
 )
 set "LAST="
-if exist .wayfarers-version set /p LAST=<.wayfarers-version
+if exist .brasshaven-version set /p LAST=<.brasshaven-version
 if exist "%WORLD%\" if not "%LAST%"=="@VERSION@" (
     if not exist backups mkdir backups
     for /f %%T in ('powershell -NoProfile -Command "Get-Date -Format yyyyMMdd-HHmmss"') do set "STAMP=%%T"
@@ -68,7 +68,7 @@ if errorlevel 1 (
     )
 )
 
-echo @VERSION@> .wayfarers-version
+echo @VERSION@> .brasshaven-version
 java @jvm_args.txt @%ARGS% nogui %*
 pause
 exit /b 0

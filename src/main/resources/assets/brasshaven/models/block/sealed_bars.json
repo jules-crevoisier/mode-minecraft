@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "brasshaven:block/sealed_bars"
+  },
+  "render_type": "minecraft:cutout"
+}

@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "brasshaven:dark_iron_plating",
+  "result": {
+    "id": "brasshaven:dark_iron_plating_wall",
+    "count": 1
+  }
+}

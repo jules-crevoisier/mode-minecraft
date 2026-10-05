@@ -1,0 +1,146 @@
+{
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "brasshaven:chunked_template",
+        "size": [
+          83,
+          41,
+          83
+        ],
+        "cells": [
+          {
+            "location": "brasshaven:undercity/cavern/x0_z0",
+            "offset": [
+              2,
+              1,
+              2
+            ],
+            "size": [
+              26,
+              33,
+              26
+            ],
+            "blocks": 10057
+          },
+          {
+            "location": "brasshaven:undercity/cavern/x0_z1",
+            "offset": [
+              0,
+              1,
+              28
+            ],
+            "size": [
+              28,
+              37,
+              27
+            ],
+            "blocks": 19994
+          },
+          {
+            "location": "brasshaven:undercity/cavern/x0_z2",
+            "offset": [
+              2,
+              1,
+              55
+            ],
+            "size": [
+              26,
+              33,
+              26
+            ],
+            "blocks": 10060
+          },
+          {
+            "location": "brasshaven:undercity/cavern/x1_z0",
+            "offset": [
+              28,
+              1,
+              0
+            ],
+            "size": [
+              27,
+              40,
+              28
+            ],
+            "blocks": 19995
+          },
+          {
+            "location": "brasshaven:undercity/cavern/x1_z1",
+            "offset": [
+              28,
+              0,
+              28
+            ],
+            "size": [
+              27,
+              41,
+              27
+            ],
+            "blocks": 25673
+          },
+          {
+            "location": "brasshaven:undercity/cavern/x1_z2",
+            "offset": [
+              28,
+              1,
+              55
+            ],
+            "size": [
+              27,
+              37,
+              28
+            ],
+            "blocks": 19992
+          },
+          {
+            "location": "brasshaven:undercity/cavern/x2_z0",
+            "offset": [
+              55,
+              1,
+              2
+            ],
+            "size": [
+              26,
+              33,
+              26
+            ],
+            "blocks": 10061
+          },
+          {
+            "location": "brasshaven:undercity/cavern/x2_z1",
+            "offset": [
+              55,
+              1,
+              28
+            ],
+            "size": [
+              28,
+              40,
+              27
+            ],
+            "blocks": 19997
+          },
+          {
+            "location": "brasshaven:undercity/cavern/x2_z2",
+            "offset": [
+              55,
+              1,
+              55
+            ],
+            "size": [
+              26,
+              33,
+              26
+            ],
+            "blocks": 10057
+          }
+        ],
+        "projection": "rigid",
+        "processors": "brasshaven:none"
+      }
+    }
+  ]
+}

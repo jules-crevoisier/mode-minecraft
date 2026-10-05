@@ -1,0 +1,28 @@
+{
+  "structures": [
+    {
+      "structure": "brasshaven:end_archive",
+      "weight": 2
+    },
+    {
+      "structure": "brasshaven:void_crypt",
+      "weight": 2
+    },
+    {
+      "structure": "brasshaven:void_nest",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "brasshaven:curated_spread",
+    "salt": 78687180,
+    "spacing": 40,
+    "separation": 14,
+    "avoid": [
+      {
+        "set": "minecraft:end_cities",
+        "chunks": 4
+      }
+    ]
+  }
+}

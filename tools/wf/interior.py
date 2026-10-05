@@ -33,7 +33,7 @@ from . import support
 
 AIR = {"minecraft:air", "minecraft:cave_air"}
 WATER = {"minecraft:water"}
-W = "wayfarers:"
+W = "brasshaven:"
 
 # blocks a player walks over/through at foot level (they still count as part of the room)
 LOW_PASSABLE = ("carpet", "pressure_plate", "rail", "button", "torch", "flower", "short_grass", "fern",
@@ -171,7 +171,7 @@ def find_rooms(bp, region=None, min_area=9, min_width=3, roof_scan=40, sky_ok=Fa
     structures carved out of the terrain)."""
     chk = _checker(bp, ground, void_solid)
     ents = _entity_cells(bp)
-    seals = [(p, (d or {}).get("radius")) for p, (n, _, d) in bp.blocks.items() if n == "wayfarers:boss_seal"]
+    seals = [(p, (d or {}).get("radius")) for p, (n, _, d) in bp.blocks.items() if n == "brasshaven:boss_seal"]
     pts = set()
     for p, (name, props, data) in bp.blocks.items():
         if name in AIR or (bp.underwater and name in WATER) or _low_passable(bp, p):
@@ -993,12 +993,12 @@ def villager(bp, x, y, z, profession, vtype="plains", level=2, facing=None, baby
 
 
 def quest_npc(bp, x, y, z, role, facing=None):
-    """A quest giver (wayfarers:wayfarer_npc, roles and contracts in wf/npcs.py): it stays where it is placed,
+    """A quest giver (brasshaven:wayfarer_npc, roles and contracts in wf/npcs.py): it stays where it is placed,
     cannot be hurt by players and never despawns. Its name and home are set by the game when it spawns."""
     from . import nbt, npcs
     if role not in npcs.ROLES:
         raise ValueError(f"unknown NPC role {role}")
-    bp.entity(x, y, z, {"id": "wayfarers:wayfarer_npc", "Role": role, "PersistenceRequired": True,
+    bp.entity(x, y, z, {"id": "brasshaven:wayfarer_npc", "Role": role, "PersistenceRequired": True,
                         "Rotation": nbt.List([nbt.Float(YAW.get(facing, 0.0)), nbt.Float(0.0)], nbt.Float)})
     _log_npc(bp, f"npc:{role}")
 
@@ -1039,7 +1039,7 @@ def iron_golem(bp, x, y, z):
 def brass_golem(bp, x, y, z):
     """The mod's Brass Golem, guarding the spot it stands on (Guarding with no GuardPos: it guards where
     it is placed, see BrassGolem.anchor)."""
-    bp.entity(x, y, z, {"id": "wayfarers:brass_golem", "PersistenceRequired": True, "Guarding": True})
+    bp.entity(x, y, z, {"id": "brasshaven:brass_golem", "PersistenceRequired": True, "Guarding": True})
     _log_npc(bp, "brass_golem")
 
 

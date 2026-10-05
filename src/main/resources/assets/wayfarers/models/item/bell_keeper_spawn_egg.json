@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "wayfarers:item/bell_keeper_spawn_egg"
-  }
-}

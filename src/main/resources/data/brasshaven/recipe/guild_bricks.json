@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "SA",
+    "AS"
+  ],
+  "key": {
+    "S": "minecraft:stone_bricks",
+    "A": "minecraft:sandstone"
+  },
+  "result": {
+    "id": "brasshaven:guild_bricks",
+    "count": 4
+  }
+}

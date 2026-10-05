@@ -1,7 +1,7 @@
 {
   "replace": false,
   "values": [
-    "wayfarers:glowwood_fence_gate",
-    "wayfarers:rustwood_fence_gate"
+    "brasshaven:glowwood_fence_gate",
+    "brasshaven:rustwood_fence_gate"
   ]
 }

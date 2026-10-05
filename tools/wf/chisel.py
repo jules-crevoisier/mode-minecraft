@@ -2,7 +2,7 @@
 
 Each family is an ordered loop: right-click a block with the chisel to get the next member, sneak-right-click for
 the previous one. Stairs, slabs and walls get their own families so the shape (facing, half, type...) is kept.
-gen_data writes one data/wayfarers/chisel/<family>.json per family ({"blocks": [...]}); the game loads them
+gen_data writes one data/brasshaven/chisel/<family>.json per family ({"blocks": [...]}); the game loads them
 (ChiselFamilies, reloadable with /reload) and datapacks may add their own files in data/<ns>/chisel/.
 
 Rules: a block belongs to one family only; no family turns something cheap into something that drops loot
@@ -12,7 +12,7 @@ the game anyway.
 """
 from . import decor
 
-W = "wayfarers:"
+W = "brasshaven:"
 
 
 def _mc(*ids):
@@ -108,7 +108,7 @@ for _wax in ("", "waxed_"):
         FAMILIES[f"{_wax}{_age}copper"] = _mc(f"{_wax}{_age}cut_copper", f"{_wax}{_age}chiseled_copper",
                                               f"{_wax}{_age}copper_grate")
 
-# ---------------------------------------------------------------- Wayfarers decor (tools/wf/decor.py)
+# ---------------------------------------------------------------- Brasshaven decor (tools/wf/decor.py)
 def _v(bid, v):
     return W + decor.variant_id(bid, v)
 
@@ -176,7 +176,7 @@ def check(vanilla_blocks, mod_blocks):
             problems.append(f"chisel family {name}: needs at least two blocks")
         for b in fam:
             ns, path = b.split(":")
-            if (ns == "minecraft" and path not in vanilla_blocks) or (ns == "wayfarers" and path not in mod_blocks):
+            if (ns == "minecraft" and path not in vanilla_blocks) or (ns == "brasshaven" and path not in mod_blocks):
                 problems.append(f"chisel family {name}: unknown block {b}")
             if b in seen:
                 problems.append(f"chisel family {name}: {b} is already in family {seen[b]}")
@@ -186,4 +186,4 @@ def check(vanilla_blocks, mod_blocks):
 
 def data_files():
     """{relative path under data/: json object} for gen_data."""
-    return {f"wayfarers/chisel/{name}.json": {"blocks": fam} for name, fam in FAMILIES.items()}
+    return {f"brasshaven/chisel/{name}.json": {"blocks": fam} for name, fam in FAMILIES.items()}

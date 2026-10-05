@@ -13,12 +13,12 @@ from ..parts import LOOT, MOB
 
 CATACOMBS = Theme(
     "catacombs",
-    wall=["wayfarers:guild_bricks"] * 4 + ["wayfarers:mossy_guild_bricks"] * 2 + ["wayfarers:cracked_guild_bricks",
+    wall=["brasshaven:guild_bricks"] * 4 + ["brasshaven:mossy_guild_bricks"] * 2 + ["brasshaven:cracked_guild_bricks",
                                                                                  "tuff_bricks"],
-    floor=["polished_tuff", "tuff_bricks", "wayfarers:polished_guild_stone"],
-    trim="wayfarers:guild_brick", pillar="wayfarers:polished_guild_stone", ceiling=["tuff_bricks", "stone_bricks"],
-    cracked="wayfarers:cracked_guild_bricks", accent="wayfarers:carved_guild_stone", light="lantern",
-    candle="candle", spawners=("wayfarers:skeleton_knight", "wayfarers:crypt_crawler", "minecraft:zombie"),
+    floor=["polished_tuff", "tuff_bricks", "brasshaven:polished_guild_stone"],
+    trim="brasshaven:guild_brick", pillar="brasshaven:polished_guild_stone", ceiling=["tuff_bricks", "stone_bricks"],
+    cracked="brasshaven:cracked_guild_bricks", accent="brasshaven:carved_guild_stone", light="lantern",
+    candle="candle", spawners=("brasshaven:skeleton_knight", "brasshaven:crypt_crawler", "minecraft:zombie"),
 )
 HYPOGEUM = Theme(
     "hypogeum",
@@ -26,23 +26,23 @@ HYPOGEUM = Theme(
     floor=["smooth_sandstone", "cut_sandstone"], trim="sandstone", pillar="cut_sandstone",
     ceiling=["sandstone", "smooth_sandstone"], cracked="chiseled_sandstone", accent="chiseled_red_sandstone",
     light="lantern", candle="orange_candle", skull="skeleton_skull",
-    spawners=("wayfarers:crypt_crawler", "minecraft:husk"),
+    spawners=("brasshaven:crypt_crawler", "minecraft:husk"),
 )
 LITHITE = Theme(
     "lithite",
-    wall=["deepslate_bricks"] * 3 + ["cracked_deepslate_bricks", "deepslate_tiles", "wayfarers:lithite_bricks"],
-    floor=["polished_deepslate", "deepslate_tiles"], trim="deepslate_brick", pillar="wayfarers:lithite_bricks",
-    ceiling=["deepslate_tiles", "cobbled_deepslate"], cracked="cracked_deepslate_tiles", accent="wayfarers:lithite_block",
+    wall=["deepslate_bricks"] * 3 + ["cracked_deepslate_bricks", "deepslate_tiles", "brasshaven:lithite_bricks"],
+    floor=["polished_deepslate", "deepslate_tiles"], trim="deepslate_brick", pillar="brasshaven:lithite_bricks",
+    ceiling=["deepslate_tiles", "cobbled_deepslate"], cracked="cracked_deepslate_tiles", accent="brasshaven:lithite_block",
     light="soul_lantern", candle="cyan_candle",
-    spawners=("wayfarers:banshee", "wayfarers:gargoyle", "minecraft:cave_spider"),
+    spawners=("brasshaven:banshee", "brasshaven:gargoyle", "minecraft:cave_spider"),
 )
 VOID = Theme(
     "void",
-    wall=["wayfarers:void_bricks"] * 4 + ["end_stone_bricks", "purpur_block"],
-    floor=["purpur_block", "wayfarers:void_bricks"], trim="wayfarers:void_brick", pillar="purpur_pillar",
-    ceiling=["end_stone_bricks", "wayfarers:void_bricks"], cracked="end_stone", accent="wayfarers:starlight_block",
+    wall=["brasshaven:void_bricks"] * 4 + ["end_stone_bricks", "purpur_block"],
+    floor=["purpur_block", "brasshaven:void_bricks"], trim="brasshaven:void_brick", pillar="purpur_pillar",
+    ceiling=["end_stone_bricks", "brasshaven:void_bricks"], cracked="end_stone", accent="brasshaven:starlight_block",
     light="end_rod", candle="purple_candle", bones="purpur_pillar",
-    spawners=("wayfarers:void_larva", "wayfarers:void_larva", "minecraft:endermite"),
+    spawners=("brasshaven:void_larva", "brasshaven:void_larva", "minecraft:endermite"),
 )
 
 
@@ -51,8 +51,8 @@ def mausoleum(bp, t, x, z):
     """Catacombs: a gothic crypt chapel in a walled graveyard; the stairwell opens in its nave."""
     rng = random.Random(x * 31 + z)
     hw, hd = 7, 9                      # half width (x) and half depth (z) of the chapel
-    W, B, M, C = ("wayfarers:guild_bricks", "wayfarers:polished_guild_stone", "wayfarers:mossy_guild_bricks",
-                  "wayfarers:carved_guild_stone")
+    W, B, M, C = ("brasshaven:guild_bricks", "brasshaven:polished_guild_stone", "brasshaven:mossy_guild_bricks",
+                  "brasshaven:carved_guild_stone")
     # ground: grass, a gravel path from the south gate to the door
     for xx in range(x - hw - 8, x + hw + 9):
         for zz in range(z - hd - 7, z + hd + 10):
@@ -67,7 +67,7 @@ def mausoleum(bp, t, x, z):
             if math.hypot(xx - x, zz - z) > 4.4:
                 bp.set(xx, 0, zz, B)
     for dx in range(-2, 3):
-        bp.set(x + dx, 0, z + hd + 2, stair("wayfarers:polished_guild_stone_stairs", "north"))
+        bp.set(x + dx, 0, z + hd + 2, stair("brasshaven:polished_guild_stone_stairs", "north"))
     # walls: brick with a moss tide line, quoins of polished stone
     for xx in range(x - hw, x + hw + 1):
         for zz in range(z - hd, z + hd + 1):
@@ -82,9 +82,9 @@ def mausoleum(bp, t, x, z):
             bx = x + side * (hw + 1)
             for y in range(1, 7):
                 bp.set(bx, y, zz, B)
-            bp.set(bx, 7, zz, stair("wayfarers:guild_brick_stairs", "east" if side < 0 else "west"))
+            bp.set(bx, 7, zz, stair("brasshaven:guild_brick_stairs", "east" if side < 0 else "west"))
             bp.set(bx + side, 1, zz, B)
-            bp.set(bx + side, 2, zz, stair("wayfarers:guild_brick_stairs", "east" if side < 0 else "west"))
+            bp.set(bx + side, 2, zz, stair("brasshaven:guild_brick_stairs", "east" if side < 0 else "west"))
             # lancet windows between buttresses
             for y in range(3, 7):
                 bp.set(x + side * hw, y, zz - 2, "purple_stained_glass_pane" if y > 3 else
@@ -97,12 +97,12 @@ def mausoleum(bp, t, x, z):
     for y in range(1, 7):
         for dx in (-2, 2):
             bp.set(x + dx, y, z + hd, C if y in (1, 6) else B)
-    bp.set(x - 1, 6, z + hd, stair("wayfarers:polished_guild_stone_stairs", "east", "top"))
-    bp.set(x + 1, 6, z + hd, stair("wayfarers:polished_guild_stone_stairs", "west", "top"))
+    bp.set(x - 1, 6, z + hd, stair("brasshaven:polished_guild_stone_stairs", "east", "top"))
+    bp.set(x + 1, 6, z + hd, stair("brasshaven:polished_guild_stone_stairs", "west", "top"))
     bp.set(x, 7, z + hd, C)
     # gables and a steep slate roof, ridge cross and corner pinnacles
-    arch.steep_roof(bp, x - hw - 1, z - hd - 1, x + hw + 1, z + hd + 1, 9, "wayfarers:slate_roof_tile_stairs",
-                    axis="z", overhang=1, steep=1, fill="wayfarers:slate_roof_tiles")
+    arch.steep_roof(bp, x - hw - 1, z - hd - 1, x + hw + 1, z + hd + 1, 9, "brasshaven:slate_roof_tile_stairs",
+                    axis="z", overhang=1, steep=1, fill="brasshaven:slate_roof_tiles")
     top = 9 + hw + 1
     for y in range(top - 1, top + 3):
         bp.set(x, y, z + hd, B)
@@ -111,18 +111,18 @@ def mausoleum(bp, t, x, z):
     for cx, cz in ((x - hw, z - hd), (x + hw, z - hd), (x - hw, z + hd), (x + hw, z + hd)):
         for y in range(9, 12):
             bp.set(cx, y, cz, B)
-        bp.set(cx, 12, cz, "wayfarers:guild_brick_wall[east=none,north=none,south=none,west=none,up=true,waterlogged=false]")
+        bp.set(cx, 12, cz, "brasshaven:guild_brick_wall[east=none,north=none,south=none,west=none,up=true,waterlogged=false]")
         bp.set(cx, 13, cz, "lantern[hanging=false,waterlogged=false]")
     # interior: a balustrade around the stairwell, candles, two sarcophagi, hanging lanterns
     for a in range(0, 360, 15):
         bx = int(round(x + math.cos(math.radians(a)) * 5))
         bz = int(round(z + math.sin(math.radians(a)) * 5))
         if bz < z + 4 or abs(bx - x) > 1:
-            bp.set(bx, 1, bz, "wayfarers:guild_brick_wall[east=none,north=none,south=none,west=none,up=true,waterlogged=false]")
+            bp.set(bx, 1, bz, "brasshaven:guild_brick_wall[east=none,north=none,south=none,west=none,up=true,waterlogged=false]")
     for side in (-1, 1):
         for dz in (-6, -5):
             bp.set(x + side * 5, 1, z + dz, B)
-            bp.set(x + side * 5, 2, z + dz, "wayfarers:guild_brick_slab[type=bottom,waterlogged=false]")
+            bp.set(x + side * 5, 2, z + dz, "brasshaven:guild_brick_slab[type=bottom,waterlogged=false]")
         bp.set(x + side * 5, 1, z + 6, "candle[candles=3,lit=true,waterlogged=false]")
         bp.set(x + side * 3, 7, z, "iron_chain[axis=y,waterlogged=false]")
         bp.set(x + side * 3, 6, z, "lantern[hanging=true,waterlogged=false]")
@@ -486,7 +486,7 @@ def well_head(bp, t, x, z):
     the west door past heaps of ore, scaffolding climbs the north wall and crystal lamp posts light the yard."""
     rng = random.Random(x * 7 + z * 13)
     B, BC, TL, PD = "deepslate_bricks", "cracked_deepslate_bricks", "deepslate_tiles", "polished_deepslate"
-    LB, LK, LO = "wayfarers:lithite_bricks", "wayfarers:lithite_block", "wayfarers:deepslate_lithite_ore"
+    LB, LK, LO = "brasshaven:lithite_bricks", "brasshaven:lithite_block", "brasshaven:deepslate_lithite_ore"
     POST = "deepslate_brick_wall[east=none,north=none,south=none,west=none,up=true,waterlogged=false]"
     FENCE = "dark_oak_fence[east=false,north=false,south=false,west=false,waterlogged=false]"
     BARS_X = "iron_bars[east=true,north=false,south=false,west=true,waterlogged=false]"
@@ -719,7 +719,7 @@ def void_obelisk(bp, t, x, z):
     the descending portal: the stairwell, rimmed with crying obsidian under a floating purpur halo hung with end
     rods. Chorus groves and fallen obelisk drums dot the end stone around it."""
     rng = random.Random(x * 17 + z * 29)
-    VB, SL = "wayfarers:void_bricks", "wayfarers:starlight_block"
+    VB, SL = "brasshaven:void_bricks", "brasshaven:starlight_block"
     ESB_WALL = "end_stone_brick_wall[east=none,north=none,south=none,west=none,up=true,waterlogged=false]"
     FLOOR = -3                       # plaza floor (blocks); the surrounding ground is y = -1
 
@@ -788,7 +788,7 @@ def void_obelisk(bp, t, x, z):
             put(ox, y, oz, VB if y % 4 else "purpur_pillar[axis=y]")
             if y <= FLOOR + 5:
                 for ddx, ddz in ((1, 0), (-1, 0), (0, 1), (0, -1)):
-                    put(ox + ddx, y, oz + ddz, VB if y < FLOOR + 5 else stair("wayfarers:void_brick_stairs",
+                    put(ox + ddx, y, oz + ddz, VB if y < FLOOR + 5 else stair("brasshaven:void_brick_stairs",
                                                                               outward(-ddx, -ddz), "bottom"))
         put(ox, hgt, oz, SL)
         put(ox, hgt + 1, oz, "end_rod[facing=up]")
@@ -860,16 +860,16 @@ def _register(sid, theme, entrance, biomes, title_fr, title_en, boss, loot, leve
 _register("forgotten_catacombs", CATACOMBS, mausoleum,
           ["plains", "forest", "birch_forest", "dark_forest", "old_growth_birch_forest", "meadow", "taiga",
            "flower_forest", "cherry_grove"],
-          "Catacombes oubliées", "Forgotten Catacombs", "wayfarers:grave_knight", "catacombs",
-          spawns=[("wayfarers:skeleton_knight", 10, 1, 2), ("wayfarers:crypt_crawler", 8, 1, 2), ("minecraft:zombie", 8, 1, 2)])
+          "Catacombes oubliées", "Forgotten Catacombs", "brasshaven:grave_knight", "catacombs",
+          spawns=[("brasshaven:skeleton_knight", 10, 1, 2), ("brasshaven:crypt_crawler", 8, 1, 2), ("minecraft:zombie", 8, 1, 2)])
 _register("sand_hypogeum", HYPOGEUM, sand_gate, ["desert", "badlands", "wooded_badlands", "eroded_badlands"],
-          "Hypogée des sables", "Sand Hypogeum", "wayfarers:bone_matriarch", "hypogeum",
-          spawns=[("wayfarers:crypt_crawler", 10, 1, 2), ("minecraft:husk", 10, 1, 2)])
+          "Hypogée des sables", "Sand Hypogeum", "brasshaven:bone_matriarch", "hypogeum",
+          spawns=[("brasshaven:crypt_crawler", 10, 1, 2), ("minecraft:husk", 10, 1, 2)])
 _register("lithite_well", LITHITE, well_head,
           ["windswept_hills", "windswept_forest", "windswept_gravelly_hills", "grove", "snowy_slopes", "jagged_peaks",
            "stony_peaks", "old_growth_spruce_taiga"],
-          "Puits de lithite", "Lithite Well", "wayfarers:weeping_lady", "lithite_well",
-          spawns=[("wayfarers:banshee", 8, 1, 1), ("wayfarers:gargoyle", 6, 1, 1), ("minecraft:cave_spider", 8, 1, 2)])
+          "Puits de lithite", "Lithite Well", "brasshaven:weeping_lady", "lithite_well",
+          spawns=[("brasshaven:banshee", 8, 1, 1), ("brasshaven:gargoyle", 6, 1, 1), ("minecraft:cave_spider", 8, 1, 2)])
 _register("void_crypt", VOID, void_obelisk, ["end_highlands", "end_midlands"],
-          "Crypte du vide", "Void Crypt", "wayfarers:larva_mother", "void_crypt", levels=2, spacing=30,
-          dimension="end", spawns=[("wayfarers:void_larva", 10, 1, 2), ("minecraft:endermite", 6, 1, 2)])
+          "Crypte du vide", "Void Crypt", "brasshaven:larva_mother", "void_crypt", levels=2, spacing=30,
+          dimension="end", spawns=[("brasshaven:void_larva", 10, 1, 2), ("minecraft:endermite", 6, 1, 2)])

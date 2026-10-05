@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate every Wayfarers structure: .nbt templates + worldgen JSON + biome tags.
+"""Generate every Brasshaven structure: .nbt templates + worldgen JSON + biome tags.
 
 Usage:
     python3 tools/gen_structures.py            # write into src/main/resources

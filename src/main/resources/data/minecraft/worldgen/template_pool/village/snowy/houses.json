@@ -336,8 +336,8 @@
       "weight": 5,
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:village/snowy/inn",
-        "processors": "wayfarers:village",
+        "location": "brasshaven:village/snowy/inn",
+        "processors": "brasshaven:village",
         "projection": "rigid"
       }
     },
@@ -345,8 +345,8 @@
       "weight": 6,
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:village/snowy/guild_post",
-        "processors": "wayfarers:village",
+        "location": "brasshaven:village/snowy/guild_post",
+        "processors": "brasshaven:village",
         "projection": "rigid"
       }
     },
@@ -354,8 +354,8 @@
       "weight": 4,
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:village/snowy/workshop",
-        "processors": "wayfarers:village",
+        "location": "brasshaven:village/snowy/workshop",
+        "processors": "brasshaven:village",
         "projection": "rigid"
       }
     },
@@ -363,8 +363,8 @@
       "weight": 3,
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:village/snowy/watchtower",
-        "processors": "wayfarers:village",
+        "location": "brasshaven:village/snowy/watchtower",
+        "processors": "brasshaven:village",
         "projection": "rigid"
       }
     },
@@ -372,8 +372,8 @@
       "weight": 4,
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:village/snowy/market",
-        "processors": "wayfarers:village",
+        "location": "brasshaven:village/snowy/market",
+        "processors": "brasshaven:village",
         "projection": "rigid"
       }
     },
@@ -381,8 +381,8 @@
       "weight": 4,
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:village/snowy/orchard",
-        "processors": "wayfarers:village",
+        "location": "brasshaven:village/snowy/orchard",
+        "processors": "brasshaven:village",
         "projection": "rigid"
       }
     },
@@ -390,8 +390,8 @@
       "weight": 5,
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:village/snowy/cottage",
-        "processors": "wayfarers:village",
+        "location": "brasshaven:village/snowy/cottage",
+        "processors": "brasshaven:village",
         "projection": "rigid"
       }
     },
@@ -399,8 +399,8 @@
       "weight": 3,
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:village/snowy/manor",
-        "processors": "wayfarers:village",
+        "location": "brasshaven:village/snowy/manor",
+        "processors": "brasshaven:village",
         "projection": "rigid"
       }
     },
@@ -408,8 +408,8 @@
       "weight": 3,
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:village/snowy/well_corner",
-        "processors": "wayfarers:village",
+        "location": "brasshaven:village/snowy/well_corner",
+        "processors": "brasshaven:village",
         "projection": "rigid"
       }
     }

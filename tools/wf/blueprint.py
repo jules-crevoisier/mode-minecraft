@@ -339,7 +339,7 @@ class Blueprint:
     def boss_seal(self, x, y, z, boss, radius):
         """Boss arena heart: wakes ``boss`` (entity id) when a player walks within ``radius`` blocks and
         seals every mist gate around the arena during the fight."""
-        self.set(x, y, z, "wayfarers:boss_seal", {"boss": nbt.String(boss), "radius": nbt.Int(radius)})
+        self.set(x, y, z, "brasshaven:boss_seal", {"boss": nbt.String(boss), "radius": nbt.Int(radius)})
 
     def mist(self, x0, y0, z0, x1, y1, z1):
         """Boss mist across a doorway: fills only the open (air) cells of the box. Walkable until the
@@ -348,7 +348,7 @@ class Blueprint:
             for y in range(min(y0, y1), max(y0, y1) + 1):
                 for z in range(min(z0, z1), max(z0, z1) + 1):
                     if self.get(x, y, z) in ("minecraft:air", "minecraft:cave_air", "minecraft:water"):
-                        self.set(x, y, z, "wayfarers:mist_gate[sealed=false]")
+                        self.set(x, y, z, "brasshaven:mist_gate[sealed=false]")
 
     def lantern(self, x, y, z, hanging=False, soul=False):
         self.set(x, y, z, with_props("soul_lantern" if soul else "lantern", hanging=hanging, waterlogged=False))

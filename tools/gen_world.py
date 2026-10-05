@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
-"""Generate the Wayfarers biomes and terrain touches (tools/wf/worldbiomes.py, objects in tools/wf/worldobjects.py).
+"""Generate the Brasshaven biomes and terrain touches (tools/wf/worldbiomes.py, objects in tools/wf/worldobjects.py).
 
 Minecraft's terrain stays as it is. Written here:
-  * mod data (always loaded): the three biomes (data/wayfarers/worldgen/biome), the noise settings
-    wayfarers:overworld (vanilla's minecraft:overworld word for word plus our surface rules), the biomes' features and
+  * mod data (always loaded): the three biomes (data/brasshaven/worldgen/biome), the noise settings
+    brasshaven:overworld (vanilla's minecraft:overworld word for word plus our surface rules), the biomes' features and
     the terrain touches' features (worldgen/{configured,placed}_feature/world/), the Forge biome modifiers of the
-    touches (forge/biome_modifier/terrain_*.json, type wayfarers:toggled_features, config world.terrain.*), the object
-    templates (structure/worldobjects), the biome tags (our biomes join the vanilla and Wayfarers tags of the vanilla
-    biome they come from: structures, mob variants, ores) and the structure tag wayfarers:clears_decoration;
+    touches (forge/biome_modifier/terrain_*.json, type brasshaven:toggled_features, config world.terrain.*), the object
+    templates (structure/worldobjects), the biome tags (our biomes join the vanilla and Brasshaven tags of the vanilla
+    biome they come from: structures, mob variants, ores) and the structure tag brasshaven:clears_decoration;
   * the built-in data pack custom_biomes_pack (Java: CustomBiomesPack, config world.customBiomes), holding one file:
     the "Default" world preset (minecraft:normal) whose Overworld uses vanilla's biome parameter list with our slices
-    carved in, and wayfarers:overworld. A preset only matters when a world is created: Superflat, Amplified, Large
+    carved in, and brasshaven:overworld. A preset only matters when a world is created: Superflat, Amplified, Large
     Biomes and existing worlds are left alone, and a world keeps its biomes whatever the pack or config later say
     (its dimensions are saved with it; everything they refer to is in the always-loaded mod data).
 
@@ -30,7 +30,7 @@ ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 RES = os.path.join(ROOT, "src", "main", "resources")
 DATA = os.path.join(RES, "data")
 PACK = os.path.join(RES, "custom_biomes_pack")
-NS = "wayfarers"
+NS = "brasshaven"
 
 # vanilla surface structures whose chunks keep the big decorations (thorns, hoodoos, spires, boulders) away
 VANILLA_CLEARS = ["#minecraft:village", "minecraft:pillager_outpost", "minecraft:desert_pyramid",
@@ -58,7 +58,7 @@ def write_pack():
     """custom_biomes_pack: the Default world preset (nothing else)."""
     reset_dir(PACK)
     write(os.path.join(PACK, "pack.mcmeta"), {"pack": {
-        "description": "Wayfarers: Crimson Mire, Volcanic Highlands and Pale Dunes in new Default worlds",
+        "description": "Brasshaven: Crimson Mire, Volcanic Highlands and Pale Dunes in new Default worlds",
         "min_format": 88, "max_format": 107}})
     icon = os.path.join(RES, "pack.png")
     if os.path.exists(icon):

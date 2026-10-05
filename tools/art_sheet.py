@@ -17,7 +17,7 @@ import sys
 from PIL import Image, ImageDraw, ImageFont
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-TEX = os.path.join(ROOT, "src", "main", "resources", "assets", "wayfarers", "textures")
+TEX = os.path.join(ROOT, "src", "main", "resources", "assets", "brasshaven", "textures")
 SCALE = 8
 COLS = 8
 ROWS = 5
@@ -87,7 +87,7 @@ def held_sheet(out, tag, only=None):
         d.text((4, 3), f"3D held models {p + 1}-{p + len(chunk)} / {len(ids)}  {tag}", fill=(230, 220, 190))
         for i, iid in enumerate(chunk):
             cx, cy = (i % cols) * cell, (i // cols) * (cell // 2 + 30) + 18
-            md = J.load(f"wayfarers:item/{iid}_3d")
+            md = J.load(f"brasshaven:item/{iid}_3d")
             for k, yaw in enumerate((135, 45)):
                 r = J.render(md, size=cell // 2 - 4, yaw=yaw, pitch=22, bg=(52, 54, 66), ss=2)
                 img.paste(r, (cx + 2 + k * (cell // 2 - 2), cy + 2))

@@ -1,0 +1,33 @@
+{
+  "display": {
+    "icon": {
+      "id": "brasshaven:telluric_hammer"
+    },
+    "title": {
+      "translate": "advancements.brasshaven.depths.telluric_hammer.title"
+    },
+    "description": {
+      "translate": "advancements.brasshaven.depths.telluric_hammer.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "brasshaven:telluric_hammer"
+          }
+        ]
+      }
+    }
+  },
+  "parent": "brasshaven:depths/lithite",
+  "rewards": {
+    "experience": 30
+  }
+}

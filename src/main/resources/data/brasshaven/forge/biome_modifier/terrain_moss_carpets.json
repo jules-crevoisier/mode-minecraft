@@ -1,0 +1,11 @@
+{
+  "type": "brasshaven:toggled_features",
+  "toggle": "mossCarpets",
+  "biomes": [
+    "minecraft:dark_forest",
+    "minecraft:old_growth_pine_taiga",
+    "minecraft:old_growth_spruce_taiga"
+  ],
+  "features": "brasshaven:world/moss_carpets",
+  "step": "vegetal_decoration"
+}

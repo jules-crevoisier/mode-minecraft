@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "brasshaven:guild_bricks",
+  "result": {
+    "id": "brasshaven:guild_brick_wall",
+    "count": 1
+  }
+}

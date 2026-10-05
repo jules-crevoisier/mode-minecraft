@@ -1,7 +1,7 @@
 """Structure definitions registry + worldgen JSON emission."""
 import hashlib
 
-MODID = "wayfarers"
+MODID = "brasshaven"
 STRUCTURES = []
 
 
@@ -153,8 +153,8 @@ def template_pool(sdef, pieces, pool_name):
 
 
 def structure_json(sdef, ground_offset, fit_info=None):
-    """A ``wayfarers:fitted_jigsaw``: the vanilla jigsaw fields plus ``fit``, the terrain check its start must pass
-    (com.wayfarers.world.FittedJigsawStructure, wf/placement.py FIT)."""
+    """A ``brasshaven:fitted_jigsaw``: the vanilla jigsaw fields plus ``fit``, the terrain check its start must pass
+    (com.brasshaven.world.FittedJigsawStructure, wf/placement.py FIT)."""
     from . import placement
     js = {
         "type": rl("fitted_jigsaw"),

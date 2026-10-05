@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "G",
+    "D"
+  ],
+  "key": {
+    "G": "minecraft:clock",
+    "D": "brasshaven:dark_iron_plating"
+  },
+  "result": {
+    "id": "brasshaven:pressure_gauge",
+    "count": 2
+  }
+}

@@ -482,7 +482,7 @@ def _arena(bp, rng):
             bp.fill(xw, L3, z, xw, L3 + 5, z, GOLD)
         bp.fill(xw, L3 + 5, AZ - 2, xw, L3 + 5, AZ + 2, GOLD)
         bp.set(xw, L3 + 6, AZ, "orange_glazed_terracotta[facing=north]")
-    bp.boss_seal(AX, L3 - 1, AZ, "wayfarers:sand_pharaoh", AR)
+    bp.boss_seal(AX, L3 - 1, AZ, "brasshaven:sand_pharaoh", AR)
 
 
 def _colossus(bp, cx, zb, side):

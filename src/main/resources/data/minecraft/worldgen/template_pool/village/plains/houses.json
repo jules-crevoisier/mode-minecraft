@@ -348,8 +348,8 @@
       "weight": 5,
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:village/plains/inn",
-        "processors": "wayfarers:village",
+        "location": "brasshaven:village/plains/inn",
+        "processors": "brasshaven:village",
         "projection": "rigid"
       }
     },
@@ -357,8 +357,8 @@
       "weight": 6,
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:village/plains/guild_post",
-        "processors": "wayfarers:village",
+        "location": "brasshaven:village/plains/guild_post",
+        "processors": "brasshaven:village",
         "projection": "rigid"
       }
     },
@@ -366,8 +366,8 @@
       "weight": 4,
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:village/plains/workshop",
-        "processors": "wayfarers:village",
+        "location": "brasshaven:village/plains/workshop",
+        "processors": "brasshaven:village",
         "projection": "rigid"
       }
     },
@@ -375,8 +375,8 @@
       "weight": 3,
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:village/plains/watchtower",
-        "processors": "wayfarers:village",
+        "location": "brasshaven:village/plains/watchtower",
+        "processors": "brasshaven:village",
         "projection": "rigid"
       }
     },
@@ -384,8 +384,8 @@
       "weight": 4,
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:village/plains/market",
-        "processors": "wayfarers:village",
+        "location": "brasshaven:village/plains/market",
+        "processors": "brasshaven:village",
         "projection": "rigid"
       }
     },
@@ -393,8 +393,8 @@
       "weight": 4,
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:village/plains/orchard",
-        "processors": "wayfarers:village",
+        "location": "brasshaven:village/plains/orchard",
+        "processors": "brasshaven:village",
         "projection": "rigid"
       }
     },
@@ -402,8 +402,8 @@
       "weight": 5,
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:village/plains/cottage",
-        "processors": "wayfarers:village",
+        "location": "brasshaven:village/plains/cottage",
+        "processors": "brasshaven:village",
         "projection": "rigid"
       }
     },
@@ -411,8 +411,8 @@
       "weight": 3,
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:village/plains/manor",
-        "processors": "wayfarers:village",
+        "location": "brasshaven:village/plains/manor",
+        "processors": "brasshaven:village",
         "projection": "rigid"
       }
     },
@@ -420,8 +420,8 @@
       "weight": 3,
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:village/plains/well_corner",
-        "processors": "wayfarers:village",
+        "location": "brasshaven:village/plains/well_corner",
+        "processors": "brasshaven:village",
         "projection": "rigid"
       }
     }

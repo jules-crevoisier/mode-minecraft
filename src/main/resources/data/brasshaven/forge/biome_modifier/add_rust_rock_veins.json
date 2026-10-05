@@ -1,0 +1,6 @@
+{
+  "type": "forge:add_features",
+  "biomes": "#brasshaven:stone_veins/rust_rock",
+  "features": "brasshaven:rust_rock_vein",
+  "step": "underground_ores"
+}

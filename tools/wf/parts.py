@@ -1,16 +1,16 @@
 """Reusable architectural parts shared by many structures."""
 from .blueprint import with_props
 
-LOOT = "wayfarers:chests/"
+LOOT = "brasshaven:chests/"
 
 # Blocks provided by the Java side of the mod. Until the mod registers them the
 # generator falls back to vanilla stand-ins so the templates stay loadable.
 USE_MOD_BLOCKS = True
 _MOD_IDS = {
-    "waystone": ("wayfarers:waystone", "minecraft:lodestone"),
-    "guardian_altar": ("wayfarers:warden_altar", "minecraft:reinforced_deepslate"),
-    "void_altar": ("wayfarers:void_altar", "minecraft:respawn_anchor[charges=4]"),
-    "vault_bars": ("wayfarers:sealed_bars", "minecraft:iron_bars"),
+    "waystone": ("brasshaven:waystone", "minecraft:lodestone"),
+    "guardian_altar": ("brasshaven:warden_altar", "minecraft:reinforced_deepslate"),
+    "void_altar": ("brasshaven:void_altar", "minecraft:respawn_anchor[charges=4]"),
+    "vault_bars": ("brasshaven:sealed_bars", "minecraft:iron_bars"),
 }
 MOD = {k: (v[0] if USE_MOD_BLOCKS else v[1]) for k, v in _MOD_IDS.items()}
 
@@ -21,7 +21,7 @@ _MOBS = {
     "basalt_guard": "minecraft:wither_skeleton",
     "void_stalker": "minecraft:enderman",
 }
-MOB = {k: (f"wayfarers:{k}" if USE_MOD_BLOCKS else v) for k, v in _MOBS.items()}
+MOB = {k: (f"brasshaven:{k}" if USE_MOD_BLOCKS else v) for k, v in _MOBS.items()}
 
 
 def timber_house(bp, x0, y0, z0, w, d, floors=2, wood="spruce", frame="dark_oak_log",

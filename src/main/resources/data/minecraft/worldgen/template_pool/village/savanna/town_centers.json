@@ -83,9 +83,9 @@
     {
       "weight": 150,
       "element": {
-        "element_type": "wayfarers:grounded_single",
-        "location": "wayfarers:village/savanna/plaza",
-        "processors": "wayfarers:village",
+        "element_type": "brasshaven:grounded_single",
+        "location": "brasshaven:village/savanna/plaza",
+        "processors": "brasshaven:village",
         "projection": "rigid",
         "ground_level_delta": 7
       }

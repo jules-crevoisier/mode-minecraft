@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "ingredient": "brasshaven:nether_orichalcum_ore",
+  "result": {
+    "id": "brasshaven:orichalcum_ingot"
+  },
+  "experience": 1.0,
+  "cookingtime": 100
+}

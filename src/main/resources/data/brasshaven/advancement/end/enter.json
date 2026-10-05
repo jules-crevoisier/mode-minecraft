@@ -1,0 +1,29 @@
+{
+  "display": {
+    "icon": {
+      "id": "minecraft:end_stone"
+    },
+    "title": {
+      "translate": "advancements.brasshaven.end.enter.title"
+    },
+    "description": {
+      "translate": "advancements.brasshaven.end.enter.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "enter": {
+      "trigger": "minecraft:changed_dimension",
+      "conditions": {
+        "to": "minecraft:the_end"
+      }
+    }
+  },
+  "parent": "brasshaven:nether/ancient_ember",
+  "rewards": {
+    "experience": 80
+  }
+}

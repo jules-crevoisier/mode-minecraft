@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "brasshaven:block/chisel_table"
+    },
+    "facing=east": {
+      "model": "brasshaven:block/chisel_table",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "brasshaven:block/chisel_table",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "brasshaven:block/chisel_table",
+      "y": 270
+    }
+  }
+}

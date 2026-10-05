@@ -1,0 +1,41 @@
+{
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "brasshaven:chunked_template",
+        "size": [
+          24,
+          17,
+          24
+        ],
+        "cells": [
+          {
+            "location": "brasshaven:coral_shrine/shrine",
+            "offset": [
+              0,
+              0,
+              0
+            ],
+            "size": [
+              24,
+              17,
+              24
+            ],
+            "blocks": 1837
+          }
+        ],
+        "projection": "rigid",
+        "processors": "brasshaven:none",
+        "ground_level_delta": 5,
+        "footprint": [
+          2,
+          2,
+          21,
+          21
+        ]
+      }
+    }
+  ]
+}

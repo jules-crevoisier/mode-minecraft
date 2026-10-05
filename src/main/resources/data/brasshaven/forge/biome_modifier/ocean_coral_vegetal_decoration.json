@@ -1,0 +1,8 @@
+{
+  "type": "forge:add_features",
+  "biomes": "#brasshaven:ocean/coral",
+  "features": [
+    "brasshaven:ocean_coral_garden"
+  ],
+  "step": "vegetal_decoration"
+}

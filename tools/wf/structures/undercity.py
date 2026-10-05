@@ -13,7 +13,7 @@ from .. import interior as INT
 from ..defs import Piece, StructureDef, register
 from ..parts import LOOT
 
-W = "wayfarers:"
+W = "brasshaven:"
 BRASS, IRON, TREAD, COPPER, VERD = (W + "brass_plating", W + "dark_iron_plating", W + "diamond_plate",
                                     W + "copper_plating", W + "verdigris_plating")
 GEAR, PIPES, EDISON, AETHER, SMOKE = W + "gear_panel", W + "copper_pipes", W + "edison_lamp", W + "aether_conduit", W + "smokestack_bricks"

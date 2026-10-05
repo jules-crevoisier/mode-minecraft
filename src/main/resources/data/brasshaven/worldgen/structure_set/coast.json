@@ -1,0 +1,28 @@
+{
+  "structures": [
+    {
+      "structure": "brasshaven:coastal_lighthouse",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "brasshaven:curated_spread",
+    "salt": 139106320,
+    "spacing": 44,
+    "separation": 16,
+    "avoid": [
+      {
+        "set": "brasshaven:wonders",
+        "chunks": 10
+      },
+      {
+        "set": "minecraft:villages",
+        "chunks": 4
+      },
+      {
+        "set": "brasshaven:landmarks",
+        "chunks": 6
+      }
+    ]
+  }
+}

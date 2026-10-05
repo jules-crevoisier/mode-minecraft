@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "XX",
+    "XX"
+  ],
+  "key": {
+    "X": "minecraft:cyan_terracotta"
+  },
+  "result": {
+    "id": "brasshaven:guild_roof_tiles",
+    "count": 4
+  }
+}

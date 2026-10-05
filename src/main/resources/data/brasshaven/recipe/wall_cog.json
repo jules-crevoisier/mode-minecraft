@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    " N ",
+    "NGN",
+    " N "
+  ],
+  "key": {
+    "N": "brasshaven:brass_nugget",
+    "G": "brasshaven:brass_gear"
+  },
+  "result": {
+    "id": "brasshaven:wall_cog",
+    "count": 2
+  }
+}

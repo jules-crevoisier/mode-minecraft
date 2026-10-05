@@ -1,6 +1,6 @@
 """People in the structures: safety checks (run by gen_structures) and a small lodge for new residents.
 
-A resident is a villager, a quest giver (wayfarers:wayfarer_npc) or a wandering trader saved in a template. The
+A resident is a villager, a quest giver (brasshaven:wayfarer_npc) or a wandering trader saved in a template. The
 checks keep them alive and at home once the structure generates:
 
   check_piece(bp, ctx)        each resident stands on a solid, safe floor with two free blocks of headroom, and no
@@ -17,7 +17,7 @@ from . import support
 from . import interior as I
 from .blueprint import OPPOSITE
 
-RESIDENTS = ("minecraft:villager", "wayfarers:wayfarer_npc", "minecraft:wandering_trader")
+RESIDENTS = ("minecraft:villager", "brasshaven:wayfarer_npc", "minecraft:wandering_trader")
 # a spawner activates when a player is within 14 blocks and puts its mobs within 4 blocks of itself
 SPAWNER_CLEARANCE = 12
 HARMFUL_FLOOR = ("magma_block", "campfire", "fire", "lava", "cactus", "sweet_berry_bush", "powder_snow",
@@ -77,7 +77,7 @@ def count(bps):
     for bp in bps:
         for _, eid, _ in residents(bp):
             v += eid == "minecraft:villager"
-            n += eid == "wayfarers:wayfarer_npc"
+            n += eid == "brasshaven:wayfarer_npc"
         beds += sum(1 for b in bp.blocks.values() if b[0].endswith("_bed") and b[1].get("part") == "head")
     return v, n, beds
 

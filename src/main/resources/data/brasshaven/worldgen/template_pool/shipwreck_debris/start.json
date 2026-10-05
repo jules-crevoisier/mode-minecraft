@@ -1,0 +1,41 @@
+{
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "brasshaven:chunked_template",
+        "size": [
+          34,
+          14,
+          27
+        ],
+        "cells": [
+          {
+            "location": "brasshaven:shipwreck_debris/debris",
+            "offset": [
+              0,
+              0,
+              0
+            ],
+            "size": [
+              34,
+              14,
+              27
+            ],
+            "blocks": 2730
+          }
+        ],
+        "projection": "rigid",
+        "processors": "brasshaven:none",
+        "ground_level_delta": 5,
+        "footprint": [
+          2,
+          2,
+          31,
+          24
+        ]
+      }
+    }
+  ]
+}

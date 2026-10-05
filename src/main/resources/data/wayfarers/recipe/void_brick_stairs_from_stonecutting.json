@@ -1,8 +1,0 @@
-{
-  "type": "minecraft:stonecutting",
-  "ingredient": "wayfarers:void_bricks",
-  "result": {
-    "id": "wayfarers:void_brick_stairs",
-    "count": 1
-  }
-}

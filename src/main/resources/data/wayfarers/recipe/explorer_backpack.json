@@ -1,9 +1,0 @@
-{
-  "type": "minecraft:crafting_transmute",
-  "category": "equipment",
-  "input": "wayfarers:travel_backpack",
-  "material": "wayfarers:brass_ingot",
-  "result": {
-    "id": "wayfarers:explorer_backpack"
-  }
-}

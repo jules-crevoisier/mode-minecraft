@@ -148,7 +148,7 @@
       "weight": 3,
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:village/plains/avenue",
+        "location": "brasshaven:village/plains/avenue",
         "processors": "minecraft:street_plains",
         "projection": "terrain_matching"
       }

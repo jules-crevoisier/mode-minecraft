@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "brasshaven:block/pneumatic_post"
+    },
+    "facing=east": {
+      "model": "brasshaven:block/pneumatic_post",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "brasshaven:block/pneumatic_post",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "brasshaven:block/pneumatic_post",
+      "y": 270
+    }
+  }
+}

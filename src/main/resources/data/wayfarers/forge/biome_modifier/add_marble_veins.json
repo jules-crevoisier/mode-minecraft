@@ -1,6 +1,0 @@
-{
-  "type": "forge:add_features",
-  "biomes": "#wayfarers:stone_veins/marble",
-  "features": "wayfarers:marble_vein",
-  "step": "underground_ores"
-}

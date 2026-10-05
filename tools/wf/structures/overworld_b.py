@@ -752,11 +752,11 @@ def giant_tree(v):
 
 TREE_VARIANTS = {
     "oak": dict(log="oak_log", wood="oak_wood", leaves="oak_leaves", leaves2="azalea_leaves",
-                leaves3="flowering_azalea_leaves", deck="spruce", roof="wayfarers:crimson_roof_tile",
-                roof_full="wayfarers:crimson_roof_tiles", hang=("vine",), seed=11),
+                leaves3="flowering_azalea_leaves", deck="spruce", roof="brasshaven:crimson_roof_tile",
+                roof_full="brasshaven:crimson_roof_tiles", hang=("vine",), seed=11),
     "dark_oak": dict(log="dark_oak_log", wood="dark_oak_wood", leaves="dark_oak_leaves", leaves2="dark_oak_leaves",
-                     leaves3="azalea_leaves", deck="oak", roof="wayfarers:guild_roof_tile",
-                     roof_full="wayfarers:guild_roof_tiles", hang=("vine", "moss", "moss"), seed=23),
+                     leaves3="azalea_leaves", deck="oak", roof="brasshaven:guild_roof_tile",
+                     roof_full="brasshaven:guild_roof_tiles", hang=("vine", "moss", "moss"), seed=23),
 }
 
 register(StructureDef(
@@ -816,7 +816,7 @@ def _desert_tower(bp, cx, cz, h, wall, dome_r=2):
     for k, y in enumerate((4, h - 4)):
         for dx, dz in ((3, 0), (-3, 0), (0, 3), (0, -3)):
             bp.set(cx + dx, y, cz + dz, "orange_stained_glass_pane")
-    arch.dome(bp, cx, h + 1, cz, dome_r, "wayfarers:guild_roof_tiles", oculus=False)
+    arch.dome(bp, cx, h + 1, cz, dome_r, "brasshaven:guild_roof_tiles", oculus=False)
     bp.set(cx, h + dome_r + 2, cz, "gold_block")
     bp.set(cx, h + dome_r + 3, cz, "lightning_rod[facing=up,powered=false,waterlogged=false]")
 
@@ -994,7 +994,7 @@ def oasis(bp):
                         bp.set(mx + dx, 17, mz + dz, "sandstone_wall")
         bp.set(mx, 12, mz + 1, "orange_stained_glass_pane")
         bp.set(mx, 19, mz, CHI)
-        arch.spire(bp, mx, mz, 20, 1, "wayfarers:guild_roof_tiles", "wayfarers:guild_roof_tile_stairs", steep=2,
+        arch.spire(bp, mx, mz, 20, 1, "brasshaven:guild_roof_tiles", "brasshaven:guild_roof_tile_stairs", steep=2,
                    finial="lightning_rod")
     # corner towers
     for (tx, tz, h) in ((X0, ZF, 13), (X1, ZF, 13), (X0, ZB, 16), (X1, ZB, 16)):
@@ -1027,7 +1027,7 @@ def oasis(bp):
         z = DZ + round(math.sin(math.radians(a)) * (DR + 1))
         if math.hypot(x - DX, z - DZ) > DR + 0.4:
             bp.set(x, DY - 1, z, stair("smooth_sandstone_stairs", _card(DX - x, DZ - z), "top"))
-    arch.dome(bp, DX, DY, DZ, DR, Palette({"wayfarers:guild_roof_tiles": 5, "light_blue_terracotta": 1}, seed=24),
+    arch.dome(bp, DX, DY, DZ, DR, Palette({"brasshaven:guild_roof_tiles": 5, "light_blue_terracotta": 1}, seed=24),
               ribs="smooth_sandstone", oculus=True, rib_count=8)
     bp.set(DX, DY + DR + 1, DZ, "gold_block")
     bp.set(DX, DY + DR + 2, DZ, "gold_block")
@@ -1348,7 +1348,7 @@ register(StructureDef(
 
 # ============================================================ Swamp witch hamlet
 MUD = Palette({"mud_bricks": 4, "packed_mud": 2, "mud": 1}, seed=31, scale=2.0)
-SLATE, SLATE_S = "wayfarers:slate_roof_tiles", "wayfarers:slate_roof_tile_stairs"
+SLATE, SLATE_S = "brasshaven:slate_roof_tiles", "brasshaven:slate_roof_tile_stairs"
 
 
 def _stilts(bp, x0, z0, x1, z1, fy, seed):
@@ -1514,7 +1514,7 @@ def _crooked_tower(bp, x0, z0, fy, seed):
     bp.fill(x0 + 1, top, z0 - 1, x0 + 6, top, z0 + 4, "dark_oak_planks")
     apex = arch.spire(bp, hx, hz, top, 4, SLATE, SLATE_S, steep=3, finial=None)
     for i, (dx, dy) in enumerate(((1, 0), (1, 1), (2, 1), (3, 1))):
-        bp.set(hx + dx, apex - 1 + dy, hz, SLATE if i < 3 else "wayfarers:slate_roof_tile_slab[type=bottom,waterlogged=false]")
+        bp.set(hx + dx, apex - 1 + dy, hz, SLATE if i < 3 else "brasshaven:slate_roof_tile_slab[type=bottom,waterlogged=false]")
     bp.set(hx + 3, apex - 1, hz, "soul_lantern[hanging=true,waterlogged=false]")
     for a in range(0, 360, 10):          # hat brim
         x = hx + round(math.cos(math.radians(a)) * 5.4)
@@ -1791,7 +1791,7 @@ def _edge(tops, cx, cz, dx, dz):
     return last
 
 
-def _helix_stair(bp, cx, cz, y0, y1, r, end, stairs, under, rail, lamp_every=9, lamp="wayfarers:rune_lamp"):
+def _helix_stair(bp, cx, cz, y0, y1, r, end, stairs, under, rail, lamp_every=9, lamp="brasshaven:rune_lamp"):
     """Stair spiralling counter-clockwise around (cx, cz), arriving at angle `end` (degrees): two cells
     wide (r, r+1), solid ribbon below, rail outside, headroom cleared (it bores through rock, where lamps
     are set into the tunnel wall). Returns the last step (x, y, z)."""
@@ -1827,7 +1827,7 @@ def sky_island(bp):
     Y = 56                                   # main island surface; its underside hangs ~40 above the ground
     rock = Palette({"stone": 5, "andesite": 2, "tuff": 2, "calcite": 1, "cobblestone": 1}, seed=4, scale=3.0)
     wall = Palette({"quartz_bricks": 4, "calcite": 3, "smooth_quartz": 1}, seed=5, scale=2.5)
-    ROOF, ROOF_S = "wayfarers:guild_roof_tiles", "wayfarers:guild_roof_tile_stairs"
+    ROOF, ROOF_S = "brasshaven:guild_roof_tiles", "brasshaven:guild_roof_tile_stairs"
     TRIM = "quartz_pillar[axis=y]"
 
     # ---------------------------------------------------------------- the islands
@@ -1893,7 +1893,7 @@ def sky_island(bp):
     for z in range(Z0, ZP + 1):   # bare rafters where the tiles are gone
         bp.set(X1 - 4, H1 + 1 + min(z - Z0 + 1, ZP - z + 1), z, "stripped_birch_log[axis=y]")
     arch.rubble(bp, X1 - 6, Z0 + 1, X1 - 1, Z1 - 1, H0 + 1, 14, blocks=("calcite", "quartz_bricks", "smooth_quartz_slab",
-                                                                        "wayfarers:guild_roof_tiles"), seed=3)
+                                                                        "brasshaven:guild_roof_tiles"), seed=3)
 
     # ---------------------------------------------------------------- interior: nave, altar, secret vault
     for z in range(Z0 + 3, Z1, 2):
@@ -1919,7 +1919,7 @@ def sky_island(bp):
     bp.room(-6, vy, Z0 - 1, 2, vy + 5, Z0 + 5, "calcite", floor="polished_diorite", ceiling="calcite")
     for (x, z) in ((-5, Z0), (1, Z0), (-5, Z0 + 4), (1, Z0 + 4)):
         bp.fill(x, vy + 1, z, x, vy + 4, z, "amethyst_block")
-        bp.set(x, vy + 4, z, "wayfarers:lithite_block")
+        bp.set(x, vy + 4, z, "brasshaven:lithite_block")
     for x in (-4, -2, 0):
         bp.set(x, vy + 4, Z0 + 2, "amethyst_cluster[facing=down,waterlogged=false]")
     bp.chest(-2, vy + 1, Z0, "south", LOOT + "sky_island")
@@ -2281,8 +2281,8 @@ def ziggurat(bp):
         bp.set(TX0 - 1, TY + 6, z, stair("tuff_brick_stairs", "east", "top"))
         bp.set(TX1 + 1, TY + 6, z, stair("tuff_brick_stairs", "west", "top"))
     bp.fill(TX0, TY + 7, TZ0, TX1, TY + 7, TZ1, "tuff_bricks")
-    ridge = bp.pyramid_roof(TX0, TZ0, TX1, TZ1, TY + 8, "wayfarers:crimson_roof_tile_stairs", overhang=1,
-                            cap="wayfarers:crimson_roof_tile_slab[type=bottom,waterlogged=false]")
+    ridge = bp.pyramid_roof(TX0, TZ0, TX1, TZ1, TY + 8, "brasshaven:crimson_roof_tile_stairs", overhang=1,
+                            cap="brasshaven:crimson_roof_tile_slab[type=bottom,waterlogged=false]")
     # roof comb: a tall pierced crest on the ridge
     for x in range(-5, 6):
         for z in (-2, -1):
@@ -2292,7 +2292,7 @@ def ziggurat(bp):
                     continue
                 hole = (y - TY) % 3 == 1 and x % 2 == 0 and abs(x) < 5 and y < ridge + 7
                 if not hole:
-                    bp.set(x, y, z, "wayfarers:crimson_roof_tiles" if (y - TY) % 3 == 0 else tpal.pick(x, y, z))
+                    bp.set(x, y, z, "brasshaven:crimson_roof_tiles" if (y - TY) % 3 == 0 else tpal.pick(x, y, z))
     bp.set(0, ridge + 9, -2, "chiseled_tuff_bricks")
     bp.set(0, ridge + 9, -1, "chiseled_tuff_bricks")
     bp.set(0, ridge + 10, -1, "lightning_rod[facing=up,powered=false,waterlogged=false]")

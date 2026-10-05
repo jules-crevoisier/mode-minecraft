@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/slab_top",
-  "textures": {
-    "bottom": "wayfarers:block/brass_tiles",
-    "top": "wayfarers:block/brass_tiles",
-    "side": "wayfarers:block/brass_tiles"
-  }
-}

@@ -1,0 +1,37 @@
+{
+  "display": {
+    "icon": {
+      "id": "brasshaven:ash_greatsword"
+    },
+    "title": {
+      "translate": "advancements.brasshaven.nether.boss_ash_lord.title"
+    },
+    "description": {
+      "translate": "advancements.brasshaven.nether.boss_ash_lord.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "kill": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "entity_type": "brasshaven:ash_lord"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "parent": "brasshaven:nether/basalt_fortress",
+  "rewards": {
+    "experience": 500
+  }
+}

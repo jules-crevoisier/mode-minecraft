@@ -77,9 +77,9 @@
     {
       "weight": 67,
       "element": {
-        "element_type": "wayfarers:grounded_single",
-        "location": "wayfarers:village/plains/plaza",
-        "processors": "wayfarers:village",
+        "element_type": "brasshaven:grounded_single",
+        "location": "brasshaven:village/plains/plaza",
+        "processors": "brasshaven:village",
         "projection": "rigid",
         "ground_level_delta": 7
       }

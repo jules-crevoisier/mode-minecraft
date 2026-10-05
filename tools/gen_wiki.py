@@ -7,8 +7,8 @@ so new content shows up by re-running the script. French explanations that the d
 tools/wf/wiki_text.py.
 
 Slow (3D renders): it is not part of generate_all.py. Renders are cached in build/wiki_cache, so a second run
-only re-renders what changed. The real in-game screenshots (wayfarers-shot-<name>.png, or a local folder in
-$WAYFARERS_SHOTS / build/shots) come from the CI pre-release; the wiki builds without them.
+only re-renders what changed. The real in-game screenshots (brasshaven-shot-<name>.png, or a local folder in
+$BRASSHAVEN_SHOTS / build/shots) come from the CI pre-release; the wiki builds without them.
 
 Usage:
     python3 tools/gen_wiki.py                 # -> build/wiki/
@@ -33,9 +33,9 @@ TOOLS = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, TOOLS)
 ROOT = os.path.dirname(TOOLS)
 RES = os.path.join(ROOT, "src", "main", "resources")
-ASSETS = os.path.join(RES, "assets", "wayfarers")
-DATA = os.path.join(RES, "data", "wayfarers")
-JAVA = os.path.join(ROOT, "src", "main", "java", "com", "wayfarers")
+ASSETS = os.path.join(RES, "assets", "brasshaven")
+DATA = os.path.join(RES, "data", "brasshaven")
+JAVA = os.path.join(ROOT, "src", "main", "java", "com", "brasshaven")
 CACHE = os.path.join(ROOT, "build", "wiki_cache")
 RENDER_VERSION = "4"
 PREVIEWS_URL = "https://github.com/jules-crevoisier/mode-minecraft/releases/download/previews-ccr-127dc262-tsdn10/{}"
@@ -128,10 +128,10 @@ def pretty(s):
 def name(rid):
     """French name of an item/block/entity id (with or without namespace)."""
     if ":" not in rid:
-        rid = "wayfarers:" + rid
+        rid = "brasshaven:" + rid
     ns, path = rid.split(":", 1)
-    if ns == "wayfarers":
-        for k in (f"item.wayfarers.{path}", f"block.wayfarers.{path}", f"entity.wayfarers.{path}"):
+    if ns == "brasshaven":
+        for k in (f"item.brasshaven.{path}", f"block.brasshaven.{path}", f"entity.brasshaven.{path}"):
             if k in FR:
                 return FR[k]
         return pretty(path)
@@ -146,7 +146,7 @@ def desc(rid):
     out = []
     for kind in ("item", "block"):
         for suf in ("desc", "desc2", "desc3", "desc4"):
-            k = f"{kind}.wayfarers.{path}.{suf}"
+            k = f"{kind}.brasshaven.{path}.{suf}"
             if k in FR:
                 out.append(FR[k])
     return out
@@ -176,13 +176,13 @@ class Atlas:
     def _make(self, key):
         if key in self.extra:
             return self.extra[key]
-        ns, path = key.split(":", 1) if ":" in key else ("wayfarers", key)
-        if ns == "wayfarers":
+        ns, path = key.split(":", 1) if ":" in key else ("brasshaven", key)
+        if ns == "brasshaven":
             gui, _hand = self.J.item_model(path)
             if gui is None:
                 bs = os.path.join(ASSETS, "blockstates", path + ".json")
                 if os.path.exists(bs):
-                    gui = f"wayfarers:block/{path}"
+                    gui = f"brasshaven:block/{path}"
             if gui is None:
                 return None
             md = self.J.load(gui)
@@ -198,7 +198,7 @@ class Atlas:
         return None
 
     def has(self, key):
-        key = key if ":" in key else "wayfarers:" + key
+        key = key if ":" in key else "brasshaven:" + key
         if key not in self.cells:
             try:
                 im = self._make(key)
@@ -211,7 +211,7 @@ class Atlas:
         return self.cells[key] is not None
 
     def icon(self, key, size=40, label=None, cls=""):
-        key = key if ":" in key else "wayfarers:" + key
+        key = key if ":" in key else "brasshaven:" + key
         title = E(label if label is not None else name(key), quote=True)
         if not self.has(key):
             short = E(name(key)[:3])
@@ -237,7 +237,7 @@ def lang_ids(kind):
     out = []
     for k in FR:
         parts = k.split(".")
-        if len(parts) == 3 and parts[0] == kind and parts[1] == "wayfarers":
+        if len(parts) == 3 and parts[0] == kind and parts[1] == "brasshaven":
             out.append(parts[2])
     return out
 
@@ -291,7 +291,7 @@ def load_recipes():
 
 
 def loot_items(table, depth=0):
-    """[(id, weight, is_mod)] of a loot table (resource id like wayfarers:chests/x), nested tables followed."""
+    """[(id, weight, is_mod)] of a loot table (resource id like brasshaven:chests/x), nested tables followed."""
     if depth > 4 or not table:
         return []
     ns, path = table.split(":", 1)
@@ -319,13 +319,13 @@ def top_loot(tables, n=10):
     for t in tables:
         for iid, w in loot_items(t):
             best[iid] = min(best.get(iid, 1e9), w if isinstance(w, (int, float)) else 1)
-    order = sorted(best.items(), key=lambda kv: (not kv[0].startswith("wayfarers:"), kv[1], kv[0]))
+    order = sorted(best.items(), key=lambda kv: (not kv[0].startswith("brasshaven:"), kv[1], kv[0]))
     return [k for k, _ in order[:n]]
 
 
 def java_keys():
     out = []
-    src = open(os.path.join(JAVA, "client", "WayfarersClient.java"), encoding="utf-8").read()
+    src = open(os.path.join(JAVA, "client", "BrasshavenClient.java"), encoding="utf-8").read()
     # the multiplayer keys (company, emotes, player card) live with the rest of the social client code
     src += open(os.path.join(JAVA, "client", "social", "ClientSocial.java"), encoding="utf-8").read()
     for key, glfw in re.findall(r'new KeyMapping\("([\w.]+)",\s*InputConstants\.Type\.KEYSYM,\s*GLFW\.GLFW_KEY_(\w+)', src):
@@ -339,9 +339,9 @@ def java_keys():
 
 
 def java_commands():
-    """Top-level /wayfarers sub-commands: (name, [arguments], [sub-literals], op only)."""
-    src = open(os.path.join(JAVA, "command", "WayfarersCommand.java"), encoding="utf-8").read()
-    start = src.find('literal("wayfarers")')
+    """Top-level /brasshaven sub-commands: (name, [arguments], [sub-literals], op only)."""
+    src = open(os.path.join(JAVA, "command", "BrasshavenCommand.java"), encoding="utf-8").read()
+    start = src.find('literal("brasshaven")')
     if start < 0:
         return []
     depth, base, tops = 0, None, []
@@ -374,9 +374,9 @@ def java_commands():
 
 def java_config():
     out = []
-    for fname, file_label in (("WayfarersConfig.java", "wayfarers-common.toml"),
-                              ("SocialConfig.java", "wayfarers-common.toml"),
-                              ("WayfarersClientConfig.java", "wayfarers-client.toml")):
+    for fname, file_label in (("BrasshavenConfig.java", "brasshaven-common.toml"),
+                              ("SocialConfig.java", "brasshaven-common.toml"),
+                              ("BrasshavenClientConfig.java", "brasshaven-client.toml")):
         src = open(os.path.join(JAVA, "config", fname), encoding="utf-8").read()
         prefix = "social." if fname == "SocialConfig.java" else ""  # its keys sit in the [social] section
         jstr = r'"(?:[^"\\]|\\.)*"'
@@ -452,7 +452,7 @@ def biome_spawns():
 
 
 def biome_name(bid):
-    if bid.startswith("wayfarers:"):
+    if bid.startswith("brasshaven:"):
         from wf import worldbiomes as WB
         b = WB.BIOMES.get(bid.split(":", 1)[1])
         if b:
@@ -464,7 +464,7 @@ def new_ids_since(ref):
     """Lang keys (item/block/entity/structure) added since a git commit: {"item": [...], ...}. Empty without git."""
     import subprocess
     try:
-        old = subprocess.run(["git", "-C", ROOT, "show", f"{ref}:src/main/resources/assets/wayfarers/lang/fr_fr.json"],
+        old = subprocess.run(["git", "-C", ROOT, "show", f"{ref}:src/main/resources/assets/brasshaven/lang/fr_fr.json"],
                              capture_output=True, timeout=20, check=True).stdout
         old = json.loads(old)
     except Exception as e:  # noqa: BLE001
@@ -473,7 +473,7 @@ def new_ids_since(ref):
     out = {}
     for k in FR:
         parts = k.split(".")
-        if len(parts) == 3 and parts[1] == "wayfarers" and k not in old and parts[0] in ("item", "block", "entity", "structure"):
+        if len(parts) == 3 and parts[1] == "brasshaven" and k not in old and parts[0] in ("item", "block", "entity", "structure"):
             out.setdefault(parts[0], []).append(parts[2])
     return out
 
@@ -562,7 +562,7 @@ def structure_job(args):
         for (name_, props, nbt) in blocks.values():
             if not nbt:
                 continue
-            if name_ == "wayfarers:boss_seal" and "boss" in nbt:
+            if name_ == "brasshaven:boss_seal" and "boss" in nbt:
                 b = _nbt_str(nbt["boss"])
                 if b not in info["bosses"]:
                     info["bosses"].append(b)
@@ -578,7 +578,7 @@ def structure_job(args):
                 if t not in info["loot"]:
                     info["loot"].append(t)
         if i == 0:
-            info["waystones"] = sum(1 for b in blocks.values() if b[0] == "wayfarers:waystone")
+            info["waystones"] = sum(1 for b in blocks.values() if b[0] == "brasshaven:waystone")
     size, blocks, view, my = main
     info["size"] = list(size)
     info["blocks"] = len(blocks)
@@ -702,13 +702,13 @@ SHOT_REFRESH = 3 * 3600  # seconds between two checks of the same screenshot on 
 
 
 def find_ingame_shots(arg):
-    """Folder holding the real client screenshots wayfarers-shot-<name>.png (tools/ci_client.py, CiDriver), and
+    """Folder holding the real client screenshots brasshaven-shot-<name>.png (tools/ci_client.py, CiDriver), and
     {name: date of the capture or ""}. A local folder when given, else the CI pre-release, cached in
     build/wiki_cache/ingame: each screenshot is fetched again when its copy is more than 3 hours old (kept when the
     release cannot be reached). Missing screenshots are skipped. (None, {}) when there is none."""
     names = [n for n, *_ in TXT.INGAME_SHOTS]
-    for d in (arg, os.environ.get("WAYFARERS_SHOTS", ""), os.path.join(ROOT, "build", "shots")):
-        if d and any(os.path.exists(os.path.join(d, f"wayfarers-shot-{n}.png")) for n in names):
+    for d in (arg, os.environ.get("BRASSHAVEN_SHOTS", ""), os.path.join(ROOT, "build", "shots")):
+        if d and any(os.path.exists(os.path.join(d, f"brasshaven-shot-{n}.png")) for n in names):
             return d, {n: "" for n in names}
     d = os.path.join(CACHE, "ingame")
     os.makedirs(d, exist_ok=True)
@@ -716,11 +716,11 @@ def find_ingame_shots(arg):
     meta = load_json(meta_path, {})
     got = 0
     for n in names:
-        png = os.path.join(d, f"wayfarers-shot-{n}.png")
+        png = os.path.join(d, f"brasshaven-shot-{n}.png")
         m = meta.setdefault(n, {})
         if not os.path.exists(png) or time.time() - m.get("checked", 0) > SHOT_REFRESH:
             try:
-                r = urllib.request.urlopen(PREVIEWS_URL.format(f"wayfarers-shot-{n}.png"), timeout=40)
+                r = urllib.request.urlopen(PREVIEWS_URL.format(f"brasshaven-shot-{n}.png"), timeout=40)
                 data = r.read()
                 if data[:8] != b"\x89PNG\r\n\x1a\n":
                     raise ValueError("not a PNG")
@@ -748,7 +748,7 @@ def ingame_images(shot_dir, out):
     os.makedirs(cdir, exist_ok=True)
     os.makedirs(os.path.join(out, "img", "jeu"), exist_ok=True)
     for n, *_ in TXT.INGAME_SHOTS:
-        png = os.path.join(shot_dir, f"wayfarers-shot-{n}.png")
+        png = os.path.join(shot_dir, f"brasshaven-shot-{n}.png")
         if not os.path.exists(png):
             continue
         cached = os.path.join(cdir, f"{n}-{sha(SHOT_MAX_W, file_bytes(png))}.webp")
@@ -864,7 +864,7 @@ def main():
         gui, hand = J.item_model(iid)
         if hand:
             held.append((iid, hand))
-        elif gui and gui.startswith("wayfarers:block/"):
+        elif gui and gui.startswith("brasshaven:block/"):
             # explicit elements in the mod's own model (furniture, fittings, special blocks)
             p = os.path.join(ASSETS, "models", "block", gui.split("/", 1)[1] + ".json")
             d = load_json(p, {})
@@ -890,7 +890,7 @@ def main():
     # ------------------------------------------------------------------ data
     atlas = Atlas()
     for mid, m in mob_info.items():
-        atlas.extra["wayfarers:" + mid] = Image.open(m["icon"]).convert("RGBA")
+        atlas.extra["brasshaven:" + mid] = Image.open(m["icon"]).convert("RGBA")
     idx = Index()
     recipes = load_recipes()
     by_result = {}
@@ -901,7 +901,7 @@ def main():
 
     def item_link(i):
         p = i.split(":")[-1]
-        return anchor_item(p) if i.startswith("wayfarers:") and p in all_ids else None
+        return anchor_item(p) if i.startswith("brasshaven:") and p in all_ids else None
 
     # boss gear
     gear = {row[0]: row for row in bossgear.BOSS_GEAR}
@@ -921,15 +921,15 @@ def main():
     sec = []  # html sections
 
     # ================================================================== ACCUEIL
-    n_items = sum(1 for i in entries if f"item.wayfarers.{i}" in FR)
-    n_blocks = sum(1 for i in entries if f"block.wayfarers.{i}" in FR)
+    n_items = sum(1 for i in entries if f"item.brasshaven.{i}" in FR)
+    n_blocks = sum(1 for i in entries if f"block.brasshaven.{i}" in FR)
     stats = [(len(defs.STRUCTURES), "structures"), (len(mob_info), "créatures et boss"),
              (n_items, "objets"), (n_blocks, "blocs"), (len(recipes), "recettes"), (len(skills.SKILLS), "talents"),
              (sum(len(json.load(open(os.path.join(DATA, "quests.json")))[c]) for c in json.load(open(os.path.join(DATA, "quests.json")))), "quêtes")]
     steps = []
     for n, (title, text, ids) in enumerate(TXT.FIRST_HOUR, 1):
         steps.append(f'<li class="step"><span class="num">{n}</span><div><h4>{E(title)}</h4><p>{E(text)}</p>'
-                     f'{chips(atlas, ["wayfarers:" + i for i in ids], 28, item_link)}</div></li>')
+                     f'{chips(atlas, ["brasshaven:" + i for i in ids], 28, item_link)}</div></li>')
     def azerty(k):
         a = TXT.KEY_AZERTY.get(k)
         return f'<kbd class="az">{E(a)}</kbd>' if a else '<span class="same">idem</span>'
@@ -940,19 +940,19 @@ def main():
     cmds = []
     for sub, a, subs, op in java_commands():
         who, text = TXT.COMMANDS.get(sub, ("op" if op else "tous", ""))
-        usage = "/wayfarers " + sub + "".join(f" &lt;{E(x)}&gt;" for x in a) + (f" {'|'.join(subs)}" if subs else "")
+        usage = "/brasshaven " + sub + "".join(f" &lt;{E(x)}&gt;" for x in a) + (f" {'|'.join(subs)}" if subs else "")
         cmds.append(f'<tr><td><code>{usage}</code></td><td><span class="who {"op" if op else ""}">{"op" if op else "tous"}'
                     f'</span></td><td>{E(text)}</td></tr>')
-        idx.add("/wayfarers " + sub, "Commande", "commandes", text)
+        idx.add("/brasshaven " + sub, "Commande", "commandes", text)
     cfg = "".join(f'<tr id="cfg-{slug(k)}-{f.split("-")[1][:6]}"><td><code>{E(k)}</code></td><td><code>{E(d)}</code></td><td>{E(c)}<br><small>{E(f)}</small></td></tr>'
                   for k, d, c, f in java_config())
     hero = wonder_ids[0] if wonder_ids and wonder_ids[0] in struct_info else None
-    hero_name = FR.get(f"structure.wayfarers.{hero}", "Une merveille du mod") if hero else ""
+    hero_name = FR.get(f"structure.brasshaven.{hero}", "Une merveille du mod") if hero else ""
     sec.append(f'''
 <section class="hero" id="accueil">
   <div class="hero-text">
     <span class="kicker">Minecraft 26.2 · Forge 65.1 · mod coopératif</span>
-    <h1>Wayfarers</h1>
+    <h1>Brasshaven</h1>
     <p class="lede">{E(TXT.TAGLINE)}</p>
     <ul class="stats">{"".join(f"<li><b>{n}</b><span>{E(l)}</span></li>" for n, l in stats)}</ul>
   </div>
@@ -979,7 +979,7 @@ def main():
   <div>{plaque("touches-h", "Clavier", "Les touches")}
   <table class="tbl keys"><thead><tr><th>QWERTY</th><th>AZERTY</th><th>Effet</th></tr></thead><tbody>{keys}</tbody></table>
   <p class="note">{E(TXT.KEYS_NOTE)}</p>
-  {screen_fig(gui, "settings", "L'écran Réglages Wayfarers (Mods → Wayfarers → Config)", "reglages")}
+  {screen_fig(gui, "settings", "L'écran Réglages Brasshaven (Mods → Brasshaven → Config)", "reglages")}
   <p class="small">{E(TXT.SETTINGS_TEXT)}</p></div>
   <div id="commandes">{plaque("commandes-h", "Chat", "Les commandes")}
   <div class="scroll"><table class="tbl"><thead><tr><th>Commande</th><th>Qui</th><th>Effet</th></tr></thead><tbody>{"".join(cmds)}</tbody></table></div></div>
@@ -1008,7 +1008,7 @@ def main():
             rows.append(f'<li class="quest {E(frame)}" id="q-{slug(q)}">{atlas.icon(icon, 36)}<div><b>{E(title)}</b>'
                         f'<span>{E(dtext)}</span>{f"<small>+{xp} XP</small>" if xp else ""}</div></li>')
             idx.add(title, "Quête", f"q-{slug(q)}", dtext)
-        cname = FR.get(f"chapter.wayfarers.{chap}", chap)
+        cname = FR.get(f"chapter.brasshaven.{chap}", chap)
         qhtml.append(f'<details class="chapter" {"open" if ci == 0 else ""}><summary><span>{E(cname)}</span>'
                      f'<small>{len(qids)} étapes</small></summary><ul class="quests">{"".join(rows)}</ul></details>')
     # the quest givers' contracts (tools/wf/npcs.py): one per row, with who gives it
@@ -1016,12 +1016,12 @@ def main():
     rows = []
     for q in npcs.QUESTS:
         title = FR.get(npcs.title_key(q.id), q.id)
-        dtext = FR.get(f"npcquest.wayfarers.{q.id}.description", "")
-        giver = FR.get(f"npc.wayfarers.role.{q.giver}", q.giver)
+        dtext = FR.get(f"npcquest.brasshaven.{q.id}.description", "")
+        giver = FR.get(f"npc.brasshaven.role.{q.giver}", q.giver)
         rows.append(f'<li class="quest task" id="q-npc-{slug(q.id)}">{atlas.icon(q.icon, 36)}<div><b>{E(title)}</b>'
                     f'<span>{E(giver)} : {E(dtext)}</span><small>+{q.xp} XP</small></div></li>')
         idx.add(title, "Contrat", f"q-npc-{slug(q.id)}", dtext)
-    qhtml.append(f'<details class="chapter"><summary><span>{E(FR.get("chapter.wayfarers.contracts", "Contrats"))}'
+    qhtml.append(f'<details class="chapter"><summary><span>{E(FR.get("chapter.brasshaven.contracts", "Contrats"))}'
                  f'</span><small>{len(rows)} contrats</small></summary><ul class="quests">{"".join(rows)}</ul></details>')
     sec.append(f'''<section class="block" id="quetes">
   {plaque("quetes-h", "Système", "Quêtes et journal", "Touche <kbd>J</kbd> ou clic droit avec l'Atlas. Chaque étape réussie par un joueur est accordée à tout le groupe, même aux absents. Les quêtes donnent de l'expérience, du butin et des points de talent.")}
@@ -1100,7 +1100,7 @@ def main():
     mcards = []
     for mid, m in machines.MACHINES.items():
         lines = "".join(f"<li>{E(f)}</li>" for _e, f in m["desc"])
-        rec = by_result.get("wayfarers:" + mid, [])
+        rec = by_result.get("brasshaven:" + mid, [])
         screen = screen_fig(gui, MACHINE_SCREENS.get(mid, ""), f"L'écran de : {name(mid)}", cls="mscreen")
         mcards.append(f'''<article class="card machine" id="{anchor_item(mid)}x">
   <div class="mhead">{atlas.icon(mid, 64)}<h4>{E(name(mid))}</h4></div>
@@ -1155,20 +1155,20 @@ def main():
         title = (m.get("gem_name") or (m["en"], m["fr"]))[1] if m.get("gem_name") else m["fr"].replace("d'", "").capitalize()
         mt.append(f'''<article class="card metal" id="metal-{mid}">
   <h4>{atlas.icon(ids[0] if ids else gear_ids[0], 36)}{E(title)}</h4>{where}
-  {chips(atlas, ["wayfarers:" + i for i in ids], 26, item_link)}
-  {chips(atlas, ["wayfarers:" + i for i in gear_ids], 26, item_link) if gear_ids else ""}
+  {chips(atlas, ["brasshaven:" + i for i in ids], 26, item_link)}
+  {chips(atlas, ["brasshaven:" + i for i in gear_ids], 26, item_link) if gear_ids else ""}
   {bonus}{stats_}
 </article>''')
         idx.add(title, "Métal", f"metal-{mid}", m["en"])
     sets = []
     for sid_, (en, fr, ten, tfr) in content.ARMOR_SETS.items():
-        pieces = [f"wayfarers:{sid_}_{p}" for p in content.PIECES]
+        pieces = [f"brasshaven:{sid_}_{p}" for p in content.PIECES]
         mat = {"explorer": "fragments de carte", "ember": "braises anciennes", "void": "éclats du vide"}.get(sid_, "")
         sets.append(f'''<article class="card metal" id="set-{sid_}"><h4>{atlas.icon(pieces[1], 36)}Armure {E(fr)}</h4>
   {chips(atlas, pieces, 26, item_link)}<p class="bonus"><b>Bonus d'ensemble :</b> {E(tfr.replace("Ensemble : ", ""))}</p>
   {f'<p class="small">Fabriquée avec des {mat}.</p>' if mat else ""}</article>''')
         idx.add(f"Armure {fr}", "Armure", f"set-{sid_}", tfr)
-    tiers = "".join(f'<li>{atlas.icon("wayfarers:" + mat, 32)}<b>{E(name(mat))}</b><span>{E(lbl)}</span></li>'
+    tiers = "".join(f'<li>{atlas.icon("brasshaven:" + mat, 32)}<b>{E(name(mat))}</b><span>{E(lbl)}</span></li>'
                     for (tier, mat), lbl in zip(bossgear.TIER_MATERIAL.items(),
                                                 ["Palier 1 · ruines de la Surface", "Palier 2 · sous terre (minerai sous y 8)",
                                                  "Palier 3 · Nether", "Palier 4 · End"]))
@@ -1233,7 +1233,7 @@ def main():
     bg_rows = []
     for row in bossgear.BOSS_GEAR:
         boss, tier, wid = row[0], row[1], row[2]
-        bg_rows.append(f'<tr><td>{atlas.icon("wayfarers:" + boss, 32)} {E(name(boss))}</td><td>{atlas.icon(remembrance_of[boss], 32)}</td>'
+        bg_rows.append(f'<tr><td>{atlas.icon("brasshaven:" + boss, 32)} {E(name(boss))}</td><td>{atlas.icon(remembrance_of[boss], 32)}</td>'
                        f'<td><a href="#{anchor_item(wid)}">{atlas.icon(wid, 32)} {E(name(wid))}</a></td><td>{E(row[4][1])}</td></tr>')
     sec.append(f'''<section class="block" id="armes3d">
   {plaque("armes-h", "Équipement", "Armes, bâtons et outils en 3D", "Ces objets s'affichent en 3D quand on les tient en main (icône plate dans l'inventaire). Chaque arme spéciale a un pouvoir au clic droit, avec un temps de recharge.")}
@@ -1283,7 +1283,7 @@ def main():
         si = struct_info.get(s.id)
         if not si:
             continue
-        title = FR.get(f"structure.wayfarers.{s.id}", s.title_fr or s.id)
+        title = FR.get(f"structure.brasshaven.{s.id}", s.title_fr or s.id)
         text = TXT.STRUCTURES.get(s.id) or (sys.modules[type(s).__module__].__doc__ or "")
         sx, sy, sz = si["size"]
         dim = TXT.DIMENSIONS.get(s.dimension, s.dimension)
@@ -1294,7 +1294,7 @@ def main():
             dim += " · sous l'eau"
         who = list(dict.fromkeys(si["bosses"] + si["spawners"] + [sp[0] for sp in s.spawns]))
         who_html = "".join(f'<a class="chip" href="#b-{w.split(":")[1]}">{atlas.icon(w, 24)}<span>{E(name(w))}</span></a>'
-                           if w.startswith("wayfarers:") and w.split(":")[1] in mob_info else
+                           if w.startswith("brasshaven:") and w.split(":")[1] in mob_info else
                            f'<span class="chip">{atlas.icon(w + "_spawn_egg", 24, label=name(w))}<span>{E(name(w))}</span></span>'
                            for w in who)
         loot = top_loot(si["loot"], 10)
@@ -1354,7 +1354,7 @@ def main():
                   ("Meubles", []), ("Blocs spéciaux", [])]
     cat_map = dict(cats_order)
     for iid in entries:
-        is_block = f"block.wayfarers.{iid}" in FR
+        is_block = f"block.brasshaven.{iid}" in FR
         d_ = desc(iid)
         if iid in gadget_ids:
             c = "Gadgets à vapeur"
@@ -1381,7 +1381,7 @@ def main():
             c = "Armes et magie"
         else:
             c = "Objets du voyageur"
-        rec = by_result.get("wayfarers:" + iid, [])
+        rec = by_result.get("brasshaven:" + iid, [])
         how = ""
         if rec:
             how = f'<a class="how" href="#r-{rec[0]["file"]}">Recette{"s" if len(rec) > 1 else ""}</a>'
@@ -1390,7 +1390,7 @@ def main():
             how = f'<a class="how" href="#b-{boss}">Lâché par {E(name(boss))}</a>'
         cat_map[c].append(f'''<article class="item" id="{anchor_item(iid)}">{atlas.icon(iid, 48)}<div><b>{E(name(iid))}</b>
   {"".join(f"<span>{E(x)}</span>" for x in d_)}{how}</div></article>''')
-        idx.add(name(iid), "Bloc" if is_block else "Objet", anchor_item(iid), " ".join(d_) + " " + EN.get(f"item.wayfarers.{iid}", EN.get(f"block.wayfarers.{iid}", "")))
+        idx.add(name(iid), "Bloc" if is_block else "Objet", anchor_item(iid), " ".join(d_) + " " + EN.get(f"item.brasshaven.{iid}", EN.get(f"block.brasshaven.{iid}", "")))
     sec.append(f'''<section class="block" id="objets">
   {plaque("objets-h", "Catalogue", "Tous les objets et blocs", "Chaque objet du mod avec sa description en jeu. « Recette » mène à sa fabrication.")}
   {"".join(f'<details class="cat" {"open" if i < 4 else ""}><summary><span>{E(c)}</span><small>{len(v)}</small></summary><div class="grid items">{"".join(v)}</div></details>' for i, (c, v) in enumerate(cats_order) if v)}
@@ -1442,7 +1442,7 @@ def spin_sprite(sheet, iid, link=False):
 
 
 def recipe_block(ctx, iid, label="Comment l'obtenir"):
-    rec = ctx.by_result.get(iid if ":" in iid else "wayfarers:" + iid, [])
+    rec = ctx.by_result.get(iid if ":" in iid else "brasshaven:" + iid, [])
     if not rec:
         return ""
     r = rec[0]
@@ -1461,8 +1461,8 @@ def manual_paras(pid=None, item=None):
 
 def mob_where(ctx, mid):
     """HTML list of the structures and biomes a creature lives in."""
-    parts = [f'<a href="#s-{w}">{E(FR.get("structure.wayfarers." + w, w))}</a>' for w in ctx.lives.get("wayfarers:" + mid, [])]
-    parts += [E(biome_name(b)) for b in ctx.spawn_biomes.get("wayfarers:" + mid, [])]
+    parts = [f'<a href="#s-{w}">{E(FR.get("structure.brasshaven." + w, w))}</a>' for w in ctx.lives.get("brasshaven:" + mid, [])]
+    parts += [E(biome_name(b)) for b in ctx.spawn_biomes.get("brasshaven:" + mid, [])]
     return ", ".join(parts)
 
 
@@ -1480,7 +1480,7 @@ def mob_card(ctx, mid, kind, badge, st, text):
     where_html = E(TXT.MOB_WHERE[mid]) if mid in TXT.MOB_WHERE else mob_where(ctx, mid)
     if not where_html and mid in TXT.COMPANIONS:
         where_html = '<a href="#golem">Se construit : voir Automates</a>'
-    loot = top_loot([f"wayfarers:entities/{mid}"], 8)
+    loot = top_loot([f"brasshaven:entities/{mid}"], 8)
     weapon = ""
     if mid in ctx.weapon_of:
         w = ctx.weapon_of[mid]
@@ -1538,16 +1538,16 @@ def section_news(ctx):
              and not i.endswith(("_slab", "_stairs", "_wall"))]
     if items:
         lists.append(f'<div class="newlist"><small>Objets et blocs ({len(items)}, sans les escaliers et dalles)</small>'
-                     f'{chips(ctx.atlas, ["wayfarers:" + i for i in items], 26, ctx.item_link)}</div>')
+                     f'{chips(ctx.atlas, ["brasshaven:" + i for i in items], 26, ctx.item_link)}</div>')
     mobs = [m for m in new.get("entity", []) if m in ctx.mob_info]
     if mobs:
         lists.append('<div class="newlist"><small>Créatures</small><span class="chips">' + "".join(
-            f'<a class="chip" href="#b-{m}">{ctx.atlas.icon("wayfarers:" + m, 26)}<span>{E(name(m))}</span></a>' for m in mobs)
+            f'<a class="chip" href="#b-{m}">{ctx.atlas.icon("brasshaven:" + m, 26)}<span>{E(name(m))}</span></a>' for m in mobs)
             + "</span></div>")
     structs = [s for s in new.get("structure", []) if s in ctx.struct_info]
     if structs:
         lists.append('<div class="newlist"><small>Structures</small><span class="chips">' + "".join(
-            f'<a class="chip" href="#s-{s}">{ctx.atlas.icon("wayfarers:structure_compass", 26)}<span>{E(FR.get("structure.wayfarers." + s, s))}</span></a>'
+            f'<a class="chip" href="#s-{s}">{ctx.atlas.icon("brasshaven:structure_compass", 26)}<span>{E(FR.get("structure.brasshaven." + s, s))}</span></a>'
             for s in structs) + "</span></div>")
     return f'''<section class="block news" id="nouveautes">
   {plaque("nouveautes-h", "Mise à jour de la nuit", TXT.NEW_TITLE, E(TXT.NEW_INTRO))}
@@ -1560,7 +1560,7 @@ def check_command(ctx, cmd, subs):
     """Warn about a test command that names an unknown sub-command, item, entity or structure."""
     parts = cmd.split()
     sids = {s.id for s in ctx.defs.STRUCTURES}
-    if parts[0] == "/wayfarers":
+    if parts[0] == "/brasshaven":
         if len(parts) < 2 or parts[1] not in subs:
             log(f"test checklist: unknown command {cmd}")
         elif parts[1] in ("tp", "locate") and (len(parts) < 3 or parts[2] not in sids):
@@ -1568,7 +1568,7 @@ def check_command(ctx, cmd, subs):
         elif parts[1] == "boss" and (len(parts) < 3 or parts[2] not in ctx.gear):
             log(f"test checklist: unknown boss in {cmd}")
     for p in parts:
-        if p.startswith("wayfarers:"):
+        if p.startswith("brasshaven:"):
             i = p.split(":", 1)[1]
             if parts[0] == "/give":
                 ok = i in ctx.all_ids
@@ -1582,7 +1582,7 @@ def check_command(ctx, cmd, subs):
 
 def section_tests(ctx):
     subs = {c[0] for c in java_commands()}
-    # the multiplayer sub-commands are registered by social/SocialCommand.java into the same /wayfarers
+    # the multiplayer sub-commands are registered by social/SocialCommand.java into the same /brasshaven
     subs |= set(re.findall(r'literal\("(\w+)"\)', open(os.path.join(JAVA, "social", "SocialCommand.java"), encoding="utf-8").read()))
     items = []
     for n, (title, cmds, expect) in enumerate(TXT.TEST_CHECKLIST, 1):
@@ -1596,7 +1596,7 @@ def section_tests(ctx):
     return f'''<section class="block" id="tester">
   {plaque("tester-h", "Check-list", "Tester en jeu", E(TXT.TEST_INTRO))}
   <ol class="checks">{"".join(items)}</ol>
-  <p class="note">Les commandes <code>/wayfarers</code> demandent les droits d'opérateur (sauf atlas, waystones, sort et magnet). Clique une commande pour la sélectionner, puis copie-la.</p>
+  <p class="note">Les commandes <code>/brasshaven</code> demandent les droits d'opérateur (sauf atlas, waystones, sort et magnet). Clique une commande pour la sélectionner, puis copie-la.</p>
 </section>'''
 
 
@@ -1609,7 +1609,7 @@ def section_gadgets(ctx):
     ammo = {}
     for gid in GD.GADGETS:
         if gid not in page_of:
-            owner = next((p[1].split(":")[-1] for p in GD.PAGES if "wayfarers:" + gid in p[4]), None)
+            owner = next((p[1].split(":")[-1] for p in GD.PAGES if "brasshaven:" + gid in p[4]), None)
             if owner:
                 ammo.setdefault(owner, []).append(gid)
     for gid, (_en, fr, _ten, tfr) in GD.GADGETS.items():
@@ -1652,7 +1652,7 @@ def section_social(ctx):
   {"".join(f"<p>{E(p)}</p>" for p in fr)}</article>''')
     blocks = []
     for bid, (_en, fr, _ten, tfr) in SO.BLOCKS.items():
-        iid = "wayfarers:" + bid
+        iid = "brasshaven:" + bid
         ctx.idx.add(fr, "Multijoueur", f"mj-b-{bid}", tfr)
         blocks.append(f'''<article class="card tool" id="mj-b-{bid}">
   <div class="g-visual"><div class="vitrine big-icon">{atlas.icon(iid, 96)}</div></div>
@@ -1674,7 +1674,7 @@ def section_social(ctx):
   <div class="card"><ul class="ticks">{safety}</ul></div>
   <h3 class="subhead" id="multijoueur-commandes">Commandes</h3>
   <div class="scroll"><table class="tbl"><thead><tr><th>Commande</th><th>Qui</th><th>Effet</th></tr></thead><tbody>{cmds}</tbody></table></div>
-  <p class="small">Chaque fonction se coupe dans <code>wayfarers-common.toml</code>, section <code>[social]</code> :
+  <p class="small">Chaque fonction se coupe dans <code>brasshaven-common.toml</code>, section <code>[social]</code> :
   <a href="#config">voir la configuration</a>.</p>
 </section>'''
 
@@ -1724,19 +1724,19 @@ def section_construction(ctx):
                    f'<small>{E(name(fam[0]))} · {len(fam)} variantes</small></li>' for fam in full.values())
     only = []
     for bid in getattr(decor, "CHISEL_ONLY", {}):
-        fam = next((f for f in CH.FAMILIES.values() if "wayfarers:" + bid in f), [])
+        fam = next((f for f in CH.FAMILIES.values() if "brasshaven:" + bid in f), [])
         src = [b for b in fam if b.split(":")[1] not in decor.CHISEL_ONLY]
         only.append(f'<li><a href="#{anchor_item(bid)}">{atlas.icon(bid, 48)}</a><div><b>{E(name(bid))}</b>'
                     f'<small>depuis : {E(", ".join(name(b) for b in src[:3]))}</small></div></li>')
     sym_steps = manual_paras(pid="symmetry")
     modes = "".join(f'<figure class="sym">{sym_svg(m)}<figcaption><b>{E(t)}</b><span>{E(x)}</span></figcaption></figure>'
                     for m, t, x in TXT.SYMMETRY_MODES)
-    wand_extra = f'<div class="chips">{chips(atlas, ["wayfarers:master_builder_wand"], 26, ctx.item_link)}</div>'
+    wand_extra = f'<div class="chips">{chips(atlas, ["brasshaven:master_builder_wand"], 26, ctx.item_link)}</div>'
     return f'''<section class="block" id="construction">
   {plaque("construction-h", "Nouveau · outils de bâtisseur", "Burin, table de taille et baguette", E(TXT.CONSTRUCTION_INTRO))}
   <div class="grid tools">
-    {tool_card("wayfarers:chisel", "chisel", "burin")}
-    {tool_card("wayfarers:chisel_table", "chisel_table", "table-taille")}
+    {tool_card("brasshaven:chisel", "chisel", "burin")}
+    {tool_card("brasshaven:chisel_table", "chisel_table", "table-taille")}
   </div>
   <h3 class="subhead" id="burin-seul">{len(only)} blocs qu'on n'obtient qu'au burin</h3>
   <p>{E(TXT.CHISEL_ONLY_TEXT)}</p>
@@ -1745,8 +1745,8 @@ def section_construction(ctx):
   <p class="note">Dans l'ordre du burin : clic droit passe à l'icône suivante, accroupi revient à la précédente. Les familles sont des fichiers de données (<code>data/&lt;ns&gt;/chisel/*.json</code>) : un pack de données peut en ajouter.</p>
   <ul class="fam-list">{fams}</ul></details>
   <h3 class="subhead" id="baguette">La baguette du bâtisseur</h3>
-  <div class="grid tools">{tool_card("wayfarers:builder_wand", "wand", "baguette-carte", wand_extra)}
-  <article class="card sym-card" id="symetrie"><h4>{atlas.icon("wayfarers:master_builder_wand", 32)}La symétrie (touche <kbd>G</kbd>)</h4>
+  <div class="grid tools">{tool_card("brasshaven:builder_wand", "wand", "baguette-carte", wand_extra)}
+  <article class="card sym-card" id="symetrie"><h4>{atlas.icon("brasshaven:master_builder_wand", 32)}La symétrie (touche <kbd>G</kbd>)</h4>
   <ol class="sym-steps">{"".join(f"<li>{E(re.sub(r'^[0-9]+[.] ', '', p))}</li>" for p in sym_steps)}</ol>
   <p class="tip"><b>Astuce :</b> pose le centre au milieu de ta future tour ou de ta façade, choisis X + Z, puis construis un seul quart : les trois autres se posent tout seuls.</p></article></div>
   <div class="sym-grid">{modes}</div>
@@ -1762,9 +1762,9 @@ def section_automatons(ctx):
     for n, (t, x) in enumerate(TXT.GOLEM_STEPS, 1):
         extra = ""
         if n == 1:
-            extra = recipe_block(ctx, "wayfarers:clockwork_heart", "Recette") + recipe_block(ctx, "wayfarers:brass_gear", "L'engrenage")
+            extra = recipe_block(ctx, "brasshaven:clockwork_heart", "Recette") + recipe_block(ctx, "brasshaven:brass_gear", "L'engrenage")
         elif n == 2:
-            extra = recipe_block(ctx, "wayfarers:brass_block", "Recette")
+            extra = recipe_block(ctx, "brasshaven:brass_block", "Recette")
         steps.append(f'<li class="step"><span class="num">{n}</span><div><h4>{E(t)}</h4><p>{E(x)}</p>{extra}</div></li>')
     orders = "".join(f'<li><b>{E(t)}</b><span>{E(x)}</span></li>' for t, x in TXT.GOLEM_ORDERS)
     foes = []
@@ -1781,7 +1781,7 @@ def section_automatons(ctx):
     if boss in ctx.mob_info:
         bst = entity_stats(boss)
         lair = "".join(f'<li><b>{E(t)}</b><span>{E(x)}</span></li>' for t, x in TXT.LAIRS.get(boss, []))
-        loot = top_loot([f"wayfarers:entities/{boss}"], 8)
+        loot = top_loot([f"brasshaven:entities/{boss}"], 8)
         weapon = ctx.weapon_of.get(boss)
         boss_html = f'''<h3 class="subhead" id="horloger">Le Grand Horloger, boss de la Citadelle</h3>
   <div class="bossbox">
@@ -1922,7 +1922,7 @@ def new_held_ids(ref, ids):
         return set()
     out = set()
     for i in ids:
-        r = subprocess.run(["git", "-C", ROOT, "show", f"{ref}:src/main/resources/assets/wayfarers/items/{i}.json"],
+        r = subprocess.run(["git", "-C", ROOT, "show", f"{ref}:src/main/resources/assets/brasshaven/items/{i}.json"],
                            capture_output=True, timeout=20)
         if r.returncode != 0 or b"display_context" not in r.stdout:
             out.add(i)
@@ -2021,12 +2021,12 @@ def section_terminal(ctx):
   {plaque("terminal-h", "Nouveau · rangement", "Le terminal de guilde, pour toute la base", E(TXT.TERMINAL_INTRO))}
   {ingame_feature(ctx, "guild_terminal")}
   <div class="grid tools">
-    {card("wayfarers:guild_terminal", "guild_terminal", "terminal-carte")}
-    {card("wayfarers:storage_relay", "storage_relay", "relais")}
+    {card("brasshaven:guild_terminal", "guild_terminal", "terminal-carte")}
+    {card("brasshaven:storage_relay", "storage_relay", "relais")}
   </div>
   <div class="reach-row" id="terminal-reseau">
     <figure class="reach-fig">{reach_svg()}<figcaption>{E(TXT.TERMINAL_DIAGRAM)}</figcaption></figure>
-    <div class="card"><h4>{atlas.icon("wayfarers:guild_terminal", 32)}Réseau, tri et exclusions</h4>
+    <div class="card"><h4>{atlas.icon("brasshaven:guild_terminal", 32)}Réseau, tri et exclusions</h4>
     {"".join(f"<p>{E(p)}</p>" for p in network)}
     <p class="small">Portées réglables côté serveur : <a href="#performances">options storage.*</a>.</p></div>
   </div>
@@ -2056,7 +2056,7 @@ def section_oceans(ctx):
         si = ctx.struct_info.get(sid)
         if not si:
             continue
-        title = FR.get(f"structure.wayfarers.{sid}", sid)
+        title = FR.get(f"structure.brasshaven.{sid}", sid)
         sx, sy, sz = si["size"]
         loot = top_loot(si["loot"], 6)
         wrecks.append(f'''<article class="card wreck"><a class="vitrine" href="#s-{sid}"><img src="{si["files"]["gif"]}" alt="{E(title, quote=True)}, rotation" loading="lazy"></a>
@@ -2065,7 +2065,7 @@ def section_oceans(ctx):
   {('<div class="drops"><small>Dans les coffres</small>' + chips(atlas, loot, 24, ctx.item_link) + '</div>') if loot else ""}</div></article>''')
     gear = []
     for iid, text in TXT.DIVING_TEXT.items():
-        recs = ctx.by_result.get("wayfarers:" + iid, [])
+        recs = ctx.by_result.get("brasshaven:" + iid, [])
         rh = "".join(f'<div class="how-get"><small>{"Recette" if k == 0 else "Ou bien"} · {E(TXT.RECIPE_TYPES.get(r["type"], ""))}</small>'
                      f'{render_recipe(atlas, r, ctx.item_link)}</div>' for k, r in enumerate(recs))
         gear.append(f'''<article class="card tool" id="g-{iid}">
@@ -2073,7 +2073,7 @@ def section_oceans(ctx):
   <div class="g-body"><h4>{atlas.icon(iid, 32)}{E(name(iid))}</h4><p>{E(text)}</p>{rh}</div></article>''')
         ctx.idx.add(name(iid), "Plongée", "plongee", text)
     extras = []
-    for res, label in (("wayfarers:jelly_lamp", "Lampe de gelée (gelée des méduses)"),
+    for res, label in (("brasshaven:jelly_lamp", "Lampe de gelée (gelée des méduses)"),
                        ("minecraft:emerald", "Quatre perles = une émeraude")):
         r = next((r for r in ctx.recipes if r["result"] == res and r["file"] in ("jelly_lamp", "emerald_from_pearls")), None)
         if r:
@@ -2134,22 +2134,22 @@ def section_worldblocks(ctx):
 
 
 def find_biomeshots():
-    """{biome: local png} of the CI renders of the Wayfarers biomes (/wayfarers biomeshots, published with the
-    previews): a local folder ($WAYFARERS_BIOMESHOTS or build/biomeshots) when there is one, else the pre-release,
+    """{biome: local png} of the CI renders of the Brasshaven biomes (/brasshaven biomeshots, published with the
+    previews): a local folder ($BRASSHAVEN_BIOMESHOTS or build/biomeshots) when there is one, else the pre-release,
     cached in build/wiki_cache/biomeshots and fetched again after 3 hours. Missing renders are skipped."""
     from wf import worldbiomes as WB
-    for d in (os.environ.get("WAYFARERS_BIOMESHOTS", ""), os.path.join(ROOT, "build", "biomeshots")):
+    for d in (os.environ.get("BRASSHAVEN_BIOMESHOTS", ""), os.path.join(ROOT, "build", "biomeshots")):
         if d and os.path.isdir(d):
-            return {b: os.path.join(d, f"wayfarers-biome-{b}.png") for b in WB.BIOMES
-                    if os.path.exists(os.path.join(d, f"wayfarers-biome-{b}.png"))}
+            return {b: os.path.join(d, f"brasshaven-biome-{b}.png") for b in WB.BIOMES
+                    if os.path.exists(os.path.join(d, f"brasshaven-biome-{b}.png"))}
     d = os.path.join(CACHE, "biomeshots")
     os.makedirs(d, exist_ok=True)
     out = {}
     for b in WB.BIOMES:
-        png = os.path.join(d, f"wayfarers-biome-{b}.png")
+        png = os.path.join(d, f"brasshaven-biome-{b}.png")
         if not os.path.exists(png) or time.time() - os.path.getmtime(png) > 3 * 3600:
             try:
-                data = urllib.request.urlopen(PREVIEWS_URL.format(f"wayfarers-biome-{b}.png"), timeout=40).read()
+                data = urllib.request.urlopen(PREVIEWS_URL.format(f"brasshaven-biome-{b}.png"), timeout=40).read()
                 if data[:8] != b"\x89PNG\r\n\x1a\n":
                     raise ValueError("not a PNG")
                 open(png, "wb").write(data)
@@ -2162,7 +2162,7 @@ def find_biomeshots():
 
 
 def section_biomes(ctx):
-    """The Wayfarers biomes (tools/wf/worldbiomes.py): a card per biome with the CI render, and the terrain touches."""
+    """The Brasshaven biomes (tools/wf/worldbiomes.py): a card per biome with the CI render, and the terrain touches."""
     from wf import worldbiomes as WB
     shots = find_biomeshots()
     os.makedirs(os.path.join(ctx.out, "img"), exist_ok=True)
@@ -2180,7 +2180,7 @@ def section_biomes(ctx):
         cards.append(f'''<article class="card wb" id="biome-{bid}">
   {img}<div class="wb-body"><h4>{E(b["fr"])} <small>· {E(b["en"])}</small></h4><p>{E(b["text_fr"])}</p>
   <p class="where">{SVG["pin"]}<span>{E(b["where_fr"][0].upper() + b["where_fr"][1:])}</span></p>
-  <p class="small"><code>/locate biome wayfarers:{bid}</code></p>
+  <p class="small"><code>/locate biome brasshaven:{bid}</code></p>
   <details><summary>In English</summary><p>{E(b["text_en"])}</p><p>Where: {E(b["where_en"])}</p></details></div>
 </article>''')
         ctx.idx.add(b["fr"], "Biome", f"biome-{bid}", b["text_fr"] + " " + b["en"])
@@ -2188,7 +2188,7 @@ def section_biomes(ctx):
     touches_en = " ".join(en for en, _fr in WB.TOUCH_TEXT.values())
     ctx.idx.add("Paysages plus sauvages", "Monde", "paysages", touches_en)
     return f'''<section class="block" id="biomes">
-  {plaque("biomes-h", "Nouveau · monde", "Biomes Wayfarers", E(TXT.BIOMES_INTRO))}
+  {plaque("biomes-h", "Nouveau · monde", "Biomes Brasshaven", E(TXT.BIOMES_INTRO))}
   <div class="grid wbs three">{"".join(cards)}</div>
   <h3 class="subhead" id="paysages">Paysages plus sauvages</h3>
   <p>{E(TXT.TOUCHES_INTRO)}</p>
@@ -2307,32 +2307,32 @@ FONTS = ("https://fonts.googleapis.com/css2?family=Zilla+Slab:ital,wght@0,500;0,
 # page really has, in page order.
 SECTIONS = {
     "accueil": ("Accueil", None, None),
-    "nouveautes": ("Nouveautés de la nuit", "Nouveautés", "wayfarers:pocket_watch"),
+    "nouveautes": ("Nouveautés de la nuit", "Nouveautés", "brasshaven:pocket_watch"),
     "en-jeu": ("En jeu (captures)", "En jeu", "minecraft:spyglass"),
     "tester": ("Tester en jeu", "Tester en jeu", "minecraft:command_block"),
     "commencer": ("Par où commencer", None, None),
     "touches": ("Touches & commandes", None, None),
     "config": ("Configuration", None, None),
     "performances": ("Serveur & performances", None, None),
-    "quetes": ("Quêtes", "Quêtes", "wayfarers:wayfarer_atlas"),
-    "manuel": ("Le Manuel", "Le Manuel", "wayfarers:wayfarer_manual"),
-    "talents": ("Talents & magie", "Talents & magie", "wayfarers:fire_staff"),
+    "quetes": ("Quêtes", "Quêtes", "brasshaven:wayfarer_atlas"),
+    "manuel": ("Le Manuel", "Le Manuel", "brasshaven:wayfarer_manual"),
+    "talents": ("Talents & magie", "Talents & magie", "brasshaven:fire_staff"),
     "carte": ("Carte & mini-carte", "Carte du monde", "minecraft:filled_map"),
-    "machines": ("Machines", "Machines", "wayfarers:auto_harvester"),
-    "terminal": ("Terminal de guilde", "Terminal de guilde", "wayfarers:guild_terminal"),
-    "gadgets": ("Gadgets à vapeur", "Gadgets à vapeur", "wayfarers:grappling_hook"),
-    "multijoueur": ("Multijoueur", "Multijoueur", "wayfarers:pneumatic_post"),
-    "construction": ("Burin & baguette", "Construction", "wayfarers:chisel"),
-    "automates": ("Automates", "Automates", "wayfarers:clockwork_heart"),
-    "metaux": ("Métaux & armures", "Métaux & armures", "wayfarers:brass_ingot"),
-    "blocs-monde": ("Bois & pierres", "Bois & pierres", "wayfarers:glowwood_log"),
-    "biomes": ("Biomes Wayfarers", "Biomes", "minecraft:crimson_nylium"),
-    "deco": ("Déco & meubles", "Déco steampunk", "wayfarers:gear_panel"),
-    "armes3d": ("Armes en 3D", "Armes en 3D", "wayfarers:bell_hammer"),
-    "oceans": ("Océans vivants", "Océans vivants", "wayfarers:diving_helmet"),
+    "machines": ("Machines", "Machines", "brasshaven:auto_harvester"),
+    "terminal": ("Terminal de guilde", "Terminal de guilde", "brasshaven:guild_terminal"),
+    "gadgets": ("Gadgets à vapeur", "Gadgets à vapeur", "brasshaven:grappling_hook"),
+    "multijoueur": ("Multijoueur", "Multijoueur", "brasshaven:pneumatic_post"),
+    "construction": ("Burin & baguette", "Construction", "brasshaven:chisel"),
+    "automates": ("Automates", "Automates", "brasshaven:clockwork_heart"),
+    "metaux": ("Métaux & armures", "Métaux & armures", "brasshaven:brass_ingot"),
+    "blocs-monde": ("Bois & pierres", "Bois & pierres", "brasshaven:glowwood_log"),
+    "biomes": ("Biomes Brasshaven", "Biomes", "minecraft:crimson_nylium"),
+    "deco": ("Déco & meubles", "Déco steampunk", "brasshaven:gear_panel"),
+    "armes3d": ("Armes en 3D", "Armes en 3D", "brasshaven:bell_hammer"),
+    "oceans": ("Océans vivants", "Océans vivants", "brasshaven:diving_helmet"),
     "bestiaire": ("Bestiaire", "Bestiaire", "minecraft:skeleton_skull"),
-    "structures": ("Structures", "Structures", "wayfarers:structure_compass"),
-    "objets": ("Tous les objets", "Tous les objets", "wayfarers:travel_backpack"),
+    "structures": ("Structures", "Structures", "brasshaven:structure_compass"),
+    "objets": ("Tous les objets", "Tous les objets", "brasshaven:travel_backpack"),
     "recettes": ("Recettes", "Recettes", "minecraft:crafting_table"),
 }
 
@@ -2345,15 +2345,15 @@ NEW_SECTIONS = {"nouveautes", "en-jeu", "tester", "carte", "terminal", "oceans",
 def render_page(sections, idx, atlas_rows, nav):
     nav_html = "".join(f'<a href="#{a}"{" class=new" if a in NEW_SECTIONS else ""}>{E(t)}</a>' for a, t in nav)
     data = json.dumps(idx.rows, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
-    return f"""<title>Wayfarers Wiki</title>
-<meta name="description" content="Le guide illustré du mod Wayfarers : systèmes, bestiaire, structures et recettes.">
+    return f"""<title>Brasshaven Wiki</title>
+<meta name="description" content="Le guide illustré du mod Brasshaven : systèmes, bestiaire, structures et recettes.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="{FONTS}">
 <style>{CSS.replace("__ATLAS_COLS__", str(COLS)).replace("__ATLAS_ROWS__", str(atlas_rows))}</style>
 <a class="skip" href="#main">Aller au contenu</a>
 <header class="top">
-  <a class="brand" href="#accueil">{SVG["cog"]}<span><b>Wayfarers</b><small>le grand manuel illustré</small></span></a>
+  <a class="brand" href="#accueil">{SVG["cog"]}<span><b>Brasshaven</b><small>le grand manuel illustré</small></span></a>
   <div class="search" role="search">
     {SVG["search"]}<input id="q" type="search" placeholder="Chercher un objet, un boss, une structure…" autocomplete="off" aria-label="Rechercher dans le wiki">
     <div id="results" class="results" role="listbox" hidden></div>

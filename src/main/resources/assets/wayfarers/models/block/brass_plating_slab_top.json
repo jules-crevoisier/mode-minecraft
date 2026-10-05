@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/slab_top",
-  "textures": {
-    "bottom": "wayfarers:block/brass_plating",
-    "top": "wayfarers:block/brass_plating",
-    "side": "wayfarers:block/brass_plating"
-  }
-}

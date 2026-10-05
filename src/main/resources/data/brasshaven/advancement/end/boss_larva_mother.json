@@ -1,0 +1,37 @@
+{
+  "display": {
+    "icon": {
+      "id": "minecraft:wither_skeleton_skull"
+    },
+    "title": {
+      "translate": "advancements.brasshaven.end.boss_larva_mother.title"
+    },
+    "description": {
+      "translate": "advancements.brasshaven.end.boss_larva_mother.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "kill": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "entity_type": "brasshaven:larva_mother"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "parent": "brasshaven:end/void_crypt",
+  "rewards": {
+    "experience": 250
+  }
+}

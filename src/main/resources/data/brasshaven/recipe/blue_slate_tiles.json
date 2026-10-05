@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "key": {
+    "#": "brasshaven:blue_slate_bricks"
+  },
+  "result": {
+    "id": "brasshaven:blue_slate_tiles",
+    "count": 4
+  }
+}

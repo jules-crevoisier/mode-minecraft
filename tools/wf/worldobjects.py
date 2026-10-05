@@ -1,5 +1,5 @@
-"""Natural objects of the Wayfarers biomes and terrain touches, saved as structure templates
-(data/wayfarers/structure/worldobjects/*.nbt, mod data, always loaded) and scattered by minecraft:template features
+"""Natural objects of the Brasshaven biomes and terrain touches, saved as structure templates
+(data/brasshaven/structure/worldobjects/*.nbt, mod data, always loaded) and scattered by minecraft:template features
 (wf/worldbiomes.py): curved blackstone thorns and giant flat-capped red mushrooms (Crimson Mire), banded terracotta
 hoodoos (Pale Dunes), small rock spires (mountains) and hot-spring terraces (savanna highlands).
 
@@ -228,11 +228,11 @@ def blueprints():
 
 
 def template_ids(kind):
-    return [f"wayfarers:worldobjects/{kind}_{i}" for i in range(VARIANTS[kind])]
+    return [f"brasshaven:worldobjects/{kind}_{i}" for i in range(VARIANTS[kind])]
 
 
 def write(root):
-    out = os.path.join(root, "src", "main", "resources", "data", "wayfarers", "structure", "worldobjects")
+    out = os.path.join(root, "src", "main", "resources", "data", "brasshaven", "structure", "worldobjects")
     os.makedirs(out, exist_ok=True)
     for f in os.listdir(out):
         os.remove(os.path.join(out, f))

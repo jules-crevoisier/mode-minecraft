@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "brasshaven:ember_bricks",
+  "result": {
+    "id": "brasshaven:ember_brick_slab",
+    "count": 2
+  }
+}

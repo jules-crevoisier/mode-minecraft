@@ -445,7 +445,7 @@ def core(bp, rng, vein, spread_sculk):
     bp.set(13, FY + 1, -6, "sculk_shrieker[can_summon=false,shrieking=false,waterlogged=false]")
     bp.set(-13, FY + 1, 5, "sculk_shrieker[can_summon=false,shrieking=false,waterlogged=false]")
     # the seal, last, so the sculk does not cover it
-    bp.boss_seal(0, FY, 0, "wayfarers:sculk_spawn", R)
+    bp.boss_seal(0, FY, 0, "brasshaven:sculk_spawn", R)
 
 
 def tank(bp, cx, cz, k, rng, vein):

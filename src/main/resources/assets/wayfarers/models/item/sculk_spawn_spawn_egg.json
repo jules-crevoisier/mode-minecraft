@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "wayfarers:item/sculk_spawn_spawn_egg"
-  }
-}

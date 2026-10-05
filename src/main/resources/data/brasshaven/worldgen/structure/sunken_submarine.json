@@ -1,0 +1,32 @@
+{
+  "type": "brasshaven:fitted_jigsaw",
+  "biomes": "#brasshaven:has_structure/sunken_submarine",
+  "step": "surface_structures",
+  "spawn_overrides": {},
+  "terrain_adaptation": "none",
+  "start_pool": "brasshaven:sunken_submarine/start",
+  "size": 1,
+  "max_distance_from_center": 80,
+  "use_expansion_hack": false,
+  "start_height": {
+    "absolute": 0
+  },
+  "project_start_to_heightmap": "OCEAN_FLOOR_WG",
+  "fit": {
+    "mode": "seabed",
+    "spread": 5,
+    "slope": 0.6,
+    "wet": 0.95,
+    "min_wet": 0.0,
+    "land": 0.5,
+    "drop": 10,
+    "depth": 6,
+    "clearance": 0,
+    "cover": 0,
+    "lift": 0,
+    "open": 0.0,
+    "ground": 4,
+    "pond": 0.002,
+    "theme": "sand"
+  }
+}

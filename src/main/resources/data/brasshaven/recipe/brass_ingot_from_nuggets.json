@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "XXX",
+    "XXX",
+    "XXX"
+  ],
+  "key": {
+    "X": "brasshaven:brass_nugget"
+  },
+  "result": {
+    "id": "brasshaven:brass_ingot",
+    "count": 1
+  }
+}

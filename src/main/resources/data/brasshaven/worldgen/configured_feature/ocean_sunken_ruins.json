@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:template",
+  "config": {
+    "templates": [
+      {
+        "data": {
+          "id": "brasshaven:ocean/ruin_colonnade"
+        },
+        "weight": 1
+      },
+      {
+        "data": {
+          "id": "brasshaven:ocean/ruin_statue"
+        },
+        "weight": 1
+      },
+      {
+        "data": {
+          "id": "brasshaven:ocean/ruin_stair"
+        },
+        "weight": 1
+      },
+      {
+        "data": {
+          "id": "brasshaven:ocean/ruin_amphorae"
+        },
+        "weight": 1
+      }
+    ]
+  }
+}

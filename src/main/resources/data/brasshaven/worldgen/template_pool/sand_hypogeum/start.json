@@ -1,0 +1,449 @@
+{
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "brasshaven:chunked_template",
+        "size": [
+          73,
+          60,
+          76
+        ],
+        "cells": [
+          {
+            "location": "brasshaven:sand_hypogeum/layout_0/x0_z0",
+            "offset": [
+              0,
+              0,
+              0
+            ],
+            "size": [
+              24,
+              53,
+              25
+            ],
+            "blocks": 5681
+          },
+          {
+            "location": "brasshaven:sand_hypogeum/layout_0/x0_z1",
+            "offset": [
+              0,
+              0,
+              25
+            ],
+            "size": [
+              24,
+              60,
+              26
+            ],
+            "blocks": 11080
+          },
+          {
+            "location": "brasshaven:sand_hypogeum/layout_0/x0_z2",
+            "offset": [
+              0,
+              0,
+              51
+            ],
+            "size": [
+              24,
+              53,
+              25
+            ],
+            "blocks": 8649
+          },
+          {
+            "location": "brasshaven:sand_hypogeum/layout_0/x1_z0",
+            "offset": [
+              24,
+              0,
+              0
+            ],
+            "size": [
+              25,
+              53,
+              25
+            ],
+            "blocks": 9052
+          },
+          {
+            "location": "brasshaven:sand_hypogeum/layout_0/x1_z1",
+            "offset": [
+              24,
+              0,
+              25
+            ],
+            "size": [
+              25,
+              60,
+              26
+            ],
+            "blocks": 15953
+          },
+          {
+            "location": "brasshaven:sand_hypogeum/layout_0/x1_z2",
+            "offset": [
+              24,
+              0,
+              51
+            ],
+            "size": [
+              25,
+              53,
+              25
+            ],
+            "blocks": 12739
+          },
+          {
+            "location": "brasshaven:sand_hypogeum/layout_0/x2_z0",
+            "offset": [
+              49,
+              0,
+              4
+            ],
+            "size": [
+              24,
+              42,
+              21
+            ],
+            "blocks": 9757
+          },
+          {
+            "location": "brasshaven:sand_hypogeum/layout_0/x2_z1",
+            "offset": [
+              49,
+              0,
+              25
+            ],
+            "size": [
+              24,
+              42,
+              26
+            ],
+            "blocks": 13296
+          },
+          {
+            "location": "brasshaven:sand_hypogeum/layout_0/x2_z2",
+            "offset": [
+              49,
+              0,
+              51
+            ],
+            "size": [
+              24,
+              41,
+              25
+            ],
+            "blocks": 11564
+          }
+        ],
+        "projection": "rigid",
+        "processors": "brasshaven:none",
+        "ground_level_delta": 42,
+        "footprint": [
+          4,
+          4,
+          50,
+          57
+        ]
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "brasshaven:chunked_template",
+        "size": [
+          73,
+          60,
+          76
+        ],
+        "cells": [
+          {
+            "location": "brasshaven:sand_hypogeum/layout_1/x0_z0",
+            "offset": [
+              0,
+              0,
+              0
+            ],
+            "size": [
+              24,
+              41,
+              25
+            ],
+            "blocks": 15876
+          },
+          {
+            "location": "brasshaven:sand_hypogeum/layout_1/x0_z1",
+            "offset": [
+              0,
+              0,
+              25
+            ],
+            "size": [
+              24,
+              43,
+              26
+            ],
+            "blocks": 11943
+          },
+          {
+            "location": "brasshaven:sand_hypogeum/layout_1/x0_z2",
+            "offset": [
+              0,
+              0,
+              51
+            ],
+            "size": [
+              24,
+              43,
+              25
+            ],
+            "blocks": 5658
+          },
+          {
+            "location": "brasshaven:sand_hypogeum/layout_1/x1_z0",
+            "offset": [
+              24,
+              0,
+              0
+            ],
+            "size": [
+              25,
+              46,
+              25
+            ],
+            "blocks": 12317
+          },
+          {
+            "location": "brasshaven:sand_hypogeum/layout_1/x1_z1",
+            "offset": [
+              24,
+              0,
+              25
+            ],
+            "size": [
+              25,
+              57,
+              26
+            ],
+            "blocks": 17003
+          },
+          {
+            "location": "brasshaven:sand_hypogeum/layout_1/x1_z2",
+            "offset": [
+              24,
+              0,
+              51
+            ],
+            "size": [
+              25,
+              60,
+              25
+            ],
+            "blocks": 9261
+          },
+          {
+            "location": "brasshaven:sand_hypogeum/layout_1/x2_z0",
+            "offset": [
+              49,
+              0,
+              0
+            ],
+            "size": [
+              24,
+              45,
+              25
+            ],
+            "blocks": 8037
+          },
+          {
+            "location": "brasshaven:sand_hypogeum/layout_1/x2_z1",
+            "offset": [
+              49,
+              0,
+              25
+            ],
+            "size": [
+              24,
+              56,
+              26
+            ],
+            "blocks": 9770
+          },
+          {
+            "location": "brasshaven:sand_hypogeum/layout_1/x2_z2",
+            "offset": [
+              49,
+              0,
+              51
+            ],
+            "size": [
+              24,
+              60,
+              25
+            ],
+            "blocks": 7348
+          }
+        ],
+        "projection": "rigid",
+        "processors": "brasshaven:none",
+        "ground_level_delta": 42,
+        "footprint": [
+          22,
+          19,
+          68,
+          72
+        ]
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "brasshaven:chunked_template",
+        "size": [
+          65,
+          60,
+          65
+        ],
+        "cells": [
+          {
+            "location": "brasshaven:sand_hypogeum/layout_2/x0_z0",
+            "offset": [
+              0,
+              0,
+              0
+            ],
+            "size": [
+              22,
+              46,
+              22
+            ],
+            "blocks": 12933
+          },
+          {
+            "location": "brasshaven:sand_hypogeum/layout_2/x0_z1",
+            "offset": [
+              0,
+              0,
+              22
+            ],
+            "size": [
+              22,
+              60,
+              21
+            ],
+            "blocks": 9246
+          },
+          {
+            "location": "brasshaven:sand_hypogeum/layout_2/x0_z2",
+            "offset": [
+              0,
+              0,
+              43
+            ],
+            "size": [
+              22,
+              48,
+              22
+            ],
+            "blocks": 10535
+          },
+          {
+            "location": "brasshaven:sand_hypogeum/layout_2/x1_z0",
+            "offset": [
+              22,
+              0,
+              0
+            ],
+            "size": [
+              21,
+              53,
+              22
+            ],
+            "blocks": 10975
+          },
+          {
+            "location": "brasshaven:sand_hypogeum/layout_2/x1_z1",
+            "offset": [
+              22,
+              0,
+              22
+            ],
+            "size": [
+              21,
+              60,
+              21
+            ],
+            "blocks": 10437
+          },
+          {
+            "location": "brasshaven:sand_hypogeum/layout_2/x1_z2",
+            "offset": [
+              22,
+              0,
+              43
+            ],
+            "size": [
+              21,
+              53,
+              22
+            ],
+            "blocks": 11809
+          },
+          {
+            "location": "brasshaven:sand_hypogeum/layout_2/x2_z0",
+            "offset": [
+              43,
+              0,
+              0
+            ],
+            "size": [
+              22,
+              47,
+              22
+            ],
+            "blocks": 10619
+          },
+          {
+            "location": "brasshaven:sand_hypogeum/layout_2/x2_z1",
+            "offset": [
+              43,
+              0,
+              22
+            ],
+            "size": [
+              22,
+              60,
+              21
+            ],
+            "blocks": 9052
+          },
+          {
+            "location": "brasshaven:sand_hypogeum/layout_2/x2_z2",
+            "offset": [
+              43,
+              0,
+              43
+            ],
+            "size": [
+              22,
+              48,
+              22
+            ],
+            "blocks": 11100
+          }
+        ],
+        "projection": "rigid",
+        "processors": "brasshaven:none",
+        "ground_level_delta": 42,
+        "footprint": [
+          9,
+          6,
+          56,
+          59
+        ]
+      }
+    }
+  ]
+}

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Static checks for the Wayfarers biomes and terrain touches (tools/gen_world.py), run by validate.py and on its own.
+"""Static checks for the Brasshaven biomes and terrain touches (tools/gen_world.py), run by validate.py and on its own.
 
 Catches what would stop a world from loading or would quietly change vanilla terrain:
-  * the pack (custom_biomes_pack): only the Default world preset, whose Overworld uses wayfarers:overworld (mod
+  * the pack (custom_biomes_pack): only the Default world preset, whose Overworld uses brasshaven:overworld (mod
     data), noise settings that are vanilla's
     minecraft:overworld word for word except the surface rule, which is vanilla's with one rule put in front; the
     biome list is vanilla's with only our slices carved out of the parent cells: every climate value reads back as
@@ -32,7 +32,7 @@ ROOT = os.path.abspath(os.path.join(HERE, ".."))
 RES = os.path.join(ROOT, "src", "main", "resources")
 DATA = os.path.join(RES, "data")
 PACK = os.path.join(RES, "custom_biomes_pack")
-NS = "wayfarers"
+NS = "brasshaven"
 V = WB.VANILLA
 ID = re.compile(r"^[a-z0-9_.-]+:[a-z0-9_/.-]+$")
 COLOR = re.compile(r"^#[0-9a-fA-F]{6}$")
@@ -56,7 +56,7 @@ PLACEMENT_FIELDS = {
     "minecraft:rarity_filter": {"chance"}, "minecraft:count": {"count"}, "minecraft:in_square": set(),
     "minecraft:heightmap": {"heightmap"}, "minecraft:biome": set(), "minecraft:random_offset": {"xz_spread", "y_spread"},
     "minecraft:surface_water_depth_filter": {"max_water_depth"}, "minecraft:block_predicate_filter": {"predicate"},
-    "wayfarers:clear_of_structures": set(),
+    "brasshaven:clear_of_structures": set(),
 }
 HEIGHTMAPS = {"WORLD_SURFACE_WG", "WORLD_SURFACE", "OCEAN_FLOOR_WG", "OCEAN_FLOOR", "MOTION_BLOCKING",
               "MOTION_BLOCKING_NO_LEAVES"}
@@ -312,7 +312,7 @@ def check_biomes():
     root = os.path.join(DATA, NS, "worldgen", "biome")
     files = sorted(glob.glob(os.path.join(root, "*.json")))
     if sorted(os.path.basename(f)[:-5] for f in files) != sorted(WB.BIOMES):
-        err(f"data/wayfarers/worldgen/biome holds {[os.path.basename(f) for f in files]}, expected {sorted(WB.BIOMES)}")
+        err(f"data/brasshaven/worldgen/biome holds {[os.path.basename(f) for f in files]}, expected {sorted(WB.BIOMES)}")
     for path in files:
         bid = f"{NS}:{os.path.basename(path)[:-5]}"
         b = load(path)
@@ -425,7 +425,7 @@ def check_feature_order(ours):
 # ===================================================================================================== features
 def check_features():
     configured = configured_ids()
-    pm_types = {f"minecraft:{t}" for t in V["placement_modifier_types"]} | {"wayfarers:clear_of_structures"}
+    pm_types = {f"minecraft:{t}" for t in V["placement_modifier_types"]} | {"brasshaven:clear_of_structures"}
     bp_types = {f"minecraft:{t}" for t in V["block_predicate_types"]}
     templates = set()
     root = os.path.join(DATA, NS, "structure")
@@ -474,7 +474,7 @@ def check_features():
                     if t == "minecraft:rarity_filter" and not (isinstance(m.get("chance"), int) and m["chance"] >= 1):
                         err(f"{rel}: rarity_filter chance must be a positive int")
                 types = [m.get("type") for m in obj.get("placement", [])]
-                if "wayfarers:clear_of_structures" in types and types.index("wayfarers:clear_of_structures") > 1:
+                if "brasshaven:clear_of_structures" in types and types.index("brasshaven:clear_of_structures") > 1:
                     err(f"{rel}: clear_of_structures belongs right after the rarity filter (it reads the chunk)")
 
 
@@ -504,7 +504,7 @@ def check_configured(rel, cf, templates):
 
 # ===================================================================================================== modifiers, lang
 def java_toggles():
-    text = open(os.path.join(ROOT, "src", "main", "java", "com", "wayfarers", "config", "WayfarersConfig.java"),
+    text = open(os.path.join(ROOT, "src", "main", "java", "com", "brasshaven", "config", "BrasshavenConfig.java"),
                 encoding="utf-8").read()
     return set(re.findall(r'\.define\("world\.terrain\.(\w+)"', text)), set(re.findall(r'case "(\w+)" ->', text))
 
@@ -523,7 +523,7 @@ def check_modifiers():
             continue
         found.add(m["toggle"])
         if m["toggle"] not in defined or m["toggle"] not in switched:
-            err(f"{rel}: toggle {m['toggle']} is not a world.terrain.* option of WayfarersConfig (terrainTouch)")
+            err(f"{rel}: toggle {m['toggle']} is not a world.terrain.* option of BrasshavenConfig (terrainTouch)")
         for b in m["biomes"]:
             if b.split(":")[-1] not in V["overworld_biomes"] or not b.startswith("minecraft:"):
                 err(f"{rel}: biome {b} is not a vanilla overworld biome (our biomes decorate themselves)")
@@ -546,7 +546,7 @@ def check_lang():
         for bid in WB.BIOMES:
             if f"biome.{NS}.{bid}" not in d:
                 err(f"{lang}: no name for biome {bid} (run tools/gen_assets.py)")
-        if "pack.wayfarers.custom_biomes" not in d:
+        if "pack.brasshaven.custom_biomes" not in d:
             err(f"{lang}: no name for the custom_biomes pack")
 
 

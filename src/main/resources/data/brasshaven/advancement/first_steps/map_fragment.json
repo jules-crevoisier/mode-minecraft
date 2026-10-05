@@ -1,0 +1,33 @@
+{
+  "display": {
+    "icon": {
+      "id": "brasshaven:map_fragment"
+    },
+    "title": {
+      "translate": "advancements.brasshaven.first_steps.map_fragment.title"
+    },
+    "description": {
+      "translate": "advancements.brasshaven.first_steps.map_fragment.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "brasshaven:map_fragment"
+          }
+        ]
+      }
+    }
+  },
+  "parent": "brasshaven:first_steps/guild_outpost",
+  "rewards": {
+    "experience": 20
+  }
+}

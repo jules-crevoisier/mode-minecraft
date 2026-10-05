@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "brasshaven:rust_rock_bricks",
+  "result": {
+    "id": "brasshaven:rust_rock_brick_slab",
+    "count": 2
+  }
+}

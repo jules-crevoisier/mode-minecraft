@@ -1,8 +1,0 @@
-{
-  "type": "minecraft:stonecutting",
-  "ingredient": "wayfarers:blue_slate",
-  "result": {
-    "id": "wayfarers:polished_blue_slate",
-    "count": 1
-  }
-}

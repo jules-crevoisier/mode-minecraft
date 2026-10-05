@@ -6,12 +6,12 @@ and live in decor.py (stairs, slabs and walls come with it); STONE_VEINS below s
 vanilla Overworld (Forge biome modifiers), and a crafting recipe makes each from vanilla stones.
 
 Woods use vanilla's oak BlockSetType / WoodType (sounds, door rules), so no custom set has to be registered; no signs
-or boats. Trees: data/wayfarers/worldgen/configured_feature/<wood>_tree.json, grown from the saplings; a sapling is
+or boats. Trees: data/brasshaven/worldgen/configured_feature/<wood>_tree.json, grown from the saplings; a sapling is
 crafted from a vanilla one (sapling_recipe) and turns up in the chests of the structures that suit it (gen_loot.py).
 """
 from . import texgen_world as W
 
-NS = "wayfarers"
+NS = "brasshaven"
 
 # palette keys: bark (log side), bark_dark, bark_light, wood (stripped/planks), wood_dark, wood_light, ring (log end),
 # leaf, leaf_light, leaf_dark, speck (glow specks or None)
@@ -121,11 +121,11 @@ def _signed(argb):
 
 
 def java():
-    L = ["package com.wayfarers.generated;", "",
-         "import com.wayfarers.Wayfarers;",
-         "import com.wayfarers.block.WoodBlocks;",
-         "import com.wayfarers.registry.ModBlocks;",
-         "import com.wayfarers.registry.ModItems;",
+    L = ["package com.brasshaven.generated;", "",
+         "import com.brasshaven.Brasshaven;",
+         "import com.brasshaven.block.WoodBlocks;",
+         "import com.brasshaven.registry.ModBlocks;",
+         "import com.brasshaven.registry.ModItems;",
          "import net.minecraft.core.Direction;",
          "import net.minecraft.core.particles.ColorParticleOption;",
          "import net.minecraft.core.particles.ParticleTypes;",
@@ -221,7 +221,7 @@ def java():
         "    /** Forces class initialisation so every block/item is queued on the deferred registers. */",
         "    public static void init() {}", "",
         "    private static ResourceKey<ConfiguredFeature<?, ?>> feature(String name) {",
-        "        return ResourceKey.create(Registries.CONFIGURED_FEATURE, Wayfarers.id(name));",
+        "        return ResourceKey.create(Registries.CONFIGURED_FEATURE, Brasshaven.id(name));",
         "    }", "",
         "    /** Like vanilla Blocks.logProperties: end colour on the Y axis, bark colour on the sides. */",
         "    private static BlockBehaviour.Properties log(MapColor top, MapColor side) {",
@@ -567,7 +567,7 @@ STONE_CRAFT = {
 
 
 # Veins of the raw stones in the vanilla Overworld, like granite or tuff blobs: stone -> (biomes, replaced blocks,
-# blob size, blobs per chunk, (min y, max y)). Biomes are vanilla ids or tags (a wayfarers:stone_veins/<stone> biome
+# blob size, blobs per chunk, (min y, max y)). Biomes are vanilla ids or tags (a brasshaven:stone_veins/<stone> biome
 # tag is written for them); the blob replaces stone or deepslate like an ore.
 STONE_VEINS = {
     # white marble in the mountains and their meadows, from the valleys to the peaks

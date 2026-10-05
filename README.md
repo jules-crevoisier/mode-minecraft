@@ -1,6 +1,6 @@
-# Wayfarers — mod d'exploration coop pour Minecraft 26.2 (Forge 65.1.0)
+# Brasshaven — mod d'exploration coop pour Minecraft 26.2 (Forge 65.1.0)
 
-**Wayfarers** transforme une survie entre potes en grande expédition. On y trouve :
+**Brasshaven** transforme une survie entre potes en grande expédition. On y trouve :
 
 - **35 structures** construites à la main, réparties dans toutes les dimensions, dont **4 donjons souterrains** générés en plusieurs plans ;
 - **une quête en 5 chapitres partagée par tout le serveur**, qui fait découvrir le monde étape par étape ;
@@ -33,21 +33,21 @@
 | Build de développement (chaque modification, testé sur un serveur) | [pré-release `dev-ccr-127dc262-tsdn10`](https://github.com/jules-crevoisier/mode-minecraft/releases/tag/dev-ccr-127dc262-tsdn10) |
 
 Les versions suivent `0.9.0-beta`, `0.9.1-beta`… ; un build de développement s'appelle
-`wayfarers-0.9.0-beta-build.84.jar` (version `0.9.0-beta+build.84`). Le mod prévient (écran titre et chat, avec le
+`brasshaven-0.9.0-beta-build.84.jar` (version `0.9.0-beta+build.84`). Le mod prévient (écran titre et chat, avec le
 lien des nouveautés) quand une nouvelle version sort ; il ne télécharge jamais rien tout seul
-(`updates.checkForUpdates` dans `wayfarers-client.toml` pour couper).
+(`updates.checkForUpdates` dans `brasshaven-client.toml` pour couper).
 
 ## Installation
 
 ### Joueur, avec l'app CurseForge
-- **Le plus simple** : télécharge `wayfarers-modpack-<version>.zip` (release) puis, dans CurseForge, **Create Custom
+- **Le plus simple** : télécharge `brasshaven-modpack-<version>.zip` (release) puis, dans CurseForge, **Create Custom
   Profile → Import** et choisis le zip : profil Minecraft 26.2 + Forge 65.1.0 avec le mod et les réglages
   recommandés.
 - **À la main** : crée un profil **Minecraft 26.2** avec **Forge 65.1.0**, ouvre son dossier (`…` → *Open Folder*)
-  et dépose `wayfarers-<version>.jar` dans `mods/`. Le mod est autonome : aucune autre bibliothèque.
+  et dépose `brasshaven-<version>.jar` dans `mods/`. Le mod est autonome : aucune autre bibliothèque.
 
 ### Serveur
-Télécharge `wayfarers-server-<version>.zip`, décompresse-le dans un dossier vide, installe **Java 25**, puis lance
+Télécharge `brasshaven-server-<version>.zip`, décompresse-le dans un dossier vide, installe **Java 25**, puis lance
 `./start.sh` (Linux/macOS) ou `start.bat` (Windows) : Forge s'installe au premier lancement, le script demande
 d'accepter le CLUF de Minecraft et démarre avec des options JVM réglées (`jvm_args.txt`, 6 Go). Détails dans
 `LISEZMOI.txt` du zip.
@@ -60,7 +60,7 @@ reçoit un message qui donne les deux versions et le lien de téléchargement.
 ### Mettre à jour sans perdre son monde
 1. Sauvegarde le monde (solo : *Modifier → Faire une sauvegarde* ; serveur : copie `world/`, ou laisse `start.sh`
    le faire).
-2. Remplace l'ancien `wayfarers-*.jar` par le nouveau (jamais deux jars du mod dans `mods/`) — ou *Update* dans
+2. Remplace l'ancien `brasshaven-*.jar` par le nouveau (jamais deux jars du mod dans `mods/`) — ou *Update* dans
    l'app CurseForge, ou décompresse le nouveau pack serveur par-dessus l'ancien dossier.
 3. Relance : le monde est conservé (les ids renommés sont remappés, les données du mod migrées).
 
@@ -71,7 +71,7 @@ Guide complet (publication CurseForge/Modrinth, releases, mises à jour joueurs 
 
 ```bash
 ./gradlew build          # nécessite un JDK 25 (Gradle peut le télécharger tout seul)
-# → build/libs/wayfarers-<mod_version>-build.local.jar (version dans gradle.properties)
+# → build/libs/brasshaven-<mod_version>-build.local.jar (version dans gradle.properties)
 ./gradlew runClient      # lancer le jeu en développement
 ./gradlew runServer      # serveur de test
 ```
@@ -87,7 +87,7 @@ Guide complet (publication CurseForge/Modrinth, releases, mises à jour joueurs 
 | **Manuel du Voyageur** | Donné à la première connexion : une page par système, avec sommaire. Survole un objet du mod et **maintiens W** pour ouvrir sa page. Des cartes d'astuce s'affichent la première fois qu'on rencontre un système. |
 | **Journal de quêtes** (touche **J** ou l'Atlas) | Chapitres, étapes, récompenses ; bouton « Suivre » qui affiche l'objectif à l'écran. |
 | **Écran de voyage** | Clic droit sur une pierre : liste avec recherche, favoris et renommage. On ne voyage que depuis une pierre. |
-| **Mini-carte** | Hublot de laiton dans un coin : terrain, direction, coordonnées, biome, pierres de voyage, repères, joueurs, signaux, tombes et dernière mort. Touche **H** pour la masquer, **Maj + H** pour changer sa taille (4 tailles), **Z** pour le zoom ; taille, coin, forme (ronde ou carrée), rotation, coordonnées et opacité dans Mods → Wayfarers → Config (onglet Mini-carte) ou `wayfarers-client.toml`. Sous terre, elle montre la grotte où l'on se trouve. |
+| **Mini-carte** | Hublot de laiton dans un coin : terrain, direction, coordonnées, biome, pierres de voyage, repères, joueurs, signaux, tombes et dernière mort. Touche **H** pour la masquer, **Maj + H** pour changer sa taille (4 tailles), **Z** pour le zoom ; taille, coin, forme (ronde ou carrée), rotation, coordonnées et opacité dans Mods → Brasshaven → Config (onglet Mini-carte) ou `brasshaven-client.toml`. Sous terre, elle montre la grotte où l'on se trouve. |
 | **Carte du monde** (touche **M**, ou l'Atlas accroupi) | Glisser pour déplacer, molette pour zoomer, Espace pour revenir sur soi ; légende cliquable (masquer un type), liste des repères. Clic droit : poser un repère (nom, couleur, icône, **privé ou partagé** avec tous) ; clic molette ou touche **B** : un **signal** que tous voient une minute. |
 | **Exploration partagée** | Le serveur dessine la carte à partir des chunks chargés autour des joueurs et l'envoie aux clients par morceaux compressés : sur un serveur, chacun voit ce que les autres ont exploré (option `map.sharedExploration` pour une carte par joueur). |
 | **Barres de vie** | Au-dessus des monstres blessés, avec les dégâts infligés ; étoile pour les élites. Réglable dans la config client. |
@@ -125,19 +125,19 @@ Points gagnés par quête, par boss et tous les 10 niveaux. Arbre de **4 branche
 Méduses lumineuses (4 couleurs, piquent un peu, gelée → lampe ou vision nocturne), bancs de poissons de récif, raies manta qui sautent hors de l'eau, baleines à bosse qui chantent au large, et la nuit, près des bateaux, le **Serpent de mer** (mini-boss : morsure, charge qui brise les bateaux, tourbillon ; ses écailles font le **Casque de scaphandre**, qui donne la force de conduit sous l'eau). Palmes. Au fond : forêts de varech, jardins et coraux géants, anémones lumineuses, huîtres perlières, cheminées à bulles, arches rocheuses, ruines, et quatre petites structures (sous-marin englouti, cloche de plongée avec poche d'air, sanctuaire de corail, débris de naufrage). Tout cela vient s'ajouter aux océans de Minecraft.
 
 ### Génération du monde
-Wayfarers garde le **relief de Minecraft** (montagnes, grottes, rivières vanilla). Le mod y ajoute ses structures (chacune dans les biomes qui lui vont, et seulement là où le terrain lui convient : option `world.structureFit`), ses minerais (zinc, mithril, cristal d'éther, lithite, orichalque dans le Nether), les créatures et les fonds des océans vivants, les veines de ses trois pierres, et :
+Brasshaven garde le **relief de Minecraft** (montagnes, grottes, rivières vanilla). Le mod y ajoute ses structures (chacune dans les biomes qui lui vont, et seulement là où le terrain lui convient : option `world.structureFit`), ses minerais (zinc, mithril, cristal d'éther, lithite, orichalque dans le Nether), les créatures et les fonds des océans vivants, les veines de ses trois pierres, et :
 
 - **trois biomes à lui**, taillés dans des climats vanilla (option `world.customBiomes`, vraie par défaut) :
   - **Marais pourpre** (les marais les plus humides) : nylium pourpre, boue et podzol, eau rouge sombre, brume rosée et spores ; cornes recourbées de pierre noire et champignons rouges géants aux lianes pleureuses ;
   - **Hautes terres volcaniques** (une moitié des montagnes des badlands) : falaises ocre striées de terre cuite, roche noire et magma, mares et filets de lave, évents fumants, cendres dans l'air, quelques bois rouillés ;
   - **Dunes pâles** (les déserts les plus arides) : sable pâle strié d'or sur du grès lisse, cheminées de fée en terre cuite rayée ;
 
-  on les trouve avec `/locate biome wayfarers:crimson_mire` (ou `volcanic_highlands`, `pale_dunes`). Villages, temples et structures du climat remplacé y apparaissent aussi ;
+  on les trouve avec `/locate biome brasshaven:crimson_mire` (ou `volcanic_highlands`, `pale_dunes`). Villages, temples et structures du climat remplacé y apparaissent aussi ;
 - **des paysages plus sauvages** dans les biomes vanilla, chacun avec son option `world.terrain.*` : rochers moussus (plaines, prairies, forêts, taïgas, collines), troncs tombés (forêts noires, savanes, cerisaies), tapis de fleurs sauvages, tapis de mousse sous les vieux arbres, petites aiguilles rocheuses (pics pierreux, collines venteuses) et sources chaudes en terrasses (hautes savanes).
 
-Les trois biomes passent par un pack de données intégré, **wayfarers:custom_biomes**, qui remplace le type de monde **« Par défaut »** par le même avec ces biomes. Comme pour tout pack qui change les biomes de l'Overworld, Minecraft affiche un avertissement **« paramètres expérimentaux »** à la création du monde : c'est normal. Les mondes Superplat, Amplifié et Grands biomes, et les mondes déjà créés, gardent les biomes vanilla ; pour un nouveau monde vanilla, mettre `world.customBiomes = false` dans `config/wayfarers-common.toml` ou décocher le pack dans l'écran « Packs de données ». Un monde garde toujours les biomes avec lesquels il a été créé.
+Les trois biomes passent par un pack de données intégré, **brasshaven:custom_biomes**, qui remplace le type de monde **« Par défaut »** par le même avec ces biomes. Comme pour tout pack qui change les biomes de l'Overworld, Minecraft affiche un avertissement **« paramètres expérimentaux »** à la création du monde : c'est normal. Les mondes Superplat, Amplifié et Grands biomes, et les mondes déjà créés, gardent les biomes vanilla ; pour un nouveau monde vanilla, mettre `world.customBiomes = false` dans `config/brasshaven-common.toml` ou décocher le pack dans l'écran « Packs de données ». Un monde garde toujours les biomes avec lesquels il a été créé.
 
-**Aussi rapide que la vanilla** : le relief, les grottes et le choix des biomes sont ceux de Minecraft (même liste de points climatiques, à 20 près sur 7 600) ; les nouveaux sols sont quelques règles derrière un seul test de biome, et les décorations sont rares et légères. La CI le mesure à chaque build (job `world-test`, `/wayfarers genbench area`) : un monde avec les biomes et les paysages, un monde sans, même graine, mêmes zones fraîches générées pour de vrai ; le build échoue si la génération complète dépasse la vanilla de plus de 5 % par chunk. Le rapport et un rendu 3D de chaque biome (`/wayfarers biomeshots`) sont publiés avec les aperçus.
+**Aussi rapide que la vanilla** : le relief, les grottes et le choix des biomes sont ceux de Minecraft (même liste de points climatiques, à 20 près sur 7 600) ; les nouveaux sols sont quelques règles derrière un seul test de biome, et les décorations sont rares et légères. La CI le mesure à chaque build (job `world-test`, `/brasshaven genbench area`) : un monde avec les biomes et les paysages, un monde sans, même graine, mêmes zones fraîches générées pour de vrai ; le build échoue si la génération complète dépasse la vanilla de plus de 5 % par chunk. Le rapport et un rendu 3D de chaque biome (`/brasshaven biomeshots`) sont publiés avec les aperçus.
 
 ### Bois et pierres
 - **bois-lueur** (troncs pâles, feuilles turquoise qui luisent la nuit) et **bois rouillé** (écorce rouge sombre, feuilles rouille), chacun avec bûches, planches, escaliers, dalles, barrières, portillons, portes, trappes, boutons, plaques de pression, feuilles et pousses. Les pousses se fabriquent (pousse de chêne + baies lumineuses + poudre de pierre lumineuse ; pousse d'acacia + fer brut) et se trouvent dans les coffres de l'Arbre-monde et du Palais sylvain (bois-lueur), de la Citadelle d'horlogerie, du Port céleste, des Bas-fonds et de la Fonderie géothermique (bois rouillé) ;
@@ -154,7 +154,7 @@ Les trois biomes passent par un pack de données intégré, **wayfarers:custom_b
 | **Gestes** (touche **Y**) | Saluer, s'incliner, acclamer, applaudir, montrer, rire, remercier, rallier : bras animés, particules et son, vus à 24 blocs. |
 | **Duels** | Défi depuis la fiche, cercle d'arène, compte à rebours, le coup fatal laisse un demi-cœur : personne ne meurt, rien n'est perdu ; vainqueur annoncé. |
 
-Tout est vérifié par le serveur (anti-duplication, distances, limites de débit) et chaque fonction se coupe dans `wayfarers-common.toml`, section `[social]`.
+Tout est vérifié par le serveur (anti-duplication, distances, limites de débit) et chaque fonction se coupe dans `brasshaven-common.toml`, section `[social]`.
 
 ### Méga-structures
 **Citadelle d'horlogerie** (71×71 blocs) : tour-horloge de 75 blocs avec quatre cadrans, beffroi et flèche de cuivre oxydé ; sept étages meublés ; quatre ateliers ; quatre cheminées fumantes ; fontaines. On la trouve dans les badlands, savanes, déserts et plaines.
@@ -344,7 +344,7 @@ Le **niveau de danger** dépend de l'endroit où un monstre apparaît. Il s'affi
 - **Monstres dans les structures** : les grandes structures continuent de faire apparaître leurs gardiens dans le noir, comme les forteresses vanilla. Les générateurs fonctionnent même dans les pièces éclairées.
 - **Boss** : leur vie augmente de 60 % par joueur supplémentaire présent dans un rayon de 48 blocs.
 
-Tout se règle dans `config/wayfarers-common.toml` :
+Tout se règle dans `config/brasshaven-common.toml` :
 
 | Option | Défaut |
 |---|---|
@@ -377,20 +377,20 @@ Les structures sont bâties avec des blocs propres au mod, qu'on peut aussi util
 
 | Commande | Qui | Effet |
 |---|---|---|
-| `/wayfarers atlas` · `waystones` · `sort` · `magnet` | tous | Utilisées par l'Atlas, les pierres de voyage et les touches. |
-| `/wayfarers warp <id>` | op | Téléportation directe vers une pierre. |
-| `/wayfarers demo` | op | Donne tout le contenu du mod (idéal pour une vidéo). |
-| `/wayfarers kit <starter\|explorer\|depths\|nether\|end>` | op | Kits par palier. |
-| `/wayfarers locate <structure>` · `/wayfarers tp <structure>` | op | Trouver ou visiter une structure. |
-| `/wayfarers boss <boss>` | op | Fait apparaître un boss devant toi, pour le tester. |
-| `/wayfarers progress reset\|complete` | op | Réinitialiser ou terminer la quête. |
-| `/wayfarers npc spawn <rôle>` · `move` · `role <rôle>` · `remove` | op | Placer, déplacer (nouveau poste), changer ou retirer un donneur de quêtes (le plus proche, 8 blocs). |
-| `/wayfarers contracts reset [joueur]` | op | Effacer les contrats d'un joueur. |
-| `/wayfarers company …` · `/cc <message>` | tous | Compagnie : create, invite, leave, kick, promote, rename, friendlyfire, sharexp, chat, join ; chat de compagnie. |
-| `/wayfarers trade <joueur>` · `/wayfarers duel <joueur>` · `/wayfarers emote <geste>` | tous | Échange, duel, geste (les demandes s'acceptent d'un clic dans le chat). |
-| `/wayfarers social status\|demo\|selftest` | op | État du multijoueur, exemples pour tester, auto-test des règles du serveur. |
+| `/brasshaven atlas` · `waystones` · `sort` · `magnet` | tous | Utilisées par l'Atlas, les pierres de voyage et les touches. |
+| `/brasshaven warp <id>` | op | Téléportation directe vers une pierre. |
+| `/brasshaven demo` | op | Donne tout le contenu du mod (idéal pour une vidéo). |
+| `/brasshaven kit <starter\|explorer\|depths\|nether\|end>` | op | Kits par palier. |
+| `/brasshaven locate <structure>` · `/brasshaven tp <structure>` | op | Trouver ou visiter une structure. |
+| `/brasshaven boss <boss>` | op | Fait apparaître un boss devant toi, pour le tester. |
+| `/brasshaven progress reset\|complete` | op | Réinitialiser ou terminer la quête. |
+| `/brasshaven npc spawn <rôle>` · `move` · `role <rôle>` · `remove` | op | Placer, déplacer (nouveau poste), changer ou retirer un donneur de quêtes (le plus proche, 8 blocs). |
+| `/brasshaven contracts reset [joueur]` | op | Effacer les contrats d'un joueur. |
+| `/brasshaven company …` · `/cc <message>` | tous | Compagnie : create, invite, leave, kick, promote, rename, friendlyfire, sharexp, chat, join ; chat de compagnie. |
+| `/brasshaven trade <joueur>` · `/brasshaven duel <joueur>` · `/brasshaven emote <geste>` | tous | Échange, duel, geste (les demandes s'acceptent d'un clic dans le chat). |
+| `/brasshaven social status\|demo\|selftest` | op | État du multijoueur, exemples pour tester, auto-test des règles du serveur. |
 
-L'onglet créatif **Wayfarers** contient tous les objets, blocs et œufs d'apparition.
+L'onglet créatif **Brasshaven** contient tous les objets, blocs et œufs d'apparition.
 
 ---
 
@@ -406,14 +406,14 @@ python3 tools/gen_wiki.py                # wiki illustré en français (GIF 3D, 
 
 | Script | Ce qu'il génère |
 |---|---|
-| `gen_structures.py` + `wf/structures/*.py` | Les plans des 35 structures (dont les repaires `lair_*.py` et les donjons `wf/dungeon.py`) (éditeur de blocs en Python) → modèles `.nbt`, pools, ensembles de structures, tags de biomes. Une pièce de plus de 48 blocs de large ou de 60 000 entrées est découpée en colonnes (`wf/chunking.py`), vérifiées bloc par bloc et posées par un seul élément de pool `wayfarers:chunked_template` (`world/ChunkedPoolElement.java`) qui ne place que les colonnes du chunk généré |
+| `gen_structures.py` + `wf/structures/*.py` | Les plans des 35 structures (dont les repaires `lair_*.py` et les donjons `wf/dungeon.py`) (éditeur de blocs en Python) → modèles `.nbt`, pools, ensembles de structures, tags de biomes. Une pièce de plus de 48 blocs de large ou de 60 000 entrées est découpée en colonnes (`wf/chunking.py`), vérifiées bloc par bloc et posées par un seul élément de pool `brasshaven:chunked_template` (`world/ChunkedPoolElement.java`) qui ne place que les colonnes du chunk généré |
 | `gen_loot.py`, `gen_quests.py`, `gen_data.py` | Butin, quêtes (progrès), recettes, tags, minerais et veines de pierre (modificateurs de biomes Forge, biomes vanilla) |
 | `gen_textures.py`, `gen_assets.py` | Textures pixel-art, modèles, traductions fr/en |
 | `gen_models.py` + `wf/mobs/*.py` | Les 30 modèles 3D animés (`wf/models.py`) → classes Java, textures, aperçus (`--preview`, voir `tools/BOSSES.md`) |
 | `gen_java.py` | Le catalogue Java partagé (`GeneratedContent.java`) |
 | `validate.py` | Vérifie tous les identifiants de blocs, objets, entités et biomes contre les données de 26.1. Il contrôle aussi chaque référence croisée : butin, quêtes, traductions, modèles et textures. |
 
-Le code Java vit dans `src/main/java/com/wayfarers` :
+Le code Java vit dans `src/main/java/com/brasshaven` :
 
 | Paquet | Contenu |
 |---|---|
@@ -423,7 +423,7 @@ Le code Java vit dans `src/main/java/com/wayfarers` :
 | `entity` | Créatures, boss (`entity/boss`), monstres de donjon (`entity/mob`) |
 | `boss` | Moteur des boss : attaques télégraphiées, phases, posture, arène |
 | `event` | Coop, tombes, équipement |
-| `command` | Commande `/wayfarers` |
+| `command` | Commande `/brasshaven` |
 | `client` | Rendu, barre de boss, touches |
 
 ### État de la vérification
@@ -438,10 +438,10 @@ Le code Java vit dans `src/main/java/com/wayfarers` :
 
 À tester au premier lancement :
 - [ ] Le jeu démarre sans erreur de données (structures, butin, quêtes) dans `logs/latest.log`.
-- [ ] `/wayfarers tp guild_outpost` puis `/wayfarers tp sunken_citadel` : les structures sont bien posées au sol ou au fond de l'eau.
+- [ ] `/brasshaven tp guild_outpost` puis `/brasshaven tp sunken_citadel` : les structures sont bien posées au sol ou au fond de l'eau.
 - [ ] Une pierre de voyage : l'écran de voyage s'ouvre et la téléportation fonctionne.
 - [ ] Bois et pierres : fabriquer une pousse de bois-lueur et la faire pousser à la poudre d'os (feuilles lumineuses la nuit) ; écorcer une bûche à la hache, mettre le feu à des planches ; veines de marbre dans les montagnes, de roche rouillée dans les badlands, d'ardoise bleue sous y 0.
-- [ ] `/wayfarers tp clockwork_citadel` : la citadelle, ses cadrans et ses cheminées fumantes.
+- [ ] `/brasshaven tp clockwork_citadel` : la citadelle, ses cadrans et ses cheminées fumantes.
 - [ ] Touche **K** (talents), **J** (quêtes), clic droit sur le Manuel ; maintenir **W** sur un objet du mod.
 - [ ] Une machine : moissonneuse au bord d'un champ avec un coffre collé ; minuteur relié à un casseur.
 - [ ] Une caisse compacte : l'objet et le total s'affichent en façade.
@@ -450,5 +450,5 @@ Le code Java vit dans `src/main/java/com/wayfarers` :
 - [ ] Une arme de boss en main : le modèle 3D s'affiche à la 1re et à la 3e personne.
 - [ ] Une mort : une tombe apparaît et rend les objets.
 - [ ] Citadelle engloutie : en entrant dans l'arène, le boss apparaît, la brume se ferme, la barre de vie s'affiche en bas de l'écran, et les barreaux et la brume tombent à sa mort (« ENNEMI ABATTU »).
-- [ ] `/wayfarers boss bell_keeper` (puis les autres) : les modèles et les animations d'attaque s'affichent correctement.
-- [ ] `/wayfarers tp forgotten_catacombs` : l'entrée mène bien aux niveaux et à l'arène du champion.
+- [ ] `/brasshaven boss bell_keeper` (puis les autres) : les modèles et les animations d'attaque s'affichent correctement.
+- [ ] `/brasshaven tp forgotten_catacombs` : l'entrée mène bien aux niveaux et à l'arène du champion.

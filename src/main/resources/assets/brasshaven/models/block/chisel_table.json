@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "particle": "brasshaven:block/chisel_table_side",
+    "up": "brasshaven:block/chisel_table_top",
+    "down": "minecraft:block/spruce_planks",
+    "north": "brasshaven:block/chisel_table_front",
+    "south": "brasshaven:block/chisel_table_side",
+    "east": "brasshaven:block/chisel_table_side",
+    "west": "brasshaven:block/chisel_table_side"
+  }
+}

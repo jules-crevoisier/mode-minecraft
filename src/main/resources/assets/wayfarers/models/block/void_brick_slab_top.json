@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/slab_top",
-  "textures": {
-    "bottom": "wayfarers:block/void_bricks",
-    "top": "wayfarers:block/void_bricks",
-    "side": "wayfarers:block/void_bricks"
-  }
-}

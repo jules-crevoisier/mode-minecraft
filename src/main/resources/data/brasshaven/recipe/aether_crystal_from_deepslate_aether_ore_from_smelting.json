@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "ingredient": "brasshaven:deepslate_aether_ore",
+  "result": {
+    "id": "brasshaven:aether_crystal"
+  },
+  "experience": 1.0,
+  "cookingtime": 200
+}

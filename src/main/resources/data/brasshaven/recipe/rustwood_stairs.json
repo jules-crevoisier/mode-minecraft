@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "#  ",
+    "## ",
+    "###"
+  ],
+  "key": {
+    "#": "brasshaven:rustwood_planks"
+  },
+  "result": {
+    "id": "brasshaven:rustwood_stairs",
+    "count": 4
+  },
+  "group": "wooden_stairs"
+}

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " E ",
+    "MCM",
+    "SSS"
+  ],
+  "key": {
+    "E": "minecraft:ender_pearl",
+    "M": "brasshaven:map_fragment",
+    "C": "minecraft:compass",
+    "S": "minecraft:stone_bricks"
+  },
+  "result": {
+    "id": "brasshaven:waystone",
+    "count": 1
+  }
+}

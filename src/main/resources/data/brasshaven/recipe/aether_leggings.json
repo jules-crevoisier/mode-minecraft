@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "MMM",
+    "M M",
+    "M M"
+  ],
+  "key": {
+    "M": "brasshaven:aether_crystal"
+  },
+  "result": {
+    "id": "brasshaven:aether_leggings",
+    "count": 1
+  }
+}

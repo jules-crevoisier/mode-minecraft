@@ -1,21 +1,21 @@
 {
   "replace": false,
   "values": [
-    "wayfarers:guild_brick_wall",
-    "wayfarers:mossy_guild_brick_wall",
-    "wayfarers:lithite_brick_wall",
-    "wayfarers:ember_brick_wall",
-    "wayfarers:void_brick_wall",
-    "wayfarers:dark_iron_plating_wall",
-    "wayfarers:smokestack_brick_wall",
-    "wayfarers:dark_iron_brick_wall",
-    "wayfarers:sooty_smokestack_brick_wall",
-    "wayfarers:marble_wall",
-    "wayfarers:marble_brick_wall",
-    "wayfarers:rust_rock_wall",
-    "wayfarers:rust_rock_brick_wall",
-    "wayfarers:blue_slate_wall",
-    "wayfarers:blue_slate_brick_wall",
-    "wayfarers:blue_slate_tile_wall"
+    "brasshaven:guild_brick_wall",
+    "brasshaven:mossy_guild_brick_wall",
+    "brasshaven:lithite_brick_wall",
+    "brasshaven:ember_brick_wall",
+    "brasshaven:void_brick_wall",
+    "brasshaven:dark_iron_plating_wall",
+    "brasshaven:smokestack_brick_wall",
+    "brasshaven:dark_iron_brick_wall",
+    "brasshaven:sooty_smokestack_brick_wall",
+    "brasshaven:marble_wall",
+    "brasshaven:marble_brick_wall",
+    "brasshaven:rust_rock_wall",
+    "brasshaven:rust_rock_brick_wall",
+    "brasshaven:blue_slate_wall",
+    "brasshaven:blue_slate_brick_wall",
+    "brasshaven:blue_slate_tile_wall"
   ]
 }

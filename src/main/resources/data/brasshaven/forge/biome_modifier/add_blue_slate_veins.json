@@ -1,0 +1,6 @@
+{
+  "type": "forge:add_features",
+  "biomes": "#brasshaven:stone_veins/blue_slate",
+  "features": "brasshaven:blue_slate_vein",
+  "step": "underground_ores"
+}

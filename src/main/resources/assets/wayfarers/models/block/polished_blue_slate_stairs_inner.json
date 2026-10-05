@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/inner_stairs",
-  "textures": {
-    "bottom": "wayfarers:block/polished_blue_slate",
-    "top": "wayfarers:block/polished_blue_slate",
-    "side": "wayfarers:block/polished_blue_slate"
-  }
-}

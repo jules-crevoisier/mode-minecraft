@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "BBB",
+    "CP ",
+    "W  "
+  ],
+  "key": {
+    "B": "brasshaven:brass_ingot",
+    "C": "minecraft:copper_ingot",
+    "P": "minecraft:piston",
+    "W": "#minecraft:planks"
+  },
+  "result": {
+    "id": "brasshaven:rivet_gun",
+    "count": 1
+  }
+}

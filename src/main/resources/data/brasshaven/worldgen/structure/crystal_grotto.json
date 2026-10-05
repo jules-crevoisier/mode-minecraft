@@ -1,0 +1,37 @@
+{
+  "type": "brasshaven:fitted_jigsaw",
+  "biomes": "#brasshaven:has_structure/crystal_grotto",
+  "step": "underground_structures",
+  "spawn_overrides": {},
+  "terrain_adaptation": "none",
+  "start_pool": "brasshaven:crystal_grotto/start",
+  "size": 1,
+  "max_distance_from_center": 80,
+  "use_expansion_hack": false,
+  "start_height": {
+    "type": "minecraft:uniform",
+    "min_inclusive": {
+      "absolute": -58
+    },
+    "max_inclusive": {
+      "absolute": -20
+    }
+  },
+  "fit": {
+    "mode": "underground",
+    "spread": 8,
+    "slope": 0.8,
+    "wet": 0.05,
+    "min_wet": 0.0,
+    "land": 0.5,
+    "drop": 10,
+    "depth": 0,
+    "clearance": 0,
+    "cover": 8,
+    "lift": 4,
+    "open": 0.0,
+    "ground": 48,
+    "pond": 0.0,
+    "theme": "stone"
+  }
+}

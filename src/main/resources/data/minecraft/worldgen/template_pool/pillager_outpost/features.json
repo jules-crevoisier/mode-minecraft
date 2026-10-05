@@ -87,8 +87,8 @@
       "weight": 2,
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:pillager_outpost/siege_engine",
-        "processors": "wayfarers:none",
+        "location": "brasshaven:pillager_outpost/siege_engine",
+        "processors": "brasshaven:none",
         "projection": "rigid"
       }
     },
@@ -96,8 +96,8 @@
       "weight": 2,
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:pillager_outpost/barricade",
-        "processors": "wayfarers:none",
+        "location": "brasshaven:pillager_outpost/barricade",
+        "processors": "brasshaven:none",
         "projection": "rigid"
       }
     }

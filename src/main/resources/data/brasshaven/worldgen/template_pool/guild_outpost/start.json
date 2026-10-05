@@ -1,0 +1,239 @@
+{
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 2,
+      "element": {
+        "element_type": "brasshaven:chunked_template",
+        "size": [
+          64,
+          56,
+          56
+        ],
+        "cells": [
+          {
+            "location": "brasshaven:guild_outpost/outpost_spruce/x0_z0",
+            "offset": [
+              0,
+              0,
+              0
+            ],
+            "size": [
+              32,
+              34,
+              28
+            ],
+            "blocks": 11990
+          },
+          {
+            "location": "brasshaven:guild_outpost/outpost_spruce/x0_z1",
+            "offset": [
+              2,
+              0,
+              28
+            ],
+            "size": [
+              30,
+              34,
+              28
+            ],
+            "blocks": 8327
+          },
+          {
+            "location": "brasshaven:guild_outpost/outpost_spruce/x1_z0",
+            "offset": [
+              32,
+              0,
+              0
+            ],
+            "size": [
+              28,
+              56,
+              28
+            ],
+            "blocks": 11058
+          },
+          {
+            "location": "brasshaven:guild_outpost/outpost_spruce/x1_z1",
+            "offset": [
+              32,
+              0,
+              28
+            ],
+            "size": [
+              32,
+              36,
+              28
+            ],
+            "blocks": 8557
+          }
+        ],
+        "projection": "rigid",
+        "processors": "brasshaven:aging",
+        "ground_level_delta": 7,
+        "footprint": [
+          0,
+          1,
+          59,
+          51
+        ]
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "brasshaven:chunked_template",
+        "size": [
+          64,
+          56,
+          56
+        ],
+        "cells": [
+          {
+            "location": "brasshaven:guild_outpost/outpost_oak/x0_z0",
+            "offset": [
+              0,
+              0,
+              0
+            ],
+            "size": [
+              32,
+              34,
+              28
+            ],
+            "blocks": 12008
+          },
+          {
+            "location": "brasshaven:guild_outpost/outpost_oak/x0_z1",
+            "offset": [
+              2,
+              0,
+              28
+            ],
+            "size": [
+              30,
+              34,
+              28
+            ],
+            "blocks": 8337
+          },
+          {
+            "location": "brasshaven:guild_outpost/outpost_oak/x1_z0",
+            "offset": [
+              32,
+              0,
+              0
+            ],
+            "size": [
+              28,
+              56,
+              28
+            ],
+            "blocks": 11056
+          },
+          {
+            "location": "brasshaven:guild_outpost/outpost_oak/x1_z1",
+            "offset": [
+              32,
+              0,
+              28
+            ],
+            "size": [
+              32,
+              36,
+              28
+            ],
+            "blocks": 8558
+          }
+        ],
+        "projection": "rigid",
+        "processors": "brasshaven:aging",
+        "ground_level_delta": 7,
+        "footprint": [
+          0,
+          1,
+          59,
+          51
+        ]
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "brasshaven:chunked_template",
+        "size": [
+          63,
+          56,
+          56
+        ],
+        "cells": [
+          {
+            "location": "brasshaven:guild_outpost/outpost_birch/x0_z0",
+            "offset": [
+              0,
+              0,
+              0
+            ],
+            "size": [
+              32,
+              34,
+              28
+            ],
+            "blocks": 12517
+          },
+          {
+            "location": "brasshaven:guild_outpost/outpost_birch/x0_z1",
+            "offset": [
+              1,
+              0,
+              28
+            ],
+            "size": [
+              31,
+              34,
+              28
+            ],
+            "blocks": 8696
+          },
+          {
+            "location": "brasshaven:guild_outpost/outpost_birch/x1_z0",
+            "offset": [
+              32,
+              0,
+              0
+            ],
+            "size": [
+              27,
+              56,
+              28
+            ],
+            "blocks": 10549
+          },
+          {
+            "location": "brasshaven:guild_outpost/outpost_birch/x1_z1",
+            "offset": [
+              32,
+              0,
+              28
+            ],
+            "size": [
+              31,
+              36,
+              28
+            ],
+            "blocks": 8205
+          }
+        ],
+        "projection": "rigid",
+        "processors": "brasshaven:aging",
+        "ground_level_delta": 7,
+        "footprint": [
+          0,
+          1,
+          58,
+          51
+        ]
+      }
+    }
+  ]
+}

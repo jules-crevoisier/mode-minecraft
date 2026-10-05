@@ -1,8 +1,0 @@
-{
-  "type": "minecraft:stonecutting",
-  "ingredient": "wayfarers:marble",
-  "result": {
-    "id": "wayfarers:chiseled_marble",
-    "count": 1
-  }
-}

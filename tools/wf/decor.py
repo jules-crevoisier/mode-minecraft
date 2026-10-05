@@ -1,4 +1,4 @@
-"""Wayfarers decorative blocks: one table drives textures, Java registration, models, data and lang."""
+"""Brasshaven decorative blocks: one table drives textures, Java registration, models, data and lang."""
 from . import texgen as T
 from . import texgen_steam as S
 

@@ -19,14 +19,14 @@ from . import lair_crystal_spider
 
 DEEP = ["#minecraft:is_overworld"]
 
-# Wayfarers deep blocks
-LB = "wayfarers:lithite_bricks"
-LBS = "wayfarers:lithite_brick_stairs"
-LBSL = "wayfarers:lithite_brick_slab"
-LBW = "wayfarers:lithite_brick_wall"
-LC = "wayfarers:lithite_block"          # glowing crystal
-LORE = "wayfarers:lithite_ore"
-GT = "wayfarers:gilded_trim"            # gold-banded dark stone
+# Brasshaven deep blocks
+LB = "brasshaven:lithite_bricks"
+LBS = "brasshaven:lithite_brick_stairs"
+LBSL = "brasshaven:lithite_brick_slab"
+LBW = "brasshaven:lithite_brick_wall"
+LC = "brasshaven:lithite_block"          # glowing crystal
+LORE = "brasshaven:lithite_ore"
+GT = "brasshaven:gilded_trim"            # gold-banded dark stone
 
 PB = "polished_blackstone_bricks"
 PBS = "polished_blackstone_brick_stairs"
@@ -37,7 +37,7 @@ DIRS4 = (("north", 0, -1), ("south", 0, 1), ("east", 1, 0), ("west", -1, 0))
 
 # full block -> its stair, used to corbel stepped ceilings into smooth curves
 STAIR_OF = {
-    "wayfarers:lithite_bricks": LBS,
+    "brasshaven:lithite_bricks": LBS,
     "minecraft:deepslate_tiles": "deepslate_tile_stairs",
     "minecraft:deepslate_bricks": "deepslate_brick_stairs",
     "minecraft:polished_deepslate": "polished_deepslate_stairs",

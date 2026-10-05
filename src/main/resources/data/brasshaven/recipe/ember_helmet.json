@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "MMM",
+    "M M"
+  ],
+  "key": {
+    "M": "brasshaven:ancient_ember"
+  },
+  "result": {
+    "id": "brasshaven:ember_helmet",
+    "count": 1
+  }
+}

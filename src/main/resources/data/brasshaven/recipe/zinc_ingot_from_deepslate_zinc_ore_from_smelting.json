@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "ingredient": "brasshaven:deepslate_zinc_ore",
+  "result": {
+    "id": "brasshaven:zinc_ingot"
+  },
+  "experience": 1.0,
+  "cookingtime": 200
+}

@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "brasshaven:block/mahogany_parquet_slab"
+    },
+    "type=top": {
+      "model": "brasshaven:block/mahogany_parquet_slab_top"
+    },
+    "type=double": {
+      "model": "brasshaven:block/mahogany_parquet"
+    }
+  }
+}

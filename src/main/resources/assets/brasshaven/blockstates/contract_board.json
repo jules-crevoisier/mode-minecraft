@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "brasshaven:block/contract_board"
+    },
+    "facing=east": {
+      "model": "brasshaven:block/contract_board",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "brasshaven:block/contract_board",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "brasshaven:block/contract_board",
+      "y": 270
+    }
+  }
+}

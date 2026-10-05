@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/outer_stairs",
-  "textures": {
-    "bottom": "wayfarers:block/smokestack_bricks",
-    "top": "wayfarers:block/smokestack_bricks",
-    "side": "wayfarers:block/smokestack_bricks"
-  }
-}

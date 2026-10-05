@@ -696,10 +696,10 @@ def moss_on(bp, region, chance=0.15, seed=0, mapping=None):
     mapping = mapping or {
         "minecraft:stone_bricks": "mossy_stone_bricks", "minecraft:cobblestone": "mossy_cobblestone",
         "minecraft:stone_brick_stairs": "mossy_stone_brick_stairs", "minecraft:stone_brick_slab": "mossy_stone_brick_slab",
-        "minecraft:stone_brick_wall": "mossy_stone_brick_wall", "wayfarers:guild_bricks": "wayfarers:mossy_guild_bricks",
-        "wayfarers:guild_brick_stairs": "wayfarers:mossy_guild_brick_stairs",
-        "wayfarers:guild_brick_slab": "wayfarers:mossy_guild_brick_slab",
-        "wayfarers:guild_brick_wall": "wayfarers:mossy_guild_brick_wall",
+        "minecraft:stone_brick_wall": "mossy_stone_brick_wall", "brasshaven:guild_bricks": "brasshaven:mossy_guild_bricks",
+        "brasshaven:guild_brick_stairs": "brasshaven:mossy_guild_brick_stairs",
+        "brasshaven:guild_brick_slab": "brasshaven:mossy_guild_brick_slab",
+        "brasshaven:guild_brick_wall": "brasshaven:mossy_guild_brick_wall",
     }
     (x0, y0, z0), (x1, y1, z1) = region
     for (x, y, z), (name, props, data) in list(bp.blocks.items()):

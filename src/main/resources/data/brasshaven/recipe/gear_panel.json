@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "B",
+    "D"
+  ],
+  "key": {
+    "B": "brasshaven:brass_ingot",
+    "D": "brasshaven:dark_iron_plating"
+  },
+  "result": {
+    "id": "brasshaven:gear_panel",
+    "count": 2
+  }
+}

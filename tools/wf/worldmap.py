@@ -13,83 +13,83 @@ import random
 
 # ------------------------------------------------------------------ text
 UI = {
-    "key.wayfarers.world_map": ("World map", "Carte du monde"),
-    "key.wayfarers.toggle_minimap": ("Show/hide the minimap (Shift: its size)", "Afficher/masquer la mini-carte (Maj : sa taille)"),
-    "message.wayfarers.minimap.size": ("Minimap: %s (%s px) - Shift + %s again: next size",
+    "key.brasshaven.world_map": ("World map", "Carte du monde"),
+    "key.brasshaven.toggle_minimap": ("Show/hide the minimap (Shift: its size)", "Afficher/masquer la mini-carte (Maj : sa taille)"),
+    "message.brasshaven.minimap.size": ("Minimap: %s (%s px) - Shift + %s again: next size",
                                        "Mini-carte : %s (%s px) - Maj + %s encore : taille suivante"),
-    "message.wayfarers.minimap.shown": ("Minimap shown - Shift + %s: change its size",
+    "message.brasshaven.minimap.shown": ("Minimap shown - Shift + %s: change its size",
                                         "Mini-carte affichée - Maj + %s : changer sa taille"),
-    "message.wayfarers.minimap.hidden": ("Minimap hidden - %s to show it again", "Mini-carte masquée - %s pour la réafficher"),
-    "message.wayfarers.minimap.zoom": ("Minimap zoom: %s", "Zoom de la mini-carte : %s"),
-    "key.wayfarers.minimap_zoom": ("Minimap zoom", "Zoom de la mini-carte"),
-    "key.wayfarers.map_ping": ("Ping the spot you look at", "Signaler l'endroit visé"),
-    "message.wayfarers.map.ping": ("%s marked a point (%s, %s)", "%s a signalé un point (%s, %s)"),
-    "message.wayfarers.map.too_many": ("You already have %s waypoints: delete some first.",
+    "message.brasshaven.minimap.hidden": ("Minimap hidden - %s to show it again", "Mini-carte masquée - %s pour la réafficher"),
+    "message.brasshaven.minimap.zoom": ("Minimap zoom: %s", "Zoom de la mini-carte : %s"),
+    "key.brasshaven.minimap_zoom": ("Minimap zoom", "Zoom de la mini-carte"),
+    "key.brasshaven.map_ping": ("Ping the spot you look at", "Signaler l'endroit visé"),
+    "message.brasshaven.map.ping": ("%s marked a point (%s, %s)", "%s a signalé un point (%s, %s)"),
+    "message.brasshaven.map.too_many": ("You already have %s waypoints: delete some first.",
                                        "Tu as déjà %s repères : supprimes-en d'abord."),
-    "gui.wayfarers.map.title": ("World Map", "Carte du monde"),
-    "gui.wayfarers.map.spawn": ("World spawn", "Point d'apparition du monde"),
-    "gui.wayfarers.map.death": ("Last death", "Dernière mort"),
-    "gui.wayfarers.map.grave": ("Your grave", "Ta tombe"),
-    "gui.wayfarers.map.structure": ("Found with a compass", "Trouvée à la boussole"),
-    "gui.wayfarers.map.target": ("Compass target", "Cible de la boussole"),
-    "gui.wayfarers.map.shared": ("Shared", "Partagé"),
-    "gui.wayfarers.map.by": ("Shared by %s", "Partagé par %s"),
-    "gui.wayfarers.map.cave_view": ("Cave view", "Vue des grottes"),
-    "gui.wayfarers.map.center": ("Centre on me (Space)", "Centrer sur moi (Espace)"),
-    "gui.wayfarers.map.zoom_in": ("Zoom in (wheel, +)", "Zoomer (molette, +)"),
-    "gui.wayfarers.map.zoom_out": ("Zoom out (wheel, -)", "Dézoomer (molette, -)"),
-    "gui.wayfarers.map.cave_on": ("Cave view when underground: on", "Vue des grottes sous terre : activée"),
-    "gui.wayfarers.map.cave_off": ("Cave view when underground: off", "Vue des grottes sous terre : désactivée"),
-    "gui.wayfarers.map.sidebar": ("Legend and waypoints", "Légende et repères"),
-    "gui.wayfarers.map.cursor": ("X %s  Y %s  Z %s  -  %s", "X %s  Y %s  Z %s  -  %s"),
-    "gui.wayfarers.map.cursor_unknown": ("X %s  Z %s  -  unexplored", "X %s  Z %s  -  inexploré"),
-    "gui.wayfarers.map.hint": ("Drag: move - Wheel: zoom - Right-click: waypoint - Middle-click: ping",
+    "gui.brasshaven.map.title": ("World Map", "Carte du monde"),
+    "gui.brasshaven.map.spawn": ("World spawn", "Point d'apparition du monde"),
+    "gui.brasshaven.map.death": ("Last death", "Dernière mort"),
+    "gui.brasshaven.map.grave": ("Your grave", "Ta tombe"),
+    "gui.brasshaven.map.structure": ("Found with a compass", "Trouvée à la boussole"),
+    "gui.brasshaven.map.target": ("Compass target", "Cible de la boussole"),
+    "gui.brasshaven.map.shared": ("Shared", "Partagé"),
+    "gui.brasshaven.map.by": ("Shared by %s", "Partagé par %s"),
+    "gui.brasshaven.map.cave_view": ("Cave view", "Vue des grottes"),
+    "gui.brasshaven.map.center": ("Centre on me (Space)", "Centrer sur moi (Espace)"),
+    "gui.brasshaven.map.zoom_in": ("Zoom in (wheel, +)", "Zoomer (molette, +)"),
+    "gui.brasshaven.map.zoom_out": ("Zoom out (wheel, -)", "Dézoomer (molette, -)"),
+    "gui.brasshaven.map.cave_on": ("Cave view when underground: on", "Vue des grottes sous terre : activée"),
+    "gui.brasshaven.map.cave_off": ("Cave view when underground: off", "Vue des grottes sous terre : désactivée"),
+    "gui.brasshaven.map.sidebar": ("Legend and waypoints", "Légende et repères"),
+    "gui.brasshaven.map.cursor": ("X %s  Y %s  Z %s  -  %s", "X %s  Y %s  Z %s  -  %s"),
+    "gui.brasshaven.map.cursor_unknown": ("X %s  Z %s  -  unexplored", "X %s  Z %s  -  inexploré"),
+    "gui.brasshaven.map.hint": ("Drag: move - Wheel: zoom - Right-click: waypoint - Middle-click: ping",
                                "Glisser : déplacer - Molette : zoom - Clic droit : repère - Clic molette : signal"),
-    "gui.wayfarers.map.scale_in": ("1 block = %s px", "1 bloc = %s px"),
-    "gui.wayfarers.map.scale_out": ("1 px = %s blocks", "1 px = %s blocs"),
-    "gui.wayfarers.map.legend": ("Legend", "Légende"),
-    "gui.wayfarers.map.waypoints": ("Waypoints", "Repères"),
-    "gui.wayfarers.map.no_waypoints": ("No waypoint here yet: right-click the map to add one.",
+    "gui.brasshaven.map.scale_in": ("1 block = %s px", "1 bloc = %s px"),
+    "gui.brasshaven.map.scale_out": ("1 px = %s blocks", "1 px = %s blocs"),
+    "gui.brasshaven.map.legend": ("Legend", "Légende"),
+    "gui.brasshaven.map.waypoints": ("Waypoints", "Repères"),
+    "gui.brasshaven.map.no_waypoints": ("No waypoint here yet: right-click the map to add one.",
                                        "Aucun repère ici : clic droit sur la carte pour en poser un."),
-    "gui.wayfarers.map.add_here": ("+ Waypoint here", "+ Repère ici"),
-    "gui.wayfarers.map.edit": ("Edit", "Modifier"),
-    "gui.wayfarers.map.share": ("Share", "Partager"),
-    "gui.wayfarers.map.make_private": ("Private", "Privé"),
-    "gui.wayfarers.map.delete": ("Delete", "Supprimer"),
-    "gui.wayfarers.map.add_waypoint": ("Add a waypoint here", "Poser un repère ici"),
-    "gui.wayfarers.map.ping": ("Ping this spot for everyone", "Signaler cet endroit à tous"),
-    "gui.wayfarers.map.copy": ("Copy the coordinates", "Copier les coordonnées"),
-    "gui.wayfarers.map.name": ("Name", "Nom"),
-    "gui.wayfarers.map.default_name": ("Waypoint %s, %s", "Repère %s, %s"),
-    "gui.wayfarers.map.new_waypoint": ("New waypoint", "Nouveau repère"),
-    "gui.wayfarers.map.edit_waypoint": ("Edit waypoint", "Modifier le repère"),
-    "gui.wayfarers.map.share_toggle": ("Share with everyone", "Partager avec tout le monde"),
-    "gui.wayfarers.map.save": ("Save", "Enregistrer"),
-    "gui.wayfarers.map.view_3d": ("3D view", "Vue 3D"),
-    "gui.wayfarers.map.view3d_on": ("3D view (tilted relief): on", "Vue 3D (relief incliné) : activée"),
-    "gui.wayfarers.map.view3d_off": ("3D view (tilted relief): off", "Vue 3D (relief incliné) : désactivée"),
-    "gui.wayfarers.map.options": ("Options: minimap size and look, map relief", "Options : taille et aspect de la mini-carte, relief des cartes"),
-    "gui.wayfarers.map.options.title": ("Minimap", "Mini-carte"),
-    "gui.wayfarers.map.options.size.tip": ("Its exact size on screen, frame included: 48 to 160 px. The minimap shows "
+    "gui.brasshaven.map.add_here": ("+ Waypoint here", "+ Repère ici"),
+    "gui.brasshaven.map.edit": ("Edit", "Modifier"),
+    "gui.brasshaven.map.share": ("Share", "Partager"),
+    "gui.brasshaven.map.make_private": ("Private", "Privé"),
+    "gui.brasshaven.map.delete": ("Delete", "Supprimer"),
+    "gui.brasshaven.map.add_waypoint": ("Add a waypoint here", "Poser un repère ici"),
+    "gui.brasshaven.map.ping": ("Ping this spot for everyone", "Signaler cet endroit à tous"),
+    "gui.brasshaven.map.copy": ("Copy the coordinates", "Copier les coordonnées"),
+    "gui.brasshaven.map.name": ("Name", "Nom"),
+    "gui.brasshaven.map.default_name": ("Waypoint %s, %s", "Repère %s, %s"),
+    "gui.brasshaven.map.new_waypoint": ("New waypoint", "Nouveau repère"),
+    "gui.brasshaven.map.edit_waypoint": ("Edit waypoint", "Modifier le repère"),
+    "gui.brasshaven.map.share_toggle": ("Share with everyone", "Partager avec tout le monde"),
+    "gui.brasshaven.map.save": ("Save", "Enregistrer"),
+    "gui.brasshaven.map.view_3d": ("3D view", "Vue 3D"),
+    "gui.brasshaven.map.view3d_on": ("3D view (tilted relief): on", "Vue 3D (relief incliné) : activée"),
+    "gui.brasshaven.map.view3d_off": ("3D view (tilted relief): off", "Vue 3D (relief incliné) : désactivée"),
+    "gui.brasshaven.map.options": ("Options: minimap size and look, map relief", "Options : taille et aspect de la mini-carte, relief des cartes"),
+    "gui.brasshaven.map.options.title": ("Minimap", "Mini-carte"),
+    "gui.brasshaven.map.options.size.tip": ("Its exact size on screen, frame included: 48 to 160 px. The minimap shows "
                                            "live in its corner while this panel is open.",
                                            "Sa taille exacte à l'écran, cadre compris : de 48 à 160 px. La mini-carte "
                                            "s'affiche en direct dans son coin tant que ce panneau est ouvert."),
-    "gui.wayfarers.map.options.shown": ("Shown", "Affichée"),
-    "gui.wayfarers.map.options.presets": ("Presets", "Préréglages"),
-    "gui.wayfarers.map.options.rotate": ("Rotation", "Rotation"),
-    "gui.wayfarers.map.options.relief_title": ("Map relief", "Relief des cartes"),
-    "gui.wayfarers.map.options.relief": ("Relief", "Relief"),
-    "gui.wayfarers.map.options.relief.flat": ("Flat", "Plat"),
-    "gui.wayfarers.map.options.relief.flat.tip": ("Plain colours, no shading (water still darkens with depth).",
+    "gui.brasshaven.map.options.shown": ("Shown", "Affichée"),
+    "gui.brasshaven.map.options.presets": ("Presets", "Préréglages"),
+    "gui.brasshaven.map.options.rotate": ("Rotation", "Rotation"),
+    "gui.brasshaven.map.options.relief_title": ("Map relief", "Relief des cartes"),
+    "gui.brasshaven.map.options.relief": ("Relief", "Relief"),
+    "gui.brasshaven.map.options.relief.flat": ("Flat", "Plat"),
+    "gui.brasshaven.map.options.relief.flat.tip": ("Plain colours, no shading (water still darkens with depth).",
                                                   "Couleurs simples, sans ombrage (l'eau fonce toujours avec la profondeur)."),
-    "gui.wayfarers.map.options.relief.normal": ("Normal", "Normal"),
-    "gui.wayfarers.map.options.relief.normal.tip": ("Hills lit from the north-west, darker valleys, paler high ground.",
+    "gui.brasshaven.map.options.relief.normal": ("Normal", "Normal"),
+    "gui.brasshaven.map.options.relief.normal.tip": ("Hills lit from the north-west, darker valleys, paler high ground.",
                                                     "Collines éclairées du nord-ouest, vallées plus sombres, hauteurs plus pâles."),
-    "gui.wayfarers.map.options.relief.strong": ("Strong", "Fort"),
-    "gui.wayfarers.map.options.relief.strong.tip": ("The same, deeper: every slope stands out.",
+    "gui.brasshaven.map.options.relief.strong": ("Strong", "Fort"),
+    "gui.brasshaven.map.options.relief.strong.tip": ("The same, deeper: every slope stands out.",
                                                     "Pareil, en plus marqué : chaque pente ressort."),
-    "gui.wayfarers.map.options.contours": ("Contours", "Courbes"),
-    "gui.wayfarers.map.options.contours.tip": ("Contour lines every 16 blocks of height, a bolder one every 64.",
+    "gui.brasshaven.map.options.contours": ("Contours", "Courbes"),
+    "gui.brasshaven.map.options.contours.tip": ("Contour lines every 16 blocks of height, a bolder one every 64.",
                                                "Courbes de niveau tous les 16 blocs de hauteur, une plus marquée tous les 64."),
 }
 KINDS = {
@@ -110,13 +110,13 @@ def lang():
     en = {k: v[0] for k, v in UI.items()}
     fr = {k: v[1] for k, v in UI.items()}
     for k, (le, lf, ce, cf) in KINDS.items():
-        en[f"gui.wayfarers.map.kind.{k}"], fr[f"gui.wayfarers.map.kind.{k}"] = le, lf
-        en[f"gui.wayfarers.map.one.{k}"], fr[f"gui.wayfarers.map.one.{k}"] = ce, cf
+        en[f"gui.brasshaven.map.kind.{k}"], fr[f"gui.brasshaven.map.kind.{k}"] = le, lf
+        en[f"gui.brasshaven.map.one.{k}"], fr[f"gui.brasshaven.map.one.{k}"] = ce, cf
     return en, fr
 
 
 # ------------------------------------------------------------------ sprites
-# Map diameters inside the 6 px frame for the presets of WayfarersClientConfig.MinimapSize (56, 68, 96 and 128 px on
+# Map diameters inside the 6 px frame for the presets of BrasshavenClientConfig.MinimapSize (56, 68, 96 and 128 px on
 # screen); the slider allows any outer size from 48 to 160 px in steps of 4. The round frame is not a sprite: the game
 # draws it for the exact size (MapFrames.java), round_frame() below is the same drawing for the mockups.
 MINIMAP_SIZES = (44, 56, 84, 116)
@@ -1055,7 +1055,7 @@ def _mock_options(g, world, Image, li=1):
     outer = 96
     draw_minimap(g, m, world, 4, 4, outer - BORDER * 2, coords=("212, 71, -148", "Plaines"))
     # the panel, on the other side
-    k, o = "gui.wayfarers.settings.", "gui.wayfarers.map.options."
+    k, o = "gui.brasshaven.settings.", "gui.brasshaven.map.options."
 
     def tr(key):
         if key in content.MESSAGES:

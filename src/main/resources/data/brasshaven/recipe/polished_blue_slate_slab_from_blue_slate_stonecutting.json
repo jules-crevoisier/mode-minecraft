@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "brasshaven:blue_slate",
+  "result": {
+    "id": "brasshaven:polished_blue_slate_slab",
+    "count": 2
+  }
+}

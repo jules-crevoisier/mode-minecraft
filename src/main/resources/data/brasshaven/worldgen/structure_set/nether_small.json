@@ -1,0 +1,28 @@
+{
+  "structures": [
+    {
+      "structure": "brasshaven:chain_bridge",
+      "weight": 2
+    },
+    {
+      "structure": "brasshaven:soul_tower",
+      "weight": 2
+    }
+  ],
+  "placement": {
+    "type": "brasshaven:curated_spread",
+    "salt": 266248685,
+    "spacing": 30,
+    "separation": 10,
+    "avoid": [
+      {
+        "set": "brasshaven:nether_large",
+        "chunks": 5
+      },
+      {
+        "set": "minecraft:nether_complexes",
+        "chunks": 3
+      }
+    ]
+  }
+}

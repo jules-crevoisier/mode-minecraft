@@ -1,0 +1,33 @@
+{
+  "display": {
+    "icon": {
+      "id": "brasshaven:sorting_chest"
+    },
+    "title": {
+      "translate": "advancements.brasshaven.first_steps.sorting_chest.title"
+    },
+    "description": {
+      "translate": "advancements.brasshaven.first_steps.sorting_chest.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "brasshaven:sorting_chest"
+          }
+        ]
+      }
+    }
+  },
+  "parent": "brasshaven:first_steps/map_fragment",
+  "rewards": {
+    "experience": 20
+  }
+}

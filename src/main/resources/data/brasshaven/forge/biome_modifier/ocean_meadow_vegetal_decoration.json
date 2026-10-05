@@ -1,0 +1,8 @@
+{
+  "type": "forge:add_features",
+  "biomes": "#brasshaven:ocean/meadow",
+  "features": [
+    "brasshaven:ocean_seagrass_meadow"
+  ],
+  "step": "vegetal_decoration"
+}

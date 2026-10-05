@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "top": "brasshaven:block/machine_top",
+    "front": "brasshaven:block/redstone_timer_front",
+    "side": "brasshaven:block/machine_side"
+  }
+}

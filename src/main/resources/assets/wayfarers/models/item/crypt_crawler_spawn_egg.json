@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "wayfarers:item/crypt_crawler_spawn_egg"
-  }
-}

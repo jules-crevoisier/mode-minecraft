@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "brasshaven:marble_bricks",
+  "result": {
+    "id": "brasshaven:chiseled_marble",
+    "count": 1
+  }
+}

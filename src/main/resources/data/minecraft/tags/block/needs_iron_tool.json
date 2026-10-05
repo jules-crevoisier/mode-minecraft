@@ -1,14 +1,14 @@
 {
   "replace": false,
   "values": [
-    "wayfarers:lithite_ore",
-    "wayfarers:deepslate_lithite_ore",
-    "wayfarers:deepslate_mithril_ore",
-    "wayfarers:mithril_block",
-    "wayfarers:raw_mithril_block",
-    "wayfarers:nether_orichalcum_ore",
-    "wayfarers:aether_ore",
-    "wayfarers:deepslate_aether_ore",
-    "wayfarers:aether_block"
+    "brasshaven:lithite_ore",
+    "brasshaven:deepslate_lithite_ore",
+    "brasshaven:deepslate_mithril_ore",
+    "brasshaven:mithril_block",
+    "brasshaven:raw_mithril_block",
+    "brasshaven:nether_orichalcum_ore",
+    "brasshaven:aether_ore",
+    "brasshaven:deepslate_aether_ore",
+    "brasshaven:aether_block"
   ]
 }

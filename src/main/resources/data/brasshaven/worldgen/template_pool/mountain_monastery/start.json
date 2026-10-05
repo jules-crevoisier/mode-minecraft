@@ -1,0 +1,153 @@
+{
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "brasshaven:chunked_template",
+        "size": [
+          81,
+          107,
+          73
+        ],
+        "cells": [
+          {
+            "location": "brasshaven:mountain_monastery/monastery/x0_z0",
+            "offset": [
+              0,
+              25,
+              0
+            ],
+            "size": [
+              27,
+              58,
+              24
+            ],
+            "blocks": 8503
+          },
+          {
+            "location": "brasshaven:mountain_monastery/monastery/x0_z1",
+            "offset": [
+              0,
+              0,
+              24
+            ],
+            "size": [
+              27,
+              80,
+              25
+            ],
+            "blocks": 19524
+          },
+          {
+            "location": "brasshaven:mountain_monastery/monastery/x0_z2",
+            "offset": [
+              0,
+              0,
+              49
+            ],
+            "size": [
+              27,
+              77,
+              24
+            ],
+            "blocks": 7916
+          },
+          {
+            "location": "brasshaven:mountain_monastery/monastery/x1_z0",
+            "offset": [
+              27,
+              19,
+              0
+            ],
+            "size": [
+              27,
+              46,
+              24
+            ],
+            "blocks": 12404
+          },
+          {
+            "location": "brasshaven:mountain_monastery/monastery/x1_z1",
+            "offset": [
+              27,
+              0,
+              24
+            ],
+            "size": [
+              27,
+              107,
+              25
+            ],
+            "blocks": 24688
+          },
+          {
+            "location": "brasshaven:mountain_monastery/monastery/x1_z2",
+            "offset": [
+              27,
+              0,
+              49
+            ],
+            "size": [
+              27,
+              93,
+              24
+            ],
+            "blocks": 19586
+          },
+          {
+            "location": "brasshaven:mountain_monastery/monastery/x2_z0",
+            "offset": [
+              54,
+              20,
+              0
+            ],
+            "size": [
+              27,
+              39,
+              24
+            ],
+            "blocks": 10710
+          },
+          {
+            "location": "brasshaven:mountain_monastery/monastery/x2_z1",
+            "offset": [
+              54,
+              0,
+              24
+            ],
+            "size": [
+              27,
+              58,
+              25
+            ],
+            "blocks": 13600
+          },
+          {
+            "location": "brasshaven:mountain_monastery/monastery/x2_z2",
+            "offset": [
+              54,
+              0,
+              49
+            ],
+            "size": [
+              27,
+              44,
+              24
+            ],
+            "blocks": 7361
+          }
+        ],
+        "projection": "rigid",
+        "processors": "brasshaven:aging",
+        "ground_level_delta": 32,
+        "footprint": [
+          1,
+          1,
+          79,
+          72
+        ]
+      }
+    }
+  ]
+}

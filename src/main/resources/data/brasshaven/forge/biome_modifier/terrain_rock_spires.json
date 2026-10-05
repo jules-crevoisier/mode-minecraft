@@ -1,0 +1,12 @@
+{
+  "type": "brasshaven:toggled_features",
+  "toggle": "rockSpires",
+  "biomes": [
+    "minecraft:stony_peaks",
+    "minecraft:windswept_hills",
+    "minecraft:windswept_gravelly_hills",
+    "minecraft:windswept_forest"
+  ],
+  "features": "brasshaven:world/rock_spires",
+  "step": "surface_structures"
+}

@@ -1,0 +1,32 @@
+{
+  "structures": [
+    {
+      "structure": "brasshaven:basalt_fortress",
+      "weight": 2
+    },
+    {
+      "structure": "brasshaven:piglin_sanctuary",
+      "weight": 2
+    },
+    {
+      "structure": "brasshaven:piglin_market",
+      "weight": 2
+    },
+    {
+      "structure": "brasshaven:lava_foundry",
+      "weight": 2
+    }
+  ],
+  "placement": {
+    "type": "brasshaven:curated_spread",
+    "salt": 193826633,
+    "spacing": 36,
+    "separation": 12,
+    "avoid": [
+      {
+        "set": "minecraft:nether_complexes",
+        "chunks": 4
+      }
+    ]
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "structures": [
+    {
+      "structure": "brasshaven:ruined_watchtower",
+      "weight": 3
+    },
+    {
+      "structure": "brasshaven:rune_circle",
+      "weight": 2
+    },
+    {
+      "structure": "brasshaven:bandit_camp",
+      "weight": 2
+    },
+    {
+      "structure": "brasshaven:giant_tree",
+      "weight": 2
+    },
+    {
+      "structure": "brasshaven:witch_huts",
+      "weight": 2
+    },
+    {
+      "structure": "brasshaven:desert_oasis",
+      "weight": 2
+    }
+  ],
+  "placement": {
+    "type": "brasshaven:curated_spread",
+    "salt": 133627041,
+    "spacing": 40,
+    "separation": 16,
+    "avoid": [
+      {
+        "set": "brasshaven:wonders",
+        "chunks": 10
+      },
+      {
+        "set": "minecraft:villages",
+        "chunks": 4
+      },
+      {
+        "set": "brasshaven:landmarks",
+        "chunks": 6
+      },
+      {
+        "set": "brasshaven:dungeons",
+        "chunks": 5
+      },
+      {
+        "set": "brasshaven:coast",
+        "chunks": 3
+      }
+    ]
+  }
+}

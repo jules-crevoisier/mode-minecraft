@@ -1,0 +1,12 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": "#brasshaven:ocean/whales",
+  "spawners": [
+    {
+      "type": "brasshaven:whale",
+      "weight": 1,
+      "minCount": 1,
+      "maxCount": 1
+    }
+  ]
+}

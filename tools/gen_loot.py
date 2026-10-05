@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate chest loot tables for every Wayfarers structure.
+"""Generate chest loot tables for every Brasshaven structure.
 
 Each table = shared tier pools (supplies / explorer gear / treasure) + a themed pool.
 Mod items (progression materials) are added once the Java side registers them.
@@ -12,7 +12,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from wf.parts import USE_MOD_BLOCKS  # noqa: E402  (same switch for blocks and items)
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-OUT = os.path.join(ROOT, "src", "main", "resources", "data", "wayfarers", "loot_table", "chests")
+OUT = os.path.join(ROOT, "src", "main", "resources", "data", "brasshaven", "loot_table", "chests")
 
 
 def item(name, weight=10, count=(1, 1), enchant=None):
@@ -80,39 +80,39 @@ THEMES = {
               item("brewing_stand", 3), item("glass_bottle", 10, (3, 8)), item("phantom_membrane", 5, (1, 3))],
     "forest": [item("apple", 20, (2, 6)), item("oak_sapling", 10, (2, 4)), item("dark_oak_sapling", 8, (2, 4)),
                item("honeycomb", 10, (2, 6)), item("mushroom_stew", 5), item("bow", 8, enchant="random"),
-               item("golden_apple", 4), item("wayfarers:glowwood_sapling", 6, (1, 2))],
+               item("golden_apple", 4), item("brasshaven:glowwood_sapling", 6, (1, 2))],
     "sky": [item("feather", 20, (6, 16)), item("phantom_membrane", 10, (2, 4)), item("amethyst_shard", 15, (4, 10)),
             item("elytra", 1), item("firework_rocket", 15, (8, 16)), item("diamond", 6, (1, 3))],
     "mine": [item("iron_ingot", 20, (4, 10)), item("raw_gold", 12, (3, 8)), item("redstone", 15, (6, 16)),
              item("lapis_lazuli", 12, (4, 10)), item("diamond", 6, (1, 3)), item("iron_pickaxe", 8, enchant=(10, 20)),
              item("tnt", 5, (1, 3)), item("rail", 10, (8, 16)), item("powered_rail", 5, (2, 6))],
-    "clockwork": [item("wayfarers:brass_ingot", 20, (3, 9)), item("wayfarers:zinc_ingot", 12, (2, 6)),
-                  item("wayfarers:mithril_ingot", 5, (1, 3)), item("wayfarers:aether_crystal", 5, (1, 3)),
-                  item("wayfarers:redstone_timer", 6), item("wayfarers:wireless_transmitter", 3),
-                  item("wayfarers:wireless_receiver", 3), item("wayfarers:auto_harvester", 2),
-                  item("wayfarers:steam_cane", 2), item("clock", 8), item("redstone", 14, (4, 12)),
-                  item("copper_ingot", 14, (4, 12)), item("spyglass", 4), item("wayfarers:rustwood_sapling", 5, (1, 2))],
-    "foundry": [item("wayfarers:brass_ingot", 20, (4, 10)), item("wayfarers:zinc_ingot", 14, (3, 8)),
-                item("wayfarers:raw_zinc", 10, (3, 9)), item("iron_ingot", 16, (4, 12)), item("gold_ingot", 8, (2, 6)),
-                item("raw_iron", 10, (4, 10)), item("coal", 12, (6, 16)), item("wayfarers:mithril_ingot", 4, (1, 3)),
-                item("wayfarers:brass_pickaxe", 5, enchant="random"), item("wayfarers:brass_axe", 4, enchant="random"),
-                item("wayfarers:brass_sword", 4, enchant="random"), item("wayfarers:brass_helmet", 3),
-                item("wayfarers:mithril_pickaxe", 1, enchant=(15, 25)), item("anvil", 3), item("blast_furnace", 3),
+    "clockwork": [item("brasshaven:brass_ingot", 20, (3, 9)), item("brasshaven:zinc_ingot", 12, (2, 6)),
+                  item("brasshaven:mithril_ingot", 5, (1, 3)), item("brasshaven:aether_crystal", 5, (1, 3)),
+                  item("brasshaven:redstone_timer", 6), item("brasshaven:wireless_transmitter", 3),
+                  item("brasshaven:wireless_receiver", 3), item("brasshaven:auto_harvester", 2),
+                  item("brasshaven:steam_cane", 2), item("clock", 8), item("redstone", 14, (4, 12)),
+                  item("copper_ingot", 14, (4, 12)), item("spyglass", 4), item("brasshaven:rustwood_sapling", 5, (1, 2))],
+    "foundry": [item("brasshaven:brass_ingot", 20, (4, 10)), item("brasshaven:zinc_ingot", 14, (3, 8)),
+                item("brasshaven:raw_zinc", 10, (3, 9)), item("iron_ingot", 16, (4, 12)), item("gold_ingot", 8, (2, 6)),
+                item("raw_iron", 10, (4, 10)), item("coal", 12, (6, 16)), item("brasshaven:mithril_ingot", 4, (1, 3)),
+                item("brasshaven:brass_pickaxe", 5, enchant="random"), item("brasshaven:brass_axe", 4, enchant="random"),
+                item("brasshaven:brass_sword", 4, enchant="random"), item("brasshaven:brass_helmet", 3),
+                item("brasshaven:mithril_pickaxe", 1, enchant=(15, 25)), item("anvil", 3), item("blast_furnace", 3),
                 item("lava_bucket", 4), item("magma_cream", 6, (2, 5)), item("fire_charge", 6, (2, 6)),
-                item("netherite_scrap", 1), item("wayfarers:rustwood_sapling", 5, (1, 2))],
-    "aether": [item("wayfarers:aether_crystal", 16, (1, 4)), item("wayfarers:arcane_cloth", 10, (1, 3)),
+                item("netherite_scrap", 1), item("brasshaven:rustwood_sapling", 5, (1, 2))],
+    "aether": [item("brasshaven:aether_crystal", 16, (1, 4)), item("brasshaven:arcane_cloth", 10, (1, 3)),
                item("amethyst_shard", 14, (3, 9)), item("lapis_lazuli", 12, (4, 12)), item("glowstone_dust", 10, (3, 9)),
                item("redstone", 10, (4, 12)), item("copper_ingot", 10, (4, 10)), item("lightning_rod", 6, (1, 3)),
                item("end_rod", 6, (2, 6)), item("spyglass", 6), item("clock", 5), item("compass", 5),
                item("experience_bottle", 10, (3, 8)), item("book", 8, enchant=(15, 30)),
-               item("wayfarers:light_staff", 2), item("wayfarers:storm_staff", 1), item("wayfarers:thunder_staff", 1),
-               item("wayfarers:levitation_wand", 2), item("wayfarers:mana_amulet", 2), item("wayfarers:arcane_ring", 2)],
-    "cathedral": [item("amethyst_shard", 20, (4, 12)), item("wayfarers:aether_crystal", 8, (1, 3)),
+               item("brasshaven:light_staff", 2), item("brasshaven:storm_staff", 1), item("brasshaven:thunder_staff", 1),
+               item("brasshaven:levitation_wand", 2), item("brasshaven:mana_amulet", 2), item("brasshaven:arcane_ring", 2)],
+    "cathedral": [item("amethyst_shard", 20, (4, 12)), item("brasshaven:aether_crystal", 8, (1, 3)),
                   item("quartz", 12, (6, 16)), item("candle", 10, (2, 6)), item("lapis_lazuli", 12, (4, 12)),
                   item("book", 14, enchant=(20, 30)), item("experience_bottle", 12, (4, 10)),
                   item("echo_shard", 3, (1, 2)), item("golden_apple", 5), item("diamond", 5, (1, 3)),
                   item("amethyst_block", 6, (2, 6)), item("tinted_glass", 6, (2, 6)), item("totem_of_undying", 1),
-                  item("wayfarers:arcane_ring", 2), item("wayfarers:light_staff", 2)],
+                  item("brasshaven:arcane_ring", 2), item("brasshaven:light_staff", 2)],
     "dwarf": [item("iron_block", 10, (1, 3)), item("gold_block", 8, (1, 2)), item("diamond", 8, (2, 4)),
               item("anvil", 3), item("diamond_pickaxe", 4, enchant=(20, 30)), item("netherite_scrap", 2),
               item("smithing_table", 4), item("rib_armor_trim_smithing_template", 1)],
@@ -156,43 +156,43 @@ THEMES = {
                 item("diamond", 10, (2, 5)), item("diamond_chestplate", 3, enchant=(20, 30)),
                 item("enchanted_golden_apple", 2), item("tide_armor_trim_smithing_template", 3)],
     # batch 2 wonders
-    "dwarf_city": [item("wayfarers:mithril_ingot", 18, (2, 6)), item("wayfarers:raw_mithril", 12, (3, 8)),
-                   item("wayfarers:mithril_sword", 4, enchant=(15, 25)), item("wayfarers:mithril_axe", 4, enchant=(15, 25)),
-                   item("wayfarers:mithril_pickaxe", 4, enchant=(15, 25)), item("wayfarers:mithril_helmet", 3, enchant=(10, 20)),
-                   item("wayfarers:mithril_chestplate", 2, enchant=(10, 20)), item("diamond", 10, (1, 4)),
+    "dwarf_city": [item("brasshaven:mithril_ingot", 18, (2, 6)), item("brasshaven:raw_mithril", 12, (3, 8)),
+                   item("brasshaven:mithril_sword", 4, enchant=(15, 25)), item("brasshaven:mithril_axe", 4, enchant=(15, 25)),
+                   item("brasshaven:mithril_pickaxe", 4, enchant=(15, 25)), item("brasshaven:mithril_helmet", 3, enchant=(10, 20)),
+                   item("brasshaven:mithril_chestplate", 2, enchant=(10, 20)), item("diamond", 10, (1, 4)),
                    item("emerald", 12, (2, 8)), item("amethyst_shard", 10, (4, 10)), item("gold_ingot", 14, (3, 9)),
-                   item("wayfarers:excavator_pickaxe", 1), item("wayfarers:telluric_hammer", 1)],
-    "sylvan": [item("wayfarers:healing_staff", 3), item("wayfarers:light_staff", 3), item("wayfarers:rootmother_staff", 1),
-               item("wayfarers:mana_amulet", 3), item("wayfarers:arcane_ring", 2), item("wayfarers:arcane_cloth", 10, (2, 5)),
+                   item("brasshaven:excavator_pickaxe", 1), item("brasshaven:telluric_hammer", 1)],
+    "sylvan": [item("brasshaven:healing_staff", 3), item("brasshaven:light_staff", 3), item("brasshaven:rootmother_staff", 1),
+               item("brasshaven:mana_amulet", 3), item("brasshaven:arcane_ring", 2), item("brasshaven:arcane_cloth", 10, (2, 5)),
                item("golden_apple", 8, (1, 2)), item("glow_berries", 14, (4, 12)), item("experience_bottle", 12, (3, 8)),
                item("book", 10, enchant=(15, 30)), item("bow", 6, enchant=(20, 30)), item("totem_of_undying", 1),
                item("flowering_azalea", 8, (1, 3)), item("cherry_sapling", 6, (1, 3)),
-               item("wayfarers:glowwood_sapling", 8, (1, 3))],
-    "inventor": [item("wayfarers:brass_ingot", 18, (4, 12)), item("wayfarers:zinc_ingot", 12, (3, 8)),
-                 item("wayfarers:aether_crystal", 8, (1, 4)), item("wayfarers:steam_cane", 3), item("wayfarers:builder_wand", 3),
-                 item("wayfarers:redstone_timer", 6), item("wayfarers:block_breaker", 4), item("wayfarers:block_placer", 4),
-                 item("wayfarers:vacuum_hopper", 3), item("wayfarers:entity_detector", 3),
-                 item("wayfarers:wireless_transmitter", 3), item("wayfarers:magnet_ring", 2), item("redstone", 14, (6, 16)),
+               item("brasshaven:glowwood_sapling", 8, (1, 3))],
+    "inventor": [item("brasshaven:brass_ingot", 18, (4, 12)), item("brasshaven:zinc_ingot", 12, (3, 8)),
+                 item("brasshaven:aether_crystal", 8, (1, 4)), item("brasshaven:steam_cane", 3), item("brasshaven:builder_wand", 3),
+                 item("brasshaven:redstone_timer", 6), item("brasshaven:block_breaker", 4), item("brasshaven:block_placer", 4),
+                 item("brasshaven:vacuum_hopper", 3), item("brasshaven:entity_detector", 3),
+                 item("brasshaven:wireless_transmitter", 3), item("brasshaven:magnet_ring", 2), item("redstone", 14, (6, 16)),
                  item("comparator", 6, (1, 3)), item("observer", 6, (1, 3)), item("clock", 6), item("spyglass", 5)],
-    "sky_isles": [item("feather", 14, (4, 12)), item("phantom_membrane", 8, (1, 4)), item("wayfarers:aether_crystal", 10, (1, 4)),
-                  item("wayfarers:levitation_wand", 2), item("elytra", 1), item("firework_rocket", 12, (6, 16)),
+    "sky_isles": [item("feather", 14, (4, 12)), item("phantom_membrane", 8, (1, 4)), item("brasshaven:aether_crystal", 10, (1, 4)),
+                  item("brasshaven:levitation_wand", 2), item("elytra", 1), item("firework_rocket", 12, (6, 16)),
                   item("amethyst_shard", 12, (4, 10)), item("ender_pearl", 8, (1, 3)), item("diamond", 6, (1, 3)),
-                  item("wayfarers:storm_staff", 1)],
+                  item("brasshaven:storm_staff", 1)],
     # living oceans: diving gear, sea treasures
-    "diving": [item("wayfarers:pearl", 18, (1, 3)), item("wayfarers:glow_jelly", 14, (2, 5)),
-               item("wayfarers:brass_ingot", 14, (2, 6)), item("copper_ingot", 12, (3, 8)),
+    "diving": [item("brasshaven:pearl", 18, (1, 3)), item("brasshaven:glow_jelly", 14, (2, 5)),
+               item("brasshaven:brass_ingot", 14, (2, 6)), item("copper_ingot", 12, (3, 8)),
                item("prismarine_crystals", 12, (2, 6)), item("nautilus_shell", 8, (1, 2)),
-               item("wayfarers:flippers", 3), item("wayfarers:diving_helmet", 2), item("turtle_helmet", 2),
+               item("brasshaven:flippers", 3), item("brasshaven:diving_helmet", 2), item("turtle_helmet", 2),
                item("compass", 6), item("spyglass", 5), item("clock", 5), item("heart_of_the_sea", 1),
-               item("wayfarers:pocket_watch", 2)],
+               item("brasshaven:pocket_watch", 2)],
 }
 
 # Progression materials from the Java side, by tier.
 MOD_ITEMS = {
-    "overworld": [item("wayfarers:map_fragment", 25, (1, 3)), item("wayfarers:structure_compass", 2)],
-    "deep": [item("wayfarers:lithite_shard", 25, (1, 3)), item("wayfarers:map_fragment", 10, (1, 2))],
-    "nether": [item("wayfarers:ancient_ember", 25, (1, 3)), item("wayfarers:lithite_shard", 8, (1, 2))],
-    "end": [item("wayfarers:void_shard", 25, (1, 3)), item("wayfarers:ancient_ember", 8, (1, 2))],
+    "overworld": [item("brasshaven:map_fragment", 25, (1, 3)), item("brasshaven:structure_compass", 2)],
+    "deep": [item("brasshaven:lithite_shard", 25, (1, 3)), item("brasshaven:map_fragment", 10, (1, 2))],
+    "nether": [item("brasshaven:ancient_ember", 25, (1, 3)), item("brasshaven:lithite_shard", 8, (1, 2))],
+    "end": [item("brasshaven:void_shard", 25, (1, 3)), item("brasshaven:ancient_ember", 8, (1, 2))],
 }
 
 # table -> (theme, supplies rolls, explorer rolls, treasure rolls, mod tier)
@@ -297,7 +297,7 @@ def table(name, spec):
         pools.append(pool(tre, TREASURE))
     if USE_MOD_BLOCKS:
         pools.append(pool((1, 2), MOD_ITEMS[tier]))
-    return {"type": "minecraft:chest", "pools": pools, "random_sequence": f"wayfarers:chests/{name}"}
+    return {"type": "minecraft:chest", "pools": pools, "random_sequence": f"brasshaven:chests/{name}"}
 
 
 def main():

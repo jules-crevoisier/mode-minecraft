@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "brasshaven:block/diamond_plate_slab"
+    },
+    "type=top": {
+      "model": "brasshaven:block/diamond_plate_slab_top"
+    },
+    "type=double": {
+      "model": "brasshaven:block/diamond_plate"
+    }
+  }
+}

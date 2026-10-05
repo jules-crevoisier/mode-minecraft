@@ -1,8 +1,0 @@
-{
-  "type": "minecraft:stonecutting",
-  "ingredient": "wayfarers:leather_padding",
-  "result": {
-    "id": "wayfarers:leather_padding_slab",
-    "count": 2
-  }
-}

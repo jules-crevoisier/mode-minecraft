@@ -1,13 +1,13 @@
 {
   "replace": false,
   "values": [
-    "wayfarers:glowwood_log",
-    "wayfarers:glowwood_wood",
-    "wayfarers:stripped_glowwood_log",
-    "wayfarers:stripped_glowwood_wood",
-    "wayfarers:rustwood_log",
-    "wayfarers:rustwood_wood",
-    "wayfarers:stripped_rustwood_log",
-    "wayfarers:stripped_rustwood_wood"
+    "brasshaven:glowwood_log",
+    "brasshaven:glowwood_wood",
+    "brasshaven:stripped_glowwood_log",
+    "brasshaven:stripped_glowwood_wood",
+    "brasshaven:rustwood_log",
+    "brasshaven:rustwood_wood",
+    "brasshaven:stripped_rustwood_log",
+    "brasshaven:stripped_rustwood_wood"
   ]
 }

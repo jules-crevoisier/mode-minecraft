@@ -1,8 +1,0 @@
-{
-  "type": "minecraft:stonecutting",
-  "ingredient": "wayfarers:guild_roof_tiles",
-  "result": {
-    "id": "wayfarers:guild_roof_tile_stairs",
-    "count": 1
-  }
-}

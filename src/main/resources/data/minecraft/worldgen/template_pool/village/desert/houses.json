@@ -312,8 +312,8 @@
       "weight": 5,
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:village/desert/inn",
-        "processors": "wayfarers:village",
+        "location": "brasshaven:village/desert/inn",
+        "processors": "brasshaven:village",
         "projection": "rigid"
       }
     },
@@ -321,8 +321,8 @@
       "weight": 6,
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:village/desert/guild_post",
-        "processors": "wayfarers:village",
+        "location": "brasshaven:village/desert/guild_post",
+        "processors": "brasshaven:village",
         "projection": "rigid"
       }
     },
@@ -330,8 +330,8 @@
       "weight": 4,
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:village/desert/workshop",
-        "processors": "wayfarers:village",
+        "location": "brasshaven:village/desert/workshop",
+        "processors": "brasshaven:village",
         "projection": "rigid"
       }
     },
@@ -339,8 +339,8 @@
       "weight": 3,
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:village/desert/watchtower",
-        "processors": "wayfarers:village",
+        "location": "brasshaven:village/desert/watchtower",
+        "processors": "brasshaven:village",
         "projection": "rigid"
       }
     },
@@ -348,8 +348,8 @@
       "weight": 4,
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:village/desert/market",
-        "processors": "wayfarers:village",
+        "location": "brasshaven:village/desert/market",
+        "processors": "brasshaven:village",
         "projection": "rigid"
       }
     },
@@ -357,8 +357,8 @@
       "weight": 4,
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:village/desert/orchard",
-        "processors": "wayfarers:village",
+        "location": "brasshaven:village/desert/orchard",
+        "processors": "brasshaven:village",
         "projection": "rigid"
       }
     },
@@ -366,8 +366,8 @@
       "weight": 5,
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:village/desert/cottage",
-        "processors": "wayfarers:village",
+        "location": "brasshaven:village/desert/cottage",
+        "processors": "brasshaven:village",
         "projection": "rigid"
       }
     },
@@ -375,8 +375,8 @@
       "weight": 3,
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:village/desert/manor",
-        "processors": "wayfarers:village",
+        "location": "brasshaven:village/desert/manor",
+        "processors": "brasshaven:village",
         "projection": "rigid"
       }
     },
@@ -384,8 +384,8 @@
       "weight": 3,
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:village/desert/well_corner",
-        "processors": "wayfarers:village",
+        "location": "brasshaven:village/desert/well_corner",
+        "processors": "brasshaven:village",
         "projection": "rigid"
       }
     }

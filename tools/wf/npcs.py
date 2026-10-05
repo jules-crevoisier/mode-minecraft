@@ -1,8 +1,8 @@
-"""Quest-giver NPCs (wayfarers:wayfarer_npc) and the contracts they hand out.
+"""Quest-giver NPCs (brasshaven:wayfarer_npc) and the contracts they hand out.
 
 One source of truth for:
   * tools/gen_quests.py   translations (roles, names, dialogue, quest titles and objectives) + the journal rewards
-  * tools/gen_java.py     com.wayfarers.generated.GeneratedNpcs (roles and quest definitions read by the server)
+  * tools/gen_java.py     com.brasshaven.generated.GeneratedNpcs (roles and quest definitions read by the server)
   * tools/wf/interior.py  quest_npc(): the template entity a structure places
   * tools/wf/mobs/wayfarer_npc.py   one texture variant per role (same order as ROLES)
   * guide / wiki texts
@@ -35,7 +35,7 @@ ROLE_ORDER = list(ROLES)
 # where each role lives (for the manual and the wiki)
 HOMES = {
     "guild_agent": (["guild_outpost"], "villages: the Guild Post and the plaza", "villages : le Relais de la Guilde et la place"),
-    "scholar": (["forgotten_library"], "villages: the Wayfarers' Inn", "villages : l'auberge des Voyageurs"),
+    "scholar": (["forgotten_library"], "villages: the Brasshaven' Inn", "villages : l'auberge des Voyageurs"),
     "tinkerer": (["clockwork_citadel"], "villages: the tinkerer's workshop", "villages : l'atelier du bricoleur"),
     "druid": (["giant_tree"], "", ""),
     "dwarf_elder": (["dwarven_city"], "", ""),
@@ -88,7 +88,7 @@ class Q:
                                                                     "deliver": "minecraft:paper"}[kind])
 
 
-W = "wayfarers:"
+W = "brasshaven:"
 QUESTS = [
     # ---------------------------------------------------------------- the Guild Agent (villages, guild outposts)
     Q("guild_provisions", "guild_agent", "fetch", "bread", 12,
@@ -240,49 +240,49 @@ PARCELS = {
 
 # GUI and message strings of the NPC screen and the contracts
 TEXT = {
-    "entity.wayfarers.wayfarer_npc": ("Wayfarer Quest Giver", "Donneur de contrats"),
-    "chapter.wayfarers.contracts": ("Contracts", "Contrats"),
-    "npc.wayfarers.display": ("%s, %s", "%s, %s"),
-    "gui.wayfarers.npc.contracts": ("Contracts", "Contrats"),
-    "gui.wayfarers.npc.accept": ("Accept", "Accepter"),
-    "gui.wayfarers.npc.turn_in": ("Turn in", "Rendre"),
-    "gui.wayfarers.npc.deliver": ("Hand over", "Remettre"),
-    "gui.wayfarers.npc.track": ("Track", "Suivre"),
-    "gui.wayfarers.npc.untrack": ("Stop tracking", "Ne plus suivre"),
-    "gui.wayfarers.npc.parcel": ("Ask for the parcel again", "Redemander le colis"),
-    "gui.wayfarers.npc.close": ("Goodbye", "Au revoir"),
-    "gui.wayfarers.npc.state.available": ("New", "Nouveau"),
-    "gui.wayfarers.npc.state.active": ("In progress", "En cours"),
-    "gui.wayfarers.npc.state.ready": ("Ready to turn in", "Prêt à rendre"),
-    "gui.wayfarers.npc.state.done": ("Completed", "Terminé"),
-    "gui.wayfarers.npc.state.locked": ("Later", "Plus tard"),
-    "gui.wayfarers.npc.state.delivery": ("Delivery for me", "Livraison pour moi"),
-    "gui.wayfarers.npc.progress": ("Progress: %s / %s", "Progression : %s / %s"),
-    "gui.wayfarers.npc.from": ("From: %s", "De : %s"),
-    "gui.wayfarers.npc.to": ("Deliver to: %s", "À livrer à : %s"),
-    "gui.wayfarers.npc.none": ("Nothing to offer right now.", "Rien à proposer pour l'instant."),
-    "gui.wayfarers.npc.after": ("First finish: %s", "Termine d'abord : %s"),
-    "gui.wayfarers.quests.contracts": ("Contracts", "Contrats"),
-    "gui.wayfarers.quests.contracts.empty": ("No contract yet. Talk to a Guild Agent, a Scholar, a Tinkerer, a Druid or a Dwarf Elder.",
+    "entity.brasshaven.wayfarer_npc": ("Wayfarer Quest Giver", "Donneur de contrats"),
+    "chapter.brasshaven.contracts": ("Contracts", "Contrats"),
+    "npc.brasshaven.display": ("%s, %s", "%s, %s"),
+    "gui.brasshaven.npc.contracts": ("Contracts", "Contrats"),
+    "gui.brasshaven.npc.accept": ("Accept", "Accepter"),
+    "gui.brasshaven.npc.turn_in": ("Turn in", "Rendre"),
+    "gui.brasshaven.npc.deliver": ("Hand over", "Remettre"),
+    "gui.brasshaven.npc.track": ("Track", "Suivre"),
+    "gui.brasshaven.npc.untrack": ("Stop tracking", "Ne plus suivre"),
+    "gui.brasshaven.npc.parcel": ("Ask for the parcel again", "Redemander le colis"),
+    "gui.brasshaven.npc.close": ("Goodbye", "Au revoir"),
+    "gui.brasshaven.npc.state.available": ("New", "Nouveau"),
+    "gui.brasshaven.npc.state.active": ("In progress", "En cours"),
+    "gui.brasshaven.npc.state.ready": ("Ready to turn in", "Prêt à rendre"),
+    "gui.brasshaven.npc.state.done": ("Completed", "Terminé"),
+    "gui.brasshaven.npc.state.locked": ("Later", "Plus tard"),
+    "gui.brasshaven.npc.state.delivery": ("Delivery for me", "Livraison pour moi"),
+    "gui.brasshaven.npc.progress": ("Progress: %s / %s", "Progression : %s / %s"),
+    "gui.brasshaven.npc.from": ("From: %s", "De : %s"),
+    "gui.brasshaven.npc.to": ("Deliver to: %s", "À livrer à : %s"),
+    "gui.brasshaven.npc.none": ("Nothing to offer right now.", "Rien à proposer pour l'instant."),
+    "gui.brasshaven.npc.after": ("First finish: %s", "Termine d'abord : %s"),
+    "gui.brasshaven.quests.contracts": ("Contracts", "Contrats"),
+    "gui.brasshaven.quests.contracts.empty": ("No contract yet. Talk to a Guild Agent, a Scholar, a Tinkerer, a Druid or a Dwarf Elder.",
                                              "Aucun contrat. Parle à un agent de la Guilde, une érudite, un bricoleur, une druidesse ou un ancien nain."),
-    "message.wayfarers.npc.accepted": ("Contract accepted: %s", "Contrat accepté : %s"),
-    "message.wayfarers.npc.completed": ("Contract completed: %s", "Contrat rempli : %s"),
-    "message.wayfarers.npc.progress": ("%s: %s / %s", "%s : %s / %s"),
-    "message.wayfarers.npc.explored": ("%s: done! Go back to the giver.", "%s : fait ! Retourne voir le commanditaire."),
-    "message.wayfarers.npc.missing": ("You do not have everything yet.", "Il te manque encore quelque chose."),
-    "message.wayfarers.npc.parcel": ("You received: %s", "Tu as reçu : %s"),
-    "message.wayfarers.npc.too_far": ("Too far away.", "Trop loin."),
-    "message.wayfarers.npc.removed": ("Removed %s NPC(s).", "%s PNJ retiré(s)."),
-    "message.wayfarers.npc.moved": ("%s moved here.", "%s a été déplacé ici."),
-    "message.wayfarers.npc.spawned": ("%s placed here.", "%s placé ici."),
-    "message.wayfarers.npc.none_near": ("No NPC within 8 blocks.", "Aucun PNJ à moins de 8 blocs."),
-    "message.wayfarers.npc.reset": ("Contracts of %s reset.", "Contrats de %s remis à zéro."),
-    "message.wayfarers.npc.parcel.lore": ("Deliver to: %s", "À livrer à : %s"),
+    "message.brasshaven.npc.accepted": ("Contract accepted: %s", "Contrat accepté : %s"),
+    "message.brasshaven.npc.completed": ("Contract completed: %s", "Contrat rempli : %s"),
+    "message.brasshaven.npc.progress": ("%s: %s / %s", "%s : %s / %s"),
+    "message.brasshaven.npc.explored": ("%s: done! Go back to the giver.", "%s : fait ! Retourne voir le commanditaire."),
+    "message.brasshaven.npc.missing": ("You do not have everything yet.", "Il te manque encore quelque chose."),
+    "message.brasshaven.npc.parcel": ("You received: %s", "Tu as reçu : %s"),
+    "message.brasshaven.npc.too_far": ("Too far away.", "Trop loin."),
+    "message.brasshaven.npc.removed": ("Removed %s NPC(s).", "%s PNJ retiré(s)."),
+    "message.brasshaven.npc.moved": ("%s moved here.", "%s a été déplacé ici."),
+    "message.brasshaven.npc.spawned": ("%s placed here.", "%s placé ici."),
+    "message.brasshaven.npc.none_near": ("No NPC within 8 blocks.", "Aucun PNJ à moins de 8 blocs."),
+    "message.brasshaven.npc.reset": ("Contracts of %s reset.", "Contrats de %s remis à zéro."),
+    "message.brasshaven.npc.parcel.lore": ("Deliver to: %s", "À livrer à : %s"),
 }
 
 
 def title_key(qid):
-    return f"npcquest.wayfarers.{qid}.title"
+    return f"npcquest.brasshaven.{qid}.title"
 
 
 def lang():
@@ -291,17 +291,17 @@ def lang():
     for k, (e, f) in TEXT.items():
         en[k], fr[k] = e, f
     for r, (e, f, names) in ROLES.items():
-        en[f"npc.wayfarers.role.{r}"], fr[f"npc.wayfarers.role.{r}"] = e, f
+        en[f"npc.brasshaven.role.{r}"], fr[f"npc.brasshaven.role.{r}"] = e, f
         te, tf, ne, nf = TALK[r]
-        en[f"npc.wayfarers.greet.{r}"], fr[f"npc.wayfarers.greet.{r}"] = te, tf
-        en[f"npc.wayfarers.idle.{r}"], fr[f"npc.wayfarers.idle.{r}"] = ne, nf
+        en[f"npc.brasshaven.greet.{r}"], fr[f"npc.brasshaven.greet.{r}"] = te, tf
+        en[f"npc.brasshaven.idle.{r}"], fr[f"npc.brasshaven.idle.{r}"] = ne, nf
     for q in QUESTS:
-        base = f"npcquest.wayfarers.{q.id}"
+        base = f"npcquest.brasshaven.{q.id}"
         en[base + ".title"], fr[base + ".title"] = q.title
         en[base + ".description"], fr[base + ".description"] = q.desc
         en[base + ".story"], fr[base + ".story"] = q.story
     for qid, (e, f) in PARCELS.items():
-        en[f"npcquest.wayfarers.{qid}.parcel"], fr[f"npcquest.wayfarers.{qid}.parcel"] = e, f
+        en[f"npcquest.brasshaven.{qid}.parcel"], fr[f"npcquest.brasshaven.{qid}.parcel"] = e, f
     return en, fr
 
 
@@ -326,7 +326,7 @@ def check():
 
 
 def java():
-    """Source of com.wayfarers.generated.GeneratedNpcs."""
+    """Source of com.brasshaven.generated.GeneratedNpcs."""
     check()
     roles = ", ".join(f'"{r}"' for r in ROLE_ORDER)
     names = ",\n            ".join("List.of(" + ", ".join(f'"{n}"' for n in ROLES[r][2]) + ")" for r in ROLE_ORDER)
@@ -335,7 +335,7 @@ def java():
         rewards = ", ".join(f'new Reward("{i}", {c})' for i, c in q.rewards)
         qs.append(f'            new Quest("{q.id}", "{q.giver}", Kind.{q.kind.upper()}, "{q.target or ""}", {q.count}, '
                   f'"{q.to or ""}", "{q.after or ""}", "{q.icon}", {q.xp}, List.of({rewards}))')
-    return f"""package com.wayfarers.generated;
+    return f"""package com.brasshaven.generated;
 
 import java.util.List;
 

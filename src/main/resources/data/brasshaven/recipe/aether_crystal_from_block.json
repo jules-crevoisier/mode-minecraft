@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "brasshaven:aether_block"
+  ],
+  "result": {
+    "id": "brasshaven:aether_crystal",
+    "count": 9
+  }
+}

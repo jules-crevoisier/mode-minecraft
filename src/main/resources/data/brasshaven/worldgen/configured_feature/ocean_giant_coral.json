@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:template",
+  "config": {
+    "templates": [
+      {
+        "data": {
+          "id": "brasshaven:ocean/coral_tower"
+        },
+        "weight": 1
+      },
+      {
+        "data": {
+          "id": "brasshaven:ocean/coral_fan"
+        },
+        "weight": 1
+      },
+      {
+        "data": {
+          "id": "brasshaven:ocean/coral_arch"
+        },
+        "weight": 1
+      },
+      {
+        "data": {
+          "id": "brasshaven:ocean/coral_brain"
+        },
+        "weight": 1
+      }
+    ]
+  }
+}

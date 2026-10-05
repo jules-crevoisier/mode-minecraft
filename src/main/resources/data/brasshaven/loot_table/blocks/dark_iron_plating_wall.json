@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "brasshaven:dark_iron_plating_wall"
+        }
+      ]
+    }
+  ],
+  "random_sequence": "brasshaven:blocks/dark_iron_plating_wall"
+}

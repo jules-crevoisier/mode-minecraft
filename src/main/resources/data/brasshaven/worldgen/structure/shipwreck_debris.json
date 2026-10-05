@@ -1,0 +1,32 @@
+{
+  "type": "brasshaven:fitted_jigsaw",
+  "biomes": "#brasshaven:has_structure/shipwreck_debris",
+  "step": "surface_structures",
+  "spawn_overrides": {},
+  "terrain_adaptation": "none",
+  "start_pool": "brasshaven:shipwreck_debris/start",
+  "size": 1,
+  "max_distance_from_center": 80,
+  "use_expansion_hack": false,
+  "start_height": {
+    "absolute": 0
+  },
+  "project_start_to_heightmap": "OCEAN_FLOOR_WG",
+  "fit": {
+    "mode": "seabed",
+    "spread": 4,
+    "slope": 0.7,
+    "wet": 0.6,
+    "min_wet": 0.0,
+    "land": 0.5,
+    "drop": 10,
+    "depth": 2,
+    "clearance": 0,
+    "cover": 0,
+    "lift": 0,
+    "open": 0.0,
+    "ground": 4,
+    "pond": 0.0,
+    "theme": "sand"
+  }
+}

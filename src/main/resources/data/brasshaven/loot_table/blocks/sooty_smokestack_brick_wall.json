@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "brasshaven:sooty_smokestack_brick_wall"
+        }
+      ]
+    }
+  ],
+  "random_sequence": "brasshaven:blocks/sooty_smokestack_brick_wall"
+}

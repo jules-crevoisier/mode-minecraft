@@ -1,0 +1,12 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": "#brasshaven:ocean/manta",
+  "spawners": [
+    {
+      "type": "brasshaven:manta_ray",
+      "weight": 2,
+      "minCount": 1,
+      "maxCount": 1
+    }
+  ]
+}

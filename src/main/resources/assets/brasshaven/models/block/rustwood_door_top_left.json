@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/door_top_left",
+  "textures": {
+    "top": "brasshaven:block/rustwood_door_top",
+    "bottom": "brasshaven:block/rustwood_door_bottom"
+  }
+}

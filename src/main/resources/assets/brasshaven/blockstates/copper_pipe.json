@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=y": {
+      "model": "brasshaven:block/copper_pipe"
+    },
+    "axis=z": {
+      "model": "brasshaven:block/copper_pipe",
+      "x": 90
+    },
+    "axis=x": {
+      "model": "brasshaven:block/copper_pipe",
+      "x": 90,
+      "y": 90
+    }
+  }
+}

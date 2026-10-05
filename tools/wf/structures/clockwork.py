@@ -18,7 +18,7 @@ from ..defs import Piece, StructureDef, register
 from ..parts import LOOT
 from . import lair_grand_clockmaker
 
-W = "wayfarers:"
+W = "brasshaven:"
 BRASS, COPPER, VERD, IRON = W + "brass_plating", W + "copper_plating", W + "verdigris_plating", W + "dark_iron_plating"
 TREAD, GEAR, PIPES, GAUGE = W + "diamond_plate", W + "gear_panel", W + "copper_pipes", W + "pressure_gauge"
 EDISON, AETHER, MAHOGANY, LEATHER, SMOKE = (W + "edison_lamp", W + "aether_conduit", W + "mahogany_panelling",

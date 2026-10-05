@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    " N ",
+    "BRB",
+    " B "
+  ],
+  "key": {
+    "N": "brasshaven:brass_nugget",
+    "B": "brasshaven:brass_ingot",
+    "R": "minecraft:redstone"
+  },
+  "result": {
+    "id": "brasshaven:pocket_watch",
+    "count": 1
+  }
+}

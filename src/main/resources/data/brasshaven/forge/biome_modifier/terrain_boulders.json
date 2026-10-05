@@ -1,0 +1,16 @@
+{
+  "type": "brasshaven:toggled_features",
+  "toggle": "boulders",
+  "biomes": [
+    "minecraft:plains",
+    "minecraft:sunflower_plains",
+    "minecraft:meadow",
+    "minecraft:forest",
+    "minecraft:birch_forest",
+    "minecraft:taiga",
+    "minecraft:windswept_hills",
+    "minecraft:windswept_forest"
+  ],
+  "features": "brasshaven:world/boulders",
+  "step": "local_modifications"
+}

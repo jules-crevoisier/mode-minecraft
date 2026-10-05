@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab_top",
+  "textures": {
+    "bottom": "brasshaven:block/polished_guild_stone",
+    "top": "brasshaven:block/polished_guild_stone",
+    "side": "brasshaven:block/polished_guild_stone"
+  }
+}

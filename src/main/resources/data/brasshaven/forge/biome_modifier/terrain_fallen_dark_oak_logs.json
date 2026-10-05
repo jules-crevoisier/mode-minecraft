@@ -1,0 +1,9 @@
+{
+  "type": "brasshaven:toggled_features",
+  "toggle": "fallenLogs",
+  "biomes": [
+    "minecraft:dark_forest"
+  ],
+  "features": "brasshaven:world/fallen_dark_oak_logs",
+  "step": "vegetal_decoration"
+}

@@ -1,8 +1,0 @@
-{
-  "type": "minecraft:stonecutting",
-  "ingredient": "wayfarers:dark_iron_bricks",
-  "result": {
-    "id": "wayfarers:dark_iron_brick_wall",
-    "count": 1
-  }
-}

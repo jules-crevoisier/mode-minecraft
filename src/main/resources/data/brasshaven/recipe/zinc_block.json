@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "XXX",
+    "XXX",
+    "XXX"
+  ],
+  "key": {
+    "X": "brasshaven:zinc_ingot"
+  },
+  "result": {
+    "id": "brasshaven:zinc_block",
+    "count": 1
+  }
+}

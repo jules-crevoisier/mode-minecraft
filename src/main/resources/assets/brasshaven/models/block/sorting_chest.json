@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "brasshaven:block/sorting_chest_top",
+    "side": "brasshaven:block/sorting_chest_side"
+  }
+}

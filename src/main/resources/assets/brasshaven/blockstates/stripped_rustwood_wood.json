@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=y": {
+      "model": "brasshaven:block/stripped_rustwood_wood"
+    },
+    "axis=z": {
+      "model": "brasshaven:block/stripped_rustwood_wood_horizontal",
+      "x": 90
+    },
+    "axis=x": {
+      "model": "brasshaven:block/stripped_rustwood_wood_horizontal",
+      "x": 90,
+      "y": 90
+    }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "brasshaven:block/copper_pipes_top",
+    "side": "brasshaven:block/copper_pipes_side"
+  }
+}

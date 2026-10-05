@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "brasshaven:block/carved_guild_stone_top",
+    "side": "brasshaven:block/carved_guild_stone_side"
+  }
+}

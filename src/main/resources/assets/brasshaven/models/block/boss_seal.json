@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "brasshaven:block/boss_seal_top",
+    "side": "brasshaven:block/boss_seal_side"
+  }
+}

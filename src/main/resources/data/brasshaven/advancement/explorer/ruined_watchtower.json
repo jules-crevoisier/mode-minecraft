@@ -1,0 +1,42 @@
+{
+  "display": {
+    "icon": {
+      "id": "minecraft:stone_bricks"
+    },
+    "title": {
+      "translate": "advancements.brasshaven.explorer.ruined_watchtower.title"
+    },
+    "description": {
+      "translate": "advancements.brasshaven.explorer.ruined_watchtower.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "found": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:ruined_watchtower"
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "parent": "brasshaven:first_steps/guild_outpost",
+  "rewards": {
+    "experience": 40,
+    "loot": [
+      "brasshaven:rewards/discovery"
+    ]
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "brasshaven:dark_iron_bricks",
+  "result": {
+    "id": "brasshaven:dark_iron_brick_stairs",
+    "count": 1
+  }
+}

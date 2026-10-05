@@ -1,0 +1,12 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": "#brasshaven:ocean/all",
+  "spawners": [
+    {
+      "type": "brasshaven:glow_jellyfish",
+      "weight": 8,
+      "minCount": 2,
+      "maxCount": 4
+    }
+  ]
+}

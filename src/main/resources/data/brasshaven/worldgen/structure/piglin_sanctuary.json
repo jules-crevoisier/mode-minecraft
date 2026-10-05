@@ -1,0 +1,37 @@
+{
+  "type": "brasshaven:fitted_jigsaw",
+  "biomes": "#brasshaven:has_structure/piglin_sanctuary",
+  "step": "surface_structures",
+  "spawn_overrides": {},
+  "terrain_adaptation": "beard_box",
+  "start_pool": "brasshaven:piglin_sanctuary/start",
+  "size": 1,
+  "max_distance_from_center": 80,
+  "use_expansion_hack": false,
+  "start_height": {
+    "type": "minecraft:uniform",
+    "min_inclusive": {
+      "absolute": 30
+    },
+    "max_inclusive": {
+      "absolute": 46
+    }
+  },
+  "fit": {
+    "mode": "cavern",
+    "spread": 8,
+    "slope": 0.8,
+    "wet": 0.05,
+    "min_wet": 0.0,
+    "land": 0.5,
+    "drop": 10,
+    "depth": 0,
+    "clearance": 0,
+    "cover": 0,
+    "lift": 0,
+    "open": 0.3,
+    "ground": 10,
+    "pond": 0.0,
+    "theme": "stone"
+  }
+}

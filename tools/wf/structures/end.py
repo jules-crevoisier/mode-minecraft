@@ -20,11 +20,11 @@ from ..parts import LOOT, MOB, MOD
 OUTER_END = ["end_highlands", "end_midlands", "small_end_islands", "end_barrens"]
 
 # ------------------------------------------------------------------ materials
-VB = "wayfarers:void_bricks"
-VB_ST = "wayfarers:void_brick_stairs"
-VB_SL = "wayfarers:void_brick_slab"
-VB_WA = "wayfarers:void_brick_wall"
-STAR = "wayfarers:starlight_block"
+VB = "brasshaven:void_bricks"
+VB_ST = "brasshaven:void_brick_stairs"
+VB_SL = "brasshaven:void_brick_slab"
+VB_WA = "brasshaven:void_brick_wall"
+STAR = "brasshaven:starlight_block"
 ESB = "end_stone_bricks"
 ESB_ST = "end_stone_brick_stairs"
 ESB_SL = "end_stone_brick_slab"
@@ -1461,7 +1461,7 @@ def end_archive(bp):
 register(StructureDef(
     "end_archive", "end", OUTER_END, [Piece("archive", end_archive)],
     spacing=22, separation=7, adaptation="none", height=("uniform", 50, 70), processors="aging",
-    title_fr="Archive de l'End", title_en="End Archive", spawns=[("wayfarers:void_stalker", 10, 1, 2)]))
+    title_fr="Archive de l'End", title_en="End Archive", spawns=[("brasshaven:void_stalker", 10, 1, 2)]))
 
 
 # ================================================================== Void ship wreck

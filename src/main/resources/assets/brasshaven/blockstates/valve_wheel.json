@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "brasshaven:block/valve_wheel"
+    },
+    "facing=east": {
+      "model": "brasshaven:block/valve_wheel",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "brasshaven:block/valve_wheel",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "brasshaven:block/valve_wheel",
+      "y": 270
+    }
+  }
+}

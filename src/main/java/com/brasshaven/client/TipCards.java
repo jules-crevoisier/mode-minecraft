@@ -1,0 +1,154 @@
+package com.brasshaven.client;
+
+import com.brasshaven.Brasshaven;
+import com.brasshaven.client.gui.GuideScreen;
+import com.brasshaven.client.gui.WfGui;
+import com.brasshaven.config.BrasshavenClientConfig;
+import com.brasshaven.generated.GeneratedGuide;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.DeltaTracker;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraftforge.client.event.AddGuiOverlayLayersEvent;
+import net.minecraftforge.client.gui.overlay.ForgeLayeredDraw;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.List;
+
+/**
+ * One-time tip cards (sent by the server the first time a player meets a system) shown under the quest
+ * tracker, plus the manual shortcut: items with a manual page get "Hold W: manual page" in their tooltip,
+ * and holding that key over them in an inventory opens the page. The key is a real key binding (W by default,
+ * rebindable), so the tooltip names the right key on every keyboard layout (it reads "Z" on AZERTY).
+ */
+public final class TipCards {
+    private static final int W = 170;
+    private static final int SHOW_TICKS = 200;
+    private static final Deque<String> QUEUE = new ArrayDeque<>();
+    private static String current;
+    private static int age;
+    private static int holdW;
+    private static String shownId;
+    private static List<FormattedCharSequence> shownLines = List.of();
+    private static ItemStack shownIcon = ItemStack.EMPTY;
+    private static boolean manualKeyDown;
+
+    private TipCards() {}
+
+    /** Key bindings are not updated while a screen is open: follow the manual key through the screen's key events. */
+    public static void registerKeys() {
+        net.minecraftforge.client.event.ScreenEvent.KeyPressed.Pre.BUS.addListener(
+                (java.util.function.Predicate<net.minecraftforge.client.event.ScreenEvent.KeyPressed.Pre>) e -> {
+                    if (BrasshavenClient.MANUAL_KEY.matches(e.getInfo())) {
+                        manualKeyDown = true;
+                    }
+                    return false;
+                });
+        net.minecraftforge.client.event.ScreenEvent.KeyReleased.Pre.BUS.addListener(
+                (java.util.function.Predicate<net.minecraftforge.client.event.ScreenEvent.KeyReleased.Pre>) e -> {
+                    if (BrasshavenClient.MANUAL_KEY.matches(e.getInfo())) {
+                        manualKeyDown = false;
+                    }
+                    return false;
+                });
+    }
+
+    public static void register(AddGuiOverlayLayersEvent event) {
+        event.getLayeredDraw().addAbove(ForgeLayeredDraw.PRE_SLEEP_STACK, Brasshaven.id("tips"),
+                ForgeLayeredDraw.BOSS_OVERLAY, TipCards::extract);
+    }
+
+    public static void show(String tip) {
+        if (BrasshavenClientConfig.TIPS.get() && !tip.equals(current) && !QUEUE.contains(tip)) {
+            QUEUE.add(tip);
+        }
+    }
+
+    private static GeneratedGuide.Tip tip(String id) {
+        return GeneratedGuide.TIPS.stream().filter(t -> t.id().equals(id)).findFirst().orElse(null);
+    }
+
+    public static void tick() {
+        if (current != null && ++age > SHOW_TICKS) {
+            current = null;
+        }
+        if (current == null && !QUEUE.isEmpty()) {
+            current = QUEUE.poll();
+            age = 0;
+            shownId = null;
+        }
+        // hold the manual key over an item with a manual page (in any inventory screen) to open it
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.gui.screen() instanceof AbstractContainerScreen<?> screen) {
+            Slot slot = screen.getSlotUnderMouse();
+            String page = slot != null && slot.hasItem() ? GuideScreen.pageFor(slot.getItem()) : null;
+            if (page != null && manualKeyDown) {
+                if (++holdW == 8) {
+                    manualKeyDown = false;
+                    // from the player's own inventory the manual returns there on close; from a chest, machine...
+                    // the container is closed properly first (the server would otherwise still think it is open)
+                    boolean ownInventory = screen instanceof net.minecraft.client.gui.screens.inventory.InventoryScreen
+                            || screen instanceof net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
+                    if (!ownInventory && mc.player != null) {
+                        mc.player.closeContainer();
+                    }
+                    mc.gui.setScreen(new GuideScreen(page).returningTo(ownInventory ? screen : null));
+                }
+            } else {
+                holdW = 0;
+            }
+        } else {
+            holdW = 0;
+            manualKeyDown = false;
+        }
+    }
+
+    public static void onTooltip(ItemTooltipEvent event) {
+        if (GuideScreen.pageFor(event.getItemStack()) != null) {
+            event.getToolTip().add(Component.translatable("gui.brasshaven.manual.hold", BrasshavenClient.MANUAL_KEY.getTranslatedKeyMessage())
+                    .withStyle(ChatFormatting.DARK_AQUA));
+        }
+    }
+
+    private static void extract(GuiGraphicsExtractor g, DeltaTracker dt) {
+        Minecraft mc = Minecraft.getInstance();
+        if (current == null || mc.player == null) {
+            return;
+        }
+        GeneratedGuide.Tip t = tip(current);
+        if (t == null) {
+            current = null;
+            return;
+        }
+        Font font = mc.font;
+        if (!t.id().equals(shownId)) { // drawn every frame for ten seconds: wrap the text and build the icon once
+            shownId = t.id();
+            shownLines = font.split(Component.translatable("tip.brasshaven." + t.id()), W - 30);
+            shownIcon = BuiltInRegistries.ITEM.getOptional(Identifier.parse(t.icon())).map(ItemStack::new)
+                    .orElse(new ItemStack(Items.BOOK));
+        }
+        List<FormattedCharSequence> lines = shownLines;
+        int h = 20 + lines.size() * 9;
+        // slide in from the right during the first 8 ticks, out during the last 8
+        float slide = Math.min(1F, Math.min(age, SHOW_TICKS - age) / 8F);
+        int x = g.guiWidth() - (int) ((W + 6) * slide);
+        int y = g.guiHeight() / 2 - h / 2 - 20;
+        WfGui.sprite(g, WfGui.CARD, x, y, W, h);
+        g.item(shownIcon, x + 5, y + 5);
+        g.text(font, WfGui.bold(Component.translatable("gui.brasshaven.tip.title")), x + 25, y + 5, WfGui.INK_SOFT, false);
+        for (int i = 0; i < lines.size(); i++) {
+            g.text(font, lines.get(i), x + 25, y + 15 + i * 9, WfGui.INK, false);
+        }
+    }
+}

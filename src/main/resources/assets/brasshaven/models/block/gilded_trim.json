@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "brasshaven:block/gilded_trim_top",
+    "side": "brasshaven:block/gilded_trim_side"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "XXX"
+  ],
+  "key": {
+    "X": "brasshaven:rust_rock"
+  },
+  "result": {
+    "id": "brasshaven:rust_rock_slab",
+    "count": 6
+  }
+}

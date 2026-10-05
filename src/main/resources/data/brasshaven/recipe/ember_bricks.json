@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "NM",
+    "MN"
+  ],
+  "key": {
+    "N": "minecraft:polished_blackstone_bricks",
+    "M": "minecraft:magma_cream"
+  },
+  "result": {
+    "id": "brasshaven:ember_bricks",
+    "count": 4
+  }
+}

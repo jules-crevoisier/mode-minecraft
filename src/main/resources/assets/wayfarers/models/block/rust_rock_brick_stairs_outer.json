@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/outer_stairs",
-  "textures": {
-    "bottom": "wayfarers:block/rust_rock_bricks",
-    "top": "wayfarers:block/rust_rock_bricks",
-    "side": "wayfarers:block/rust_rock_bricks"
-  }
-}

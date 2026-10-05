@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "X  ",
+    "XX ",
+    "XXX"
+  ],
+  "key": {
+    "X": "brasshaven:mahogany_parquet"
+  },
+  "result": {
+    "id": "brasshaven:mahogany_parquet_stairs",
+    "count": 4
+  }
+}

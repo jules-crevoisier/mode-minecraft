@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "XXX",
+    "XXX",
+    "XXX"
+  ],
+  "key": {
+    "X": "brasshaven:aether_crystal"
+  },
+  "result": {
+    "id": "brasshaven:aether_block",
+    "count": 1
+  }
+}

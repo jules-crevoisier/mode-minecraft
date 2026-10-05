@@ -1,0 +1,42 @@
+{
+  "display": {
+    "icon": {
+      "id": "minecraft:barrel"
+    },
+    "title": {
+      "translate": "advancements.brasshaven.explorer.shipwreck_debris.title"
+    },
+    "description": {
+      "translate": "advancements.brasshaven.explorer.shipwreck_debris.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "found": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:shipwreck_debris"
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "parent": "brasshaven:first_steps/guild_outpost",
+  "rewards": {
+    "experience": 40,
+    "loot": [
+      "brasshaven:rewards/discovery"
+    ]
+  }
+}

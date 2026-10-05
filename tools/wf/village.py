@@ -1,11 +1,11 @@
-"""Wayfarers pieces for the vanilla villages and pillager outposts.
+"""Brasshaven pieces for the vanilla villages and pillager outposts.
 
 Vanilla villages are jigsaw structures whose pools live in ``data/minecraft/worldgen/template_pool/village/<type>``.
 We override those pool files with copies that keep every vanilla element and weight (``wf/vanilla_pools.py`` reads
 them from the 26.2 sources) and add our pieces, built here in each village's own materials with steampunk touches:
 
   town_centers  a plaza with a Waystone, a notice board, a meeting bell, lamps, benches and flower beds
-  houses        the Wayfarers' Inn (guild hall), a tinkerer's workshop, a watchtower, market stalls, an orchard,
+  houses        the Brasshaven' Inn (guild hall), a tinkerer's workshop, a watchtower, market stalls, an orchard,
                 a cottage and a manor, a well corner (street furniture)
   streets       a lamp-lined avenue
   decor         a brass street lamp and a signpost (1 x 1, they stand on the street side like the vanilla lamps)
@@ -25,7 +25,7 @@ Jigsaw conventions (vanilla 1.14 village data, upgraded by JigsawPropertiesFix: 
 Coordinates: x east, y up, z south, y = 0 is the ground layer, walking level y = 1, the street is to the north
 (z < 0). Rigid pieces attached to a street get the right ground level from the jigsaw (the beard flattens the
 terrain at the walking level) and carry a foundation below y = 0; the plaza (the start piece) says its ground
-depth through ``wayfarers:grounded_single`` (com.wayfarers.world.GroundedPoolElement).
+depth through ``brasshaven:grounded_single`` (com.brasshaven.world.GroundedPoolElement).
 """
 import copy
 import math
@@ -37,7 +37,7 @@ from . import nbt
 from .arch import Palette
 from .blueprint import Blueprint, OPPOSITE, with_props
 
-W = "wayfarers:"
+W = "brasshaven:"
 TYPES = ["plains", "desert", "savanna", "snowy", "taiga"]
 ENTRANCE = "minecraft:building_entrance"
 STREET = "minecraft:street"
@@ -201,7 +201,7 @@ SIGNS = {
     "notice": ("NOTICE BOARD", "AVIS ET ANNONCES"),
     "wanted": ("WANTED: gears", "ON CHERCHE : rouages"),
     "reward": ("Reward: emeralds", "Récompense : émeraudes"),
-    "guild": ("Wayfarers' Guild", "Guilde des Voyageurs"),
+    "guild": ("Brasshaven' Guild", "Guilde des Voyageurs"),
     "waystone": ("Waystone ->", "Pierre de voyage ->"),
     "market": ("Market <-", "<- Marché"),
     "tinker": ("Tinkerer", "Bricoleur"),
@@ -214,7 +214,7 @@ SIGNS = {
 
 
 def sign_key(k):
-    return f"sign.wayfarers.village.{k}"
+    return f"sign.brasshaven.village.{k}"
 
 
 def lang():
@@ -702,7 +702,7 @@ def manor(bp, st):
 
 
 def inn(bp, st):
-    """The Wayfarers' Inn, a guild hall: tavern with a bar, a hearth, tables and brass chandeliers on the ground
+    """The Brasshaven' Inn, a guild hall: tavern with a bar, a hearth, tables and brass chandeliers on the ground
     floor, a landing and three bedrooms upstairs, a balcony porch with the hanging signs, banners and lamps."""
     rng = random.Random(bp.name)
     x0, z0, x1, z1 = 1, 4, 16, 14
@@ -803,7 +803,7 @@ def inn(bp, st):
 
 
 def guild_post(bp, st):
-    """The Guild Post: a small office of the Wayfarers' Guild where a Guild Agent hands out contracts across a
+    """The Guild Post: a small office of the Brasshaven' Guild where a Guild Agent hands out contracts across a
     counter, between a map table and a lectern of ledgers, under the guild's banners; couriers sleep upstairs."""
     rng = random.Random(bp.name)
     x0, z0, x1, z1 = 1, 3, 10, 10

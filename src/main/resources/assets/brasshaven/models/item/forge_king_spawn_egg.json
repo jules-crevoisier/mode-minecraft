@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "brasshaven:item/forge_king_spawn_egg"
+  }
+}

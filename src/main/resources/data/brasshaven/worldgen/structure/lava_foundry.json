@@ -1,0 +1,31 @@
+{
+  "type": "brasshaven:fitted_jigsaw",
+  "biomes": "#brasshaven:has_structure/lava_foundry",
+  "step": "surface_structures",
+  "spawn_overrides": {},
+  "terrain_adaptation": "none",
+  "start_pool": "brasshaven:lava_foundry/start",
+  "size": 1,
+  "max_distance_from_center": 80,
+  "use_expansion_hack": false,
+  "start_height": {
+    "absolute": 24
+  },
+  "fit": {
+    "mode": "cavern",
+    "spread": 8,
+    "slope": 0.8,
+    "wet": 0.05,
+    "min_wet": 0.0,
+    "land": 0.5,
+    "drop": 10,
+    "depth": 0,
+    "clearance": 0,
+    "cover": 0,
+    "lift": 0,
+    "open": 0.5,
+    "ground": 16,
+    "pond": 0.0,
+    "theme": "stone"
+  }
+}

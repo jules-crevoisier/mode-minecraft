@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "brasshaven:brass_plating",
+  "result": {
+    "id": "brasshaven:brass_plating_stairs",
+    "count": 1
+  }
+}

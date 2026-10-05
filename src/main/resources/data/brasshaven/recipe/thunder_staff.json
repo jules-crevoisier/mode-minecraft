@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    " R ",
+    "CAC",
+    " S "
+  ],
+  "key": {
+    "R": "minecraft:lightning_rod",
+    "C": "minecraft:copper_ingot",
+    "A": "minecraft:amethyst_shard",
+    "S": "minecraft:stick"
+  },
+  "result": {
+    "id": "brasshaven:thunder_staff",
+    "count": 1
+  }
+}

@@ -1,12 +1,12 @@
 {
   "replace": false,
   "values": [
-    "wayfarers:explorer_leggings",
-    "wayfarers:ember_leggings",
-    "wayfarers:void_leggings",
-    "wayfarers:brass_leggings",
-    "wayfarers:mithril_leggings",
-    "wayfarers:aether_leggings",
-    "wayfarers:arcane_leggings"
+    "brasshaven:explorer_leggings",
+    "brasshaven:ember_leggings",
+    "brasshaven:void_leggings",
+    "brasshaven:brass_leggings",
+    "brasshaven:mithril_leggings",
+    "brasshaven:aether_leggings",
+    "brasshaven:arcane_leggings"
   ]
 }

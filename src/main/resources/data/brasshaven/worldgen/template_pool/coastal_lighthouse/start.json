@@ -1,0 +1,83 @@
+{
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "brasshaven:chunked_template",
+        "size": [
+          56,
+          67,
+          45
+        ],
+        "cells": [
+          {
+            "location": "brasshaven:coastal_lighthouse/lighthouse/x0_z0",
+            "offset": [
+              0,
+              0,
+              0
+            ],
+            "size": [
+              28,
+              67,
+              22
+            ],
+            "blocks": 9196
+          },
+          {
+            "location": "brasshaven:coastal_lighthouse/lighthouse/x0_z1",
+            "offset": [
+              1,
+              0,
+              22
+            ],
+            "size": [
+              27,
+              19,
+              18
+            ],
+            "blocks": 973
+          },
+          {
+            "location": "brasshaven:coastal_lighthouse/lighthouse/x1_z0",
+            "offset": [
+              28,
+              0,
+              0
+            ],
+            "size": [
+              28,
+              61,
+              22
+            ],
+            "blocks": 7242
+          },
+          {
+            "location": "brasshaven:coastal_lighthouse/lighthouse/x1_z1",
+            "offset": [
+              28,
+              0,
+              22
+            ],
+            "size": [
+              25,
+              20,
+              23
+            ],
+            "blocks": 1221
+          }
+        ],
+        "projection": "rigid",
+        "processors": "brasshaven:aging",
+        "ground_level_delta": 7,
+        "footprint": [
+          1,
+          0,
+          55,
+          44
+        ]
+      }
+    }
+  ]
+}

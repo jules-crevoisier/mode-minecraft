@@ -41,7 +41,7 @@ def changelog(version, to="HEAD"):
     lines = git("log", rng, "--no-merges", "--pretty=format:%s (%h)", "-n", "300").splitlines()
     changes = [line for line in lines if line and not NOISE.match(line)]
     today = datetime.date.today().isoformat()
-    out = [f"## Wayfarers {version} ({today})", "",
+    out = [f"## Brasshaven {version} ({today})", "",
            f"Minecraft {props.get('minecraft_version')} · Forge {props.get('forge_version')} · Java 25", "",
            "**Update / Mise à jour:** back up your world, then put the same jar on the server and on every player "
            "(the world is kept). / Sauvegarde le monde, puis mets le même jar sur le serveur et chez chaque joueur "

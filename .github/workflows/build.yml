@@ -28,7 +28,7 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
 
       # Versions (docs/PUBLISHING.md): a v<mod_version> tag builds the release itself, any other push a development
-      # build <mod_version>+build.<run number> (jar wayfarers-<mod_version>-build.<run>.jar)
+      # build <mod_version>+build.<run number> (jar brasshaven-<mod_version>-build.<run>.jar)
       - name: Version
         id: version
         run: |
@@ -55,12 +55,12 @@ jobs:
       - name: Upload the jar (Actions artifact)
         uses: actions/upload-artifact@v4
         with:
-          name: wayfarers-mod
-          path: build/libs/wayfarers-*.jar
+          name: brasshaven-mod
+          path: build/libs/brasshaven-*.jar
 
       - name: Server pack and modpack
         run: |
-          jar=$(ls build/libs/wayfarers-*.jar | grep -v -- '-sources\.jar$' | head -n 1)
+          jar=$(ls build/libs/brasshaven-*.jar | grep -v -- '-sources\.jar$' | head -n 1)
           python3 tools/make_modpack.py serverpack --jar "$jar" --out build/packs
           python3 tools/make_modpack.py modpack --jar "$jar" --out build/packs
 
@@ -71,7 +71,7 @@ jobs:
       - name: Upload the packs (Actions artifact)
         uses: actions/upload-artifact@v4
         with:
-          name: wayfarers-packs
+          name: brasshaven-packs
           path: build/packs/*.zip
 
   # Boots a real Forge server with the jar, places every structure, summons every mob and item,
@@ -91,7 +91,7 @@ jobs:
 
       - uses: actions/download-artifact@v4
         with:
-          name: wayfarers-mod
+          name: brasshaven-mod
           path: jar
 
       - name: Install the Forge server
@@ -99,7 +99,7 @@ jobs:
           mkdir -p server/mods
           curl -fsSL -o installer.jar https://maven.minecraftforge.net/net/minecraftforge/forge/26.2-65.1.0/forge-26.2-65.1.0-installer.jar
           java -jar installer.jar --installServer server > install.log 2>&1 || (tail -50 install.log; exit 1)
-          cp jar/wayfarers-*.jar server/mods/
+          cp jar/brasshaven-*.jar server/mods/
 
       - name: Run the smoke test (structures, mobs, items, loot)
         run: python3 tools/ci_smoke.py server
@@ -121,10 +121,10 @@ jobs:
         with:
           name: world-previews-smoke
           if-no-files-found: ignore
-          path: server/wayfarers-ci-*.txt
+          path: server/brasshaven-ci-*.txt
 
-  # The structure fit test, in a fresh world with Minecraft's own terrain (and the Wayfarers biomes, on by default), in two
-  # shards on two machines (every second structure each): /wayfarers fitcheck locates the Overworld structures of the
+  # The structure fit test, in a fresh world with Minecraft's own terrain (and the Brasshaven biomes, on by default), in two
+  # shards on two machines (every second structure each): /brasshaven fitcheck locates the Overworld structures of the
   # mod, generates them and measures how they sit on the vanilla terrain (floating edges, buried edges, flooding),
   # with a render of each in place. A misfit fails the job. Each shard keeps to ~35 minutes of test.
   fit-test:
@@ -149,7 +149,7 @@ jobs:
 
       - uses: actions/download-artifact@v4
         with:
-          name: wayfarers-mod
+          name: brasshaven-mod
           path: jar
 
       - name: Install the Forge server
@@ -157,7 +157,7 @@ jobs:
           mkdir -p server/mods
           curl -fsSL -o installer.jar https://maven.minecraftforge.net/net/minecraftforge/forge/26.2-65.1.0/forge-26.2-65.1.0-installer.jar
           java -jar installer.jar --installServer server > install.log 2>&1 || (tail -50 install.log; exit 1)
-          cp jar/wayfarers-*.jar server/mods/
+          cp jar/brasshaven-*.jar server/mods/
 
       - name: Run the structure fit test (every Overworld structure located, generated and measured in a vanilla world)
         run: python3 tools/ci_smoke.py server --fit --shard ${{ matrix.shard }}
@@ -179,16 +179,16 @@ jobs:
           name: world-previews-${{ matrix.part }}
           if-no-files-found: ignore
           path: |
-            server/wayfarers-fit-*.png
-            server/wayfarers-fit*.txt
-            server/wayfarers-ci-*.txt
+            server/brasshaven-fit-*.png
+            server/brasshaven-fit*.txt
+            server/brasshaven-ci-*.txt
 
-  # The Wayfarers biomes and the generation speed gate, on one machine: the server runs twice on the same seed in a
-  # fresh normal world, WITH the Wayfarers biomes and terrain touches (config world.customBiomes / world.terrain.*)
-  # and WITHOUT (vanilla generation). Each run really generates the same fresh areas (/wayfarers genbench area: a
-  # fixed 12 x 12 chunk area at 20000 20000 and a 6 x 6 area on each Wayfarers biome); the job fails when WITH is
+  # The Brasshaven biomes and the generation speed gate, on one machine: the server runs twice on the same seed in a
+  # fresh normal world, WITH the Brasshaven biomes and terrain touches (config world.customBiomes / world.terrain.*)
+  # and WITHOUT (vanilla generation). Each run really generates the same fresh areas (/brasshaven genbench area: a
+  # fixed 12 x 12 chunk area at 20000 20000 and a 6 x 6 area on each Brasshaven biome); the job fails when WITH is
   # more than 5 % slower per chunk than WITHOUT (a pair over the gate is measured again, in the other order). The
-  # WITH run also finds each biome with /locate biome and draws it (/wayfarers biomeshots).
+  # WITH run also finds each biome with /locate biome and draws it (/brasshaven biomeshots).
   world-test:
     needs: build
     runs-on: ubuntu-latest
@@ -203,7 +203,7 @@ jobs:
 
       - uses: actions/download-artifact@v4
         with:
-          name: wayfarers-mod
+          name: brasshaven-mod
           path: jar
 
       - name: Install the Forge server
@@ -211,9 +211,9 @@ jobs:
           mkdir -p server/mods
           curl -fsSL -o installer.jar https://maven.minecraftforge.net/net/minecraftforge/forge/26.2-65.1.0/forge-26.2-65.1.0-installer.jar
           java -jar installer.jar --installServer server > install.log 2>&1 || (tail -50 install.log; exit 1)
-          cp jar/wayfarers-*.jar server/mods/
+          cp jar/brasshaven-*.jar server/mods/
 
-      - name: Run the world test (Wayfarers biomes, generation speed with / without, biome renders)
+      - name: Run the world test (Brasshaven biomes, generation speed with / without, biome renders)
         run: python3 tools/ci_smoke.py server --world
 
       - name: Upload the server logs
@@ -234,10 +234,10 @@ jobs:
           name: world-previews-world
           if-no-files-found: ignore
           path: |
-            server/wayfarers-biome-*.png
-            server/wayfarers-biomes.txt
-            server/wayfarers-genbench.txt
-            server/wayfarers-ci-*.txt
+            server/brasshaven-biome-*.png
+            server/brasshaven-biomes.txt
+            server/brasshaven-genbench.txt
+            server/brasshaven-ci-*.txt
 
   # Runs the real client (software OpenGL under Xvfb) through ForgeGradle's runClient. client/CiDriver creates a
   # world, opens every screen of the mod, places machines, summons creatures and the Clockwork Citadel, and saves a
@@ -316,23 +316,23 @@ jobs:
       - name: Collect the client screenshots
         run: |
           mkdir -p previews
-          cp client/wayfarers-shot-*.png previews/ 2>/dev/null || echo "no client screenshots"
+          cp client/brasshaven-shot-*.png previews/ 2>/dev/null || echo "no client screenshots"
           cp client/ci-client-summary.md previews/ 2>/dev/null || echo "no client summary"
           # the fit test runs in shards: one report for the release, as before
-          if ls previews/wayfarers-fit-shard*.txt >/dev/null 2>&1; then
-            cat previews/wayfarers-fit-shard*.txt > previews/wayfarers-fit.txt
+          if ls previews/brasshaven-fit-shard*.txt >/dev/null 2>&1; then
+            cat previews/brasshaven-fit-shard*.txt > previews/brasshaven-fit.txt
           fi
-          ls previews/wayfarers-ci-*.txt 2>/dev/null || echo "no test summaries"
+          ls previews/brasshaven-ci-*.txt 2>/dev/null || echo "no test summaries"
 
       - name: Publish the previews
         if: hashFiles('previews/*') != ''
         uses: softprops/action-gh-release@v2
         with:
           tag_name: previews-${{ github.ref_name }}
-          name: Wayfarers — aperçus (${{ github.ref_name }})
+          name: Brasshaven — aperçus (${{ github.ref_name }})
           prerelease: true
           make_latest: false
-          body: Chaque structure en place sur le relief de Minecraft avec sa mesure d'intégration (wayfarers-fit-*.png, wayfarers-fit.txt, /wayfarers fitcheck), un rendu 3D de chaque biome Wayfarers (wayfarers-biome-*.png, /wayfarers biomeshots), le résumé de chaque test serveur (wayfarers-ci-*.txt, durée des phases, vitesse de génération avec et sans les biomes Wayfarers en ms/chunk et leur rapport, lignes FAIL), et des captures du vrai client (wayfarers-shot-*.png — écrans, HUD, créatures, Citadelle) prises par le job client-test (commit ${{ github.sha }}).
+          body: Chaque structure en place sur le relief de Minecraft avec sa mesure d'intégration (brasshaven-fit-*.png, brasshaven-fit.txt, /brasshaven fitcheck), un rendu 3D de chaque biome Brasshaven (brasshaven-biome-*.png, /brasshaven biomeshots), le résumé de chaque test serveur (brasshaven-ci-*.txt, durée des phases, vitesse de génération avec et sans les biomes Brasshaven en ms/chunk et leur rapport, lignes FAIL), et des captures du vrai client (brasshaven-shot-*.png — écrans, HUD, créatures, Citadelle) prises par le job client-test (commit ${{ github.sha }}).
           files: previews/*
 
   # Development build of a branch: the tested jar and the packs on the branch's pre-release (dev-<branch>)
@@ -344,28 +344,28 @@ jobs:
     steps:
       - uses: actions/download-artifact@v4
         with:
-          name: wayfarers-mod
+          name: brasshaven-mod
           path: jar
 
       - uses: actions/download-artifact@v4
         with:
-          name: wayfarers-packs
+          name: brasshaven-packs
           path: packs
 
       - name: Publish the jar as the latest development build
         uses: softprops/action-gh-release@v2
         with:
           tag_name: dev-${{ github.ref_name }}
-          name: Wayfarers — build de développement (${{ github.ref_name }})
+          name: Brasshaven — build de développement (${{ github.ref_name }})
           prerelease: true
           make_latest: false
           body: |
             Build automatique ${{ needs.build.outputs.version }} du commit ${{ github.sha }}, testé sur un serveur Forge (structures, mobs, objets, butins).
-            Mets `wayfarers-*.jar` dans le dossier `mods` d'un profil CurseForge Minecraft 26.2 + Forge 65.1.0 (même jar sur le serveur et chez chaque joueur).
-            `wayfarers-server-*.zip` : serveur prêt à lancer (start.sh / start.bat). `wayfarers-modpack-*.zip` : profil à importer dans l'app CurseForge.
+            Mets `brasshaven-*.jar` dans le dossier `mods` d'un profil CurseForge Minecraft 26.2 + Forge 65.1.0 (même jar sur le serveur et chez chaque joueur).
+            `brasshaven-server-*.zip` : serveur prêt à lancer (start.sh / start.bat). `brasshaven-modpack-*.zip` : profil à importer dans l'app CurseForge.
             Versions publiques : les releases `v*` (docs/PUBLISHING.md).
           files: |
-            jar/wayfarers-*.jar
+            jar/brasshaven-*.jar
             packs/*.zip
 
       # jar names carry the build number: drop the previous builds' files so the release holds only this one
@@ -377,7 +377,7 @@ jobs:
           keep=$(ls jar packs)
           gh release view "$tag" --repo "$GITHUB_REPOSITORY" --json assets -q '.assets[].name' | while read -r asset; do
             case "$asset" in
-              wayfarers-*.jar|wayfarers-*.zip)
+              brasshaven-*.jar|brasshaven-*.zip)
                 if ! printf '%s\n' "$keep" | grep -qxF "$asset"; then
                   gh release delete-asset "$tag" "$asset" --repo "$GITHUB_REPOSITORY" -y
                 fi ;;
@@ -397,12 +397,12 @@ jobs:
 
       - uses: actions/download-artifact@v4
         with:
-          name: wayfarers-mod
+          name: brasshaven-mod
           path: jar
 
       - uses: actions/download-artifact@v4
         with:
-          name: wayfarers-packs
+          name: brasshaven-packs
           path: packs
 
       - name: Changelog (commits since the previous release)
@@ -417,12 +417,12 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.ref_name }}
-          name: Wayfarers ${{ needs.build.outputs.version }}
+          name: Brasshaven ${{ needs.build.outputs.version }}
           body_path: build/changelog.md
           prerelease: false
           make_latest: true
           files: |
-            jar/wayfarers-*.jar
+            jar/brasshaven-*.jar
             packs/*.zip
 
   # Optional: skipped until the repository variable CURSEFORGE_PROJECT_ID exists; the upload itself is skipped (with a
@@ -436,7 +436,7 @@ jobs:
 
       - uses: actions/download-artifact@v4
         with:
-          name: wayfarers-mod
+          name: brasshaven-mod
           path: jar
 
       - uses: actions/download-artifact@v4
@@ -449,7 +449,7 @@ jobs:
         env:
           CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
           CURSEFORGE_PROJECT_ID: ${{ vars.CURSEFORGE_PROJECT_ID }}
-        run: python3 tools/publish.py curseforge --jar "$(ls jar/wayfarers-*.jar | head -n 1)" --changelog build/changelog.md
+        run: python3 tools/publish.py curseforge --jar "$(ls jar/brasshaven-*.jar | head -n 1)" --changelog build/changelog.md
 
       # the modpack that references the CurseForge file (what a modpack project on CurseForge needs)
       - name: Modpack referencing the CurseForge file
@@ -457,7 +457,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          python3 tools/make_modpack.py modpack --jar "$(ls jar/wayfarers-*.jar | head -n 1)" --out build/packs \
+          python3 tools/make_modpack.py modpack --jar "$(ls jar/brasshaven-*.jar | head -n 1)" --out build/packs \
             --project-id "${{ vars.CURSEFORGE_PROJECT_ID }}" --file-id "${{ steps.upload.outputs.file_id }}"
           gh release upload "$GITHUB_REF_NAME" build/packs/*-curseforge.zip --repo "$GITHUB_REPOSITORY" --clobber
 
@@ -471,7 +471,7 @@ jobs:
 
       - uses: actions/download-artifact@v4
         with:
-          name: wayfarers-mod
+          name: brasshaven-mod
           path: jar
 
       - uses: actions/download-artifact@v4
@@ -483,4 +483,4 @@ jobs:
         env:
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
           MODRINTH_PROJECT_ID: ${{ vars.MODRINTH_PROJECT_ID }}
-        run: python3 tools/publish.py modrinth --jar "$(ls jar/wayfarers-*.jar | head -n 1)" --changelog build/changelog.md
+        run: python3 tools/publish.py modrinth --jar "$(ls jar/brasshaven-*.jar | head -n 1)" --changelog build/changelog.md

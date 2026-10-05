@@ -1,4 +1,4 @@
-// Wayfarers — Minecraft 26.2 / Forge 65.1.0 (Java 25)
+// Brasshaven — Minecraft 26.2 / Forge 65.1.0 (Java 25)
 plugins {
     id 'java'
     id 'idea'
@@ -8,32 +8,32 @@ plugins {
 
 // Versions (docs/PUBLISHING.md): a release (CI on a v* tag passes -Prelease=true) is mod_version itself; any other build
 // carries its build number as semantic-versioning build metadata, 0.9.0-beta+build.84 (CI: -Pbuild_number=<run>).
-// The jar name swaps '+' for '-' (wayfarers-0.9.0-beta-build.84.jar): '+' is unsafe in download links.
-def wayfarersRelease = providers.gradleProperty('release').getOrElse('false') == 'true'
-def wayfarersBuild = providers.gradleProperty('build_number').getOrElse('local')
-def wayfarersVersion = wayfarersRelease ? project.mod_version : "${project.mod_version}+build.${wayfarersBuild}".toString()
-version = wayfarersVersion
-group = 'com.wayfarers'
-base.archivesName = 'wayfarers'
+// The jar name swaps '+' for '-' (brasshaven-0.9.0-beta-build.84.jar): '+' is unsafe in download links.
+def brasshavenRelease = providers.gradleProperty('release').getOrElse('false') == 'true'
+def brasshavenBuild = providers.gradleProperty('build_number').getOrElse('local')
+def brasshavenVersion = brasshavenRelease ? project.mod_version : "${project.mod_version}+build.${brasshavenBuild}".toString()
+version = brasshavenVersion
+group = 'com.brasshaven'
+base.archivesName = 'brasshaven'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(25)
 
-// CI client test (tools/ci_client.py): `./gradlew runClient -Pwayfarers.ci=true` turns on the scripted screenshot run
-def wayfarersCi = providers.gradleProperty('wayfarers.ci').getOrElse('false') == 'true'
-def wayfarersCiTimeout = providers.gradleProperty('wayfarers.ci.timeout').getOrElse('1080')
+// CI client test (tools/ci_client.py): `./gradlew runClient -Pbrasshaven.ci=true` turns on the scripted screenshot run
+def brasshavenCi = providers.gradleProperty('brasshaven.ci').getOrElse('false') == 'true'
+def brasshavenCiTimeout = providers.gradleProperty('brasshaven.ci.timeout').getOrElse('1080')
 
 minecraft {
     runs {
         configureEach {
             workingDir = layout.projectDirectory.dir('run')
             systemProperty 'eventbus.api.strictRuntimeChecks', 'true'
-            systemProperty 'forge.enabledGameTestNamespaces', 'wayfarers'
+            systemProperty 'forge.enabledGameTestNamespaces', 'brasshaven'
         }
         register('client') {
             // client/CiDriver plays its scripted tour, in a 1280x720 OpenGL window (see tools/ci_client.py)
-            if (wayfarersCi) {
-                systemProperty 'wayfarers.ci', 'true'
-                systemProperty 'wayfarers.ci.timeout', wayfarersCiTimeout
+            if (brasshavenCi) {
+                systemProperty 'brasshaven.ci', 'true'
+                systemProperty 'brasshaven.ci.timeout', brasshavenCiTimeout
                 args '--width', '1280', '--height', '720', '--graphicsBackend', 'opengl'
             }
         }
@@ -57,20 +57,20 @@ dependencies {
 }
 
 tasks.named('processResources', ProcessResources).configure {
-    var props = [mod_version: wayfarersVersion, network_protocol: project.network_protocol,
+    var props = [mod_version: brasshavenVersion, network_protocol: project.network_protocol,
                  mod_download_url: project.mod_download_url]
     inputs.properties(props)
-    filesMatching(['META-INF/mods.toml', 'META-INF/wayfarers/build.properties']) {
+    filesMatching(['META-INF/mods.toml', 'META-INF/brasshaven/build.properties']) {
         expand(props)
     }
     // registry ids, with the aliases of renamed ones, for release/RegistryRemap (checked by tools/validate.py)
     from(layout.projectDirectory.file('tools/data/registry_ids.json')) {
-        into 'META-INF/wayfarers'
+        into 'META-INF/brasshaven'
     }
 }
 
 tasks.withType(Jar).configureEach {
-    archiveVersion = wayfarersVersion.replace('+', '-')
+    archiveVersion = brasshavenVersion.replace('+', '-')
 }
 
 tasks.withType(JavaCompile).configureEach {

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "SSS",
+    "N N"
+  ],
+  "key": {
+    "S": "brasshaven:mahogany_panelling_slab",
+    "N": "brasshaven:brass_nugget"
+  },
+  "result": {
+    "id": "brasshaven:wall_shelf",
+    "count": 2
+  }
+}

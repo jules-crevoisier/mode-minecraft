@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:purple_wool",
+    "brasshaven:aether_crystal",
+    "minecraft:string"
+  ],
+  "result": {
+    "id": "brasshaven:arcane_cloth",
+    "count": 2
+  }
+}

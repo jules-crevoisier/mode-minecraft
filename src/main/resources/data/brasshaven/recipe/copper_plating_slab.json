@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "XXX"
+  ],
+  "key": {
+    "X": "brasshaven:copper_plating"
+  },
+  "result": {
+    "id": "brasshaven:copper_plating_slab",
+    "count": 6
+  }
+}

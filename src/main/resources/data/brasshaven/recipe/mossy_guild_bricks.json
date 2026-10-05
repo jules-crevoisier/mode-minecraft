@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "brasshaven:guild_bricks",
+    "minecraft:vine"
+  ],
+  "result": {
+    "id": "brasshaven:mossy_guild_bricks",
+    "count": 1
+  }
+}

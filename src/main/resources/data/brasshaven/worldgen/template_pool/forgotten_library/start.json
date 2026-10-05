@@ -1,0 +1,195 @@
+{
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "brasshaven:chunked_template",
+        "size": [
+          102,
+          97,
+          66
+        ],
+        "cells": [
+          {
+            "location": "brasshaven:forgotten_library/library/x0_z0",
+            "offset": [
+              0,
+              29,
+              2
+            ],
+            "size": [
+              26,
+              37,
+              20
+            ],
+            "blocks": 3090
+          },
+          {
+            "location": "brasshaven:forgotten_library/library/x0_z1",
+            "offset": [
+              0,
+              2,
+              22
+            ],
+            "size": [
+              26,
+              76,
+              22
+            ],
+            "blocks": 11667
+          },
+          {
+            "location": "brasshaven:forgotten_library/library/x0_z2",
+            "offset": [
+              0,
+              29,
+              44
+            ],
+            "size": [
+              26,
+              25,
+              22
+            ],
+            "blocks": 3222
+          },
+          {
+            "location": "brasshaven:forgotten_library/library/x1_z0",
+            "offset": [
+              26,
+              1,
+              0
+            ],
+            "size": [
+              25,
+              66,
+              22
+            ],
+            "blocks": 12181
+          },
+          {
+            "location": "brasshaven:forgotten_library/library/x1_z1",
+            "offset": [
+              26,
+              1,
+              22
+            ],
+            "size": [
+              25,
+              78,
+              22
+            ],
+            "blocks": 34385
+          },
+          {
+            "location": "brasshaven:forgotten_library/library/x1_z2",
+            "offset": [
+              26,
+              1,
+              44
+            ],
+            "size": [
+              25,
+              63,
+              22
+            ],
+            "blocks": 8069
+          },
+          {
+            "location": "brasshaven:forgotten_library/library/x2_z0",
+            "offset": [
+              51,
+              1,
+              2
+            ],
+            "size": [
+              25,
+              83,
+              20
+            ],
+            "blocks": 8742
+          },
+          {
+            "location": "brasshaven:forgotten_library/library/x2_z1",
+            "offset": [
+              51,
+              1,
+              22
+            ],
+            "size": [
+              25,
+              96,
+              22
+            ],
+            "blocks": 29406
+          },
+          {
+            "location": "brasshaven:forgotten_library/library/x2_z2",
+            "offset": [
+              51,
+              0,
+              44
+            ],
+            "size": [
+              25,
+              80,
+              22
+            ],
+            "blocks": 7911
+          },
+          {
+            "location": "brasshaven:forgotten_library/library/x3_z0",
+            "offset": [
+              76,
+              29,
+              1
+            ],
+            "size": [
+              26,
+              63,
+              21
+            ],
+            "blocks": 5032
+          },
+          {
+            "location": "brasshaven:forgotten_library/library/x3_z1",
+            "offset": [
+              76,
+              22,
+              22
+            ],
+            "size": [
+              26,
+              70,
+              22
+            ],
+            "blocks": 7982
+          },
+          {
+            "location": "brasshaven:forgotten_library/library/x3_z2",
+            "offset": [
+              76,
+              14,
+              44
+            ],
+            "size": [
+              24,
+              70,
+              22
+            ],
+            "blocks": 6258
+          }
+        ],
+        "projection": "rigid",
+        "processors": "brasshaven:aging",
+        "ground_level_delta": 36,
+        "footprint": [
+          1,
+          0,
+          97,
+          62
+        ]
+      }
+    }
+  ]
+}

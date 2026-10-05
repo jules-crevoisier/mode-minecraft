@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "brasshaven:leather_padding",
+  "result": {
+    "id": "brasshaven:leather_padding_slab",
+    "count": 2
+  }
+}

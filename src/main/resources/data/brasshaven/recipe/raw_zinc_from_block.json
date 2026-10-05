@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "brasshaven:raw_zinc_block"
+  ],
+  "result": {
+    "id": "brasshaven:raw_zinc",
+    "count": 9
+  }
+}

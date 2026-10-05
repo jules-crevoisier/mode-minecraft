@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "powered=false": {
+      "model": "brasshaven:block/rustwood_pressure_plate"
+    },
+    "powered=true": {
+      "model": "brasshaven:block/rustwood_pressure_plate_down"
+    }
+  }
+}

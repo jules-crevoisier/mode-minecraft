@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/slab",
-  "textures": {
-    "bottom": "wayfarers:block/glowwood_planks",
-    "top": "wayfarers:block/glowwood_planks",
-    "side": "wayfarers:block/glowwood_planks"
-  }
-}

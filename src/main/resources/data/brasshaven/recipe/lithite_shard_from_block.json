@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "brasshaven:lithite_block"
+  ],
+  "result": {
+    "id": "brasshaven:lithite_shard",
+    "count": 9
+  }
+}

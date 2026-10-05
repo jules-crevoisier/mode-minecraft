@@ -55,7 +55,7 @@ KEY_TEXT = {
 KEY_AZERTY = {"W": "Z", "Z": "W", "M": ","}
 KEYS_NOTE = ("Les lettres ci-dessus sont celles d'un clavier QWERTY. Minecraft retient l'emplacement de la touche : en "
              "AZERTY, la touche du Manuel (W) est donc sur Z, le zoom de la mini-carte (Z) sur W et la carte (M) sur la "
-             "virgule. Toutes se changent dans Options → Commandes → rubrique Wayfarers, ou depuis Mods → Wayfarers → "
+             "virgule. Toutes se changent dans Options → Commandes → rubrique Brasshaven, ou depuis Mods → Brasshaven → "
              "Config → Touches.")
 
 COMMANDS = {
@@ -107,18 +107,18 @@ CONFIG_FR = {
     "map.sharedExploration": "Carte du monde partagée : chacun voit ce que tous ont exploré. Sur false, chaque joueur "
                              "ne voit que ce qu'il a vu lui-même (le serveur garde les deux, on peut changer à tout moment).",
     "map.showPlayers": "Montre les autres joueurs sur la mini-carte et la carte du monde (même dimension).",
-    "compat.requireSameVersion": "Refuse les joueurs dont la version de Wayfarers diffère de celle du serveur, avec un "
+    "compat.requireSameVersion": "Refuse les joueurs dont la version de Brasshaven diffère de celle du serveur, avec un "
                                  "message qui donne les deux versions et la page de téléchargement. Sur false : seuls "
                                  "un protocole réseau incompatible ou des blocs/objets manquants les refusent.",
     "compat.downloadUrl": "Page de téléchargement donnée aux joueurs refusés (la page de ton modpack, par exemple). "
                           "Vide : la page du mod.",
-    "updates.checkForUpdates": "Cherche une version plus récente de Wayfarers (GitHub, en arrière-plan) : un message "
+    "updates.checkForUpdates": "Cherche une version plus récente de Brasshaven (GitHub, en arrière-plan) : un message "
                                "avec le lien du changelog en jeu, une ligne dans le journal du serveur. Rien n'est "
                                "jamais téléchargé.",
     "map.minimap": "Affiche la mini-carte (touche H en jeu ; Maj + H change sa taille).",
     "map.corner": "Coin de l'écran de la mini-carte : TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT ou BOTTOM_RIGHT.",
     "map.size": "Préréglage de taille de la mini-carte, cadre compris : SMALL (56 px), MEDIUM (68 px), LARGE (96 px) "
-                "ou XLARGE (128 px). En jeu : Maj + H, ou Mods → Wayfarers → Config, onglet Mini-carte. Sert quand "
+                "ou XLARGE (128 px). En jeu : Maj + H, ou Mods → Brasshaven → Config, onglet Mini-carte. Sert quand "
                 "map.sizePixels vaut 0 (les anciens fichiers de réglages gardent ainsi leur taille).",
     "map.sizePixels": "Taille exacte de la mini-carte à l'écran, cadre compris, de 48 à 160 px (0 : le préréglage "
                       "map.size). En jeu : le curseur des options de la carte (M, puis le bouton engrenage), par pas "
@@ -492,7 +492,7 @@ NEW_GROUPS = [
         ("Un vrai écran pour chaque machine", "Les neuf machines s'ouvrent au clic : zone, sortie, filtre, mode "
          "redstone, réglés avec des boutons et des infobulles.", "ecrans-machines",
          "img:img/gui/machine_harvester.webp"),
-        ("Réglages et touches", "Mods → Wayfarers → Config : barres de vie, chiffres de dégâts, suivi, astuces. La "
+        ("Réglages et touches", "Mods → Brasshaven → Config : barres de vie, chiffres de dégâts, suivi, astuces. La "
          "touche du Manuel se change (W, donc Z en AZERTY).", "touches", "img:img/gui/settings.webp"),
         ("Terminal de guilde pour toute la base", "Il relie tous les coffres à 48 blocs. Des relais de stockage "
          "étendent la portée, une page réseau exclut un coffre, « Montrer » les encadre dans le monde.", "terminal",
@@ -591,66 +591,66 @@ NEW_GROUPS = [
     ]),
 ]
 
-# « Tester en jeu » : (titre, [commandes], ce qu'on doit voir). Les commandes /wayfarers sont vérifiées par le
-# générateur contre WayfarersCommand.java ; les ids d'objets, d'entités et de structures contre les données du mod.
+# « Tester en jeu » : (titre, [commandes], ce qu'on doit voir). Les commandes /brasshaven sont vérifiées par le
+# générateur contre BrasshavenCommand.java ; les ids d'objets, d'entités et de structures contre les données du mod.
 TEST_INTRO = ("Une partie en créatif (ou avec les droits d'opérateur), un monde neuf, et ces commandes dans le chat. "
               "Coche au fur et à mesure : la liste se souvient de tes coches sur cet appareil.")
 TEST_CHECKLIST = [
-    ("Tout recevoir d'un coup", ["/gamemode creative", "/wayfarers demo"],
+    ("Tout recevoir d'un coup", ["/gamemode creative", "/brasshaven demo"],
      "Tous les objets du mod arrivent dans l'inventaire (le surplus tombe au sol)."),
-    ("Clé à molette", ["/give @s wayfarers:brass_wrench", "/give @s minecraft:oak_stairs 8"],
+    ("Clé à molette", ["/give @s brasshaven:brass_wrench", "/give @s minecraft:oak_stairs 8"],
      "Pose un escalier, clic droit avec la clé : il tourne. Accroupi : dans l'autre sens. Accroupi sur un bloc déco "
-     "Wayfarers (placage de laiton…) : il revient dans l'inventaire."),
-    ("Grappin et planeur", ["/give @s wayfarers:grappling_hook", "/give @s wayfarers:brass_glider"],
+     "Brasshaven (placage de laiton…) : il revient dans l'inventaire."),
+    ("Grappin et planeur", ["/give @s brasshaven:grappling_hook", "/give @s brasshaven:brass_glider"],
      "Vise un mur à moins de 32 blocs : la chaîne te tire jusqu'au rebord. En survie (/gamemode survival), saute "
      "d'en haut avec le planeur en main : tu descends doucement, sans dégâts."),
-    ("Pistolet à rivets", ["/give @s wayfarers:rivet_gun", "/give @s wayfarers:rivet 64",
+    ("Pistolet à rivets", ["/give @s brasshaven:rivet_gun", "/give @s brasshaven:rivet 64",
                            "/summon minecraft:zombie ~ ~ ~5"],
      "Clic droit : un rivet fumant part tout droit (5 dégâts). Sans rivets ni pépites de fer : « Plus de rivets »."),
-    ("Montre et boussole", ["/give @s wayfarers:pocket_watch", "/give @s wayfarers:airship_compass"],
+    ("Montre et boussole", ["/give @s brasshaven:pocket_watch", "/give @s brasshaven:airship_compass"],
      "La montre affiche l'heure, le jour, la lune et le biome. La boussole cherche le Port céleste le plus proche et "
      "son aiguille pointe vers lui (sinon elle le dit et tourne)."),
-    ("Burin", ["/give @s wayfarers:chisel", "/give @s minecraft:stone_bricks 16",
+    ("Burin", ["/give @s brasshaven:chisel", "/give @s minecraft:stone_bricks 16",
                "/give @s minecraft:stone_brick_stairs 8"],
      "Clic droit sur des briques de pierre : moussues, fissurées, sculptées… Le nom de la variante et sa place "
      "dans la famille (ex. 3/6) s'affichent au-dessus de la barre. Sur un escalier, l'orientation est gardée."),
-    ("Table de taille", ["/give @s wayfarers:chisel_table", "/give @s wayfarers:brass_plating 64"],
+    ("Table de taille", ["/give @s brasshaven:chisel_table", "/give @s brasshaven:brass_plating 64"],
      "Pose la table, mets la pile de placage de laiton dans la case : clique « Laiton gravé » ou « Grille en "
      "laiton », toute la pile change."),
-    ("Symétrie de la baguette", ["/give @s wayfarers:builder_wand", "/give @s minecraft:stone_bricks 64"],
+    ("Symétrie de la baguette", ["/give @s brasshaven:builder_wand", "/give @s minecraft:stone_bricks 64"],
      "Accroupi + clic droit sur un bloc : centre du miroir (étincelles). G : miroir X, Z, X + Z. Clic droit sur "
      "un mur : contours dorés pour tes blocs, bleus pour les copies. Accroupi dans le vide : tout s'annule."),
-    ("Golem de laiton", ["/give @s wayfarers:brass_block 2", "/give @s wayfarers:clockwork_heart"],
+    ("Golem de laiton", ["/give @s brasshaven:brass_block 2", "/give @s brasshaven:clockwork_heart"],
      "Empile les deux blocs, clic droit avec le cœur : le golem apparaît et te suit. Accroupi + clic droit main "
      "vide : « garde ici »."),
-    ("Automates ennemis", ["/time set night", "/summon wayfarers:clockwork_spider ~ ~ ~6",
-                           "/summon wayfarers:steam_drone ~ ~4 ~6"],
+    ("Automates ennemis", ["/time set night", "/summon brasshaven:clockwork_spider ~ ~ ~6",
+                           "/summon brasshaven:steam_drone ~ ~4 ~6"],
      "L'araignée s'arrête, sa clé ronronne, puis elle bondit. Le drone tourne au-dessus de toi, tire des rivets et "
      "se cabre avant de plonger."),
-    ("Donneurs de quêtes", ["/wayfarers npc spawn guild_agent", "/give @s minecraft:bread 12"],
+    ("Donneurs de quêtes", ["/brasshaven npc spawn guild_agent", "/give @s minecraft:bread 12"],
      "Un agent de la Guilde apparaît à tes pieds, son nom au-dessus de la tête ; il reste à son poste et ne prend "
      "aucun dégât. Clic droit : il salue, ses contrats s'affichent. Accepte « Des vivres pour la route », clique "
      "Rendre : les pains partent, émeraudes et fragments de carte arrivent. Le contrat apparaît dans le journal "
      "(J), onglet Contrats."),
-    ("Habitants des structures", ["/wayfarers tp giant_tree", "/wayfarers tp jungle_ziggurat",
-                                  "/wayfarers tp clockwork_citadel"],
+    ("Habitants des structures", ["/brasshaven tp giant_tree", "/brasshaven tp jungle_ziggurat",
+                                  "/brasshaven tp clockwork_citadel"],
      "Dans l'Arbre-monde, des villageois en robe verte vivent sur les étages du tronc (lit et métier chacun) et une "
      "druidesse attend à l'étage des couchettes. Près de la ziggourat, la loge des gardiens ; dans la Citadelle, "
      "le bricoleur du premier atelier. La nuit, aucun monstre n'apparaît chez eux."),
-    ("Le Grand Horloger", ["/wayfarers boss grand_clockmaker"],
+    ("Le Grand Horloger", ["/brasshaven boss grand_clockmaker"],
      "Il apparaît à 6 blocs (arène de 20 blocs autour de toi). Guette l'arrêt du temps (cercle qui se referme) et, "
-     "à mi-vie, le rugissement puis minuit. Pour le vrai repaire : /wayfarers tp clockwork_citadel."),
-    ("Merveilles en surface", ["/wayfarers tp inventor_manor", "/wayfarers tp sylvan_palace",
-                               "/wayfarers tp geothermal_foundry", "/wayfarers tp tesla_observatory",
-                               "/wayfarers tp sky_isles"],
+     "à mi-vie, le rugissement puis minuit. Pour le vrai repaire : /brasshaven tp clockwork_citadel."),
+    ("Merveilles en surface", ["/brasshaven tp inventor_manor", "/brasshaven tp sylvan_palace",
+                               "/brasshaven tp geothermal_foundry", "/brasshaven tp tesla_observatory",
+                               "/brasshaven tp sky_isles"],
      "Téléportation à la plus proche (générée si besoin, quelques secondes ; si aucune n'est assez près, le "
      "message le dit). Les Îles célestes flottent vers y 170-230 : tu arrives dessus ou dessous ; en dessous, "
      "passe en /gamemode spectator pour monter."),
-    ("Merveilles souterraines", ["/wayfarers locate dwarven_city", "/wayfarers locate crystal_cathedral",
-                                 "/locate structure wayfarers:dwarven_city", "/gamemode spectator"],
+    ("Merveilles souterraines", ["/brasshaven locate dwarven_city", "/brasshaven locate crystal_cathedral",
+                                 "/locate structure brasshaven:dwarven_city", "/gamemode spectator"],
      "locate donne les coordonnées ; tp t'amène à la surface juste au-dessus. En spectateur, descends à travers la "
      "roche : la cité est vers y −50, le sol de la cathédrale vers y −40."),
-    ("Carte du monde et mini-carte", ["/gamemode spectator", "/give @s wayfarers:wayfarer_atlas"],
+    ("Carte du monde et mini-carte", ["/gamemode spectator", "/give @s brasshaven:wayfarer_atlas"],
      "La mini-carte est en haut à gauche ; H la masque, Z change son zoom (W en AZERTY). Vole un peu puis ouvre la "
      "carte avec M (la virgule en AZERTY) ou l'Atlas accroupi : le terrain vu est dessiné, en relief. Glisse, molette "
      "pour zoomer, Espace pour revenir sur toi. Le bouton cube incline la carte en 3D ; l'engrenage ouvre les "
@@ -662,33 +662,33 @@ TEST_CHECKLIST = [
     ("Vue des grottes", ["/gamemode spectator", "/tp @s ~ 20 ~"],
      "Sous terre, la mini-carte et la carte montrent la grotte à ta hauteur (« Vue des grottes ») au lieu de la "
      "surface. Le bouton à droite de la carte l'active ou la coupe."),
-    ("Écrans des machines", ["/give @s wayfarers:auto_harvester", "/give @s wayfarers:redstone_timer",
-                             "/give @s wayfarers:entity_detector", "/give @s wayfarers:vacuum_hopper"],
+    ("Écrans des machines", ["/give @s brasshaven:auto_harvester", "/give @s brasshaven:redstone_timer",
+                             "/give @s brasshaven:entity_detector", "/give @s brasshaven:vacuum_hopper"],
      "Pose chaque machine et fais clic droit : un écran de laiton avec la zone, la sortie, le mode redstone… "
      "Survole un bouton pour son infobulle. Le minuteur affiche son intervalle, le détecteur sa cible et sa portée."),
-    ("Terminal de guilde et relais", ["/give @s wayfarers:guild_terminal", "/give @s wayfarers:storage_relay 2",
+    ("Terminal de guilde et relais", ["/give @s brasshaven:guild_terminal", "/give @s brasshaven:storage_relay 2",
                                       "/give @s minecraft:chest 8"],
      "Pose des coffres jusqu'à 48 blocs du terminal, ouvre-le : tous leurs objets sont dans une seule grille. Pose "
      "un coffre à 70 blocs : absent ; un relais entre les deux : il apparaît. Bouton réseau en haut à droite : "
      "clique un coffre pour l'exclure, « Montrer » les encadre (or relié, rouge exclu)."),
-    ("Créatures marines", ["/wayfarers tp sunken_submarine", "/time set night",
-                           "/summon wayfarers:glow_jellyfish ~ ~-3 ~4", "/summon wayfarers:reef_fish ~ ~-3 ~4",
-                           "/summon wayfarers:manta_ray ~ ~-4 ~8", "/summon wayfarers:whale ~ ~-8 ~16"],
+    ("Créatures marines", ["/brasshaven tp sunken_submarine", "/time set night",
+                           "/summon brasshaven:glow_jellyfish ~ ~-3 ~4", "/summon brasshaven:reef_fish ~ ~-3 ~4",
+                           "/summon brasshaven:manta_ray ~ ~-4 ~8", "/summon brasshaven:whale ~ ~-8 ~16"],
      "Tu arrives à la surface de la mer. La méduse pulse et brille la nuit (la toucher pique), les poissons "
      "nagent en banc, la raie bat des ailes et saute, la baleine remonte souffler."),
-    ("Serpent de mer", ["/time set night", "/give @s minecraft:oak_boat", "/summon wayfarers:sea_serpent ~ ~-4 ~10"],
+    ("Serpent de mer", ["/time set night", "/give @s minecraft:oak_boat", "/summon brasshaven:sea_serpent ~ ~-4 ~10"],
      "Une barre de boss apparaît. Il mord, charge (ton bateau se brise) et lève un tourbillon qui t'aspire. Il "
      "lâche des écailles de serpent de mer."),
-    ("Épaves sous l'eau", ["/wayfarers tp sunken_submarine", "/wayfarers tp diving_bell",
-                           "/wayfarers tp coral_shrine", "/wayfarers tp shipwreck_debris"],
+    ("Épaves sous l'eau", ["/brasshaven tp sunken_submarine", "/brasshaven tp diving_bell",
+                           "/brasshaven tp coral_shrine", "/brasshaven tp shipwreck_debris"],
      "Tu arrives à la surface juste au-dessus : plonge. Le sous-marin a une brèche dans le flanc et deux coffres ; "
      "dans la cloche de plongée, on respire."),
-    ("Plongée et fonds marins", ["/give @s wayfarers:diving_helmet", "/give @s wayfarers:flippers",
-                                 "/give @s wayfarers:pearl_oyster 2", "/give @s wayfarers:glow_anemone 4"],
+    ("Plongée et fonds marins", ["/give @s brasshaven:diving_helmet", "/give @s brasshaven:flippers",
+                                 "/give @s brasshaven:pearl_oyster 2", "/give @s brasshaven:glow_anemone 4"],
      "Avec le casque, la tête sous l'eau : force de conduit (respiration, vue dégagée, minage normal). Avec les "
      "palmes, tu nages bien plus vite. Pose l'huître sous l'eau, clic droit quand elle est entrouverte : une perle."),
-    ("Bois et pierres", ["/give @s wayfarers:glowwood_sapling", "/give @s minecraft:bone_meal 8",
-                         "/give @s wayfarers:marble 16", "/locate biome minecraft:badlands"],
+    ("Bois et pierres", ["/give @s brasshaven:glowwood_sapling", "/give @s minecraft:bone_meal 8",
+                         "/give @s brasshaven:marble 16", "/locate biome minecraft:badlands"],
      "Plante la pousse et donne-lui de la poudre d'os : un arbre de bois-lueur aux feuilles qui luisent la nuit. "
      "Mets le marbre dans un tailleur de pierre : poli, briques, pilier, sculpté. Dans les badlands, creuse une "
      "falaise : des veines de roche rouillée."),
@@ -742,7 +742,7 @@ MAP_FEATURES = [
     ("carte-partagee", "Exploration partagée", "Le serveur dessine les chunks autour de chaque joueur et garde la "
      "carte de chaque dimension. Ce que ton ami a exploré pendant ton absence est déjà sur ta carte. Un serveur qui "
      "préfère des cartes personnelles met map.sharedExploration à false : chacun ne voit alors que ce qu'il a vu "
-     "lui-même (le serveur garde les deux, on peut basculer à tout moment).", "wayfarers:wayfarer_atlas"),
+     "lui-même (le serveur garde les deux, on peut basculer à tout moment).", "brasshaven:wayfarer_atlas"),
     ("reperes", "Repères privés ou partagés", "Clic droit sur la carte, « Poser un repère ici » : un nom, une "
      "couleur, une icône (maison, pioche, étoile…) et la case « Partager avec tout le monde ». Un repère privé n'est "
      "visible que par toi ; un repère partagé apparaît chez tous, avec le nom de celui qui l'a posé. Sa fiche permet "
@@ -771,8 +771,8 @@ MINIMAP_TEXT = [
     "pixel près, de 48 à 160 px : le curseur des options de la carte (M, puis l'engrenage), la mini-carte change en "
     "direct. La flèche et les marqueurs suivent sa taille : petits sur une petite mini-carte. Z change son zoom "
     "(4 niveaux) ; en AZERTY c'est la touche W. Coin de l'écran, forme (ronde ou carrée), rotation, coordonnées "
-    "et opacité se règlent aussi dans ces options ou dans Mods → Wayfarers → Config, onglet Mini-carte (ou "
-    "config/wayfarers-client.toml).",
+    "et opacité se règlent aussi dans ces options ou dans Mods → Brasshaven → Config, onglet Mini-carte (ou "
+    "config/brasshaven-client.toml).",
 ]
 
 # ------------------------------------------------------------------ machines : écrans
@@ -780,7 +780,7 @@ MACHINE_SCREENS_INTRO = ("Clic droit sur une machine : un écran de laiton s'ouv
                          "état en une ligne ; au milieu, ses réglages en boutons (survole-les pour une infobulle) ; "
                          "à droite, ses cases quand elle en a. Les images ci-dessous sont dessinées avec les vraies "
                          "textures du jeu ; touche une image pour l'agrandir.")
-SETTINGS_TEXT = ("Mods → Wayfarers → Config ouvre les réglages du mod dans le même style : barres de vie (toujours, "
+SETTINGS_TEXT = ("Mods → Brasshaven → Config ouvre les réglages du mod dans le même style : barres de vie (toujours, "
                  "blessées, jamais), chiffres de dégâts, suivi de quête, cartes d'astuce, et un bouton vers les "
                  "touches. La touche du Manuel (maintenue sur un objet pour ouvrir sa page) se change maintenant : W "
                  "par défaut, c'est-à-dire Z sur un clavier AZERTY.")
@@ -810,9 +810,9 @@ OCEAN_FLOOR = [
     ("Récifs et coraux géants", "Des jardins de corail bien plus denses, et de grandes formes en blocs de corail : "
      "tours, éventails, arches, cerveaux.", "minecraft:brain_coral_block", "mers chaudes"),
     ("Anémones lumineuses", "Elles éclairent le fond la nuit, en trois couleurs. Casse-les pour les ramasser : de "
-     "quoi décorer un aquarium.", "wayfarers:glow_anemone", "toutes les mers"),
+     "quoi décorer un aquarium.", "brasshaven:glow_anemone", "toutes les mers"),
     ("Huîtres perlières", "Clic droit sur une coquille entrouverte pour prendre sa perle ; sous l'eau, elle en refait "
-     "une avec le temps. Quatre perles valent une émeraude à l'établi.", "wayfarers:pearl_oyster",
+     "une avec le temps. Quatre perles valent une émeraude à l'établi.", "brasshaven:pearl_oyster",
      "mers tempérées et chaudes"),
     ("Cheminées à bulles", "Des cheminées de basalte sur du magma soufflent une colonne de bulles jusqu'à la "
      "surface : entre dedans pour remonter d'un coup et reprendre ton souffle.", "minecraft:magma_block",
@@ -878,7 +878,7 @@ PERF_POINTS = [
     ("Côté serveur", [
         "Les arènes de boss, les sceaux et les gargouilles ne parcourent plus toutes les créatures autour d'eux à "
         "chaque tick : ils regardent seulement la liste des joueurs.",
-        "La boussole des structures, la boussole de dirigeable et /wayfarers locate gardent leur réponse en "
+        "La boussole des structures, la boussole de dirigeable et /brasshaven locate gardent leur réponse en "
         "mémoire (même « rien trouvé », la recherche la plus lente).",
         "Le mana, les bonus d'ensemble d'armure et les anneaux aimantés se calculent moins souvent, et les anneaux "
         "de tous les joueurs ne tombent plus sur le même tick.",
@@ -951,14 +951,14 @@ INGAME_SHOTS = [
 ]
 
 
-# ------------------------------------------------------------------ Wayfarers biomes (gen_wiki section_biomes; the
+# ------------------------------------------------------------------ Brasshaven biomes (gen_wiki section_biomes; the
 # biome texts themselves are in wf/worldbiomes.py, shared with the in-game manual)
 BIOMES_INTRO = ("Trois biomes propres au mod, taillés dans des climats vanilla : le relief reste celui de Minecraft, "
                 "mais le sol, les couleurs, le ciel, les particules et les objets naturels changent. Ils apparaissent "
                 "dans les nouveaux mondes de type « Par défaut ».")
 TOUCHES_INTRO = ("Les biomes vanilla gagnent quelques touches naturelles, rares et légères : chacune a son option "
                  "côté serveur (lue au démarrage, pour les nouveaux chunks seulement).")
-BIOMES_NOTE = ("Option world.customBiomes (vrai par défaut) : un pack de données intégré, « wayfarers:custom_biomes », "
+BIOMES_NOTE = ("Option world.customBiomes (vrai par défaut) : un pack de données intégré, « brasshaven:custom_biomes », "
                "remplace le type de monde « Par défaut » par le même avec ces trois biomes. Minecraft affiche alors son "
                "avertissement « paramètres expérimentaux » à la création du monde : c'est normal. Les mondes "
                "Superplat, Amplifié, Grands biomes et les mondes existants ne changent pas. La génération reste au "
@@ -986,17 +986,17 @@ SOCIAL_SAFETY = [
      "seulement quand elles changent ; la boîte et le tableau seulement quand on les ouvre."),
 ]
 SOCIAL_COMMANDS = [
-    ("/wayfarers company create|invite|leave|kick|promote|rename|friendlyfire|sharexp|chat|join", "tous",
+    ("/brasshaven company create|invite|leave|kick|promote|rename|friendlyfire|sharexp|chat|join", "tous",
      "Tout ce que fait l'écran de Compagnie, en commande."),
     ("/cc <message>", "tous", "Écrit à ta compagnie seulement."),
-    ("/wayfarers trade <joueur>", "tous", "Propose un échange (à moins de 8 blocs)."),
-    ("/wayfarers duel <joueur>", "tous", "Lance un défi en duel."),
-    ("/wayfarers emote <geste>", "tous", "wave, bow, cheer, clap, point, laugh, thanks ou rally."),
-    ("/wayfarers social accept|decline <type> <joueur>", "tous",
+    ("/brasshaven trade <joueur>", "tous", "Propose un échange (à moins de 8 blocs)."),
+    ("/brasshaven duel <joueur>", "tous", "Lance un défi en duel."),
+    ("/brasshaven emote <geste>", "tous", "wave, bow, cheer, clap, point, laugh, thanks ou rally."),
+    ("/brasshaven social accept|decline <type> <joueur>", "tous",
      "Répond à une demande (les boutons du chat l'écrivent pour toi)."),
-    ("/wayfarers social status", "op", "Joueurs connus, compagnies, colis en attente, contrats ouverts."),
-    ("/wayfarers social demo", "op", "Remplit ta compagnie, ta boîte et le tableau avec des exemples (pour tester ou filmer)."),
-    ("/wayfarers social selftest", "op", "Vérifie les règles du serveur (sauvegarde, échange, contrats, XP partagée...) "
+    ("/brasshaven social status", "op", "Joueurs connus, compagnies, colis en attente, contrats ouverts."),
+    ("/brasshaven social demo", "op", "Remplit ta compagnie, ta boîte et le tableau avec des exemples (pour tester ou filmer)."),
+    ("/brasshaven social selftest", "op", "Vérifie les règles du serveur (sauvegarde, échange, contrats, XP partagée...) "
      "sans joueur ; utilisé par le test automatique du serveur."),
 ]
 KEY_TEXT.update({
@@ -1045,10 +1045,10 @@ INGAME_SHOTS += [
      "deux voyants d'accord au milieu.", "multijoueur"),
 ]
 TEST_CHECKLIST += [
-    ("Multijoueur (seul)", ["/wayfarers social demo", "/give @s wayfarers:pneumatic_post", "/give @s wayfarers:contract_board"],
+    ("Multijoueur (seul)", ["/brasshaven social demo", "/give @s brasshaven:pneumatic_post", "/give @s brasshaven:contract_board"],
      "Touche O : ta compagnie « Brass Owls » avec Ada. Pose la borne et le tableau : la boîte contient trois envois, le "
      "tableau trois contrats. Touche Y : la roue des gestes."),
-    ("Multijoueur (à deux)", ["/wayfarers trade <ami>", "/wayfarers duel <ami>", "/wayfarers company invite <ami>"],
+    ("Multijoueur (à deux)", ["/brasshaven trade <ami>", "/brasshaven duel <ami>", "/brasshaven company invite <ami>"],
      "L'ami accepte dans le chat. Échange : mettez un objet, acceptez tous les deux, 3 s plus tard les objets changent "
      "de mains. Duel : le coup fatal laisse un demi-cœur. Compagnie : vos cadres dorés sur la carte, /cc pour vous écrire."),
 ]

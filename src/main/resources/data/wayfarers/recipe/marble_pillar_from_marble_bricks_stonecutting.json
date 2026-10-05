@@ -1,8 +1,0 @@
-{
-  "type": "minecraft:stonecutting",
-  "ingredient": "wayfarers:marble_bricks",
-  "result": {
-    "id": "wayfarers:marble_pillar",
-    "count": 1
-  }
-}

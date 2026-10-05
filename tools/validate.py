@@ -53,7 +53,7 @@ def res_path(rl, kind, ext):
 def mod_ids(kind):
     """Ids registered by the Java side, read straight from the registry classes."""
     import re
-    java = os.path.join(ROOT, "src", "main", "java", "com", "wayfarers")
+    java = os.path.join(ROOT, "src", "main", "java", "com", "brasshaven")
     files = {"blocks": ["registry/ModBlocks.java", "generated/ModDecor.java", "generated/GeneratedMetals.java",
                         "generated/GeneratedMachines.java", "generated/GeneratedFurniture.java",
                         "generated/GeneratedWorldBlocks.java"],
@@ -109,7 +109,7 @@ def check_templates():
         for entry in d["palette"]:
             ns, name = entry["Name"].split(":")
             props = entry.get("Properties", {})
-            if ns == "wayfarers":
+            if ns == "brasshaven":
                 if mod_blocks and name not in mod_blocks:
                     err(f"{rel}: unknown mod block {entry['Name']}")
                 analog = ("stone_brick_stairs" if name.endswith("_stairs") else "stone_brick_slab"
@@ -151,11 +151,11 @@ def check_templates():
                 loot_refs.add((data["LootTable"], rel))
             for stack in data.get("Items", []) if isinstance(data.get("Items"), list) else []:
                 ins, _, iid = str(stack.get("id", "")).rpartition(":")
-                if (ins == "minecraft" and iid not in MC_GAME["items"]) or (ins == "wayfarers" and iid not in mod_ids("items")):
+                if (ins == "minecraft" and iid not in MC_GAME["items"]) or (ins == "brasshaven" and iid not in mod_ids("items")):
                     err(f"{rel}: container item {stack.get('id')} unknown (the game rejects the whole template)")
             if "SpawnData" in data:
                 ens, eid = data["SpawnData"]["entity"]["id"].split(":")
-                if (ens == "minecraft" and eid not in MC_GAME["entities"]) or (ens == "wayfarers" and eid not in mod_ids("entities")):
+                if (ens == "minecraft" and eid not in MC_GAME["entities"]) or (ens == "brasshaven" and eid not in mod_ids("entities")):
                     err(f"{rel}: spawner entity {eid} unknown")
             if "pool" in data and data["pool"] != "minecraft:empty" and data["pool"] not in VANILLA_POOLS:
                 if not os.path.exists(res_path(data["pool"], "worldgen/template_pool", ".json")):
@@ -163,7 +163,7 @@ def check_templates():
         for e in d["entities"]:
             check_template_entity(rel, e, err)
     for ref, rel in sorted(loot_refs):
-        if ref.startswith("wayfarers:") and not os.path.exists(res_path(ref, "loot_table", ".json")):
+        if ref.startswith("brasshaven:") and not os.path.exists(res_path(ref, "loot_table", ".json")):
             err(f"{rel}: loot table {ref} missing")
 
 
@@ -180,7 +180,7 @@ def check_template_entity(rel, e, err):
     """Entities saved in structure templates: known ids, no block-attached ones, sane villager data."""
     data = e["nbt"]
     ns, eid = data["id"].split(":")
-    known = eid in MC_GAME["entities"] if ns == "minecraft" else ns == "wayfarers" and eid in mod_ids("entities")
+    known = eid in MC_GAME["entities"] if ns == "minecraft" else ns == "brasshaven" and eid in mod_ids("entities")
     if not known:
         err(f"{rel}: entity {data['id']} unknown")
     if eid in HANGING:
@@ -189,7 +189,7 @@ def check_template_entity(rel, e, err):
         err(f"{rel}: entity {eid} without pos/blockPos")
     if "Rotation" in data and len(data["Rotation"]) != 2:
         err(f"{rel}: entity {eid} rotation must be [yaw, pitch]")
-    if ns == "wayfarers" and eid == "wayfarer_npc":
+    if ns == "brasshaven" and eid == "wayfarer_npc":
         from wf import npcs
         if data.get("Role") not in npcs.ROLES:
             err(f"{rel}: quest giver role {data.get('Role')} unknown (wf/npcs.py ROLES)")
@@ -223,17 +223,17 @@ def check_tags():
     for path in glob.glob(os.path.join(DATA, "*", "tags", "block", "**", "*.json"), recursive=True):
         for v in json.load(open(path))["values"]:
             v = v["id"] if isinstance(v, dict) else v
-            if v.startswith("wayfarers:") and v.split(":")[1] not in mod_ids("blocks"):
+            if v.startswith("brasshaven:") and v.split(":")[1] not in mod_ids("blocks"):
                 err(f"{os.path.relpath(path, DATA)}: unknown mod block {v}")
     for b in mod_ids("blocks"):
         if b not in TECHNICAL_BLOCKS and \
-                not os.path.exists(os.path.join(DATA, "wayfarers", "loot_table", "blocks", b + ".json")):
+                not os.path.exists(os.path.join(DATA, "brasshaven", "loot_table", "blocks", b + ".json")):
             err(f"block {b} has no loot table (would drop nothing)")
 
 
 def check_loot():
     mod_items = mod_ids("items")
-    for path in glob.glob(os.path.join(DATA, "wayfarers", "loot_table", "**", "*.json"), recursive=True):
+    for path in glob.glob(os.path.join(DATA, "brasshaven", "loot_table", "**", "*.json"), recursive=True):
         rel = os.path.relpath(path, DATA)
         table = json.load(open(path))
         for p in table["pools"]:
@@ -243,12 +243,12 @@ def check_loot():
                 ns, name = e["name"].split(":")
                 if ns == "minecraft" and name not in MC_GAME["items"]:
                     err(f"{rel}: unknown item {e['name']}")
-                if ns == "wayfarers" and mod_items and name not in mod_items:
+                if ns == "brasshaven" and mod_items and name not in mod_items:
                     err(f"{rel}: unknown mod item {e['name']}")
 
 
 def check_worldgen():
-    ns_dir = os.path.join(DATA, "wayfarers")
+    ns_dir = os.path.join(DATA, "brasshaven")
     for path in glob.glob(os.path.join(ns_dir, "worldgen", "structure", "*.json")):
         s = json.load(open(path))
         sid = os.path.basename(path)[:-5]
@@ -320,11 +320,11 @@ def check_worldgen():
 
 def check_biome_refs():
     """Every biome a data file names (biome tags, Forge biome modifiers, structures, predicates) is a vanilla biome, one
-    of the mod's own biomes (data/wayfarers/worldgen/biome, tools/wf/worldbiomes.py: Crimson Mire, Volcanic Highlands,
-    Pale Dunes) or a tag that exists. Any other wayfarers: biome id is an error."""
+    of the mod's own biomes (data/brasshaven/worldgen/biome, tools/wf/worldbiomes.py: Crimson Mire, Volcanic Highlands,
+    Pale Dunes) or a tag that exists. Any other brasshaven: biome id is an error."""
     biomes = set(MC_GAME["biomes"])
     ours = {os.path.splitext(os.path.basename(p))[0]
-            for p in glob.glob(os.path.join(DATA, "wayfarers", "worldgen", "biome", "*.json"))}
+            for p in glob.glob(os.path.join(DATA, "brasshaven", "worldgen", "biome", "*.json"))}
 
     def check(where, rid):
         if rid.startswith("#"):
@@ -334,7 +334,7 @@ def check_biome_refs():
                     err(f"{where}: unknown biome tag {rid}")
             elif not os.path.exists(os.path.join(DATA, ns, "tags", "worldgen", "biome", path + ".json")):
                 err(f"{where}: biome tag {rid} missing")
-        elif rid.startswith("wayfarers:"):
+        elif rid.startswith("brasshaven:"):
             if rid.split(":", 1)[1] not in ours:
                 err(f"{where}: biome {rid} is neither vanilla nor one of the mod's biomes ({sorted(ours)})")
         elif ":" in rid and not rid.startswith("minecraft:"):
@@ -371,7 +371,7 @@ def check_biome_refs():
     import wf.structures  # noqa: F401
     for sdef in defs.STRUCTURES:
         for b in sdef.biomes:
-            if b.startswith("wayfarers:") and b.split(":", 1)[1] not in ours:
+            if b.startswith("brasshaven:") and b.split(":", 1)[1] not in ours:
                 err(f"structure {sdef.id}: biome {b} is neither vanilla nor one of the mod's biomes "
                     f"(tools/wf/structures, tools/wf/placement.py)")
 
@@ -400,7 +400,7 @@ def check_vanilla_overrides():
             e = el["element"]
             if not 1 <= el["weight"] <= 150:
                 err(f"{path}: weight {el['weight']} outside 1..150")
-            if e["element_type"] not in ("minecraft:single_pool_element", "wayfarers:grounded_single"):
+            if e["element_type"] not in ("minecraft:single_pool_element", "brasshaven:grounded_single"):
                 err(f"{path}: unexpected element type {e['element_type']} for an added piece")
                 continue
             if e["location"] not in TEMPLATES:
@@ -409,12 +409,12 @@ def check_vanilla_overrides():
             if isinstance(procs, str) and procs not in VANILLA_PROCESSORS and \
                     not os.path.exists(res_path(procs, "worldgen/processor_list", ".json")):
                 err(f"{path}: processor list {procs} missing")
-            if e["element_type"] == "wayfarers:grounded_single" and not isinstance(e.get("ground_level_delta"), int):
+            if e["element_type"] == "brasshaven:grounded_single" and not isinstance(e.get("ground_level_delta"), int):
                 err(f"{path}: grounded element without an integer ground_level_delta")
 
 
 def check_chunked(path, e):
-    """A wayfarers:chunked_template element (wf/chunking.py, ChunkedPoolElement.java): every column exists, matches
+    """A brasshaven:chunked_template element (wf/chunking.py, ChunkedPoolElement.java): every column exists, matches
     the size and entry count the element declares, stays under the threshold, lies inside the piece and no two
     columns overlap."""
     size, cells = e.get("size"), e.get("cells") or []
@@ -450,15 +450,15 @@ def check_item_id(where, rid):
     ns, name = rid.split(":") if ":" in rid else ("minecraft", rid)
     if ns == "minecraft" and name not in MC_GAME["items"]:
         err(f"{where}: unknown item {rid}")
-    elif ns == "wayfarers" and name not in mod_ids("items"):
+    elif ns == "brasshaven" and name not in mod_ids("items"):
         err(f"{where}: unknown mod item {rid}")
 
 
 def check_advancements():
-    adv_dir = os.path.join(DATA, "wayfarers", "advancement")
+    adv_dir = os.path.join(DATA, "brasshaven", "advancement")
     ids = set()
     for path in glob.glob(os.path.join(adv_dir, "**", "*.json"), recursive=True):
-        ids.add("wayfarers:" + os.path.relpath(path, adv_dir)[:-5].replace(os.sep, "/"))
+        ids.add("brasshaven:" + os.path.relpath(path, adv_dir)[:-5].replace(os.sep, "/"))
     for path in glob.glob(os.path.join(adv_dir, "**", "*.json"), recursive=True):
         rel = os.path.relpath(path, DATA)
         adv = json.load(open(path))
@@ -475,7 +475,7 @@ def check_advancements():
                     continue
                 t = e["predicate"]["entity_type"]
                 ns, name = t.split(":")
-                if (ns == "wayfarers" and name not in mod_ids("entities")) or (ns == "minecraft" and name not in MC_GAME["entities"]):
+                if (ns == "brasshaven" and name not in mod_ids("entities")) or (ns == "minecraft" and name not in MC_GAME["entities"]):
                     err(f"{rel}: unknown entity {t}")
             for p in cond.get("player", []):
                 sid = p["predicate"]["location"]["structures"]
@@ -484,7 +484,7 @@ def check_advancements():
         for loot in adv.get("rewards", {}).get("loot", []):
             if not os.path.exists(res_path(loot, "loot_table", ".json")):
                 err(f"{rel}: reward table {loot} missing")
-    for path in glob.glob(os.path.join(DATA, "wayfarers", "recipe", "*.json")):
+    for path in glob.glob(os.path.join(DATA, "brasshaven", "recipe", "*.json")):
         r = json.load(open(path))
         rel = os.path.relpath(path, DATA)
         check_item_id(rel, r["result"]["id"])
@@ -498,7 +498,7 @@ def check_chisel():
     from wf import chisel
     for problem in chisel.check(set(MC_GAME["blocks"]), mod_ids("blocks")):
         err(problem)
-    folder = os.path.join(DATA, "wayfarers", "chisel")
+    folder = os.path.join(DATA, "brasshaven", "chisel")
     expected = {os.path.basename(rel) for rel in chisel.data_files()}
     present = set(os.listdir(folder)) if os.path.isdir(folder) else set()
     for f in sorted(expected ^ present):
@@ -507,16 +507,16 @@ def check_chisel():
 
 def check_lang():
     """Every registered id has a translation in both languages."""
-    a = os.path.join(ASSETS, "wayfarers", "lang")
+    a = os.path.join(ASSETS, "brasshaven", "lang")
     for lang in ("en_us", "fr_fr"):
         table = json.load(open(os.path.join(a, lang + ".json"), encoding="utf-8"))
         for i in mod_ids("items"):
-            if f"item.wayfarers.{i}" not in table and f"block.wayfarers.{i}" not in table:
+            if f"item.brasshaven.{i}" not in table and f"block.brasshaven.{i}" not in table:
                 err(f"{lang}: missing name for item {i}")
         for e in mod_ids("entities"):
-            if f"entity.wayfarers.{e}" not in table:
+            if f"entity.brasshaven.{e}" not in table:
                 err(f"{lang}: missing name for entity {e}")
-        java = open(os.path.join(ROOT, "src", "main", "java", "com", "wayfarers", "registry", "ModItems.java")).read()
+        java = open(os.path.join(ROOT, "src", "main", "java", "com", "brasshaven", "registry", "ModItems.java")).read()
         import re
         for root, _, files in os.walk(os.path.join(ROOT, "src", "main", "java")):
             for f in files:
@@ -538,7 +538,7 @@ def check_model_bounds():
 
 def check_assets():
     """Models -> textures, items/blocks -> models, lang keys (only once assets exist)."""
-    a = os.path.join(ASSETS, "wayfarers")
+    a = os.path.join(ASSETS, "brasshaven")
     if not os.path.isdir(a):
         return
     for path in glob.glob(os.path.join(a, "models", "**", "*.json"), recursive=True):
@@ -547,10 +547,10 @@ def check_assets():
             if tex.startswith("#"):
                 continue
             ns, p = tex.split(":") if ":" in tex else ("minecraft", tex)
-            if ns == "wayfarers" and not os.path.exists(os.path.join(a, "textures", p + ".png")):
+            if ns == "brasshaven" and not os.path.exists(os.path.join(a, "textures", p + ".png")):
                 err(f"{os.path.relpath(path, a)}: texture {tex} missing")
         parent = model.get("parent", "")
-        if parent.startswith("wayfarers:"):
+        if parent.startswith("brasshaven:"):
             if not os.path.exists(os.path.join(a, "models", parent.split(":")[1] + ".json")):
                 err(f"{os.path.relpath(path, a)}: parent {parent} missing")
 
@@ -566,7 +566,7 @@ def check_guide():
 
     def item_ok(where, rid):
         ns, name = rid.split(":")
-        if (ns == "minecraft" and name not in MC_GAME["items"]) or (ns == "wayfarers" and name not in items):
+        if (ns == "minecraft" and name not in MC_GAME["items"]) or (ns == "brasshaven" and name not in items):
             err(f"{where}: unknown item {rid}")
 
     for c, icon, _t in guide.CATEGORIES:
@@ -587,10 +587,10 @@ def check_guide():
         if page not in seen:
             err(f"tip {tid}: unknown manual page {page}")
     for lang in ("en_us", "fr_fr"):
-        table = json.load(open(os.path.join(ASSETS, "wayfarers", "lang", lang + ".json"), encoding="utf-8"))
-        keys = list(guide.UI) + [f"guide.wayfarers.cat.{c}" for c in cats]
+        table = json.load(open(os.path.join(ASSETS, "brasshaven", "lang", lang + ".json"), encoding="utf-8"))
+        keys = list(guide.UI) + [f"guide.brasshaven.cat.{c}" for c in cats]
         for pid, _c, _i, _t, paras, _r in guide.PAGES:
-            keys += [f"guide.wayfarers.{pid}.title"] + [f"guide.wayfarers.{pid}.p{i}" for i in range(len(paras))]
+            keys += [f"guide.brasshaven.{pid}.title"] + [f"guide.brasshaven.{pid}.p{i}" for i in range(len(paras))]
         for k in keys:
             if k not in table:
                 err(f"{lang}: missing manual text {k}: run gen_assets.py")
@@ -605,7 +605,7 @@ def check_screen_fit(sw=427, sh=240):
     window) and hint line (13 px under it) included. The sizes are read from the Java constants, so a screen made
     bigger fails here instead of in the next in-game screenshot."""
     import re
-    java = os.path.join(ROOT, "src", "main", "java", "com", "wayfarers")
+    java = os.path.join(ROOT, "src", "main", "java", "com", "brasshaven")
 
     def consts(*rels):
         """``int NAME = expr;`` constants of these files, evaluated (expressions may use earlier constants)."""
@@ -671,12 +671,12 @@ def check_screen_fit(sw=427, sh=240):
     # the world map's options panel floats beside the live minimap (at most 160 px + its 4 px margin)
     c = consts("client/map/WorldMapScreen.java")
     fits("world map options panel", c["OPT_W"], c["OPT_H"] - 5)  # no title plate above it
-    cc = consts("config/WayfarersClientConfig.java")
+    cc = consts("config/BrasshavenClientConfig.java")
     if 4 + cc["MINIMAP_MAX"] + 6 + c["OPT_W"] + 6 > sw:
         err(f"screen fit: the world map's options panel ({c['OPT_W']} px) covers a {cc['MINIMAP_MAX']} px minimap at {sw} px")
     if cc["MINIMAP_MAX"] + 21 + 8 > sh:
         err(f"screen fit: a {cc['MINIMAP_MAX']} px minimap and its plate do not fit {sh} px")
-    # multiplayer screens (com.wayfarers.social, client/social)
+    # multiplayer screens (com.brasshaven.social, client/social)
     c = consts("social/TradeMenu.java")
     fits("trade screen", c["W"], c["H"])
     c = consts("social/PostMenu.java")
@@ -754,7 +754,7 @@ def _options(v):
 
 @functools.lru_cache(maxsize=None)
 def _mod_tag(tag):
-    """Members of one of our item tags (wayfarers namespace or vanilla tags we add to), recursively."""
+    """Members of one of our item tags (brasshaven namespace or vanilla tags we add to), recursively."""
     ns, path = tag.split(":") if ":" in tag else ("minecraft", tag)
     out = set()
     p = os.path.join(DATA, ns, "tags", "item", path + ".json")
@@ -840,7 +840,7 @@ def _conflict(a, b):
 
 def _all_recipes():
     out = {}
-    for path in sorted(glob.glob(os.path.join(DATA, "wayfarers", "recipe", "*.json"))):
+    for path in sorted(glob.glob(os.path.join(DATA, "brasshaven", "recipe", "*.json"))):
         out[os.path.basename(path)[:-5]] = json.load(open(path))
     return out
 
@@ -904,13 +904,13 @@ def check_obtainable(recipes):
     that is not a block's, a block placed by worldgen or a structure, a Java hand-out, or a recipe whose own
     ingredients are obtainable). Reports what is left, and cycles of items that only make each other."""
     have = {i for i in MC_GAME["items"] if i not in CREATIVE_ONLY}
-    have |= {f"wayfarers:{i}" for i in JAVA_SOURCES}
+    have |= {f"brasshaven:{i}" for i in JAVA_SOURCES}
     block_drops, placed = {}, set()
     for path in glob.glob(os.path.join(DATA, "*", "loot_table", "**", "*.json"), recursive=True):
         rel = os.path.relpath(path, DATA).replace(os.sep, "/")
         names = _loot_names(json.load(open(path)))
         if "/loot_table/blocks/" in "/" + rel:
-            block_drops["wayfarers:" + os.path.basename(path)[:-5] if rel.startswith("wayfarers/") else rel] = names
+            block_drops["brasshaven:" + os.path.basename(path)[:-5] if rel.startswith("brasshaven/") else rel] = names
         else:
             have |= names
     # blocks a feature places: only features some biome modifier adds to the world count (a feature no biome
@@ -930,23 +930,23 @@ def check_obtainable(recipes):
             cpath = os.path.join(DATA, cns, "worldgen", "configured_feature", cname + ".json")
             if os.path.exists(cpath):
                 text += open(cpath).read()
-        placed |= set(re.findall(r'"Name": "(wayfarers:[a-z0-9_]+)"', text))
+        placed |= set(re.findall(r'"Name": "(brasshaven:[a-z0-9_]+)"', text))
     # a sapling grows its tree (configured_feature <wood>_tree, GeneratedWorldBlocks)
     trees = {}
-    for path in glob.glob(os.path.join(DATA, "wayfarers", "worldgen", "configured_feature", "*_tree.json")):
-        sapling = "wayfarers:" + os.path.basename(path)[:-len("_tree.json")] + "_sapling"
-        trees[sapling] = set(re.findall(r'"Name": "(wayfarers:[a-z0-9_]+)"', open(path).read()))
+    for path in glob.glob(os.path.join(DATA, "brasshaven", "worldgen", "configured_feature", "*_tree.json")):
+        sapling = "brasshaven:" + os.path.basename(path)[:-len("_tree.json")] + "_sapling"
+        trees[sapling] = set(re.findall(r'"Name": "(brasshaven:[a-z0-9_]+)"', open(path).read()))
     if not TEMPLATE_BLOCKS:  # run on its own, without check_templates() having read the templates
         for path in glob.glob(os.path.join(DATA, "*", "structure", "**", "*.nbt"), recursive=True):
             TEMPLATE_BLOCKS.update(e["Name"] for e in nbt.load(path)["palette"])
-    placed |= {b for b in TEMPLATE_BLOCKS if b.startswith("wayfarers:")}
+    placed |= {b for b in TEMPLATE_BLOCKS if b.startswith("brasshaven:")}
     # in-world conversions: the Engraver's Chisel turns any block of a family into the others; an axe strips logs
     families = [{_short(b) for b in json.load(open(p))["blocks"]}
                 for p in glob.glob(os.path.join(DATA, "*", "chisel", "*.json"))]
-    java = os.path.join(ROOT, "src", "main", "java", "com", "wayfarers", "generated", "GeneratedWorldBlocks.java")
+    java = os.path.join(ROOT, "src", "main", "java", "com", "brasshaven", "generated", "GeneratedWorldBlocks.java")
     strips = re.findall(r'block\("([a-z0-9_]+)", p -> new WoodBlocks\.Log\(GeneratedWorldBlocks\.([A-Z0-9_]+),',
                         open(java).read()) if os.path.exists(java) else []
-    strips = [(f"wayfarers:{a}", f"wayfarers:{b.lower()}") for a, b in strips]
+    strips = [(f"brasshaven:{a}", f"brasshaven:{b.lower()}") for a, b in strips]
     tag_cache = {}
 
     def ok(options):
@@ -1030,8 +1030,8 @@ def check_recipes():
     check_recipe_conflicts(recipes)
     have = check_obtainable(recipes)
     for i in sorted(mod_ids("items")):
-        if f"wayfarers:{i}" not in have and not i.endswith("_spawn_egg") and i not in TECHNICAL_BLOCKS:
-            warnings.append(f"wayfarers:{i} cannot be obtained in survival (creative or commands only)")
+        if f"brasshaven:{i}" not in have and not i.endswith("_spawn_egg") and i not in TECHNICAL_BLOCKS:
+            warnings.append(f"brasshaven:{i} cannot be obtained in survival (creative or commands only)")
 
 
 REGISTRY_IDS = os.path.join(ROOT, "tools", "data", "registry_ids.json")
@@ -1046,7 +1046,7 @@ REGISTRY_DOC = [
 
 def current_registry_ids():
     """{kind: ids registered by the current sources}: the Java registry scan, plus the generated assets of each id."""
-    a = os.path.join(ASSETS, "wayfarers")
+    a = os.path.join(ASSETS, "brasshaven")
     lang = json.load(open(os.path.join(a, "lang", "en_us.json"), encoding="utf-8"))
     java = ""
     for base, _dirs, files in os.walk(os.path.join(ROOT, "src", "main", "java")):
@@ -1059,7 +1059,7 @@ def current_registry_ids():
         "block": set(mod_ids("blocks")) | listing("blockstates"),
         "item": set(mod_ids("items")) | listing("items"),
         "entity_type": set(mod_ids("entities")) | {k.split(".")[2] for k in lang
-                                                  if k.startswith("entity.wayfarers.") and k.count(".") == 2},
+                                                  if k.startswith("entity.brasshaven.") and k.count(".") == 2},
         "block_entity_type": set(re.findall(r'BLOCK_ENTITIES\.register\(\s*"([a-z0-9_/]+)"', java)),
         "menu": set(re.findall(r'MENUS\.register\(\s*"([a-z0-9_/]+)"', java)),
     }
@@ -1079,11 +1079,11 @@ def check_registry_ids(record=True):
             if old in al:
                 continue
             if old not in rm:
-                err(f"registry id wayfarers:{old} ({kind}) is gone: worlds and inventories still hold it. Put it back, "
+                err(f"registry id brasshaven:{old} ({kind}) is gone: worlds and inventories still hold it. Put it back, "
                     f"or add it to tools/data/registry_ids.json, under \"aliases\" -> \"{kind}\" (\"{old}\": \"new_id\", "
                     f"remapped in old worlds) or \"removed\" -> \"{kind}\" (\"{old}\": \"why\", dropped from old worlds)")
         for old, new in sorted(al.items()):
-            target = new.split(":", 1)[1] if new.startswith("wayfarers:") else new
+            target = new.split(":", 1)[1] if new.startswith("brasshaven:") else new
             if old in cur:
                 err(f"registry_ids.json: alias {kind} {old} -> {new}, but {old} is still registered")
             elif ":" not in target and target not in cur:
@@ -1140,7 +1140,7 @@ def main():
     check_chisel()
     check_guide()
     check_screen_fit()
-    import validate_world  # the Wayfarers biomes and terrain touches (tools/gen_world.py)
+    import validate_world  # the Brasshaven biomes and terrain touches (tools/gen_world.py)
     for e in validate_world.check():
         err(f"world: {e}")
     from wf import machines

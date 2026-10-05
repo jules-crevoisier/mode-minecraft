@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "brasshaven:block/warden_altar_top",
+    "side": "brasshaven:block/warden_altar_side"
+  }
+}

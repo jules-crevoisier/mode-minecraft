@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "brasshaven:item/skeleton_knight_spawn_egg"
+  }
+}

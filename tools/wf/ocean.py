@@ -5,7 +5,7 @@ Java: registry/ModOcean.java (blocks, items, spawn eggs, the bubble_vent feature
 ModEntities (creatures), event/OceanEvents.java (the Sea Serpent rises near boats at night; Glow Jelly brewing).
 
 Everything placed in the world is in the mod's own data: Forge biome modifiers add the spawns and the features to
-biome tags (data/wayfarers/tags/worldgen/biome/ocean/*) that list the vanilla oceans.
+biome tags (data/brasshaven/tags/worldgen/biome/ocean/*) that list the vanilla oceans.
 """
 import math
 import random
@@ -13,7 +13,7 @@ import random
 from .png import Canvas
 from .texgen import mix, mul
 
-NS = "wayfarers"
+NS = "brasshaven"
 
 # ------------------------------------------------------------------ names
 # id -> (english, french, tooltip en, tooltip fr)
@@ -59,7 +59,7 @@ EGGS = {
     "whale": ((46, 58, 76), (226, 230, 232)),
 }
 MESSAGES = {
-    "message.wayfarers.sea_serpent.rises": ("Something huge stirs beneath the waves...",
+    "message.brasshaven.sea_serpent.rises": ("Something huge stirs beneath the waves...",
                                             "Quelque chose d'énorme remue sous les vagues..."),
 }
 # block-state properties of our blocks, for validate.py (structure templates)
@@ -308,9 +308,9 @@ def worldgen(write):
 
 
 # ------------------------------------------------------------------ manual (guide.py)
-CATEGORY = ("oceans", "wayfarers:diving_helmet", ("Living oceans", "Océans vivants"))
+CATEGORY = ("oceans", "brasshaven:diving_helmet", ("Living oceans", "Océans vivants"))
 PAGES = [
-    ("oceans", "wayfarers:glow_jelly", ("Living oceans", "Océans vivants"), [
+    ("oceans", "brasshaven:glow_jelly", ("Living oceans", "Océans vivants"), [
         ("The seas are full of life now: schools of reef fish, glowing jellyfish, manta rays, and far out in the "
          "deep, humpback whales. Dive and look around: the floor hides kelp forests, coral gardens, glowing "
          "anemones, pearl oysters, bubble vents, rock arches and sunken ruins.",
@@ -323,7 +323,7 @@ PAGES = [
          "pleine d'air, des sanctuaires de corail dans les mers chaudes et des champs de débris de naufrage. "
          "Chacun a son butin."),
     ], []),
-    ("ocean_creatures", "wayfarers:reef_fish_bucket", ("Sea creatures", "Créatures marines"), [
+    ("ocean_creatures", "brasshaven:reef_fish_bucket", ("Sea creatures", "Créatures marines"), [
         ("Glow Jellyfish drift in every sea, in four colours. Bumping into one stings (a little poison). They drop "
          "Glow Jelly: brew it into an Awkward Potion for Night Vision, or put four around glass for a Jelly Lamp.",
          "Les méduses lumineuses dérivent dans toutes les mers, en quatre couleurs. Les toucher pique (un peu de "
@@ -336,8 +336,8 @@ PAGES = [
          "they rise to blow and sing from far away. Both are peaceful.",
          "Les raies manta planent près de la surface et sautent parfois hors de l'eau. Les baleines à bosse vivent "
          "au large : elles remontent souffler et chantent de loin. Toutes deux sont paisibles."),
-    ], ["wayfarers:glow_jelly", "wayfarers:jelly_lamp", "wayfarers:reef_fish_bucket"]),
-    ("sea_serpent", "wayfarers:serpent_scale", ("Sea Serpent", "Serpent de mer"), [
+    ], ["brasshaven:glow_jelly", "brasshaven:jelly_lamp", "brasshaven:reef_fish_bucket"]),
+    ("sea_serpent", "brasshaven:serpent_scale", ("Sea Serpent", "Serpent de mer"), [
         ("At night, over deep water, a boat or a swimmer may draw the Sea Serpent: a long crested beast with a boss "
          "bar. It bites, lunges from afar (boats in its way break) and roars up a whirlpool that drags you in and "
          "tips riders into the sea.",
@@ -348,8 +348,8 @@ PAGES = [
          "and sometimes a Heart of the Sea. Unfought, it sinks away at dawn.",
          "Affronte-le depuis un appui solide ou sous l'eau avec un casque de scaphandre. Il lâche des écailles, de "
          "la prismarine et parfois un cœur de la mer. S'il n'est pas combattu, il replonge à l'aube."),
-    ], ["wayfarers:serpent_scale", "wayfarers:sea_serpent_spawn_egg"]),
-    ("diving_gear", "wayfarers:diving_helmet", ("Diving gear", "Équipement de plongée"), [
+    ], ["brasshaven:serpent_scale", "brasshaven:sea_serpent_spawn_egg"]),
+    ("diving_gear", "brasshaven:diving_helmet", ("Diving gear", "Équipement de plongée"), [
         ("Diving Helmet: a brass dome with a porthole. With your head under water it gives Conduit Power: you "
          "breathe, see clearly and mine at full speed. Craft it from four Sea Serpent Scales, a brass ingot and "
          "glass, or from two brass ingots, three copper blocks and glass.",
@@ -358,8 +358,8 @@ PAGES = [
          "lingot de laiton et du verre, ou deux lingots de laiton, trois blocs de cuivre et du verre."),
         ("Flippers: swim much faster. Two leather and two dried kelp blocks.",
          "Palmes : nage bien plus vite. Deux cuirs et deux blocs d'algues séchées."),
-    ], ["wayfarers:diving_helmet", "wayfarers:flippers"]),
-    ("sea_floor", "wayfarers:pearl_oyster", ("The sea floor", "Les fonds marins"), [
+    ], ["brasshaven:diving_helmet", "brasshaven:flippers"]),
+    ("sea_floor", "brasshaven:pearl_oyster", ("The sea floor", "Les fonds marins"), [
         ("Pearl Oysters lie in beds in temperate and warm seas. Right-click an open shell to take its pearl; it grows "
          "a new one in time. Four pearls trade for an emerald at the crafting table.",
          "Les huîtres perlières forment des bancs dans les mers tempérées et chaudes. Clic droit sur une coquille "
@@ -369,7 +369,7 @@ PAGES = [
          "Anemones light the floor at night; pick them up to decorate an aquarium.",
          "Les cheminées de basalte soufflent des colonnes de bulles : entre dedans pour remonter d'un coup et "
          "respirer. Les anémones lumineuses éclairent le fond la nuit ; ramasse-les pour décorer un aquarium."),
-    ], ["wayfarers:pearl_oyster", "wayfarers:pearl", "wayfarers:glow_anemone"]),
+    ], ["brasshaven:pearl_oyster", "brasshaven:pearl", "brasshaven:glow_anemone"]),
 ]
 
 

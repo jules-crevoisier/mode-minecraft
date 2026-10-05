@@ -1,0 +1,6 @@
+{
+  "type": "forge:add_features",
+  "biomes": "#brasshaven:stone_veins/marble",
+  "features": "brasshaven:marble_vein",
+  "step": "underground_ores"
+}

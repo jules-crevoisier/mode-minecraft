@@ -1,8 +1,0 @@
-{
-  "type": "minecraft:stonecutting",
-  "ingredient": "wayfarers:mahogany_parquet",
-  "result": {
-    "id": "wayfarers:mahogany_parquet_slab",
-    "count": 2
-  }
-}

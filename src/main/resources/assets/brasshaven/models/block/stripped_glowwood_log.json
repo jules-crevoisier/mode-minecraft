@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "brasshaven:block/stripped_glowwood_log_top",
+    "side": "brasshaven:block/stripped_glowwood_log"
+  }
+}

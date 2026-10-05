@@ -1,7 +1,7 @@
 {
   "replace": false,
   "values": [
-    "wayfarers:glowwood_slab",
-    "wayfarers:rustwood_slab"
+    "brasshaven:glowwood_slab",
+    "brasshaven:rustwood_slab"
   ]
 }

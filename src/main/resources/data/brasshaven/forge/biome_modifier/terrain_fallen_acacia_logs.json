@@ -1,0 +1,10 @@
+{
+  "type": "brasshaven:toggled_features",
+  "toggle": "fallenLogs",
+  "biomes": [
+    "minecraft:savanna",
+    "minecraft:savanna_plateau"
+  ],
+  "features": "brasshaven:world/fallen_acacia_logs",
+  "step": "vegetal_decoration"
+}

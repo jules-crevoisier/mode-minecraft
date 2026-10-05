@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/outer_stairs",
-  "textures": {
-    "bottom": "wayfarers:block/dark_iron_plating",
-    "top": "wayfarers:block/dark_iron_plating",
-    "side": "wayfarers:block/dark_iron_plating"
-  }
-}

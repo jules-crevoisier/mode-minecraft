@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:block/cube_column",
-  "textures": {
-    "end": "wayfarers:block/boss_seal_top",
-    "side": "wayfarers:block/boss_seal_side"
-  }
-}

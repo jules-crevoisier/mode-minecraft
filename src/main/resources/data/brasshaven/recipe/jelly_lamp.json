@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    " J ",
+    "JGJ",
+    " J "
+  ],
+  "key": {
+    "J": "brasshaven:glow_jelly",
+    "G": "minecraft:glass"
+  },
+  "result": {
+    "id": "brasshaven:jelly_lamp",
+    "count": 1
+  }
+}

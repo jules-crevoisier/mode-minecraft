@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "BGB",
+    "CHC",
+    "BBB"
+  ],
+  "key": {
+    "B": "brasshaven:brass_ingot",
+    "G": "minecraft:glass",
+    "C": "minecraft:copper_ingot",
+    "H": "minecraft:chest"
+  },
+  "result": {
+    "id": "brasshaven:pneumatic_post",
+    "count": 1
+  }
+}

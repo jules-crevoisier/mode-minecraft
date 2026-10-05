@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:block/cube_column",
-  "textures": {
-    "end": "wayfarers:block/copper_pipes_top",
-    "side": "wayfarers:block/copper_pipes_side"
-  }
-}

@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab_top",
+  "textures": {
+    "bottom": "brasshaven:block/marble_bricks",
+    "top": "brasshaven:block/marble_bricks",
+    "side": "brasshaven:block/marble_bricks"
+  }
+}

@@ -19,25 +19,25 @@ from . import lair_archivist, lair_bell_keeper
 TEMPERATE = ["#minecraft:is_forest", "plains", "sunflower_plains", "meadow", "#minecraft:is_taiga",
              "savanna", "cherry_grove"]
 
-# ------------------------------------------------------------------ Wayfarers blocks
-GB = "wayfarers:guild_bricks"
-GB_ST = "wayfarers:guild_brick_stairs"
-GB_SL = "wayfarers:guild_brick_slab"
-GB_WALL = "wayfarers:guild_brick_wall"
-MGB = "wayfarers:mossy_guild_bricks"
-CRGB = "wayfarers:cracked_guild_bricks"
-PGS = "wayfarers:polished_guild_stone"
-PGS_ST = "wayfarers:polished_guild_stone_stairs"
-PGS_SL = "wayfarers:polished_guild_stone_slab"
-CGS = "wayfarers:carved_guild_stone"
-RUNE = "wayfarers:rune_lamp"
+# ------------------------------------------------------------------ Brasshaven blocks
+GB = "brasshaven:guild_bricks"
+GB_ST = "brasshaven:guild_brick_stairs"
+GB_SL = "brasshaven:guild_brick_slab"
+GB_WALL = "brasshaven:guild_brick_wall"
+MGB = "brasshaven:mossy_guild_bricks"
+CRGB = "brasshaven:cracked_guild_bricks"
+PGS = "brasshaven:polished_guild_stone"
+PGS_ST = "brasshaven:polished_guild_stone_stairs"
+PGS_SL = "brasshaven:polished_guild_stone_slab"
+CGS = "brasshaven:carved_guild_stone"
+RUNE = "brasshaven:rune_lamp"
 
 # roofs: (full block, stairs, slab)
 ROOF = {
-    "azure": ("wayfarers:guild_roof_tiles", "wayfarers:guild_roof_tile_stairs", "wayfarers:guild_roof_tile_slab"),
-    "crimson": ("wayfarers:crimson_roof_tiles", "wayfarers:crimson_roof_tile_stairs",
-                "wayfarers:crimson_roof_tile_slab"),
-    "slate": ("wayfarers:slate_roof_tiles", "wayfarers:slate_roof_tile_stairs", "wayfarers:slate_roof_tile_slab"),
+    "azure": ("brasshaven:guild_roof_tiles", "brasshaven:guild_roof_tile_stairs", "brasshaven:guild_roof_tile_slab"),
+    "crimson": ("brasshaven:crimson_roof_tiles", "brasshaven:crimson_roof_tile_stairs",
+                "brasshaven:crimson_roof_tile_slab"),
+    "slate": ("brasshaven:slate_roof_tiles", "brasshaven:slate_roof_tile_stairs", "brasshaven:slate_roof_tile_slab"),
     "deepslate": ("deepslate_tiles", "deepslate_tile_stairs", "deepslate_tile_slab"),
     "copper": ("waxed_oxidized_cut_copper", "waxed_oxidized_cut_copper_stairs", "waxed_oxidized_cut_copper_slab"),
     "dark_oak": ("dark_oak_planks", "dark_oak_stairs", "dark_oak_slab"),
@@ -465,7 +465,7 @@ def cone(bp, cx, cz, y, r, R, h=None, finial="lightning_rod[facing=up,powered=fa
                     bp.set(x, y + k, z, "air")
     top = y + k
     bp.set(cx, top, cz, full)
-    bp.set(cx, top + 1, cz, "wayfarers:polished_guild_stone_slab[type=bottom,waterlogged=false]"
+    bp.set(cx, top + 1, cz, "brasshaven:polished_guild_stone_slab[type=bottom,waterlogged=false]"
            if finial is None else finial)
     return top + 1
 

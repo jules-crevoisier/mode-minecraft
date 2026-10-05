@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "brasshaven:mahogany_parquet",
+  "result": {
+    "id": "brasshaven:mahogany_parquet_stairs",
+    "count": 1
+  }
+}

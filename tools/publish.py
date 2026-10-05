@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Uploads a release jar to CurseForge or Modrinth through their official APIs (docs/PUBLISHING.md).
 
-    python3 tools/publish.py curseforge --jar build/libs/wayfarers-0.9.1-beta.jar --changelog build/changelog.md
-    python3 tools/publish.py modrinth   --jar build/libs/wayfarers-0.9.1-beta.jar --changelog build/changelog.md
+    python3 tools/publish.py curseforge --jar build/libs/brasshaven-0.9.1-beta.jar --changelog build/changelog.md
+    python3 tools/publish.py modrinth   --jar build/libs/brasshaven-0.9.1-beta.jar --changelog build/changelog.md
 
 Settings come from the environment (GitHub secrets and variables in CI):
     CurseForge: CURSEFORGE_TOKEN (secret, https://legacy.curseforge.com/account/api-tokens), CURSEFORGE_PROJECT_ID
@@ -24,7 +24,7 @@ import urllib.request
 import uuid
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-USER_AGENT = "jules-crevoisier/mode-minecraft (Wayfarers release CI)"
+USER_AGENT = "jules-crevoisier/mode-minecraft (Brasshaven release CI)"
 CURSEFORGE = "https://minecraft.curseforge.com"
 MODRINTH = "https://api.modrinth.com/v2"
 
@@ -39,9 +39,9 @@ def gradle_props():
 
 
 def jar_version(jar):
-    m = re.match(r"wayfarers-(.+)\.jar$", os.path.basename(jar))
+    m = re.match(r"brasshaven-(.+)\.jar$", os.path.basename(jar))
     if not m:
-        sys.exit(f"not a Wayfarers jar name: {jar}")
+        sys.exit(f"not a Brasshaven jar name: {jar}")
     return re.sub(r"-build\.(\w+)$", r"+build.\1", m.group(1))
 
 
@@ -68,7 +68,7 @@ def set_output(key, value):
 
 def multipart(fields, files):
     """(body, content type) for urllib: fields {name: str}, files {name: path}."""
-    boundary = "----wayfarers" + uuid.uuid4().hex
+    boundary = "----brasshaven" + uuid.uuid4().hex
     parts = []
     for name, value in fields.items():
         parts.append(f'--{boundary}\r\nContent-Disposition: form-data; name="{name}"\r\n\r\n'.encode()
@@ -124,9 +124,9 @@ def curseforge(a):
         return
     props, version = gradle_props(), jar_version(a.jar)
     metadata = {
-        "changelog": open(a.changelog, encoding="utf-8").read() if a.changelog else f"Wayfarers {version}",
+        "changelog": open(a.changelog, encoding="utf-8").read() if a.changelog else f"Brasshaven {version}",
         "changelogType": "markdown",
-        "displayName": f"Wayfarers {version}",
+        "displayName": f"Brasshaven {version}",
         "releaseType": release_type(version, a.release_type),
     }
     if a.dry_run:
@@ -150,9 +150,9 @@ def modrinth(a):
     props, version = gradle_props(), jar_version(a.jar)
     h = {"Authorization": token}
     data = {
-        "name": f"Wayfarers {version}",
+        "name": f"Brasshaven {version}",
         "version_number": version,
-        "changelog": open(a.changelog, encoding="utf-8").read() if a.changelog else f"Wayfarers {version}",
+        "changelog": open(a.changelog, encoding="utf-8").read() if a.changelog else f"Brasshaven {version}",
         "dependencies": [],
         "game_versions": [props["minecraft_version"]],
         "version_type": release_type(version, a.release_type),
@@ -169,7 +169,7 @@ def modrinth(a):
     proj = request("GET", f"{MODRINTH}/project/{project}", h)
     data["project_id"] = proj["id"]  # the API wants the id, the variable may hold the slug
     if any(v.get("version_number") == version for v in request("GET", f"{MODRINTH}/project/{proj['id']}/version", h) or []):
-        notice(f"Modrinth already has Wayfarers {version}: nothing to upload")
+        notice(f"Modrinth already has Brasshaven {version}: nothing to upload")
         return
     tags = {t.get("version") for t in request("GET", f"{MODRINTH}/tag/game_version", {}) or []}
     if props["minecraft_version"] not in tags:

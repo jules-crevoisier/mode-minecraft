@@ -1,0 +1,33 @@
+{
+  "display": {
+    "icon": {
+      "id": "brasshaven:excavator_pickaxe"
+    },
+    "title": {
+      "translate": "advancements.brasshaven.depths.excavator_pickaxe.title"
+    },
+    "description": {
+      "translate": "advancements.brasshaven.depths.excavator_pickaxe.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "brasshaven:excavator_pickaxe"
+          }
+        ]
+      }
+    }
+  },
+  "parent": "brasshaven:depths/lithite",
+  "rewards": {
+    "experience": 30
+  }
+}

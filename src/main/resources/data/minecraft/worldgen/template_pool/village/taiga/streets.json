@@ -148,7 +148,7 @@
       "weight": 3,
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "wayfarers:village/taiga/avenue",
+        "location": "brasshaven:village/taiga/avenue",
         "processors": "minecraft:street_snowy_or_taiga",
         "projection": "terrain_matching"
       }

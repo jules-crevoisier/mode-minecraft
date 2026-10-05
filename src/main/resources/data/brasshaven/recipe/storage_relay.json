@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " E ",
+    "BRB",
+    "BCB"
+  ],
+  "key": {
+    "E": "minecraft:ender_pearl",
+    "B": "brasshaven:brass_ingot",
+    "R": "minecraft:redstone",
+    "C": "minecraft:copper_ingot"
+  },
+  "result": {
+    "id": "brasshaven:storage_relay",
+    "count": 2
+  }
+}

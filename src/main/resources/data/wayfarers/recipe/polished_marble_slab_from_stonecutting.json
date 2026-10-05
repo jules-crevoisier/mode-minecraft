@@ -1,8 +1,0 @@
-{
-  "type": "minecraft:stonecutting",
-  "ingredient": "wayfarers:polished_marble",
-  "result": {
-    "id": "wayfarers:polished_marble_slab",
-    "count": 2
-  }
-}

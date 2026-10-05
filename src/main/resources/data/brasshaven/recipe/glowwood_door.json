@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "##",
+    "##",
+    "##"
+  ],
+  "key": {
+    "#": "brasshaven:glowwood_planks"
+  },
+  "result": {
+    "id": "brasshaven:glowwood_door",
+    "count": 3
+  },
+  "group": "wooden_door"
+}

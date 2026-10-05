@@ -1,0 +1,42 @@
+{
+  "display": {
+    "icon": {
+      "id": "brasshaven:void_chestplate"
+    },
+    "title": {
+      "translate": "advancements.brasshaven.end.void_armor.title"
+    },
+    "description": {
+      "translate": "advancements.brasshaven.end.void_armor.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "armor": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "brasshaven:void_helmet"
+          },
+          {
+            "items": "brasshaven:void_chestplate"
+          },
+          {
+            "items": "brasshaven:void_leggings"
+          },
+          {
+            "items": "brasshaven:void_boots"
+          }
+        ]
+      }
+    }
+  },
+  "parent": "brasshaven:end/void_shard",
+  "rewards": {
+    "experience": 150
+  }
+}

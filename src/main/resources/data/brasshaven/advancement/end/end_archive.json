@@ -1,0 +1,42 @@
+{
+  "display": {
+    "icon": {
+      "id": "minecraft:purpur_pillar"
+    },
+    "title": {
+      "translate": "advancements.brasshaven.end.end_archive.title"
+    },
+    "description": {
+      "translate": "advancements.brasshaven.end.end_archive.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "found": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:end_archive"
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "parent": "brasshaven:end/enter",
+  "rewards": {
+    "experience": 80,
+    "loot": [
+      "brasshaven:rewards/discovery"
+    ]
+  }
+}

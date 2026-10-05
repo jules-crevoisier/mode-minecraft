@@ -1,0 +1,42 @@
+{
+  "display": {
+    "icon": {
+      "id": "minecraft:sculk_catalyst"
+    },
+    "title": {
+      "translate": "advancements.brasshaven.depths.sealed_lab.title"
+    },
+    "description": {
+      "translate": "advancements.brasshaven.depths.sealed_lab.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "found": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:sealed_lab"
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "parent": "brasshaven:depths/lithite",
+  "rewards": {
+    "experience": 50,
+    "loot": [
+      "brasshaven:rewards/discovery"
+    ]
+  }
+}

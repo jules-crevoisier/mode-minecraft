@@ -1,0 +1,33 @@
+{
+  "display": {
+    "icon": {
+      "id": "brasshaven:frost_blade"
+    },
+    "title": {
+      "translate": "advancements.brasshaven.depths.frost_blade.title"
+    },
+    "description": {
+      "translate": "advancements.brasshaven.depths.frost_blade.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "brasshaven:frost_blade"
+          }
+        ]
+      }
+    }
+  },
+  "parent": "brasshaven:depths/lithite",
+  "rewards": {
+    "experience": 30
+  }
+}

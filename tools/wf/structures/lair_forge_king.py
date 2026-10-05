@@ -21,9 +21,9 @@ import math
 from ..arch import Palette, stair
 from ..parts import LOOT, MOB, MOD
 
-LB = "wayfarers:lithite_bricks"
-LC = "wayfarers:lithite_block"
-GT = "wayfarers:gilded_trim"
+LB = "brasshaven:lithite_bricks"
+LC = "brasshaven:lithite_block"
+GT = "brasshaven:gilded_trim"
 PB = "polished_blackstone_bricks"
 PBS = "polished_blackstone_brick_stairs"
 PBW = "polished_blackstone_brick_wall"
@@ -473,7 +473,7 @@ def crucible(bp):
                 elif d < 2.6:
                     b = LC if int(ang / 45) % 2 == 0 else GT
                 elif d < 5.5:
-                    b = "chiseled_polished_blackstone" if spoke else "wayfarers:ember_bricks"
+                    b = "chiseled_polished_blackstone" if spoke else "brasshaven:ember_bricks"
                 elif d < 6.4 or 11.6 <= d < 12.5:
                     b = GT
                 elif spoke:
@@ -517,7 +517,7 @@ def crucible(bp):
                 if math.hypot(px + ox - AX, pz + oz - AZ) >= Rw - 0.6:
                     bp.set(px + ox, y, pz + oz, GT if y in (AY + 6, AY + DRUM + 3) else "polished_blackstone")
         ix, iz = AX + round(math.cos(a) * (Rw - 0.8)), AZ + round(math.sin(a) * (Rw - 0.8))
-        bp.set(ix, AY + 4, iz, "wayfarers:ember_lamp")
+        bp.set(ix, AY + 4, iz, "brasshaven:ember_lamp")
         bp.set(ix, AY + 3, iz, stair(PBS, _facing_out(a), "top"))
         bp.set(ix, AY + 5, iz, stair(PBS, _facing_out(a)))
     for k in (1, 3, 5, 7):
@@ -572,7 +572,7 @@ def crucible(bp):
         a = math.radians(k * 45 + 22.5)
         x, z = AX + round(math.cos(a) * (R + 1)), AZ + round(math.sin(a) * (R + 1))
         bp.set(x, AY + 1, z, "anvil[facing=" + ("north" if k % 4 == 1 else "east") + "]")
-    bp.boss_seal(AX, AY, AZ, "wayfarers:forge_king", AR)
+    bp.boss_seal(AX, AY, AZ, "brasshaven:forge_king", AR)
 
 
 def forge_hearth(bp, a):
@@ -595,7 +595,7 @@ def forge_hearth(bp, a):
                     bp.set(x, y, z, "magma_block" if depth >= 1 else "polished_blackstone")
                 elif depth == 2:
                     b = "blast_furnace[facing=" + _facing_out(a + math.pi) + ",lit=true]" if y <= AY + 2 else \
-                        "wayfarers:ember_lamp" if y == AY + 3 else PB
+                        "brasshaven:ember_lamp" if y == AY + 3 else PB
                     bp.set(x, y, z, b)
                 elif y <= AY + 4:
                     bp.set(x, y, z, "air")

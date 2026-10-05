@@ -1,0 +1,251 @@
+{
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "brasshaven:chunked_template",
+        "size": [
+          109,
+          102,
+          112
+        ],
+        "cells": [
+          {
+            "location": "brasshaven:tesla_observatory/campus/x0_z0",
+            "offset": [
+              8,
+              0,
+              8
+            ],
+            "size": [
+              19,
+              32,
+              20
+            ],
+            "blocks": 1493
+          },
+          {
+            "location": "brasshaven:tesla_observatory/campus/x0_z1",
+            "offset": [
+              0,
+              0,
+              28
+            ],
+            "size": [
+              27,
+              49,
+              28
+            ],
+            "blocks": 7409
+          },
+          {
+            "location": "brasshaven:tesla_observatory/campus/x0_z2",
+            "offset": [
+              2,
+              0,
+              56
+            ],
+            "size": [
+              25,
+              44,
+              28
+            ],
+            "blocks": 6173
+          },
+          {
+            "location": "brasshaven:tesla_observatory/campus/x0_z3",
+            "offset": [
+              10,
+              0,
+              84
+            ],
+            "size": [
+              17,
+              24,
+              14
+            ],
+            "blocks": 765
+          },
+          {
+            "location": "brasshaven:tesla_observatory/campus/x1_z0",
+            "offset": [
+              27,
+              0,
+              0
+            ],
+            "size": [
+              27,
+              51,
+              28
+            ],
+            "blocks": 6529
+          },
+          {
+            "location": "brasshaven:tesla_observatory/campus/x1_z1",
+            "offset": [
+              27,
+              18,
+              28
+            ],
+            "size": [
+              27,
+              47,
+              28
+            ],
+            "blocks": 18993
+          },
+          {
+            "location": "brasshaven:tesla_observatory/campus/x1_z2",
+            "offset": [
+              27,
+              18,
+              56
+            ],
+            "size": [
+              27,
+              37,
+              28
+            ],
+            "blocks": 14644
+          },
+          {
+            "location": "brasshaven:tesla_observatory/campus/x1_z3",
+            "offset": [
+              27,
+              0,
+              84
+            ],
+            "size": [
+              27,
+              35,
+              28
+            ],
+            "blocks": 4911
+          },
+          {
+            "location": "brasshaven:tesla_observatory/campus/x2_z0",
+            "offset": [
+              54,
+              0,
+              0
+            ],
+            "size": [
+              28,
+              93,
+              28
+            ],
+            "blocks": 7317
+          },
+          {
+            "location": "brasshaven:tesla_observatory/campus/x2_z1",
+            "offset": [
+              54,
+              18,
+              28
+            ],
+            "size": [
+              28,
+              84,
+              28
+            ],
+            "blocks": 14211
+          },
+          {
+            "location": "brasshaven:tesla_observatory/campus/x2_z2",
+            "offset": [
+              54,
+              16,
+              56
+            ],
+            "size": [
+              28,
+              40,
+              28
+            ],
+            "blocks": 17768
+          },
+          {
+            "location": "brasshaven:tesla_observatory/campus/x2_z3",
+            "offset": [
+              54,
+              0,
+              84
+            ],
+            "size": [
+              28,
+              35,
+              28
+            ],
+            "blocks": 5271
+          },
+          {
+            "location": "brasshaven:tesla_observatory/campus/x3_z0",
+            "offset": [
+              82,
+              0,
+              9
+            ],
+            "size": [
+              19,
+              39,
+              19
+            ],
+            "blocks": 1399
+          },
+          {
+            "location": "brasshaven:tesla_observatory/campus/x3_z1",
+            "offset": [
+              82,
+              0,
+              28
+            ],
+            "size": [
+              27,
+              39,
+              28
+            ],
+            "blocks": 6580
+          },
+          {
+            "location": "brasshaven:tesla_observatory/campus/x3_z2",
+            "offset": [
+              82,
+              0,
+              56
+            ],
+            "size": [
+              26,
+              47,
+              28
+            ],
+            "blocks": 6420
+          },
+          {
+            "location": "brasshaven:tesla_observatory/campus/x3_z3",
+            "offset": [
+              82,
+              0,
+              84
+            ],
+            "size": [
+              16,
+              24,
+              15
+            ],
+            "blocks": 777
+          }
+        ],
+        "projection": "rigid",
+        "processors": "brasshaven:none",
+        "ground_level_delta": 27,
+        "footprint": [
+          14,
+          13,
+          94,
+          92
+        ]
+      }
+    }
+  ]
+}

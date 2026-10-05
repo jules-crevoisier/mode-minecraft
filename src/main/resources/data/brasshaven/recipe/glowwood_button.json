@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "redstone",
+  "group": "wooden_button",
+  "ingredients": [
+    "brasshaven:glowwood_planks"
+  ],
+  "result": {
+    "id": "brasshaven:glowwood_button",
+    "count": 1
+  }
+}

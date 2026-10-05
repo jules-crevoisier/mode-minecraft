@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "P  ",
+    "PLP",
+    "S S"
+  ],
+  "key": {
+    "P": "brasshaven:mahogany_panelling",
+    "L": "minecraft:leather",
+    "S": "minecraft:stick"
+  },
+  "result": {
+    "id": "brasshaven:mahogany_chair",
+    "count": 2
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "X  ",
+    "XX ",
+    "XXX"
+  ],
+  "key": {
+    "X": "brasshaven:blue_slate_bricks"
+  },
+  "result": {
+    "id": "brasshaven:blue_slate_brick_stairs",
+    "count": 4
+  }
+}

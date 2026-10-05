@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "brasshaven:block/void_altar_top",
+    "side": "brasshaven:block/void_altar_side"
+  }
+}

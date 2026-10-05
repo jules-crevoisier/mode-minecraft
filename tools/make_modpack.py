@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
-"""Player and server packs of Wayfarers (docs/PUBLISHING.md).
+"""Player and server packs of Brasshaven (docs/PUBLISHING.md).
 
     python3 tools/make_modpack.py configs
         Rewrites the recommended configs (modpack/overrides/config/*.toml) from the config classes of the mod
-        (src/main/java/com/wayfarers/config), keeping the values already set in them. validate.py checks they match.
+        (src/main/java/com/brasshaven/config), keeping the values already set in them. validate.py checks they match.
 
-    python3 tools/make_modpack.py modpack --jar build/libs/wayfarers-X.jar [--project-id N --file-id N] [--out DIR]
+    python3 tools/make_modpack.py modpack --jar build/libs/brasshaven-X.jar [--project-id N --file-id N] [--out DIR]
         CurseForge modpack zip: manifest.json (modpack/manifest.json filled in), modlist.html and overrides/ (the
         recommended configs). With the CurseForge project and file ids of the mod (CI passes the ids of the file it
         just uploaded) the manifest references the mod, which is what a modpack published on CurseForge needs.
         Without them (no CurseForge project yet) the jar itself goes into overrides/mods: the zip still imports in
         the CurseForge app (Create custom profile > Import), it just cannot be published on CurseForge as is.
 
-    python3 tools/make_modpack.py serverpack --jar build/libs/wayfarers-X.jar [--out DIR]
+    python3 tools/make_modpack.py serverpack --jar build/libs/brasshaven-X.jar [--out DIR]
         Server pack zip: the jar, start scripts for Linux/macOS and Windows (they install Forge on the first run,
         ask for the EULA, back the world up when the mod version changes, and start with tuned JVM flags), the
         recommended server config and server.properties (copied only when missing, so an update never overwrites
@@ -26,15 +26,15 @@ import sys
 import zipfile
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-CONFIG_JAVA = os.path.join(ROOT, "src", "main", "java", "com", "wayfarers", "config")
+CONFIG_JAVA = os.path.join(ROOT, "src", "main", "java", "com", "brasshaven", "config")
 MODPACK = os.path.join(ROOT, "modpack")
 SERVERPACK = os.path.join(ROOT, "serverpack")
 CONFIG_OUT = os.path.join(MODPACK, "overrides", "config")
 # config file -> Java class (Forge names the files <modid>-<type>.toml)
-CONFIGS = {"wayfarers-client.toml": "WayfarersClientConfig.java", "wayfarers-common.toml": "WayfarersConfig.java"}
+CONFIGS = {"brasshaven-client.toml": "BrasshavenClientConfig.java", "brasshaven-common.toml": "BrasshavenConfig.java"}
 # values that differ from the mod's defaults in the recommended configs (none yet: the defaults are the recommended
 # play; a public server sets compat.downloadUrl to its own modpack page)
-RECOMMENDED = {"wayfarers-client.toml": {}, "wayfarers-common.toml": {}}
+RECOMMENDED = {"brasshaven-client.toml": {}, "brasshaven-common.toml": {}}
 JSTR = r'"(?:[^"\\]|\\.)*"'
 
 
@@ -102,7 +102,7 @@ def read_toml_values(path):
 
 
 def render_toml(name, entries, values):
-    lines = [f"# Wayfarers recommended {name} (tools/make_modpack.py configs from the mod's config classes).",
+    lines = [f"# Brasshaven recommended {name} (tools/make_modpack.py configs from the mod's config classes).",
              "# Forge reads it from the config folder; every value is the mod's default unless noted below.", ""]
     section = None
     for e in entries:
@@ -157,10 +157,10 @@ def check_configs():
 
 # ------------------------------------------------------------------ packs
 def _jar_version(jar):
-    """(file-name version, mod version): wayfarers-0.9.0-beta-build.84.jar is the mod's 0.9.0-beta+build.84."""
-    m = re.match(r"wayfarers-(.+)\.jar$", os.path.basename(jar))
+    """(file-name version, mod version): brasshaven-0.9.0-beta-build.84.jar is the mod's 0.9.0-beta+build.84."""
+    m = re.match(r"brasshaven-(.+)\.jar$", os.path.basename(jar))
     if not m:
-        sys.exit(f"not a Wayfarers jar name: {jar}")
+        sys.exit(f"not a Brasshaven jar name: {jar}")
     return m.group(1), re.sub(r"-build\.(\w+)$", r"+build.\1", m.group(1))
 
 
@@ -193,10 +193,10 @@ def build_modpack(jar, out_dir, project_id=None, file_id=None):
     embed = not (project_id and file_id)
     manifest["files"] = [] if embed else [{"projectID": int(project_id), "fileID": int(file_id), "required": True}]
     os.makedirs(out_dir, exist_ok=True)
-    out = os.path.join(out_dir, f"wayfarers-modpack-{file_version}{'' if embed else '-curseforge'}.zip")
+    out = os.path.join(out_dir, f"brasshaven-modpack-{file_version}{'' if embed else '-curseforge'}.zip")
     with zipfile.ZipFile(out, "w", zipfile.ZIP_DEFLATED) as z:
         z.writestr("manifest.json", json.dumps(manifest, indent=2, ensure_ascii=False) + "\n")
-        z.writestr("modlist.html", "<ul>\n<li><a href=\"%s\">Wayfarers %s</a></li>\n</ul>\n"
+        z.writestr("modlist.html", "<ul>\n<li><a href=\"%s\">Brasshaven %s</a></li>\n</ul>\n"
                    % (props.get("mod_download_url", ""), version))
         _add_tree(z, os.path.join(MODPACK, "overrides"), "overrides")
         if embed:
@@ -213,10 +213,10 @@ def build_serverpack(jar, out_dir):
     subst = {"@VERSION@": version, "@JAR@": os.path.basename(jar), "@FORGE@": forge,
              "@MINECRAFT@": props["minecraft_version"], "@DOWNLOAD@": props.get("mod_download_url", "")}
     os.makedirs(out_dir, exist_ok=True)
-    out = os.path.join(out_dir, f"wayfarers-server-{file_version}.zip")
+    out = os.path.join(out_dir, f"brasshaven-server-{file_version}.zip")
     with zipfile.ZipFile(out, "w", zipfile.ZIP_DEFLATED) as z:
         _add_tree(z, SERVERPACK, "", subst)
-        z.write(os.path.join(CONFIG_OUT, "wayfarers-common.toml"), "defaults/config/wayfarers-common.toml")
+        z.write(os.path.join(CONFIG_OUT, "brasshaven-common.toml"), "defaults/config/brasshaven-common.toml")
         z.write(jar, "mods/" + os.path.basename(jar))
     print("server pack:", os.path.relpath(out, ROOT) if out.startswith(ROOT) else out)
     return out

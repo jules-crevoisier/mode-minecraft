@@ -1,0 +1,42 @@
+{
+  "display": {
+    "icon": {
+      "id": "brasshaven:ember_chestplate"
+    },
+    "title": {
+      "translate": "advancements.brasshaven.nether.ember_armor.title"
+    },
+    "description": {
+      "translate": "advancements.brasshaven.nether.ember_armor.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "armor": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "brasshaven:ember_helmet"
+          },
+          {
+            "items": "brasshaven:ember_chestplate"
+          },
+          {
+            "items": "brasshaven:ember_leggings"
+          },
+          {
+            "items": "brasshaven:ember_boots"
+          }
+        ]
+      }
+    }
+  },
+  "parent": "brasshaven:nether/ancient_ember",
+  "rewards": {
+    "experience": 100
+  }
+}

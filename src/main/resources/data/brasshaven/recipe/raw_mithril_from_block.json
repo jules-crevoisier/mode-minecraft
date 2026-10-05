@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "brasshaven:raw_mithril_block"
+  ],
+  "result": {
+    "id": "brasshaven:raw_mithril",
+    "count": 9
+  }
+}

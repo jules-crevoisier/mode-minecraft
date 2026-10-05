@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "brasshaven:block/brass_railing"
+    },
+    "facing=east": {
+      "model": "brasshaven:block/brass_railing",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "brasshaven:block/brass_railing",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "brasshaven:block/brass_railing",
+      "y": 270
+    }
+  }
+}

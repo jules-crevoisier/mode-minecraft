@@ -4,12 +4,12 @@ license="MIT"
 issueTrackerURL="https://github.com/jules-crevoisier/mode-minecraft/issues"
 
 [[mods]]
-modId="wayfarers"
+modId="brasshaven"
 version="${mod_version}"
-displayName="Wayfarers"
+displayName="Brasshaven"
 displayURL="https://github.com/jules-crevoisier/mode-minecraft"
 logoFile="logo.png"
-authors="Wayfarers Guild"
+authors="Brasshaven Guild"
 description='''Exploration-first co-op survival with a cyber-steampunk soul.
 45 hand-built structures in every dimension, including ten colossal Wonders (Clockwork Citadel, Undercity,
 Sky Isles, Deep Dwarven City, Crystal Cathedral...), Elden Ring style bosses, automatons and a Brass Golem
@@ -17,14 +17,14 @@ companion, living oceans, three biomes on vanilla terrain, new woods and stones,
 steam gadgets (grappling hook, glider, wrench...), building tools, storage and quality-of-life galore,
 an illustrated in-game Manual and a shared quest line.'''
 
-[[dependencies.wayfarers]]
+[[dependencies.brasshaven]]
     modId="forge"
     mandatory=true
     versionRange="[65.1,)"
     ordering="NONE"
     side="BOTH"
 
-[[dependencies.wayfarers]]
+[[dependencies.brasshaven]]
     modId="minecraft"
     mandatory=true
     versionRange="[26.2,26.3)"

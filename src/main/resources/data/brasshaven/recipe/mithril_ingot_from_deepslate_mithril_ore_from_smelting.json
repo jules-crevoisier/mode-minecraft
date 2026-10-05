@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "ingredient": "brasshaven:deepslate_mithril_ore",
+  "result": {
+    "id": "brasshaven:mithril_ingot"
+  },
+  "experience": 1.0,
+  "cookingtime": 200
+}

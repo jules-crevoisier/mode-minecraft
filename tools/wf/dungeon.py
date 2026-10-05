@@ -553,7 +553,7 @@ def build(bp, theme, seed, boss, dungeon, levels=3, gw=5, gd=5, entrance_fn=None
             arena_dress(p, arena_box, theme, boss, lv, gw, gd, y)
             # site of grace: a waystone and lights in the cell before the mist
             gx, gz = cell_center(lv.grace, gw, gd)
-            bp.set(gx, y, gz, "wayfarers:waystone")
+            bp.set(gx, y, gz, "brasshaven:waystone")
             for sx, sz in ((-2, -2), (2, -2), (-2, 2), (2, 2)):
                 bp.set(gx + sx, y, gz + sz, with_props(theme.candle, candles=3, lit=True))
             for key in ("mist_a", "mist_b"):

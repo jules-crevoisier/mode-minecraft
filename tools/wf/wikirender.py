@@ -1,7 +1,7 @@
 """Renderers used by tools/gen_wiki.py (needs Pillow + numpy).
 
 * ``voxel_frames``  - flat-shaded turntable of a structure (any yaw), painter's algorithm per block.
-* ``JsonModels``    - loads Wayfarers block/item JSON models (parents, vanilla cube templates, elements)
+* ``JsonModels``    - loads Brasshaven block/item JSON models (parents, vanilla cube templates, elements)
                       and renders them textured at any angle (inventory icons, furniture and 3D held items).
 * ``mob_frames``    - turntable of an entity model (wf.models) through wf.model_render, idle animation playing.
 * ``save_gif``      - shared-palette animated GIF.
@@ -53,13 +53,13 @@ _JM = None
 
 
 def _mod_block_icon(name):
-    """Inventory-like icon of a wayfarers block from its blockstate's first model (furniture, pipes...)."""
+    """Inventory-like icon of a brasshaven block from its blockstate's first model (furniture, pipes...)."""
     global _JM
     if _JM is None:
         _JM = JsonModels()
     bid = name.split(":")[1]
     ref = None
-    bs = os.path.join(ASSETS, "wayfarers", "blockstates", bid + ".json")
+    bs = os.path.join(ASSETS, "brasshaven", "blockstates", bid + ".json")
     if os.path.exists(bs):
         d = json.load(open(bs, encoding="utf-8"))
         if "variants" in d and d["variants"]:
@@ -83,7 +83,7 @@ def _block_colors(name, props):
     if key not in _COLORS:
         try:
             ic = render3d.icon(name, None)
-            if name.startswith("wayfarers:"):
+            if name.startswith("brasshaven:"):
                 px = ic.convert("RGBA").resize((1, 1), Image.BOX).getpixel((0, 0))
                 if px[0] > 150 and px[2] > 150 and px[1] < 60:  # render3d's magenta "missing" icon
                     ic = _mod_block_icon(name) or ic
@@ -304,7 +304,7 @@ class JsonModels:
         for _ in range(12):
             ns = cur.split(":", 1)[0] if ":" in cur else "minecraft"
             path = os.path.join(ASSETS, ns, "models", _strip(cur) + ".json")
-            if ns != "wayfarers" or not os.path.exists(path):
+            if ns != "brasshaven" or not os.path.exists(path):
                 chain.append(_strip(cur))
                 break
             data = json.load(open(path, encoding="utf-8"))
@@ -333,8 +333,8 @@ class JsonModels:
         return dict(kind="elements", textures=textures, elements=elements)
 
     def item_model(self, item_id):
-        """Model reference used in the inventory (gui) for wayfarers:<item_id>, and the 3D one if any."""
-        path = os.path.join(ASSETS, "wayfarers", "items", item_id + ".json")
+        """Model reference used in the inventory (gui) for brasshaven:<item_id>, and the 3D one if any."""
+        path = os.path.join(ASSETS, "brasshaven", "items", item_id + ".json")
         if not os.path.exists(path):
             return None, None
         d = json.load(open(path, encoding="utf-8"))["model"]
@@ -559,7 +559,7 @@ def patch_render3d():
         icon = original(name)
         if icon is None:
             try:
-                icon = _mod_block_icon("wayfarers:" + name)
+                icon = _mod_block_icon("brasshaven:" + name)
             except Exception:  # noqa: BLE001
                 icon = None
         return icon

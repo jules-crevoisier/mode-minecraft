@@ -1,0 +1,33 @@
+{
+  "display": {
+    "icon": {
+      "id": "brasshaven:ancient_ember"
+    },
+    "title": {
+      "translate": "advancements.brasshaven.nether.ancient_ember.title"
+    },
+    "description": {
+      "translate": "advancements.brasshaven.nether.ancient_ember.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "brasshaven:ancient_ember"
+          }
+        ]
+      }
+    }
+  },
+  "parent": "brasshaven:nether/enter",
+  "rewards": {
+    "experience": 50
+  }
+}

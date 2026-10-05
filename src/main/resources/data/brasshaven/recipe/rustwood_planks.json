@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "group": "planks",
+  "ingredients": [
+    "#brasshaven:rustwood_logs"
+  ],
+  "result": {
+    "id": "brasshaven:rustwood_planks",
+    "count": 4
+  }
+}

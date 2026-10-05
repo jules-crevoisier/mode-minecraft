@@ -49,7 +49,7 @@ def build(bp, cx=0, cz=0):
     _turret(bp, n, cx, cz + TZ)
     _reliquary(bp, n, cx, cz)
     # the seal, flush in the floor at the centre, and the mist across the stair arrival
-    bp.boss_seal(cx, F, cz, "wayfarers:soul_reaper", SEAL_R)
+    bp.boss_seal(cx, F, cz, "brasshaven:soul_reaper", SEAL_R)
     bp.mist(cx, F + 2, cz + R, cx, F + 3, cz + R)
 
 

@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/slab",
-  "textures": {
-    "bottom": "wayfarers:block/sooty_smokestack_bricks",
-    "top": "wayfarers:block/sooty_smokestack_bricks",
-    "side": "wayfarers:block/sooty_smokestack_bricks"
-  }
-}

@@ -187,8 +187,8 @@ TW_WALL = Palette({"stone_bricks": 7, "cracked_stone_bricks": 2, "tuff_bricks": 
 TW_BASE = Palette({"cobblestone": 3, "mossy_cobblestone": 2, "stone": 2, "andesite": 1}, seed=12, scale=2.2)
 TW_TRIM = "polished_tuff"
 TW_TRIM_ST = "polished_tuff_stairs"
-TW_ROOF = "wayfarers:slate_roof_tiles"
-TW_ROOF_ST = "wayfarers:slate_roof_tile_stairs"
+TW_ROOF = "brasshaven:slate_roof_tiles"
+TW_ROOF_ST = "brasshaven:slate_roof_tile_stairs"
 TW_IN, TW_OUT = 4.5, 6.5     # interior radius / outer wall radius
 TW_FLOORS = (9, 18, 27)
 TW_EAVE = 38
@@ -326,8 +326,8 @@ def _tower_upright(bp, ruined):
                    stair(TW_ROOF_ST, _toward(-px * s, -pz * s)))
         bp.set(x, TW_EAVE + 2, z, "glass_pane")
         bp.set(x, TW_EAVE + 3, z, "glass_pane")
-        bp.set(x, TW_EAVE + 5, z, slab("wayfarers:slate_roof_tile_slab"))
-    bp.set(0, top - 1, 0, "wayfarers:slate_roof_tiles")
+        bp.set(x, TW_EAVE + 5, z, slab("brasshaven:slate_roof_tile_slab"))
+    bp.set(0, top - 1, 0, "brasshaven:slate_roof_tiles")
     arch.hanging_lantern(bp, 0, TW_EAVE - 1, 0, chain=3)
     return top
 
@@ -408,7 +408,7 @@ def _guardhouse(bp, ruined, rng):
             bp.set(x, 7, z, "glass_pane")
             bp.set(x + 1, 7, z, "glass_pane")
     arch.steep_roof(bp, x0, z0, x1, z1, 10, TW_ROOF_ST, axis="x", overhang=1, fill="spruce_planks",
-                    under="dark_oak_stairs", ridge=slab("wayfarers:slate_roof_tile_slab"))
+                    under="dark_oak_stairs", ridge=slab("brasshaven:slate_roof_tile_slab"))
     # chimney on the west gable
     for y in range(1, 16):
         bp.set(x0 - 1, y, 6, "cobblestone" if y < 6 else "bricks")
@@ -464,7 +464,7 @@ def _guardhouse(bp, ruined, rng):
         for _ in range(14):
             x, z = rng.randint(-14, x1 - 1), rng.randint(z0 + 1, z1 - 1)
             if bp.get(x, 1, z) in (None, "minecraft:air"):
-                bp.set(x, 1, z, rng.choice(["cobblestone", "wayfarers:slate_roof_tiles", "stone_bricks",
+                bp.set(x, 1, z, rng.choice(["cobblestone", "brasshaven:slate_roof_tiles", "stone_bricks",
                                             "spruce_slab[type=bottom,waterlogged=false]"]))
 
 
@@ -544,7 +544,7 @@ def watchtower(ruined):
             for _ in range(70):
                 x, z = rng.randint(14, 32), rng.randint(8, 24)
                 if bp.get(x, 1, z) is None:
-                    bp.set(x, 1, z, rng.choice(["wayfarers:slate_roof_tiles", "wayfarers:slate_roof_tile_slab"
+                    bp.set(x, 1, z, rng.choice(["brasshaven:slate_roof_tiles", "brasshaven:slate_roof_tile_slab"
                                                 "[type=bottom,waterlogged=false]", "dark_oak_planks"]))
             # cellar under the tower: hidden hatch under moss, spawner guards the hoard
             bp.set(-1, 1, -2, "moss_carpet")
@@ -1017,8 +1017,8 @@ register(StructureDef(
 # ============================================================ 3. Rune circle (henge + crypt)
 RC_STONE = Palette({"stone": 4, "tuff": 3, "andesite": 2, "mossy_cobblestone": 1, "cobblestone": 1}, seed=21, scale=2.2)
 RC_LINTEL = Palette({"tuff_bricks": 3, "stone": 2, "tuff": 2, "mossy_stone_bricks": 1}, seed=22, scale=2.5)
-RUNE = "wayfarers:carved_guild_stone"
-RUNE_LAMP = "wayfarers:rune_lamp"
+RUNE = "brasshaven:carved_guild_stone"
+RUNE_LAMP = "brasshaven:rune_lamp"
 
 
 def _oriented_box(bp, ang, r, hu, hv, y0, y1, spec, taper=0.0, rng=None):
@@ -1142,11 +1142,11 @@ def rune_circle(bp):
             bp.set(x, y, z, dais.pick(x, y, z))
         ring_stairs(bp, 0, y, 0, r, st, half="bottom")
     for x, z in ring_cells(0, 0, -1, 2.5):
-        bp.set(x, 3, z, "wayfarers:polished_guild_stone" if (x + z) % 2 else "chiseled_tuff")
+        bp.set(x, 3, z, "brasshaven:polished_guild_stone" if (x + z) % 2 else "chiseled_tuff")
     # altar block with rune, crystal and candles
     bp.set(0, 4, 0, RUNE)
-    bp.set(-1, 4, 0, stair("wayfarers:polished_guild_stone_stairs", "east"))
-    bp.set(1, 4, 0, stair("wayfarers:polished_guild_stone_stairs", "west"))
+    bp.set(-1, 4, 0, stair("brasshaven:polished_guild_stone_stairs", "east"))
+    bp.set(1, 4, 0, stair("brasshaven:polished_guild_stone_stairs", "west"))
     bp.set(0, 5, 0, "amethyst_cluster[facing=up,waterlogged=false]")
     for x, z in ((-1, -1), (1, -1), (-1, 1), (1, 1)):
         bp.set(x, 4, z, f"candle[candles={2 + (x + z) % 2},lit=true,waterlogged=false]")
@@ -1154,11 +1154,11 @@ def rune_circle(bp):
     # rune pillars at the four diagonals of the dais
     for ang in (45, 135, 225, 315):
         x, z = at_angle(0, 0, ang, 6.4)
-        bp.set(x, 1, z, "wayfarers:polished_guild_stone")
-        bp.set(x, 2, z, "wayfarers:guild_brick_wall")
-        bp.set(x, 3, z, "wayfarers:guild_brick_wall")
+        bp.set(x, 1, z, "brasshaven:polished_guild_stone")
+        bp.set(x, 2, z, "brasshaven:guild_brick_wall")
+        bp.set(x, 3, z, "brasshaven:guild_brick_wall")
         bp.set(x, 4, z, RUNE_LAMP)
-        bp.set(x, 5, z, slab("wayfarers:polished_guild_stone_slab"))
+        bp.set(x, 5, z, slab("brasshaven:polished_guild_stone_slab"))
 
     # ---- the crypt: break the southern step of the dais to find the shaft
     cy = -11
@@ -2284,7 +2284,7 @@ register(StructureDef(
 # ============================================================ 7. Dwarven mine (hillside settlement + galleries)
 DM_STONE = Palette({"stone_bricks": 4, "cobblestone": 2, "andesite": 1, "cracked_stone_bricks": 1}, seed=71, scale=2.5)
 DM_ROCK = Palette({"stone": 5, "andesite": 2, "tuff": 2, "cobblestone": 1}, seed=72, scale=3)
-DM_ROOF = "wayfarers:crimson_roof_tile_stairs"
+DM_ROOF = "brasshaven:crimson_roof_tile_stairs"
 DM_UP = 4            # upper terrace height
 SHAFT = (0, -10)     # shaft centre (x, z)
 DEPTH = 32           # hall floor at y = -DEPTH
@@ -2334,7 +2334,7 @@ def _dm_timber_house(bp, x0, z0, w, d, floors, rng, roof_axis="x"):
                 bp.set(x, fy + 2, z, "glass_pane")
     ridge = arch.steep_roof(bp, x0, z0, x1, z1, top + 1, DM_ROOF, axis=roof_axis, overhang=1, steep=1,
                             fill="spruce_planks", under="dark_oak_stairs",
-                            ridge=slab("wayfarers:crimson_roof_tile_slab"),
+                            ridge=slab("brasshaven:crimson_roof_tile_slab"),
                             dormers=1 if (w if roof_axis == "x" else d) >= 9 else 0, dormer_stairs=DM_ROOF,
                             dormer_wall="spruce_planks")
     return top, ridge
@@ -2387,7 +2387,7 @@ def _dm_gallery(bp, hy, start, direction, length, rng, end_loot=True, vault=Fals
         if rng.random() < 0.08:
             bp.set(cx + px, hy + 2, cz + pz, "cobweb")
         if rng.random() < 0.05:
-            bp.set(cx - px * 2, hy + 1, cz - pz * 2, "wayfarers:lithite_block")
+            bp.set(cx - px * 2, hy + 1, cz - pz * 2, "brasshaven:lithite_block")
     # side alcove with a collapsed section and an ore pile near the end
     ax, az = sx + dx * (length // 2) + px * 2, sz + dz * (length // 2) + pz * 2
     for y in range(hy, hy + 2):
@@ -2413,7 +2413,7 @@ def _dm_gallery(bp, hy, start, direction, length, rng, end_loot=True, vault=Fals
                     else:
                         bp.set(x, y, z, "gravel")
         vx, vz = ex + dx * 2, ez + dz * 2
-        bp.set(vx + px, hy, vz + pz, "wayfarers:lithite_block")
+        bp.set(vx + px, hy, vz + pz, "brasshaven:lithite_block")
         bp.set(vx - px, hy, vz - pz, "raw_gold_block")
         bp.chest(vx + dx, hy, vz + dz, _toward(-dx, -dz), LOOT + "dwarven_mine")
         bp.lantern(vx, hy + 2, vz, hanging=True)
@@ -2647,7 +2647,7 @@ def dwarven_mine(bp):
         bp.set(sx0, 5, z, log("dark_oak_log", "z"))
         bp.set(sx1, 5, z, log("dark_oak_log", "z"))
     arch.steep_roof(bp, sx0, sz0, sx1, sz1, 6, DM_ROOF, axis="x", overhang=1, fill="spruce_planks",
-                    under="dark_oak_stairs", ridge=slab("wayfarers:crimson_roof_tile_slab"))
+                    under="dark_oak_stairs", ridge=slab("brasshaven:crimson_roof_tile_slab"))
     # forge: stone hearth with magma glow, chimney, anvils, quench trough
     bp.fill(sx1 - 3, 1, sz0 + 1, sx1 - 1, 1, sz0 + 2, "bricks")
     bp.set(sx1 - 2, 1, sz0 + 1, "magma_block")
@@ -2732,7 +2732,7 @@ def dwarven_mine(bp):
         bp.set(x, hy, hz - 7, "polished_deepslate")
         bp.set(x, hy + 1, hz - 7, "deepslate_bricks")
         bp.set(x, hy + 2, hz - 7, "deepslate_tiles")
-        bp.set(x, hy + 3, hz - 7, "wayfarers:lithite_block")
+        bp.set(x, hy + 3, hz - 7, "brasshaven:lithite_block")
         bp.set(x, hy + 4, hz - 7, slab("deepslate_tile_slab"))
         bp.set(x - 1, hy + 2, hz - 7, stair("deepslate_tile_stairs", "east", "top"))
         bp.set(x + 1, hy + 2, hz - 7, stair("deepslate_tile_stairs", "west", "top"))

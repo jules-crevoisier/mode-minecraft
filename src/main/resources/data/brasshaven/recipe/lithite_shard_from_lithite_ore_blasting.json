@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "ingredient": "brasshaven:lithite_ore",
+  "result": {
+    "id": "brasshaven:lithite_shard"
+  },
+  "experience": 1.0,
+  "cookingtime": 100
+}

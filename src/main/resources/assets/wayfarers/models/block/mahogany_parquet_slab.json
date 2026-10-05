@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/slab",
-  "textures": {
-    "bottom": "wayfarers:block/mahogany_parquet",
-    "top": "wayfarers:block/mahogany_parquet",
-    "side": "wayfarers:block/mahogany_parquet"
-  }
-}

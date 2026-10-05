@@ -1,0 +1,40 @@
+{
+  "display": {
+    "icon": {
+      "id": "brasshaven:warden_scale"
+    },
+    "title": {
+      "translate": "advancements.brasshaven.depths.drowned_warden.title"
+    },
+    "description": {
+      "translate": "advancements.brasshaven.depths.drowned_warden.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "kill": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "entity_type": "brasshaven:drowned_warden"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "parent": "brasshaven:depths/sunken_citadel",
+  "rewards": {
+    "experience": 500,
+    "loot": [
+      "brasshaven:rewards/drowned_warden"
+    ]
+  }
+}

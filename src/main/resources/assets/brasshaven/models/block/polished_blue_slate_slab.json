@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab",
+  "textures": {
+    "bottom": "brasshaven:block/polished_blue_slate",
+    "top": "brasshaven:block/polished_blue_slate",
+    "side": "brasshaven:block/polished_blue_slate"
+  }
+}

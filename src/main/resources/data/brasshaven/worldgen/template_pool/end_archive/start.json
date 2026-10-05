@@ -1,0 +1,104 @@
+{
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "brasshaven:chunked_template",
+        "size": [
+          63,
+          104,
+          69
+        ],
+        "cells": [
+          {
+            "location": "brasshaven:end_archive/archive/x0_z0",
+            "offset": [
+              1,
+              8,
+              0
+            ],
+            "size": [
+              31,
+              73,
+              23
+            ],
+            "blocks": 3440
+          },
+          {
+            "location": "brasshaven:end_archive/archive/x0_z1",
+            "offset": [
+              0,
+              2,
+              23
+            ],
+            "size": [
+              32,
+              102,
+              23
+            ],
+            "blocks": 32697
+          },
+          {
+            "location": "brasshaven:end_archive/archive/x0_z2",
+            "offset": [
+              1,
+              1,
+              46
+            ],
+            "size": [
+              31,
+              86,
+              23
+            ],
+            "blocks": 5510
+          },
+          {
+            "location": "brasshaven:end_archive/archive/x1_z0",
+            "offset": [
+              32,
+              26,
+              19
+            ],
+            "size": [
+              12,
+              37,
+              4
+            ],
+            "blocks": 319
+          },
+          {
+            "location": "brasshaven:end_archive/archive/x1_z1",
+            "offset": [
+              32,
+              0,
+              23
+            ],
+            "size": [
+              31,
+              87,
+              23
+            ],
+            "blocks": 7559
+          },
+          {
+            "location": "brasshaven:end_archive/archive/x1_z2",
+            "offset": [
+              32,
+              18,
+              46
+            ],
+            "size": [
+              10,
+              53,
+              7
+            ],
+            "blocks": 567
+          }
+        ],
+        "projection": "rigid",
+        "processors": "brasshaven:aging"
+      }
+    }
+  ]
+}

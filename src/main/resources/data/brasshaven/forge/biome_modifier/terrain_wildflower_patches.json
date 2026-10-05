@@ -1,0 +1,11 @@
+{
+  "type": "brasshaven:toggled_features",
+  "toggle": "wildflowers",
+  "biomes": [
+    "minecraft:plains",
+    "minecraft:sunflower_plains",
+    "minecraft:forest"
+  ],
+  "features": "brasshaven:world/wildflower_patches",
+  "step": "vegetal_decoration"
+}

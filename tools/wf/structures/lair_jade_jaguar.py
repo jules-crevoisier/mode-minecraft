@@ -390,7 +390,7 @@ def _platform(bp, rng):
                     bp.set(x, L3, z, "tuff_brick_wall" if i % 3 else "chiseled_tuff_bricks")
                     if i % 6 == 0:
                         bp.set(x, L3 + 1, z, "lantern[hanging=false,waterlogged=false]")
-    bp.boss_seal(0, L3 - 1, 0, "wayfarers:jade_jaguar", SEAL_R)
+    bp.boss_seal(0, L3 - 1, 0, "brasshaven:jade_jaguar", SEAL_R)
 
 
 def _stela(bp, x, z, h):

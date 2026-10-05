@@ -1,0 +1,10 @@
+{
+  "type": "brasshaven:toggled_features",
+  "toggle": "hotSprings",
+  "biomes": [
+    "minecraft:windswept_savanna",
+    "minecraft:savanna_plateau"
+  ],
+  "features": "brasshaven:world/hot_springs",
+  "step": "surface_structures"
+}

@@ -17,8 +17,8 @@ from .. import arch
 from ..arch import Palette, slab, stair
 from ..parts import LOOT, MOB, MOD
 
-RUNE = "wayfarers:carved_guild_stone"
-LAMP = "wayfarers:rune_lamp"
+RUNE = "brasshaven:carved_guild_stone"
+LAMP = "brasshaven:rune_lamp"
 CRYPT_Y = -11
 SX, SZ = -14, 0          # the rune well (spiral stair) centre
 FLOOR = -30              # gallery, antechamber and vault floor
@@ -52,7 +52,7 @@ def build(bp):
     # the mist across both doorways of the vault (after carving them)
     bp.mist(AX - AR - 2, FLOOR + 1, AZ - 1, AX - AR - 1, FLOOR + 4, AZ + 1)
     bp.mist(AX + AR + 1, FLOOR + 1, AZ - 1, AX + AR + 2, FLOOR + 3, AZ + 1)
-    bp.boss_seal(AX, FLOOR, AZ, "wayfarers:rune_colossus", 16)
+    bp.boss_seal(AX, FLOOR, AZ, "brasshaven:rune_colossus", 16)
 
 
 # -------------------------------------------------------------------- the rune well (helical stair)
@@ -379,8 +379,8 @@ def vault(bp, rng):
     apex = drum_top + rise
     for dx in (-1, 0, 1):
         for dz in (-1, 0, 1):
-            bp.set(AX + dx, apex + 1, AZ + dz, "wayfarers:lithite_block")
-    bp.set(AX, apex, AZ, "wayfarers:lithite_block")
+            bp.set(AX + dx, apex + 1, AZ + dz, "brasshaven:lithite_block")
+    bp.set(AX, apex, AZ, "brasshaven:lithite_block")
     for (dx, dz) in ((7, 0), (-7, 0), (0, 7), (0, -7)):
         y = int(drum_top + rise * math.sqrt(1 - (7 / (AR + 0.5)) ** 2))
         bp.chain(AX + dx, y - 3, AZ + dz, y)

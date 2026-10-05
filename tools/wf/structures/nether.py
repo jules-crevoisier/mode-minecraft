@@ -18,12 +18,12 @@ from .lair_piglin_king import piglin_king_lair
 NETHER = ["#minecraft:is_nether"]
 
 # ------------------------------------------------------------------ materials
-EB = "wayfarers:ember_bricks"
-EBS = "wayfarers:ember_brick_stairs"
-EBSL = "wayfarers:ember_brick_slab"
-EBW = "wayfarers:ember_brick_wall"
-LAMP = "wayfarers:ember_lamp"
-GILD = "wayfarers:gilded_trim"
+EB = "brasshaven:ember_bricks"
+EBS = "brasshaven:ember_brick_stairs"
+EBSL = "brasshaven:ember_brick_slab"
+EBW = "brasshaven:ember_brick_wall"
+LAMP = "brasshaven:ember_lamp"
+GILD = "brasshaven:gilded_trim"
 PBB = "polished_blackstone_bricks"
 CPBB = "cracked_polished_blackstone_bricks"
 PBBS = "polished_blackstone_brick_stairs"
@@ -723,7 +723,7 @@ register(StructureDef(
     "basalt_fortress", "nether", ["basalt_deltas", "nether_wastes", "soul_sand_valley"],
     [Piece("fortress", basalt_fortress)], spacing=26, separation=9, step="surface_structures",
     adaptation="beard_box", height=("uniform", 22, 24),
-    spawns=[("wayfarers:basalt_guard", 10, 1, 2), ("minecraft:wither_skeleton", 6, 1, 2)],
+    spawns=[("brasshaven:basalt_guard", 10, 1, 2), ("minecraft:wither_skeleton", 6, 1, 2)],
     title_fr="Forteresse de basalte", title_en="Basalt Fortress"))
 
 

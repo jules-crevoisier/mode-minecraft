@@ -21,7 +21,7 @@ from ..arch import Palette, stair, slab
 from ..defs import Piece, StructureDef, register
 from ..parts import LOOT
 
-W = "wayfarers:"
+W = "brasshaven:"
 ROCK = Palette({"stone": 6, "andesite": 2, "tuff": 1, "granite": 1}, seed=3, scale=3.0)
 WHITE = Palette({"calcite": 3, "smooth_quartz": 2, "polished_diorite": 2}, seed=8, scale=2.0)
 ORES = ["coal_ore", "iron_ore", "copper_ore", "gold_ore", W + "aether_ore", W + "zinc_ore", "lapis_ore",
@@ -434,7 +434,7 @@ def watchtower(bp):
     for y in range(y0 + 1, y0 + 7):
         bp.set(tx - 2, y, tz, "ladder[facing=east,waterlogged=false]")
     bp.set(tx - 3, y0 + 6, tz, "stone_bricks")
-    bp.spawner(tx, y0 + 1, tz, "wayfarers:gargoyle")
+    bp.spawner(tx, y0 + 1, tz, "brasshaven:gargoyle")
     bp.chest(tx + 1, y0 + 7, tz + 1, "west", loot=LOOT + "sky_isles")
     arch.vines_on(bp, ((tx - 4, y0, tz - 4), (tx + 4, y0 + 12, tz + 4)), chance=0.1, seed=7, max_len=5)
 

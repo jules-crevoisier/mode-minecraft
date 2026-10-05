@@ -1,0 +1,42 @@
+{
+  "display": {
+    "icon": {
+      "id": "brasshaven:explorer_chestplate"
+    },
+    "title": {
+      "translate": "advancements.brasshaven.first_steps.explorer_armor.title"
+    },
+    "description": {
+      "translate": "advancements.brasshaven.first_steps.explorer_armor.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "armor": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "brasshaven:explorer_helmet"
+          },
+          {
+            "items": "brasshaven:explorer_chestplate"
+          },
+          {
+            "items": "brasshaven:explorer_leggings"
+          },
+          {
+            "items": "brasshaven:explorer_boots"
+          }
+        ]
+      }
+    }
+  },
+  "parent": "brasshaven:first_steps/blade",
+  "rewards": {
+    "experience": 60
+  }
+}

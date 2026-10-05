@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "GMG",
+    "MLM",
+    "GMG"
+  ],
+  "key": {
+    "G": "brasshaven:guild_bricks",
+    "M": "brasshaven:map_fragment",
+    "L": "minecraft:glowstone"
+  },
+  "result": {
+    "id": "brasshaven:rune_lamp",
+    "count": 4
+  }
+}

@@ -499,7 +499,7 @@ def furnish(bp):
         bp.set(x, L2 + 1, z, "waxed_exposed_cut_copper_slab[type=bottom,waterlogged=false]")   # bronze shards
     bp.set(cx + 12, L2 + 1, cz - 6, "waxed_weathered_cut_copper_stairs[facing=north,half=bottom,shape=straight,"
                                     "waterlogged=false]")
-    bp.boss_seal(cx, L2, cz, "wayfarers:bell_keeper", AR)
+    bp.boss_seal(cx, L2, cz, "brasshaven:bell_keeper", AR)
     _furnish_vault(bp)
 
 

@@ -146,24 +146,24 @@ def lang():
         for iid, (form, (ne, nf)) in item_ids(mid).items():
             if form == "raw":
                 ne, nf = raw_name(mid)
-            en[f"item.wayfarers.{iid}"], fr[f"item.wayfarers.{iid}"] = ne, nf
+            en[f"item.brasshaven.{iid}"], fr[f"item.brasshaven.{iid}"] = ne, nf
         for bid, (_kind, _host, (ne, nf)) in block_ids(mid).items():
-            en[f"block.wayfarers.{bid}"], fr[f"block.wayfarers.{bid}"] = ne, nf
+            en[f"block.brasshaven.{bid}"], fr[f"block.brasshaven.{bid}"] = ne, nf
         for gid, (_kind, _what, (ne, nf)) in gear_ids(mid).items():
-            en[f"item.wayfarers.{gid}"], fr[f"item.wayfarers.{gid}"] = ne, nf
+            en[f"item.brasshaven.{gid}"], fr[f"item.brasshaven.{gid}"] = ne, nf
             if m.get("armor") and _kind == "armor":
                 be, bf = m["armor"]["bonus"]
-                en[f"item.wayfarers.{gid}.desc"], fr[f"item.wayfarers.{gid}.desc"] = be, bf
+                en[f"item.brasshaven.{gid}.desc"], fr[f"item.brasshaven.{gid}.desc"] = be, bf
     return en, fr
 
 
 def java():
-    L = ["package com.wayfarers.generated;", "",
-         "import com.wayfarers.Wayfarers;",
-         "import com.wayfarers.item.TooltipItem;",
-         "import com.wayfarers.item.TooltipBlockItem;",
-         "import com.wayfarers.registry.ModBlocks;",
-         "import com.wayfarers.registry.ModItems;",
+    L = ["package com.brasshaven.generated;", "",
+         "import com.brasshaven.Brasshaven;",
+         "import com.brasshaven.item.TooltipItem;",
+         "import com.brasshaven.item.TooltipBlockItem;",
+         "import com.brasshaven.registry.ModBlocks;",
+         "import com.brasshaven.registry.ModItems;",
          "import net.minecraft.core.registries.Registries;",
          "import net.minecraft.resources.ResourceKey;",
          "import net.minecraft.sounds.SoundEvents;",
@@ -198,7 +198,7 @@ def java():
     for mid, m in METALS.items():
         C = mid.upper()
         if m.get("tools") or m.get("armor"):
-            L.append(f'    public static final TagKey<Item> {C}_REPAIR = TagKey.create(Registries.ITEM, Wayfarers.id("{mid}_repair"));')
+            L.append(f'    public static final TagKey<Item> {C}_REPAIR = TagKey.create(Registries.ITEM, Brasshaven.id("{mid}_repair"));')
         t = m.get("tools")
         if t:
             L.append(f'    public static final ToolMaterial {C}_TOOLS = new ToolMaterial(BlockTags.{t["incorrect"]}, '
@@ -207,7 +207,7 @@ def java():
         if a:
             b, l, c, h = a["defense"]
             L.append(f'    public static final ResourceKey<EquipmentAsset> {C}_ASSET = ResourceKey.create(EquipmentAssets.ROOT_ID, '
-                     f'Wayfarers.id("{mid}"));')
+                     f'Brasshaven.id("{mid}"));')
             L.append(f'    public static final ArmorMaterial {C}_ARMOR = new ArmorMaterial({a["durability"]}, defense({b}, {l}, {c}, {h}), '
                      f'{a["enchant"]}, SoundEvents.{a["sound"]}, {a["toughness"]}F, {a["knockback"]}F, {C}_REPAIR, {C}_ASSET);')
         light = m.get("ore", {}).get("light", 0) if m.get("ore") else 0

@@ -1,0 +1,37 @@
+{
+  "display": {
+    "icon": {
+      "id": "brasshaven:crone_ladle"
+    },
+    "title": {
+      "translate": "advancements.brasshaven.explorer.boss_swamp_crone.title"
+    },
+    "description": {
+      "translate": "advancements.brasshaven.explorer.boss_swamp_crone.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "kill": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "entity_type": "brasshaven:swamp_crone"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "parent": "brasshaven:explorer/witch_huts",
+  "rewards": {
+    "experience": 500
+  }
+}

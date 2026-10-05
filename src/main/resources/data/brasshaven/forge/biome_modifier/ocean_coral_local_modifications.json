@@ -1,0 +1,8 @@
+{
+  "type": "forge:add_features",
+  "biomes": "#brasshaven:ocean/coral",
+  "features": [
+    "brasshaven:ocean_giant_coral"
+  ],
+  "step": "local_modifications"
+}

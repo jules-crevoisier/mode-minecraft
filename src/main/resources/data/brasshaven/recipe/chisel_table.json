@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "BCB",
+    "PPP",
+    "P P"
+  ],
+  "key": {
+    "B": "brasshaven:brass_ingot",
+    "C": "brasshaven:chisel",
+    "P": "#minecraft:planks"
+  },
+  "result": {
+    "id": "brasshaven:chisel_table",
+    "count": 1
+  }
+}

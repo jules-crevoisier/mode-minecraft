@@ -1,7 +1,7 @@
 {
   "replace": false,
   "values": [
-    "wayfarers:brass_shovel",
-    "wayfarers:mithril_shovel"
+    "brasshaven:brass_shovel",
+    "brasshaven:mithril_shovel"
   ]
 }

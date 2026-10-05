@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/inner_stairs",
+  "textures": {
+    "bottom": "brasshaven:block/rust_rock",
+    "top": "brasshaven:block/rust_rock",
+    "side": "brasshaven:block/rust_rock"
+  }
+}

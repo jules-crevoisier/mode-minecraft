@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "I",
+    "B",
+    "S"
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "B": "brasshaven:brass_ingot",
+    "S": "minecraft:stick"
+  },
+  "result": {
+    "id": "brasshaven:chisel",
+    "count": 1
+  }
+}

@@ -10,7 +10,7 @@ MACHINES = {
         desc=[("Harvests ripe crops around it and replants them.", "Récolte les cultures mûres autour d'elle et replante."),
               ("The harvest goes into a chest next to it.", "La récolte va dans un coffre collé à elle."),
               ("Click it: area, replanting, output side, redstone mode.", "Clic : zone, replantation, côté de sortie, mode redstone.")],
-        recipe=(["BHB", "BCB", "BRB"], {"B": "wayfarers:brass_ingot", "H": "iron_hoe", "C": "chest", "R": "redstone"}, 1)),
+        recipe=(["BHB", "BCB", "BRB"], {"B": "brasshaven:brass_ingot", "H": "iron_hoe", "C": "chest", "R": "redstone"}, 1)),
     "sprinkler": dict(
         kind="SPRINKLER", glyph="sprinkler", en="Sprinkler", fr="Arroseur", color="COLOR_ORANGE",
         desc=[("Place it among your crops: plants below grow faster.", "Pose-le au milieu des cultures : les plantes dessous poussent plus vite."),
@@ -22,19 +22,19 @@ MACHINES = {
         desc=[("Pulls in items and experience nearby.", "Aspire les objets et l'expérience autour."),
               ("Feeds the chest below it.", "Remplit le coffre en dessous."),
               ("Click it: range, item filter, stored XP, redstone mode.", "Clic : portée, filtre d'objets, XP stockée, mode redstone.")],
-        recipe=(["BEB", "BHB", " B "], {"B": "wayfarers:brass_ingot", "E": "ender_pearl", "H": "hopper"}, 1)),
+        recipe=(["BEB", "BHB", " B "], {"B": "brasshaven:brass_ingot", "E": "ender_pearl", "H": "hopper"}, 1)),
     "block_breaker": dict(
         kind="BREAKER", glyph="breaker", en="Block Breaker", fr="Casseur de blocs", color="COLOR_GRAY",
         desc=[("On a redstone pulse, breaks the block in front.", "Sur une impulsion de redstone, casse le bloc devant."),
               ("Drops go into the chest behind it.", "Les objets vont dans le coffre derrière."),
               ("Click it to see what it breaks next.", "Clic : voir ce qu'il cassera ensuite.")],
-        recipe=(["BBB", "BPB", "BRB"], {"B": "wayfarers:brass_ingot", "P": "iron_pickaxe", "R": "redstone"}, 1)),
+        recipe=(["BBB", "BPB", "BRB"], {"B": "brasshaven:brass_ingot", "P": "iron_pickaxe", "R": "redstone"}, 1)),
     "block_placer": dict(
         kind="PLACER", glyph="placer", en="Block Placer", fr="Poseur de blocs", color="COLOR_GRAY",
         desc=[("On a redstone pulse, places a block in front.", "Sur une impulsion de redstone, pose un bloc devant."),
               ("Takes blocks from the chest behind, or its own slots.", "Prend les blocs dans le coffre derrière, ou dans ses cases."),
               ("Click it to see which block it places next.", "Clic : voir quel bloc il posera ensuite.")],
-        recipe=(["BBB", "BDB", "BRB"], {"B": "wayfarers:brass_ingot", "D": "dispenser", "R": "redstone"}, 1)),
+        recipe=(["BBB", "BDB", "BRB"], {"B": "brasshaven:brass_ingot", "D": "dispenser", "R": "redstone"}, 1)),
     "redstone_timer": dict(
         kind="TIMER", glyph="timer", en="Redstone Timer", fr="Minuteur de redstone", color="COLOR_RED",
         desc=[("Sends a short redstone pulse every few seconds.", "Envoie une courte impulsion de redstone toutes les quelques secondes."),
@@ -46,23 +46,23 @@ MACHINES = {
         desc=[("Sends the redstone signal it receives through the air.", "Envoie par les airs le signal de redstone qu'il reçoit."),
               ("Click it to pick its channel colour (or use a dye on it).", "Clic : choisir la couleur du canal (ou une teinture dessus)."),
               ("Receivers of the same colour turn on.", "Les récepteurs de la même couleur s'allument.")],
-        recipe=([" A ", "BRB", "BBB"], {"A": "lightning_rod", "B": "wayfarers:brass_ingot", "R": "redstone_block"}, 1)),
+        recipe=([" A ", "BRB", "BBB"], {"A": "lightning_rod", "B": "brasshaven:brass_ingot", "R": "redstone_block"}, 1)),
     "wireless_receiver": dict(
         kind="RECEIVER", glyph="receiver", en="Wireless Receiver", fr="Récepteur sans fil", color="COLOR_CYAN",
         desc=[("Outputs redstone while a transmitter of its colour is on.", "Émet de la redstone tant qu'un émetteur de sa couleur est allumé."),
               ("Click it to pick its channel colour (or use a dye on it).", "Clic : choisir la couleur du canal (ou une teinture dessus)."),
               ("Works anywhere in the same dimension (chunks loaded).", "Marche partout dans la même dimension (chunks chargés).")],
-        recipe=(["B B", "BRB", "BBB"], {"B": "wayfarers:brass_ingot", "R": "redstone"}, 1)),
+        recipe=(["B B", "BRB", "BBB"], {"B": "brasshaven:brass_ingot", "R": "redstone"}, 1)),
     "entity_detector": dict(
         kind="DETECTOR", glyph="detector", en="Entity Detector", fr="Détecteur de créatures", color="COLOR_RED",
         desc=[("Outputs redstone while something is near (1 per creature, max 15).", "Émet de la redstone quand quelque chose approche (1 par créature, max 15)."),
               ("Click it: target (players, monsters, animals, items, all).", "Clic : cible (joueurs, monstres, animaux, objets, tous)."),
               ("Range 2 to 16 blocks; the output can be inverted.", "Portée de 2 à 16 blocs ; la sortie peut être inversée.")],
-        recipe=(["BBB", "BEB", "BRB"], {"B": "wayfarers:brass_ingot", "E": "ender_eye", "R": "redstone"}, 1)),
+        recipe=(["BBB", "BEB", "BRB"], {"B": "brasshaven:brass_ingot", "E": "ender_eye", "R": "redstone"}, 1)),
 }
 
 GUIDE = [
-    ("machines", "wayfarers:auto_harvester", ("Farm machines", "Machines de ferme"), [
+    ("machines", "brasshaven:auto_harvester", ("Farm machines", "Machines de ferme"), [
         ("No cables, no power: each machine is one block that does one job. Click a machine to open its screen: "
          "what it does, what it is doing right now, and its settings. The Brass Wrench turns it; sneak + wrench "
          "changes its main setting without opening the screen.",
@@ -82,8 +82,8 @@ GUIDE = [
          "Fabrication : la plupart des machines demandent des lingots de laiton et de la redstone autour de l'outil "
          "de leur métier (houe, pioche, distributeur, entonnoir...) ; l'arroseur, quatre lingots de cuivre autour "
          "d'un seau d'eau."),
-    ], ["wayfarers:auto_harvester", "wayfarers:sprinkler", "wayfarers:vacuum_hopper"]),
-    ("machine_screens", "wayfarers:brass_wrench", ("Machine screens", "Écrans des machines"), [
+    ], ["brasshaven:auto_harvester", "brasshaven:sprinkler", "brasshaven:vacuum_hopper"]),
+    ("machine_screens", "brasshaven:brass_wrench", ("Machine screens", "Écrans des machines"), [
         ("Top of the screen: the machine and a status line with a lamp. Green: working. Amber: waiting (no ripe "
          "crops, no redstone signal...). Red: stuck (output full, nothing to place). Hover anything for a tip.",
          "En haut : la machine et une ligne d'état avec un voyant. Vert : elle travaille. Orange : elle attend "
@@ -103,8 +103,8 @@ GUIDE = [
          "Moissonneuse : replantation et côté de sortie (un point vert marque les côtés avec un conteneur). Trémie : "
          "5 objets filtrés (seulement eux, ou tout sauf eux) et un bouton pour récupérer l'expérience. Maj + clic "
          "remplit ou vide leurs cases."),
-    ], ["wayfarers:auto_harvester", "wayfarers:vacuum_hopper", "wayfarers:brass_wrench"]),
-    ("redstone_easy", "wayfarers:redstone_timer", ("Easy redstone", "Redstone facile"), [
+    ], ["brasshaven:auto_harvester", "brasshaven:vacuum_hopper", "brasshaven:brass_wrench"]),
+    ("redstone_easy", "brasshaven:redstone_timer", ("Easy redstone", "Redstone facile"), [
         ("Redstone Timer: a ready-made clock. Its screen has a slider for the interval (0.5 s to 1 minute), the "
          "pulse length, a redstone mode to pause it, and a bar counting down to the next pulse.",
          "Minuteur de redstone : une horloge toute faite. Son écran a un curseur pour l'intervalle (0,5 s à "
@@ -124,8 +124,8 @@ GUIDE = [
          "Détecteur de créatures : choisis ce qu'il cherche (joueurs, monstres, animaux, objets ou toutes les "
          "créatures) et à quelle distance ; il émet 1 par créature (max 15), ou l'inverse quand il est inversé : "
          "allumé tant que rien n'approche."),
-    ], ["wayfarers:redstone_timer", "wayfarers:block_breaker", "wayfarers:block_placer",
-        "wayfarers:wireless_transmitter", "wayfarers:wireless_receiver", "wayfarers:entity_detector"]),
+    ], ["brasshaven:redstone_timer", "brasshaven:block_breaker", "brasshaven:block_placer",
+        "brasshaven:wireless_transmitter", "brasshaven:wireless_receiver", "brasshaven:entity_detector"]),
 ]
 
 # ---------------------------------------------------------------- machine screens (client/gui/MachineScreen.java)
@@ -329,7 +329,7 @@ GUI = {
 
 def gui_lang():
     en, fr = {}, {}
-    k = "gui.wayfarers.machine."
+    k = "gui.brasshaven.machine."
     for kind, ((we, wf), (he, hf)) in WHAT.items():
         en[k + "what." + kind], fr[k + "what." + kind] = we, wf
         en[k + "howto." + kind], fr[k + "howto." + kind] = he, hf
@@ -380,21 +380,21 @@ def textures():
 def lang():
     en, fr = {}, {}
     for mid, m in MACHINES.items():
-        en[f"block.wayfarers.{mid}"], fr[f"block.wayfarers.{mid}"] = m["en"], m["fr"]
+        en[f"block.brasshaven.{mid}"], fr[f"block.brasshaven.{mid}"] = m["en"], m["fr"]
         for i, (e, f) in enumerate(m["desc"]):
             suffix = "" if i == 0 else str(i + 1)
-            en[f"block.wayfarers.{mid}.desc{suffix}"], fr[f"block.wayfarers.{mid}.desc{suffix}"] = e, f
+            en[f"block.brasshaven.{mid}.desc{suffix}"], fr[f"block.brasshaven.{mid}.desc{suffix}"] = e, f
     msgs = {
-        "message.wayfarers.machine.area": ("Area: %sx%s", "Zone : %sx%s"),
-        "message.wayfarers.machine.interval": ("Pulse every %s s", "Impulsion toutes les %s s"),
-        "message.wayfarers.machine.channel": ("Channel: %s", "Canal : %s"),
-        "message.wayfarers.machine.xp": ("+%s experience collected", "+%s d'expérience récupérée"),
-        "message.wayfarers.machine.detector": ("Detects %s within %s blocks", "Détecte : %s à %s blocs"),
-        "message.wayfarers.machine.detector.players": ("players", "joueurs"),
-        "message.wayfarers.machine.detector.monsters": ("monsters", "monstres"),
-        "message.wayfarers.machine.detector.animals": ("animals", "animaux"),
-        "message.wayfarers.machine.detector.items": ("items", "objets"),
-        "message.wayfarers.machine.detector.living": ("all creatures", "toutes les créatures"),
+        "message.brasshaven.machine.area": ("Area: %sx%s", "Zone : %sx%s"),
+        "message.brasshaven.machine.interval": ("Pulse every %s s", "Impulsion toutes les %s s"),
+        "message.brasshaven.machine.channel": ("Channel: %s", "Canal : %s"),
+        "message.brasshaven.machine.xp": ("+%s experience collected", "+%s d'expérience récupérée"),
+        "message.brasshaven.machine.detector": ("Detects %s within %s blocks", "Détecte : %s à %s blocs"),
+        "message.brasshaven.machine.detector.players": ("players", "joueurs"),
+        "message.brasshaven.machine.detector.monsters": ("monsters", "monstres"),
+        "message.brasshaven.machine.detector.animals": ("animals", "animaux"),
+        "message.brasshaven.machine.detector.items": ("items", "objets"),
+        "message.brasshaven.machine.detector.living": ("all creatures", "toutes les créatures"),
     }
     for k, (e, f) in msgs.items():
         en[k], fr[k] = e, f
@@ -406,12 +406,12 @@ def lang():
 
 def java():
     L = [
-        "package com.wayfarers.generated;",
+        "package com.brasshaven.generated;",
         "",
-        "import com.wayfarers.block.MachineBlock;",
-        "import com.wayfarers.item.TooltipBlockItem;",
-        "import com.wayfarers.registry.ModBlocks;",
-        "import com.wayfarers.registry.ModItems;",
+        "import com.brasshaven.block.MachineBlock;",
+        "import com.brasshaven.item.TooltipBlockItem;",
+        "import com.brasshaven.registry.ModBlocks;",
+        "import com.brasshaven.registry.ModItems;",
         "import net.minecraft.world.item.Item;",
         "import net.minecraft.world.level.block.Block;",
         "import net.minecraft.world.level.block.SoundType;",

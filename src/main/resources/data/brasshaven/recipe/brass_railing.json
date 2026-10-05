@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "BBB",
+    "N N"
+  ],
+  "key": {
+    "B": "brasshaven:brass_ingot",
+    "N": "minecraft:iron_nugget"
+  },
+  "result": {
+    "id": "brasshaven:brass_railing",
+    "count": 6
+  }
+}

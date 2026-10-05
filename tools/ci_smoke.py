@@ -5,7 +5,7 @@ Used by CI (.github/workflows/build.yml) after `./gradlew build`:
     python3 tools/ci_smoke.py <server_dir>                    # flat world: every structure, mob, item, loot table
     python3 tools/ci_smoke.py <server_dir> --fit              # normal world: how every structure sits on the terrain
     python3 tools/ci_smoke.py <server_dir> --fit --shard 0/2  # ...every second structure from the first
-    python3 tools/ci_smoke.py <server_dir> --world            # Wayfarers biomes + generation speed gate
+    python3 tools/ci_smoke.py <server_dir> --world            # Brasshaven biomes + generation speed gate
 
 The server directory must already contain an installed Forge server and the mod jar in mods/.
 The script accepts the EULA, starts the server, waits for "Done", then from the console:
@@ -15,27 +15,27 @@ The script accepts the EULA, starts the server, waits for "Done", then from the 
   * measures the server's time per tick with a crowded base of machines and automatons (fails above 25 ms),
   * breaks mod blocks (loot tables + Forge loot modifiers),
   * spawns every loot table,
-  * runs /wayfarers social selftest (the multiplayer features' server rules, with no player needed),
+  * runs /brasshaven social selftest (the multiplayer features' server rules, with no player needed),
   * reloads data packs,
 and stops the server. Any ERROR line, exception, crash report or failed command fails the run.
-With --fit the server makes a fresh world with Minecraft's own terrain instead (and the Wayfarers biomes, on by
-default) and /wayfarers fitcheck locates, generates and measures every Overworld structure there.
+With --fit the server makes a fresh world with Minecraft's own terrain instead (and the Brasshaven biomes, on by
+default) and /brasshaven fitcheck locates, generates and measures every Overworld structure there.
 
-With --world the server runs twice on the same seed, each time in a fresh normal world: once WITH the Wayfarers biomes
+With --world the server runs twice on the same seed, each time in a fresh normal world: once WITH the Brasshaven biomes
 and terrain touches (config world.customBiomes and world.terrain.* on), once WITHOUT (all off: Minecraft's own
-generation). Each run generates the same fresh areas for real (/wayfarers genbench area: a warm-up area first, then
-a fixed 12 x 12 chunk area at 20000 20000 and a 6 x 6 chunk area on each Wayfarers biome) and the summary gives the
+generation). Each run generates the same fresh areas for real (/brasshaven genbench area: a warm-up area first, then
+a fixed 12 x 12 chunk area at 20000 20000 and a 6 x 6 chunk area on each Brasshaven biome) and the summary gives the
 full-generation ms/chunk of both and their ratio. The job fails when WITH is more than 5 % slower than WITHOUT
 (GATE); a pair over the gate is measured once more, in the other order, on fresh worlds, and the verdict uses both
 pairs together. The WITH run also checks that the pack is on, finds each biome with /locate biome and draws it
-(/wayfarers biomeshots: wayfarers-biome-<id>.png, published with the previews).
+(/brasshaven biomeshots: brasshaven-biome-<id>.png, published with the previews).
 
-Every run writes a short diagnostic summary, wayfarers-ci-<job>.txt, into the server folder: phase durations, FAIL
+Every run writes a short diagnostic summary, brasshaven-ci-<job>.txt, into the server folder: phase durations, FAIL
 lines, suspicious log lines, slow commands. CI publishes it with the previews, so the next diagnosis needs no log
 download.
 
 Time: the server runs one command at a time, so a command the script stopped waiting for still blocks the ones after
-it. /wayfarers fitcheck keeps to its own budget (in the Java command) and the script waits that budget plus a margin;
+it. /brasshaven fitcheck keeps to its own budget (in the Java command) and the script waits that budget plus a margin;
 anything skipped for time is listed in the summary, never counted as a pass.
 """
 import glob
@@ -51,7 +51,7 @@ import zipfile
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 RES = os.path.join(ROOT, "src", "main", "resources")
-DATA = os.path.join(RES, "data", "wayfarers")
+DATA = os.path.join(RES, "data", "brasshaven")
 
 NETHER = {"nether_wastes", "soul_sand_valley", "crimson_forest", "warped_forest", "basalt_deltas"}
 END = {"the_end", "end_highlands", "end_midlands", "small_end_islands", "end_barrens"}
@@ -97,7 +97,7 @@ TERRAIN_TOGGLES = ["boulders", "fallenLogs", "rockSpires", "wildflowers", "mossC
 
 
 class Summary:
-    """What wayfarers-ci-<job>.txt says (see the module docstring)."""
+    """What brasshaven-ci-<job>.txt says (see the module docstring)."""
     job = "smoke"
     phases = []      # (name, seconds, note)
     notes = []       # skips, partial results, anything a reader must know
@@ -106,7 +106,7 @@ class Summary:
 
     @classmethod
     def write(cls, server_dir, failures, bad, extra=()):
-        lines = [f"wayfarers CI summary: job {cls.job}, commit {os.environ.get('GITHUB_SHA', '?')[:12]}, "
+        lines = [f"brasshaven CI summary: job {cls.job}, commit {os.environ.get('GITHUB_SHA', '?')[:12]}, "
                  f"run {os.environ.get('GITHUB_RUN_ID', '?')} attempt {os.environ.get('GITHUB_RUN_ATTEMPT', '?')}",
                  f"result: {'FAILED' if failures else 'OK'}", "", "phases (seconds):"]
         lines += [f"  {name:34s} {sec:6.0f}  {note}".rstrip() for name, sec, note in cls.phases]
@@ -119,7 +119,7 @@ class Summary:
             lines += ["", "slow commands:"] + ["  " + n for n in cls.slow[:40]]
         lines += ["", f"FAIL lines ({len(failures)}):"] + ["  FAIL: " + f for f in failures]
         lines += ["", f"suspicious log lines ({len(set(bad))}):"] + ["  " + b[:400] for b in sorted(set(bad))[:40]]
-        path = os.path.join(server_dir, f"wayfarers-ci-{cls.job}.txt")
+        path = os.path.join(server_dir, f"brasshaven-ci-{cls.job}.txt")
         with open(path, "w", encoding="utf-8") as f:
             f.write("\n".join(lines) + "\n")
         print(f"[smoke] summary written to {path}", flush=True)
@@ -144,7 +144,7 @@ def structure_dims():
 
 
 def lang_ids(prefix):
-    lang = json.load(open(os.path.join(RES, "assets", "wayfarers", "lang", "en_us.json")))
+    lang = json.load(open(os.path.join(RES, "assets", "brasshaven", "lang", "en_us.json")))
     return sorted({k[len(prefix):] for k in lang if k.startswith(prefix) and "." not in k[len(prefix):]})
 
 
@@ -221,10 +221,10 @@ def prepare(server_dir, fit, level_name=None, custom=True):
         f.write("eula=true\n")
     props = ("online-mode=false\nspawn-protection=0\nlevel-seed=wayfarers-ci\nmax-tick-time=-1\n"
              "view-distance=4\nsimulation-distance=4\nsync-chunk-writes=false\n")
-    # the Wayfarers biomes and terrain touches: on (the defaults) unless this run measures vanilla generation
+    # the Brasshaven biomes and terrain touches: on (the defaults) unless this run measures vanilla generation
     os.makedirs(os.path.join(server_dir, "config"), exist_ok=True)
     flag = "true" if custom else "false"
-    with open(os.path.join(server_dir, "config", "wayfarers-common.toml"), "w") as f:
+    with open(os.path.join(server_dir, "config", "brasshaven-common.toml"), "w") as f:
         f.write(f"[world]\ncustomBiomes = {flag}\n\n[world.terrain]\n"
                 + "".join(f"{t} = {flag}\n" for t in TERRAIN_TOGGLES))
     if level_name:
@@ -309,7 +309,7 @@ def place_structures(srv, failures):
                     failures.append(f"forceload for {sid}: {res}")
         res = None
         for attempt in range(12):
-            res = srv.run(f"execute in {dim} run place structure wayfarers:{sid} {x} 100 0",
+            res = srv.run(f"execute in {dim} run place structure brasshaven:{sid} {x} 100 0",
                           r"Generated structure|Failed to place|not loaded|commands\.place|Unknown|Invalid|Incorrect", 120)
             if not res or "not loaded" not in res:
                 break
@@ -323,9 +323,9 @@ VILLAGES = ["plains", "desert", "savanna", "snowy", "taiga"]
 
 
 def our_templates(sub):
-    """Template ids of ours under data/wayfarers/structure/<sub>."""
+    """Template ids of ours under data/brasshaven/structure/<sub>."""
     root = os.path.join(DATA, "structure")
-    return sorted("wayfarers:" + os.path.relpath(p, root)[:-4].replace(os.sep, "/")
+    return sorted("brasshaven:" + os.path.relpath(p, root)[:-4].replace(os.sep, "/")
                   for p in glob.glob(os.path.join(root, sub, "**", "*.nbt"), recursive=True))
 
 
@@ -431,17 +431,17 @@ def load_origin(srv):
 
 def summon_all(srv, failures):
     load_origin(srv)
-    for eid in lang_ids("entity.wayfarers."):
-        res = srv.run(f"execute in minecraft:overworld run summon wayfarers:{eid} 0 200 0",
+    for eid in lang_ids("entity.brasshaven."):
+        res = srv.run(f"execute in minecraft:overworld run summon brasshaven:{eid} 0 200 0",
                       r"Summoned|Unable|Unknown|Invalid|Incorrect", 60)
         if not res or "Summoned" not in res:
             failures.append(f"summon {eid}: {res}")
     srv.run("execute in minecraft:overworld run kill @e[type=!minecraft:player]", r"Killed|No entity", 60)
-    items = lang_ids("item.wayfarers.") + lang_ids("block.wayfarers.")
+    items = lang_ids("item.brasshaven.") + lang_ids("block.brasshaven.")
     for iid in items:
         check_budget(f"item {iid}")
         res = srv.run(f'execute in minecraft:overworld run summon minecraft:item 0 200 0 '
-                      f'{{Item:{{id:"wayfarers:{iid}",count:1}}}}',
+                      f'{{Item:{{id:"brasshaven:{iid}",count:1}}}}',
                       r"Summoned|Unable|Unknown|Invalid|Incorrect|Expected", 60)
         if not res or "Summoned" not in res:
             failures.append(f"item {iid}: {res}")
@@ -452,9 +452,9 @@ def creatures_fight(srv, failures):
     projectiles, summons and boss phases all run, and any exception in them lands in the log."""
     srv.run("execute in minecraft:overworld run forceload add -64 -64 64 64", r"Marked|forceload|No chunks|already", 300)
     ground = -60  # the flat test world: bedrock, 2 dirt, grass on top at y -61
-    for i, eid in enumerate(lang_ids("entity.wayfarers.")):
+    for i, eid in enumerate(lang_ids("entity.brasshaven.")):
         x, z = (i % 8) * 14 - 49, (i // 8) * 14 - 49
-        res = srv.run(f"execute in minecraft:overworld run summon wayfarers:{eid} {x} {ground} {z}",
+        res = srv.run(f"execute in minecraft:overworld run summon brasshaven:{eid} {x} {ground} {z}",
                       r"Summoned|Unable|Unknown|Invalid|Incorrect|not loaded", 60)
         if not res or "Summoned" not in res:
             failures.append(f"summon {eid} on the ground: {res}")
@@ -470,7 +470,7 @@ def creatures_fight(srv, failures):
 # Server performance check: a crowded base (PERF_MACHINES machines working a wheat field) and PERF_AUTOMATONS
 # automatons fighting each other, then the mean time per tick over PERF_TICKS ticks (/tick sprint measures the real
 # work of each tick, without the sleep between ticks). Above PERF_MAX_MSPT the run fails. The numbers go to the
-# summary (wayfarers-ci-smoke.txt) with a baseline of the same world before anything was added.
+# summary (brasshaven-ci-smoke.txt) with a baseline of the same world before anything was added.
 PERF_MACHINES = {"auto_harvester": 24, "sprinkler": 16, "vacuum_hopper": 16, "entity_detector": 16,
                  "redstone_timer": 8, "wireless_transmitter": 8, "wireless_receiver": 8}
 PERF_AUTOMATONS = {"brass_golem": 20, "clockwork_spider": 20, "steam_drone": 20}
@@ -519,7 +519,7 @@ def server_performance(srv, failures):
     for bid, n in PERF_MACHINES.items():
         for _ in range(n):
             x, z = x0 + 3 + (i % 16) * 6, z0 + 3 + (i // 16) * 6
-            res = srv.run(f"execute in minecraft:overworld run setblock {x} {ground + 1} {z} wayfarers:{bid}",
+            res = srv.run(f"execute in minecraft:overworld run setblock {x} {ground + 1} {z} brasshaven:{bid}",
                           r"Changed|Could not|Unknown|Invalid|not loaded", 30)
             placed += 1 if res and "Changed" in res else 0
             i += 1
@@ -530,7 +530,7 @@ def server_performance(srv, failures):
     for eid, n in PERF_AUTOMATONS.items():
         for _ in range(n):
             x, z = x0 + 8 + (i % 10) * 9, z0 + 8 + (i // 10) * 13
-            res = srv.run(f"execute in minecraft:overworld run summon wayfarers:{eid} {x} {ground + 2} {z}",
+            res = srv.run(f"execute in minecraft:overworld run summon brasshaven:{eid} {x} {ground + 2} {z}",
                           r"Summoned|Unable|Unknown|Invalid|not loaded", 30)
             summoned += 1 if res and "Summoned" in res else 0
             i += 1
@@ -557,15 +557,15 @@ def server_performance(srv, failures):
 
 def blocks_and_loot(srv, failures):
     load_origin(srv)
-    for bid in lang_ids("block.wayfarers."):
+    for bid in lang_ids("block.brasshaven."):
         check_budget(f"block {bid}")
-        res = srv.run(f"execute in minecraft:overworld run setblock 0 150 0 wayfarers:{bid}",
+        res = srv.run(f"execute in minecraft:overworld run setblock 0 150 0 brasshaven:{bid}",
                       r"Changed|Could not|Unknown|Invalid|not loaded", 30)
         if not res or re.search(r"Unknown|Invalid|not loaded", res):
             failures.append(f"setblock {bid}: {res}")
         srv.run("execute in minecraft:overworld run setblock 0 150 0 minecraft:air destroy", r"Changed|Could not|not loaded", 30)
     for table in loot_tables():
-        res = srv.run(f"execute in minecraft:overworld run loot spawn 0 200 0 loot wayfarers:{table}",
+        res = srv.run(f"execute in minecraft:overworld run loot spawn 0 200 0 loot brasshaven:{table}",
                       r"Dropped|Unknown|Invalid|Incorrect|No loot", 30)
         if not res or "Dropped" not in res and "No loot" not in res:
             failures.append(f"loot {table}: {res}")
@@ -573,22 +573,22 @@ def blocks_and_loot(srv, failures):
 
 
 def social(srv, failures):
-    """The multiplayer features have no player on a console server: /wayfarers social selftest checks their server
+    """The multiplayer features have no player on a console server: /brasshaven social selftest checks their server
     rules instead (saved data round trip, trade space, contract matching and item conservation, shared experience,
     text cleaning, duel ring, contract expiry with refund by post, config), then the status line and the blocks."""
-    res = srv.run("wayfarers social selftest", r"Social self-test (passed|FAILED)|Unknown|Incorrect", 120)
+    res = srv.run("brasshaven social selftest", r"Social self-test (passed|FAILED)|Unknown|Incorrect", 120)
     if not res or "passed" not in res:
         failures.append(f"social self-test: {res}")
         # the server prints one FAILED line per broken rule: give the next lines a moment to land in the log
         time.sleep(2)
         failures += [ln.strip() for ln in srv.lines[-40:] if "Social self-test FAILED" in ln and ln.strip() not in failures]
-    res = srv.run("wayfarers social status", r"Social: |Unknown|Incorrect", 60)
+    res = srv.run("brasshaven social status", r"Social: |Unknown|Incorrect", 60)
     if not res or "Social: " not in res:
         failures.append(f"social status: {res}")
     load_origin(srv)
     for bid in ("pneumatic_post", "contract_board"):
         for facing in ("north", "east", "south", "west"):
-            res = srv.run(f"execute in minecraft:overworld run setblock 1 150 1 wayfarers:{bid}[facing={facing}]",
+            res = srv.run(f"execute in minecraft:overworld run setblock 1 150 1 brasshaven:{bid}[facing={facing}]",
                           r"Changed|Could not|Unknown|Invalid|not loaded", 30)
             if not res or re.search(r"Unknown|Invalid|not loaded", res):
                 failures.append(f"setblock {bid}[facing={facing}]: {res}")
@@ -597,12 +597,12 @@ def social(srv, failures):
 
 def exercise_fit(srv, failures, shard=None):
     """Every Overworld structure of the mod (or every n-th with --shard i/n), located in a fresh normal world
-    (Minecraft's terrain) and really generated: /wayfarers fitcheck measures floating edges, buried edges and flooding at each, draws it in
-    place (wayfarers-fit-<id>.png) and writes wayfarers-fit.txt (wayfarers-fit-shard<i>.txt). A MISFIT or ERROR line
+    (Minecraft's terrain) and really generated: /brasshaven fitcheck measures floating edges, buried edges and flooding at each, draws it in
+    place (brasshaven-fit-<id>.png) and writes brasshaven-fit.txt (brasshaven-fit-shard<i>.txt). A MISFIT or ERROR line
     fails the run, so every structure is checked on real terrain. A structure skipped for time is listed in the
     summary; the run fails for that only when more than half of the structures were skipped."""
-    command = "wayfarers fitcheck" + (f" shard {shard[0]} {shard[1]}" if shard else "")
-    name = f"wayfarers-fit-shard{shard[0]}.txt" if shard else "wayfarers-fit.txt"
+    command = "brasshaven fitcheck" + (f" shard {shard[0]} {shard[1]}" if shard else "")
+    name = f"brasshaven-fit-shard{shard[0]}.txt" if shard else "brasshaven-fit.txt"
     with Phase("structure fit" + (f" (shard {shard[0] + 1} of {shard[1]})" if shard else "")):
         # the command keeps to FIT_BUDGET (plus the structure in progress) and reports what it skipped past that
         res = srv.run(command, r"Fit check (written|failed)|Unknown|Incorrect", FIT_WAIT)
@@ -645,8 +645,8 @@ GENBENCH_RX = re.compile(r"Genbench area: (\d+) x \d+ chunks at block (-?\d+) (-
 
 
 def genbench_area(srv, x, z, size, failures, label):
-    """/wayfarers genbench area: {"ms", "chunks", "already", "per_chunk"} or None."""
-    res = srv.run(f"wayfarers genbench area {x} {z} {size}", r"Genbench area|Unknown|Incorrect", GENBENCH_WAIT)
+    """/brasshaven genbench area: {"ms", "chunks", "already", "per_chunk"} or None."""
+    res = srv.run(f"brasshaven genbench area {x} {z} {size}", r"Genbench area|Unknown|Incorrect", GENBENCH_WAIT)
     m = GENBENCH_RX.search(res or "")
     if not m:
         failures.append(f"genbench {label} at {x} {z}: {res}")
@@ -667,7 +667,7 @@ def locate_biome(srv, biome, x=4000, z=4000):
 
 
 def world_run(server_dir, custom, level_name, biome_spots, failures, bad):
-    """One server start in a fresh normal world: WITH (custom) or WITHOUT the Wayfarers biomes and terrain touches.
+    """One server start in a fresh normal world: WITH (custom) or WITHOUT the Brasshaven biomes and terrain touches.
     The same areas are generated in both, in the same order: a warm-up area (not counted), the fixed area, then the
     biome areas (biome_spots, found by the WITH run). Returns the genbench results."""
     import shutil
@@ -685,9 +685,9 @@ def world_run(server_dir, custom, level_name, biome_spots, failures, bad):
         Phase.start = time.time()
         try:
             res = srv.run("datapack list enabled", r"data pack", 60)
-            on = bool(res) and "wayfarers:custom_biomes" in res
+            on = bool(res) and "brasshaven:custom_biomes" in res
             if on != custom:
-                failures.append(f"pack wayfarers:custom_biomes {'not ' if custom else ''}enabled in the {tag} world: {res}")
+                failures.append(f"pack brasshaven:custom_biomes {'not ' if custom else ''}enabled in the {tag} world: {res}")
             with Phase(f"generation benchmark ({tag})"):
                 genbench_area(srv, WARMUP_X, WARMUP_Z, WARMUP_SIZE, failures, "warm-up")
                 r = genbench_area(srv, BENCH_X, BENCH_Z, BENCH_SIZE, failures, "fixed area")
@@ -697,9 +697,9 @@ def world_run(server_dir, custom, level_name, biome_spots, failures, bad):
                 with Phase("locate biomes"):
                     first = not biome_spots
                     for b in OUR_BIOMES:
-                        spot = locate_biome(srv, f"wayfarers:{b}")
+                        spot = locate_biome(srv, f"brasshaven:{b}")
                         if spot is None:
-                            failures.append(f"/locate biome wayfarers:{b}: not found within 6400 blocks of 4000 4000")
+                            failures.append(f"/locate biome brasshaven:{b}: not found within 6400 blocks of 4000 4000")
                         elif first:
                             biome_spots[b] = spot
             else:
@@ -711,19 +711,19 @@ def world_run(server_dir, custom, level_name, biome_spots, failures, bad):
                     r = genbench_area(srv, x, z, BIOME_BENCH_SIZE, failures, b)
                     if r:
                         results.append(r)
-            res = srv.run("wayfarers genbench noise", r"Genbench world|Unknown|Incorrect", GENBENCH_WAIT)
+            res = srv.run("brasshaven genbench noise", r"Genbench world|Unknown|Incorrect", GENBENCH_WAIT)
             for line in list(srv.lines):
                 m = re.search(r"(Genbench (vanilla|world).*)$", line)
                 if m and ">>>" not in line:
                     Summary.notes.append(f"{tag}: {m.group(1)}")
             if custom:
                 with Phase("biome shots"):
-                    res = srv.run("wayfarers biomeshots", r"Biome shots (written|failed)|Unknown|Incorrect", BIOMESHOTS_WAIT)
+                    res = srv.run("brasshaven biomeshots", r"Biome shots (written|failed)|Unknown|Incorrect", BIOMESHOTS_WAIT)
                     m = re.search(r"written: (\d+) of (\d+)", res or "")
                     if not res or not m:
                         failures.append(f"biome shots: {res}")
                     elif int(m.group(1)) < int(m.group(2)):
-                        failures.append(f"biome shots: only {m.group(1)} of {m.group(2)} drawn (see wayfarers-biomes.txt)")
+                        failures.append(f"biome shots: only {m.group(1)} of {m.group(2)} drawn (see brasshaven-biomes.txt)")
         except TimeoutError as e:
             failures.append(str(e))
             Summary.notes.append(str(e))
@@ -784,7 +784,7 @@ def pair_ratio(pairs):
 
 def speed_report(pairs, spots, failures):
     lines = ["", "world generation speed (same seed, same fresh areas, full generation on the server's worker threads;",
-             "  WITH = Wayfarers biomes + terrain touches, WITHOUT = vanilla generation; warm-up area not counted):"]
+             "  WITH = Brasshaven biomes + terrain touches, WITHOUT = vanilla generation; warm-up area not counted):"]
     for i, got in enumerate(pairs):
         lines.append(f"  pair {i + 1}:")
         for a, b in _match(got.get(True, []), got.get(False, [])):
@@ -806,7 +806,7 @@ def speed_report(pairs, spots, failures):
         verdict = "PASS" if ratio <= GATE else "FAIL"
         lines.append(f"  RATIO with / without (all areas, all pairs): {ratio:.3f} (gate <= {GATE}) {verdict}")
         if ratio > GATE:
-            failures.append(f"generation speed: with the Wayfarers biomes and terrain touches {ratio:.3f}x vanilla "
+            failures.append(f"generation speed: with the Brasshaven biomes and terrain touches {ratio:.3f}x vanilla "
                             f"(gate {GATE})")
     print("\n".join(lines), flush=True)
     return lines

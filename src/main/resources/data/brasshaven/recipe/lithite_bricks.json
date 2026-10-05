@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "LS",
+    "SL"
+  ],
+  "key": {
+    "L": "brasshaven:lithite_shard",
+    "S": "minecraft:stone_bricks"
+  },
+  "result": {
+    "id": "brasshaven:lithite_bricks",
+    "count": 4
+  }
+}

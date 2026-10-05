@@ -1,0 +1,50 @@
+{
+  "variants": {
+    "facing=north,powered=false": {
+      "model": "brasshaven:block/redstone_timer"
+    },
+    "facing=north,powered=true": {
+      "model": "brasshaven:block/redstone_timer_on"
+    },
+    "facing=east,powered=false": {
+      "model": "brasshaven:block/redstone_timer",
+      "y": 90
+    },
+    "facing=east,powered=true": {
+      "model": "brasshaven:block/redstone_timer_on",
+      "y": 90
+    },
+    "facing=south,powered=false": {
+      "model": "brasshaven:block/redstone_timer",
+      "y": 180
+    },
+    "facing=south,powered=true": {
+      "model": "brasshaven:block/redstone_timer_on",
+      "y": 180
+    },
+    "facing=west,powered=false": {
+      "model": "brasshaven:block/redstone_timer",
+      "y": 270
+    },
+    "facing=west,powered=true": {
+      "model": "brasshaven:block/redstone_timer_on",
+      "y": 270
+    },
+    "facing=up,powered=false": {
+      "model": "brasshaven:block/redstone_timer",
+      "x": 270
+    },
+    "facing=up,powered=true": {
+      "model": "brasshaven:block/redstone_timer_on",
+      "x": 270
+    },
+    "facing=down,powered=false": {
+      "model": "brasshaven:block/redstone_timer",
+      "x": 90
+    },
+    "facing=down,powered=true": {
+      "model": "brasshaven:block/redstone_timer_on",
+      "x": 90
+    }
+  }
+}

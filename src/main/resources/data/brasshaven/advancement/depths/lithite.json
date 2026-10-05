@@ -1,0 +1,33 @@
+{
+  "display": {
+    "icon": {
+      "id": "brasshaven:lithite_shard"
+    },
+    "title": {
+      "translate": "advancements.brasshaven.depths.lithite.title"
+    },
+    "description": {
+      "translate": "advancements.brasshaven.depths.lithite.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "brasshaven:lithite_shard"
+          }
+        ]
+      }
+    }
+  },
+  "parent": "brasshaven:first_steps/map_fragment",
+  "rewards": {
+    "experience": 50
+  }
+}

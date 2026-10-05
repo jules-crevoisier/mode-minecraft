@@ -1,0 +1,8 @@
+{
+  "type": "forge:add_features",
+  "biomes": "#brasshaven:ocean/oysters",
+  "features": [
+    "brasshaven:ocean_oyster_beds"
+  ],
+  "step": "vegetal_decoration"
+}

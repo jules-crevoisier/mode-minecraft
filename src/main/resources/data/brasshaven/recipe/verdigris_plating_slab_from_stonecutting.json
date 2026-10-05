@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "brasshaven:verdigris_plating",
+  "result": {
+    "id": "brasshaven:verdigris_plating_slab",
+    "count": 2
+  }
+}

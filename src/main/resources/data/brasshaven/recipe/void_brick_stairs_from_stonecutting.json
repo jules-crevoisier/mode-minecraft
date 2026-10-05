@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "brasshaven:void_bricks",
+  "result": {
+    "id": "brasshaven:void_brick_stairs",
+    "count": 1
+  }
+}

@@ -11,16 +11,16 @@ How it works
    points Mesa at its software renderer: LIBGL_ALWAYS_SOFTWARE=1, GALLIUM_DRIVER=llvmpipe,
    MESA_GL_VERSION_OVERRIDE=4.5 / MESA_GLSL_VERSION_OVERRIDE=450. ALSOFT_DRIVERS=null gives OpenAL a silent
    output device, so the sound engine starts instead of logging errors.
-2. Launch. `./gradlew runClient -Pwayfarers.ci=true` (ForgeGradle's client run, see build.gradle). That property
-   adds `-Dwayfarers.ci=true` to the game JVM and `--width 1280 --height 720 --graphicsBackend opengl` to the
+2. Launch. `./gradlew runClient -Pbrasshaven.ci=true` (ForgeGradle's client run, see build.gradle). That property
+   adds `-Dbrasshaven.ci=true` to the game JVM and `--width 1280 --height 720 --graphicsBackend opengl` to the
    game arguments. Minecraft's assets come from Mojang's servers on the first run. The FML early loading window
    is turned off (run/config/fml.toml) unless --early-window: one less OpenGL context to go wrong.
-3. In game. With -Dwayfarers.ci=true, com.wayfarers.client.CiDriver waits for the title screen, creates a
-   fresh creative world ("wayfarers-ci", normal terrain, no structures), lets it settle, then plays scripted
+3. In game. With -Dbrasshaven.ci=true, com.brasshaven.client.CiDriver waits for the title screen, creates a
+   fresh creative world ("brasshaven-ci", normal terrain, no structures), lets it settle, then plays scripted
    steps on client ticks: HUD + minimap, world map, quest journal, talent tree, two Manual pages, a stage in the
    sky with the Auto Harvester, Guild Terminal and waystone screens (opened by right-clicking the placed
    blocks), the multiplayer screens (company, player card, emote wheel, Pneumatic Post and Contract Board filled by
-   /wayfarers social demo, a client-side preview of the trade screen), the creative tab, creatures (Grand Clockmaker, Brass Golem, Clockwork Spider, a jellyfish in a
+   /brasshaven social demo, a client-side preview of the trade screen), the creative tab, creatures (Grand Clockmaker, Brass Golem, Clockwork Spider, a jellyfish in a
    water tank) with their health bars, and the Clockwork Citadel placed with /place structure and framed
    from its bounding box. Each step saves run/screenshots/ci/<name>.png with the vanilla screenshot code. An
    exception or timeout in a step is logged as an ERROR and the next step runs anyway. At the end the driver
@@ -30,15 +30,15 @@ How it works
    process tree after --timeout seconds (default 25 min, Gradle setup included).
 5. Verdict. The run fails on:
      * a step marked FAIL (or SKIP) in the report, a missing report or a missing screenshot;
-     * in run/logs/latest.log: ERROR/FATAL lines from com.wayfarers or mentioning wayfarers, any stack trace
-       going through com.wayfarers, warnings about wayfarers: resources (missing models/textures/blockstates,
+     * in run/logs/latest.log: ERROR/FATAL lines from com.brasshaven or mentioning brasshaven, any stack trace
+       going through com.brasshaven, warnings about brasshaven: resources (missing models/textures/blockstates,
        "Unable to load model", "Missing texture", "Exception loading blockstate"...), crashes ("Reported
        exception thrown", crash reports in run/crash-reports, a JVM crash);
      * a non-zero exit code of the game.
    Other ERROR lines are listed but do not fail the run (--strict makes them fail), and headless noise is
    ignored outright: OpenAL/sound devices, the narrator, telemetry, Realms, Mojang account services, GLFW and
    Mesa chatter.
-6. Output. build/ci-client/ gets wayfarers-shot-<name>.png for each screenshot, the report and the scan
+6. Output. build/ci-client/ gets brasshaven-shot-<name>.png for each screenshot, the report and the scan
    summary; the workflow uploads it as an artifact and attaches the images to the previews-<branch> release.
 """
 import argparse
@@ -67,12 +67,12 @@ EXPECTED_SHOTS = [
     "creative_tab", "creatures", "mega_structure",
 ]
 
-DONE_MARK = "[wayfarers-ci] DONE"
+DONE_MARK = "[brasshaven-ci] DONE"
 EXIT_GRACE = 180  # seconds for the game to save and quit once the driver is done
 
 ENTRY = re.compile(r"^\[(?P<time>[^\]]+)\] \[(?P<thread>[^\]]*?)/(?P<level>[A-Z]+)\] \[(?P<logger>[^\]]*?)/(?P<marker>[^\]]*)\]: (?P<msg>.*)$")
 
-# headless CI noise that says nothing about the mod (never applied to an entry that mentions wayfarers)
+# headless CI noise that says nothing about the mod (never applied to an entry that mentions brasshaven)
 BENIGN = re.compile("|".join((
     r"OpenAL", r"\bALC\b", r"SoundSystem", r"[Ss]ound [Ee]ngine", r"Sound Library", r"audio device",
     r"[Nn]arrator", r"Text2Speech", r"flite",
@@ -97,12 +97,12 @@ def log(msg):
 
 def ensure_display(argv):
     """Re-runs this script under xvfb-run when there is no X display."""
-    if os.environ.get("DISPLAY") or os.environ.get("WAYFARERS_CI_NO_XVFB"):
+    if os.environ.get("DISPLAY") or os.environ.get("BRASSHAVEN_CI_NO_XVFB"):
         return
     xvfb = shutil.which("xvfb-run")
     if not xvfb:
         sys.exit("no $DISPLAY and no xvfb-run: install xvfb (apt-get install xvfb) or run under a display")
-    os.environ["WAYFARERS_CI_NO_XVFB"] = "1"
+    os.environ["BRASSHAVEN_CI_NO_XVFB"] = "1"
     cmd = [xvfb, "-a", "-s", "-screen 0 1920x1080x24", sys.executable, os.path.abspath(__file__)] + argv
     log("no display: re-running under " + " ".join(cmd))
     os.execv(xvfb, cmd)
@@ -123,7 +123,7 @@ def prepare(early_window):
             shutil.rmtree(path)
         elif os.path.exists(path):
             os.remove(path)
-    for world in glob.glob(os.path.join(RUN, "saves", "wayfarers-ci*")):
+    for world in glob.glob(os.path.join(RUN, "saves", "brasshaven-ci*")):
         shutil.rmtree(world, ignore_errors=True)
     for hs in glob.glob(os.path.join(RUN, "hs_err_pid*.log")):
         os.remove(hs)
@@ -160,7 +160,7 @@ def kill_tree(proc):
             continue
         try:
             with open(f"/proc/{pid}/cmdline", "rb") as f:
-                if b"-Dwayfarers.ci=true" in f.read():
+                if b"-Dbrasshaven.ci=true" in f.read():
                     os.kill(int(pid), signal.SIGKILL)
                     log(f"killed stray game process {pid}")
         except (OSError, ValueError):
@@ -168,8 +168,8 @@ def kill_tree(proc):
 
 
 def run_game(args):
-    cmd = [os.path.join(ROOT, "gradlew"), "runClient", "-Pwayfarers.ci=true",
-           f"-Pwayfarers.ci.timeout={args.game_timeout}", "--no-daemon", "--stacktrace", "--console=plain"]
+    cmd = [os.path.join(ROOT, "gradlew"), "runClient", "-Pbrasshaven.ci=true",
+           f"-Pbrasshaven.ci.timeout={args.game_timeout}", "--no-daemon", "--stacktrace", "--console=plain"]
     log("running " + " ".join(cmd))
     start = time.time()
     proc = subprocess.Popen(cmd, cwd=ROOT, env=game_env(), stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
@@ -231,20 +231,20 @@ def read_entries(path):
 
 
 def classify(entry):
-    """None (fine) or one of: crash, wayfarers, resources, other."""
+    """None (fine) or one of: crash, brasshaven, resources, other."""
     level = entry["level"]
-    # the checkout path may well contain "wayfarers": take it out before looking for the mod's name
+    # the checkout path may well contain "brasshaven": take it out before looking for the mod's name
     text = (entry["head"] + "\n" + "\n".join(entry["more"])).replace(ROOT, "<root>")
-    mentions_mod = "wayfarers" in text.lower()
+    mentions_mod = "brasshaven" in text.lower()
     if CRASH.search(text) or level == "FATAL":
         if not mentions_mod and BENIGN.search(entry["head"]):
             return None
         return "crash"
-    if "at com.wayfarers." in text and level in ("WARN", "ERROR"):
-        return "wayfarers"
-    if level == "ERROR" and (entry["logger"].startswith("com.wayfarers") or mentions_mod):
-        return "wayfarers"
-    if level in ("WARN", "ERROR") and "wayfarers:" in text and RESOURCE_TROUBLE.search(text):
+    if "at com.brasshaven." in text and level in ("WARN", "ERROR"):
+        return "brasshaven"
+    if level == "ERROR" and (entry["logger"].startswith("com.brasshaven") or mentions_mod):
+        return "brasshaven"
+    if level in ("WARN", "ERROR") and "brasshaven:" in text and RESOURCE_TROUBLE.search(text):
         return "resources"
     if level == "ERROR":
         return None if BENIGN.search(text) else "other"
@@ -253,7 +253,7 @@ def classify(entry):
 
 def scan_log(strict):
     path = os.path.join(RUN, "logs", "latest.log")
-    found = {"crash": [], "wayfarers": [], "resources": [], "other": []}
+    found = {"crash": [], "brasshaven": [], "resources": [], "other": []}
     entries = read_entries(path)
     if not entries:
         return found, [f"FAIL no game log at {path}"]
@@ -261,7 +261,7 @@ def scan_log(strict):
         kind = classify(e)
         if kind:
             found[kind].append(e)
-    failing = ["crash", "wayfarers", "resources"] + (["other"] if strict else [])
+    failing = ["crash", "brasshaven", "resources"] + (["other"] if strict else [])
     problems = []
     for kind in failing:
         if found[kind]:
@@ -284,7 +284,7 @@ def collect_shots():
                                             for p in glob.glob(os.path.join(SHOTS, "*.png"))) - set(EXPECTED_SHOTS)):
         src = os.path.join(SHOTS, name + ".png")
         if os.path.exists(src) and os.path.getsize(src) > 0:
-            shutil.copyfile(src, os.path.join(OUT, f"wayfarers-shot-{name}.png"))
+            shutil.copyfile(src, os.path.join(OUT, f"brasshaven-shot-{name}.png"))
             saved.append(name)
     return saved
 
@@ -329,10 +329,10 @@ def main():
         else:
             failures.append(f"FAIL the game exited with code {code}")
 
-    summary = ["# Wayfarers client test", ""]
+    summary = ["# Brasshaven client test", ""]
     summary += ["## Steps", "```"] + (report or ["(no report)"]) + ["```", ""]
     summary += ["## Screenshots", ", ".join(saved) if saved else "none", ""]
-    for kind in ("crash", "wayfarers", "resources", "other"):
+    for kind in ("crash", "brasshaven", "resources", "other"):
         if found[kind]:
             summary += [f"## Log: {kind} ({len(found[kind])})", "```"]
             for e in found[kind][:40]:

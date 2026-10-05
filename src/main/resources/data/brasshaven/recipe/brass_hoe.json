@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "XX",
+    " S",
+    " S"
+  ],
+  "key": {
+    "X": "brasshaven:brass_ingot",
+    "S": "minecraft:stick"
+  },
+  "result": {
+    "id": "brasshaven:brass_hoe",
+    "count": 1
+  }
+}

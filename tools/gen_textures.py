@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate every Wayfarers texture: item sprites, block faces, armor layers, mob skins.
+"""Generate every Brasshaven texture: item sprites, block faces, armor layers, mob skins.
 
 Everything is procedural / hand-drawn ASCII so the repository needs no binary art
 sources. Run with --sheet to also write a contact sheet to build/previews.
@@ -15,7 +15,7 @@ from wf.png import Canvas  # noqa: E402
 from wf.sprites import ACCENTS, HANDLES, MATERIALS, SHAPES  # noqa: E402
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-TEX = os.path.join(ROOT, "src", "main", "resources", "assets", "wayfarers", "textures")
+TEX = os.path.join(ROOT, "src", "main", "resources", "assets", "brasshaven", "textures")
 
 # item id -> (shape, material, handle, accent)
 ITEMS = {

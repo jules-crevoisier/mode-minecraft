@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "brasshaven:raw_orichalcum_block"
+  ],
+  "result": {
+    "id": "brasshaven:raw_orichalcum",
+    "count": 9
+  }
+}

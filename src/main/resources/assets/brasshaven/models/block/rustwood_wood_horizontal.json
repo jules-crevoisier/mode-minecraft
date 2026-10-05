@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column_horizontal",
+  "textures": {
+    "end": "brasshaven:block/rustwood_log",
+    "side": "brasshaven:block/rustwood_log"
+  }
+}

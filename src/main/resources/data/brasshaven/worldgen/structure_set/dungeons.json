@@ -1,0 +1,40 @@
+{
+  "structures": [
+    {
+      "structure": "brasshaven:forgotten_catacombs",
+      "weight": 1
+    },
+    {
+      "structure": "brasshaven:sand_hypogeum",
+      "weight": 1
+    },
+    {
+      "structure": "brasshaven:lithite_well",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "brasshaven:curated_spread",
+    "salt": 233463812,
+    "spacing": 60,
+    "separation": 24,
+    "avoid": [
+      {
+        "set": "brasshaven:wonders",
+        "chunks": 10
+      },
+      {
+        "set": "brasshaven:deep_wonders",
+        "chunks": 8
+      },
+      {
+        "set": "minecraft:villages",
+        "chunks": 4
+      },
+      {
+        "set": "brasshaven:landmarks",
+        "chunks": 6
+      }
+    ]
+  }
+}

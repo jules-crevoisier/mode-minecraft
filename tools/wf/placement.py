@@ -10,7 +10,7 @@ Families
     weight w comes back about every ``spacing * sqrt(W_b / w)`` chunks; alone in its biome, every ``spacing``.
 
 Placement type
-    ``wayfarers:curated_spread`` (com.wayfarers.world.CuratedSpreadPlacement) is vanilla ``random_spread`` plus
+    ``brasshaven:curated_spread`` (com.brasshaven.world.CuratedSpreadPlacement) is vanilla ``random_spread`` plus
     ``avoid`` (several exclusion zones instead of vanilla's single ``exclusion_zone``) and ``min_spawn_distance``.
     Like vanilla exclusion zones, ``avoid`` tests the other set's grid positions without looking at biomes, so
     each zone costs a family about ``(2r+1)^2 / spacing_other^2`` of its cells; radii stay modest for that reason.
@@ -21,13 +21,13 @@ Terrain fit
     jigsaw "ground = lowest layer + 1", which is where the beardifier flattens the terrain; for our templates that
     was up to 12 blocks under the real ground, so beard_thin dug a moat around every structure (the "castle
     floating over a crater"). gen_structures now writes every start piece of a heightmap-projected structure as a
-    ``wayfarers:chunked_template`` element (one column when small) with ``ground_level_delta`` = depth of the
+    ``brasshaven:chunked_template`` element (one column when small) with ``ground_level_delta`` = depth of the
     ground layer + 1, and the structure's start height no longer subtracts that depth.
     ``carve_limit`` then drops template air that would only carve hills: air above the ground layer in columns with
     nothing built, and air more than ``KEEP_AIR`` blocks above the highest built block of its column.
 
 Site selection (FIT)
-    Every structure is a ``wayfarers:fitted_jigsaw`` (com.wayfarers.world.FittedJigsawStructure): a vanilla jigsaw
+    Every structure is a ``brasshaven:fitted_jigsaw`` (com.brasshaven.world.FittedJigsawStructure): a vanilla jigsaw
     whose start is first checked against the real terrain, sampled with ``ChunkGenerator.getBaseHeight``
     (WORLD_SURFACE_WG and OCEAN_FLOOR_WG) on a grid over the structure's footprint (corners, edges, centre, up to
     7 x 7 points). A site that does not fit is rejected like a cell with the wrong biome: the grid cell stays empty
@@ -537,7 +537,7 @@ def check(data_dir):
 
 
 def check_fit(data_dir):
-    """Site-fit rules, read back from the written structures (wayfarers:fitted_jigsaw): every structure has a fit
+    """Site-fit rules, read back from the written structures (brasshaven:fitted_jigsaw): every structure has a fit
     mode that matches how it is placed, sane tolerances, a footprint inside its templates, a terrain adaptation that
     suits the mode, and biomes that suit its ground (no desert template on snowy peaks, no land building in the
     sea...). Returns a list of error strings."""

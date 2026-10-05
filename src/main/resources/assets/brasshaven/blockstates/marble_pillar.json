@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=y": {
+      "model": "brasshaven:block/marble_pillar"
+    },
+    "axis=z": {
+      "model": "brasshaven:block/marble_pillar_horizontal",
+      "x": 90
+    },
+    "axis=x": {
+      "model": "brasshaven:block/marble_pillar_horizontal",
+      "x": 90,
+      "y": 90
+    }
+  }
+}

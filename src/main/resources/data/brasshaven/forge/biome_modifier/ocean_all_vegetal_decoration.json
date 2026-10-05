@@ -1,0 +1,8 @@
+{
+  "type": "forge:add_features",
+  "biomes": "#brasshaven:ocean/all",
+  "features": [
+    "brasshaven:ocean_anemones"
+  ],
+  "step": "vegetal_decoration"
+}

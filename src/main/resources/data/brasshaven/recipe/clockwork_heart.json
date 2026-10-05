@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " G ",
+    "IRI",
+    " C "
+  ],
+  "key": {
+    "G": "brasshaven:brass_gear",
+    "I": "brasshaven:brass_ingot",
+    "R": "minecraft:redstone_block",
+    "C": "minecraft:clock"
+  },
+  "result": {
+    "id": "brasshaven:clockwork_heart",
+    "count": 1
+  }
+}

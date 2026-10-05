@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "brasshaven:orichalcum_ingot"
+  ],
+  "result": {
+    "id": "brasshaven:orichalcum_nugget",
+    "count": 9
+  }
+}

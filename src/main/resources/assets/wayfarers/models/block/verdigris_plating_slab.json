@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/slab",
-  "textures": {
-    "bottom": "wayfarers:block/verdigris_plating",
-    "top": "wayfarers:block/verdigris_plating",
-    "side": "wayfarers:block/verdigris_plating"
-  }
-}

@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "brasshaven:block/verdigris_plating_slab"
+    },
+    "type=top": {
+      "model": "brasshaven:block/verdigris_plating_slab_top"
+    },
+    "type=double": {
+      "model": "brasshaven:block/verdigris_plating"
+    }
+  }
+}

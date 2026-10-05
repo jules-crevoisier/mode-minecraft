@@ -1,4 +1,4 @@
-# Wayfarers — server-readiness audit
+# Brasshaven — server-readiness audit
 
 Scope: every client → server packet, every server action a player can trigger (blocks, items, menus, commands),
 duplication paths, multiplayer sync, server-thread hot paths, memory, config, stability. Target: a public server
@@ -8,7 +8,7 @@ Severity: **High** = exploitable by any player to harm the server or other playe
 a distance, theft). **Medium** = exploitable with effort, or a server-wide cost a crowd can trigger. **Low** = bug,
 leak or hardening with little impact.
 
-The server options mentioned below live in `config/wayfarers-common.toml` and are described for admins (in French)
+The server options mentioned below live in `config/brasshaven-common.toml` and are described for admins (in French)
 in [SERVER_ADMIN.md](SERVER_ADMIN.md).
 
 ## 1. Security and exploits
@@ -25,7 +25,7 @@ in [SERVER_ADMIN.md](SERVER_ADMIN.md).
 | S8 | Med. | **Unbounded strings in serverbound packets** (`readUtf()` = 32 767 chars) in `WaystoneActionMsg` and `SkillActionMsg`. | Ids bounded to 16 / 64 chars at decode time (longer = malformed packet). `MapActionMsg` was already bounded (8 KB, 64 requests). | `network/WaystoneActionMsg.java`, `network/SkillActionMsg.java` |
 | S9 | Med. | **Anyone could rename or pin every waystone** of the server (they are shared) from any waystone. | Only the waystone you stand at, unless `waystones.renameOnlyHere = false`; operators always can. | `util/Waystones.java` |
 | S10 | Med. | **Waystone travel had no cooldown**: teleport spam loads chunks all over the world. | `waystones.cooldownSeconds` (5), optional `waystones.costLevels` (×2 across dimensions), `waystones.crossDimension`. Operators are exempt. | `util/Waystones.java` |
-| S11 | Med. | **Waystone names and count unbounded.** A waystone item renamed by a command or another mod could carry a name longer than the 64 chars the list packet allows: an encoder exception for everyone opening the list. The list itself grew without limit. | Names cleaned (no control/formatting characters) and cut to 32; `waystones.maxTotal` (1000). | `data/WayfarersData.java`, `util/Waystones.java` |
+| S11 | Med. | **Waystone names and count unbounded.** A waystone item renamed by a command or another mod could carry a name longer than the 64 chars the list packet allows: an encoder exception for everyone opening the list. The list itself grew without limit. | Names cleaned (no control/formatting characters) and cut to 32; `waystones.maxTotal` (1000). | `data/BrasshavenData.java`, `util/Waystones.java` |
 | S12 | Med. | **Graves could be emptied by anyone.** | `graves.ownerOnlyMinutes`: only the owner (and operators) open a grave, for N minutes or always (-1, default). A grave without a recorded owner stays open to all; with a time limit, graves made before the update (no creation time) are open. | `block/GraveBlock.java`, `block/GraveBlockEntity.java` |
 | S13 | Med. | **Storm Staff called real lightning**: fire, and damage to players (whatever the PvP setting), pets and villagers, also inside spawn protection. | Default: a visual bolt that hurts only monsters (same rule as every other ability, `Targets.foe`) and starts no fire. `items.stormStaffRealLightning = true` restores real lightning, refused inside spawn protection. | `item/StormStaffItem.java` |
 | S14 | Med. | **Builder's Wand bypassed claims**, and its undo could remove blocks placed since by other players, at any distance. | Every placement is announced to protection mods (one refusal cancels the use); undo only within 96 blocks and where the player may break. | `item/BuilderWandItem.java` |
@@ -105,13 +105,13 @@ ripe wheat field with 96 machines (24 harvesters, 16 sprinklers, 16 vacuum hoppe
 8 transmitters, 8 receivers) and 60 automatons fighting (20 brass golems, 20 clockwork spiders, 20 steam drones).
 `/tick sprint 600` gives the mean time per tick (real work, no sleep), `/tick query` after 30 s at 20 TPS gives
 average and P50/P95/P99. Fails above 25 ms per tick. The numbers, with a baseline of the empty area, are written to
-`wayfarers-ci-smoke.txt`.
+`brasshaven-ci-smoke.txt`.
 
 ## 5. Stability
 
-* Client-only code: every `com.wayfarers.client` / `net.minecraft.client` reference from common code sits behind
+* Client-only code: every `com.brasshaven.client` / `net.minecraft.client` reference from common code sits behind
   `FMLEnvironment.dist == Dist.CLIENT` (packet handlers, manual, atlas) and the client package is only initialised
-  from `WayfarersClient.init` under the same check. Generated models are only used by client renderers. Nothing to
+  from `BrasshavenClient.init` under the same check. Generated models are only used by client renderers. Nothing to
   fix.
 * Threads: all packet handlers run on the main thread (`addMain`); the map worker only touches its own copies and
   hands results back through a queue drained on the server thread.

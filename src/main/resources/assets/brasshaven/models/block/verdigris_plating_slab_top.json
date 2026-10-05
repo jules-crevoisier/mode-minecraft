@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab_top",
+  "textures": {
+    "bottom": "brasshaven:block/verdigris_plating",
+    "top": "brasshaven:block/verdigris_plating",
+    "side": "brasshaven:block/verdigris_plating"
+  }
+}
