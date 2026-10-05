@@ -847,6 +847,7 @@ def _mock_minimap(g, world, Image):
 # MapView3D.java
 DEPTH = 0.72
 RISE = 0.9
+EDGE_BASE = 58  # the cut of the land at the edge of the explored area goes down to this height
 
 
 def render3d(world, colour, cx, cz, s, w, h, ref, known=None):
@@ -877,11 +878,11 @@ def render3d(world, colour, cx, cz, s, w, h, ref, known=None):
             y_far = mid + (bz - cz) * depth - (hh + 1 - ref) * rise
             y0 = _round_half(y_far)
             y_face = max(y0 + 1, _round_half(y_far + step * depth))
-            base = hh - 3 if near_h is None else min(hh, near_h)
+            base = min(hh - 2, EDGE_BASE) if near_h is None else min(hh, near_h)
             y_base = _round_half(mid + (bz + step - cz) * depth - (base + 1 - ref) * rise)
             fr, to = max(0, y0), min(top, max(y_face, y_base))
             if fr < to:
-                wall = _scale(c, 0.7) if cell[0] == "water" else _scale(_mix(c, (0x5B, 0x46, 0x30), 0.28), 0.6)
+                wall = _scale(c, 0.7) if cell[0] == "water" else _scale(_mix(c, (0x5B, 0x46, 0x30), 0.45), 0.62)
                 for yy in range(fr, to):
                     if yy < y_face:
                         px[sx, yy] = c[:3] + (255,)

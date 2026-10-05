@@ -26,6 +26,8 @@ final class MapView3D {
     /** Screen height of one block of height, per block of ground: a little exaggerated, Minecraft hills are low. */
     static final float RISE = 0.9F;
     /** Height range searched above / below the reference height (blocks). */
+    /** At the edge of the explored land, the cut goes down to this height: the map looks like a model on the table. */
+    private static final int EDGE_BASE = 58;
     private static final int ABOVE = 128;
     private static final int BELOW = 96;
     private static final long MIN_INTERVAL_MS = 33;
@@ -149,17 +151,17 @@ final class MapView3D {
                 }
                 int hh = data.height[i];
                 // the top face spans the cell's north edge to its south edge; the wall under it goes down to the top
-                // of the cell in front (or a short skirt at the edge of the explored land)
+                // of the cell in front (or to EDGE_BASE at the edge of the explored land)
                 float yFar = mid + (float) ((bz - cz) * depth) - (hh + 1 - ref) * rise;
                 int y0 = Math.round(yFar);
                 int yFace = Math.max(y0 + 1, Math.round(yFar + step * depth));
-                int base = nearH == Integer.MIN_VALUE ? hh - 3 : Math.min(hh, nearH);
+                int base = nearH == Integer.MIN_VALUE ? Math.min(hh - 2, EDGE_BASE) : Math.min(hh, nearH);
                 int yBase = Math.round(mid + (float) ((bz + step - cz) * depth) - (base + 1 - ref) * rise);
                 int from = Math.max(0, y0);
                 int to = Math.min(top, Math.max(yFace, yBase));
                 if (from < to) {
                     int wall = (data.mat[i] & 0xFF) == MapScan.WATER ? MapPalette.scale(color, 0.7F)
-                            : MapPalette.scale(MapPalette.mix(color, 0xFF5B4630, 0.28F), 0.6F);
+                            : MapPalette.scale(MapPalette.mix(color, 0xFF5B4630, 0.45F), 0.62F);
                     for (int yy = from; yy < to; yy++) {
                         int o = yy * w + px;
                         if (yy < yFace) {
