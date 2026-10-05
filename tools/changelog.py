@@ -4,6 +4,7 @@
     python3 tools/changelog.py --version 0.9.1-beta [--to HEAD] [--out build/changelog.md]
 
 Merge commits and pure regeneration/CI commits are left out. CI needs the full history (checkout fetch-depth: 0).
+Hand-written notes in docs/releases/<version>.md, when present, open the page; a first release shows only them.
 """
 import argparse
 import datetime
@@ -41,6 +42,12 @@ def changelog(version, to="HEAD"):
     lines = git("log", rng, "--no-merges", "--pretty=format:%s (%h)", "-n", "300").splitlines()
     changes = [line for line in lines if line and not NOISE.match(line)]
     today = datetime.date.today().isoformat()
+    notes = os.path.join(ROOT, "docs", "releases", f"{version}.md")
+    if os.path.exists(notes):
+        text = open(notes, encoding="utf-8").read().rstrip() + "\n"
+        if not prev:
+            return text
+        return text + "\n" + f"### Changes since {prev}\n\n" + "\n".join(f"- {c}" for c in changes) + "\n"
     out = [f"## Brasshaven {version} ({today})", "",
            f"Minecraft {props.get('minecraft_version')} · Forge {props.get('forge_version')} · Java 25", "",
            "**Update / Mise à jour:** back up your world, then put the same jar on the server and on every player "
