@@ -187,6 +187,11 @@ def check_template_entity(rel, e, err):
         err(f"{rel}: entity {eid} without pos/blockPos")
     if "Rotation" in data and len(data["Rotation"]) != 2:
         err(f"{rel}: entity {eid} rotation must be [yaw, pitch]")
+    if ns == "wayfarers" and eid == "wayfarer_npc":
+        from wf import npcs
+        if data.get("Role") not in npcs.ROLES:
+            err(f"{rel}: quest giver role {data.get('Role')} unknown (wf/npcs.py ROLES)")
+        return
     if eid != "villager":
         return
     vd = data.get("VillagerData", {})

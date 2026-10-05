@@ -60,6 +60,8 @@ public class WayfarerNpc extends PathfinderMob implements AnimatedMob {
     private final AnimationState[] actionStates = AnimatedMob.createStates();
     private int nameIndex = -1;
     private int talkCooldown;
+    /** First server tick on the ground seen (not saved: a loaded NPC is checked again, which is harmless). */
+    private boolean landed;
 
     public WayfarerNpc(EntityType<? extends PathfinderMob> type, Level level) {
         super(type, level);
@@ -266,6 +268,12 @@ public class WayfarerNpc extends PathfinderMob implements AnimatedMob {
         }
         if (!hasHome()) {
             setPost(blockPosition()); // summoned without finalizeSpawn (a command with NBT, an old save)
+        }
+        if (!landed && onGround()) {
+            landed = true;
+            if (!getHomePosition().closerThan(blockPosition(), 4.0)) {
+                setPost(blockPosition()); // summoned in the air: its post is where it lands
+            }
         }
         if (getCustomName() == null) {
             refreshName();

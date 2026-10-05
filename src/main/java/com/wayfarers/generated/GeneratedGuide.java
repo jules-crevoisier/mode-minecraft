@@ -26,6 +26,8 @@ public final class GeneratedGuide {
     public static final List<Page> PAGES = List.of(
             new Page("welcome", "start", "wayfarers:wayfarer_atlas", 4, List.of("wayfarers:wayfarer_atlas", "wayfarers:wayfarer_manual")),
             new Page("quests", "start", "minecraft:writable_book", 3, List.of()),
+            new Page("contracts", "start", "minecraft:emerald", 2, List.of("minecraft:emerald")),
+            new Page("contracts_kinds", "start", "minecraft:paper", 3, List.of()),
             new Page("keys", "start", "minecraft:oak_sign", 2, List.of()),
             new Page("compass", "start", "wayfarers:structure_compass", 3, List.of("wayfarers:structure_compass")),
             new Page("harvest", "start", "minecraft:wheat", 1, List.of()),
@@ -34,7 +36,7 @@ public final class GeneratedGuide {
             new Page("waystones", "travel", "wayfarers:waystone", 3, List.of("wayfarers:waystone")),
             new Page("map", "travel", "minecraft:filled_map", 6, List.of("wayfarers:wayfarer_atlas")),
             new Page("recall", "travel", "wayfarers:recall_scroll", 2, List.of("wayfarers:recall_scroll")),
-            new Page("villages", "travel", "minecraft:bell", 3, List.of("wayfarers:waystone", "wayfarers:edison_lamp", "minecraft:bell")),
+            new Page("villages", "travel", "minecraft:bell", 4, List.of("wayfarers:waystone", "wayfarers:edison_lamp", "minecraft:bell")),
             new Page("wonders", "wonders", "wayfarers:structure_compass", 4, List.of()),
             new Page("clockwork_citadel", "wonders", "minecraft:clock", 3, List.of()),
             new Page("sky_harbour", "wonders", "wayfarers:airship_compass", 3, List.of()),
@@ -104,6 +106,7 @@ public final class GeneratedGuide {
             new Tip("blood_moon", "minecraft:redstone", "blood_moon"),
             new Tip("boss_mist", "wayfarers:mist_gate", "bosses"),
             new Tip("danger", "minecraft:skeleton_skull", "danger"),
+            new Tip("npc", "minecraft:emerald", "contracts"),
             new Tip("map", "minecraft:filled_map", "map")
     );
 

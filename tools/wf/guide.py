@@ -69,6 +69,8 @@ PAGES = [
          "ask, then Accept. Track pins it to the top-right of your screen.",
          "Clic droit pour leur parler. « ! » signale un nouveau contrat, « ? » un contrat à rendre. Choisis-le, lis "
          "ce qu'on te demande, puis Accepter. Suivre l'épingle en haut à droite de l'écran."),
+    ], ["minecraft:emerald"]),
+    ("contracts_kinds", "start", "minecraft:paper", ("Contracts: kinds & rewards", "Contrats : sortes et récompenses"), [
         ("Four kinds: bring items (they are taken when you hand them in), hunt creatures (kills after accepting "
          "count), find a structure (just walk into it), and deliver a sealed parcel to another quest giver.",
          "Quatre sortes : apporter des objets (ils sont pris quand tu les rends), chasser des créatures (les "
@@ -87,7 +89,7 @@ PAGES = [
          "donneurs de quêtes habitent les avant-postes de la Guilde, le monastère, la bibliothèque, le phare, "
          "l'Arbre-monde, l'oasis, les observatoires, le cercle runique, la loge des gardiens de la ziggourat et la "
          "plupart des merveilles : aucun monstre n'apparaît à l'intérieur."),
-    ], ["minecraft:emerald"]),
+    ], []),
     ("keys", "start", "minecraft:oak_sign", ("Keys", "Touches"), [
         ("J: quest journal\nK: talent tree\nV: use your active talent\nR: sort your inventory\nM: world map\n"
          "H: show/hide the minimap\nShift + H: minimap size\nZ: minimap zoom\nB: ping the spot you look at\nN: magnet ring on/off\n"
