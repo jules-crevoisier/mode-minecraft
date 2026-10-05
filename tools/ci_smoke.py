@@ -3,7 +3,7 @@
 
 Used by CI (.github/workflows/build.yml) after `./gradlew build`:
     python3 tools/ci_smoke.py <server_dir>                    # flat world: every structure, mob, item, loot table
-    python3 tools/ci_smoke.py <server_dir> --fit              # vanilla world: how every structure sits on the terrain
+    python3 tools/ci_smoke.py <server_dir> --fit              # normal world: how every structure sits on the terrain
     python3 tools/ci_smoke.py <server_dir> --fit --shard 0/2  # ...every second structure from the first
     python3 tools/ci_smoke.py <server_dir> --world            # Wayfarers biomes + generation speed gate
 
@@ -226,7 +226,7 @@ def prepare(server_dir, fit, level_name=None, custom=True):
         # a fresh normal world (the --world speed runs)
         props += f"level-name={level_name}\n"
     elif fit:
-        # a fresh world with Minecraft's default generator: the structures are measured on real vanilla terrain
+        # a fresh Default world: the structures are measured on Minecraft's own terrain
         props += "level-name=world_fit\n"
     else:
         # a flat Overworld generates in a blink; /place structure ignores biomes, so every structure
@@ -476,8 +476,8 @@ def blocks_and_loot(srv, failures):
 
 
 def exercise_fit(srv, failures, shard=None):
-    """Every Overworld structure of the mod (or every n-th with --shard i/n), located in a fresh vanilla world and
-    really generated: /wayfarers fitcheck measures floating edges, buried edges and flooding at each, draws it in
+    """Every Overworld structure of the mod (or every n-th with --shard i/n), located in a fresh normal world
+    (Minecraft's terrain) and really generated: /wayfarers fitcheck measures floating edges, buried edges and flooding at each, draws it in
     place (wayfarers-fit-<id>.png) and writes wayfarers-fit.txt (wayfarers-fit-shard<i>.txt). A MISFIT or ERROR line
     fails the run, so every structure is checked on real terrain. A structure skipped for time is listed in the
     summary; the run fails for that only when more than half of the structures were skipped."""

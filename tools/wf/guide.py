@@ -6,6 +6,8 @@ gen_assets writes the text into the lang files as guide.wayfarers.<page>.title /
 Keep paragraphs short: 1-3 sentences, say what to do, not how it works inside.
 """
 
+from . import worldbiomes as _WB  # the Wayfarers biome pages take their text from there (the wiki does too)
+
 CATEGORIES = [
     ("start", "minecraft:compass", ("Getting started", "Premiers pas")),
     ("talents", "minecraft:enchanted_book", ("Talents & magic", "Talents et magie")),
@@ -188,6 +190,46 @@ PAGES = [
          "Les rues ont des lampes en laiton, des panneaux et des jardinières. Les avant-postes pillards ont des "
          "balistes à vapeur et des barricades hérissées."),
     ], ["wayfarers:waystone", "wayfarers:edison_lamp", "minecraft:bell"]),
+    ("biomes", "travel", "minecraft:crimson_nylium", ("Wayfarers biomes", "Biomes Wayfarers"), [
+        ("New worlds of the Default type get three biomes of their own, carved out of vanilla climates on "
+         "Minecraft's usual terrain: the Crimson Mire, the Volcanic Highlands and the Pale Dunes. Each has its "
+         "colours, its ground and its natural objects.",
+         "Les nouveaux mondes de type « Par défaut » ont trois biomes à eux, taillés dans des climats vanilla sur le "
+         "relief habituel de Minecraft : le Marais pourpre, les Hautes terres volcaniques et les Dunes pâles. "
+         "Chacun a ses couleurs, son sol et ses objets naturels."),
+        ("To find one: /locate biome wayfarers:crimson_mire (or volcanic_highlands, pale_dunes). Villages, "
+         "temples and Wayfarers structures of the climate they replace appear there too.",
+         "Pour en trouver un : /locate biome wayfarers:crimson_mire (ou volcanic_highlands, pale_dunes). Les "
+         "villages, temples et structures Wayfarers du climat qu'ils remplacent y apparaissent aussi."),
+        ("Superflat, Amplified and Large Biomes worlds, and worlds created before, keep vanilla's biomes. A server "
+         "can turn them off for new worlds (option world.customBiomes).",
+         "Les mondes Superplat, Amplifié et Grands biomes, et les mondes déjà créés, gardent les biomes vanilla. Un "
+         "serveur peut les couper pour les nouveaux mondes (option world.customBiomes)."),
+    ], []),
+    ('crimson_mire', "travel", 'minecraft:crimson_roots', (_WB.BIOMES['crimson_mire']["en"], _WB.BIOMES['crimson_mire']["fr"]), [
+        (_WB.BIOMES['crimson_mire']["text_en"], _WB.BIOMES['crimson_mire']["text_fr"]),
+        ("Where: " + _WB.BIOMES['crimson_mire']["where_en"], "Où : " + _WB.BIOMES['crimson_mire']["where_fr"]),
+    ], []),
+    ('volcanic_highlands', "travel", 'minecraft:magma_block', (_WB.BIOMES['volcanic_highlands']["en"], _WB.BIOMES['volcanic_highlands']["fr"]), [
+        (_WB.BIOMES['volcanic_highlands']["text_en"], _WB.BIOMES['volcanic_highlands']["text_fr"]),
+        ("Where: " + _WB.BIOMES['volcanic_highlands']["where_en"], "Où : " + _WB.BIOMES['volcanic_highlands']["where_fr"]),
+    ], []),
+    ('pale_dunes', "travel", 'minecraft:orange_terracotta', (_WB.BIOMES['pale_dunes']["en"], _WB.BIOMES['pale_dunes']["fr"]), [
+        (_WB.BIOMES['pale_dunes']["text_en"], _WB.BIOMES['pale_dunes']["text_fr"]),
+        ("Where: " + _WB.BIOMES['pale_dunes']["where_en"], "Où : " + _WB.BIOMES['pale_dunes']["where_fr"]),
+    ], []),
+    ("terrain_touches", "travel", "minecraft:mossy_cobblestone", ("Wilder landscapes", "Paysages plus sauvages"), [
+        ("The vanilla biomes get a few natural touches: mossy boulders in plains, meadows, forests and taigas, "
+         "fallen logs in dark forests, savannas and cherry groves, wildflower patches, moss carpets under old "
+         "trees, small rock spires on stony peaks and windswept hills, and hot-spring terraces in the savanna "
+         "highlands.",
+         "Les biomes vanilla gagnent quelques touches naturelles : rochers moussus dans les plaines, prairies, "
+         "forêts et taïgas, troncs tombés dans les forêts noires, savanes et cerisaies, tapis de fleurs sauvages, "
+         "tapis de mousse sous les vieux arbres, petites aiguilles rocheuses sur les pics pierreux et les collines "
+         "venteuses, et sources chaudes en terrasses sur les hautes savanes."),
+        ("Each can be switched off on a server (options world.terrain.*); new chunks only.",
+         "Chacune peut être coupée sur un serveur (options world.terrain.*) ; seulement pour les nouveaux chunks."),
+    ], []),
 
     # ------------------------------------------------------------------ wonders
     ("wonders", "wonders", "wayfarers:structure_compass", ("How to find them", "Où les trouver"), [
