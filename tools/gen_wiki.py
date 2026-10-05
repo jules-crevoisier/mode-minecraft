@@ -2116,7 +2116,7 @@ def section_biomes(ctx):
                 log(f"biome render {bid} unreadable: {e}")
         cards.append(f'''<article class="card wb" id="biome-{bid}">
   {img}<div class="wb-body"><h4>{E(b["fr"])} <small>· {E(b["en"])}</small></h4><p>{E(b["text_fr"])}</p>
-  <p class="where">{SVG["pin"]}<span>{E(b["where_fr"])}</span></p>
+  <p class="where">{SVG["pin"]}<span>{E(b["where_fr"][0].upper() + b["where_fr"][1:])}</span></p>
   <p class="small"><code>/locate biome wayfarers:{bid}</code></p>
   <details><summary>In English</summary><p>{E(b["text_en"])}</p><p>Where: {E(b["where_en"])}</p></details></div>
 </article>''')

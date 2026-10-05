@@ -48,8 +48,8 @@ BIOMES = {
         fog_end=112.0,
         drop=["minecraft:trees_swamp", "minecraft:flower_swamp", "minecraft:patch_pumpkin"],
         add=["mire_thorns", "mire_giant_mushrooms", "mire_crimson_roots", "mire_red_mushrooms"],
-        where_en="The wettest swamps (about two in five swamps).",
-        where_fr="Les marais les plus humides (environ deux marais sur cinq).",
+        where_en="the wettest swamps (about two swamps in five).",
+        where_fr="les marais les plus humides (environ deux marais sur cinq).",
         text_en="A blood-red marsh under a rosy haze: crimson nylium, mud and podzol, dark red water and drifting "
                 "spores. Curved horns of blackstone rise from the mud, and giant red mushrooms with weeping vines "
                 "shade the pools. Witches, slimes and the Bogged live here like in any swamp.",
@@ -67,8 +67,8 @@ BIOMES = {
               "minecraft:trees_badlands"],
         add=["volcanic_lava_pools", "volcanic_boulders", "volcanic_lava_springs", "volcanic_rustwoods",
              "volcanic_smoke_vents"],
-        where_en="The mountains of the badlands, on one side of the weirdness (about half of the badlands ranges).",
-        where_fr="Les montagnes des badlands, d'un côté de l'étrangeté (environ la moitié des reliefs des badlands).",
+        where_en="half of the mountain ranges of the badlands.",
+        where_fr="la moitié des massifs montagneux des badlands.",
         text_en="Ochre mountains banded with terracotta under an ashen sky. Black rock and glowing magma break "
                 "through the tan grass, lava pools steam in the hollows and lava trickles down the slopes. Smoke "
                 "rises from vents, and a few Rustwoods cling to the ground. Watch your step.",
@@ -81,8 +81,8 @@ BIOMES = {
         sky="#9cc0ff", fog="#f0e6d4", water="#3fa0a8", water_fog="#0a3a3e",
         music="minecraft:music.overworld.desert", fog_end=None,
         add=["pale_hoodoos"],
-        where_en="The driest deserts (about one desert in four).",
-        where_fr="Les déserts les plus arides (environ un désert sur quatre).",
+        where_en="the driest deserts (about one desert in four).",
+        where_fr="les déserts les plus arides (environ un désert sur quatre).",
         text_en="A white desert of pale sand rippled with gold, smooth sandstone underneath. Banded terracotta "
                 "hoodoos stand like chimneys between the dunes, some with a sandstone cap. Husks, camels and "
                 "desert villages are at home here too.",
