@@ -123,7 +123,7 @@ jobs:
             server/crash-reports/
             server/smoke-console*.log
 
-      # the diagnostic summary (phases, FAIL lines) goes to the previews release
+      # the diagnostic summary (phases, FAIL lines) and the profile of the crowded base go to the previews release
       - name: Upload the test summary
         if: always()
         uses: actions/upload-artifact@v4
@@ -131,6 +131,16 @@ jobs:
           name: world-previews-smoke
           if-no-files-found: ignore
           path: server/brasshaven-ci-*.txt
+
+      # the Java Flight Recorder recording of the server performance check (open it in JDK Mission Control, or
+      # python3 tools/jfr_report.py brasshaven-ci-mspt.jfr)
+      - name: Upload the JFR recording
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jfr-smoke
+          if-no-files-found: ignore
+          path: server/*.jfr
 
   # The structure fit test, in a fresh world with Minecraft's own terrain (and the Brasshaven biomes, on by default), in two
   # shards on two machines (every second structure each): /brasshaven fitcheck locates the Overworld structures of the
@@ -198,10 +208,13 @@ jobs:
   # fixed 12 x 12 chunk area at 20000 20000 and a 6 x 6 area on each Brasshaven biome); the job fails when WITH is
   # more than 5 % slower per chunk than WITHOUT (a pair over the gate is measured again, in the other order). The
   # WITH run also finds each biome with /locate biome and draws it (/brasshaven biomeshots).
+  # Then the whole mod against vanilla: the same Forge server with and without the Brasshaven jar, same seed, the same
+  # fresh areas generated with /forceload (start time, ms and CPU per chunk per thread, heap after GC, MSPT with the
+  # areas loaded; reported, not gated), each recorded with Java Flight Recorder (brasshaven-ci-profile-gen.txt).
   world-test:
     needs: build
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 80
     steps:
       - uses: actions/checkout@v4
 
@@ -247,6 +260,15 @@ jobs:
             server/brasshaven-biomes.txt
             server/brasshaven-genbench.txt
             server/brasshaven-ci-*.txt
+
+      # the generation profiles of the full mod and of vanilla (python3 tools/jfr_report.py <file> summarises one)
+      - name: Upload the JFR recordings
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jfr-world
+          if-no-files-found: ignore
+          path: server/*.jfr
 
   # Runs the real client (software OpenGL under Xvfb) through ForgeGradle's runClient. client/CiDriver creates a
   # world, opens every screen of the mod, places machines, summons creatures and the Clockwork Citadel, and saves a
@@ -400,6 +422,10 @@ jobs:
           if ls previews/brasshaven-fit-shard*.txt >/dev/null 2>&1; then
             cat previews/brasshaven-fit-shard*.txt > previews/brasshaven-fit.txt
           fi
+          # the profiles of the smoke test (crowded base) and of the world test (generation, mod and vanilla): one file
+          if ls previews/brasshaven-ci-profile-*.txt >/dev/null 2>&1; then
+            cat previews/brasshaven-ci-profile-gen.txt previews/brasshaven-ci-profile-mspt.txt > previews/brasshaven-ci-profile.txt 2>/dev/null || true
+          fi
           ls previews/brasshaven-ci-*.txt 2>/dev/null || echo "no test summaries"
 
       - name: Publish the previews
@@ -410,7 +436,7 @@ jobs:
           name: Brasshaven — aperçus (${{ github.ref_name }})
           prerelease: true
           make_latest: false
-          body: Chaque structure en place sur le relief de Minecraft avec sa mesure d'intégration (brasshaven-fit-*.png, brasshaven-fit.txt, /brasshaven fitcheck), un rendu 3D de chaque biome Brasshaven (brasshaven-biome-*.png, /brasshaven biomeshots), le résumé de chaque test serveur (brasshaven-ci-*.txt, durée des phases, vitesse de génération avec et sans les biomes Brasshaven en ms/chunk et leur rapport, lignes FAIL), et des captures du vrai client (brasshaven-shot-*.png — écrans, HUD, créatures, Citadelle) prises par le job client-test, et les séquences filmées du vrai client pour les vidéos de présentation (brasshaven-showcase-*.mp4 et brasshaven-showcase-scenes.json, job showcase, assemblées par tools/make_video.py) (commit ${{ github.sha }}).
+          body: Chaque structure en place sur le relief de Minecraft avec sa mesure d'intégration (brasshaven-fit-*.png, brasshaven-fit.txt, /brasshaven fitcheck), un rendu 3D de chaque biome Brasshaven (brasshaven-biome-*.png, /brasshaven biomeshots), le résumé de chaque test serveur (brasshaven-ci-*.txt, durée des phases, vitesse de génération avec et sans les biomes Brasshaven en ms/chunk et leur rapport, le mod complet face à Forge sans le mod — démarrage, ms et CPU par chunk, mémoire, MSPT, lignes FAIL), les profils Java Flight Recorder de la génération et de la base chargée (brasshaven-ci-profile.txt — méthodes les plus coûteuses, part de com.brasshaven, allocations, pauses GC), et des captures du vrai client (brasshaven-shot-*.png — écrans, HUD, créatures, Citadelle) prises par le job client-test, et les séquences filmées du vrai client pour les vidéos de présentation (brasshaven-showcase-*.mp4 et brasshaven-showcase-scenes.json, job showcase, assemblées par tools/make_video.py) (commit ${{ github.sha }}).
           files: previews/*
 
   # Development build of a branch: the tested jar and the packs on the branch's pre-release (dev-<branch>)

@@ -21,3 +21,7 @@
 -XX:SurvivorRatio=32
 -XX:+PerfDisableSharedMem
 -XX:MaxTenuringThreshold=1
+# Java 25: 8-byte object headers instead of 12 (JEP 519). Minecraft keeps millions of small objects (block
+# positions, chunk sections, entities, NBT): about 10-20 % less heap and less GC work. CI runs every server test
+# with these flags (tools/ci_perf.py). Remove the line if a mod misbehaves with it.
+-XX:+UseCompactObjectHeaders

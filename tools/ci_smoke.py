@@ -29,6 +29,14 @@ full-generation ms/chunk of both and their ratio. The job fails when WITH is mor
 (GATE); a pair over the gate is measured once more, in the other order, on fresh worlds, and the verdict uses both
 pairs together. The WITH run also checks that the pack is on, finds each biome with /locate biome and draws it
 (/brasshaven biomeshots: brasshaven-biome-<id>.png, published with the previews).
+Then --world compares the whole mod with vanilla: the same Forge server once with the jar (all defaults: biomes,
+structures, ores, creatures) and once without it, same seed, fresh worlds, the same fresh areas generated with the
+vanilla /forceload: start time, wall and CPU time per chunk per thread group, heap after a full GC, MSPT with the areas
+loaded (reported, not gated), and a Java Flight Recorder profile of each (brasshaven-ci-profile-gen.txt).
+
+Profiles: the smoke test records its crowded-base sprint with JFR (brasshaven-ci-profile-mspt.txt); tools/jfr_report.py
+summarises a recording (hot frames, the com.brasshaven share, allocations, GC). CI servers run the server pack's JVM
+flags (serverpack/jvm_args.txt, see tools/ci_perf.py).
 
 Every run writes a short diagnostic summary, brasshaven-ci-<job>.txt, into the server folder: phase durations, FAIL
 lines, suspicious log lines, slow commands. CI publishes it with the previews, so the next diagnosis needs no log
@@ -43,11 +51,16 @@ import json
 import os
 import queue
 import re
+import shutil
 import subprocess
 import sys
 import threading
 import time
 import zipfile
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import ci_perf  # noqa: E402
+import jfr_report  # noqa: E402
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 RES = os.path.join(ROOT, "src", "main", "resources")
@@ -242,10 +255,16 @@ def prepare(server_dir, fit, level_name=None, custom=True):
                   '"biome":"minecraft:plains"}\n')
     with open(os.path.join(server_dir, "server.properties"), "w") as f:
         f.write(props)
+    # the JVM: a 4 GB heap, the server pack's flags (serverpack/jvm_args.txt, so the game runs with what we ship) and
+    # deep JFR stacks for the profiles (tools/ci_perf.py); rewritten from Forge's own file at every start
     jvm = os.path.join(server_dir, "user_jvm_args.txt")
-    if os.path.exists(jvm) and "-Xmx4G" not in open(jvm).read():
-        with open(jvm, "a") as f:
-            f.write("\n-Xmx4G\n")
+    if os.path.exists(jvm):
+        forge = jvm + ".forge"
+        if not os.path.exists(forge):
+            shutil.copyfile(jvm, forge)
+        lines = ["-Xmx4G"] + ci_perf.server_jvm_flags() + ci_perf.JFR_FLAGS
+        with open(jvm, "w") as f:
+            f.write(open(forge).read().rstrip("\n") + "\n\n# tools/ci_smoke.py\n" + "\n".join(lines) + "\n")
 
 
 def check_budget(where):
@@ -551,8 +570,54 @@ def server_performance(srv, failures):
     if loaded is not None and loaded > PERF_MAX_MSPT:
         failures.append(f"performance: {loaded} ms per tick with {placed} machines and {summoned} automatons "
                         f"(limit {PERF_MAX_MSPT} ms, baseline {base} ms)")
+    profile_mspt(srv, failures)
     srv.run("execute in minecraft:overworld run kill @e[type=!minecraft:player]", r"Killed|No entity", 60)
     srv.run("execute in minecraft:overworld run forceload remove all", r"Unmarked|forceload|No chunks", 30)
+
+
+PROFILE_TICKS = 600
+
+
+def write_profile(server_dir, part, header, recordings):
+    """brasshaven-ci-profile-<part>.txt: the JFR report of each (title, file) recording (published with the previews,
+    joined into brasshaven-ci-profile.txt there). A report that cannot be made becomes a note, never a failure."""
+    lines = [f"brasshaven CI profile: {part}, commit {os.environ.get('GITHUB_SHA', '?')[:12]}, "
+             f"run {os.environ.get('GITHUB_RUN_ID', '?')}"] + list(header)
+    for title, path in recordings:
+        lines += ["", "=" * 100]
+        if not path or not os.path.exists(path):
+            lines += [f"{title}: no recording"]
+            continue
+        try:
+            lines += jfr_report.report(path, title)
+        except (OSError, RuntimeError) as e:
+            lines += [f"{title}: report failed ({e})"]
+            Summary.notes.append(f"profile {part}: report of {os.path.basename(path)} failed: {e}")
+    out = os.path.join(server_dir, f"brasshaven-ci-profile-{part}.txt")
+    with open(out, "w", encoding="utf-8") as f:
+        f.write("\n".join(lines) + "\n")
+    print(f"[smoke] profile written to {out}", flush=True)
+
+
+def profile_mspt(srv, failures):
+    """The same crowded base recorded with Java Flight Recorder (after the measured sprint, so the recording's own
+    overhead never touches the gated number): /tick sprint PROFILE_TICKS under JFR's profile settings, summarised into
+    brasshaven-ci-profile-mspt.txt (the hot frames of the server thread, the mod's share, allocations, GC pauses);
+    the recording itself, brasshaven-ci-mspt.jfr, is uploaded with the logs."""
+    pid = ci_perf.java_pid(srv.proc.pid)
+    path = os.path.join(srv.cwd, "brasshaven-ci-mspt.jfr")
+    if not pid or not ci_perf.jfr_start(pid, "mspt", path):
+        Summary.notes.append("profile mspt: could not start a JFR recording (jcmd)")
+        return
+    mspt = sprint_mspt(srv, PROFILE_TICKS, failures, "the profiled sprint")
+    if not ci_perf.jfr_stop(pid, "mspt"):
+        Summary.notes.append("profile mspt: could not stop the JFR recording (jcmd)")
+        return
+    write_profile(srv.cwd, "mspt", [
+        f"what: the server performance check's crowded base ({sum(PERF_MACHINES.values())} machines working a wheat "
+        f"field, {sum(PERF_AUTOMATONS.values())} automatons fighting) on the flat test world, /tick sprint "
+        f"{PROFILE_TICKS} recorded with JFR (settings=profile): {mspt} ms per tick under the recording"],
+        [("JFR: server performance check (smoke-test)", path)])
 
 
 def blocks_and_loot(srv, failures):
@@ -737,6 +802,189 @@ def world_run(server_dir, custom, level_name, biome_spots, failures, bad):
     return results
 
 
+# ------------------------------------------------------------------ --world: the full mod against vanilla
+# The cost of the whole mod over Minecraft: a Forge server WITH the Brasshaven jar (everything at its defaults:
+# biomes, terrain touches, structures, ores, creatures) and the same Forge server WITHOUT it, same seed, fresh worlds,
+# the same fresh areas. Forge without the mod has no /brasshaven genbench, so the areas are generated with the vanilla
+# /forceload add (the server thread waits for each chunk of the area to be fully generated while the worker threads
+# generate it and its surroundings: same method, same order on both servers). Measured from the outside (ci_perf):
+# wall time, CPU per thread group, heap after a full GC, start time, then /tick sprint with the areas loaded. After
+# the measures, a JFR recording of more fresh areas on each server makes brasshaven-ci-profile-gen.txt.
+COMPARE_WARMUP = (0, 30000, 8)                     # block x, z (chunk aligned) and chunks per side; not counted
+COMPARE_AREAS = [(24000, 24000), (-24000, 24000), (24000, -24000), (-24000, -24000)]  # 16 x 16 chunks each
+PROFILE_AREAS = [(32000, 0), (-32000, 0)]
+COMPARE_SIDE = 16                                  # /forceload takes at most 256 chunks per call
+FORCELOAD_WAIT = 1800
+COMPARE_SPRINT = 200
+
+
+def forceload_area(srv, x, z, side, failures, label):
+    """Generates side x side fresh chunks from block x z (chunk aligned) with /forceload add; seconds, or None."""
+    x1, z1 = x + 16 * side - 1, z + 16 * side - 1
+    t = time.time()
+    res = srv.run(f"execute in minecraft:overworld run forceload add {x} {z} {x1} {z1}",
+                  r"Marked \d+ chunks|No chunks|oo many|Unknown|Incorrect", FORCELOAD_WAIT)
+    sec = time.time() - t
+    if not res or "Marked" not in res:
+        failures.append(f"forceload {label} at {x} {z}: {res}")
+        return None
+    return sec
+
+
+def disable_mod_jars(server_dir):
+    """Moves the Brasshaven jar out of mods/ (the vanilla run); returns (from, to) pairs for restore_jars."""
+    off = os.path.join(server_dir, "mods-off")
+    os.makedirs(off, exist_ok=True)
+    moved = []
+    for jar in glob.glob(os.path.join(server_dir, "mods", "*.jar")):
+        to = os.path.join(off, os.path.basename(jar))
+        shutil.move(jar, to)
+        moved.append((jar, to))
+    return moved
+
+
+def restore_jars(moved):
+    for jar, to in moved:
+        if os.path.exists(to):
+            shutil.move(to, jar)
+
+
+def compare_run(server_dir, mod, failures, bad):
+    """One fresh world on a server with (mod) or without the Brasshaven jar: the numbers of compare_report."""
+    tag = "full mod" if mod else "vanilla"
+    key = "mod" if mod else "vanilla"
+    level_name = f"world_compare_{key}"
+    shutil.rmtree(os.path.join(server_dir, level_name), ignore_errors=True)
+    prepare(server_dir, False, level_name=level_name, custom=True)
+    moved = [] if mod else disable_mod_jars(server_dir)
+    r = {"tag": tag, "areas": []}
+    try:
+        srv = Server(server_dir, server_command(server_dir), f"smoke-console-compare-{key}.log")
+        boot = time.time()
+        started = srv.wait_for(r"Done \(|Failed to load datapacks|Crashing|Encountered an unexpected exception", 1200)
+        r["start"] = time.time() - boot
+        Summary.phases.append((f"server start ({tag}, {level_name})", r["start"], ""))
+        if not started or "Done (" not in started:
+            failures.append(f"server did not finish starting ({tag})")
+        else:
+            m = re.search(r"Done \(([\d.]+)s\)", started)
+            r["done"] = float(m.group(1)) if m else None
+            Phase.start = time.time()
+            pid = ci_perf.java_pid(srv.proc.pid)
+            try:
+                res = srv.run("datapack list enabled", r"data pack", 60) or ""
+                if ("brasshaven" in res) != mod:
+                    failures.append(f"compare: the {tag} server {'lacks' if mod else 'has'} the Brasshaven data: {res}")
+                time.sleep(10)  # let the start settle (spawn chunks, the first saves)
+                r["heap_idle"] = ci_perf.heap_after_gc(pid)
+                r["rss_idle"] = ci_perf.rss_mb(pid)
+                with Phase(f"compare: generation ({tag})"):
+                    forceload_area(srv, *COMPARE_WARMUP, failures, f"warm-up ({tag})")
+                    before = ci_perf.cpu_snapshot(pid)
+                    for x, z in COMPARE_AREAS:
+                        r["areas"].append((x, z, forceload_area(srv, x, z, COMPARE_SIDE, failures, f"area ({tag})")))
+                    r["cpu"] = ci_perf.cpu_delta(before, ci_perf.cpu_snapshot(pid))
+                with Phase(f"compare: loaded world ({tag})"):
+                    r["mspt"] = sprint_mspt(srv, COMPARE_SPRINT, failures, f"the loaded areas ({tag})")
+                    r["heap_loaded"] = ci_perf.heap_after_gc(pid)
+                    r["rss_loaded"] = ci_perf.rss_mb(pid)
+                with Phase(f"compare: profile ({tag})"):
+                    path = os.path.join(server_dir, f"brasshaven-ci-gen-{key}.jfr")
+                    if pid and ci_perf.jfr_start(pid, "gen", path):
+                        for x, z in PROFILE_AREAS:
+                            forceload_area(srv, x, z, COMPARE_SIDE, failures, f"profiled area ({tag})")
+                        sprint_mspt(srv, COMPARE_SPRINT, failures, f"the profiled ticks ({tag})")
+                        if ci_perf.jfr_stop(pid, "gen"):
+                            r["jfr"] = path
+                    if "jfr" not in r:
+                        Summary.notes.append(f"compare: no JFR recording on the {tag} server (jcmd)")
+            except TimeoutError as e:
+                failures.append(str(e))
+                Summary.notes.append(str(e))
+        srv.run("stop")
+        try:
+            srv.proc.wait(timeout=300)
+        except subprocess.TimeoutExpired:
+            srv.proc.kill()
+            failures.append(f"server did not stop ({tag})")
+        bad += scan_log(server_dir, srv.lines)
+    finally:
+        restore_jars(moved)
+    return r
+
+
+def compare_report(runs, server_dir):
+    """The summary lines of the full mod / vanilla comparison (and the generation profile file)."""
+    mod, van = runs.get(True, {}), runs.get(False, {})
+    chunks = COMPARE_SIDE * COMPARE_SIDE
+
+    # wall time over the areas both servers generated (a failed area on one side would skew the mean)
+    both = {(x, z) for x, z, s in mod.get("areas", []) if s} & {(x, z) for x, z, s in van.get("areas", []) if s}
+
+    def per_chunk(r):
+        secs = [s for x, z, s in r.get("areas", []) if s and (x, z) in both]
+        return (1000.0 * sum(secs) / (len(secs) * chunks), len(secs)) if secs else (None, 0)
+
+    def fmt(v, unit, digits=1):
+        return f"{v:.{digits}f} {unit}" if isinstance(v, (int, float)) else "n/a"
+
+    def ratio(a, b):
+        return f"{a / b:.3f}" if isinstance(a, (int, float)) and isinstance(b, (int, float)) and b else "n/a"
+
+    def row(name, a, b, unit, digits=1):
+        return f"  {name:44s} {fmt(a, unit, digits):>14s} {fmt(b, unit, digits):>14s} {ratio(a, b):>8s}"
+
+    mw, mn = per_chunk(mod)
+    vw, vn = per_chunk(van)
+    n = min(mn, vn) * chunks
+    lines = ["", "full mod vs vanilla (the same Forge server without the Brasshaven jar; same seed, fresh worlds, structures on;",
+             f"  the same {len(COMPARE_AREAS)} fresh areas of {COMPARE_SIDE} x {COMPARE_SIDE} chunks generated with /forceload add, after a "
+             f"{COMPARE_WARMUP[2]} x {COMPARE_WARMUP[2]} warm-up area; the server thread waits for each chunk, the worker threads generate):",
+             f"  {'':44s} {'full mod':>14s} {'vanilla':>14s} {'ratio':>8s}",
+             row("server start, process to \"Done\"", mod.get("start"), van.get("start"), "s"),
+             row("server start, \"Done (...)\" reported", mod.get("done"), van.get("done"), "s", 2),
+             row("heap after full GC, idle after start", mod.get("heap_idle"), van.get("heap_idle"), "MB", 0),
+             row("process RSS, idle after start", mod.get("rss_idle"), van.get("rss_idle"), "MB", 0),
+             row(f"generation, wall time ({n} chunks)", mw, vw, "ms/chunk")]
+    for (x, z, a), (_, _, b) in zip(mod.get("areas", []), van.get("areas", [])):
+        lines.append(row(f"  area {x} {z}", 1000.0 * a / chunks if a else None, 1000.0 * b / chunks if b else None, "ms/chunk"))
+    mc, vc = mod.get("cpu") or {}, van.get("cpu") or {}
+    # CPU covers every area each server generated
+    mchunks = max(1, chunks * sum(1 for *_, s in mod.get("areas", []) if s))
+    vchunks = max(1, chunks * sum(1 for *_, s in van.get("areas", []) if s))
+    for group in ["process"] + sorted({g for g in list(mc) + list(vc) if g != "process"}):
+        name = "generation, CPU, whole JVM" if group == "process" else f"  CPU, {group}"
+        lines.append(row(name, mc.get(group, 0.0) / mchunks if mc else None, vc.get(group, 0.0) / vchunks if vc else None,
+                         "ms/chunk"))
+    loaded = len(COMPARE_AREAS) * chunks + COMPARE_WARMUP[2] ** 2
+    lines += [row(f"MSPT, /tick sprint {COMPARE_SPRINT}, {loaded} chunks forced", mod.get("mspt"), van.get("mspt"), "ms", 2),
+              row("heap after full GC, areas loaded", mod.get("heap_loaded"), van.get("heap_loaded"), "MB", 0),
+              row("process RSS, areas loaded", mod.get("rss_loaded"), van.get("rss_loaded"), "MB", 0)]
+    if mw and vw:
+        lines.append(f"  RATIO full mod / vanilla: generation wall {mw / vw:.3f}"
+                     + (f", generation CPU {(mc['process'] / mchunks) / (vc['process'] / vchunks):.3f}"
+                        if mc.get("process") and vc.get("process") else "")
+                     + " (reported, not gated: the mod adds content; the biome gate above covers the terrain)")
+    lines.append("  CPU per thread group from /proc (server thread = tick time a player would feel while chunks generate; "
+                 "worldgen workers = noise, structures, features); profiles: brasshaven-ci-profile.txt")
+    recordings = [(f"JFR: world generation, {r['tag']} ({len(PROFILE_AREAS)} fresh areas of {COMPARE_SIDE} x {COMPARE_SIDE} "
+                   f"chunks with /forceload, then /tick sprint {COMPARE_SPRINT})", r.get("jfr")) for r in (mod, van) if r]
+    try:
+        write_profile(server_dir, "gen", ["what: world generation on the world-test servers, full mod first, then vanilla "
+                                          "(the same Forge server without the jar) for comparison"] + lines[1:], recordings)
+    except OSError as e:
+        Summary.notes.append(f"profile gen: could not write it: {e}")
+    print("\n".join(lines), flush=True)
+    return lines
+
+
+def exercise_compare(server_dir, failures, bad):
+    runs = {}
+    for mod in (True, False):
+        runs[mod] = compare_run(server_dir, mod, failures, bad)
+    return compare_report(runs, server_dir)
+
+
 def scan_log(server_dir, lines):
     """Suspicious lines of a run: its console and logs/latest.log (BAD minus BENIGN)."""
     text = list(lines)
@@ -819,6 +1067,7 @@ def main():
         Summary.job = "world"
         failures, bad = [], []
         extra = exercise_world(server_dir, failures, bad)
+        extra += exercise_compare(server_dir, failures, bad)
         crashes = glob.glob(os.path.join(server_dir, "crash-reports", "*"))
         if crashes:
             failures.append(f"crash reports: {crashes}")
