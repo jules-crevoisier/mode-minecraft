@@ -2,7 +2,13 @@ name: Build the mod
 
 on:
   push:
+  # "Run workflow" with release ticked publishes v<mod_version> from the chosen branch, like pushing that tag
   workflow_dispatch:
+    inputs:
+      release:
+        description: "Publish the release v<mod_version> (gradle.properties) from this commit"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -33,7 +39,10 @@ jobs:
         id: version
         run: |
           base=$(sed -n 's/^mod_version=//p' gradle.properties)
-          if [ "$GITHUB_REF_TYPE" = tag ] && [[ "$GITHUB_REF_NAME" == v* ]]; then
+          if [ "${{ github.event_name == 'workflow_dispatch' && inputs.release }}" = true ]; then
+            echo "version=$base" >> "$GITHUB_OUTPUT"
+            echo "GRADLE_VERSION_ARGS=-Prelease=true" >> "$GITHUB_ENV"
+          elif [ "$GITHUB_REF_TYPE" = tag ] && [[ "$GITHUB_REF_NAME" == v* ]]; then
             if [ "${GITHUB_REF_NAME#v}" != "$base" ]; then
               echo "::error::tag $GITHUB_REF_NAME does not match mod_version=$base in gradle.properties"
               exit 1
@@ -457,7 +466,7 @@ jobs:
   # the changelog (commits since the previous v* tag), the jar, the server pack and the modpack.
   github-release:
     needs: [build, smoke-test, fit-test]
-    if: startsWith(github.ref, 'refs/tags/v')
+    if: startsWith(github.ref, 'refs/tags/v') || (github.event_name == 'workflow_dispatch' && inputs.release)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -475,7 +484,7 @@ jobs:
           path: packs
 
       - name: Changelog (commits since the previous release)
-        run: python3 tools/changelog.py --version "${{ needs.build.outputs.version }}" --to "$GITHUB_REF_NAME" --out build/changelog.md
+        run: python3 tools/changelog.py --version "${{ needs.build.outputs.version }}" --to "$GITHUB_SHA" --out build/changelog.md
 
       - uses: actions/upload-artifact@v4
         with:
@@ -485,7 +494,9 @@ jobs:
       - name: Publish the release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ github.ref_name }}
+          # pushed tag, or (Run workflow + release) created here on this commit
+          tag_name: v${{ needs.build.outputs.version }}
+          target_commitish: ${{ github.sha }}
           name: Brasshaven ${{ needs.build.outputs.version }}
           body_path: build/changelog.md
           prerelease: false
@@ -498,7 +509,7 @@ jobs:
   # notice) while the secret CURSEFORGE_TOKEN is missing. Release type from the version (0.9.0-beta: beta).
   curseforge:
     needs: [build, github-release]
-    if: startsWith(github.ref, 'refs/tags/v') && vars.CURSEFORGE_PROJECT_ID != ''
+    if: (startsWith(github.ref, 'refs/tags/v') || (github.event_name == 'workflow_dispatch' && inputs.release)) && vars.CURSEFORGE_PROJECT_ID != ''
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -528,12 +539,12 @@ jobs:
         run: |
           python3 tools/make_modpack.py modpack --jar "$(ls jar/brasshaven-*.jar | head -n 1)" --out build/packs \
             --project-id "${{ vars.CURSEFORGE_PROJECT_ID }}" --file-id "${{ steps.upload.outputs.file_id }}"
-          gh release upload "$GITHUB_REF_NAME" build/packs/*-curseforge.zip --repo "$GITHUB_REPOSITORY" --clobber
+          gh release upload "v${{ needs.build.outputs.version }}" build/packs/*-curseforge.zip --repo "$GITHUB_REPOSITORY" --clobber
 
   # Optional, like curseforge: repository variable MODRINTH_PROJECT_ID and secret MODRINTH_TOKEN
   modrinth:
     needs: [build, github-release]
-    if: startsWith(github.ref, 'refs/tags/v') && vars.MODRINTH_PROJECT_ID != ''
+    if: (startsWith(github.ref, 'refs/tags/v') || (github.event_name == 'workflow_dispatch' && inputs.release)) && vars.MODRINTH_PROJECT_ID != ''
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

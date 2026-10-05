@@ -136,6 +136,8 @@ Dépôt `jules-crevoisier/mode-minecraft`, **Settings**, **Secrets and variables
    ```
    Tu peux aussi passer par GitHub : **Releases**, **Draft a new release**, tag `v0.9.1-beta` à créer sur `main`,
    **Publish**. Le CI complète alors cette release.
+   Sans tag : **Actions**, *Build the mod*, **Run workflow**, choisis la branche et coche **release** : le CI crée
+   lui-même le tag `v<mod_version>` sur ce commit et publie la release (notes : `docs/releases/<version>.md`).
 4. Le workflow `.github/workflows/build.yml` enchaîne :
    - **build** : vérifie que le tag correspond à `mod_version` et qu'aucun id de bloc ou d'objet n'a disparu (voir
      section 6), compile le jar, construit le pack serveur et le modpack, et teste les options JVM du pack serveur
