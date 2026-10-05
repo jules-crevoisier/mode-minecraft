@@ -1030,26 +1030,22 @@ public class MachineBlockEntity extends BaseContainerBlockEntity {
                 && !(target.getBlock() instanceof MachineBlock) && !special;
     }
 
-    /**
-     * The player a Breaker or Placer acts as (machines.actAsOwner): its owner when online. Empty when the machine must
-     * wait (owner offline); {@code Optional.of(null)} is never returned: an ownerless machine gets {@link #NO_ACTOR}.
-     */
-    private java.util.Optional<ServerPlayer> actor(ServerLevel level) {
-        if (owner == null || !com.wayfarers.config.WayfarersConfig.MACHINES_ACT_AS_OWNER.get()) {
-            return NO_ACTOR;
-        }
-        return java.util.Optional.ofNullable(level.getServer().getPlayerList().getPlayer(owner));
+    /** Whether the Breaker / Placer acts as its owner (it has one and machines.actAsOwner is on). */
+    private boolean actsAsOwner() {
+        return owner != null && com.wayfarers.config.WayfarersConfig.MACHINES_ACT_AS_OWNER.get();
     }
 
-    /** Marker for "acts as nobody" (an old machine without an owner, or machines.actAsOwner off). */
-    private static final java.util.Optional<ServerPlayer> NO_ACTOR = java.util.Optional.empty();
+    /** The online owner a Breaker or Placer acts as; null when it acts as nobody or the owner is offline. */
+    private @org.jetbrains.annotations.Nullable ServerPlayer actor(ServerLevel level) {
+        return actsAsOwner() ? level.getServer().getPlayerList().getPlayer(owner) : null;
+    }
 
-    /** Whether a Breaker / Placer may work at all now: enabled in the config, and its owner online when it has one. */
+    /** Whether a Breaker / Placer may work at all now: enabled in the config, and its owner online when it acts as them. */
     private boolean mayWork(ServerLevel level, boolean breaker) {
         if (!(breaker ? com.wayfarers.config.WayfarersConfig.BREAKER_ENABLED.get() : com.wayfarers.config.WayfarersConfig.PLACER_ENABLED.get())) {
             return false;
         }
-        return owner == null || !com.wayfarers.config.WayfarersConfig.MACHINES_ACT_AS_OWNER.get() || actor(level).isPresent();
+        return !actsAsOwner() || actor(level) != null;
     }
 
     void pulse(ServerLevel level) {
@@ -1061,7 +1057,7 @@ public class MachineBlockEntity extends BaseContainerBlockEntity {
         if ((breaker || kind() == MachineBlock.Kind.PLACER) && !mayWork(level, breaker)) {
             return;
         }
-        ServerPlayer actor = actor(level).orElse(null);
+        ServerPlayer actor = actor(level); // null: an ownerless machine, no protection to ask
         if (breaker) {
             if (!breakable(level, front, target)) {
                 return;

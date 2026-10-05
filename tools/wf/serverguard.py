@@ -22,8 +22,6 @@ MESSAGES = {
                                            "Cette tombe appartient à %s : seul ce joueur peut l'ouvrir pendant encore %s minutes."),
     "message.wayfarers.compass.busy": ("The compass is still turning: try again in a few seconds.",
                                        "La boussole tourne encore : réessaie dans quelques secondes."),
-    "message.wayfarers.machine.owner_offline": ("Waiting for its owner to come back online.",
-                                                "Attend que son propriétaire revienne en ligne."),
 }
 
 
