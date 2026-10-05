@@ -19,6 +19,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 
 from wf import mobs  # noqa: E402
+from wf.png import Canvas  # noqa: E402
 
 ROOT = os.path.dirname(HERE)
 JAVA = os.path.join(ROOT, "src/main/java/com/brasshaven/generated")
@@ -258,11 +259,7 @@ def main():
         check(m)
         m.pack()
         tex, glow = m.textures()
-        m._has_glow = glow is not None
         built.append(m)
-        if args.only and m.name != args.only:
-            continue
-        os.makedirs(TEX, exist_ok=True)
         painted = [(m.name, tex, glow)]
         for v, tname in zip(m.variants[1:], texture_names(m)[1:]):
             mv = builder(v)
@@ -270,6 +267,13 @@ def main():
             if [c.uv for c in mv.all_cubes()] != [c.uv for c in m.all_cubes()]:
                 raise ValueError(f"{m.name}: variant {v} must keep the same cubes")
             painted.append((tname, *mv.textures()))
+        # one glowing variant gives the model its glow layer: the others get a blank glow texture
+        m._has_glow = any(g is not None for _, _, g in painted)
+        if m._has_glow:
+            painted = [(n, t, g if g is not None else Canvas(*m.tex_size)) for n, t, g in painted]
+        if args.only and m.name != args.only:
+            continue
+        os.makedirs(TEX, exist_ok=True)
         for tname, t, g in painted:
             t.save(os.path.join(TEX, f"{tname}.png"))
             glow_path = os.path.join(TEX, f"{tname}_glow.png")

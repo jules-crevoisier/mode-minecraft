@@ -415,6 +415,8 @@ def main():
         emblem(cv, EMBLEMS[row[0]], outline if bright else (255, 250, 230))
     from wf import ocean
     EGGS.update(ocean.EGGS)
+    from wf import denizens
+    EGGS.update(denizens.EGGS)
     for mob, (base, spots) in EGGS.items():
         written[f"item/{mob}_spawn_egg"] = egg(base, spots)
     for name, cv in block_textures().items():

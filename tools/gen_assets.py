@@ -297,8 +297,9 @@ def main():
         lang_fr[f"structure.{NS}.{sdef.id}"] = sdef.title_fr
     for key, (en, fr) in content.MESSAGES.items():
         lang_en[key], lang_fr[key] = en, fr
-    from wf import guide, skills, metals, machines, furniture, gadgets, worldmap, ocean, village, worldbiomes, social
-    for mod in (guide, skills, metals, machines, furniture, gadgets, worldblocks, worldmap, ocean, village, worldbiomes, social):
+    from wf import guide, skills, metals, machines, furniture, gadgets, worldmap, ocean, village, worldbiomes, social, denizens
+    for mod in (guide, skills, metals, machines, furniture, gadgets, worldblocks, worldmap, ocean, village, worldbiomes, social,
+                denizens):
         g_en, g_fr = mod.lang()
         lang_en.update(g_en)
         lang_fr.update(g_fr)

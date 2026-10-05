@@ -42,6 +42,16 @@ import com.brasshaven.entity.ocean.MantaRay;
 import com.brasshaven.entity.ocean.ReefFish;
 import com.brasshaven.entity.ocean.SeaSerpent;
 import com.brasshaven.entity.ocean.Whale;
+import com.brasshaven.entity.folk.ClockworkCitizen;
+import com.brasshaven.entity.folk.Dwarf;
+import com.brasshaven.entity.folk.Monk;
+import com.brasshaven.entity.folk.Sylvan;
+import com.brasshaven.entity.mob.BanditMarksman;
+import com.brasshaven.entity.mob.BarnacleCrab;
+import com.brasshaven.entity.mob.CinderHound;
+import com.brasshaven.entity.mob.LanternWisp;
+import com.brasshaven.entity.mob.RiftSentinel;
+import com.brasshaven.entity.mob.SkyRaider;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.SpawnPlacementTypes;
@@ -201,6 +211,39 @@ public final class ModEntities {
             () -> EntityType.Builder.<Whale>of(Whale::new, MobCategory.WATER_CREATURE)
                     .sized(Whale.WIDTH, Whale.HEIGHT).clientTrackingRange(10).build(ENTITIES.key("whale")));
 
+    // ---- peoples of the places (tools/wf/denizens.py): residents with roles, trades and guards
+    public static final RegistryObject<EntityType<Dwarf>> DWARF = ENTITIES.register("dwarf",
+            () -> EntityType.Builder.<Dwarf>of(Dwarf::new, MobCategory.MISC)
+                    .sized(Dwarf.WIDTH, Dwarf.HEIGHT).clientTrackingRange(10).build(ENTITIES.key("dwarf")));
+    public static final RegistryObject<EntityType<Sylvan>> SYLVAN = ENTITIES.register("sylvan",
+            () -> EntityType.Builder.<Sylvan>of(Sylvan::new, MobCategory.MISC)
+                    .sized(Sylvan.WIDTH, Sylvan.HEIGHT).clientTrackingRange(10).build(ENTITIES.key("sylvan")));
+    public static final RegistryObject<EntityType<ClockworkCitizen>> CLOCKWORK_CITIZEN = ENTITIES.register("clockwork_citizen",
+            () -> EntityType.Builder.<ClockworkCitizen>of(ClockworkCitizen::new, MobCategory.MISC)
+                    .sized(ClockworkCitizen.WIDTH, ClockworkCitizen.HEIGHT).clientTrackingRange(10).build(ENTITIES.key("clockwork_citizen")));
+    public static final RegistryObject<EntityType<Monk>> MONK = ENTITIES.register("monk",
+            () -> EntityType.Builder.<Monk>of(Monk::new, MobCategory.MISC)
+                    .sized(Monk.WIDTH, Monk.HEIGHT).clientTrackingRange(10).build(ENTITIES.key("monk")));
+    // ---- creatures of the hostile places (tools/wf/denizens.py)
+    public static final RegistryObject<EntityType<BanditMarksman>> BANDIT_MARKSMAN = ENTITIES.register("bandit_marksman",
+            () -> EntityType.Builder.<BanditMarksman>of(BanditMarksman::new, MobCategory.MONSTER)
+                    .sized(BanditMarksman.WIDTH, BanditMarksman.HEIGHT).clientTrackingRange(8).build(ENTITIES.key("bandit_marksman")));
+    public static final RegistryObject<EntityType<SkyRaider>> SKY_RAIDER = ENTITIES.register("sky_raider",
+            () -> EntityType.Builder.<SkyRaider>of(SkyRaider::new, MobCategory.MONSTER)
+                    .sized(SkyRaider.WIDTH, SkyRaider.HEIGHT).clientTrackingRange(8).build(ENTITIES.key("sky_raider")));
+    public static final RegistryObject<EntityType<BarnacleCrab>> BARNACLE_CRAB = ENTITIES.register("barnacle_crab",
+            () -> EntityType.Builder.<BarnacleCrab>of(BarnacleCrab::new, MobCategory.MONSTER)
+                    .sized(BarnacleCrab.WIDTH, BarnacleCrab.HEIGHT).clientTrackingRange(8).build(ENTITIES.key("barnacle_crab")));
+    public static final RegistryObject<EntityType<LanternWisp>> LANTERN_WISP = ENTITIES.register("lantern_wisp",
+            () -> EntityType.Builder.<LanternWisp>of(LanternWisp::new, MobCategory.MONSTER)
+                    .sized(LanternWisp.WIDTH, LanternWisp.HEIGHT).fireImmune().clientTrackingRange(8).build(ENTITIES.key("lantern_wisp")));
+    public static final RegistryObject<EntityType<CinderHound>> CINDER_HOUND = ENTITIES.register("cinder_hound",
+            () -> EntityType.Builder.<CinderHound>of(CinderHound::new, MobCategory.MONSTER)
+                    .sized(CinderHound.WIDTH, CinderHound.HEIGHT).fireImmune().clientTrackingRange(8).build(ENTITIES.key("cinder_hound")));
+    public static final RegistryObject<EntityType<RiftSentinel>> RIFT_SENTINEL = ENTITIES.register("rift_sentinel",
+            () -> EntityType.Builder.<RiftSentinel>of(RiftSentinel::new, MobCategory.MONSTER)
+                    .sized(RiftSentinel.WIDTH, RiftSentinel.HEIGHT).clientTrackingRange(8).build(ENTITIES.key("rift_sentinel")));
+
     /** Every boss with an Elden Ring style fight (demo command, quests). */
     public static List<RegistryObject<? extends EntityType<? extends com.brasshaven.boss.WayfarerBoss>>> bosses() {
         return List.of(DROWNED_WARDEN, VOID_WARDEN, GRAVE_KNIGHT, BONE_MATRIARCH, WEEPING_LADY, LARVA_MOTHER, BELL_KEEPER, ARCHIVIST, SAND_PHARAOH, JADE_JAGUAR, ROOT_MOTHER, SWAMP_CRONE, GRYPHON_KNIGHT, RUNE_COLOSSUS, FORGE_KING, CRYSTAL_SPIDER, SCULK_SPAWN, ASH_LORD, PIGLIN_KING, SOUL_REAPER, GRAND_CLOCKMAKER);
@@ -247,14 +290,28 @@ public final class ModEntities {
         event.put(MANTA_RAY.get(), MantaRay.attributes().build());
         event.put(SEA_SERPENT.get(), SeaSerpent.attributes().build());
         event.put(WHALE.get(), Whale.attributes().build());
+        event.put(DWARF.get(), Dwarf.attributes().build());
+        event.put(SYLVAN.get(), Sylvan.attributes().build());
+        event.put(CLOCKWORK_CITIZEN.get(), ClockworkCitizen.attributes().build());
+        event.put(MONK.get(), Monk.attributes().build());
+        event.put(BANDIT_MARKSMAN.get(), BanditMarksman.attributes().build());
+        event.put(SKY_RAIDER.get(), SkyRaider.attributes().build());
+        event.put(BARNACLE_CRAB.get(), BarnacleCrab.attributes().build());
+        event.put(LANTERN_WISP.get(), LanternWisp.attributes().build());
+        event.put(CINDER_HOUND.get(), CinderHound.attributes().build());
+        event.put(RIFT_SENTINEL.get(), RiftSentinel.attributes().build());
     }
 
     /** Natural/structure spawning rules: on the ground, in the dark, like vanilla monsters. */
     public static void registerSpawnPlacements(SpawnPlacementRegisterEvent event) {
         for (EntityType<? extends Monster> type : List.of(RUIN_WALKER.get(), MAP_WRAITH.get(), BASALT_GUARD.get(), VOID_STALKER.get(),
-                SKELETON_KNIGHT.get(), CRYPT_CRAWLER.get(), BANSHEE.get(), GARGOYLE.get(), EMBER_IMP.get(), VOID_LARVA.get(), CLOCKWORK_SPIDER.get(), STEAM_DRONE.get())) {
+                SKELETON_KNIGHT.get(), CRYPT_CRAWLER.get(), BANSHEE.get(), GARGOYLE.get(), EMBER_IMP.get(), VOID_LARVA.get(), CLOCKWORK_SPIDER.get(), STEAM_DRONE.get(),
+                BANDIT_MARKSMAN.get(), SKY_RAIDER.get(), LANTERN_WISP.get(), CINDER_HOUND.get(), RIFT_SENTINEL.get())) {
             register(event, type);
         }
+        // the Barnacle Crab spawns under water (the sunken structures' spawn lists)
+        event.register(BARNACLE_CRAB.get(), SpawnPlacementTypes.IN_WATER, Heightmap.Types.OCEAN_FLOOR,
+                BarnacleCrab::checkSpawnRules, SpawnPlacementRegisterEvent.Operation.REPLACE);
         // sea creatures: in water, each with its own depth rules
         event.register(GLOW_JELLYFISH.get(), SpawnPlacementTypes.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 GlowJellyfish::checkSpawnRules, SpawnPlacementRegisterEvent.Operation.REPLACE);
@@ -268,7 +325,8 @@ public final class ModEntities {
         // server limits (spawns.natural, spawns.maxLoadedPerType) on top of every creature's own rules
         for (EntityType<?> type : List.of(RUIN_WALKER.get(), MAP_WRAITH.get(), BASALT_GUARD.get(), VOID_STALKER.get(),
                 SKELETON_KNIGHT.get(), CRYPT_CRAWLER.get(), BANSHEE.get(), GARGOYLE.get(), EMBER_IMP.get(), VOID_LARVA.get(),
-                CLOCKWORK_SPIDER.get(), STEAM_DRONE.get(), GLOW_JELLYFISH.get(), REEF_FISH.get(), MANTA_RAY.get(), WHALE.get())) {
+                CLOCKWORK_SPIDER.get(), STEAM_DRONE.get(), GLOW_JELLYFISH.get(), REEF_FISH.get(), MANTA_RAY.get(), WHALE.get(),
+                BANDIT_MARKSMAN.get(), SKY_RAIDER.get(), BARNACLE_CRAB.get(), LANTERN_WISP.get(), CINDER_HOUND.get(), RIFT_SENTINEL.get())) {
             capped(event, type);
         }
     }

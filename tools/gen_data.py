@@ -557,6 +557,8 @@ def main():
     automaton_spawns()
     from wf import ocean
     ocean.loot(write)
+    from wf import denizens
+    denizens.loot(write)
     ocean.worldgen(write)
     ocean.write_templates(ROOT)
     ore_worldgen()

@@ -534,4 +534,115 @@ public final class MobAnims {
 
         private WayfarerNpc() {}
     }
+    public static final class Dwarf {
+        public static final int GREET = 0;
+        public static final int ATTACK = 1;
+        public static final int HAMMER = 2;
+        public static final int DIG = 3;
+        public static final int BREW = 4;
+        public static final int CARVE = 5;
+        public static final int COUNT = 6;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {28, 20, 24, 24, 32, 24};
+
+        private Dwarf() {}
+    }
+    public static final class Sylvan {
+        public static final int GREET = 0;
+        public static final int ATTACK = 1;
+        public static final int TEND = 2;
+        public static final int BREW = 3;
+        public static final int CARVE = 4;
+        public static final int COUNT = 5;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {32, 24, 40, 32, 24};
+
+        private Sylvan() {}
+    }
+    public static final class ClockworkCitizen {
+        public static final int GREET = 0;
+        public static final int ATTACK = 1;
+        public static final int TINKER = 2;
+        public static final int WIND = 3;
+        public static final int COUNT = 4;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {24, 20, 28, 32};
+
+        private ClockworkCitizen() {}
+    }
+    public static final class Monk {
+        public static final int GREET = 0;
+        public static final int ATTACK = 1;
+        public static final int SCRIBE = 2;
+        public static final int BREW = 3;
+        public static final int TEND = 4;
+        public static final int COUNT = 5;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {32, 20, 32, 32, 32};
+
+        private Monk() {}
+    }
+    public static final class BanditMarksman {
+        public static final int DRAW = 0;
+        public static final int THROW = 1;
+        public static final int KICK = 2;
+        public static final int DODGE = 3;
+        public static final int COUNT = 4;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {22, 16, 12, 10};
+
+        private BanditMarksman() {}
+    }
+    public static final class SkyRaider {
+        public static final int SCREECH = 0;
+        public static final int CARRY = 1;
+        public static final int SWIPE = 2;
+        public static final int STUNNED = 3;
+        public static final int COUNT = 4;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {18, 20, 14, 32};
+
+        private SkyRaider() {}
+    }
+    public static final class BarnacleCrab {
+        public static final int SNAP = 0;
+        public static final int CLAMP = 1;
+        public static final int HOLD = 2;
+        public static final int HIDE = 3;
+        public static final int COUNT = 4;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {12, 20, 10, 60};
+
+        private BarnacleCrab() {}
+    }
+    public static final class LanternWisp {
+        public static final int SNUFF = 0;
+        public static final int LUNGE = 1;
+        public static final int PULSE = 2;
+        public static final int COUNT = 3;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {18, 14, 20};
+
+        private LanternWisp() {}
+    }
+    public static final class CinderHound {
+        public static final int HOWL = 0;
+        public static final int CHARGE = 1;
+        public static final int BITE = 2;
+        public static final int COUNT = 3;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {28, 24, 10};
+
+        private CinderHound() {}
+    }
+    public static final class RiftSentinel {
+        public static final int CHARGE = 0;
+        public static final int BLINK = 1;
+        public static final int SHOVE = 2;
+        public static final int COUNT = 3;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {28, 12, 16};
+
+        private RiftSentinel() {}
+    }
 }

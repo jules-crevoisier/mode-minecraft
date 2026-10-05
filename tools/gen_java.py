@@ -250,6 +250,11 @@ def main():
     with open(npc_out, "w") as f:
         f.write(npcs.java())
     print(f"wrote {os.path.relpath(npc_out, ROOT)}")
+    from wf import denizens
+    folk_out = os.path.join(os.path.dirname(OUT), "GeneratedFolk.java")
+    with open(folk_out, "w") as f:
+        f.write(denizens.java())
+    print(f"wrote {os.path.relpath(folk_out, ROOT)}")
     chapters = json.load(open(QUESTS))
     lines = [
         "package com.brasshaven.generated;",

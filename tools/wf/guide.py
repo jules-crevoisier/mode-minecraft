@@ -894,6 +894,16 @@ def _social():
 PAGES += _social()
 
 
+def _denizens():
+    """The peoples and creatures of the places (wf/denizens.py): their own category."""
+    from . import denizens
+    CATEGORIES.append(denizens.CATEGORY)
+    return denizens.guide_pages()
+
+
+PAGES += _denizens()
+
+
 # ------------------------------------------------------------------ page layout estimate (validate.py, gen_gui.py)
 # GuideScreen.java lays the pages out with the real font and splits a page that does not fit into continuation
 # sheets, so nothing is ever cut. This mirrors that layout with Minecraft's default-font advances (glyph width
