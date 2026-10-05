@@ -294,8 +294,10 @@ MESSAGES = {
     "gui.wayfarers.settings.minimap.keys": ("In game: %s show/hide - Shift + %1$s size - %s zoom",
                                             "En jeu : %s afficher/masquer - Maj + %1$s taille - %s zoom"),
     "gui.wayfarers.settings.minimap_size": ("Size", "Taille"),
-    "gui.wayfarers.settings.minimap_size.tip": ("Its size on screen (frame included). Shift + the minimap key changes it in game.",
-                                                "Sa taille à l'écran (cadre compris). Maj + la touche de la mini-carte la change en jeu."),
+    "gui.wayfarers.settings.minimap_size.tip": ("Its size on screen (frame included). Shift + the minimap key changes it in game; "
+                                                "any size from 48 to 160 px: the slider in the world map's options (gear button).",
+                                                "Sa taille à l'écran (cadre compris). Maj + la touche de la mini-carte la change en jeu ; "
+                                                "au pixel près, de 48 à 160 px : le curseur des options de la carte du monde (engrenage)."),
     "gui.wayfarers.settings.minimap_size.small": ("Small", "Petite"),
     "gui.wayfarers.settings.minimap_size.medium": ("Medium", "Moyenne"),
     "gui.wayfarers.settings.minimap_size.large": ("Large", "Grande"),

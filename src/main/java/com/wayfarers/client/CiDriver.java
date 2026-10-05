@@ -401,6 +401,35 @@ public final class CiDriver {
                 .waitTicks(60)
                 .shot("world_map");
 
+        // the options panel, the minimap set to 96 px with its slider: it shows live in its corner
+        step("world_map_options")
+                .run("open options", () -> {
+                    WayfarersClientConfig.setMinimapPixels(96);
+                    if (screen() instanceof com.wayfarers.client.map.WorldMapScreen map) {
+                        map.openOptions();
+                    }
+                })
+                .waitTicks(30)
+                .shot("world_map_options")
+                .run("default size", () -> WayfarersClientConfig.setMinimapPixels(WayfarersClientConfig.MinimapSize.MEDIUM.outer));
+
+        // the tilted 3D view (a fresh map screen: the options closed)
+        step("world_map_3d")
+                .run("open 3d", () -> {
+                    ClientHooks.openWorldMap();
+                    if (screen() instanceof com.wayfarers.client.map.WorldMapScreen map) {
+                        map.set3d(true);
+                    }
+                })
+                .until("WorldMapScreen", () -> screen() instanceof com.wayfarers.client.map.WorldMapScreen, 60)
+                .waitTicks(80)
+                .shot("world_map_3d")
+                .run("back to 2d", () -> {
+                    if (screen() instanceof com.wayfarers.client.map.WorldMapScreen map) {
+                        map.set3d(false);
+                    }
+                });
+
         step("quest_journal")
                 .run("request", () -> com.wayfarers.network.WayfarersNet.toServer(new com.wayfarers.network.QuestRequestMsg(true)))
                 .until("QuestJournalScreen", () -> screen() instanceof com.wayfarers.client.gui.QuestJournalScreen, 200)

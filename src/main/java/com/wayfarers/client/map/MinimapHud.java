@@ -19,14 +19,15 @@ import java.util.List;
  * The minimap: a brass porthole (or square bezel) in a corner of the screen, north-up or turning with you, with the
  * explored terrain, markers, and under it a compact plate with your coordinates and the biome you stand in.
  *
- * <p>Four sizes (56, 68, 96 and 128 GUI px, frame included; 68 by default), changed with Shift + the minimap key or
- * in the settings screen. Every round frame is a sprite drawn for its own size, pixel for pixel, and the square one is
- * a nine-slice: both stay crisp at any GUI scale.
+ * <p>Any size from 48 to 160 GUI px, frame included (68 by default): the slider of the world map's options, or the
+ * four presets (56, 68, 96, 128) cycled with Shift + the minimap key or picked in the settings screen. The round frame
+ * is drawn for the exact size ({@link MapFrames}) and the square one is a nine-slice: both stay crisp at any GUI
+ * scale. The player arrow and the markers grow with the map (a 7 px arrow on the small ones).
  */
 public final class MinimapHud {
     /** GUI pixels per block for each zoom level. */
     static final float[] ZOOMS = {0.5F, 1.0F, 2.0F, 4.0F};
-    private static final int BORDER = 6;
+    private static final int BORDER = MapFrames.BORDER;
     private static final int MARGIN = 4;
     /** Height of the coordinates / biome plate under the map. */
     private static final int PLATE_H = 20;
@@ -43,7 +44,7 @@ public final class MinimapHud {
 
     /** Diameter of the map itself (inside the frame) in GUI pixels. */
     static int mapSize() {
-        return WayfarersClientConfig.MINIMAP_SIZE.get().outer - BORDER * 2;
+        return WayfarersClientConfig.minimapPixels() - BORDER * 2;
     }
 
     private static boolean visible(Minecraft mc) {
@@ -66,8 +67,16 @@ public final class MinimapHud {
         if (!visible(mc)) {
             return;
         }
+        draw(g, dt.getGameTimeDeltaPartialTick(false));
+    }
+
+    /** Draws the minimap as set in the config (also the live preview of the world map's options). */
+    static void draw(GuiGraphicsExtractor g, float pt) {
+        Minecraft mc = Minecraft.getInstance();
         LocalPlayer player = mc.player;
-        float pt = dt.getGameTimeDeltaPartialTick(false);
+        if (player == null || mc.level == null) {
+            return;
+        }
         int size = mapSize();
         int outer = size + BORDER * 2;
         boolean coords = WayfarersClientConfig.MINIMAP_COORDS.get();
@@ -97,8 +106,9 @@ public final class MinimapHud {
         MapRenderer.tiles(g, px, pz, scale, cxs, cys, angle, size * 0.75F, alpha >= 255 ? -1 : alpha << 24 | 0xFFFFFF);
         g.disableScissor();
 
-        // markers (inside the map; a few kinds stick to the rim when off the map)
-        float half = size / 2.0F - 4;
+        // markers (inside the map; a few kinds stick to the rim when off the map), sized to the map
+        float markerSize = MapRenderer.minimapMarker(outer);
+        float half = size / 2.0F - Math.max(3.0F, markerSize / 2.0F - 0.5F);
         double cos = Math.cos(angle);
         double sin = Math.sin(angle);
         List<ClientMap.Marker> markers = ClientMap.markers();
@@ -117,13 +127,13 @@ public final class MinimapHud {
                 sx *= k;
                 sy *= k;
             }
-            MapRenderer.marker(g, m, Math.round(cxs + (float) sx), Math.round(cys + (float) sy), !inside);
+            MapRenderer.marker(g, m, Math.round(cxs + (float) sx), Math.round(cys + (float) sy), !inside, markerSize);
         }
-        MapRenderer.arrow(g, cxs, cys, rotate ? 0.0F : (float) Math.toRadians(yaw + 180.0));
+        MapRenderer.arrow(g, cxs, cys, rotate ? 0.0F : (float) Math.toRadians(yaw + 180.0), MapRenderer.minimapArrow(outer));
 
         if (round) {
-            // one sprite per size, drawn 1:1: no stretched pixels
-            g.blitSprite(net.minecraft.client.renderer.RenderPipelines.GUI_TEXTURED, Wayfarers.id("map/frame_round_" + size), x, y, outer, outer);
+            // drawn for this exact size, one texel per GUI pixel: no stretched pixels
+            MapFrames.round(g, x, y, size);
         } else {
             WfGui.sprite(g, SQUARE, x, y, outer, outer);
         }
@@ -168,10 +178,17 @@ public final class MinimapHud {
                         : Component.translatable("gui.wayfarers.map.scale_out", (int) (1 / s))));
     }
 
-    /** Next size preset (wraps around); Shift + the minimap key. Shows the minimap if it was hidden. */
+    /** Next size preset, the first bigger than now (wraps around); Shift + the minimap key. Shows the minimap if hidden. */
     public static void cycleSize() {
         WayfarersClientConfig.MinimapSize[] sizes = WayfarersClientConfig.MinimapSize.values();
-        WayfarersClientConfig.MinimapSize next = sizes[(WayfarersClientConfig.MINIMAP_SIZE.get().ordinal() + 1) % sizes.length];
+        int now = WayfarersClientConfig.minimapPixels();
+        WayfarersClientConfig.MinimapSize next = sizes[0];
+        for (WayfarersClientConfig.MinimapSize s : sizes) {
+            if (s.outer > now) {
+                next = s;
+                break;
+            }
+        }
         setSize(next);
         if (!WayfarersClientConfig.MINIMAP.get()) {
             WayfarersClientConfig.MINIMAP.set(true);
@@ -184,6 +201,12 @@ public final class MinimapHud {
     public static void setSize(WayfarersClientConfig.MinimapSize size) {
         WayfarersClientConfig.MINIMAP_SIZE.set(size);
         WayfarersClientConfig.MINIMAP_SIZE.save();
+        WayfarersClientConfig.setMinimapPixels(size.outer);
+    }
+
+    /** True when the minimap is exactly this preset's size. */
+    public static boolean isSize(WayfarersClientConfig.MinimapSize size) {
+        return WayfarersClientConfig.minimapPixels() == size.outer;
     }
 
     public static Component sizeName(WayfarersClientConfig.MinimapSize size) {

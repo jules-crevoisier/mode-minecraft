@@ -654,6 +654,14 @@ def check_screen_fit(sw=427, sh=240):
         err(f"screen fit: talent tree cells are {col_w} x {row_h} px at {sw} x {sh}, under {c['NODE'] + 6}")
     c = consts(gui + "GuideScreen.java")
     fits("manual", c["MIN_W"], c["MIN_H"] + 3)  # its top is at least 8 px down, 3 more than the plate needs
+    # the world map's options panel floats beside the live minimap (at most 160 px + its 4 px margin)
+    c = consts("client/map/WorldMapScreen.java")
+    fits("world map options panel", c["OPT_W"], c["OPT_H"] - 5)  # no title plate above it
+    cc = consts("config/WayfarersClientConfig.java")
+    if 4 + cc["MINIMAP_MAX"] + 6 + c["OPT_W"] + 6 > sw:
+        err(f"screen fit: the world map's options panel ({c['OPT_W']} px) covers a {cc['MINIMAP_MAX']} px minimap at {sw} px")
+    if cc["MINIMAP_MAX"] + 21 + 8 > sh:
+        err(f"screen fit: a {cc['MINIMAP_MAX']} px minimap and its plate do not fit {sh} px")
 
 
 def check_pack_meta():

@@ -72,16 +72,25 @@ final class MapPalette {
         int b = d.biome[i] & 0xFF;
         int[] t = b < tints.length ? tints[b] : DEFAULT;
         if (m == MapScan.WATER) {
-            int water = scale(t[2], 0.86F);
-            int f = d.floor[i] & 0xFF;
-            int depth = d.depth[i];
-            if (f > MapScan.VOID && f != MapScan.WATER && depth <= 4) {
-                float shallow = depth <= 1 ? 0.5F : depth == 2 ? 0.34F : 0.18F;
-                water = mix(water, material(f, t), shallow);
-            }
-            return water;
+            return water(t[2], d.depth[i], d.floor[i] & 0xFF, t);
         }
         return material(m, t);
+    }
+
+    /**
+     * Water by depth: light over the shallows (the bed shows through the first blocks), a deep navy far down, on the
+     * biome's own water hue.
+     */
+    static int water(int tint, int depth, int floorMat, int[] t) {
+        float f = (float) Math.sqrt(Math.max(0, Math.min(30, depth - 1)) / 30.0F);
+        int shallow = mix(tint, 0xFFFFFFFF, 0.12F);
+        int deep = mix(scale(tint, 0.52F), 0xFF0B1C3E, 0.32F);
+        int c = mix(shallow, deep, f);
+        if (floorMat > MapScan.VOID && floorMat != MapScan.WATER && depth <= 4) {
+            float bed = depth <= 1 ? 0.55F : depth == 2 ? 0.38F : depth == 3 ? 0.22F : 0.10F;
+            c = mix(c, material(floorMat, t), bed);
+        }
+        return c;
     }
 
     private static int material(int m, int[] t) {

@@ -68,11 +68,13 @@ PAGES = [
          "N : allumer/éteindre l'aimant\nG : symétrie de la baguette\nW (maintenu sur un objet) : sa page du manuel"),
         ("These are the keys of a QWERTY keyboard: Options > Controls, Wayfarers section, shows yours and changes "
          "them. Display settings (health bars, damage numbers, tracker, tips, and the minimap's size, corner, shape, "
-         "rotation, coordinates and opacity): Config button of Wayfarers in the mods list.",
+         "rotation, coordinates and opacity): Config button of Wayfarers in the mods list. The minimap's exact size "
+         "(a slider) and the maps' relief: M, then the gear button.",
          "Ce sont les touches d'un clavier QWERTY (en AZERTY : W devient Z, Z devient W et M devient la virgule) : "
          "Options > Commandes, rubrique Wayfarers, montre les tiennes et les change. Réglages d'affichage (barres de "
          "vie, chiffres de dégâts, suivi, astuces, et taille, coin, forme, rotation, coordonnées et opacité de "
-         "la mini-carte) : bouton Config de Wayfarers dans la liste des mods."),
+         "la mini-carte) : bouton Config de Wayfarers dans la liste des mods. Taille exacte de la mini-carte (un "
+         "curseur) et relief des cartes : M, puis le bouton engrenage."),
     ], []),
     ("compass", "start", "wayfarers:structure_compass", ("Structure Compass", "Boussole des structures"), [
         ("It finds Wayfarers structures. You get one when you first arrive; craft more with a compass surrounded by "
@@ -164,8 +166,10 @@ PAGES = [
          "modifier, partager ou supprimer."),
         ("Middle-click the map, or press B while looking at a spot, to ping it: everyone sees it for a minute.",
          "Clic molette sur la carte, ou B en visant un endroit : un signal que tous voient une minute."),
-        ("More settings: Mods > Wayfarers > Config, Minimap tab.",
-         "Autres réglages : Mods > Wayfarers > Config, onglet Mini-carte."),
+        ("The cube button tilts the world map into a 3D view. The gear button: minimap size (48 to 160 px, shown "
+         "live), corner, shape, opacity, relief and contour lines.",
+         "Le bouton cube incline la carte en vue 3D. L'engrenage : taille de la mini-carte (48 à 160 px, en "
+         "direct), coin, forme, opacité, relief et courbes de niveau."),
     ], ["wayfarers:wayfarer_atlas"]),
     ("recall", "travel", "wayfarers:recall_scroll", ("Recall Scroll", "Parchemin de rappel"), [
         ("Use it to return instantly to the nearest waystone of your dimension. It is used up.",

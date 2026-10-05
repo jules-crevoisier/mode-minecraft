@@ -1755,7 +1755,7 @@ MACHINE_SCREENS = {"auto_harvester": "machine_harvester", "sprinkler": "machine_
                    "block_placer": "machine_placer", "redstone_timer": "machine_timer",
                    "wireless_transmitter": "machine_transmitter", "wireless_receiver": "machine_receiver",
                    "entity_detector": "machine_detector"}
-GUI_SHOTS = ["worldmap", "minimap", "settings"] + list(MACHINE_SCREENS.values())
+GUI_SHOTS = ["worldmap", "worldmap_3d", "worldmap_options", "minimap", "settings"] + list(MACHINE_SCREENS.values())
 PREVIEW_GUI = os.path.join(ROOT, "build", "previews", "gui")
 _GUI_SIZE = {}
 
@@ -1890,8 +1890,10 @@ def section_map(ctx):
   </div>
   <ul class="keyrow">{keyrow}</ul>
   <div class="grid feats">{feats}</div>
+  <div class="mini-row"><div>{shot_fig(ctx, "world_map_3d") or screen_fig(gui, "worldmap_3d", "La vue 3D : le terrain exploré en relief, chaque colonne à sa hauteur")}</div>
+    <div>{shot_fig(ctx, "world_map_options") or screen_fig(gui, "worldmap_options", "Les options (bouton engrenage) : la mini-carte change en direct dans son coin")}</div></div>
   <h3 class="subhead" id="mini-carte">La mini-carte</h3>
-  <div class="mini-row"><div>{shot_fig(ctx, "hud_minimap")}{screen_fig(gui, "minimap", "Maquette : le hublot rond (par défaut) et le cadre carré" if "hud_minimap" in ctx.shots else "Le hublot rond (par défaut) et le cadre carré")}</div>
+  <div class="mini-row"><div>{shot_fig(ctx, "hud_minimap")}{screen_fig(gui, "minimap", "Maquette : de 48 à 128 px, la flèche et les marqueurs suivent sa taille" if "hud_minimap" in ctx.shots else "De 48 à 128 px : la flèche et les marqueurs suivent sa taille")}</div>
     <div>{"".join(f"<p>{E(p)}</p>" for p in TXT.MINIMAP_TEXT)}
     <h4 class="minihead">Sur l'écran de la carte</h4>
     <div class="scroll"><table class="tbl ctl"><tbody>{controls}</tbody></table></div></div>

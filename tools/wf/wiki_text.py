@@ -43,7 +43,8 @@ KEY_TEXT = {
     "M": "Carte du monde (partagée sur un serveur : repères, signaux, pierres de voyage, joueurs)",
     "N": "Allumer / éteindre l'anneau aimanté",
     "H": "Afficher / masquer la mini-carte",
-    "Maj + H": "Changer la taille de la mini-carte (petite, moyenne, grande, énorme)",
+    "Maj + H": "Passer à la taille suivante de la mini-carte (56, 68, 96, 128 px) ; au pixel près : options de la "
+               "carte (M, puis l'engrenage)",
     "Z": "Changer le zoom de la mini-carte",
     "B": "Signaler l'endroit visé à tous les joueurs (visible une minute sur les cartes)",
     "W": "Maintenir sur un objet du mod : ouvrir sa page du Manuel",
@@ -112,8 +113,19 @@ CONFIG_FR = {
                                "jamais téléchargé.",
     "map.minimap": "Affiche la mini-carte (touche H en jeu ; Maj + H change sa taille).",
     "map.corner": "Coin de l'écran de la mini-carte : TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT ou BOTTOM_RIGHT.",
-    "map.size": "Taille de la mini-carte à l'écran, cadre compris : SMALL (56 px), MEDIUM (68 px), LARGE (96 px) ou "
-                "XLARGE (128 px). En jeu : Maj + H, ou Mods → Wayfarers → Config, onglet Mini-carte.",
+    "map.size": "Préréglage de taille de la mini-carte, cadre compris : SMALL (56 px), MEDIUM (68 px), LARGE (96 px) "
+                "ou XLARGE (128 px). En jeu : Maj + H, ou Mods → Wayfarers → Config, onglet Mini-carte. Sert quand "
+                "map.sizePixels vaut 0 (les anciens fichiers de réglages gardent ainsi leur taille).",
+    "map.sizePixels": "Taille exacte de la mini-carte à l'écran, cadre compris, de 48 à 160 px (0 : le préréglage "
+                      "map.size). En jeu : le curseur des options de la carte (M, puis le bouton engrenage), par pas "
+                      "de 4 px ; un préréglage la règle aussi.",
+    "map.relief": "Relief des cartes, calculé à partir des hauteurs explorées : FLAT (couleurs simples), NORMAL "
+                  "(pentes éclairées du nord-ouest, vallées plus sombres, hauteurs plus pâles) ou STRONG (plus "
+                  "marqué). L'eau fonce avec la profondeur dans tous les cas.",
+    "map.contours": "Courbes de niveau sur les cartes : une ligne fine tous les 16 blocs de hauteur, une plus "
+                    "marquée tous les 64 (pas sur la cime des arbres).",
+    "map.worldMap3d": "La carte du monde s'ouvre en vue 3D inclinée (le terrain exploré en relief, chaque colonne à "
+                      "sa hauteur) au lieu de la vue du ciel. Le bouton cube de la carte bascule entre les deux.",
     "map.opacity": "Opacité du terrain de la mini-carte, en pourcentage (30 à 100) : baisse-la pour voir le monde à "
                    "travers.",
     "map.shape": "Forme : ROUND (hublot de laiton) ou SQUARE (cadre carré).",
@@ -602,8 +614,9 @@ TEST_CHECKLIST = [
      "roche : la cité est vers y −50, le sol de la cathédrale vers y −40."),
     ("Carte du monde et mini-carte", ["/gamemode spectator", "/give @s wayfarers:wayfarer_atlas"],
      "La mini-carte est en haut à gauche ; H la masque, Z change son zoom (W en AZERTY). Vole un peu puis ouvre la "
-     "carte avec M (la virgule en AZERTY) ou l'Atlas accroupi : le terrain vu est dessiné. Glisse, molette pour "
-     "zoomer, Espace pour revenir sur toi."),
+     "carte avec M (la virgule en AZERTY) ou l'Atlas accroupi : le terrain vu est dessiné, en relief. Glisse, molette "
+     "pour zoomer, Espace pour revenir sur toi. Le bouton cube incline la carte en 3D ; l'engrenage ouvre les "
+     "options : fais glisser le curseur de taille, la mini-carte grandit en direct dans son coin."),
     ("Repères et signaux", ["/gamemode creative"],
      "Sur la carte, clic droit : « Poser un repère ici » (nom, couleur, icône, Partager). Clic sur le repère : sa "
      "fiche (Modifier, Privé/Partager, Supprimer). Clic molette ou B en visant un bloc : un signal visible une "
@@ -671,7 +684,8 @@ MAP_WHAT = [
                          "touche M de Minecraft est la virgule (réglable dans Options → Commandes)."),
     ("Comment s'en servir", "Glisse pour déplacer la carte, molette (ou + et −) pour zoomer, Espace pour revenir sur "
                             "toi. Clique un marqueur pour ouvrir sa fiche. En bas, les coordonnées et le biome sous ta "
-                            "souris."),
+                            "souris. Sur le bord, le bouton cube incline la carte en vue 3D et l'engrenage ouvre les "
+                            "options (taille de la mini-carte, relief)."),
 ]
 # (geste, effet) : commandes de l'écran de la carte
 MAP_CONTROLS = [
@@ -681,6 +695,8 @@ MAP_CONTROLS = [
     ("Clic sur un marqueur", "sa fiche : nom, coordonnées, distance"),
     ("Clic droit", "poser un repère, signaler l'endroit, copier les coordonnées"),
     ("Clic molette", "envoyer un signal à tous"),
+    ("Bouton cube", "vue 3D inclinée : le terrain en relief, à sa hauteur"),
+    ("Bouton engrenage", "options : taille exacte de la mini-carte, coin, forme, opacité, relief, courbes de niveau"),
     ("M ou Échap", "fermer la carte"),
 ]
 # (ancre, titre, texte, icône) : les fonctions de la carte
@@ -699,15 +715,26 @@ MAP_FEATURES = [
     ("vue-grottes", "Vue des grottes", "Sous terre, la mini-carte et la carte dessinent la grotte à ta hauteur (une "
      "tranche du monde) au lieu de la surface loin au-dessus ; les parois sont en sombre. Le bouton sur le côté de la "
      "carte l'active ou la coupe (option map.caveMode).", "minecraft:lantern"),
+    ("relief", "Relief et vue 3D", "Les cartes sont ombrées à partir des hauteurs explorées : pentes éclairées du "
+     "nord-ouest, vallées plus sombres, sommets plus pâles, eau de plus en plus foncée avec la profondeur et fond "
+     "marin qui transparaît près des côtes. Le bouton cube de la carte du monde l'incline en vue 3D : chaque colonne "
+     "monte à sa hauteur, falaises et pentes en relief, comme une maquette. Les options règlent le relief (plat, "
+     "normal, fort) et ajoutent des courbes de niveau.", "minecraft:spyglass"),
+    ("options-carte", "Options de la carte", "Le bouton engrenage de la carte du monde ouvre un panneau : taille "
+     "exacte de la mini-carte (un curseur de 48 à 160 px, par pas de 4, ou les préréglages 56, 68, 96 et 128), "
+     "coin, forme, rotation, coordonnées et opacité. Tant qu'il est ouvert, la mini-carte s'affiche dans son coin et "
+     "change en direct. Tout est enregistré aussitôt.", "minecraft:compass"),
 ]
 MINIMAP_TEXT = [
     "La mini-carte est un hublot de laiton dans un coin de l'écran (en haut à gauche au départ). Elle montre le "
     "terrain autour de toi, la flèche de ta direction, et les pierres de voyage, repères, joueurs, signaux, tombes "
     "et ta dernière mort. En dessous : tes coordonnées et le biome où tu es.",
-    "H la masque ou la réaffiche, Maj + H change sa taille (petite, moyenne par défaut, grande, énorme : 56 à "
-    "128 px). Z change son zoom (4 niveaux) ; en AZERTY c'est la touche W. Taille, coin de l'écran, forme (ronde "
-    "ou carrée), rotation, coordonnées et opacité se règlent aussi dans Mods → Wayfarers → Config, onglet "
-    "Mini-carte (ou config/wayfarers-client.toml).",
+    "H la masque ou la réaffiche, Maj + H passe à la taille suivante (56, 68 par défaut, 96 ou 128 px). Au "
+    "pixel près, de 48 à 160 px : le curseur des options de la carte (M, puis l'engrenage), la mini-carte change en "
+    "direct. La flèche et les marqueurs suivent sa taille : petits sur une petite mini-carte. Z change son zoom "
+    "(4 niveaux) ; en AZERTY c'est la touche W. Coin de l'écran, forme (ronde ou carrée), rotation, coordonnées "
+    "et opacité se règlent aussi dans ces options ou dans Mods → Wayfarers → Config, onglet Mini-carte (ou "
+    "config/wayfarers-client.toml).",
 ]
 
 # ------------------------------------------------------------------ machines : écrans
@@ -857,7 +884,11 @@ INGAME_SHOTS = [
     ("hud_minimap", "La mini-carte", "Le hublot de laiton en haut à gauche : le terrain autour de toi, ta direction, "
      "tes coordonnées et le nom du biome.", "mini-carte"),
     ("world_map", "La carte du monde", "Touche M. À droite la légende et tes repères, sur le bord les boutons de "
-     "zoom, de vue des grottes et de liste.", "carte"),
+     "zoom, de vue des grottes, de liste, de vue 3D et d'options.", "carte"),
+    ("world_map_options", "Les options de la carte", "Le bouton engrenage : taille exacte de la mini-carte, coin, "
+     "forme, opacité et relief ; la mini-carte s'affiche en direct dans son coin.", "options-carte"),
+    ("world_map_3d", "La carte en vue 3D", "Le bouton cube incline la carte : le terrain exploré en relief, chaque "
+     "colonne à sa hauteur.", "relief"),
     ("quest_journal", "Le journal de quêtes", "Touche J. Les cinq chapitres à gauche, leurs étapes au milieu, et "
      "à droite l'objectif et les récompenses de la quête choisie.", "quetes"),
     ("talent_tree", "L'arbre de talents", "Touche K. Les quatre branches : Guerrier, Explorateur, Arcaniste et "
