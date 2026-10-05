@@ -12,6 +12,8 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.NoiseBasedChunkGenerator;
+import net.minecraft.world.level.levelgen.NoiseSettings;
 import net.minecraft.world.level.levelgen.RandomState;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.PoolElementStructurePiece;
@@ -29,6 +31,7 @@ import java.util.Optional;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
 /**
@@ -67,6 +70,55 @@ public final class SiteFit {
         int depth() {
             return this.top - this.floor;
         }
+    }
+
+    // ------------------------------------------------------------------ terrain columns
+
+    private static final Predicate<BlockState> TOP_TEST = Heightmap.Types.WORLD_SURFACE_WG.isOpaque();
+    private static final Predicate<BlockState> FLOOR_TEST = Heightmap.Types.OCEAN_FLOOR_WG.isOpaque();
+
+    /**
+     * The terrain heights of one column, {@code top} (WORLD_SURFACE_WG) and {@code floor} (OCEAN_FLOOR_WG), exactly as
+     * {@link ChunkGenerator#getBaseHeight} gives them.
+     *
+     * <p>Cost: each {@code getBaseHeight} of the noise generator builds a one-column noise chunk and evaluates the
+     * whole density router at every noise-cell corner of the column (about 200 evaluations, the 2-3 ms the world
+     * test's genbench measures), however early its heightmap test stops. When both heights are needed, one
+     * {@link ChunkGenerator#getBaseColumn} pays that once: it walks the same column top-down with the same states
+     * (NoiseBasedChunkGenerator.iterateNoiseColumn, without the early stop), so the first state matching each
+     * heightmap's test, from the top, gives the same heights for half the price. Other generators (flat, other
+     * mods') keep the two plain queries.
+     */
+    private static Sample sample(ChunkGenerator gen, int x, int z, LevelHeightAccessor heights, RandomState rs,
+                                 boolean needTop, boolean needFloor) {
+        if (needTop && needFloor && gen instanceof NoiseBasedChunkGenerator noise) {
+            NoiseSettings ns = noise.generatorSettings().value().noiseSettings().clampToHeightAccessor(heights);
+            int cell = ns.getCellHeight();
+            // the column's array index is y - minY only when the cells tile [minY, minY + height) exactly (always so
+            // for vanilla's dimensions); otherwise keep the plain queries
+            if (ns.height() > 0 && Math.floorMod(ns.minY(), cell) == 0 && ns.height() % cell == 0) {
+                NoiseColumn column = gen.getBaseColumn(x, z, heights, rs);
+                int top = Integer.MIN_VALUE;
+                int floor = Integer.MIN_VALUE;
+                for (int y = ns.minY() + ns.height() - 1; y >= ns.minY() && floor == Integer.MIN_VALUE; y--) {
+                    BlockState state = column.getBlock(y);
+                    if (state == null) {
+                        continue;
+                    }
+                    if (top == Integer.MIN_VALUE && TOP_TEST.test(state)) {
+                        top = y + 1;
+                    }
+                    if (FLOOR_TEST.test(state)) {
+                        floor = y + 1;
+                    }
+                }
+                return new Sample(x, z, top == Integer.MIN_VALUE ? heights.getMinY() : top,
+                        floor == Integer.MIN_VALUE ? heights.getMinY() : floor);
+            }
+        }
+        int top = needTop ? gen.getBaseHeight(x, z, Heightmap.Types.WORLD_SURFACE_WG, heights, rs) : 0;
+        int floor = needFloor ? gen.getBaseHeight(x, z, Heightmap.Types.OCEAN_FLOOR_WG, heights, rs) : top;
+        return new Sample(x, z, needTop ? top : floor, floor);
     }
 
     // ------------------------------------------------------------------ switches
@@ -196,13 +248,9 @@ public final class SiteFit {
         int[] floor = new int[n];
         int wet = 0;
         for (int k = 0; k < n; k++) {
-            int x = start.getX() + at[k][0];
-            int z = start.getZ() + at[k][1];
-            top[k] = needTop ? gen.getBaseHeight(x, z, Heightmap.Types.WORLD_SURFACE_WG, heights, rs) : 0;
-            floor[k] = needFloor ? gen.getBaseHeight(x, z, Heightmap.Types.OCEAN_FLOOR_WG, heights, rs) : top[k];
-            if (!needTop) {
-                top[k] = floor[k];
-            }
+            Sample p = sample(gen, start.getX() + at[k][0], start.getZ() + at[k][1], heights, rs, needTop, needFloor);
+            top[k] = p.top();
+            floor[k] = p.floor();
             wet += top[k] > floor[k] ? 1 : 0;
         }
         double wetShare = wet / (double) n;
@@ -302,14 +350,20 @@ public final class SiteFit {
         if (fit.mode().equals("cavern")) {
             return cavern(fit, box, gen, heights, rs, fp, nx, nz);
         }
+        // sky reads only the surface, underground only the ground under the water: one height each is enough
+        boolean needTop = !fit.mode().equals("underground");
+        boolean needFloor = !fit.mode().equals("sky");
         Sample[] s = new Sample[nx * nz];
-        for (int j = 0; j < nz; j++) {
-            for (int i = 0; i < nx; i++) {
-                int x = fp[0] + Math.round(w * i / (float) (nx - 1));
-                int z = fp[1] + Math.round(d * j / (float) (nz - 1));
-                int top = gen.getBaseHeight(x, z, Heightmap.Types.WORLD_SURFACE_WG, heights, rs);
-                int floor = gen.getBaseHeight(x, z, Heightmap.Types.OCEAN_FLOOR_WG, heights, rs);
-                s[j * nx + i] = new Sample(x, z, top, floor);
+        EarlyReject early = new EarlyReject(fit, s.length, box, heights);
+        for (int k : sampleOrder(nx, nz)) {
+            int i = k % nx;
+            int j = k / nx;
+            int x = fp[0] + Math.round(w * i / (float) (nx - 1));
+            int z = fp[1] + Math.round(d * j / (float) (nz - 1));
+            s[k] = sample(gen, x, z, heights, rs, needTop, needFloor);
+            String why = early.add(s[k]);
+            if (why != null) {
+                return Verdict.reject(why);
             }
         }
         return switch (fit.mode()) {
@@ -320,6 +374,121 @@ public final class SiteFit {
             case "underground" -> underground(fit, s, box, heights);
             default -> Verdict.accept(0);
         };
+    }
+
+    /**
+     * The order the grid of an {@link #evaluate} is sampled in: the four corners, the centre and the middles of the
+     * edges first (a coarse look at the whole footprint), then the rest row by row. Each column costs a noise column,
+     * and {@link EarlyReject} stops at the first sample that settles a rejection, so the samples most likely to settle
+     * it come first. The verdict does not depend on the order (every check reads the complete grid).
+     */
+    private static int[] sampleOrder(int nx, int nz) {
+        int[] order = new int[nx * nz];
+        int n = 0;
+        int ci = nx / 2;
+        int cj = nz / 2;
+        int[][] coarse = {{0, 0}, {nx - 1, nz - 1}, {nx - 1, 0}, {0, nz - 1}, {ci, cj}, {ci, 0}, {ci, nz - 1}, {0, cj}, {nx - 1, cj}};
+        boolean[] done = new boolean[nx * nz];
+        for (int[] c : coarse) {
+            int k = c[1] * nx + c[0];
+            if (!done[k]) {
+                done[k] = true;
+                order[n++] = k;
+            }
+        }
+        for (int k = 0; k < nx * nz; k++) {
+            if (!done[k]) {
+                order[n++] = k;
+            }
+        }
+        return order;
+    }
+
+    /**
+     * Rejections that a part of the grid already settles, checked after each sample so the remaining columns are not
+     * computed. Only monotone conditions are used: the share of water (or of dry land) can only grow, the spread of the
+     * ground heights can only widen, the highest terrain under a floating structure can only rise and the lowest
+     * ground over a buried one can only sink as samples are added. So whenever this rejects, the complete check
+     * ({@link #land}, {@link #seabed}, {@link #sky}, {@link #underground}) would have rejected the site as well: the
+     * verdict is the same, only the reason recorded for /brasshaven fitcheck may name another failing check first
+     * (same first word, so the statistics keep their categories).
+     */
+    private static final class EarlyReject {
+        private final FittedJigsawStructure.Fit fit;
+        private final String mode;
+        private final int total;
+        private final BoundingBox box;
+        private final LevelHeightAccessor heights;
+        private int seen;
+        private int wet;
+        private int lo = Integer.MAX_VALUE;
+        private int hi = Integer.MIN_VALUE;
+        private int highest;
+        private int lowest = Integer.MAX_VALUE;
+
+        EarlyReject(FittedJigsawStructure.Fit fit, int total, BoundingBox box, LevelHeightAccessor heights) {
+            this.fit = fit;
+            this.mode = fit.mode();
+            this.total = total;
+            this.box = box;
+            this.heights = heights;
+            this.highest = heights.getMinY();
+        }
+
+        /** Adds a sample; a rejection reason when the site cannot fit whatever the other samples say, else null. */
+        String add(Sample p) {
+            this.seen++;
+            int remaining = this.total - this.seen;
+            switch (this.mode) {
+                case "land", "wetland" -> {
+                    this.wet += p.wet() ? 1 : 0;
+                    if (this.wet > this.fit.wet() * this.total + 1.0E-4) {
+                        return String.format(Locale.ROOT, "water %d%%+ > %d%% (early)", this.wet * 100 / this.total,
+                                Math.round(this.fit.wet() * 100));
+                    }
+                    if (this.wet + remaining < this.fit.minWet() * this.total - 1.0E-4) {
+                        return String.format(Locale.ROOT, "dry %d%%- water < %d%% (early)", (this.wet + remaining) * 100 / this.total,
+                                Math.round(this.fit.minWet() * 100));
+                    }
+                    return this.spread((this.mode.equals("wetland") ? p.top() : p.floor()) - 1);
+                }
+                case "seabed" -> {
+                    this.wet += p.wet() ? 1 : 0;
+                    if (this.wet + remaining < this.fit.wet() * this.total) {
+                        return String.format(Locale.ROOT, "water %d%%- < %d%% (early)", (this.wet + remaining) * 100 / this.total,
+                                Math.round(this.fit.wet() * 100));
+                    }
+                    return this.spread(p.floor() - 1);
+                }
+                case "sky" -> {
+                    this.highest = Math.max(this.highest, p.top() - 1);
+                    int gap = this.box.minY() - this.highest;
+                    int need = this.fit.clearance() - gap;
+                    if (gap < this.fit.clearance() && (need > this.fit.lift() || this.box.maxY() + need >= this.heights.getMaxY())) {
+                        return "terrain " + (-gap) + "+ above the underside (early)";
+                    }
+                    return null;
+                }
+                case "underground" -> {
+                    this.lowest = Math.min(this.lowest, p.floor() - 1);
+                    int cover = this.lowest - this.box.maxY();
+                    int need = this.fit.cover() - cover;
+                    if (cover < this.fit.cover() && (need > this.fit.lift() || this.box.minY() - need <= this.heights.getMinY() + 4)) {
+                        return "cover " + cover + "- < " + this.fit.cover() + " (early)";
+                    }
+                    return null;
+                }
+                default -> {
+                    return null; // coast: its checks need the whole grid
+                }
+            }
+        }
+
+        private String spread(int h) {
+            this.lo = Math.min(this.lo, h);
+            this.hi = Math.max(this.hi, h);
+            return this.hi - this.lo > this.fit.spread() ? "spread " + (this.hi - this.lo) + "+ > " + this.fit.spread() + " (early)" : null;
+        }
     }
 
     /** Dry ground, flat enough: the start moves to the footprint's median ground (within reach of the foundations). */
