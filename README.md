@@ -300,6 +300,8 @@ Tout se règle dans `config/wayfarers-common.toml` :
 | `bloodMoon.enabled` | `true` |
 | `bloodMoon.interval` | `7` |
 
+**Serveur public** : options anti-grief et limites de charge (pierres de voyage, machines, tombes, quêtes, apparitions), réglages Java et sauvegardes dans [docs/SERVER_ADMIN.md](docs/SERVER_ADMIN.md).
+
 ### Blocs de construction exclusifs
 
 Les structures sont bâties avec des blocs propres au mod, qu'on peut aussi utiliser pour construire sa base. Ils se trouvent dans l'onglet créatif, et chaque famille de briques a ses escaliers, dalles et murets.

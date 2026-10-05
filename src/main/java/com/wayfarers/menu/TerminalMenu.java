@@ -81,6 +81,10 @@ public class TerminalMenu extends AbstractContainerMenu {
         if (player.level().isClientSide() || !slot.hasItem()) {
             return ItemStack.EMPTY;
         }
+        // each shift-click indexes the whole network: the same per-player limit as the grid clicks
+        if (player instanceof ServerPlayer sp && !com.wayfarers.util.ServerGuard.allow(sp, "terminal_click", 30, 15.0)) {
+            return ItemStack.EMPTY;
+        }
         ItemStack rest = StorageNetwork.insert(network(), slot.getItem());
         slot.set(rest);
         dirty();
