@@ -1,0 +1,1 @@
+From https://github.com/latent-spaces/brag (MIT, commit cb89b9f). Update: copy skills/brag-slim/SKILL.md again.
