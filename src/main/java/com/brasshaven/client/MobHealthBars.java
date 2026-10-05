@@ -147,22 +147,30 @@ public final class MobHealthBars {
         Font font = mc.font;
         if (showBar) {
             float max = Math.max(1F, entity.getMaxHealth());
-            float frac = Math.min(1F, entity.getHealth() / max);
-            float trail = t == null ? frac : Math.min(1F, t.trail / max);
-            int half = BAR_W / 2;
+            float frac = clamp01(entity.getHealth() / max);
+            float trail = t == null ? frac : Math.max(frac, clamp01(t.trail / max));
+            float half = BAR_W / 2.0F;
             int fill = frac > 0.5F ? 0xFF5BD14A : frac > 0.25F ? 0xFFF2C744 : 0xFFE0483B;
+            int shine = frac > 0.5F ? 0xFF9BEA8C : frac > 0.25F ? 0xFFF9DE8A : 0xFFF08A80;
             boolean elite = isElite(entity);
             int frame = elite ? 0xFFF6C343 : 0xFF17120F;
             float fx = -half + BAR_W * frac;
             float tx = -half + BAR_W * trail;
+            // Side by side, never on top of each other: the text background render type writes depth and sorts its
+            // quads by distance, so stacked layers (the old frame / background / trail / fill at -0.1 .. -0.5) left
+            // only the frame visible, the one nearest the camera (+z faces the camera here, Font draws its own
+            // background at -0.01 behind the glyphs). One plane, no overlap: no depth fight at any angle or view.
             out.submitCustomGeometry(ps, RenderTypes.textBackground(), (pose, buf) -> {
-                quad(buf, pose, -half - 1, -1, half + 1, 4, frame, -0.1F);
-                quad(buf, pose, -half, 0, half, 3, 0xFF2B2320, -0.2F);
-                if (tx > fx) {
-                    quad(buf, pose, fx, 0, tx, 3, 0xFFF6E27A, -0.3F);
-                }
-                quad(buf, pose, -half, 0, fx, 3, fill, -0.4F);
-                quad(buf, pose, -half, 0, fx, 1, 0x60FFFFFF, -0.5F);
+                // the frame: four strips around the bar
+                quad(buf, pose, -half - 1, -1, half + 1, 0, frame);
+                quad(buf, pose, -half - 1, 3, half + 1, 4, frame);
+                quad(buf, pose, -half - 1, 0, -half, 3, frame);
+                quad(buf, pose, half, 0, half + 1, 3, frame);
+                // health (a lighter top row), then the yellow trail of recent damage, then the empty part
+                quad(buf, pose, -half, 0, fx, 1, shine);
+                quad(buf, pose, -half, 1, fx, 3, fill);
+                quad(buf, pose, fx, 0, tx, 3, 0xFFF6E27A);
+                quad(buf, pose, tx, 0, half, 3, 0xFF2B2320);
             });
             if (elite || aimed) {
                 String label = (elite ? "★ " : "") + (int) Math.ceil(entity.getHealth()) + "/" + (int) Math.ceil(max);
@@ -192,12 +200,20 @@ public final class MobHealthBars {
         ps.popPose();
     }
 
+    private static float clamp01(float v) {
+        return v > 0F ? Math.min(1F, v) : 0F; // NaN too
+    }
+
+    /** One flat quad in the bar's plane (z 0); nothing when it is empty. Same winding as vanilla's text backgrounds. */
     private static void quad(com.mojang.blaze3d.vertex.VertexConsumer buf, PoseStack.Pose pose, float x0, float y0,
-                             float x1, float y1, int color, float z) {
-        buf.addVertex(pose, x0, y0, z).setColor(color).setLight(FULL_BRIGHT);
-        buf.addVertex(pose, x0, y1, z).setColor(color).setLight(FULL_BRIGHT);
-        buf.addVertex(pose, x1, y1, z).setColor(color).setLight(FULL_BRIGHT);
-        buf.addVertex(pose, x1, y0, z).setColor(color).setLight(FULL_BRIGHT);
+                             float x1, float y1, int color) {
+        if (x1 - x0 < 0.01F || y1 - y0 < 0.01F) {
+            return;
+        }
+        buf.addVertex(pose, x0, y0, 0F).setColor(color).setLight(FULL_BRIGHT);
+        buf.addVertex(pose, x0, y1, 0F).setColor(color).setLight(FULL_BRIGHT);
+        buf.addVertex(pose, x1, y1, 0F).setColor(color).setLight(FULL_BRIGHT);
+        buf.addVertex(pose, x1, y0, 0F).setColor(color).setLight(FULL_BRIGHT);
     }
 
     /** Elites are named "Elite ..." in gold by the server (DangerEvents). */
