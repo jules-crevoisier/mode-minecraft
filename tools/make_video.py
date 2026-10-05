@@ -2,15 +2,13 @@
 """Brasshaven presentation videos, rebuilt from scratch by one command:
 
     python3 tools/make_video.py --fetch     # CI screenshots, biome renders and showcase clips of the previews release
-    python3 tools/make_video.py             # build/video/brasshaven-guide.mp4, brasshaven-teaser.mp4 (+ .jpg, share-copy.txt)
+    python3 tools/make_video.py             # build/video/brasshaven-guide.mp4 (+ -discord.mp4, .jpg)
 
-Two videos, 1920x1080 at 30 fps, H.264 + AAC:
-
-* brasshaven-guide.mp4, the "Guide de démarrage" (about 3 minutes): installing (Minecraft 26.2, Forge 65.1.0, the
-  CurseForge modpack, the jar in mods/, the server pack), first steps (the Manual, the keys, the quest journal, the
-  minimap), then the world, quests and travel, machines and fights, playing together, and where to download.
-* brasshaven-teaser.mp4, a 20 second launch teaser (the /brag-slim laws: a hook in two seconds, the real thing on
-  screen, readable text, the poster baked in as frame 0), with brasshaven-teaser.jpg and share-copy.txt.
+The "Guide de démarrage" (about 3 minutes): installing (Minecraft 26.2, Forge 65.1.0, the CurseForge modpack, the jar
+in mods/, the server pack), first steps (the Manual, the keys, the quest journal, the minimap), then the world, quests
+and travel, machines and fights, playing together (every multiplayer screen), and where to download.
+brasshaven-guide.mp4 is the 1920x1080 master; brasshaven-guide-discord.mp4 is the same at 1280x720 in two-pass H.264,
+sized to stay under Discord's 20 MB upload limit (DISCORD_MB).
 
 Footage: the real client filmed by the `showcase` CI job (tools/ci_client.py --showcase, client/CiShowcase.java),
 whose clips --fetch puts in build/video/clips/ (brasshaven-showcase-<scene>.mp4 and brasshaven-showcase-scenes.json,
@@ -24,7 +22,7 @@ the same key, normalised to -16 LUFS.
 Every text shown comes from the mod (README.md, docs/PUBLISHING.md, docs/SERVER_ADMIN.md, the key bindings of
 client/BrasshavenClient.java and client/social/ClientSocial.java, the French language file).
 
-Options: --only guide|teaser, --stills (frames of every segment and transition to build/video/stills, no encoding),
+Options: --stills (frames of every segment and transition to build/video/stills, no encoding),
 --jobs N (parallel segment encoders), --fetch.
 """
 import argparse
@@ -59,7 +57,7 @@ SCENES = ["citadel", "sylvan_palace", "world_tree", "sky_harbour", "quest_journa
           "biome_crimson_mire", "biome_volcanic_highlands", "biome_pale_dunes"]
 
 GUIDE_BPM = 96
-TEASER_BPM = 120
+DISCORD_MB = 19.0  # Discord's upload limit is 20 MB: keep a margin for the container
 
 
 def log(*a):
@@ -677,8 +675,6 @@ def render_frame(seg, t, state):
             big_text(img, t, *b)
     elif kind == "hero":
         img = hero_frame(seg, t, state)
-    elif kind == "teaser_end":
-        img = teaser_end(seg, t)
     else:
         img = render_card(seg, t)
     if seg.get("chapter"):
@@ -751,24 +747,7 @@ def _left_shade():
     return _SHADE[0]
 
 
-def teaser_end(seg, t):
-    img = K.backdrop(t)
-    glow_layer(img, 0.5, 0.42, 0.4)
-    cut = K.cutout("clockwork_citadel", int(H * 0.62))
-    u = K.ease_out(t / 0.8)
-    K.paste(img, cut, (W - cut.width) / 2, 70 + (1 - u) * 50, u)
-    title = K.sweep(K.brass_title("Brasshaven", 150), (t - 0.5) / 1.3)
-    a = K.ease_out((t - 0.25) / 0.45)
-    K.paste(img, title, (W - title.width) / 2, H * 0.58 + (1 - a) * 30, a)
-    y = H * 0.58 + title.height - 18
-    for i, (text, size, colour) in enumerate(seg["lines"]):
-        s = K.text_sprite(text, K.SANS_BOLD, size, fill=colour, width=1700, align="center")
-        K.paste(img, s, (W - s.width) / 2, y, K.ease_out((t - 0.6 - i * 0.35) / 0.4))
-        y += s.height - 8
-    return img
-
-
-# ------------------------------------------------------------------ the two videos
+# ------------------------------------------------------------------ the guide
 
 def guide_segments():
     """The guide, chapter by chapter. Each scene uses its real clip when the showcase job filmed it."""
@@ -929,69 +908,60 @@ def guide_segments():
          "captions": [(0.3, 3.3, "Automates et créatures, avec leur barre de vie.", "Créatures"),
                       (3.5, 9.25, "20 boss façon Elden Ring. À leur mort : « ENNEMI ABATTU » et un Souvenir.", "Boss")]})
 
-    # ---- 6. Entre amis
+    # ---- 6. Entre amis: every multiplayer screen gets its own scene
     ch = "6 · Entre amis"
     add({"kind": "chapter", "dur": 2.5, "number": "6", "title": "Entre amis", "sub": "Le multijoueur de Brasshaven", "hit": True})
+    add({"kind": "scene", "dur": 10.0, "chapter": ch,
+         "parts": [(10.0, first(clip("company", 10.0, gui=True), still("company", (1.0, 1.04, (0.5, 0.5), (0.5, 0.5)),
+                                                                      ([(0.3, 900, 500), (2.0, 764, 222), (5.0, 640, 420)],
+                                                                       [2.6, 5.6]), gui=True)))],
+         "captions": [(0.3, 4.4, "Touche O : ta compagnie, jusqu'à 8 joueurs.", "Compagnie"),
+                      (4.55, 9.9, "XP partagée, chat de compagnie (/cc) et tes compagnons en or sur la carte.",
+                       "Compagnie")]})
+    add({"kind": "scene", "dur": 10.625, "chapter": ch,
+         "parts": [(10.625, first(still("player_card", (1.0, 1.04, (0.5, 0.5), (0.5, 0.5)),
+                                       ([(0.3, 900, 600), (2.2, 700, 520), (5.6, 820, 520)], [3.0, 6.2]), gui=True),
+                                 clip("company", 10.625, gui=True)))],
+         "captions": [(0.3, 5.45, "Accroupi + clic droit sur un joueur, main vide, ou vise-le et appuie sur U.",
+                       "Fiche du joueur"),
+                      (5.6, 10.5, "Sa fiche : sa compagnie, ses duels, et Échanger, Duel, Inviter, Saluer.",
+                       "Fiche du joueur")]})
     add({"kind": "scene", "dur": 6.25, "chapter": ch,
-         "parts": [(3.2, first(clip("company", 3.2, gui=True), still("company", (1.0, 1.02, (0.5, 0.5), (0.5, 0.5)),
-                                                                    ([(0.3, 900, 500), (1.6, 764, 222)], [2.2]), gui=True))),
-                   (3.05, first(clip("emotes", 3.05, 2.0), still("emote_wheel", (1.0, 1.02, (0.5, 0.5), (0.5, 0.5)),
-                                                                ([(0.2, 900, 420), (1.2, 636, 170), (2.4, 820, 344)], [2.8]),
-                                                                gui=True)))],
-         "captions": [(0.3, 3.2, "Touche O : ta compagnie, jusqu'à 8 joueurs.", "Compagnie"),
-                      (3.35, 6.15, "Touche Y : huit gestes animés.", "Gestes")]})
+         "parts": [(6.25, first(clip("emotes", 6.25, 2.0), still("emote_wheel", (1.0, 1.04, (0.5, 0.5), (0.5, 0.5)),
+                                                                 ([(0.2, 900, 420), (1.6, 636, 170), (3.4, 820, 344)],
+                                                                  [2.2, 4.0]), gui=True)))],
+         "captions": [(0.3, 6.15, "Touche Y : huit gestes animés, que tout le monde autour de toi voit.", "Gestes")]})
+    add({"kind": "scene", "dur": 9.375, "chapter": ch,
+         "parts": [(9.375, first(clip("trade", 9.375, gui=True), still("trade", (1.0, 1.04, (0.5, 0.5), (0.5, 0.5)),
+                                                                      ([(0.2, 700, 500), (2.0, 442, 346), (5.4, 900, 600)],
+                                                                       [2.6, 6.0]), gui=True)))],
+         "captions": [(0.3, 4.6, "Échange sécurisé : chacun pose son offre, en face à face.", "Échange"),
+                      (4.75, 9.25, "Les deux acceptent, 3 secondes, et c'est fait. Le moindre changement annule.",
+                       "Échange")]})
+    add({"kind": "scene", "dur": 9.375, "chapter": ch,
+         "parts": [(9.375, first(clip("pneumatic_post", 9.375, gui=True),
+                                 still("pneumatic_post", (1.0, 1.04, (0.5, 0.5), (0.5, 0.5)),
+                                       ([(0.2, 600, 400), (2.0, 320, 160), (5.2, 700, 500)], [2.4, 5.8]), gui=True)))],
+         "captions": [(0.3, 4.6, "Poste pneumatique : écris à n'importe quel joueur, même absent.", "Poste"),
+                      (4.75, 9.25, "Une lettre et jusqu'à 6 piles d'objets, payées en pépites de laiton.", "Poste")]})
+    add({"kind": "scene", "dur": 9.375, "chapter": ch,
+         "parts": [(9.375, first(clip("contract_board", 9.375, gui=True),
+                                 still("contract_board", (1.0, 1.04, (0.5, 0.5), (0.5, 0.5)),
+                                       ([(0.2, 700, 400), (2.0, 420, 156), (5.2, 760, 520)], [2.4, 5.8]), gui=True)))],
+         "captions": [(0.3, 4.6, "Tableau des contrats : « 32 fer contre 3 diamants ».", "Contrats"),
+                      (4.75, 9.25, "La récompense attend le livreur, la marchandise arrive par la poste.", "Contrats")]})
     add({"kind": "scene", "dur": 6.875, "chapter": ch,
-         "parts": [(2.3, first(clip("trade", 2.3, gui=True), still("trade", (1.0, 1.02, (0.5, 0.5), (0.5, 0.5)),
-                                                                  ([(0.2, 700, 500), (1.4, 442, 346)], [1.9]), gui=True))),
-                   (2.3, first(clip("pneumatic_post", 2.3, gui=True), still("pneumatic_post", (1.0, 1.02, (0.5, 0.5), (0.5, 0.5)),
-                                                                            ([(0.2, 600, 400), (1.2, 320, 160)], [1.6]),
-                                                                            gui=True))),
-                   (2.275, first(clip("contract_board", 2.275, gui=True), still("contract_board", (1.0, 1.02, (0.5, 0.5), (0.5, 0.5)),
-                                                                            ([(0.2, 700, 400), (1.2, 420, 156)], [1.6]),
-                                                                            gui=True)))],
-         "plates": [("Échange sécurisé",), ("Poste pneumatique",), ("Tableau des contrats",)],
-         "captions": [(0.4, 6.75, "Et des duels où personne ne meurt : le coup fatal laisse un demi-cœur.", "Duels")]})
+         "parts": [(6.875, first(still("player_card", (1.04, 1.1, (0.55, 0.6), (0.55, 0.65)),
+                                       ([(0.3, 800, 600), (2.0, 820, 520)], [2.6]), gui=True),
+                                 clip("company", 6.875, gui=True)))],
+         "captions": [(0.3, 6.75, "Duels : 3-2-1 dans un cercle rouge. Personne ne meurt, le dernier coup laisse un "
+                                  "demi-cœur.", "Duels")]})
 
     # ---- outro
     add({"kind": "outro", "dur": 8.125, "fout": 1.2, "hit": True, "bell": (3.4, 69),
          "rows": [("Télécharger", RELEASES), ("Bientôt", "sur CurseForge et Modrinth"),
                   ("Pour", "Minecraft 26.2 · Forge 65.1.0 · Java 25")],
          "final": "Bon jeu !", "final_at": 3.4})
-    return snap(S, beat)
-
-
-def teaser_segments():
-    beat = 60.0 / TEASER_BPM
-    S = []
-    # 0-2.5 s: the hook. The real Citadel, the name slammed on the first beat.
-    S.append({"kind": "hero", "dur": 3.0, "fin": 0.0, "fout": 0.12, "hit_at": 0.0, "flash_at": 0.0,
-              "src": first(clip("citadel", 3.0, 6.0), diorama("clockwork_citadel", zoom=(1.0, 1.1), drift=(600, 630))),
-              "title": "Brasshaven", "size": 150, "title_at": 0.0, "sweep_at": 0.5, "title_y": 330,
-              "lines": [("Un mod d'aventure steampunk pour Minecraft", 50, K.CREAM)], "lines_at": 0.45})
-    S.append({"kind": "scene", "dur": 3.5, "fin": 0.0, "fout": 0.1, "part_dip": 0.0, "whoosh": True,
-              "parts": [(1.2, first(clip("sylvan_palace", 1.2, 3.0), diorama("sylvan_palace", zoom=(1.0, 1.1)))),
-                        (1.1, first(clip("world_tree", 1.1, 3.0), diorama("giant_tree", zoom=(1.0, 1.1)))),
-                        (1.2, first(clip("citadel", 1.2, 9.0), diorama("sky_harbour", zoom=(1.0, 1.1))))],
-              "bigtext": [(0.1, 3.4, "Des cités géantes", "à explorer, à plusieurs", 0.8)]})
-    S.append({"kind": "scene", "dur": 3.5, "fin": 0.0, "fout": 0.1, "whoosh": True, "hit_at": 0.0,
-              "parts": [(3.5, first(clip("boss", 3.5, 5.0),
-                                    {"type": "bosses", "names": [("forge_king", "Le Roi-Forgeron"),
-                                                                 ("ash_lord", "Le Seigneur des Cendres"),
-                                                                 ("gryphon_knight", "Le Chevalier-griffon"),
-                                                                 ("void_warden", "Gardien du vide")]}))],
-              "bigtext": [(0.1, 3.4, "20 boss", "façon Elden Ring", 0.82)]})
-    S.append({"kind": "scene", "dur": 3.5, "fin": 0.0, "fout": 0.1, "part_dip": 0.0, "whoosh": True,
-              "parts": [(1.2, first(clip("machines", 1.2, 4.0), still("machine_harvester", (1.0, 1.06, (0.5, 0.4), (0.5, 0.4)), gui=True))),
-                        (1.1, first(clip("magic", 1.1, 1.0), still("talent_tree", (1.0, 1.06, (0.5, 0.5), (0.5, 0.5)), gui=True))),
-                        (1.2, first(clip("world_map", 1.2, 5.0, gui=True),
-                                    still("world_map_3d", (1.0, 1.06, (0.4, 0.45), (0.4, 0.45)), gui=True)))],
-              "bigtext": [(0.1, 3.4, "Machines, magie", "et carte du monde en 3D", 0.89)]})
-    S.append({"kind": "scene", "dur": 3.0, "fin": 0.0, "fout": 0.25, "part_dip": 0.0, "whoosh": True,
-              "parts": [(1.5, first(clip("emotes", 1.5, 2.0), still("company", (1.0, 1.06, (0.5, 0.5), (0.5, 0.5)), gui=True))),
-                        (1.5, first(clip("trade", 1.5, 1.0, gui=True), still("trade", (1.0, 1.06, (0.5, 0.5), (0.5, 0.5)), gui=True)))],
-              "bigtext": [(0.1, 2.9, "Entre amis", "compagnie, échanges, duels", 0.89)], "riser": 1.5})
-    S.append({"kind": "teaser_end", "dur": 4.5, "fin": 0.15, "fout": 0.6, "hit_at": 0.0, "bell": (0.0, 74),
-              "lines": [("Mod Forge · Minecraft 26.2", 44, K.CREAM), (RELEASES, 34, K.PARCHMENT)]})
     return snap(S, beat)
 
 
@@ -1147,6 +1117,30 @@ def build(name, segments, bpm, sections_fn, jobs, poster=None, seed=0):
     return out
 
 
+def discord(src, out):
+    """The guide at 1280x720 in two-pass H.264, at the bitrate that lands just under DISCORD_MB."""
+    dur = float(subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", src],
+                               capture_output=True, text=True, check=True).stdout)
+    audio_k = 80
+    target = DISCORD_MB * 1e6
+    for attempt in range(3):
+        video_k = int(target * 8 / dur / 1000 * 0.97) - audio_k  # 3 % for the container
+        passlog = os.path.join(K.WORK, "discord-pass")
+        common = ["-vf", "scale=1280:720:flags=lanczos", "-c:v", "libx264", "-preset", "slow", "-b:v", f"{video_k}k",
+                  "-maxrate", f"{int(video_k * 1.8)}k", "-bufsize", f"{video_k * 4}k", "-pix_fmt", "yuv420p",
+                  "-r", str(FPS), "-passlogfile", passlog]
+        subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", src] + common + ["-pass", "1", "-an", "-f", "mp4", os.devnull],
+                       check=True)
+        subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", src] + common +
+                       ["-pass", "2", "-c:a", "aac", "-b:a", f"{audio_k}k", "-movflags", "+faststart", out], check=True)
+        size = os.path.getsize(out)
+        log(f"wrote {out} ({size / 1e6:.1f} MB, video {video_k} kb/s)")
+        if size <= DISCORD_MB * 1e6:
+            return out
+        target *= DISCORD_MB * 1e6 / size * 0.98
+    sys.exit(f"{out} is still over {DISCORD_MB} MB")
+
+
 def guide_sections(segments, starts, total):
     """Music levels: calm under the install chapter, full under the gameplay."""
     sec = []
@@ -1157,10 +1151,6 @@ def guide_sections(segments, starts, total):
             lvl = 1
         sec.append((t0, t0 + s["dur"], lvl))
     return sec
-
-
-def teaser_sections(segments, starts, total):
-    return [(0, total, 2)]
 
 
 def stills(name, segments):
@@ -1190,15 +1180,9 @@ def poster_frame(segments, path, which=-1, t=None):
     return path
 
 
-SHARE_COPY = ("Brasshaven, notre mod d'aventure steampunk pour Minecraft 26.2 (Forge) : des cités géantes à explorer, "
-              "20 boss façon Elden Ring, des machines, de la magie et une carte du monde en 3D, à jouer entre amis.\n"
-              "Téléchargement : https://" + RELEASES + "/latest\n")
-
-
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--fetch", action="store_true", help="download the CI screenshots, biome renders and showcase clips")
-    ap.add_argument("--only", choices=["guide", "teaser"], help="build one video")
     ap.add_argument("--stills", action="store_true", help="only render inspection frames to build/video/stills")
     ap.add_argument("--jobs", type=int, default=max(1, min(4, os.cpu_count() or 1)))
     args = ap.parse_args()
@@ -1213,24 +1197,15 @@ def main():
     log(f"real footage: {len(clips)} clips ({', '.join(sorted(clips)) or 'none: stills only'})")
     if not os.path.isdir(K.RENDERS):
         log("warning: no build/wiki/img/s (python3 tools/gen_wiki.py): the structure stills are missing")
-    videos = []
-    if args.only in (None, "teaser"):
-        videos.append(("teaser", teaser_segments(), TEASER_BPM, teaser_sections, 2))
-    if args.only in (None, "guide"):
-        videos.append(("guide", guide_segments(), GUIDE_BPM, guide_sections, 1))
+    videos = [("guide", guide_segments(), GUIDE_BPM, guide_sections, 1)]
     for name, segs, bpm, sections, seed in videos:
         check_reading(segs, name)
         if args.stills:
             stills(name, segs)
             continue
-        poster = None
-        if name == "teaser":
-            poster = poster_frame(segs, os.path.join(K.VIDEO, "brasshaven-teaser.jpg"))
-            with open(os.path.join(K.VIDEO, "share-copy.txt"), "w", encoding="utf-8") as f:
-                f.write(SHARE_COPY)
-        else:
-            poster_frame(segs, os.path.join(K.VIDEO, "brasshaven-guide.jpg"), which=0, t=3.0)
-        build(name, segs, bpm, sections, args.jobs, poster=poster, seed=seed)
+        poster_frame(segs, os.path.join(K.VIDEO, "brasshaven-guide.jpg"), which=0, t=3.0)
+        full = build(name, segs, bpm, sections, args.jobs, seed=seed)
+        discord(full, os.path.join(K.VIDEO, "brasshaven-guide-discord.mp4"))
 
 
 if __name__ == "__main__":
