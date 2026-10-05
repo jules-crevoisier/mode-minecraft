@@ -20,7 +20,8 @@ public final class GeneratedGuide {
             new Category("building", "wayfarers:builder_wand"),
             new Category("machines", "wayfarers:auto_harvester"),
             new Category("gadgets", "wayfarers:brass_wrench"),
-            new Category("oceans", "wayfarers:diving_helmet")
+            new Category("oceans", "wayfarers:diving_helmet"),
+            new Category("multiplayer", "wayfarers:pneumatic_post")
     );
 
     public static final List<Page> PAGES = List.of(
@@ -92,7 +93,15 @@ public final class GeneratedGuide {
             new Page("ocean_creatures", "oceans", "wayfarers:reef_fish_bucket", 3, List.of("wayfarers:glow_jelly", "wayfarers:jelly_lamp", "wayfarers:reef_fish_bucket")),
             new Page("sea_serpent", "oceans", "wayfarers:serpent_scale", 2, List.of("wayfarers:serpent_scale", "wayfarers:sea_serpent_spawn_egg")),
             new Page("diving_gear", "oceans", "wayfarers:diving_helmet", 2, List.of("wayfarers:diving_helmet", "wayfarers:flippers")),
-            new Page("sea_floor", "oceans", "wayfarers:pearl_oyster", 2, List.of("wayfarers:pearl_oyster", "wayfarers:pearl", "wayfarers:glow_anemone"))
+            new Page("sea_floor", "oceans", "wayfarers:pearl_oyster", 2, List.of("wayfarers:pearl_oyster", "wayfarers:pearl", "wayfarers:glow_anemone")),
+            new Page("multiplayer", "multiplayer", "minecraft:player_head", 3, List.of("wayfarers:pneumatic_post", "wayfarers:contract_board")),
+            new Page("company", "multiplayer", "minecraft:white_banner", 4, List.of()),
+            new Page("company_travel", "multiplayer", "wayfarers:waystone", 2, List.of("wayfarers:waystone")),
+            new Page("trade", "multiplayer", "minecraft:emerald", 3, List.of()),
+            new Page("pneumatic_post", "multiplayer", "wayfarers:pneumatic_post", 3, List.of("wayfarers:pneumatic_post", "wayfarers:brass_nugget")),
+            new Page("contracts", "multiplayer", "wayfarers:contract_board", 3, List.of("wayfarers:contract_board")),
+            new Page("emotes", "multiplayer", "minecraft:note_block", 2, List.of()),
+            new Page("duels", "multiplayer", "minecraft:iron_sword", 3, List.of())
     );
 
     public static final List<Tip> TIPS = List.of(
@@ -104,7 +113,13 @@ public final class GeneratedGuide {
             new Tip("blood_moon", "minecraft:redstone", "blood_moon"),
             new Tip("boss_mist", "wayfarers:mist_gate", "bosses"),
             new Tip("danger", "minecraft:skeleton_skull", "danger"),
-            new Tip("map", "minecraft:filled_map", "map")
+            new Tip("map", "minecraft:filled_map", "map"),
+            new Tip("company", "minecraft:white_banner", "company"),
+            new Tip("trade", "minecraft:emerald", "trade"),
+            new Tip("pneumatic_post", "wayfarers:pneumatic_post", "pneumatic_post"),
+            new Tip("contract_board", "wayfarers:contract_board", "contracts"),
+            new Tip("duel", "minecraft:iron_sword", "duels"),
+            new Tip("emotes", "minecraft:note_block", "emotes")
     );
 
     private GeneratedGuide() {}

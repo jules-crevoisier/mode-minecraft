@@ -39,6 +39,7 @@
     "wayfarers:rustwood_door",
     "wayfarers:rustwood_trapdoor",
     "wayfarers:rustwood_button",
-    "wayfarers:rustwood_pressure_plate"
+    "wayfarers:rustwood_pressure_plate",
+    "wayfarers:contract_board"
   ]
 }
