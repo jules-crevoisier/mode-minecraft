@@ -166,16 +166,10 @@ PAGES = [
          "modifier, partager ou supprimer."),
         ("Middle-click the map, or press B while looking at a spot, to ping it: everyone sees it for a minute.",
          "Clic molette sur la carte, ou B en visant un endroit : un signal que tous voient une minute."),
-        ("The maps show the relief: slopes lit from the north-west, darker valleys, paler heights, water darker as "
-         "it deepens. The cube button tilts the world map into a 3D view, the land raised to its height.",
-         "Les cartes montrent le relief : pentes éclairées du nord-ouest, vallées plus sombres, hauteurs plus pâles, "
-         "eau plus foncée en profondeur. Le bouton cube incline la carte du monde en vue 3D, le terrain en relief."),
-        ("The gear button opens the options: the minimap's exact size (a slider from 48 to 160 px, or 4 presets), "
-         "corner, shape, rotation, coordinates and opacity, shown live in its corner; the relief (flat, normal, "
-         "strong) and contour lines. Also in Mods > Wayfarers > Config.",
-         "Le bouton engrenage ouvre les options : taille exacte de la mini-carte (un curseur de 48 à 160 px, ou "
-         "4 préréglages), coin, forme, rotation, coordonnées et opacité, visibles en direct dans son coin ; le "
-         "relief (plat, normal, fort) et les courbes de niveau. Aussi dans Mods > Wayfarers > Config."),
+        ("The cube button tilts the world map into a 3D view. The gear button: minimap size (48 to 160 px, shown "
+         "live), corner, shape, opacity, relief and contour lines.",
+         "Le bouton cube incline la carte en vue 3D. L'engrenage : taille de la mini-carte (48 à 160 px, en "
+         "direct), coin, forme, opacité, relief et courbes de niveau."),
     ], ["wayfarers:wayfarer_atlas"]),
     ("recall", "travel", "wayfarers:recall_scroll", ("Recall Scroll", "Parchemin de rappel"), [
         ("Use it to return instantly to the nearest waystone of your dimension. It is used up.",
