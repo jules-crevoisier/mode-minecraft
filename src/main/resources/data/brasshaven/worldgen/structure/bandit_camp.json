@@ -11,6 +11,12 @@
           "weight": 10,
           "minCount": 1,
           "maxCount": 3
+        },
+        {
+          "type": "brasshaven:bandit_marksman",
+          "weight": 8,
+          "minCount": 1,
+          "maxCount": 2
         }
       ]
     }

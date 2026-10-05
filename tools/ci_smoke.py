@@ -301,6 +301,8 @@ def exercise_mod(srv, failures):
         summon_all(srv, failures)
     with Phase("creatures fighting"):
         creatures_fight(srv, failures)
+    with Phase("peoples and creatures of the places"):
+        peoples_and_creatures(srv, failures)
     with Phase("server performance"):
         server_performance(srv, failures)
     with Phase("blocks and loot"):
@@ -487,6 +489,63 @@ def creatures_fight(srv, failures):
     if not res or "Sprint completed" not in res:
         failures.append(f"tick sprint: {res}")
     srv.run("execute in minecraft:overworld run kill @e[type=!minecraft:player]", r"Killed|No entity", 60)
+
+
+# The peoples of the places (wf/denizens.py): every role of every people, a guard of each people against a husk
+# (the husk must die: the guards defend), and each new creature brawling with a dwarven guard (their attacks, grabs,
+# beams and fire trails run; any exception lands in the log).
+PEOPLES = {"dwarf": ["smith", "miner", "brewer", "gemcutter", "guard"],
+           "sylvan": ["gardener", "herbalist", "woodwright", "warden"],
+           "clockwork_citizen": ["gearwright", "mechanic", "chronometrist", "sentinel"],
+           "monk": ["scribe", "healer", "cook", "warden"]}
+GUARDS = {"dwarf": "guard", "sylvan": "warden", "clockwork_citizen": "sentinel", "monk": "warden"}
+CREATURES = ["bandit_marksman", "sky_raider", "barnacle_crab", "lantern_wisp", "cinder_hound", "rift_sentinel"]
+
+
+def peoples_and_creatures(srv, failures):
+    x0, z0 = 600, 600
+    ground = -60  # the flat test world: grass on top at y -61
+    srv.run(f"execute in minecraft:overworld run forceload add {x0 - 16} {z0 - 16} {x0 + 112} {z0 + 112}",
+            r"Marked|forceload|No chunks|already|too many|Too many", 300)
+    srv.run("execute in minecraft:overworld run kill @e[type=!minecraft:player]", r"Killed|No entity", 60)
+    i = 0
+    for people, roles in PEOPLES.items():
+        for role in roles:
+            x, z = x0 + (i % 8) * 6, z0 + (i // 8) * 6
+            res = srv.run(f'execute in minecraft:overworld run summon brasshaven:{people} {x} {ground} {z} '
+                          f'{{Role:"{role}",Tags:["bh_folk"]}}', r"Summoned|Unable|Unknown|Invalid|Incorrect|not loaded", 30)
+            if not res or "Summoned" not in res:
+                failures.append(f"summon {people} ({role}): {res}")
+            i += 1
+    # a guard of each people, a husk in front of it (husks do not burn in daylight)
+    for k, (people, guard) in enumerate(GUARDS.items()):
+        x, z = x0 + k * 16, z0 + 40
+        srv.run(f'execute in minecraft:overworld run summon brasshaven:{people} {x} {ground} {z} {{Role:"{guard}"}}',
+                r"Summoned|Unable|Unknown|Invalid|not loaded", 30)
+        srv.run(f'execute in minecraft:overworld run summon minecraft:husk {x} {ground} {z + 5} '
+                f'{{Tags:["bh_folk_foe"],PersistenceRequired:1b}}', r"Summoned|Unable|Invalid|not loaded", 30)
+    # each creature against a dwarven guard and a monk warden
+    for k, cid in enumerate(CREATURES):
+        x, z = x0 + k * 16, z0 + 80
+        res = srv.run(f"execute in minecraft:overworld run summon brasshaven:{cid} {x} {ground} {z} {{PersistenceRequired:1b}}",
+                      r"Summoned|Unable|Unknown|Invalid|not loaded", 30)
+        if not res or "Summoned" not in res:
+            failures.append(f"summon {cid}: {res}")
+        srv.run(f'execute in minecraft:overworld run summon brasshaven:dwarf {x + 3} {ground} {z} {{Role:"guard"}}',
+                r"Summoned|Unable|Invalid|not loaded", 30)
+        srv.run(f'execute in minecraft:overworld run summon brasshaven:monk {x - 3} {ground} {z} {{Role:"warden"}}',
+                r"Summoned|Unable|Invalid|not loaded", 30)
+    res = srv.run("tick sprint 600", r"Sprint completed|Unknown|Incorrect", 600)
+    if not res or "Sprint completed" not in res:
+        failures.append(f"tick sprint (peoples): {res}")
+    res = srv.run("execute in minecraft:overworld if entity @e[tag=bh_folk_foe]", r"Test passed|Test failed", 30)
+    if res and "Test passed" in res:
+        failures.append(f"guards did not defend: husks still alive after 30 s ({res})")
+    res = srv.run("execute in minecraft:overworld if entity @e[tag=bh_folk]", r"Test passed|Test failed", 30)
+    if not res or "count: 17" not in res:
+        failures.append(f"residents lost (17 expected, nothing attacked them): {res}")
+    srv.run("execute in minecraft:overworld run kill @e[type=!minecraft:player]", r"Killed|No entity", 60)
+    srv.run("execute in minecraft:overworld run forceload remove all", r"Unmarked|forceload|No chunks", 30)
 
 
 # Server performance check: a crowded base (PERF_MACHINES machines working a wheat field) and PERF_AUTOMATONS

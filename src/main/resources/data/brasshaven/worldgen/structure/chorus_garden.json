@@ -2,7 +2,25 @@
   "type": "brasshaven:fitted_jigsaw",
   "biomes": "#brasshaven:has_structure/chorus_garden",
   "step": "surface_structures",
-  "spawn_overrides": {},
+  "spawn_overrides": {
+    "monster": {
+      "bounding_box": "piece",
+      "spawns": [
+        {
+          "type": "brasshaven:rift_sentinel",
+          "weight": 4,
+          "minCount": 1,
+          "maxCount": 1
+        },
+        {
+          "type": "minecraft:enderman",
+          "weight": 10,
+          "minCount": 1,
+          "maxCount": 2
+        }
+      ]
+    }
+  },
   "terrain_adaptation": "none",
   "start_pool": "brasshaven:chorus_garden/start",
   "size": 1,

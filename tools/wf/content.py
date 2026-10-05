@@ -597,3 +597,11 @@ def _ocean():
 
 
 _ocean()
+
+
+def _denizens():
+    from .denizens import register_content
+    register_content(ITEMS, ENTITIES, SPAWN_EGGS)
+
+
+_denizens()

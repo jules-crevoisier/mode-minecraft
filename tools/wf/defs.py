@@ -22,7 +22,7 @@ class StructureDef:
                  step="surface_structures", adaptation="beard_thin", heightmap="WORLD_SURFACE_WG",
                  height_offset=0, height=None, size=1, extra_pools=None, processors="aging",
                  max_distance=80, exclusion=None, title_fr="", title_en="", ground=0, spawns=None,
-                 foundation=True, peaceful=False):
+                 foundation=True, peaceful=False, creatures=None):
         self.id = sid
         self.dimension = dimension
         self.biomes = biomes
@@ -50,6 +50,10 @@ class StructureDef:
         self.peaceful = peaceful
         if peaceful and self.spawns:
             raise ValueError(f"{sid}: a peaceful structure cannot list monster spawns")
+        # the creatures of wf/denizens.py waiting in the start pieces: [(creature id, count)]
+        self.creatures = creatures or []
+        if peaceful and self.creatures:
+            raise ValueError(f"{sid}: a peaceful structure cannot hold monsters")
         # extend ground-layer columns downwards so the structure never floats on a slope
         self.foundation = foundation
 

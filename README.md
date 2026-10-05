@@ -258,6 +258,32 @@ Pour la pioche et la hache, s'accroupir désactive l'effet de zone.
 | **Braise** | Immunité au feu, rapide dans la lave. |
 | **Vide** | Chute lente ; le vide de l'End te ramène au lieu de te tuer. |
 
+### Les peuples et les créatures des lieux
+
+![Les peuples](docs/bestiary/peoples.png)
+
+Les grands lieux sont habités par leur propre peuple, chacun avec son modèle 3D, ses rôles et ses animations de travail. Clic droit sur un habitant : l'écran d'échange de Minecraft, avec des offres à thème qui reviennent au bout d'une demi-journée.
+
+| Peuple | Où | Rôles | Ce qu'ils vendent |
+|---|---|---|---|
+| **Nains** | Cité naine des profondeurs, mine naine | forgeron, mineur, brasseur, lapidaire, garde | outils et armures, minerais bruts, lithite, pain et potions, gemmes |
+| **Sylvains** | Palais sylvain, Arbre-monde creux | jardinier, herboriste, boisier, gardien (archer) | pousses de bois-lueur, fleurs, potions de soin, arcs et flèches |
+| **Citoyens mécaniques** | Citadelle d'horlogerie | engrenier, mécanicien, chronométreur, sentinelle | rouages et laiton, pistons et tuyaux, horloges, montres de poche, boussole des structures |
+| **Moines** | Monastère des cimes | copiste, guérisseur, cuisinier, gardien | papier et livres, fragments de carte, potions, pommes dorées, pain et tartes |
+
+Les ouvriers marchent d'un poste de travail à l'autre (enclume, minerai, compostière, lutrin…) et y travaillent ; les marchands restent à leur étal. Les **gardes** attaquent les monstres qui approchent et quiconque frappe un habitant : frappe-en un, et plus personne ne commerce avec toi pendant trois minutes. Les habitants ne disparaissent jamais, restent chez eux et fuient les monstres.
+
+![Les créatures des lieux](docs/bestiary/creatures_of_places.png)
+
+| Créature | Où | Sa ruse |
+|---|---|---|
+| **Tireur bandit** | Camps de bandits, tours de guet en ruine | Garde ses distances et vise juste ; de près, bombe fumigène et bond en arrière. |
+| **Pillard du ciel** | Îles célestes | Crie, plonge, t'attrape et t'emporte avant de te lâcher ; s'il rate son piqué, il reste sonné. |
+| **Crabe à bernacles** | Temples, citadelle, épaves engloutis | Grimpe aux murs sous l'eau, t'immobilise dans sa pince, se cache dans sa carapace. |
+| **Feu follet** | Catacombes, hypogée des sables | Éteint bougies et feux de camp pour devenir plus fort ; fuit les torches tenues en main. |
+| **Molosse de cendre** | Forteresse de basalte, fonderie de lave, pont de chaînes | Chasse en meute : hurlement qui accélère la meute, charge qui laisse une traînée de feu. |
+| **Sentinelle de la faille** | Archives, observatoires, épaves et jardins de l'End | Rayon annoncé par une ligne pointillée qui t'attire vers elle ; se téléporte quand on la frappe. |
+
 ### Les boss, façon Elden Ring
 
 ![Bestiaire](docs/bestiary/all.png)

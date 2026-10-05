@@ -921,6 +921,13 @@ def main():
             lives.setdefault(e, [])
             if s.id not in lives[e]:
                 lives[e].append(s.id)
+    # the peoples and creatures of the places wait in the templates (wf/denizens.py)
+    from wf import denizens as DZ
+    for d in DZ.ALL_IDS:
+        for h in (DZ.PEOPLES.get(d) or DZ.CREATURES.get(d))["homes"]:
+            lives.setdefault("brasshaven:" + d, [])
+            if h not in lives["brasshaven:" + d]:
+                lives["brasshaven:" + d].append(h)
     spawn_biomes = biome_spawns()
 
     sec = []  # html sections
@@ -1251,24 +1258,25 @@ def main():
 
     # ================================================================== BESTIARY
     from wf import ocean as OC
-    groups = {"boss": [], "champion": [], "creature": [], "sea": [], "companion": []}
+    groups = {"boss": [], "champion": [], "folk": [], "creature": [], "sea": [], "companion": []}
     for mid in list(content.ENTITIES) + [m for m in mob_info if m not in content.ENTITIES]:
         if mid not in mob_info:
             continue
         st = entity_stats(mid)
         if st["hp"] is None and mid in TXT.MOB_HP:
             st["hp"] = TXT.MOB_HP[mid]
-        kind = ("boss" if mid in gear else "champion" if st["boss"] else
+        kind = ("boss" if mid in gear else "champion" if st["boss"] else "folk" if mid in DZ.PEOPLES else
                 "companion" if mid in TXT.COMPANIONS else "sea" if mid in OC.ENTITIES else "creature")
         text = TXT.MOBS.get(mid) or st["doc"]
         badge = TXT.MOB_BADGE.get(mid) or {"boss": "Boss", "champion": "Champion de donjon", "creature": "Créature",
-                                           "sea": "Créature marine", "companion": "Compagnon"}[kind]
+                                           "sea": "Créature marine", "companion": "Compagnon",
+                                           "folk": "Habitant"}[kind]
         groups[kind].append(mob_card(ctx, mid, kind, badge, st, text))
         idx.add(name(mid), badge, f"b-{mid}", text)
     sec.append(section_oceans(ctx))
     sec.append(f'''<section class="block" id="bestiaire">
   {plaque("bestiaire-h", "Danger", "Bestiaire", "Toutes les créatures du mod, avec leur vrai modèle 3D. Les boss ont deux phases : à mi-vie ils rugissent puis changent de rythme. Chaque attaque est annoncée (animation ou cercle au sol) : observe, esquive, punis. Frapper fort et souvent brise leur posture (+50 % de dégâts). En coop, leur vie augmente de 60 % par joueur.")}
-  {"".join(f'<h3 class="subhead" id="bestiaire-{k}">{t}</h3><div class="grid mobs">{"".join(groups[k])}</div>' for k, t in (("boss", "Les grands boss"), ("champion", "Les champions de donjon"), ("creature", "Les créatures"), ("sea", "Les créatures marines"), ("companion", "Les compagnons")) if groups[k])}
+  {"".join(f'<h3 class="subhead" id="bestiaire-{k}">{t}</h3><div class="grid mobs">{"".join(groups[k])}</div>' for k, t in (("boss", "Les grands boss"), ("champion", "Les champions de donjon"), ("folk", "Les peuples des grands lieux"), ("creature", "Les créatures"), ("sea", "Les créatures marines"), ("companion", "Les compagnons")) if groups[k])}
 </section>''')
 
     # ================================================================== STRUCTURES
@@ -1297,7 +1305,9 @@ def main():
             dim = "Profondeurs · sous terre"
         elif s.heightmap.startswith("OCEAN"):
             dim += " · sous l'eau"
-        who = list(dict.fromkeys(si["bosses"] + si["spawners"] + [sp[0] for sp in s.spawns]))
+        who = list(dict.fromkeys(si["bosses"] + si["spawners"] + [sp[0] for sp in s.spawns]
+                                 + [f"brasshaven:{d}" for d in DZ.ALL_IDS
+                                    if s.id in (DZ.PEOPLES.get(d) or DZ.CREATURES.get(d))["homes"]]))
         who_html = "".join(f'<a class="chip" href="#b-{w.split(":")[1]}">{atlas.icon(w, 24)}<span>{E(name(w))}</span></a>'
                            if w.startswith("brasshaven:") and w.split(":")[1] in mob_info else
                            f'<span class="chip">{atlas.icon(w + "_spawn_egg", 24, label=name(w))}<span>{E(name(w))}</span></span>'
@@ -1471,6 +1481,31 @@ def mob_where(ctx, mid):
     return ", ".join(parts)
 
 
+def folk_trades(ctx, mid):
+    """What each role of a people sells and buys (wf/denizens.py), as a folded table."""
+    from wf import denizens as DZ
+
+    def stack(spec):
+        if spec is None:
+            return ""
+        iid, n = spec
+        if iid.startswith("potion:"):
+            label = "Potion (" + iid.split(":", 1)[1].replace("_", " ") + ")"
+            return f'{ctx.atlas.icon("minecraft:potion", 22)}<span>{n} × {E(label)}</span>'
+        return f'{ctx.atlas.icon(iid, 22)}<span>{n} × {E(name(iid))}</span>'
+    rows = []
+    for role, trades in DZ.wiki_trades(mid):
+        for a, b, r in trades:
+            cost = stack(a) + (" + " + stack(b) if b else "")
+            rows.append(f'<tr><td>{E(role)}</td><td><span class="chip">{cost}</span></td>'
+                        f'<td><span class="chip">{stack(r)}</span></td></tr>')
+    return (f'<details class="moves-box"><summary>Ce qu\'ils vendent et achètent</summary>'
+            f'<p class="small">Clic droit sur un habitant : l\'écran d\'échange de Minecraft. Les stocks reviennent '
+            f'au bout d\'une demi-journée. Les gardes ne commercent pas, ils défendent les lieux.</p>'
+            f'<div class="scroll"><table class="tbl moves"><thead><tr><th>Rôle</th><th>Tu donnes</th><th>Tu reçois</th></tr>'
+            f'</thead><tbody>{"".join(rows)}</tbody></table></div></details>')
+
+
 def moves_table(mid):
     rows = TXT.BOSS_MOVES.get(mid, [])
     if not rows:
@@ -1494,6 +1529,8 @@ def mob_card(ctx, mid, kind, badge, st, text):
     if mid in TXT.BOSS_MOVES:
         moves = (f'<details class="moves-box"><summary>Ses attaques, phase par phase</summary>'
                  f'<p class="small">{E(TXT.BOSS_FACTS.get(mid, ""))}</p>{moves_table(mid)}</details>')
+    if kind == "folk":
+        moves = folk_trades(ctx, mid)
     return f'''<article class="card mob {kind}" id="b-{mid}">
   <figure class="vitrine"><img src="{ctx.mob_info[mid]["gif"]}" alt="{E(name(mid), quote=True)} en rotation" width="260" height="260" loading="lazy"></figure>
   <div class="mob-body"><span class="badge {kind}">{badge}</span><h4>{E(name(mid))}</h4>

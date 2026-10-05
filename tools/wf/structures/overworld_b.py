@@ -732,18 +732,20 @@ def giant_tree(v):
             arch.boulder(bp, x, 1, z, r=2, seed=s, blocks=("mossy_cobblestone", "cobblestone", "andesite", "tuff"))
 
         # ---------------------------------------------------------------- the forest folk of the World Tree
-        # druid-robed villagers (swamp type) on the trunk floors and the crown deck, each with a bed and a job
-        # site; the Druid gives contracts on the bunk floor (the ground hall sits on the spider cellar)
+        # sylvans (wf/denizens.py) on the trunk floors and the crown deck, each with a bed and a job block, a
+        # warden on the bunk floor and one on the crown deck; the Druid gives contracts on the bunk floor (the
+        # ground hall sits on the spider cellar)
         def floor_r(y, r=9):
             return ((-r, y, -r), (r, y, r))
         I.quest_npc_in(bp, "druid", region=floor_r(LEVELS[0] + 1), seed=v["seed"])
-        I.populate(bp, [("fletcher", 2), ("farmer", 3)], region=floor_r(LEVELS[0] + 1), vtype="swamp",
-                   seed=1, bed_colour="green")
-        I.populate(bp, [("librarian", 3)], region=floor_r(LEVELS[1] + 1), vtype="swamp", seed=2, bed_colour="lime")
-        I.populate(bp, [("cartographer", 3)], region=floor_r(LEVELS[2] + 1), vtype="swamp", seed=3,
-                   bed_colour="brown")
-        I.populate(bp, [("cleric", 4), ("shepherd", 2)], region=floor_r(TOP + 1, 11), vtype="swamp", seed=4,
-                   bed_colour="green")
+        I.populate(bp, ["woodwright", "gardener"], region=floor_r(LEVELS[0] + 1), vtype="swamp",
+                   seed=1, bed_colour="green", folk="sylvan", guard=("sylvan", (4, LEVELS[0] + 1, -4)))
+        I.populate(bp, ["herbalist"], region=floor_r(LEVELS[1] + 1), vtype="swamp", seed=2, bed_colour="lime",
+                   folk="sylvan")
+        I.populate(bp, ["woodwright"], region=floor_r(LEVELS[2] + 1), vtype="swamp", seed=3,
+                   bed_colour="brown", folk="sylvan")
+        I.populate(bp, ["herbalist", "gardener"], region=floor_r(TOP + 1, 11), vtype="swamp", seed=4,
+                   bed_colour="green", folk="sylvan", guard=("sylvan", (-5, TOP + 1, 5)))
         # ---------------------------------------------------------------- lived-in rooms in the hollow trunk
         I.decorate(bp, dict(I.THEMES["home"], wood=deck), seed=v["seed"])
 
@@ -2130,6 +2132,7 @@ register(StructureDef(
     "sky_island", "overworld", ["plains", "meadow", "#minecraft:is_forest", "savanna", "cherry_grove",
                                  "sunflower_plains"],
     [Piece("island", sky_island)], spacing=34, separation=12, adaptation="none", processors="none",
+    spawns=[("brasshaven:sky_raider", 10, 1, 2), ("minecraft:skeleton", 5, 1, 1)], creatures=[("sky_raider", 2)],
     title_fr="Île céleste", title_en="Sky Island"))
 
 

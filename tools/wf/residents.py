@@ -17,7 +17,9 @@ from . import support
 from . import interior as I
 from .blueprint import OPPOSITE
 
-RESIDENTS = ("minecraft:villager", "brasshaven:wayfarer_npc", "minecraft:wandering_trader")
+# villagers, quest givers, wandering traders and the peoples of wf/denizens.py (dwarves, sylvans...)
+RESIDENTS = ("minecraft:villager", "brasshaven:wayfarer_npc", "minecraft:wandering_trader", "brasshaven:dwarf",
+             "brasshaven:sylvan", "brasshaven:clockwork_citizen", "brasshaven:monk")
 # a spawner activates when a player is within 14 blocks and puts its mobs within 4 blocks of itself
 SPAWNER_CLEARANCE = 12
 HARMFUL_FLOOR = ("magma_block", "campfire", "fire", "lava", "cactus", "sweet_berry_bush", "powder_snow",
@@ -51,6 +53,13 @@ def check_piece(bp, ctx):
     """[(kind, pos, message)] for unsafe residents of one blueprint (blueprint coordinates)."""
     chk = support.Checker(bp.blocks, ctx)
     spawners = [p for p, b in bp.blocks.items() if b[0] in ("minecraft:spawner", "minecraft:trial_spawner")]
+    # the creatures of wf/denizens.py waiting in the template: as far from the residents as a spawner
+    from .denizens import CREATURES
+    monsters = []
+    for (x, y, z), d in bp.entities:
+        eid = str(getattr(d.get("id"), "value", d.get("id")))
+        if eid.startswith("brasshaven:") and eid.split(":", 1)[1] in CREATURES:
+            monsters.append(((int(math.floor(x)), int(math.floor(y)), int(math.floor(z))), eid.split(":", 1)[1]))
     out = []
     for p, eid, _ in residents(bp):
         x, y, z = p
@@ -68,16 +77,19 @@ def check_piece(bp, ctx):
         for s in spawners:
             if math.dist(p, s) < SPAWNER_CLEARANCE:
                 out.append(("residents", p, f"{who} lives {math.dist(p, s):.1f} blocks from a spawner at {s}"))
+        for c, cid in monsters:
+            if math.dist(p, c) < SPAWNER_CLEARANCE:
+                out.append(("residents", p, f"{who} lives {math.dist(p, c):.1f} blocks from a {cid} at {c}"))
     return out
 
 
 def count(bps):
-    """(villagers, quest givers, beds) over blueprints."""
+    """(villagers, other residents (quest givers, the peoples of wf/denizens.py), beds) over blueprints."""
     v = n = beds = 0
     for bp in bps:
         for _, eid, _ in residents(bp):
             v += eid == "minecraft:villager"
-            n += eid == "brasshaven:wayfarer_npc"
+            n += eid != "minecraft:villager" and eid != "minecraft:wandering_trader"
         beds += sum(1 for b in bp.blocks.values() if b[0].endswith("_bed") and b[1].get("part") == "head")
     return v, n, beds
 

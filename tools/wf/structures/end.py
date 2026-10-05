@@ -802,6 +802,7 @@ def void_observatory(bp):
 register(StructureDef(
     "void_observatory", "end", OUTER_END, [Piece("observatory", void_observatory)],
     spacing=20, separation=6, adaptation="none", height=("uniform", 60, 85), processors="aging",
+    spawns=[("brasshaven:rift_sentinel", 5, 1, 1), ("minecraft:enderman", 10, 1, 2)], creatures=[("rift_sentinel", 2)],
     title_fr="Observatoire du vide", title_en="Void Observatory"))
 
 
@@ -1115,6 +1116,7 @@ def chorus_garden(bp):
 register(StructureDef(
     "chorus_garden", "end", OUTER_END, [Piece("garden", chorus_garden)],
     spacing=18, separation=5, adaptation="none", height=("uniform", 55, 80), processors="none",
+    spawns=[("brasshaven:rift_sentinel", 4, 1, 1), ("minecraft:enderman", 10, 1, 2)], creatures=[("rift_sentinel", 1)],
     title_fr="Jardin flottant de chorus", title_en="Floating Chorus Garden"))
 
 
@@ -1461,7 +1463,9 @@ def end_archive(bp):
 register(StructureDef(
     "end_archive", "end", OUTER_END, [Piece("archive", end_archive)],
     spacing=22, separation=7, adaptation="none", height=("uniform", 50, 70), processors="aging",
-    title_fr="Archive de l'End", title_en="End Archive", spawns=[("brasshaven:void_stalker", 10, 1, 2)]))
+    title_fr="Archive de l'End", title_en="End Archive",
+    spawns=[("brasshaven:void_stalker", 10, 1, 2), ("brasshaven:rift_sentinel", 5, 1, 1)],
+    creatures=[("rift_sentinel", 2)]))
 
 
 # ================================================================== Void ship wreck
@@ -1778,6 +1782,7 @@ def void_ship(bp):
 register(StructureDef(
     "void_ship", "end", OUTER_END, [Piece("ship", void_ship)],
     spacing=24, separation=8, adaptation="none", height=("uniform", 55, 80), processors="none",
+    spawns=[("brasshaven:rift_sentinel", 5, 1, 1), ("minecraft:enderman", 8, 1, 2)], creatures=[("rift_sentinel", 2)],
     title_fr="Épave du vide", title_en="Void Ship Wreck"))
 
 

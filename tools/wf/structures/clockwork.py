@@ -12,6 +12,7 @@ import math
 
 from .. import arch
 from .. import interior as INT
+from .. import denizens
 from ..arch import stair
 from ..blueprint import with_props
 from ..defs import Piece, StructureDef, register
@@ -442,23 +443,24 @@ def citadel():
                     bp.set(x, 3, z, EDISON)
         # the stair in the tower hall down to the Gearworks and the Clock Vault (lair_grand_clockmaker.py)
         lair_grand_clockmaker.build(bp)
-        # ---- the guild of clockmakers still at work: smiths in the halls, a librarian in the archive,
-        # two Brass Golems guarding the plaza
+        # ---- the clockwork citizens (wf/denizens.py) still at work: gearwrights and mechanics in the halls,
+        # chronometrists in the clock tower, sentinels and two Brass Golems guarding the plaza
         for i, face in enumerate(SIDES):
             x0, z0 = _local(face, 12, -5)
             x1, z1 = _local(face, 29, 5)
             hall_r = ((min(x0, x1), 1, min(z0, z1)), (max(x0, x1), 6, max(z0, z1)))
-            INT.populate(bp, [("toolsmith", "armorer", "weaponsmith", "toolsmith")[i],
-                              ("mason", "fletcher", "leatherworker", "cartographer")[i]],
-                         region=hall_r, vtype="savanna", seed=i)
+            INT.populate(bp, [("gearwright", "mechanic", "mechanic", "gearwright")[i],
+                              ("mechanic", "gearwright", "chronometrist", "mechanic")[i]],
+                         region=hall_r, vtype="savanna", seed=i, folk="clockwork_citizen")
             if i == 0:
                 # the master Tinkerer gives contracts in the first workshop hall (wf/npcs.py)
                 INT.quest_npc_in(bp, "tinkerer", region=hall_r, seed=1)
             INT.decorate(bp, "steampunk", seed=i, region=hall_r)
         tower_r = ((-T, 1, -T), (T, CLOCK_Y, T))
-        INT.populate(bp, [("librarian", 3), ("cartographer", 3)], region=tower_r, vtype="savanna", seed=9,
-                     bell=(9, 1, 0), guard=("brass", (10, 1, -10)))
+        INT.populate(bp, ["chronometrist", "gearwright"], region=tower_r, vtype="savanna", seed=9,
+                     bell=(9, 1, 0), guard=("brass", (10, 1, -10)), folk="clockwork_citizen")
         INT.brass_golem(bp, *INT.open_spot(bp, (-10, 1, 10)))
+        denizens.guards(bp, "clockwork_citizen", [(-10, 1, -10), (-12, 1, 2)])
         INT.decorate(bp, "steampunk", seed=9, region=tower_r)
         INT.decorate(bp, dict(INT.THEMES["workshop"], ceiling="edison"), seed=10, region=((-60, -60, -60), (60, 0, 60)),
                      density=0.2)

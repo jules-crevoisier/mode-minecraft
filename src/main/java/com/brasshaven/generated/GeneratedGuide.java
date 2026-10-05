@@ -21,7 +21,8 @@ public final class GeneratedGuide {
             new Category("machines", "brasshaven:auto_harvester"),
             new Category("gadgets", "brasshaven:brass_wrench"),
             new Category("oceans", "brasshaven:diving_helmet"),
-            new Category("multiplayer", "brasshaven:pneumatic_post")
+            new Category("multiplayer", "brasshaven:pneumatic_post"),
+            new Category("peoples", "minecraft:emerald")
     );
 
     public static final List<Page> PAGES = List.of(
@@ -110,7 +111,18 @@ public final class GeneratedGuide {
             new Page("pneumatic_post", "multiplayer", "brasshaven:pneumatic_post", 3, List.of("brasshaven:pneumatic_post", "brasshaven:brass_nugget")),
             new Page("contract_board", "multiplayer", "brasshaven:contract_board", 3, List.of("brasshaven:contract_board")),
             new Page("emotes", "multiplayer", "minecraft:note_block", 2, List.of()),
-            new Page("duels", "multiplayer", "minecraft:iron_sword", 3, List.of())
+            new Page("duels", "multiplayer", "minecraft:iron_sword", 3, List.of()),
+            new Page("peoples", "peoples", "minecraft:emerald", 4, List.of("minecraft:emerald")),
+            new Page("dwarf", "peoples", "brasshaven:dwarf_spawn_egg", 3, List.of("brasshaven:dwarf_spawn_egg")),
+            new Page("sylvan", "peoples", "brasshaven:sylvan_spawn_egg", 3, List.of("brasshaven:sylvan_spawn_egg")),
+            new Page("clockwork_citizen", "peoples", "brasshaven:clockwork_citizen_spawn_egg", 3, List.of("brasshaven:clockwork_citizen_spawn_egg")),
+            new Page("monk", "peoples", "brasshaven:monk_spawn_egg", 3, List.of("brasshaven:monk_spawn_egg")),
+            new Page("bandit_marksman", "peoples", "brasshaven:bandit_marksman_spawn_egg", 1, List.of("brasshaven:bandit_marksman_spawn_egg")),
+            new Page("sky_raider", "peoples", "brasshaven:sky_raider_spawn_egg", 1, List.of("brasshaven:sky_raider_spawn_egg")),
+            new Page("barnacle_crab", "peoples", "brasshaven:barnacle_crab_spawn_egg", 1, List.of("brasshaven:barnacle_crab_spawn_egg")),
+            new Page("lantern_wisp", "peoples", "brasshaven:lantern_wisp_spawn_egg", 1, List.of("brasshaven:lantern_wisp_spawn_egg")),
+            new Page("cinder_hound", "peoples", "brasshaven:cinder_hound_spawn_egg", 1, List.of("brasshaven:cinder_hound_spawn_egg")),
+            new Page("rift_sentinel", "peoples", "brasshaven:rift_sentinel_spawn_egg", 1, List.of("brasshaven:rift_sentinel_spawn_egg"))
     );
 
     public static final List<Tip> TIPS = List.of(

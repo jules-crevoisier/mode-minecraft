@@ -41,6 +41,17 @@ from . import sea_serpent
 from . import whale
 # quest givers
 from . import wayfarer_npc
+# peoples and creatures of the places (wf/denizens.py)
+from . import dwarf
+from . import sylvan
+from . import clockwork_citizen
+from . import monk
+from . import bandit_marksman
+from . import sky_raider
+from . import barnacle_crab
+from . import lantern_wisp
+from . import cinder_hound
+from . import rift_sentinel
 
 MODELS = [
     drowned_warden.build,
@@ -83,4 +94,14 @@ MODELS = [
     sea_serpent.build,
     whale.build,
     wayfarer_npc.build,
+    dwarf.build,
+    sylvan.build,
+    clockwork_citizen.build,
+    monk.build,
+    bandit_marksman.build,
+    sky_raider.build,
+    barnacle_crab.build,
+    lantern_wisp.build,
+    cinder_hound.build,
+    rift_sentinel.build,
 ]

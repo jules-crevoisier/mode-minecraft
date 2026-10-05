@@ -194,6 +194,7 @@ def submarine(bp):
 register(StructureDef(
     "sunken_submarine", "overworld", ["#minecraft:is_ocean"], [Piece("submarine", submarine)],
     spacing=26, separation=8, heightmap="OCEAN_FLOOR_WG", adaptation="none", processors="none",
+    spawns=[("brasshaven:barnacle_crab", 8, 1, 1), ("minecraft:drowned", 6, 1, 1)], creatures=[("barnacle_crab", 2)],
     title_fr="Sous-marin englouti", title_en="Sunken Submarine"))
 
 
@@ -450,4 +451,5 @@ def shipwreck_debris(bp):
 register(StructureDef(
     "shipwreck_debris", "overworld", ["#minecraft:is_ocean", "#minecraft:is_beach"],
     [Piece("debris", shipwreck_debris)], spacing=18, separation=6, heightmap="OCEAN_FLOOR_WG", adaptation="none",
-    processors="none", title_fr="Débris de naufrage", title_en="Shipwreck Debris"))
+    processors="none", creatures=[("barnacle_crab", 1)],
+    title_fr="Débris de naufrage", title_en="Shipwreck Debris"))

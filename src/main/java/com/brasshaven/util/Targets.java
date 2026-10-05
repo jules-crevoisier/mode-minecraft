@@ -20,6 +20,7 @@ public final class Targets {
     public static boolean friendly(Entity e) {
         return e instanceof Player || e instanceof ArmorStand || e instanceof AbstractVillager || e instanceof IronGolem
                 || e instanceof SnowGolem || e instanceof Allay || e instanceof com.brasshaven.entity.WayfarerNpc
+                || e instanceof com.brasshaven.entity.folk.Resident
                 || (e instanceof OwnableEntity owned && owned.getOwnerReference() != null)
                 || (e instanceof AbstractHorse horse && horse.isTamed());
     }

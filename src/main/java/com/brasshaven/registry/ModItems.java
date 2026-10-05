@@ -186,6 +186,17 @@ public final class ModItems {
     public static final RegistryObject<Item> STEAM_DRONE_SPAWN_EGG = egg("steam_drone_spawn_egg", ModEntities.STEAM_DRONE);
     public static final RegistryObject<Item> BRASS_GOLEM_SPAWN_EGG = egg("brass_golem_spawn_egg", ModEntities.BRASS_GOLEM);
     public static final RegistryObject<Item> GRAND_CLOCKMAKER_SPAWN_EGG = egg("grand_clockmaker_spawn_egg", ModEntities.GRAND_CLOCKMAKER);
+    // peoples and creatures of the places (tools/wf/denizens.py)
+    public static final RegistryObject<Item> DWARF_SPAWN_EGG = egg("dwarf_spawn_egg", ModEntities.DWARF);
+    public static final RegistryObject<Item> SYLVAN_SPAWN_EGG = egg("sylvan_spawn_egg", ModEntities.SYLVAN);
+    public static final RegistryObject<Item> CLOCKWORK_CITIZEN_SPAWN_EGG = egg("clockwork_citizen_spawn_egg", ModEntities.CLOCKWORK_CITIZEN);
+    public static final RegistryObject<Item> MONK_SPAWN_EGG = egg("monk_spawn_egg", ModEntities.MONK);
+    public static final RegistryObject<Item> BANDIT_MARKSMAN_SPAWN_EGG = egg("bandit_marksman_spawn_egg", ModEntities.BANDIT_MARKSMAN);
+    public static final RegistryObject<Item> SKY_RAIDER_SPAWN_EGG = egg("sky_raider_spawn_egg", ModEntities.SKY_RAIDER);
+    public static final RegistryObject<Item> BARNACLE_CRAB_SPAWN_EGG = egg("barnacle_crab_spawn_egg", ModEntities.BARNACLE_CRAB);
+    public static final RegistryObject<Item> LANTERN_WISP_SPAWN_EGG = egg("lantern_wisp_spawn_egg", ModEntities.LANTERN_WISP);
+    public static final RegistryObject<Item> CINDER_HOUND_SPAWN_EGG = egg("cinder_hound_spawn_egg", ModEntities.CINDER_HOUND);
+    public static final RegistryObject<Item> RIFT_SENTINEL_SPAWN_EGG = egg("rift_sentinel_spawn_egg", ModEntities.RIFT_SENTINEL);
 
     /** Axe subclass keeps vanilla stripping behaviour; tree felling is handled in EquipmentEvents. */
     public static final class LumberAxe extends AxeItem {

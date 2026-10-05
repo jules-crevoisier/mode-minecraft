@@ -92,6 +92,11 @@ def save_piece(sdef, piece, bp, start, report):
 def build_piece(sdef, piece, start=False):
     bp = Blueprint(f"{sdef.id}/{piece.name}")
     piece.builder(bp)
+    if start and sdef.creatures:
+        # the creatures of the place wait in it (wf/denizens.py)
+        from wf import denizens
+        denizens.place_creatures(bp, sdef.creatures, seed=sdef.salt, ground=sdef.ground,
+                                 underground=sdef.step == "underground_structures" or sdef.dimension != "overworld")
     if start and needs_foundation(sdef):
         foundation.add_foundations(bp, sdef.ground)
         # stair-step earth bank around the footprint: shows only where the ground falls away (wf/foundation.py)

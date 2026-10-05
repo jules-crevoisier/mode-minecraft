@@ -189,6 +189,10 @@ def check_template_entity(rel, e, err):
         err(f"{rel}: entity {eid} without pos/blockPos")
     if "Rotation" in data and len(data["Rotation"]) != 2:
         err(f"{rel}: entity {eid} rotation must be [yaw, pitch]")
+    if ns == "brasshaven":
+        from wf import denizens
+        if eid in denizens.PEOPLES and data.get("Role") not in denizens.ROLE_ORDER[eid]:
+            err(f"{rel}: {eid} role {data.get('Role')} unknown (wf/denizens.py PEOPLES)")
     if ns == "brasshaven" and eid == "wayfarer_npc":
         from wf import npcs
         if data.get("Role") not in npcs.ROLES:
@@ -1162,6 +1166,23 @@ def check_progression():
             if f"`{step}`" not in text:
                 warnings.append(f"docs/PROGRESSION.md does not name the ladder step `{step}`")
 
+def check_denizens():
+    """The peoples' trades name real items, every people and creature has a model, a spawn egg and a loot table."""
+    from wf import denizens, mobs
+    known = {f"minecraft:{i}" for i in MC_GAME["items"]} | {f"brasshaven:{i}" for i in mod_ids("items")}
+    for e in denizens.check_trades(known):
+        err(f"denizens: {e}")
+    models = {b.__module__.rsplit(".", 1)[1] for b in mobs.MODELS}
+    for eid in denizens.ALL_IDS:
+        if eid not in models:
+            err(f"denizens: {eid} has no model in tools/wf/mobs")
+        if eid not in mod_ids("entities"):
+            err(f"denizens: {eid} is not registered in ModEntities")
+        if f"{eid}_spawn_egg" not in mod_ids("items"):
+            err(f"denizens: {eid} has no spawn egg")
+        if not os.path.exists(res_path(f"brasshaven:entities/{eid}", "loot_table", ".json")):
+            err(f"denizens: {eid} has no loot table")
+
 
 def check_release_files():
     """Recommended configs of the packs follow the config classes (tools/make_modpack.py)."""
@@ -1195,6 +1216,7 @@ def main():
     check_guide()
     check_progression()
     check_screen_fit()
+    check_denizens()
     import validate_world  # the Brasshaven biomes and terrain touches (tools/gen_world.py)
     for e in validate_world.check():
         err(f"world: {e}")
