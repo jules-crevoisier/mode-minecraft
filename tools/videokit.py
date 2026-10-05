@@ -13,7 +13,7 @@ from PIL import Image, ImageDraw, ImageFilter, ImageFont
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 VIDEO = os.path.join(ROOT, "build", "video")
 SRC = os.path.join(VIDEO, "src")
-CLIPS = os.path.join(VIDEO, "clips")
+CLIPS = os.environ.get("BRASSHAVEN_VIDEO_CLIPS") or os.path.join(VIDEO, "clips")
 WORK = os.path.join(VIDEO, "work")
 RENDERS = os.path.join(ROOT, "build", "wiki", "img", "s")
 MODELS = os.path.join(ROOT, "build", "previews", "models")

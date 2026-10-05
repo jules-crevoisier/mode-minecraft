@@ -244,7 +244,8 @@ def clip_or_still(src, t, dur, state, size):
     if src["type"] == "clip":
         reader = state.get(id(src))
         if reader is None:
-            reader = K.ClipReader(src["path"], src["start"], src["speed"], size)
+            # opened when the part first shows: at its start in a render, anywhere for an inspection still
+            reader = K.ClipReader(src["path"], src["start"] + t * src["speed"], src["speed"], size)
             state[id(src)] = reader
         img = reader.next()
         if src.get("cursor"):
@@ -433,18 +434,18 @@ def render_card(seg, t):
     if kind == "steps":
         illu_right = seg.get("illustration")
         width = 760 if illu_right else 1560
-        y = 330
+        y = 300
         for i, text in enumerate(seg["steps"]):
             t0 = 0.6 + i * seg.get("stagger", 0.9)
             u = K.ease_out((t - t0) / 0.45)
-            s = K.text_sprite(text, K.SANS, 42, fill=K.CREAM, width=width)
+            s = K.text_sprite(text, K.SANS, 39, fill=K.CREAM, width=width)
             if u > 0:
                 bx = 150 - (1 - u) * 80
                 n = badge(str(i + 1))
                 small = n.resize((96, 96), Image.LANCZOS)
                 K.paste(img, small, bx, y - 4, u)
                 K.paste(img, s, bx + 125, y - 2, u)
-            y += max(120, s.height + 34)
+            y += max(112, s.height + 22)
         if illu_right:
             ILLUSTRATIONS[illu_right](img, t, seg)
         return img
@@ -598,8 +599,9 @@ def illu_modpack(img, t, seg):
 
 def illu_server(img, t, seg):
     win = _window(700, 470, "serveur")
+    # the prompts of serverpack/start.sh
     lines = ["$ unzip brasshaven-server-<version>.zip", "$ java -version", '  openjdk version "25"', "$ ./start.sh",
-             "  Installation de Forge 65.1.0…", "  Accepter le CLUF de Minecraft ? (o/n) o", "  Done! Serveur prêt."]
+             "== Installation de Forge 26.2-65.1.0", "Acceptes-tu le CLUF de Minecraft ? [o/y/N] o", 'Done! For help, type "help"']
     f = K.font(K.MONO_BOLD, 22)
     d = ImageDraw.Draw(win)
     shown = (t - 0.8) / 0.55
@@ -778,8 +780,8 @@ def guide_segments():
         return seg
 
     # ---- opening
-    add({"kind": "hero", "dur": 7.0, "fin": 0.6, "fout": 0.4, "bell": (0.5, 74),
-         "src": first(clip("citadel", 7.0, 1.0), diorama("clockwork_citadel", zoom=(1.0, 1.08), drift=(520, 550))),
+    add({"kind": "hero", "dur": 5.625, "fin": 0.6, "fout": 0.4, "bell": (0.5, 74),
+         "src": first(clip("citadel", 5.625, 1.0), diorama("clockwork_citadel", zoom=(1.0, 1.08), drift=(540, 570))),
          "title": "Brasshaven", "size": 160, "title_y": 300,
          "lines": [("Guide de démarrage", 56, K.CREAM),
                    ("Le mod d'exploration coop pour Minecraft 26.2 · Forge 65.1.0", 34, K.PARCHMENT)],
@@ -787,179 +789,174 @@ def guide_segments():
 
     # ---- 1. Installer
     ch = "1 · Installer"
-    add({"kind": "chapter", "dur": 2.6, "number": "1", "title": "Installer", "sub": "Ce qu'il te faut, et comment l'installer",
+    add({"kind": "chapter", "dur": 2.5, "number": "1", "title": "Installer", "sub": "Ce qu'il te faut, et comment l'installer",
          "hit": True})
-    add({"kind": "list", "dur": 7.0, "chapter": ch, "title": "Ce qu'il te faut", "stagger": 0.55, "art": "sky_harbour",
+    add({"kind": "list", "dur": 6.875, "chapter": ch, "title": "Ce qu'il te faut", "stagger": 0.55, "art": "sky_harbour",
          "rows": [("26.2", "Minecraft Java Edition 26.2", None),
                   ("65.1.0", "Forge 65.1.0", "l'installeur forge-26.2-65.1.0"),
                   ("25", "Java 25", "obligatoire pour un serveur"),
                   (".jar", "Le mod : brasshaven-<version>.jar", "un seul fichier, aucune autre bibliothèque")]})
-    add({"kind": "steps", "dur": 8.4, "chapter": ch, "title": "Le plus simple : l'app CurseForge", "illustration": "modpack",
-         "stagger": 1.1,
+    add({"kind": "steps", "dur": 7.5, "chapter": ch, "title": "Le plus simple : l'app CurseForge", "illustration": "modpack",
+         "stagger": 1.0,
          "steps": ["Télécharge brasshaven-modpack-<version>.zip (Releases GitHub).",
                    "Dans CurseForge : Create Custom Profile, puis Import, et choisis le zip.",
                    "Profil Minecraft 26.2 + Forge 65.1.0 prêt, mod et réglages compris."]})
-    add({"kind": "steps", "dur": 9.4, "chapter": ch, "title": "À la main, avec le launcher", "illustration": "mods",
-         "stagger": 1.0,
+    add({"kind": "steps", "dur": 8.75, "chapter": ch, "title": "À la main, avec le launcher", "illustration": "mods",
+         "stagger": 0.9,
          "steps": ["Lance forge-26.2-65.1.0-installer.jar : « Install client ».",
                    "Ouvre le dossier mods de ton jeu (.minecraft/mods).",
                    "Dépose brasshaven-<version>.jar dedans : un seul jar du mod.",
                    "Lance le profil Forge dans le launcher."]})
-    add({"kind": "steps", "dur": 8.4, "chapter": ch, "title": "Pour un serveur", "illustration": "server", "stagger": 1.0,
+    add({"kind": "steps", "dur": 9.375, "chapter": ch, "title": "Pour un serveur", "illustration": "server", "stagger": 0.9,
          "steps": ["Décompresse brasshaven-server-<version>.zip dans un dossier vide.",
                    "Installe Java 25, lance ./start.sh (ou start.bat) et accepte le CLUF.",
-                   "Même version du mod sur le serveur et chez chaque joueur."]})
-    add({"kind": "scene", "dur": 5.6, "chapter": ch,
-         "parts": [(5.6, first(clip("sky_harbour", 5.6), diorama("guild_outpost", zoom=(1.0, 1.06))))],
-         "captions": [(0.3, 5.4, "Les structures n'apparaissent que dans les régions jamais générées : crée un nouveau monde.",
-                       "Astuce")]})
+                   "Même version du mod sur le serveur et chez chaque joueur.",
+                   "Crée un nouveau monde : les structures n'apparaissent que là où rien n'a été généré."]})
 
     # ---- 2. Premiers pas
     ch = "2 · Premiers pas"
-    add({"kind": "chapter", "dur": 2.6, "number": "2", "title": "Premiers pas", "sub": "Le manuel, les touches, ta première quête",
+    add({"kind": "chapter", "dur": 2.5, "number": "2", "title": "Premiers pas", "sub": "Le manuel, les touches, ta première quête",
          "hit": True})
-    add({"kind": "scene", "dur": 9.4, "chapter": ch,
-         "parts": [(9.4, first(clip("manual", 9.4, gui=True),
+    add({"kind": "scene", "dur": 8.75, "chapter": ch,
+         "parts": [(8.75, first(clip("manual", 8.75, gui=True),
                               still("manual_welcome", (1.0, 1.02, (0.5, 0.5), (0.5, 0.5)),
                                     ([(0.5, 900, 560), (2.6, 1100, 648), (6.0, 1100, 648), (7.0, 175, 254)], [2.8, 7.2]),
                                     gui=True)))],
-         "captions": [(0.3, 4.6, "Première connexion : l'Atlas, le Manuel du Voyageur et la boussole des structures.",
+         "captions": [(0.3, 4.55, "Première connexion : l'Atlas, le Manuel du Voyageur et la boussole des structures.",
                        "Bienvenue"),
-                      (4.8, 9.3, "Survole un objet du mod, maintiens W (Z en AZERTY) : sa page s'ouvre.",
+                      (4.7, 8.65, "Survole un objet, maintiens W (Z en AZERTY) : sa page s'ouvre.",
                        "Astuce")]})
-    add({"kind": "keys", "dur": 10.0, "chapter": ch, "title": "Les touches à connaître",
+    add({"kind": "keys", "dur": 9.375, "chapter": ch, "title": "Les touches à connaître",
          "keys": [("J", "Journal de quêtes", None), ("K", "Talents", None), ("V", "Capacité active", None),
                   ("M", "Carte du monde", ","), ("H", "Mini-carte", None), ("Z", "Zoom mini-carte", "W"),
                   ("B", "Signal", None), ("O", "Compagnie", None), ("U", "Fiche d'un joueur", None),
                   ("Y", "Gestes", None), ("R", "Trier l'inventaire", None), ("N", "Anneau aimanté", None),
                   ("G", "Symétrie", None), ("W", "Page du manuel (maintenu)", "Z")],
          "note": "Touches d'un clavier QWERTY. Toutes se changent dans Options, Commandes, rubrique Brasshaven."})
-    add({"kind": "scene", "dur": 8.4, "chapter": ch,
-         "parts": [(8.4, first(clip("quest_journal", 8.4),
+    add({"kind": "scene", "dur": 8.125, "chapter": ch,
+         "parts": [(8.125, first(clip("quest_journal", 8.125, gui=True),
                               still("quest_journal", (1.0, 1.02, (0.5, 0.5), (0.5, 0.5)),
                                     ([(0.6, 700, 450), (1.6, 580, 322), (3.2, 580, 322), (4.4, 1010, 598)], [1.8, 4.7]),
                                     gui=True)))],
          "captions": [(0.3, 4.85, "Touche J : le journal de quêtes, cinq chapitres partagés par tout le serveur.", "Quêtes"),
-                      (5.05, 8.3, "« Suivre » épingle l'objectif en haut de l'écran.", "Suivi")]})
-    add({"kind": "scene", "dur": 6.4, "chapter": ch,
-         "parts": [(6.4, first(clip("hud_explore", 6.4), still("hud_minimap", (1.0, 1.10, (0.3, 0.3), (0.2, 0.2)))))],
-         "captions": [(0.3, 6.2, "La mini-carte : terrain, coordonnées, biome, repères. H la masque, Maj + H change sa taille.",
+                      (5.05, 8.0, "« Suivre » épingle l'objectif en haut de l'écran.", "Suivi")]})
+    add({"kind": "scene", "dur": 6.25, "chapter": ch,
+         "parts": [(6.25, first(clip("hud_explore", 6.25), still("hud_minimap", (1.0, 1.10, (0.3, 0.3), (0.2, 0.2)))))],
+         "captions": [(0.3, 6.1, "La mini-carte : terrain, coordonnées, biome, repères. H la masque, Maj + H change sa taille.",
                        "Mini-carte")]})
 
     # ---- 3. Explorer
     ch = "3 · Explorer"
-    add({"kind": "chapter", "dur": 2.6, "number": "3", "title": "Explorer", "sub": "Des merveilles faites à la main", "hit": True})
-    add({"kind": "scene", "dur": 7.6, "chapter": ch,
-         "parts": [(7.6, first(clip("citadel", 7.6, 5.0), diorama("clockwork_citadel", zoom=(0.98, 1.08), drift=(-20, 20))))],
+    add({"kind": "chapter", "dur": 2.5, "number": "3", "title": "Explorer", "sub": "Des merveilles faites à la main", "hit": True})
+    add({"kind": "scene", "dur": 6.875, "chapter": ch,
+         "parts": [(6.875, first(clip("citadel", 6.875, 5.0), diorama("clockwork_citadel", zoom=(0.98, 1.08), drift=(-20, 20))))],
          "plate": ("Citadelle d'horlogerie",),
-         "captions": [(1.0, 7.4, "71 × 71 blocs, une tour-horloge de 75 blocs, sept étages meublés.", "Méga-structure")]})
-    add({"kind": "scene", "dur": 8.4, "chapter": ch,
-         "parts": [(2.8, first(clip("sylvan_palace", 2.8, 2.0), diorama("sylvan_palace"))),
-                   (2.8, first(clip("world_tree", 2.8, 2.0), diorama("giant_tree"))),
-                   (2.8, first(clip("sky_harbour", 2.8, 1.0), diorama("sky_harbour")))],
+         "captions": [(0.8, 6.7, "71 × 71 blocs, une tour-horloge de 75 blocs, sept étages meublés.", "Méga-structure")]})
+    add({"kind": "scene", "dur": 7.5, "chapter": ch,
+         "parts": [(2.5, first(clip("sylvan_palace", 2.5, 2.0), diorama("sylvan_palace"))),
+                   (2.5, first(clip("world_tree", 2.5, 2.0), diorama("giant_tree"))),
+                   (2.5, first(clip("sky_harbour", 2.5, 1.0), diorama("sky_harbour")))],
          "plates": [("Palais sylvain",), ("Arbre-monde",), ("Port céleste",)],
-         "captions": [(0.4, 8.2, "Des dizaines de structures : palais, cités, donjons, épaves… chacune avec ses secrets.", None)]})
-    add({"kind": "scene", "dur": 9.6, "chapter": ch, "part_dip": 0.14,
-         "parts": [(3.2, first(clip("biome_crimson_mire", 3.2), biome_still("crimson_mire"))),
-                   (3.2, first(clip("biome_volcanic_highlands", 3.2), biome_still("volcanic_highlands"))),
-                   (3.2, first(clip("biome_pale_dunes", 3.2), biome_still("pale_dunes")))],
+         "captions": [(0.4, 7.35, "Des dizaines de structures : palais, cités, donjons, épaves… chacune avec ses secrets.", None)]})
+    add({"kind": "scene", "dur": 8.125, "chapter": ch, "part_dip": 0.14,
+         "parts": [(2.7, first(clip("biome_crimson_mire", 2.7), biome_still("crimson_mire"))),
+                   (2.7, first(clip("biome_volcanic_highlands", 2.7), biome_still("volcanic_highlands"))),
+                   (2.7, first(clip("biome_pale_dunes", 2.7), biome_still("pale_dunes")))],
          "plates": [("Marais pourpre", "eau rouge sombre, champignons géants"),
                     ("Hautes terres volcaniques", "falaises ocre, magma, évents fumants"),
                     ("Dunes pâles", "sable pâle strié d'or, cheminées de fée")]})
 
     # ---- 4. Quêtes et voyages
     ch = "4 · Quêtes et voyages"
-    add({"kind": "chapter", "dur": 2.6, "number": "4", "title": "Quêtes et voyages", "sub": "Contrats, carte, pierres de voyage, talents",
+    add({"kind": "chapter", "dur": 2.5, "number": "4", "title": "Quêtes et voyages", "sub": "Contrats, carte, pierres de voyage, talents",
          "hit": True})
-    add({"kind": "scene", "dur": 7.6, "chapter": ch,
-         "parts": [(7.6, first(clip("npc_contract", 7.6),
+    add({"kind": "scene", "dur": 6.875, "chapter": ch,
+         "parts": [(6.875, first(clip("npc_contract", 6.875),
                               {"type": "roles", "rows": [("Agent de la Guilde", "villages et avant-postes de la Guilde"),
                                                          ("Érudite", "auberges, Bibliothèque oubliée"),
                                                          ("Bricoleur", "ateliers, Citadelle d'horlogerie"),
                                                          ("Druidesse", "Arbre-monde creux"),
                                                          ("Ancien nain", "Cité naine des profondeurs")]}))],
          "captions": [(0.3, 4.4, "Les donneurs de quêtes proposent des contrats : apporter, chasser, trouver, livrer.", "Contrats"),
-                      (4.6, 7.4, "Clic droit pour leur parler.", None)]})
-    add({"kind": "scene", "dur": 8.4, "chapter": ch,
-         "parts": [(8.4, first(clip("world_map", 8.4, gui=True),
+                      (4.6, 6.75, "Clic droit pour leur parler.", None)]})
+    add({"kind": "scene", "dur": 7.5, "chapter": ch,
+         "parts": [(7.5, first(clip("world_map", 7.5, gui=True),
                               still("world_map", (1.0, 1.02, (0.5, 0.5), (0.5, 0.5)),
                                     ([(0.4, 600, 330), (1.8, 420, 300), (3.6, 824, 392)], [4.0]), then=(4.15, "world_map_3d"),
                                     gui=True)))],
-         "captions": [(0.3, 4.3, "Touche M : la carte du monde. Glisse, zoome, pose des repères.", "Carte"),
-                      (4.5, 8.2, "Et la même carte en relief, en vue 3D.", None)]})
-    add({"kind": "scene", "dur": 6.8, "chapter": ch,
-         "parts": [(6.8, first(clip("waystone", 6.8),
+         "captions": [(0.3, 4.2, "Touche M : la carte du monde. Glisse, zoome, pose des repères.", "Carte"),
+                      (4.35, 7.4, "Et la même carte en relief, en 3D.", None)]})
+    add({"kind": "scene", "dur": 6.25, "chapter": ch,
+         "parts": [(6.25, first(clip("waystone", 6.25),
                               still("waystone", (1.0, 1.02, (0.5, 0.5), (0.5, 0.5)),
                                     ([(0.5, 700, 500), (1.6, 440, 238), (3.4, 908, 398)], [3.8]), gui=True)))],
-         "captions": [(0.3, 6.6, "Pierres de voyage : découvertes pour tout le groupe, on voyage de l'une à l'autre.",
+         "captions": [(0.3, 6.15, "Pierres de voyage : découvertes pour tout le groupe, on voyage de l'une à l'autre.",
                        "Voyage")]})
-    add({"kind": "scene", "dur": 8.8, "chapter": ch,
+    add({"kind": "scene", "dur": 8.125, "chapter": ch,
          "parts": [(4.6, first(clip("talents", 4.6, gui=True),
                               still("talent_tree", (1.0, 1.02, (0.5, 0.5), (0.5, 0.5)),
                                     ([(0.3, 640, 500), (1.2, 192, 180), (2.6, 488, 180), (3.8, 786, 260)], [1.5, 2.9]),
                                     gui=True))),
-                   (4.2, first(clip("magic", 4.2), still("talent_tree", (1.04, 1.12, (0.62, 0.5), (0.72, 0.5)))))],
+                   (3.525, first(clip("magic", 3.525), still("talent_tree", (1.04, 1.12, (0.62, 0.5), (0.72, 0.5)))))],
          "captions": [(0.3, 4.5, "Touche K : 36 talents en 4 branches. V lance ta capacité active.", "Talents"),
-                      (4.7, 8.6, "Et 7 bâtons de sort, qui consomment du mana.", "Magie")]})
+                      (4.7, 8.0, "Et 7 bâtons de sort, qui consomment du mana.", "Magie")]})
 
     # ---- 5. Machines et combats
     ch = "5 · Machines et combats"
-    add({"kind": "chapter", "dur": 2.6, "number": "5", "title": "Machines et combats", "sub": "Fermes, stockage, créatures et boss",
+    add({"kind": "chapter", "dur": 2.5, "number": "5", "title": "Machines et combats", "sub": "Fermes, stockage, créatures et boss",
          "hit": True})
-    add({"kind": "scene", "dur": 8.4, "chapter": ch,
+    add({"kind": "scene", "dur": 7.5, "chapter": ch,
          "parts": [(4.4, first(clip("machines", 4.4, 2.0),
                               still("machine_harvester", (1.0, 1.02, (0.5, 0.5), (0.5, 0.5)),
                                     ([(0.4, 600, 520), (1.6, 684, 212), (3.2, 500, 272)], [2.0, 3.5]), gui=True))),
-                   (4.0, first(clip("machine_screen", 4.0, 1.0, gui=True),
+                   (3.1, first(clip("machine_screen", 3.1, 1.0, gui=True),
                                still("machine_harvester", (1.3, 1.36, (0.5, 0.3), (0.5, 0.3)),
-                                     ([(0.3, 760, 420), (1.3, 684, 212), (2.6, 772, 212)], [1.6, 2.9]), gui=True)))],
-         "captions": [(0.3, 4.3, "Neuf machines simples, sans câble ni énergie : moissonneuse, arroseur, casseur…", "Machines"),
-                      (4.5, 8.2, "Chaque machine a son écran : zone, sortie, redstone.", None)]})
-    add({"kind": "scene", "dur": 6.8, "chapter": ch,
-         "parts": [(6.8, first(clip("guild_terminal", 6.8, gui=True),
+                                     ([(0.3, 760, 420), (1.3, 684, 212), (2.4, 772, 212)], [1.6, 2.7]), gui=True)))],
+         "captions": [(0.3, 4.25, "Neuf machines simples, sans câble ni énergie : moissonneuse, arroseur, casseur…", "Machines"),
+                      (4.4, 7.4, "Chaque machine a son écran : zone, sortie, redstone.", None)]})
+    add({"kind": "scene", "dur": 6.25, "chapter": ch,
+         "parts": [(6.25, first(clip("guild_terminal", 6.25, gui=True),
                               still("guild_terminal", (1.0, 1.02, (0.5, 0.5), (0.5, 0.5)),
                                     ([(0.4, 800, 500), (1.4, 540, 76), (3.8, 490, 442)], [1.7, 4.1]), gui=True)))],
-         "captions": [(0.3, 6.6, "Terminal de guilde : tous les coffres de la base dans une seule grille, avec recherche et tri.",
+         "captions": [(0.3, 6.15, "Terminal de guilde : tous les coffres de la base dans une seule grille, avec recherche et tri.",
                        "Rangement")]})
-    add({"kind": "scene", "dur": 6.2, "chapter": ch,
-         "parts": [(6.2, first(clip("creatures", 6.2, 1.0), still("creatures", (1.0, 1.08, (0.45, 0.5), (0.5, 0.55)))))],
-         "captions": [(0.3, 6.0, "Automates de laiton et créatures, avec une barre de vie au-dessus de chacun.", "Créatures")]})
-    add({"kind": "scene", "dur": 8.8, "chapter": ch,
-         "parts": [(8.8, first(clip("boss", 8.8, 2.0),
-                              {"type": "bosses", "names": [("forge_king", "Le Roi-Forgeron"), ("root_mother", "La Mère-Racine"),
-                                                           ("gryphon_knight", "Le Chevalier-griffon"),
-                                                           ("void_warden", "Gardien du vide")]}))],
-         "captions": [(0.3, 4.0, "20 boss façon Elden Ring : brume, deuxième phase, posture…", "Boss"),
-                      (4.2, 8.6, "À leur mort : « ENNEMI ABATTU » et un Souvenir pour forger leur arme.", None)]})
+    add({"kind": "scene", "dur": 9.375, "chapter": ch,
+         "parts": [(3.4, first(clip("creatures", 3.4, 1.0), still("creatures", (1.0, 1.08, (0.45, 0.5), (0.5, 0.55))))),
+                   (5.975, first(clip("boss", 5.975, 2.0),
+                                 {"type": "bosses", "names": [("forge_king", "Le Roi-Forgeron"), ("root_mother", "La Mère-Racine"),
+                                                              ("gryphon_knight", "Le Chevalier-griffon"),
+                                                              ("void_warden", "Gardien du vide")]}))],
+         "captions": [(0.3, 3.3, "Automates et créatures, avec leur barre de vie.", "Créatures"),
+                      (3.5, 9.25, "20 boss façon Elden Ring. À leur mort : « ENNEMI ABATTU » et un Souvenir.", "Boss")]})
 
     # ---- 6. Entre amis
     ch = "6 · Entre amis"
-    add({"kind": "chapter", "dur": 2.6, "number": "6", "title": "Entre amis", "sub": "Le multijoueur de Brasshaven", "hit": True})
-    add({"kind": "scene", "dur": 7.0, "chapter": ch,
-         "parts": [(3.6, first(clip("company", 3.6, gui=True), still("company", (1.0, 1.02, (0.5, 0.5), (0.5, 0.5)),
+    add({"kind": "chapter", "dur": 2.5, "number": "6", "title": "Entre amis", "sub": "Le multijoueur de Brasshaven", "hit": True})
+    add({"kind": "scene", "dur": 6.25, "chapter": ch,
+         "parts": [(3.2, first(clip("company", 3.2, gui=True), still("company", (1.0, 1.02, (0.5, 0.5), (0.5, 0.5)),
                                                                     ([(0.3, 900, 500), (1.6, 764, 222)], [2.2]), gui=True))),
-                   (3.4, first(clip("emotes", 3.4, 2.0), still("emote_wheel", (1.0, 1.02, (0.5, 0.5), (0.5, 0.5)),
+                   (3.05, first(clip("emotes", 3.05, 2.0), still("emote_wheel", (1.0, 1.02, (0.5, 0.5), (0.5, 0.5)),
                                                                 ([(0.2, 900, 420), (1.2, 636, 170), (2.4, 820, 344)], [2.8]),
                                                                 gui=True)))],
-         "captions": [(0.3, 3.5, "Touche O : ta compagnie, jusqu'à 8 joueurs.", "Compagnie"),
-                      (3.7, 6.8, "Touche Y : huit gestes animés.", "Gestes")]})
-    add({"kind": "scene", "dur": 8.6, "chapter": ch,
-         "parts": [(2.9, first(clip("trade", 2.9, gui=True), still("trade", (1.0, 1.02, (0.5, 0.5), (0.5, 0.5)),
+         "captions": [(0.3, 3.2, "Touche O : ta compagnie, jusqu'à 8 joueurs.", "Compagnie"),
+                      (3.35, 6.15, "Touche Y : huit gestes animés.", "Gestes")]})
+    add({"kind": "scene", "dur": 6.875, "chapter": ch,
+         "parts": [(2.3, first(clip("trade", 2.3, gui=True), still("trade", (1.0, 1.02, (0.5, 0.5), (0.5, 0.5)),
                                                                   ([(0.2, 700, 500), (1.4, 442, 346)], [1.9]), gui=True))),
-                   (2.9, first(clip("pneumatic_post", 2.9, gui=True), still("pneumatic_post", (1.0, 1.02, (0.5, 0.5), (0.5, 0.5)),
+                   (2.3, first(clip("pneumatic_post", 2.3, gui=True), still("pneumatic_post", (1.0, 1.02, (0.5, 0.5), (0.5, 0.5)),
                                                                             ([(0.2, 600, 400), (1.2, 320, 160)], [1.6]),
                                                                             gui=True))),
-                   (2.8, first(clip("contract_board", 2.8, gui=True), still("contract_board", (1.0, 1.02, (0.5, 0.5), (0.5, 0.5)),
+                   (2.275, first(clip("contract_board", 2.275, gui=True), still("contract_board", (1.0, 1.02, (0.5, 0.5), (0.5, 0.5)),
                                                                             ([(0.2, 700, 400), (1.2, 420, 156)], [1.6]),
                                                                             gui=True)))],
          "plates": [("Échange sécurisé",), ("Poste pneumatique",), ("Tableau des contrats",)],
-         "captions": [(0.4, 8.4, "Et des duels où personne ne meurt : le coup fatal laisse un demi-cœur.", "Duels")]})
+         "captions": [(0.4, 6.75, "Et des duels où personne ne meurt : le coup fatal laisse un demi-cœur.", "Duels")]})
 
     # ---- outro
-    add({"kind": "outro", "dur": 9.0, "fout": 1.2, "hit": True, "bell": (4.0, 69),
+    add({"kind": "outro", "dur": 8.125, "fout": 1.2, "hit": True, "bell": (3.4, 69),
          "rows": [("Télécharger", RELEASES), ("Bientôt", "sur CurseForge et Modrinth"),
                   ("Pour", "Minecraft 26.2 · Forge 65.1.0 · Java 25")],
-         "final": "Bon jeu !", "final_at": 4.0})
+         "final": "Bon jeu !", "final_at": 3.4})
     return snap(S, beat)
 
 
