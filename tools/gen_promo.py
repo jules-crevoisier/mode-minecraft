@@ -72,7 +72,7 @@ def icon(s=512):
     img.alpha_composite(c, ((s - c.width) // 2, s - c.height - int(s * 0.05)))
     d = ImageDraw.Draw(img)
     f = ImageFont.truetype(SERIF, int(s * 0.17))
-    text = "W"
+    text = "B"
     tw = d.textlength(text, font=f)
     x, y = s * 0.07, s * 0.03
     d.text((x + 4, y + 5), text, font=f, fill=INK)
