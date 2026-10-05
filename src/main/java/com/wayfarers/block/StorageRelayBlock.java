@@ -45,7 +45,9 @@ public class StorageRelayBlock extends BaseEntityBlock {
 
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
-        if (level instanceof ServerLevel serverLevel) {
+        // following the relay chain walks every block entity around up to 64 relays: a few times a second at most
+        if (level instanceof ServerLevel serverLevel && player instanceof net.minecraft.server.level.ServerPlayer sp
+                && com.wayfarers.util.ServerGuard.allow(sp, "relay_use", 3, 1.0)) {
             BlockPos terminal = StorageNetwork.findTerminal(serverLevel, pos);
             if (terminal != null) {
                 player.sendOverlayMessage(Component.translatable("message.wayfarers.relay.linked",
