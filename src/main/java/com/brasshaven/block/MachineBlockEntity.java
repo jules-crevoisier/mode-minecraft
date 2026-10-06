@@ -56,6 +56,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * State and behaviour of every {@link MachineBlock}: a 9-slot buffer, its settings (area, redstone mode, channel,
@@ -1161,6 +1162,26 @@ public class MachineBlockEntity extends BaseContainerBlockEntity {
         return level.dimension().identifier() + "#" + channel;
     }
 
+    /** {@link #key} of this machine's dimension and channel, built once (receivers ask every 5 ticks). */
+    private @Nullable String cachedKey;
+    private @Nullable ServerLevel cachedKeyLevel;
+    private int cachedKeyChannel = -1;
+
+    private String key(ServerLevel level) {
+        if (cachedKey == null || cachedKeyLevel != level || cachedKeyChannel != channel) {
+            cachedKey = key(level, channel);
+            cachedKeyLevel = level;
+            cachedKeyChannel = channel;
+        }
+        return cachedKey;
+    }
+
+    /** The index entry at {@code p} is still a loaded machine of {@code kind} on this machine's channel. */
+    private boolean stillOnChannel(ServerLevel level, BlockPos p, MachineBlock.Kind kind) {
+        return level.isLoaded(p) && level.getBlockEntity(p) instanceof MachineBlockEntity m && m.kind() == kind
+                && m.channel == channel;
+    }
+
     private Map<String, Set<BlockPos>> index() {
         return kind() == MachineBlock.Kind.TRANSMITTER ? TRANSMITTERS : kind() == MachineBlock.Kind.RECEIVER ? RECEIVERS : null;
     }
@@ -1168,7 +1189,7 @@ public class MachineBlockEntity extends BaseContainerBlockEntity {
     private void register(ServerLevel level) {
         Map<String, Set<BlockPos>> index = index();
         if (index != null) {
-            index.computeIfAbsent(key(level, channel), k -> new HashSet<>()).add(worldPosition.immutable());
+            index.computeIfAbsent(key(level), k -> new HashSet<>()).add(worldPosition.immutable());
         }
     }
 
@@ -1176,7 +1197,7 @@ public class MachineBlockEntity extends BaseContainerBlockEntity {
         Map<String, Set<BlockPos>> index = index();
         if (index != null) {
             // (not getOrDefault(..., Set.of()): removing from an immutable set throws)
-            Set<BlockPos> old = index.get(key(level, channel));
+            Set<BlockPos> old = index.get(key(level));
             if (old != null) {
                 old.remove(worldPosition);
             }
@@ -1185,12 +1206,11 @@ public class MachineBlockEntity extends BaseContainerBlockEntity {
 
     /** Machines of {@code kind} on this machine's channel in this dimension (loaded ones only). */
     private int channelCount(ServerLevel level, Map<String, Set<BlockPos>> index, MachineBlock.Kind kind) {
-        Set<BlockPos> set = index.get(key(level, channel));
+        Set<BlockPos> set = index.get(key(level));
         if (set == null) {
             return 0;
         }
-        set.removeIf(p -> !level.isLoaded(p) || !(level.getBlockEntity(p) instanceof MachineBlockEntity m)
-                || m.kind() != kind || m.channel != channel);
+        set.removeIf(p -> !stillOnChannel(level, p, kind));
         int n = 0;
         for (BlockPos p : set) {
             if (inWirelessRange(p)) {
@@ -1206,12 +1226,22 @@ public class MachineBlockEntity extends BaseContainerBlockEntity {
         return range <= 0 || other.distSqr(worldPosition) <= range * range;
     }
 
+    /**
+     * Is a powered transmitter of this channel in range? One pass over the channel's transmitters that also drops the
+     * entries that are no longer valid (it used to clean the whole set, count it, then walk it again, building the
+     * channel key three times, for every receiver every 5 ticks). Stopping at the first powered one can leave a stale
+     * entry for a later call to drop; every reader validates entries before using them, so no answer changes.
+     */
     private boolean anyTransmitter(ServerLevel level) {
-        if (channelCount(level, TRANSMITTERS, MachineBlock.Kind.TRANSMITTER) == 0) {
+        Set<BlockPos> set = TRANSMITTERS.get(key(level));
+        if (set == null) {
             return false;
         }
-        for (BlockPos p : TRANSMITTERS.get(key(level, channel))) {
-            if (inWirelessRange(p) && level.getBlockState(p).getValue(MachineBlock.POWERED)) {
+        for (java.util.Iterator<BlockPos> it = set.iterator(); it.hasNext(); ) {
+            BlockPos p = it.next();
+            if (!stillOnChannel(level, p, MachineBlock.Kind.TRANSMITTER)) {
+                it.remove();
+            } else if (inWirelessRange(p) && level.getBlockState(p).getValue(MachineBlock.POWERED)) {
                 return true;
             }
         }
