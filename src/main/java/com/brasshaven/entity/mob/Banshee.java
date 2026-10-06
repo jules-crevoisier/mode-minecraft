@@ -313,7 +313,7 @@ public class Banshee extends Monster implements AnimatedMob {
                 b.playSound(SoundEvents.VEX_CHARGE, 1.0F, 0.7F);
                 return;
             }
-            if (dist >= 3.0 && dist <= 9.0 && b.wailCooldown == 0 && b.hasLineOfSight(t)) {
+            if (dist >= 3.0 && dist <= 9.0 && b.wailCooldown == 0 && b.getSensing().hasLineOfSight(t)) {
                 b.face(t, 180.0F);
                 begin(MobAnims.Banshee.WAIL);
                 b.playSound(SoundEvents.GHAST_WARN, 1.2F, 1.5F);

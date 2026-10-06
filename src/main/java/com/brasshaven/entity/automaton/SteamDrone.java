@@ -293,7 +293,7 @@ public class SteamDrone extends Monster implements AnimatedMob {
             }
             d.getLookControl().setLookAt(t, 30.0F, 30.0F);
             double dist = Math.sqrt(d.distanceToSqr(t));
-            boolean sees = d.hasLineOfSight(t);
+            boolean sees = d.getSensing().hasLineOfSight(t);
             if (dist >= 3.0 && dist <= 14.0 && d.diveCooldown == 0 && sees) {
                 diveAt = t.position().add(0, t.getBbHeight() * 0.5, 0);
                 begin(MobAnims.SteamDrone.DIVE);

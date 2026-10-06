@@ -393,6 +393,8 @@ jobs:
     if: ${{ always() && github.ref_type == 'branch' }}
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+
       - uses: actions/download-artifact@v4
         continue-on-error: true
         with:
@@ -428,16 +430,19 @@ jobs:
           fi
           ls previews/brasshaven-ci-*.txt 2>/dev/null || echo "no test summaries"
 
+      # one file at a time (tools/ci_previews.py): softprops/action-gh-release deleted and uploaded the 240+ files all at
+      # once, hit GitHub's secondary rate limit and left the run's summaries un-uploaded
       - name: Publish the previews
         if: hashFiles('previews/*') != ''
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: previews-${{ github.ref_name }}
-          name: Brasshaven — aperçus (${{ github.ref_name }})
-          prerelease: true
-          make_latest: false
-          body: Chaque structure en place sur le relief de Minecraft avec sa mesure d'intégration (brasshaven-fit-*.png, brasshaven-fit.txt, /brasshaven fitcheck), un rendu 3D de chaque biome Brasshaven (brasshaven-biome-*.png, /brasshaven biomeshots), le résumé de chaque test serveur (brasshaven-ci-*.txt, durée des phases, vitesse de génération avec et sans les biomes Brasshaven en ms/chunk et leur rapport, le mod complet face à Forge sans le mod — démarrage, ms et CPU par chunk, mémoire, MSPT, lignes FAIL), les profils Java Flight Recorder de la génération et de la base chargée (brasshaven-ci-profile.txt — méthodes les plus coûteuses, part de com.brasshaven, allocations, pauses GC), et des captures du vrai client (brasshaven-shot-*.png — écrans, HUD, créatures, Citadelle) prises par le job client-test, et les séquences filmées du vrai client pour les vidéos de présentation (brasshaven-showcase-*.mp4 et brasshaven-showcase-scenes.json, job showcase, assemblées par tools/make_video.py) (commit ${{ github.sha }}).
-          files: previews/*
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          cat > notes.md <<NOTES
+          Chaque structure en place sur le relief de Minecraft avec sa mesure d'intégration (brasshaven-fit-*.png, brasshaven-fit.txt, /brasshaven fitcheck), un rendu 3D de chaque biome Brasshaven (brasshaven-biome-*.png, /brasshaven biomeshots), le résumé de chaque test serveur (brasshaven-ci-*.txt, durée des phases, vitesse de génération avec et sans les biomes Brasshaven en ms/chunk et leur rapport, le mod complet face à Forge sans le mod — démarrage, ms et CPU par chunk, mémoire, MSPT, lignes FAIL), les profils Java Flight Recorder de la génération et de la base chargée (brasshaven-ci-profile.txt — méthodes les plus coûteuses, part de com.brasshaven, allocations, pauses GC), et des captures du vrai client (brasshaven-shot-*.png — écrans, HUD, créatures, Citadelle) prises par le job client-test, et les séquences filmées du vrai client pour les vidéos de présentation (brasshaven-showcase-*.mp4 et brasshaven-showcase-scenes.json, job showcase, assemblées par tools/make_video.py) (commit $GITHUB_SHA).
+          NOTES
+          python3 tools/ci_previews.py --tag "previews-$GITHUB_REF_NAME" --title "Brasshaven — aperçus ($GITHUB_REF_NAME)" \
+            --notes-file notes.md --sha "$GITHUB_SHA" previews/*
 
   # Development build of a branch: the tested jar and the packs on the branch's pre-release (dev-<branch>)
   release:

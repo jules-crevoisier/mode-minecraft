@@ -30,6 +30,7 @@ from collections import Counter, defaultdict
 
 MOD = "com.brasshaven."
 STACK_DEPTH = 256
+SHOWN_FRAMES = 18     # frames printed per stack in the stack sections (from the running method outwards)
 DURATION_RX = re.compile(r"([\d.]+)\s*(ns|us|ms|s|min|h)\b")
 SIZE_RX = re.compile(r"([\d.]+)\s*(bytes|byte|kB|KB|MB|GB|TB)\b")
 UNITS = {"ns": 1e-6, "us": 1e-3, "ms": 1.0, "s": 1e3, "min": 60e3, "h": 3600e3}
@@ -136,6 +137,16 @@ def table(counter, total, top, width=110):
     return out or ["    (none)"]
 
 
+def stack_table(counter, total, top, unit="samples", scale=1.0):
+    """The heaviest distinct stacks (leaf first, SHOWN_FRAMES frames each)."""
+    out = []
+    for stack, n in counter.most_common(top):
+        amount = f"{n / scale:10.1f} MB" if unit == "MB" else f"{int(n):8d}"
+        out.append(f"    {pct(n, total)} {amount}")
+        out += [f"        {f[:120]}" for f in stack]
+    return out or ["    (none)"]
+
+
 def cpu_section(path, top):
     total = 0
     groups = Counter()
@@ -151,6 +162,8 @@ def cpu_section(path, top):
     mod_total = Counter()
     mod_nearest = Counter()
     mod_nearest_server = Counter()
+    server_stacks = Counter()
+    mod_stacks = Counter()
     truncated = 0
     for ev in events(path, "jdk.ExecutionSample"):
         stack = ev["stack"]
@@ -171,6 +184,7 @@ def cpu_section(path, top):
         if group == "server thread":
             server_n += 1
             server_self[leaf] += 1
+            server_stacks[tuple(stack[:SHOWN_FRAMES])] += 1
             for f in seen:
                 server_total[f] += 1
         mods = [f for f in stack if f.startswith(MOD)]
@@ -182,6 +196,9 @@ def cpu_section(path, top):
             for f in set(mods):
                 mod_total[f] += 1
             mod_nearest[mods[0]] += 1
+            # the stack from the running method out to the nearest mod frame and a few frames past it
+            cut = stack.index(mods[0])
+            mod_stacks[tuple(stack[:min(len(stack), max(cut + 4, 6), SHOWN_FRAMES)])] += 1
             if group == "server thread":
                 mod_nearest_server[mods[0]] += 1
     lines = ["", "CPU (jdk.ExecutionSample, percentages of all samples):", f"  samples: {total}"
@@ -195,6 +212,7 @@ def cpu_section(path, top):
     lines += ["", f"  server thread ({server_n} samples, {pct(server_n, total).strip()} of all; this is tick time):",
               f"    top {top} self:"] + table(server_self, total, top)
     lines += [f"    top {top} total:"] + table(server_total, total, top)
+    lines += ["", "  server thread, heaviest stacks (what one tick spends its time in):"] + stack_table(server_stacks, total, 12)
     lines += ["", f"  com.brasshaven: {mod_n} samples with a mod frame on the stack ({pct(mod_n, total).strip()} of all samples)"]
     lines += [f"    {pct(n, total)} {n:8d}  {g}" + (f"  ({pct(n, groups[g]).strip()} of that group)" if groups[g] else "")
               for g, n in mod_groups.most_common()]
@@ -203,6 +221,7 @@ def cpu_section(path, top):
     lines += ["", f"  samples attributed to the mod frame nearest the running method (mod code + what it calls, top {top}):"] \
         + table(mod_nearest, total, top)
     lines += ["", "  same, server thread only:"] + table(mod_nearest_server, total, top)
+    lines += ["", "  heaviest stacks through mod code (running method out to the nearest mod frame):"] + stack_table(mod_stacks, total, 10)
     return lines
 
 
@@ -214,7 +233,9 @@ def alloc_section(path, top):
     mod_total = 0.0
     mod_sites = Counter()
     mod_classes = Counter()
-    for ev in events(path, "jdk.ObjectAllocationSample", 64):
+    site_stacks = defaultdict(Counter)
+    server_stacks = Counter()
+    for ev in events(path, "jdk.ObjectAllocationSample"):  # full depth: worldgen stacks run deep
         w = size_bytes(ev.get("weight"))
         total += w
         cls = re.sub(r"\s*\(classLoader.*$", "", ev.get("objectClass", "?"))
@@ -222,7 +243,11 @@ def alloc_section(path, top):
         stack = ev["stack"]
         site = stack[0] if stack else "?"
         by_site[site] += w
-        by_group[thread_group(thread_name(ev.get("eventThread")))] += w
+        site_stacks[site][tuple(stack[:SHOWN_FRAMES])] += w
+        group = thread_group(thread_name(ev.get("eventThread")))
+        by_group[group] += w
+        if group == "server thread":
+            server_stacks[tuple(stack[:SHOWN_FRAMES])] += w
         mods = [f for f in stack if f.startswith(MOD)]
         if mods:
             mod_total += w
@@ -242,6 +267,13 @@ def alloc_section(path, top):
     lines += ["", f"  com.brasshaven on the stack: {mod_total / 1024 ** 2:.1f} MB ({pct(mod_total, total).strip()})",
               f"  by the mod frame nearest the allocation (top {top}):"] + mb_table(mod_sites, top)
     lines += ["  classes allocated under mod code:"] + mb_table(mod_classes, 15)
+    lines += ["", "  who calls the top allocating frames (heaviest stacks of each of the top 6 sites):"]
+    for site, w in by_site.most_common(6):
+        lines += [f"  {pct(w, total).strip()} {w / 1024 ** 2:.1f} MB  {site[:110]}"]
+        lines += stack_table(site_stacks[site], total, 3, "MB", 1024 ** 2)
+    lines += ["", "  server thread, heaviest allocating stacks:"] + stack_table(server_stacks, total, 8, "MB", 1024 ** 2)
+    lines += ["  (allocation samples are weighted by the bytes the thread allocated since its previous sample: with few",
+              "   samples a single stack can carry a large, noisy weight; compare stacks, not exact megabytes)"]
     return lines
 
 

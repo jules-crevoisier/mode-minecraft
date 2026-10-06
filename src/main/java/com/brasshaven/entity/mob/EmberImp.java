@@ -285,14 +285,14 @@ public class EmberImp extends Monster implements AnimatedMob {
             }
             imp.getLookControl().setLookAt(t, 30.0F, 30.0F);
             double dist = Math.sqrt(imp.distanceToSqr(t));
-            if (dist >= 3.5 && dist <= 16.0 && imp.throwCooldown == 0 && imp.hasLineOfSight(t)) {
+            if (dist >= 3.5 && dist <= 16.0 && imp.throwCooldown == 0 && imp.getSensing().hasLineOfSight(t)) {
                 doubleThrow = imp.random.nextFloat() < 0.35F;
                 begin(MobAnims.EmberImp.THROW);
                 level.playSound(null, imp, SoundEvents.FIRECHARGE_USE, SoundSource.HOSTILE, 0.5F, 1.8F);
                 return;
             }
             if (imp.tickCount % 10 == 0) {
-                if (dist > 10.0 || !imp.hasLineOfSight(t)) {
+                if (dist > 10.0 || !imp.getSensing().hasLineOfSight(t)) {
                     imp.getNavigation().moveTo(t, 1.0);
                 } else if (dist < 5.0) {
                     Vec3 away = DefaultRandomPos.getPosAway(imp, 6, 3, t.position());

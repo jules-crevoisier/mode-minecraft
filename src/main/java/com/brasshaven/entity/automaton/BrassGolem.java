@@ -333,8 +333,26 @@ public class BrassGolem extends AbstractGolem implements AnimatedMob {
     }
 
     private List<Mob> crowd(ServerLevel level, double radius) {
-        return level.getEntitiesOfClass(Mob.class, new AABB(position(), position()).inflate(radius, 2, radius),
-                e -> e.isAlive() && e instanceof Enemy && !(e instanceof Creeper));
+        return level.getEntitiesOfClass(Mob.class, crowdBox(radius), BrassGolem::crowding);
+    }
+
+    private AABB crowdBox(double radius) {
+        return new AABB(position(), position()).inflate(radius, 2, radius);
+    }
+
+    private static boolean crowding(Mob e) {
+        return e.isAlive() && e instanceof Enemy && !(e instanceof Creeper);
+    }
+
+    /**
+     * Whether at least {@code count} foes stand within {@code radius}: the same answer as {@code crowd(...).size() >=
+     * count}, but the search stops at the {@code count}-th foe (the fight goal asks every tick).
+     */
+    private boolean crowded(ServerLevel level, double radius, int count) {
+        List<Mob> found = new java.util.ArrayList<>(count);
+        level.getEntities(net.minecraft.world.level.entity.EntityTypeTest.forClass(Mob.class), crowdBox(radius),
+                BrassGolem::crowding, found, count);
+        return found.size() >= count;
     }
 
     private void punch(ServerLevel level, LivingEntity target) {
@@ -441,7 +459,7 @@ public class BrassGolem extends AbstractGolem implements AnimatedMob {
             g.getLookControl().setLookAt(t, 30.0F, 30.0F);
             double reach = 2.4 + t.getBbWidth() / 2;
             double dist = Math.sqrt(g.distanceToSqr(t));
-            if (g.slamCooldown == 0 && g.crowd(level, 3.0).size() >= 3) {
+            if (g.slamCooldown == 0 && g.crowded(level, 3.0, 3)) {
                 g.slamCooldown = 160;
                 begin(MobAnims.BrassGolem.SLAM);
                 return;

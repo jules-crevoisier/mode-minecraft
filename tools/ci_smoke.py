@@ -637,7 +637,7 @@ def server_performance(srv, failures):
     srv.run("execute in minecraft:overworld run forceload remove all", r"Unmarked|forceload|No chunks", 30)
 
 
-PROFILE_TICKS = 600
+PROFILE_TICKS = 3000  # ~5 s of ticks: enough samples (600 ticks gave 105 samples in run 37388245497)
 
 
 def write_profile(server_dir, part, header, recordings):
@@ -894,7 +894,15 @@ COMPARE_AREAS = [(24000, 24000), (-24000, 24000), (24000, -24000), (-24000, -240
 PROFILE_AREAS = [(32000, 0), (-32000, 0)]
 COMPARE_SIDE = 16                                  # /forceload takes at most 256 chunks per call
 FORCELOAD_WAIT = 1800
-COMPARE_SPRINT = 200
+COMPARE_SPRINT = 600
+LOADED_PROFILE_TICKS = 600
+# entity census of the loaded areas (vanilla commands, so both servers answer): these vanilla types plus every
+# Brasshaven type on the mod server
+CENSUS_VANILLA = ["villager", "iron_golem", "armor_stand", "item", "experience_orb", "zombie", "skeleton", "creeper",
+                  "spider", "drowned", "slime", "bat", "cow", "sheep", "pig", "chicken", "horse", "rabbit", "fox",
+                  "wolf", "goat", "llama", "camel", "armadillo", "frog", "parrot", "turtle", "bee", "cod", "salmon",
+                  "squid", "glow_squid", "tropical_fish", "dolphin", "axolotl", "wandering_trader", "piglin",
+                  "minecart", "chest_minecart"]
 
 
 def forceload_area(srv, x, z, side, failures, label):
@@ -964,9 +972,19 @@ def compare_run(server_dir, mod, failures, bad):
                         r["areas"].append((x, z, forceload_area(srv, x, z, COMPARE_SIDE, failures, f"area ({tag})")))
                     r["cpu"] = ci_perf.cpu_delta(before, ci_perf.cpu_snapshot(pid))
                 with Phase(f"compare: loaded world ({tag})"):
+                    # fresh chunks start with one-off scheduled ticks (fluids settling around what the features
+                    # placed): let those run out before measuring what the loaded world costs per tick
+                    sprint_mspt(srv, 200, failures, f"settling the loaded areas ({tag})")
                     r["mspt"] = sprint_mspt(srv, COMPARE_SPRINT, failures, f"the loaded areas ({tag})")
                     r["heap_loaded"] = ci_perf.heap_after_gc(pid)
                     r["rss_loaded"] = ci_perf.rss_mb(pid)
+                    r["census"] = entity_census(srv, mod)
+                    # what those ticks are made of, on their own (the generation profile below mixes in worldgen)
+                    path = os.path.join(server_dir, f"brasshaven-ci-loaded-{key}.jfr")
+                    if pid and ci_perf.jfr_start(pid, "loaded", path):
+                        sprint_mspt(srv, LOADED_PROFILE_TICKS, failures, f"the profiled loaded areas ({tag})")
+                        if ci_perf.jfr_stop(pid, "loaded"):
+                            r["jfr_loaded"] = path
                 with Phase(f"compare: profile ({tag})"):
                     path = os.path.join(server_dir, f"brasshaven-ci-gen-{key}.jfr")
                     if pid and ci_perf.jfr_start(pid, "gen", path):
@@ -990,6 +1008,31 @@ def compare_run(server_dir, mod, failures, bad):
     finally:
         restore_jars(moved)
     return r
+
+
+def entity_census(srv, mod):
+    """{type: count} of the loaded entities (vanilla /execute if entity), '*' = all of them."""
+    types = ["minecraft:" + t for t in CENSUS_VANILLA]
+    if mod:
+        types += ["brasshaven:" + e for e in lang_ids("entity.brasshaven.")]
+    out = {}
+    for t in ["*"] + types:
+        sel = "@e" if t == "*" else f"@e[type={t}]"
+        res = srv.run(f"execute in minecraft:overworld if entity {sel}", r"Test (passed|failed)|Unknown|Invalid|Incorrect", 60)
+        m = re.search(r"count: (\d+)", res or "")
+        out[t] = int(m.group(1)) if m else 0
+    return out
+
+
+def census_lines(mod, van):
+    mc, vc = mod.get("census") or {}, van.get("census") or {}
+    if not mc and not vc:
+        return []
+    rows = sorted({t for t in list(mc) + list(vc) if t != "*" and (mc.get(t) or vc.get(t))},
+                  key=lambda t: -abs(mc.get(t, 0) - vc.get(t, 0)))
+    lines = [f"  entities loaded after the sprint (/execute if entity): full mod {mc.get('*', 'n/a')}, vanilla {vc.get('*', 'n/a')}"]
+    lines += [f"    {t:34s} {mc.get(t, 0):6d} {vc.get(t, 0):6d}" for t in rows[:30]]
+    return lines
 
 
 def compare_report(runs, server_dir):
@@ -1036,9 +1079,10 @@ def compare_report(runs, server_dir):
         lines.append(row(name, mc.get(group, 0.0) / mchunks if mc else None, vc.get(group, 0.0) / vchunks if vc else None,
                          "ms/chunk"))
     loaded = len(COMPARE_AREAS) * chunks + COMPARE_WARMUP[2] ** 2
-    lines += [row(f"MSPT, /tick sprint {COMPARE_SPRINT}, {loaded} chunks forced", mod.get("mspt"), van.get("mspt"), "ms", 2),
+    lines += [row(f"MSPT, /tick sprint {COMPARE_SPRINT} (after 200), {loaded} chunks", mod.get("mspt"), van.get("mspt"), "ms", 2),
               row("heap after full GC, areas loaded", mod.get("heap_loaded"), van.get("heap_loaded"), "MB", 0),
               row("process RSS, areas loaded", mod.get("rss_loaded"), van.get("rss_loaded"), "MB", 0)]
+    lines += census_lines(mod, van)
     if mw and vw:
         lines.append(f"  RATIO full mod / vanilla: generation wall {mw / vw:.3f}"
                      + (f", generation CPU {(mc['process'] / mchunks) / (vc['process'] / vchunks):.3f}"
@@ -1048,6 +1092,9 @@ def compare_report(runs, server_dir):
                  "worldgen workers = noise, structures, features); profiles: brasshaven-ci-profile.txt")
     recordings = [(f"JFR: world generation, {r['tag']} ({len(PROFILE_AREAS)} fresh areas of {COMPARE_SIDE} x {COMPARE_SIDE} "
                    f"chunks with /forceload, then /tick sprint {COMPARE_SPRINT})", r.get("jfr")) for r in (mod, van) if r]
+    recordings += [(f"JFR: the loaded areas alone, {r['tag']} (/tick sprint {LOADED_PROFILE_TICKS} with "
+                    f"{len(COMPARE_AREAS) * chunks + COMPARE_WARMUP[2] ** 2} chunks forced, no player)", r.get("jfr_loaded"))
+                   for r in (mod, van) if r]
     try:
         write_profile(server_dir, "gen", ["what: world generation on the world-test servers, full mod first, then vanilla "
                                           "(the same Forge server without the jar) for comparison"] + lines[1:], recordings)

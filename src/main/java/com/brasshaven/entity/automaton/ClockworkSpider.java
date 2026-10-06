@@ -311,7 +311,7 @@ public class ClockworkSpider extends Monster implements AnimatedMob {
                 return;
             }
             if (dist >= 3.0 && dist <= 8.0 && spider.onGround() && spider.leapCooldown == 0
-                    && Math.abs(target.getY() - spider.getY()) < 2.5 && spider.hasLineOfSight(target)) {
+                    && Math.abs(target.getY() - spider.getY()) < 2.5 && spider.getSensing().hasLineOfSight(target)) {
                 spider.leapCooldown = 80 + spider.getRandom().nextInt(25);
                 spider.getNavigation().stop();
                 float yaw = (float) (Mth.atan2(target.getZ() - spider.getZ(), target.getX() - spider.getX()) * Mth.RAD_TO_DEG) - 90.0F;
