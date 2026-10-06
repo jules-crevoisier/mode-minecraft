@@ -107,8 +107,20 @@ def thread_group(comm):
         return "worldgen workers"
     if comm.startswith("IO-Worker") or comm.startswith("Chunk") or "IO" in comm and not comm.startswith("Netty"):
         return "io"
-    if comm.startswith(("GC Thread", "G1 ", "VM Thread", "ZGC", "Z ", "VM Periodic")):
-        return "gc + vm"
+    # the collector's threads by kind: a gap here says whether it is young collections (allocation), concurrent
+    # marking (live heap size) or card refinement (old-to-young writes), or VM operations (safepoints, deopt)
+    if comm.startswith("GC Thread"):
+        return "gc: pause workers"
+    if comm.startswith(("G1 Conc", "G1 Main Marker", "G1 Service")):
+        return "gc: concurrent marking"
+    if comm.startswith("G1 Refine"):
+        return "gc: refinement"
+    if comm.startswith("G1 "):
+        return "gc: other G1"
+    if comm.startswith(("ZGC", "Z ")):
+        return "gc: zgc"
+    if comm.startswith(("VM Thread", "VM Periodic")):
+        return "vm thread"
     if "CompilerThre" in comm or comm.startswith("C1 ") or comm.startswith("C2 "):
         return "jit"
     return "other"
@@ -175,6 +187,24 @@ def heap_after_gc(pid):
     info = jcmd(pid, "GC.heap_info") or ""
     m = re.search(r"used (\d+)K", info)
     return int(m.group(1)) / 1024.0 if m else None
+
+
+def class_histogram(pid):
+    """{class name: bytes} of the live heap (jcmd GC.class_histogram runs a full GC first), or {}."""
+    out = jcmd(pid, "GC.class_histogram", timeout=300) or ""
+    hist = {}
+    for line in out.splitlines():
+        m = re.match(r"\s*\d+:\s+(\d+)\s+(\d+)\s+(\S+)", line)
+        if m:
+            hist[m.group(3)] = hist.get(m.group(3), 0) + int(m.group(2))
+    return hist
+
+
+def histogram_diff(a, b, top=25):
+    """Lines: the classes whose live bytes grew most from b to a (MB, a and b)."""
+    rows = sorted(((a.get(k, 0) - b.get(k, 0), k) for k in set(a) | set(b)), reverse=True)[:top]
+    return [f"    {d / 1024 ** 2:+8.1f} MB  {a.get(k, 0) / 1024 ** 2:8.1f} {b.get(k, 0) / 1024 ** 2:8.1f}  {k[:100]}"
+            for d, k in rows if d > 0]
 
 
 def rss_mb(pid):

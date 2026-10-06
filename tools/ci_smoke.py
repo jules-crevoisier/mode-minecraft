@@ -230,7 +230,7 @@ def server_command(server_dir):
     return ["java", "-Xmx4G", "-jar", os.path.basename(jars[0]), "nogui"]
 
 
-def prepare(server_dir, fit, level_name=None, custom=True):
+def prepare(server_dir, fit, level_name=None, custom=True, extra_jvm=()):
     with open(os.path.join(server_dir, "eula.txt"), "w") as f:
         f.write("eula=true\n")
     props = ("online-mode=false\nspawn-protection=0\nlevel-seed=wayfarers-ci\nmax-tick-time=-1\n"
@@ -263,7 +263,7 @@ def prepare(server_dir, fit, level_name=None, custom=True):
         forge = jvm + ".forge"
         if not os.path.exists(forge):
             shutil.copyfile(jvm, forge)
-        lines = ["-Xmx4G"] + ci_perf.server_jvm_flags() + ci_perf.JFR_FLAGS
+        lines = ["-Xmx4G"] + ci_perf.server_jvm_flags() + ci_perf.JFR_FLAGS + list(extra_jvm)
         with open(jvm, "w") as f:
             f.write(open(forge).read().rstrip("\n") + "\n\n# tools/ci_smoke.py\n" + "\n".join(lines) + "\n")
 
@@ -936,13 +936,19 @@ def restore_jars(moved):
             shutil.move(to, jar)
 
 
-def compare_run(server_dir, mod, failures, bad):
-    """One fresh world on a server with (mod) or without the Brasshaven jar: the numbers of compare_report."""
-    tag = "full mod" if mod else "vanilla"
-    key = "mod" if mod else "vanilla"
+def compare_run(server_dir, mod, failures, bad, custom=True):
+    """One fresh world on a server with (mod) or without the Brasshaven jar: the numbers of compare_report.
+    custom=False (with the mod): the Brasshaven biomes and terrain touches off, everything else on, and no generation
+    profile (it isolates what the biomes change from what structures, features and creatures add)."""
+    tag = ("full mod" if custom else "mod, vanilla biomes") if mod else "vanilla"
+    key = ("mod" if custom else "mod-nobiomes") if mod else "vanilla"
     level_name = f"world_compare_{key}"
     shutil.rmtree(os.path.join(server_dir, level_name), ignore_errors=True)
-    prepare(server_dir, False, level_name=level_name, custom=True)
+    # the run without the biomes (whose start time is not compared) also records the start itself: what loading the
+    # mod costs before the server's own "Done (...)" clock starts
+    startup = os.path.join(server_dir, "brasshaven-ci-startup-mod.jfr")
+    extra = [] if custom or not mod else [f"-XX:StartFlightRecording=name=startup,settings=profile,duration=90s,filename={startup}"]
+    prepare(server_dir, False, level_name=level_name, custom=custom, extra_jvm=extra)
     moved = [] if mod else disable_mod_jars(server_dir)
     r = {"tag": tag, "areas": []}
     try:
@@ -965,6 +971,7 @@ def compare_run(server_dir, mod, failures, bad):
                 time.sleep(10)  # let the start settle (spawn chunks, the first saves)
                 r["heap_idle"] = ci_perf.heap_after_gc(pid)
                 r["rss_idle"] = ci_perf.rss_mb(pid)
+                r["hist_idle"] = ci_perf.class_histogram(pid)
                 with Phase(f"compare: generation ({tag})"):
                     forceload_area(srv, *COMPARE_WARMUP, failures, f"warm-up ({tag})")
                     before = ci_perf.cpu_snapshot(pid)
@@ -978,6 +985,7 @@ def compare_run(server_dir, mod, failures, bad):
                     r["mspt"] = sprint_mspt(srv, COMPARE_SPRINT, failures, f"the loaded areas ({tag})")
                     r["heap_loaded"] = ci_perf.heap_after_gc(pid)
                     r["rss_loaded"] = ci_perf.rss_mb(pid)
+                    r["hist_loaded"] = ci_perf.class_histogram(pid)
                     r["census"] = entity_census(srv, mod)
                     # what those ticks are made of, on their own (the generation profile below mixes in worldgen)
                     path = os.path.join(server_dir, f"brasshaven-ci-loaded-{key}.jfr")
@@ -987,13 +995,13 @@ def compare_run(server_dir, mod, failures, bad):
                             r["jfr_loaded"] = path
                 with Phase(f"compare: profile ({tag})"):
                     path = os.path.join(server_dir, f"brasshaven-ci-gen-{key}.jfr")
-                    if pid and ci_perf.jfr_start(pid, "gen", path):
+                    if custom and pid and ci_perf.jfr_start(pid, "gen", path):
                         for x, z in PROFILE_AREAS:
                             forceload_area(srv, x, z, COMPARE_SIDE, failures, f"profiled area ({tag})")
                         sprint_mspt(srv, COMPARE_SPRINT, failures, f"the profiled ticks ({tag})")
                         if ci_perf.jfr_stop(pid, "gen"):
                             r["jfr"] = path
-                    if "jfr" not in r:
+                    if "jfr" not in r and custom:
                         Summary.notes.append(f"compare: no JFR recording on the {tag} server (jcmd)")
             except TimeoutError as e:
                 failures.append(str(e))
@@ -1019,25 +1027,45 @@ def entity_census(srv, mod):
     for t in ["*"] + types:
         sel = "@e" if t == "*" else f"@e[type={t}]"
         res = srv.run(f"execute in minecraft:overworld if entity {sel}", r"Test (passed|failed)|Unknown|Invalid|Incorrect", 60)
-        m = re.search(r"count: (\d+)", res or "")
+        # 26.2 answers "Test passed. Count: 475" (earlier versions "Test passed, count: 475")
+        m = re.search(r"[Cc]ount: (\d+)", res or "")
         out[t] = int(m.group(1)) if m else 0
+    # which items lie on the ground: the ids of a random sample (an item entity ticks like a mob, without AI)
+    start = len(srv.lines)
+    srv.run("execute in minecraft:overworld as @e[type=minecraft:item,limit=60,sort=random] run data get entity @s Item.id",
+            r"entity data|No entity|Found no", 60)
+    time.sleep(1.5)
+    ids = {}
+    for line in srv.lines[start:]:
+        m = re.search(r'has the following entity data: "([^"]+)"', line)
+        if m:
+            ids[m.group(1)] = ids.get(m.group(1), 0) + 1
+    out["items sampled"] = ids
     return out
 
 
-def census_lines(mod, van):
-    mc, vc = mod.get("census") or {}, van.get("census") or {}
+def census_lines(mod, van, nob=None):
+    mc, vc, nc = mod.get("census") or {}, van.get("census") or {}, (nob or {}).get("census") or {}
     if not mc and not vc:
         return []
-    rows = sorted({t for t in list(mc) + list(vc) if t != "*" and (mc.get(t) or vc.get(t))},
+    rows = sorted({t for t in list(mc) + list(vc) + list(nc) if t not in ("*", "items sampled")
+                   and (mc.get(t) or vc.get(t) or nc.get(t))},
                   key=lambda t: -abs(mc.get(t, 0) - vc.get(t, 0)))
-    lines = [f"  entities loaded after the sprint (/execute if entity): full mod {mc.get('*', 'n/a')}, vanilla {vc.get('*', 'n/a')}"]
-    lines += [f"    {t:34s} {mc.get(t, 0):6d} {vc.get(t, 0):6d}" for t in rows[:30]]
+    lines = [f"  entities loaded after the sprint (/execute if entity): full mod {mc.get('*', 'n/a')}, vanilla "
+             f"{vc.get('*', 'n/a')}" + (f", mod with vanilla biomes {nc.get('*', 'n/a')}" if nc else ""),
+             f"    {'type':34s} {'mod':>6s} {'vanilla':>7s}" + (f" {'mod, vanilla biomes':>20s}" if nc else "")]
+    lines += [f"    {t:34s} {mc.get(t, 0):6d} {vc.get(t, 0):7d}" + (f" {nc.get(t, 0):20d}" if nc else "") for t in rows[:40]]
+    for tag, c in (("full mod", mc), ("vanilla", vc), ("mod, vanilla biomes", nc)):
+        sample = c.get("items sampled") or {}
+        if sample:
+            lines.append(f"  items on the ground, {tag} (random sample of {sum(sample.values())}): "
+                         + ", ".join(f"{k} {n}" for k, n in sorted(sample.items(), key=lambda kv: -kv[1])[:15]))
     return lines
 
 
 def compare_report(runs, server_dir):
     """The summary lines of the full mod / vanilla comparison (and the generation profile file)."""
-    mod, van = runs.get(True, {}), runs.get(False, {})
+    mod, van, nob = runs.get(True, {}), runs.get(False, {}), runs.get("nobiomes", {})
     chunks = COMPARE_SIDE * COMPARE_SIDE
 
     # wall time over the areas both servers generated (a failed area on one side would skew the mean)
@@ -1082,7 +1110,15 @@ def compare_report(runs, server_dir):
     lines += [row(f"MSPT, /tick sprint {COMPARE_SPRINT} (after 200), {loaded} chunks", mod.get("mspt"), van.get("mspt"), "ms", 2),
               row("heap after full GC, areas loaded", mod.get("heap_loaded"), van.get("heap_loaded"), "MB", 0),
               row("process RSS, areas loaded", mod.get("rss_loaded"), van.get("rss_loaded"), "MB", 0)]
-    lines += census_lines(mod, van)
+    if nob:
+        lines += [row(f"MSPT, mod with vanilla biomes (vs vanilla)", nob.get("mspt"), van.get("mspt"), "ms", 2),
+                  row(f"generation wall, mod with vanilla biomes", per_chunk(nob)[0], vw, "ms/chunk")]
+    lines += census_lines(mod, van, nob)
+    for phase, label in (("hist_idle", "idle after start"), ("hist_loaded", "with the areas loaded")):
+        diff = ci_perf.histogram_diff(mod.get(phase) or {}, van.get(phase) or {})
+        if diff:
+            lines += [f"  live heap by class, full mod minus vanilla, {label} (jcmd GC.class_histogram; MB: diff, mod, vanilla):"]
+            lines += diff
     if mw and vw:
         lines.append(f"  RATIO full mod / vanilla: generation wall {mw / vw:.3f}"
                      + (f", generation CPU {(mc['process'] / mchunks) / (vc['process'] / vchunks):.3f}"
@@ -1092,9 +1128,12 @@ def compare_report(runs, server_dir):
                  "worldgen workers = noise, structures, features); profiles: brasshaven-ci-profile.txt")
     recordings = [(f"JFR: world generation, {r['tag']} ({len(PROFILE_AREAS)} fresh areas of {COMPARE_SIDE} x {COMPARE_SIDE} "
                    f"chunks with /forceload, then /tick sprint {COMPARE_SPRINT})", r.get("jfr")) for r in (mod, van) if r]
+    startup = os.path.join(server_dir, "brasshaven-ci-startup-mod.jfr")
+    if nob and os.path.exists(startup):
+        recordings.append(("JFR: server start with the mod (the first 90 s from the JVM start, run with vanilla biomes)", startup))
     recordings += [(f"JFR: the loaded areas alone, {r['tag']} (/tick sprint {LOADED_PROFILE_TICKS} with "
                     f"{len(COMPARE_AREAS) * chunks + COMPARE_WARMUP[2] ** 2} chunks forced, no player)", r.get("jfr_loaded"))
-                   for r in (mod, van) if r]
+                   for r in (mod, van, nob) if r]
     try:
         write_profile(server_dir, "gen", ["what: world generation on the world-test servers, full mod first, then vanilla "
                                           "(the same Forge server without the jar) for comparison"] + lines[1:], recordings)
@@ -1108,6 +1147,8 @@ def exercise_compare(server_dir, failures, bad):
     runs = {}
     for mod in (True, False):
         runs[mod] = compare_run(server_dir, mod, failures, bad)
+    # the mod with Minecraft's own biomes and terrain: what remains of the gap is structures, features, creatures
+    runs["nobiomes"] = compare_run(server_dir, True, failures, bad, custom=False)
     return compare_report(runs, server_dir)
 
 
