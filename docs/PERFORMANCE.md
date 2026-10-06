@@ -25,10 +25,15 @@ d'échauffement de 8 × 8 chunks, puis 4 zones de 16 × 16 chunks (1024 chunks).
 |---|---|
 | démarrage | du lancement du processus au `Done`, et le `Done (…s)` affiché par le serveur |
 | génération, temps réel | ms par chunk (le thread serveur attend chaque chunk, les workers le génèrent) |
-| génération, CPU | ms de CPU par chunk, par groupe de threads (`/proc`) : thread serveur (= temps de tick qu'un joueur ressent pendant que des chunks se génèrent), workers de génération (bruit, structures, décorations), IO, GC, JIT |
-| mémoire | tas utilisé juste après un GC complet (`jcmd GC.run` + `GC.heap_info`) au repos après le démarrage, puis avec les 1088 chunks chargés ; RSS du processus |
+| génération, CPU | ms de CPU par chunk, par groupe de threads (`/proc`) : thread serveur (= temps de tick qu'un joueur ressent pendant que des chunks se génèrent), workers de génération (bruit, structures, décorations), IO, JIT, et le GC détaillé (pauses, marquage concurrent, raffinement, thread VM) |
+| mémoire | tas utilisé juste après un GC complet (`jcmd GC.run` + `GC.heap_info`) au repos après le démarrage, puis avec les 1088 chunks chargés ; RSS du processus ; **classes qui pèsent plus** dans le tas du mod que dans celui de vanilla (`jcmd GC.class_histogram`, au repos et chargé) |
 | MSPT | `/tick sprint 600` avec les zones chargées, après 200 ticks pour laisser s'écouler les ticks ponctuels des chunks neufs (fluides) |
-| entités | recensement des entités chargées par type (`/execute if entity`), mod et vanilla |
+| entités | recensement des entités chargées par type (`/execute if entity`), mod et vanilla, et l'identité d'un échantillon des objets tombés au sol |
+
+Un troisième serveur tourne avec le mod mais **sans les biomes ni les retouches du relief Brasshaven** (même
+recensement, même MSPT) : ce qui reste de l'écart face à vanilla vient des structures, des décorations et des
+créatures, le reste des biomes (végétation, eau, animaux). Il enregistre aussi son **démarrage** sous JFR (ce que
+coûte le chargement du mod avant que l'horloge `Done (…)` du serveur ne démarre).
 
 Le tableau donne les deux colonnes et leur rapport (`RATIO full mod / vanilla`). Il n'est pas bloquant : le mod
 ajoute du contenu, il coûte forcément un peu. Ce qui est bloquant (déjà avant) : la paire **avec / sans biomes
@@ -85,6 +90,8 @@ morceau de bruit d'une colonne et évalue tout le routeur de densité à chaque 
   la grille complète aurait rejeté aussi. Verdicts, positions des structures et `/locate` sont identiques ; seule
   la raison notée pour `/brasshaven fitcheck` peut citer un autre défaut (même catégorie). La plupart des cases sont
   rejetées : c'est là que le gain est le plus grand.
+  Le dénivelé (pente la plus raide entre deux points voisins) fait aussi partie de ces conditions : chaque nouveau
+  point vérifie les paires qu'il complète.
 
 Déjà en place (vérifié) : décision mémorisée par case (le chunk qui génère la structure après `/locate` ne refait pas
 le calcul), au plus 2 assemblages jigsaw par case, pré-test à 5 points avant tout assemblage ; gabarits découpés en
@@ -108,6 +115,10 @@ retouches du relief mesurés à coût nul par la CI (rapport ≈ 1,0).
   chaque tick (même résultat : le cache est vidé au début de chaque tick de l'IA). Le golem de laiton ne compte plus
   toute la foule autour de lui à chaque tick pour savoir s'il frappe le sol : la recherche s'arrête au troisième
   ennemi trouvé (même décision).
+* **Redstone sans fil** : chaque récepteur, toutes les 5 ticks, reconstruisait trois fois la clé de son canal,
+  vérifiait chaque émetteur du canal puis les reparcourait. La clé est gardée par machine et une seule passe fait le
+  tri et la réponse (mêmes réponses). Sur un serveur où beaucoup de bases partagent les 16 canaux, le coût était
+  récepteurs × émetteurs toutes les 5 ticks.
 
 ### JVM
 
@@ -182,7 +193,9 @@ En résumé : sur Forge 26.2, **spark + Chunky** côté serveur ; côté client,
 baisser la distance de rendu et les particules reste le levier principal. Le gain mémoire de FerriteCore est en
 partie couvert par `-XX:+UseCompactObjectHeaders`.
 
-## 5. Ce que la CI a montré (run 37388245497) et la suite
+## 5. Ce que la CI a montré et la suite
+
+### Run 37388245497
 
 Le mod complet face à Forge sans le mod, sur les mêmes 1024 chunks neufs :
 
@@ -208,18 +221,54 @@ Le mod complet face à Forge sans le mod, sur les mêmes 1024 chunks neufs :
   savoir quelles entités étaient chargées : la CI recense maintenant les entités par type et profile le monde chargé
   seul.
 
-À lire dans le prochain `brasshaven-ci-profile.txt` :
+### Run 37401499009 (version 0.9.1-beta)
 
-1. **Monde chargé seul, mod vs vanilla** : les piles du thread serveur et le recensement des entités (villageois et
-   habitants des structures, armures, créatures du mod) diront d'où viennent les 29 % de MSPT en plus.
-2. **Qui alloue** dans la génération du mod : les piles sous `DensityFunctions$Mapped.create` (enveloppe du routeur de
-   bruit à chaque morceau de bruit créé — chaque colonne lue par la vérification de terrain en crée un),
-   `DirectMethodHandle.allocateInstance` (lambdas capturantes), `CollectToTag` (lectures NBT partielles des chunks,
-   recherche de structures) et `Long2ObjectOpenHashMap.clone` (copies des sections de lumière).
-3. Si les **décalages de site** pèsent (chaque décalage refait la projection jigsaw = 1 colonne de bruit, même quand le
+| | mod | vanilla | rapport |
+|---|---|---|---|
+| génération, temps réel | 43,4 ms/chunk | 40,9 ms/chunk | 1,06 |
+| génération, CPU total | 120,8 ms/chunk | 109,8 ms/chunk | 1,10 |
+| CPU du GC et de la VM | 13,0 ms/chunk | 7,8 ms/chunk | 1,67 |
+| CPU du JIT | 13,2 ms/chunk | 10,9 ms/chunk | 1,21 |
+| MSPT, après 200 ticks de décantation, 1088 chunks | 4,68 ms | 3,92 ms | 1,19 |
+| tas après GC au repos / chargé | 138 / 567 Mo | 119 / 527 Mo | 1,16 / 1,08 |
+
+* Les 29 % de MSPT du run précédent étaient surtout l'écoulement des fluides des chunks neufs : il reste **+0,76 ms
+  par tick** pour 1088 chunks chargés sans joueur.
+* Dans ce monde chargé, le code du mod ne tourne **jamais** (0 échantillon sous `com.brasshaven`). L'écart vient du
+  contenu : chez le mod, `ItemEntity.tick()` (des objets posés au sol qui tombent et glissent) fait **29,5 %** du
+  thread serveur, contre presque rien chez vanilla (qui a pourtant 194 objets au sol dans les mêmes zones). Le
+  prochain run dira lesquels (échantillon d'identifiants) et si les biomes en sont la cause (troisième serveur).
+* Génération : le code du mod fait 2,0 % des échantillons (vérification de terrain des structures), les allocations
+  sont à +10 % (31,1 contre 28,4 Go) et les collections du GC en même nombre ; l'écart de CPU du GC vient donc
+  surtout du tas vivant plus gros (marquage concurrent), ce que le détail par thread du GC confirmera.
+* `ChunkedPoolElement.place` (pose des gabarits, processeur `aging` compris) : 0,2 % des échantillons — rien à gagner
+  là pour l'instant.
+* Le recensement des entités affichait 0 : 26.2 répond `Test passed. Count: 475` (et non plus `count:`) ; corrigé.
+
+Corrigé dans ce passage : la vérification de terrain s'arrête aussi au premier dénivelé trop raide (même verdict,
+vérifié sur 200 000 grilles aléatoires), et les récepteurs sans fil vérifient leur canal en une seule passe (§2).
+
+### Contenu : à décider (non changé, effet visible possible)
+
+* **172 supports d'armure décoratifs** (114 dans la forteresse de basalte du Nether, 36 dans la citadelle engloutie) :
+  ce sont des entités vivantes qui calculent leur chute et leurs collisions à chaque tick. Avec `NoGravity:1b` dans le
+  gabarit, ils ne calculent plus rien (vanilla saute leur physique) ; la seule différence visible : un support resterait
+  en l'air si un joueur casse le sol dessous. Gain : leur part du tick là où ces structures sont chargées.
+* **146 villageois** dans les gabarits (70 dans nos pièces de village, 24 dans l'avant-poste de la guilde, les autres
+  dans les observatoires, bibliothèques, cités…) : ce sont des marchands voulus (métiers fixés, persistants). Un
+  villageois est l'entité vanilla la plus chère (cerveau, recherche de points d'intérêt). À garder sauf si le jeu peut
+  s'en passer dans certaines structures.
+* Les objets au sol (ci-dessus) : selon ce que montrera l'échantillon (pousses et bâtons = feuilles qui se décomposent
+  là où un gabarit a coupé un arbre voisin ; graines et fleurs = eau qui coule sur l'herbe ; blocs = sable/gravier qui
+  tombe), la correction se fera dans les générateurs de `tools/`.
+
+### À lire dans le prochain `brasshaven-ci-profile.txt`
+
+1. **Monde chargé** : recensement mod / vanilla / mod sans biomes et identité des objets au sol.
+2. **Tas** : les classes qui pèsent plus chez le mod (au repos : registres, données ; chargé : entités, blocs à entités).
+3. **Démarrage** : le profil JFR du démarrage avec le mod (chargement des classes, des données, des registres).
+4. **GC** : quel thread du GC fait l'écart (pauses = allocation, marquage concurrent = tas vivant).
+5. Si les **décalages de site** pèsent (chaque décalage refait la projection jigsaw = 1 colonne de bruit, même quand le
    biome ne convient pas) : tester le biome avant la projection n'est pas strictement équivalent (biomes 3D) — à
    décider avec mesure à l'appui.
-4. **Processeur `aging`** (89 règles appliquées à chaque bloc de 20 gabarits, air compris) : si
-   `RuleProcessor.processBlock` ressort, découper la liste par bloc d'entrée dans le générateur (`tools/`) en gardant
-   le même ordre de tirage.
-5. Client (non mesuré) : FPS avec minimap + HUD actifs ou non dans une scène chargée.
+6. Client (non mesuré) : FPS avec minimap + HUD actifs ou non dans une scène chargée.
