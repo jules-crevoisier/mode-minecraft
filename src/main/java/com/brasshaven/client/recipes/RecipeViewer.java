@@ -34,6 +34,10 @@ public final class RecipeViewer {
     private RecipeViewer() {}
 
     public static boolean enabled() {
+        // screens open (title, loading) before the client config is loaded: off until it is
+        if (!BrasshavenClientConfig.SPEC.isLoaded()) {
+            return false;
+        }
         return BrasshavenClientConfig.RECIPE_VIEWER.get() && (!JEI || BrasshavenClientConfig.RECIPE_WITH_JEI.get());
     }
 

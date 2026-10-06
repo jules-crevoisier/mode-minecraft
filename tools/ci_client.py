@@ -508,7 +508,9 @@ def crash_excerpts(paths):
         except OSError:
             continue
         keep, frames = [], 0
-        for i, line in enumerate(lines[:400]):
+        start = next((i for i, l in enumerate(lines) if l.startswith("Description:")), 0)
+        keep += lines[start:start + 6]  # the description and the exception line, whatever its wording
+        for i, line in enumerate(lines[start + 6:400]):
             if line.startswith("Description:") or line.startswith("Caused by") or "Exception" in line.split(":")[0]:
                 keep.append(line)
                 frames = 8
