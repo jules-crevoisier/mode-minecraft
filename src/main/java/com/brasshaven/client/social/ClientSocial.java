@@ -223,14 +223,31 @@ public final class ClientSocial {
             return;
         }
         Font font = mc.font;
-        List<SocialNet.Status> mates = STATUS.values().stream().filter(s -> !s.id().equals(mc.player.getUUID())).toList();
+        List<SocialNet.Status> mates = new java.util.ArrayList<>();
+        for (SocialNet.Status s : STATUS.values()) {
+            if (!s.id().equals(mc.player.getUUID())) {
+                mates.add(s);
+            }
+        }
         if (mates.isEmpty()) {
             return;
         }
         int rowH = 21;
         int w = 92;
         int x = 3;
-        int y = g.guiHeight() / 2 - mates.size() * rowH / 2;
+        // a big company (company.maxSize up to 100): the nearest companions that fit, then "+N"
+        int fit = Math.max(1, (g.guiHeight() - 40) / rowH);
+        int hidden = 0;
+        if (mates.size() > fit) {
+            mates.sort(java.util.Comparator.comparingInt(s -> {
+                int d = distance(s);
+                return d < 0 ? Integer.MAX_VALUE : d;
+            }));
+            hidden = mates.size() - (fit - 1);
+            mates = mates.subList(0, fit - 1);
+        }
+        int rows = mates.size() + (hidden > 0 ? 1 : 0);
+        int y = g.guiHeight() / 2 - rows * rowH / 2;
         for (SocialNet.Status s : mates) {
             String name = "?";
             for (SocialNet.MemberInfo m : company.members()) {
@@ -262,6 +279,10 @@ public final class ClientSocial {
             }
             g.text(font, where, bx + bw + 4, by - 2, WfGui.CREAM_SOFT, true);
             y += rowH;
+        }
+        if (hidden > 0) {
+            g.fill(x, y, x + w, y + 12, 0xA00F0C0A);
+            g.text(font, "+" + hidden, x + 6, y + 2, WfGui.CREAM_SOFT, true);
         }
     }
 

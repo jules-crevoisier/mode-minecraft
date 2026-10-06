@@ -43,7 +43,8 @@ public final class SocialConfig {
 
         companyEnabled = b.comment("Companies (parties): invite, company chat, friendly-fire and XP-sharing switches, companions",
                 "on the HUD and the maps, travel to a companion from a waystone.").define("company.enabled", true);
-        companyMaxSize = b.comment("Most members in one company.").defineInRange("company.maxSize", 8, 2, 32);
+        companyMaxSize = b.comment("Most members in one company (a guild of a big server can go up to 100; the companions HUD then",
+                "shows the nearest ones that fit on the screen).").defineInRange("company.maxSize", 8, 2, 100);
         companyXpRange = b.comment("Shared experience goes to companions within this many blocks (same dimension).")
                 .defineInRange("company.xpShareRange", 48, 8, 256);
         companyJoinCost = b.comment("Experience levels paid to travel from a waystone to a companion (creative players pay nothing).")

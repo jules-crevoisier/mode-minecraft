@@ -1071,7 +1071,7 @@ KEY_TEXT.update({
 CONFIG_FR.update({
     "social.company.enabled": "Compagnies : invitations, chat de compagnie, tirs amis et XP partagée, compagnons à "
                               "l'écran et sur les cartes, voyage vers un compagnon depuis une pierre.",
-    "social.company.maxSize": "Nombre maximal de membres d'une compagnie.",
+    "social.company.maxSize": "Nombre maximal de membres d'une compagnie (de 2 à 100 ; 8 par défaut). Avec une grande guilde, le HUD des compagnons montre les plus proches et « +N » pour les autres.",
     "social.company.xpShareRange": "L'expérience partagée va aux compagnons à moins de ce nombre de blocs (même dimension).",
     "social.company.joinCostLevels": "Niveaux d'expérience payés pour rejoindre un compagnon depuis une pierre (gratuit en créatif).",
     "social.company.joinCooldownSeconds": "Secondes entre deux voyages vers un compagnon.",
