@@ -778,6 +778,14 @@ public final class CiDriver {
      * recipe; the uses of the Brass Ingot; then the "+" button, checked on the server: the grid holds the wrench's
      * ingredients (its result slot shows a wrench) and they left the player's inventory.
      */
+    /** The recipe screen's widgets: those of its last layout only, once each, inside the window (no stray copy). */
+    private static void checkWidgets(com.brasshaven.client.recipes.RecipeScreen rs) {
+        String problem = rs.widgetProblem();
+        if (problem != null) {
+            throw new IllegalStateException("recipe screen: " + problem);
+        }
+    }
+
     private static void recipeSteps() {
         int[] before = new int[2];
         net.minecraft.world.item.Item brass = com.brasshaven.generated.GeneratedMetals.BRASS_INGOT.get();
@@ -817,6 +825,7 @@ public final class CiDriver {
                     if (rs.recipeCount() < 1) {
                         throw new IllegalStateException("no recipe for the Brass Wrench");
                     }
+                    checkWidgets(rs);
                 })
                 .waitTicks(20)
                 .shot("recipe_view");
@@ -830,6 +839,7 @@ public final class CiDriver {
                     if (rs.recipeCount() < 10) {
                         throw new IllegalStateException("only " + rs.recipeCount() + " uses for the Brass Ingot");
                     }
+                    checkWidgets(rs);
                 })
                 .waitTicks(20)
                 .shot("recipe_uses");

@@ -93,6 +93,8 @@ public class RecipeScreen extends Screen {
     /** Per visible recipe: which input slots the inventory cannot fill (null: no "+" for it). */
     private final Map<ViewRecipe, boolean[]> missing = new IdentityHashMap<>();
     private int missingAge;
+    /** init() has run (the screen is shown): widgets can be rebuilt. */
+    private boolean laidOut;
 
     public RecipeScreen(ItemStack stack, boolean uses, @Nullable Screen parent) {
         super(Component.translatable(uses ? "gui.brasshaven.recipes.uses" : "gui.brasshaven.recipes.recipes"));
@@ -125,7 +127,10 @@ public class RecipeScreen extends Screen {
         Identifier key = BuiltInRegistries.ITEM.getKey(focus.getItem());
         focusMod = net.minecraftforge.fml.ModList.getModContainerById(key.getNamespace())
                 .map(c -> c.getModInfo().getDisplayName()).orElse(key.getNamespace());
-        if (minecraft != null) {
+        // only once the screen has been laid out: the constructor comes here too (show), and in 26.2 `minecraft` is
+        // already set there, so a rebuild then ran init() on a 0 x 0 screen and its widgets stayed (Screen.init(w, h)
+        // calls init() without clearing them the first time): a second ">" button over the first recipe
+        if (laidOut) {
             rebuildWidgets();
         }
     }
@@ -213,6 +218,7 @@ public class RecipeScreen extends Screen {
         prev = addRenderableWidget(new WfButton(left + 10, top + H - 24, 40, 16, Component.literal("<"), b -> turn(-1)));
         next = addRenderableWidget(new WfButton(left + W - 50, top + H - 24, 40, 16, Component.literal(">"), b -> turn(1)));
         pageChanged();
+        laidOut = true;
     }
 
     private void pageChanged() {
@@ -773,5 +779,26 @@ public class RecipeScreen extends Screen {
 
     public int recipeCount() {
         return count(current());
+    }
+
+    /**
+     * What is wrong with the screen's widgets, or null (CI): exactly the five of the last init(), each once, each inside
+     * the window.
+     */
+    public @Nullable String widgetProblem() {
+        List<? extends net.minecraft.client.gui.components.events.GuiEventListener> kids = children();
+        List<net.minecraft.client.gui.components.AbstractWidget> expected = List.of(modeButton, manualButton, backButton, prev, next);
+        if (kids.size() != expected.size()) {
+            return kids.size() + " widgets instead of " + expected.size() + ": " + kids;
+        }
+        for (var w : expected) {
+            if (kids.stream().filter(k -> k == w).count() != 1) {
+                return "widget " + w.getMessage().getString() + " not listed once";
+            }
+            if (w.getX() < left || w.getY() < top || w.getRight() > left + W || w.getBottom() > top + H) {
+                return "widget " + w.getMessage().getString() + " at " + w.getX() + "," + w.getY() + " outside the window";
+            }
+        }
+        return null;
     }
 }
