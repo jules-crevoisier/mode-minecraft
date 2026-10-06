@@ -164,7 +164,9 @@ public final class MapRadar {
             KIND[slot] = kind;
             DIST[slot] = d;
         }
-        Arrays.fill(FOUND, n, count, null); // let go of the creatures no longer kept
+        if (n < count) {
+            Arrays.fill(FOUND, n, count, null); // let go of the creatures no longer kept
+        }
         count = n;
         // drawing order: by kind (passive first, bosses last), no sort
         Arrays.fill(BUCKET, 0);
