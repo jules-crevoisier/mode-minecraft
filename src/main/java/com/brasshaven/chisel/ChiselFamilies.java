@@ -89,6 +89,14 @@ public final class ChiselFamilies {
     /** Client side: replaces the families with the server's (ChiselSyncMsg). */
     public static void setClient(List<Data> data) {
         client = build(data);
+        clientList = client.values().stream().distinct().sorted(Comparator.comparing(Family::id)).toList();
+    }
+
+    private static List<Family> clientList = List.of();
+
+    /** Client side: every family, by id (the recipe viewer's Chisel Table tab). */
+    public static List<Family> clientFamilies() {
+        return clientList;
     }
 
     private static Map<Block, Family> build(List<Data> data) {

@@ -75,6 +75,17 @@
 	#Radar: items lying on the ground (small grey dots).
 	radarItems = false
 
+[recipes]
+	#Built-in recipe viewer: in any inventory, R over an item shows its recipes and U its uses (keys rebindable).
+	enabled = true
+	#The item list beside inventories, crafting tables, furnaces... (show / hide it in game with I).
+	panel = true
+	#The item list shows only Brasshaven items (its filter button). Off: Brasshaven items first, then every other.
+	modItemsOnly = false
+	#When JEI is installed the built-in viewer steps aside (no item list, no R / U keys of its own).
+	#Set to true to keep both.
+	alongsideJei = false
+
 [updates]
 	#Look for a newer Brasshaven release (GitHub, in the background) and show a notice with the changelog link.
 	#Nothing is ever downloaded.

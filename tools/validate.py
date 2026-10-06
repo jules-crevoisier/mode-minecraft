@@ -571,7 +571,8 @@ def check_lang():
         for root, _, files in os.walk(os.path.join(ROOT, "src", "main", "java")):
             for f in files:
                 text = open(os.path.join(root, f), encoding="utf-8").read()
-                for key in re.findall(r'"((?:message|tooltip|key|chapter|itemGroup)\.[a-z0-9_.]+)"', text):
+                for key in re.findall(r'"((?:message|tooltip|key|chapter|itemGroup)\.[a-z0-9_.]+|gui\.brasshaven\.recipes\.[a-z0-9_.]+)"',
+                                      text):
                     if not key.endswith(".") and key not in table:
                         err(f"{lang}: missing key {key} (used in {f})")
 
@@ -742,6 +743,32 @@ def check_screen_fit(sw=427, sh=240):
     c = consts("client/social/EmoteWheelScreen.java")
     if 2 * (c["RADIUS"] + c["CELL"] // 2) > sh or 2 * (c["RADIUS"] + c["CELL"] // 2) > sw:
         err("screen fit: the emote wheel does not fit")
+    # the recipe viewer (client/recipes): the recipe screen and its cells, the item list beside the inventory (176 px
+    # wide, potion effects shown or not) without covering it, and the key hints under the screens
+    c = consts("client/recipes/RecipeScreen.java")
+    fits("recipe screen", c["W"], c["H"], 13)
+    if c["CARD_X"] + c["CARD_W"] > c["W"] - 8 or c["CARD_Y"] + c["CARD_H"] > c["H"] - 26:
+        err("screen fit: the recipe screen's card runs into its frame or its page buttons")
+    cat = open(os.path.join(java, "client", "recipes", "RecipeCategory.java"), encoding="utf-8").read()
+    for name, cw, ch in re.findall(r'([A-Z_]+)\("[a-z_:]+", (\d+), (\d+)\)', cat):
+        if int(cw) > c["CARD_W"] or int(ch) > c["CARD_H"]:
+            err(f"screen fit: a {name} recipe ({cw} x {ch}) does not fit the recipe screen's card ({c['CARD_W']} x {c['CARD_H']})")
+    g = consts("client/recipes/ItemGrid.java")
+    chrome = g["PAD"] + g["HEADER"] + 3 + g["SEARCH"] + g["PAD"] - 1
+    right = (sw - 176) // 2 + 176
+    for effects in (0, 35):
+        room = sw - 4 - (right + 4 + effects)
+        cols, rows = min(9, (room - 2 * g["PAD"]) // g["SLOT"]), min(16, (sh - 8 - chrome) // g["SLOT"])
+        if cols < 3 or rows < 3:
+            err(f"screen fit: the item list beside the inventory gets {cols} x {rows} slots at {sw} x {sh} (3 x 3 at least)")
+        elif sw - 4 - (cols * g["SLOT"] + 2 * g["PAD"]) < right + 4 + effects:
+            err("screen fit: the item list covers the inventory window")
+    from wf import guide, recipe_viewer
+    for li in (0, 1):
+        for key in ("gui.brasshaven.recipes.keys",):
+            hint = recipe_viewer.text(key, li, "R", "U")
+            if guide.text_width(hint) > sw - 8:
+                err(f"screen fit: the recipe viewer's hint '{hint}' is wider than {sw - 8} px")
 
 
 def check_pack_meta():

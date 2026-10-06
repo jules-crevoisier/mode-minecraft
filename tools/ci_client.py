@@ -82,7 +82,7 @@ DRIVER_MARK = "client test driver active"
 # keep in step with CiDriver.buildSteps()
 EXPECTED_SHOTS = [
     "hud_minimap", "world_map", "world_map_options", "world_map_3d", "quest_journal", "talent_tree", "manual_welcome", "manual_machines",
-    "machine_harvester", "guild_terminal", "waystone",
+    "machine_harvester", "guild_terminal", "waystone", "recipe_panel", "recipe_view", "recipe_uses", "recipe_fill",
     "company", "player_card", "emote_wheel", "pneumatic_post", "contract_board", "trade",
     "creative_tab", "creatures", "health_bars", "minimap_radar", "peoples", "creatures_places", "folk_trade",
     "mega_structure",

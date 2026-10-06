@@ -80,6 +80,7 @@ public final class Brasshaven {
         com.brasshaven.skill.SkillEvents.register();
         com.brasshaven.util.NpcQuests.register();
         com.brasshaven.chisel.ChiselFamilies.register();
+        com.brasshaven.recipe.RecipeSync.register();
         com.brasshaven.util.StructureLocator.register();
         com.brasshaven.world.SiteFit.register();
         com.brasshaven.block.MachineBlockEntity.registerEvents();

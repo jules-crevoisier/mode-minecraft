@@ -329,13 +329,14 @@ def java_keys():
     # the multiplayer keys (company, emotes, player card) live with the rest of the social client code
     src += open(os.path.join(JAVA, "client", "social", "ClientSocial.java"), encoding="utf-8").read()
     for key, glfw in re.findall(r'new KeyMapping\("([\w.]+)",\s*InputConstants\.Type\.KEYSYM,\s*GLFW\.GLFW_KEY_(\w+)', src):
-        out.append((glfw, FR.get(key, key)))
+        out.append((glfw, FR.get(key, key), key))
     for f in glob.glob(os.path.join(JAVA, "client", "*.java")):
         s = open(f, encoding="utf-8").read()
         for k in re.findall(r"isKeyDown\(.*?GLFW\.GLFW_KEY_(\w+)\)", s):
             if k not in [o[0] for o in out]:
-                out.append((k, None))
-    return [(k, TXT.KEY_TEXT.get(k) or v or k) for k, v in out]
+                out.append((k, None, None))
+    # a letter used twice (R sorts in game and shows recipes in an inventory) is told apart by its key id
+    return [(k, TXT.KEY_TEXT.get(kid) or TXT.KEY_TEXT.get(k) or v or k) for k, v, kid in out]
 
 
 def java_commands():
@@ -1134,6 +1135,7 @@ def main():
   <div class="grid pages">{farm}</div>
 </section>''')
     sec.append(section_terminal(ctx))
+    sec.append(section_recipe_viewer(ctx))
     sec.append(section_gadgets(ctx))
     sec.append(section_social(ctx))
     sec.append(section_construction(ctx))
@@ -1865,7 +1867,8 @@ MACHINE_SCREENS = {"auto_harvester": "machine_harvester", "sprinkler": "machine_
                    "block_placer": "machine_placer", "redstone_timer": "machine_timer",
                    "wireless_transmitter": "machine_transmitter", "wireless_receiver": "machine_receiver",
                    "entity_detector": "machine_detector"}
-GUI_SHOTS = ["worldmap", "worldmap_3d", "worldmap_options", "minimap", "settings"] + list(MACHINE_SCREENS.values())
+GUI_SHOTS = ["worldmap", "worldmap_3d", "worldmap_options", "minimap", "settings"] + list(MACHINE_SCREENS.values()) + [
+    "recipes_panel", "recipes_view", "recipes_uses", "recipes_furnace"]
 PREVIEW_GUI = os.path.join(ROOT, "build", "previews", "gui")
 _GUI_SIZE = {}
 
@@ -2073,6 +2076,26 @@ def section_terminal(ctx):
     {"".join(f"<p>{E(p)}</p>" for p in network)}
     <p class="small">Portées réglables côté serveur : <a href="#performances">options storage.*</a>.</p></div>
   </div>
+</section>'''
+
+
+def section_recipe_viewer(ctx):
+    """The built-in recipe viewer (client/recipes): the item list, the recipe screen, the "+" button."""
+    gui = ctx.gui
+    paras = manual_paras(pid="recipes")
+    ctx.idx.add("Livre de recettes", "Interface", "livre-recettes", " ".join(paras))
+    keyrow = "".join(f'<li><kbd>{E(k)}</kbd><span>{E(x)}</span></li>' for k, x in TXT.RECIPE_KEYS)
+    figs = [shot_fig(ctx, "recipe_panel") or screen_fig(gui, "recipes_panel", "La liste des objets à côté de l'établi, avec une recherche"),
+            shot_fig(ctx, "recipe_fill") or screen_fig(gui, "recipes_view", "Les recettes du lingot de laiton ouvertes depuis "
+                                                       "l'établi : boutons +, ingrédient manquant en rouge"),
+            screen_fig(gui, "recipes_uses", "Ses utilisations : quatre recettes par page, retour à l'objet précédent"),
+            screen_fig(gui, "recipes_furnace", "L'onglet du four : temps de cuisson et expérience")]
+    return f'''<section class="block" id="livre-recettes">
+  {plaque("livre-recettes-h", "Nouveau · interface", "Le livre de recettes intégré", E(TXT.RECIPE_VIEWER_INTRO))}
+  {ingame_feature(ctx, "recipe_view")}
+  <ul class="keyrow">{keyrow}</ul>
+  <div class="card">{"".join(f"<p>{E(p)}</p>" for p in paras)}</div>
+  <div class="mini-row">{"".join(f"<div>{f}</div>" for f in figs if f)}</div>
 </section>'''
 
 
@@ -2365,6 +2388,7 @@ SECTIONS = {
     "carte": ("Carte & mini-carte", "Carte du monde", "minecraft:filled_map"),
     "machines": ("Machines", "Machines", "brasshaven:auto_harvester"),
     "terminal": ("Terminal de guilde", "Terminal de guilde", "brasshaven:guild_terminal"),
+    "livre-recettes": ("Livre de recettes", "Livre de recettes", "minecraft:knowledge_book"),
     "gadgets": ("Gadgets à vapeur", "Gadgets à vapeur", "brasshaven:grappling_hook"),
     "multijoueur": ("Multijoueur", "Multijoueur", "brasshaven:pneumatic_post"),
     "construction": ("Burin & baguette", "Construction", "brasshaven:chisel"),
@@ -2383,8 +2407,8 @@ SECTIONS = {
 
 
 # sections marked with a dot in the menu and the tiles (what changed tonight)
-NEW_SECTIONS = {"nouveautes", "en-jeu", "tester", "carte", "terminal", "oceans", "blocs-monde", "performances",
-                "biomes", "multijoueur"}
+NEW_SECTIONS = {"nouveautes", "en-jeu", "tester", "carte", "terminal", "livre-recettes", "oceans", "blocs-monde",
+                "performances", "biomes", "multijoueur"}
 
 
 def render_page(sections, idx, atlas_rows, nav):

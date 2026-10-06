@@ -15,7 +15,7 @@
 - **un univers steampunk** : laiton, zinc, mithril, éther, 13 blocs de déco, 9 meubles en 3D, 9 machines simples et la **Citadelle d'horlogerie** ;
 - **des talents RPG et de la magie simple** : arbre de 36 talents (touche **K**), capacité active (touche **V**), mana et 7 bâtons de sort ;
 - **une carte du monde et une mini-carte** (touche **M**) partagées sur un serveur, avec repères, signaux et pierres de voyage ;
-- **de vraies interfaces** : journal de quêtes, écran de voyage, terminal de stockage, manuel illustré, barres de vie des monstres.
+- **de vraies interfaces** : journal de quêtes, écran de voyage, terminal de stockage, manuel illustré, barres de vie des monstres, et un **livre de recettes intégré** (façon JEI, sans autre mod : **R** recettes, **U** utilisations, liste des objets à côté des inventaires, bouton **+** qui remplit l'établi).
 
 | Cible | Version |
 |---|---|
@@ -97,6 +97,7 @@ Guide complet (publication CurseForge/Modrinth, releases, mises à jour joueurs 
 |---|---|
 | **Boutons dans tous les coffres** | Trier, Tout prendre, Déposer les identiques, Ranger dans les coffres proches ; barre de recherche ; clic molette pour trier. |
 | **Confort** | Réapprovisionnement automatique de la barre d'action ; récolte au clic droit avec replantation. |
+| **Livre de recettes** | Dans tout inventaire : la liste de tous les objets à côté de la fenêtre (recherche par nom, `@mod`, `#tag` ; touche **I** pour la masquer), **R** sur un objet pour ses recettes, **U** pour ses utilisations (établi, fours, tailleur de pierre, forge, table de taille...). Depuis un établi ou un four, le bouton **+** met les ingrédients dans la grille (Maj : le plus possible). Toutes les recettes du serveur, packs de données compris ; s'efface si JEI est installé. |
 | **Terminal de guilde** | Tous les coffres de la base (48 blocs autour, plus loin avec des **relais de stockage** qui s'enchaînent) dans une seule grille : recherche, tri, coffres exclus au choix, « Montrer » encadre les coffres reliés. |
 | **Caisse compacte** | 32 piles d'un seul objet, affiché en façade avec le total. Clic droit pour ranger (double clic : tout), clic gauche pour prendre. |
 | **Baguettes du bâtisseur** | Prolongent une face (16 ou 64 blocs) avec un aperçu ; accroupi dans le vide pour annuler. **Symétrie** : accroupi + clic sur un bloc pour placer le centre du miroir, touche **G** pour choisir miroir X, Z ou les deux (4 côtés) ; les copies en miroir s'affichent en bleu. |

@@ -719,7 +719,8 @@ def mockup_settings(G, li=1):
     k = "gui.brasshaven.settings."
 
     def tr(key):
-        return content.MESSAGES[key][li]
+        from . import recipe_viewer
+        return (content.MESSAGES.get(key) or recipe_viewer.MESSAGES[key])[li]
 
     # SettingsScreen constants
     w_, row_h, rows_n, first, hint, cx = 360, 20, 7, 42, 12, 124
@@ -752,7 +753,7 @@ def mockup_settings(G, li=1):
         tbw = max(80, max(guide.text_width(t) + 16 for t in tabs))
         for i, t in enumerate(tabs):
             choice(ox + (w_ - len(tabs) * tbw - (len(tabs) - 1) * 4) // 2 + i * (tbw + 4), oy + 17, tbw, 16, t, i == tab)
-        names = (["health_bars", "damage_numbers", "quest_tracker", "tips", "keys"] if tab == 0 else
+        names = (["health_bars", "damage_numbers", "quest_tracker", "tips", "keys", "recipe_viewer", "recipe_panel"] if tab == 0 else
                  ["minimap", "minimap_size", "minimap_corner", "minimap_shape", "minimap_rotate", "minimap_coords",
                   "minimap_opacity"] if tab == 1 else
                  ["radar", "radar_icons", "radar_hostile", "radar_passive", "radar_npcs", "radar_players", "radar_items"])
@@ -767,6 +768,8 @@ def mockup_settings(G, li=1):
                 toggle(i, on)
             kb = tr(k + "keys.button")
             choice(ox + cx, row_y(4), max(60, guide.text_width(kb) + 16), 18, kb, False)
+            toggle(5, True)  # the recipe viewer and its item list (client/recipes)
+            toggle(6, True)
         elif tab == 2:
             toggle(0, True)
             x = ox + cx

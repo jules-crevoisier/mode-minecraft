@@ -48,6 +48,14 @@ public final class BrasshavenClient {
     public static final KeyMapping MANUAL_KEY = new KeyMapping("key.brasshaven.manual_page",
             InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_W, CATEGORY);
 
+    /** Recipe viewer (client/recipes): over an item in an inventory, its recipes / its uses; I shows or hides the item list. */
+    public static final KeyMapping RECIPES_KEY = new KeyMapping("key.brasshaven.recipes",
+            InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_R, CATEGORY);
+    public static final KeyMapping USES_KEY = new KeyMapping("key.brasshaven.uses",
+            InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_U, CATEGORY);
+    public static final KeyMapping RECIPE_PANEL_KEY = new KeyMapping("key.brasshaven.recipe_panel",
+            InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_I, CATEGORY);
+
     private BrasshavenClient() {}
 
     public static void init(BusGroup modBus, net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext context) {
@@ -55,6 +63,14 @@ public final class BrasshavenClient {
         // a conflict with "Walk Forwards" (also W) in the controls screen
         ((net.minecraftforge.client.extensions.IForgeKeyMapping) MANUAL_KEY).setKeyConflictContext(
                 net.minecraftforge.client.settings.KeyConflictContext.GUI);
+        // the recipe viewer's keys work in inventories only; the in-game keys on the same letters (R sorts, U opens a
+        // player's card) only work with no screen open: different contexts, so the controls screen shows no conflict
+        for (KeyMapping gui : new KeyMapping[] {RECIPES_KEY, USES_KEY, RECIPE_PANEL_KEY}) {
+            ((net.minecraftforge.client.extensions.IForgeKeyMapping) gui).setKeyConflictContext(
+                    net.minecraftforge.client.settings.KeyConflictContext.GUI);
+        }
+        ((net.minecraftforge.client.extensions.IForgeKeyMapping) SORT_KEY).setKeyConflictContext(
+                net.minecraftforge.client.settings.KeyConflictContext.IN_GAME);
         EntityRenderersEvent.RegisterLayerDefinitions.BUS.addListener(ModelRegistry::registerLayers);
         EntityRenderersEvent.RegisterRenderers.BUS.addListener(BrasshavenClient::registerRenderers);
         AddGuiOverlayLayersEvent.BUS.addListener(EldenBossBar::register);
@@ -83,6 +99,7 @@ public final class BrasshavenClient {
                 });
         net.minecraftforge.event.entity.player.ItemTooltipEvent.BUS.addListener(TipCards::onTooltip);
         TipCards.registerKeys();
+        com.brasshaven.client.recipes.RecipeViewer.register();
         ReleaseClient.register();
         // "Config" button of the mods list: the display settings in the mod's own theme
         context.registerExtensionPoint(
@@ -101,6 +118,9 @@ public final class BrasshavenClient {
             event.register(MINIMAP_KEY);
             event.register(MINIMAP_ZOOM_KEY);
             event.register(PING_KEY);
+            event.register(RECIPES_KEY);
+            event.register(USES_KEY);
+            event.register(RECIPE_PANEL_KEY);
         });
         TickEvent.ClientTickEvent.Post.BUS.addListener(event -> onClientTick());
         // scripted screenshot run for CI; inert unless the JVM has -Dbrasshaven.ci=true

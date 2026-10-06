@@ -118,6 +118,20 @@ public final class BrasshavenClientConfig {
             .comment("Radar: items lying on the ground (small grey dots).")
             .define("map.radarItems", false);
 
+    public static final ForgeConfigSpec.BooleanValue RECIPE_VIEWER = B
+            .comment("Built-in recipe viewer: in any inventory, R over an item shows its recipes and U its uses (keys rebindable).")
+            .define("recipes.enabled", true);
+    public static final ForgeConfigSpec.BooleanValue RECIPE_PANEL = B
+            .comment("The item list beside inventories, crafting tables, furnaces... (show / hide it in game with I).")
+            .define("recipes.panel", true);
+    public static final ForgeConfigSpec.BooleanValue RECIPE_MOD_ONLY = B
+            .comment("The item list shows only Brasshaven items (its filter button). Off: Brasshaven items first, then every other.")
+            .define("recipes.modItemsOnly", false);
+    public static final ForgeConfigSpec.BooleanValue RECIPE_WITH_JEI = B
+            .comment("When JEI is installed the built-in viewer steps aside (no item list, no R / U keys of its own).",
+                    "Set to true to keep both.")
+            .define("recipes.alongsideJei", false);
+
     public static final ForgeConfigSpec.BooleanValue UPDATE_CHECK = B
             .comment("Look for a newer Brasshaven release (GitHub, in the background) and show a notice with the changelog link.",
                     "Nothing is ever downloaded.")
