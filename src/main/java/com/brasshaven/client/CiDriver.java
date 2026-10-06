@@ -580,8 +580,11 @@ public final class CiDriver {
                         "fill " + at(-4, 1, 0) + " " + at(4, 4, 5) + " minecraft:air",
                         "summon minecraft:husk " + (bx - 1.75) + " " + (STAGE_Y + 1) + " " + (bz + 3.5) + " {" + hb + ",Health:20f}",
                         "summon minecraft:husk " + (bx - 0.25) + " " + (STAGE_Y + 1) + " " + (bz + 3.5) + " {" + hb + ",Tags:[\"ci_hit\"]}",
-                        "summon minecraft:creeper " + (bx + 1.25) + " " + (STAGE_Y + 1) + " " + (bz + 3.5) + " {" + hb + ",Health:8f}",
-                        "summon minecraft:husk " + (bx + 2.75) + " " + (STAGE_Y + 1) + " " + (bz + 3.5) + " {" + hb + ",Health:3f}",
+                        "summon minecraft:creeper " + (bx + 1.25) + " " + (STAGE_Y + 1) + " " + (bz + 3.5) + " {" + hb + ",Tags:[\"ci_40\"]}",
+                        "summon minecraft:husk " + (bx + 2.75) + " " + (STAGE_Y + 1) + " " + (bz + 3.5) + " {" + hb + ",Tags:[\"ci_15\"]}",
+                        // Health in the summon tag is reset to full when the creature spawns: set it afterwards
+                        "data merge entity @e[tag=ci_40,limit=1] {Health:8f}",
+                        "data merge entity @e[tag=ci_15,limit=1] {Health:3f}",
                         "tp @s " + (bx + 0.5) + " " + (STAGE_Y + 1) + " " + (bz - 1.0) + " facing "
                                 + (bx - 0.25) + " " + (STAGE_Y + 1.5) + " " + (bz + 3.5)))
                 .run("fly", CiDriver::fly)
