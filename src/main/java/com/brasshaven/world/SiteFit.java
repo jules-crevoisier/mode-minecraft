@@ -354,14 +354,14 @@ public final class SiteFit {
         boolean needTop = !fit.mode().equals("underground");
         boolean needFloor = !fit.mode().equals("sky");
         Sample[] s = new Sample[nx * nz];
-        EarlyReject early = new EarlyReject(fit, s.length, box, heights);
+        EarlyReject early = new EarlyReject(fit, s.length, nx, box, heights);
         for (int k : sampleOrder(nx, nz)) {
             int i = k % nx;
             int j = k / nx;
             int x = fp[0] + Math.round(w * i / (float) (nx - 1));
             int z = fp[1] + Math.round(d * j / (float) (nz - 1));
             s[k] = sample(gen, x, z, heights, rs, needTop, needFloor);
-            String why = early.add(s[k]);
+            String why = early.add(s, k);
             if (why != null) {
                 return Verdict.reject(why);
             }
@@ -408,7 +408,8 @@ public final class SiteFit {
      * Rejections that a part of the grid already settles, checked after each sample so the remaining columns are not
      * computed. Only monotone conditions are used: the share of water (or of dry land) can only grow, the spread of the
      * ground heights can only widen, the highest terrain under a floating structure can only rise and the lowest
-     * ground over a buried one can only sink as samples are added. So whenever this rejects, the complete check
+     * ground over a buried one can only sink, and the steepest slope between two neighbouring samples (once both are
+     * known) can only get steeper as samples are added. So whenever this rejects, the complete check
      * ({@link #land}, {@link #seabed}, {@link #sky}, {@link #underground}) would have rejected the site as well: the
      * verdict is the same, only the reason recorded for /brasshaven fitcheck may name another failing check first
      * (same first word, so the statistics keep their categories).
@@ -417,6 +418,7 @@ public final class SiteFit {
         private final FittedJigsawStructure.Fit fit;
         private final String mode;
         private final int total;
+        private final int nx;
         private final BoundingBox box;
         private final LevelHeightAccessor heights;
         private int seen;
@@ -426,17 +428,19 @@ public final class SiteFit {
         private int highest;
         private int lowest = Integer.MAX_VALUE;
 
-        EarlyReject(FittedJigsawStructure.Fit fit, int total, BoundingBox box, LevelHeightAccessor heights) {
+        EarlyReject(FittedJigsawStructure.Fit fit, int total, int nx, BoundingBox box, LevelHeightAccessor heights) {
             this.fit = fit;
             this.mode = fit.mode();
             this.total = total;
+            this.nx = nx;
             this.box = box;
             this.heights = heights;
             this.highest = heights.getMinY();
         }
 
-        /** Adds a sample; a rejection reason when the site cannot fit whatever the other samples say, else null. */
-        String add(Sample p) {
+        /** Adds sample {@code s[k]}; a rejection reason when the site cannot fit whatever the other samples say, else null. */
+        String add(Sample[] s, int k) {
+            Sample p = s[k];
             this.seen++;
             int remaining = this.total - this.seen;
             switch (this.mode) {
@@ -450,7 +454,8 @@ public final class SiteFit {
                         return String.format(Locale.ROOT, "dry %d%%- water < %d%% (early)", (this.wet + remaining) * 100 / this.total,
                                 Math.round(this.fit.minWet() * 100));
                     }
-                    return this.spread((this.mode.equals("wetland") ? p.top() : p.floor()) - 1);
+                    String why = this.spread(this.ground(p));
+                    return why != null ? why : this.slope(s, k);
                 }
                 case "seabed" -> {
                     this.wet += p.wet() ? 1 : 0;
@@ -458,7 +463,8 @@ public final class SiteFit {
                         return String.format(Locale.ROOT, "water %d%%- < %d%% (early)", (this.wet + remaining) * 100 / this.total,
                                 Math.round(this.fit.wet() * 100));
                     }
-                    return this.spread(p.floor() - 1);
+                    String why = this.spread(this.ground(p));
+                    return why != null ? why : this.slope(s, k);
                 }
                 case "sky" -> {
                     this.highest = Math.max(this.highest, p.top() - 1);
@@ -482,6 +488,35 @@ public final class SiteFit {
                     return null; // coast: its checks need the whole grid
                 }
             }
+        }
+
+        /** The height {@link #land} and {@link #seabed} compare (wetland: the water surface counts as ground). */
+        private int ground(Sample p) {
+            return (this.mode.equals("wetland") ? p.top() : p.floor()) - 1;
+        }
+
+        /** The steepest of the pairs {@code s[k]} now completes, measured exactly as {@link #steepest} does. */
+        private String slope(Sample[] s, int k) {
+            int i = k % this.nx;
+            double worst = 0;
+            if (i > 0 && s[k - 1] != null) {
+                worst = Math.max(worst, pair(s[k - 1], s[k], s[k].x() - s[k - 1].x()));
+            }
+            if (i + 1 < this.nx && k + 1 < s.length && s[k + 1] != null) {
+                worst = Math.max(worst, pair(s[k], s[k + 1], s[k + 1].x() - s[k].x()));
+            }
+            if (k - this.nx >= 0 && s[k - this.nx] != null) {
+                worst = Math.max(worst, pair(s[k - this.nx], s[k], s[k].z() - s[k - this.nx].z()));
+            }
+            if (k + this.nx < s.length && s[k + this.nx] != null) {
+                worst = Math.max(worst, pair(s[k], s[k + this.nx], s[k + this.nx].z() - s[k].z()));
+            }
+            return worst > this.fit.slope()
+                    ? String.format(Locale.ROOT, "slope %.2f+ > %.2f (early)", worst, this.fit.slope()) : null;
+        }
+
+        private double pair(Sample a, Sample b, int run) {
+            return Math.abs(this.ground(b) - this.ground(a)) / (double) Math.max(MIN_STEP, run);
         }
 
         private String spread(int h) {
