@@ -903,6 +903,10 @@ CENSUS_VANILLA = ["villager", "iron_golem", "armor_stand", "item", "experience_o
                   "wolf", "goat", "llama", "camel", "armadillo", "frog", "parrot", "turtle", "bee", "cod", "salmon",
                   "squid", "glow_squid", "tropical_fish", "dolphin", "axolotl", "wandering_trader", "piglin",
                   "minecart", "chest_minecart"]
+# items on the ground counted exactly (with any id the random sample finds): the kelp and buttons that the ocean
+# template features broke in the neighbouring chunks, and vanilla's own (azalea, moss carpets, seeds) for scale
+GROUND_ITEM_IDS = ["kelp", "polished_blackstone_button", "moss_carpet", "azalea", "flowering_azalea",
+                   "wheat_seeds", "sand", "string"]
 
 
 def forceload_area(srv, x, z, side, failures, label):
@@ -1041,6 +1045,14 @@ def entity_census(srv, mod):
         if m:
             ids[m.group(1)] = ids.get(m.group(1), 0) + 1
     out["items sampled"] = ids
+    # then every item of those ids, counted exactly (a sample of 60 cannot show a change of a few dozen)
+    exact = {}
+    for iid in sorted(set("minecraft:" + i for i in GROUND_ITEM_IDS) | set(ids)):
+        res = srv.run(f'execute in minecraft:overworld if entity @e[type=minecraft:item,nbt={{Item:{{id:"{iid}"}}}}]',
+                      r"Test (passed|failed)|Unknown|Invalid|Incorrect", 60)
+        m = re.search(r"[Cc]ount: (\d+)", res or "")
+        exact[iid] = int(m.group(1)) if m else 0
+    out["items by id"] = exact
     return out
 
 
@@ -1048,7 +1060,7 @@ def census_lines(mod, van, nob=None):
     mc, vc, nc = mod.get("census") or {}, van.get("census") or {}, (nob or {}).get("census") or {}
     if not mc and not vc:
         return []
-    rows = sorted({t for t in list(mc) + list(vc) + list(nc) if t not in ("*", "items sampled")
+    rows = sorted({t for t in list(mc) + list(vc) + list(nc) if t not in ("*", "items sampled", "items by id")
                    and (mc.get(t) or vc.get(t) or nc.get(t))},
                   key=lambda t: -abs(mc.get(t, 0) - vc.get(t, 0)))
     lines = [f"  entities loaded after the sprint (/execute if entity): full mod {mc.get('*', 'n/a')}, vanilla "
@@ -1060,6 +1072,12 @@ def census_lines(mod, van, nob=None):
         if sample:
             lines.append(f"  items on the ground, {tag} (random sample of {sum(sample.values())}): "
                          + ", ".join(f"{k} {n}" for k, n in sorted(sample.items(), key=lambda kv: -kv[1])[:15]))
+    me, ve, ne = (c.get("items by id") or {} for c in (mc, vc, nc))
+    if me or ve:
+        lines.append("  items on the ground by id, exact counts (/execute if entity @e[type=item,nbt={Item:{id:...}}]):")
+        lines.append(f"    {'item':34s} {'mod':>6s} {'vanilla':>7s}" + (f" {'mod, vanilla biomes':>20s}" if ne else ""))
+        for iid in sorted(set(me) | set(ve) | set(ne), key=lambda i: -(me.get(i, 0) + ve.get(i, 0) + ne.get(i, 0))):
+            lines.append(f"    {iid:34s} {me.get(iid, 0):6d} {ve.get(iid, 0):7d}" + (f" {ne.get(iid, 0):20d}" if ne else ""))
     return lines
 
 

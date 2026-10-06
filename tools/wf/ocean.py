@@ -210,6 +210,34 @@ def _templates(names, weight=None):
         {"data": {"id": f"{NS}:ocean/{n}"}, "weight": (weight or {}).get(n, 1)} for n in names]}}
 
 
+def _floor_in_chunk(names):
+    """FLOOR for a template feature, with an origin that keeps every one of ``names``, at every rotation, inside the
+    chunk being decorated.
+
+    The template feature centres the template on its origin (``origin - size / 2``, Java integer division), so a
+    template of ``s`` blocks reaches ``s // 2`` blocks on each side whatever the rotation. With ``in_square`` it spilled
+    into the neighbouring chunks, some of them already decorated: a coral, sea grass, slab or pot stamped into the
+    middle of their kelp left the kelp above with nothing to stand on, and on load the whole column broke into kelp
+    items lying on the sea floor (the CI's census of items on the ground). Kept inside its own chunk, the template is
+    placed before that chunk's kelp, which then grows around it (vanilla's kelp checks it can survive)."""
+    reach = 0
+    for n in names:
+        (x0, _y0, z0), (x1, _y1, z1) = build_template(n).bounds()
+        reach = max(reach, (max(x1 - x0, z1 - z0) + 1) // 2)
+    if reach > 7:
+        raise ValueError(f"ocean templates {names}: reach {reach} does not fit in a chunk")
+    return [{"type": "minecraft:random_offset",
+             "xz_spread": {"type": "minecraft:uniform", "min_inclusive": reach, "max_inclusive": 15 - reach},
+             "y_spread": 0},
+            {"type": "minecraft:heightmap", "heightmap": "OCEAN_FLOOR_WG"}]
+
+
+# the template features (templates below)
+CORAL_TEMPLATES = ["coral_tower", "coral_fan", "coral_arch", "coral_brain"]
+ROCK_TEMPLATES = ["rock_arch", "rock_pillars", "rock_stack", "rock_ring"]
+RUIN_TEMPLATES = ["ruin_colonnade", "ruin_statue", "ruin_stair", "ruin_amphorae"]
+
+
 # id -> (configured feature, placement, generation step, biome tag)
 def features():
     anemone = [{"data": {"Name": f"{NS}:glow_anemone", "Properties": {"color": str(c), "waterlogged": "true"}},
@@ -232,8 +260,8 @@ def features():
                                  "noise_factor": 160.0, "noise_offset": 0.3}] + FLOOR + [BIOME],
                                "vegetal_decoration", "coral"),
         # giant corals: towers, fans and arches of coral blocks (templates below)
-        "ocean_giant_coral": (_templates(["coral_tower", "coral_fan", "coral_arch", "coral_brain"]),
-                              [{"type": "minecraft:rarity_filter", "chance": 4}] + FLOOR
+        "ocean_giant_coral": (_templates(CORAL_TEMPLATES),
+                              [{"type": "minecraft:rarity_filter", "chance": 4}] + _floor_in_chunk(CORAL_TEMPLATES)
                               + [{"type": "minecraft:random_offset", "xz_spread": 0, "y_spread": -4},
                                  {"type": "minecraft:block_predicate_filter", "predicate": _water_at(15)}, BIOME],
                               "local_modifications", "coral"),
@@ -254,14 +282,14 @@ def features():
                                [{"type": "minecraft:rarity_filter", "chance": 20}] + FLOOR + [BIOME],
                                "local_modifications", "all"),
         # rock arches, sea stacks and pillars standing on the sea floor (templates below)
-        "ocean_rock_formations": (_templates(["rock_arch", "rock_pillars", "rock_stack", "rock_ring"]),
-                                  [{"type": "minecraft:rarity_filter", "chance": 9}] + FLOOR
+        "ocean_rock_formations": (_templates(ROCK_TEMPLATES),
+                                  [{"type": "minecraft:rarity_filter", "chance": 9}] + _floor_in_chunk(ROCK_TEMPLATES)
                                   + [{"type": "minecraft:random_offset", "xz_spread": 0, "y_spread": -4},
                                      {"type": "minecraft:block_predicate_filter", "predicate": _water_at(15)}, BIOME],
                                   "local_modifications", "all"),
         # small sunken ruins: broken colonnades, a fallen statue, a sunken stair, an amphora heap
-        "ocean_sunken_ruins": (_templates(["ruin_colonnade", "ruin_statue", "ruin_stair", "ruin_amphorae"]),
-                               [{"type": "minecraft:rarity_filter", "chance": 14}] + FLOOR
+        "ocean_sunken_ruins": (_templates(RUIN_TEMPLATES),
+                               [{"type": "minecraft:rarity_filter", "chance": 14}] + _floor_in_chunk(RUIN_TEMPLATES)
                                + [{"type": "minecraft:random_offset", "xz_spread": 0, "y_spread": -4},
                                   {"type": "minecraft:block_predicate_filter", "predicate": _water_at(10)}, BIOME],
                                "surface_structures", "all"),
