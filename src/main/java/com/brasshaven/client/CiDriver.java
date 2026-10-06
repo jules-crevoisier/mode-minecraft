@@ -546,6 +546,7 @@ public final class CiDriver {
                 .waitTicks(30)
                 .shot("waystone");
 
+        recipeSteps();
         socialSteps();
 
         step("creative_tab")
@@ -770,6 +771,118 @@ public final class CiDriver {
                 .until("TradeScreen", () -> screen() instanceof com.brasshaven.client.social.TradeScreen, 20)
                 .waitTicks(20)
                 .shot("trade");
+    }
+
+    /**
+     * The recipe viewer (client/recipes): a crafting table with the item list beside it and a search; the Brass Wrench's
+     * recipe; the uses of the Brass Ingot; then the "+" button, checked on the server: the grid holds the wrench's
+     * ingredients (its result slot shows a wrench) and they left the player's inventory.
+     */
+    private static void recipeSteps() {
+        int[] before = new int[2];
+        net.minecraft.world.item.Item brass = com.brasshaven.generated.GeneratedMetals.BRASS_INGOT.get();
+        net.minecraft.world.item.Item iron = net.minecraft.world.item.Items.IRON_INGOT;
+        net.minecraft.world.item.Item wrench = com.brasshaven.registry.ModItems.BRASS_WRENCH.get();
+        step("recipe_panel")
+                .cmd(() -> List.of("setblock " + at(4, 1, -4) + " minecraft:crafting_table",
+                        "give @s brasshaven:brass_ingot 5", "give @s minecraft:iron_ingot 2"))
+                .run("panel on", () -> {
+                    BrasshavenClientConfig.RECIPE_VIEWER.set(true);
+                    BrasshavenClientConfig.RECIPE_PANEL.set(true);
+                    BrasshavenClientConfig.RECIPE_MOD_ONLY.set(false);
+                    com.brasshaven.client.recipes.RecipePanel.setSearch("brass");
+                })
+                .waitTicks(10)
+                .run("use", () -> useBlock(4, 1, -4))
+                .until("CraftingScreen", () -> screen() instanceof net.minecraft.client.gui.screens.inventory.CraftingScreen, 100)
+                .until("the server's recipes", com.brasshaven.client.recipes.ClientRecipes::ready, 200)
+                .run("check", () -> {
+                    int n = com.brasshaven.client.recipes.ClientRecipes.count();
+                    LOGGER.info(TAG + "recipe viewer: {} recipes from the server", n);
+                    if (n < 1000) {
+                        throw new IllegalStateException("the viewer knows only " + n + " recipes (vanilla alone has over 1000)");
+                    }
+                })
+                .waitTicks(30)
+                .shot("recipe_panel");
+
+        step("recipe_view")
+                .run("use", () -> useBlock(4, 1, -4))
+                .until("CraftingScreen", () -> screen() instanceof net.minecraft.client.gui.screens.inventory.CraftingScreen, 100)
+                .run("open", () -> com.brasshaven.client.recipes.RecipeViewer.open(new net.minecraft.world.item.ItemStack(wrench), false,
+                        screen()))
+                .until("RecipeScreen", () -> screen() instanceof com.brasshaven.client.recipes.RecipeScreen, 20)
+                .run("check", () -> {
+                    var rs = (com.brasshaven.client.recipes.RecipeScreen) screen();
+                    if (rs.recipeCount() < 1) {
+                        throw new IllegalStateException("no recipe for the Brass Wrench");
+                    }
+                })
+                .waitTicks(20)
+                .shot("recipe_view");
+
+        step("recipe_uses")
+                .run("open", () -> com.brasshaven.client.recipes.RecipeViewer.open(new net.minecraft.world.item.ItemStack(brass), true, null))
+                .until("RecipeScreen", () -> screen() instanceof com.brasshaven.client.recipes.RecipeScreen, 20)
+                .run("check", () -> {
+                    var rs = (com.brasshaven.client.recipes.RecipeScreen) screen();
+                    LOGGER.info(TAG + "recipe viewer: the Brass Ingot has {} uses", rs.recipeCount());
+                    if (rs.recipeCount() < 10) {
+                        throw new IllegalStateException("only " + rs.recipeCount() + " uses for the Brass Ingot");
+                    }
+                })
+                .waitTicks(20)
+                .shot("recipe_uses");
+
+        step("recipe_fill")
+                .server("count", (server, player) -> {
+                    before[0] = carried(player, brass);
+                    before[1] = carried(player, iron);
+                    if (before[0] < 3 || before[1] < 1) {
+                        throw new IllegalStateException("not enough brass / iron to fill the grid: " + before[0] + " / " + before[1]);
+                    }
+                    return List.of();
+                })
+                .run("use", () -> useBlock(4, 1, -4))
+                .until("CraftingScreen", () -> screen() instanceof net.minecraft.client.gui.screens.inventory.CraftingScreen, 100)
+                .run("open", () -> com.brasshaven.client.recipes.RecipeViewer.open(new net.minecraft.world.item.ItemStack(wrench), false,
+                        screen()))
+                .until("RecipeScreen", () -> screen() instanceof com.brasshaven.client.recipes.RecipeScreen, 20)
+                .waitTicks(5)
+                .run("press +", () -> {
+                    var rs = (com.brasshaven.client.recipes.RecipeScreen) screen();
+                    var recipe = rs.firstFillable();
+                    if (recipe == null) {
+                        throw new IllegalStateException("no \"+\" button for the Brass Wrench on a crafting table");
+                    }
+                    rs.pressFill(recipe, false);
+                })
+                .until("back on the crafting table", () -> screen() instanceof net.minecraft.client.gui.screens.inventory.CraftingScreen, 40)
+                .waitTicks(20)
+                .server("grid filled", (server, player) -> {
+                    if (!(player.containerMenu instanceof net.minecraft.world.inventory.CraftingMenu menu)) {
+                        throw new IllegalStateException("the crafting table closed (" + player.containerMenu + ")");
+                    }
+                    int gridBrass = 0;
+                    int gridIron = 0;
+                    for (net.minecraft.world.inventory.Slot slot : menu.getInputGridSlots()) {
+                        gridBrass += slot.getItem().is(brass) ? slot.getItem().getCount() : 0;
+                        gridIron += slot.getItem().is(iron) ? slot.getItem().getCount() : 0;
+                    }
+                    net.minecraft.world.item.ItemStack result = menu.getResultSlot().getItem();
+                    LOGGER.info(TAG + "recipe fill: grid {} brass + {} iron, result {}", gridBrass, gridIron, result);
+                    if (gridBrass != 3 || gridIron != 1 || !result.is(wrench)) {
+                        throw new IllegalStateException("the grid holds " + gridBrass + " brass and " + gridIron + " iron, result "
+                                + result + " (expected 3 + 1 and a Brass Wrench)");
+                    }
+                    if (carried(player, brass) != before[0] - 3 || carried(player, iron) != before[1] - 1) {
+                        throw new IllegalStateException("the inventory went from " + before[0] + " / " + before[1] + " to "
+                                + carried(player, brass) + " / " + carried(player, iron) + " brass / iron (expected 3 and 1 fewer)");
+                    }
+                    return List.of();
+                })
+                .shot("recipe_fill")
+                .run("clear search", () -> com.brasshaven.client.recipes.RecipePanel.setSearch(""));
     }
 
     /** Health / max health of the creatures within 8 blocks of the player, as the client knows them, sorted. */

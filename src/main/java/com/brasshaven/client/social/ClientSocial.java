@@ -58,6 +58,9 @@ public final class ClientSocial {
     }
 
     public static void init(BusGroup modBus) {
+        // in game only: U over an item in an inventory is the recipe viewer's "uses" key (a GUI key), no conflict
+        ((net.minecraftforge.client.extensions.IForgeKeyMapping) CARD_KEY).setKeyConflictContext(
+                net.minecraftforge.client.settings.KeyConflictContext.IN_GAME);
         RegisterKeyMappingsEvent.BUS.addListener(e -> {
             e.register(COMPANY_KEY);
             e.register(EMOTE_KEY);

@@ -32,6 +32,7 @@ public final class GeneratedGuide {
             new Page("contracts", "start", "minecraft:emerald", 2, List.of("minecraft:emerald")),
             new Page("contracts_kinds", "start", "minecraft:paper", 3, List.of()),
             new Page("keys", "start", "minecraft:oak_sign", 2, List.of()),
+            new Page("recipes", "start", "minecraft:crafting_table", 4, List.of()),
             new Page("compass", "start", "brasshaven:structure_compass", 3, List.of("brasshaven:structure_compass")),
             new Page("harvest", "start", "minecraft:wheat", 1, List.of()),
             new Page("talents", "talents", "minecraft:enchanted_book", 4, List.of("brasshaven:oblivion_vial")),

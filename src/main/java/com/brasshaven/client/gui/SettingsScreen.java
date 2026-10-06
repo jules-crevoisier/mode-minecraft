@@ -17,7 +17,8 @@ import java.util.function.BooleanSupplier;
 
 /**
  * Brasshaven display settings (config/brasshaven-client.toml) in the mod's own theme, opened by the "Config" button
- * of the mods list. Three tabs: "Display" (health bars, damage numbers, quest tracker, tip cards, key bindings),
+ * of the mods list. Three tabs: "Display" (health bars, damage numbers, quest tracker, tip cards, key bindings, recipe
+ * viewer and its item list),
  * "Minimap" (shown or not, size, corner, shape, rotation, coordinates, opacity) and "Radar" (the creatures and players
  * on the maps: on or off, faces or dots, which kinds). Every change is saved at once.
  */
@@ -113,6 +114,9 @@ public class SettingsScreen extends Screen {
         Component keys = Component.translatable(K + "keys.button");
         addRenderableWidget(new WfButton(left + CX, rowY(4), Math.max(60, font.width(keys) + 16), 18, keys,
                 b -> minecraft.gui.setScreen(new KeyBindsScreen(this, minecraft.options))));
+        // the recipe viewer (client/recipes): R / U over items, and the item list beside inventories
+        toggle(5, "recipe_viewer", BrasshavenClientConfig.RECIPE_VIEWER);
+        toggle(6, "recipe_panel", BrasshavenClientConfig.RECIPE_PANEL);
     }
 
     private void initMinimap() {

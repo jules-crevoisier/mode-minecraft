@@ -52,6 +52,10 @@ KEY_TEXT = {
     "Z": "Changer le zoom de la mini-carte",
     "B": "Signaler l'endroit visé à tous les joueurs (visible une minute sur les cartes)",
     "W": "Maintenir sur un objet du mod : ouvrir sa page du Manuel",
+    # the recipe viewer's keys only work in an inventory: they share letters with keys that only work in game
+    "key.brasshaven.recipes": "Dans un inventaire, sur un objet (case ou liste) : ses recettes (le livre de recettes)",
+    "key.brasshaven.uses": "Dans un inventaire, sur un objet : ses utilisations",
+    "key.brasshaven.recipe_panel": "Dans un inventaire : afficher / masquer la liste des objets à côté de la fenêtre",
     "G": "Baguette du bâtisseur : changer de symétrie (désactivée, miroir X, miroir Z, X + Z)",
     "Clic molette": "Sur une case d'un coffre : trier ce coffre",
 }
@@ -1128,3 +1132,26 @@ def _denizen_texts():
 
 
 _denizen_texts()
+
+
+# Le livre de recettes intégré (client/recipes ; section « livre-recettes » du wiki)
+RECIPE_VIEWER_INTRO = ("Pas besoin de JEI : le mod a son propre livre de recettes, aux couleurs du laiton. La liste de "
+                       "tous les objets se tient à côté de chaque inventaire, R montre comment fabriquer un objet, U à quoi "
+                       "il sert, et le bouton + remplit l'établi tout seul. Il connaît toutes les recettes du serveur : "
+                       "Minecraft, Brasshaven et les packs de données.")
+RECIPE_KEYS = [
+    ("R", "Sur un objet, dans un inventaire : ses recettes (ou clic gauche dans la liste)"),
+    ("U", "Ses utilisations (ou clic droit dans la liste)"),
+    ("I", "Afficher / masquer la liste des objets"),
+    ("Retour arrière", "Revenir à l'objet précédent"),
+]
+INGAME_SHOTS += [
+    ("recipe_panel", "La liste des objets", "À côté de l'établi : tous les objets, ceux du mod d'abord, avec une "
+     "recherche par nom, @mod ou #tag.", "livre-recettes"),
+    ("recipe_view", "Une recette", "R sur la clé à molette en laiton : sa recette sur la grille de l'établi, avec le "
+     "bouton + pour la remplir.", "livre-recettes"),
+    ("recipe_uses", "Les utilisations", "U sur le lingot de laiton : toutes les recettes qui l'utilisent, page par "
+     "page.", "livre-recettes"),
+    ("recipe_fill", "Le bouton +", "Les ingrédients passent de l'inventaire à la grille de l'établi, déplacés par le "
+     "serveur comme avec le livre de recettes de Minecraft.", "livre-recettes"),
+]

@@ -279,12 +279,14 @@ MESSAGES = {
     "gui.brasshaven.settings.tips.tip": ("One-time tips the first time you meet a system.",
                                         "Astuces affichées une fois, la première fois que tu découvres un système."),
     "gui.brasshaven.settings.keys": ("Keys", "Touches"),
-    "gui.brasshaven.settings.keys.tip": ("Journal, talents, active talent, magnet, sorting, wand symmetry, manual page.",
-                                        "Journal, talents, talent actif, aimant, tri, symétrie de la baguette, page du manuel."),
+    "gui.brasshaven.settings.keys.tip": ("Journal, talents, active talent, magnet, sorting, wand symmetry, manual page, recipes.",
+                                        "Journal, talents, talent actif, aimant, tri, symétrie de la baguette, page du manuel, "
+                                        "recettes."),
     "gui.brasshaven.settings.keys.button": ("Key bindings...", "Modifier..."),
     "gui.brasshaven.settings.tab.display": ("Display", "Affichage"),
-    "gui.brasshaven.settings.tab.display.tip": ("Health bars, damage numbers, quest tracker, tips and keys.",
-                                               "Barres de vie, chiffres de dégâts, suivi de quête, astuces et touches."),
+    "gui.brasshaven.settings.tab.display.tip": ("Health bars, damage numbers, quest tracker, tips, keys and the recipe viewer.",
+                                               "Barres de vie, chiffres de dégâts, suivi de quête, astuces, touches et livre de "
+                                               "recettes."),
     "gui.brasshaven.settings.tab.minimap": ("Minimap", "Mini-carte"),
     "gui.brasshaven.settings.tab.minimap.tip": ("Size, corner, shape, rotation, coordinates and opacity of the minimap.",
                                                "Taille, coin, forme, rotation, coordonnées et opacité de la mini-carte."),

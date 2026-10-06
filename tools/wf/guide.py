@@ -121,11 +121,14 @@ PAGES = [
     ("keys", "start", "minecraft:oak_sign", ("Keys", "Touches"), [
         ("J: quest journal\nK: talent tree\nV: use your active talent\nR: sort your inventory\nM: world map\n"
          "H: show/hide the minimap\nShift + H: minimap size\nZ: minimap zoom\nB: ping the spot you look at\nN: magnet ring on/off\n"
-         "G: Builder's Wand symmetry\nW (held over an item): its manual page",
+         "G: Builder's Wand symmetry\nW (held over an item): its manual page\n"
+         "In an inventory, over an item: R its recipes, U its uses\nI (in an inventory): show/hide the item list",
          "J : journal de quêtes\nK : arbre de talents\nV : utiliser le talent actif\nR : trier l'inventaire\n"
          "M : carte du monde\nH : afficher/masquer la mini-carte\nMaj + H : taille de la mini-carte\n"
          "Z : zoom de la mini-carte\nB : signaler l'endroit visé\n"
-         "N : allumer/éteindre l'aimant\nG : symétrie de la baguette\nW (maintenu sur un objet) : sa page du manuel"),
+         "N : allumer/éteindre l'aimant\nG : symétrie de la baguette\nW (maintenu sur un objet) : sa page du manuel\n"
+         "Dans un inventaire, sur un objet : R ses recettes, U ses utilisations\n"
+         "I (dans un inventaire) : afficher/masquer la liste des objets"),
         ("These are the keys of a QWERTY keyboard: Options > Controls, Brasshaven section, shows yours and changes "
          "them. Display settings (health bars, damage numbers, tracker, tips, and the minimap's size, corner, shape, "
          "rotation, coordinates and opacity): Config button of Brasshaven in the mods list. The minimap's exact size "
@@ -135,6 +138,24 @@ PAGES = [
          "vie, chiffres de dégâts, suivi, astuces, et taille, coin, forme, rotation, coordonnées et opacité de "
          "la mini-carte) : bouton Config de Brasshaven dans la liste des mods. Taille exacte de la mini-carte (un "
          "curseur) et relief des cartes : M, puis le bouton engrenage."),
+    ], []),
+    # the built-in recipe viewer (com.brasshaven.client.recipes)
+    ("recipes", "start", "minecraft:crafting_table", ("Recipe viewer", "Livre de recettes"), [
+        ("Beside every inventory sits the list of all items, Brasshaven's first. Search a name, @mod or #tag; the "
+         "wheel turns its pages. I shows or hides it.",
+         "À côté de chaque inventaire se tient la liste de tous les objets, ceux de Brasshaven d'abord. Cherche un "
+         "nom, @mod ou #tag ; la molette tourne ses pages. I l'affiche ou la masque."),
+        ("Over an item, in a slot or the list: R shows how to make it, U what it is used for (in the list: left or "
+         "right click). One tab per way of making: crafting, furnaces, stonecutter, Chisel Table...",
+         "Sur un objet, dans une case ou la liste : R montre comment le fabriquer, U à quoi il sert (dans la liste : "
+         "clic gauche ou droit). Un onglet par façon de fabriquer : établi, fours, tailleur, table de taille..."),
+        ("Click an ingredient for its own recipes; Backspace goes back. The book button opens the item's manual page.",
+         "Clique un ingrédient pour ses propres recettes ; Retour arrière revient. Le bouton livre ouvre sa page du "
+         "manuel."),
+        ("From a crafting table, your inventory or a furnace, the + button moves the ingredients into the grid (Shift: "
+         "as many as possible). What you lack is red.",
+         "Depuis un établi, ton inventaire ou un four, le bouton + met les ingrédients dans la grille (Maj : le plus "
+         "possible). Ce qui manque est en rouge."),
     ], []),
     ("compass", "start", "brasshaven:structure_compass", ("Structure Compass", "Boussole des structures"), [
         ("It finds Brasshaven structures. The Guild Agent gives you one for the contract \"Survey the Watchtower\" "

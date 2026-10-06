@@ -35,6 +35,7 @@ public final class BrasshavenNet {
                     .addMain(MapDataMsg.class, MapDataMsg.STREAM_CODEC, MapDataMsg::handle)
                     .addMain(NpcDialogMsg.class, NpcDialogMsg.STREAM_CODEC, NpcDialogMsg::handle)
                     .addMain(ContractSyncMsg.class, ContractSyncMsg.STREAM_CODEC, ContractSyncMsg::handle)
+                    .addMain(RecipeSyncMsg.class, RecipeSyncMsg.STREAM_CODEC, RecipeSyncMsg::handle)
                 .serverbound()
                     .addMain(WaystoneActionMsg.class, WaystoneActionMsg.STREAM_CODEC, WaystoneActionMsg::handle)
                     .addMain(QuestRequestMsg.class, QuestRequestMsg.STREAM_CODEC, QuestRequestMsg::handle)
@@ -45,6 +46,7 @@ public final class BrasshavenNet {
                     .addMain(TerminalToggleMsg.class, TerminalToggleMsg.STREAM_CODEC, TerminalToggleMsg::handle)
                     .addMain(MapActionMsg.class, MapActionMsg.STREAM_CODEC, MapActionMsg::handle)
                     .addMain(NpcActionMsg.class, NpcActionMsg.STREAM_CODEC, NpcActionMsg::handle)
+                    .addMain(RecipeFillMsg.class, RecipeFillMsg.STREAM_CODEC, RecipeFillMsg::handle)
             .build();
 
     private BrasshavenNet() {}

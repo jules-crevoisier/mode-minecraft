@@ -1002,6 +1002,8 @@ def main():
     worldmap.sprites(sys.modules[__name__])
     from wf import gui_social  # multiplayer icons (company, post, contracts, duels, emotes)
     gui_social.sprites(sys.modules[__name__])
+    from wf import gui_recipes  # the recipe viewer (item list, recipe screen)
+    gui_recipes.sprites(sys.modules[__name__])
     if "--mockup" in sys.argv:
         worldmap.mockups(sys.modules[__name__])
         mockup_waystones()
@@ -1011,6 +1013,7 @@ def main():
         gui_machines.mockups(sys.modules[__name__])
         gui_machines.mockups(sys.modules[__name__], li=0)
         gui_machines.mockup_settings(sys.modules[__name__])
+        gui_recipes.mockups(sys.modules[__name__])
     print("gui sprites written to", os.path.relpath(OUT, ROOT))
 
 
