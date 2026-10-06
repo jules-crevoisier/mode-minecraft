@@ -6,7 +6,13 @@
       "chance": 4
     },
     {
-      "type": "minecraft:in_square"
+      "type": "minecraft:random_offset",
+      "xz_spread": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 7,
+        "max_inclusive": 8
+      },
+      "y_spread": 0
     },
     {
       "type": "minecraft:heightmap",

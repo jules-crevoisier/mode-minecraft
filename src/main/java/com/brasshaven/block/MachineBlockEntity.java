@@ -18,6 +18,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.WorldlyContainerHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.LivingEntity;
@@ -782,6 +783,15 @@ public class MachineBlockEntity extends BaseContainerBlockEntity {
         return true;
     }
 
+    private boolean bufferEmpty() {
+        for (ItemStack stack : items) {
+            if (!stack.isEmpty()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     // ------------------------------------------------------------------ harvester
     private int countRipe(ServerLevel level) {
         int r = radius();
@@ -797,6 +807,19 @@ public class MachineBlockEntity extends BaseContainerBlockEntity {
 
     /** Harvests ripe crops in the area; true when anything was harvested. */
     private boolean harvest(ServerLevel level) {
+        // the neighbouring containers are looked up once per run instead of once per drop (up to 16 crops x a few
+        // drops x 6 sides, each lookup also searching the block for container entities); nothing in a run adds or
+        // removes a container, so every drop goes where it went before (with several chest minecarts in one block,
+        // Minecraft picks one at random: now once per run instead of once per drop)
+        outputs = new Container[Direction.values().length];
+        try {
+            return harvestCrops(level);
+        } finally {
+            outputs = null;
+        }
+    }
+
+    private boolean harvestCrops(ServerLevel level) {
         int r = radius();
         int done = 0;
         for (BlockPos p : BlockPos.betweenClosed(worldPosition.offset(-r, -1, -r), worldPosition.offset(r, 1, r))) {
@@ -877,25 +900,13 @@ public class MachineBlockEntity extends BaseContainerBlockEntity {
     }
 
     /** Puts a stack into a neighbouring container (only {@code only} when given), then into the buffer. */
-    private ItemStack store(ServerLevel level, ItemStack stack, Direction only) {
-        List<Direction> order = new ArrayList<>();
-        if (only != null) {
-            order.add(only);
-        } else {
-            order.add(Direction.DOWN);
-            order.addAll(Direction.Plane.HORIZONTAL.stream().toList());
-            order.add(Direction.UP);
-        }
+    private ItemStack store(ServerLevel level, ItemStack stack, @org.jetbrains.annotations.Nullable Direction only) {
         ItemStack rest = stack;
-        for (Direction d : order) {
+        for (Direction d : only != null ? new Direction[] {only} : AUTO_OUTPUT_ORDER) {
             if (rest.isEmpty()) {
                 break;
             }
-            BlockPos np = worldPosition.relative(d);
-            if (level.getBlockEntity(np) instanceof MachineBlockEntity) {
-                continue;
-            }
-            Container target = HopperBlockEntity.getContainerAt(level, np);
+            Container target = output(level, d);
             if (target != null) {
                 rest = HopperBlockEntity.addItem(this, target, rest, d.getOpposite());
             }
@@ -904,6 +915,31 @@ public class MachineBlockEntity extends BaseContainerBlockEntity {
             rest = InventoryUtil.insert(this, rest, false);
         }
         return rest;
+    }
+
+    /** Output order of the automatic mode: below, then the four sides (north, east, south, west), then above. */
+    private static final Direction[] AUTO_OUTPUT_ORDER = {Direction.DOWN, Direction.NORTH, Direction.EAST,
+            Direction.SOUTH, Direction.WEST, Direction.UP};
+    /** Marks a side already looked up during this harvest run and found without a container. */
+    private static final Container NO_OUTPUT = new SimpleContainer(0);
+    /** The neighbouring containers by side, cached during one harvest run (null outside of it). */
+    private Container @org.jetbrains.annotations.Nullable [] outputs;
+
+    /** The container on side {@code d} that drops may go into (never another machine), or null. */
+    private @org.jetbrains.annotations.Nullable Container output(ServerLevel level, Direction d) {
+        Container[] cache = outputs;
+        if (cache != null && cache[d.ordinal()] != null) {
+            return cache[d.ordinal()] == NO_OUTPUT ? null : cache[d.ordinal()];
+        }
+        BlockPos np = worldPosition.relative(d);
+        Container target = level.getBlockEntity(np) instanceof MachineBlockEntity ? null
+                : HopperBlockEntity.getContainerAt(level, np);
+        // a composter's container is a snapshot of its fill level that takes one item, then refuses: looked up afresh
+        // for every drop, as before (block entities and container entities are the same object all run long)
+        if (cache != null && !(level.getBlockState(np).getBlock() instanceof WorldlyContainerHolder)) {
+            cache[d.ordinal()] = target == null ? NO_OUTPUT : target;
+        }
+        return target;
     }
 
     // ------------------------------------------------------------------ sprinkler
@@ -991,6 +1027,11 @@ public class MachineBlockEntity extends BaseContainerBlockEntity {
     }
 
     private void pushDown(ServerLevel level) {
+        // nothing to push (the usual case): skip the container lookup below, which also searches the block below for
+        // entities (chest minecarts) - the same short cut as Lithium's hoppers, which skip an empty inventory
+        if (bufferEmpty()) {
+            return;
+        }
         if (level.getBlockEntity(worldPosition.below()) instanceof MachineBlockEntity) {
             return;
         }
