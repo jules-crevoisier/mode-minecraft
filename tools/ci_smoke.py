@@ -632,7 +632,8 @@ def server_performance(srv, failures):
     if loaded is not None and loaded > PERF_MAX_MSPT:
         failures.append(f"performance: {loaded} ms per tick with {placed} machines and {summoned} automatons "
                         f"(limit {PERF_MAX_MSPT} ms, baseline {base} ms)")
-    profile_mspt(srv, failures)
+    if DEEP:
+        profile_mspt(srv, failures)
     srv.run("execute in minecraft:overworld run kill @e[type=!minecraft:player]", r"Killed|No entity", 60)
     srv.run("execute in minecraft:overworld run forceload remove all", r"Unmarked|forceload|No chunks", 30)
 
@@ -1248,6 +1249,10 @@ def speed_report(pairs, spots, failures):
     return lines
 
 
+# the deep performance runs (full mod vs vanilla on extra servers, JFR profiles): only when asked (Run workflow + perf)
+DEEP = os.environ.get("BRASSHAVEN_CI_DEEP") == "1"
+
+
 def main():
     server_dir = os.path.abspath(sys.argv[1])
     args = sys.argv[2:]
@@ -1255,7 +1260,10 @@ def main():
         Summary.job = "world"
         failures, bad = [], []
         extra = exercise_world(server_dir, failures, bad)
-        extra += exercise_compare(server_dir, failures, bad)
+        if DEEP:
+            extra += exercise_compare(server_dir, failures, bad)
+        else:
+            Summary.notes.append("full mod vs vanilla comparison and JFR profiles skipped (run the workflow with 'perf')")
         crashes = glob.glob(os.path.join(server_dir, "crash-reports", "*"))
         if crashes:
             failures.append(f"crash reports: {crashes}")

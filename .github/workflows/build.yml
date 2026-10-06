@@ -9,6 +9,14 @@ on:
         description: "Publish the release v<mod_version> (gradle.properties) from this commit"
         type: boolean
         default: false
+      perf:
+        description: "Deep performance runs: full mod vs vanilla on extra servers, JFR profiles (slow)"
+        type: boolean
+        default: false
+      showcase:
+        description: "Film the showcase tour for the presentation videos (about 40 minutes)"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -112,6 +120,8 @@ jobs:
 
       - name: Run the smoke test (structures, mobs, items, loot)
         run: python3 tools/ci_smoke.py server
+        env:
+          BRASSHAVEN_CI_DEEP: ${{ (github.event_name == 'workflow_dispatch' && inputs.perf) && '1' || '' }}
 
       - name: Upload the server logs
         if: always()
@@ -237,6 +247,8 @@ jobs:
 
       - name: Run the world test (Brasshaven biomes, generation speed with / without, biome renders)
         run: python3 tools/ci_smoke.py server --world
+        env:
+          BRASSHAVEN_CI_DEEP: ${{ (github.event_name == 'workflow_dispatch' && inputs.perf) && '1' || '' }}
 
       - name: Upload the server logs
         if: always()
@@ -331,7 +343,8 @@ jobs:
   # up again when it is cut: one clip per scene, brasshaven-showcase-<scene>.mp4, with brasshaven-showcase-scenes.json
   # (durations, cursor tracks). Branch pushes only; nothing waits for it.
   showcase:
-    if: github.ref_type == 'branch'
+    # footage for the presentation videos: only on demand (Run workflow + showcase), never on a push
+    if: github.ref_type == 'branch' && github.event_name == 'workflow_dispatch' && inputs.showcase
     runs-on: ubuntu-latest
     timeout-minutes: 80
     env:
