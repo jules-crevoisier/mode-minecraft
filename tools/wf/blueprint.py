@@ -459,6 +459,9 @@ class Blueprint:
         self.set(x, y, z, ("minecraft:jigsaw", {"orientation": orientation}), data)
 
     def entity(self, x, y, z, nbt_data):
+        if nbt_data.get("id") == "minecraft:armor_stand":
+            # decorative stands never move: without gravity the server skips their physics every tick
+            nbt_data = {"NoGravity": True, **nbt_data}
         self.entities.append(((x, y, z), nbt_data))
 
     # ------------------------------------------------------------ transforms
