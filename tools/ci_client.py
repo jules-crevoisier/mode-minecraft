@@ -480,6 +480,7 @@ def main():
                 summary.append(e["head"])
                 summary += e["more"][:12]
             summary += ["```", ""]
+    summary += crash_excerpts(crashes)
     summary += ["## Verdict", ""] + [f"- {f}" for f in failures] + [f"- {r}" for r in remarks]
     summary.append("**FAILED**" if failures else "**OK**")
     text = "\n".join(summary) + "\n"
@@ -495,6 +496,31 @@ def main():
     print(text, flush=True)
     log("client test: " + ("FAILED" if failures else "OK"))
     sys.exit(1 if failures else 0)
+
+
+def crash_excerpts(paths):
+    """The part of each crash report that names the cause: the description, the exception with its first frames, every
+    'Caused by' and the mod frames, so the summary shows what broke without downloading the logs."""
+    out = []
+    for path in paths[:2]:
+        try:
+            lines = open(path, encoding="utf-8", errors="replace").read().splitlines()
+        except OSError:
+            continue
+        keep, frames = [], 0
+        for i, line in enumerate(lines[:400]):
+            if line.startswith("Description:") or line.startswith("Caused by") or "Exception" in line.split(":")[0]:
+                keep.append(line)
+                frames = 8
+            elif frames and line.lstrip().startswith("at "):
+                keep.append(line)
+                frames -= 1
+            elif "com.brasshaven" in line and line.lstrip().startswith("at "):
+                keep.append(line)
+            elif line.startswith("-- ") and keep:
+                break
+        out += [f"## Crash report {os.path.basename(path)}", "```"] + keep[:80] + ["```", ""]
+    return out
 
 
 def showcase_verdict(args, code, state, notes):

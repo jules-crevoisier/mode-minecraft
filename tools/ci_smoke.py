@@ -542,7 +542,7 @@ def peoples_and_creatures(srv, failures):
     if res and "Test passed" in res:
         failures.append(f"guards did not defend: husks still alive after 30 s ({res})")
     res = srv.run("execute in minecraft:overworld if entity @e[tag=bh_folk]", r"Test passed|Test failed", 30)
-    if not res or "count: 17" not in res:
+    if not res or "count: 17" not in res.lower():
         failures.append(f"residents lost (17 expected, nothing attacked them): {res}")
     srv.run("execute in minecraft:overworld run kill @e[type=!minecraft:player]", r"Killed|No entity", 60)
     srv.run("execute in minecraft:overworld run forceload remove all", r"Unmarked|forceload|No chunks", 30)
