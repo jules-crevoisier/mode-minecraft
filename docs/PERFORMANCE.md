@@ -27,7 +27,8 @@ d'échauffement de 8 × 8 chunks, puis 4 zones de 16 × 16 chunks (1024 chunks).
 | génération, temps réel | ms par chunk (le thread serveur attend chaque chunk, les workers le génèrent) |
 | génération, CPU | ms de CPU par chunk, par groupe de threads (`/proc`) : thread serveur (= temps de tick qu'un joueur ressent pendant que des chunks se génèrent), workers de génération (bruit, structures, décorations), IO, GC, JIT |
 | mémoire | tas utilisé juste après un GC complet (`jcmd GC.run` + `GC.heap_info`) au repos après le démarrage, puis avec les 1088 chunks chargés ; RSS du processus |
-| MSPT | `/tick sprint 200` avec les zones chargées |
+| MSPT | `/tick sprint 600` avec les zones chargées, après 200 ticks pour laisser s'écouler les ticks ponctuels des chunks neufs (fluides) |
+| entités | recensement des entités chargées par type (`/execute if entity`), mod et vanilla |
 
 Le tableau donne les deux colonnes et leur rapport (`RATIO full mod / vanilla`). Il n'est pas bloquant : le mod
 ajoute du contenu, il coûte forcément un peu. Ce qui est bloquant (déjà avant) : la paire **avec / sans biomes
@@ -37,14 +38,20 @@ Brasshaven** (même jar, `world.customBiomes` et `world.terrain.*` on/off) doit 
 
 * **Génération** (`world-test`) : après les mesures (pour ne pas les fausser), chaque serveur (mod et vanilla)
   génère deux zones neuves de plus et fait 200 ticks sous JFR (`settings=profile`, piles de 256 appels).
+* **Monde chargé seul** (`world-test`) : 600 ticks avec les 1088 chunks chargés, sans génération, sous JFR (le profil
+  de génération mélangeait les deux).
 * **Base chargée** (`smoke-test`) : la base de test de MSPT (96 machines sur un champ de blé, 60 automates qui se
-  battent) refait un `/tick sprint 600` sous JFR, après le sprint mesuré.
+  battent) refait un `/tick sprint 3000` sous JFR, après le sprint mesuré (600 ticks ne donnaient que 105
+  échantillons, trop peu pour conclure).
 
 `tools/jfr_report.py` résume chaque enregistrement : échantillons par groupe de threads, méthodes les plus chaudes
 (temps propre et temps total), par paquet, le thread serveur seul, puis **la part de `com.brasshaven`** (méthodes du
 mod en temps propre, en temps total, et « attribué à la méthode du mod la plus proche » = ce que le code du mod coûte,
 code Minecraft appelé compris), les allocations (par classe, par site, part du mod) et les pauses du GC. Les deux
-profils de génération côte à côte montrent ce que le mod ajoute.
+profils de génération côte à côte montrent ce que le mod ajoute. Il donne aussi les **piles d'appels** les plus
+lourdes : du thread serveur, de chaque grand site d'allocation (qui appelle `DirectMethodHandle.allocateInstance`,
+`DensityFunctions$Mapped.create`…) et des chemins qui passent par le code du mod. Les piles d'allocation sont lues sur
+toute leur profondeur (256 appels) : à 64, la génération du monde coupait les méthodes du mod.
 
 Sur sa machine : `python3 tools/jfr_report.py brasshaven-ci-gen-mod.jfr` (il faut le `jfr` d'un JDK), ou ouvrir le
 fichier dans JDK Mission Control.
@@ -94,6 +101,13 @@ retouches du relief mesurés à coût nul par la CI (rapport ≈ 1,0).
   machines par chunk, plafond de créatures du mod, recherches de structures des boussoles en cache et budgétées,
   carte avec budget de temps et d'octets par joueur, gestionnaires par joueur espacés (10 à 200 ticks), recherches
   d'entités en boîtes serrées.
+
+* **Automates et créatures** : les tests de ligne de vue des buts de combat (drone à vapeur, araignée mécanique,
+  rampeur des cryptes, banshee, diablotin de braise, gargouille) passent par le `Sensing` du mob, comme les buts
+  vanilla : un seul lancer de rayon par cible et par tick, déjà fait par le but de ciblage, au lieu d'un de plus à
+  chaque tick (même résultat : le cache est vidé au début de chaque tick de l'IA). Le golem de laiton ne compte plus
+  toute la foule autour de lui à chaque tick pour savoir s'il frappe le sol : la recherche s'arrête au troisième
+  ennemi trouvé (même décision).
 
 ### JVM
 
@@ -168,22 +182,44 @@ En résumé : sur Forge 26.2, **spark + Chunky** côté serveur ; côté client,
 baisser la distance de rendu et les particules reste le levier principal. Le gain mémoire de FerriteCore est en
 partie couvert par `-XX:+UseCompactObjectHeaders`.
 
-## 5. Phase 2 (une fois les profils de la CI disponibles)
+## 5. Ce que la CI a montré (run 37388245497) et la suite
 
-À lire dans `brasshaven-ci-profile.txt` :
+Le mod complet face à Forge sans le mod, sur les mêmes 1024 chunks neufs :
 
-1. **Profil de génération, mod vs vanilla** : la part des échantillons sous `com.brasshaven` sur les workers
-   (attendu : `SiteFit` / `FittedJigsawStructure`, `ChunkedPoolElement.place`, nos décorations océaniques), et les
-   paquets Minecraft dont la part grimpe par rapport au profil vanilla (par ex. `levelgen.structure.templatesystem`
-   = pose des gabarits et processeurs, `levelgen.feature` = minerais ajoutés).
-2. Si les **décalages de site** pèsent (chaque décalage refait la projection jigsaw = 1 colonne de bruit, même quand le
+| | mod | vanilla | rapport |
+|---|---|---|---|
+| génération, temps réel | 54,8 ms/chunk | 51,2 ms/chunk | 1,07 |
+| génération, CPU total | 152,8 ms/chunk | 142,2 ms/chunk | 1,08 |
+| CPU du GC et de la VM | 15,6 ms/chunk | 9,4 ms/chunk | 1,66 |
+| CPU du thread serveur | 5,1 ms/chunk | 5,3 ms/chunk | 0,97 |
+| MSPT, 1088 chunks forcés, aucun joueur | 28,2 ms | 21,8 ms | 1,29 |
+| tas après GC au repos | 138 Mo | 119 Mo | 1,16 |
+| démarrage (`Done`) | 4,98 s | 4,97 s | 1,00 |
+
+* Le code du mod ne pèse que **2 %** des échantillons CPU de la génération (vérification de terrain des structures :
+  `FittedJigsawStructure` 1,8 %, dont `SiteFit.sample` 1,2 %). Le surcoût vient surtout de ce que le mod fait faire
+  à Minecraft : plus d'objets alloués (d'où le GC à 1,66×), plus de structures et de décorations à poser.
+* Le profil de la base chargée était trop court (105 échantillons). Ce qu'il montrait sous `BrassGolem.tick()`
+  (34 %), c'est surtout du code vanilla appelé par `super.tick()` (déplacement : `Entity.move` → collisions de blocs →
+  fusion de formes, et recherche de chemin) : le golem n'ajoute rien dans `tick()`, il n'est que le cadre du mod le
+  plus proche dans la pile. Un golem de fer (même taille) coûte pareil. Les buts de combat du golem et du drone, eux,
+  ont été allégés (§2).
+* Le MSPT avec chunks forcés était mesuré tout de suite après la génération (ticks ponctuels des fluides) et sans
+  savoir quelles entités étaient chargées : la CI recense maintenant les entités par type et profile le monde chargé
+  seul.
+
+À lire dans le prochain `brasshaven-ci-profile.txt` :
+
+1. **Monde chargé seul, mod vs vanilla** : les piles du thread serveur et le recensement des entités (villageois et
+   habitants des structures, armures, créatures du mod) diront d'où viennent les 29 % de MSPT en plus.
+2. **Qui alloue** dans la génération du mod : les piles sous `DensityFunctions$Mapped.create` (enveloppe du routeur de
+   bruit à chaque morceau de bruit créé — chaque colonne lue par la vérification de terrain en crée un),
+   `DirectMethodHandle.allocateInstance` (lambdas capturantes), `CollectToTag` (lectures NBT partielles des chunks,
+   recherche de structures) et `Long2ObjectOpenHashMap.clone` (copies des sections de lumière).
+3. Si les **décalages de site** pèsent (chaque décalage refait la projection jigsaw = 1 colonne de bruit, même quand le
    biome ne convient pas) : tester le biome avant la projection n'est pas strictement équivalent (biomes 3D) — à
    décider avec mesure à l'appui.
-3. **Processeur `aging`** (89 règles appliquées à chaque bloc de 20 gabarits, air compris) : si
+4. **Processeur `aging`** (89 règles appliquées à chaque bloc de 20 gabarits, air compris) : si
    `RuleProcessor.processBlock` ressort, découper la liste par bloc d'entrée dans le générateur (`tools/`) en gardant
    le même ordre de tirage.
-4. **Thread serveur pendant la génération** (ligne « CPU, server thread » du tableau) : chargement des entités et blocs
-   à entités des structures (PNJ, coffres), éclairage.
-5. **Profil de la base chargée** : méthodes du mod en tête du thread serveur (IA des automates, machines).
-6. Mémoire : écart de tas après GC mod / vanilla au repos (registres, gabarits en cache, modèles) et avec 1088 chunks.
-7. Client (non mesuré) : FPS avec minimap + HUD actifs ou non dans une scène chargée.
+5. Client (non mesuré) : FPS avec minimap + HUD actifs ou non dans une scène chargée.

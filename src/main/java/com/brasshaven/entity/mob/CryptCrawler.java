@@ -292,7 +292,7 @@ public class CryptCrawler extends Monster implements AnimatedMob {
                 return;
             }
             if (dist >= 3.0 && dist <= 7.0 && crawler.onGround() && crawler.pounceCooldown == 0
-                    && Math.abs(target.getY() - crawler.getY()) < 2.5 && crawler.hasLineOfSight(target)) {
+                    && Math.abs(target.getY() - crawler.getY()) < 2.5 && crawler.getSensing().hasLineOfSight(target)) {
                 crawler.pounceCooldown = 80 + crawler.getRandom().nextInt(30);
                 crawler.getNavigation().stop();
                 float yaw = (float) (Mth.atan2(target.getZ() - crawler.getZ(), target.getX() - crawler.getX()) * Mth.RAD_TO_DEG) - 90.0F;

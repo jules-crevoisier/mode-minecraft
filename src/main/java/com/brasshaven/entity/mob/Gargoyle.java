@@ -373,7 +373,7 @@ public class Gargoyle extends Monster implements AnimatedMob {
                 return;
             }
             boolean diveRange = dist >= 4.0 && dist <= 13.0 || above >= 2.5 && dist <= 14.0;
-            if (diveRange && g.diveCooldown == 0 && g.onGround() && g.hasLineOfSight(t)) {
+            if (diveRange && g.diveCooldown == 0 && g.onGround() && g.getSensing().hasLineOfSight(t)) {
                 g.face(t);
                 begin(MobAnims.Gargoyle.DIVE);
                 landing = t.position();
