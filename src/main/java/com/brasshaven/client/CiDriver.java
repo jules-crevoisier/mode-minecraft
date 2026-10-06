@@ -577,6 +577,8 @@ public final class CiDriver {
         step("health_bars")
                 .cmd(() -> List.of(
                         "kill @e[type=!minecraft:player,distance=..64]",
+                        // a block to clear, so the fill always changes something (an all-air fill is an error)
+                        "setblock " + at(0, 1, 0) + " minecraft:stone",
                         "fill " + at(-4, 1, 0) + " " + at(4, 4, 5) + " minecraft:air",
                         "summon minecraft:husk " + (bx - 1.75) + " " + (STAGE_Y + 1) + " " + (bz + 3.5) + " {" + hb + ",Health:20f}",
                         "summon minecraft:husk " + (bx - 0.25) + " " + (STAGE_Y + 1) + " " + (bz + 3.5) + " {" + hb + ",Tags:[\"ci_hit\"]}",
