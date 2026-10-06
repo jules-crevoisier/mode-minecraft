@@ -180,6 +180,12 @@ DIMENSIONS = {"overworld": "Surface", "nether": "Nether", "end": "End"}
 # toute structure citée dans les pages « wonders* » du Manuel (tools/wf/guide.py) ; l'ordre ci-dessous passe en premier.
 WONDERS = ["clockwork_citadel", "sky_harbour", "undercity", "sunken_citadel"]
 
+# Les tonneaux des pièces (tools/wf/barrels.py), en une phrase sous le titre des structures
+BARRELS_NOTE = ("Les tonneaux des pièces ne sont plus vides : environ deux sur trois gardent quelques provisions "
+                "selon le lieu (vivres dans les cuisines et réserves, pépites et charbon dans les forges, papier et "
+                "encre dans les bibliothèques, flèches dans les casernes, poisson et ficelle sur les quais, minerai "
+                "dans les mines). Le vrai butin reste dans les coffres.")
+
 STRUCTURES = {
     "guild_outpost": "Fort de la Guilde avec rempart, châtelet, grande salle et tour des cartes de 46 blocs. "
                      "Première structure à trouver : fragments de carte et pierre de voyage. Trois variantes. Une "

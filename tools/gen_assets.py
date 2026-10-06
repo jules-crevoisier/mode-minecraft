@@ -129,9 +129,8 @@ def machine_assets():
     rot = {"north": {}, "east": {"y": 90}, "south": {"y": 180}, "west": {"y": 270}, "up": {"x": 270}, "down": {"x": 90}}
     for mid in machines.MACHINES:
         for suffix in ("", "_on"):
-            write(f"models/block/{mid}{suffix}.json", {"parent": "minecraft:block/orientable", "textures": {
-                "top": f"{NS}:block/machine_top", "front": f"{NS}:block/{mid}_front{suffix}",
-                "side": f"{NS}:block/machine_side"}})
+            # recessed glyph window, emissive when on (wf/machines.py block_model)
+            write(f"models/block/{mid}{suffix}.json", machines.block_model(mid, suffix == "_on"))
         write(f"blockstates/{mid}.json", {"variants": {
             f"facing={f},powered={p}": {"model": f"{NS}:block/{mid}{'_on' if p == 'true' else ''}", **r}
             for f, r in rot.items() for p in ("false", "true")}})

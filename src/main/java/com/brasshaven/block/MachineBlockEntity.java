@@ -607,10 +607,14 @@ public class MachineBlockEntity extends BaseContainerBlockEntity {
                 if (due()) {
                     ran(40, redstoneAllows(level) && harvest(level));
                 }
+                if (ticker % 20 == 10) {
+                    showRunning(level, state, redstoneAllows(level) && !(outputFull && bufferFull()));
+                }
             }
             case SPRINKLER -> {
-                if (ticker % 20 == 0 && redstoneAllows(level)) {
-                    sprinkle(level);
+                if (ticker % 20 == 0) {
+                    // lit while it waters something (allowed by its redstone mode and with crops or farmland around)
+                    showRunning(level, state, redstoneAllows(level) && sprinkle(level));
                 }
             }
             case VACUUM -> {
@@ -619,6 +623,9 @@ public class MachineBlockEntity extends BaseContainerBlockEntity {
                 }
                 if (ticker % 10 == 0) {
                     pushDown(level);
+                }
+                if (ticker % 20 == 10) {
+                    showRunning(level, state, redstoneAllows(level) && !(outputFull && bufferFull()));
                 }
             }
             case TIMER -> timerTick(level, state);
@@ -675,6 +682,17 @@ public class MachineBlockEntity extends BaseContainerBlockEntity {
 
     private void setPowered(ServerLevel level, BlockState state, boolean on) {
         level.setBlock(worldPosition, state.setValue(MachineBlock.POWERED, on), Block.UPDATE_ALL);
+    }
+
+    /**
+     * Harvester, Sprinkler, Vacuum Hopper: their {@code powered} state means "running", which lights the glyph of
+     * their front (the _on block model). Only a change is sent, and only to the clients: these machines emit no
+     * signal, so their neighbours need no update.
+     */
+    private void showRunning(ServerLevel level, BlockState state, boolean on) {
+        if (state.getValue(MachineBlock.POWERED) != on) {
+            level.setBlock(worldPosition, state.setValue(MachineBlock.POWERED, on), Block.UPDATE_CLIENTS);
+        }
     }
 
     // ------------------------------------------------------------------ live status (while a screen is open)
@@ -960,14 +978,22 @@ public class MachineBlockEntity extends BaseContainerBlockEntity {
         return n;
     }
 
-    private void sprinkle(ServerLevel level) {
+    /** Waters the area; true when there was farmland or a plant to water. */
+    private boolean sprinkle(ServerLevel level) {
         int r = radius();
+        boolean any = false;
         for (BlockPos p : BlockPos.betweenClosed(worldPosition.offset(-r, -2, -r), worldPosition.offset(r, 0, r))) {
             BlockState s = level.getBlockState(p);
-            if (s.getBlock() instanceof FarmlandBlock && s.getValue(FarmlandBlock.MOISTURE) < FarmlandBlock.MAX_MOISTURE) {
-                level.setBlock(p, s.setValue(FarmlandBlock.MOISTURE, FarmlandBlock.MAX_MOISTURE), Block.UPDATE_CLIENTS);
-            } else if (growable(s) && level.getRandom().nextInt(3) == 0) {
-                s.randomTick(level, p.immutable(), level.getRandom());
+            if (s.getBlock() instanceof FarmlandBlock) {
+                any = true;
+                if (s.getValue(FarmlandBlock.MOISTURE) < FarmlandBlock.MAX_MOISTURE) {
+                    level.setBlock(p, s.setValue(FarmlandBlock.MOISTURE, FarmlandBlock.MAX_MOISTURE), Block.UPDATE_CLIENTS);
+                }
+            } else if (growable(s)) {
+                any = true;
+                if (level.getRandom().nextInt(3) == 0) {
+                    s.randomTick(level, p.immutable(), level.getRandom());
+                }
             }
         }
         for (int i = 0; i < 6; i++) {
@@ -976,6 +1002,7 @@ public class MachineBlockEntity extends BaseContainerBlockEntity {
             level.sendParticles(ParticleTypes.SPLASH, worldPosition.getX() + 0.5 + Math.cos(a) * d, worldPosition.getY() + 1.0,
                     worldPosition.getZ() + 0.5 + Math.sin(a) * d, 2, 0.1, 0.0, 0.1, 0.0);
         }
+        return any;
     }
 
     // ------------------------------------------------------------------ vacuum hopper

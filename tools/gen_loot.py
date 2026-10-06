@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate chest loot tables for every Brasshaven structure.
+"""Generate chest loot tables for every Brasshaven structure (and the barrel supply tables of wf/barrels.py).
 
 Each table = shared tier pools (supplies / explorer gear / treasure) + a themed pool.
 Mod items (progression materials) are added once the Java side registers them.
@@ -10,6 +10,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from wf.parts import USE_MOD_BLOCKS  # noqa: E402  (same switch for blocks and items)
+from wf import barrels  # noqa: E402  (the modest supplies of structure barrels)
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 OUT = os.path.join(ROOT, "src", "main", "resources", "data", "brasshaven", "loot_table", "chests")
@@ -306,7 +307,11 @@ def main():
         with open(os.path.join(OUT, f"{name}.json"), "w") as f:
             json.dump(table(name, spec), f, indent=2)
             f.write("\n")
-    print(f"{len(TABLES)} loot tables written")
+    for kind in barrels.KINDS:
+        with open(os.path.join(OUT, f"barrel_{kind}.json"), "w") as f:
+            json.dump(barrels.table_json(kind), f, indent=2)
+            f.write("\n")
+    print(f"{len(TABLES)} loot tables written, {len(barrels.KINDS)} barrel supply tables")
 
 
 if __name__ == "__main__":

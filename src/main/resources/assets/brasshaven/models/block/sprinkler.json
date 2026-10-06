@@ -1,8 +1,171 @@
 {
-  "parent": "minecraft:block/orientable",
+  "parent": "minecraft:block/block",
+  "render_type": "minecraft:cutout",
   "textures": {
+    "particle": "brasshaven:block/sprinkler_front",
     "top": "brasshaven:block/machine_top",
-    "front": "brasshaven:block/sprinkler_front",
-    "side": "brasshaven:block/machine_side"
-  }
+    "side": "brasshaven:block/machine_side",
+    "frame": "brasshaven:block/machine_front_frame",
+    "window": "brasshaven:block/sprinkler_front"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "down": {
+          "texture": "#top",
+          "cullface": "down"
+        },
+        "up": {
+          "texture": "#top",
+          "cullface": "up"
+        },
+        "north": {
+          "texture": "#frame",
+          "cullface": "north"
+        },
+        "south": {
+          "texture": "#side",
+          "cullface": "south"
+        },
+        "west": {
+          "texture": "#side",
+          "cullface": "west"
+        },
+        "east": {
+          "texture": "#side",
+          "cullface": "east"
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        3,
+        1
+      ],
+      "to": [
+        13,
+        13,
+        1
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            3,
+            3,
+            13,
+            13
+          ],
+          "texture": "#window",
+          "cullface": "north"
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        3,
+        0
+      ],
+      "to": [
+        3,
+        13,
+        1
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            13,
+            3,
+            14,
+            13
+          ],
+          "texture": "#frame",
+          "cullface": "north"
+        }
+      }
+    },
+    {
+      "from": [
+        13,
+        3,
+        0
+      ],
+      "to": [
+        14,
+        13,
+        1
+      ],
+      "faces": {
+        "west": {
+          "uv": [
+            2,
+            3,
+            3,
+            13
+          ],
+          "texture": "#frame",
+          "cullface": "north"
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        13,
+        0
+      ],
+      "to": [
+        13,
+        14,
+        1
+      ],
+      "faces": {
+        "down": {
+          "uv": [
+            3,
+            2,
+            13,
+            3
+          ],
+          "texture": "#frame",
+          "cullface": "north"
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        2,
+        0
+      ],
+      "to": [
+        13,
+        3,
+        1
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            3,
+            13,
+            13,
+            14
+          ],
+          "texture": "#frame",
+          "cullface": "north"
+        }
+      }
+    }
+  ]
 }

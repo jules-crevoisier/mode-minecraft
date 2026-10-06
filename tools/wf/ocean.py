@@ -1118,6 +1118,9 @@ def write_templates(root):
     import os
     out = os.path.join(root, "src", "main", "resources", "data", NS, "structure", "ocean")
     os.makedirs(out, exist_ok=True)
+    from . import barrels
     for name in TEMPLATES:
-        build_template(name).save(os.path.join(out, f"{name}.nbt"))
+        bp = build_template(name)
+        barrels.stock(bp, "ocean")  # the amphora ruin's barrel: a sailor's supplies (wf/barrels.py)
+        bp.save(os.path.join(out, f"{name}.nbt"))
     return list(TEMPLATES)

@@ -46,7 +46,7 @@ public final class GeneratedGuide {
             new Page("volcanic_highlands", "travel", "minecraft:magma_block", 2, List.of()),
             new Page("pale_dunes", "travel", "minecraft:orange_terracotta", 2, List.of()),
             new Page("terrain_touches", "travel", "minecraft:mossy_cobblestone", 2, List.of()),
-            new Page("wonders", "wonders", "brasshaven:structure_compass", 4, List.of()),
+            new Page("wonders", "wonders", "brasshaven:structure_compass", 5, List.of()),
             new Page("clockwork_citadel", "wonders", "minecraft:clock", 3, List.of()),
             new Page("sky_harbour", "wonders", "brasshaven:airship_compass", 3, List.of()),
             new Page("undercity", "wonders", "minecraft:copper_lantern", 3, List.of()),

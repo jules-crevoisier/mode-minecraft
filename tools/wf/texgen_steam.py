@@ -310,19 +310,78 @@ MACHINE_GLYPHS = {
 }
 
 
-def machine_face(name, on=False, seed=0):
-    glow = AETHER if name in ("transmitter", "receiver", "vacuum") else AMBER
+def machine_glow(name):
+    """The colour a machine's window lights up with: amber for steam work, aether cyan for the wireless/vacuum ones."""
+    return AETHER if name in ("transmitter", "receiver", "vacuum") else AMBER
+
+
+def machine_window(name, on=False):
+    """The 10x10 glyph window of a machine as a function (x, y) -> colour.
+
+    Off: the glyph in its own metal colours, a little dimmed, on a sooty dark glass. On (running / powered): the glass
+    is backlit (a warm glow brightest behind the glyph centre), the glyph pixels run hot (mixed toward a pale
+    filament white) and every dark pixel touching the glyph catches a halo of the glow, so the whole symbol lights up
+    even when it has no ``a`` (glow) pixels of its own. The block model draws this window as an emissive element
+    when on (wf/machines.py model)."""
+    glow = machine_glow(name)
     colors = {
         "s": (210, 214, 220), "b": BRASS, "w": (214, 190, 90), "c": CREAM if name in ("timer", "detector") else COPPER,
         "d": (170, 30, 30) if name in ("timer", "detector") else (90, 170, 230),
-        "a": glow if on else mul(glow, 0.45),
+        "a": glow,
     }
     if name == "sprinkler":
         colors["c"] = (90, 170, 230)
     if name == "detector" and on:
         colors["d"] = (255, 70, 50)
-    back = _dark_back((60, 40, 26) if on and name in ("timer", "detector") else (30, 26, 26))
-    return machine_frame(_glyph(MACHINE_GLYPHS[name], colors, back), seed)
+    rows = [r.ljust(10, ".") for r in MACHINE_GLYPHS[name]]
+    lit = {(x, y) for y in range(10) for x in range(10) if rows[y][x] != "."}
+    hot = mix(glow, (255, 244, 220), 0.55)
+    if not on:
+        dark = _dark_back((30, 26, 26))
+
+        def inner(x, y):
+            ch = rows[y][x]
+            if ch == ".":
+                return dark(x, y)
+            return mul(glow, 0.42) if ch == "a" else mul(colors[ch], 0.82)
+        return inner
+
+    def back(x, y):
+        d = math.hypot(x - 4.5, y - 4.5) / 6.0
+        f = max(0.0, 1.0 - d) ** 1.6
+        c = mix(mul(glow, 0.13), mul(glow, 0.40), f)
+        # a soft halo on the glass right next to the glyph (edge neighbours count more than corners)
+        near = sum((x + dx, y + dy) in lit for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1))) * 2 + \
+            sum((x + dx, y + dy) in lit for dx, dy in ((1, 1), (-1, 1), (1, -1), (-1, -1)))
+        if near:
+            c = mix(c, mul(glow, 0.8), min(0.42, 0.07 * near))
+        return mul(c, 1.0 + ((x * 7 + y * 13) % 5 - 2) * 0.02)
+
+    def inner(x, y):
+        ch = rows[y][x]
+        if ch == ".":
+            return back(x, y)
+        if ch == "a":
+            return hot
+        if ch == "d":  # coloured marks (timer hands, detector eye, water drops) keep their colour, brighter
+            return mix(mul(colors[ch], 1.25), (255, 244, 220), 0.12)
+        # metal parts glow from within: their own colour pushed toward the filament white, tinted by the glow
+        return mix(mix(mul(colors[ch], 1.12), glow, 0.18), (255, 246, 226), 0.30)
+    return inner
+
+
+def machine_face(name, on=False, seed=0):
+    """The whole front of a machine (frame + window): the item icons and screens use it."""
+    return machine_frame(machine_window(name, on), seed)
+
+
+def machine_front_frame(seed=0):
+    """The machine front with its window cut out (transparent): the block models draw the window one pixel deeper."""
+    cv = machine_frame(lambda x, y: None, seed)
+    for y in range(3, 13):
+        for x in range(3, 13):
+            cv.set(x, y, (0, 0, 0, 0))
+    return cv
 
 
 # ---------------------------------------------------------------- furniture surfaces (wf/furniture.py)

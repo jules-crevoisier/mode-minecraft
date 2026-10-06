@@ -14,7 +14,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from wf import defs, render, support, foundation, chunking, nbt, placement, residents  # noqa: E402
+from wf import defs, render, support, foundation, chunking, nbt, placement, residents, barrels  # noqa: E402
 try:
     from wf import render3d  # noqa: E402  (optional: needs Pillow + minecraft-textures)
 except ImportError:
@@ -123,6 +123,7 @@ def main():
     args = ap.parse_args()
     report = []
     repairs = {}
+    stocked = {}
 
     preview_dir = os.path.join(ROOT, "build", "previews")
     used_processors = set()
@@ -141,6 +142,8 @@ def main():
                 bp.resolve_shapes()
                 for what, n in support.repair(bp, ctx).items():
                     repairs[what] = repairs.get(what, 0) + n
+                # supplies in the empty barrels (wf/barrels.py)
+                barrels.merge(stocked, barrels.stock(bp, sdef.id, sdef.dimension))
                 size, blocks, (mx, my, mz), ncells, written, biggest = save_piece(sdef, piece, bp, pool_name == "start", report)
                 built.append(residents.count([bp]))
                 if not args.no_check:
@@ -173,7 +176,7 @@ def main():
         write_json(os.path.join(DATA, "tags", "worldgen", "biome", "has_structure", f"{sdef.id}.json"),
                    defs.biome_tag_json(sdef.biomes))
     if not args.only or "villages" in args.only:
-        gen_villages(args, report, repairs, summary, preview_dir)
+        gen_villages(args, report, repairs, summary, preview_dir, stocked)
     used_processors.add("village")
     for kind in sorted(used_processors | {"aging", "ruin", "none"}):
         write_json(os.path.join(DATA, "worldgen", "processor_list", f"{kind}.json"), defs.processor_list(kind))
@@ -196,6 +199,7 @@ def main():
           f"{sum(1 for s in summary if s[3])} pieces chunked, biggest template {biggest} entries")
     for what, n in sorted(repairs.items()):
         print(f"auto-repair: {what}: {n}")
+    print(barrels.summary(stocked))
     if not args.no_check:
         write_report(report)
         if report:
@@ -203,7 +207,7 @@ def main():
             sys.exit(1)
 
 
-def gen_villages(args, report, repairs, summary, preview_dir):
+def gen_villages(args, report, repairs, summary, preview_dir, stocked):
     """Our pieces for the vanilla villages and outposts (wf/village.py): templates, then the vanilla pools they
     extend, written under data/minecraft with every vanilla element kept."""
     from wf import village
@@ -214,6 +218,7 @@ def gen_villages(args, report, repairs, summary, preview_dir):
         bp.resolve_shapes()
         for what, n in support.repair(bp, ctx).items():
             repairs[what] = repairs.get(what, 0) + n
+        barrels.merge(stocked, barrels.stock(bp, path.split("/")[0]))
         size, blocks, ents, (mx, my, mz) = bp.normalized()
         out = os.path.join(ROOT, "src", "main", "resources", "data", ns, "structure", path + ".nbt")
         os.makedirs(os.path.dirname(out), exist_ok=True)

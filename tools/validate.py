@@ -96,9 +96,13 @@ def _mod_states():
 MOD_STATES = _mod_states()
 
 
+CONTAINER_BLOCKS = ("minecraft:barrel", "minecraft:chest", "minecraft:trapped_chest")
+
+
 def check_templates():
     mod_blocks = mod_ids("blocks")
     loot_refs = set()
+    barrels = {"stocked": 0, "empty": 0}
     for path in sorted(glob.glob(os.path.join(DATA, "*", "structure", "**", "*.nbt"), recursive=True)):
         rel = os.path.relpath(path, DATA)
         d = nbt.load(path)
@@ -145,10 +149,17 @@ def check_templates():
             if not all(0 <= c < s for c, s in zip(b["pos"], size)):
                 err(f"{rel}: block outside template bounds at {b['pos']}")
             data = b.get("nbt")
+            bname = d["palette"][b["state"]]["Name"]
+            if bname == "minecraft:barrel":
+                barrels["stocked" if data and "LootTable" in data else "empty"] += 1
             if not data:
                 continue
             if "LootTable" in data:
                 loot_refs.add((data["LootTable"], rel))
+                if not (bname in CONTAINER_BLOCKS or bname.endswith("shulker_box") or bname in (
+                        "minecraft:suspicious_sand", "minecraft:suspicious_gravel", "minecraft:decorated_pot",
+                        "minecraft:dispenser", "minecraft:dropper", "minecraft:hopper")):
+                    err(f"{rel}: {bname} is not a container but has a LootTable")
             for stack in data.get("Items", []) if isinstance(data.get("Items"), list) else []:
                 ins, _, iid = str(stack.get("id", "")).rpartition(":")
                 if (ins == "minecraft" and iid not in MC_GAME["items"]) or (ins == "brasshaven" and iid not in mod_ids("items")):
@@ -162,9 +173,15 @@ def check_templates():
                     err(f"{rel}: jigsaw pool {data['pool']} missing")
         for e in d["entities"]:
             check_template_entity(rel, e, err)
+            if "LootTable" in e["nbt"]:  # chest minecarts
+                loot_refs.add((e["nbt"]["LootTable"], rel))
     for ref, rel in sorted(loot_refs):
         if ref.startswith("brasshaven:") and not os.path.exists(res_path(ref, "loot_table", ".json")):
             err(f"{rel}: loot table {ref} missing")
+    # the barrels of the rooms hold supplies (wf/barrels.py): most of them, not all, so it feels natural
+    total = barrels["stocked"] + barrels["empty"]
+    if total and not 0.55 <= barrels["stocked"] / total <= 0.85:
+        err(f"barrels: {barrels['stocked']} of {total} barrels hold supplies (wf/barrels.py aims at about two in three)")
 
 
 # vanilla 26.2 registries (VillagerProfession / VillagerType keys)
@@ -233,6 +250,35 @@ def check_tags():
         if b not in TECHNICAL_BLOCKS and \
                 not os.path.exists(os.path.join(DATA, "brasshaven", "loot_table", "blocks", b + ".json")):
             err(f"block {b} has no loot table (would drop nothing)")
+
+
+def check_barrel_tables():
+    """The barrel supplies (wf/barrels.py): every kind has its table, small and modest: no strong reward, nothing that
+    skips a step of the progression ladder, no enchantment, small stacks."""
+    from wf import barrels
+    for kind in barrels.KINDS:
+        path = res_path(barrels.PREFIX + kind, "loot_table", ".json")
+        if not os.path.exists(path):
+            err(f"barrels: table {barrels.PREFIX}{kind} missing (tools/gen_loot.py)")
+            continue
+        table = json.load(open(path))
+        for p in table["pools"]:
+            for e in p["entries"]:
+                if e["type"] != "minecraft:item":
+                    continue
+                short = e["name"].split(":")[1]
+                if any(f in short for f in barrels.FORBIDDEN):
+                    err(f"barrels: {kind} gives {e['name']} (keep strong or progression items in the chests)")
+                for fn in e.get("functions", []):
+                    if "enchant" in fn["function"]:
+                        err(f"barrels: {kind} enchants {e['name']}")
+                    if fn["function"] == "minecraft:set_count" and fn["count"].get("max", 0) > 12:
+                        err(f"barrels: {kind} gives up to {fn['count']['max']} {e['name']} (a barrel is a larder)")
+    # every barrel table on disk is one of the kinds
+    for path in glob.glob(os.path.join(DATA, "brasshaven", "loot_table", "chests", "barrel_*.json")):
+        kind = os.path.basename(path)[len("barrel_"):-5]
+        if kind not in barrels.KINDS:
+            err(f"barrels: stale table {os.path.basename(path)} (not in wf/barrels.py)")
 
 
 def check_loot():
@@ -1205,6 +1251,7 @@ def main():
     check_templates()
     check_recipes()
     check_loot()
+    check_barrel_tables()
     check_worldgen()
     check_vanilla_overrides()
     check_assets()

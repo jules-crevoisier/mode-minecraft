@@ -370,11 +370,45 @@ def check_gui():
 
 def textures():
     """{texture path under textures/: canvas}."""
-    out = {"block/machine_side": S.machine_side(60), "block/machine_top": S.machine_top(61)}
+    out = {"block/machine_side": S.machine_side(60), "block/machine_top": S.machine_top(61),
+           "block/machine_front_frame": S.machine_front_frame(62)}
     for mid, m in MACHINES.items():
         out[f"block/{mid}_front"] = S.machine_face(m["glyph"], False, 62)
         out[f"block/{mid}_front_on"] = S.machine_face(m["glyph"], True, 62)
     return out
+
+
+def block_model(mid, on):
+    """Block model of a machine, off or on (the ``powered`` state: running, receiving or sending a signal).
+
+    The casing is a cube whose front (north, turned by the blockstate) is the frame with its window cut out; the glyph
+    window sits one pixel deeper, framed by four thin recess walls (so no angle looks through the block). On, the
+    window element is emissive (light_emission 15, unshaded): the lit glyph glows even in a dark cave."""
+    ns = "brasshaven"
+    win = {"uv": [3, 3, 13, 13], "texture": "#window", "cullface": "north"}
+    window = {"from": [3, 3, 1], "to": [13, 13, 1], "faces": {"north": win}}
+    if on:
+        window.update(shade=False, light_emission=15)
+    walls = [  # (from, to, face, uv on the frame: its shadowed / lit inner bevel)
+        ([2, 3, 0], [3, 13, 1], "east", [13, 3, 14, 13]),
+        ([13, 3, 0], [14, 13, 1], "west", [2, 3, 3, 13]),
+        ([3, 13, 0], [13, 14, 1], "down", [3, 2, 13, 3]),
+        ([3, 2, 0], [13, 3, 1], "up", [3, 13, 13, 14]),
+    ]
+    elements = [
+        {"from": [0, 0, 0], "to": [16, 16, 16], "faces": {
+            "down": {"texture": "#top", "cullface": "down"}, "up": {"texture": "#top", "cullface": "up"},
+            "north": {"texture": "#frame", "cullface": "north"}, "south": {"texture": "#side", "cullface": "south"},
+            "west": {"texture": "#side", "cullface": "west"}, "east": {"texture": "#side", "cullface": "east"}}},
+        window,
+    ] + [{"from": f, "to": t, "faces": {face: {"uv": uv, "texture": "#frame", "cullface": "north"}}}
+         for f, t, face, uv in walls]
+    suffix = "_on" if on else ""
+    return {"parent": "minecraft:block/block", "render_type": "minecraft:cutout",
+            "textures": {"particle": f"{ns}:block/{mid}_front", "top": f"{ns}:block/machine_top",
+                         "side": f"{ns}:block/machine_side", "frame": f"{ns}:block/machine_front_frame",
+                         "window": f"{ns}:block/{mid}_front{suffix}"},
+            "elements": elements}
 
 
 def lang():

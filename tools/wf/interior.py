@@ -25,11 +25,13 @@ Entity notes (checked against the 26.2 sources):
   * Item frames and paintings are NOT used: their ``block_pos`` is absolute and a template copy logs
     "Block-attached entity at invalid position" (an ERROR the CI smoke test rejects).
 """
+import contextlib
 import math
 import random
 
 from .blueprint import DIRS, HORIZONTAL, OPPOSITE, CW, CCW, with_props, is_solid
 from . import support
+from . import barrels
 
 AIR = {"minecraft:air", "minecraft:cave_air"}
 WATER = {"minecraft:water"}
@@ -642,6 +644,26 @@ def decorate(bp, theme, seed=0, region=None, density=None, loot=None, rooms=None
              void_solid=False):
     """Furnish every room of ``bp`` (inside ``region``) in ``theme`` (a THEMES key or dict).
     Returns the rooms that were decorated."""
+    # the barrels of this theme's rooms get its supplies (wf/barrels.py); a custom theme keeps the structure's
+    with _barrels_of(bp, barrels.ROOM_KIND.get(theme) if isinstance(theme, str) else None):
+        return _decorate(bp, theme, seed, region, density, loot, rooms, min_area, max_rooms, rugs, lights, centre,
+                         walls, skip_decorated, sky_ok, ground, void_solid)
+
+
+@contextlib.contextmanager
+def _barrels_of(bp, kind):
+    """While furnishing: barrels placed in ``bp`` remember ``kind`` (None keeps an outer room's kind)."""
+    prev = getattr(bp, "barrel_kind", None)
+    if kind is not None:
+        bp.barrel_kind = kind
+    try:
+        yield
+    finally:
+        bp.barrel_kind = prev
+
+
+def _decorate(bp, theme, seed, region, density, loot, rooms, min_area, max_rooms, rugs, lights, centre, walls,
+              skip_decorated, sky_ok, ground, void_solid):
     T = dict(THEMES[theme]) if isinstance(theme, str) else dict(theme)
     rng = random.Random(f"{bp.name}:{seed}:{theme if isinstance(theme, str) else 'custom'}")
     rooms = rooms if rooms is not None else find_rooms(bp, region, min_area=min_area, sky_ok=sky_ok, ground=ground,
@@ -1205,7 +1227,8 @@ def _settle_one(bp, room, prof, lvl, vtype, rng, beds, bed_colour, who=None):
         if room.connected_without([c]):
             d = rng.choice(room.walls[c])
             spec = JOB_SITE[prof](OPPOSITE[d])
-            ctx.set(c, 0, spec)
+            with _barrels_of(bp, "harbour" if prof == "fisherman" else None):  # the fisherman's barrel: his catch
+                ctx.set(c, 0, spec)
             room.take([c])
             job = c
             break
@@ -1495,6 +1518,11 @@ def yard(bp, area, y, theme="village", count=8, seed=0, ring=1, avoid=()):
     """Scatter ``count`` props of ``theme`` (a YARD key or {kind: weight}) on open soil inside
     ``area`` (x0, z0, x1, z1) at level ``y`` (the first block above the ground). ``avoid``: extra (x, z)
     cells to keep free (paths, gates). Returns the kinds placed."""
+    with _barrels_of(bp, barrels.YARD_KIND.get(theme) if isinstance(theme, str) else None):
+        return _yard(bp, area, y, theme, count, seed, ring, avoid)
+
+
+def _yard(bp, area, y, theme, count, seed, ring, avoid):
     weights = YARD[theme] if isinstance(theme, str) else theme
     rng = random.Random(f"{bp.name}:yard:{seed}:{area}")
     x0, z0, x1, z1 = area

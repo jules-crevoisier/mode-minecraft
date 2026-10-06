@@ -116,6 +116,10 @@ class Blueprint:
         self.entities = []
         self.rng = random.Random(f"{name}:{seed}")
         self.underwater = False  # clear() fills with water and blocks get waterlogged
+        # supplies of the barrels (wf/barrels.py): while ``barrel_kind`` is set (a room being furnished), every
+        # barrel placed is remembered with it, so it gets that room's table instead of the structure's
+        self.barrel_kind = None
+        self.barrel_hints = {}
 
     # ------------------------------------------------------------ primitives
     def set(self, x, y, z, spec, data=None, keep=False):
@@ -123,6 +127,8 @@ class Blueprint:
             return
         name, props = parse_block(spec)
         self.blocks[(x, y, z)] = (name, dict(props), data)
+        if self.barrel_kind is not None and name == "minecraft:barrel":
+            self.barrel_hints[(x, y, z)] = self.barrel_kind
 
     def get(self, x, y, z):
         b = self.blocks.get((x, y, z))
@@ -468,6 +474,8 @@ class Blueprint:
     def paste(self, other, ox, oy, oz):
         for (x, y, z), b in other.blocks.items():
             self.blocks[(x + ox, y + oy, z + oz)] = b
+        for (x, y, z), k in getattr(other, "barrel_hints", {}).items():
+            self.barrel_hints[(x + ox, y + oy, z + oz)] = k
 
     # ------------------------------------------------------------ shape resolution
     def _neighbor(self, pos, d):

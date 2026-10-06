@@ -14,7 +14,7 @@ The script accepts the EULA, starts the server, waits for "Done", then from the 
   * summons every entity and every item,
   * measures the server's time per tick with a crowded base of machines and automatons (fails above 25 ms),
   * breaks mod blocks (loot tables + Forge loot modifiers),
-  * spawns every loot table,
+  * spawns every loot table (the structure barrels' supply tables, chests/barrel_*, must drop something),
   * runs /brasshaven social selftest (the multiplayer features' server rules, with no player needed),
   * runs /brasshaven progression selftest (first-join kit, the Structure Compass earned from a contract, the ladder),
   * reloads data packs,
@@ -696,6 +696,9 @@ def blocks_and_loot(srv, failures):
                       r"Dropped|Unknown|Invalid|Incorrect|No loot", 30)
         if not res or "Dropped" not in res and "No loot" not in res:
             failures.append(f"loot {table}: {res}")
+        elif table.startswith("chests/barrel_") and "Dropped" not in res:
+            # a stocked structure barrel always holds something (wf/barrels.py: the main pool rolls 2-3 times)
+            failures.append(f"loot {table}: a barrel supply table dropped nothing ({res})")
     srv.run("execute in minecraft:overworld run kill @e[type=minecraft:item]", r"Killed|No entity", 60)
 
 

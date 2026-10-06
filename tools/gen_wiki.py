@@ -580,7 +580,8 @@ def structure_job(args):
                     pass
             if "LootTable" in nbt:
                 t = _nbt_str(nbt["LootTable"])
-                if t not in info["loot"]:
+                # the barrels' modest supplies (wf/barrels.py) are not what a card shows "in the chests"
+                if t not in info["loot"] and "/barrel_" not in t:
                     info["loot"].append(t)
         if i == 0:
             info["waystones"] = sum(1 for b in blocks.values() if b[0] == "brasshaven:waystone")
@@ -1346,7 +1347,7 @@ def main():
 </article>''')
         idx.add(title, "Structure", f"s-{s.id}", text + " " + biomes_)
     sec.append(f'''<section class="block" id="structures">
-  {plaque("structures-h", "Exploration", "Structures et merveilles", "Elles n'apparaissent que dans les régions jamais générées : le plus simple est un nouveau monde. La boussole des structures (accroupi + clic droit pour choisir la cible) donne la distance et la direction. Survole ou touche une image pour passer de la rotation à la vue détaillée.")}
+  {plaque("structures-h", "Exploration", "Structures et merveilles", "Elles n'apparaissent que dans les régions jamais générées : le plus simple est un nouveau monde. La boussole des structures (accroupi + clic droit pour choisir la cible) donne la distance et la direction. Survole ou touche une image pour passer de la rotation à la vue détaillée. " + TXT.BARRELS_NOTE)}
   <h3 class="subhead">Les merveilles du monde</h3>
   {ingame_feature(ctx, "mega_structure")}
   {"".join(wcards)}

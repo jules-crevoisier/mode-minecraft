@@ -333,6 +333,8 @@ PAGES = [
         ("Underground wonders lie under any biome: dig down to the depth given on their page.",
          "Les merveilles souterraines se cachent sous n'importe quel biome : creuse jusqu'à la profondeur indiquée "
          "sur leur page."),
+        ("Most barrels hold a few supplies that fit the room; the real loot stays in the chests.",
+         "La plupart des tonneaux gardent quelques provisions selon la pièce ; le vrai butin reste dans les coffres."),
     ], []),
     ("clockwork_citadel", "wonders", "minecraft:clock", ("Clockwork Citadel", "Citadelle d'horlogerie"), [
         ("A walled steampunk town around a clock tower over 70 blocks tall, with workshops and smoking chimneys.",
