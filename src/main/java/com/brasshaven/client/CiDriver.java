@@ -780,23 +780,37 @@ public final class CiDriver {
         int px = bx + 320 + index * 480;
         int pz = bz;
         double[][] box = new double[1][];
+        String dim = dimensionOf(shortName);
+        boolean surface = dim.equals("overworld");
         step("structure_" + shortName)
                 .run("render distance", () -> Minecraft.getInstance().options.renderDistance().set(12))
-                .server("locate " + shortName, (server, player) -> prepareStructure(server, name, px, pz, box))
-                .cmd(() -> List.of("tp @s " + centre(box[0])[0] + " " + (box[0][4] + 30) + " " + centre(box[0])[2]))
+                .server("locate " + shortName, (server, player) -> prepareStructure(server, name, px, pz, box, dim))
+                .cmd(() -> List.of(in(dim) + "tp @s " + centre(box[0])[0] + " "
+                        + (surface ? box[0][4] + 30 : centre(box[0])[1]) + " " + centre(box[0])[2]))
                 .run("fly", CiDriver::fly)
                 .waitTicks(60)
                 // /place lands on whatever terrain is there (often a wooded hillside that buries the build); worldgen
                 // picks flat sites (wf/placement.py FIT), so level the site first, then locate again on the flat
                 .server("level the site", (server, player) -> {
+                    if (!surface) {
+                        return List.of(); // caverns and islands: the structure brings its own space
+                    }
                     Placed placed = PLACED.get(name);
                     int layer = groundLayer(shortName);
                     levelSite(server.overworld(), px, pz, box[0],
                             placed != null && layer >= 0 ? placed.origin().getY() + layer : Integer.MIN_VALUE);
-                    prepareStructure(server, name, px, pz, box); // same chunks, already force-loaded: only the height moves
+                    prepareStructure(server, name, px, pz, box, dim); // same chunks, already force-loaded: only the height moves
                     return List.of();
                 })
-                .retry("place structure", () -> List.of("place structure " + name + " " + px + " 64 " + pz), 100, 30);
+                .retry("place structure", () -> List.of(in(dim) + "place structure " + name + " " + px + " 64 " + pz), 100, 30);
+        if (surface) {
+            outsideSteps(shortName, box);
+        }
+        interiorSteps(name, shortName, dim);
+    }
+
+    /** The four corners, the walk-up, the low view inside the footprint and the top view (surface structures). */
+    private static void outsideSteps(String shortName, double[][] box) {
         String[] names = {"nw", "ne", "se", "sw"};
         int[][] dirs = {{-1, -1}, {1, -1}, {1, 1}, {-1, 1}};
         for (int k = 0; k < 4; k++) {
@@ -876,14 +890,17 @@ public final class CiDriver {
                 .settleChunks(2400)
                 .waitTicks(40)
                 .shot("structure_" + shortName + "_top");
-        // inside: the camera spots the generator lists in tools/ci_views.json (template coordinates)
+    }
+
+    /** The camera spots the generator lists in tools/ci_views.json (template coordinates). */
+    private static void interiorSteps(String name, String shortName, String dim) {
         for (String[] view : interiorViews(shortName)) {
             step("structure_" + shortName + "_in_" + view[0])
                     .server("inside " + view[0], (server, player) -> {
                         Placed placed = PLACED.get(name);
                         Vec3 feet = placed.world(view[1]);
                         Vec3 look = placed.world(view[2]);
-                        return List.of("tp @s " + feet.x + " " + feet.y + " " + feet.z + " facing "
+                        return List.of(in(dim) + "tp @s " + feet.x + " " + feet.y + " " + feet.z + " facing "
                                 + look.x + " " + look.y + " " + look.z);
                     })
                     .run("fly", CiDriver::fly)
@@ -928,6 +945,32 @@ public final class CiDriver {
             LOGGER.warn(TAG + "could not read {}: {}", file, e.toString());
         }
         return out;
+    }
+
+    /** "overworld", "nether" or "end": the structure's dimension (tools/ci_views.json), overworld if unknown. */
+    private static String dimensionOf(String shortName) {
+        File file = new File("../tools/ci_views.json");
+        try {
+            var root = com.google.gson.JsonParser.parseString(Files.readString(file.toPath(), StandardCharsets.UTF_8))
+                    .getAsJsonObject();
+            var entry = root.has(shortName) ? root.getAsJsonObject(shortName) : null;
+            return entry != null && entry.has("dimension") ? entry.get("dimension").getAsString() : "overworld";
+        } catch (IOException | RuntimeException e) {
+            return "overworld";
+        }
+    }
+
+    private static ServerLevel levelOf(IntegratedServer server, String dimension) {
+        return switch (dimension) {
+            case "nether" -> server.getLevel(net.minecraft.world.level.Level.NETHER);
+            case "end" -> server.getLevel(net.minecraft.world.level.Level.END);
+            default -> server.overworld();
+        };
+    }
+
+    /** Command prefix that runs a command in the structure's dimension. */
+    private static String in(String dimension) {
+        return dimension.equals("overworld") ? "" : "execute in minecraft:the_" + dimension + " run ";
     }
 
     /** The structure's ground layer above its template's lowest layer (tools/ci_views.json), or -1. */
@@ -1426,7 +1469,12 @@ public final class CiDriver {
      * layout), stores its bounding box and force-loads its chunks.
      */
     private static List<String> prepareStructure(IntegratedServer server, String name, int x, int z, double[][] out) {
-        ServerLevel level = server.overworld();
+        return prepareStructure(server, name, x, z, out, "overworld");
+    }
+
+    private static List<String> prepareStructure(IntegratedServer server, String name, int x, int z, double[][] out,
+                                                 String dim) {
+        ServerLevel level = levelOf(server, dim);
         BlockPos pos = new BlockPos(x, 64, z);
         Holder.Reference<Structure> holder = level.registryAccess().lookupOrThrow(Registries.STRUCTURE)
                 .get(net.minecraft.resources.Identifier.parse(name))
@@ -1450,7 +1498,7 @@ public final class CiDriver {
         int minCx = (box.minX() >> 4) - 1;
         int maxCx = (box.maxX() >> 4) + 1;
         for (int chz = (box.minZ() >> 4) - 1; chz <= (box.maxZ() >> 4) + 1; chz++) {
-            commands.add("forceload add " + (minCx * 16) + " " + (chz * 16) + " " + (maxCx * 16) + " " + (chz * 16));
+            commands.add(in(dim) + "forceload add " + (minCx * 16) + " " + (chz * 16) + " " + (maxCx * 16) + " " + (chz * 16));
         }
         return commands;
     }

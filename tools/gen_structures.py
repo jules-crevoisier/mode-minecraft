@@ -155,7 +155,7 @@ def main():
                         report.append((sdef.id, piece.name, kind, pos, msg))
                 if pool_name == "start" and piece is pieces[0]:
                     ground_offset = my - sdef.ground
-                    views[sdef.id] = {"ground": sdef.ground - my,
+                    views[sdef.id] = {"dimension": sdef.dimension, "ground": sdef.ground - my,
                                       "views": [{"name": n, "feet": [f[0] - mx, f[1] - my, f[2] - mz],
                                                  "look": [l[0] - mx, l[1] - my, l[2] - mz]} for n, f, l in piece.views]}
                 summary.append((f"{sdef.id}/{piece.name}", size, len(blocks), ncells, written, biggest))
