@@ -849,7 +849,7 @@ def dressing(bp):
     # hold: amber lamps flush in the ceiling, cargo chains with lanterns hanging between the pillar rows
     for z in range(-26, 27, 6):
         for x in (-13, -4, 4, 13):
-            if bp.get(x, ENGINE - 1, z) not in (None, "air") and bp.get(x, ENGINE - 2, z) in (None, "air"):
+            if not is_air(bp, x, ENGINE - 1, z) and is_air(bp, x, ENGINE - 2, z):
                 bp.set(x, ENGINE - 1, z, EDISON)
     for (x, z) in ((-4, -16), (4, -8), (-4, 8), (4, 16), (-14, -24), (14, 0), (-14, 20)):
         bp.set(x, ENGINE - 2, z, "chain[axis=y]")
@@ -863,12 +863,12 @@ def dressing(bp):
     # engine room: more lamps over the catwalk and the furnace glow
     for z in range(-15, 14, 5):
         for x in (-8, 8):
-            if bp.get(x, GUN - 2, z) in (None, "air"):
+            if is_air(bp, x, GUN - 2, z):
                 bp.set(x, GUN - 2, z, HANG_LAMP)
     # gun deck: a red runner down the centre, chart tables, shot racks, more lamps
     for z in range(-26, 13):
         for x in (-1, 0, 1):
-            if bp.get(x, GUN, z) in (None, "air") and bp.get(x, GUN - 1, z) not in (None, "air"):
+            if is_air(bp, x, GUN, z) and not is_air(bp, x, GUN - 1, z):
                 bp.set(x, GUN, z, "red_carpet" if x == 0 else "black_carpet")
     for z in (-18, -2):
         for x in (-4, 4):
@@ -879,16 +879,23 @@ def dressing(bp):
             w = int(hull_w(GUN + 1, z))
             x = s * (w - 7)
             for dz in (-3, 3):
-                if bp.get(x, GUN, z + dz) in (None, "air"):
+                if is_air(bp, x, GUN, z + dz):
                     bp.set(x, GUN, z + dz, "coal_block")
     for z in range(-20, 24, 7):
         for x in (-14, 14):
-            if bp.get(x, DECK - 2, z) in (None, "air"):
+            if is_air(bp, x, DECK - 2, z):
                 bp.set(x, DECK - 2, z, HANG_LAMP)
+    # ceiling beams across the hold and the gun deck (they also hide the arena's brass rings seen from below)
+    for (y, x_w) in ((ENGINE - 2, HOLD + 3), (DECK - 2, GUN + 3)):
+        for z in range(-27, 30, 6):
+            w = int(hull_w(x_w, z))
+            for x in range(-w + 1, w):
+                if is_air(bp, x, y, z) and not is_air(bp, x, y + 1, z):
+                    bp.set(x, y, z, IRON_SLAB + "[type=top]")
     # cockpit: the pilots' console under the eyes, two seats, levers and gauges
     zc = HEAD_Z + 3
     for x in range(-6, 7):
-        if bp.get(x, GUN, zc) in (None, "air"):
+        if is_air(bp, x, GUN, zc):
             bp.set(x, GUN, zc, IRON)
             bp.set(x, GUN + 1, zc, GAUGE if x % 3 == 0 else (BRASS_SLAB if x % 3 == 1 else
                                                             "lever[face=floor,facing=south,powered=false]"))
@@ -898,7 +905,7 @@ def dressing(bp):
     bp.set(0, GUN + 1, zc + 1, GEAR)
     for x in (-6, 6):
         for y in range(GUN, GUN + 4):
-            if bp.get(x, y, zc + 4) in (None, "air"):
+            if is_air(bp, x, y, zc + 4):
                 bp.set(x, y, zc + 4, PIPES)
 
 
