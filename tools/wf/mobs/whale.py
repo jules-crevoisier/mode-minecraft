@@ -1,63 +1,152 @@
 """Humpback Whale (Baleine à bosse): huge, rare and peaceful, in the deep oceans. It cruises slowly, surfaces to
-blow, and sings. Built at half scale (root scale 2): a long, slightly humped body with knobby tubercles on the
-head, a grooved white throat, barnacle clusters, very long white-edged pectoral fins (two segments each), a small
-dorsal hump and wide notched flukes that beat up and down through a three-joint tail.
+blow, and sings. Built at half scale (root scale 2).
 
-Actions: sing (fins spread, head tilts, a slow roll), spout (the blowhole puffs, the back arches at the surface).
+Silhouette idea: a long, heavy spindle that reads from far away. A flat, gently down-sloping rostrum studded with
+knobby tubercles over a deep, bulging lower jaw (the white pleated throat that balloons when it sings), the body
+thickest just behind the very long white pectoral fins (three joints each, knobbed along the leading edge), a small
+dorsal fin on a hump two thirds of the way back, a tall, laterally flattened tail stock and wide swept-back flukes
+with a notched, scalloped trailing edge. Countershaded slate-blue over white, with pale rake scars and barnacle
+clusters on the chin, the knobs and the fin edges.
+
+Actions: sing (the throat swells, fins spread, a slow roll), spout (the head breaks the surface, the blowhole flares,
+the back arches and the flukes lift).
 """
+import math
+
 from ..models import Model
 from ..texgen import mix, mul
+from . import folkkit as K
 
-BACK = (46, 58, 76)
-BACK_L = (70, 86, 108)
-SIDE = (88, 100, 118)
+BACK = (44, 56, 74)
+BACK_L = (66, 82, 104)
+SIDE = (84, 98, 118)
 BELLY = (226, 230, 232)
-GROOVE = (150, 156, 166)
+BELLY_D = (188, 194, 204)
+GROOVE = (140, 148, 162)
+SCAR = (150, 162, 176)
 BARNACLE = (214, 208, 190)
-BARNACLE_D = (150, 140, 124)
-EYE = (16, 16, 20)
+BARNACLE_D = (128, 118, 104)
+EYE = (14, 14, 20)
+MOUTH = (26, 28, 36)
 
 
-def _n(x, y, seed):
-    r = ((x * 73856093) ^ (y * 19349663) ^ (seed * 83492791)) & 0xFFFF
-    return (r % 1000) / 1000.0
+def blot(x, y, seed, sx=4, sy=3):
+    """Low-frequency mottling in [0, 1): flat patches of a few texels, not per-texel noise."""
+    return (K.h(x // sx, y // sy, seed) % 100) / 100.0
 
 
-def hide(seed, belly_from=0.62, grooves=False, barnacles=0.0):
-    """Dark mottled back, lighter flanks, white (grooved) belly; scattered barnacles."""
+def _u(face, x, w):
+    """Distance from the front (-z) end along a side face."""
+    return x if face == "left" else w - 1 - x
+
+
+def barnacle(x, y, seed, density):
+    """Barnacles grow in tight clusters: a cluster cell is picked by the seed, then a 2 x 2 rosette with a dark
+    centre is drawn inside it."""
+    if density <= 0:
+        return None
+    cx, cy = x // 4, y // 4
+    if K.h(cx, cy, seed, 77) % 100 >= density * 100:
+        return None
+    ox, oy = K.h(cx, cy, seed, 5) % 3, K.h(cx, cy, seed, 6) % 3
+    lx, ly = x % 4 - ox, y % 4 - oy
+    if (lx, ly) in ((0, 0), (1, 0), (0, 1)):
+        return BARNACLE
+    if (lx, ly) == (1, 1):
+        return BARNACLE_D
+    return None
+
+
+def hide(seed, belly=0.62, pleats=False, barnacles=0.0, scars=True):
+    """Countershaded skin: dark slate back with a soft lighter streak along the spine, flanks fading to blue-grey,
+    a crisp wavy line to the white belly (long pleat grooves on the throat), pale rake scars and barnacle clusters."""
     def f(face, x, y, w, h):
         if face == "top":
-            c = mix(BACK, BACK_L, 0.4 * _n(x // 2, y // 2, seed))
-            if barnacles and _n(x, y, seed + 9) < barnacles:
-                return BARNACLE if _n(x, y, seed + 3) < 0.6 else BARNACLE_D
+            b = barnacle(x, y, seed, barnacles * 0.6)
+            if b:
+                return b
+            spine = abs(x - (w - 1) / 2) < max(1.0, w / 8)
+            c = mix(BACK, BACK_L, 0.35 if spine else 0.12 * blot(x, y, seed))
             return c
         if face == "bottom":
-            if grooves and x % 3 == 0:
-                return GROOVE
-            return mix(BELLY, GROOVE, 0.15 * _n(x, y, seed))
+            if pleats:
+                return GROOVE if x % 2 == 0 else BELLY
+            return mix(BELLY, BELLY_D, 0.4 * blot(x, y, seed))
+        if face in ("front", "back"):
+            v = y / max(1, h - 1)
+            return BELLY if v > belly + 0.06 else mix(BACK, SIDE, min(1.0, v * 1.3))
+        u = _u(face, x, w)
         v = y / max(1, h - 1)
-        if v > belly_from:
-            if grooves and (x + (y % 2)) % 3 == 0:
+        edge = belly + 0.06 * math.sin(u * 0.7 + seed)
+        if v > edge:
+            if pleats and y % 2 == 1:
                 return GROOVE
-            return BELLY
-        c = mix(BACK, SIDE, min(1.0, v * 1.4))
-        if barnacles and _n(x, y, seed + 11) < barnacles * 0.6:
-            return BARNACLE_D
-        return mix(c, BACK_L, 0.25 * _n(x // 2, y // 2, seed + 1))
+            return BELLY if v > edge + 0.12 else BELLY_D
+        b = barnacle(u, y, seed + 1, barnacles)
+        if b:
+            return b
+        c = mix(BACK, SIDE, min(1.0, (v / max(0.1, edge)) ** 1.3))
+        c = mix(c, BACK_L, 0.12 * blot(u, y, seed + 2, 5, 3))
+        # rake scars: two short parallel pale scratches, slanting down toward the tail, on some flanks only
+        if scars and w >= 10 and h >= 8 and K.h(seed, 3) % 3 != 0:
+            s0 = 2 + K.h(seed, face == "left") % max(1, w - 10)
+            r0 = 1 + K.h(seed, 4) % max(1, int(h * edge) - 4)
+            du = u - s0
+            if 0 <= du < 6 and y - r0 - du // 3 in (0, 2):
+                c = mix(c, SCAR, 0.6)
+        return c
     return f
 
 
 def fin(seed, tip=False):
-    """Pectoral fin: dark mottled top with a white knobby leading edge, white underside."""
+    """Pectoral fin: slate on top fading to white toward the tip, a white scalloped leading edge, white below."""
     def f(face, x, y, w, h):
         if face == "bottom":
-            return BELLY
+            return BELLY if (x + seed) % 5 else BELLY_D
         if face == "top":
-            if y >= h - 2 or (y == h - 3 and x % 2 == 0):
-                return BELLY            # the white scalloped leading edge
-            return mix(BACK, BELLY, 0.15 + 0.35 * _n(x, y, seed)) if _n(x // 2, y, seed) > 0.25 else BACK_L
+            lead = y >= h - 1                                               # the front edge (-z)
+            if lead:
+                return BELLY if x % 2 == 0 else BELLY_D
+            t = x / max(1, w - 1)
+            if seed % 2 == 0:
+                t = 1 - t                                                   # the -x fin: tip is at x = 0
+            t = t * 0.5 + (0.5 if tip else 0.0)
+            c = mix(BACK, BELLY, max(0.0, t - 0.25) * 1.3)
+            if blot(x, y, seed, 3, 2) < 0.25:
+                c = mix(c, BELLY, 0.45)                                     # pale blotches
+            return c
+        if face == "front":
+            return BELLY
         return mix(SIDE, BELLY, 0.5)
     return f
+
+
+def fluke(side):
+    """Half of the flukes: slate on top with a lit leading edge, white with dark marks below, scalloped trailing
+    edge cut into the back rows; ``side`` is -1 or 1 (which end is the tip)."""
+    def f(face, x, y, w, h):
+        if face in ("top", "bottom"):
+            back = y                                                         # y = 0 is the trailing (+z) edge
+            tipu = x if side < 0 else w - 1 - x                               # distance from the tip
+            if back == 0 and (x % 3 == 1 or tipu < 2):
+                return None
+            if back == 1 and tipu == 0:
+                return None
+            if face == "bottom":
+                return BELLY if K.h(x // 3, y // 2, 7 + side) % 4 else (60, 70, 86)
+            return BACK_L if y == h - 1 else mix(BACK, BACK_L, 0.2 * blot(x, y, 8))
+        return BACK
+    return f
+
+
+def wave(anim, part, length, amp, phase=0.0, base=(0, 0, 0), kind="rot", n=8):
+    """A seamless sine loop on ``part``: base + amp * sin(2 pi (t / length + phase))."""
+    keys = []
+    for i in range(n + 1):
+        t = length * i / n
+        s = math.sin(2 * math.pi * (i / n + phase))
+        keys.append((round(t, 4), tuple(round(base[k] + amp[k] * s, 3) for k in range(3))))
+    getattr(anim, kind)(part, *keys)
 
 
 def build():
@@ -66,79 +155,128 @@ def build():
 
     m.part("bone", pivot=(0, 24, 0), scale=(2, 2, 2))
     m.part("body", "bone", pivot=(0, -8, 0))
-    m.part("tail1", "body", pivot=(0, -1, 12))
-    m.part("tail2", "tail1", pivot=(0, 0, 11))
+    m.part("head", "body", pivot=(0, -1, -17), rot=(3, 0, 0))
+    m.part("jaw", "head", pivot=(0, 1, -1))
+    m.part("tail1", "body", pivot=(0, -1, 10))
+    m.part("tail2", "tail1", pivot=(0, 0, 10))
     m.part("flukes", "tail2", pivot=(0, 0, 9))
+    m.part("fluke_r", "flukes", pivot=(-1, 0, 1), rot=(0, -14, 0))
+    m.part("fluke_l", "flukes", pivot=(1, 0, 1), rot=(0, 14, 0))
 
-    # ---- torso and head
-    m.box("body", -8, -7, -16, 16, 14, 28, hide(1, barnacles=0.0))
-    m.box("body", -7, -8, -12, 14, 1, 18, hide(2))                                 # the hump of the back
-    m.box("body", -7, -6, -29, 14, 12, 13, hide(3, belly_from=0.58, grooves=True, barnacles=0.03))
-    m.box("body", -5, -5, -35, 10, 9, 6, hide(4, belly_from=0.55, grooves=True, barnacles=0.08))
-    m.box("body", -6.5, 3, -34, 13, 4, 18, hide(5, belly_from=0.0, grooves=True))   # grooved throat
-    # knobby tubercles along the rostrum, blowhole, eyes
-    for i, (x, z) in enumerate(((-2, -33), (2, -32), (0, -30), (-3, -28), (3, -27), (-1, -25))):
-        m.box("body", x - 0.5, -6 if z < -29 else -7, z, 1, 1, 1, BARNACLE if i % 2 else BACK_L)
-    m.box("body", -1.5, -7.2, -20, 3, 1, 2, {"top": lambda f, x, y, w, h: EYE if x == 1 else BACK, "*": BACK})
+    # ---- torso: an octagonal cross-section (a wide box and a tall box), thickest behind the fins
+    m.box("body", -8, -6, -18, 16, 12, 16, hide(1, belly=0.6, barnacles=0.03))
+    m.box("body", -6.5, -7.5, -17, 13, 15, 14, hide(2, belly=0.6))
+    m.box("body", -7, -5.5, -3, 14, 11, 13, hide(3, belly=0.62))
+    m.box("body", -5.5, -6.5, -3, 11, 13, 12, hide(4, belly=0.62))
+    m.box("body", -7.5, 2, -18, 15, 5, 14, hide(5, belly=0.0, pleats=True, scars=False))   # pleated chest
+
+    # ---- head: a flat rostrum sloping down to the snout, knobby tubercles, the splash guard and blowholes
+    m.box("head", -6, -6, -9, 12, 6, 10, hide(10, belly=0.95, barnacles=0.05, scars=False))
+    m.box("head", -5, -5, -15, 10, 5, 7, hide(11, belly=0.95, barnacles=0.08, scars=False))
+    m.box("head", -3.5, -4, -19, 7, 4, 5, hide(12, belly=0.95, barnacles=0.12, scars=False))
+    for i, (x, z) in enumerate(((-2, -18), (1.5, -17), (-1, -15), (2.5, -14), (-3, -12), (0.5, -11), (-2, -8),
+                                (3, -7))):
+        m.box("head", x - 0.5, -5 if z < -15 else -6 if z < -9 else -7, z, 1, 1, 1,
+              {"top": BARNACLE if i % 3 == 0 else BACK_L, "*": BACK})
+    m.box("head", -2, -7, -4, 4, 1, 4, {"top": lambda f_, x, y, w, h: MOUTH if (x in (1, 2) and y in (1, 2))
+                                        else BACK_L, "*": BACK})               # splash guard with the twin blowhole
+    # the deep lower jaw: wider than the rostrum, pleated white throat, barnacles crusted on the chin
+    def jaw_side(f_, x, y, w, h):
+        if y == 0:
+            return MOUTH                                                     # the long mouth line
+        return hide(13, belly=0.35, pleats=True, barnacles=0.15, scars=False)(f_, x, y, w, h)
+    m.box("jaw", -6.5, -1, -18, 13, 7, 19, {"left": jaw_side, "right": jaw_side,
+                                          "front": hide(14, belly=0.55, barnacles=0.3, scars=False),
+                                          "*": hide(13, belly=0.35, pleats=True, scars=False)})
+    m.box("jaw", -5, 1, -20, 10, 4, 3, hide(15, belly=0.2, barnacles=0.4, scars=False))
     for sx in (-1, 1):
-        m.box("body", (6.6 if sx > 0 else -7.6), 1, -24, 1, 1, 1, EYE)
-        m.box("body", (6.4 if sx > 0 else -7.4), 3, -31, 1, 2, 3, BARNACLE)          # barnacles on the jaw
+        # small eye just above the corner of the mouth, a pale lid around it
+        m.box("head", 5.6 if sx > 0 else -6.6, -2, -3, 1, 2, 2,
+              {"side": lambda f_, x, y, w, h: EYE if (y == 1 and x == 0) or (y == 1 and f_ == "right" and x == 1)
+               else SIDE, "*": SIDE})
 
-    # ---- pectoral fins: long, two segments, swept back
+    # ---- pectoral fins: very long, three joints, swept back and down, knobbed leading edge
     for side, sx in (("r", -1), ("l", 1)):
-        root, tip = f"fin_{side}", f"fin_{side}_tip"
-        m.part(root, "body", pivot=(7 * sx, 4, -12), rot=(0, 30 * sx, 25 * sx))
-        m.part(tip, root, pivot=(12 * sx, 0, 0), rot=(0, 10 * sx, 0))
-        m.box(root, 0 if sx > 0 else -12, -1, -3, 12, 2, 6, fin(10 + sx))
-        m.box(tip, 0 if sx > 0 else -11, -0.5, -2, 11, 1, 4, fin(12 + sx, tip=True))
+        root, mid, tip = f"fin_{side}", f"fin_{side}_mid", f"fin_{side}_tip"
+        m.part(root, "body", pivot=(7 * sx, 4, -12), rot=(0, 38 * sx, 9 * sx))
+        m.part(mid, root, pivot=(9 * sx, 0, 0), rot=(0, 8 * sx, 4 * sx))
+        m.part(tip, mid, pivot=(9 * sx, 0, 0), rot=(0, 10 * sx, 4 * sx))
+        seed = 20 + (sx > 0)
+        m.box(root, 0 if sx > 0 else -9, -1, -3.5, 9, 2, 7, fin(seed))
+        m.box(mid, 0 if sx > 0 else -9, -1, -3, 9, 2, 6, fin(seed))
+        m.box(tip, 0 if sx > 0 else -8, -0.5, -2.5, 8, 1, 5, fin(seed, tip=True))
+        for i, part in enumerate((root, root, mid, mid, tip)):
+            xx = (2 + (i % 2) * 4) * sx - (1 if sx < 0 else 0)
+            m.box(part, xx, -1 if part != tip else -0.5, -4.5 + (i >= 2) * 0.5 + (i == 4) * 0.5, 1, 1, 1,
+                  {"top": BARNACLE if i == 1 else BELLY, "*": BELLY})            # leading-edge knobs
 
-    # ---- tail stock with a small dorsal hump, flukes
-    m.box("tail1", -6, -5, 0, 12, 10, 11, hide(20, belly_from=0.7))
-    m.box("tail1", -1, -8, 2, 2, 3, 5, {"*": BACK, "top": BACK_L})                    # dorsal hump
-    m.box("tail2", -4, -3, 0, 8, 6, 9, hide(21, belly_from=0.75))
+    # ---- tail stock: tall and laterally flattened, a small dorsal fin on a hump, then the flukes
+    m.box("tail1", -5.5, -5, 0, 11, 10, 11, hide(30, belly=0.68))
+    m.box("tail1", -4.5, -6, 0, 9, 12, 10, hide(31, belly=0.68))
+    m.box("tail1", -1.5, -8, 1, 3, 2, 6, {"*": BACK, "top": BACK_L})              # the hump
+    m.box("tail1", -0.5, -10, 3, 1, 2, 4, {"*": BACK, "top": BACK_L})             # the little dorsal fin
+    m.box("tail2", -3, -4, 0, 6, 8, 10, hide(32, belly=0.72, scars=False))
+    m.box("tail2", -0.5, -5, 1, 1, 1, 8, {"*": BACK, "top": BACK_L})              # the keel along the top
+    m.box("flukes", -2, -1.5, -1, 4, 3, 4, hide(33, belly=0.7, scars=False))
+    m.box("fluke_r", -14, -1, -1, 14, 2, 8, fluke(-1))
+    m.box("fluke_l", 0, -1, -1, 14, 2, 8, fluke(1))
 
-    def fluke(face, x, y, w, h):
-        # wide flukes: notched at the middle of the trailing edge, scalloped, white with dark marks below
-        back = y if face == "top" else h - 1 - y
-        if face in ("top", "bottom"):
-            cx = abs(x - (w - 1) / 2)
-            if back == 0 and (cx < 1 or x % 3 == 0):
-                return None
-            if back <= 1 and cx > w / 2 - 2:
-                return None
-            if face == "bottom":
-                return BELLY if _n(x, y, 7) > 0.2 else GROOVE
-            return mix(BACK, BACK_L, 0.3 * _n(x, y, 8))
-        return BACK
-    m.box("flukes", -13, -1, 0, 26, 2, 8, fluke)
-    m.box("flukes", -2, -1.5, -1, 4, 3, 3, hide(22))
+    _anims(m)
+    return m
 
-    # ------------------------------------------------------------------ animations
+
+def _anims(m):
+    # idle: a slow travelling wave from the head to the flukes (each joint lags the one before), fins sculling with
+    # the tips trailing, the throat breathing
     L = 4.0
     idle = m.anim("idle", L)
-    idle.rot("tail1", (0, (5, 0, 0)), (L / 2, (-5, 0, 0)), (L, (5, 0, 0)))
-    idle.rot("tail2", (0, (2, 0, 0)), (L * 0.3, (9, 0, 0)), (L * 0.8, (-9, 0, 0)), (L, (2, 0, 0)))
-    idle.rot("flukes", (0, (-4, 0, 0)), (L * 0.4, (14, 0, 0)), (L * 0.9, (-14, 0, 0)), (L, (-4, 0, 0)))
-    idle.rot("body", (0, (-1.5, 0, 0)), (L / 2, (1.5, 0, 0)), (L, (-1.5, 0, 0)))
-    idle.pos("body", (0, (0, 0.4, 0)), (L / 2, (0, -0.4, 0)), (L, (0, 0.4, 0)))
+    wave(idle, "body", L, (1.5, 0, 0.6), 0.0)
+    wave(idle, "body", L, (0, 0.5, 0), 0.0, kind="pos")
+    wave(idle, "head", L, (-1.5, 0, 0), 0.08)
+    wave(idle, "tail1", L, (5, 0, 0), 0.15)
+    wave(idle, "tail2", L, (8, 0, 0), 0.27)
+    wave(idle, "flukes", L, (14, 0, 0), 0.4)
+    wave(idle, "fluke_r", L, (0, 0, 5), 0.5)
+    wave(idle, "fluke_l", L, (0, 0, -5), 0.5)
+    wave(idle, "jaw", L, (0.03, 0.05, 0), 0.25, base=(1, 1, 1), kind="scale")
     for side, sx in (("r", -1), ("l", 1)):
-        idle.rot(f"fin_{side}", (0, (6, 0, 0)), (L / 2, (-6, 0, -6 * sx)), (L, (6, 0, 0)))
-        idle.rot(f"fin_{side}_tip", (0, (0, 0, 0)), (L * 0.6, (0, 0, -8 * sx)), (L, (0, 0, 0)))
+        wave(idle, f"fin_{side}", L, (5, 0, 5 * sx), 0.0)
+        wave(idle, f"fin_{side}_mid", L, (0, 0, 5 * sx), 0.12)
+        wave(idle, f"fin_{side}_tip", L, (0, 0, 7 * sx), 0.24)
 
-    walk = m.anim("walk", 3.0)
-    walk.rot("tail1", (0, (4, 0, 0)), (1.5, (-4, 0, 0)), (3.0, (4, 0, 0)))
-    walk.rot("flukes", (0, (-6, 0, 0)), (1.5, (6, 0, 0)), (3.0, (-6, 0, 0)))
+    # swim: stronger, faster strokes, the flukes doing the work; fins tucked back
+    W = 3.0
+    walk = m.anim("walk", W)
+    wave(walk, "body", W, (-2, 0, 0), 0.0)
+    wave(walk, "tail1", W, (6, 0, 0), 0.12)
+    wave(walk, "tail2", W, (10, 0, 0), 0.24)
+    wave(walk, "flukes", W, (18, 0, 0), 0.36)
+    wave(walk, "head", W, (1.5, 0, 0), 0.0)
+    for side, sx in (("r", -1), ("l", 1)):
+        wave(walk, f"fin_{side}", W, (0, 0, 4 * sx), 0.0, base=(0, -8 * sx, -4 * sx))
+        wave(walk, f"fin_{side}_tip", W, (0, 0, 6 * sx), 0.2)
 
-    # sing: the fins open wide, the head lifts a little and the whale rolls slowly onto its side and back
+    # sing: the throat swells, fins open wide, the head lifts and the whale rolls slowly onto its side and back
     a = m.anim("sing", 4.0)
     a.rot("body", (0, (0, 0, 0)), (1.2, (-6, 0, 18)), (2.8, (-6, 0, 18)), (4.0, (0, 0, 0)))
+    a.rot("head", (0, (0, 0, 0)), (1.2, (-6, 0, 0)), (2.0, (-8, 0, 0)), (2.8, (-6, 0, 0)), (4.0, (0, 0, 0)))
+    a.scale("jaw", (0, (1, 1, 1)), (1.0, (1.06, 1.22, 1.02)), (1.6, (1.04, 1.12, 1.0)), (2.2, (1.07, 1.26, 1.02)),
+            (2.8, (1.04, 1.12, 1.0)), (4.0, (1, 1, 1)))
     for side, sx in (("r", -1), ("l", 1)):
         a.rot(f"fin_{side}", (0, (0, 0, 0)), (1.2, (0, -25 * sx, -30 * sx)), (2.8, (0, -25 * sx, -35 * sx)),
               (4.0, (0, 0, 0)))
-    a.rot("flukes", (0, (0, 0, 0)), (1.5, (12, 0, 0)), (2.5, (-8, 0, 0)), (4.0, (0, 0, 0)))
-    # spout: the back arches at the surface while the blowhole puffs
+        a.rot(f"fin_{side}_tip", (0, (0, 0, 0)), (1.4, (0, 0, -14 * sx)), (2.4, (0, 0, -4 * sx)), (3.2, (0, 0, -12 * sx)),
+              (4.0, (0, 0, 0)))
+    a.rot("tail1", (0, (0, 0, 0)), (1.5, (6, 0, 0)), (2.5, (-4, 0, 0)), (4.0, (0, 0, 0)))
+    a.rot("flukes", (0, (0, 0, 0)), (1.5, (14, 0, 0)), (2.5, (-10, 0, 0)), (4.0, (0, 0, 0)))
+
+    # spout: the head breaks the surface, the blowhole flares (the jaw tucks), then the back arches over and the
+    # flukes lift as it rolls back under
     a = m.anim("spout", 2.0)
-    a.rot("body", (0, (0, 0, 0)), (0.6, (-5, 0, 0)), (1.4, (3, 0, 0)), (2.0, (0, 0, 0)))
-    a.rot("tail1", (0, (0, 0, 0)), (0.6, (8, 0, 0)), (1.4, (-6, 0, 0)), (2.0, (0, 0, 0)))
+    a.rot("body", (0, (0, 0, 0)), (0.6, (-7, 0, 0)), (1.4, (4, 0, 0)), (2.0, (0, 0, 0)))
+    a.rot("head", (0, (0, 0, 0)), (0.5, (-6, 0, 0)), (0.8, (-4, 0, 0)), (1.4, (5, 0, 0)), (2.0, (0, 0, 0)))
+    a.scale("jaw", (0, (1, 1, 1)), (0.5, (1, 0.94, 1)), (0.9, (1, 1.04, 1)), (2.0, (1, 1, 1)))
+    a.rot("tail1", (0, (0, 0, 0)), (0.6, (8, 0, 0)), (1.4, (-8, 0, 0)), (2.0, (0, 0, 0)))
+    a.rot("tail2", (0, (0, 0, 0)), (0.8, (6, 0, 0)), (1.5, (-10, 0, 0)), (2.0, (0, 0, 0)))
+    a.rot("flukes", (0, (0, 0, 0)), (0.9, (6, 0, 0)), (1.6, (-16, 0, 0)), (2.0, (0, 0, 0)))
     a.pos("body", (0, (0, 0, 0)), (0.6, (0, 1, 0)), (2.0, (0, 0, 0)))
-    return m
