@@ -614,6 +614,7 @@ public final class CiDriver {
         step("held_items")
                 .cmd(() -> {
                     List<String> c = new ArrayList<>();
+                    c.add(in("overworld") + "tp @s " + (bx + 0.5) + " " + (STAGE_Y + 1) + " " + bz); // back from the End or Nether
                     // a block to clear, so the fill always changes something (an all-air fill is an error)
                     c.add("setblock " + at(0, 1, 4) + " minecraft:stone");
                     c.add("fill " + at(-16, 1, 3) + " " + at(16, 7, 6) + " minecraft:air");
@@ -655,6 +656,7 @@ public final class CiDriver {
         step("colossal_gear")
                 .cmd(() -> {
                     List<String> c = new ArrayList<>();
+                    c.add(in("overworld") + "tp @s " + (bx + 0.5) + " " + (STAGE_Y + 1) + " " + bz); // back from the End or Nether
                     c.add("setblock " + at(0, 1, 12) + " minecraft:stone");
                     c.add("fill " + at(-8, 1, 10) + " " + at(8, 4, 14) + " minecraft:air");
                     c.add("fill " + at(-8, 0, 4) + " " + at(8, 0, 14) + " minecraft:polished_andesite");
@@ -1122,7 +1124,8 @@ public final class CiDriver {
 
     /** Command prefix that runs a command in the structure's dimension. */
     private static String in(String dimension) {
-        return dimension.equals("overworld") ? "" : "execute in minecraft:the_" + dimension + " run ";
+        // explicit for the overworld too: after an End or Nether structure the player is still over there
+        return "execute in minecraft:" + (dimension.equals("overworld") ? "overworld" : "the_" + dimension) + " run ";
     }
 
     /** The structure's ground layer above its template's lowest layer (tools/ci_views.json), or -1. */
@@ -1198,7 +1201,7 @@ public final class CiDriver {
         step("entity_" + shortName)
                 .cmd(() -> {
                     frame[0] = entityFrame(name);
-                    return List.of("tp @s " + ex + " " + frame[0][1] + " " + (ez - frame[0][0]) + " facing "
+                    return List.of(in("overworld") + "tp @s " + ex + " " + frame[0][1] + " " + (ez - frame[0][0]) + " facing "
                             + ex + " " + frame[0][2] + " " + ez);
                 })
                 .run("fly", CiDriver::fly)
