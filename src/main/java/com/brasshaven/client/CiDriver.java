@@ -751,11 +751,27 @@ public final class CiDriver {
         // clean pictures: no HUD, no hand
         step("focus_view").run("hide the HUD", () -> {
             // the F1 flag, by reflection: its field moved between versions, and a missing one only costs the HUD
-            try {
-                Field f = Minecraft.getInstance().options.getClass().getField("hideGui");
-                f.setBoolean(Minecraft.getInstance().options, true);
-            } catch (ReflectiveOperationException e) {
-                LOGGER.warn(TAG + "could not hide the HUD: {}", e.toString());
+            Minecraft mc = Minecraft.getInstance();
+            int found = 0;
+            for (Object owner : new Object[] {mc.options, mc.gui, mc}) {
+                for (Class<?> c = owner.getClass(); c != null && c != Object.class; c = c.getSuperclass()) {
+                    for (Field f : c.getDeclaredFields()) {
+                        if (f.getType() == boolean.class && !Modifier.isStatic(f.getModifiers())
+                                && f.getName().toLowerCase(java.util.Locale.ROOT).contains("hidegui")) {
+                            try {
+                                f.setAccessible(true);
+                                f.setBoolean(owner, true);
+                                found++;
+                                LOGGER.info(TAG + "HUD hidden through {}.{}", c.getSimpleName(), f.getName());
+                            } catch (ReflectiveOperationException | RuntimeException e) {
+                                LOGGER.warn(TAG + "could not set {}.{}: {}", c.getSimpleName(), f.getName(), e.toString());
+                            }
+                        }
+                    }
+                }
+            }
+            if (found == 0) {
+                LOGGER.warn(TAG + "no hideGui flag found: the HUD stays on the screenshots");
             }
         });
         int index = 0;
@@ -798,8 +814,8 @@ public final class CiDriver {
                         double[] b = box[0];
                         double[] c = centre(b);
                         double size = Math.max(b[3] - b[0], b[5] - b[2]);
-                        double back = size * 0.55 + 20;
-                        return List.of("tp @s " + (c[0] + dx * back) + " " + (b[4] + size * 0.3 + 10) + " "
+                        double back = size * 0.45 + 14;
+                        return List.of("tp @s " + (c[0] + dx * back) + " " + (b[4] + size * 0.12 + 6) + " "
                                 + (c[2] + dz * back) + " facing " + c[0] + " " + c[1] + " " + c[2]);
                     })
                     .run("fly", CiDriver::fly)
@@ -807,6 +823,22 @@ public final class CiDriver {
                     .waitTicks(40)
                     .shot("structure_" + shortName + "_" + names[k]);
         }
+        // what a player walking up sees: eye height on the ground, south of the structure, looking at its middle
+        step("structure_" + shortName + "_ground")
+                .server("ground in front", (server, player) -> {
+                    double[] b = box[0];
+                    double[] c = centre(b);
+                    int gx = (int) Math.floor(c[0]);
+                    int gz = (int) Math.floor(b[5] + 12);
+                    int gy = server.overworld().getHeight(
+                            net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, gx, gz);
+                    return List.of("tp @s " + (gx + 0.5) + " " + gy + " " + (gz + 0.5) + " facing "
+                            + c[0] + " " + (gy + (b[4] - gy) * 0.45) + " " + c[2]);
+                })
+                .run("fly", CiDriver::fly)
+                .settleChunks(2400)
+                .waitTicks(40)
+                .shot("structure_" + shortName + "_ground");
         step("structure_" + shortName + "_top")
                 .cmd(() -> {
                     double[] b = box[0];
