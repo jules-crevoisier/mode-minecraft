@@ -48,8 +48,8 @@ from ..defs import Piece, StructureDef, register
 from ..megakit import hash01, hash3, is_air, pointed_arch
 from ..parts import LOOT, MOD
 
-# the ringwall's own lord comes with the boss pass; until then the needle's arena wakes the Gryphon Knight
-BOSS = "brasshaven:gryphon_knight"
+# the ringwall's own lord: the Castellan of the Caldera (entity/boss/CalderaCastellan.java, tools/BOSSES.md)
+BOSS = "brasshaven:caldera_castellan"
 MOB_KNIGHT = "brasshaven:skeleton_knight"
 MOB_GARGOYLE = "brasshaven:gargoyle"
 MOB_CRAWLER = "brasshaven:crypt_crawler"

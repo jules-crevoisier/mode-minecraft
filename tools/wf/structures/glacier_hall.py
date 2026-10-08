@@ -47,8 +47,8 @@ from ..defs import Piece, StructureDef, register
 from ..megakit import hash01, hash3, pointed_arch
 from ..parts import LOOT, MOD
 
-# the hall's own jarl comes with the boss pass; until then the arena wakes the Grave Knight (a dead warrior king)
-BOSS = "brasshaven:grave_knight"
+# the hall's own king: the Frost Jarl (entity/boss/FrostJarl.java, tools/BOSSES.md)
+BOSS = "brasshaven:frost_jarl"
 MOB_STRAY = "minecraft:stray"
 MOB_KNIGHT = "brasshaven:skeleton_knight"
 MOB_DROWNED = "minecraft:drowned"

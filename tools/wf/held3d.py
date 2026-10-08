@@ -528,6 +528,59 @@ def halo_glaive():
     return out
 
 
+def dane_axe():
+    """Bearded Axe of the Frost Jarl: a long dark haft with a gold pommel and collars, and for a head a bearded
+    crescent of blue ice with a glowing edge, an iron spike behind."""
+    out = _shaft(-6, 26, 1.6, "handle") + _grip(2, 9, 2.2)
+    out += [box(6.8, -7, 6.8, 9.2, -6, 9.2, "accent_dark"), box(6.6, 13, 6.6, 9.4, 14, 9.4, "brass"),
+            box(6.6, 19, 6.6, 9.4, 20, 9.4, "brass"), box(7.1, 26, 7.1, 8.9, 27.5, 8.9, "accent")]
+    out += [box(5, 20.5, 7.4, 7.2, 24.5, 8.6, "dark"),                         # the neck
+            box(2, 18.5, 7.5, 5, 26.5, 8.5, "dark"),                           # the body
+            box(-0.5, 16, 7.5, 2, 29, 8.5, "mid"),                             # the outer blade
+            box(0, 29, 7.6, 1.5, 30.5, 8.4, "light"),                          # the upper horn
+            box(0, 13, 7.6, 2.2, 16, 8.4, "mid"),                              # the beard's hook
+            box(-1.6, 15, 7.6, -0.5, 29.5, 8.4, "glow"),                       # the frost edge
+            box(3, 21, 7.3, 4, 24, 8.7, "accent"),                             # a rune in the ice
+            box(9.2, 21, 7.5, 11.6, 23, 8.5, "iron_dark")]                     # back spike
+    return out
+
+
+def caldera_halberd():
+    """Halberd of the Caldera: a long black haft banded with bronze, a leather grip, a bronze socket; an obsidian axe
+    blade with a molten edge and a glowing crack, a long spear point and a back spike."""
+    out = _shaft(-6, 22, 1.6, "handle") + _grip(3, 9, 2.2)
+    out += [box(6.8, -7, 6.8, 9.2, -6, 9.2, "brass_dark"), box(7.1, 13, 7.1, 8.9, 14, 8.9, "brass"),
+            box(6.6, 20.5, 6.6, 9.4, 23.5, 9.4, "brass"), box(6.9, 23.5, 6.9, 9.1, 24.5, 9.1, "brass_dark")]
+    # the axe blade, widening outward (-x), its molten edge and a crack of magma through it
+    out += [box(5.0, 18.5, 7.3, 7.2, 25.5, 8.7, "dark"), box(3.4, 17.5, 7.35, 5.0, 26.5, 8.65, "mid"),
+            box(1.6, 16.0, 7.4, 3.4, 28.0, 8.6, "mid"), box(0.6, 15.2, 7.45, 1.6, 28.8, 8.55, "accent_dark"),
+            box(2.6, 21.5, 7.25, 6.4, 22.3, 8.75, "accent_dark"), box(2.6, 17.8, 7.3, 3.4, 18.8, 8.7, "light"),
+            box(2.6, 25.2, 7.3, 3.4, 26.2, 8.7, "light")]
+    # the spear point and the back spike
+    out += [box(7.2, 24.5, 7.4, 8.8, 30, 8.6, "mid"), box(7.6, 30, 7.6, 8.4, 32, 8.4, "light"),
+            box(7.8, 25, 7.3, 8.2, 29.5, 8.7, "accent_dark"),
+            box(9.2, 21.2, 7.5, 11.5, 22.6, 8.5, "dark"), box(11.5, 21.5, 7.6, 13, 22.3, 8.4, "light")]
+    return out
+
+
+def gate_key():
+    """Key of the Kneeling Gate: the gate's great key wielded as a mace: a broad gold ring bow for a pommel with a
+    soul-blue gem in it, a wrapped grip, a thick banded gold shaft set with glowing runes and a heavy toothed bit."""
+    out = [box(4, -8, 7.2, 12, -6.4, 8.8, "light"), box(4, -1.6, 7.2, 12, 0, 8.8, "dark"),          # the bow ring
+           box(3.4, -7, 7.2, 5, -0.6, 8.8, "mid"), box(11, -7, 7.2, 12.6, -0.6, 8.8, "mid"),
+           box(7, -5, 7.5, 9, -2.6, 8.5, "accent"), box(7.5, -4.5, 7.3, 8.5, -3.1, 8.7, "glow")]
+    out += [box(6.8, 0, 6.8, 9.2, 8, 9.2, "handle"), box(6.6, 8, 6.6, 9.4, 9.5, 9.4, "dark")]
+    out += [box(6.6, 9.5, 6.6, 9.4, 29, 9.4, "mid")]                                            # the shaft
+    for y in (14, 20, 26):
+        out.append(box(6.3, y, 6.3, 9.7, y + 1.2, 9.7, "dark"))
+    for y in (11.5, 16.5, 22.5):
+        out.append(box(7.4, y, 6.4, 8.6, y + 1.6, 9.6, "glow"))
+    out += [box(9.4, 19, 7, 14, 22, 9, "light"), box(9.4, 23, 7, 15, 26, 9, "mid"),                 # the bit's teeth
+            box(9.4, 27, 7, 13, 29.5, 9, "light"), box(13, 22, 7, 14, 23, 9, "dark"),
+            box(6.3, 29, 6.3, 9.7, 31.5, 9.7, "light")]
+    return out
+
+
 ARCHETYPES = {"sword": broadsword, "greatsword": lambda: broadsword(length=19, width=5.0, guard=11), "blade": blade, "spear": spear,
               "trident": lambda: spear("trident"), "lance": lambda: spear("lance"), "hammer": hammer,
               "mace": mace, "staff": staff, "cane": cane, "scythe": scythe, "book": book, "fist": fist,
@@ -538,7 +591,8 @@ ARCHETYPES = {"sword": broadsword, "greatsword": lambda: broadsword(length=19, w
               "pendulum": pendulum, "anchor": anchor, "ladle": ladle, "flail": flail, "bell_hammer": bell_hammer,
               "forge_hammer": forge_hammer, "crystal_spear": crystal_spear, "axe": axe, "pickaxe": pickaxe,
               "shovel": shovel, "hoe": hoe, "wand_block": wand_block, "caged_orb": caged_orb,
-              "broadsword": broadsword, "sentinel_greatsword": sentinel_greatsword, "crook": crook, "chain_flail": chain_flail, "halo_glaive": halo_glaive,
+              "broadsword": broadsword, "sentinel_greatsword": sentinel_greatsword, "crook": crook, "chain_flail": chain_flail, "gate_key": gate_key, "halo_glaive": halo_glaive, "caldera_halberd": caldera_halberd,
+              "dane_axe": dane_axe,
               "trident_big": trident_big, "fang": fang, "grimoire": grimoire, "gauntlet": gauntlet,
               "horn_curved": horn_curved, "ward_orb": ward_orb}
 
@@ -566,6 +620,9 @@ HELD = {
     "dune_king_crook": ("crook", "gold", "gold", "sapphire"),
     "jailer_chain": ("chain_flail", "ember", "dark", "ember"),
     "halo_glaive": ("halo_glaive", "light", "purpur", "gold"),
+    "gatekeeper_key": ("gate_key", "gold", "wood", "aether"),
+    "caldera_halberd": ("caldera_halberd", "obsidian", "dark", "ember"),
+    "jarl_axe": ("dane_axe", "frost", "dark", "ice"),
     "cartographer_blade": ("sword", "cartographer", "wood", "emerald"),
     "telluric_hammer": ("hammer", "lithite", "wood", "emerald"),
     "storm_staff": ("staff", "storm", "dark", "sapphire"),
@@ -652,3 +709,8 @@ def textures():
     for item_id, (arch, mat, handle, accent) in HELD.items():
         out[f"item/3d/{item_id}"] = palette(mat, handle, accent)
     return out
+
+
+# the relic weapons of the colossal structures (wf/relics.py, archetypes in wf/relicart.py)
+from . import relicart as _relicart  # noqa: E402
+_relicart.register_held(ARCHETYPES, HELD)

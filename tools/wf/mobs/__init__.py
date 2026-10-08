@@ -38,6 +38,9 @@ from . import bronze_sentinel
 from . import dune_king
 from . import fallen_seraph
 from . import chained_jailer
+from . import frost_jarl
+from . import caldera_castellan
+from . import oathbound_gatekeeper
 # living oceans
 from . import glow_jellyfish
 from . import reef_fish
@@ -98,6 +101,9 @@ MODELS = [
     dune_king.build,
     fallen_seraph.build,
     chained_jailer.build,
+    frost_jarl.build,
+    caldera_castellan.build,
+    oathbound_gatekeeper.build,
     glow_jellyfish.build,
     reef_fish.build,
     manta_ray.build,

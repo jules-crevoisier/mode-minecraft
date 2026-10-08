@@ -512,6 +512,19 @@ MOBS = {
                       "en pierre noire et fer doré. Sa tête est une cage verrouillée pleine de feu, son cœur un grand "
                       "cadenas à la serrure ardente ; un gibet se dresse sur son dos, il traîne un boulet de fers "
                       "enflammé au bout d'une chaîne et porte un gantelet entravé. Le boss le plus dur du Nether.",
+    "oathbound_gatekeeper": "Champion de la Porte agenouillée : l'une des deux statues du col descendue à taille de "
+                            "combat, un chevalier de calcaire pâle de 6 blocs au manteau de granit rouge, heaume ouvert "
+                            "et barbe tressée de pierre, les yeux pleins d'une lumière d'âme. Un pavois gravé de la clé "
+                            "d'or du péage, un espadon de pierre, et la grande clé de la porte au bout d'une chaîne.",
+    "caldera_castellan": "Champion du Rempart de la caldeira : le seigneur du château, un géant de 5,7 blocs en armure "
+                         "de basalte fendue de magma qui refroidit. Une couronne de pointes d'obsidienne autour d'un "
+                         "petit cratère ardent sur le heaume, un volcan fumant pour épaulière droite, un long manteau "
+                         "rouge cendre et une grande hallebarde à lame d'obsidienne. Le boss le plus dur de la Surface.",
+    "frost_jarl": "Champion de la Halle glaciaire des jarls : le roi mort, un géant nordique de 5,7 blocs gelé debout. "
+                  "Peau bleuie de givre, casque à nasal couronné de pics de glace (une corne entière, l'autre brisée), "
+                  "barbe de frimas qui s'ouvre pour son souffle, peau de loup sur les épaules. Une hache barbue de glace "
+                  "bleue dans la main droite, un bouclier rond givré au bras gauche, des cristaux de glace qui lui "
+                  "poussent dans le dos.",
     "glow_jellyfish": "Une cloche translucide qui pulse et dérive dans toutes les mers, en rose, azur, ambre ou "
                       "violet ; elle brille la nuit. La toucher pique un peu (poison). Sa gelée donne une lampe ou la "
                       "vision nocturne.",
@@ -675,6 +688,94 @@ BOSS_MOVES = {
                          "salves de chaînes tombent sur chaque joueur, chacune annoncée 0,9 s par un cercle (14, tenu "
                          "et brûlé). Change de place à chaque salve."),
     ],
+    "oathbound_gatekeeper": [
+        ("Garde du serment", "1 et 2", "Son pavois bloque tout coup venu de face (environ 145°), quand il marche et "
+                                       "pendant ses coups d'épée et de bouclier. Frappe ses flancs et son dos pendant "
+                                       "qu'il se remet ; trois coups sur le bouclier et il charge de l'épaule."),
+        ("Balayage", "1 à 3", "L'espadon ramené sur sa droite (0,8 s, l'arc est tracé), puis un balayage sur 200° "
+                              "(16). Recule hors de l'arc."),
+        ("Estoc", "1 à 3", "Une ligne de poussière montre la fente (0,7 s), puis il fonce pointe en avant sur 7 blocs "
+                           "(15). Écarte-toi de la ligne."),
+        ("Coup de pavois", "1 à 3", "Le pavois ramené contre lui (0,6 s), puis projeté devant lui (10, te repousse "
+                                    "loin et te ralentit)."),
+        ("Piétinement", "1 à 3", "Le pied levé (0,9 s, un cercle autour de lui), puis frappé : 13 autour de lui et "
+                                 "une onde à sauter (deux en phase 2). Ne reste pas collé à son dos."),
+        ("Chute de la clé", "1 à 3", "Un cercle doré te suit (0,9 s) puis se fige quand il lance la clé : elle tombe "
+                                     "0,9 s plus tard (14, tenu sur place). Sa garde est ouverte."),
+        ("Pivot", "1 à 3", "Si tu restes dans son dos, il plante ses pieds (0,7 s, un cercle) et tourne sur lui-même "
+                           "lame tendue (14, rayon 5,5)."),
+        ("Fronde de la clé", "2 et 3", "La clé tournoie au bout de sa chaîne (0,9 s, deux cercles dorés) : tout ce qui "
+                                       "est entre 3,6 et 9,8 blocs prend 12. Colle-toi à lui ou éloigne-toi."),
+        ("Coup d'en haut", "2 et 3", "L'espadon levé au-dessus du heaume (1,1 s), abattu devant lui (22), puis des "
+                                     "mains de pierre jaillissent une à une sur sa ligne jusqu'à 15 blocs (13). Sa "
+                                     "garde reste ouverte : frappe de face pendant qu'il se relève."),
+        ("Charge", "2 et 3", "Le pavois en avant (0,8 s, une ligne d'étincelles), puis il charge (16, te projette)."),
+        ("Le glas", "2 et 3", "L'espadon levé (1,2 s), frappé sur son propre pavois : la cloche sonne et un mur de "
+                              "mains de pierre balaie toute la salle rangée après rangée (13, trop haut pour sauter). "
+                              "Un seul passage reste ouvert, bordé de flammes d'âme : cours-y. 2,2 s plus tard, un "
+                              "second mur balaie en travers."),
+        ("Le serment", "3", "À 30 % de vie, il s'agenouille derrière son pavois comme les statues (10 s) : aucun coup "
+                            "ne l'atteint, la porte le soigne et sonne trois balayages de mains. Chaque coup va au "
+                            "Bouclier du Serment (sa propre barre). Brise-le : il chancelle 3 s (+50 % de dégâts) et "
+                            "perd sa garde pour de bon. Sinon il se relève et recommence 30 s plus tard."),
+        ("Furie", "3", "Bouclier brisé, l'espadon à deux mains : balayage, revers 0,6 s plus tard, puis coup d'en haut "
+                       "et onde à sauter. Le glas revient toutes les 15 s."),
+    ],
+    "caldera_castellan": [
+        ("Balayage", "1 à 3", "La hallebarde ramenée par-dessus l'épaule droite (0,9 s, l'arc est tracé en braises), puis "
+                              "un balayage sur 230° (17 et feu). Recule hors de l'arc."),
+        ("Taille", "1 à 3", "La hallebarde levée à deux mains (1 s, une ligne ardente au sol), puis abattue : 7 blocs "
+                            "devant lui (20) et une gerbe de magma au bout (10). Écarte-toi de la ligne."),
+        ("Charge", "1 à 3", "Hallebarde baissée comme une lance (0,8 s, une ligne de fumée), puis une course d'une "
+                            "seconde (15). S'il charge dans un de ses murs, il le brise et reste sonné : frappe."),
+        ("Bond", "1 à 3", "Accroupi, un cercle de braises te suit (0,6 s), se fige et s'enflamme quand il saute : il "
+                          "retombe dessus à 1,2 s (20), puis une faille de lave court depuis l'impact vers toi (12 et "
+                          "feu ; trois failles en éventail en phase 2). Sors du cercle, puis de la ligne."),
+        ("Piétinement", "1 à 3", "Le pied droit levé haut (0,7 s, un cercle à ses pieds), puis frappé (12, repousse) ; en "
+                                 "phase 2 une onde de chaleur roule (8, saute-la)."),
+        ("Rempart", "2 et 3", "Le gantelet gauche levé, le magma coule (1 s, des lignes de fumée au sol), puis enfoncé "
+                              "dans le sol : des murs d'obsidienne de 3 blocs jaillissent, un couloir autour de toi (il "
+                              "le charge) ou un enclos (il bondit dedans). Qui est sur une ligne est projeté (8). Les "
+                              "murs s'effondrent au bout de 10 s."),
+        ("Moisson", "2 et 3", "La hallebarde ramenée à droite (0,8 s), un balayage, puis 0,6 s plus tard un revers "
+                              "(15 chacun). Reste hors de portée jusqu'au second."),
+        ("Chaleur du volcan", "3", "À 30 % de vie, il plante la hallebarde et s'agenouille (1,5 s, invulnérable), puis se "
+                                   "relève : une onde (12, saute-la) et un cercle d'explosions. Il est ensuite plus "
+                                   "rapide."),
+        ("Cheminées", "3", "Toutes les 10 s environ : hallebarde levée au ciel (1 s) puis plantée ; les cheminées du "
+                           "sol entrent en éruption en motifs (anneaux, spirales, damier, sous chaque joueur), chacune "
+                           "annoncée 1 s par de la fumée et des gouttes de lave (13 et feu). Ensuite, son armure est "
+                           "fragile 3 s (+30 % de dégâts) : c'est le moment de frapper."),
+    ],
+    "frost_jarl": [
+        ("Bouclier", "1 à 3", "Entre deux attaques, son bouclier te fait face : les coups portés de face perdent 65 %. "
+                              "Frappe pendant qu'il se reprend, ou par le flanc."),
+        ("Taille", "1 à 3", "La hache levée sur l'épaule droite (0,9 s, l'arc est tracé de neige), puis une taille en "
+                            "diagonale sur 130° (18 et givre). Recule hors de l'arc."),
+        ("Coup de bouclier", "1 à 3", "Le bouclier levé droit devant (0,6 s), puis il pousse (12, projeté loin, "
+                                      "ralenti) ; un bouclier levé est écarté 5 s. Ne reste pas collé à lui."),
+        ("Souffle de glace", "1 à 3", "Il se cambre, la poitrine gonfle (1 s, le cône est tracé au sol), puis son "
+                                      "souffle balaie de sa droite vers sa gauche 1,5 s : 4 tous les quarts de seconde "
+                                      "et le froid te gagne. Passe dans son dos ou sors du cône par sa droite."),
+        ("Pics de glace", "1 à 3", "La hache levée (1,1 s, la ligne marquée au sol), puis plantée : des pics jaillissent "
+                                   "le long de la ligne (14), trois lignes en phase 2, et un pic sous toi (sous chaque "
+                                   "joueur en phase 2) annoncé par un cercle qui te suit puis se fige."),
+        ("Bond du jarl", "1 à 3", "Accroupi 1 s, un cercle te suit puis se fige ; il bondit et s'abat dessus 0,5 s plus "
+                                  "tard (20) et une onde de givre roule (9). Sors du cercle, saute l'onde."),
+        ("Huscarls gelés", "1 à 3", "Toutes les 32 s environ, la hache brandie au ciel : deux chevaliers squelettes "
+                                    "sortent de la glace (trois en phase 3, plus à plusieurs), jamais plus à la fois."),
+        ("Furie", "2 et 3", "Trois coups de suite, chacun annoncé : une taille (0,8 s), un revers 0,5 s plus tard, puis "
+                            "un coup vertical en ligne 0,6 s après (20) qui fait jaillir trois pics. Il se tourne vers "
+                            "toi entre les coups."),
+        ("Givre éclaté", "2 et 3", "La hache plantée droite (1,1 s, cinq anneaux tracés au sol) : les anneaux de pics "
+                                   "jaillissent l'un après l'autre vers l'extérieur (13), puis reviennent en phase 3. "
+                                   "Tiens-toi entre deux anneaux."),
+        ("Fimbulvetr", "3", "À 30 %, il s'agenouille (invulnérable) et plante sa hache : une onde de givre (12, saute-la) "
+                            "et la salle gèle. Rester immobile te gèle (3 par seconde une fois gelé), et toutes les 7 s "
+                            "le sol blanchit 1,2 s avant une pulsation (7) : saute à ce moment."),
+        ("Blizzard", "3", "Toutes les 13 s : la hache tendue vers l'oculus (1,2 s), puis trois salves de pics tombent, "
+                          "chacune annoncée par un cercle sous chaque joueur (14). Change de place à chaque salve."),
+    ],
 }
 # Difficulté des boss (bestiaire) : coop et cycles NG+ (boss/WayfarerBoss, tools/BOSSES.md)
 BOSS_DIFFICULTY = ("Plus on est, plus ils sont durs : chaque joueur de plus dans l'arène donne au boss +75 % de vie, "
@@ -702,6 +803,16 @@ BOSS_FACTS = {
     "chained_jailer": "600 PV, armure 14, posture 100, barre rouge. Phase 2 à 60 % : il rugit, accélère et enchaîne "
                       "ses coups. Phase 3 à 30 % : il brise ses chaînes, va encore plus vite, brûle au contact et "
                       "lance le verdict.",
+    "oathbound_gatekeeper": "480 PV, armure 14, posture 110, barre bleue. Son pavois bloque les coups de face : "
+                            "contourne-le. Phase 2 à 65 % : la cloche de la porte sonne, il accélère et appelle les "
+                            "mains de pierre. Phase 3 à 30 % : il s'agenouille ; brise son Bouclier du Serment.",
+    "caldera_castellan": "520 PV, armure 15, posture 105, barre rouge. Phase 2 à 60 % : il rugit, accélère, enchaîne "
+                         "ses coups et dresse des murs d'obsidienne (toujours temporaires). Phase 3 à 30 % : il puise "
+                         "la chaleur du volcan et fait entrer les cheminées du sol en éruption ; après chaque éruption "
+                         "son armure est fragile 3 s.",
+    "frost_jarl": "540 PV, armure 14, posture 110, barre bleue. Son bouclier pare les coups de face entre ses "
+                  "attaques. Phase 2 à 65 % : il rugit, accélère et enchaîne ses coups. Phase 3 à 30 % : il gèle la "
+                  "salle, le sol pulse et le blizzard tombe.",
 }
 
 # Descente vers un repaire : étapes dans l'ordre
@@ -776,6 +887,46 @@ LAIRS = {
                        "la lave, 16 de haut, des rideaux de chaînes. Le Geôlier se réveille quand tu approches du "
                        "sceau."),
         ("La salle forte", "Au-delà de la brume sud et des barreaux scellés qui s'ouvrent à sa mort."),
+    ],
+    "oathbound_gatekeeper": [
+        ("La ville du péage", "Sous le linteau, entre les deux géants agenouillés : la place, le puits et la pierre de "
+                              "voyage."),
+        ("Le géant est", "Par la maison de garde est, un escalier descend sous la ville jusqu'à la chapelle des "
+                         "gardiens (le lieu de grâce), puis un passage étroit et la brume."),
+        ("La salle sous la porte", "L'arène : une salle ronde de 17 blocs et demi de rayon sous un dôme bas de tuf, des "
+                                   "lanternes d'âme sur huit pilastres, la lumière du puits qui tombe par la grille. "
+                                   "Le Gardien se réveille quand tu approches du sceau."),
+        ("La salle forte", "Sous le sol de l'arène, derrière des barreaux scellés qui s'ouvrent à sa mort ; le passage "
+                           "ouest remonte au géant ouest par une porte de fer."),
+    ],
+    "caldera_castellan": [
+        ("La porterie", "Au pied du massif, le camp et sa pierre de voyage, puis la route jusqu'à la barbacane, la "
+                        "salle de garde et le grand escalier jusqu'à la cour de la porte, sur le bord du cratère."),
+        ("Le chemin de ronde", "Par la tour sud-est, le chemin de ronde et le bastion est jusqu'au moyeu nord : grande "
+                               "tour, grande salle, lieu de grâce."),
+        ("Le souterrain", "Sous le moyeu, creusé dans la paroi du cratère : citerne, prison, galerie du pont, puis le "
+                          "long pont jusqu'à la porte de l'aiguille."),
+        ("L'aiguille", "Un escalier à vis monte 45 blocs dans le rocher jusqu'au donjon ; sa grande salle est le lieu "
+                       "de grâce, un passage couvert mène à la brume."),
+        ("La cour du sommet", "L'arène : une cour à ciel ouvert de 16 blocs de rayon sur des encorbellements "
+                              "au-dessus du vide, un parapet crénelé et quatre tourelles. Le Châtelain se réveille "
+                              "quand tu approches du sceau."),
+        ("La salle forte", "La tourelle sud, derrière des barreaux scellés qui s'ouvrent à sa mort ; son balcon "
+                           "permet de sauter dans le lac."),
+    ],
+    "frost_jarl": [
+        ("La terrasse", "Le grand escalier monte au pied de la falaise de glace : pierre de voyage sur la terrasse, "
+                        "puis le guichet de la porte entre les deux jarls de glace."),
+        ("La grande salle", "La nef sous la voûte de glace, les foyers et les tables du festin ; à la croisée, "
+                            "l'escalier du scalde (transept ouest) monte aux galeries."),
+        ("Le pont de la crevasse", "Par le déambulatoire et la porte nord, un pont à ciel ouvert franchit la crevasse "
+                                   "(une brèche dans le garde-corps : la chute dans le lac)."),
+        ("L'escalier du Jarl", "Dans la corne, deux longues volées taillées dans la glace montent de 20 blocs jusqu'au "
+                               "lieu de grâce (pierre de voyage, braseros)."),
+        ("La salle du jarl", "Derrière la brume : une salle ronde de 16 blocs de rayon sous un dôme, huit piliers de "
+                             "glace, un oculus. Le Jarl se réveille quand tu approches du sceau."),
+        ("La salle forte et le saut", "Au nord, la salle forte, puis le Saut du Jarl : un puits de 47 blocs jusqu'au "
+                                      "bassin de la source, et la rivière qui ramène dehors."),
     ],
 }
 
@@ -1054,6 +1205,20 @@ TEST_CHECKLIST = [
      "Il apparaît à 6 blocs (prends de la résistance au feu). Écarte-toi de la ligne du grappin, sors des cercles "
      "d'entraves, saute l'anneau de feu ; à 60 %, tiens-toi entre les barreaux du bûcher ; à 30 %, il brise ses "
      "chaînes et le verdict tombe sur toi. Pour le vrai repaire : /brasshaven tp chained_bastion (le tambour)."),
+    ("Le Gardien du Serment", ["/brasshaven boss oathbound_gatekeeper"],
+     "Il apparaît à 6 blocs. Tourne autour de son pavois et frappe son dos, saute l'onde du piétinement, sors du cercle "
+     "doré de la clé ; à 65 %, cours au passage entre les flammes d'âme quand le glas sonne ; à 30 %, il "
+     "s'agenouille : brise le Bouclier du Serment en 10 s. Pour le vrai repaire : /brasshaven tp kneeling_gate (la "
+     "salle sous la porte)."),
+    ("Le Châtelain de la caldeira", ["/brasshaven boss caldera_castellan"],
+     "Il apparaît à 6 blocs. Recule hors du balayage, écarte-toi de la ligne de la taille, sors du cercle de braises du "
+     "bond puis de la faille ; à 60 %, sors des murs d'obsidienne par le côté ouvert (ils disparaissent après 10 s) ; à "
+     "30 %, lis la fumée des cheminées et frappe pendant que son armure est fragile. Pour le vrai repaire : "
+     "/brasshaven tp caldera_ringwall (la cour du sommet de l'aiguille)."),
+    ("Le Jarl de givre", ["/brasshaven boss frost_jarl"],
+     "Il apparaît à 6 blocs. Frappe-le de flanc ou pendant qu'il se reprend (son bouclier pare de face), sors du cône "
+     "du souffle et des cercles de pics ; à 65 %, tiens-toi entre les anneaux du givre éclaté ; à 30 %, bouge sans "
+     "cesse et saute quand le sol blanchit. Pour le vrai repaire : /brasshaven tp glacier_hall (dans la corne)."),
     ("Merveilles en surface", ["/brasshaven tp inventor_manor", "/brasshaven tp sylvan_palace",
                                "/brasshaven tp geothermal_foundry", "/brasshaven tp tesla_observatory",
                                "/brasshaven tp sky_isles"],

@@ -346,6 +346,67 @@ def chain_flail(a):
     a.px(11, 5, "F", "dark")
 
 
+@painted("dane_axe")
+def dane_axe(a):
+    """Bearded Axe of the Frost Jarl: a long dark haft with a gold pommel, a broad bearded crescent of ice whose edge
+    shines, an iron spike behind the socket."""
+    shaft(a, 12, key="H", grip=(1, 4), butt="B")
+    collar(a, 9, key="B")
+    sx, sy = 11.0, 4.6
+    ux, uy = 0.7071, -0.7071       # along the haft (up-right)
+    vx, vy = -0.7071, -0.7071      # perpendicular, towards the blade (up-left)
+
+    def uv(x, y):
+        return (x - sx) * ux + (y - sy) * uy, (x - sx) * vx + (y - sy) * vy
+
+    def blade(x, y):
+        u, v = uv(x, y)
+        if not 0.5 <= v <= 6.4:
+            return False
+        lo = -1.0 - 1.15 * (v - 0.5) ** 1.15        # the long beard sweeps down the haft
+        hi = 1.0 + 0.55 * (v - 0.5)
+        return lo <= u <= hi
+
+    def spike(x, y):
+        u, v = uv(x, y)
+        return -2.8 <= v <= -0.6 and abs(u) <= 0.8 - 0.25 * (-v - 0.6)
+    a.paint("M", blade)
+    a.shade_dir("M", 1.0, 1.0, cuts=(-0.5, 0.05, 0.6))
+    for y in range(16):
+        for x in range(16):
+            u, v = uv(x + 0.5, y + 0.5)
+            if a.m[y][x] == "M" and v > 5.3:
+                a.tone(x, y, "shine")
+            elif a.m[y][x] == "M" and 2.2 < v < 3.2 and -1.0 < u < 1.0:
+                a.px(x, y, "A", "light")                  # a rune in the ice
+    a.paint("X", spike)
+    a.stamp(["BB", "BB"], {"B": "B"}, 10, 4)
+    a.px(10, 4, "B", "light")
+    a.px(11, 5, "B", "dark")
+
+
+@painted("gate_key")
+def gate_key(a):
+    """Key of the Kneeling Gate: a great gold key held like a mace: the ring bow at the butt with a soul-blue gem,
+    a banded shaft, and a heavy toothed bit at the head."""
+    a.disc("M", 2.6, 13.4, 2.6)
+    a.clear(lambda x, y: (x - 2.6) ** 2 + (y - 13.4) ** 2 < 1.1)
+    a.px(2, 13, "A", "light")
+    a.px(3, 13, "A", "dark")
+    diag(a, "M", 4, 11, 9)
+    for i in (3, 6):
+        a.px(4 + i, 11 - i, "M", "dark")
+        a.px(5 + i, 11 - i, "M", "deep")
+    # the bit: teeth standing off the shaft's lower side near the head
+    a.seg("M", 10.5, 6.5, 13.5, 9.5, 0.6)
+    a.seg("M", 12.5, 4.5, 15, 7, 0.6)
+    a.px(14, 9, "M", "dark")
+    a.px(15, 6, "M", "dark")
+    a.px(13, 1, "M", "light")
+    a.px(14, 2, "M", "light")
+    a.shade_dir("M", -0.5, 1.0)
+
+
 @painted("ladle")
 def ladle(a):
     """Crone's Ladle: a long iron ladle, its bowl brimming with a glowing poison brew; bubbles rise."""

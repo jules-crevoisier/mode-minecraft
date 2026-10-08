@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "brasshaven:tidewarden"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "brasshaven:tidewarden"
+      }
+    ]
+  }
+}

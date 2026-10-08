@@ -276,6 +276,15 @@ def entity_loot():
         "chained_jailer": [entry("gold_ingot", 4, 8), entry("ancient_ember", 6, 10), entry("emerald", 5, 9),
                            entry("experience_bottle", 4, 7), entry("golden_apple", 1, 2), entry("diamond", 2, 3),
                            entry("iron_chain", 3, 6), entry("gilded_blackstone", 2, 4)],
+        "caldera_castellan": [entry("map_fragment", 6, 10), entry("emerald", 5, 9), entry("experience_bottle", 4, 7),
+                              entry("golden_apple", 1, 2), entry("diamond", 1, 3), entry("obsidian", 4, 8),
+                              entry("magma_block", 2, 4), entry("blaze_powder", 2, 5)],
+        "oathbound_gatekeeper": [entry("gold_ingot", 4, 8), entry("map_fragment", 6, 10), entry("emerald", 5, 9),
+                                 entry("experience_bottle", 4, 7), entry("golden_apple", 1, 2), entry("diamond", 2, 3),
+                                 entry("calcite", 8, 16), entry("bell", chance=0.25)],
+        "frost_jarl": [entry("gold_ingot", 4, 8), entry("map_fragment", 6, 10), entry("emerald", 5, 9),
+                       entry("experience_bottle", 4, 7), entry("golden_apple", 1, 2), entry("diamond", 2, 3),
+                       entry("blue_ice", 4, 8), entry("goat_horn", chance=0.35)],
     }
     from wf.bossgear import BOSS_GEAR, remembrance_id
     for row in BOSS_GEAR:  # every great boss always drops its remembrance
@@ -594,6 +603,9 @@ def main():
     from wf import social
     social.loot(write)
     for rel, values in social.tags().items():
+        extra_tags.setdefault(rel, []).extend(values)
+    # relic gear of the colossal structures (wf/relics.py): repair tags, armour slots, swords
+    for rel, values in __import__("wf.relics", fromlist=["tags"]).tags(write).items():
         extra_tags.setdefault(rel, []).extend(values)
     for rel, values in extra_tags.items():
         path = os.path.join(DATA, rel)

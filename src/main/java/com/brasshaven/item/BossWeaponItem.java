@@ -21,11 +21,11 @@ import java.util.List;
 
 /**
  * A weapon forged from a boss's Remembrance. Its right-click ability is one of a few shapes (ring, beam, dash,
- * eruptions, snare, poison cloud, leap, sweep, blink, chain hook, halo shards), tuned per weapon by power, size, particle and flags.
+ * eruptions, snare, poison cloud, leap, sweep, blink, chain hook, halo shards, frost breath), tuned per weapon by power, size, particle and flags.
  * Abilities only ever hurt non-player creatures.
  */
 public class BossWeaponItem extends AbilityItem {
-    public enum Ability { WAVE, BEAM, DASH, ERUPT, ROOT, CLOUD, LEAP, ARC, BLINK, HOOK, SHARDS }
+    public enum Ability { WAVE, BEAM, DASH, ERUPT, ROOT, CLOUD, LEAP, ARC, BLINK, HOOK, SHARDS, BREATH, RIFT, WARD }
 
     public static final int FIRE = 1;
     public static final int SLOW = 2;
@@ -56,7 +56,7 @@ public class BossWeaponItem extends AbilityItem {
                       List<net.minecraft.network.chat.Component> details) {
         String shape = ability.name().toLowerCase(java.util.Locale.ROOT);
         boolean radius = switch (ability) {
-            case WAVE, ROOT, CLOUD, LEAP, ARC -> true;
+            case WAVE, ROOT, CLOUD, LEAP, ARC, WARD -> true;
             default -> false;
         };
         facts.add(BrassTooltip.heading(net.minecraft.network.chat.Component.translatable("tooltip.brasshaven.ability",
@@ -264,6 +264,29 @@ public class BossWeaponItem extends AbilityItem {
                     level.playSound(null, caught, SoundEvents.CHAIN_PLACE, SoundSource.PLAYERS, 1.5F, 0.5F);
                 }
             }
+            case WARD -> {
+                // the Oathbound Gatekeeper's key: turned in the floor, stone hands punch up in a ring of eight around
+                // the wielder (each throws its foes up), and the oath wards the wielder (Resistance II, 4 s)
+                for (LivingEntity e : foes(level, player, player.getBoundingBox().inflate(size, 2, size))) {
+                    if (e.distanceTo(player) <= size) {
+                        hit(level, player, e, power, 0.6);
+                    }
+                }
+                var stone = new net.minecraft.core.particles.BlockParticleOption(net.minecraft.core.particles.ParticleTypes.BLOCK,
+                        net.minecraft.world.level.block.Blocks.CALCITE.defaultBlockState());
+                for (int k = 0; k < 8; k++) {
+                    double r = Math.PI * 2 * k / 8;
+                    for (double d : new double[]{size * 0.45, size * 0.9}) {
+                        Vec3 p = origin.add(Math.cos(r + d * 0.2) * d, 0, Math.sin(r + d * 0.2) * d);
+                        level.sendParticles(stone, p.x, p.y + 0.6, p.z, 8, 0.25, 0.6, 0.25, 0.1);
+                        level.sendParticles(particle, p.x, p.y + 1.2, p.z, 2, 0.2, 0.3, 0.2, 0.01);
+                    }
+                }
+                player.addEffect(new MobEffectInstance(MobEffects.RESISTANCE, 80, 1));
+                ring(level, origin, size);
+                level.playSound(null, player, SoundEvents.BELL_BLOCK, SoundSource.PLAYERS, 1.2F, 0.6F);
+                level.playSound(null, player, SoundEvents.STONE_BREAK, SoundSource.PLAYERS, 1.2F, 0.6F);
+            }
             case SHARDS -> {
                 // the Fallen Seraph's halo shards: a fan of five piercing lines along the look direction (each stops on
                 // walls), every foe they pass through is hurt once
@@ -288,8 +311,88 @@ public class BossWeaponItem extends AbilityItem {
                 }
                 level.playSound(null, player, SoundEvents.AMETHYST_CLUSTER_BREAK, SoundSource.PLAYERS, 1.2F, 1.3F);
             }
+            case BREATH -> {
+                // the Frost Jarl's breath: a cone of frost (35 degrees each side of the look line, stopped by walls at
+                // its centre); every foe inside is hurt and frozen solid for 2 s
+                Vec3 eye = player.getEyePosition();
+                BlockHitResult wall = level.clip(new ClipContext(eye, eye.add(look.scale(size)), ClipContext.Block.COLLIDER,
+                        ClipContext.Fluid.NONE, player));
+                double reach = wall.getType() == HitResult.Type.MISS ? size : wall.getLocation().distanceTo(eye) + 1.0;
+                double cos = Math.cos(Math.toRadians(35));
+                for (LivingEntity e : foes(level, player, player.getBoundingBox().inflate(reach + 1))) {
+                    Vec3 to = e.getBoundingBox().getCenter().subtract(eye);
+                    double d = to.length();
+                    if (d <= reach && d > 0.1 && to.normalize().dot(look) >= cos) {
+                        hit(level, player, e, power, 0.3);
+                        e.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 40, 6));
+                        e.setTicksFrozen(Math.max(e.getTicksFrozen(), e.getTicksRequiredToFreeze() + 100));
+                        level.sendParticles(net.minecraft.core.particles.ParticleTypes.ITEM_SNOWBALL,
+                                e.getX(), e.getY() + e.getBbHeight() / 2, e.getZ(), 12, 0.3, 0.5, 0.3, 0.05);
+                    }
+                }
+                for (double d = 1; d <= reach; d += 0.75) {
+                    double spread = 0.1 + d * 0.22;
+                    Vec3 p = eye.add(look.scale(d)).add(0, -0.3, 0);
+                    level.sendParticles(particle, p.x, p.y, p.z, 3, spread, spread * 0.6, spread, 0.02);
+                    level.sendParticles(net.minecraft.core.particles.ParticleTypes.CLOUD, p.x, p.y, p.z, 1, spread * 0.6,
+                            spread * 0.4, spread * 0.6, 0.01);
+                }
+                level.playSound(null, player, SoundEvents.POWDER_SNOW_BREAK, SoundSource.PLAYERS, 1.2F, 0.6F);
+                level.playSound(null, player, SoundEvents.PLAYER_BREATH, SoundSource.PLAYERS, 1.0F, 0.5F);
+            }
+            case RIFT -> {
+                // the Castellan of the Caldera's halberd: driven into the ground, it opens a molten rift that runs
+                // along the ground ahead (stops on walls) and forks in two at its end; every foe on it is hurt once
+                java.util.Set<LivingEntity> seared = new java.util.HashSet<>();
+                java.util.List<Vec3> path = new java.util.ArrayList<>();
+                Vec3 end = origin;
+                for (double d = 1; d <= size; d += 0.75) {
+                    Vec3 p = riftGround(level, origin.add(flat.scale(d)));
+                    if (p == null) {
+                        break;
+                    }
+                    path.add(p);
+                    end = p;
+                }
+                for (int side = -1; side <= 1; side += 2) {
+                    double r = Math.toRadians(35 * side);
+                    Vec3 dir = new Vec3(flat.x * Math.cos(r) - flat.z * Math.sin(r), 0, flat.x * Math.sin(r) + flat.z * Math.cos(r));
+                    for (double d = 0.75; d <= size * 0.35; d += 0.75) {
+                        Vec3 p = riftGround(level, end.add(dir.scale(d)));
+                        if (p == null) {
+                            break;
+                        }
+                        path.add(p);
+                    }
+                }
+                for (Vec3 p : path) {
+                    level.sendParticles(net.minecraft.core.particles.ParticleTypes.LAVA, p.x, p.y + 0.1, p.z, 1, 0.15, 0.0, 0.15, 0.0);
+                    level.sendParticles(particle, p.x, p.y + 0.3, p.z, 3, 0.2, 0.3, 0.2, 0.02);
+                    for (LivingEntity e : foes(level, player, new AABB(p, p).inflate(1.2, 1.5, 1.2))) {
+                        if (seared.add(e)) {
+                            hit(level, player, e, power, 0.2);
+                            e.push(0, 0.35, 0);
+                        }
+                    }
+                }
+                level.playSound(null, player, SoundEvents.MACE_SMASH_GROUND, SoundSource.PLAYERS, 1.0F, 0.6F);
+                level.playSound(null, player, SoundEvents.LAVA_POP, SoundSource.PLAYERS, 1.2F, 0.7F);
+            }
         }
         return true;
+    }
+
+    /** The rift's footing near {@code p}: the top of the ground within a block and a half, or null at a wall or a drop. */
+    private static Vec3 riftGround(ServerLevel level, Vec3 p) {
+        net.minecraft.core.BlockPos base = net.minecraft.core.BlockPos.containing(p);
+        for (int dy = 1; dy >= -2; dy--) {
+            net.minecraft.core.BlockPos at = base.above(dy);
+            if (level.getBlockState(at).isAir() && level.getBlockState(at.below()).isFaceSturdy(level, at.below(),
+                    net.minecraft.core.Direction.UP) && level.getBlockState(at.above()).isAir()) {
+                return new Vec3(p.x, at.getY(), p.z);
+            }
+        }
+        return null;
     }
 
     private void ring(ServerLevel level, Vec3 c, double radius) {

@@ -23,8 +23,18 @@
     "brasshaven:helmsman_anchor",
     "brasshaven:sentinel_greatsword",
     "brasshaven:jailer_chain",
+    "brasshaven:gatekeeper_key",
     "brasshaven:halo_glaive",
+    "brasshaven:caldera_halberd",
+    "brasshaven:jarl_axe",
     "brasshaven:brass_sword",
-    "brasshaven:mithril_sword"
+    "brasshaven:mithril_sword",
+    "brasshaven:magma_maul",
+    "brasshaven:bastion_cannon",
+    "brasshaven:rimefang_spear",
+    "brasshaven:oathbreaker",
+    "brasshaven:toll_billhook",
+    "brasshaven:undertow_glaive",
+    "brasshaven:starfall_lance"
   ]
 }

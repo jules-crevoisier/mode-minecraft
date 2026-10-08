@@ -570,6 +570,66 @@ public final class MobAnims {
 
         private ChainedJailer() {}
     }
+    public static final class FrostJarl {
+        public static final int CLEAVE = 0;
+        public static final int BASH = 1;
+        public static final int BREATH = 2;
+        public static final int SPIKES = 3;
+        public static final int LEAP = 4;
+        public static final int HUSCARLS = 5;
+        public static final int RAMPAGE = 6;
+        public static final int RIMEBURST = 7;
+        public static final int WINTER = 8;
+        public static final int BLIZZARD = 9;
+        public static final int ROAR = 10;
+        public static final int STAGGER = 11;
+        public static final int COUNT = 12;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {36, 30, 64, 60, 46, 36, 62, 72, 70, 80, 40, 32};
+
+        private FrostJarl() {}
+    }
+    public static final class CalderaCastellan {
+        public static final int SWEEP = 0;
+        public static final int CHOP = 1;
+        public static final int CHARGE = 2;
+        public static final int LEAP = 3;
+        public static final int STOMP = 4;
+        public static final int RAMPART = 5;
+        public static final int REAP = 6;
+        public static final int REEL = 7;
+        public static final int HEAT = 8;
+        public static final int VENTS = 9;
+        public static final int ROAR = 10;
+        public static final int STAGGER = 11;
+        public static final int COUNT = 12;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {36, 38, 50, 46, 29, 42, 46, 40, 70, 84, 40, 32};
+
+        private CalderaCastellan() {}
+    }
+    public static final class OathboundGatekeeper {
+        public static final int SWEEP = 0;
+        public static final int THRUST = 1;
+        public static final int BASH = 2;
+        public static final int STOMP = 3;
+        public static final int KEYFALL = 4;
+        public static final int WHEEL = 5;
+        public static final int KEYSWING = 6;
+        public static final int OVERHEAD = 7;
+        public static final int TOLL = 8;
+        public static final int RUSH = 9;
+        public static final int KNEEL = 10;
+        public static final int BROKEN = 11;
+        public static final int FURY = 12;
+        public static final int ROAR = 13;
+        public static final int STAGGER = 14;
+        public static final int COUNT = 15;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {34, 36, 26, 34, 50, 32, 36, 44, 80, 44, 244, 60, 60, 44, 50};
+
+        private OathboundGatekeeper() {}
+    }
     public static final class GlowJellyfish {
 
         public static final int COUNT = 0;

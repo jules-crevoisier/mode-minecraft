@@ -6,7 +6,8 @@ gen_data (recipes, boss loot, tags) and gen_quests (the Legends chapter).
 ability: WAVE (ring around you), BEAM (line ahead), DASH (rush through enemies), ERUPT (bursts along
 a line), ROOT (snare around you), CLOUD (poison cloud where you look), LEAP (bound forward), ARC (wide
 sweep), BLINK (teleport ahead and strike), HOOK (a chain
-thrown ahead drags the first foe to you), SHARDS (a fan of piercing shards ahead). flags: fire, slow, weak, blind, poison, lift, lifesteal.
+thrown ahead drags the first foe to you), SHARDS (a fan of piercing shards ahead), BREATH (a cone of frost
+breath ahead that freezes foes solid). flags: fire, slow, weak, blind, poison, lift, lifesteal.
 """
 
 TIER_MATERIAL = {"overworld": "map_fragment", "depths": "lithite_shard", "nether": "ancient_ember", "end": "void_shard"}
@@ -108,12 +109,32 @@ BOSS_GEAR = [
      ("Remembrance of the Chained Jailer", "Souvenir du Geôlier enchaîné"),
      ("EMBER", 7.0, -2.9), "HOOK", 12.0, 14.0, 80, "FLAME", "fire", ("chain_flail", "ember", "dark", "ember"),
      ("ember", "ember")),
+    ("oathbound_gatekeeper", "overworld", "gatekeeper_key", ("Key of the Kneeling Gate", "Clé de la Porte agenouillée"),
+     ("Use: turn the key in the floor; stone hands punch up all around you, hurling foes into the air, and the oath "
+      "wards you (Resistance II, 4 s).",
+      "Clic droit : tourne la clé dans le sol ; des mains de pierre jaillissent tout autour de toi et projettent les "
+      "ennemis en l'air, et le serment te protège (Résistance II, 4 s)."),
+     ("Remembrance of the Oathbound Gatekeeper", "Souvenir du Gardien du Serment"),
+     ("LITHITE", 8.0, -3.2), "WARD", 10.0, 5.0, 100, "SOUL_FIRE_FLAME", "lift", ("gate_key", "gold", "dark", "aether"),
+     ("gold", "aether")),
     ("fallen_seraph", "end", "halo_glaive", ("Glaive of the Broken Halo", "Glaive du Halo brisé"),
      ("Use: fling a fan of five halo shards ahead; they pierce every foe in their path and blind it.",
       "Clic droit : lance un éventail de cinq éclats de halo ; ils transpercent tous les ennemis sur leur passage et les aveuglent."),
      ("Remembrance of the Fallen Seraph", "Souvenir du Séraphin déchu"),
      ("VOID", 8.0, -2.9), "SHARDS", 12.0, 16.0, 80, "END_ROD", "blind", ("scythe", "light", "purpur", "gold"),
      ("light", "amethyst")),
+    ("caldera_castellan", "overworld", "caldera_halberd", ("Halberd of the Caldera", "Hallebarde de la caldeira"),
+     ("Use: drive the halberd into the ground; a molten rift runs along it and forks, searing every foe on it.",
+      "Clic droit : plante la hallebarde dans le sol ; une faille de magma court devant toi et se divise, brûlant tous les ennemis dessus."),
+     ("Remembrance of the Castellan", "Souvenir du Châtelain"),
+     ("LITHITE", 8.0, -3.1), "RIFT", 11.0, 12.0, 85, "FLAME", "fire,slow", ("halberd", "obsidian", "dark", "ember"),
+     ("obsidian", "ember")),
+    ("frost_jarl", "overworld", "jarl_axe", ("Bearded Axe of the Frost Jarl", "Hache barbue du Jarl de givre"),
+     ("Use: breathe the jarl's winter; a cone of frost ahead hurts every foe in it and freezes it solid for 2 s.",
+      "Clic droit : souffle l'hiver du jarl ; un cône de givre blesse tous les ennemis devant toi et les gèle sur place 2 s."),
+     ("Remembrance of the Frost Jarl", "Souvenir du Jarl de givre"),
+     ("LITHITE", 8.0, -3.1), "BREATH", 10.0, 9.0, 90, "SNOWFLAKE", "slow", ("dane_axe", "frost", "dark", "ice"),
+     ("frost", "ice")),
 ]
 
 

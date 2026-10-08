@@ -138,6 +138,9 @@ BOSS_HOME = {
     "dune_king": "rock_necropolis",
     "fallen_seraph": "shattered_halo",
     "chained_jailer": "chained_bastion",
+    "caldera_castellan": "caldera_ringwall",
+    "oathbound_gatekeeper": "kneeling_gate",
+    "frost_jarl": "glacier_hall",
 }
 CHAPTER = {}
 for s in defs.STRUCTURES:

@@ -1,0 +1,37 @@
+{
+  "display": {
+    "icon": {
+      "id": "brasshaven:gatekeeper_key"
+    },
+    "title": {
+      "translate": "advancements.brasshaven.explorer.boss_oathbound_gatekeeper.title"
+    },
+    "description": {
+      "translate": "advancements.brasshaven.explorer.boss_oathbound_gatekeeper.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "kill": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "entity_type": "brasshaven:oathbound_gatekeeper"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "parent": "brasshaven:explorer/kneeling_gate",
+  "rewards": {
+    "experience": 500
+  }
+}

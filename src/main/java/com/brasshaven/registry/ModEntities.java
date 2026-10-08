@@ -36,8 +36,11 @@ import com.brasshaven.entity.boss.GrandClockmaker;
 import com.brasshaven.entity.boss.IronHelmsman;
 import com.brasshaven.entity.boss.BronzeSentinel;
 import com.brasshaven.entity.boss.ChainedJailer;
+import com.brasshaven.entity.boss.CalderaCastellan;
 import com.brasshaven.entity.boss.DuneKing;
 import com.brasshaven.entity.boss.FallenSeraph;
+import com.brasshaven.entity.boss.FrostJarl;
+import com.brasshaven.entity.boss.OathboundGatekeeper;
 import com.brasshaven.entity.automaton.BrassGolem;
 import com.brasshaven.entity.automaton.ClockworkSpider;
 import com.brasshaven.entity.automaton.HotRivetEntity;
@@ -204,6 +207,15 @@ public final class ModEntities {
     public static final RegistryObject<EntityType<ChainedJailer>> CHAINED_JAILER = ENTITIES.register("chained_jailer",
             () -> EntityType.Builder.<ChainedJailer>of(ChainedJailer::new, MobCategory.MONSTER)
                     .sized(ChainedJailer.WIDTH, ChainedJailer.HEIGHT).fireImmune().clientTrackingRange(10).build(ENTITIES.key("chained_jailer")));
+    public static final RegistryObject<EntityType<CalderaCastellan>> CALDERA_CASTELLAN = ENTITIES.register("caldera_castellan",
+            () -> EntityType.Builder.<CalderaCastellan>of(CalderaCastellan::new, MobCategory.MONSTER)
+                    .sized(CalderaCastellan.WIDTH, CalderaCastellan.HEIGHT).fireImmune().clientTrackingRange(10).build(ENTITIES.key("caldera_castellan")));
+    public static final RegistryObject<EntityType<FrostJarl>> FROST_JARL = ENTITIES.register("frost_jarl",
+            () -> EntityType.Builder.<FrostJarl>of(FrostJarl::new, MobCategory.MONSTER)
+                    .sized(FrostJarl.WIDTH, FrostJarl.HEIGHT).clientTrackingRange(10).build(ENTITIES.key("frost_jarl")));
+    public static final RegistryObject<EntityType<OathboundGatekeeper>> OATHBOUND_GATEKEEPER = ENTITIES.register("oathbound_gatekeeper",
+            () -> EntityType.Builder.<OathboundGatekeeper>of(OathboundGatekeeper::new, MobCategory.MONSTER)
+                    .sized(OathboundGatekeeper.WIDTH, OathboundGatekeeper.HEIGHT).clientTrackingRange(10).build(ENTITIES.key("oathbound_gatekeeper")));
     public static final RegistryObject<EntityType<HotRivetEntity>> HOT_RIVET = ENTITIES.register("hot_rivet",
             () -> EntityType.Builder.<HotRivetEntity>of(HotRivetEntity::new, MobCategory.MISC)
                     .sized(0.25F, 0.25F).clientTrackingRange(6).updateInterval(2).build(ENTITIES.key("hot_rivet")));
@@ -266,7 +278,7 @@ public final class ModEntities {
 
     /** Every boss with an Elden Ring style fight (demo command, quests). */
     public static List<RegistryObject<? extends EntityType<? extends com.brasshaven.boss.WayfarerBoss>>> bosses() {
-        return List.of(DROWNED_WARDEN, VOID_WARDEN, GRAVE_KNIGHT, BONE_MATRIARCH, WEEPING_LADY, LARVA_MOTHER, BELL_KEEPER, ARCHIVIST, SAND_PHARAOH, JADE_JAGUAR, ROOT_MOTHER, SWAMP_CRONE, GRYPHON_KNIGHT, RUNE_COLOSSUS, FORGE_KING, CRYSTAL_SPIDER, SCULK_SPAWN, ASH_LORD, PIGLIN_KING, SOUL_REAPER, GRAND_CLOCKMAKER, IRON_HELMSMAN, BRONZE_SENTINEL, DUNE_KING, FALLEN_SERAPH, CHAINED_JAILER);
+        return List.of(DROWNED_WARDEN, VOID_WARDEN, GRAVE_KNIGHT, BONE_MATRIARCH, WEEPING_LADY, LARVA_MOTHER, BELL_KEEPER, ARCHIVIST, SAND_PHARAOH, JADE_JAGUAR, ROOT_MOTHER, SWAMP_CRONE, GRYPHON_KNIGHT, RUNE_COLOSSUS, FORGE_KING, CRYSTAL_SPIDER, SCULK_SPAWN, ASH_LORD, PIGLIN_KING, SOUL_REAPER, GRAND_CLOCKMAKER, IRON_HELMSMAN, BRONZE_SENTINEL, DUNE_KING, FALLEN_SERAPH, CHAINED_JAILER, CALDERA_CASTELLAN, FROST_JARL, OATHBOUND_GATEKEEPER);
     }
 
     public static void registerAttributes(EntityAttributeCreationEvent event) {
@@ -310,6 +322,9 @@ public final class ModEntities {
         event.put(DUNE_KING.get(), DuneKing.attributes().build());
         event.put(FALLEN_SERAPH.get(), FallenSeraph.attributes().build());
         event.put(CHAINED_JAILER.get(), ChainedJailer.attributes().build());
+        event.put(CALDERA_CASTELLAN.get(), CalderaCastellan.attributes().build());
+        event.put(FROST_JARL.get(), FrostJarl.attributes().build());
+        event.put(OATHBOUND_GATEKEEPER.get(), OathboundGatekeeper.attributes().build());
         event.put(GLOW_JELLYFISH.get(), GlowJellyfish.attributes().build());
         event.put(REEF_FISH.get(), ReefFish.attributes().build());
         event.put(MANTA_RAY.get(), MantaRay.attributes().build());

@@ -47,8 +47,8 @@ from ..defs import Piece, StructureDef, register
 from ..megakit import hash01, hash3, is_air
 from ..parts import LOOT, MOD
 
-# placeholder guardian until the gate gets its own boss: the Rune Colossus wakes in the hall under the gate
-BOSS = "brasshaven:rune_colossus"
+# the gate's own guardian: the Oathbound Gatekeeper (entity/boss/OathboundGatekeeper.java, tools/BOSSES.md section 11)
+BOSS = "brasshaven:oathbound_gatekeeper"
 MOB_KNIGHT = "brasshaven:skeleton_knight"
 MOB_GARGOYLE = "brasshaven:gargoyle"
 MOB_STRAY = "minecraft:stray"

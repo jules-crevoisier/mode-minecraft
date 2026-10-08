@@ -113,6 +113,9 @@ EGGS = {
     "dune_king": ((206, 188, 146), (40, 72, 166)),
     "fallen_seraph": ((238, 234, 226), (150, 90, 220)),
     "chained_jailer": ((46, 40, 48), (255, 124, 32)),
+    "caldera_castellan": ((56, 50, 58), (255, 116, 26)),
+    "oathbound_gatekeeper": ((204, 196, 174), (110, 232, 236)),
+    "frost_jarl": ((46, 64, 108), (160, 226, 250)),
 }
 
 
@@ -164,6 +167,9 @@ EMBLEMS = {
     "dune_king": ["#...#", "##.##", "#.#.#", "#####", "#####"],         # double crown
     "fallen_seraph": [".##..", "#...#", "#...#", "#...#", ".###."],     # broken halo
     "chained_jailer": [".###.", "#...#", "#####", "##.##", "#####"],    # padlock
+    "caldera_castellan": ["#.#.#", "#####", "#...#", "#.#.#", "#####"],  # crater crown round a needle
+    "oathbound_gatekeeper": [".###.", ".#.#.", ".###.", "..#..", "..##."],  # the gate's key
+    "frost_jarl": ["#.#.#", "#####", ".###.", ".###.", "..#.."],        # ice crown over a beard
 }
 
 
@@ -403,6 +409,7 @@ def main():
     written.update(furniture.textures())
     from wf import held3d
     written.update(held3d.textures())
+    written.update(__import__("wf.relicart", fromlist=["textures"]).textures())  # relic gear (wf/relics.py)
     from wf import gadgets
     written.update(gadgets.textures())
     from wf import worldblocks

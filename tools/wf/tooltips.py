@@ -26,6 +26,9 @@ ABILITIES = {
     "blink": ("Blink", "Clignement", "range"),
     "hook": ("Chain hook", "Chaîne-grappin", "range"),
     "shards": ("Halo shards", "Éclats de halo", "range"),
+    "ward": ("Oath ward", "Garde du serment", "radius"),
+    "rift": ("Molten rift", "Faille de magma", "range"),
+    "breath": ("Frost breath", "Souffle de givre", "range"),
 }
 # BossWeaponItem flags, in bit order
 ABILITY_EFFECTS = {
@@ -128,6 +131,10 @@ FLAVOR = {
     "dune_king_crook": ("The dunes still bow to it.", "Les dunes s'inclinent encore devant lui."),
     "jailer_chain": ("No prisoner ever outran it.", "Aucun prisonnier ne l'a jamais distancée."),
     "halo_glaive": ("A crescent torn from a broken heaven.", "Un croissant arraché à un ciel brisé."),
+    "gatekeeper_key": ("It opened the pass for a thousand years; now it opens skulls.",
+                       "Elle a ouvert le col mille ans durant ; elle ouvre désormais les crânes."),
+    "caldera_halberd": ("Forged in the throat of a dead volcano.", "Forgée dans la gorge d'un volcan éteint."),
+    "jarl_axe": ("The winter he swore to bring never ended.", "L'hiver qu'il avait juré d'apporter n'a jamais fini."),
 }
 
 # armour sets: one flavour per set prefix (all four pieces)

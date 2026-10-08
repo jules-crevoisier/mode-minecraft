@@ -199,6 +199,9 @@ ENTITIES = {
     "dune_king": ("The Dune King", "Le Roi des dunes"),
     "fallen_seraph": ("The Fallen Seraph", "Le Séraphin déchu"),
     "chained_jailer": ("The Chained Jailer", "Le Geôlier enchaîné"),
+    "caldera_castellan": ("The Castellan of the Caldera", "Le Châtelain de la caldeira"),
+    "oathbound_gatekeeper": ("The Oathbound Gatekeeper", "Le Gardien du Serment"),
+    "frost_jarl": ("The Frost Jarl", "Le Jarl de givre"),
     "hot_rivet": ("Hot Rivet", "Rivet brûlant"),
     "boomerang": ("Boomerang", "Boomerang"),
 }
@@ -236,6 +239,9 @@ SPAWN_EGGS = ["ruin_walker", "map_wraith", "basalt_guard", "void_stalker", "drow
               "dune_king",
               "fallen_seraph",
               "chained_jailer",
+              "caldera_castellan",
+              "oathbound_gatekeeper",
+              "frost_jarl",
               ]
 
 # Misc translated messages used from Java (key suffix -> (en, fr))
@@ -531,6 +537,7 @@ MESSAGES = {
     "message.brasshaven.boss.cycle_up": ("%s will return stronger: cycle +%s.", "%s reviendra plus fort : cycle +%s."),
     "message.brasshaven.boss.cycle": ("%s: cycle +%s (%s defeats).", "%s : cycle +%s (%s victoires)."),
     "message.brasshaven.boss.cycle_set": ("%s: cycle set to +%s.", "%s : cycle réglé sur +%s."),
+    "message.brasshaven.boss.oath_shield": ("Oath Shield", "Bouclier du Serment"),
     "message.brasshaven.brass_golem.built": ("Gears whir, steam hisses: your Brass Golem wakes up! It follows you and "
                                             "fights monsters. Sneak-use it with an empty hand: guard here / follow. "
                                             "Brass ingots repair it.",
@@ -626,3 +633,12 @@ def _denizens():
 
 
 _denizens()
+
+
+# relic gear of the colossal structures (tools/wf/relics.py)
+def _relics():
+    from .relics import register_content
+    register_content(ITEMS)
+
+
+_relics()

@@ -758,6 +758,95 @@ PAGES = [
          "Son Souvenir, quatre braises anciennes et deux diamants forgent la Chaîne ardente du Geôlier, dont le clic "
          "droit lance une chaîne qui traîne le premier ennemi à tes pieds et l'embrase."),
     ], []),
+    ("caldera_castellan", "wonders", "brasshaven:remembrance_caldera_castellan", ("The Castellan of the Caldera", "Le Châtelain de la caldeira"), [
+        ("The lord of the Caldera Ringwall waits in the open court on the summit of the needle in the crater lake (520 "
+         "health, armour 15): a towering lord in basalt plate split by cracks of cooling magma, a crater of obsidian "
+         "spikes on his helm, a smoking volcano for a right pauldron and a great halberd.",
+         "Le seigneur du Rempart de la caldeira attend dans la cour à ciel ouvert, au sommet de l'aiguille du lac de "
+         "cratère (520 PV, armure 15) : un seigneur immense en armure de basalte fendue de magma qui refroidit, un "
+         "cratère de pointes d'obsidienne sur le heaume, un volcan fumant pour épaulière droite et une grande hallebarde."),
+        ("He sweeps the halberd across his front, cleaves down a glowing line, charges with the halberd levelled, "
+         "leaps onto the ring of embers that follows you (a lava crack runs on from the landing: step off its line) "
+         "and stamps when you hug him.",
+         "Il balaie devant lui avec la hallebarde, fend le sol le long d'une ligne ardente, charge hallebarde baissée, "
+         "bondit sur le cercle de braises qui te suit (une faille de lave court ensuite depuis l'impact : écarte-toi "
+         "de sa ligne) et piétine qui le colle."),
+    ], ["brasshaven:remembrance_caldera_castellan", "brasshaven:caldera_halberd"]),
+    ("caldera_castellan_heat", "wonders", "minecraft:magma_block", ("Castellan: walls and vents", "Châtelain : murs et cheminées"), [
+        ("At 60% he raises walls of obsidian from the floor, a corridor round you (he charges down it) or a pen (he "
+         "leaps in): get out through the open side. A charge into his own wall breaks it and leaves him reeling. At "
+         "30% he draws the volcano's heat, and every ten seconds the floor vents erupt in patterns (rings, spirals, a "
+         "checker, vents under your feet), each warned by smoke and dripping lava. After venting, his armour is "
+         "brittle for three seconds: strike then. The walls always crumble.",
+         "À 60 %, il fait surgir du sol des murs d'obsidienne, un couloir autour de toi (il le charge) ou un enclos (il "
+         "bondit dedans) : sors par le côté ouvert. Une charge dans son propre mur le brise et le laisse sonné. À "
+         "30 %, il puise la chaleur du volcan, et toutes les dix secondes les cheminées du sol entrent en éruption en "
+         "motifs (anneaux, spirales, damier, sous tes pieds), chacune annoncée par de la fumée et des gouttes de lave. "
+         "Après l'éruption, son armure est fragile trois secondes : frappe alors. Les murs s'effondrent toujours."),
+        ("His Remembrance, four Map Fragments and two diamonds forge the Halberd of the Caldera, whose right-click "
+         "opens a molten rift that runs ahead and forks, searing and slowing every foe on it.",
+         "Son Souvenir, quatre fragments de carte et deux diamants forgent la Hallebarde de la caldeira, dont le clic "
+         "droit ouvre une faille de magma qui court devant toi et se divise, brûlant et ralentissant tous les ennemis "
+         "dessus."),
+    ], []),
+    ("frost_jarl", "wonders", "brasshaven:remembrance_frost_jarl", ("The Frost Jarl", "Le Jarl de givre"), [
+        ("At the top of the Jarl's Stair in the horn behind the Glacier Hall, the dead king waits under the dome (540 "
+         "health, armour 14): a Norse giant frozen on his feet, a bearded axe of blue ice in his right hand, a round "
+         "shield crusted with frost on his left arm, a beard of hoarfrost. His shield turns blows that come from in "
+         "front while he walks: strike during his recoveries or from the side.",
+         "En haut de l'escalier du Jarl, dans la corne derrière la Halle glaciaire, le roi mort attend sous le dôme "
+         "(540 PV, armure 14) : un géant nordique gelé debout, une hache barbue de glace bleue dans la main droite, "
+         "un bouclier rond couvert de givre au bras gauche, une barbe de frimas. Son bouclier pare les coups portés "
+         "de face quand il marche : frappe pendant qu'il se reprend, ou par le flanc."),
+        ("He cleaves across his front, bashes with the shield (it knocks a raised shield aside), sweeps a cone of ice "
+         "breath from his right to his left, drives his axe into the floor so ice spikes run out along a line, leaps "
+         "onto the ring that follows you (jump the frost wave) and calls up his frozen huscarls.",
+         "Il fend devant lui, frappe du bouclier (il écarte un bouclier levé), balaie un cône de souffle de glace de "
+         "sa droite vers sa gauche, plante sa hache dans le sol pour faire courir une ligne de pics de glace, bondit "
+         "sur le cercle qui te suit (saute l'onde de givre) et appelle ses huscarls gelés."),
+    ], ["brasshaven:remembrance_frost_jarl", "brasshaven:jarl_axe"]),
+    ("frost_jarl_winter", "wonders", "minecraft:blue_ice", ("Jarl: Fimbulwinter", "Jarl : Fimbulvetr"), [
+        ("At 65% he strikes three times in a row and makes rings of spikes burst out from his axe: stand in a gap "
+         "between the rings. At 30% he kneels and freezes the hall: keep moving (standing still freezes you), jump "
+         "when the floor whitens, and every 13 s a blizzard rains ice spikes on everyone.",
+         "À 65 %, il frappe trois fois de suite et fait jaillir des anneaux de pics autour de sa hache : tiens-toi "
+         "entre deux anneaux. À 30 %, il s'agenouille et gèle la salle : ne reste pas immobile (le froid te saisit), "
+         "saute quand le sol blanchit, et toutes les 13 s un blizzard fait pleuvoir des pics de glace sur tous."),
+        ("His Remembrance, four Map Fragments and two diamonds forge the Bearded Axe of the Frost Jarl, whose "
+         "right-click breathes a cone of frost that freezes foes solid.",
+         "Son Souvenir, quatre fragments de carte et deux diamants forgent la Hache barbue du Jarl de givre, dont le "
+         "clic droit souffle un cône de givre qui gèle les ennemis sur place."),
+    ], []),
+    ("oathbound_gatekeeper", "wonders", "brasshaven:remembrance_oathbound_gatekeeper",
+     ("The Oathbound Gatekeeper", "Le Gardien du Serment"), [
+        ("Under the Kneeling Gate, in the domed hall beneath the town square, the gate's own knight waits (480 health, "
+         "armour 14): a living statue of pale limestone with a red granite cloak, a tower shield carved with the gold "
+         "key of the toll, a stone greatsword and the gate's great key on a chain.",
+         "Sous la Porte agenouillée, dans la salle voûtée sous la place, attend le chevalier de la porte (480 PV, "
+         "armure 14) : une statue vivante de calcaire pâle au manteau de granit rouge, un pavois gravé de la clé d'or "
+         "du péage, un espadon de pierre et la grande clé de la porte au bout d'une chaîne."),
+        ("His shield blocks every blow from the front: walk round him and strike his sides and back while he "
+         "recovers. Beat on the shield and he bashes you; stay behind him too long and he wheels round; hug his back "
+         "and he stomps (jump the ring). His key falls on the gold ring that follows you.",
+         "Son pavois bloque tous les coups venus de face : tourne autour de lui et frappe ses flancs et son dos "
+         "pendant qu'il se remet. Frappe le bouclier et il te charge de l'épaule ; reste trop longtemps dans son dos "
+         "et il pivote ; colle-toi à lui et il piétine (saute l'onde). Sa clé tombe sur le cercle doré qui te suit."),
+    ], ["brasshaven:remembrance_oathbound_gatekeeper", "brasshaven:gatekeeper_key"]),
+    ("oathbound_gatekeeper_oath", "wonders", "minecraft:bell", ("Gatekeeper: the oath", "Gardien : le serment"), [
+        ("At 65% the gate's bell answers him: he strikes his shield and walls of stone hands sweep the whole hall, "
+         "each with one open lane between two lines of soul flame: run to the lane. At 30% he kneels behind his "
+         "shield like the statues above and the gate heals him: no blow reaches him, every hit goes to the Oath "
+         "Shield. Break it in 10 s and he reels, his guard gone for good; fail and he rises and kneels again later.",
+         "À 65 %, la cloche de la porte lui répond : il frappe son pavois et des murs de mains de pierre balaient "
+         "toute la salle, chacun avec un seul passage ouvert entre deux lignes de flammes d'âme : cours-y. À 30 %, il "
+         "s'agenouille derrière son pavois comme les statues et la porte le soigne : aucun coup ne l'atteint, tout va "
+         "au Bouclier du Serment. Brise-le en 10 s et il chancelle, sans garde pour de bon ; sinon il se relève et "
+         "s'agenouillera de nouveau."),
+        ("His Remembrance, four map fragments and two diamonds forge the Key of the Kneeling Gate, whose right-click "
+         "makes stone hands punch up all around you and wards you with Resistance II.",
+         "Son Souvenir, quatre fragments de carte et deux diamants forgent la Clé de la Porte agenouillée, dont le "
+         "clic droit fait jaillir des mains de pierre tout autour de toi et te protège (Résistance II)."),
+    ], []),
     ("tesla_observatory", "wonders", "minecraft:lightning_rod", ("Tesla Observatory", "Observatoire Tesla"), [
         ("A science campus on a rocky crag: a copper dome with a 30-block telescope, a 70-block Tesla tower and an "
          "orrery under a glass dome.",

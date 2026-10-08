@@ -78,9 +78,18 @@ public final class BossGear {
     public static final RegistryObject<Item> REMEMBRANCE_CHAINED_JAILER = remembrance("remembrance_chained_jailer");
     public static final RegistryObject<Item> JAILER_CHAIN = weapon("jailer_chain", p -> p.sword(ModMaterials.EMBER, 7.0F, -2.9F).rarity(Rarity.EPIC).fireResistant(),
             BossWeaponItem.Ability.HOOK, 12.0F, 14.0F, 80, () -> ParticleTypes.FLAME, BossWeaponItem.FIRE);
+    public static final RegistryObject<Item> REMEMBRANCE_OATHBOUND_GATEKEEPER = remembrance("remembrance_oathbound_gatekeeper");
+    public static final RegistryObject<Item> GATEKEEPER_KEY = weapon("gatekeeper_key", p -> p.sword(ModMaterials.LITHITE, 8.0F, -3.2F).rarity(Rarity.EPIC),
+            BossWeaponItem.Ability.WARD, 10.0F, 5.0F, 100, () -> ParticleTypes.SOUL_FIRE_FLAME, BossWeaponItem.LIFT);
     public static final RegistryObject<Item> REMEMBRANCE_FALLEN_SERAPH = remembrance("remembrance_fallen_seraph");
     public static final RegistryObject<Item> HALO_GLAIVE = weapon("halo_glaive", p -> p.sword(ModMaterials.VOID, 8.0F, -2.9F).rarity(Rarity.EPIC).fireResistant(),
             BossWeaponItem.Ability.SHARDS, 12.0F, 16.0F, 80, () -> ParticleTypes.END_ROD, BossWeaponItem.BLIND);
+    public static final RegistryObject<Item> REMEMBRANCE_CALDERA_CASTELLAN = remembrance("remembrance_caldera_castellan");
+    public static final RegistryObject<Item> CALDERA_HALBERD = weapon("caldera_halberd", p -> p.sword(ModMaterials.LITHITE, 8.0F, -3.1F).rarity(Rarity.EPIC),
+            BossWeaponItem.Ability.RIFT, 11.0F, 12.0F, 85, () -> ParticleTypes.FLAME, BossWeaponItem.FIRE | BossWeaponItem.SLOW);
+    public static final RegistryObject<Item> REMEMBRANCE_FROST_JARL = remembrance("remembrance_frost_jarl");
+    public static final RegistryObject<Item> JARL_AXE = weapon("jarl_axe", p -> p.sword(ModMaterials.LITHITE, 8.0F, -3.1F).rarity(Rarity.EPIC),
+            BossWeaponItem.Ability.BREATH, 10.0F, 9.0F, 90, () -> ParticleTypes.SNOWFLAKE, BossWeaponItem.SLOW);
 
     private BossGear() {}
 

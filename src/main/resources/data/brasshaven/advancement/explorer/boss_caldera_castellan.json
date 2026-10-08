@@ -1,0 +1,37 @@
+{
+  "display": {
+    "icon": {
+      "id": "brasshaven:caldera_halberd"
+    },
+    "title": {
+      "translate": "advancements.brasshaven.explorer.boss_caldera_castellan.title"
+    },
+    "description": {
+      "translate": "advancements.brasshaven.explorer.boss_caldera_castellan.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "kill": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "entity_type": "brasshaven:caldera_castellan"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "parent": "brasshaven:explorer/caldera_ringwall",
+  "rewards": {
+    "experience": 500
+  }
+}

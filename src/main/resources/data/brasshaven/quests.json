@@ -59,7 +59,10 @@
     "explorer/boss_grand_clockmaker",
     "explorer/boss_iron_helmsman",
     "explorer/boss_bronze_sentinel",
-    "explorer/boss_dune_king"
+    "explorer/boss_dune_king",
+    "explorer/boss_caldera_castellan",
+    "explorer/boss_oathbound_gatekeeper",
+    "explorer/boss_frost_jarl"
   ],
   "depths": [
     "depths/lithite",

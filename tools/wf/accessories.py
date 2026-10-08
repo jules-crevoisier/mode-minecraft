@@ -20,6 +20,11 @@ SLOTS = {
 # the order of the slots in the panel (top to bottom), the same as AccessorySlotType.LAYOUT in Java
 LAYOUT = ["back", "ring", "ring", "amulet", "belt"]
 
+# the relic accessories of the colossal structures (wf/relics.py) fit these slots too
+from . import relics as _relics  # noqa: E402
+for _sid, _ids in _relics.accessory_slots().items():
+    SLOTS[_sid][3].extend(i for i in _ids if i not in SLOTS[_sid][3])
+
 
 def slot_of(item_id):
     for sid, (_en, _fr, _n, items) in SLOTS.items():

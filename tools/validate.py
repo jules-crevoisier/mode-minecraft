@@ -73,6 +73,10 @@ def mod_ids(kind):
             ids |= set(re.findall(r'\bblock\("([a-z0-9_]+)"', text))
             continue
         ids |= set(re.findall(r'(?:register|simple|armor|block|pillar|door|egg|stairs|slab|wall|weapon|remembrance|spell|item|gear|machine|furniture)\("([a-z0-9_]+)"', text))
+    if kind == "items":  # relic gear of the colossal structures (wf/relics.py)
+        relic = os.path.join(java, "relic", "RelicGear.java")
+        if os.path.exists(relic):
+            ids |= set(re.findall(r'\b(?:weapon|armor|accessory)\("([a-z0-9_]+)"', open(relic, encoding="utf-8").read()))
     return ids
 
 

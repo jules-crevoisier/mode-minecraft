@@ -11,6 +11,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from wf.parts import USE_MOD_BLOCKS  # noqa: E402  (same switch for blocks and items)
 from wf import barrels  # noqa: E402  (the modest supplies of structure barrels)
+from wf import relics  # noqa: E402  (relic gear pools of the colossal structures)
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 OUT = os.path.join(ROOT, "src", "main", "resources", "data", "brasshaven", "loot_table", "chests")
@@ -365,6 +366,7 @@ def table(name, spec):
         pools.append(pool(tre, TREASURE))
     if USE_MOD_BLOCKS:
         pools.append(pool((1, 2), MOD_ITEMS[tier]))
+        pools += relics.loot_pools(name)  # relic gear of the colossal structures, rarer deeper in
     return {"type": "minecraft:chest", "pools": pools, "random_sequence": f"brasshaven:chests/{name}"}
 
 

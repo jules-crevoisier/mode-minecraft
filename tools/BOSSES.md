@@ -380,6 +380,158 @@ Co-op and NG+ come from the engine (players-under-rings scale naturally, fissure
 Previews: `python3 tools/gen_models.py --preview --only fallen_seraph` → `build/previews/models/fallen_seraph.png`;
 held glaive: `python3 tools/art_sheet.py --kind held --only halo_glaive`.
 
+## 11. Champion of the Kneeling Gate: The Oathbound Gatekeeper (Le Gardien du Serment)
+Files: `tools/wf/mobs/oathbound_gatekeeper.py` (model, texture variants `oath` and `broken`),
+`src/main/java/com/brasshaven/entity/boss/OathboundGatekeeper.java` (moveset). No lair module: the arena is the gate's
+existing hall under the town square (radius 17.5, a shallow tuff dome 14-17 high, soul lanterns on eight pilasters, the
+well's grate in the middle; `BOSS` in `tools/wf/structures/kneeling_gate.py`, seal radius 15). Reward:
+`remembrance_oathbound_gatekeeper` → **Key of the Kneeling Gate** (`gatekeeper_key`, LITHITE 8 / -3.2, new ability
+**WARD** in `BossWeaponItem`: stone hands punch up in a ring round you, radius 5, 10 damage and a throw, and you get
+Resistance II for 4 s; held model `gate_key` in `wf/held3d.py`), plus gold, map fragments, emeralds, diamonds, calcite and
+a 25% bell (`gen_data.py`). Quest: `explorer/boss_oathbound_gatekeeper`. (A duo of twins was considered; the engine's
+boss bar, seal and phases are single-entity, so it is one knight with a shield mechanic instead.)
+
+**Concept.** One of the two 70-block statues above the pass come down to fight size, ~6 blocks with the crest: the
+statues' own pale limestone plate (calcite on the top edges), grey stone mail, waxed copper trim, a red-granite cloak
+to the calves and a red tabard with the gold key of the toll, an open helm with nasal, cheek plates and a copper crest,
+a braided stone beard. The oath that binds him shows as soul-blue light in his eyes and in hairline cracks. Asymmetry:
+a tower shield taller than a man on the left arm, carved with the gold key between two columns of glowing runes; a
+stone greatsword point-down in the right hand; the gate's great gold key on an iron chain at the right hip.
+
+**Stats.** 480 health, armour 14, toughness 5, poise 110, knockback resistance 1.0, blue bar. Phase 2 at 65% (roar, the
+bell answers; +10% speed). Phase 3 at 30%, driven by the class (like the Chained Jailer): `kneel`, `broken` and `fury`
+have range 999 and are only chained from `bossTick`.
+
+**The oath guard (phases 1-2, until the shield breaks).** While he walks or idles and during `sweep`, `thrust`, `bash`,
+`stomp`, `wheel` and `rush`, any hit whose source is in front of his body (dot >= 0.3, about 145°) clangs off the shield:
+no damage, no posture, the attacker is nudged back. Flank him: his moves lock his facing from the impact on, so the
+punish window is his side and back during recoveries. `keyfall`, `keyswing`, `overhead`, `toll`, staggers and the roar
+leave the guard open. Reactions in `bossTick`: 3 blocked hits within 2 s → `bash`; the target staying behind him (within
+6 blocks, 1 s x cycle speed) → `wheel` (own 4 s cooldown).
+
+| Move | Phase | Wind-up / active / recovery | Range | What it does |
+|---|---|---|---|---|
+| sweep | 1-3 | 16 / 4 / 14 | 0-7.5 | Blade drawn back to his right (arc in stone dust), swept over 200°: 16. P2: 35% chains thrust (target > 4) or stomp. |
+| thrust | 1-3 | 14 / 8 / 14 | 4-14 | Dust line shows the lunge; he lunges ~7 blocks point first: 15 once per target. Guarded. |
+| bash | 1-3 | 12 / 3 / 11 | 0-4.5 | Shield drawn in (spark arc), rammed out over 120°: 10, huge knockback, Slowness II 2 s. Also the answer to shield-beaters. |
+| stomp | 1-3 | 18 / 3 / 13 | 0-6 | Foot raised (4-block ring): 13 all round + a ring to jump (9, out to 10; P2 a second ring 10 ticks later). Punishes back-huggers. |
+| keyfall | 1-3 | 18 / 20 / 12 | 7-22 | Gold ring follows the target during the wind-up, locks on the throw; the key lands 0.9 s later: 14, Slowness IV 1.5 s; P2 six hands burst round it 0.5 s after (11). Guard open. |
+| wheel | 1-3 | 14 / 4 / 14 | 0-5.5 | Ring of crits, one full turn: 14 in r 5.5. Rarely rolled (weight 4); mostly the anti-flank reaction. |
+| keyswing | 2-3 | 18 / 4 / 14 | 3-11 | Key whirled on its chain; two gold rings mark the band 3.6-9.8: everyone in the band takes 12 + Slowness II. Hug him or leave. Guard open. |
+| overhead | 2-3 | 22 / 4 / 18 | 0-9 | Sword over the helm (ring 3.5 ahead + soul dots on the line): 22 in r 2.8, then 7 hands burst one by one along the line out to 15 blocks (13). Guard open, long recovery: the frontal punish. |
+| rush | 2-3 | 16 / 16 / 12 | 6-18 | Shield set (spark line), charge 1 block/tick for 13 ticks (stops on walls): 16 + big knockback once per target. Guarded. 40% chains overhead. |
+| toll | 2-3 | 24 / 40 / 16 | 0-30 | Spectacle: sword raised (bell hum), struck on his own shield: the bell tolls and a wall of stone hands sweeps the whole hall from behind him to the far wall, a row every 2 ticks (each row warned 0.9 s by dust), 13 + throw, too tall to jump. One 3.6-block lane (within 10 blocks of his own line) stays open, edged by soul flames. 2.2 s later a second wall sweeps across at 90° with another lane. Guard open. |
+| kneel | 3 | 20 / 200 / 24 | scheduled | At 30% (then every 30 s x cooldown scale while the shield holds): he kneels behind his planted shield like the statues. No damage reaches him; every player hit feeds the **Oath Shield** (white notched bar, 60 x (1 + 0.6 per extra player) x (1 + 0.25 x cycle)). The gate heals him 0.8%/s and tolls three sweeps of hands (forward, across, forward) whose open lane passes within 4 blocks of him. Shield broken → `broken`. Survived → he rises healed. |
+| broken | 3 | 6 / 4 / 50 | on break | The shield shatters (variant `broken` hides it); he reels for 3 s taking +50% damage. From now on: no guard, +18% speed, soul flames off him. |
+| fury | 3 (broken) | 14 / 30 / 16 | scheduled, < 7 | Every ~8.5 s: two-handed sweep (15), backhand 0.6 s later (15, arc re-telegraphed), overhead crash 0.6 s later (20 in r 3, ring of soul fire to jump, 9). After the break the toll also comes every 15 s. |
+
+Co-op and NG+ come from the engine (health, damage, poise, cooldowns, compressed wind-ups, soul wave); the shield's
+integrity, the kneel and toll timers scale with players / `cooldownScale()` as above. Resetting the fight (empty
+arena) restores the shield and the guard.
+
+Previews: `python3 tools/gen_models.py --preview --only oathbound_gatekeeper` →
+`build/previews/models/oathbound_gatekeeper.png` (and `_broken.png`); held key:
+`python3 tools/art_sheet.py --kind held --only gatekeeper_key`.
+
+## 12. Champion of the Caldera Ringwall: The Castellan of the Caldera (Le Châtelain de la caldeira)
+Files: `tools/wf/mobs/caldera_castellan.py` (model), `src/main/java/com/brasshaven/entity/boss/CalderaCastellan.java`
+(moveset). No lair module: the arena is the ringwall's existing summit court on the needle (radius 16, open sky, a
+crenellated parapet over the void; `BOSS` in `tools/wf/structures/caldera_ringwall.py`, seal radius 15). Reward:
+`remembrance_caldera_castellan` → **Halberd of the Caldera** (`caldera_halberd`, LITHITE 8 / -3.1, a new ability shape
+**RIFT** in `BossWeaponItem`: the halberd is driven into the ground and a molten rift runs 12 blocks along the ground
+ahead (stops at walls and drops), forking in two 4-block branches at its end; every foe on it takes 11 once, is set
+ablaze, slowed and lifted a little; held model `caldera_halberd` in `wf/held3d.py`), plus map fragments, emeralds,
+diamonds, obsidian, magma blocks and blaze powder (`gen_data.py`). Quest: `explorer/boss_caldera_castellan`.
+
+**Concept.** The lord of the ringwall, 5.7 blocks with his crown: a towering, upright knight in basalt plate trimmed
+with tarnished bronze, split all over by cracks of cooling magma (white-hot core, dull red edges, black crust). His great
+helm has a glowing T-slit and is crowned by a ring of jagged obsidian spikes round a small crater that glows from
+inside. A long ash-red mantle with a smouldering hem, the ringwall's sigil (a ring with a needle) on his tabard.
+Asymmetry: the right pauldron is a small volcano (stacked plates up to a glowing, smoking vent); the left shoulder is a
+low plate under a drape of the mantle; a great halberd taller than he is (black haft, obsidian axe blade with a molten
+edge, spear point, back spike) in the right hand; a heavy left gauntlet with molten knuckles, the fist that raises walls.
+
+**Stats.** 520 health (a deliberately hard Overworld boss, colossal structure), armour 15, toughness 6, poise 105,
+knockback resistance 1.0, fire immune, red bar. Three phases: phase 2 at 60% (base roar, +12% speed); phase 3 at 30%,
+driven by the class like the Chained Jailer: when he is free between moves he chains `heat`, then every 10 s (x
+`cooldownScale()`) `vents`. `reel`, `heat` and `vents` have range 999 so the picker never rolls them.
+
+| Move | Phase | Wind-up / active / recovery | Range | What it does |
+|---|---|---|---|---|
+| sweep | 1-3 | 18 / 4 / 14 | 0-7.5 | Halberd hauled back over the right shoulder (ember arc), swept over 230°: 17 + 2 s fire. P2: 35% chains into chop (P3: 50%, half of them into reap). |
+| chop | 1-3 | 20 / 3 / 15 | 0-8 | Raised in both hands (magma dots on the line), cleaved 7 blocks ahead (20, half-width 1.3) + a magma burst at the tip 8 ticks later (10, r 1.8). P2: 35% chains into charge if the target is > 6 away. |
+| charge | 1-3 | 16 / 20 / 14 | 6-22 | Halberd levelled (smoke line 18 blocks), runs 0.95 b/t for 18 ticks: 15 + knockback once per target; stops at solid blocks. Into one of his own walls: the wall shatters (6 to whoever is near) and he chains **reel**. P2: 40% chains into sweep. |
+| leap | 1-3 | 24 / 4 / 18 | 7-22 | Crouch, an ember ring follows the target (0.6 s, clamped to 13 blocks from the arena centre and 18 from him); it locks (flame) as he jumps on a fixed 12-tick arc (no gravity, `setPos`), lands at 1.2 s: 20 in r 3.5 + fire, then a lava crack spreads 1 block/tick for 14 blocks toward the target and flares 12 ticks behind its front (12 + fire). P2: three cracks (±28°), 30% chains into sweep. |
+| stomp | 1-3 | 14 / 3 / 12 | 0-4.5 | Foot raised (smoke ring), stamped: 12 in r 4.5, big shove. P2: + a heat ring to jump (8, out to 9). |
+| rampart | 2-3 | 20 / 6 / 16 | 4-20 | Gauntlet raised (obsidian dust marks the wall lines), driven into the floor: 3-high obsidian walls. Alternates a **corridor** (two 11-block walls 2.6 to each side of the target, along his line; 70% chains charge) and a **pen** (a 9-block wall behind the target + two 4-block side walls, open toward him; 60% chains leap). Anyone on a line: 8 + thrown aside, that column stays open. |
+| reap | 2-3 | 16 / 16 / 14 | 0-8 | Forehand sweep at the impact (15), the arc re-drawn, backhand sweep 12 ticks later (15 + fire each). |
+| reel | (charge into a wall) | 6 / 2 / 32 | — | Thrown back, sags over the haft; brittle (+30% damage) for 44 ticks. |
+| heat | 3 (once, at 30%) | 30 / 20 / 20 | — | Kneels over the planted halberd, invulnerable ~2.6 s (growing smoke ring): a ring of heat to jump (12, out to 14) + 10 magma bursts at r 6 (12). Then +15% speed, smoke and flame round him. |
+| vents | 3 (every 10 s) | 20 / 50 / 14 | — | Spectacle: halberd raised to the sky, point driven into the floor; the floor vents round the arena centre erupt in a pattern, each vent warned 1 s by smoke, magma dust and falling lava, then a column of fire (13 + fire, small lift). Patterns in turn: **rings** (r 2.5/7.5/12.5, then 5/10/14.5 1.2 s later), **spiral** (three arms unwinding outward), **checker** (4-block squares, the dark then the light ones 1.3 s later), **hunt** (4 volleys 0.6 s apart under every player + `scaledCount(2)` strays). Afterwards his armour is brittle for 3 s (+30% damage): the punish window. |
+
+**The walls are temporary.** Every obsidian block he places is recorded with its expiry (200 ticks + up to 20, 240 in
+phase 3, at most 150 blocks) and only placed into air over a sturdy floor within 15 blocks of the arena centre and not
+within 2.5 blocks of himself. They are removed when they expire, when a charge breaks them, as soon as no player is
+within 28 blocks of the arena (death, flight, the reset), when the fight resets to phase 1, in `onDefeated`, in
+`remove()` for any destroying removal, and positions are saved (`CastellanWalls`) so that a chunk unload mid-fight
+clears them on the next tick after reload. Removal only touches blocks that are still obsidian.
+
+**Co-op and NG+** come from the engine: health, damage, poise, cooldowns (the vents timer uses `cooldownScale()`),
+compressed wind-ups (the leap arc keys off wind-up tick numbers, so it still lands on time), and the hunt pattern's
+strays use `scaledCount`. Players under rings and vents scale naturally.
+
+Previews: `python3 tools/gen_models.py --preview --only caldera_castellan` → `build/previews/models/caldera_castellan.png`;
+held halberd: `python3 tools/art_sheet.py --kind held --only caldera_halberd`.
+
+## 13. Champion of the Glacier Hall: The Frost Jarl (Le Jarl de givre)
+Files: `tools/wf/mobs/frost_jarl.py` (model), `src/main/java/com/brasshaven/entity/boss/FrostJarl.java` (moveset).
+No lair module: the arena is the hall's existing domed room in the horn (radius 16, dome 12-20 high, eight ice pillars,
+an oculus; `BOSS` in `tools/wf/structures/glacier_hall.py`, seal radius 15), reached by the Jarl's Stair and its site
+of grace. Reward: `remembrance_frost_jarl` → **Bearded Axe of the Frost Jarl** (`jarl_axe`, LITHITE 8 / -3.1, new
+ability shape **BREATH** in `BossWeaponItem`: a cone of frost 35° each side of the look line out to 9 blocks, 10 to
+every foe in it, frozen solid 2 s (Slowness VII + full freeze ticks); held model `dane_axe` in `wf/held3d.py`, sprite
+`dane_axe` in `wf/itemart_shapes.py`), plus gold, map fragments, emeralds, diamonds, blue ice and a 35% goat horn
+(`gen_data.py`). Quest: `explorer/boss_frost_jarl`.
+
+**Concept.** The dead king of the hall, a 5.7-block Norse giant frozen on his feet: frost-blue skin, white-blue eyes
+under an iron helm with a nasal and a crown of ice spikes (the right horn whole, the left snapped), a hoarfrost beard
+with a gold-ringed braid and icicles (his jaw drops for the breath), a white wolf pelt with its head on his left
+shoulder, a navy cloak with a woven white wolf and a frozen hem, mail under an iron breastplate with a gold knot.
+Asymmetry: a bearded Dane axe with a crescent of blue ice and a glowing edge in his right fist; a round quartered
+white-and-blue shield with icicles on his left forearm; ice crystals grown out of his right shoulder blade.
+
+**Stats.** 540 health (colossal overworld tier), armour 14, toughness 5, poise 110, knockback resistance 1.0, blue bar.
+**Shield:** between moves (and during the bash wind-up) every frontal blow (55° each side, not `BYPASSES_SHIELD`)
+loses 65%: hit him during recoveries or from the flanks. Three phases: phase 2 at 65% (roar, +10% speed, a small frost
+wave); phase 3 at 30%, driven by the class (like the Jailer): when he is free he chains `winter`, then every 13 s
+(scaled by `cooldownScale()`) `blizzard`. `huscarls`, `winter` and `blizzard` have range 999 so the picker never
+chooses them.
+
+| Move | Phase | Wind-up / active / recovery | Range | What it does |
+|---|---|---|---|---|
+| cleave | 1-3 | 18 / 4 / 14 | 0-7.5 | Axe over the right shoulder (arc in snow), diagonal cut over 130°, 6.8 out: 18 + frost. P2: 35% chains into bash (close) or spikes. |
+| bash | 1-3 | 12 / 6 / 12 | 0-5 | Shield raised square (guarded), then a 0.75 b/t shove: 12, knockback 2.6, Slowness III 1.5 s; a raised player shield goes on a 5 s cooldown. P2: 50% chains into cleave. |
+| breath | 1-3 | 20 / 30 / 14 | 0-11 | Rears back (cone outlined), then the breath sweeps from his right to his left (±25°, P2 ±32°, P3 ±40°) for 1.5 s: 4 (P3 5) + 45 frozen ticks + Slowness II every 5 ticks to whoever is in the 20° beam, 11 out. |
+| spikes | 1-3 | 22 / 24 / 14 | 3-20 | Axe raised (line marked), driven into the floor: spikes every 1.5 blocks out to 18 (P2: three lines at -22/0/22°), each warned (snow ring, white 6 ticks before): 14 + lift. Plus a spike that follows the target for 6 ticks then locks (P2: every player): 12. |
+| leap | 1-3 | 20 / 10 / 16 | 7-22 | Crouch; a ring follows the target for 14 ticks then locks (turns blue); he springs on an arc 5 high and lands on the 10th active tick (anim 1.5 s): 20 in r 3.5 + frost wave (9, to r 10, jump). Destination clamped inside the arena. |
+| huscarls | 1-3 | 16 / 4 / 16 | scheduled | First 15 s into the fight, then every 32 s × cooldownScale when there is room: rings mark the spots, then skeleton knights (frozen huscarls) rise. Alive at most `scaledCount(2)` (P3 `scaledCount(3)`), at most `scaledCount(2)` per call. Discarded when he dies. |
+| rampage | 2-3 | 16 / 30 / 16 | 0-7.5 | Three blows: cleave (active tick 0, anim 0.8 s, 14), backhand (tick 10, 1.3 s, 14), overhead chop down a line (tick 22, 1.9 s, 20 + three spikes beyond). Turns up to 40° toward the target at ticks 3 and 13; each blow re-telegraphed. |
+| rimeburst | 2-3 | 22 / 36 / 14 | 0-14 | Axe planted (five rings drawn at r 2.5/5.5/8.5/11.5/14.5): ring k bursts at 4 + 7k ticks, hitting within 1.1 of the ring: 13 + lift. Safe: the gaps (3.6-4.4, 6.6-7.4, 9.6-10.4, 12.6-13.4) and hugging. P3: the rings come back in (44 + 6k, 11). |
+| winter | 3 (once) | 30 / 20 / 20 | scheduled | Kneels, invulnerable 2.5 s, axe driven into the floor: frost nova (12, jump) and the hall freezes, +15% speed. |
+| blizzard | 3 | 24 / 40 / 16 | scheduled | Axe to the oculus; three volleys 18 ticks apart: a following spike under every player in the arena + `scaledCount(3)` strays: 14 + lift. |
+
+**Phase 3 (Fimbulwinter).** Players who stay on the floor within 0.6 blocks over a quarter second gain 22 frozen ticks
+(vanilla thaws 10 in that time): about 3 s standing still freezes you; fully frozen = 3 damage + Slowness III every
+second. Every 7 s × `cooldownScale()` the floor whitens round every player for 1.2 s (snowball dust, a ring at each
+player's feet, a cue sound), then pulses: 7 + 60 frozen ticks + Slowness II to everyone on the ground: jump it.
+Reset: if the fight resets the hall thaws and the speed modifiers are removed.
+
+Co-op and NG+ come from the engine: spikes and rings under every player scale naturally, huscarls use
+`scaledCount`, the huscarl, pulse and blizzard timers use `cooldownScale()` (co-op and cycle speed).
+
+Previews: `python3 tools/gen_models.py --preview --only frost_jarl` → `build/previews/models/frost_jarl.png`;
+held axe: `python3 tools/art_sheet.py --kind held --only jarl_axe`.
+
 ## Difficulty: co-op scaling and NG+ cycles
 
 Applied by `boss/WayfarerBoss` to **every** boss on its first server tick, whatever spawned it (boss seal,

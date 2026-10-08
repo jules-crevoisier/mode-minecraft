@@ -16,6 +16,7 @@ HANDHELD = {"builder_wand", "master_builder_wand", "chisel", "fire_staff", "fros
             "light_staff", "excavator_pickaxe", "lumber_axe"}
 HANDHELD |= {row[2] for row in __import__("wf.bossgear", fromlist=["BOSS_GEAR"]).BOSS_GEAR}
 HANDHELD |= __import__("wf.gadgets", fromlist=["HANDHELD"]).HANDHELD
+HANDHELD |= __import__("wf.relics", fromlist=["handheld"]).handheld()  # relic weapons of the colossal structures
 
 
 def _de(name):
@@ -284,6 +285,7 @@ def main():
     gadget_assets()
     __import__("wf.ocean", fromlist=["assets"]).assets(write)
     __import__("wf.social", fromlist=["assets"]).assets(write)  # multiplayer blocks
+    __import__("wf.relics", fromlist=["assets"]).assets(write)  # relic armour sets (equipment assets)
     for eid, (en, fr) in content.ENTITIES.items():
         lang_en[f"entity.{NS}.{eid}"], lang_fr[f"entity.{NS}.{eid}"] = en, fr
     for prefix in content.ARMOR_SETS:
@@ -309,6 +311,10 @@ def main():
         g_en, g_fr = mod.lang()
         lang_en.update(g_en)
         lang_fr.update(g_fr)
+    # relic gear of the colossal structures: flavours and tooltip strings (wf/relics.py)
+    g_en, g_fr = __import__("wf.relics", fromlist=["lang"]).lang()
+    lang_en.update(g_en)
+    lang_fr.update(g_fr)
     # advancement translations are merged in by gen_quests.py
     extra = os.path.join(ROOT, "build", "quest_lang.json")
     if os.path.exists(extra):
