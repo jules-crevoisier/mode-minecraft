@@ -73,6 +73,8 @@ def grow_crystals(bp, cells, rng, chance=0.3):
         rng.shuffle(order)
         for face, dx, dy, dz in order:
             if bp.get(x + dx, y + dy, z + dz) == AIR:
+                if face == "down" and any(bp.get(x, y - k, z) != AIR for k in (2, 3, 4)):
+                    continue    # no bud hanging into a walkway (keep 3 blocks of headroom under it)
                 kind = rng.choice(["amethyst_cluster", "large_amethyst_bud", "medium_amethyst_bud", "amethyst_cluster"])
                 bp.set(x + dx, y + dy, z + dz, f"{kind}[facing={face},waterlogged=false]")
                 break

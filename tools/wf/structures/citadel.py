@@ -597,7 +597,8 @@ def tower(bp):
         px, pz = cx + round(math.cos(a) * 4), cz + round(math.sin(a) * 4)
         for y in range(cab, cab + 4):
             bp.set(px, y, pz, TRIM)
-    bp.door(cx, cab, cz + 4, "south", "dark_oak")
+    # door on the north side: the stairwell opening is under the south half of the cabin floor
+    bp.door(cx, cab, cz - 4, "north", "dark_oak")
     bp.set(cx + 2, cab, cz - 2, MOD["waystone"])
     bp.set(cx - 2, cab, cz - 2, "lectern[facing=south,has_book=false,powered=false]")
     bp.set(cx, cab + 3, cz, SEA)
@@ -691,6 +692,14 @@ def aquarium(bp, x0, z0, x1, z1, hw, rng):
     cx, cz = (x0 + x1) // 2, (z0 + z1) // 2
     corals = ["brain_coral_block", "tube_coral_block", "bubble_coral_block", "fire_coral_block", "horn_coral_block"]
     tanks = [(x0 + 2, z0 + 2), (x1 - 4, z0 + 2), (x0 + 2, z1 - 4), (x1 - 4, z1 - 4)]
+    # the walk around the tanks runs along the wall, where the bay shafts stand: they start above head height
+    # here, or a shaft and a tank corner close off the far side of the hall
+    for x in range(x0, x1 + 1):
+        for z in range(z0, z1 + 1):
+            if x in (x0, x1) or z in (z0, z1):
+                for y in (1, 2):
+                    if bp.get(x, y, z) not in (None, "minecraft:air"):
+                        bp.set(x, y, z, "air")
     for i, (tx, tz) in enumerate(tanks):
         for x in range(tx - 1, tx + 4):
             for z in range(tz - 1, tz + 4):
@@ -875,10 +884,13 @@ def citadel(variant):
         hall_shell(bp, -7, 7, 7, 27, 16, "z", flying=True, rose=(False, False), avoid=AVOID)
         themes = THEMES[:]
         rng.shuffle(themes)
+        bare = []           # halls whose theme fills the floor (cells, tanks): no clutter on top of it
         for theme, key in zip(themes, ["W1", "E1", "W2", "E2", "W3", "E3"]):
             x0, z0, x1, z1, hw, axis = HALLS[key]
             hall_shell(bp, x0, z0, x1, z1, hw, axis, avoid=AVOID)
             theme(bp, x0 + 1, z0 + 1, x1 - 1, z1 - 1, hw, rng)
+            if theme in (prison, aquarium):
+                bare.append((x0, z0, x1, z1))
         arena(bp)
         vault(bp)
         vault_passage(bp)
@@ -899,11 +911,28 @@ def citadel(variant):
                         bp.set(x, y, z, "air")
                 bp.set(x, 0, z, TRIM)
         arena_mist(bp)
-        # the drowned halls: crates and barnacled pots in the corners, a few webs of kelp-dust
+        # the drowned halls: crates and barnacled pots in the corners, a few webs of kelp-dust (hall floors only:
+        # the tops of the prison cells, tanks and shelves are not rooms, a crate there is a ladder to nowhere)
         I.decorate(bp, dict(I.THEMES["storage"], ceiling=None, density=0.25,
                             floor={"crates": 2, "barrel": 2, "pot": 3, "sea_pickle": 2, "coral": 1}),
-                   seed=1, rugs=False, centre=False)
+                   seed=1, rugs=False, centre=False, rooms=_hall_floors(bp, bare))
     return build
+
+
+def _hall_floors(bp, bare):
+    """Floor-level rooms for the clutter, minus the halls in ``bare`` (prison cells and fish tanks: a crate stacked
+    against them is a step up onto their roofs) and the 1-wide strips (a crate there blocks the strip)."""
+    # found one half at a time: the whole floor is one connected room centred near the arena, and find_rooms
+    # skips a room centred inside the boss seal's reach (the halves still drop the arena itself)
+    rooms = [r for region in (((-200, 1, -200), (-1, 1, 200)), ((0, 1, -200), (200, 1, 200)))
+             for r in I.find_rooms(bp, region=region) if r.y == 1]
+    for r in rooms:
+        cells = set(r.cells)
+        r.free = {(x, z) for x, z in r.free
+                  if not ((x - 1, z) not in cells and (x + 1, z) not in cells)
+                  and not ((x, z - 1) not in cells and (x, z + 1) not in cells)
+                  and not any(x0 <= x <= x1 and z0 <= z <= z1 for x0, z0, x1, z1 in bare)}
+    return rooms
 
 
 def arena_mist(bp):

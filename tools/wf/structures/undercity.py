@@ -29,7 +29,7 @@ def cavern(bp):
     """Carve the ellipsoid (upper part) and a lake bowl (lower part), lining the shell with rock."""
     for x in range(-RX - 1, RX + 2):
         for z in range(-RZ - 1, RZ + 2):
-            for y in range(FLOOR - 3, RY + 2):
+            for y in range(FLOOR - 3, 4 + RY + 3):        # the ellipsoid is centred on y 4: its crown is at 4 + RY
                 dy = (y - 4) / RY if y >= 4 else (y - 4) / 10.0
                 d = (x / RX) ** 2 + dy ** 2 + (z / RZ) ** 2
                 if d <= 1.0:
@@ -92,7 +92,10 @@ def pillar(bp):
         a = math.radians(ang)
         for i in range(PILLAR_R, 18):
             x, z = round(math.cos(a) * i), round(math.sin(a) * i)
-            y = top - 1 - int((i - PILLAR_R) * 0.25)
+            # kept above head height over the top catwalks and houses: they run under the ceiling until they meet it
+            y = max(top - 1 - int((i - PILLAR_R) * 0.25), LEVELS[-1] + 3)
+            if i > PILLAR_R + 1 and bp.get(x, y, z) != "minecraft:air":
+                break
             bp.set(x, y, z, IRON)
 
 

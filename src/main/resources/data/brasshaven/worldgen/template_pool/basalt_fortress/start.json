@@ -21,23 +21,23 @@
             "size": [
               30,
               93,
-              30
+              26
             ],
-            "blocks": 19457
+            "blocks": 18032
           },
           {
             "location": "brasshaven:basalt_fortress/fortress/x0_z1",
             "offset": [
               0,
               0,
-              30
+              26
             ],
             "size": [
               30,
               54,
-              29
+              33
             ],
-            "blocks": 16593
+            "blocks": 18513
           },
           {
             "location": "brasshaven:basalt_fortress/fortress/x0_z2",
@@ -51,7 +51,7 @@
               75,
               30
             ],
-            "blocks": 18569
+            "blocks": 18924
           },
           {
             "location": "brasshaven:basalt_fortress/fortress/x1_z0",
@@ -62,24 +62,24 @@
             ],
             "size": [
               29,
-              72,
-              30
+              64,
+              26
             ],
-            "blocks": 21445
+            "blocks": 16042
           },
           {
             "location": "brasshaven:basalt_fortress/fortress/x1_z1",
             "offset": [
               30,
               0,
-              30
+              26
             ],
             "size": [
               29,
               88,
-              29
+              33
             ],
-            "blocks": 30399
+            "blocks": 36195
           },
           {
             "location": "brasshaven:basalt_fortress/fortress/x1_z2",
@@ -93,7 +93,7 @@
               65,
               30
             ],
-            "blocks": 22223
+            "blocks": 22552
           },
           {
             "location": "brasshaven:basalt_fortress/fortress/x2_z0",
@@ -105,23 +105,23 @@
             "size": [
               30,
               79,
-              30
+              26
             ],
-            "blocks": 18129
+            "blocks": 16513
           },
           {
             "location": "brasshaven:basalt_fortress/fortress/x2_z1",
             "offset": [
               59,
               0,
-              30
+              26
             ],
             "size": [
               30,
               54,
-              29
+              33
             ],
-            "blocks": 16556
+            "blocks": 18497
           },
           {
             "location": "brasshaven:basalt_fortress/fortress/x2_z2",
@@ -135,7 +135,7 @@
               81,
               30
             ],
-            "blocks": 19599
+            "blocks": 19957
           }
         ],
         "projection": "rigid",

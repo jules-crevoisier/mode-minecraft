@@ -218,7 +218,7 @@ def gallery(bp, rng):
     # the collapsed stretch: rubble slope, a hole in the vault with hanging roots
     for z in range(-23, -17):
         for x in range(GX0, GX1 + 1):
-            h = max(0, 2 - abs(z + 20) // 2 - (1 if x in (GX0 + 3, GX0 + 4) else 0))
+            h = max(0, 2 - abs(z + 20) // 2 - (1 if x in (GX0, GX0 + 3, GX0 + 4, GX1) else 0))  # 1-steps up from the alcoves
             for y in range(y0 + 1, y0 + 1 + h):
                 bp.set(x, y, z, rng.choice(["cobbled_deepslate", "gravel", "deepslate_bricks", "tuff"]))
             if abs(z + 20) <= 1 and GX0 + 1 <= x <= GX1 - 1:

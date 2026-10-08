@@ -37,7 +37,7 @@
               19,
               18
             ],
-            "blocks": 973
+            "blocks": 972
           },
           {
             "location": "brasshaven:coastal_lighthouse/lighthouse/x1_z0",
@@ -51,7 +51,7 @@
               61,
               22
             ],
-            "blocks": 7242
+            "blocks": 7742
           },
           {
             "location": "brasshaven:coastal_lighthouse/lighthouse/x1_z1",
@@ -65,7 +65,7 @@
               20,
               23
             ],
-            "blocks": 1221
+            "blocks": 1229
           }
         ],
         "projection": "rigid",

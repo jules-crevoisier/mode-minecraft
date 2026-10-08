@@ -23,7 +23,7 @@
               22,
               19
             ],
-            "blocks": 2740
+            "blocks": 2757
           },
           {
             "location": "brasshaven:ruined_watchtower/tower_ruined/x0_z1",
@@ -37,7 +37,7 @@
               23,
               19
             ],
-            "blocks": 3112
+            "blocks": 3121
           },
           {
             "location": "brasshaven:ruined_watchtower/tower_ruined/x1_z0",
@@ -51,7 +51,7 @@
               44,
               28
             ],
-            "blocks": 7602
+            "blocks": 7604
           },
           {
             "location": "brasshaven:ruined_watchtower/tower_ruined/x1_z1",
@@ -65,7 +65,7 @@
               43,
               27
             ],
-            "blocks": 5539
+            "blocks": 5544
           },
           {
             "location": "brasshaven:ruined_watchtower/tower_ruined/x2_z0",
@@ -79,7 +79,7 @@
               20,
               28
             ],
-            "blocks": 3659
+            "blocks": 3644
           },
           {
             "location": "brasshaven:ruined_watchtower/tower_ruined/x2_z1",
@@ -93,7 +93,7 @@
               20,
               27
             ],
-            "blocks": 4129
+            "blocks": 4099
           }
         ],
         "projection": "rigid",
@@ -129,7 +129,7 @@
               51,
               24
             ],
-            "blocks": 4246
+            "blocks": 4256
           },
           {
             "location": "brasshaven:ruined_watchtower/tower_intact/x0_z1",
@@ -143,7 +143,7 @@
               49,
               25
             ],
-            "blocks": 3392
+            "blocks": 3384
           },
           {
             "location": "brasshaven:ruined_watchtower/tower_intact/x1_z0",
@@ -157,7 +157,7 @@
               62,
               25
             ],
-            "blocks": 7278
+            "blocks": 7275
           },
           {
             "location": "brasshaven:ruined_watchtower/tower_intact/x1_z1",
@@ -171,7 +171,7 @@
               57,
               25
             ],
-            "blocks": 5435
+            "blocks": 5436
           }
         ],
         "projection": "rigid",

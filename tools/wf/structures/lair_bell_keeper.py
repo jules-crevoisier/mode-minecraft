@@ -377,6 +377,8 @@ def doors(bp):
     opening(bp, 57, L1 + 1, 30, 59, L1 + 4, 30, TRIM, TS, axis="x")
     # catacomb stair -> ossuary
     opening(bp, 33, L1 + 1, 15, 34, L1 + 4, 17)
+    for z in (15, 16, 17):                                # the opening ate the last step of the flight
+        bp.stairs(33, L1 + 1, z, TS, "west")
     # grace -> arena (east), arena -> vault (west): 3 wide, 4 tall, deep portals
     opening(bp, cx + AR + 1, L2 + 1, cz - 1, 54, L2 + 4, cz + 1, TRIM, TS, axis="z")
     opening(bp, 18, L2 + 1, cz - 1, cx - AR - 1, L2 + 4, cz + 1, TRIM, TS, axis="z")

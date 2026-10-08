@@ -4,7 +4,7 @@ The fortress already fills the whole template height (top at y116 absolute), so 
 solid rock island between blueprint y=-14 (the template floor) and y=-2, sealed on every side against
 the lava sea it sits in. The route:
 
-  * the keep's secret vault (y=-6): a cracked block in the great-hall floor, a ladder down;
+  * the keep's secret vault (y=-6): a trapdoor in the great-hall floor, a ladder down;
   * level 1, the Bone Nave: a long ossuary of basalt with skull niches, a guard spawner and a side cache;
   * the Ember Stair down to level 2, the Magma Gallery: two lanes on either side of a lava channel
     behind iron bars, burnt ossuaries in the walls, a blaze spawner;
@@ -134,13 +134,13 @@ def _skull_niche(L, x, y, z, facing, k):
 
 # ------------------------------------------------------------------ the route
 def _vault_access(L):
-    """The keep's secret vault: a cracked block in the great-hall floor and a working ladder down.
+    """The keep's secret vault: a trapdoor flush with the great-hall floor and a working ladder down.
     (The keep's own corner shaft ends inside the corner turret's footing; it is filled in.)"""
     bp = L.bp
     for y in range(-2, 1):
         bp.set(-11, y, -19, PBB)
         bp.set(-11, y, -18, PBB)
-    bp.set(-6, 1, -18, CPBB)
+    bp.set(-6, 1, -18, "crimson_trapdoor[facing=south,half=top,open=false,powered=false,waterlogged=false]")
     L.air(-6, -6, -18, -6, 0, -18)
     bp.ladder(-6, -6, -18, 0, "south")
 

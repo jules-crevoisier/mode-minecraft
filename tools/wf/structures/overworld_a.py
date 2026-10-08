@@ -661,9 +661,10 @@ def guild_outpost(style):
                          crown=crown, floors_every=5, cone_h=11)
             dx = 1 if cx < 23 else -1
             dz = 1 if cz < 23 else -1
-            for k in (2, 3):
-                bp.set(cx + dx * k, 1, cz + dz * k, "air")
-                bp.set(cx + dx * k, 2, cz + dz * k, "air")
+            # diagonal doorway through the round wall, stepped so it is passable orthogonally
+            for (u, v) in ((2, 1), (2, 2), (3, 3)):
+                bp.set(cx + dx * u, 1, cz + dz * v, "air")
+                bp.set(cx + dx * u, 2, cz + dz * v, "air")
             if crown == "crenels":
                 banner_pole(bp, cx, top - 1, cz, banner, h=3, post=fence)
 
@@ -774,7 +775,8 @@ def guild_outpost(style):
         for u in (cx0, cx1):
             wall_lamp(bp, "south", cz1, u, 4, PGS_ST)
         # chimney stacks (west gable + north slope)
-        for (x0, z0, x1, z1) in ((hx0 - 2, 13, hx0 - 1, 15), (25, hz0 - 3, 26, hz0 - 2)):
+        # (the north stack is one deep so the lane between hall and curtain stays open to the NW tower)
+        for (x0, z0, x1, z1) in ((hx0 - 2, 13, hx0 - 1, 15), (25, hz0 - 2, 26, hz0 - 2)):
             for x in range(x0, x1 + 1):
                 for z in range(z0, z1 + 1):
                     for y in range(0, ridge + 3):
@@ -971,7 +973,7 @@ def guild_outpost(style):
                     bp.set(x, 0, z, "farmland[moisture=7]")
                     bp.set(x, 1, z, "wheat[age=7]")
         bp.set(15, 1, gdz0, "air")
-        wx, wz = 39, 39
+        wx, wz = 37, 38                     # well clear of the SE tower's doorway
         bp.fill(wx - 1, -4, wz - 1, wx + 1, 0, wz + 1, "cobblestone")
         bp.fill(wx, -3, wz, wx, 0, wz, "water")
         bp.fill(wx - 1, 1, wz - 1, wx + 1, 1, wz + 1, "mossy_cobblestone")
@@ -987,9 +989,10 @@ def guild_outpost(style):
         for (x, z) in ((6, 38), (7, 38), (41, 21), (40, 22)):
             bp.barrel(x, 1, z, "up")
         bp.set(8, 1, 38, "hay_block[axis=y]")
-        bp.set(6, 1, 40, "grindstone[face=floor,facing=north]")
-        bp.set(7, 1, 40, "smithing_table")
-        bp.set(8, 1, 40, "anvil[facing=east]")
+        bp.set(8, 0, 40, "polished_andesite")
+        bp.set(8, 1, 40, "grindstone[face=floor,facing=north]")    # clear of the SW tower's doorway
+        bp.set(9, 1, 40, "smithing_table")
+        bp.set(10, 1, 40, "anvil[facing=east]")
         rng = random.Random(5)
         for _ in range(60):
             x, z = rng.randint(5, 41), rng.randint(5, 41)
@@ -1078,8 +1081,9 @@ def monastery(bp):
     bp.set(16, 0, 21, "skeleton_skull[rotation=8]")
     bp.lantern(17, 3, 13, hanging=True, soul=True)
     bp.lantern(17, 3, 20, hanging=True, soul=True)
-    bp.ladder(17, 0, 10, 4, "south")
-    bp.set(17, P, 10, "spruce_trapdoor[facing=south,half=top,open=false,powered=false,waterlogged=false]")
+    # ladder up on a pier to a hatch in the choir platform (inside the apse, beside the altar)
+    bp.fill(15, 0, 11, 15, 3, 11, BASE.pick(15, 0, 11))
+    bp.ladder(15, 0, 12, 4, "south")
 
     # ---------------------------------------------------------- cathedral: aisles, nave, apse
     NX0, NX1, Z0, Z1 = 11, 23, 16, 46        # nave walls x, nave z range (facade at Z1)
@@ -1181,8 +1185,8 @@ def monastery(bp):
     bp.set(16, P + 3, 11, "candle[candles=4,lit=true,waterlogged=false]")
     bp.set(18, P + 3, 11, "candle[candles=4,lit=true,waterlogged=false]")
     bp.set(17, P + 2, 13, "lectern[facing=south,has_book=false,powered=false]")
-    bp.set(17, P + 1, 10, "spruce_trapdoor[facing=south,half=top,open=false,powered=false,waterlogged=false]")
-    bp.set(17, P, 10, "air")
+    bp.set(15, P + 1, 12, "spruce_trapdoor[facing=south,half=top,open=false,powered=false,waterlogged=false]")
+    bp.set(15, P, 12, "ladder[facing=south,waterlogged=false]")
     for x in (12, 22):
         for y in (P + 6, P + 7):
             bp.set(x, y, 13, f"purple_wall_banner[facing={'east' if x == 12 else 'west'}]")
@@ -1340,6 +1344,7 @@ def monastery(bp):
         bp.stairs(lx0 + 1 + i, P + 1 + i, lz1 - 3, "spruce_stairs", "east")
         bp.set(lx0 + 1 + i, P + 7, lz1 - 3, "air")
     bp.fill(lx0 + 1, P + 7, lz1 - 3, lx0 + 7, P + 8, lz1 - 3, "air")
+    bp.fill(lx0 + 6, P + 8, lz0 + 3, lx0 + 7, P + 8, lz0 + 3, "air")    # gap in the north rail at the stair head
     door_in(bp, "south", lz1, 45, P, "spruce")
 
     # east wing: dormitory, stone ground floor + half-timbered upper floor
@@ -1675,8 +1680,8 @@ def library(bp):
                 for d in range(1, 3):
                     for y in range(1, 6):
                         bp.set(x, y, zw + step * d, shelf if (x + y + d) % 5 else cshelf("east"))
-                    for y in range(GY1 + 1, GY1 + 4):
-                        bp.set(x, y, zw + step * d, shelf)
+                    for y in range(GY1 + 1, GY1 + 4):           # (one deep up there: the gallery runs past)
+                        bp.set(x, y, zw + step * d, shelf) if d == 1 else None
             if k == 3:                                  # reading alcove in each bay
                 bp.set(x, 1, zw + step, "dark_oak_fence")
                 bp.set(x, 2, zw + step, "dark_oak_pressure_plate[powered=false]")
@@ -1684,14 +1689,14 @@ def library(bp):
                 bp.lantern(x, GY1 - 1, zw + step, hanging=True)
                 bp.set(x, GY1 + 1, zw + step, "lectern[facing=%s,has_book=false,powered=false]" % OPPOSITE[f])
     # stairs to the galleries (west end) and ladders to the upper catwalks
+    # two side-by-side flights (x 17-18 north, x 19-20 south) that land on the gallery edges through a gap in
+    # the rail; they pass over each other's feet, so the way from the rotunda arch runs under them
     A.stair_run(bp, HX0 + 1, 1, HZ0 + 15, "north", GY1, 2, "dark_oak_stairs", fill=None, clear=3)
-    A.stair_run(bp, HX0 + 1, 1, HZ1 - 15, "south", GY1, 2, "dark_oak_stairs", fill=None, clear=3)
-    for z in range(HZ0 + 4, HZ0 + 16):
-        for x in (HX0 + 1, HX0 + 2):
-            bp.set(x, GY1, z, "air") if z > HZ0 + 4 else None
-    for z in range(HZ1 - 15, HZ1 - 3):
-        for x in (HX0 + 1, HX0 + 2):
-            bp.set(x, GY1, z, "air") if z < HZ1 - 4 else None
+    A.stair_run(bp, HX0 + 4, 1, HZ1 - 15, "south", GY1, 2, "dark_oak_stairs", fill=None, clear=3)
+    for x in (HX0 + 1, HX0 + 2):
+        bp.set(x, GY1 + 1, HZ0 + 4, "air")
+    for x in (HX0 + 3, HX0 + 4):
+        bp.set(x, GY1 + 1, HZ1 - 4, "air")
     for z in (HZ0 + 3, HZ1 - 3):
         bp.ladder(HX1 - 2, GY1 + 1, z, GY2 + 1, "west")
         bp.set(HX1 - 2, GY2, z, "ladder[facing=west,waterlogged=false]")
@@ -1833,7 +1838,8 @@ def library(bp):
                      plinth_stairs=BS, cornice_stairs=TS, sill=TS, glass=G2)
             for u in (a, b):
                 A.buttress(bp, face, line, u, 0, 26, T.pick(u, 1, line), TS, 2)
-            gwindow(bp, face, line, (a + b) // 2, 28, 4, "air", CGS, TS, w=3, sill=TS)
+            # open belvedere, glazed on the west where it would step out onto the hall roof
+            gwindow(bp, face, line, (a + b) // 2, 28, 4, G2 if face == "west" else "air", CGS, TS, w=3, sill=TS)
             for y in (12, 24):
                 for u in range(a, b + 1):
                     fset(bp, face, line, u, 1, y, stp(TS, OPPOSITE[face], "top"))
@@ -1852,10 +1858,9 @@ def library(bp):
             pinnacle(bp, x, TH + 1, z, "polished_tuff", R, h=3)
         spire2(bp, tcx, tcz, TH + 1, 4, R, steep=4, shape="octagon", tip=3)
         if secret:
-            # secret study: only reachable by breaking two bookshelves in the hall's south-east corner
+            # secret study: a narrow door hidden in the bookcases of the hall's south-east corner
             sx = tx0
-            bp.set(sx, 1, HZ1 - 2, shelf)
-            bp.set(sx, 2, HZ1 - 2, shelf)
+            bp.door(sx, 1, HZ1 - 2, "west", "dark_oak")
             bp.set(sx - 1, 1, HZ1 - 2, "air")
             bp.set(sx - 1, 2, HZ1 - 2, "air")
             for x in range(tx0 + 1, tx1):
@@ -2125,6 +2130,8 @@ def lighthouse(bp):
     bp.set(LX, WR, LZ - 3, "ladder[facing=south,waterlogged=false]")
     bp.set(LX, WR - 1, LZ - 3, "ladder[facing=south,waterlogged=false]")
     bp.set(LX - 1, WR - 1, LZ - 2, "air")
+    for z in range(LZ - 2, LZ + 2):                 # stairwell over the last turn of the spiral
+        bp.set(LX - 2, WR, z, "air")
     bp.chest(LX + 2, WR + 1, LZ, "west", LOOT + "lighthouse")
     bp.set(LX - 2, WR + 1, LZ, "cartography_table")
     bp.set(LX, WR + 1, LZ + 2, "lectern[facing=north,has_book=false,powered=false]")
@@ -2209,18 +2216,26 @@ def lighthouse(bp):
     bp.set(kx1 - 1, TOP + 6, kz1 - 1, "barrel[facing=up,open=false]")
     bp.set(kx0 + 1, TOP + 6, kz0 + 1, "chiseled_bookshelf[facing=south,slot_0_occupied=true,slot_1_occupied=false,"
            "slot_2_occupied=true,slot_3_occupied=false,slot_4_occupied=false,slot_5_occupied=true]")
-    for i in range(4):
+    for i in range(5):                              # the fifth step is set in the upper floor
         bp.stairs(kx0 + 2 + i, TOP + 1 + i, kz0 + 1, "spruce_stairs", "east")
     bp.fill(kx0 + 2, TOP + 5, kz0 + 1, kx0 + 5, TOP + 5, kz0 + 1, "air")
     bp.lantern(12, TOP + 8, -7, hanging=True)
-    # lean-to net shed on the east side
+    # lean-to net shed on the east side, entered from the kitchen; cottage and shed stand on a rock footing
+    # where they overhang the cliff edge
+    for x in range(kx0, kx1 + 4):
+        for z in range(kz0, kz1 + 1):
+            if x > kx1:
+                bp.set(x, TOP, z, "spruce_planks" if x > kx1 + 1 else "stone_bricks")
+            for y in range(-6, TOP):
+                bp.set(x, y, z, rock.pick(x, y, z), keep=True)
+    bp.door(kx1, TOP + 1, kz0 + 4, "east", "spruce")
     for z in range(kz0 + 1, kz1):
         bp.set(kx1 + 3, TOP + 1, z, "spruce_fence") if z in (kz0 + 1, kz1 - 1) else None
         bp.set(kx1 + 3, TOP + 2, z, "spruce_fence") if z in (kz0 + 1, kz1 - 1) else None
     lean_to(bp, "east", kx1 + 3, kz0, kz1, TOP + 3, 3, ROOF["spruce"])
     bp.barrel(kx1 + 1, TOP + 1, kz0 + 2, "up")
     bp.barrel(kx1 + 2, TOP + 1, kz0 + 2, "up")
-    bp.set(kx1 + 1, TOP + 1, kz0 + 4, "cobweb")
+    bp.set(kx1 + 2, TOP + 1, kz1 - 1, "cobweb")
 
     # ---------------------------------------------------------- waystone, garden, lamps on the plateau
     wx, wz = 10, 1
@@ -2308,6 +2323,9 @@ def lighthouse(bp):
             bp.set(x, 0, z, "spruce_planks")
             for y in range(1, 3):
                 bp.set(x, y, z, "air")
+    for z in range(0, 3):                           # steps out of the water: at the mouth and onto the landing
+        bp.set(-20, -1, z, "stone_brick_stairs[facing=west,half=bottom,shape=straight,waterlogged=true]")
+        bp.set(-16, -1, z, "stone_brick_stairs[facing=east,half=bottom,shape=straight,waterlogged=true]")
     bp.chest(-13, 1, 3, "west", LOOT + "lighthouse")
     bp.spawner(-15, 1, 1, "minecraft:drowned")
     bp.barrel(-13, 1, -1, "up")

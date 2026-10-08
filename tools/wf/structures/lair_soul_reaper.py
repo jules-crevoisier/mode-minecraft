@@ -260,9 +260,10 @@ def _bridge(bp, n, cx, cz):
                 if abs(x - cx) <= 1:
                     bp.set(x, yy, z, "air")
         for x in (cx - 2, cx + 2):
-            bp.set(x, y + 1, z, n.PBBW)
+            bp.set(x, y + 1, z, n.PBBW)         # a two-course balustrade: nobody climbs onto it and drops
+            bp.set(x, y + 2, z, n.PBBW)         # to the tower's corbel ledges under the overhang
             if (z - cz) % 3 == 0:
-                bp.set(x, y + 2, z, "soul_lantern[hanging=false,waterlogged=false]")
+                bp.set(x, y + 3, z, "soul_lantern[hanging=false,waterlogged=false]")
         bp.set(cx - 2, y - 1, z, stair(n.PBBS, "east", "top"))
         bp.set(cx + 2, y - 1, z, stair(n.PBBS, "west", "top"))
         bp.set(cx, y - 1, z, n.PBB if (z - cz) % 2 else stair(n.PBBS, "south", "top"))

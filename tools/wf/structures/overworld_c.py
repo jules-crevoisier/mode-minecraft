@@ -266,16 +266,17 @@ def _tower_upright(bp, ruined):
     k = 0
     while True:
         y = 1 + k // 2
-        if y > TW_EAVE - 2:
+        if y > TW_EAVE - 3:
             break
-        ang = 135 + k * 24
-        for rr in (4.0, 3.0):
-            x, z = at_angle(0, 0, ang, rr)
-            bp.set(x, y, z, slab("stone_brick_slab", "bottom" if k % 2 == 0 else "top"))
-            for c in range(1, 4):
-                n = bp.get(x, y + c, z)
-                if n and ("planks" in n or "log" in n):
-                    bp.set(x, y + c, z, "air")
+        # three sub-angles per tread: consecutive treads share an edge (no diagonal-only step to the next one)
+        for ang in (135 + k * 24, 143 + k * 24, 151 + k * 24):
+            for rr in (4.0, 3.0):
+                x, z = at_angle(0, 0, ang, rr)
+                bp.set(x, y, z, slab("stone_brick_slab", "bottom" if k % 2 == 0 else "top"))
+                for c in range(1, 4):
+                    n = bp.get(x, y + c, z)
+                    if n and ("planks" in n or "log" in n):
+                        bp.set(x, y + c, z, "air")
         k += 1
     # ---- rooms
     # ground floor: store room
@@ -457,10 +458,10 @@ def _guardhouse(bp, ruined, rng):
                     bp.set(x, y, z, "air")
         for x in range(-14, x1):
             for z in range(z0 + 1, z1):
-                if rng.random() < 0.45:
+                if rng.random() < 0.45 and z != z1 - 1:   # the boards along the ladder wall still hold
                     bp.set(x, 5, z, "air")
         bp.line((-15, 6, 4), (-11, 1, 6), log("dark_oak_log", "x"))
-        bp.line((-14, 9, 9), (-11, 2, 8), log("dark_oak_log", "x"))
+        bp.line((-14, 9, 8), (-11, 2, 8), log("dark_oak_log", "x"))
         for _ in range(14):
             x, z = rng.randint(-14, x1 - 1), rng.randint(z0 + 1, z1 - 1)
             if bp.get(x, 1, z) in (None, "minecraft:air"):
@@ -508,7 +509,8 @@ def watchtower(ruined):
             # broken top floor remnant hanging on the west side
             for x, z in ring_cells(0, 0, -1, TW_IN):
                 if x < -1:
-                    bp.set(x, 27, z, "spruce_planks")
+                    if full.get(x, 27, z) != "minecraft:air":   # keep the stairwell open
+                        bp.set(x, 27, z, "spruce_planks")
                 elif x < 2 and (x + z) % 3 == 0:
                     bp.set(x, 27, z, "air")
             bp.chest(-3, 28, 1, "east", LOOT + "watchtower")
@@ -688,8 +690,8 @@ def _bc_watchtower(bp, x0, z0, banner):
     for x, z in ((x0, z0), (x1, z0), (x0, z1), (x1, z1)):
         for y in range(-2, 13):
             bp.set(x, y, z, log("spruce_log"))
-    # cross bracing
-    for y0 in (2, 6):
+    # cross bracing (the low one at head height + 1: you walk in under it to reach the ladder)
+    for y0 in (3, 6):
         for x in range(x0 + 1, x1):
             bp.set(x, y0, z0, log("stripped_spruce_log", "x"))
             bp.set(x, y0, z1, log("stripped_spruce_log", "x"))
@@ -1164,7 +1166,7 @@ def rune_circle(bp):
         bp.set(x, 4, z, RUNE_LAMP)
         bp.set(x, 5, z, slab("brasshaven:polished_guild_stone_slab"))
 
-    # ---- the crypt: break the southern step of the dais to find the shaft
+    # ---- the crypt: a hatch in the southern step of the dais opens on the shaft
     cy = -11
     bp.room(-7, cy, -7, 7, cy + 7, 7, "deepslate_bricks", floor="deepslate_tiles", ceiling="deepslate_bricks")
     bp.fill(-8, cy - 1, -8, 8, cy + 8, 8, "stone", keep=True)
@@ -1194,7 +1196,8 @@ def rune_circle(bp):
         bp.set(0, y, 7, "air")
         bp.set(0, y, 8, "deepslate_bricks" if y < cy + 8 else "stone")
         bp.set(0, y, 7, "ladder[facing=north,waterlogged=false]")
-    bp.set(0, 1, 7, stair("polished_tuff_stairs", "north"))
+    # a worn hatch set into the southern step (a hidden shaft nobody could open stayed sealed for good)
+    bp.set(0, 1, 7, "dark_oak_trapdoor[facing=north,half=bottom,open=false,powered=false,waterlogged=false]")
     # central sarcophagus + guardian spawner + reliquary chest
     bp.fill(-1, cy + 1, -3, 1, cy + 1, 1, "polished_deepslate")
     bp.fill(-1, cy + 2, -3, 1, cy + 2, 1, slab("polished_deepslate_slab"))
@@ -1890,10 +1893,10 @@ def _gl_ship(rng):
     for y in range(1, 5):
         s.set(-2, y, 34, "ladder[facing=south,waterlogged=false]")
         s.set(-2, y + 4, 34, "ladder[facing=south,waterlogged=false]")
-    for y in range(1, 9):
+    for y in range(1, 10):
         s.set(-2, y, 33, "spruce_planks")
     s.set(-2, 5, 34, "ladder[facing=south,waterlogged=false]")
-    s.set(-2, 9, 34, "air")
+    s.set(-2, 9, 34, "ladder[facing=south,waterlogged=false]")   # through the hatch, up to deck level
     for z in (12, 20, 28, 34):
         s.lantern(3, 4, z, hanging=True)
         s.lantern(-3, 8, z, hanging=True)
@@ -2218,12 +2221,12 @@ def sunken_temple(bp):
         bp.set(ox, 17, oz, "sea_lantern")
         bp.set(ox, 18, oz, "prismarine_wall")
 
-    # ---- hidden vault under the rotunda (break the cracked tile north of the pedestal)
+    # ---- hidden vault under the rotunda (a sunken hatch north of the pedestal)
     vy = -7
     bp.room(-5, vy, -5, 5, -1, 5, "dark_prismarine", floor="prismarine_bricks", ceiling="prismarine_bricks")
     for y in range(vy + 1, 3):
         bp.set(0, y, -3, "air")
-    bp.set(0, 2, -3, "prismarine_slab[type=top,waterlogged=true]")
+    bp.set(0, 2, -3, "dark_oak_trapdoor[facing=south,half=top,open=false,powered=false,waterlogged=true]")
     bp.ladder(0, vy + 1, -3, 1, "south")
     bp.fill(0, vy + 1, -4, 0, 1, -4, "prismarine_bricks")
     bp.chest(-4, vy + 1, 0, "east", LOOT + "sunken_temple")
@@ -2375,9 +2378,9 @@ def _dm_gallery(bp, hy, start, direction, length, rng, end_loot=True, vault=Fals
             for w in (-1, 0, 1):
                 x, z = cx + px * w, cz + pz * w
                 bp.set(x, hy + 2, z, log("spruce_log", "z" if axis == "x" else "x"))
-            if k % 8 == 0:
-                bp.lantern(cx, hy + 1, cz, hanging=True)
-                bp.set(cx, hy + 2, cz, log("spruce_log", "z" if axis == "x" else "x"))
+            if k % 8 == 0 and k + 1 < length:
+                # in the next bay, at the cap height: between the posts only the centre lane is free to walk
+                bp.lantern(cx + dx, hy + 2, cz + dz, hanging=True)
         elif k % 4 in (1, 3):
             for w in (-1, 1):
                 x, z = cx + px * w, cz + pz * w
@@ -2408,7 +2411,7 @@ def _dm_gallery(bp, hy, start, direction, length, rng, end_loot=True, vault=Fals
         bp.set(x, hy, z, "gravel")
         bp.set(x, hy + 1, z, "gravel" if w else "air")
     if vault:
-        # secret: dig through the collapse to find the foreman's sealed strongroom
+        # secret: squeeze over the collapse to find the foreman's sealed strongroom
         for k in range(1, 5):
             for w in (-1, 0, 1):
                 for y in range(hy - 1, hy + 4):
@@ -2418,7 +2421,7 @@ def _dm_gallery(bp, hy, start, direction, length, rng, end_loot=True, vault=Fals
                     elif k > 1:
                         bp.set(x, y, z, "air")
                     else:
-                        bp.set(x, y, z, "gravel")
+                        bp.set(x, y, z, "gravel" if y == hy else "air")   # a squeeze over the scree
         vx, vz = ex + dx * 2, ez + dz * 2
         bp.set(vx + px, hy, vz + pz, "brasshaven:lithite_block")
         bp.set(vx - px, hy, vz - pz, "raw_gold_block")
@@ -2488,6 +2491,7 @@ def dwarven_mine(bp):
             if max(abs(x - sxx), abs(z - szz)) == 2:
                 bp.set(x, DM_UP + 1, z, "spruce_fence")
     bp.set(sxx, DM_UP + 1, szz + 2, "spruce_fence_gate[facing=south,in_wall=false,open=false,powered=false]")
+    bp.set(sxx, DM_UP + 1, szz - 2, "spruce_fence_gate[facing=north,in_wall=false,open=false,powered=false]")  # ladder top
     HT = DM_UP + 20
     legs = [((sxx - 3, szz - 3), (sxx - 1, szz - 1)), ((sxx + 3, szz - 3), (sxx + 1, szz - 1)),
             ((sxx - 3, szz + 3), (sxx - 1, szz + 1)), ((sxx + 3, szz + 3), (sxx + 1, szz + 1))]
@@ -2547,6 +2551,7 @@ def dwarven_mine(bp):
     wh.set(-15, 1, -14, "barrel[facing=up,open=false]")
     wh.set(-15, 1, -10, "lectern[facing=east,has_book=false,powered=false]")
     wh.lantern(-12, 3, -12, hanging=True)
+    wh.ladder(-13, 1, -14, 4, "south")          # up through the floor into the roof loft
     bp.paste(wh, 0, DM_UP, 0)
     bp.set(-8, DM_UP, -12, stair("spruce_stairs", "west"))
 
@@ -2589,11 +2594,15 @@ def dwarven_mine(bp):
                 if bp.get(x, y, z) is None or y > DM_UP:
                     bp.set(x, y, z, rng.choice(["gravel", "gravel", "andesite", "cobblestone", "tuff", "coarse_dirt"]))
     # ore bin + sorting table on the terrace
+    for x in range(4, 10):
+        for z in (szz - 4, szz - 3):
+            for y in range(DM_UP + 1, DM_UP + 4):
+                bp.set(x, y, z, "air")
     for x in range(5, 9):
         for z in (szz - 4, szz - 3):
             bp.barrel(x, DM_UP + 1, z, "up")
-    bp.set(6, DM_UP + 2, szz - 4, "raw_iron_block")
-    bp.set(7, DM_UP + 2, szz - 4, "coal_block")
+    bp.set(6, DM_UP + 2, szz - 3, "raw_iron_block")
+    bp.set(7, DM_UP + 2, szz - 3, "coal_block")
     bp.set(5, DM_UP + 1, szz + 3, "raw_copper_block")
     bp.set(6, DM_UP + 1, szz + 3, "raw_iron_block")
     bp.set(6, DM_UP + 2, szz + 3, "raw_gold_block")
@@ -2624,10 +2633,11 @@ def dwarven_mine(bp):
     bp.set(-20, 1, 7, "smoker[facing=east,lit=false]")
     bp.barrel(-20, 5, 8, "up")
     bp.set(-12, 5, 8, "crafting_table")
-    for x in range(-19, -16):
+    for x in range(-17, -14):
         bp.set(x, 4, 7, "air")
-    for i in range(3):
+    for i in range(4):
         bp.stairs(-17 + i, 1 + i, 7, "spruce_stairs", "east")
+    bp.ladder(-20, 5, 6, 8, "east")                # up into the attic
     bp.lantern(-15, 3, 5, hanging=True)
     bp.lantern(-15, 7, 5, hanging=True)
     for y in range(1, bridge + 3):
@@ -2764,8 +2774,9 @@ def dwarven_mine(bp):
         for y in range(hy, hy + 3):
             for w in (-1, 0, 1):
                 bp.set(x + (w if x == hx else 0), y, z + (w if z == hz else 0), "air")
-    bp.spawner(hx, hy, hz + 20, "minecraft:cave_spider")
-    bp.spawner(hx - 20, hy, hz, MOB["ruin_walker"])
+    # in a side lane between two post bays: the centre lane (the only one past the posts) stays free
+    bp.spawner(hx - 1, hy, hz + 18, "minecraft:cave_spider")
+    bp.spawner(hx - 18, hy, hz - 1, MOB["ruin_walker"])
     # ---- the dwarves who came back to the mine (wf/denizens.py) work up top; the deep galleries below belong to the
     # monsters
     surface = ((-60, 1, -60), (60, 60, 60))

@@ -423,7 +423,14 @@ def great_hall(bp):
             bp.set(side * 4, TER + 1, z, POL_WALL)
             bp.set(side * 4, TER + 2, z, POL_WALL)
             bp.lantern(side * 4, TER + 3, z)
-    # steps up to the throne room
+
+
+def throne_steps(bp):
+    """Steps from the great hall up to the throne room doorway (after the throne room: its masonry shell reaches
+    into the back of the hall)."""
+    for x in range(-5, 6):
+        for y in range(TER + 1, 17):
+            bp.set(x, y, HALL_Z1 + 1, "air")
     for x in range(-3, 4):
         bp.set(x, TER + 1, HALL_Z1 + 2, stair(BRK_ST, "north"))
         bp.set(x, TER + 2, HALL_Z1 + 1, stair(BRK_ST, "north"))
@@ -867,11 +874,10 @@ def tavern(bp):
             bp.set(x, 1, z + 1, stair("dark_oak_stairs", "south"))
         for x in (19, 22, 24):
             bp.set(x, 2, z, "candle[candles=3,lit=true,waterlogged=false]")
-    for z in range(4, 15):
-        bp.set(28, 1, z, "barrel[facing=west,open=false]")
-        bp.set(29, 1, z, "barrel[facing=up,open=false]")
+    for z in range(4, 15):                      # the barrel wall behind the bar (one deep: every cask can be tapped)
+        bp.set(29, 1, z, "barrel[facing=west,open=false]")
         bp.set(29, 2, z, "barrel[facing=west,open=false]")
-    bp.barrel(28, 2, 9, "up", loot=LOOT + "dwarven_city")
+    bp.barrel(28, 1, 9, "up", loot=LOOT + "dwarven_city")
     for x in range(26, 27):
         for z in range(5, 14):
             bp.set(x, 1, z, "polished_deepslate_slab[type=top,waterlogged=false]" if z != 9 else "air")
@@ -1047,6 +1053,7 @@ def dwarven_city(bp):
     cavern(bp)
     great_hall(bp)
     throne_room(bp)
+    throne_steps(bp)
     vault(bp)
     secret_way(bp)
     gate(bp)

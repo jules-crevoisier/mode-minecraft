@@ -251,10 +251,10 @@ def tower(bp):
     for face in SIDES:
         for u in (-1, 0, 1):
             x, z = _face_xz(face, u, 0)
-            for dy in (1, 2):
+            for dy in (1, 2, 3):
                 bp.set(x, by + dy, z, "air")
         x, z = _face_xz(face, 0, 0)
-        bp.set(x, by + 3, z, GEAR)
+        bp.set(x, by + 4, z, GEAR)
         # brackets under the balcony
         for u in (-T - 2, 0, T + 2):
             bx, bz = _face_xz(face, u, 2) if abs(u) < T else _face_xz(face, u, 1)
@@ -281,6 +281,8 @@ def tower(bp):
     for x in range(-T, T + 1):
         for z in range(-T, T + 1):
             bp.set(x, top, z, IRON)
+            if max(abs(x), abs(z)) <= 2 and (x, z) != (0, 0):
+                bp.set(x, BELFRY, z, "air")     # the spiral stair comes up through the belfry floor
     bp.set(0, top - 1, 0, "bell[attachment=ceiling,facing=north,powered=false]")
     bp.set(0, top - 2, 0, "air")
     bp.set(2, top - 1, 2, W + "brass_chandelier")

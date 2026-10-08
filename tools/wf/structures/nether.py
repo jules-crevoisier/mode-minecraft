@@ -174,8 +174,8 @@ def spike(bp, cx, cz, y, r, block="blackstone", stairs=BS, steep=3, round_=True,
                         bp.set(x, yy, z, lamp)
                     elif edge:
                         bp.set(x, yy, z, band if (band and i == 0 and k == 0) else block)
-                    elif k == 0:
-                        bp.set(x, yy, z, block)
+                    else:
+                        bp.set(x, yy, z, block)     # solid core: no sealed cavity inside the cone
             yy += 1
         rr -= 1
         i += 1
@@ -497,7 +497,7 @@ def _keep(bp):
                     ridge=GILD, dormers=3, dormer_stairs=PBBS, dormer_wall=EB)
     round_tower(bp, 0, -10, top, 24, 5, base=0, steep=3, slit_seed=99, door_to=(-12, -10))
     # a ladder from the war room up through the ceiling into the roof space and the spire's door
-    bp.ladder(-11, 20, -10, top + 1, "east")
+    bp.ladder(-11, 20, -10, top, "east")
     # lavafalls from the front turrets into basins
     for sx in (-1, 1):
         tx = sx * 12
@@ -558,8 +558,10 @@ def _keep(bp):
     bp.chest(-9, 2, -3, "north", LOOT + "basalt_fortress")
     bp.spawner(0, 2, -10, MOB["basalt_guard"])
     # stairs to the upper floors
-    arch.stair_run(bp, 10, 2, -2, "north", 9, 1, PBBS, fill=PBB, clear=3)
-    arch.stair_run(bp, -10, 11, -17, "south", 9, 1, PBBS, fill=PBB, clear=3)
+    # (climbing south: its foot opens on the east aisle, its head lands clear of the corner turret's footing)
+    arch.stair_run(bp, 10, 2, -12, "south", 9, 1, PBBS, fill=PBB, clear=3)
+    # (foot one step clear of the north-west turret's ribs, so it is entered from the aisle)
+    arch.stair_run(bp, -10, 11, -16, "south", 9, 1, PBBS, fill=PBB, clear=3)
     # armory / barracks floor (y=10)
     for x in range(-8, 9, 2):
         bp.entity(x, 11, -19, {"id": "minecraft:armor_stand", "Rotation": [0.0, 0.0]})
@@ -686,6 +688,8 @@ def _lean_hall(bp, x0, x1, z0, z1, door_face, kind):
     arch.steep_roof(bp, x0, z0, x1, z1, 9, BS, axis="z", overhang=1, steep=2, fill=PBB, under=PBBS, ridge=GILD)
     mid = (z0 + z1) // 2
     arch.arch_door(bp, face, line, mid, 0, width=3, height=4, trim=CHIS, stairs=PBBS)
+    # back door in the south gable: the only way into the yard behind (corner tower, gatehouse flank)
+    arch.arch_door(bp, "south", z1, (x0 + x1) // 2, 0, width=3, height=4, trim=CHIS, stairs=PBBS)
     inner_x = x1 - 1 if face == "west" else x0 + 1
     if kind == "barracks":
         for z in range(z0 + 2, z1 - 1, 3):
@@ -709,6 +713,10 @@ def _lean_hall(bp, x0, x1, z0, z1, door_face, kind):
         bp.set(cxh + 1, 23, z1 - 2, "campfire[facing=north,lit=true,signal_fire=true,waterlogged=false]")
         for z in (z0 + 4, z1 - 6):
             bp.lantern((x0 + x1) // 2, 8, z, hanging=True)
+        # service ladder up the curtain's inner face, through the roof, to the wall-walk
+        lx = x1 if face == "west" else x0
+        bp.ladder(lx, 1, z0 + 7, F_H, face)
+        bp.set(lx, F_H + 1, z0 + 7, "air")      # a gap in the inner rail
 
 
 def basalt_fortress(bp):
@@ -733,9 +741,12 @@ def basalt_fortress(bp):
     _gatehouse(bp)
     # stair up to the west wall-walk
     arch.stair_run(bp, -20, 1, -25, "east", 20, 1, PBBS, fill=PBB, clear=3)
+    bp.set(0, 20, -25, PBB)         # landing at its head, through the inner rail onto the wall-walk
+    bp.set(0, 21, -25, "air")
     _keep(bp)
-    _lean_hall(bp, -25, -17, 4, 22, "east", "barracks")
-    _lean_hall(bp, 17, 25, 4, 22, "west", "forge")
+    # (z0=5: a 2-wide lane at z=3..4 runs between the halls and the keep's corner turrets to the side yards)
+    _lean_hall(bp, -25, -17, 5, 22, "east", "barracks")
+    _lean_hall(bp, 17, 25, 5, 22, "west", "forge")
     # courtyard braziers
     for z in (6, 12, 18):
         for x in (-4, 4):
@@ -972,6 +983,11 @@ def chain_bridge(bp):
     bp.clear(0, -7, zm, 0, -5, zm)
     bp.chest(0, -7, zm, "north", LOOT + "chain_bridge")
     bp.set(0, -9, zm, LAMP)
+    # ... reached by a hatch in the deck and a ladder down a hanger post, through the cage lid
+    bp.set(0, 0, zm, "dark_oak_trapdoor[facing=north,half=top,open=false,powered=false,waterlogged=false]")
+    for y in range(-6, 0):
+        bp.set(0, y, zm - 1, PBB)
+    bp.ladder(0, -6, zm, -1, "south")
     # mid-span lookout with braziers
     for sx in (-1, 1):
         bp.set(sx * 6, 0, zm, stair(PBBS, "west" if sx > 0 else "east", "top"))
@@ -1341,7 +1357,8 @@ def piglin_sanctuary(bp):
         z = 29 - i
         for x in range(-4, 5):
             for y in range(-1, i):
-                bp.set(x, y, z, TEMPLE.pick(x, y, z), keep=True)
+                if (bp.get(x, y, z) or "air").endswith("air"):     # solid under the flight (no sealed hollow)
+                    bp.set(x, y, z, TEMPLE.pick(x, y, z))
             if x == 0 and i % 3 == 0:
                 bp.set(x, i, z, stair("polished_blackstone_stairs", "north"))
         for x in (-5, 5):
@@ -1363,6 +1380,12 @@ def piglin_sanctuary(bp):
     for x in (-6, 6):
         bp.set(x, ys + 3, 3, LAMP)
     piglin_idol(bp, ys + 5, zc=-3)
+    # close the hollow under the idol's belly, between its legs and hands (a sealed pocket nobody reaches)
+    for x in (-4, -3, 3, 4):
+        for z in range(-6, 0):
+            for y in (ys + 23, ys + 24):
+                if bp.get(x, y, z) is None and bp.get(x, ys + 25, z):
+                    bp.set(x, y, z, GOLD.pick(x, y, z))
     bp.fill(-3, ys, 5, 3, ys, 6, GBS)
     bp.fill(-2, ys + 1, 5, 2, ys + 1, 5, "gold_block")
     bp.chest(0, ys + 1, 6, "south", LOOT + "piglin_sanctuary")
@@ -1409,11 +1432,11 @@ def piglin_sanctuary(bp):
     bp.spawner(0, 0, -6, "minecraft:piglin")
     for (x, z) in ((-5, 5), (5, 5), (-5, -5), (5, -5)):
         chandelier(bp, x, 9, z, drop=2)
-    # hidden vault inside the third tier, reached by a ladder under a cracked slab on the summit
+    # hidden vault inside the third tier, reached by a ladder under a trapdoor flush with the summit paving
     bp.room(2, 13, 2, 8, 17, 8, PBB, floor=GBS, ceiling=PBB)
-    bp.set(6, ys - 1, 5, CPBB)
+    bp.set(6, ys - 1, 5, "crimson_trapdoor[facing=south,half=top,open=false,powered=false,waterlogged=false]")
     bp.clear(6, 14, 5, 6, ys - 2, 5)
-    bp.ladder(6, 17, 5, ys - 2, "south")
+    bp.ladder(6, 14, 5, ys - 2, "south")
     bp.chest(3, 14, 7, "east", LOOT + "piglin_sanctuary")
     bp.fill(4, 14, 7, 5, 14, 7, "gold_block")
     bp.set(3, 14, 3, "soul_lantern[hanging=false,waterlogged=false]")
@@ -1478,7 +1501,7 @@ def chimney(bp, cx, cz, h, seed=0):
     step = int(h * 0.55)
     for y in range(4, h + 1):
         r = 3 if y < step else 2
-        bp.disk(cx, y, cz, r - 1, "air")
+        bp.disk(cx, y, cz, r - 1, "nether_bricks")     # solid masonry core (a hollow flue is a sealed void)
         for (x, z) in ring_cells(cx, cz, r, inner=0.8):
             bp.set(x, y, z, "nether_bricks" if y % 7 == 0 else CLAY.pick(x, y, z))
         if y % 7 == 3:
@@ -1693,7 +1716,8 @@ def lava_foundry(bp):
     bp.set(mx, 32, mz, "lightning_rod[facing=up,powered=false,waterlogged=false]")
     hx = mx - 22
     bp.chain(hx, 10, mz, 25)
-    bp.fill(hx - 1, 8, mz - 1, hx + 1, 9, mz + 1, "barrel[facing=up,open=false]")
+    bp.fill(hx - 1, 8, mz - 1, hx + 1, 9, mz + 1, "stripped_spruce_wood[axis=y]")      # a strapped cargo crate
+    bp.fill(hx - 1, 9, mz - 1, hx + 1, 9, mz + 1, "spruce_planks")
     bp.fill(hx - 1, 7, mz - 1, hx + 1, 7, mz + 1, PBB)
     bp.lantern(hx, 6, mz, hanging=True)
     # smugglers' cache hanging under the pier, reached through a hatch
@@ -1722,7 +1746,7 @@ def lava_foundry(bp):
                     under="nether_brick_stairs", ridge=slab(CUSL))
     arch.arch_door(bp, "south", oz1, 17, 0, width=1, height=3, trim=PBAS, stairs=PBBS)
     bp.door(17, 1, oz1, "south", "crimson")
-    arch.stair_run(bp, ox1 - 1, 1, oz1 - 1, "north", 4, 1, "spruce_stairs", clear=3)
+    arch.stair_run(bp, ox1 - 1, 1, oz1 - 1, "north", 5, 1, "spruce_stairs", clear=3)
     for x in range(ox0 + 1, ox1 - 1, 2):
         bp.set(x, 1, oz0 + 1, "iron_block" if x % 4 == 1 else "gold_block")
         bp.barrel(x + 1, 1, oz0 + 1, "up")
@@ -1795,8 +1819,9 @@ def bone_buttresses(bp, cx, cz, n, y0, y1, twist, flare, seed=0):
         bp.set(prev[0], y1, prev[1], "wither_skeleton_skull[rotation=%d]" % ((k * 3) % 16))
 
 
-def ghost_balcony(bp, cx, cz, y, ang_deg, depth=3, spread=40, loot=None):
-    """Half-moon balcony on corbels: slab floor, wall rail, soul lantern posts, hanging lanterns."""
+def ghost_balcony(bp, cx, cz, y, ang_deg, depth=3, spread=40, loot=None, rail_h=1):
+    """Half-moon balcony on corbels: slab floor, wall rail (``rail_h`` courses: 2 keeps players from
+    climbing onto it and dropping to the ledges below), soul lantern posts, hanging lanterns."""
     r = st_r(y)
     a0 = math.radians(ang_deg)
     cells = []
@@ -1811,9 +1836,10 @@ def ghost_balcony(bp, cx, cz, y, ang_deg, depth=3, spread=40, loot=None):
         bp.set(x, y - 1, z, stair(PBBS, toward(cx, cz, x, z), "top"))
         outer = d > r + depth - 0.6 or da > math.radians(spread - 9)
         if outer:
-            bp.set(x, y + 1, z, PBBW)
+            for k in range(1, rail_h + 1):
+                bp.set(x, y + k, z, PBBW)
             if (x + z) % 4 == 0:
-                bp.set(x, y + 2, z, "soul_lantern[hanging=false,waterlogged=false]")
+                bp.set(x, y + rail_h + 1, z, "soul_lantern[hanging=false,waterlogged=false]")
             if (x * 3 + z) % 5 == 0:
                 bp.chain(x, y - 3, z, y - 2)
                 bp.lantern(x, y - 4, z, hanging=True, soul=True)
@@ -1933,7 +1959,7 @@ def soul_tower(bp):
     bone_buttresses(bp, cx, cz, 6, -3, ST_TOP - 6, twist=4.0, flare=5.0)
     # ---------------- ghostly balconies
     ghost_balcony(bp, cx, cz, 24, 40, depth=4, spread=45)
-    ghost_balcony(bp, cx, cz, 40, 200, depth=4, spread=45, loot=LOOT + "soul_tower")
+    ghost_balcony(bp, cx, cz, 40, 200, depth=4, spread=45, loot=LOOT + "soul_tower", rail_h=2)
     ghost_balcony(bp, cx, cz, 48, 310, depth=3)
     # ---------------- crown of spikes around a needle spire
     top = ST_TOP
@@ -2021,10 +2047,9 @@ def soul_tower(bp):
         bp.disk(cx, y, cz, 5, "air")
     bp.disk(cx, -1, cz, 6, PBB)
     bp.set(cx, -5, cz, BONE)
-    bp.set(cx + 4, 0, cz - 4, CPBB)
-    bp.clear(cx + 4, -4, cz - 4, cx + 4, -1, cz - 4)
-    bp.ladder(cx + 4, -5, cz - 3, -1, "south")
-    bp.set(cx + 4, -5, cz - 4, "air")
+    # reached by a trapdoor in the ground floor and a ladder down the ossuary wall
+    bp.set(cx, 0, cz - 5, "crimson_trapdoor[facing=south,half=top,open=false,powered=false,waterlogged=false]")
+    bp.ladder(cx, -5, cz - 5, -1, "south")
     bp.chest(cx - 3, -5, cz + 3, "north", LOOT + "soul_tower")
     for (x, z) in ((cx - 4, cz), (cx + 4, cz + 2), (cx, cz - 4)):
         bp.set(x, -5, z, "soul_lantern[hanging=false,waterlogged=false]")
@@ -2189,7 +2214,7 @@ def piglin_market(bp):
         for sz in (-1, 1):
             x0, z0 = (I if sx > 0 else -H), (I if sz > 0 else -H)
             sq_tower(bp, x0, z0, x0 + H - I, z0 + H - I, 0, 15, TEMPLE, base=-4, steep=2, roof_block=RNB,
-                     roof_stairs=RNBS, floors_every=5)
+                     roof_stairs=RNBS, floors_every=5, door_to=(0, z0 + (H - I) // 2))   # opens on its arcade
     # ---------------- gate towers with pointed arch passages and red spires
     for face in ("north", "south", "east", "west"):
         line = H if face in ("south", "east") else -H
@@ -2276,13 +2301,10 @@ def piglin_market(bp):
                 bp.set(x, 1, z, PBBW if z % 2 else "gold_block")
     bp.chest(-2, 1, -2, "south", LOOT + "piglin_market")
     bp.spawner(2, 1, -1, "minecraft:piglin")
-    # hidden treasury under the tower
-    bp.set(2, 0, 2, CPBB)
-    bp.clear(2, -4, 2, 2, -1, 2)
-    bp.ladder(2, -5, 1, -1, "south")
+    # hidden treasury under the tower: a trapdoor in the floor, a ladder down the vault's east wall
     bp.room(-4, -6, -4, 4, -1, 4, PBB, floor=GBS, ceiling=PBB)
-    bp.set(2, -1, 2, "air")
-    bp.set(2, -1, 1, "ladder[facing=south,waterlogged=false]")
+    bp.set(3, 0, 0, "crimson_trapdoor[facing=west,half=top,open=false,powered=false,waterlogged=false]")
+    bp.ladder(3, -5, 0, -1, "west")
     bp.chest(-3, -5, -3, "south", LOOT + "piglin_market")
     bp.fill(-3, -5, 3, 3, -5, 3, "gold_block")
     bp.fill(-2, -4, 3, 2, -4, 3, "raw_gold_block")

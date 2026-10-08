@@ -37,7 +37,7 @@
               60,
               26
             ],
-            "blocks": 11080
+            "blocks": 11053
           },
           {
             "location": "brasshaven:sand_hypogeum/layout_0/x0_z2",
@@ -51,7 +51,7 @@
               53,
               25
             ],
-            "blocks": 8649
+            "blocks": 8721
           },
           {
             "location": "brasshaven:sand_hypogeum/layout_0/x1_z0",
@@ -79,7 +79,7 @@
               60,
               26
             ],
-            "blocks": 15953
+            "blocks": 15876
           },
           {
             "location": "brasshaven:sand_hypogeum/layout_0/x1_z2",
@@ -135,7 +135,7 @@
               41,
               25
             ],
-            "blocks": 11564
+            "blocks": 11636
           }
         ],
         "projection": "rigid",
@@ -185,7 +185,7 @@
               43,
               26
             ],
-            "blocks": 11943
+            "blocks": 12015
           },
           {
             "location": "brasshaven:sand_hypogeum/layout_1/x0_z2",
@@ -227,7 +227,7 @@
               57,
               26
             ],
-            "blocks": 17003
+            "blocks": 16926
           },
           {
             "location": "brasshaven:sand_hypogeum/layout_1/x1_z2",
@@ -269,7 +269,7 @@
               56,
               26
             ],
-            "blocks": 9770
+            "blocks": 9742
           },
           {
             "location": "brasshaven:sand_hypogeum/layout_1/x2_z2",
@@ -283,7 +283,7 @@
               60,
               25
             ],
-            "blocks": 7348
+            "blocks": 7420
           }
         ],
         "projection": "rigid",
@@ -333,7 +333,7 @@
               60,
               21
             ],
-            "blocks": 9246
+            "blocks": 9244
           },
           {
             "location": "brasshaven:sand_hypogeum/layout_2/x0_z2",
@@ -375,7 +375,7 @@
               60,
               21
             ],
-            "blocks": 10437
+            "blocks": 10341
           },
           {
             "location": "brasshaven:sand_hypogeum/layout_2/x1_z2",
@@ -389,7 +389,7 @@
               53,
               22
             ],
-            "blocks": 11809
+            "blocks": 11845
           },
           {
             "location": "brasshaven:sand_hypogeum/layout_2/x2_z0",
@@ -403,7 +403,7 @@
               47,
               22
             ],
-            "blocks": 10619
+            "blocks": 10655
           },
           {
             "location": "brasshaven:sand_hypogeum/layout_2/x2_z1",
@@ -417,7 +417,7 @@
               60,
               21
             ],
-            "blocks": 9052
+            "blocks": 9086
           },
           {
             "location": "brasshaven:sand_hypogeum/layout_2/x2_z2",
@@ -431,7 +431,7 @@
               48,
               22
             ],
-            "blocks": 11100
+            "blocks": 11136
           }
         ],
         "projection": "rigid",

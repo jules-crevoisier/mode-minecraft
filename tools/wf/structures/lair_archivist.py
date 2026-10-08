@@ -1,6 +1,6 @@
 """Lair of the Archivist, under the Forgotten Library.
 
-The library had nothing underground. Its secret study (the south tower, reached by breaking two bookshelves)
+The library had nothing underground. Its secret study (the south tower, behind a door hidden in the bookcases)
 now hides a stair in its floor:
 
 * the stair winds down a square shaft in the tower's foundations to level 1 (floor y = LA1): a buried

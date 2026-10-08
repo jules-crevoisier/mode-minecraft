@@ -23,7 +23,7 @@
               78,
               25
             ],
-            "blocks": 11500
+            "blocks": 11668
           },
           {
             "location": "brasshaven:chain_bridge/bridge/x0_z1",
@@ -65,7 +65,7 @@
               88,
               25
             ],
-            "blocks": 12205
+            "blocks": 12457
           },
           {
             "location": "brasshaven:chain_bridge/bridge/x1_z0",
@@ -79,7 +79,7 @@
               78,
               25
             ],
-            "blocks": 12142
+            "blocks": 12310
           },
           {
             "location": "brasshaven:chain_bridge/bridge/x1_z1",
@@ -93,7 +93,7 @@
               49,
               25
             ],
-            "blocks": 1778
+            "blocks": 1781
           },
           {
             "location": "brasshaven:chain_bridge/bridge/x1_z2",
@@ -121,7 +121,7 @@
               88,
               25
             ],
-            "blocks": 12749
+            "blocks": 13001
           }
         ],
         "projection": "rigid",

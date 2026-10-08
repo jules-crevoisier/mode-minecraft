@@ -79,7 +79,7 @@
               109,
               28
             ],
-            "blocks": 34815
+            "blocks": 34782
           },
           {
             "location": "brasshaven:clockwork_citadel/citadel/x1_z2",
@@ -107,7 +107,7 @@
               52,
               29
             ],
-            "blocks": 8075
+            "blocks": 8079
           },
           {
             "location": "brasshaven:clockwork_citadel/citadel/x2_z1",
@@ -121,7 +121,7 @@
               30,
               28
             ],
-            "blocks": 13734
+            "blocks": 13729
           },
           {
             "location": "brasshaven:clockwork_citadel/citadel/x2_z2",
@@ -135,7 +135,7 @@
               61,
               22
             ],
-            "blocks": 5531
+            "blocks": 5545
           }
         ],
         "projection": "rigid",

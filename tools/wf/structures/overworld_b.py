@@ -143,7 +143,9 @@ def _gable(bp, x0, z0, x1, z1, y, stairs, full, gable, axis="x", overhang=1, ste
 def _bridge(bp, a, b, wood, sag=1, width=3, rail="fence", posts=5, clear_leaves=True, slab_block=None,
             edge=None, post=None, under=True, piles=None, soul=False, gaps=0.0, seed=0):
     """Bridge from deck block a to deck block b ((x, y, z)), sagging in the middle. The walking surface
-    is quantised to half blocks (bottom/top slabs) so slopes need no jumping. rail: 'fence' or 'chain'."""
+    is quantised to half blocks (bottom/top slabs) so slopes need no jumping. rail: 'fence' or 'chain'.
+    Where a slanting bridge shifts sideways, a connecting deck cell keeps the walkway continuous (the rail of
+    one step never lands on the deck of the next)."""
     (ax, ay, az), (bx, by, bz) = a, b
     n = max(abs(bx - ax), abs(bz - az), 1)
     along_x = abs(bx - ax) >= abs(bz - az)
@@ -152,6 +154,7 @@ def _bridge(bp, a, b, wood, sag=1, width=3, rail="fence", posts=5, clear_leaves=
     edge = edge or f"{wood}_planks"
     post = post or f"{wood}_fence"
     rng = random.Random(seed)
+    steps = []
     for i in range(n + 1):
         t = i / n
         x = round(ax + (bx - ax) * t)
@@ -161,15 +164,31 @@ def _bridge(bp, a, b, wood, sag=1, width=3, rail="fence", posts=5, clear_leaves=
             y, kind = int(q) - 1, "top"
         else:
             y, kind = int(math.floor(q)), "bottom"
-        for w in range(-half - 1, half + 2):
-            px, pz = (x, z + w) if along_x else (x + w, z)
-            if clear_leaves:
+        steps.append((i, x, z, y, kind))
+
+    def at(x, z, w):
+        return (x, z + w) if along_x else (x + w, z)
+
+    deck = {}
+    prev = None
+    for (i, x, z, y, kind) in steps:
+        for w in range(-half, half + 1):
+            deck[at(x, z, w)] = (y, kind, i)
+        if prev is not None and (prev[2] != z if along_x else prev[1] != x):
+            for w in range(-half, half + 1):     # sideways shift: a deck cell beside the previous step
+                deck.setdefault(at(x, prev[2], w) if along_x else at(prev[1], z, w), (y, kind, i))
+        prev = (i, x, z, y, kind)
+    if clear_leaves:
+        for (i, x, z, y, kind) in steps:
+            for w in range(-half - 1, half + 2):
+                px, pz = at(x, z, w)
                 _strip_leaves(bp, px, y, pz, px, y + 3, pz)
-            if abs(w) <= half:
-                if gaps and 0 < i < n and rng.random() < gaps:
-                    continue                      # rotten plank
-                bp.set(px, y, pz, slab(sb, kind))
-                continue
+    for (i, x, z, y, kind) in steps:
+        for w in (-half - 1, half + 1):
+            px, pz = at(x, z, w)
+            cur = bp.get(px, y, pz)
+            if (px, pz) in deck or (cur and (cur.endswith("_planks") or cur.endswith("_slab"))):
+                continue                          # never a rail on the walkway, a porch or a deck it meets
             bp.set(px, y, pz, edge)
             if rail == "chain":
                 bp.set(px, y + 1, pz, f"iron_chain[axis={'x' if along_x else 'z'},waterlogged=false]")
@@ -184,12 +203,26 @@ def _bridge(bp, a, b, wood, sag=1, width=3, rail="fence", posts=5, clear_leaves=
                 elif under:
                     bp.chain(px, y - 2, pz, y - 1)
                     bp.lantern(px, y - 3, pz, hanging=True, soul=soul)
+    for (px, pz), (y, kind, i) in deck.items():
+        if gaps and 0 < i < n and rng.random() < gaps:
+            if width > 1:
+                continue                          # rotten plank (a 1-wide walkway keeps its planks: moss)
+            bp.set(px, y, pz, slab(sb, kind))
+            if kind == "bottom":
+                bp.set(px, y + 1, pz, "moss_carpet")
+            continue
+        bp.set(px, y, pz, slab(sb, kind))
+        for yy in (y + 1, y + 2):                 # nothing of the rails or the scenery over the walkway
+            cur = bp.get(px, yy, pz)
+            if cur and (cur.endswith("_fence") or "chain" in cur):
+                bp.remove(px, yy, pz)
     return n
 
 
 def _cabin(bp, cx, cz, y, w, d, wood, roof_stairs, roof_full, door, *, axis=None, steep=1, seed=0,
-           interior=None, loot=None, frame=None):
-    """Timber cabin (floor at y) with log frame, framed windows and a steep overhanging roof."""
+           interior=None, loot=None, frame=None, sills=True):
+    """Timber cabin (floor at y) with log frame, framed windows and a steep overhanging roof.
+    sills=False: no stair sill / flower pot outside the windows (cabins ringed by a narrow walkway)."""
     rng = random.Random(seed)
     x0, z0 = cx - w // 2, cz - d // 2
     x1, z1 = x0 + w - 1, z0 + d - 1
@@ -215,6 +248,8 @@ def _cabin(bp, cx, cz, y, w, d, wood, roof_stairs, roof_full, door, *, axis=None
         if face == door:
             continue
         bp.fill(wx, y + 2, wz, wx, y + 3, wz, "glass_pane")
+        if not sills:
+            continue
         ox, oz = arch.FACE_VEC[face]
         bp.set(wx + ox, y + 1, wz + oz, stair(f"{wood}_stairs", arch.OPPOSITE[face], "top"))
         if rng.random() < 0.6:
@@ -395,7 +430,7 @@ def giant_tree(v):
             x, z = _polar(4.6, ang)
             bp.set(x, 1, z, "moss_carpet", keep=True)
         # floor 1: bunk room; floor 2: library; floor 3: map room
-        for i, ang in enumerate((200, 250, 300)):
+        for i, ang in enumerate((215, 250, 300)):
             x, z = _polar(4.3, ang)
             bp.bed(x, LEVELS[0] + 1, z, _card(-x, -z), ["green", "lime", "brown"][i])
         for ang in range(0, 360, 18):
@@ -440,6 +475,7 @@ def giant_tree(v):
                 for z in range(-8, 9):
                     if math.hypot(x, z) <= inner and bp.get(x, y, z) == f"minecraft:{v['wood']}":
                         bp.set(x, y, z, "air")
+        bp.spiral_stairs(0, 0, 1, TOP, 2, f"{deck}_slab")   # re-lay the steps the limbs swallowed
         # central leader up to the crow's nest
         for y in range(TOP - 2, 77):
             for x in range(-1, 2):
@@ -529,7 +565,7 @@ def giant_tree(v):
                interior="bed", axis="z")
         bp.barrel(hx + 1, LEVELS[1] + 1, hz + 2, "up", LOOT + "giant_tree")
         hx, hz = _polar(12.5, 190)
-        _cabin(bp, hx, hz, LEVELS[2], 5, 5, deck, v["roof"] + "_stairs", v["roof_full"], "north", steep=2, seed=3,
+        _cabin(bp, hx, hz, LEVELS[2], 5, 5, deck, v["roof"] + "_stairs", v["roof_full"], "east", steep=2, seed=3,
                interior="study")
 
         # companion tree with a lookout deck, joined to the east deck by a long rope bridge
@@ -614,18 +650,19 @@ def giant_tree(v):
             nx, nz = _polar(nest_r, ang)
             for x in range(nx - 4, nx + 5):
                 for z in range(nz - 4, nz + 5):
-                    if math.hypot(x - nx, z - nz) <= 4.6:
+                    if math.hypot(x - nx, z - nz) <= 5.1:      # wide enough to walk round the cabin's corners
                         bp.set(x, ny, z, f"{deck}_planks")
-                        if math.hypot(x - nx, z - nz) > 3.7:
+                        if math.hypot(x - nx, z - nz) > 4.3:
                             bp.set(x, ny + 1, z, f"{deck}_fence")
             _cabin(bp, nx, nz, ny, 5, 5, deck, v["roof"] + "_stairs", v["roof_full"],
-                   _card(-nx, -nz), steep=2, seed=6 + idx, interior="study" if loot else "bed", loot=loot)
+                   _card(-nx, -nz), steep=2, seed=6 + idx, interior="study" if loot else "bed", loot=loot,
+                   sills=False)
             _cluster(bp, nx, ny + 9, nz, 8, 4, 8, lv, seed=300 + idx, glow="shroomlight")
             _cluster(bp, nx, ny - 2, nz, 6, 2, 6, lv, seed=310 + idx)
             ex, ez = _polar(10.4, ang)
             sx, sz = _polar(nest_r - 4.6, ang)
             _bridge(bp, (ex, TOP, ez), (sx, ny, sz), deck, sag=1)
-            bp.clear(ex, TOP + 1, ez - 1, ex, TOP + 1, ez + 1)
+            bp.clear(ex, TOP + 1, ez - 1, ex, TOP + 3, ez + 1)   # rail gap, and no lantern post over the way
 
         # crow's nest above the canopy
         bp.ladder(0, TOP + 1, 2, 77, "south")
@@ -1001,6 +1038,8 @@ def oasis(bp):
     # corner towers
     for (tx, tz, h) in ((X0, ZF, 13), (X1, ZF, 13), (X0, ZB, 16), (X1, ZB, 16)):
         _desert_tower(bp, tx, tz, h, wall)
+        if tz == ZF:   # a door from the corner room into the tower (back towers: from the hall, below)
+            bp.door(tx + 3 if tx < 0 else tx - 3, 1, tz - 1, "east" if tx < 0 else "west", "jungle")
     # domed hall: flat roof with a drum and a great azure dome
     DX, DZ, DR = 0, -47, 7
     for x in range(X0 + 1, X1):
@@ -1041,6 +1080,8 @@ def oasis(bp):
             if max(abs(x), abs(z - DZ)) % 6 == 0:
                 c = "yellow"
             bp.set(x, 1, z, f"{c}_carpet")
+    for tx in (X0 + 1, X1 - 1):               # doors from the hall into the back corner towers
+        bp.door(tx, 1, ZB + 3, "south", "jungle")
     bp.disk(DX, 0, DZ, 3, "water[level=0]")
     bp.disk(DX, 1, DZ, 3, "air")
     bp.disk(DX, 0, DZ, 3, CHI, hollow=True)
@@ -1060,10 +1101,10 @@ def oasis(bp):
     bp.set(-13, 1, -40, "loom[facing=east]")
     bp.set(13, 1, -40, "barrel[facing=up,open=false]")
     # storerooms in the front wing, stables and guest rooms on the sides
-    bp.chest(-12, 1, ZF - 1, "north", LOOT + "oasis")
+    bp.chest(-10, 1, ZF - 1, "north", LOOT + "oasis")
     for x in range(-13, -4, 2):
         bp.barrel(x, 1, ZF - 3, "up")
-    for x in range(5, 14, 2):
+    for x in range(5, 11, 2):                   # (x 11..13: the corner tower's door)
         bp.set(x, 1, ZF - 1, "hay_block[axis=x]")
         bp.set(x, 2, ZF - 1, "hay_block[axis=z]")
     for z in range(-36, -32, 2):
@@ -1266,6 +1307,8 @@ def oasis(bp):
     bp.clear(SX, -3, -48, SX, -1, -48)
     bp.ladder(SX, -3, -48, -1, "south")
     bp.set(SX, -4, -48, "cut_sandstone")
+    bp.set(SX + 1, -4, -48, "cut_sandstone")       # landing at the ladder's foot, level with the top step
+    bp.clear(SX + 1, -3, -48, SX + 1, -1, -48)
     bp.fill(SX, -4, -49, SX, -1, -49, "cut_sandstone")
     for i in range(12):
         z, y = -47 + i, -4 - i
@@ -1325,6 +1368,8 @@ def oasis(bp):
     bp.set(C0X, TY + 3, MZ, "chiseled_red_sandstone")
     bp.room(C0X - 6, TY - 1, MZ - 2, C0X, TY + 3, MZ + 2, "sandstone", floor="sandstone", ceiling="sandstone")
     bp.fill(C0X, TY, MZ - 1, C0X, TY + 2, MZ + 1, "sandstone")
+    bp.clear(C0X, TY, MZ, C0X, TY, MZ)             # a low slot under the carved eye, veiled by cobweb
+    bp.set(C0X, TY + 1, MZ, "cobweb")
     for z in (MZ - 1, MZ, MZ + 1):
         bp.set(C0X - 5, TY - 1, z, "suspicious_sand", {"LootTable": "minecraft:archaeology/desert_pyramid"})
     bp.chest(C0X - 4, TY, MZ, "east", LOOT + "desert_tomb_secret")
@@ -1515,6 +1560,16 @@ def _crooked_tower(bp, x0, z0, fy, seed):
     hx, hz = x0 + 1 + 3, z0 - 1 + 3
     bp.fill(x0 + 1, top, z0 - 1, x0 + 6, top, z0 + 4, "dark_oak_planks")
     apex = arch.spire(bp, hx, hz, top, 4, SLATE, SLATE_S, steep=3, finial=None)
+    # a hollow witch-hat attic: no inner floors in the cone, the ladder climbs through its floor
+    r_, yy = 3, top + 3
+    while r_ >= 1:
+        for x in range(hx - r_, hx + r_ + 1):
+            for z in range(hz - r_, hz + r_ + 1):
+                if math.hypot(x - hx, z - hz) <= r_ - 0.75:
+                    bp.set(x, yy, z, "air")
+        r_, yy = r_ - 1, yy + 3
+    bp.fill(px, top, pz + 1, px, top + 2, pz + 1, "dark_oak_log[axis=y]")
+    bp.ladder(px, top, pz, top + 1, "north")
     for i, (dx, dy) in enumerate(((1, 0), (1, 1), (2, 1), (3, 1))):
         bp.set(hx + dx, apex - 1 + dy, hz, SLATE if i < 3 else "brasshaven:slate_roof_tile_slab[type=bottom,waterlogged=false]")
     bp.set(hx + 3, apex - 1, hz, "soul_lantern[hanging=true,waterlogged=false]")
@@ -1656,6 +1711,7 @@ def witch_huts(bp):
     for z in (-12, -9):
         bp.fill(-20, 4, z, -20, 5, z, "dark_oak_fence")
         bp.fill(-20, -2, z, -20, 2, z, "mangrove_log[axis=y]")
+    bp.door(-17, 4, -10, "west", "dark_oak")         # the brewery's back door into the woodshed
     # secret: the hermit's floor hides a trapdoor down a root ladder into a sunken mud cellar
     bp.set(-14, 3, 12, "mangrove_trapdoor[facing=north,half=top,open=false,powered=false,waterlogged=false]")
     bp.set(-14, 4, 12, "purple_carpet")
@@ -1689,7 +1745,7 @@ def witch_huts(bp):
     for (x, z, h, sd) in ((-22, -2, 9, 1), (20, 13, 10, 2), (-4, -21, 8, 3), (-2, 22, 7, 4), (22, -20, 8, 5),
                           (-22, 21, 8, 6), (10, 21, 6, 7)):
         _mangrove(bp, x, z, h, sd)
-    for (x, z) in ((-3, 11), (4, -9), (-9, 2), (11, 0)):
+    for (x, z) in ((-3, 11), (4, -9), (-9, 2), (11, -3)):   # lamp posts beside (not on) the boardwalks
         bp.fill(x, -2, z, x, 4, z, "mangrove_log[axis=y]")
         bp.set(x + 1, 4, z, "mangrove_fence")
         bp.lantern(x + 1, 3, z, hanging=True, soul=True)
@@ -1926,9 +1982,10 @@ def sky_island(bp):
         bp.set(x, vy + 4, Z0 + 2, "amethyst_cluster[facing=down,waterlogged=false]")
     bp.chest(-2, vy + 1, Z0, "south", LOOT + "sky_island")
     bp.spawner(-2, vy + 1, Z0 + 3, MOB["ruin_walker"])
-    bp.set(0, H0, Z0 + 3, "birch_trapdoor[facing=south,half=top,open=false,powered=false,waterlogged=false]")
-    bp.ladder(0, vy + 1, Z0 + 3, H0 - 1, "south")
-    bp.fill(0, vy + 1, Z0 + 2, 0, H0 - 1, Z0 + 2, "calcite")
+    # (in the aisle between two pews: a pew over the hatch would lock it)
+    bp.set(0, H0, Z0 + 4, "birch_trapdoor[facing=south,half=top,open=false,powered=false,waterlogged=false]")
+    bp.ladder(0, vy + 1, Z0 + 4, H0 - 1, "south")
+    bp.fill(0, vy + 1, Z0 + 3, 0, H0 - 1, Z0 + 3, "calcite")
 
     # ---------------------------------------------------------------- tall west tower with an azure spire
     TX, TZ = -17, -4
@@ -2374,10 +2431,10 @@ def ziggurat(bp):
                 bp.set(-B - 1, y, z, "chiseled_tuff_bricks" if (y + z) % 2 else "polished_tuff")
     bp.clear(-B - 1, 1, -1, -B + 1, 3, 1)
     bp.set(-B - 1, 4, 0, "verdant_froglight[axis=y]")
-    # secret tomb behind a cracked panel in the hall's north wall (marked by a jade mask)
+    # secret tomb behind a root-veiled gap in the hall's north wall (marked by a jade mask)
     bp.room(-4, 0, -17, 4, 7, HZ0, "tuff_bricks", floor="polished_tuff", ceiling="tuff_bricks")
-    bp.set(0, 1, HZ0, "cracked_stone_bricks")
-    bp.set(0, 2, HZ0, "cracked_stone_bricks")
+    bp.set(0, 1, HZ0, "air")                        # a gap under the mask, veiled by hanging roots
+    bp.set(0, 2, HZ0, "hanging_roots[waterlogged=false]")
     bp.set(0, 3, HZ0, "oxidized_copper")
     bp.set(-1, 3, HZ0, "verdant_froglight[axis=y]")
     bp.set(1, 3, HZ0, "verdant_froglight[axis=y]")

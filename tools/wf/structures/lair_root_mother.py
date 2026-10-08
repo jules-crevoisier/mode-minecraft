@@ -261,7 +261,12 @@ def build_lair(bp, v):
     # ------------------------------------------------------------------ dress the stair and the site of grace
     for x in range(CX1, SX[-1] + 1):
         for z in (27, 28, 29):
+            if x in SX and z != 29:
+                continue                              # the stair goes down here: no floor over its steps
             bp.set(x, CRYPT_Y, z, "tuff_bricks")
+    for x in SX:                                      # landing nook behind the top step
+        bp.set(x, CRYPT_Y, 30, "tuff_bricks")
+        bp.clear(x, CRYPT_Y + 1, 30, x, CRYPT_Y + 3, 30)
     bp.chain(11, CRYPT_Y + 3, 28, CRYPT_Y + 3)
     bp.lantern(11, CRYPT_Y + 2, 28, hanging=True)
     for (z, fy) in stair_cells:

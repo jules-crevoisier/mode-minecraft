@@ -183,9 +183,8 @@ def build_lair(bp):
         if x % 3 == 0:
             bp.set(x, fy + 1, 9, "barrel[facing=up,open=false]")
     bp.spawner(-3, pd[-3] + 1, 10, "minecraft:bogged")
-    for x in (-8, -1):
-        bp.chain(x, pd[x] + 4, 11, pd[x] + 4)
-        bp.lantern(x, pd[x] + 3, 11, hanging=True, soul=True)
+    for x in (-8, -1):                                # hung right under the beams: clear of the steps' headroom
+        bp.lantern(x, pd[x] + 4, 11, hanging=True, soul=True)
 
     # ------------------------------------------------------------------ dress the brewing rooms
     for x in range(BX0 - 1, BX1 + 2):

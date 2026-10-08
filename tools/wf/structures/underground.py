@@ -459,6 +459,11 @@ def dwarven_forge(bp):
     bp.spawner(44, 1, 0, MOB["ruin_walker"])
     # the King's Stair down to the Forge King's crucible (lair_forge_king.py)
     lair_forge_king.build(bp)
+    # the statue pedestals stand in the lava lake: nobody climbs up there, so keep them bare (rooms whose cells are
+    # already marked as furnished are skipped by I.decorate)
+    marked = bp.__dict__.setdefault("_decor_cells", set())
+    for s in (-1, 1):
+        marked.update((x, 4, z) for x in range(-17, -8) for z in range(14 * s - 4, 14 * s + 5))
     # an abandoned dwarven forge: tools left on the benches, crates of ore, dust and webs
     I.decorate(bp, dict(I.THEMES["forge"], ceiling=None, loot_barrels=1, rubble=["cobbled_deepslate", "deepslate",
                                                                                     "tuff", "gravel"]),
@@ -697,14 +702,14 @@ def gate_court(bp):
                             th = "tip"
                         bp.set(x, y - k, z, f"pointed_dripstone[thickness={th},vertical_direction=down,waterlogged=false]")
                 break
-    # approach tunnel climbing west
+    # approach tunnel climbing west, a landing at the top where it meets the caves
     for x in range(-32, -23):
-        k = max(0, -25 - x)
+        k = min(6, max(0, -25 - x))
         for z in range(-3, 4):
             for y in range(k, k + 7):
                 bp.set(x, y, z, CAVE_ROCK.pick(x, y, z))
         for z in range(-2, 3):
-            bp.set(x, k, z, stair("polished_blackstone_brick_stairs", "west") if x < -25 else PB)
+            bp.set(x, k, z, stair("polished_blackstone_brick_stairs", "west") if -32 < x < -25 else PB)
             for y in range(k + 1, k + 6):
                 bp.set(x, y, z, "air")
     bp.lantern(-29, 8, 2, hanging=True)
@@ -803,9 +808,11 @@ def barracks(bp):
         bp.entity(x0 + 1, 1, z, {"id": "minecraft:armor_stand", "Rotation": [270.0, 0.0]})
     bp.set(x0 + 2, 1, -21, "cartography_table")
     bp.set(x0 + 3, 1, -21, "lectern[facing=south,has_book=false,powered=false]")
-    # secret: a crumbling patch of wall at the west end hides the master smith's cellar
+    # secret: a low door in a crumbling patch of wall at the west end leads to the master smith's cellar
     for y in (1, 2):
-        bp.set(x0, y, -25, "cracked_deepslate_bricks")
+        bp.set(x0, y, -24, "cracked_deepslate_bricks")
+        bp.set(x0, y, -26, "cracked_deepslate_bricks")
+    bp.door(x0, 1, -25, "east", "spruce")
     bp.set(x0, 3, -25, "chiseled_deepslate")
     for x in range(1, x0):
         for y in (1, 2):
@@ -1172,9 +1179,13 @@ def crystal_grotto(bp):
                     bp.set(x, y, z, "smooth_basalt")
     bp.set(px, py - 2, pz, "calcite")
     bp.chest(px, py - 1, pz, "south", LOOT + "crystal_grotto")
-    for z in range(pz + 2, pz + 6):     # the giveaway: a tinted peephole glowing in the wall
+    for z in range(pz + 2, pz + 6):     # the way in: a narrow fissure under a tinted pane glowing in the wall
         if bp.get(px, py, z) not in (AIR,) and _geode_r(px, py, z) >= 15:
-            bp.set(px, py, z, "tinted_glass")
+            bp.set(px, py - 1, z, "air")
+            bp.set(px, py, z, "air")
+            bp.set(px, py + 1, z, "tinted_glass")
+            if bp.get(px, py - 2, z) in (None, AIR):
+                bp.set(px, py - 2, z, "calcite")
     # ---------------------------------------------------------------- crystal growth on every exposed amethyst face
     faces = (("up", 0, 1, 0), ("down", 0, -1, 0), ("north", 0, 0, -1), ("south", 0, 0, 1),
              ("east", 1, 0, 0), ("west", -1, 0, 0))
@@ -1185,6 +1196,8 @@ def crystal_grotto(bp):
         rng.shuffle(order)
         for face, dx, dy, dz in order:
             if bp.get(x + dx, y + dy, z + dz) == AIR:
+                if face == "down" and any(bp.get(x, y - k, z) != AIR for k in (2, 3, 4)):
+                    continue    # no bud hanging into a walkway (keep 3 blocks of headroom under it)
                 kind = rng.choice(["amethyst_cluster", "large_amethyst_bud", "medium_amethyst_bud", "amethyst_cluster"])
                 bp.set(x + dx, y + dy, z + dz, f"{kind}[facing={face},waterlogged=false]")
                 break
@@ -1436,10 +1449,10 @@ def sealed_lab(bp):
     bp.chest(7, 1, -12, "west", LOOT + "sealed_lab")
     for x in (-3, 3):
         bp.set(x, H, -17, "verdant_froglight[axis=y]")
-    # the office hides behind the north barrels: one of them is a hollow false front
+    # the office hides behind the north barrels: one stack is missing, the gap curtained by cobwebs
     lab_room(bp, -4, -30, 4, -24, 5)
     bp.set(0, 1, -23, "air")
-    bp.set(0, 2, -23, "barrel[facing=south,open=false]")
+    bp.set(0, 2, -23, "cobweb")       # the gap in the barrel wall, veiled by webs
     bp.set(0, 1, -24, "air")
     bp.set(0, 2, -24, "air")
     bp.set(0, 1, -28, "polished_deepslate_slab[type=top,waterlogged=false]")
@@ -1515,7 +1528,8 @@ def fill_cells(bp, cells, rng):
         elif kind == 1:    # the breach: glass blown out, sculk erupting from the catalyst
             for x in range(a + 1, b):
                 for y in (2, 3, 4):
-                    if rng.random() < 0.7:
+                    # the door and the pane carrying its button hold
+                    if rng.random() < 0.7 and x not in (cx, cx + 1):
                         bp.set(x, y, -3, "air")
             bp.set(cx - 1, 1, back, "sculk_catalyst[bloom=true]")
             bp.set(cx + 1, 1, back, "sculk_catalyst[bloom=false]")

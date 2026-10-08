@@ -1,11 +1,12 @@
 """Lair of the Jade Jaguar, under the Jungle Ziggurat.
 
-Nothing lay under the pyramid until now. The way down starts in the **secret tomb** behind the treasure hall's
-cracked north panel (x -4..4, z -17..-10, floor y 0, see ``ziggurat`` in overworld_b.py):
+Nothing lay under the pyramid until now. The way down starts in the **secret tomb** behind the root-veiled gap
+under the jade mask of the treasure hall's north wall (x -4..4, z -17..-10, floor y 0, see ``ziggurat`` in
+overworld_b.py):
 
 * **The serpent stair** leaves the tomb's north wall and dives 14 blocks under the forecourt.
 * **The passage of masks** (walk y -13) runs west for 38 blocks: carved jade masks with glowing eyes, roots
-  breaking through the vault, a guard alcove (skeleton spawner), a hidden offering niche, and three dart traps
+  breaking through the vault, a guard alcove (skeleton spawner), a hidden offering niche (behind hanging roots), and three dart traps
   (pressure plates that fire the dispensers set in the north wall).
 * **The root stair**, a rough cave stair, drops 22 more blocks to the south (cave spider spawner on a ledge), then
   a short landing leads to the **site of grace**: a shrine room with the waystone, benches and candles.
@@ -120,6 +121,8 @@ def _passage(bp, rng):
     x0, x1, z0, z1 = -39, 2, -35, -31
     _tube(bp, x0, x1, L1 - 1, L1 + 5, z0, z1, floor="mossy_stone_bricks", ceiling="tuff_bricks")
     bp.clear(-1, L1, z1, 1, L1 + 3, z1)                     # the serpent stair arrives from the south
+    for x in range(-1, 2):                                  # (its last step sits in the wall plane)
+        bp.set(x, L1, z1, stair("tuff_brick_stairs", "south"))
     # the floor: a processional band of jade between worn flagstones
     for x in range(x0 + 1, x1):
         bp.set(x, L1 - 1, -33, "oxidized_cut_copper" if x % 3 else "chiseled_tuff")
@@ -141,7 +144,7 @@ def _passage(bp, rng):
         _dart_trap(bp, x, z0, z0 + 1)
         bp.set(x - 1, L1 + 2, z0, "chiseled_tuff")
         bp.set(x + 1, L1 + 2, z0, "chiseled_tuff")
-    # a guard alcove with a spawner, and a hidden offering niche behind cracked bricks
+    # a guard alcove with a spawner, and a hidden offering niche behind a veil of roots
     for x in range(-25, -22):
         for z in (z1, z1 + 1, z1 + 2):
             for y in range(L1, L1 + 3):
@@ -156,8 +159,8 @@ def _passage(bp, rng):
                 bp.set(x, y, z, CARVED.pick(x, y, z))
     bp.fill(-25, L1 - 1, z1 + 3, -23, L1 + 3, z1 + 3, "tuff_bricks")
     bp.spawner(-24, L1, z1 + 2, "minecraft:skeleton")
-    bp.set(-6, L1, z0, "cracked_stone_bricks")
-    bp.set(-6, L1 + 1, z0, "cracked_stone_bricks")
+    bp.set(-6, L1, z0, AIR)                                 # the niche's mouth, veiled by hanging roots
+    bp.set(-6, L1 + 1, z0, "hanging_roots[waterlogged=false]")
     bp.clear(-6, L1, z0 - 2, -6, L1 + 1, z0 - 1)
     bp.fill(-7, L1 - 1, z0 - 3, -5, L1 + 2, z0 - 3, "tuff_bricks")
     for x in (-7, -5):
@@ -205,6 +208,9 @@ def _root_stair(bp, rng):
     bp.set(-34, L1 - 10, -22, "cobweb")
     # landing at the bottom (walk -35), lit by a lantern, turning east to the grace
     _tube(bp, -39, -35, L3 - 1, L3 + 4, -10, 2, wall=ROCK, floor="mossy_stone_bricks")
+    for x in range(-38, -35):                                # the stair's last step comes through its north wall
+        bp.set(x, L3, -10, stair("cobblestone_stairs", "north"))
+        bp.clear(x, L3 + 1, -10, x, L3 + 3, -10)
     bp.lantern(-37, L3 + 3, -5, hanging=True)
 
 
@@ -429,7 +435,8 @@ def _light_wells(bp, rng):
                     cur = bp.get(sx + dx, y, sz + dz)
                     if inner:
                         bp.set(sx + dx, y, sz + dz, AIR if y < top else "iron_bars[east=true,north=true,south=true,waterlogged=false,west=true]")
-                    elif cur is None or cur not in ("minecraft:air", "minecraft:water"):
+                    elif cur is None or cur not in ("minecraft:air", "minecraft:water") or y > CTOP + 2:
+                        # (above the cavern the shaft is walled even through the pyramid's niches)
                         bp.set(sx + dx, y, sz + dz, "mossy_stone_bricks" if (y + dx + dz) % 5 else "chiseled_stone_bricks")
         for dx in range(-1, 3):                              # a mossy rim around the grate on the terrace
             for dz in range(-1, 3):

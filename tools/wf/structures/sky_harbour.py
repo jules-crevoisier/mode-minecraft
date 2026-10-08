@@ -70,7 +70,7 @@ def tower(bp):
             if max(abs(x), abs(z)) == R and not (x == R and abs(z) <= 1):
                 facing = ("north" if z < 0 else "south") if abs(z) >= abs(x) else ("west" if x < 0 else "east")
                 railing(bp, x, DECK + 1, z, facing)
-    bp.set(-r + 1, DECK, 0, "air")  # ladder hatch
+    bp.set(-r + 1, DECK, 0, "ladder[facing=east,waterlogged=false]")  # ladder hatch: last rung reaches the deck
     for (x, z) in ((-R, -R), (R, -R), (-R, R), (R, R)):
         bp.set(x, DECK + 1, z, BRASS)
         bp.set(x, DECK + 2, z, EDISON)
@@ -128,10 +128,14 @@ def hull(bp):
     # keel
     for z in range(-HALF_LEN + 2, HALF_LEN - 1):
         bp.set(SHIP_X, DECK - 9, z, IRON)
-    # lower hold: floor, cargo, lamp
+    # lower hold: floor, cargo, lamp (the floor runs wall to wall: no gap to drop into the bilge)
     for z in range(-HALF_LEN + 4, HALF_LEN - 3):
         for x in range(SHIP_X - 2, SHIP_X + 3):
             bp.set(x, DECK - 5, z, "spruce_planks")
+    for z in range(-HALF_LEN, HALF_LEN + 1):
+        for x in range(SHIP_X - 6, SHIP_X + 7):
+            if bp.get(x, DECK - 5, z) == "minecraft:air":
+                bp.set(x, DECK - 5, z, "spruce_planks")
     bp.chest(SHIP_X - 2, DECK - 4, 6, "east", loot=LOOT + "sky_harbour")
     bp.set(SHIP_X + 2, DECK - 4, 6, W + "compacting_crate[facing=west]")
     bp.set(SHIP_X, DECK - 1, 0, W + "hanging_edison_lamp")
@@ -240,10 +244,17 @@ def harbour(bp):
     cabin(bp)
     engines(bp)
     envelope(bp)
+    # the rooms to live in and furnish: not the open deck under the envelope (crates there stack up onto the cabin
+    # roof), the gas bag or the sealed bilge under the hold
+    rooms = [r for r in INT.find_rooms(bp)
+             if r.y < DECK + 5 and not (r.y == DECK + 1 and (SHIP_X, HALF_LEN - 4) in r.cells)
+             and not (r.y < DECK - 4 and r.box[0] > SHIP_X - 8)]
     # the crew: a navigator at the chart table, an engineer in the hold, a quartermaster; a trader at the
     # foot of the tower waiting for the next flight
-    INT.populate(bp, [("cartographer", 3), ("toolsmith", 2), "armorer", "fisherman"], seed=1, bell=(-6, 1, 0))
-    INT.decorate(bp, dict(INT.THEMES["steampunk"], density=0.35), seed=1)
+    INT.populate(bp, [("cartographer", 3), ("toolsmith", 2), "armorer", "fisherman"], seed=1, bell=(-6, 1, 0),
+                 rooms=rooms)
+    INT.decorate(bp, dict(INT.THEMES["steampunk"], density=0.35), seed=1,
+                 rooms=[r for r in INT.find_rooms(bp) if any((r.y, r.box) == (q.y, q.box) for q in rooms)])
     INT.wandering_trader(bp, *INT.open_spot(bp, (8, 1, 2), height=2), facing="west")
     INT.yard(bp, (-14, -14, 14, 14), 1, "harbour", count=5, seed=1)
 

@@ -90,6 +90,13 @@ def stair_down(bp):
         bp.set(3, 1, z, f"{W}brass_railing[facing=west]")
     bp.set(3, 1, -1, IRON)
     bp.set(3, 2, -1, EDISON)
+    # the top steps end a block below the hall floor against the north wall: a landing sunk in the floor at their
+    # head (z -6, under the foot of the corner pier) and a last step up to the west
+    for x in (4, 5, 6):
+        bp.set(x, -1, -6, TREAD)
+        bp.set(x, 0, -6, "air")
+    bp.set(6, 1, -6, "air")
+    bp.stairs(3, 0, -6, SMOKE_ST, "west")
 
 
 def second_stair(bp):
@@ -219,6 +226,8 @@ def doors(bp):
     # stair 1 -> Gearworks (north wall), Gearworks -> stair 2 (south wall)
     opening(bp, 4, L1 + 1, gz0, 6, L1 + 4, gz0)
     opening(bp, 9, L1 + 1, gz1, 11, L1 + 3, gz1)
+    for x in (9, 10, 11):                               # the stair's last step, in the doorway
+        bp.stairs(x, L1, gz1, SMOKE_ST, "north")
     # stair 2 -> site of grace (north wall)
     opening(bp, 9, L2 + 1, GRACE[1], 11, L2 + 4, GRACE[1])
     # grace -> vault (east side of the drum) and vault -> study (west side): 3 wide, 4 tall

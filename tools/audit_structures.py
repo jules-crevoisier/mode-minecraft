@@ -198,6 +198,9 @@ def _shape(name, props):
         return FULL if props.get("sealed") == "true" else NONE
     if s.endswith("_door") or s.endswith("_fence_gate"):
         return (-1, -1, OPEN | wl)
+    if s == "sealed_bars":
+        # boss-reward bars: they open when the boss falls, so they count as a hatch (passable, climbable over a ladder)
+        return (-1, -1, OPEN | wl | SURF3)
     if s.endswith("_trapdoor"):
         if props.get("open") == "true":
             return (-1, -1, OPEN | wl)
@@ -1368,7 +1371,7 @@ class Audit:
             ti = W.idx(t)
             # the climber's node at the top ladder cell (or in the hatch right above it: a trapdoor over a
             # ladder climbs like one once opened)
-            hatch = "_trapdoor" in self.blocks.get((t[0], t[1] + 1, t[2]), ("",))[0]
+            hatch = self.blocks.get((t[0], t[1] + 1, t[2]), ("",))[0].endswith(("_trapdoor", ":sealed_bars"))
             hy = 16 * (ti[1] + 1) if hatch else 16 * ti[1]
             ns = self.nodes_at(ti[0], ti[2], hy, hy) or self.nodes_at(ti[0], ti[2], 16 * ti[1], 16 * ti[1])
             if not ns:

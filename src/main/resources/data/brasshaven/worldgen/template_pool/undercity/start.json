@@ -20,10 +20,10 @@
             ],
             "size": [
               26,
-              33,
+              34,
               26
             ],
-            "blocks": 10057
+            "blocks": 10060
           },
           {
             "location": "brasshaven:undercity/cavern/x0_z1",
@@ -37,7 +37,7 @@
               37,
               27
             ],
-            "blocks": 19994
+            "blocks": 20169
           },
           {
             "location": "brasshaven:undercity/cavern/x0_z2",
@@ -48,10 +48,10 @@
             ],
             "size": [
               26,
-              33,
+              34,
               26
             ],
-            "blocks": 10060
+            "blocks": 10063
           },
           {
             "location": "brasshaven:undercity/cavern/x1_z0",
@@ -65,7 +65,7 @@
               40,
               28
             ],
-            "blocks": 19995
+            "blocks": 20171
           },
           {
             "location": "brasshaven:undercity/cavern/x1_z1",
@@ -79,7 +79,7 @@
               41,
               27
             ],
-            "blocks": 25673
+            "blocks": 27188
           },
           {
             "location": "brasshaven:undercity/cavern/x1_z2",
@@ -93,7 +93,7 @@
               37,
               28
             ],
-            "blocks": 19992
+            "blocks": 20168
           },
           {
             "location": "brasshaven:undercity/cavern/x2_z0",
@@ -104,10 +104,10 @@
             ],
             "size": [
               26,
-              33,
+              34,
               26
             ],
-            "blocks": 10061
+            "blocks": 10064
           },
           {
             "location": "brasshaven:undercity/cavern/x2_z1",
@@ -121,7 +121,7 @@
               40,
               27
             ],
-            "blocks": 19997
+            "blocks": 20172
           },
           {
             "location": "brasshaven:undercity/cavern/x2_z2",
@@ -132,10 +132,10 @@
             ],
             "size": [
               26,
-              33,
+              34,
               26
             ],
-            "blocks": 10057
+            "blocks": 10060
           }
         ],
         "projection": "rigid",

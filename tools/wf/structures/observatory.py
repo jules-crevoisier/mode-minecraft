@@ -495,6 +495,9 @@ def tesla(bp):
                 bp.set(x, y, z, "air")
             bp.set(x, 5, z, BRASS)
     generator_hall(bp, cx, cz, hx, top)
+    # the coil's ladder starts on the hall floor and climbs through a hatch in the roof into the tower
+    for y in range(1, top + 1):
+        bp.set(cx, y, cz + 2, "ladder[facing=south,waterlogged=false]")
     tower(bp, cx, cz, top)
 
 

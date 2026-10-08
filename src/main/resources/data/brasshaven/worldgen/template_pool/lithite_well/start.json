@@ -37,7 +37,7 @@
               63,
               21
             ],
-            "blocks": 7830
+            "blocks": 7835
           },
           {
             "location": "brasshaven:lithite_well/layout_0/x0_z2",
@@ -51,7 +51,7 @@
               72,
               22
             ],
-            "blocks": 9282
+            "blocks": 9296
           },
           {
             "location": "brasshaven:lithite_well/layout_0/x1_z0",
@@ -65,7 +65,7 @@
               36,
               22
             ],
-            "blocks": 10505
+            "blocks": 10577
           },
           {
             "location": "brasshaven:lithite_well/layout_0/x1_z1",
@@ -79,7 +79,7 @@
               61,
               21
             ],
-            "blocks": 9300
+            "blocks": 9302
           },
           {
             "location": "brasshaven:lithite_well/layout_0/x1_z2",
@@ -93,7 +93,7 @@
               72,
               22
             ],
-            "blocks": 11905
+            "blocks": 11978
           },
           {
             "location": "brasshaven:lithite_well/layout_0/x2_z0",
@@ -171,7 +171,7 @@
               72,
               22
             ],
-            "blocks": 9336
+            "blocks": 9341
           },
           {
             "location": "brasshaven:lithite_well/layout_1/x0_z1",
@@ -185,7 +185,7 @@
               61,
               21
             ],
-            "blocks": 9136
+            "blocks": 9215
           },
           {
             "location": "brasshaven:lithite_well/layout_1/x0_z2",
@@ -199,7 +199,7 @@
               36,
               22
             ],
-            "blocks": 8542
+            "blocks": 8614
           },
           {
             "location": "brasshaven:lithite_well/layout_1/x1_z0",
@@ -213,7 +213,7 @@
               72,
               22
             ],
-            "blocks": 12354
+            "blocks": 12360
           },
           {
             "location": "brasshaven:lithite_well/layout_1/x1_z1",
@@ -227,7 +227,7 @@
               63,
               21
             ],
-            "blocks": 10394
+            "blocks": 10403
           },
           {
             "location": "brasshaven:lithite_well/layout_1/x1_z2",
@@ -319,7 +319,7 @@
               72,
               22
             ],
-            "blocks": 8797
+            "blocks": 8807
           },
           {
             "location": "brasshaven:lithite_well/layout_2/x0_z1",
@@ -333,7 +333,7 @@
               61,
               21
             ],
-            "blocks": 8607
+            "blocks": 8619
           },
           {
             "location": "brasshaven:lithite_well/layout_2/x0_z2",
@@ -361,7 +361,7 @@
               72,
               22
             ],
-            "blocks": 12431
+            "blocks": 12514
           },
           {
             "location": "brasshaven:lithite_well/layout_2/x1_z1",
@@ -375,7 +375,7 @@
               63,
               21
             ],
-            "blocks": 9681
+            "blocks": 9682
           },
           {
             "location": "brasshaven:lithite_well/layout_2/x1_z2",
@@ -431,7 +431,7 @@
               36,
               22
             ],
-            "blocks": 10850
+            "blocks": 10922
           }
         ],
         "projection": "rigid",

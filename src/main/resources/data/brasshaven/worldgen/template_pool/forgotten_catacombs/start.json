@@ -65,7 +65,7 @@
               36,
               23
             ],
-            "blocks": 9834
+            "blocks": 9906
           },
           {
             "location": "brasshaven:forgotten_catacombs/layout_0/x1_z1",
@@ -79,7 +79,7 @@
               57,
               22
             ],
-            "blocks": 8760
+            "blocks": 8771
           },
           {
             "location": "brasshaven:forgotten_catacombs/layout_0/x1_z2",
@@ -93,7 +93,7 @@
               57,
               23
             ],
-            "blocks": 8974
+            "blocks": 8993
           },
           {
             "location": "brasshaven:forgotten_catacombs/layout_0/x2_z0",
@@ -107,7 +107,7 @@
               36,
               23
             ],
-            "blocks": 10180
+            "blocks": 10228
           },
           {
             "location": "brasshaven:forgotten_catacombs/layout_0/x2_z1",
@@ -121,7 +121,7 @@
               60,
               22
             ],
-            "blocks": 11251
+            "blocks": 11296
           },
           {
             "location": "brasshaven:forgotten_catacombs/layout_0/x2_z2",
@@ -135,7 +135,7 @@
               61,
               23
             ],
-            "blocks": 10287
+            "blocks": 10305
           }
         ],
         "projection": "rigid",
@@ -199,7 +199,7 @@
               56,
               23
             ],
-            "blocks": 13830
+            "blocks": 13902
           },
           {
             "location": "brasshaven:forgotten_catacombs/layout_1/x1_z0",
@@ -227,7 +227,7 @@
               60,
               22
             ],
-            "blocks": 9461
+            "blocks": 9489
           },
           {
             "location": "brasshaven:forgotten_catacombs/layout_1/x1_z2",
@@ -241,7 +241,7 @@
               61,
               23
             ],
-            "blocks": 9422
+            "blocks": 9449
           },
           {
             "location": "brasshaven:forgotten_catacombs/layout_1/x2_z0",
@@ -255,7 +255,7 @@
               36,
               23
             ],
-            "blocks": 10670
+            "blocks": 10742
           },
           {
             "location": "brasshaven:forgotten_catacombs/layout_1/x2_z1",
@@ -319,7 +319,7 @@
               60,
               22
             ],
-            "blocks": 8826
+            "blocks": 8827
           },
           {
             "location": "brasshaven:forgotten_catacombs/layout_2/x0_z1",
@@ -333,7 +333,7 @@
               61,
               21
             ],
-            "blocks": 9094
+            "blocks": 9127
           },
           {
             "location": "brasshaven:forgotten_catacombs/layout_2/x0_z2",
@@ -347,7 +347,7 @@
               60,
               22
             ],
-            "blocks": 10904
+            "blocks": 10928
           },
           {
             "location": "brasshaven:forgotten_catacombs/layout_2/x1_z0",
@@ -375,7 +375,7 @@
               57,
               21
             ],
-            "blocks": 8484
+            "blocks": 8504
           },
           {
             "location": "brasshaven:forgotten_catacombs/layout_2/x1_z2",
@@ -389,7 +389,7 @@
               57,
               22
             ],
-            "blocks": 9008
+            "blocks": 9044
           },
           {
             "location": "brasshaven:forgotten_catacombs/layout_2/x2_z0",
@@ -403,7 +403,7 @@
               36,
               22
             ],
-            "blocks": 13918
+            "blocks": 13990
           },
           {
             "location": "brasshaven:forgotten_catacombs/layout_2/x2_z1",

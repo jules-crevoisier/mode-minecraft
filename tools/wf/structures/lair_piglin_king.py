@@ -158,6 +158,8 @@ def _tithe_stair(L):
                 else:
                     L.air(x, yy, z, x, yy, z)
         bp.set(12 if k % 2 else 16, y + 2, z, LAMP)
+    for x in range(13, 16):         # the flight's top step, set into the landing's edge
+        L.put(x, top, 8, stair(PBBS, "north"))
 
 
 def _hall_of_tribute(L):

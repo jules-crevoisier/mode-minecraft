@@ -23,7 +23,7 @@
               37,
               20
             ],
-            "blocks": 3090
+            "blocks": 3072
           },
           {
             "location": "brasshaven:forgotten_library/library/x0_z1",
@@ -37,7 +37,7 @@
               76,
               22
             ],
-            "blocks": 11667
+            "blocks": 11661
           },
           {
             "location": "brasshaven:forgotten_library/library/x0_z2",
@@ -51,7 +51,7 @@
               25,
               22
             ],
-            "blocks": 3222
+            "blocks": 3225
           },
           {
             "location": "brasshaven:forgotten_library/library/x1_z0",
@@ -65,7 +65,7 @@
               66,
               22
             ],
-            "blocks": 12181
+            "blocks": 12157
           },
           {
             "location": "brasshaven:forgotten_library/library/x1_z1",
@@ -79,7 +79,7 @@
               78,
               22
             ],
-            "blocks": 34385
+            "blocks": 34411
           },
           {
             "location": "brasshaven:forgotten_library/library/x1_z2",
@@ -93,7 +93,7 @@
               63,
               22
             ],
-            "blocks": 8069
+            "blocks": 8066
           },
           {
             "location": "brasshaven:forgotten_library/library/x2_z0",
@@ -107,7 +107,7 @@
               83,
               20
             ],
-            "blocks": 8742
+            "blocks": 8747
           },
           {
             "location": "brasshaven:forgotten_library/library/x2_z1",
@@ -121,7 +121,7 @@
               96,
               22
             ],
-            "blocks": 29406
+            "blocks": 29400
           },
           {
             "location": "brasshaven:forgotten_library/library/x2_z2",
@@ -135,7 +135,7 @@
               80,
               22
             ],
-            "blocks": 7911
+            "blocks": 7909
           },
           {
             "location": "brasshaven:forgotten_library/library/x3_z0",
@@ -149,7 +149,7 @@
               63,
               21
             ],
-            "blocks": 5032
+            "blocks": 5037
           },
           {
             "location": "brasshaven:forgotten_library/library/x3_z1",
@@ -163,7 +163,7 @@
               70,
               22
             ],
-            "blocks": 7982
+            "blocks": 7997
           },
           {
             "location": "brasshaven:forgotten_library/library/x3_z2",
@@ -177,7 +177,7 @@
               70,
               22
             ],
-            "blocks": 6258
+            "blocks": 6256
           }
         ],
         "projection": "rigid",

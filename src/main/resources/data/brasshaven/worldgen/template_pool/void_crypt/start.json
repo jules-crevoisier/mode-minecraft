@@ -37,7 +37,7 @@
               32,
               21
             ],
-            "blocks": 7144
+            "blocks": 7216
           },
           {
             "location": "brasshaven:void_crypt/layout_0/x0_z2",
@@ -283,7 +283,7 @@
               41,
               22
             ],
-            "blocks": 8957
+            "blocks": 9029
           }
         ],
         "projection": "rigid",
@@ -431,7 +431,7 @@
               31,
               22
             ],
-            "blocks": 7419
+            "blocks": 7491
           }
         ],
         "projection": "rigid",

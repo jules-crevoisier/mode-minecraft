@@ -23,7 +23,7 @@
               79,
               24
             ],
-            "blocks": 3870
+            "blocks": 3875
           },
           {
             "location": "brasshaven:sylvan_palace/palace/x0_z1",
@@ -37,7 +37,7 @@
               85,
               26
             ],
-            "blocks": 3608
+            "blocks": 3619
           },
           {
             "location": "brasshaven:sylvan_palace/palace/x0_z2",
@@ -51,7 +51,7 @@
               55,
               24
             ],
-            "blocks": 3458
+            "blocks": 3450
           },
           {
             "location": "brasshaven:sylvan_palace/palace/x1_z0",
@@ -65,7 +65,7 @@
               85,
               16
             ],
-            "blocks": 3487
+            "blocks": 3653
           },
           {
             "location": "brasshaven:sylvan_palace/palace/x1_z1",
@@ -79,7 +79,7 @@
               97,
               26
             ],
-            "blocks": 21003
+            "blocks": 20927
           },
           {
             "location": "brasshaven:sylvan_palace/palace/x1_z2",
@@ -93,7 +93,7 @@
               71,
               25
             ],
-            "blocks": 4764
+            "blocks": 4765
           },
           {
             "location": "brasshaven:sylvan_palace/palace/x2_z0",
@@ -104,10 +104,10 @@
             ],
             "size": [
               6,
-              13,
+              52,
               5
             ],
-            "blocks": 82
+            "blocks": 112
           },
           {
             "location": "brasshaven:sylvan_palace/palace/x2_z1",
@@ -121,7 +121,7 @@
               71,
               26
             ],
-            "blocks": 3594
+            "blocks": 3642
           },
           {
             "location": "brasshaven:sylvan_palace/palace/x2_z2",

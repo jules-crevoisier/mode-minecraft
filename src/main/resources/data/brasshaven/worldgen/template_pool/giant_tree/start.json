@@ -14,30 +14,30 @@
           {
             "location": "brasshaven:giant_tree/oak/x0_z0",
             "offset": [
-              4,
+              6,
               0,
               3
             ],
             "size": [
-              27,
-              98,
-              19
+              24,
+              97,
+              18
             ],
-            "blocks": 4756
+            "blocks": 3828
           },
           {
             "location": "brasshaven:giant_tree/oak/x0_z1",
             "offset": [
               0,
               0,
-              22
+              21
             ],
             "size": [
-              31,
+              30,
               110,
-              22
+              23
             ],
-            "blocks": 20814
+            "blocks": 19658
           },
           {
             "location": "brasshaven:giant_tree/oak/x0_z2",
@@ -47,53 +47,53 @@
               44
             ],
             "size": [
-              26,
+              25,
               102,
               22
             ],
-            "blocks": 4505
+            "blocks": 4119
           },
           {
             "location": "brasshaven:giant_tree/oak/x1_z0",
             "offset": [
-              31,
+              30,
               0,
               0
             ],
             "size": [
-              31,
+              32,
               97,
-              22
+              21
             ],
-            "blocks": 5897
+            "blocks": 5804
           },
           {
             "location": "brasshaven:giant_tree/oak/x1_z1",
             "offset": [
-              31,
+              30,
               0,
-              22
+              21
             ],
             "size": [
-              30,
+              31,
               110,
-              22
+              23
             ],
-            "blocks": 18678
+            "blocks": 20814
           },
           {
             "location": "brasshaven:giant_tree/oak/x1_z2",
             "offset": [
-              31,
+              30,
               0,
               44
             ],
             "size": [
-              29,
+              30,
               101,
               22
             ],
-            "blocks": 7256
+            "blocks": 7642
           }
         ],
         "projection": "rigid",
@@ -125,11 +125,11 @@
               3
             ],
             "size": [
-              27,
+              26,
               98,
               19
             ],
-            "blocks": 4708
+            "blocks": 4348
           },
           {
             "location": "brasshaven:giant_tree/dark_oak/x0_z1",
@@ -139,11 +139,11 @@
               22
             ],
             "size": [
-              31,
+              30,
               110,
               22
             ],
-            "blocks": 20845
+            "blocks": 19135
           },
           {
             "location": "brasshaven:giant_tree/dark_oak/x0_z2",
@@ -153,53 +153,53 @@
               44
             ],
             "size": [
-              26,
-              102,
+              25,
+              101,
               22
             ],
-            "blocks": 4561
+            "blocks": 4202
           },
           {
             "location": "brasshaven:giant_tree/dark_oak/x1_z0",
             "offset": [
-              31,
+              30,
               0,
               0
             ],
             "size": [
-              31,
-              97,
+              32,
+              98,
               22
             ],
-            "blocks": 5774
+            "blocks": 6108
           },
           {
             "location": "brasshaven:giant_tree/dark_oak/x1_z1",
             "offset": [
-              31,
+              30,
               0,
               22
             ],
             "size": [
-              30,
+              31,
               110,
               22
             ],
-            "blocks": 18620
+            "blocks": 20337
           },
           {
             "location": "brasshaven:giant_tree/dark_oak/x1_z2",
             "offset": [
-              31,
+              30,
               0,
               44
             ],
             "size": [
-              29,
-              101,
+              30,
+              102,
               22
             ],
-            "blocks": 7261
+            "blocks": 7618
           }
         ],
         "projection": "rigid",

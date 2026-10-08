@@ -170,13 +170,13 @@ def _hypostyle(bp, rng):
     x0, x1, z0, z1 = -14, 14, -3, 19
     y0, y1 = L2 - 1, L2 + 9
     _box(bp, x0, y0, z0, x1, y1, z1, floor=FLOOR)
-    bp.clear(-1, L2, z0, 1, L2 + 3, z0)                                   # from the grand stair
     _star_ceiling(bp, x0 + 1, z0 + 1, x1 - 1, z1 - 1, y1, seed=5)
     _band(bp, x0, z0, x1, z1, L2 + 1, "orange_terracotta")
     _frieze(bp, x0, z0, x1, z1, L2 + 3, seed=1)
     _band(bp, x0, z0, x1, z1, L2 + 5, "blue_terracotta")
     _frieze(bp, x0, z0, x1, z1, L2 + 6, seed=2)
     _band(bp, x0, z0, x1, z1, L2 + 8, "yellow_terracotta")
+    bp.clear(-1, L2, z0, 1, L2 + 3, z0)                                   # from the grand stair (after the paint)
     # processional way: lapis and gold inlay down the central aisle
     for z in range(z0 + 1, z1):
         bp.set(0, y0, z, GOLD if z % 4 == 0 else LAPIS)

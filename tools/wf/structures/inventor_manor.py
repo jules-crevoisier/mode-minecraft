@@ -238,7 +238,7 @@ def turret(bp, cx, cz, r, h, cone_h):
     # corbelled eave and the cone
     for a in range(0, 360, 4):
         x, z = cx + round(math.cos(math.radians(a)) * (r + 1)), cz + round(math.sin(math.radians(a)) * (r + 1))
-        if math.hypot(x - cx, z - cz) > r + 0.5:
+        if math.hypot(x - cx, z - cz) > r + 0.5 and bp.get(x, h, z) is None:   # not into the mansard
             bp.set(x, h, z, stair(BRASS_ST, _toward(x - cx, z - cz), "top"))
     rr = r + 1
     y = h + 1
@@ -312,6 +312,8 @@ def observatory(bp):
     bp.set(cx + 1, base + 7, cz + 1, W + "mahogany_chair[facing=north]")
     bp.set(cx, top + R, cz, BRASS)
     bp.set(cx, top + R + 1, cz, "lightning_rod[facing=up,powered=false,waterlogged=false]")
+    # the attic stair comes up inside the tower: a door out to the attic on the east side
+    bp.door(x1, base, cz, "east", "spruce")
     bp.ladder(x1 - 1, TOP + 1, z1 - 1, base + 6, "north")
     bp.set(x1 - 1, base + 6, z1 - 1, "ladder[facing=north,waterlogged=false]")
 
@@ -363,7 +365,7 @@ def interiors(bp):
     # the study: desk, bookshelves, globe, the carpet hiding the trapdoor
     for z in range(Z0 + 1, Z1):
         for y in range(F0 + 1, F0 + 4):
-            if z != 2:
+            if z not in (0, 2):                           # z 0: the workshop door
                 bp.set(X0 + 1, y, z, "bookshelf" if (z + y) % 5 else "chiseled_bookshelf[facing=east]")
     bp.set(-9, F0 + 1, 4, W + "mahogany_table")
     bp.set(-9, F0 + 1, 5, f"{W}mahogany_chair[facing=north]")
@@ -424,10 +426,11 @@ def interiors(bp):
     bp.barrel(-11, TOP + 1, 1, "up", loot=LOOT + "inventor_manor")
     bp.set(6, TOP + 1, 0, W + "mahogany_table")
     bp.set(6, TOP + 2, 0, "brewing_stand[has_bottle_0=false,has_bottle_1=false,has_bottle_2=false]")
-    # stair from the first floor to the attic, along the north wall
+    # stair from the first floor to the attic, along the north wall (one row in from the grand staircase, whose
+    # top steps come out under it)
     for i in range(6):
         x = 2 - i
-        for z in (Z0 + 1,):
+        for z in (Z0 + 2,):
             bp.set(x, F1 + 1 + i, z + 1, stair("spruce_stairs", "west"))
             for y in range(F1 + 2 + i, F1 + 5 + i):
                 if y >= TOP:
@@ -746,6 +749,16 @@ def manor(bp):
     laboratory(bp)
     turret(bp, X1, Z1, 4, TOP + 6, 9)
     turret(bp, X0, Z0, 3, TOP + 3, 7)
+    # the turrets' rings cut across the house corners: a door through the ring on every storey
+    for y in (F0 + 1, F1 + 1, TOP + 1):
+        bp.door(X1 - 3, y, Z1 - 2, "west", "dark_oak")
+    for y in (F0 + 1, F1 + 1):
+        bp.door(X0 + 2, y, Z0 + 2, "east", "dark_oak")
+    # and a ladder up to the room under each cone
+    for y in range(TOP + 1, TOP + 6):
+        bp.set(X1, y, Z1 + 3, "ladder[facing=north,waterlogged=false]")
+    for y in range(F1 + 1, TOP + 3):
+        bp.set(X0, y, Z0 - 2, "ladder[facing=south,waterlogged=false]")
     observatory(bp)
     chimney(bp, X0 + 3, -2, TOP + 12)
     chimney(bp, 9, -6, TOP + 11)
@@ -754,6 +767,17 @@ def manor(bp):
     workshop(bp)
     garden(bp)
     household(bp)
+
+
+def _open_rooms(bp, region):
+    """The rooms of ``region`` without their 1-wide strips (dormer recesses): something set in one blocks it."""
+    rooms = INT.find_rooms(bp, region)
+    for r in rooms:
+        cells = set(r.cells)
+        r.free = {(x, z) for x, z in r.free
+                  if not ((x - 1, z) not in cells and (x + 1, z) not in cells)
+                  and not ((x, z - 1) not in cells and (x, z + 1) not in cells)}
+    return rooms
 
 
 def household(bp):
@@ -765,11 +789,11 @@ def household(bp):
     INT.populate(bp, [("toolsmith", 3), "armorer"], region=ws, seed=1)
     INT.populate(bp, [("cleric", 3)], region=lab, seed=2)
     INT.populate(bp, [("librarian", 3), "butcher", "cartographer", "farmer"], region=house, seed=3,
-                 bell=None, guard=("brass", (X1 + 6, 1, 0)))
+                 bell=None, guard=("brass", (X1 + 6, 1, 0)), rooms=_open_rooms(bp, house))
     INT.decorate(bp, "workshop", seed=1, region=ws)
     INT.decorate(bp, "lab", seed=2, region=lab)
-    INT.decorate(bp, "steampunk", seed=3, region=house)
-    INT.decorate(bp, "steampunk", seed=4)
+    INT.decorate(bp, "steampunk", seed=3, region=house, rooms=_open_rooms(bp, house))
+    INT.decorate(bp, "steampunk", seed=4, rooms=_open_rooms(bp, None))
     INT.yard(bp, (X0 - 20, Z0 - 20, X1 + 20, Z1 + 25), 1, "garden", count=6, seed=1)
 
 

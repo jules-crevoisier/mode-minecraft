@@ -260,8 +260,10 @@ def build(bp, Y, main):
     bp.set(NX + 1, Y + 3, NZ + 1, "sniffer_egg[hatch=0]")
     bp.set(NX - 1, Y + 3, NZ - 1, "sniffer_egg[hatch=1]")
     bp.chest(NX, Y + 3, NZ, "north", LOOT + "sky_island")
-    bp.set(NX, Y + 3, NZ - 2, "bell[attachment=floor,facing=north,powered=false]")
-    # steps up the crag from the plaza
+    bp.set(NX, Y + 3, NZ + 2, "bell[attachment=floor,facing=north,powered=false]")
+    # steps up the crag from the plaza, through a gap in the ring of branches
+    for z in (NZ - 4, NZ - 3):
+        bp.clear(NX, Y + 3, z, NX, Y + 4, z)
     for k, (x, z) in enumerate(((NX, NZ - 5), (NX, NZ - 4))):
         bp.set(x, Y + 1 + k, z, stair("smooth_quartz_stairs", "north"))
     # two tall columns flank the nest, with braziers

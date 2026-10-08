@@ -23,7 +23,7 @@
               58,
               24
             ],
-            "blocks": 8503
+            "blocks": 8492
           },
           {
             "location": "brasshaven:mountain_monastery/monastery/x0_z1",
@@ -37,7 +37,7 @@
               80,
               25
             ],
-            "blocks": 19524
+            "blocks": 19541
           },
           {
             "location": "brasshaven:mountain_monastery/monastery/x0_z2",
@@ -51,7 +51,7 @@
               77,
               24
             ],
-            "blocks": 7916
+            "blocks": 7928
           },
           {
             "location": "brasshaven:mountain_monastery/monastery/x1_z0",
@@ -65,7 +65,7 @@
               46,
               24
             ],
-            "blocks": 12404
+            "blocks": 12414
           },
           {
             "location": "brasshaven:mountain_monastery/monastery/x1_z1",
@@ -93,7 +93,7 @@
               93,
               24
             ],
-            "blocks": 19586
+            "blocks": 19610
           },
           {
             "location": "brasshaven:mountain_monastery/monastery/x2_z0",
@@ -107,7 +107,7 @@
               39,
               24
             ],
-            "blocks": 10710
+            "blocks": 10695
           },
           {
             "location": "brasshaven:mountain_monastery/monastery/x2_z1",
@@ -121,7 +121,7 @@
               58,
               25
             ],
-            "blocks": 13600
+            "blocks": 13583
           },
           {
             "location": "brasshaven:mountain_monastery/monastery/x2_z2",
@@ -135,7 +135,7 @@
               44,
               24
             ],
-            "blocks": 7361
+            "blocks": 7359
           }
         ],
         "projection": "rigid",

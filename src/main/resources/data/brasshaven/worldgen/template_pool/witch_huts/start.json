@@ -23,7 +23,7 @@
               48,
               23
             ],
-            "blocks": 7567
+            "blocks": 7550
           },
           {
             "location": "brasshaven:witch_huts/huts/x0_z1",
@@ -37,7 +37,7 @@
               55,
               22
             ],
-            "blocks": 12468
+            "blocks": 12464
           },
           {
             "location": "brasshaven:witch_huts/huts/x0_z2",
@@ -51,7 +51,7 @@
               51,
               23
             ],
-            "blocks": 4485
+            "blocks": 4497
           },
           {
             "location": "brasshaven:witch_huts/huts/x1_z0",
@@ -65,7 +65,7 @@
               65,
               17
             ],
-            "blocks": 3869
+            "blocks": 3866
           },
           {
             "location": "brasshaven:witch_huts/huts/x1_z1",
@@ -79,7 +79,7 @@
               62,
               22
             ],
-            "blocks": 9706
+            "blocks": 9700
           },
           {
             "location": "brasshaven:witch_huts/huts/x1_z2",
@@ -93,7 +93,7 @@
               40,
               23
             ],
-            "blocks": 4205
+            "blocks": 4227
           }
         ],
         "projection": "rigid",

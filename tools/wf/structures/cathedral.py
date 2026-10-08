@@ -644,6 +644,11 @@ def tower(bp, cx, cz):
             bp.set(x, 28, z, CAL)
     bp.set(cx, 26, cz, "bell[attachment=ceiling,facing=north,powered=false]")
     bp.set(cx, 27, cz, QZB)
+    # a door from the aisle and a ladder along the outer wall up through the middle storey to the belfry
+    s = 1 if cx > 0 else -1
+    bp.door(cx - s * r, 1, cz, "west" if s > 0 else "east", "dark_oak")
+    for y in range(1, 21):
+        bp.set(cx + s * (r - 1), y, cz + 2, f"ladder[facing={'west' if s > 0 else 'east'},waterlogged=false]")
     # gallery of arches across the west front, between the towers
     for x in range(-NW + 1, NW):
         bp.set(x, 12, Z_FRONT + 2, stair(QZ_ST, "north", "top"))
@@ -814,7 +819,8 @@ def crypt(bp):
     bp.set(0, y0 + 2, z0 + 5, "air")
     bp.set(0, y0 + 1, z0 + 3, "air")
     bp.set(0, y0 + 2, z0 + 3, "air")
-    bp.set(1, y0 + 1, z0 + 5, "stone_pressure_plate[powered=false]") if False else None
+    for z in (z0 + 3, z0 + 5):                      # the iron door opens from both sides
+        bp.set(0, y0 + 1, z, "stone_pressure_plate[powered=false]")
     for x in (-2, 2):
         bp.chest(x, y0 + 1, z0 + 1, "south", loot=LOOT + "crystal_cathedral_vault")
     bp.set(0, y0 + 1, z0 + 1, AME)
@@ -878,9 +884,13 @@ def cathedral(bp):
     geode_crystals(bp)
     processional(bp)
     # two clerics keep the candles lit; chapels and sacristies get their furniture
-    INT.populate(bp, [("cleric", 4), ("cleric", 2)], seed=1, void_solid=True, beds=True)
+    # (not in the closed rooms under the towers' spires)
+    def rooms():
+        return [r for r in INT.find_rooms(bp, void_solid=True)
+                if not (r.y > 28 and abs((r.box[0] + r.box[2]) / 2) > 8 and r.box[3] > Z_FRONT - 12)]
+    INT.populate(bp, [("cleric", 4), ("cleric", 2)], seed=1, void_solid=True, beds=True, rooms=rooms())
     INT.decorate(bp, dict(INT.THEMES["chapel"], ceiling=None), seed=1, void_solid=True, density=0.25, rugs=False,
-                 centre=False)
+                 centre=False, rooms=rooms())
 
 
 register(StructureDef(

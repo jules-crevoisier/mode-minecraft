@@ -23,7 +23,7 @@
               34,
               28
             ],
-            "blocks": 11990
+            "blocks": 11992
           },
           {
             "location": "brasshaven:guild_outpost/outpost_spruce/x0_z1",
@@ -37,7 +37,7 @@
               34,
               28
             ],
-            "blocks": 8327
+            "blocks": 8326
           },
           {
             "location": "brasshaven:guild_outpost/outpost_spruce/x1_z0",
@@ -51,7 +51,7 @@
               56,
               28
             ],
-            "blocks": 11058
+            "blocks": 11006
           },
           {
             "location": "brasshaven:guild_outpost/outpost_spruce/x1_z1",
@@ -65,7 +65,7 @@
               36,
               28
             ],
-            "blocks": 8557
+            "blocks": 8564
           }
         ],
         "projection": "rigid",
@@ -101,7 +101,7 @@
               34,
               28
             ],
-            "blocks": 12008
+            "blocks": 12005
           },
           {
             "location": "brasshaven:guild_outpost/outpost_oak/x0_z1",
@@ -115,7 +115,7 @@
               34,
               28
             ],
-            "blocks": 8337
+            "blocks": 8341
           },
           {
             "location": "brasshaven:guild_outpost/outpost_oak/x1_z0",
@@ -129,7 +129,7 @@
               56,
               28
             ],
-            "blocks": 11056
+            "blocks": 11007
           },
           {
             "location": "brasshaven:guild_outpost/outpost_oak/x1_z1",
@@ -143,7 +143,7 @@
               36,
               28
             ],
-            "blocks": 8558
+            "blocks": 8562
           }
         ],
         "projection": "rigid",
@@ -179,7 +179,7 @@
               34,
               28
             ],
-            "blocks": 12517
+            "blocks": 12495
           },
           {
             "location": "brasshaven:guild_outpost/outpost_birch/x0_z1",
@@ -193,7 +193,7 @@
               34,
               28
             ],
-            "blocks": 8696
+            "blocks": 8693
           },
           {
             "location": "brasshaven:guild_outpost/outpost_birch/x1_z0",
@@ -207,7 +207,7 @@
               56,
               28
             ],
-            "blocks": 10549
+            "blocks": 10526
           },
           {
             "location": "brasshaven:guild_outpost/outpost_birch/x1_z1",
@@ -221,7 +221,7 @@
               36,
               28
             ],
-            "blocks": 8205
+            "blocks": 8209
           }
         ],
         "projection": "rigid",

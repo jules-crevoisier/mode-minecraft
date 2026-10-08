@@ -633,13 +633,15 @@ def void_observatory(bp):
     y = F[3] + 14
     for rr in (3, 3, 2, 2, 2, 1, 1, 1, 1):
         for (x, z) in disk_pts(tx, tz, rr):
-            if math.hypot(x - tx, z - tz) > rr - 0.6 or rr == 1:
-                bp.set(x, y, z, sp.pick(x, y, z))
+            bp.set(x, y, z, sp.pick(x, y, z))      # solid: a hollow spire is a sealed cavity
         y += 1
     bp.fill(tx, y, tz, tx, y + 1, tz, "waxed_oxidized_copper")
     bp.set(tx, y + 2, tz, STAR)
     bp.set(tx, y + 3, tz, "lightning_rod[facing=up,powered=false,waterlogged=false]")
-    bp.ladder(tx + 2, 1, tz, F[3] + 2, "west")
+    bp.ladder(tx + 2, 1, tz, F[3], "west")
+    for (x, z) in disk_pts(tx, tz, 2):     # landing at gallery level, from the ladder head to the doorway
+        if (x, z) != (tx + 2, tz):
+            bp.set(x, F[3], z, VB)
     for yy in (1, 2):  # doorway between the tower and the turret
         for (x, z) in ((5, -6), (6, -6), (7, -6), (6, -7)):
             bp.set(x, yy, z, "air")
@@ -748,8 +750,7 @@ def void_observatory(bp):
                   hood=None)
     bp.fill(30, 6, -5, 30, 7, -5, "air")
     bp.fill(28, 6, -5, 28, 7, -5, "air")
-    bp.ladder(32, 6, -5, 16, "west")
-    bp.set(32, 16, -5, "air")
+    bp.ladder(32, 6, -5, 16, "west")         # up through the roof (its top rung is the hatch)
     bp.set(31, 6, -6, "barrel[facing=up,open=false]")
     sd = (math.cos(math.radians(30)) * math.cos(-0.5), math.sin(math.radians(30)), math.cos(math.radians(30)) * math.sin(-0.5))
     tube(bp, (31.0, 19.0, -5.0), sd, 8, 1.0, 0.8, brass, rings="waxed_chiseled_copper", ring_every=4, back=2)
@@ -782,11 +783,11 @@ def void_observatory(bp):
 
     # --- chorus around the plaza and secret star vault under the tower
     chorus_patch(bp, main, [(rng.randint(-26, 18), rng.randint(-18, 18)) for _ in range(28)], rng, 3, 5)
-    # the vault: a bookshelf on the ground floor hides a ladder down into the rock
-    bp.set(-7, 1, 0, "bookshelf")
-    bp.set(-7, 2, 0, "bookshelf")
-    bp.set(-7, 0, 0, "air")
-    bp.ladder(-7, -8, 0, 0, "east")
+    # the vault: a niche in the ground-floor wall hides a trapdoor and a ladder down into the rock
+    bp.set(-7, 1, 0, "air")
+    bp.set(-7, 2, 0, "air")
+    bp.set(-7, 0, 0, "dark_oak_trapdoor[facing=east,half=top,open=false,powered=false,waterlogged=false]")
+    bp.ladder(-7, -8, 0, -1, "east")
     bp.clear(-6, -9, -3, -1, -5, 3)
     bp.fill(-7, -10, -4, 0, -10, 4, VB)
     bp.fill(-6, -10, -3, -1, -10, 3, "obsidian")
@@ -883,9 +884,10 @@ def gazebo(bp, cx, y, cz, r, n=8, h=5, roof="dome", loot=None):
                 bp.set(px, top - 1, pz, stair(PUR_ST, face_vec(to[0] - px, to[1] - pz), "top"))
     for (x, z) in ring_pts(cx, cz, r + 1):
         bp.set(x, top, z, stair(VB_ST, face_in(x, z, cx, cz), "top"))
-    for (x, z) in disk_pts(cx, cz, r):
-        if not bp.get(x, top, z):
-            bp.set(x, top, z, slab(PUR_SL, "top"))
+    if roof != "dome":      # (a dome stays open to the pavilion below: no sealed void under it)
+        for (x, z) in disk_pts(cx, cz, r):
+            if not bp.get(x, top, z):
+                bp.set(x, top, z, slab(PUR_SL, "top"))
     if roof == "dome":
         for x in range(cx - r - 1, cx + r + 2):
             for yy in range(top + 1, top + r + 2):
@@ -1090,7 +1092,7 @@ def chorus_garden(bp):
         star_lamp(bp, lx, ly + 1, lz, h=1)
         hanging_vines(bp, led, rng, 0.35, 5)
 
-    # --- secret grotto under the crown: the glowing font block hides a ladder shaft into the rock
+    # --- secret grotto under the crown: a trapdoor in the pavilion floor hides a ladder shaft into the rock
     gc = (pc[0], pc[1] + 4)
     for (x, z) in ring_pts(gc[0], gc[1], 5):
         for y in range(-8, -1):
@@ -1107,9 +1109,10 @@ def chorus_garden(bp):
     for (x, z) in ((gc[0] - 3, gc[1]), (gc[0] - 2, gc[1] + 2), (gc[0] + 3, gc[1] + 1)):
         bp.set(x, -8, z, "end_stone")
         chorus_tree(bp, x, -7, z, rng.randint(2, 3), rng, 1)
-    bp.fill(pc[0], -7, pc[1] - 1, pc[0], 8, pc[1] - 1, "end_stone")
-    bp.ladder(pc[0], -7, pc[1], 8, "south")
-    bp.set(pc[0], 9, pc[1], STAR)
+    hx, hz = pc[0], pc[1] + 3           # south of the font, inside the pavilion
+    bp.fill(hx, -7, hz - 1, hx, 8, hz - 1, "end_stone")
+    bp.ladder(hx, -7, hz, 7, "south")
+    bp.set(hx, 8, hz, "warped_trapdoor[facing=south,half=top,open=false,powered=false,waterlogged=false]")
     INT.decorate(bp, dict(INT.THEMES["end"], density=0.25), seed=1, centre=False)
 
 
@@ -1341,7 +1344,8 @@ def end_archive(bp):
     # --- roof walk, upper drum and the dragon-crowned dome
     roof = octagon(A, B)
     for (x, z) in roof:
-        bp.set(x, F[4], z, VB)
+        if math.hypot(x, z) > 3.9:      # the stair well stays open: the helix climbs into the dome chamber
+            bp.set(x, F[4], z, VB)
     for (x, z) in oct_edge(roof):
         bp.set(x, F[4] + 1, z, ESB_WA)
     drum = octagon(7, 10)
@@ -1436,11 +1440,10 @@ def end_archive(bp):
         bp.set(x, F[4] + 2, z, "candle[candles=4,lit=true,waterlogged=false]")
     hang_star(bp, 0, ltop - 2, 0, 3, STAR)
 
-    # --- secret: a bookshelf in hall 1 hides a ladder down to the sealed vault in the rock
+    # --- secret: a gap in the shelving of hall 1 hides a trapdoor and a ladder down to the vault in the rock
     bp.fill(0, -8, -A + 1, 0, 2, -A + 1, "air")
-    bp.set(0, 1, -A + 1, "bookshelf")
-    bp.set(0, 2, -A + 1, "bookshelf")
-    bp.ladder(0, -8, -A + 1, 0, "south")
+    bp.set(0, 0, -A + 1, "warped_trapdoor[facing=south,half=top,open=false,powered=false,waterlogged=false]")
+    bp.ladder(0, -8, -A + 1, -1, "south")
     bp.clear(-4, -8, -8, 4, -4, -3)
     bp.fill(-5, -9, -9, 5, -9, -2, VB)
     bp.fill(-4, -9, -8, 4, -9, -3, "obsidian")
@@ -1571,8 +1574,9 @@ def ship_model(rng):
         m.set(x, 6, 0, STAR if x % 2 else "magenta_stained_glass")
     for x in range(-5, 6):
         m.set(x, P + 1, 11, VB_WA)
-    m.set(0, DECK + 1, 11, "air")
-    m.set(0, DECK + 2, 11, "air")
+    for x in (-1, 0, 1):     # cabin door, 3x3: the hull's pitch steps a narrower one down to a crawl
+        for y in (DECK + 1, DECK + 2, DECK + 3):
+            m.set(x, y, 11, "air")
     for x in (-4, 4):
         star_lamp(m, x, P + 1, 1, h=2)
     # forecastle z 47..53, raised to DECK + 3
@@ -1690,7 +1694,7 @@ def ship_model(rng):
     for x in (-1, 0, 1):  # hatch down to the hold
         for z in range(28, 33):
             m.set(x, DECK, z, "air")
-        for k, z in enumerate(range(29, 33)):
+        for k, z in enumerate(range(29, 34)):      # the top step sits in the deck's edge
             m.set(x, 4 + k, z, stair(PUR_ST, "south"))
             for y in range(3, 4 + k):
                 m.set(x, y, z, PUR)

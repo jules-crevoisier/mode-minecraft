@@ -23,7 +23,7 @@
               34,
               22
             ],
-            "blocks": 6466
+            "blocks": 6476
           },
           {
             "location": "brasshaven:piglin_market/market/x0_z1",
@@ -37,7 +37,7 @@
               36,
               23
             ],
-            "blocks": 7744
+            "blocks": 7828
           },
           {
             "location": "brasshaven:piglin_market/market/x0_z2",
@@ -51,7 +51,7 @@
               34,
               23
             ],
-            "blocks": 6455
+            "blocks": 6465
           },
           {
             "location": "brasshaven:piglin_market/market/x1_z0",
@@ -65,7 +65,7 @@
               36,
               23
             ],
-            "blocks": 7793
+            "blocks": 7877
           },
           {
             "location": "brasshaven:piglin_market/market/x1_z1",
@@ -79,7 +79,7 @@
               69,
               23
             ],
-            "blocks": 9562
+            "blocks": 9713
           },
           {
             "location": "brasshaven:piglin_market/market/x1_z2",
@@ -93,7 +93,7 @@
               36,
               23
             ],
-            "blocks": 7750
+            "blocks": 7834
           },
           {
             "location": "brasshaven:piglin_market/market/x2_z0",
@@ -107,7 +107,7 @@
               34,
               23
             ],
-            "blocks": 6465
+            "blocks": 6475
           },
           {
             "location": "brasshaven:piglin_market/market/x2_z1",
@@ -121,7 +121,7 @@
               36,
               23
             ],
-            "blocks": 7781
+            "blocks": 7865
           },
           {
             "location": "brasshaven:piglin_market/market/x2_z2",
@@ -135,7 +135,7 @@
               34,
               22
             ],
-            "blocks": 6436
+            "blocks": 6446
           }
         ],
         "projection": "rigid",

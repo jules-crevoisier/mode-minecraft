@@ -177,6 +177,12 @@ Journal de la refonte :
   heurtait le mur à chaque coin (on ne remontait plus), les ossuaires bouchaient des portes, la sortie de
   l'hypogée passait au-dessus du puits. Tapis et meubles ne recouvrent plus les trappes. Les tours de la
   Forteresse de basalte ont enfin des portes.
+  Puis toutes les autres structures : **130 pièces, 0 erreur** (315 au départ). Ce qui revenait le plus : tours
+  sans porte, escaliers qui s'arrêtent une marche trop tôt ou heurtent un plancher, passerelles en pente dont la
+  rambarde tombait sur la marche suivante, meubles posés devant les portes ou sur des toits, et entrées
+  « secrètes » qu'il fallait casser. Les secrets restent cachés mais s'ouvrent sans pioche : trappe au ras du sol,
+  porte perdue entre des bibliothèques, passage derrière une toile d'araignée ou un rideau de racines. Les barreaux
+  scellés des salles du trésor (ouverts à la mort du boss) comptent comme une trappe pour l'audit.
 
 ## 6. Petits outils de débogage
 
