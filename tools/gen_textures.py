@@ -450,6 +450,7 @@ def main():
         names = decor.texture_names(bid)
         for face, fn in d["tex"].items():
             written[f"block/{names[face]}"] = fn()
+    written.update(__import__("wf.blocktex", fromlist=["textures"]).textures(written))  # block-face overhaul, repaints only
     for rel, cv in written.items():
         path = os.path.join(TEX, rel + ".png")
         os.makedirs(os.path.dirname(path), exist_ok=True)
