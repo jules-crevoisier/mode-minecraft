@@ -116,6 +116,7 @@ STRUCTURE_ICONS = {
     "sunken_submarine": "brasshaven:diving_helmet", "diving_bell": "bell", "coral_shrine": "brain_coral_block",
     "shipwreck_debris": "barrel",
     "chained_bastion": "gilded_blackstone",
+    "shattered_halo": "end_crystal",
 }
 # where each boss lives (its quest follows the discovery of that structure)
 BOSS_HOME = {

@@ -1,0 +1,468 @@
+{
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "brasshaven:chunked_template",
+        "size": [
+          181,
+          107,
+          176
+        ],
+        "cells": [
+          {
+            "location": "brasshaven:shattered_halo/halo/x0_z1",
+            "offset": [
+              13,
+              34,
+              29
+            ],
+            "size": [
+              17,
+              44,
+              30
+            ],
+            "blocks": 7468
+          },
+          {
+            "location": "brasshaven:shattered_halo/halo/x0_z2",
+            "offset": [
+              4,
+              24,
+              59
+            ],
+            "size": [
+              24,
+              31,
+              29
+            ],
+            "blocks": 4494
+          },
+          {
+            "location": "brasshaven:shattered_halo/halo/x0_z3",
+            "offset": [
+              0,
+              17,
+              88
+            ],
+            "size": [
+              28,
+              34,
+              29
+            ],
+            "blocks": 4203
+          },
+          {
+            "location": "brasshaven:shattered_halo/halo/x0_z4",
+            "offset": [
+              7,
+              13,
+              117
+            ],
+            "size": [
+              23,
+              57,
+              30
+            ],
+            "blocks": 11398
+          },
+          {
+            "location": "brasshaven:shattered_halo/halo/x0_z5",
+            "offset": [
+              20,
+              22,
+              147
+            ],
+            "size": [
+              10,
+              15,
+              4
+            ],
+            "blocks": 190
+          },
+          {
+            "location": "brasshaven:shattered_halo/halo/x1_z0",
+            "offset": [
+              33,
+              36,
+              4
+            ],
+            "size": [
+              27,
+              29,
+              25
+            ],
+            "blocks": 3075
+          },
+          {
+            "location": "brasshaven:shattered_halo/halo/x1_z1",
+            "offset": [
+              30,
+              34,
+              29
+            ],
+            "size": [
+              26,
+              41,
+              29
+            ],
+            "blocks": 7283
+          },
+          {
+            "location": "brasshaven:shattered_halo/halo/x1_z2",
+            "offset": [
+              47,
+              20,
+              80
+            ],
+            "size": [
+              13,
+              35,
+              8
+            ],
+            "blocks": 1433
+          },
+          {
+            "location": "brasshaven:shattered_halo/halo/x1_z3",
+            "offset": [
+              47,
+              20,
+              88
+            ],
+            "size": [
+              13,
+              36,
+              9
+            ],
+            "blocks": 1751
+          },
+          {
+            "location": "brasshaven:shattered_halo/halo/x1_z4",
+            "offset": [
+              30,
+              15,
+              123
+            ],
+            "size": [
+              17,
+              45,
+              24
+            ],
+            "blocks": 3918
+          },
+          {
+            "location": "brasshaven:shattered_halo/halo/x1_z5",
+            "offset": [
+              30,
+              5,
+              147
+            ],
+            "size": [
+              30,
+              31,
+              20
+            ],
+            "blocks": 4484
+          },
+          {
+            "location": "brasshaven:shattered_halo/halo/x2_z0",
+            "offset": [
+              60,
+              43,
+              1
+            ],
+            "size": [
+              30,
+              25,
+              28
+            ],
+            "blocks": 2864
+          },
+          {
+            "location": "brasshaven:shattered_halo/halo/x2_z1",
+            "offset": [
+              69,
+              49,
+              29
+            ],
+            "size": [
+              1,
+              3,
+              1
+            ],
+            "blocks": 3
+          },
+          {
+            "location": "brasshaven:shattered_halo/halo/x2_z2",
+            "offset": [
+              60,
+              12,
+              59
+            ],
+            "size": [
+              30,
+              67,
+              29
+            ],
+            "blocks": 3059
+          },
+          {
+            "location": "brasshaven:shattered_halo/halo/x2_z3",
+            "offset": [
+              60,
+              10,
+              88
+            ],
+            "size": [
+              30,
+              75,
+              29
+            ],
+            "blocks": 3354
+          },
+          {
+            "location": "brasshaven:shattered_halo/halo/x2_z5",
+            "offset": [
+              60,
+              6,
+              148
+            ],
+            "size": [
+              30,
+              29,
+              28
+            ],
+            "blocks": 2799
+          },
+          {
+            "location": "brasshaven:shattered_halo/halo/x3_z0",
+            "offset": [
+              90,
+              44,
+              0
+            ],
+            "size": [
+              31,
+              63,
+              27
+            ],
+            "blocks": 9495
+          },
+          {
+            "location": "brasshaven:shattered_halo/halo/x3_z2",
+            "offset": [
+              90,
+              10,
+              59
+            ],
+            "size": [
+              31,
+              68,
+              29
+            ],
+            "blocks": 3357
+          },
+          {
+            "location": "brasshaven:shattered_halo/halo/x3_z3",
+            "offset": [
+              90,
+              0,
+              88
+            ],
+            "size": [
+              31,
+              85,
+              29
+            ],
+            "blocks": 3809
+          },
+          {
+            "location": "brasshaven:shattered_halo/halo/x3_z5",
+            "offset": [
+              90,
+              6,
+              149
+            ],
+            "size": [
+              31,
+              43,
+              27
+            ],
+            "blocks": 12173
+          },
+          {
+            "location": "brasshaven:shattered_halo/halo/x4_z0",
+            "offset": [
+              121,
+              42,
+              2
+            ],
+            "size": [
+              30,
+              42,
+              27
+            ],
+            "blocks": 5621
+          },
+          {
+            "location": "brasshaven:shattered_halo/halo/x4_z1",
+            "offset": [
+              131,
+              41,
+              29
+            ],
+            "size": [
+              20,
+              25,
+              23
+            ],
+            "blocks": 1239
+          },
+          {
+            "location": "brasshaven:shattered_halo/halo/x4_z2",
+            "offset": [
+              121,
+              14,
+              82
+            ],
+            "size": [
+              30,
+              34,
+              6
+            ],
+            "blocks": 866
+          },
+          {
+            "location": "brasshaven:shattered_halo/halo/x4_z3",
+            "offset": [
+              121,
+              20,
+              88
+            ],
+            "size": [
+              30,
+              28,
+              7
+            ],
+            "blocks": 1107
+          },
+          {
+            "location": "brasshaven:shattered_halo/halo/x4_z4",
+            "offset": [
+              130,
+              12,
+              123
+            ],
+            "size": [
+              21,
+              21,
+              24
+            ],
+            "blocks": 1019
+          },
+          {
+            "location": "brasshaven:shattered_halo/halo/x4_z5",
+            "offset": [
+              121,
+              6,
+              147
+            ],
+            "size": [
+              30,
+              37,
+              27
+            ],
+            "blocks": 5731
+          },
+          {
+            "location": "brasshaven:shattered_halo/halo/x5_z0",
+            "offset": [
+              151,
+              56,
+              27
+            ],
+            "size": [
+              1,
+              5,
+              2
+            ],
+            "blocks": 6
+          },
+          {
+            "location": "brasshaven:shattered_halo/halo/x5_z1",
+            "offset": [
+              151,
+              33,
+              29
+            ],
+            "size": [
+              16,
+              29,
+              30
+            ],
+            "blocks": 1265
+          },
+          {
+            "location": "brasshaven:shattered_halo/halo/x5_z2",
+            "offset": [
+              151,
+              23,
+              59
+            ],
+            "size": [
+              30,
+              53,
+              29
+            ],
+            "blocks": 10829
+          },
+          {
+            "location": "brasshaven:shattered_halo/halo/x5_z3",
+            "offset": [
+              151,
+              15,
+              88
+            ],
+            "size": [
+              30,
+              61,
+              29
+            ],
+            "blocks": 11372
+          },
+          {
+            "location": "brasshaven:shattered_halo/halo/x5_z4",
+            "offset": [
+              151,
+              12,
+              117
+            ],
+            "size": [
+              17,
+              25,
+              26
+            ],
+            "blocks": 1124
+          },
+          {
+            "location": "brasshaven:shattered_halo/halo/x5_z5",
+            "offset": [
+              151,
+              2,
+              147
+            ],
+            "size": [
+              26,
+              36,
+              15
+            ],
+            "blocks": 2326
+          }
+        ],
+        "projection": "rigid",
+        "processors": "brasshaven:none"
+      }
+    }
+  ]
+}

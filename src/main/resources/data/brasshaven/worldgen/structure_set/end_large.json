@@ -11,6 +11,10 @@
     {
       "structure": "brasshaven:void_nest",
       "weight": 1
+    },
+    {
+      "structure": "brasshaven:shattered_halo",
+      "weight": 1
     }
   ],
   "placement": {

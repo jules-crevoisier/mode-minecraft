@@ -35,6 +35,7 @@
  "rune_circle": {"dimension": "overworld", "ground": 32, "views": []},
  "sand_hypogeum": {"dimension": "overworld", "ground": 41, "views": []},
  "sealed_lab": {"dimension": "overworld", "ground": 32, "views": []},
+ "shattered_halo": {"dimension": "end", "ground": 41, "views": [{"name": "arrival", "feet": [170, 28, 155], "look": [90, 52, 88]}, {"name": "light_bridge", "feet": [66, 32, 161], "look": [49, 34, 157]}, {"name": "observatory", "feet": [109, 27, 164], "look": [114, 33, 162]}, {"name": "library", "feet": [28, 35, 130], "look": [21, 43, 138]}, {"name": "grace", "feet": [130, 43, 90], "look": [126, 44, 84]}, {"name": "arena", "feet": [106, 42, 88], "look": [80, 48, 88]}, {"name": "gate", "feet": [172, 44, 88], "look": [157, 53, 88]}]},
  "shipwreck_debris": {"dimension": "overworld", "ground": 4, "views": []},
  "sky_harbour": {"dimension": "overworld", "ground": 12, "views": []},
  "sky_island": {"dimension": "overworld", "ground": 12, "views": []},

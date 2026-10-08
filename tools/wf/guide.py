@@ -207,10 +207,11 @@ PAGES = [
          "Sorts : trait de feu, nova de givre, éclair Tesla, soin, lévitation, protection et jet de vapeur. Chaque "
          "bâton se fabrique debout : un éclat d'améthyste entre deux ingrédients de son élément (poudre de blaze, "
          "glace compactée, cuivre...) en haut, une bague, un bâton."),
-        ("More mana: an Arcane Ring (+50 mana) or a Mana Amulet (faster regeneration) work just by being in your "
-         "inventory. Arcanist talents and robes make spells stronger.",
-         "Plus de mana : un Anneau arcanique (+50 mana) ou une Amulette de mana (recharge plus rapide) agissent "
-         "simplement en étant dans ton inventaire. Les talents et les robes d'arcaniste renforcent les sorts."),
+        ("More mana: an Arcane Ring (+50 mana, ring slot) or a Mana Amulet (faster regeneration, amulet slot) work "
+         "while worn in the accessory slots next to your armour. Arcanist talents and robes make spells stronger.",
+         "Plus de mana : un Anneau arcanique (+50 mana, emplacement d'anneau) ou une Amulette de mana (recharge plus "
+         "rapide, emplacement d'amulette) agissent portés dans les emplacements d'accessoires, à côté de l'armure. "
+         "Les talents et les robes d'arcaniste renforcent les sorts."),
     ], ["brasshaven:fire_staff", "brasshaven:frost_staff", "brasshaven:thunder_staff", "brasshaven:healing_staff",
         "brasshaven:levitation_wand", "brasshaven:ward_orb", "brasshaven:steam_cane", "brasshaven:arcane_ring",
         "brasshaven:mana_amulet"]),
@@ -519,6 +520,25 @@ PAGES = [
          "la prison des cages suspendues, la caserne (regarde sous le plancher), la forge, la chapelle et un lieu de "
          "grâce avant le tambour du boss ; la salle du trésor est au-delà de l'arène."),
     ], []),
+    ("shattered_halo", "wonders", "minecraft:end_crystal", ("Shattered Halo", "Halo brisé"), [
+        ("A tilted ring of purpur, end stone bricks and gold, 170 blocks across, broken into five arcs floating at "
+         "different heights over the void of the End, with a temple on each arc and the boss on a disc at the centre.",
+         "Un anneau incliné de purpur, de briques de pierre de l'End et d'or, large de 170 blocs, brisé en cinq arcs "
+         "qui flottent à des hauteurs différentes au-dessus du vide de l'End, avec un temple sur chaque arc et le "
+         "boss sur un disque au centre."),
+        ("Where: the outer islands of the End (highlands, midlands, barrens, small islands), over open void.",
+         "Où : les îles extérieures de l'End (hautes terres, terres moyennes, terres arides, petites îles), "
+         "au-dessus du vide."),
+        ("Arrive on the outer islet (waystone); the bridges set the order: the Observatory, a light bridge to the "
+         "Library of the Void, stepping islets to the Reliquary (a trapdoor hides a crypt), an arched bridge to the "
+         "Bell Shrine, a light bridge down to the Gate. The radial bridge leads to a site of grace, then to the arena. "
+         "A fall off a walkway means the void: bring ender pearls and slow falling.",
+         "On arrive sur l'îlot extérieur (pierre de passage) ; les ponts imposent l'ordre : l'Observatoire, un pont "
+         "de lumière jusqu'à la Bibliothèque du vide, des îlots-gués jusqu'au Reliquaire (une trappe cache une "
+         "crypte), un pont en arc jusqu'au Sanctuaire des cloches, un pont de lumière qui descend à la Porte. Le pont "
+         "rayonnant mène à un lieu de grâce, puis à l'arène. Une chute, c'est le vide : prends des perles de l'Ender "
+         "et de la chute lente."),
+    ], []),
     ("iron_helmsman", "wonders", "brasshaven:remembrance_iron_helmsman", ("The Iron Helmsman", "Le Timonier de Fer"), [
         ("The pilot of the Walking Fortress waits on its open top deck (450 health, armour 15): a hulking captain "
          "fused into a steam harness, a harpoon-cannon for an arm and an anchor dragged on a chain. Bring your best "
@@ -694,9 +714,12 @@ PAGES = [
          "contenu n'est perdu."),
     ], ["brasshaven:travel_backpack", "brasshaven:explorer_backpack"]),
     ("magnet", "storage", "brasshaven:magnet_ring", ("Magnet Ring", "Anneau aimanté"), [
-        ("While it is in your inventory and switched on (it glows), items and experience within 7 blocks fly to you.",
-         "Tant qu'il est dans ton inventaire et allumé (il brille), objets et expérience à 7 blocs volent vers toi."),
-        ("Right-click it or press N to switch it on or off.", "Clic droit ou touche N pour l'allumer ou l'éteindre."),
+        ("Wear it in a ring slot (next to your armour in the inventory). Switched on (it glows), it makes items and "
+         "experience within 7 blocks fly to you.",
+         "Porte-le dans un emplacement d'anneau (à côté de l'armure, dans l'inventaire). Allumé (il brille), il fait "
+         "voler vers toi objets et expérience à 7 blocs."),
+        ("Right-click it in hand, or press N even while it is worn, to switch it on or off.",
+         "Clic droit en main, ou touche N même quand il est porté, pour l'allumer ou l'éteindre."),
         ("Craft: two Map Fragments, a redstone and three iron ingots.",
          "Fabrication : deux fragments de carte, une redstone et trois lingots de fer."),
     ], ["brasshaven:magnet_ring"]),

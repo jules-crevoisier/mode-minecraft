@@ -154,6 +154,7 @@ FAMILIES = [
     }, avoid=[(NL, 5), (V + "nether_complexes", 3)]),
     Family("end_large", "end", 40, 14, {
         "end_archive": 2, "void_crypt": 2, "void_nest": 1,
+        "shattered_halo": 1,
     }, avoid=[(V + "end_cities", 4)]),
     Family("end_small", "end", 32, 10, {
         "chorus_garden": 3, "void_observatory": 2, "void_ship": 2,
@@ -247,6 +248,7 @@ FIT = {
     "end_archive": _f("sky", clearance=4, lift=32),
     "void_ship": _f("sky", clearance=4, lift=32),
     "void_nest": _f("sky", clearance=4, lift=32),
+    "shattered_halo": _f("sky", clearance=4, lift=32),   # floats over the void between the outer islands
     "void_crypt": _f("land", spread=6, slope=0.7, wet=0.0),            # mausoleum on an End island
 }
 

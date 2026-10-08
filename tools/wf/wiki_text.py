@@ -175,6 +175,13 @@ QOL = [
      "N'importe quel membre du groupe peut la vider."),
     ("Cartes d'astuce", "La première fois que tu rencontres un système (pierre, élite, lune de sang...), une petite "
      "carte l'explique en une phrase."),
+    ("Emplacements d'accessoires", "À gauche de l'armure, l'inventaire a cinq cases d'accessoires : un dos (planeur "
+     "en laiton), deux anneaux (anneau aimanté, anneau arcanique), une amulette (amulette de mana) et une ceinture "
+     "(montre à gousset). Un accessoire n'agit que porté ; Maj + clic pour l'équiper. En créatif, les cases sont à "
+     "droite de l'armure. À la mort, ils suivent la règle keepInventory (sinon, direction la tombe)."),
+    ("Infobulles claires", "Chaque objet du mod a la même infobulle : son nom, une phrase d'ambiance en italique, "
+     "puis les règles en clair avec les vrais chiffres (dégâts, recharge, mana, emplacement, bonus d'ensemble). "
+     "Quand il y a plus à dire : « Maj enfoncée : plus de détails »."),
     ("Danger et élites", "Plus tu t'éloignes du spawn (+1 niveau tous les 900 blocs), plus les monstres ont de vie "
      "et de dégâts. Les élites (nom doré) lâchent un meilleur butin. Une lune de sang tous les 7 nuits."),
 ]
@@ -295,6 +302,15 @@ STRUCTURES = {
                        "des cages suspendues au-dessus d'un puits ouvert sur la lave, la caserne et sa cellule secrète, "
                        "la halle de la forge, la chapelle, la salle du lieu de grâce, puis une passerelle couverte "
                        "jusqu'au tambour du boss, au sol de grilles, et la salle du trésor.",
+    "shattered_halo": "Un anneau colossal de purpur, de briques de pierre de l'End et d'or, large de 170 blocs et "
+                      "incliné au-dessus du vide de l'End, brisé en cinq arcs qui flottent chacun à sa hauteur. On "
+                      "arrive sur un îlot extérieur (pierre de passage), puis les ponts imposent l'ordre : "
+                      "l'Observatoire et son télescope géant, un pont de lumière jusqu'à la Bibliothèque du vide et "
+                      "son puits ouvert sur le néant, des îlots-gués jusqu'au Reliquaire (une trappe y cache une "
+                      "crypte), un pont en arc jusqu'au Sanctuaire des cloches sous son aiguille dorée, un dernier pont "
+                      "de lumière jusqu'à la Porte. De là, un pont rayonnant mène à l'îlot du lieu de grâce, puis "
+                      "à l'arène : un disque flottant au centre de l'anneau, ouvert sur le vide, cerné d'éclats d'un "
+                      "plus petit halo. La salle du trésor est au-delà.",
     "tesla_observatory": "Un campus scientifique perché sur un piton de montagne. À l'ouest, le Grand Observatoire : "
                          "un tambour de pierre crème sous une coupole de cuivre vert-de-gris, fendue pour un télescope "
                          "de laiton de 30 blocs. Au nord-est, la Tour Tesla : 70 blocs de treillis autour d'une bobine "
@@ -624,10 +640,12 @@ GADGET_TIPS = {
                     "casser.",
     "grappling_hook": "Vise un rebord en hauteur : tours de la Citadelle, falaises, Îles célestes. La griffe ne "
                       "touche pas les créatures.",
-    "brass_glider": "Le combo du mod : grappin pour monter, planeur pour redescendre de l'autre côté.",
+    "brass_glider": "Le combo du mod : grappin pour monter, planeur pour redescendre de l'autre côté. Porte-le "
+                    "dans la case du dos : il s'ouvre tout seul quand tu tombes, les mains restent libres.",
     "rivet_gun": "Une arme à distance sans arc, rapide et presque droite : parfaite contre les drones à vapeur.",
     "rivet": "Garde-en une pile sur toi ; sans rivets, le pistolet prend tes pépites de fer.",
-    "pocket_watch": "Pour voir venir la nuit et la lune de sang, et savoir dans quel biome tu te trouves.",
+    "pocket_watch": "Pour voir venir la nuit et la lune de sang, et savoir dans quel biome tu te trouves. À la "
+                    "ceinture (case d'accessoire), elle sonne au crépuscule et à l'aube.",
     "airship_compass": "Le plus simple pour trouver le Port céleste. Dans l'End, elle mène à l'Épave du vide.",
 }
 
@@ -796,6 +814,8 @@ NEW_GROUPS = [
          "sa main.", "s-fallen_colossus", "struct:fallen_colossus"),
         ("Bastion enchaîné", "Une forteresse de pierre noire et d'or suspendue sous le plafond du Nether par des "
          "chaînes géantes, au-dessus d'un lac de lave.", "s-chained_bastion", "struct:chained_bastion"),
+        ("Halo brisé", "Un anneau de 170 blocs brisé en cinq arcs flottants au-dessus du vide de l'End, un temple "
+         "sur chaque arc et le boss sur un disque au centre.", "s-shattered_halo", "struct:shattered_halo"),
     ]),
 ]
 
@@ -811,7 +831,12 @@ TEST_CHECKLIST = [
      "Brasshaven (placage de laiton…) : il revient dans l'inventaire."),
     ("Grappin et planeur", ["/give @s brasshaven:grappling_hook", "/give @s brasshaven:brass_glider"],
      "Vise un mur à moins de 32 blocs : la chaîne te tire jusqu'au rebord. En survie (/gamemode survival), saute "
-     "d'en haut avec le planeur en main : tu descends doucement, sans dégâts."),
+     "d'en haut avec le planeur en main ou porté dans la case du dos : tu descends doucement, sans dégâts."),
+    ("Accessoires", ["/gamemode survival", "/give @s brasshaven:magnet_ring", "/give @s brasshaven:arcane_ring",
+                     "/give @s brasshaven:mana_amulet", "/give @s brasshaven:brass_glider"],
+     "Ouvre l'inventaire (E) : une colonne de cinq cases grises à gauche de l'armure (dos, deux anneaux, amulette, "
+     "ceinture). Maj + clic sur chaque objet : il va dans sa case. L'anneau arcanique donne +50 de mana max "
+     "seulement porté ; l'anneau aimanté (touche N pour l'allumer) attire les objets seulement porté."),
     ("Pistolet à rivets", ["/give @s brasshaven:rivet_gun", "/give @s brasshaven:rivet 64",
                            "/summon minecraft:zombie ~ ~ ~5"],
      "Clic droit : un rivet fumant part tout droit (5 dégâts). Sans rivets ni pépites de fer : « Plus de rivets »."),
