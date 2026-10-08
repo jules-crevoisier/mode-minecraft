@@ -116,6 +116,15 @@ public final class BrasshavenCommand {
                                         GeneratedContent.STRUCTURES.stream().map(GeneratedContent.StructureInfo::id), b))
                                 .executes(ctx -> locate(ctx, StringArgumentType.getString(ctx, "structure"), true))))
                 .then(Commands.literal("boss").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
+                        // NG+ cycle of a boss in this world: read it, or set it (0..7)
+                        .then(Commands.literal("cycle")
+                                .then(Commands.argument("boss", StringArgumentType.word())
+                                        .suggests((ctx, b) -> SharedSuggestionProvider.suggest(
+                                                ModEntities.bosses().stream().map(r -> r.getId().getPath()), b))
+                                        .executes(ctx -> bossCycle(ctx, StringArgumentType.getString(ctx, "boss"), -1))
+                                        .then(Commands.argument("n", IntegerArgumentType.integer(0, com.brasshaven.boss.BossCycles.MAX))
+                                                .executes(ctx -> bossCycle(ctx, StringArgumentType.getString(ctx, "boss"),
+                                                        IntegerArgumentType.getInteger(ctx, "n"))))))
                         .then(Commands.argument("boss", StringArgumentType.word())
                                 .suggests((ctx, b) -> SharedSuggestionProvider.suggest(
                                         ModEntities.bosses().stream().map(r -> r.getId().getPath()), b))
@@ -153,6 +162,28 @@ public final class BrasshavenCommand {
                 // the progression ladder's server rules, checked without a player (the CI server smoke test)
                 .then(Commands.literal("progression").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                         .then(Commands.literal("selftest").executes(com.brasshaven.util.ProgressionSelfTest::run))));
+    }
+
+    /** {@code /brasshaven boss cycle <boss> [n]}: read (n < 0) or set the world's NG+ cycle of a boss type. */
+    private static int bossCycle(CommandContext<CommandSourceStack> ctx, String id, int n) {
+        for (RegistryObject<? extends EntityType<? extends WayfarerBoss>> type : ModEntities.bosses()) {
+            if (!type.getId().getPath().equals(id)) {
+                continue;
+            }
+            var cycles = com.brasshaven.boss.BossCycles.get(ctx.getSource().getServer());
+            String key = type.getId().toString();
+            Component name = type.get().getDescription();
+            if (n < 0) {
+                ctx.getSource().sendSuccess(() -> Component.translatable("message.brasshaven.boss.cycle", name,
+                        cycles.cycle(key), cycles.defeats(key)), false);
+                return cycles.cycle(key);
+            }
+            cycles.setCycle(key, n);
+            ctx.getSource().sendSuccess(() -> Component.translatable("message.brasshaven.boss.cycle_set", name, n), true);
+            return n;
+        }
+        ctx.getSource().sendFailure(Component.literal("Unknown boss: " + id));
+        return 0;
     }
 
     /** Demo: summon a boss 6 blocks in front of you, its arena centred where it appears (radius 20). */

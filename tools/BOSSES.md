@@ -223,3 +223,112 @@ the **top deck** arena (open air, radius 15, ~89 blocks above the crater floor) 
 smokestacks → the vault in the bridge tower behind sealed bars that open when he falls.
 
 Previews: `python3 tools/gen_models.py --preview --only iron_helmsman` → `build/previews/models/iron_helmsman.png`.
+
+## 7. Champion of the Fallen Colossus: The Bronze Sentinel (La Sentinelle d'airain)
+Files: `tools/wf/mobs/bronze_sentinel.py` (model), `src/main/java/com/brasshaven/entity/boss/BronzeSentinel.java`
+(moveset). No lair module: the arena is the toppled statue's helm, whose seal wakes it (`BOSS` in
+`tools/wf/structures/fallen_colossus.py`). Reward: `remembrance_bronze_sentinel` → **Greatsword of the Sentinel**
+(`sentinel_greatsword`, LITHITE 8 / -3.2, ERUPT: a crack of rune light tears along a 12-block line and throws foes up),
+plus copper, map fragments, emeralds, diamonds and moss (`gen_data.py`). Quest: `explorer/boss_bronze_sentinel`.
+
+**Concept.** The statue's living guardian, a 5.6-block knight automaton of stone under bronze plate: verdigris streaks
+running down every plate, moss in the knees, elbows, waist and shoulders, a great helm whose cross visor is broken at
+the lower corner and glows gold from inside (the crest snapped off behind), a gold rune band across the breastplate
+and a torn mossy tabard. Asymmetric silhouette: a tower shield taller than a man on the left arm (gold-lit sun boss,
+cracked verdigris field), a long bronze greatsword in the right hand whose point rests on the ground in front of it.
+
+**Stats.** 460 health (a hard Overworld boss), armour 14, toughness 5, poise 100, knockback resistance 1.0, green
+bar, phase 2 at 50%: the plates fall away (armour -6, +20% speed).
+
+| Move | Phase | Wind-up / active / recovery | Range | What it does |
+|---|---|---|---|---|
+| bash | 1-2 | 14 / 8 / 12 | 3.5-14 | Shield drawn in (spark line on the path), lunge behind the shield: 12 + big knockback, once per target. P2: 40% chains into cleave. |
+| overhead | 1-2 | 22 / 4 / 16 | 0-10 | Greatsword over the helm, crashed 3.5 ahead (22, r 2.6), then a crack runs 12 blocks along the ground (14, warned by gold dots). P2: three cracks in a 50° fan. |
+| cleave | 1-2 | 16 / 3 / 14 | 0-7.5 | Blade drawn back to its right, swept over 220°: 18. P2: 35% chains into overhead. |
+| shieldwall | 1-2 | 10 / 40 / 10 | 0-12 | Shield planted for 2 s (guarded front outlined in gold): frontal hits clang off (no damage, no posture). Punish from behind; if it blocked anything it answers with a bash. |
+| stomp | 1-2 | 18 / 3 / 12 | 0-6 | Right foot raised (3.5 ring), stamped: 12 around + a ring to jump (10, out to 9; P2 12). |
+| dance | 2 | 12 / 36 / 14 | 0-9 | Blade held out, three whirling turns while it walks the target down: 11 per turn in r 4.8. |
+| topple | 2 | 20 / 20 / 18 | 5-22 | Spectacle: crouch while a gold ring follows the target; leap, the ring locks where the target stood (max 18 blocks), lands sword-first a second later: 22 in r 4 + a ring (9). Long stuck recovery. |
+| beams | 2 | 20 / 50 / 14 | 0-30 | Blade raised to the sky and driven into the floor; 3 volleys (0.8 s apart) of 32-block rune-light lines, one through every player plus one stray, warned 0.9 s by gold dots, then flaring (14). Step aside; too tall to jump. |
+
+**Lair (the helm).** In by the broken wrist: forearm tunnel → elbow chamber → arm stair → balcony of the rib hall (30-block
+vault opened by a breach) → grand stair to the gorget dais and its waystone (site of grace) → neck tunnel → mist → the
+**helm** arena (radius ~14, ceiling ~16, tuff rings on the floor, soul and plain campfires round the wall, daylight
+through the visor bars) → the vault under the arena floor behind sealed bars, an iron door out through the cheek.
+
+Previews: `python3 tools/gen_models.py --preview --only bronze_sentinel` → `build/previews/models/bronze_sentinel.png`.
+
+## 8. Champion of the Necropolis of Kings: The Dune King (Le Roi des dunes)
+Files: `tools/wf/mobs/dune_king.py` (model), `src/main/java/com/brasshaven/entity/boss/DuneKing.java` (moveset). No
+lair module: the arena is the existing L3 arena of the necropolis (`BOSS` in `tools/wf/structures/rock_necropolis.py`).
+Reward: `remembrance_dune_king` → **Crook of the Dune King** (`dune_king_crook`, a staff, BEAM: a 16-block beam of
+judgement that slows), plus gold, map fragments, emeralds, diamonds and lapis (`gen_data.py`). Quest:
+`explorer/boss_dune_king`. (Not a flail: the Sand Pharaoh already drops the Pharaoh's Flail.)
+
+**Concept.** An undead pharaoh-king, 4.6 blocks (5.2 with the crown): staggered strips of mummy wrappings with gilded
+bands, a towering double crown (white bulb out of the red crown with its tall back, gold curl, uraeus), a broad usekh
+collar of lapis, gold and turquoise beads, a striped false beard and lappets, a pleated kilt with a gold apron,
+sunken turquoise eyes. Asymmetry: a vulture-wing gold pauldron on the right shoulder, the crook held upright like a
+sceptre in the right hand, a beaded flail in the left, a loose bandage streaming off the left forearm. Four canopic
+jars (human, jackal, baboon and falcon lids, turquoise glyphs that glow) orbit him at chest height and bob.
+
+**Stats.** 460 health, armour 10, toughness 3, poise 85, knockback resistance 0.8, yellow bar, phase 2 at 50%: he
+rises and floats 1.4 blocks over the floor (no gravity, drifts toward the target between moves; every ground effect
+is drawn on the floor under him), +15% speed.
+
+| Move | Phase | Wind-up / active / recovery | Range | What it does |
+|---|---|---|---|---|
+| flail | 1-2 | 14 / 22 / 12 | 0-6.5 | Flail raised behind the shoulder, three lashes 10 ticks apart (past invulnerability frames): 10, 10, then 14 wider with knockback. |
+| hook | 1-2 | 16 / 4 / 14 | 4-11 | Crook drawn back (gold line on the ground): the first creature on the line takes 10 and is pulled 2.2 blocks in front of him, then he chains the flail. |
+| sandstorm | 1-2 | 20 / 30 / 12 | 0-10 | Arms raised, cone outlined in falling sand; 1.5 s of storm in a 70° cone, 10 long: 3 damage, blindness and slowness II every 10 ticks. |
+| summon | 1-2 | 20 / 4 / 16 | any | Crook and flail crossed over the crown (sand churns at 4 points 6 blocks out); husks rise there: 2 (P2 3), never more than 4 alive; they crumble when he dies. |
+| jars | 1-2 | 14 / 24 / 12 | 3-24 | Crook pointed (ring under the target); every 6 ticks a jar spits a curse bolt at where the target is then (0.7 blocks/tick, stops on walls): 8 + Wither 3 s. |
+| quicksand | 2 | 20 / 40 / 14 | 0-16 | Palms to the floor; 24 quicksand pools burst in three spiral arms spreading out to 14 blocks (12 + Slowness III 3 s), plus one under every player; each warned by falling sand and a ring. |
+| scarabs | 2 | 16 / 30 / 12 | 0-14 | Flail cracked on the floor: two low rings of scarabs roll out to 16 blocks, 16 ticks apart (10 each, jump them). |
+| judgement | 2 | 24 / 50 / 16 | 0-20 | Spectacle: crook levelled, a line of light marks the start on his left; a low 18-block beam sweeps 200° left to right over 2.5 s (16 + glowing, once per 10 ticks per target, grounded only): jump it as it passes or stand behind him. |
+
+**Lair (the king's arena).** Through the slot canyon to the hidden plaza → portal between the seated kings → hypostyle
+hall → L1 (embalming hall, gallery of niches) → L2 (flooded gallery, trap corridor, treasury) → L3 site of grace →
+narrow corridor → mist → the **king's arena** (radius 16, 17-18 high, a dais with two seated colossi and jackal
+statues) → south mist → reward vault behind sealed bars and the King's Well back up to the vestibule.
+
+Previews: `python3 tools/gen_models.py --preview --only dune_king` → `build/previews/models/dune_king.png`.
+
+## Difficulty: co-op scaling and NG+ cycles
+
+Applied by `boss/WayfarerBoss` to **every** boss on its first server tick, whatever spawned it (boss seal,
+altar, `/brasshaven boss`, spawn egg, a lair placement). Subclasses get it for free; nothing to do per boss.
+
+**Co-op** (players = alive, non-creative, non-spectator players within the arena/leash radius, at least the
+count the seal or altar passed to `scaleForPlayers`):
+
+| per extra player | effect |
+|---|---|
+| health | x (1 + 0.75 per extra player), attribute modifier `brasshaven:coop_health` (multiplicative) |
+| damage | +10% on every hit the boss deals (`BossDifficulty`, LivingHurtEvent: moves, waves, melee, projectiles) |
+| poise | +25% (`effectiveMaxPoise()` wraps the subclass's `maxPoise()`) |
+| cooldowns (2+ players) | -10% per extra player, never below 60% |
+| minions | `summon()` adds +1 per 2 extra players; `scaledCount(base)` is public for custom spawns |
+
+Every second the boss recounts the arena: if more players are fighting than it is scaled for, it scales up
+once (keeping its health fraction). It never scales down mid-fight. The boss bar shows "· N players".
+
+**NG+ cycles** (`boss/BossCycles`, SavedData in the overworld: `world/data/brasshaven_boss_cycles.dat`, keyed by
+entity id, e.g. `brasshaven:iron_helmsman`). Each defeat of a boss type with a player involved adds one; the
+cycle is `min(defeats, 7)` and is read when the boss spawns (and again when its fight starts, upward only, for
+bosses that waited in their lair). At cycle c:
+
+- health x (1 + 0.35c) (`brasshaven:ng_health`, multiplies with co-op), damage x (1 + 0.15c), armour +2c;
+- faster: wind-ups and recoveries x max(0.75, 1 - 0.04c), cooldowns and idle pauses scaled the same way.
+  A wind-up never drops below 10 ticks (or its authored length when that is shorter). Compressed wind-ups still
+  run every authored wind-up step (`tick == N` checks keep firing), several per tick when needed;
+- from cycle 2, phase 2 only, all bosses: an enraged soul shockwave every max(100, 220 - 15c) ticks
+  (1 s ring telegraph, then a wave of radius 9 + c, 4 + c damage before multipliers: jump it), and staggers
+  last max(34, 50 - 3c) ticks instead of 50;
+- boss bar title "Name +c";
+- loot: the boss loot table is rolled c extra times (Remembrances excluded, they stay unique), and from cycle 3
+  an **Ember of Ascension** drops with chance 15% x (c - 2). On an anvil, boss weapon + Ember = +1 attack damage
+  (modifier `brasshaven:ascension`, up to +5, cost 5 + 3 x level levels).
+
+Admin: `/brasshaven boss cycle <boss>` reads the cycle and defeat count, `/brasshaven boss cycle <boss> <n>` sets it
+(0..7). `/brasshaven boss <boss>` spawns at the world's current cycle.

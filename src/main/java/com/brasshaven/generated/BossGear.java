@@ -69,6 +69,12 @@ public final class BossGear {
     public static final RegistryObject<Item> REMEMBRANCE_IRON_HELMSMAN = remembrance("remembrance_iron_helmsman");
     public static final RegistryObject<Item> HELMSMAN_ANCHOR = weapon("helmsman_anchor", p -> p.sword(ModMaterials.LITHITE, 8.0F, -3.4F).rarity(Rarity.EPIC),
             BossWeaponItem.Ability.ERUPT, 11.0F, 12.0F, 90, () -> ParticleTypes.LARGE_SMOKE, BossWeaponItem.FIRE);
+    public static final RegistryObject<Item> REMEMBRANCE_BRONZE_SENTINEL = remembrance("remembrance_bronze_sentinel");
+    public static final RegistryObject<Item> SENTINEL_GREATSWORD = weapon("sentinel_greatsword", p -> p.sword(ModMaterials.LITHITE, 8.0F, -3.2F).rarity(Rarity.EPIC),
+            BossWeaponItem.Ability.ERUPT, 11.0F, 12.0F, 80, () -> ParticleTypes.WAX_ON, BossWeaponItem.LIFT);
+    public static final RegistryObject<Item> REMEMBRANCE_DUNE_KING = remembrance("remembrance_dune_king");
+    public static final RegistryObject<Item> DUNE_KING_CROOK = weapon("dune_king_crook", p -> p.durability(600).rarity(Rarity.EPIC),
+            BossWeaponItem.Ability.BEAM, 12.0F, 16.0F, 90, () -> ParticleTypes.END_ROD, BossWeaponItem.SLOW);
 
     private BossGear() {}
 

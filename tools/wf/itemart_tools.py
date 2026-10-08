@@ -114,19 +114,59 @@ def nugget(a):
 
 @painted("ingot")
 def ingot(a):
-    """Ingot: a trapezoid bar in three-quarter view, a maker's stamp on its face."""
+    """Ingot: a trapezoid bar in three-quarter view - lit top face, a bright bevel where it turns down, a mid
+    front face, a shaded end face and a deep bottom edge."""
     a.stamp([
-        ".....sllllllll..",
-        "....lllllllllld.",
-        "...llllllllllldd",
-        "..mmmmmmmmmmmdd.",
-        "..mmmmmmmmmmmd..",
-        "..mmmmmmmmmmd...",
-        "..eeeeeeeeeee...",
-    ], L("M", None), 0, 5)
-    for x, y in ((6, 9), (7, 8), (8, 9), (7, 10)):
-        a.px(x, y, "M", "dark")
-    a.px(3, 8, "M", "light")
+        "......lllllllll.",
+        ".....lslllllllm.",
+        "....llllllllllmd",
+        "...sssssssssssdd",
+        "...mmmmmmmmmmmdd",
+        "...mmmmmmmmmmmde",
+        "...dddddddddddde",
+        "....eeeeeeeeeee.",
+    ], L("M", None), 0, 4)
+
+
+@painted("raw")
+def raw(a):
+    """Raw ore: a rough chunk of two fused lobes and a chip, a deep crevice between them, two inclusions of the
+    accent mineral."""
+    a.stamp([
+        ".....lll........",
+        "....lsslmm......",
+        "...lslllmmd.ll..",
+        "...llmmmmmdlslm.",
+        "..lmmmmmmdelmmmd",
+        "..lmmmmmmdlmmmmd",
+        "..lmmmmmddmmmmdd",
+        "..dmmmmddemmmmdd",
+        "...ddmddeeddddd.",
+        "...eeddee.eeee..",
+        "....eee.........",
+    ], L("M", None), 0, 3)
+    for x, y in ((4, 9), (12, 6)):
+        a.px(x, y, "A", "light")
+        a.px(x + 1, y, "A", "dark")
+    a.px(5, 10, "A", "dark")
+
+
+@painted("gem")
+def gem(a):
+    """Cut gem: a brilliant seen from above - a bright table, lit crown facets on the left, shaded pavilion
+    facets sweeping down to the culet on the right."""
+    a.poly("M", [(2, 6), (5, 3), (11, 3), (14, 6), (8, 14)], "mid")
+    a.poly("M", [(5, 3), (11, 3), (10, 6), (6, 6)], "light")            # table
+    a.poly("M", [(2, 6), (5, 3), (6, 6)], "light")                       # left crown
+    a.poly("M", [(11, 3), (14, 6), (10, 6)], "mid")                      # right crown
+    a.poly("M", [(2, 6), (6, 6), (8, 14)], "mid")                        # left pavilion
+    a.poly("M", [(6, 6), (10, 6), (8, 14)], "dark")                      # centre pavilion
+    a.poly("M", [(10, 6), (14, 6), (8, 14)], "deep")                     # right pavilion
+    for x, y in ((6, 4), (7, 4), (6, 5)):
+        a.tone(x, y, "shine")
+    a.tone(3, 6, "light")
+    a.px(12, 2, "Y", "shine")
+    a.px(13, 3, "Y", "light")
 
 
 # ------------------------------------------------------------------ armour
@@ -290,3 +330,66 @@ def robe(a):
     a.px(6, 4, "A", "light")
     a.px(6, 6, "A", "light")
     a.px(7, 5, "A", "light")
+
+
+# ------------------------------------------------------------------ shards and relic orbs
+@painted("shard")
+def shard(a):
+    """Crystal shard: a long prism broken off at the base, lying on the diagonal; its lit left facet, mid ridge and
+    shaded right facet run its whole length up to a glinting point."""
+    x0, y0, x1, y1 = 3.6, 13.4, 12.4, 2.6
+    ln = math.hypot(x1 - x0, y1 - y0)
+    ux, uy = (x1 - x0) / ln, (y1 - y0) / ln
+
+    def geo(x, y):
+        u = (x - x0) * ux + (y - y0) * uy
+        v = (x - x0) * -uy + (y - y0) * ux      # < 0 on the upper-left side
+        return u, v
+
+    def inside(x, y):
+        u, v = geo(x, y)
+        if u < -1.2 or u > ln + 0.6:
+            return False
+        w = 2.3 if u < ln - 3.2 else 2.3 * (ln + 0.6 - u) / 3.8
+        if u < 0:
+            w = 2.3 + u * 0.8                 # the broken base, cut on a slant
+        return abs(v) <= w
+    a.paint("M", inside)
+    for y in range(16):
+        for x in range(16):
+            if a.m[y][x] != "M":
+                continue
+            u, v = geo(x + 0.5, y + 0.5)
+            t = "light" if v < -0.7 else "mid" if v < 0.6 else "dark"
+            if u < 0.6:
+                t = "deep" if v > -0.7 else "dark"
+            if u > ln - 1.6 and v < 0.6:
+                t = "shine"
+            a.tone(x, y, t)
+    for k in range(3):
+        a.tone(6 + k, 9 - k, "shine")
+
+
+@painted("orb")
+def orb(a):
+    """Relic orb: a glassy sphere of the boss's material lit from the top-left, held by a small brass cap and
+    loop; the boss emblem is drawn over its heart afterwards (gen_textures.EMBLEMS)."""
+    cx, cy, r = 8.0, 8.8, 6.1
+    a.disc("M", cx, cy, r)
+    hx, hy = cx - r * 0.38, cy - r * 0.38
+    for y in range(16):
+        for x in range(16):
+            if a.m[y][x] != "M":
+                continue
+            d = math.hypot(x + 0.5 - hx, y + 0.5 - hy) / r
+            rim = math.hypot(x + 0.5 - cx, y + 0.5 - cy) / r
+            t = "shine" if d < 0.2 else "light" if d < 0.62 else "mid" if d < 1.02 else "dark" if d < 1.36 else "deep"
+            if rim > 0.86 and t == "deep" and (x + 0.5 - cx) + (y + 0.5 - cy) > r * 0.9:
+                t = "dark"          # bounce light along the lower-right rim
+            a.tone(x, y, t)
+    a.box("H", 6, 2, 9, 2)
+    a.px(7, 1, "H")
+    a.px(8, 1, "H")
+    a.px(6, 2, "H", "light")
+    a.px(9, 2, "H", "dark")
+

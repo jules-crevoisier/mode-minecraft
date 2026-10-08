@@ -78,6 +78,7 @@ public final class Brasshaven {
         com.brasshaven.event.GadgetEvents.register();
         com.brasshaven.event.OceanEvents.register();
         com.brasshaven.skill.SkillEvents.register();
+        com.brasshaven.boss.BossDifficulty.register();
         com.brasshaven.util.NpcQuests.register();
         com.brasshaven.chisel.ChiselFamilies.register();
         com.brasshaven.recipe.RecipeSync.register();

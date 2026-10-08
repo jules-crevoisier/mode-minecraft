@@ -1,0 +1,356 @@
+{
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "brasshaven:chunked_template",
+        "size": [
+          179,
+          90,
+          113
+        ],
+        "cells": [
+          {
+            "location": "brasshaven:chained_bastion/bastion/x0_z0",
+            "offset": [
+              14,
+              0,
+              15
+            ],
+            "size": [
+              16,
+              3,
+              13
+            ],
+            "blocks": 251
+          },
+          {
+            "location": "brasshaven:chained_bastion/bastion/x0_z1",
+            "offset": [
+              1,
+              0,
+              28
+            ],
+            "size": [
+              29,
+              41,
+              28
+            ],
+            "blocks": 6530
+          },
+          {
+            "location": "brasshaven:chained_bastion/bastion/x0_z2",
+            "offset": [
+              0,
+              0,
+              56
+            ],
+            "size": [
+              30,
+              41,
+              29
+            ],
+            "blocks": 10471
+          },
+          {
+            "location": "brasshaven:chained_bastion/bastion/x0_z3",
+            "offset": [
+              13,
+              0,
+              85
+            ],
+            "size": [
+              17,
+              3,
+              12
+            ],
+            "blocks": 290
+          },
+          {
+            "location": "brasshaven:chained_bastion/bastion/x1_z0",
+            "offset": [
+              30,
+              0,
+              5
+            ],
+            "size": [
+              30,
+              3,
+              23
+            ],
+            "blocks": 1258
+          },
+          {
+            "location": "brasshaven:chained_bastion/bastion/x1_z1",
+            "offset": [
+              30,
+              0,
+              28
+            ],
+            "size": [
+              30,
+              41,
+              28
+            ],
+            "blocks": 2874
+          },
+          {
+            "location": "brasshaven:chained_bastion/bastion/x1_z2",
+            "offset": [
+              30,
+              0,
+              56
+            ],
+            "size": [
+              30,
+              49,
+              29
+            ],
+            "blocks": 4034
+          },
+          {
+            "location": "brasshaven:chained_bastion/bastion/x1_z3",
+            "offset": [
+              30,
+              0,
+              85
+            ],
+            "size": [
+              30,
+              3,
+              26
+            ],
+            "blocks": 1277
+          },
+          {
+            "location": "brasshaven:chained_bastion/bastion/x2_z0",
+            "offset": [
+              60,
+              0,
+              0
+            ],
+            "size": [
+              30,
+              90,
+              28
+            ],
+            "blocks": 2314
+          },
+          {
+            "location": "brasshaven:chained_bastion/bastion/x2_z1",
+            "offset": [
+              60,
+              0,
+              28
+            ],
+            "size": [
+              30,
+              90,
+              28
+            ],
+            "blocks": 22055
+          },
+          {
+            "location": "brasshaven:chained_bastion/bastion/x2_z2",
+            "offset": [
+              60,
+              0,
+              56
+            ],
+            "size": [
+              30,
+              90,
+              29
+            ],
+            "blocks": 21052
+          },
+          {
+            "location": "brasshaven:chained_bastion/bastion/x2_z3",
+            "offset": [
+              60,
+              0,
+              85
+            ],
+            "size": [
+              30,
+              90,
+              28
+            ],
+            "blocks": 2806
+          },
+          {
+            "location": "brasshaven:chained_bastion/bastion/x3_z0",
+            "offset": [
+              90,
+              0,
+              1
+            ],
+            "size": [
+              29,
+              90,
+              27
+            ],
+            "blocks": 2690
+          },
+          {
+            "location": "brasshaven:chained_bastion/bastion/x3_z1",
+            "offset": [
+              90,
+              0,
+              28
+            ],
+            "size": [
+              29,
+              87,
+              28
+            ],
+            "blocks": 36259
+          },
+          {
+            "location": "brasshaven:chained_bastion/bastion/x3_z2",
+            "offset": [
+              90,
+              0,
+              56
+            ],
+            "size": [
+              29,
+              89,
+              29
+            ],
+            "blocks": 31880
+          },
+          {
+            "location": "brasshaven:chained_bastion/bastion/x3_z3",
+            "offset": [
+              90,
+              0,
+              85
+            ],
+            "size": [
+              29,
+              90,
+              28
+            ],
+            "blocks": 3717
+          },
+          {
+            "location": "brasshaven:chained_bastion/bastion/x4_z0",
+            "offset": [
+              119,
+              0,
+              5
+            ],
+            "size": [
+              30,
+              3,
+              23
+            ],
+            "blocks": 1193
+          },
+          {
+            "location": "brasshaven:chained_bastion/bastion/x4_z1",
+            "offset": [
+              119,
+              0,
+              28
+            ],
+            "size": [
+              30,
+              90,
+              28
+            ],
+            "blocks": 15130
+          },
+          {
+            "location": "brasshaven:chained_bastion/bastion/x4_z2",
+            "offset": [
+              119,
+              0,
+              56
+            ],
+            "size": [
+              30,
+              90,
+              29
+            ],
+            "blocks": 16332
+          },
+          {
+            "location": "brasshaven:chained_bastion/bastion/x4_z3",
+            "offset": [
+              119,
+              0,
+              85
+            ],
+            "size": [
+              30,
+              65,
+              23
+            ],
+            "blocks": 1189
+          },
+          {
+            "location": "brasshaven:chained_bastion/bastion/x5_z0",
+            "offset": [
+              149,
+              0,
+              16
+            ],
+            "size": [
+              18,
+              3,
+              12
+            ],
+            "blocks": 247
+          },
+          {
+            "location": "brasshaven:chained_bastion/bastion/x5_z1",
+            "offset": [
+              149,
+              0,
+              28
+            ],
+            "size": [
+              29,
+              90,
+              28
+            ],
+            "blocks": 12747
+          },
+          {
+            "location": "brasshaven:chained_bastion/bastion/x5_z2",
+            "offset": [
+              149,
+              0,
+              56
+            ],
+            "size": [
+              30,
+              90,
+              29
+            ],
+            "blocks": 17152
+          },
+          {
+            "location": "brasshaven:chained_bastion/bastion/x5_z3",
+            "offset": [
+              149,
+              0,
+              85
+            ],
+            "size": [
+              22,
+              67,
+              14
+            ],
+            "blocks": 1672
+          }
+        ],
+        "projection": "rigid",
+        "processors": "brasshaven:none"
+      }
+    }
+  ]
+}

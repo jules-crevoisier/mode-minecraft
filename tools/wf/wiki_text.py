@@ -76,7 +76,8 @@ COMMANDS = {
     "demo": ("op", "Donne tout le contenu du mod d'un coup (idéal pour tester ou filmer)."),
     "locate": ("op", "Indique où se trouve la structure demandée."),
     "tp": ("op", "Téléporte vers la structure demandée (la génère si besoin)."),
-    "boss": ("op", "Fait apparaître un boss devant toi, pour le tester."),
+    "boss": ("op", "Fait apparaître un boss devant toi, pour le tester (à son cycle NG+ du monde). "
+                   "cycle <boss> [n] : lit ou règle le cycle d'un boss (0 à 7)."),
     "fitcheck": ("op", "Trouve chaque structure de la Surface, la génère et mesure comment elle se pose sur le relief (rapport et images PNG dans le dossier du serveur). Sert aux tests ; prend plusieurs minutes."),
     "progress": ("op", "reset : remet la quête à zéro ; complete : accorde toutes les quêtes."),
     "npc": ("op", "Donneurs de quêtes : spawn <rôle> en pose un à tes pieds (guild_agent, scholar, tinkerer, druid, "
@@ -286,6 +287,14 @@ STRUCTURES = {
                        "ressort par le genou. Par le tunnel du cou, l'arène du boss dans le heaume, sous les barreaux "
                        "de la visière, et sous son sol la salle forte, avec une porte de fer qui ne s'ouvre que de "
                        "l'intérieur.",
+    "chained_bastion": "Une forteresse de pierre noire et d'or de 120 blocs suspendue sous le plafond du Nether par "
+                       "huit chaînes géantes, au-dessus d'un lac de lave : une quille en gradins, une forêt de flèches "
+                       "inversées et des chaînes brisées qui pendent vers la lave. Depuis l'éperon rocheux du "
+                       "débarcadère, un pont de chaînes mène à une pile ; au-delà, le pont est rompu, et il faut "
+                       "gravir l'escalier posé sur le dos de la chaîne d'ancrage jusqu'au porche. Dedans : la prison "
+                       "des cages suspendues au-dessus d'un puits ouvert sur la lave, la caserne et sa cellule secrète, "
+                       "la halle de la forge, la chapelle, la salle du lieu de grâce, puis une passerelle couverte "
+                       "jusqu'au tambour du boss, au sol de grilles, et la salle du trésor.",
     "tesla_observatory": "Un campus scientifique perché sur un piton de montagne. À l'ouest, le Grand Observatoire : "
                          "un tambour de pierre crème sous une coupole de cuivre vert-de-gris, fendue pour un télescope "
                          "de laiton de 30 blocs. Au nord-est, la Tour Tesla : 70 blocs de treillis autour d'une bobine "
@@ -416,6 +425,13 @@ MOBS = {
                      "soudé à un harnais à vapeur. Chaudière fumante sur le dos, canon-harpon au bras droit, ancre "
                      "de navire traînée au bout d'une chaîne, heaume à visière fendue d'ambre. Le boss le plus dur "
                      "de la Surface.",
+    "bronze_sentinel": "Champion du Colosse abattu : le gardien vivant de la statue, un chevalier-automate de 5,6 "
+                       "blocs, pierre sous plates de bronze vert-de-gris, mousse dans les jointures. Son heaume à "
+                       "visière en croix, brisé à un coin, luit d'or de l'intérieur ; il porte un pavois plus grand "
+                       "qu'un homme et un long espadon.",
+    "dune_king": "Champion de la Nécropole des rois : un pharaon mort-vivant de 4,6 blocs sous la haute double "
+                 "couronne, bandelettes dorées, collier de lapis et d'or, la crosse et le fléau en main. Quatre vases "
+                 "canopes tournent autour de lui et ses yeux brûlent de turquoise.",
     "glow_jellyfish": "Une cloche translucide qui pulse et dérive dans toutes les mers, en rose, azur, ambre ou "
                       "violet ; elle brille la nuit. La toucher pique un peu (poison). Sa gelée donne une lampe ou la "
                       "vision nocturne.",
@@ -478,12 +494,74 @@ BOSS_MOVES = {
                         "salves d'obus sur chaque joueur (16, un cercle de fumée prévient 1 s avant) et des obus "
                         "perdus tombent sur le pont. Ne reste jamais immobile."),
     ],
+    "bronze_sentinel": [
+        ("Coup de pavois", "1 et 2", "Il ramène son bouclier contre lui (0,7 s, une ligne d'étincelles montre sa "
+                                     "course), puis fonce derrière lui sur 8 à 10 blocs (12, gros recul). Pas de "
+                                     "côté. En phase 2, souvent suivi d'un fauchage."),
+        ("Coup d'espadon", "1 et 2", "Il hisse l'espadon au-dessus du heaume (1,1 s) et l'abat 3,5 blocs devant lui "
+                                     "(22) ; une fissure court ensuite 12 blocs dans l'axe (14), annoncée par des "
+                                     "étincelles dorées. En phase 2, trois fissures en éventail."),
+        ("Fauchage", "1 et 2", "L'espadon ramené loin sur sa droite (0,8 s, l'arc est tracé au sol), puis balayé sur "
+                               "220° (18, portée 7,5). Recule ou passe dans son dos."),
+        ("Mur de pavois", "1 et 2", "Il plante son pavois devant lui pendant 2 s : tout coup de face rebondit. "
+                                    "Contourne-le et frappe dans le dos ; s'il a paré quelque chose, il riposte d'un "
+                                    "coup de pavois."),
+        ("Piétinement", "1 et 2", "Le pied droit levé haut (0,9 s, un cercle de 3,5 blocs), puis abattu : 12 autour "
+                                  "de lui et une onde à sauter (10)."),
+        ("Danse des lames", "2", "Lame tendue sur le côté (0,6 s), il tourne trois fois sur lui-même en marchant "
+                                 "sur toi (11 à chaque tour, rayon 4,8). Recule et frappe à la fin."),
+        ("Chute du colosse", "2", "Accroupi, lame levée, pendant qu'un cercle doré te suit (1 s) ; il bondit, le "
+                                  "cercle se fige là où tu étais et il retombe dessus l'épée la première une seconde "
+                                  "plus tard (22, puis une onde). Sors du cercle."),
+        ("Rayons runiques", "2", "Il lève l'espadon vers le ciel et le plante dans le sol : trois salves de lignes "
+                                 "de lumière se dessinent sur le sol, une sous chaque joueur (0,9 s), puis "
+                                 "flamboient (14). Un pas de côté suffit ; on ne peut pas les sauter."),
+    ],
+    "dune_king": [
+        ("Fléau", "1 et 2", "Le fléau levé derrière l'épaule (0,7 s, l'arc est tracé), puis trois coups à une "
+                            "demi-seconde d'écart (10, 10, puis 14 plus large). Recule après le deuxième."),
+        ("Crosse", "1 et 2", "Il pointe sa crosse et la ramène en arrière (0,8 s, une ligne dorée montre sa portée "
+                             "de 11 blocs) : touché, tu prends 10 et tu es tiré devant lui, et le fléau suit. "
+                             "Écarte-toi de la ligne."),
+        ("Tempête de sable", "1 et 2", "Bras levés, il rassemble le sable (1 s, le cône est tracé), puis souffle 1,5 s "
+                                       "sur un cône de 70° et 10 blocs : cécité, lenteur et petits dégâts. Passe sur "
+                                       "le côté ou derrière lui."),
+        ("Les morts se lèvent", "1 et 2", "Crosse et fléau croisés au-dessus de la couronne (1 s, le sable remue à "
+                                          "quatre endroits), puis des momies (husks) sortent du sol : 2 (3 en phase "
+                                          "2), jamais plus de 4."),
+        ("Vases canopes", "1 et 2", "Crosse pointée sur toi (0,7 s, un cercle sous tes pieds), puis chaque vase "
+                                    "crache un trait de malédiction là où tu te trouves (8 et flétrissement). "
+                                    "Bouge en arc de cercle."),
+        ("Sables mouvants", "2", "Il flotte, paumes vers le sol (1 s) : des fosses de sable mouvant s'ouvrent en "
+                                 "trois bras de spirale qui s'éloignent de lui, et une sous chaque joueur (12 et "
+                                 "lenteur), chacune annoncée par du sable qui tombe."),
+        ("Nuée de scarabées", "2", "Le fléau levé haut (0,8 s) puis claqué au sol : deux anneaux bas de scarabées "
+                                   "roulent jusqu'au bord de l'arène (10). Saute chacun."),
+        ("Jugement", "2", "Crosse tendue, yeux flamboyants (1,2 s, une ligne de lumière sur sa gauche montre le "
+                          "départ) : un rayon bas balaie 200° de sa gauche à sa droite en 2,5 s (16). Saute-le quand "
+                          "il passe, ou mets-toi dans son dos."),
+    ],
 }
+# Difficulté des boss (bestiaire) : coop et cycles NG+ (boss/WayfarerBoss, tools/BOSSES.md)
+BOSS_DIFFICULTY = ("Plus on est, plus ils sont durs : chaque joueur de plus dans l'arène donne au boss +75 % de vie, "
+                   "+10 % de dégâts et +25 % de posture ; à plusieurs il attaque plus souvent et appelle plus "
+                   "d'acolytes. Si quelqu'un rejoint le combat en cours, le boss se renforce (jamais l'inverse). "
+                   "Chaque boss vaincu revient plus fort dans ce monde : c'est son cycle, affiché « +1 », « +2 »… "
+                   "jusqu'à +7 dans sa barre de vie. À chaque cycle : +35 % de vie, +15 % de dégâts, +2 d'armure et des "
+                   "attaques plus vives (toujours annoncées). Dès +2, en phase 2, il lâche régulièrement une onde "
+                   "d'âmes à sauter. En échange, son butin est tiré une fois de plus par cycle, et dès +3 il peut "
+                   "lâcher une Braise d'ascension : posée sur une enclume avec une arme de boss, elle lui donne +1 de "
+                   "dégâts (jusqu'à +5).")
+
 BOSS_FACTS = {
     "grand_clockmaker": "400 PV, armure 12, barre jaune. Phase 2 à mi-vie : il rugit, des étincelles crépitent sur "
                         "lui, il accélère et enchaîne ses coups.",
     "iron_helmsman": "450 PV, armure 15, posture 95, barre blanche. Phase 2 à mi-vie : la corne sonne, il fume et "
                      "flambe, accélère et enchaîne ses coups.",
+    "bronze_sentinel": "460 PV, armure 14, posture 100, barre verte. Phase 2 à mi-vie : ses plaques tombent "
+                       "(armure −6), il accélère de 20 % et enchaîne ses coups.",
+    "dune_king": "460 PV, armure 10, posture 85, barre jaune. Phase 2 à mi-vie : il s'élève et flotte au-dessus du "
+                 "sol, accélère et ouvre les sables.",
 }
 
 # Descente vers un repaire : étapes dans l'ordre
@@ -512,6 +590,27 @@ LAIRS = {
                               "au-dessus du cratère, entre la tour de commandement et les deux cheminées. Le "
                               "Timonier se réveille quand tu approches du sceau."),
         ("La salle forte", "Dans la tour de commandement, derrière des barreaux scellés qui s'ouvrent à sa mort."),
+    ],
+    "bronze_sentinel": [
+        ("Le poignet brisé", "Entre par la main tendue du Colosse abattu : le tunnel de l'avant-bras mène à la salle "
+                             "du coude, puis l'escalier du bras monte au balcon de la salle des côtes."),
+        ("La salle des côtes", "Une voûte de 30 blocs ouverte sur le ciel. Le grand escalier remonte au gorgerin et à "
+                               "sa pierre de voyage (le lieu de grâce)."),
+        ("Le cou", "Un tunnel étroit mène dans le heaume, derrière la brume."),
+        ("Le heaume", "L'arène : une salle ronde d'environ 14 blocs de rayon et 16 de haut sous les barreaux de la "
+                      "visière, braseros autour. La Sentinelle se réveille quand tu approches du sceau."),
+        ("La salle forte", "Sous le sol de l'arène, derrière des barreaux scellés qui s'ouvrent à sa mort ; une "
+                           "porte de fer ressort par la joue."),
+    ],
+    "dune_king": [
+        ("La place cachée", "Au bout du canyon, passe le portail entre les quatre rois assis : la salle hypostyle."),
+        ("Les tombeaux", "Trois niveaux descendent : salle d'embaumement et galerie des niches, puis galerie "
+                         "inondée, couloir piégé et trésor."),
+        ("Le lieu de grâce", "Tout en bas (y −37) : pierre de voyage, puis un couloir étroit et la brume."),
+        ("L'arène du roi", "Une salle ronde de 16 blocs de rayon et 18 de haut, une estrade avec deux colosses "
+                           "assis et des statues de chacals. Le Roi des dunes se réveille quand tu approches du sceau."),
+        ("La salle forte", "Derrière la brume sud et des barreaux scellés ; le puits du roi remonte jusqu'au "
+                           "vestibule."),
     ],
 }
 
@@ -695,6 +794,8 @@ NEW_GROUPS = [
          "s-rock_necropolis", "struct:rock_necropolis"),
         ("Colosse abattu", "Un chevalier de pierre et de bronze de 155 blocs couché dans une vallée : on entre par "
          "sa main.", "s-fallen_colossus", "struct:fallen_colossus"),
+        ("Bastion enchaîné", "Une forteresse de pierre noire et d'or suspendue sous le plafond du Nether par des "
+         "chaînes géantes, au-dessus d'un lac de lave.", "s-chained_bastion", "struct:chained_bastion"),
     ]),
 ]
 
@@ -751,6 +852,13 @@ TEST_CHECKLIST = [
      "Il apparaît à 6 blocs. Saute l'onde de l'ancre abattue, écarte-toi de la ligne du harpon, sors du cercle de "
      "vapeur ; à mi-vie, la corne sonne puis la bordée tombe sur toi. Pour le vrai repaire : /brasshaven tp "
      "walking_fortress (le pont supérieur)."),
+    ("La Sentinelle d'airain", ["/brasshaven boss bronze_sentinel"],
+     "Elle apparaît à 6 blocs. Contourne le mur de pavois, saute l'onde du piétinement, écarte-toi de la fissure ; à "
+     "mi-vie, ses plaques tombent, puis sors du cercle doré de la chute. Pour le vrai repaire : /brasshaven tp "
+     "fallen_colossus (le heaume)."),
+    ("Le Roi des dunes", ["/brasshaven boss dune_king"],
+     "Il apparaît à 6 blocs. Évite la ligne de la crosse et le cône de sable ; à mi-vie, il flotte : saute les "
+     "scarabées et le rayon du jugement. Pour le vrai repaire : /brasshaven tp rock_necropolis (tout en bas)."),
     ("Merveilles en surface", ["/brasshaven tp inventor_manor", "/brasshaven tp sylvan_palace",
                                "/brasshaven tp geothermal_foundry", "/brasshaven tp tesla_observatory",
                                "/brasshaven tp sky_isles"],

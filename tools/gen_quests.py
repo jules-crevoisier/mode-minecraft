@@ -115,6 +115,7 @@ STRUCTURE_ICONS = {
     "geothermal_foundry": "magma_block", "walking_fortress": "brasshaven:gear_panel", "rock_necropolis": "chiseled_red_sandstone", "fallen_colossus": "oxidized_copper", "tesla_observatory": "lightning_rod", "crystal_cathedral": "amethyst_block",
     "sunken_submarine": "brasshaven:diving_helmet", "diving_bell": "bell", "coral_shrine": "brain_coral_block",
     "shipwreck_debris": "barrel",
+    "chained_bastion": "gilded_blackstone",
 }
 # where each boss lives (its quest follows the discovery of that structure)
 BOSS_HOME = {
@@ -127,6 +128,8 @@ BOSS_HOME = {
     "larva_mother": "void_crypt",
     "grand_clockmaker": "clockwork_citadel",
     "iron_helmsman": "walking_fortress",
+    "bronze_sentinel": "fallen_colossus",
+    "dune_king": "rock_necropolis",
 }
 CHAPTER = {}
 for s in defs.STRUCTURES:

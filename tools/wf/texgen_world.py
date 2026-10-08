@@ -8,7 +8,8 @@ import math
 import random
 
 from .png import Canvas
-from .texgen import clamp, mix, mul
+from .texgen import clamp, mix
+from .texkit import tmul as mul  # hue-shifted shading
 
 CLEAR = (0, 0, 0, 0)
 
@@ -474,10 +475,19 @@ def speckled(base, palette, seed=0, streak=None, grain=0.05, blotch=0.12):
     for y in range(16):
         for x in range(16):
             n = _smooth(x, y, seed, cell=4)
-            c = _rgb(base, 1 - blotch + n * blotch * 2 + rng.uniform(-grain, grain))
-            if rng.random() < 0.22:
-                c = _rgb(rng.choice(palette), 1 + rng.uniform(-0.06, 0.06))
+            c = _rgb(base, 1 - blotch + round(n * 3) / 3 * blotch * 2)
             cv.set(x, y, c)
+    # specks as little embedded grains: a 1-2 px chip of a palette colour with its shadow below-right
+    for _ in range(18):
+        x, y = rng.randrange(16), rng.randrange(16)
+        col = rng.choice(palette)
+        cells = [(x, y)] + ([(x + 1, y)] if rng.random() < 0.4 else [])
+        for cx, cy in cells:
+            cv.set(cx % 16, cy % 16, _rgb(col, 1.0))
+        for cx, cy in cells:
+            sx, sy = (cx + 1) % 16, (cy + 1) % 16
+            if (sx, sy) not in cells:
+                cv.set(sx, sy, mul(cv.get(sx, sy), 0.78))
     if streak:
         colour, count = streak
         for _ in range(count):

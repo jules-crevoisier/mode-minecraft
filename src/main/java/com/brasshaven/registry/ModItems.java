@@ -48,6 +48,8 @@ public final class ModItems {
     public static final RegistryObject<Item> VOID_SHARD = simple("void_shard", p -> p.rarity(Rarity.UNCOMMON));
     public static final RegistryObject<Item> WARDEN_SCALE = simple("warden_scale", p -> p.rarity(Rarity.RARE));
     public static final RegistryObject<Item> VOID_HEART = simple("void_heart", p -> p.rarity(Rarity.EPIC).fireResistant());
+    /** NG+ boss drop (cycle 3+): on an anvil, +1 attack damage for a boss weapon (boss/BossDifficulty). */
+    public static final RegistryObject<Item> EMBER_OF_ASCENSION = simple("ember_of_ascension", p -> p.rarity(Rarity.EPIC).fireResistant());
     // ---- automatons
     public static final RegistryObject<Item> BRASS_GEAR = simple("brass_gear", p -> p);
     public static final RegistryObject<Item> CLOCKWORK_HEART = register("clockwork_heart", com.brasshaven.item.ClockworkHeartItem::new,
@@ -187,6 +189,8 @@ public final class ModItems {
     public static final RegistryObject<Item> BRASS_GOLEM_SPAWN_EGG = egg("brass_golem_spawn_egg", ModEntities.BRASS_GOLEM);
     public static final RegistryObject<Item> GRAND_CLOCKMAKER_SPAWN_EGG = egg("grand_clockmaker_spawn_egg", ModEntities.GRAND_CLOCKMAKER);
     public static final RegistryObject<Item> IRON_HELMSMAN_SPAWN_EGG = egg("iron_helmsman_spawn_egg", ModEntities.IRON_HELMSMAN);
+    public static final RegistryObject<Item> BRONZE_SENTINEL_SPAWN_EGG = egg("bronze_sentinel_spawn_egg", ModEntities.BRONZE_SENTINEL);
+    public static final RegistryObject<Item> DUNE_KING_SPAWN_EGG = egg("dune_king_spawn_egg", ModEntities.DUNE_KING);
     // peoples and creatures of the places (tools/wf/denizens.py)
     public static final RegistryObject<Item> DWARF_SPAWN_EGG = egg("dwarf_spawn_egg", ModEntities.DWARF);
     public static final RegistryObject<Item> SYLVAN_SPAWN_EGG = egg("sylvan_spawn_egg", ModEntities.SYLVAN);

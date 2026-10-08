@@ -34,6 +34,8 @@ import com.brasshaven.entity.boss.PiglinKing;
 import com.brasshaven.entity.boss.SoulReaper;
 import com.brasshaven.entity.boss.GrandClockmaker;
 import com.brasshaven.entity.boss.IronHelmsman;
+import com.brasshaven.entity.boss.BronzeSentinel;
+import com.brasshaven.entity.boss.DuneKing;
 import com.brasshaven.entity.automaton.BrassGolem;
 import com.brasshaven.entity.automaton.ClockworkSpider;
 import com.brasshaven.entity.automaton.HotRivetEntity;
@@ -188,6 +190,12 @@ public final class ModEntities {
     public static final RegistryObject<EntityType<IronHelmsman>> IRON_HELMSMAN = ENTITIES.register("iron_helmsman",
             () -> EntityType.Builder.<IronHelmsman>of(IronHelmsman::new, MobCategory.MONSTER)
                     .sized(IronHelmsman.WIDTH, IronHelmsman.HEIGHT).fireImmune().clientTrackingRange(10).build(ENTITIES.key("iron_helmsman")));
+    public static final RegistryObject<EntityType<BronzeSentinel>> BRONZE_SENTINEL = ENTITIES.register("bronze_sentinel",
+            () -> EntityType.Builder.<BronzeSentinel>of(BronzeSentinel::new, MobCategory.MONSTER)
+                    .sized(BronzeSentinel.WIDTH, BronzeSentinel.HEIGHT).clientTrackingRange(10).build(ENTITIES.key("bronze_sentinel")));
+    public static final RegistryObject<EntityType<DuneKing>> DUNE_KING = ENTITIES.register("dune_king",
+            () -> EntityType.Builder.<DuneKing>of(DuneKing::new, MobCategory.MONSTER)
+                    .sized(DuneKing.WIDTH, DuneKing.HEIGHT).clientTrackingRange(10).build(ENTITIES.key("dune_king")));
     public static final RegistryObject<EntityType<HotRivetEntity>> HOT_RIVET = ENTITIES.register("hot_rivet",
             () -> EntityType.Builder.<HotRivetEntity>of(HotRivetEntity::new, MobCategory.MISC)
                     .sized(0.25F, 0.25F).clientTrackingRange(6).updateInterval(2).build(ENTITIES.key("hot_rivet")));
@@ -250,7 +258,7 @@ public final class ModEntities {
 
     /** Every boss with an Elden Ring style fight (demo command, quests). */
     public static List<RegistryObject<? extends EntityType<? extends com.brasshaven.boss.WayfarerBoss>>> bosses() {
-        return List.of(DROWNED_WARDEN, VOID_WARDEN, GRAVE_KNIGHT, BONE_MATRIARCH, WEEPING_LADY, LARVA_MOTHER, BELL_KEEPER, ARCHIVIST, SAND_PHARAOH, JADE_JAGUAR, ROOT_MOTHER, SWAMP_CRONE, GRYPHON_KNIGHT, RUNE_COLOSSUS, FORGE_KING, CRYSTAL_SPIDER, SCULK_SPAWN, ASH_LORD, PIGLIN_KING, SOUL_REAPER, GRAND_CLOCKMAKER, IRON_HELMSMAN);
+        return List.of(DROWNED_WARDEN, VOID_WARDEN, GRAVE_KNIGHT, BONE_MATRIARCH, WEEPING_LADY, LARVA_MOTHER, BELL_KEEPER, ARCHIVIST, SAND_PHARAOH, JADE_JAGUAR, ROOT_MOTHER, SWAMP_CRONE, GRYPHON_KNIGHT, RUNE_COLOSSUS, FORGE_KING, CRYSTAL_SPIDER, SCULK_SPAWN, ASH_LORD, PIGLIN_KING, SOUL_REAPER, GRAND_CLOCKMAKER, IRON_HELMSMAN, BRONZE_SENTINEL, DUNE_KING);
     }
 
     public static void registerAttributes(EntityAttributeCreationEvent event) {
@@ -290,6 +298,8 @@ public final class ModEntities {
         event.put(BRASS_GOLEM.get(), BrassGolem.attributes().build());
         event.put(GRAND_CLOCKMAKER.get(), GrandClockmaker.attributes().build());
         event.put(IRON_HELMSMAN.get(), IronHelmsman.attributes().build());
+        event.put(BRONZE_SENTINEL.get(), BronzeSentinel.attributes().build());
+        event.put(DUNE_KING.get(), DuneKing.attributes().build());
         event.put(GLOW_JELLYFISH.get(), GlowJellyfish.attributes().build());
         event.put(REEF_FISH.get(), ReefFish.attributes().build());
         event.put(MANTA_RAY.get(), MantaRay.attributes().build());

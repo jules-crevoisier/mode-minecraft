@@ -501,6 +501,24 @@ PAGES = [
          "salles (la jambe ressort au genou) ; le cou mène au boss dans le heaume, et la salle forte est sous le sol "
          "de l'arène."),
     ], []),
+    ("chained_bastion", "wonders", "minecraft:gilded_blackstone", ("Chained Bastion", "Bastion enchaîné"), [
+        ("A blackstone and gilded fortress hanging under the Nether ceiling from eight giant chains, over a lava "
+         "lake: a stepped keel, a forest of inverted spires and broken chains dangling toward the lava.",
+         "Une forteresse de pierre noire et d'or suspendue sous le plafond du Nether par huit chaînes géantes, "
+         "au-dessus d'un lac de lave : une quille en gradins, une forêt de flèches inversées et des chaînes brisées "
+         "qui pendent vers la lave."),
+        ("Where: Nether wastes, basalt deltas, crimson forests and soul sand valleys, in big lava caverns.",
+         "Où : désolations du Nether, deltas de basalte, forêts carmin et vallées des âmes, dans les grandes "
+         "cavernes de lave."),
+        ("The way in starts on a rock landing: a chain bridge to a pier, then a stair up the back of the anchor "
+         "chain to the gate (a fall means the lava: bring fire resistance). Inside, the prison of hanging cages, the "
+         "barracks (look under the floor), the forge, the chapel and a site of grace before the boss drum; the "
+         "vault lies past the arena.",
+         "On entre par un débarcadère rocheux : un pont de chaînes jusqu'à une pile, puis un escalier sur le dos de "
+         "la chaîne d'ancrage jusqu'à la porte (une chute, c'est la lave : prends de la résistance au feu). Dedans, "
+         "la prison des cages suspendues, la caserne (regarde sous le plancher), la forge, la chapelle et un lieu de "
+         "grâce avant le tambour du boss ; la salle du trésor est au-delà de l'arène."),
+    ], []),
     ("iron_helmsman", "wonders", "brasshaven:remembrance_iron_helmsman", ("The Iron Helmsman", "Le Timonier de Fer"), [
         ("The pilot of the Walking Fortress waits on its open top deck (450 health, armour 15): a hulking captain "
          "fused into a steam harness, a harpoon-cannon for an arm and an anchor dragged on a chain. Bring your best "
@@ -525,6 +543,52 @@ PAGES = [
          "right-click sends a broadside of fiery bursts down the line ahead.",
          "Son Souvenir, quatre fragments de carte et deux diamants forgent l'Ancre du Timonier, une arme lourde dont "
          "le clic droit envoie une bordée d'explosions enflammées sur la ligne devant toi."),
+    ], []),
+    ("bronze_sentinel", "wonders", "brasshaven:remembrance_bronze_sentinel", ("The Bronze Sentinel", "La Sentinelle d'airain"), [
+        ("The living guardian of the Fallen Colossus waits inside the statue's helm (460 health, armour 14): a "
+         "knight automaton of stone and verdigris bronze, a tower shield on one arm and a long greatsword in the "
+         "other, its broken visor glowing gold.",
+         "Le gardien vivant du Colosse abattu attend dans le heaume de la statue (460 PV, armure 14) : un "
+         "chevalier-automate de pierre et de bronze vert-de-gris, un pavois à un bras et un long espadon à l'autre, "
+         "sa visière brisée luisant d'or."),
+        ("It bashes with the shield, brings the greatsword down (a crack runs on along the ground), sweeps wide and "
+         "stamps (jump the ring). When it plants its shield, frontal blows bounce off: walk round and strike its back.",
+         "Il frappe du pavois, abat l'espadon (une fissure court ensuite au sol), fauche large et piétine (saute "
+         "l'onde). Quand il plante son pavois, les coups de face rebondissent : contourne-le et frappe dans le dos."),
+    ], ["brasshaven:remembrance_bronze_sentinel", "brasshaven:sentinel_greatsword"]),
+    ("bronze_sentinel_unplated", "wonders", "minecraft:oxidized_copper", ("Sentinel: plates fallen", "Sentinelle : plaques tombées"), [
+        ("At half health its plates fall away and it gets faster: a whirling blade dance, a leap that lands on the "
+         "golden circle marked where you stood, and lines of rune light drawn across the floor (step aside before "
+         "they flare).",
+         "À mi-vie, ses plaques tombent et il accélère : une danse des lames tournoyante, un bond qui retombe sur le "
+         "cercle doré tracé là où tu étais, et des lignes de lumière runique dessinées au sol (fais un pas de côté "
+         "avant qu'elles flamboient)."),
+        ("Its Remembrance, four Map Fragments and two diamonds forge the Greatsword of the Sentinel, whose "
+         "right-click tears a crack of rune light along the line ahead.",
+         "Son Souvenir, quatre fragments de carte et deux diamants forgent l'Espadon de la Sentinelle, dont le clic "
+         "droit déchire une fissure de lumière runique sur la ligne devant toi."),
+    ], []),
+    ("dune_king", "wonders", "brasshaven:remembrance_dune_king", ("The Dune King", "Le Roi des dunes"), [
+        ("At the bottom of the Necropolis of Kings, the undead pharaoh waits in his arena (460 health): a mummy "
+         "king under a double crown, crook and flail in hand, four canopic jars circling him.",
+         "Tout en bas de la Nécropole des rois, le pharaon mort-vivant attend dans son arène (460 PV) : un roi "
+         "momifié sous la double couronne, la crosse et le fléau en main, quatre vases canopes tournant autour de lui."),
+        ("He lashes with the flail, hooks you in with the crook, blows a cone of blinding sand, raises husks from "
+         "the floor and makes his jars spit curse bolts: keep moving sideways.",
+         "Il frappe du fléau, t'attire avec sa crosse, souffle un cône de sable aveuglant, fait sortir des husks du "
+         "sol et fait cracher à ses vases des traits de malédiction : déplace-toi de côté."),
+    ], ["brasshaven:remembrance_dune_king", "brasshaven:dune_king_crook"]),
+    ("dune_king_risen", "wonders", "minecraft:sand", ("Dune King: risen", "Roi des dunes : l'élévation"), [
+        ("At half health he rises and floats: pools of quicksand open in spirals across the floor, rings of "
+         "scarabs roll out (jump them) and a low beam of judgement sweeps the arena from his left to his right: "
+         "jump it as it passes or get behind him.",
+         "À mi-vie, il s'élève et flotte : des fosses de sable mouvant s'ouvrent en spirales, des anneaux de "
+         "scarabées roulent vers toi (saute-les) et un rayon bas de jugement balaie l'arène de sa gauche à sa "
+         "droite : saute-le quand il passe ou mets-toi dans son dos."),
+        ("His Remembrance, four Map Fragments and two diamonds forge the Crook of the Dune King, a staff whose "
+         "right-click lances a beam of judgement that slows foes.",
+         "Son Souvenir, quatre fragments de carte et deux diamants forgent la Crosse du Roi des dunes, un bâton dont "
+         "le clic droit lance un rayon de jugement qui ralentit les ennemis."),
     ], []),
     ("tesla_observatory", "wonders", "minecraft:lightning_rod", ("Tesla Observatory", "Observatoire Tesla"), [
         ("A science campus on a rocky crag: a copper dome with a 30-block telescope, a 70-block Tesla tower and an "

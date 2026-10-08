@@ -52,7 +52,9 @@
     "explorer/boss_grave_knight",
     "explorer/boss_bone_matriarch",
     "explorer/boss_grand_clockmaker",
-    "explorer/boss_iron_helmsman"
+    "explorer/boss_iron_helmsman",
+    "explorer/boss_bronze_sentinel",
+    "explorer/boss_dune_king"
   ],
   "depths": [
     "depths/lithite",
@@ -84,6 +86,7 @@
     "nether/lava_foundry",
     "nether/soul_tower",
     "nether/piglin_market",
+    "nether/chained_bastion",
     "nether/ancient_ember",
     "nether/ember_scythe",
     "nether/storm_staff",

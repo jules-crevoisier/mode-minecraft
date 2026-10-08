@@ -499,6 +499,40 @@ public final class MobAnims {
 
         private IronHelmsman() {}
     }
+    public static final class BronzeSentinel {
+        public static final int BASH = 0;
+        public static final int OVERHEAD = 1;
+        public static final int CLEAVE = 2;
+        public static final int SHIELDWALL = 3;
+        public static final int STOMP = 4;
+        public static final int DANCE = 5;
+        public static final int TOPPLE = 6;
+        public static final int BEAMS = 7;
+        public static final int ROAR = 8;
+        public static final int STAGGER = 9;
+        public static final int COUNT = 10;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {34, 42, 33, 60, 33, 62, 58, 84, 44, 32};
+
+        private BronzeSentinel() {}
+    }
+    public static final class DuneKing {
+        public static final int FLAIL = 0;
+        public static final int HOOK = 1;
+        public static final int SANDSTORM = 2;
+        public static final int SUMMON = 3;
+        public static final int JARS = 4;
+        public static final int QUICKSAND = 5;
+        public static final int SCARABS = 6;
+        public static final int JUDGEMENT = 7;
+        public static final int ROAR = 8;
+        public static final int STAGGER = 9;
+        public static final int COUNT = 10;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {48, 34, 62, 40, 50, 74, 58, 90, 48, 32};
+
+        private DuneKing() {}
+    }
     public static final class GlowJellyfish {
 
         public static final int COUNT = 0;

@@ -49,5 +49,11 @@ Light sources are always visible and warm: amber for steam tech, cyan for aether
 - Every item gets its own silhouette: a boss weapon never shares a shape with another one.
 - Glows, sparks and steam (`Y`, `a`) float free of the outline; everything else is outlined.
 - Utility, altar and metal block faces live in `wf/blockart.py`.
+- Shading kit `wf/texkit.py`: `ramp()` / `shift()` give hue-shifted tones (shadows cool, lights warm), `tmul()` is a
+  drop-in for `mul()` that shades that way (texgen_steam, texgen_world, texgen_chisel and blockart import it as `mul`),
+  `grain_field()` / `field()` draw noise as 2-4 px clusters. No per-pixel random jitter on new faces.
+- Ores are hand-pixelled stamps in `wf/texore.py` on a clustered host stone: each metal has its own mineral shape
+  (zinc platelets, mithril seam, orichalcum nuggets, aether prisms, lithite octahedra); a new ore gets a new shape.
+- Review sheets: `build/texreview/` (before / after / compare, x8 contact sheets).
 - Review loop: `python3 tools/gen_textures.py && python3 tools/art_sheet.py` (contact sheets at 8x with 1x/2x copies in
   `build/previews/art_*.png`; `--kind held` renders the 3D in-hand models after `gen_assets.py`).

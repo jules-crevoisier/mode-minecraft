@@ -34,6 +34,8 @@ from . import steam_drone
 from . import brass_golem
 from . import grand_clockmaker
 from . import iron_helmsman
+from . import bronze_sentinel
+from . import dune_king
 # living oceans
 from . import glow_jellyfish
 from . import reef_fish
@@ -90,6 +92,8 @@ MODELS = [
     brass_golem.build,
     grand_clockmaker.build,
     iron_helmsman.build,
+    bronze_sentinel.build,
+    dune_king.build,
     glow_jellyfish.build,
     reef_fish.build,
     manta_ray.build,

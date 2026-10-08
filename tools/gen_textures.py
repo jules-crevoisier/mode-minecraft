@@ -26,6 +26,7 @@ ITEMS = {
     "void_shard": ("shard", "void", "wood", "amethyst"),
     "warden_scale": ("scale", "warden", "wood", "sapphire"),
     "void_heart": ("heart", "void", "wood", "amethyst"),
+    "ember_of_ascension": ("ember", "ember", "wood", "gold"),
     # explorer utilities
     "wayfarer_atlas": ("book", "leather", "gold", "gold"),
     "wayfarer_manual": ("book", "map", "gold", "sapphire"),
@@ -108,6 +109,8 @@ EGGS = {
     "brass_golem": ((200, 158, 70), (70, 214, 255)),
     "grand_clockmaker": ((124, 90, 40), (222, 204, 168)),
     "iron_helmsman": ((58, 52, 52), (255, 178, 70)),
+    "bronze_sentinel": ((150, 104, 56), (86, 168, 146)),
+    "dune_king": ((206, 188, 146), (40, 72, 166)),
 }
 
 
@@ -155,6 +158,8 @@ EMBLEMS = {
     "void_warden": ["..#..", "..#..", "#####", "..#..", "..#.."],     # star
     "grand_clockmaker": [".###.", "#.#.#", "#.###", "#...#", ".###."],  # clock face
     "iron_helmsman": ["..#..", "#####", "..#..", "#.#.#", ".###."],     # anchor
+    "bronze_sentinel": ["#####", "#.#.#", "#####", "#####", ".###."],   # tower shield with a cross
+    "dune_king": ["#...#", "##.##", "#.#.#", "#####", "#####"],         # double crown
 }
 
 
@@ -243,9 +248,9 @@ def block_textures():
             mist.set(x, y, (int(205 + 40 * v), int(215 + 35 * v), 255, a))
     out["mist_gate"] = mist
     # ores: lithite crystals in stone and deepslate
-    lithite = ((170, 250, 232), (64, 196, 180), (24, 110, 112))
-    out["lithite_ore"] = BA.crystal_ore((124, 124, 130), 14, *lithite)
-    out["deepslate_lithite_ore"] = BA.crystal_ore((74, 74, 82), 15, *lithite, deep=True)
+    from wf import texore
+    out["lithite_ore"] = texore.ore("lithite", "stone", 14)
+    out["deepslate_lithite_ore"] = texore.ore("lithite", "deepslate", 15)
     return out
 
 
@@ -288,7 +293,6 @@ def armor_layer(mat, accent, legs=False):
 
 
 # ------------------------------------------------------------------ metals (wf/metals.py)
-HOSTS = {"stone": (124, 124, 128), "deepslate": (78, 78, 86), "netherrack": (112, 46, 44)}
 GEAR_ACCENT = {"brass": "ember", "mithril": "sapphire", "aether": "ice", "arcane": "amethyst", "zinc": "gold",
                "orichalcum": "ruby"}
 
@@ -297,47 +301,8 @@ GEAR_ACCENT = {"brass": "ember", "mithril": "sapphire", "aether": "ice", "arcane
 ARMOR_SHAPES = {("brass", "helmet"): "goggles", ("arcane", "helmet"): "hood", ("arcane", "chestplate"): "robe"}
 
 
-def host_tile(host, seed):
-    rng = random.Random(f"{host}{seed}")
-    base = HOSTS[host]
-    cv = noise_tile(base, 7, seed)
-    # strata / cracks so the host reads like its vanilla counterpart
-    for _ in range(5 if host != "deepslate" else 7):
-        x, y = rng.randrange(16), rng.randrange(16)
-        for _ in range(rng.randint(2, 5)):
-            cv.set(x % 16, y % 16, shade(base, 0.78))
-            x += rng.choice((1, 1, 0))
-            y += rng.choice((0, 0, 1)) if host == "deepslate" else rng.choice((0, 1, -1))
-    return cv
-
-
-def ore_tile(host, palette, gem, seed):
-    light, mid, dark, outline = palette
-    rng = random.Random(f"ore{host}{seed}")
-    cv = host_tile(host, seed)
-    centres = [(3, 3), (10, 4), (5, 10), (12, 11), (8, 7)]
-    for cx, cy in centres:
-        cx += rng.randint(-1, 1)
-        cy += rng.randint(-1, 1)
-        cells = {(cx, cy), (cx + 1, cy), (cx, cy + 1)}
-        if rng.random() < 0.7:
-            cells.add((cx + 1, cy + 1))
-        if rng.random() < 0.5:
-            cells.add((cx - 1, cy))
-        for x, y in cells:
-            if 0 <= x < 16 and 0 <= y < 16:
-                for ox, oy in ((1, 0), (0, 1), (1, 1)):
-                    if (x + ox, y + oy) not in cells and 0 <= x + ox < 16 and 0 <= y + oy < 16:
-                        cv.set(x + ox, y + oy, shade(HOSTS[host], 0.55))
-        for x, y in cells:
-            if 0 <= x < 16 and 0 <= y < 16:
-                c = light if (x, y) == (cx, cy) else mid if (x + y) % 2 else dark
-                cv.set(x, y, (255, 255, 255) if gem and (x, y) == (cx, cy) else c)
-    return cv
-
-
 def metal_textures():
-    from wf import blockart, metals
+    from wf import blockart, metals, texore
     out = {}
     for mid, m in metals.METALS.items():
         pal = metals.PALETTES[m["palette"]]
@@ -345,7 +310,7 @@ def metal_textures():
         accent = GEAR_ACCENT.get(mid, "gold")
         for bid, (kind, host, _label) in metals.block_ids(mid).items():
             if kind == "ore":
-                out[f"block/{bid}"] = ore_tile(host, pal, m["ore"].get("drop") == "gem", len(bid))
+                out[f"block/{bid}"] = texore.ore(mid, host, len(bid))  # hand-pixelled ore stamps (wf/texore.py)
             elif kind == "storage":
                 out[f"block/{bid}"] = blockart.storage_block(pal, mid, sum(map(ord, mid)))
             else:

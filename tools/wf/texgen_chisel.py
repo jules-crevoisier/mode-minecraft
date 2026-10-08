@@ -4,7 +4,8 @@ import math
 import random
 
 from .png import Canvas
-from .texgen import bricks, mix, mul
+from .texgen import bricks, mix
+from .texkit import tmul as mul  # hue-shifted shading
 from .texgen_steam import _base, _bevel, _rivet, soot_bricks
 
 

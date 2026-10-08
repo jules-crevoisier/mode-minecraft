@@ -799,6 +799,7 @@ JAVA_SOURCES = {
     "wayfarer_manual": "given on first join",
     "wayfarer_atlas": "given on first join",
     "structure_compass": "the Guild Agent's survey contract (NpcQuests, wf/progression.py)",
+    "ember_of_ascension": "bosses at NG+ cycle 3+ (WayfarerBoss#dropCustomDeathLoot)",
 }
 # vanilla item tags used by recipes: a test telling whether an item id belongs to the tag (no tag files for vanilla)
 VANILLA_TAGS = {

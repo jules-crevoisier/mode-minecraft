@@ -6,7 +6,7 @@
       "element": {
         "element_type": "brasshaven:chunked_template",
         "size": [
-          182,
+          181,
           148,
           206
         ],
@@ -20,24 +20,24 @@
             ],
             "size": [
               16,
-              25,
+              52,
               24
             ],
-            "blocks": 3339
+            "blocks": 4151
           },
           {
             "location": "brasshaven:rock_necropolis/necropolis/x0_z1",
             "offset": [
-              2,
+              0,
               27,
               29
             ],
             "size": [
-              28,
+              30,
               79,
               30
             ],
-            "blocks": 7885
+            "blocks": 7887
           },
           {
             "location": "brasshaven:rock_necropolis/necropolis/x0_z2",
@@ -51,7 +51,7 @@
               84,
               29
             ],
-            "blocks": 9866
+            "blocks": 9728
           },
           {
             "location": "brasshaven:rock_necropolis/necropolis/x0_z3",
@@ -65,35 +65,35 @@
               90,
               30
             ],
-            "blocks": 7846
+            "blocks": 8249
           },
           {
             "location": "brasshaven:rock_necropolis/necropolis/x0_z4",
             "offset": [
-              3,
+              0,
               27,
               118
             ],
             "size": [
-              27,
-              74,
+              30,
+              76,
               29
             ],
-            "blocks": 6614
+            "blocks": 7849
           },
           {
             "location": "brasshaven:rock_necropolis/necropolis/x0_z5",
             "offset": [
-              13,
+              12,
               27,
               147
             ],
             "size": [
-              17,
-              53,
-              19
+              18,
+              49,
+              21
             ],
-            "blocks": 2129
+            "blocks": 2834
           },
           {
             "location": "brasshaven:rock_necropolis/necropolis/x1_z0",
@@ -103,25 +103,25 @@
               6
             ],
             "size": [
-              31,
-              76,
+              30,
+              75,
               23
             ],
-            "blocks": 8926
+            "blocks": 9382
           },
           {
             "location": "brasshaven:rock_necropolis/necropolis/x1_z1",
             "offset": [
               30,
-              27,
+              28,
               29
             ],
             "size": [
-              31,
-              107,
+              30,
+              105,
               30
             ],
-            "blocks": 9808
+            "blocks": 9287
           },
           {
             "location": "brasshaven:rock_necropolis/necropolis/x1_z2",
@@ -131,11 +131,11 @@
               59
             ],
             "size": [
-              31,
+              30,
               113,
               29
             ],
-            "blocks": 12841
+            "blocks": 12363
           },
           {
             "location": "brasshaven:rock_necropolis/necropolis/x1_z3",
@@ -145,11 +145,11 @@
               88
             ],
             "size": [
-              31,
-              95,
+              30,
+              94,
               30
             ],
-            "blocks": 14659
+            "blocks": 13758
           },
           {
             "location": "brasshaven:rock_necropolis/necropolis/x1_z4",
@@ -159,11 +159,11 @@
               118
             ],
             "size": [
-              31,
-              66,
+              30,
+              72,
               29
             ],
-            "blocks": 7137
+            "blocks": 7541
           },
           {
             "location": "brasshaven:rock_necropolis/necropolis/x1_z5",
@@ -173,44 +173,44 @@
               147
             ],
             "size": [
-              31,
-              66,
+              30,
+              68,
               30
             ],
-            "blocks": 7190
+            "blocks": 7692
           },
           {
             "location": "brasshaven:rock_necropolis/necropolis/x1_z6",
             "offset": [
-              47,
+              52,
               34,
               177
             ],
             "size": [
-              14,
-              3,
-              2
+              8,
+              2,
+              1
             ],
-            "blocks": 52
+            "blocks": 16
           },
           {
             "location": "brasshaven:rock_necropolis/necropolis/x2_z0",
             "offset": [
-              61,
+              60,
               16,
-              4
+              6
             ],
             "size": [
               30,
               87,
-              25
+              23
             ],
-            "blocks": 9565
+            "blocks": 9537
           },
           {
             "location": "brasshaven:rock_necropolis/necropolis/x2_z1",
             "offset": [
-              61,
+              60,
               0,
               29
             ],
@@ -219,26 +219,26 @@
               134,
               30
             ],
-            "blocks": 13647
+            "blocks": 12805
           },
           {
             "location": "brasshaven:rock_necropolis/necropolis/x2_z2",
             "offset": [
-              61,
+              60,
               0,
               59
             ],
             "size": [
               30,
-              148,
+              147,
               29
             ],
-            "blocks": 32982
+            "blocks": 31778
           },
           {
             "location": "brasshaven:rock_necropolis/necropolis/x2_z3",
             "offset": [
-              61,
+              60,
               0,
               88
             ],
@@ -247,26 +247,124 @@
               141,
               30
             ],
-            "blocks": 30456
+            "blocks": 30403
           },
           {
             "location": "brasshaven:rock_necropolis/necropolis/x2_z4",
             "offset": [
-              61,
+              60,
               38,
               118
             ],
             "size": [
               30,
-              54,
+              58,
               29
             ],
-            "blocks": 5707
+            "blocks": 5825
           },
           {
             "location": "brasshaven:rock_necropolis/necropolis/x2_z5",
             "offset": [
-              61,
+              60,
+              27,
+              147
+            ],
+            "size": [
+              30,
+              69,
+              30
+            ],
+            "blocks": 9891
+          },
+          {
+            "location": "brasshaven:rock_necropolis/necropolis/x2_z6",
+            "offset": [
+              60,
+              27,
+              177
+            ],
+            "size": [
+              30,
+              41,
+              28
+            ],
+            "blocks": 3528
+          },
+          {
+            "location": "brasshaven:rock_necropolis/necropolis/x3_z0",
+            "offset": [
+              90,
+              8,
+              0
+            ],
+            "size": [
+              30,
+              93,
+              29
+            ],
+            "blocks": 12431
+          },
+          {
+            "location": "brasshaven:rock_necropolis/necropolis/x3_z1",
+            "offset": [
+              90,
+              0,
+              29
+            ],
+            "size": [
+              30,
+              137,
+              30
+            ],
+            "blocks": 19684
+          },
+          {
+            "location": "brasshaven:rock_necropolis/necropolis/x3_z2",
+            "offset": [
+              90,
+              0,
+              59
+            ],
+            "size": [
+              30,
+              148,
+              29
+            ],
+            "blocks": 37738
+          },
+          {
+            "location": "brasshaven:rock_necropolis/necropolis/x3_z3",
+            "offset": [
+              90,
+              0,
+              88
+            ],
+            "size": [
+              30,
+              141,
+              30
+            ],
+            "blocks": 29606
+          },
+          {
+            "location": "brasshaven:rock_necropolis/necropolis/x3_z4",
+            "offset": [
+              90,
+              38,
+              118
+            ],
+            "size": [
+              30,
+              56,
+              29
+            ],
+            "blocks": 4102
+          },
+          {
+            "location": "brasshaven:rock_necropolis/necropolis/x3_z5",
+            "offset": [
+              90,
               27,
               147
             ],
@@ -275,119 +373,21 @@
               63,
               30
             ],
-            "blocks": 9290
+            "blocks": 8144
           },
           {
-            "location": "brasshaven:rock_necropolis/necropolis/x2_z6",
+            "location": "brasshaven:rock_necropolis/necropolis/x3_z6",
             "offset": [
-              61,
+              90,
               27,
               177
             ],
             "size": [
               30,
-              26,
-              28
-            ],
-            "blocks": 3775
-          },
-          {
-            "location": "brasshaven:rock_necropolis/necropolis/x3_z0",
-            "offset": [
-              91,
-              8,
-              0
-            ],
-            "size": [
-              29,
-              93,
+              42,
               29
             ],
-            "blocks": 12330
-          },
-          {
-            "location": "brasshaven:rock_necropolis/necropolis/x3_z1",
-            "offset": [
-              91,
-              0,
-              29
-            ],
-            "size": [
-              29,
-              137,
-              30
-            ],
-            "blocks": 18534
-          },
-          {
-            "location": "brasshaven:rock_necropolis/necropolis/x3_z2",
-            "offset": [
-              91,
-              0,
-              59
-            ],
-            "size": [
-              29,
-              148,
-              29
-            ],
-            "blocks": 36056
-          },
-          {
-            "location": "brasshaven:rock_necropolis/necropolis/x3_z3",
-            "offset": [
-              91,
-              0,
-              88
-            ],
-            "size": [
-              29,
-              141,
-              30
-            ],
-            "blocks": 28457
-          },
-          {
-            "location": "brasshaven:rock_necropolis/necropolis/x3_z4",
-            "offset": [
-              91,
-              38,
-              118
-            ],
-            "size": [
-              29,
-              51,
-              29
-            ],
-            "blocks": 3887
-          },
-          {
-            "location": "brasshaven:rock_necropolis/necropolis/x3_z5",
-            "offset": [
-              91,
-              27,
-              147
-            ],
-            "size": [
-              29,
-              61,
-              30
-            ],
-            "blocks": 7304
-          },
-          {
-            "location": "brasshaven:rock_necropolis/necropolis/x3_z6",
-            "offset": [
-              91,
-              27,
-              177
-            ],
-            "size": [
-              29,
-              33,
-              29
-            ],
-            "blocks": 9935
+            "blocks": 10440
           },
           {
             "location": "brasshaven:rock_necropolis/necropolis/x4_z0",
@@ -397,25 +397,25 @@
               0
             ],
             "size": [
-              32,
+              31,
               85,
               29
             ],
-            "blocks": 8103
+            "blocks": 8603
           },
           {
             "location": "brasshaven:rock_necropolis/necropolis/x4_z1",
             "offset": [
               120,
-              27,
+              38,
               29
             ],
             "size": [
-              32,
-              108,
+              31,
+              97,
               30
             ],
-            "blocks": 5109
+            "blocks": 4943
           },
           {
             "location": "brasshaven:rock_necropolis/necropolis/x4_z2",
@@ -425,11 +425,11 @@
               59
             ],
             "size": [
-              32,
+              31,
               102,
               29
             ],
-            "blocks": 5194
+            "blocks": 5078
           },
           {
             "location": "brasshaven:rock_necropolis/necropolis/x4_z3",
@@ -439,11 +439,11 @@
               88
             ],
             "size": [
-              32,
+              31,
               96,
               30
             ],
-            "blocks": 17265
+            "blocks": 17311
           },
           {
             "location": "brasshaven:rock_necropolis/necropolis/x4_z4",
@@ -453,11 +453,11 @@
               118
             ],
             "size": [
-              32,
-              67,
+              31,
+              72,
               29
             ],
-            "blocks": 6260
+            "blocks": 6419
           },
           {
             "location": "brasshaven:rock_necropolis/necropolis/x4_z5",
@@ -467,11 +467,11 @@
               147
             ],
             "size": [
-              32,
-              69,
+              31,
+              72,
               30
             ],
-            "blocks": 7556
+            "blocks": 7935
           },
           {
             "location": "brasshaven:rock_necropolis/necropolis/x4_z6",
@@ -483,93 +483,93 @@
             "size": [
               15,
               18,
-              28
+              27
             ],
-            "blocks": 2584
+            "blocks": 2572
           },
           {
             "location": "brasshaven:rock_necropolis/necropolis/x5_z0",
             "offset": [
-              152,
-              31,
-              22
+              151,
+              27,
+              16
             ],
             "size": [
-              8,
-              8,
-              7
+              14,
+              41,
+              13
             ],
-            "blocks": 82
+            "blocks": 933
           },
           {
             "location": "brasshaven:rock_necropolis/necropolis/x5_z1",
             "offset": [
-              152,
+              151,
               27,
               29
             ],
             "size": [
-              24,
+              25,
               84,
               30
             ],
-            "blocks": 6429
+            "blocks": 7080
           },
           {
             "location": "brasshaven:rock_necropolis/necropolis/x5_z2",
             "offset": [
-              152,
+              151,
               27,
               59
             ],
             "size": [
-              30,
+              29,
               83,
               29
             ],
-            "blocks": 7133
+            "blocks": 7194
           },
           {
             "location": "brasshaven:rock_necropolis/necropolis/x5_z3",
             "offset": [
-              152,
+              151,
               27,
               88
             ],
             "size": [
               30,
-              92,
+              97,
               30
             ],
-            "blocks": 7831
+            "blocks": 8253
           },
           {
             "location": "brasshaven:rock_necropolis/necropolis/x5_z4",
             "offset": [
-              152,
+              151,
               27,
               118
             ],
             "size": [
               29,
-              76,
+              81,
               29
             ],
-            "blocks": 7027
+            "blocks": 7803
           },
           {
             "location": "brasshaven:rock_necropolis/necropolis/x5_z5",
             "offset": [
-              152,
+              151,
               27,
               147
             ],
             "size": [
               21,
-              55,
+              50,
               24
             ],
-            "blocks": 2595
+            "blocks": 3349
           }
         ],
         "projection": "rigid",
@@ -577,8 +577,8 @@
         "ground_level_delta": 40,
         "footprint": [
           4,
-          8,
-          177,
+          9,
+          176,
           201
         ]
       }

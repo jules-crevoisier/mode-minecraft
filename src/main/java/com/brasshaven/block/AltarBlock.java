@@ -84,9 +84,12 @@ public class AltarBlock extends Block {
         if (entity instanceof WayfarerBoss wb) {
             wb.setArena(pos.above(), 24, null);
         }
-        // co-op scaling: +60% health per extra player in the arena
+        // co-op scaling: a WayfarerBoss scales itself (health, damage, poise, cooldowns, minions: WayfarerBoss#applyDifficulty);
+        // other altar bosses get +60% health per extra player in the arena
         int players = serverLevel.getEntitiesOfClass(Player.class, new AABB(pos).inflate(48), p -> !p.isSpectator()).size();
-        if (players > 1) {
+        if (entity instanceof WayfarerBoss wb) {
+            wb.scaleForPlayers(players);
+        } else if (players > 1) {
             AttributeInstance health = entity.getAttribute(Attributes.MAX_HEALTH);
             if (health != null) {
                 health.addPermanentModifier(new AttributeModifier(Brasshaven.id("coop_health"), 0.6 * (players - 1),

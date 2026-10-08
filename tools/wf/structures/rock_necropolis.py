@@ -39,7 +39,7 @@ from ..megakit import hash01, hash3
 from ..parts import LOOT, MOD
 
 # the necropolis' own king comes with the boss pass of the overhaul; until then the arena wakes the Sand Pharaoh
-BOSS = "brasshaven:sand_pharaoh"
+BOSS = "brasshaven:dune_king"
 MOB_CRAWLER = "brasshaven:crypt_crawler"
 
 # ------------------------------------------------------------------ dimensions
@@ -139,7 +139,7 @@ def _fields():
     ax, az = 86.0, np.where(z < -12, 84.0, 84.0)
     p = 2.6
     r = (np.abs(x / ax) ** p + np.abs((z + 12) / az) ** p) ** (1 / p)
-    r = r * (1 + 0.16 * (fbm(x, z, 22.0, 3) - 0.5))
+    r = r * (1 + 0.16 * (fbm(x, z, 22.0, 3) - 0.5) + 0.22 * (fbm(x, z, 48.0, 4) - 0.5))   # spurs and bays
     # plateau: tall behind the façade, falling to the back, the sides and the canyon side
     s = np.where(z < -40, np.exp(-((z + 40) / 30) ** 2), np.where(z > 0, np.exp(-(z / 30) ** 2), 1.0))
     hp = 40 + 58 * np.exp(-(x / 70) ** 2) * s + 8 * (fbm(x, z, 16.0, 5) - 0.5)
@@ -150,9 +150,16 @@ def _fields():
     d = np.hypot(x / 56.0, (z + 14) / 19.0)
     crest = 95 + 6 * (fbm(x, z, 9.0, 9) - 0.5) - 0.08 * np.abs(x) - np.clip(d - 0.82, 0, None) * 110
     hp = np.where(z <= FZ + 2, np.maximum(hp, crest), hp)
-    rim = np.clip((1 - r) / 0.15, 0, 1)
-    rim = rim * rim * (3 - 2 * rim)
-    h = np.where(r < 1, hp * rim ** 0.5, 0)
+    # badlands terraces: flat benches with steep risers (raise-only, so no room under the surface gets exposed)
+    step = 9.0 + 3.0 * (fbm(x, z, 40.0, 13) - 0.5)
+    q = hp / step
+    base = np.floor(q)
+    hp = np.where(z <= FZ + 2, hp, np.maximum(hp, (base + np.minimum(1.0, (q - base) / 0.3)) * step))
+    # the outer slopes climb in three cliff-and-bench steps (sheer risers, flat benches) up to the plateau
+    rim = np.clip((1 - r) / 0.24, 0, 1) * 3.0
+    tier = np.floor(rim)
+    rim = np.minimum(1.0, (tier + np.minimum(1.0, (rim - tier) / 0.18)) / 3.0)
+    h = np.where(r < 1, np.minimum(hp, np.maximum(28.0, hp * (0.45 + 0.55 * rim))), 0)
     h = np.minimum(h, TOP - 2)
     return r, h.astype(int)
 

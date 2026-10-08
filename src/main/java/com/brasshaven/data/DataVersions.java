@@ -37,6 +37,8 @@ public final class DataVersions {
     public static final int MAP = 1;
     /** Guild Terminal block entity (storage network settings: excluded containers). */
     public static final int TERMINAL = 1;
+    /** BossCycles: NG+ defeat counters per boss type (world/data/brasshaven_boss_cycles.dat). */
+    public static final int BOSS_CYCLES = 1;
 
     public static final String FIELD = "data_version";
 

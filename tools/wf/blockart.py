@@ -1,4 +1,4 @@
-"""Block faces of the guild utility blocks, boss altars, lithite ore and metal storage blocks, in the shaded
+"""Block faces of the guild utility blocks, boss altars and metal storage blocks (ores: wf/texore.py), in the shaded
 steampunk style of texgen_steam (brass frames, rivets, bevels, aether and amber glows; STYLE_STEAMPUNK.md).
 
 Every function returns a 16x16 Canvas; gen_textures.block_textures() and metal_textures() call them.
@@ -7,7 +7,8 @@ import math
 import random
 
 from .png import Canvas
-from .texgen import bricks, mix, mul
+from .texgen import bricks, mix
+from .texkit import tmul as mul  # hue-shifted shading
 from .texgen_steam import AETHER, BRASS, DARK_IRON, MAHOGANY, VERDIGRIS, _base, _bevel, _rivet
 
 STONE = (124, 124, 130)
@@ -384,137 +385,197 @@ def boss_seal_top():
     return cv
 
 
-# ------------------------------------------------------------------ ores
-def crystal_ore(host, seed, light, mid, dark, deep=False):
-    """Host stone with five small crystal clusters: lit facet, mid body, dark base, a shadow in the stone."""
-    rng = random.Random(seed)
-    cv = _stone(host, seed, 0.07)
-    if deep:
-        for y in range(0, 16, 4):
-            for x in range(16):
-                if rng.random() < 0.5:
-                    cv.set(x, y, mul(host, 0.86))
-    spots = [(2, 2), (9, 1), (12, 7), (4, 9), (9, 12)]
-    for cx, cy in spots:
-        cx += rng.randint(0, 1)
-        cy += rng.randint(0, 1)
-        shape = [(0, 1), (1, 0), (1, 1), (2, 1), (1, 2)] if rng.random() < 0.5 else [(0, 0), (1, 0), (0, 1), (1, 1), (2, 2)]
-        cells = {(cx + dx, cy + dy) for dx, dy in shape}
-        for x, y in cells:
-            for sx, sy in ((x + 1, y), (x, y + 1), (x + 1, y + 1)):
-                if (sx, sy) not in cells and 0 <= sx < 16 and 0 <= sy < 16:
-                    cv.set(sx, sy, mul(host, 0.5))
-        for x, y in cells:
-            if 0 <= x < 16 and 0 <= y < 16:
-                up = (x, y - 1) in cells
-                left = (x - 1, y) in cells
-                cv.set(x, y, light if not (up or left) else dark if (x + 1, y) not in cells and (x, y + 1) not in cells else mid)
-    return cv
-
-
 # ------------------------------------------------------------------ metal storage and raw blocks
-def storage_block(palette, kind, seed):
-    """Metal storage block faces: brass/zinc riveted plates, mithril filigree, orichalcum hammered plate,
-    aether faceted crystal."""
-    light, mid, dark, outline = (tuple(c[:3]) for c in palette)
-    rng = random.Random(seed)
+def _metal_ramp(palette):
+    """Six hue-shifted tones (0 deepest .. 5 brightest) around a metal palette's mid tone."""
+    from . import texkit as K
+    return K.ramp(tuple(palette[1][:3]), 6, -0.72, 0.7)
+
+
+def _framed(r, seed, field=2):
+    """A bevelled block face: lit top/left rim, shaded bottom/right rim, a field of tone ``field`` with a few
+    brushed streaks."""
     cv = Canvas(16, 16)
     for y in range(16):
         for x in range(16):
-            cv.set(x, y, mul(mid, 1 + rng.uniform(-0.025, 0.025)))
+            cv.set(x, y, r[field])
+    # brushed streaks: a few horizontal 3-6 px runs one tone up, clustered rather than per pixel
+    rng = random.Random(f"brush{seed}")
+    for _ in range(5):
+        x, y, n = rng.randrange(2, 12), rng.randrange(2, 14), rng.randint(3, 6)
+        for i in range(n):
+            if x + i < 14:
+                cv.set(x + i, y, r[field + 1])
     for i in range(16):
-        cv.set(i, 0, light)
-        cv.set(0, i, light)
-        cv.set(i, 15, mix(dark, outline, 0.4))
-        cv.set(15, i, mix(dark, outline, 0.4))
+        cv.set(i, 0, r[5])
+        cv.set(0, i, r[5])
+        cv.set(i, 15, r[0])
+        cv.set(15, i, r[0])
     for i in range(1, 15):
-        cv.set(i, 1, mix(light, mid, 0.5))
-        cv.set(1, i, mix(light, mid, 0.5))
-        cv.set(i, 14, dark)
-        cv.set(14, i, dark)
-    if kind in ("brass", "zinc"):
-        for x in range(2, 14):
-            cv.set(x, 7, dark)
-            cv.set(x, 8, light)
-        for x, y in ((3, 3), (11, 3), (3, 11), (11, 11)):
-            cv.set(x, y, mix(light, (255, 255, 255), 0.4))
-            cv.set(x + 1, y, mid)
-            cv.set(x, y + 1, mid)
-            cv.set(x + 1, y + 1, dark)
-        for x, y in ((7, 3), (7, 11)):
-            cv.set(x, y, light)
-            cv.set(x + 1, y + 1, dark)
-    elif kind == "mithril":
-        # inlaid filigree: a diamond lattice of bright lines with a star at its heart
-        def lattice(x, y):
-            return (x + y) % 6 == 3 or (x - y) % 6 == 0
-        for y in range(2, 14):
-            for x in range(2, 14):
-                if lattice(x, y):
-                    cv.set(x, y, light)
-                elif lattice(x - 1, y - 1) and x > 2 and y > 2:
-                    cv.set(x, y, mix(mid, dark, 0.5))
-        cv.set(7, 7, mix(light, (255, 255, 255), 0.6))
-        cv.set(8, 8, mix(light, (255, 255, 255), 0.6))
-    elif kind == "orichalcum":
-        # hammered plate: dimples lit from the top-left
-        for cy in (4, 8, 12):
-            for cx in (4, 8, 12):
-                ox = cx + (2 if cy == 8 else 0) - 1
-                if 2 <= ox <= 13:
-                    cv.set(ox, cy - 1, dark)
-                    cv.set(ox - 1, cy - 1, mix(dark, mid, 0.5))
-                    cv.set(ox + 1, cy, light)
-                    cv.set(ox, cy, mix(light, mid, 0.4))
-    else:
-        # cut-crystal block: a faceted diamond set in a bevelled frame, each facet a flat tone, bright edges
-        cv2 = Canvas(16, 16)
-        glint = mix(light, (255, 255, 255), 0.5)
+        cv.set(i, 1, r[4])
+        cv.set(1, i, r[4])
+        cv.set(i, 14, r[1])
+        cv.set(14, i, r[1])
+    cv.set(15, 0, r[3])
+    cv.set(0, 15, r[3])
+    return cv
+
+
+def _rivet6(cv, x, y, r):
+    """A 2x2 domed rivet: bright cap, mid sides, deep shadow pixel bottom-right."""
+    cv.set(x, y, r[5])
+    cv.set(x + 1, y, r[3])
+    cv.set(x, y + 1, r[3])
+    cv.set(x + 1, y + 1, r[0])
+
+
+def _inset(cv, r, x0, y0, x1, y1, raised=True):
+    hi, lo = (r[4], r[1]) if raised else (r[1], r[4])
+    for x in range(x0, x1 + 1):
+        cv.set(x, y0, hi)
+        cv.set(x, y1, lo)
+    for y in range(y0, y1 + 1):
+        cv.set(x0, y, hi)
+        cv.set(x1, y, lo)
+
+
+def storage_block(palette, kind, seed):
+    """Metal storage blocks, each with its own construction: brass a riveted boss plate, zinc a galvanised sheet with
+    its crystal spangle, mithril raised filigree, orichalcum a hammered plate, aether a cut crystal."""
+    r = _metal_ramp(palette)
+    light, mid, dark, outline = (tuple(c[:3]) for c in palette)
+    if kind == "brass":
+        cv = _framed(r, seed)
+        # raised centre boss with a recessed groove round it and a stamped cog-tooth ring
+        _inset(cv, r, 3, 3, 12, 12, raised=False)
+        _inset(cv, r, 4, 4, 11, 11, raised=True)
+        for y in range(5, 11):
+            for x in range(5, 11):
+                cv.set(x, y, r[3] if (x + y) < 16 else r[2])
+        for x, y in ((7, 5), (8, 5), (5, 7), (5, 8)):
+            cv.set(x, y, r[4])
+        for x, y in ((7, 10), (8, 10), (10, 7), (10, 8)):
+            cv.set(x, y, r[1])
+        cv.set(7, 7, r[1])
+        cv.set(8, 8, r[5])
+        for x, y in ((2, 2), (12, 2), (2, 12), (12, 12)):
+            _rivet6(cv, x, y, r)
+        return cv
+    if kind == "zinc":
+        # galvanised spangle: big flat crystal facets of slightly different greys, crisp edges between them
+        rng = random.Random(seed)
+        pts = [(rng.uniform(0, 16), rng.uniform(0, 16), rng.choice((2, 3, 3, 4))) for _ in range(13)]
+        cv = Canvas(16, 16)
         for y in range(16):
             for x in range(16):
-                dx, dy = x - 7.5, y - 7.5
-                inner = abs(dx) + abs(dy) < 5.0
-                if abs(abs(dx) + abs(dy) - 5.0) < 0.6 or (inner and (abs(dx - dy) < 0.6 or abs(dx + dy) < 0.6)):
-                    c = mix(light, mid, 0.2)
-                elif inner:
-                    c = light if dy < 0 and abs(dx) < -dy else mid if dx < 0 else dark if dy > 0 else mix(mid, dark, 0.4)
-                else:
-                    c = mix(mid, light, 0.3) if dy < -abs(dx) else mid if dx < -abs(dy) else (
-                        mix(dark, outline, 0.3) if dy > abs(dx) else mix(mid, dark, 0.6))
-                cv2.set(x, y, c)
+                best = sorted(((min(abs(x - px), 16 - abs(x - px)) ** 2 + min(abs(y - py), 16 - abs(y - py)) ** 2, t)
+                               for px, py, t in pts))
+                edge = best[1][0] - best[0][0] < 2.2
+                cv.set(x, y, r[best[0][1] - 1] if edge and best[0][1] > best[1][1] else r[best[0][1]])
         for i in range(16):
-            cv2.set(i, 0, light)
-            cv2.set(0, i, light)
-            cv2.set(i, 15, mix(dark, outline, 0.5))
-            cv2.set(15, i, mix(dark, outline, 0.5))
-        for x, y in ((6, 4), (7, 5)):
-            cv2.set(x, y, glint)
-        return cv2
-    return cv
+            cv.set(i, 0, r[5])
+            cv.set(0, i, r[5])
+            cv.set(i, 15, r[0])
+            cv.set(15, i, r[0])
+        for x, y in ((1, 1), (13, 1), (1, 13), (13, 13)):
+            _rivet6(cv, x, y, r)
+        return cv
+    if kind == "mithril":
+        # a pale plate with a raised rhombus of filigree and a four-point star in the middle
+        cv = _framed(r, seed, field=2)
+        for y in range(2, 14):
+            for x in range(2, 14):
+                d = abs(x - 7.5) + abs(y - 7.5)
+                up, left = y < 7.5, x < 7.5
+                if 5.0 <= d < 6.0:
+                    cv.set(x, y, r[5] if up and left else r[1] if not up and not left else r[4] if up else r[3])
+                elif 6.0 <= d < 7.0:
+                    cv.set(x, y, r[0] if not up and not left else r[1] if not up or not left else r[2])
+                elif d < 5.0:
+                    cv.set(x, y, r[3])
+        star = {(7, 4): 5, (8, 4): 4, (7, 5): 5, (8, 5): 3, (4, 7): 5, (5, 7): 5, (4, 8): 4, (5, 8): 3,
+                (10, 7): 4, (11, 7): 3, (10, 8): 2, (11, 8): 1, (7, 10): 4, (8, 10): 2, (7, 11): 3, (8, 11): 1,
+                (6, 6): 5, (7, 6): 5, (8, 6): 4, (9, 6): 3, (6, 7): 5, (7, 7): 5, (8, 7): 4, (9, 7): 2,
+                (6, 8): 4, (7, 8): 4, (8, 8): 3, (9, 8): 1, (6, 9): 3, (7, 9): 2, (8, 9): 1, (9, 9): 1}
+        for (x, y), t in star.items():
+            cv.set(x, y, r[t])
+        cv.set(7, 7, (255, 255, 255))
+        for x, y in ((2, 2), (12, 2), (2, 12), (12, 12)):
+            _rivet6(cv, x, y, r)
+        return cv
+    if kind == "orichalcum":
+        # a hammered bowl: one big concave dish in the plate (shadow on its upper-left wall, light caught on the
+        # lower-right wall) and four small dents round it
+        cv = _framed(r, seed, field=3)
+        for y in range(2, 14):
+            for x in range(2, 14):
+                dx, dy = x + 0.5 - 8, y + 0.5 - 8
+                d = math.hypot(dx, dy)
+                if d <= 5.2:
+                    k = (dx + dy) / (d * 1.41) if d else 0
+                    if d > 4.2:
+                        cv.set(x, y, r[0] if k < -0.3 else r[5] if k > 0.3 else r[2])
+                    elif d > 3.0:
+                        cv.set(x, y, r[1] if k < -0.2 else r[4] if k > 0.4 else r[2])
+                    else:
+                        cv.set(x, y, r[2] if k < 0 else r[3])
+        for mx, my in ((3, 3), (11, 3), (3, 11), (11, 11)):
+            cv.set(mx, my, r[1])
+            cv.set(mx + 1, my, r[2])
+            cv.set(mx, my + 1, r[2])
+            cv.set(mx + 1, my + 1, r[5])
+        cv.set(6, 10, r[5])
+        cv.set(10, 6, r[5])
+        return cv
+    # cut-crystal block: a faceted diamond set in a bevelled frame, each facet one flat tone, bright edges
+    cv2 = Canvas(16, 16)
+    glint = mix(r[5], (255, 255, 255), 0.5)
+    for y in range(16):
+        for x in range(16):
+            dx, dy = x - 7.5, y - 7.5
+            inner = abs(dx) + abs(dy) < 5.0
+            if abs(abs(dx) + abs(dy) - 5.0) < 0.6 or (inner and (abs(dx - dy) < 0.6 or abs(dx + dy) < 0.6)):
+                c = r[5] if dy < 0 or dx < 0 else r[3]
+            elif inner:
+                c = r[5] if dy < 0 and abs(dx) < -dy else r[3] if dx < 0 else r[1] if dy > 0 else r[2]
+            else:
+                c = r[4] if dy < -abs(dx) else r[3] if dx < -abs(dy) else (r[0] if dy > abs(dx) else r[1])
+            cv2.set(x, y, c)
+    for i in range(16):
+        cv2.set(i, 0, r[5])
+        cv2.set(0, i, r[5])
+        cv2.set(i, 15, mix(r[0], outline, 0.4))
+        cv2.set(15, i, mix(r[0], outline, 0.4))
+    for x, y in ((6, 4), (7, 5)):
+        cv2.set(x, y, glint)
+    return cv2
 
 
 def raw_block(palette, seed):
-    """Raw ore block: rounded lumps of ore packed together, each lit from the top-left."""
-    light, mid, dark, outline = (tuple(c[:3]) for c in palette)
+    """Raw ore block: rounded lumps packed together, each shaded as a lit ball from the top-left on a hue-shifted
+    ramp, with deep crevices between them."""
+    r = _metal_ramp(palette)
     rng = random.Random(seed)
     cv = Canvas(16, 16)
     for y in range(16):
         for x in range(16):
-            cv.set(x, y, mix(dark, outline, 0.35))
+            cv.set(x, y, r[0])
     lumps = []
-    for gy in range(4):
-        for gx in range(4):
-            lumps.append((gx * 4 + 2 + (2 if gy % 2 else 0) + rng.uniform(-0.7, 0.7), gy * 4 + 2 + rng.uniform(-0.6, 0.6),
-                          rng.uniform(1.9, 2.5)))
-    for cx, cy, r in lumps:
-        tint = 1 + rng.uniform(-0.08, 0.06)
+    for gy in range(3):
+        for gx in range(3):
+            lumps.append((gx * 5.33 + 2.6 + (2.6 if gy % 2 else 0) + rng.uniform(-0.8, 0.8),
+                          gy * 5.33 + 2.6 + rng.uniform(-0.7, 0.7), rng.uniform(2.9, 3.5)))
+    rng.shuffle(lumps)
+    for cx, cy, rad in lumps:
+        bump = rng.choice((0, 0, 0, -1))
         for y in range(16):
             for x in range(16):
                 for ox in (-16, 0, 16):
                     for oy in (-16, 0, 16):
                         dx, dy = x + 0.5 - cx - ox, y + 0.5 - cy - oy
-                        if dx * dx + dy * dy <= r * r:
-                            k = (dx + dy) / (r * 1.41)
-                            c = light if k < -0.5 else mid if k < 0.3 else dark
-                            cv.set(x, y, mul(c, tint))
+                        d2 = dx * dx + dy * dy
+                        if d2 <= rad * rad:
+                            k = (dx + dy) / (rad * 1.41)
+                            t = 5 if k < -0.68 and d2 > rad * rad * 0.25 else 4 if k < -0.25 else 3 if k < 0.3 else 2 if k < 0.7 else 1
+                            cv.set(x, y, r[max(1, t + bump)])
     return cv

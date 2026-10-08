@@ -29,7 +29,7 @@ from ..megakit import fbm, hash01, hash3
 from ..parts import LOOT, MOB, MOD
 
 # the colossus' own boss comes with the boss pass of the overhaul; until then the helmet wakes the Rune Colossus
-BOSS = "brasshaven:rune_colossus"
+BOSS = "brasshaven:bronze_sentinel"
 
 # ------------------------------------------------------------------ dimensions
 YC = 15                                  # body axis height (torso, pelvis): the right flank is up

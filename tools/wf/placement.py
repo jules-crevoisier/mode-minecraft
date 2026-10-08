@@ -147,6 +147,7 @@ FAMILIES = [
     }, avoid=[(DW, WONDER_RADIUS), (V + "ancient_cities", 4), (D, 5)]),
     Family("nether_large", "nether", 36, 12, {
         "basalt_fortress": 2, "piglin_sanctuary": 2, "piglin_market": 2, "lava_foundry": 2,
+        "chained_bastion": 1,
     }, avoid=[(V + "nether_complexes", 4)]),
     Family("nether_small", "nether", 30, 10, {
         "chain_bridge": 2, "soul_tower": 2,
@@ -239,6 +240,7 @@ FIT = {
     "lava_foundry": _f("cavern", open=0.5),
     "soul_tower": _f("cavern", open=0.3),
     "piglin_market": _f("cavern", open=0.3),
+    "chained_bastion": _f("cavern", open=0.4),   # hangs in a big cavern: open air at the floor of the bastion
     # ---- End: monuments floating over the void beside the outer islands; they rise above an island in the way
     "void_observatory": _f("sky", clearance=4, lift=32),
     "chorus_garden": _f("sky", clearance=4, lift=32),

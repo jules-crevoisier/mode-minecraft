@@ -60,14 +60,15 @@ public final class GeneratedContent {
             new StructureInfo("shipwreck_debris", "overworld"),
             new StructureInfo("walking_fortress", "overworld"),
             new StructureInfo("rock_necropolis", "overworld"),
-            new StructureInfo("fallen_colossus", "overworld")
+            new StructureInfo("fallen_colossus", "overworld"),
+            new StructureInfo("chained_bastion", "nether")
     );
 
     public static final List<Chapter> CHAPTERS = List.of(
             new Chapter("first_steps", List.of("first_steps/guild_outpost", "first_steps/map_fragment", "first_steps/waystone", "first_steps/sorting_chest", "first_steps/guild_terminal", "first_steps/backpack", "first_steps/blade", "first_steps/explorer_armor")),
-            new Chapter("explorer", List.of("explorer/mountain_monastery", "explorer/forgotten_library", "explorer/coastal_lighthouse", "explorer/giant_tree", "explorer/desert_oasis", "explorer/witch_huts", "explorer/sky_island", "explorer/jungle_ziggurat", "explorer/ruined_watchtower", "explorer/bandit_camp", "explorer/rune_circle", "explorer/ice_observatory", "explorer/galleon_wreck", "explorer/sunken_temple", "explorer/forgotten_catacombs", "explorer/sand_hypogeum", "explorer/clockwork_citadel", "explorer/sky_harbour", "explorer/sylvan_palace", "explorer/inventor_manor", "explorer/sky_isles", "explorer/geothermal_foundry", "explorer/tesla_observatory", "explorer/sunken_submarine", "explorer/diving_bell", "explorer/coral_shrine", "explorer/shipwreck_debris", "explorer/walking_fortress", "explorer/rock_necropolis", "explorer/fallen_colossus", "explorer/master_cartographer", "explorer/boss_bell_keeper", "explorer/boss_archivist", "explorer/boss_sand_pharaoh", "explorer/boss_jade_jaguar", "explorer/boss_root_mother", "explorer/boss_swamp_crone", "explorer/boss_gryphon_knight", "explorer/boss_rune_colossus", "explorer/boss_grave_knight", "explorer/boss_bone_matriarch", "explorer/boss_grand_clockmaker", "explorer/boss_iron_helmsman")),
+            new Chapter("explorer", List.of("explorer/mountain_monastery", "explorer/forgotten_library", "explorer/coastal_lighthouse", "explorer/giant_tree", "explorer/desert_oasis", "explorer/witch_huts", "explorer/sky_island", "explorer/jungle_ziggurat", "explorer/ruined_watchtower", "explorer/bandit_camp", "explorer/rune_circle", "explorer/ice_observatory", "explorer/galleon_wreck", "explorer/sunken_temple", "explorer/forgotten_catacombs", "explorer/sand_hypogeum", "explorer/clockwork_citadel", "explorer/sky_harbour", "explorer/sylvan_palace", "explorer/inventor_manor", "explorer/sky_isles", "explorer/geothermal_foundry", "explorer/tesla_observatory", "explorer/sunken_submarine", "explorer/diving_bell", "explorer/coral_shrine", "explorer/shipwreck_debris", "explorer/walking_fortress", "explorer/rock_necropolis", "explorer/fallen_colossus", "explorer/master_cartographer", "explorer/boss_bell_keeper", "explorer/boss_archivist", "explorer/boss_sand_pharaoh", "explorer/boss_jade_jaguar", "explorer/boss_root_mother", "explorer/boss_swamp_crone", "explorer/boss_gryphon_knight", "explorer/boss_rune_colossus", "explorer/boss_grave_knight", "explorer/boss_bone_matriarch", "explorer/boss_grand_clockmaker", "explorer/boss_iron_helmsman", "explorer/boss_bronze_sentinel", "explorer/boss_dune_king")),
             new Chapter("depths", List.of("depths/lithite", "depths/dwarven_mine", "depths/dwarven_forge", "depths/crystal_grotto", "depths/sealed_lab", "depths/lithite_well", "depths/undercity", "depths/dwarven_city", "depths/crystal_cathedral", "depths/telluric_hammer", "depths/excavator_pickaxe", "depths/lumber_axe", "depths/frost_blade", "depths/boomerang", "depths/sunken_citadel", "depths/drowned_warden", "depths/boss_forge_king", "depths/boss_crystal_spider", "depths/boss_sculk_spawn", "depths/boss_weeping_lady")),
-            new Chapter("nether", List.of("nether/enter", "nether/basalt_fortress", "nether/chain_bridge", "nether/piglin_sanctuary", "nether/lava_foundry", "nether/soul_tower", "nether/piglin_market", "nether/ancient_ember", "nether/ember_scythe", "nether/storm_staff", "nether/ember_armor", "nether/all", "nether/boss_ash_lord", "nether/boss_piglin_king", "nether/boss_soul_reaper")),
+            new Chapter("nether", List.of("nether/enter", "nether/basalt_fortress", "nether/chain_bridge", "nether/piglin_sanctuary", "nether/lava_foundry", "nether/soul_tower", "nether/piglin_market", "nether/chained_bastion", "nether/ancient_ember", "nether/ember_scythe", "nether/storm_staff", "nether/ember_armor", "nether/all", "nether/boss_ash_lord", "nether/boss_piglin_king", "nether/boss_soul_reaper")),
             new Chapter("end", List.of("end/enter", "end/void_observatory", "end/chorus_garden", "end/end_archive", "end/void_ship", "end/void_nest", "end/void_crypt", "end/void_shard", "end/void_spear", "end/void_armor", "end/void_warden", "end/boss_larva_mother", "end/legends_bane", "end/legend"))
     );
 
@@ -137,6 +138,7 @@ public final class GeneratedContent {
             java.util.Map.entry("walking_fortress", List.of("Walking Fortress", "Forteresse marchante")),
             java.util.Map.entry("rock_necropolis", List.of("Necropolis of Kings", "Nécropole des rois")),
             java.util.Map.entry("fallen_colossus", List.of("Fallen Colossus", "Colosse abattu")),
+            java.util.Map.entry("chained_bastion", List.of("Chained Bastion", "Bastion enchaîné")),
             java.util.Map.entry("village", List.of("Village", "Village"))
     );
 
@@ -180,6 +182,8 @@ public final class GeneratedContent {
             java.util.Map.entry("explorer/boss_archivist", "500|"),
             java.util.Map.entry("explorer/boss_bell_keeper", "500|"),
             java.util.Map.entry("explorer/boss_bone_matriarch", "250|"),
+            java.util.Map.entry("explorer/boss_bronze_sentinel", "500|"),
+            java.util.Map.entry("explorer/boss_dune_king", "500|"),
             java.util.Map.entry("explorer/boss_grand_clockmaker", "500|"),
             java.util.Map.entry("explorer/boss_grave_knight", "250|"),
             java.util.Map.entry("explorer/boss_gryphon_knight", "500|"),
@@ -234,6 +238,7 @@ public final class GeneratedContent {
             java.util.Map.entry("nether/boss_piglin_king", "500|"),
             java.util.Map.entry("nether/boss_soul_reaper", "500|"),
             java.util.Map.entry("nether/chain_bridge", "60|brasshaven:map_fragment*2"),
+            java.util.Map.entry("nether/chained_bastion", "60|brasshaven:map_fragment*2"),
             java.util.Map.entry("nether/ember_armor", "100|"),
             java.util.Map.entry("nether/ember_scythe", "40|"),
             java.util.Map.entry("nether/enter", "50|"),

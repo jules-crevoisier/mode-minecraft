@@ -21,6 +21,9 @@ ITEMS = {
                      "Trophy of the Sunken Citadel.", "Trophée de la Citadelle engloutie."),
     "void_heart": ("Void Heart", "Cœur du vide", "It beats with the rhythm of the void.",
                    "Il bat au rythme du vide."),
+    "ember_of_ascension": ("Ember of Ascension", "Braise d'ascension",
+                           "Dropped by bosses from NG+ cycle 3. Anvil: boss weapon + this = +1 attack damage (max +5).",
+                           "Lâchée par les boss dès le cycle NG+ 3. Enclume : arme de boss + cette braise = +1 de dégâts (max +5)."),
     "brass_gear": ("Brass Gear", "Engrenage en laiton",
                    "A precise little cog salvaged from an automaton.",
                    "Un petit engrenage de précision récupéré sur un automate."),
@@ -191,6 +194,8 @@ ENTITIES = {
     "brass_golem": ("Brass Golem", "Golem de laiton"),
     "grand_clockmaker": ("The Grand Clockmaker", "Le Grand Horloger"),
     "iron_helmsman": ("The Iron Helmsman", "Le Timonier de Fer"),
+    "bronze_sentinel": ("The Bronze Sentinel", "La Sentinelle d'airain"),
+    "dune_king": ("The Dune King", "Le Roi des dunes"),
     "hot_rivet": ("Hot Rivet", "Rivet brûlant"),
     "boomerang": ("Boomerang", "Boomerang"),
 }
@@ -224,6 +229,8 @@ SPAWN_EGGS = ["ruin_walker", "map_wraith", "basalt_guard", "void_stalker", "drow
               "brass_golem",
               "grand_clockmaker",
               "iron_helmsman",
+              "bronze_sentinel",
+              "dune_king",
               ]
 
 # Misc translated messages used from Java (key suffix -> (en, fr))
@@ -514,6 +521,11 @@ MESSAGES = {
     "message.brasshaven.altar.awake": ("%s awakens!", "%s se réveille !"),
     "message.brasshaven.boss.defeated": ("%s has been defeated! The sealed bars crumble.",
                                         "%s est vaincu ! Les barreaux scellés s'effondrent."),
+    # boss difficulty: co-op scaling and NG+ cycles (boss/WayfarerBoss, boss/BossDifficulty)
+    "message.brasshaven.boss.players": ("%s players", "%s joueurs"),
+    "message.brasshaven.boss.cycle_up": ("%s will return stronger: cycle +%s.", "%s reviendra plus fort : cycle +%s."),
+    "message.brasshaven.boss.cycle": ("%s: cycle +%s (%s defeats).", "%s : cycle +%s (%s victoires)."),
+    "message.brasshaven.boss.cycle_set": ("%s: cycle set to +%s.", "%s : cycle réglé sur +%s."),
     "message.brasshaven.brass_golem.built": ("Gears whir, steam hisses: your Brass Golem wakes up! It follows you and "
                                             "fights monsters. Sneak-use it with an empty hand: guard here / follow. "
                                             "Brass ingots repair it.",

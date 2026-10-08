@@ -1278,7 +1278,8 @@ def main():
         idx.add(name(mid), badge, f"b-{mid}", text)
     sec.append(section_oceans(ctx))
     sec.append(f'''<section class="block" id="bestiaire">
-  {plaque("bestiaire-h", "Danger", "Bestiaire", "Toutes les créatures du mod, avec leur vrai modèle 3D. Les boss ont deux phases : à mi-vie ils rugissent puis changent de rythme. Chaque attaque est annoncée (animation ou cercle au sol) : observe, esquive, punis. Frapper fort et souvent brise leur posture (+50 % de dégâts). En coop, leur vie augmente de 60 % par joueur.")}
+  {plaque("bestiaire-h", "Danger", "Bestiaire", "Toutes les créatures du mod, avec leur vrai modèle 3D. Les boss ont deux phases : à mi-vie ils rugissent puis changent de rythme. Chaque attaque est annoncée (animation ou cercle au sol) : observe, esquive, punis. Frapper fort et souvent brise leur posture (+50 % de dégâts).")}
+  <p>{E(TXT.BOSS_DIFFICULTY)}</p>
   {"".join(f'<h3 class="subhead" id="bestiaire-{k}">{t}</h3><div class="grid mobs">{"".join(groups[k])}</div>' for k, t in (("boss", "Les grands boss"), ("champion", "Les champions de donjon"), ("folk", "Les peuples des grands lieux"), ("creature", "Les créatures"), ("sea", "Les créatures marines"), ("companion", "Les compagnons")) if groups[k])}
 </section>''')
 

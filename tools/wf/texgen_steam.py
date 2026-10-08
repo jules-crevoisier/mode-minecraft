@@ -7,7 +7,9 @@ import math
 import random
 
 from .png import Canvas
-from .texgen import mix, mul
+from .texgen import mix
+from .texkit import tmul as mul  # hue-shifted shading
+from .texgen import mul as _pmul  # plain scaling, for glows (a dim glow stays its own hue)
 
 BRASS = (181, 150, 66)
 COPPER = (184, 115, 51)
@@ -21,11 +23,14 @@ AETHER = (63, 208, 255)
 
 
 def _base(base, seed, grain=0.04):
-    rng = random.Random(seed)
+    """A flat field of ``base`` with clustered grain (2-4 px patches one shade up or down), not per-pixel noise."""
+    from .texkit import grain_field
+    g = grain_field(seed)
     cv = Canvas(16, 16)
+    tones = {-1: mul(base, 1 - grain * 1.4), 0: tuple(base[:3]), 1: mul(base, 1 + grain * 1.4)}
     for y in range(16):
         for x in range(16):
-            cv.set(x, y, mul(base, 1 + rng.uniform(-grain, grain)))
+            cv.set(x, y, tones[g[y][x]])
     return cv
 
 
@@ -35,49 +40,66 @@ def _bevel(cv, base, light=1.18, dark=0.72):
         cv.set(0, i, mul(base, light))
         cv.set(i, 15, mul(base, dark))
         cv.set(15, i, mul(base, dark))
+    cv.set(15, 0, mul(base, (light + dark) / 2))
+    cv.set(0, 15, mul(base, (light + dark) / 2))
     return cv
 
 
 def _rivet(cv, x, y, base):
-    cv.set(x, y, mul(base, 1.45))
-    cv.set(x + 1, y, mul(base, 1.1))
-    cv.set(x, y + 1, mul(base, 1.0))
-    cv.set(x + 1, y + 1, mul(base, 0.55))
+    """A 2x2 domed rivet head lit from the top-left, shaded bottom-right."""
+    cv.set(x, y, mul(base, 1.5))
+    cv.set(x + 1, y, mul(base, 1.05))
+    cv.set(x, y + 1, mul(base, 0.95))
+    cv.set(x + 1, y + 1, mul(base, 0.66))
 
 
 def riveted_plate(base, seed=0, patina=None, patina_amount=0.0):
-    """Two plates with a seam, rivets along the edges; optional verdigris patches. A patina_amount of 0.6 or more
-    is a fully weathered plate: the verdigris is the surface and the copper only shows on the rivets."""
-    rng = random.Random(seed)
+    """Two overlapping plates (the upper one casts a shadow line on the lower), staggered vertical seams so a wall
+    of them reads as laid plates, domed rivets along each plate, clustered brushed streaks. Optional verdigris:
+    patches grown from clustered noise that pool in the seams and run down under the rivets. A patina_amount of 0.6
+    or more is a fully weathered plate: the verdigris is the surface and the copper only shows on the rivets."""
+    from .texkit import grain_field, field
     copper = base
-    if patina and patina_amount >= 0.6:
+    weathered = bool(patina) and patina_amount >= 0.6
+    if weathered:
         base = mix(base, patina, 0.78)
-    cv = _base(base, seed, 0.035)
-    # brushed streaks
+    g = grain_field(f"rp{seed}", stretch=4)
+    cv = Canvas(16, 16)
     for y in range(16):
-        if rng.random() < 0.3:
-            for x in range(16):
-                cv.set(x, y, mul(cv.get(x, y), 1.05))
-    _bevel(cv, base)
+        upper = y < 8
+        for x in range(16):
+            f = (1.03 if upper else 0.97) + g[y][x] * 0.045
+            cv.set(x, y, mul(base, f))
+    _bevel(cv, base, 1.22, 0.62)
+    # seam between the plates: upper plate's lower lip, its cast shadow, the lower plate's lit top edge
     for x in range(1, 15):
-        cv.set(x, 7, mul(base, 0.6))
-        cv.set(x, 8, mul(base, 1.2))
-    for x in (2, 6, 10, 13):
-        _rivet(cv, x, 2, base)
-        _rivet(cv, x, 11, base)
+        cv.set(x, 6, mul(base, 0.84))
+        cv.set(x, 7, mul(base, 0.52))
+        cv.set(x, 8, mul(base, 1.16))
+    # staggered butt joints
+    for y in range(1, 6):
+        cv.set(10, y, mul(base, 0.6))
+        cv.set(11, y, mul(base, 1.14))
+    for y in range(9, 15):
+        cv.set(4, y, mul(base, 0.6))
+        cv.set(5, y, mul(base, 1.14))
+    rivets = [(2, 2), (7, 2), (13, 2), (2, 11), (8, 11), (13, 11)]
+    for x, y in rivets:
+        _rivet(cv, x, y, copper if weathered else base)
     if patina:
-        for _ in range(int(40 * patina_amount)):
-            x, y = rng.randrange(16), rng.randrange(16)
-            for dx, dy in ((0, 0), (1, 0), (0, 1)):
-                if 0 <= x + dx < 16 and 0 <= y + dy < 16 and rng.random() < 0.8:
-                    cv.set(x + dx, y + dy, mix(cv.get(x + dx, y + dy), patina, 0.55 + rng.uniform(0, 0.3)))
-        if patina_amount >= 0.6:
-            # copper rubbed bright on the rivet heads, darker patina pooled under them
-            for x in (2, 6, 10, 13):
-                for y in (2, 11):
-                    cv.set(x, y, mul(copper, 1.35))
-                    if y + 2 < 16:
-                        cv.set(x, y + 2, mul(patina, 0.7))
+        f = field(f"pat{seed}", ((4, 0.6), (2, 0.4)), 0.1)
+        cut = 1.0 - patina_amount * 0.55
+        for y in range(16):
+            for x in range(16):
+                v = f[y][x] + (0.18 if y in (6, 7, 8) else 0)      # it pools in the seam
+                if (x, y) in {(rx + i, ry + j) for rx, ry in rivets for i in (0, 1) for j in (0, 1)}:
+                    continue
+                if v > cut:
+                    cv.set(x, y, mix(cv.get(x, y), patina, 0.6 if v < cut + 0.15 else 0.85))
+        for x, y in rivets:
+            for k in (2, 3):
+                if y + k < 16 and (not weathered or k == 2):
+                    cv.set(x, y + k, mix(cv.get(x, y + k), mul(patina, 0.85 if weathered else 1.0), 0.7))
     return cv
 
 
@@ -225,30 +247,47 @@ def soot_bricks(base, mortar, seed=0):
 
 
 def grate(base, seed=0):
-    """Diamond-plate iron flooring (solid, so it works everywhere a full block does)."""
-    cv = _base(base, seed, 0.04)
-    for y in range(16):
-        for x in range(16):
-            if (x + 2 * (y // 4)) % 4 == 0 and y % 4 in (1, 2):
-                cv.set(x, y, mul(base, 1.35))
-                cv.set(min(15, x + 1), y, mul(base, 0.8))
-    _bevel(cv, base)
+    """Diamond (tread) plate: raised lozenges in a herringbone, alternately "/" and "\\", each lit on its upper-left
+    end and shaded on its lower-right end (solid, so it works everywhere a full block does)."""
+    cv = _base(base, seed, 0.03)
+    hi, mid_, lo = mul(base, 1.45), mul(base, 1.18), mul(base, 0.6)
+    for cy in range(0, 16, 4):
+        for cx in range(0, 16, 4):
+            if ((cx + cy) // 4) % 2:
+                bar = [(cx + 2, cy), (cx + 1, cy + 1), (cx, cy + 2)]          # "/"
+            else:
+                bar = [(cx, cy), (cx + 1, cy + 1), (cx + 2, cy + 2)]          # "\\"
+            for i, (x, y) in enumerate(bar):
+                cv.set(x, y, hi if (x, y) == min(bar, key=lambda p: p[0] + p[1]) else mid_)
+            for x, y in bar:
+                if (x, y + 1) not in bar:
+                    cv.set(x, (y + 1) % 16, lo)
+    _bevel(cv, base, 1.2, 0.66)
     return cv
 
 
 def aether_conduit(base, glow, seed=0):
-    """Dark iron block with glowing aether channels."""
+    """Dark iron block crossed by glass aether channels: a white-hot core line, the glow, then a soft halo on the
+    iron, meeting in a brass junction collar at the centre."""
     cv = riveted_plate(base, seed)
-    for i in range(3, 13):
-        cv.set(i, 5, glow)
-        cv.set(i, 10, glow)
-        cv.set(3, 5 + (i - 3) % 6, glow)
-        cv.set(12, 5 + (i - 3) % 6, glow)
-    for x, y in ((3, 5), (12, 5), (3, 10), (12, 10)):
-        cv.set(x, y, (255, 255, 255))
-    for y in (4, 6, 9, 11):
-        for x in range(3, 13):
-            cv.set(x, y, mix(cv.get(x, y), glow, 0.35))
+    core = mix(glow, (255, 255, 255), 0.65)
+    halo = lambda c: mix(c, glow, 0.38)
+    for i in range(1, 15):
+        for (x, y) in ((i, 7), (i, 8), (7, i), (8, i)):
+            cv.set(x, y, glow)
+        for (x, y) in ((i, 6), (i, 9), (6, i), (9, i)):
+            if not (6 <= x <= 9 and 6 <= y <= 9):
+                cv.set(x, y, halo(cv.get(x, y)))
+        cv.set(i, 7, core) if i not in (7, 8) else None
+        cv.set(7, i, core) if i not in (7, 8) else None
+    for x in range(5, 11):
+        for y in range(5, 11):
+            if x in (5, 10) or y in (5, 10):
+                cv.set(x, y, mul(BRASS, 1.3 if x == 5 or y == 5 else 0.7))
+            elif x in (6, 9) or y in (6, 9):
+                cv.set(x, y, mul(BRASS, 1.0))
+    for x, y in ((7, 7), (8, 8), (7, 8), (8, 7)):
+        cv.set(x, y, core)
     return cv
 
 
@@ -273,11 +312,20 @@ def machine_frame(inner, seed=0):
 
 
 def machine_side(seed=0):
-    """Machine casing: brass plate with a vent grille."""
+    """Machine casing: a riveted brass plate with a recessed vent - shadowed top/left lip, lit bottom/right lip,
+    louvred slats (lit top edge, dark gap) over the sooty inside."""
     cv = riveted_plate(BRASS, seed)
     for y in range(4, 12):
         for x in range(4, 12):
-            cv.set(x, y, mul(DARK_IRON, 0.8) if y % 2 == 0 else mul(BRASS, 0.75))
+            if (y - 4) % 2 == 0:
+                cv.set(x, y, mul(DARK_IRON, 0.75))
+            else:
+                cv.set(x, y, mul(BRASS, 1.12) if x < 11 else mul(BRASS, 0.8))
+    for i in range(3, 13):
+        cv.set(i, 3, mul(BRASS, 0.55))
+        cv.set(3, i, mul(BRASS, 0.55))
+        cv.set(i, 12, mul(BRASS, 1.3))
+        cv.set(12, i, mul(BRASS, 1.3))
     return cv
 
 
@@ -347,25 +395,40 @@ def machine_window(name, on=False):
     rows = [r.ljust(10, ".") for r in MACHINE_GLYPHS[name]]
     lit = {(x, y) for y in range(10) for x in range(10) if rows[y][x] != "."}
     hot = mix(glow, (255, 244, 220), 0.55)
-    if not on:
-        dark = _dark_back((30, 26, 26))
+    def edge(x, y):
+        """+1 on a glyph pixel's lit (top/left) rim, -1 on its shaded (bottom/right) rim, 0 inside."""
+        ch = rows[y][x]
 
+        def same(xx, yy):
+            return 0 <= xx < 10 and 0 <= yy < 10 and rows[yy][xx] == ch
+        if not same(x, y - 1) or not same(x - 1, y):
+            return 1 if same(x + 1, y) or same(x, y + 1) else 0
+        if not same(x, y + 1) or not same(x + 1, y):
+            return -1
+        return 0
+
+    if not on:
         def inner(x, y):
             ch = rows[y][x]
             if ch == ".":
-                return dark(x, y)
-            return mul(glow, 0.42) if ch == "a" else mul(colors[ch], 0.82)
+                # sooty glass with one faint diagonal reflection near its top-left corner
+                c = mul((30, 26, 28), 1.0 + ((x * 7 + y * 13) % 5 - 2) * 0.03)
+                return mix(c, (70, 66, 70), 0.5) if x + y in (2, 3) else c
+            if ch == "a":
+                return _pmul(glow, 0.42)
+            e = edge(x, y)
+            return mul(colors[ch], 0.82 * (1.22 if e > 0 else 0.7 if e < 0 else 1.0))
         return inner
 
     def back(x, y):
         d = math.hypot(x - 4.5, y - 4.5) / 6.0
         f = max(0.0, 1.0 - d) ** 1.6
-        c = mix(mul(glow, 0.13), mul(glow, 0.40), f)
+        c = mix(_pmul(glow, 0.13), _pmul(glow, 0.40), f)
         # a soft halo on the glass right next to the glyph (edge neighbours count more than corners)
         near = sum((x + dx, y + dy) in lit for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1))) * 2 + \
             sum((x + dx, y + dy) in lit for dx, dy in ((1, 1), (-1, 1), (1, -1), (-1, -1)))
         if near:
-            c = mix(c, mul(glow, 0.8), min(0.42, 0.07 * near))
+            c = mix(c, _pmul(glow, 0.8), min(0.42, 0.07 * near))
         return mul(c, 1.0 + ((x * 7 + y * 13) % 5 - 2) * 0.02)
 
     def inner(x, y):
@@ -377,7 +440,9 @@ def machine_window(name, on=False):
         if ch == "d":  # coloured marks (timer hands, detector eye, water drops) keep their colour, brighter
             return mix(mul(colors[ch], 1.25), (255, 244, 220), 0.12)
         # metal parts glow from within: their own colour pushed toward the filament white, tinted by the glow
-        return mix(mix(mul(colors[ch], 1.12), glow, 0.18), (255, 246, 226), 0.30)
+        e = edge(x, y)
+        return mix(mix(mul(colors[ch], 1.12 * (1.12 if e > 0 else 0.86 if e < 0 else 1.0)), glow, 0.18),
+                   (255, 246, 226), 0.30)
     return inner
 
 

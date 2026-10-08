@@ -48,10 +48,13 @@ def mul(c, f):
 
 
 def tones(pal):
-    """(light, mid, dark, outline) -> dict of the six tones."""
+    """(light, mid, dark, outline) -> dict of the six tones, hue-shifted (texkit.shift): the lights lean warm, the
+    shadows lean cool, so a material is a ramp of related hues rather than one colour at six brightnesses."""
+    from .texkit import shift
     light, mid, dark, outline = (tuple(c[:3]) for c in pal)
-    return {"shine": mix(light, (255, 255, 255), 0.5), "light": light, "mid": mid, "dark": dark,
-            "deep": mix(dark, outline, 0.5), "outline": outline}
+    return {"shine": mix(shift(light, 0.55), (255, 252, 236), 0.25), "light": mix(light, shift(light, 0.18), 0.6),
+            "mid": mid, "dark": mix(dark, shift(dark, -0.12), 0.6), "deep": mix(shift(dark, -0.32), outline, 0.35),
+            "outline": outline}
 
 
 def two_tone(lo, hi):

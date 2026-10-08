@@ -90,6 +90,17 @@ BOSS_GEAR = [
      ("Remembrance of the Iron Helmsman", "Souvenir du Timonier de Fer"),
      ("LITHITE", 8.0, -3.4), "ERUPT", 11.0, 12.0, 90, "LARGE_SMOKE", "fire", ("anchor", "iron", "dark", "ember"),
      ("iron", "ember")),
+    ("bronze_sentinel", "overworld", "sentinel_greatsword", ("Greatsword of the Sentinel", "Espadon de la Sentinelle"),
+     ("Use: the greatsword cleaves the ground and a crack of rune light tears along the line ahead, hurling foes up.",
+      "Clic droit : l'espadon fend le sol et une fissure de lumière runique déchire la ligne devant toi en projetant les ennemis."),
+     ("Remembrance of the Bronze Sentinel", "Souvenir de la Sentinelle d'airain"),
+     ("LITHITE", 8.0, -3.2), "ERUPT", 11.0, 12.0, 80, "WAX_ON", "lift", ("greatsword", "copper", "dark", "emerald"),
+     ("copper", "emerald")),
+    ("dune_king", "overworld", "dune_king_crook", ("Crook of the Dune King", "Crosse du Roi des dunes"),
+     ("Use: a low beam of judgement lances ahead, burning foes and dragging their steps.",
+      "Clic droit : un rayon de jugement file devant toi, brûle les ennemis et alourdit leurs pas."),
+     ("Remembrance of the Dune King", "Souvenir du Roi des dunes"),
+     None, "BEAM", 12.0, 16.0, 90, "END_ROD", "slow", ("cane", "gold", "gold", "sapphire"), ("gold", "sapphire")),
 ]
 
 

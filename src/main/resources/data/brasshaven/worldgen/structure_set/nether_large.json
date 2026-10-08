@@ -15,6 +15,10 @@
     {
       "structure": "brasshaven:lava_foundry",
       "weight": 2
+    },
+    {
+      "structure": "brasshaven:chained_bastion",
+      "weight": 1
     }
   ],
   "placement": {

@@ -84,6 +84,15 @@ public abstract class WayfarerBoss extends Monster implements AnimatedMob {
     private @Nullable BlockPos home;
     private int arenaRadius = 24;
     private @Nullable BlockPos seal;
+    // difficulty: co-op scaling and NG+ cycles (see tools/BOSSES.md, "Difficulty")
+    private boolean difficultyApplied;
+    private int cycle = -1;
+    private int scaledPlayers = 1;
+    private int playerHint = 1;
+    private int enrageTimer;
+    private int effWindup;
+    private int effRecovery;
+    private int windupDone;
 
     protected WayfarerBoss(EntityType<? extends Monster> type, Level level) {
         super(type, level);
@@ -165,15 +174,193 @@ public abstract class WayfarerBoss extends Monster implements AnimatedMob {
         this.seal = sealPos == null ? null : sealPos.immutable();
     }
 
-    /** Co-op: +60% health per extra player, like the altars. */
+    /**
+     * Co-op hint from whoever spawns the boss (seal, altar): the boss scales for at least this many players. The
+     * scaling itself happens on the boss's first server tick ({@link #applyDifficulty}), for every spawn path.
+     */
     public void scaleForPlayers(int players) {
-        if (players > 1) {
-            var health = getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.MAX_HEALTH);
-            if (health != null) {
-                health.setBaseValue(health.getBaseValue() * (1.0 + 0.6 * (players - 1)));
-                setHealth(getMaxHealth());
-            }
+        playerHint = Math.max(playerHint, players);
+        if (difficultyApplied && players > scaledPlayers) {
+            scalePlayers(players);
         }
+    }
+
+    // ------------------------------------------------------------------ difficulty: co-op scaling, NG+ cycles
+
+    /** NG+ cycle of this fight (0 = first time), or -1 before the first tick. */
+    public int cycle() {
+        return Math.max(0, cycle);
+    }
+
+    /** Players this boss is scaled for (never goes down mid-fight). */
+    public int scaledPlayers() {
+        return scaledPlayers;
+    }
+
+    /** Admin/command: force the cycle before (or after) the boss spawns. */
+    public void setCycle(int c) {
+        this.cycle = Mth.clamp(c, 0, BossCycles.MAX);
+        if (difficultyApplied) {
+            applyCycleModifiers();
+            refreshBarName();
+        }
+    }
+
+    public String bossTypeId() {
+        return net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(getType()).toString();
+    }
+
+    /** Multiplier on every hit the boss deals (applied by {@link BossDifficulty} on LivingHurtEvent). */
+    public float damageMultiplier() {
+        return (float) ((1.0 + 0.10 * (scaledPlayers - 1)) * (1.0 + 0.15 * cycle()));
+    }
+
+    /** Minion count for {@code base} summoned helpers: +1 per 2 extra players (0 stays 0). */
+    public int scaledCount(int base) {
+        return base <= 0 ? base : base + (scaledPlayers - 1) / 2;
+    }
+
+    /** Cooldown multiplier: co-op (-10% per extra player, min 60%) times the cycle speed-up. */
+    protected double cooldownScale() {
+        double coop = scaledPlayers >= 2 ? Math.max(0.6, 1.0 - 0.10 * (scaledPlayers - 1)) : 1.0;
+        return coop * cycleSpeed();
+    }
+
+    /** Timing multiplier of NG+ cycles: wind-ups, recoveries and pauses get up to 25% shorter. */
+    protected double cycleSpeed() {
+        return Math.max(0.75, 1.0 - 0.04 * cycle());
+    }
+
+    /** Readable minimum: a wind-up never drops below 10 ticks (nor below its authored length if shorter). */
+    private int scaledWindup(int windup) {
+        return Math.max(Math.min(windup, 10), (int) Math.round(windup * cycleSpeed()));
+    }
+
+    private int scaledRecovery(int recovery) {
+        return Math.max(Math.min(recovery, 4), (int) Math.round(recovery * cycleSpeed()));
+    }
+
+    /** Poise with the co-op bonus (+25% per extra player). */
+    protected float effectiveMaxPoise() {
+        return maxPoise() * (1.0F + 0.25F * (scaledPlayers - 1));
+    }
+
+    private AABB leashBox() {
+        BlockPos c = home != null ? home : blockPosition();
+        return new AABB(c).inflate(arenaRadius, 12, arenaRadius);
+    }
+
+    private int countFighters(ServerLevel level) {
+        return com.brasshaven.util.NearbyPlayers.in(level, leashBox(),
+                p -> p.isAlive() && !p.isSpectator() && !p.isCreative()).size();
+    }
+
+    /** First server tick: read the world's NG+ cycle for this boss and scale for the players in the arena. */
+    private void applyDifficulty(ServerLevel level) {
+        difficultyApplied = true;
+        if (cycle < 0) {
+            cycle = BossCycles.get(level.getServer()).cycle(bossTypeId());
+        }
+        applyCycleModifiers();
+        int players = Math.max(Math.max(1, playerHint), countFighters(level));
+        scaledPlayers = 1;
+        scalePlayers(players);
+        refreshBarName();
+    }
+
+    /** The world's cycle went up since this boss spawned (it waited in its lair): catch up, never down. */
+    private void refreshCycle(ServerLevel level) {
+        int c = BossCycles.get(level.getServer()).cycle(bossTypeId());
+        if (c > cycle()) {
+            setCycle(c);
+        }
+    }
+
+    private void applyCycleModifiers() {
+        int c = cycle();
+        setModifier(net.minecraft.world.entity.ai.attributes.Attributes.MAX_HEALTH, "ng_health", 0.35 * c,
+                net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
+        setModifier(net.minecraft.world.entity.ai.attributes.Attributes.ARMOR, "ng_armor", 2.0 * c,
+                net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADD_VALUE);
+    }
+
+    /** Scale up for {@code players} (never down): HP x (1 + 0.75 per extra player), keeping the health fraction. */
+    private void scalePlayers(int players) {
+        if (players <= scaledPlayers && players > 1) {
+            return;
+        }
+        scaledPlayers = Math.max(scaledPlayers, Math.max(1, players));
+        setModifier(net.minecraft.world.entity.ai.attributes.Attributes.MAX_HEALTH, "coop_health", 0.75 * (scaledPlayers - 1),
+                net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
+        if (poise >= 0) {
+            poise = effectiveMaxPoise();
+        }
+        refreshBarName();
+    }
+
+    private void setModifier(net.minecraft.core.Holder<net.minecraft.world.entity.ai.attributes.Attribute> attribute, String name,
+                             double amount, net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation op) {
+        var inst = getAttribute(attribute);
+        if (inst == null) {
+            return;
+        }
+        float fraction = getMaxHealth() > 0 ? getHealth() / getMaxHealth() : 1.0F;
+        var id = com.brasshaven.Brasshaven.id(name);
+        inst.removeModifier(id);
+        if (amount != 0) {
+            inst.addPermanentModifier(new net.minecraft.world.entity.ai.attributes.AttributeModifier(id, amount, op));
+        }
+        if (attribute == net.minecraft.world.entity.ai.attributes.Attributes.MAX_HEALTH) {
+            setHealth(Math.max(1.0F, getMaxHealth() * fraction));
+        }
+    }
+
+    /** Boss bar title: name, "+c" from cycle 1, and the player count in co-op. */
+    private Component barName() {
+        var name = getDisplayName().copy();
+        if (cycle() > 0) {
+            name.append(Component.literal(" +" + cycle()).withStyle(ChatFormatting.GOLD));
+        }
+        if (scaledPlayers > 1) {
+            name.append(Component.literal(" · ").withStyle(ChatFormatting.GRAY))
+                    .append(Component.translatable("message.brasshaven.boss.players", scaledPlayers).withStyle(ChatFormatting.GRAY));
+        }
+        return name;
+    }
+
+    private void refreshBarName() {
+        if (bossBar != null) {
+            bossBar.setName(barName());
+        }
+    }
+
+    /**
+     * NG+ phase-2 rage (cycle 2+, every boss): every few seconds a telegraphed soul shockwave rolls out from the
+     * boss (jump it), stronger and more frequent with each cycle.
+     */
+    private void tickEnrage(ServerLevel level) {
+        if (cycle() < 2 || phase() != 2 || current != null || staggerTicks > 0 || roarTicks > 0) {
+            return;
+        }
+        if (++enrageTimer < Math.max(100, 220 - 15 * cycle())) {
+            return;
+        }
+        enrageTimer = 0;
+        Vec3 center = position();
+        int c = cycle();
+        level.playSound(null, this, SoundEvents.ENDER_DRAGON_GROWL, SoundSource.HOSTILE, 1.5F, 1.4F);
+        int[] t = {0};
+        addEffect((boss, lvl) -> {
+            if (t[0] < 20) {
+                if (t[0] % 2 == 0) {
+                    boss.telegraphRing(lvl, center, 1.5 + t[0] * 0.1, ParticleTypes.SOUL_FIRE_FLAME);
+                }
+                t[0]++;
+                return false;
+            }
+            boss.addEffect(wave(center, 9.0 + c, 0.6, 4.0F + c, ParticleTypes.SOUL_FIRE_FLAME));
+            return true;
+        });
     }
 
     @Override
@@ -201,6 +388,9 @@ public abstract class WayfarerBoss extends Monster implements AnimatedMob {
         if (seal != null) {
             output.putLong("BossSeal", seal.asLong());
         }
+        output.putBoolean("BossScaled", difficultyApplied);
+        output.putInt("BossCycle", cycle);
+        output.putInt("BossPlayers", scaledPlayers);
     }
 
     @Override
@@ -212,6 +402,9 @@ public abstract class WayfarerBoss extends Monster implements AnimatedMob {
         arenaRadius = input.getIntOr("BossArena", 24);
         long s = input.getLongOr("BossSeal", Long.MIN_VALUE);
         seal = s == Long.MIN_VALUE ? null : BlockPos.of(s);
+        difficultyApplied = input.getBooleanOr("BossScaled", false);
+        cycle = input.getIntOr("BossCycle", -1);
+        scaledPlayers = Math.max(1, input.getIntOr("BossPlayers", 1));
     }
 
     // ------------------------------------------------------------------ client
@@ -242,8 +435,11 @@ public abstract class WayfarerBoss extends Monster implements AnimatedMob {
         if (home == null) {
             home = blockPosition();
         }
+        if (!difficultyApplied) {
+            applyDifficulty(level);
+        }
         if (poise < 0) {
-            poise = maxPoise();
+            poise = effectiveMaxPoise();
         }
         updateBossBar(level);
         tickEffects(level);
@@ -263,6 +459,13 @@ public abstract class WayfarerBoss extends Monster implements AnimatedMob {
         LivingEntity target = getTarget();
         if (target != null && !fightStarted) {
             fightStarted = true;
+            refreshCycle(level);
+        }
+        if (tickCount % 20 == 0) {
+            int fighters = countFighters(level);
+            if (fighters > scaledPlayers) {
+                scalePlayers(fighters); // someone joined mid-fight: scale up once, never down
+            }
         }
         if (roarTicks > 0) {
             roarTicks--;
@@ -281,8 +484,9 @@ public abstract class WayfarerBoss extends Monster implements AnimatedMob {
             return;
         }
         if (tickCount - lastHurtTick > 100) {
-            poise = Math.min(maxPoise(), poise + 0.5F);
+            poise = Math.min(effectiveMaxPoise(), poise + 0.5F);
         }
+        tickEnrage(level);
         if (current != null) {
             tickAttack(level, target);
             return;
@@ -324,7 +528,10 @@ public abstract class WayfarerBoss extends Monster implements AnimatedMob {
         current = attack;
         attackTick = 0;
         lockedYaw = getYRot();
-        cooldowns.put(attack.name, attack.cooldown);
+        effWindup = scaledWindup(attack.windup);
+        effRecovery = scaledRecovery(attack.recovery);
+        windupDone = 0;
+        cooldowns.put(attack.name, (int) Math.round(attack.cooldown * cooldownScale()));
         getNavigation().stop();
         if (attack.anim >= 0) {
             AnimatedMob.playAction(this, attack.anim);
@@ -346,25 +553,30 @@ public abstract class WayfarerBoss extends Monster implements AnimatedMob {
         BossAttack a = current;
         int t = attackTick++;
         getNavigation().stop();
-        if (t < a.windup) {
+        if (t < effWindup) {
             if (a.track && target != null) {
                 faceTarget(target, 25.0F);
             } else {
                 lockRotation();
             }
-            a.onWindup.run(this, level, target, t);
-        } else if (t < a.windup + a.active) {
-            if (t == a.windup) {
+            // NG+ wind-ups are compressed: every authored wind-up tick still runs (a few per tick when shorter)
+            int upTo = effWindup == a.windup ? t : (int) ((long) (t + 1) * a.windup / effWindup) - 1;
+            while (windupDone <= upTo && windupDone < a.windup && current == a) {
+                a.onWindup.run(this, level, target, windupDone++);
+            }
+        } else if (t < effWindup + a.active) {
+            if (t == effWindup) {
                 lockedYaw = getYRot();
                 a.onImpact.run(this, level, target, 0);
             }
             lockRotation();
-            a.onActive.run(this, level, target, t - a.windup);
-        } else if (t < a.length()) {
+            a.onActive.run(this, level, target, t - effWindup);
+        } else if (t < effWindup + a.active + effRecovery) {
             lockRotation();
         } else {
             current = null;
-            idleDelay = phase() == 1 ? 8 + random.nextInt(16) : 4 + random.nextInt(10);
+            int idle = phase() == 1 ? 8 + random.nextInt(16) : 4 + random.nextInt(10);
+            idleDelay = (int) Math.round(idle * cycleSpeed());
             a.onEnd.run(this, level, target, 0);
         }
     }
@@ -442,8 +654,9 @@ public abstract class WayfarerBoss extends Monster implements AnimatedMob {
 
     private void stagger(ServerLevel level) {
         current = null;
-        staggerTicks = 50;
-        poise = maxPoise();
+        // NG+ cycle 2+: the boss shakes off a stagger faster in phase 2
+        staggerTicks = phase() == 2 && cycle() >= 2 ? Math.max(34, 50 - 3 * cycle()) : 50;
+        poise = effectiveMaxPoise();
         lockedYaw = getYRot();
         entityData.set(DATA_STAGGERED, true);
         if (staggerAction() >= 0) {
@@ -467,7 +680,7 @@ public abstract class WayfarerBoss extends Monster implements AnimatedMob {
 
     private void updateBossBar(ServerLevel level) {
         if (bossBar == null) {
-            bossBar = new ServerBossEvent(getUUID(), getDisplayName(), barColor(), BossEvent.BossBarOverlay.PROGRESS);
+            bossBar = new ServerBossEvent(getUUID(), barName(), barColor(), BossEvent.BossBarOverlay.PROGRESS);
         }
         bossBar.setProgress(getHealth() / getMaxHealth());
         if (tickCount % 10 != 0) {
@@ -502,9 +715,7 @@ public abstract class WayfarerBoss extends Monster implements AnimatedMob {
     @Override
     public void setCustomName(@Nullable Component name) {
         super.setCustomName(name);
-        if (bossBar != null) {
-            bossBar.setName(getDisplayName());
-        }
+        refreshBarName();
     }
 
     private void teleportHome(ServerLevel level) {
@@ -524,7 +735,8 @@ public abstract class WayfarerBoss extends Monster implements AnimatedMob {
         staggerTicks = 0;
         effects.clear();
         cooldowns.clear();
-        poise = maxPoise();
+        enrageTimer = 0;
+        poise = effectiveMaxPoise();
         entityData.set(DATA_PHASE, 1);
         entityData.set(DATA_STAGGERED, false);
         setTarget(null);
@@ -564,9 +776,43 @@ public abstract class WayfarerBoss extends Monster implements AnimatedMob {
             level.getServer().getPlayerList().broadcastSystemMessage(
                     Component.translatable("message.brasshaven.boss.defeated", getDisplayName()).withStyle(ChatFormatting.GOLD), false);
             onDefeated(level);
+            if (getLastHurtByPlayer() != null || source.getEntity() instanceof Player) {
+                int before = cycle();
+                int next = BossCycles.get(level.getServer()).defeated(bossTypeId());
+                if (next > before) {
+                    level.getServer().getPlayerList().broadcastSystemMessage(Component.translatable(
+                            "message.brasshaven.boss.cycle_up", getDisplayName(), next).withStyle(ChatFormatting.DARK_RED), false);
+                }
+            }
             if (seal != null && level.getBlockEntity(seal) instanceof BossSealBlockEntity be) {
                 be.onBossDefeated(this);
             }
+        }
+    }
+
+    /**
+     * NG+ loot: at cycle c the boss's loot table is rolled c more times (without its Remembrance, which stays
+     * unique), and from cycle 3 an Ember of Ascension may drop (15% per cycle above 2).
+     */
+    @Override
+    protected void dropCustomDeathLoot(ServerLevel level, DamageSource source, boolean killedByPlayer) {
+        super.dropCustomDeathLoot(level, source, killedByPlayer);
+        int c = cycle();
+        if (c <= 0) {
+            return;
+        }
+        getLootTable().ifPresent(key -> {
+            for (int i = 0; i < c; i++) {
+                dropFromLootTable(level, source, killedByPlayer, key, stack -> {
+                    var id = net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(stack.getItem());
+                    if (!id.getPath().startsWith("remembrance_")) {
+                        spawnAtLocation(level, stack);
+                    }
+                });
+            }
+        });
+        if (c >= 3 && random.nextFloat() < 0.15F * (c - 2)) {
+            spawnAtLocation(level, new net.minecraft.world.item.ItemStack(com.brasshaven.registry.ModItems.EMBER_OF_ASCENSION.get()));
         }
     }
 
@@ -670,6 +916,7 @@ public abstract class WayfarerBoss extends Monster implements AnimatedMob {
 
     /** Summon helpers around the boss; they target the boss's target and never hurt it. */
     public void summon(ServerLevel level, EntityType<? extends Mob> type, int count, double radius) {
+        count = scaledCount(count); // co-op: +1 helper per 2 extra players
         for (int i = 0; i < count; i++) {
             Mob minion = type.create(level, EntitySpawnReason.MOB_SUMMONED);
             if (minion == null) {
