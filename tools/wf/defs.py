@@ -6,8 +6,11 @@ STRUCTURES = []
 
 
 class Piece:
-    def __init__(self, name, builder, weight=1, processors=None, projection="rigid"):
+    def __init__(self, name, builder, weight=1, processors=None, projection="rigid", views=None):
         self.name = name
+        # interior camera spots for the CI focus shots: [(name, feet (x, y, z), look at (x, y, z))] in blueprint
+        # space; gen_structures writes them to tools/ci_views.json (client/CiDriver structure_<id>_in_<name>)
+        self.views = views or []
         self.builder = builder
         self.weight = weight
         self.processors = processors

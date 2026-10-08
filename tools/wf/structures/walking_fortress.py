@@ -867,10 +867,22 @@ def walking_fortress(bp):
     scavenger_camp(bp)
 
 
+# interior shots for the CI focus run: (name, feet, look at)
+VIEWS = [
+    ("knee", (-36, KNEE_FLOOR, -27), (-44, KNEE_FLOOR + 2, -21)),
+    ("hold", (6, HOLD, 22), (-3, HOLD + 2, -24)),
+    ("engine", (-8, ENGINE + 6, 14), (2, ENGINE + 3, -12)),
+    ("gun_deck", (-11, GUN, 23), (5, GUN + 2, -24)),
+    ("cockpit", (0, GUN, -38), (0, GUN + 2, -52)),
+    ("bridge", (6, DECK, -23), (-6, DECK + 1, -30)),
+    ("arena", (13, DECK, 20), (0, DECK + 3, -18)),
+]
+
+
 register(StructureDef(
     "walking_fortress", "overworld",
     ["#minecraft:is_badlands", "savanna", "savanna_plateau", "windswept_savanna", "plains", "desert"],
-    [Piece("walker", walking_fortress)],
+    [Piece("walker", walking_fortress, views=VIEWS)],
     spacing=80, separation=32, adaptation="beard_box", processors="none", max_distance=100,
     exclusion=("brasshaven:clockwork_citadel", 8),
     title_fr="Forteresse marchante", title_en="Walking Fortress"))

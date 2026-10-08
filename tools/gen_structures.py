@@ -128,6 +128,8 @@ def main():
     preview_dir = os.path.join(ROOT, "build", "previews")
     used_processors = set()
     summary = []
+    views_path = os.path.join(ROOT, "tools", "ci_views.json")
+    views = json.load(open(views_path, encoding="utf-8")) if os.path.exists(views_path) else {}
     for sdef in defs.STRUCTURES:
         if args.only and sdef.id not in args.only:
             continue
@@ -153,6 +155,8 @@ def main():
                         report.append((sdef.id, piece.name, kind, pos, msg))
                 if pool_name == "start" and piece is pieces[0]:
                     ground_offset = my - sdef.ground
+                    views[sdef.id] = [{"name": n, "feet": [f[0] - mx, f[1] - my, f[2] - mz],
+                                       "look": [l[0] - mx, l[1] - my, l[2] - mz]} for n, f, l in piece.views]
                 summary.append((f"{sdef.id}/{piece.name}", size, len(blocks), ncells, written, biggest))
                 if args.preview:
                     os.makedirs(preview_dir, exist_ok=True)
@@ -175,6 +179,10 @@ def main():
                    defs.structure_json(sdef, ground_offset, merged_fit_info(sdef)))
         write_json(os.path.join(DATA, "tags", "worldgen", "biome", "has_structure", f"{sdef.id}.json"),
                    defs.biome_tag_json(sdef.biomes))
+    views = {k: v for k, v in sorted(views.items()) if v and any(d.id == k for d in defs.STRUCTURES)}
+    with open(views_path, "w", encoding="utf-8") as f:
+        json.dump(views, f, indent=1)
+        f.write("\n")
     if not args.only or "villages" in args.only:
         gen_villages(args, report, repairs, summary, preview_dir, stocked)
     used_processors.add("village")

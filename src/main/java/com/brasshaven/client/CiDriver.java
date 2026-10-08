@@ -866,6 +866,62 @@ public final class CiDriver {
                 .settleChunks(2400)
                 .waitTicks(40)
                 .shot("structure_" + shortName + "_top");
+        // inside: the camera spots the generator lists in tools/ci_views.json (template coordinates)
+        for (String[] view : interiorViews(shortName)) {
+            step("structure_" + shortName + "_in_" + view[0])
+                    .server("inside " + view[0], (server, player) -> {
+                        Placed placed = PLACED.get(name);
+                        Vec3 feet = placed.world(view[1]);
+                        Vec3 look = placed.world(view[2]);
+                        return List.of("tp @s " + feet.x + " " + feet.y + " " + feet.z + " facing "
+                                + look.x + " " + look.y + " " + look.z);
+                    })
+                    .run("fly", CiDriver::fly)
+                    .settleChunks(2400)
+                    .waitTicks(40)
+                    .shot("structure_" + shortName + "_in_" + view[0]);
+        }
+    }
+
+    /** The start piece of a structure prepared by {@link #prepareStructure}: where its template went. */
+    private record Placed(BlockPos origin, net.minecraft.world.level.block.Rotation rotation) {
+        /** "x y z" in template coordinates (block corner) to the world, at the middle of that block. */
+        Vec3 world(String local) {
+            String[] p = local.split(" ");
+            Vec3 v = new Vec3(Double.parseDouble(p[0]) + 0.5, Double.parseDouble(p[1]), Double.parseDouble(p[2]) + 0.5);
+            Vec3 t = net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.transform(
+                    v, net.minecraft.world.level.block.Mirror.NONE, rotation, BlockPos.ZERO);
+            return t.add(origin.getX(), origin.getY(), origin.getZ());
+        }
+    }
+
+    private static final Map<String, Placed> PLACED = new LinkedHashMap<>();
+
+    /** [name, "x y z" feet, "x y z" look] for each interior view of a structure (run dir is run/, so ../tools). */
+    private static List<String[]> interiorViews(String shortName) {
+        List<String[]> out = new ArrayList<>();
+        File file = new File("../tools/ci_views.json");
+        if (!file.exists()) {
+            return out;
+        }
+        try {
+            var root = com.google.gson.JsonParser.parseString(Files.readString(file.toPath(), StandardCharsets.UTF_8))
+                    .getAsJsonObject();
+            if (root.has(shortName)) {
+                for (var e : root.getAsJsonArray(shortName)) {
+                    var o = e.getAsJsonObject();
+                    out.add(new String[] {o.get("name").getAsString(), xyz(o.getAsJsonArray("feet")),
+                            xyz(o.getAsJsonArray("look"))});
+                }
+            }
+        } catch (IOException | RuntimeException e) {
+            LOGGER.warn(TAG + "could not read {}: {}", file, e.toString());
+        }
+        return out;
+    }
+
+    private static String xyz(com.google.gson.JsonArray a) {
+        return a.get(0).getAsInt() + " " + a.get(1).getAsInt() + " " + a.get(2).getAsInt();
     }
 
     /** Centre of a {minX, minY, minZ, maxX, maxY, maxZ} box, at a third of its height. */
@@ -1323,6 +1379,11 @@ public final class CiDriver {
         }
         BoundingBox box = start.getBoundingBox();
         LOGGER.info(TAG + "{} bounding box {}", name, box);
+        if (!start.getPieces().isEmpty()
+                && start.getPieces().get(0) instanceof net.minecraft.world.level.levelgen.structure.PoolElementStructurePiece piece) {
+            PLACED.put(name, new Placed(piece.getPosition(), piece.getRotation()));
+            LOGGER.info(TAG + "{} start piece at {} rotated {}", name, piece.getPosition(), piece.getRotation());
+        }
         out[0] = new double[] {box.minX(), box.minY(), box.minZ(), box.maxX(), box.maxY(), box.maxZ()};
         List<String> commands = new ArrayList<>();
         int minCx = (box.minX() >> 4) - 1;
