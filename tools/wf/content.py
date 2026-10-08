@@ -190,6 +190,7 @@ ENTITIES = {
     "steam_drone": ("Steam Drone", "Drone à vapeur"),
     "brass_golem": ("Brass Golem", "Golem de laiton"),
     "grand_clockmaker": ("The Grand Clockmaker", "Le Grand Horloger"),
+    "iron_helmsman": ("The Iron Helmsman", "Le Timonier de Fer"),
     "hot_rivet": ("Hot Rivet", "Rivet brûlant"),
     "boomerang": ("Boomerang", "Boomerang"),
 }
@@ -222,6 +223,7 @@ SPAWN_EGGS = ["ruin_walker", "map_wraith", "basalt_guard", "void_stalker", "drow
               "steam_drone",
               "brass_golem",
               "grand_clockmaker",
+              "iron_helmsman",
               ]
 
 # Misc translated messages used from Java (key suffix -> (en, fr))

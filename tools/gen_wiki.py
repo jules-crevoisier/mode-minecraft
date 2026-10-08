@@ -1799,6 +1799,33 @@ def section_construction(ctx):
 </section>'''
 
 
+def boss_box(ctx, boss, anchor, title, short, caption):
+    """A boss card: rotating model, stats, the descent to its lair, drops, its weapon and its moves table."""
+    if boss not in ctx.mob_info:
+        return ""
+    atlas = ctx.atlas
+    bst = entity_stats(boss)
+    lair = "".join(f'<li><b>{E(t)}</b><span>{E(x)}</span></li>' for t, x in TXT.LAIRS.get(boss, []))
+    loot = top_loot([f"brasshaven:entities/{boss}"], 8)
+    weapon = ctx.weapon_of.get(boss)
+    html = f'''<h3 class="subhead" id="{anchor}">{E(title)}</h3>
+  <div class="bossbox">
+    <figure class="vitrine boss-fig"><img src="{ctx.mob_info[boss]["gif"]}" alt="{E(short, quote=True)} en rotation" loading="lazy"><figcaption>{E(caption)}</figcaption></figure>
+    <div class="boss-body">
+      <p class="statline"><span>{SVG["heart"]}{fmt_num(bst["hp"])} PV</span><span>{SVG["sword"]}{fmt_num(bst["dmg"])}</span></p>
+      <p>{E(TXT.MOBS.get(boss, ""))} {E(TXT.BOSS_FACTS.get(boss, ""))}</p>
+      <h4>La descente vers son repaire</h4>
+      <ol class="lair">{lair}</ol>
+      {('<div class="drops"><small>Il lâche</small>' + chips(atlas, loot, 24, ctx.item_link) + '</div>') if loot else ""}
+      {f'<p class="small">Son Souvenir se forge (4 matériaux de palier + 2 diamants) en <a href="#{anchor_item(weapon)}">{E(name(weapon))}</a> : {E(desc(weapon)[0] if desc(weapon) else "")}</p>' if weapon else ""}
+    </div>
+  </div>
+  <h4 class="movehead">Ses attaques</h4>
+  {moves_table(boss)}'''
+    ctx.idx.add(f"{short} : attaques et repaire", "Boss", anchor, " ".join(t for t, _p, _x in TXT.BOSS_MOVES.get(boss, [])))
+    return html
+
+
 def section_automatons(ctx):
     atlas = ctx.atlas
     gst = entity_stats("brass_golem")
@@ -1821,28 +1848,10 @@ def section_automatons(ctx):
   <div><h4><a href="#b-{mid}">{E(name(mid))}</a></h4>
   <p class="statline"><span>{SVG["heart"]}{fmt_num(st["hp"])} PV</span><span>{SVG["sword"]}{fmt_num(st["dmg"])}</span></p>
   <p>{E(TXT.MOBS.get(mid, st["doc"]))}</p><p class="where">{SVG["pin"]}<span>{mob_where(ctx, mid)}</span></p></div></article>''')
-    boss = "grand_clockmaker"
-    boss_html = ""
-    if boss in ctx.mob_info:
-        bst = entity_stats(boss)
-        lair = "".join(f'<li><b>{E(t)}</b><span>{E(x)}</span></li>' for t, x in TXT.LAIRS.get(boss, []))
-        loot = top_loot([f"brasshaven:entities/{boss}"], 8)
-        weapon = ctx.weapon_of.get(boss)
-        boss_html = f'''<h3 class="subhead" id="horloger">Le Grand Horloger, boss de la Citadelle</h3>
-  <div class="bossbox">
-    <figure class="vitrine boss-fig"><img src="{ctx.mob_info[boss]["gif"]}" alt="Le Grand Horloger en rotation" loading="lazy"><figcaption>4,4 blocs de haut</figcaption></figure>
-    <div class="boss-body">
-      <p class="statline"><span>{SVG["heart"]}{fmt_num(bst["hp"])} PV</span><span>{SVG["sword"]}{fmt_num(bst["dmg"])}</span></p>
-      <p>{E(TXT.MOBS.get(boss, ""))} {E(TXT.BOSS_FACTS.get(boss, ""))}</p>
-      <h4>La descente vers son repaire</h4>
-      <ol class="lair">{lair}</ol>
-      {('<div class="drops"><small>Il lâche</small>' + chips(atlas, loot, 24, ctx.item_link) + '</div>') if loot else ""}
-      {f'<p class="small">Son Souvenir se forge (4 matériaux de palier + 2 diamants) en <a href="#{anchor_item(weapon)}">{E(name(weapon))}</a> : {E(desc(weapon)[0] if desc(weapon) else "")}</p>' if weapon else ""}
-    </div>
-  </div>
-  <h4 class="movehead">Ses attaques</h4>
-  {moves_table(boss)}'''
-        ctx.idx.add("Le Grand Horloger : attaques et repaire", "Boss", "horloger", " ".join(t for t, _p, _x in TXT.BOSS_MOVES.get(boss, [])))
+    boss_html = boss_box(ctx, "grand_clockmaker", "horloger", "Le Grand Horloger, boss de la Citadelle",
+                         "Le Grand Horloger", "4,4 blocs de haut")
+    boss_html += boss_box(ctx, "iron_helmsman", "timonier", "Le Timonier de Fer, boss de la Forteresse marchante",
+                          "Le Timonier de Fer", "5,2 blocs de haut")
     ctx.idx.add("Construire le golem de laiton", "Automate", "golem", " ".join(x for _t, x in TXT.GOLEM_STEPS))
     return f'''<section class="block" id="automates">
   {plaque("automates-h", "Nouveau · mécanique vivante", "Automates", E(TXT.AUTOMATONS_INTRO))}

@@ -38,6 +38,8 @@
     "explorer/coral_shrine",
     "explorer/shipwreck_debris",
     "explorer/walking_fortress",
+    "explorer/rock_necropolis",
+    "explorer/fallen_colossus",
     "explorer/master_cartographer",
     "explorer/boss_bell_keeper",
     "explorer/boss_archivist",
@@ -49,7 +51,8 @@
     "explorer/boss_rune_colossus",
     "explorer/boss_grave_knight",
     "explorer/boss_bone_matriarch",
-    "explorer/boss_grand_clockmaker"
+    "explorer/boss_grand_clockmaker",
+    "explorer/boss_iron_helmsman"
   ],
   "depths": [
     "depths/lithite",

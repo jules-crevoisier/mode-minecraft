@@ -84,6 +84,12 @@ BOSS_GEAR = [
      ("Remembrance of the Grand Clockmaker", "Souvenir du Grand Horloger"),
      ("LITHITE", 6.0, -2.6), "ARC", 10.0, 6.0, 70, "ELECTRIC_SPARK", "slow", ("pendulum", "brass", "dark", "aether"),
      ("brass", "aether")),
+    ("iron_helmsman", "overworld", "helmsman_anchor", ("Helmsman's Anchor", "Ancre du Timonier"),
+     ("Use: the anchor crashes down and a broadside of bursts tears along the line ahead, setting foes ablaze.",
+      "Clic droit : l'ancre s'abat et une bordée d'explosions déchire la ligne devant toi, embrasant les ennemis."),
+     ("Remembrance of the Iron Helmsman", "Souvenir du Timonier de Fer"),
+     ("LITHITE", 8.0, -3.4), "ERUPT", 11.0, 12.0, 90, "LARGE_SMOKE", "fire", ("anchor", "iron", "dark", "ember"),
+     ("iron", "ember")),
 ]
 
 

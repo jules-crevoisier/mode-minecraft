@@ -786,6 +786,13 @@ public final class CiDriver {
                 .cmd(() -> List.of("tp @s " + centre(box[0])[0] + " " + (box[0][4] + 30) + " " + centre(box[0])[2]))
                 .run("fly", CiDriver::fly)
                 .waitTicks(60)
+                // /place lands on whatever terrain is there (often a wooded hillside that buries the build); worldgen
+                // picks flat sites (wf/placement.py FIT), so level the site first, then locate again on the flat
+                .server("level the site", (server, player) -> {
+                    levelSite(server.overworld(), px, pz, box[0]);
+                    prepareStructure(server, name, px, pz, box); // same chunks, already force-loaded: only the height moves
+                    return List.of();
+                })
                 .retry("place structure", () -> List.of("place structure " + name + " " + px + " 64 " + pz), 100, 30);
         String[] names = {"nw", "ne", "se", "sw"};
         int[][] dirs = {{-1, -1}, {1, -1}, {1, 1}, {-1, 1}};
@@ -922,6 +929,39 @@ public final class CiDriver {
 
     private static String xyz(com.google.gson.JsonArray a) {
         return a.get(0).getAsInt() + " " + a.get(1).getAsInt() + " " + a.get(2).getAsInt();
+    }
+
+    /** Flat ground over the structure's box and a 16-block margin: the surface of the centre column (its top
+     *  block and the one under it) at the centre's height, air above it up to the box top + 40. */
+    private static void levelSite(ServerLevel level, int px, int pz, double[] b) {
+        var heightmap = net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES;
+        int g = level.getHeight(heightmap, px, pz) - 1;
+        var top = level.getBlockState(new BlockPos(px, g, pz));
+        var filler = level.getBlockState(new BlockPos(px, g - 2, pz));
+        if (!top.isSolid()) {
+            top = net.minecraft.world.level.block.Blocks.GRASS_BLOCK.defaultBlockState();
+        }
+        if (!filler.isSolid()) {
+            filler = net.minecraft.world.level.block.Blocks.DIRT.defaultBlockState();
+        }
+        var air = net.minecraft.world.level.block.Blocks.AIR.defaultBlockState();
+        int yTop = Math.min(level.getMaxY(), (int) b[4] + 40);
+        int changed = 0;
+        BlockPos.MutableBlockPos p = new BlockPos.MutableBlockPos();
+        for (int x = (int) b[0] - 16; x <= (int) b[3] + 16; x++) {
+            for (int z = (int) b[2] - 16; z <= (int) b[5] + 16; z++) {
+                for (int y = g - 5; y <= yTop; y++) {
+                    p.set(x, y, z);
+                    var want = y > g ? air : y == g ? top : filler;
+                    var have = level.getBlockState(p);
+                    if (have != want && !(y > g && have.isAir())) {
+                        level.setBlock(p, want, 2 | 16);
+                        changed++;
+                    }
+                }
+            }
+        }
+        LOGGER.info(TAG + "levelled the site at y {} ({} blocks changed)", g, changed);
     }
 
     /** Centre of a {minX, minY, minZ, maxX, maxY, maxZ} box, at a third of its height. */

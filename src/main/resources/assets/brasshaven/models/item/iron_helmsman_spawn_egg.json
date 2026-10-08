@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "brasshaven:item/iron_helmsman_spawn_egg"
+  }
+}

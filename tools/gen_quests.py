@@ -112,7 +112,7 @@ STRUCTURE_ICONS = {
     "clockwork_citadel": "clock", "sky_harbour": "scaffolding", "undercity": "copper_lantern",
     "dwarven_city": "brasshaven:mithril_block", "sylvan_palace": "flowering_azalea_leaves",
     "inventor_manor": "brasshaven:redstone_timer", "sky_isles": "brasshaven:aether_crystal",
-    "geothermal_foundry": "magma_block", "walking_fortress": "brasshaven:gear_panel", "tesla_observatory": "lightning_rod", "crystal_cathedral": "amethyst_block",
+    "geothermal_foundry": "magma_block", "walking_fortress": "brasshaven:gear_panel", "rock_necropolis": "chiseled_red_sandstone", "fallen_colossus": "oxidized_copper", "tesla_observatory": "lightning_rod", "crystal_cathedral": "amethyst_block",
     "sunken_submarine": "brasshaven:diving_helmet", "diving_bell": "bell", "coral_shrine": "brain_coral_block",
     "shipwreck_debris": "barrel",
 }
@@ -126,6 +126,7 @@ BOSS_HOME = {
     "grave_knight": "forgotten_catacombs", "bone_matriarch": "sand_hypogeum", "weeping_lady": "lithite_well",
     "larva_mother": "void_crypt",
     "grand_clockmaker": "clockwork_citadel",
+    "iron_helmsman": "walking_fortress",
 }
 CHAPTER = {}
 for s in defs.STRUCTURES:

@@ -188,3 +188,38 @@ pilasters with Edison lamps, wall cogs, and a great pendulum hanging high over t
 **Clockmaker's study** (reward chests).
 
 Previews: `python3 tools/gen_models.py --preview --only grand_clockmaker` → `build/previews/models/grand_clockmaker.png`.
+
+## 6. Champion of the Walking Fortress: The Iron Helmsman (Le Timonier de Fer)
+Files: `tools/wf/mobs/iron_helmsman.py` (model, shared steampunk paint in `tools/wf/mobs/brasswork.py`),
+`src/main/java/com/brasshaven/entity/boss/IronHelmsman.java` (moveset). No lair module: the arena is the walker's
+existing top deck, whose seal wakes him (`BOSS` in `tools/wf/structures/walking_fortress.py`).
+Reward: `remembrance_iron_helmsman` → **Helmsman's Anchor** (`helmsman_anchor`, heavy LITHITE weapon 8 / -3.4, ERUPT:
+a broadside of fiery bursts down a 12-block line), plus brass, map fragments, a Clockwork Heart, diamonds and chains
+(`gen_data.py`). Quest: `explorer/boss_iron_helmsman`.
+
+**Concept.** A 5.2-block armoured sea captain fused into a steam harness: barrel chest under a navy captain's coat
+of riveted iron plates with brass trim, a sunken visor helm with a peaked brim and a glowing amber slit, a banded
+copper boiler on his back with a short smoking stack leaning to his left. Asymmetric silhouette: the right arm is a
+banded harpoon-cannon under a great pauldron (a barbed harpoon in the muzzle); the left arm drags a ship's anchor
+on a chain, its crown and barbed flukes scraping the deck beside him.
+
+**Stats.** 450 health (a deliberately hard Overworld boss), armour 15, toughness 6, poise 95, knockback resistance
+1.0, white bar, phase 2 at 50% (+15% speed).
+
+| Move | Phase | Wind-up / active / recovery | Range | What it does |
+|---|---|---|---|---|
+| sweep | 1-2 | 20 / 4 / 14 | 0-7 | Anchor hauled back to his left, swung over 210°, 17 damage. P2: 40% chains into slam. |
+| slam | 1-2 | 22 / 3 / 15 | 0-8 | Anchor overhead, crashed 4 ahead (22, r 3.2) + a shockwave ring to jump (10, out to 10). P2: second fire ring (9), 35% chains into harpoon. |
+| harpoon | 1-2 | 16 / 4 / 14 | 5-18 | Aim line telegraphed; the first creature on the line takes 10 and is reeled in to 2.8 blocks ahead, then he chains a sweep. |
+| vent | 1-2 | 24 / 10 / 12 | 0-5.5 | Boiler hisses, a 6-block steam ring; burst 12 + 3 s fire, then lingering steam (4 every 5 ticks). Punishes hugging. |
+| charge | 1-2 | 16 / 14 / 12 | 6-20 | Shoulder ram along a smoke line, 16 once per target. P2: 50% chains into sweep. |
+| overload | 2 | 24 / 30 / 14 | 0-14 | Boiler overload: 4 rings (6/10/14/18 bursts at r 3/6/9/12) of smoke-warned fire bursts spreading out, 14 + fire each. |
+| whirl | 2 | 14 / 40 / 14 | 0-9 | Anchor spun on its chain for 2 s while he walks the target down: 10 every 6 ticks in r 5.5. |
+| broadside | 2 | 20 / 38 / 14 | 0-30 | Spectacle: cannon raised, raid horn; 3 volleys of shells on every player's position (1 s smoke-ring warning, 16, r 2.6) + 6 strays on the deck. Particles and sound only, no block damage. |
+
+**Lair (the top deck).** Up the Walking Fortress: the breach in a planted foot → spiral stair in the shin → knee
+chamber → thigh stair → cargo hold → engine room → gun deck → companionway stair arriving behind the arena → mist →
+the **top deck** arena (open air, radius 15, ~89 blocks above the crater floor) between the bridge tower and the two
+smokestacks → the vault in the bridge tower behind sealed bars that open when he falls.
+
+Previews: `python3 tools/gen_models.py --preview --only iron_helmsman` → `build/previews/models/iron_helmsman.png`.

@@ -171,6 +171,25 @@ def pendulum():
     return out
 
 
+def anchor():
+    """Helmsman's Anchor: a wrapped grip with a brass ring at the butt, a stock across the shank, a heavy iron shank
+    and the crown: two curved arms with barbed flukes, an amber rivet glowing at the middle."""
+    out = _shaft(-2, 12, 2.0, "iron_dark") + _grip(0, 8, 2.4)
+    out += [box(6.5, -4, 7.5, 9.5, -2, 8.5, "brass"), box(6, -3.5, 7.5, 6.8, -1.2, 8.5, "brass"),
+            box(9.2, -3.5, 7.5, 10, -1.2, 8.5, "brass"),                          # the ring
+            box(2.5, 10, 7, 13.5, 11.5, 9, "brass_dark"), box(2, 9.8, 6.8, 3, 11.7, 9.2, "brass"),
+            box(13, 9.8, 6.8, 14, 11.7, 9.2, "brass"),                            # the stock
+            box(6.8, 11.5, 6.8, 9.2, 26, 9.2, "mid"), box(6.5, 18, 6.5, 9.5, 19, 9.5, "brass")]
+    # the crown: stacked segments along an arc (radius ~7) under the shank's tip, curving back up
+    for x0, y0, x1, y1, k in ((5.5, 25, 10.5, 28, "dark"), (3, 24, 5.5, 27, "mid"), (10.5, 24, 13, 27, "mid"),
+                              (1.5, 21.5, 3.5, 25, "mid"), (12.5, 21.5, 14.5, 25, "mid"),
+                              (0.5, 19, 2.5, 22, "light"), (13.5, 19, 15.5, 22, "light")):
+        out.append(box(x0, y0, 7, x1, y1, 9, k))
+    out += [box(-0.5, 17, 6.5, 3, 19.5, 9.5, "dark"), box(13, 17, 6.5, 16.5, 19.5, 9.5, "dark"),   # flukes
+            box(7, 27.6, 6.6, 9, 29, 9.4, "glow"), box(7.25, 25.5, 6.4, 8.75, 27, 9.6, "accent")]
+    return out
+
+
 def ladle():
     """Crone's Ladle: a long dark handle, an iron neck and a deep bowl brimming with glowing brew."""
     out = _shaft(-4, 15, 1.6, "handle") + _grip(4, 10, 2.1)
@@ -337,7 +356,7 @@ ARCHETYPES = {"sword": sword, "greatsword": greatsword, "blade": blade, "spear":
               "staff_flame": lambda: staff(head="flame"), "staff_snow": lambda: staff(head="snow"),
               "staff_bolt": lambda: staff(head="bolt"), "staff_cross": lambda: staff(head="cross"),
               "staff_sun": lambda: staff(head="sun"), "staff_root": lambda: staff(head="root"),
-              "pendulum": pendulum, "ladle": ladle, "flail": flail, "bell_hammer": bell_hammer,
+              "pendulum": pendulum, "anchor": anchor, "ladle": ladle, "flail": flail, "bell_hammer": bell_hammer,
               "forge_hammer": forge_hammer, "crystal_spear": crystal_spear, "axe": axe, "pickaxe": pickaxe,
               "shovel": shovel, "hoe": hoe, "wand_block": wand_block, "caged_orb": caged_orb}
 
@@ -360,6 +379,7 @@ HELD = {
     "soul_scythe": ("scythe", "void", "bone", "ice"),
     "void_greatblade": ("greatsword", "void", "purpur", "amethyst"),
     "clockmaker_pendulum": ("pendulum", "brass", "dark", "aether"),
+    "helmsman_anchor": ("anchor", "iron", "dark", "ember"),
     "cartographer_blade": ("sword", "cartographer", "wood", "emerald"),
     "telluric_hammer": ("hammer", "lithite", "wood", "emerald"),
     "storm_staff": ("staff", "storm", "dark", "sapphire"),

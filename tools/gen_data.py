@@ -260,6 +260,9 @@ def entity_loot():
         "grand_clockmaker": [entry("brass_gear", 4, 8), entry("map_fragment", 6, 10), entry("emerald", 4, 8),
                              entry("experience_bottle", 3, 6), entry("golden_apple", 1, 2), entry("clockwork_heart"),
                              entry("clock")],
+        "iron_helmsman": [entry("brass_ingot", 4, 8), entry("map_fragment", 6, 10), entry("emerald", 5, 9),
+                          entry("experience_bottle", 4, 7), entry("golden_apple", 1, 2), entry("clockwork_heart"),
+                          entry("diamond", 1, 2), entry("iron_chain", 2, 4)],
     }
     from wf.bossgear import BOSS_GEAR, remembrance_id
     for row in BOSS_GEAR:  # every great boss always drops its remembrance

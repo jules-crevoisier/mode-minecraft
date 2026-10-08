@@ -471,6 +471,61 @@ PAGES = [
          "l'escalier de la cuisse jusqu'à la cale. Le boss attend sur le pont supérieur ; la salle forte est dans "
          "la tour de commandement."),
     ], []),
+    ("rock_necropolis", "wonders", "minecraft:chiseled_red_sandstone", ("Necropolis of Kings", "Nécropole des rois"), [
+        ("A rose-red sandstone massif carved like Petra and Abu Simbel: a winding slot canyon opens on a hidden "
+         "court where four 42-block seated kings flank an 18-block portal.",
+         "Un massif de grès rose taillé comme à Pétra et Abou Simbel : un canyon étroit et sinueux débouche sur une "
+         "place cachée où quatre rois assis de 42 blocs encadrent un portail de 18 blocs."),
+        ("Where: deserts and badlands.",
+         "Où : déserts et badlands."),
+        ("Behind the hypostyle hall, three levels of tombs go down: embalming rooms, a flooded gallery, a trapped "
+         "corridor (mind the pressure plates) and the treasury. A site of grace waits before the king's arena; the "
+         "King's Well climbs from the vault back to the hall.",
+         "Derrière la salle hypostyle, trois niveaux de tombeaux descendent : salles d'embaumement, galerie inondée, "
+         "couloir piégé (attention aux plaques de pression) et trésor. Un lieu de grâce précède l'arène du roi ; le "
+         "puits du roi remonte de la salle forte jusqu'à la salle hypostyle."),
+    ], []),
+    ("fallen_colossus", "wonders", "minecraft:oxidized_copper", ("Fallen Colossus", "Colosse abattu"), [
+        ("A 155-block statue of an armoured knight, stone under verdigris bronze plate, fallen on its side across a "
+         "valley: the helm turned to the sky, a bent knee, the hand reaching out and the sword shattered behind him.",
+         "La statue de 155 blocs d'un chevalier en armure, pierre sous plates de bronze vert-de-gris, tombée sur le "
+         "flanc en travers d'une vallée : le heaume tourné vers le ciel, un genou replié, la main tendue et l'épée "
+         "brisée derrière lui."),
+        ("Where: plains, meadows, forests, savannas and taiga valleys.",
+         "Où : plaines, prairies, forêts, savanes et vallées de taïga."),
+        ("The way in is the broken wrist: the forearm leads to the elbow, a stair climbs the arm onto a balcony of "
+         "the rib hall, a 30-block vault opened by a breach. The shoulder and the hip hide side rooms (the leg comes "
+         "out at the knee); the neck leads to the boss in the helm, and the vault is under the arena floor.",
+         "On entre par le poignet brisé : l'avant-bras mène au coude, un escalier monte dans le bras jusqu'au balcon "
+         "de la salle des côtes, une voûte de 30 blocs ouverte par une brèche. L'épaule et la hanche cachent des "
+         "salles (la jambe ressort au genou) ; le cou mène au boss dans le heaume, et la salle forte est sous le sol "
+         "de l'arène."),
+    ], []),
+    ("iron_helmsman", "wonders", "brasshaven:remembrance_iron_helmsman", ("The Iron Helmsman", "Le Timonier de Fer"), [
+        ("The pilot of the Walking Fortress waits on its open top deck (450 health, armour 15): a hulking captain "
+         "fused into a steam harness, a harpoon-cannon for an arm and an anchor dragged on a chain. Bring your best "
+         "gear: he is the hardest boss of the Overworld.",
+         "Le pilote de la Forteresse marchante attend sur son pont supérieur à ciel ouvert (450 PV, armure 15) : un "
+         "capitaine colossal soudé à un harnais à vapeur, un canon-harpon pour bras et une ancre traînée au bout "
+         "d'une chaîne. Viens avec ton meilleur équipement : c'est le boss le plus dur de la Surface."),
+        ("He sweeps and slams the anchor (jump the shockwave), fires a harpoon that reels you in before a sweep, "
+         "charges, and when his boiler hisses and a ring of steam appears, get out of it: the steam scalds.",
+         "Il balaie et abat son ancre (saute l'onde de choc), tire un harpon qui te ramène vers lui avant un "
+         "balayage, charge, et quand sa chaudière siffle et qu'un cercle de vapeur apparaît, sors-en : la vapeur "
+         "brûle."),
+    ], ["brasshaven:remembrance_iron_helmsman", "brasshaven:helmsman_anchor"]),
+    ("iron_helmsman_broadside", "wonders", "minecraft:tnt", ("Helmsman: broadside", "Timonier : bordée"), [
+        ("At half health he goes full steam: his boiler overloads (rings of fire burst out of the deck), he whirls "
+         "the anchor on its chain while walking you down, and he raises his cannon to call the walker's guns: "
+         "shells land where you stand. Move as soon as a ring of smoke appears under you.",
+         "À mi-vie, il passe à toute vapeur : sa chaudière surchauffe (des anneaux de feu jaillissent du pont), il "
+         "fait tournoyer l'ancre au bout de sa chaîne en marchant sur toi, et il lève son canon pour appeler les "
+         "pièces du marcheur : les obus tombent là où tu te tiens. Bouge dès qu'un cercle de fumée apparaît sous toi."),
+        ("His Remembrance, four Map Fragments and two diamonds forge the Helmsman's Anchor, a heavy weapon whose "
+         "right-click sends a broadside of fiery bursts down the line ahead.",
+         "Son Souvenir, quatre fragments de carte et deux diamants forgent l'Ancre du Timonier, une arme lourde dont "
+         "le clic droit envoie une bordée d'explosions enflammées sur la ligne devant toi."),
+    ], []),
     ("tesla_observatory", "wonders", "minecraft:lightning_rod", ("Tesla Observatory", "Observatoire Tesla"), [
         ("A science campus on a rocky crag: a copper dome with a 30-block telescope, a 70-block Tesla tower and an "
          "orrery under a glass dome.",

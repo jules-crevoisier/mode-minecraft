@@ -31,6 +31,14 @@
     {
       "structure": "brasshaven:walking_fortress",
       "weight": 1
+    },
+    {
+      "structure": "brasshaven:rock_necropolis",
+      "weight": 1
+    },
+    {
+      "structure": "brasshaven:fallen_colossus",
+      "weight": 1
     }
   ],
   "placement": {

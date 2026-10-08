@@ -252,6 +252,20 @@
           }
         ]
       }
+    },
+    "iron_helmsman": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "entity_type": "brasshaven:iron_helmsman"
+            }
+          }
+        ]
+      }
     }
   },
   "parent": "brasshaven:end/void_warden",

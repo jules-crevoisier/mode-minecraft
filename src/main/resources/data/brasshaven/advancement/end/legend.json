@@ -814,6 +814,38 @@
           }
         ]
       }
+    },
+    "rock_necropolis": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:rock_necropolis"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "fallen_colossus": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:fallen_colossus"
+              }
+            }
+          }
+        ]
+      }
     }
   },
   "parent": "brasshaven:end/void_warden",

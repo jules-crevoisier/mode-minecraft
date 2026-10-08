@@ -111,6 +111,7 @@ FAMILIES = [
     Family("wonders", "wonder", 120, 40, {
         "clockwork_citadel": 1, "sky_harbour": 1, "sylvan_palace": 1, "inventor_manor": 1, "sky_isles": 1,
         "geothermal_foundry": 1, "tesla_observatory": 1, "walking_fortress": 1,
+        "rock_necropolis": 1, "fallen_colossus": 1,
     }, avoid=[(V + "villages", 10), (V + "pillager_outposts", 6), (V + "woodland_mansions", 8)], min_spawn=32,
         note="surface wonders; at least 40 chunks between two of them, none within 512 blocks of 0,0"),
     Family("deep_wonders", "deep_wonder", 72, 28, {
@@ -210,6 +211,8 @@ FIT = {
     "geothermal_foundry": _f("land", spread=26, slope=1.0, wet=0.12),
     "tesla_observatory": _f("land", spread=32, slope=1.3, wet=0.12),    # terraced mountain campus
     "walking_fortress": _f("land", spread=24, slope=0.9, wet=0.1),      # the crater bowl wants open, flat ground
+    "rock_necropolis": _f("land", spread=28, slope=1.1, wet=0.05),      # brings its own cliff massif
+    "fallen_colossus": _f("land", spread=22, slope=0.9, wet=0.08),      # a valley floor: open, flat ground
     # ---- coast: the dock side (template +z = south) in the sea, the cape on land, shore near sea level
     "coastal_lighthouse": _f("coast", sea_side="south", wet=0.5, land=0.5, spread=8, slope=1.0),
     # ---- sea floor: wet share, median water depth, floor spread

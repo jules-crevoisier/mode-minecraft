@@ -1,0 +1,14 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "minecraft:desert",
+      "required": false
+    },
+    {
+      "id": "#minecraft:is_badlands",
+      "required": false
+    },
+    "brasshaven:pale_dunes"
+  ]
+}

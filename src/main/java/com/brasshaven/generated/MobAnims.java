@@ -482,6 +482,23 @@ public final class MobAnims {
 
         private GrandClockmaker() {}
     }
+    public static final class IronHelmsman {
+        public static final int SWEEP = 0;
+        public static final int SLAM = 1;
+        public static final int HARPOON = 2;
+        public static final int VENT = 3;
+        public static final int CHARGE = 4;
+        public static final int OVERLOAD = 5;
+        public static final int WHIRL = 6;
+        public static final int BROADSIDE = 7;
+        public static final int ROAR = 8;
+        public static final int STAGGER = 9;
+        public static final int COUNT = 10;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {38, 40, 34, 46, 42, 68, 68, 72, 40, 32};
+
+        private IronHelmsman() {}
+    }
     public static final class GlowJellyfish {
 
         public static final int COUNT = 0;

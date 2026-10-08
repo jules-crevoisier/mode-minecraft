@@ -33,6 +33,7 @@ from . import clockwork_spider
 from . import steam_drone
 from . import brass_golem
 from . import grand_clockmaker
+from . import iron_helmsman
 # living oceans
 from . import glow_jellyfish
 from . import reef_fish
@@ -88,6 +89,7 @@ MODELS = [
     steam_drone.build,
     brass_golem.build,
     grand_clockmaker.build,
+    iron_helmsman.build,
     glow_jellyfish.build,
     reef_fish.build,
     manta_ray.build,

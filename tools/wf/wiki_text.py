@@ -269,6 +269,23 @@ STRUCTURES = {
                         "colimaçon de la jambe, la salle du genou puis l'escalier de la cuisse jusqu'à la cale. Au-dessus : "
                         "la salle des machines, le pont des canons, et sur le pont supérieur l'arène du boss devant la "
                         "tour de commandement et sa salle forte.",
+    "rock_necropolis": "Un massif de grès rose de 170 blocs, taillé comme à Pétra et Abou Simbel. Un canyon étroit et "
+                       "sinueux, aux parois de 50 blocs, débouche sur une place cachée où quatre rois assis de 42 blocs "
+                       "encadrent un portail de 18 blocs, sous une frise de babouins et un étage à tholos. Dedans : la "
+                       "salle hypostyle aux piliers osiriaques, la galerie des couronnes avec son balcon, puis trois "
+                       "niveaux de tombeaux : salle d'embaumement, galerie des niches, galerie inondée, couloir piégé, "
+                       "trésor et sa cachette secrète, un lieu de grâce, l'arène du roi et sa salle forte, d'où le "
+                       "puits du roi remonte jusqu'à la salle hypostyle.",
+    "fallen_colossus": "La statue de 155 blocs d'un chevalier en armure, pierre sous plates de bronze vert-de-gris, "
+                       "tombée sur le flanc en travers d'une vallée et à demi enfoncée dans la terre : le heaume tourné "
+                       "vers le ciel avec son cimier, l'épaulière à 50 blocs, un genou replié en arche, la main tendue "
+                       "dans l'herbe et l'épée brisée en trois derrière son dos. On entre par le poignet brisé : le "
+                       "tunnel de l'avant-bras, la salle du coude, l'escalier du bras jusqu'au balcon de la salle des "
+                       "côtes, une voûte de 30 blocs ouverte sur le ciel par une brèche de la cuirasse. Côté épaule, "
+                       "le reliquaire sous l'épaulière ; côté hanche, la crypte du bassin et le tunnel de la jambe qui "
+                       "ressort par le genou. Par le tunnel du cou, l'arène du boss dans le heaume, sous les barreaux "
+                       "de la visière, et sous son sol la salle forte, avec une porte de fer qui ne s'ouvre que de "
+                       "l'intérieur.",
     "tesla_observatory": "Un campus scientifique perché sur un piton de montagne. À l'ouest, le Grand Observatoire : "
                          "un tambour de pierre crème sous une coupole de cuivre vert-de-gris, fendue pour un télescope "
                          "de laiton de 30 blocs. Au nord-est, la Tour Tesla : 70 blocs de treillis autour d'une bobine "
@@ -395,6 +412,10 @@ MOBS = {
     "grand_clockmaker": "Champion de la Citadelle d'horlogerie : un gentleman-automate de 4,4 blocs, le torse en "
                         "cadran d'horloge, le monocle qui luit, des ailes d'engrenages et une canne-pendule. Il arrête "
                         "le temps, appelle des araignées-horloges et, blessé, sonne minuit.",
+    "iron_helmsman": "Champion de la Forteresse marchante : le pilote du marcheur, un capitaine colossal de 5 blocs "
+                     "soudé à un harnais à vapeur. Chaudière fumante sur le dos, canon-harpon au bras droit, ancre "
+                     "de navire traînée au bout d'une chaîne, heaume à visière fendue d'ambre. Le boss le plus dur "
+                     "de la Surface.",
     "glow_jellyfish": "Une cloche translucide qui pulse et dérive dans toutes les mers, en rose, azur, ambre ou "
                       "violet ; elle brille la nuit. La toucher pique un peu (poison). Sa gelée donne une lampe ou la "
                       "vision nocturne.",
@@ -433,10 +454,36 @@ BOSS_MOVES = {
                         "chacune, un reflet prévient), puis une treizième sous chaque joueur (12) : ne reste pas "
                         "immobile."),
     ],
+    "iron_helmsman": [
+        ("Balayage d'ancre", "1 et 2", "Il ramène l'ancre loin sur sa gauche pendant 1 s, puis la balance sur 210° "
+                                       "devant lui (17 dégâts, portée 7 blocs). Recule hors de l'arc ou passe dans "
+                                       "son dos. En phase 2, il enchaîne souvent sur l'ancre abattue."),
+        ("Ancre abattue", "1 et 2", "Il soulève l'ancre au-dessus de sa tête (1,1 s) et l'abat 4 blocs devant lui "
+                                    "(22) ; une onde de choc roule ensuite vers l'extérieur (10) : saute-la. En "
+                                    "phase 2, une seconde onde de feu suit, puis parfois le harpon."),
+        ("Harpon", "1 et 2", "Il lève son bras-canon et vise (une ligne d'étincelles au sol montre le tir, 0,8 s), "
+                             "puis tire jusqu'à 18 blocs. Touché : 10 dégâts et tu es ramené à 3 blocs de lui, juste "
+                             "à portée du balayage qui suit. Écarte-toi de la ligne."),
+        ("Purge de vapeur", "1 et 2", "Il se voûte, sa chaudière enfle et siffle 1,2 s pendant qu'un cercle de "
+                                      "vapeur de 6 blocs se dessine : la vapeur brûlante jaillit (12 dégâts, en feu) "
+                                      "et reste une demi-seconde. Ne reste pas collé à lui."),
+        ("Charge", "1 et 2", "Épaule baissée derrière sa spalière (une ligne de fumée montre le trajet, 0,8 s), il "
+                             "fonce sur 12 à 15 blocs (16). Pas de côté. En phase 2, souvent suivie d'un balayage."),
+        ("Surchauffe", "2", "Sa chaudière rougeoie 1,2 s, puis quatre anneaux de jets de feu sortent du pont l'un "
+                            "après l'autre en s'éloignant de lui (14 chacun, en feu). Chaque jet est annoncé par de "
+                            "la fumée : passe entre eux ou recule vite."),
+        ("Moulinet d'ancre", "2", "Il déroule la chaîne et fait tournoyer l'ancre autour de lui pendant 2 s en "
+                                  "marchant sur toi (10 par coup, rayon 5,5). Recule et frappe quand il s'arrête."),
+        ("Bordée", "2", "Il lève son canon vers le ciel et sonne la corne : les canons du marcheur tirent trois "
+                        "salves d'obus sur chaque joueur (16, un cercle de fumée prévient 1 s avant) et des obus "
+                        "perdus tombent sur le pont. Ne reste jamais immobile."),
+    ],
 }
 BOSS_FACTS = {
     "grand_clockmaker": "400 PV, armure 12, barre jaune. Phase 2 à mi-vie : il rugit, des étincelles crépitent sur "
                         "lui, il accélère et enchaîne ses coups.",
+    "iron_helmsman": "450 PV, armure 15, posture 95, barre blanche. Phase 2 à mi-vie : la corne sonne, il fume et "
+                     "flambe, accélère et enchaîne ses coups.",
 }
 
 # Descente vers un repaire : étapes dans l'ordre
@@ -454,6 +501,17 @@ LAIRS = {
                                    "qui se balance sous le dôme."),
         ("Le cabinet de l'Horloger", "À l'ouest de l'arène, derrière une seconde brume qui tombe à sa mort : les "
                                      "coffres de récompense."),
+    ],
+    "iron_helmsman": [
+        ("Le cratère", "Entre par la brèche d'un des deux pieds posés de la Forteresse marchante."),
+        ("La jambe", "L'escalier en colimaçon monte dans le tibia jusqu'à la salle du genou, puis l'escalier de la "
+                     "cuisse mène à la cale."),
+        ("Les ponts", "La salle des machines, puis le pont des canons et son armurerie ; l'escalier central monte "
+                      "derrière l'arène."),
+        ("Le pont supérieur", "Derrière la brume : une arène à ciel ouvert de 15 blocs de rayon, à près de 90 blocs "
+                              "au-dessus du cratère, entre la tour de commandement et les deux cheminées. Le "
+                              "Timonier se réveille quand tu approches du sceau."),
+        ("La salle forte", "Dans la tour de commandement, derrière des barreaux scellés qui s'ouvrent à sa mort."),
     ],
 }
 
@@ -633,6 +691,10 @@ NEW_GROUPS = [
          "s-tesla_observatory", "struct:tesla_observatory"),
         ("Forteresse marchante", "Un marcheur de siège géant figé dans un cratère : on monte par ses jambes.",
          "s-walking_fortress", "struct:walking_fortress"),
+        ("Nécropole des rois", "Un massif taillé comme à Pétra : quatre rois assis de 42 blocs au bout d'un canyon.",
+         "s-rock_necropolis", "struct:rock_necropolis"),
+        ("Colosse abattu", "Un chevalier de pierre et de bronze de 155 blocs couché dans une vallée : on entre par "
+         "sa main.", "s-fallen_colossus", "struct:fallen_colossus"),
     ]),
 ]
 
@@ -685,6 +747,10 @@ TEST_CHECKLIST = [
     ("Le Grand Horloger", ["/brasshaven boss grand_clockmaker"],
      "Il apparaît à 6 blocs (arène de 20 blocs autour de toi). Guette l'arrêt du temps (cercle qui se referme) et, "
      "à mi-vie, le rugissement puis minuit. Pour le vrai repaire : /brasshaven tp clockwork_citadel."),
+    ("Le Timonier de Fer", ["/brasshaven boss iron_helmsman"],
+     "Il apparaît à 6 blocs. Saute l'onde de l'ancre abattue, écarte-toi de la ligne du harpon, sors du cercle de "
+     "vapeur ; à mi-vie, la corne sonne puis la bordée tombe sur toi. Pour le vrai repaire : /brasshaven tp "
+     "walking_fortress (le pont supérieur)."),
     ("Merveilles en surface", ["/brasshaven tp inventor_manor", "/brasshaven tp sylvan_palace",
                                "/brasshaven tp geothermal_foundry", "/brasshaven tp tesla_observatory",
                                "/brasshaven tp sky_isles"],

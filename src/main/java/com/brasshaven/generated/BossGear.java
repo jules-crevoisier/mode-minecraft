@@ -66,6 +66,9 @@ public final class BossGear {
     public static final RegistryObject<Item> REMEMBRANCE_GRAND_CLOCKMAKER = remembrance("remembrance_grand_clockmaker");
     public static final RegistryObject<Item> CLOCKMAKER_PENDULUM = weapon("clockmaker_pendulum", p -> p.sword(ModMaterials.LITHITE, 6.0F, -2.6F).rarity(Rarity.EPIC),
             BossWeaponItem.Ability.ARC, 10.0F, 6.0F, 70, () -> ParticleTypes.ELECTRIC_SPARK, BossWeaponItem.SLOW);
+    public static final RegistryObject<Item> REMEMBRANCE_IRON_HELMSMAN = remembrance("remembrance_iron_helmsman");
+    public static final RegistryObject<Item> HELMSMAN_ANCHOR = weapon("helmsman_anchor", p -> p.sword(ModMaterials.LITHITE, 8.0F, -3.4F).rarity(Rarity.EPIC),
+            BossWeaponItem.Ability.ERUPT, 11.0F, 12.0F, 90, () -> ParticleTypes.LARGE_SMOKE, BossWeaponItem.FIRE);
 
     private BossGear() {}
 

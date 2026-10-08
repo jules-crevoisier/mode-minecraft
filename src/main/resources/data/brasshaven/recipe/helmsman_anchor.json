@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    " M ",
+    "MRM",
+    "DMD"
+  ],
+  "key": {
+    "M": "brasshaven:map_fragment",
+    "R": "brasshaven:remembrance_iron_helmsman",
+    "D": "minecraft:diamond"
+  },
+  "result": {
+    "id": "brasshaven:helmsman_anchor",
+    "count": 1
+  }
+}

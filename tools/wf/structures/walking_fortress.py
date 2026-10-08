@@ -27,7 +27,7 @@ from ..megakit import (BARS, BRASS, BRASS_SLAB, BRASS_STAIRS, COPPER, EDISON, GA
 from ..parts import LOOT, MOD
 
 # the boss of the walker comes with the boss pass of the overhaul; until then the arena wakes the Forge King
-BOSS = "brasshaven:forge_king"
+BOSS = "brasshaven:iron_helmsman"
 
 # ------------------------------------------------------------------ dimensions
 CRATER_R = 74          # outer edge of the crater (blends back into the terrain)
@@ -852,7 +852,7 @@ def dressing(bp):
             if not is_air(bp, x, ENGINE - 1, z) and is_air(bp, x, ENGINE - 2, z):
                 bp.set(x, ENGINE - 1, z, EDISON)
     for (x, z) in ((-4, -16), (4, -8), (-4, 8), (4, 16), (-14, -24), (14, 0), (-14, 20)):
-        bp.set(x, ENGINE - 2, z, "chain[axis=y]")
+        bp.set(x, ENGINE - 2, z, "iron_chain[axis=y]")
         bp.set(x, ENGINE - 3, z, "lantern[hanging=true]")
     # loose crates and coal sacks in the lanes
     for (x, z) in ((-6, -22), (6, -14), (-6, 2), (6, 18), (-15, -4), (15, 8)):

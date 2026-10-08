@@ -286,6 +286,44 @@ def pendulum(a):
 # ------------------------------------------------------------------ boss weapons
 
 
+@painted("anchor")
+def anchor(a):
+    """Helmsman's Anchor: a ship's anchor turned war-maul. Leather-wrapped iron grip with a brass ring at the butt, a
+    short stock across the shank, a heavy shank and the curved crown of two arms ending in barbed flukes; an amber
+    rivet glows at the crown."""
+    import math as _m
+    shaft(a, 6, key="X", grip=(1, 5), butt=None)
+    a.disc("B", 1.5, 14.5, 1.6)                       # the ring at the butt
+    a.clear(lambda x, y: (x - 1.5) ** 2 + (y - 14.5) ** 2 < 0.5)
+    # the stock: a crossbar perpendicular to the shank, brass-capped
+    a.seg("M", 3.5, 8.5, 7.5, 12.5, 0.7)
+    a.px(3, 8, "B", "light")
+    a.px(7, 12, "B", "dark")
+    # the shank, two px wide, up to the crown
+    diag(a, "M", 6, 9, 6)
+    # the crown: an arc of radius 5.2 around (8.6, 6.4), facing up-right, both arms curving back to the grip
+    cx, cy, r = 8.4, 6.6, 5.4
+
+    def arm(x, y):
+        d = _m.hypot(x - cx, y - cy)
+        ang = _m.degrees(_m.atan2(y - cy, x - cx))        # -45 = toward the top-right corner
+        off = abs(((ang + 45) + 180) % 360 - 180)
+        return r - 1.0 <= d <= r + 0.6 and off <= 78
+    a.paint("M", arm)
+    # flukes: barbed tips at both ends of the arc
+    for sgn in (-1, 1):
+        t = _m.radians(-45 + sgn * 78)
+        fx, fy = cx + _m.cos(t) * r, cy + _m.sin(t) * r
+        a.disc("M", fx, fy, 1.5)
+        a.px(fx - 0.5, fy - 0.5, "M", "light")
+    a.shade_dir("M", -0.5, 1.0)
+    # amber rivet at the crown, a brass band where the shank meets it
+    a.px(11, 3, "R", "light")
+    a.px(12, 3, "R", "mid")
+    a.px(9, 6, "B", "light")
+    a.px(10, 6, "B", "dark")
+
+
 @painted("ladle")
 def ladle(a):
     """Crone's Ladle: a long iron ladle, its bowl brimming with a glowing poison brew; bubbles rise."""

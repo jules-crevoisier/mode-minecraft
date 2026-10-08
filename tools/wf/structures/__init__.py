@@ -6,3 +6,5 @@ from . import sky_isles  # noqa: F401
 from . import foundry, observatory, cathedral  # noqa: F401
 from . import ocean_life  # noqa: F401
 from . import walking_fortress  # noqa: F401
+from . import rock_necropolis  # noqa: F401
+from . import fallen_colossus  # noqa: F401

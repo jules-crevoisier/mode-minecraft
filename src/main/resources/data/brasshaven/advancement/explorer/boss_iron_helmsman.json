@@ -1,0 +1,37 @@
+{
+  "display": {
+    "icon": {
+      "id": "brasshaven:helmsman_anchor"
+    },
+    "title": {
+      "translate": "advancements.brasshaven.explorer.boss_iron_helmsman.title"
+    },
+    "description": {
+      "translate": "advancements.brasshaven.explorer.boss_iron_helmsman.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "kill": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "entity_type": "brasshaven:iron_helmsman"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "parent": "brasshaven:explorer/walking_fortress",
+  "rewards": {
+    "experience": 500
+  }
+}
