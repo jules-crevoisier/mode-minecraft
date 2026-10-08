@@ -2549,6 +2549,6 @@ register(StructureDef(
     ["meadow", "grove", "snowy_slopes", "stony_peaks", "windswept_hills", "windswept_gravelly_hills",
      "windswept_forest"],
     [Piece("ringwall", caldera_ringwall, views=VIEWS)],
-    spacing=80, separation=32, adaptation="beard_thin", processors="none", max_distance=124,
+    spacing=80, separation=32, adaptation="none", processors="none", max_distance=128,
     foundation=False, spawns=[(MOB_SKELETON, 8, 1, 2), (MOB_KNIGHT, 4, 1, 1)],
     title_fr="Le Rempart de la caldeira", title_en="Caldera Ringwall"))

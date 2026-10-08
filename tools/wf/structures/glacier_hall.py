@@ -1972,6 +1972,6 @@ register(StructureDef(
     "glacier_hall", "overworld",
     ["snowy_plains", "ice_spikes", "snowy_taiga", "grove", "snowy_slopes"],
     [Piece("hall", glacier_hall, views=VIEWS)],
-    spacing=80, separation=32, adaptation="beard_thin", processors="none", max_distance=128, foundation=False,
+    spacing=80, separation=32, adaptation="none", processors="none", max_distance=128, foundation=False,
     spawns=[("minecraft:stray", 10, 1, 2), ("brasshaven:skeleton_knight", 4, 1, 1)],
     title_fr="Halle glaciaire des jarls", title_en="Glacier Hall of the Frost Jarls"))

@@ -163,6 +163,11 @@ def structure_json(sdef, ground_offset, fit_info=None):
     """A ``brasshaven:fitted_jigsaw``: the vanilla jigsaw fields plus ``fit``, the terrain check its start must pass
     (com.brasshaven.world.FittedJigsawStructure, wf/placement.py FIT)."""
     from . import placement
+    # JigsawStructure refuses the whole data pack (no world can be created) past this: the beard/bury padding counts
+    pad = 0 if sdef.adaptation == "none" else 12
+    if sdef.max_distance + pad > 128:
+        raise SystemExit(f"{sdef.id}: max_distance {sdef.max_distance} + terrain adaptation padding {pad} > 128 "
+                         f"(Minecraft rejects it); lower max_distance to {128 - pad} or use adaptation='none'")
     js = {
         "type": rl("fitted_jigsaw"),
         "biomes": f"#{rl('has_structure/' + sdef.id)}",

@@ -21,10 +21,10 @@
       ]
     }
   },
-  "terrain_adaptation": "beard_thin",
+  "terrain_adaptation": "none",
   "start_pool": "brasshaven:caldera_ringwall/start",
   "size": 1,
-  "max_distance_from_center": 124,
+  "max_distance_from_center": 128,
   "use_expansion_hack": false,
   "start_height": {
     "absolute": 0

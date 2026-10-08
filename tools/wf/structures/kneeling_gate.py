@@ -1803,6 +1803,6 @@ register(StructureDef(
     ["meadow", "grove", "snowy_slopes", "stony_peaks", "windswept_hills", "windswept_gravelly_hills",
      "windswept_forest"],
     [Piece("gate", kneeling_gate, views=VIEWS)],
-    spacing=80, separation=32, adaptation="beard_thin", max_distance=128, foundation=False,
+    spacing=80, separation=32, adaptation="none", max_distance=128, foundation=False,
     spawns=[("brasshaven:skeleton_knight", 6, 1, 2), ("minecraft:stray", 4, 1, 2)],
     title_fr="La Porte agenouillée", title_en="Kneeling Gate"))

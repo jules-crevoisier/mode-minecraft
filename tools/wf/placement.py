@@ -623,6 +623,9 @@ def check_fit(data_dir):
         ok_adapt = {"land": ("beard_thin", "beard_box", "bury"), "wetland": ("none", "beard_thin"),
                     "coast": ("none",), "seabed": ("none", "beard_box", "beard_thin"), "sky": ("none",),
                     "underground": ("none", "encapsulate", "bury"), "cavern": ("none", "beard_box")}[mode]
+        # wider than a beard allows (max_distance + 12 > 128): no adaptation, the build writes its own footings
+        if mode == "land" and adapt == "none" and js.get("max_distance_from_center", 0) > 116:
+            ok_adapt = ok_adapt + ("none",)
         if adapt not in ok_adapt:
             errors.append(f"{sid}: terrain_adaptation {adapt} does not suit fit mode {mode} (use {ok_adapt})")
         # heights and the footprint against the start templates
