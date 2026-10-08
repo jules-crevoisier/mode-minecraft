@@ -533,6 +533,43 @@ public final class MobAnims {
 
         private DuneKing() {}
     }
+    public static final class FallenSeraph {
+        public static final int GLAIVE = 0;
+        public static final int THRUST = 1;
+        public static final int SHARDS = 2;
+        public static final int PILLARS = 3;
+        public static final int BLINK = 4;
+        public static final int BEAM = 5;
+        public static final int NOVA = 6;
+        public static final int RAIN = 7;
+        public static final int DIVE = 8;
+        public static final int SHATTER = 9;
+        public static final int ROAR = 10;
+        public static final int STAGGER = 11;
+        public static final int COUNT = 12;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {34, 36, 54, 54, 20, 80, 70, 80, 52, 60, 48, 48};
+
+        private FallenSeraph() {}
+    }
+    public static final class ChainedJailer {
+        public static final int LASH = 0;
+        public static final int HOOK = 1;
+        public static final int SLAM = 2;
+        public static final int SHACKLES = 3;
+        public static final int KICK = 4;
+        public static final int WHIRL = 5;
+        public static final int PYRE = 6;
+        public static final int VERDICT = 7;
+        public static final int UNCHAIN = 8;
+        public static final int ROAR = 9;
+        public static final int STAGGER = 10;
+        public static final int COUNT = 11;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {36, 34, 41, 50, 25, 68, 66, 80, 70, 40, 32};
+
+        private ChainedJailer() {}
+    }
     public static final class GlowJellyfish {
 
         public static final int COUNT = 0;

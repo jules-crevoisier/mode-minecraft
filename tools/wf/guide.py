@@ -647,6 +647,60 @@ PAGES = [
          "Son Souvenir, quatre fragments de carte et deux diamants forgent la Crosse du Roi des dunes, un bâton dont "
          "le clic droit lance un rayon de jugement qui ralentit les ennemis."),
     ], []),
+    ("fallen_seraph", "wonders", "brasshaven:remembrance_fallen_seraph", ("The Fallen Seraph", "Le Séraphin déchu"), [
+        ("At the centre of the Shattered Halo, on the disc floating over the void, the fallen seraph waits (780 "
+         "health, armour 14): an angel hovering under a broken golden halo, one wing white and gold, the other burnt "
+         "to the void, a glaive with a crescent blade, six halo shards circling her.",
+         "Au centre du Halo brisé, sur le disque suspendu au-dessus du vide, attend la séraphine déchue (780 PV, "
+         "armure 14) : un ange qui flotte sous un halo d'or brisé, une aile blanche et dorée, l'autre brûlée par le "
+         "vide, un glaive à lame en croissant, six éclats de halo qui tournent autour d'elle."),
+        ("She sweeps with the glaive, glides along a line of light, flings her shards one by one, drops lances of "
+         "light into rings under you and vanishes to reappear at the edge of the disc (watch for the violet ring). "
+         "None of her blows throws you toward the void near the rim.",
+         "Elle balaie de son glaive, glisse le long d'une ligne de lumière, lance ses éclats un à un, fait tomber des "
+         "lances de lumière dans des cercles sous toi et disparaît pour surgir au bord du disque (guette l'anneau "
+         "violet). Aucun de ses coups ne te projette vers le vide près du bord."),
+    ], ["brasshaven:remembrance_fallen_seraph", "brasshaven:halo_glaive"]),
+    ("fallen_seraph_shattered", "wonders", "minecraft:end_crystal", ("Seraph: the disc breaks", "Séraphin : le disque se brise"), [
+        ("At 60% her halo blazes: a blinding beam sweeps from her left to her right (stay under her or behind her) "
+         "and rings of light roll out and back (jump both). At 25% she shatters the disc: fissures flare in turn, "
+         "the rim beyond the gold ring crumbles, shards rain from the sky and she dives on the gold ring that "
+         "follows you.",
+         "À 60 %, son halo flamboie : un rayon aveuglant balaie de sa gauche à sa droite (reste sous elle ou dans "
+         "son dos) et des anneaux de lumière roulent aller et retour (saute les deux). À 25 %, elle brise le "
+         "disque : les fissures jaillissent tour à tour, le bord au-delà de l'anneau d'or s'effrite, des éclats "
+         "tombent du ciel et elle plonge sur le cercle doré qui te suit."),
+        ("Her Remembrance, four Void Shards and two diamonds forge the Glaive of the Broken Halo, whose right-click "
+         "flings a fan of five piercing halo shards that blind foes.",
+         "Son Souvenir, quatre éclats du vide et deux diamants forgent le Glaive du Halo brisé, dont le clic droit "
+         "lance un éventail de cinq éclats de halo perçants qui aveuglent les ennemis."),
+    ], []),
+    ("chained_jailer", "wonders", "brasshaven:remembrance_chained_jailer", ("The Chained Jailer", "Le Geôlier enchaîné"), [
+        ("The warden of the Chained Bastion waits in the boss drum over the lava (600 health, armour 14): a hunched "
+         "giant of blackstone and gilded iron, his head a locked cage full of fire, a padlock for a heart, a burning "
+         "fetter-ball dragged on a chain. Bring fire resistance.",
+         "Le geôlier du Bastion enchaîné attend dans le tambour au-dessus de la lave (600 PV, armure 14) : un géant "
+         "voûté de pierre noire et de fer doré, la tête dans une cage verrouillée pleine de feu, un cadenas pour "
+         "cœur, un boulet enflammé traîné au bout d'une chaîne. Prends de la résistance au feu."),
+        ("He lashes the ball across his front, hurls his chain to drag you in, slams both fists (jump the ring of "
+         "fire), kicks huggers away and makes chains burst from the floor under you: step out of the iron rings.",
+         "Il balaie devant lui avec le boulet, lance sa chaîne pour te traîner, frappe des deux poings (saute "
+         "l'anneau de feu), repousse qui le colle d'un coup de pied et fait jaillir des chaînes du sol sous toi : "
+         "sors des cercles de fer."),
+    ], ["brasshaven:remembrance_chained_jailer", "brasshaven:jailer_chain"]),
+    ("chained_jailer_unchained", "wonders", "minecraft:iron_chain", ("Jailer: unchained", "Geôlier : libéré"), [
+        ("At 60% he spins the ball round him and drives his fists into the floor: fire runs out along eight bars, "
+         "stand between them. At 30% he kneels, tears his own chains apart (a ring of fire to jump) and from then "
+         "on burns whoever stays close and casts the verdict: three volleys of chains on every player.",
+         "À 60 %, il fait tourner le boulet autour de lui et plante ses poings dans le sol : le feu court le long de "
+         "huit barreaux, tiens-toi entre eux. À 30 %, il s'agenouille, brise ses propres chaînes (un anneau de feu "
+         "à sauter), puis brûle qui reste près de lui et lance le verdict : trois salves de chaînes sur chaque "
+         "joueur."),
+        ("His Remembrance, four Ancient Embers and two diamonds forge the Jailer's Burning Chain, whose right-click "
+         "hurls a chain that drags the first foe to your feet and sets it ablaze.",
+         "Son Souvenir, quatre braises anciennes et deux diamants forgent la Chaîne ardente du Geôlier, dont le clic "
+         "droit lance une chaîne qui traîne le premier ennemi à tes pieds et l'embrase."),
+    ], []),
     ("tesla_observatory", "wonders", "minecraft:lightning_rod", ("Tesla Observatory", "Observatoire Tesla"), [
         ("A science campus on a rocky crag: a copper dome with a 30-block telescope, a 70-block Tesla tower and an "
          "orrery under a glass dome.",

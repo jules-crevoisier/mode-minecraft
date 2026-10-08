@@ -36,6 +36,8 @@ from . import grand_clockmaker
 from . import iron_helmsman
 from . import bronze_sentinel
 from . import dune_king
+from . import fallen_seraph
+from . import chained_jailer
 # living oceans
 from . import glow_jellyfish
 from . import reef_fish
@@ -94,6 +96,8 @@ MODELS = [
     iron_helmsman.build,
     bronze_sentinel.build,
     dune_king.build,
+    fallen_seraph.build,
+    chained_jailer.build,
     glow_jellyfish.build,
     reef_fish.build,
     manta_ray.build,

@@ -467,6 +467,14 @@ MOBS = {
     "dune_king": "Champion de la Nécropole des rois : un pharaon mort-vivant de 4,6 blocs sous la haute double "
                  "couronne, bandelettes dorées, collier de lapis et d'or, la crosse et le fléau en main. Quatre vases "
                  "canopes tournent autour de lui et ses yeux brûlent de turquoise.",
+    "fallen_seraph": "Champion du Halo brisé : une séraphine déchue de 5,4 blocs qui flotte sans pieds au-dessus du "
+                     "disque, un grand halo d'or brisé derrière la tête, une aile blanche et dorée, l'autre brûlée par "
+                     "le vide. Un bandeau d'or sur les yeux, un glaive dont la lame est un croissant de halo, et six "
+                     "éclats de halo qui tournent autour d'elle. Le boss le plus dur de l'End.",
+    "chained_jailer": "Champion du Bastion enchaîné : le geôlier de la prison suspendue, un colosse voûté de 5,4 blocs "
+                      "en pierre noire et fer doré. Sa tête est une cage verrouillée pleine de feu, son cœur un grand "
+                      "cadenas à la serrure ardente ; un gibet se dresse sur son dos, il traîne un boulet de fers "
+                      "enflammé au bout d'une chaîne et porte un gantelet entravé. Le boss le plus dur du Nether.",
     "glow_jellyfish": "Une cloche translucide qui pulse et dérive dans toutes les mers, en rose, azur, ambre ou "
                       "violet ; elle brille la nuit. La toucher pique un peu (poison). Sa gelée donne une lampe ou la "
                       "vision nocturne.",
@@ -576,6 +584,60 @@ BOSS_MOVES = {
                           "départ) : un rayon bas balaie 200° de sa gauche à sa droite en 2,5 s (16). Saute-le quand "
                           "il passe, ou mets-toi dans son dos."),
     ],
+    "fallen_seraph": [
+        ("Glaive", "1 à 3", "Le glaive ramené par-dessus l'épaule droite (0,8 s, l'arc est tracé en lumière), puis un "
+                            "balayage sur 210° (17). Recule hors de l'arc."),
+        ("Estoc", "1 à 3", "Glaive pointé, une ligne de lumière marque sa trajectoire (0,7 s), puis elle glisse le long "
+                           "de la ligne (16). Écarte-toi de la ligne ; elle s'arrête avant le bord du disque."),
+        ("Éclats de halo", "1 à 3", "Main levée, ses éclats tournent plus vite (0,9 s, un cercle sous toi), puis six "
+                                    "éclats partent l'un après l'autre là où tu te trouves (9 chacun ; par paires en "
+                                    "phase 2). Bouge en arc de cercle."),
+        ("Lances de lumière", "1 à 3", "Mains au ciel (1 s) : un cercle sous chaque joueur et quelques autres, la "
+                                       "lumière y tombe, puis des colonnes frappent (14). En phase 2, une deuxième "
+                                       "salve suit là où tu es allé. Sors du cercle."),
+        ("Transport", "1 à 3", "Ses ailes se referment (0,6 s) pendant qu'un anneau violet marque l'endroit où elle "
+                               "va apparaître, au bord du disque ; elle y surgit et enchaîne souvent les éclats."),
+        ("Balayage aveuglant", "2 et 3", "Elle s'élève, le halo flamboie (1,2 s : une ligne de lumière sur sa gauche, "
+                                         "des points dorés sur le cercle sûr) : un rayon part du halo et balaie 160° "
+                                         "de sa gauche à sa droite en 2 s (14 et cécité). Trop haut pour sauter : "
+                                         "colle-toi sous elle ou passe dans son dos."),
+        ("Nova", "2 et 3", "Le halo levé au-dessus de la tête (1 s), un anneau de lumière roule vers le bord (12, saute-"
+                           "le), puis un second revient du bord vers elle (12, saute encore)."),
+        ("Le disque se brise", "3", "À 25 % de vie, elle se recroqueville, invulnérable (2 s), puis frappe : six "
+                                    "fissures fendent le disque et une onde roule (8, saute-la). Ensuite les fissures "
+                                    "s'illuminent tour à tour avant de jaillir (10 et lenteur), et au-delà de l'anneau "
+                                    "d'or le disque s'effrite (3 par demi-seconde) : reste au centre."),
+        ("Ciel brisé", "3", "Elle lance ses éclats vers le ciel (1,1 s) : quatre salves retombent, chacune annoncée par "
+                            "un cercle sous chaque joueur (13). Change de place à chaque salve."),
+        ("Chute du séraphin", "3", "Un cercle doré te suit 0,8 s puis se fige (il devient bleu) pendant qu'elle "
+                                   "apparaît haut au-dessus : 0,7 s plus tard, elle s'abat dessus (22) et une onde "
+                                   "roule (9). Sors du cercle, puis frappe pendant qu'elle se relève."),
+    ],
+    "chained_jailer": [
+        ("Fouet de chaîne", "1 à 3", "La chaîne ramenée en arrière sur sa droite (0,9 s, l'arc est tracé en flammes), "
+                                     "puis le boulet balaie 220° devant lui (16 et feu). Recule hors de l'arc."),
+        ("Grappin", "1 à 3", "La chaîne enroulée au-dessus de l'épaule (0,8 s, une ligne de braises montre le jet "
+                             "de 16 blocs) : touché, tu prends 9, tu es traîné à ses pieds et il frappe des deux poings. "
+                             "Écarte-toi de la ligne."),
+        ("Frappe ardente", "1 à 3", "Les deux poings levés (1,1 s, un cercle de feu devant lui), puis abattus (20) : "
+                                    "un anneau de feu roule (9), deux en phase 2. Saute-le."),
+        ("Entraves", "1 à 3", "Le gantelet levé, sa chaîne cliquette (0,9 s), puis balayé vers le sol : sous chaque "
+                              "joueur un cercle de fer prévient (0,8 s) avant que des chaînes jaillissent (8, tenu "
+                              "1,5 s sur place). Sors du cercle."),
+        ("Coup de pied", "1 à 3", "Le pied ramené (0,6 s) puis un coup de pied qui repousse loin (12). Ne reste pas "
+                                  "collé à lui."),
+        ("Tourbillon", "2 et 3", "La chaîne déroulée sur le côté (0,7 s, un cercle de flammes), puis le boulet tourne "
+                                 "autour de lui 2 s pendant qu'il marche sur toi (9 et feu à chaque tour, rayon 6,5)."),
+        ("Bûcher", "2 et 3", "Bras en croix (1,1 s, huit lignes de braises au sol), puis poings plantés : le feu court "
+                             "le long des quatre barreaux droits, puis des quatre diagonaux (13 et feu). Tiens-toi "
+                             "entre les barreaux."),
+        ("Libération", "3", "À 30 % de vie, il s'agenouille et tire sur ses chaînes (1,5 s, invulnérable), puis les "
+                            "brise : une onde de feu (12, saute-la) et un cercle d'explosions. Il est ensuite plus "
+                            "rapide et brûle qui reste au contact."),
+        ("Verdict", "3", "Toutes les 12 s : la chaîne tournoie au-dessus de lui (1,2 s) et part dans le noir ; trois "
+                         "salves de chaînes tombent sur chaque joueur, chacune annoncée 0,9 s par un cercle (14, tenu "
+                         "et brûlé). Change de place à chaque salve."),
+    ],
 }
 # Difficulté des boss (bestiaire) : coop et cycles NG+ (boss/WayfarerBoss, tools/BOSSES.md)
 BOSS_DIFFICULTY = ("Plus on est, plus ils sont durs : chaque joueur de plus dans l'arène donne au boss +75 % de vie, "
@@ -597,6 +659,12 @@ BOSS_FACTS = {
                        "(armure −6), il accélère de 20 % et enchaîne ses coups.",
     "dune_king": "460 PV, armure 10, posture 85, barre jaune. Phase 2 à mi-vie : il s'élève et flotte au-dessus du "
                  "sol, accélère et ouvre les sables.",
+    "fallen_seraph": "780 PV, armure 14, posture 110, barre violette. Phase 2 à 60 % : elle rugit, s'élève et "
+                     "accélère. Phase 3 à 25 % : le disque se fissure, son bord s'effrite et le ciel tombe. Aucun "
+                     "coup ne te projette vers le vide près du bord.",
+    "chained_jailer": "600 PV, armure 14, posture 100, barre rouge. Phase 2 à 60 % : il rugit, accélère et enchaîne "
+                      "ses coups. Phase 3 à 30 % : il brise ses chaînes, va encore plus vite, brûle au contact et "
+                      "lance le verdict.",
 }
 
 # Descente vers un repaire : étapes dans l'ordre
@@ -646,6 +714,31 @@ LAIRS = {
                            "assis et des statues de chacals. Le Roi des dunes se réveille quand tu approches du sceau."),
         ("La salle forte", "Derrière la brume sud et des barreaux scellés ; le puits du roi remonte jusqu'au "
                            "vestibule."),
+    ],
+    "fallen_seraph": [
+        ("L'îlot d'arrivée", "Au sud-est : pierre de voyage, puis les ponts imposent l'ordre des cinq arcs et de "
+                             "leurs temples."),
+        ("La Porte", "Sur l'arc est : la salle sombre entre deux pylônes, et son portail tourné vers le centre."),
+        ("Le lieu de grâce", "Le pont rayonnant mène à l'îlot du lieu de grâce, puis à un portique étroit et à la "
+                             "brume."),
+        ("Le disque", "L'arène : un disque de 16 blocs de rayon suspendu au-dessus du vide, un parapet bas brisé en "
+                      "trois endroits, des éclats d'anneau qui flottent autour. La Séraphine se réveille quand tu "
+                      "approches du sceau. Prends des perles de l'Ender et la chute lente."),
+        ("La salle forte", "Au-delà de la brume ouest et des barreaux scellés, sur son propre îlot."),
+    ],
+    "chained_jailer": [
+        ("Le débarcadère", "Sur l'éperon rocheux à l'ouest : pierre de voyage, poste de garde, puis le pont de chaînes "
+                           "jusqu'à la pile dans la lave."),
+        ("La chaîne d'ancrage", "Un escalier posé sur le dos de la chaîne géante monte jusqu'au porche de la "
+                                "porterie (une chute, c'est la lave)."),
+        ("La prison", "Niveau bas : porterie, prison des cages suspendues, caserne et sa cellule secrète, forge, "
+                      "armurerie et l'escalier principal."),
+        ("Le lieu de grâce", "Niveau haut : galerie, chapelle, puis la salle du lieu de grâce et un pont couvert "
+                             "étroit jusqu'à la brume."),
+        ("Le tambour", "L'arène : un anneau de pierre noire de 14 blocs de rayon autour d'une grille qui donne sur "
+                       "la lave, 16 de haut, des rideaux de chaînes. Le Geôlier se réveille quand tu approches du "
+                       "sceau."),
+        ("La salle forte", "Au-delà de la brume sud et des barreaux scellés qui s'ouvrent à sa mort."),
     ],
 }
 
@@ -907,6 +1000,15 @@ TEST_CHECKLIST = [
     ("Le Roi des dunes", ["/brasshaven boss dune_king"],
      "Il apparaît à 6 blocs. Évite la ligne de la crosse et le cône de sable ; à mi-vie, il flotte : saute les "
      "scarabées et le rayon du jugement. Pour le vrai repaire : /brasshaven tp rock_necropolis (tout en bas)."),
+    ("Le Séraphin déchu", ["/brasshaven boss fallen_seraph"],
+     "Elle apparaît à 6 blocs. Écarte-toi de la ligne de l'estoc, sors des cercles de lumière ; à 60 %, colle-toi "
+     "sous elle pendant le balayage et saute les deux anneaux de la nova ; à 25 %, le disque se brise : reste "
+     "dans l'anneau d'or et sors du cercle de sa chute. Pour le vrai repaire : /brasshaven tp shattered_halo (le "
+     "disque au centre)."),
+    ("Le Geôlier enchaîné", ["/brasshaven boss chained_jailer"],
+     "Il apparaît à 6 blocs (prends de la résistance au feu). Écarte-toi de la ligne du grappin, sors des cercles "
+     "d'entraves, saute l'anneau de feu ; à 60 %, tiens-toi entre les barreaux du bûcher ; à 30 %, il brise ses "
+     "chaînes et le verdict tombe sur toi. Pour le vrai repaire : /brasshaven tp chained_bastion (le tambour)."),
     ("Merveilles en surface", ["/brasshaven tp inventor_manor", "/brasshaven tp sylvan_palace",
                                "/brasshaven tp geothermal_foundry", "/brasshaven tp tesla_observatory",
                                "/brasshaven tp sky_isles"],

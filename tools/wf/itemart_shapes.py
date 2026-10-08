@@ -324,6 +324,28 @@ def anchor(a):
     a.px(10, 6, "B", "dark")
 
 
+@painted("chain_flail")
+def chain_flail(a):
+    """Jailer's Burning Chain: a wrapped dark-iron grip with a gold pommel, a chain of alternating links sagging up
+    to a spiked blackstone fetter-ball split by glowing ember cracks."""
+    shaft(a, 5, key="X", grip=(1, 4), butt="B")
+    collar(a, 5, key="B")
+    # the chain: links alternating light (flat) and dark (edge-on), sagging along a curve
+    for i, (x, y) in enumerate(((7, 8), (8, 8), (9, 7), (9, 6), (10, 6))):
+        a.px(x, y, "I", "light" if i % 2 == 0 else "dark")
+    # the ball: a dark disc with gilded spikes all round and ember cracks
+    cx, cy = 12.0, 4.0
+    for k in range(8):
+        ang = k * math.pi / 4 + 0.39
+        a.seg("B", cx, cy, cx + math.cos(ang) * 3.9, cy + math.sin(ang) * 3.9, 0.5)
+    a.sphere("X", cx, cy, 2.7, shine=False)
+    a.px(11, 3, "X", "light")
+    a.px(12, 3, "F", "shine")
+    a.px(13, 4, "F", "light")
+    a.px(12, 5, "F", "mid")
+    a.px(11, 5, "F", "dark")
+
+
 @painted("ladle")
 def ladle(a):
     """Crone's Ladle: a long iron ladle, its bowl brimming with a glowing poison brew; bubbles rise."""

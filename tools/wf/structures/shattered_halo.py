@@ -38,8 +38,8 @@ from .end import (ESB, ESB_SL, ESB_ST, ESB_WA, FROG, OUTER_END, PUR, PUR_P, PUR_
                   VB, VB_SL, VB_ST, VB_WA, brazier, build_rock, disk_pts, face_in, face_vec, hang_star, ring_pts,
                   rock_lobe, round_windows, tube)
 
-# the halo's own guardian comes with the boss pass; until then its disc wakes the Void Warden
-BOSS = "brasshaven:void_warden"
+# the halo's own guardian: the Fallen Seraph (entity/boss/FallenSeraph.java, tools/BOSSES.md section 10)
+BOSS = "brasshaven:fallen_seraph"
 
 # ------------------------------------------------------------------ geometry
 R = 78                      # centreline radius of the ring

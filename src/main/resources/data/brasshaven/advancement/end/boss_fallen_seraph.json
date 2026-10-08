@@ -1,0 +1,37 @@
+{
+  "display": {
+    "icon": {
+      "id": "brasshaven:halo_glaive"
+    },
+    "title": {
+      "translate": "advancements.brasshaven.end.boss_fallen_seraph.title"
+    },
+    "description": {
+      "translate": "advancements.brasshaven.end.boss_fallen_seraph.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "kill": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "entity_type": "brasshaven:fallen_seraph"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "parent": "brasshaven:end/shattered_halo",
+  "rewards": {
+    "experience": 500
+  }
+}

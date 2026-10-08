@@ -5,7 +5,8 @@ gen_data (recipes, boss loot, tags) and gen_quests (the Legends chapter).
 
 ability: WAVE (ring around you), BEAM (line ahead), DASH (rush through enemies), ERUPT (bursts along
 a line), ROOT (snare around you), CLOUD (poison cloud where you look), LEAP (bound forward), ARC (wide
-sweep), BLINK (teleport ahead and strike). flags: fire, slow, weak, blind, poison, lift, lifesteal.
+sweep), BLINK (teleport ahead and strike), HOOK (a chain
+thrown ahead drags the first foe to you), SHARDS (a fan of piercing shards ahead). flags: fire, slow, weak, blind, poison, lift, lifesteal.
 """
 
 TIER_MATERIAL = {"overworld": "map_fragment", "depths": "lithite_shard", "nether": "ancient_ember", "end": "void_shard"}
@@ -101,6 +102,18 @@ BOSS_GEAR = [
       "Clic droit : un rayon de jugement file devant toi, brûle les ennemis et alourdit leurs pas."),
      ("Remembrance of the Dune King", "Souvenir du Roi des dunes"),
      None, "BEAM", 12.0, 16.0, 90, "END_ROD", "slow", ("cane", "gold", "gold", "sapphire"), ("gold", "sapphire")),
+    ("chained_jailer", "nether", "jailer_chain", ("Jailer's Burning Chain", "Chaîne ardente du Geôlier"),
+     ("Use: hurl the chain ahead; the first foe it catches is dragged to your feet and set ablaze.",
+      "Clic droit : lance la chaîne devant toi ; le premier ennemi qu'elle attrape est traîné à tes pieds et embrasé."),
+     ("Remembrance of the Chained Jailer", "Souvenir du Geôlier enchaîné"),
+     ("EMBER", 7.0, -2.9), "HOOK", 12.0, 14.0, 80, "FLAME", "fire", ("chain_flail", "ember", "dark", "ember"),
+     ("ember", "ember")),
+    ("fallen_seraph", "end", "halo_glaive", ("Glaive of the Broken Halo", "Glaive du Halo brisé"),
+     ("Use: fling a fan of five halo shards ahead; they pierce every foe in their path and blind it.",
+      "Clic droit : lance un éventail de cinq éclats de halo ; ils transpercent tous les ennemis sur leur passage et les aveuglent."),
+     ("Remembrance of the Fallen Seraph", "Souvenir du Séraphin déchu"),
+     ("VOID", 8.0, -2.9), "SHARDS", 12.0, 16.0, 80, "END_ROD", "blind", ("scythe", "light", "purpur", "gold"),
+     ("light", "amethyst")),
 ]
 
 

@@ -21,11 +21,11 @@ import java.util.List;
 
 /**
  * A weapon forged from a boss's Remembrance. Its right-click ability is one of a few shapes (ring, beam, dash,
- * eruptions, snare, poison cloud, leap, sweep, blink), tuned per weapon by power, size, particle and flags.
+ * eruptions, snare, poison cloud, leap, sweep, blink, chain hook, halo shards), tuned per weapon by power, size, particle and flags.
  * Abilities only ever hurt non-player creatures.
  */
 public class BossWeaponItem extends AbilityItem {
-    public enum Ability { WAVE, BEAM, DASH, ERUPT, ROOT, CLOUD, LEAP, ARC, BLINK }
+    public enum Ability { WAVE, BEAM, DASH, ERUPT, ROOT, CLOUD, LEAP, ARC, BLINK, HOOK, SHARDS }
 
     public static final int FIRE = 1;
     public static final int SLOW = 2;
@@ -227,6 +227,66 @@ public class BossWeaponItem extends AbilityItem {
                 }
                 level.sendParticles(particle, target.x, player.getY() + 1, target.z, 30, 0.4, 0.8, 0.4, 0.1);
                 level.playSound(null, player, SoundEvents.ENDERMAN_TELEPORT, SoundSource.PLAYERS, 1.0F, 0.8F);
+            }
+            case HOOK -> {
+                // the Chained Jailer's chain: thrown along the look line (stops on walls), the first foe it meets is
+                // hurt and dragged to the wielder's feet
+                Vec3 eye = player.getEyePosition();
+                BlockHitResult wall = level.clip(new ClipContext(eye, eye.add(look.scale(size)), ClipContext.Block.COLLIDER,
+                        ClipContext.Fluid.NONE, player));
+                double reach = wall.getType() == HitResult.Type.MISS ? size : wall.getLocation().distanceTo(eye);
+                LivingEntity caught = null;
+                double best = reach + 1;
+                for (LivingEntity e : foes(level, player, player.getBoundingBox().inflate(reach + 1))) {
+                    Vec3 to = e.getBoundingBox().getCenter().subtract(eye);
+                    double along = to.dot(look);
+                    if (along > 0 && along <= reach && to.subtract(look.scale(along)).length() <= 0.9 + e.getBbWidth() / 2
+                            && along < best) {
+                        caught = e;
+                        best = along;
+                    }
+                }
+                double shown = caught != null ? best : reach;
+                for (double d = 1; d <= shown; d += 0.5) {
+                    Vec3 p = eye.add(look.scale(d)).add(0, -0.3, 0);
+                    level.sendParticles(d % 1.0 == 0 ? particle : net.minecraft.core.particles.ParticleTypes.CRIT,
+                            p.x, p.y, p.z, 1, 0.02, 0.02, 0.02, 0.0);
+                }
+                level.playSound(null, player, SoundEvents.CHAIN_BREAK, SoundSource.PLAYERS, 1.2F, 0.6F);
+                if (caught != null) {
+                    hit(level, player, caught, power, 0.0);
+                    Vec3 pull = origin.add(flat.scale(1.5)).subtract(caught.position()).multiply(1, 0, 1);
+                    double dist = pull.length();
+                    Vec3 v = dist > 0.1 ? pull.normalize().scale(Math.min(2.2, 0.3 + dist * 0.16)) : Vec3.ZERO;
+                    caught.setDeltaMovement(v.x, 0.4, v.z);
+                    caught.hurtMarked = true;
+                    level.sendParticles(particle, caught.getX(), caught.getY() + 1, caught.getZ(), 20, 0.3, 0.5, 0.3, 0.05);
+                    level.playSound(null, caught, SoundEvents.CHAIN_PLACE, SoundSource.PLAYERS, 1.5F, 0.5F);
+                }
+            }
+            case SHARDS -> {
+                // the Fallen Seraph's halo shards: a fan of five piercing lines along the look direction (each stops on
+                // walls), every foe they pass through is hurt once
+                Vec3 eye = player.getEyePosition();
+                java.util.Set<LivingEntity> hitOnce = new java.util.HashSet<>();
+                for (int k = -2; k <= 2; k++) {
+                    double r = Math.toRadians(k * 9.0);
+                    Vec3 dir = new Vec3(look.x * Math.cos(r) - look.z * Math.sin(r), look.y,
+                            look.x * Math.sin(r) + look.z * Math.cos(r)).normalize();
+                    BlockHitResult wall = level.clip(new ClipContext(eye, eye.add(dir.scale(size)), ClipContext.Block.COLLIDER,
+                            ClipContext.Fluid.NONE, player));
+                    double reach = wall.getType() == HitResult.Type.MISS ? size : wall.getLocation().distanceTo(eye);
+                    for (double d = 1; d <= reach; d += 0.75) {
+                        Vec3 p = eye.add(dir.scale(d)).add(0, -0.2, 0);
+                        level.sendParticles(particle, p.x, p.y, p.z, 1, 0.02, 0.02, 0.02, 0.0);
+                        for (LivingEntity e : foes(level, player, new AABB(p, p).inflate(0.8))) {
+                            if (hitOnce.add(e)) {
+                                hit(level, player, e, power, 0.3);
+                            }
+                        }
+                    }
+                }
+                level.playSound(null, player, SoundEvents.AMETHYST_CLUSTER_BREAK, SoundSource.PLAYERS, 1.2F, 1.3F);
             }
         }
         return true;

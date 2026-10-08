@@ -24,6 +24,8 @@ ABILITIES = {
     "leap": ("Leap", "Bond", "radius"),
     "arc": ("Sweep", "Balayage", "radius"),
     "blink": ("Blink", "Clignement", "range"),
+    "hook": ("Chain hook", "Chaîne-grappin", "range"),
+    "shards": ("Halo shards", "Éclats de halo", "range"),
 }
 # BossWeaponItem flags, in bit order
 ABILITY_EFFECTS = {
@@ -124,6 +126,8 @@ FLAVOR = {
     "sentinel_greatsword": ("Bronze that kept a gate for a thousand years.",
                             "Un bronze qui a gardé une porte mille ans."),
     "dune_king_crook": ("The dunes still bow to it.", "Les dunes s'inclinent encore devant lui."),
+    "jailer_chain": ("No prisoner ever outran it.", "Aucun prisonnier ne l'a jamais distancée."),
+    "halo_glaive": ("A crescent torn from a broken heaven.", "Un croissant arraché à un ciel brisé."),
 }
 
 # armour sets: one flavour per set prefix (all four pieces)

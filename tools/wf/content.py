@@ -197,6 +197,8 @@ ENTITIES = {
     "iron_helmsman": ("The Iron Helmsman", "Le Timonier de Fer"),
     "bronze_sentinel": ("The Bronze Sentinel", "La Sentinelle d'airain"),
     "dune_king": ("The Dune King", "Le Roi des dunes"),
+    "fallen_seraph": ("The Fallen Seraph", "Le Séraphin déchu"),
+    "chained_jailer": ("The Chained Jailer", "Le Geôlier enchaîné"),
     "hot_rivet": ("Hot Rivet", "Rivet brûlant"),
     "boomerang": ("Boomerang", "Boomerang"),
 }
@@ -232,6 +234,8 @@ SPAWN_EGGS = ["ruin_walker", "map_wraith", "basalt_guard", "void_stalker", "drow
               "iron_helmsman",
               "bronze_sentinel",
               "dune_king",
+              "fallen_seraph",
+              "chained_jailer",
               ]
 
 # Misc translated messages used from Java (key suffix -> (en, fr))

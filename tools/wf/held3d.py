@@ -405,6 +405,33 @@ def crook():
     return out
 
 
+def chain_flail():
+    """Jailer's Burning Chain: a wrapped iron grip with a gilded pommel and collar, a ring, a short chain of
+    alternating links and a spiked blackstone fetter-ball split by glowing cracks."""
+    out = [box(7, -1, 7, 9, 9, 9, "wrap"), box(6.5, -2.5, 6.5, 9.5, -1, 9.5, "brass"),
+           box(6.6, 9, 6.6, 9.4, 13, 9.4, "iron_dark"), box(6.2, 11, 6.2, 9.8, 12, 9.8, "brass"),
+           box(7, 13, 7.6, 9, 15, 8.4, "brass")]                                           # the ring
+    # the chain: links alternating flat and edge-on, leaning out to one side
+    for k, (x, y) in enumerate(((8, 14.5), (8.6, 16.6), (9.3, 18.6), (10.0, 20.6))):
+        if k % 2 == 0:
+            out.append(box(x - 1, y, 7.6, x + 1, y + 2.6, 8.4, "steel"))
+        else:
+            out.append(box(x - 0.4, y, 7, x + 0.4, y + 2.6, 9, "steel"))
+    # the ball: a rough sphere with a gold band, spikes and ember cracks
+    cx, cy, cz = 10.8, 26.0, 8.0
+    out += [box(cx - 3, cy - 2.2, cz - 2.2, cx + 3, cy + 2.2, cz + 2.2, "iron_dark"),
+            box(cx - 2.2, cy - 3, cz - 2.2, cx + 2.2, cy + 3, cz + 2.2, "iron_dark"),
+            box(cx - 2.2, cy - 2.2, cz - 3, cx + 2.2, cy + 2.2, cz + 3, "dark"),
+            box(cx - 3.2, cy - 0.5, cz - 3.2, cx + 3.2, cy + 0.5, cz + 3.2, "brass"),
+            box(cx - 0.6, cy + 0.8, cz - 3.1, cx + 0.4, cy + 2.4, cz - 2.9, "glow"),
+            box(cx + 2.9, cy - 2.2, cz - 0.5, cx + 3.1, cy - 0.6, cz + 0.6, "glow"),
+            box(cx - 1.2, cy - 2.6, cz + 2.9, cx - 0.2, cy - 1.0, cz + 3.1, "glow")]
+    for dx, dy, dz in ((0, 4, 0), (4, 0, 0), (-4, 0, 0), (0, 0, 4), (0, 0, -4), (0, -4, 0)):
+        out.append(box(cx + dx * 0.88 - 0.8, cy + dy * 0.88 - 0.8, cz + dz * 0.88 - 0.8,
+                       cx + dx * 0.88 + 0.8, cy + dy * 0.88 + 0.8, cz + dz * 0.88 + 0.8, "brass"))
+    return out
+
+
 def trident_big():
     """A great trident: a long haft with a gold collar, a broad crossbar and three barbed prongs, the middle one
     longest."""
@@ -477,6 +504,30 @@ def ward_orb():
     return out
 
 
+def halo_glaive():
+    """Glaive of the Broken Halo: a long pale haft banded with gold, a gold collar, and for a blade a crescent of halo
+    (a broken ring of gold segments with an inner edge of light) pierced by a spike."""
+    import math
+    out = _shaft(-6, 21, 1.6, "light") + _grip(3, 9, 2.2)
+    out += [box(6.8, -7, 6.8, 9.2, -6, 9.2, "accent_dark"), box(7.1, 14, 7.1, 8.9, 15, 8.9, "accent"),
+            box(6.4, 20, 6.4, 9.6, 21.5, 9.6, "accent"), box(6.9, 21.5, 6.9, 9.1, 22.5, 9.1, "accent_dark")]
+    cx, cy, r = 8.0, 25.4, 5.4
+    for a in range(-40, 221, 20):
+        if 70 <= a <= 90:
+            continue                                                   # the break in the ring
+        x, y = cx + r * math.cos(math.radians(a)), cy + r * math.sin(math.radians(a))
+        out.append(box(x - 1.1, y - 1.1, 7.3, x + 1.1, y + 1.1, 8.7, "accent"))
+        if 0 <= a <= 180:                                              # the honed outer edge
+            xo, yo = cx + (r + 1.2) * math.cos(math.radians(a)), cy + (r + 1.2) * math.sin(math.radians(a))
+            yo = min(yo, 31.4)
+            out.append(box(xo - 0.7, yo - 0.6, 7.7, xo + 0.7, yo + 0.6, 8.3, "light"))
+        if -20 <= a <= 200 and a % 40 == 0:
+            xi, yi = cx + (r - 1.3) * math.cos(math.radians(a)), cy + (r - 1.3) * math.sin(math.radians(a))
+            out.append(box(xi - 0.5, yi - 0.5, 7.6, xi + 0.5, yi + 0.5, 8.4, "glow"))
+    out += [box(7.5, 22.5, 7.5, 8.5, 30, 8.5, "glow"), box(7.7, 30, 7.7, 8.3, 31, 8.3, "light")]
+    return out
+
+
 ARCHETYPES = {"sword": broadsword, "greatsword": lambda: broadsword(length=19, width=5.0, guard=11), "blade": blade, "spear": spear,
               "trident": lambda: spear("trident"), "lance": lambda: spear("lance"), "hammer": hammer,
               "mace": mace, "staff": staff, "cane": cane, "scythe": scythe, "book": book, "fist": fist,
@@ -487,7 +538,7 @@ ARCHETYPES = {"sword": broadsword, "greatsword": lambda: broadsword(length=19, w
               "pendulum": pendulum, "anchor": anchor, "ladle": ladle, "flail": flail, "bell_hammer": bell_hammer,
               "forge_hammer": forge_hammer, "crystal_spear": crystal_spear, "axe": axe, "pickaxe": pickaxe,
               "shovel": shovel, "hoe": hoe, "wand_block": wand_block, "caged_orb": caged_orb,
-              "broadsword": broadsword, "sentinel_greatsword": sentinel_greatsword, "crook": crook,
+              "broadsword": broadsword, "sentinel_greatsword": sentinel_greatsword, "crook": crook, "chain_flail": chain_flail, "halo_glaive": halo_glaive,
               "trident_big": trident_big, "fang": fang, "grimoire": grimoire, "gauntlet": gauntlet,
               "horn_curved": horn_curved, "ward_orb": ward_orb}
 
@@ -513,6 +564,8 @@ HELD = {
     "helmsman_anchor": ("anchor", "iron", "dark", "ember"),
     "sentinel_greatsword": ("sentinel_greatsword", "copper", "dark", "emerald"),
     "dune_king_crook": ("crook", "gold", "gold", "sapphire"),
+    "jailer_chain": ("chain_flail", "ember", "dark", "ember"),
+    "halo_glaive": ("halo_glaive", "light", "purpur", "gold"),
     "cartographer_blade": ("sword", "cartographer", "wood", "emerald"),
     "telluric_hammer": ("hammer", "lithite", "wood", "emerald"),
     "storm_staff": ("staff", "storm", "dark", "sapphire"),

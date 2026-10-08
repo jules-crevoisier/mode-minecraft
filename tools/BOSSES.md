@@ -294,6 +294,92 @@ statues) → south mist → reward vault behind sealed bars and the King's Well 
 
 Previews: `python3 tools/gen_models.py --preview --only dune_king` → `build/previews/models/dune_king.png`.
 
+## 9. Champion of the Chained Bastion: The Chained Jailer (Le Geôlier enchaîné)
+Files: `tools/wf/mobs/chained_jailer.py` (model), `src/main/java/com/brasshaven/entity/boss/ChainedJailer.java`
+(moveset). No lair module: the arena is the bastion's existing boss drum (`BOSS` in
+`tools/wf/structures/chained_bastion.py`). Reward: `remembrance_chained_jailer` → **Jailer's Burning Chain**
+(`jailer_chain`, EMBER 7 / -2.9, a new ability shape **HOOK** in `BossWeaponItem`: a chain thrown 14 blocks along the
+look line, the first foe it meets takes 12, is dragged to your feet and set ablaze), plus gold, Ancient Embers,
+emeralds, diamonds, chains and gilded blackstone (`gen_data.py`). Quest: `nether/boss_chained_jailer`.
+
+**Concept.** The warden of the hanging prison, a hunched 5.4-block giant of blackstone and gilded iron with lava
+cracks glowing through the plates: his head is a locked iron birdcage with a fire burning inside it, his heart a great
+gilded padlock with a glowing keyhole, a chain bandolier across the cuirass, a red tabard with three gold bars. Strong
+asymmetry: a gibbet post rises from his back and a small cage with a burning skull swings from it; the right fist drags
+a long chain ending in a spiked, burning fetter-ball; the left arm ends in an oversized gauntlet with a broken shackle
+cuff, its snapped chain dangling; a ring of gold keys at the left hip, broken shackles on both ankles.
+
+**Stats.** 600 health (Nether range), armour 14, toughness 5, poise 100, knockback resistance 1.0, fire immune, red
+bar. Three phases: phase 2 at 60% (the base roar, +12% speed); phase 3 at 30%, driven by the class itself (the base
+class knows two phases): when he is free between moves he chains `unchain`, then every 12 s (scaled like cooldowns)
+`verdict`. `unchain` and `verdict` have range 999 so the normal picker never chooses them.
+
+| Move | Phase | Wind-up / active / recovery | Range | What it does |
+|---|---|---|---|---|
+| lash | 1-3 | 18 / 4 / 14 | 0-8 | Chain drawn back to his right (flame arc), the ball swept over 220°: 16 + 3 s fire. P2: 35% chains into hook (P3: 50%, half of them into slam). |
+| hook | 1-3 | 16 / 4 / 14 | 5-16 | Chain wound over the shoulder (ember line); the first creature on the line takes 9 + fire and is dragged to 2.6 blocks ahead, then he slams. |
+| slam | 1-3 | 22 / 3 / 16 | 0-7 | Both fists overhead, crashed 3.5 ahead (20 + fire, r 3.2) + a fire ring to jump (9, out to 11). P2: a second (soul fire) ring 12 ticks later, 30% chains into lash. |
+| shackles | 1-3 | 18 / 20 / 12 | 0-20 | Gauntlet raised, chain rattling; a shackle under every player within 22 blocks plus 2 (P2 4) strays: 0.8 s iron ring, then chains burst up: 8 and held fast 1.5 s (no walking, no jumping; P3 also burns). P2: if someone was caught and the target is 5-16 away, he follows with the hook. |
+| kick | 1-3 | 12 / 3 / 10 | 0-3.5 | Foot drawn back, front kick in a 60° arc: 12, big knockback. Punishes hugging. |
+| whirl | 2-3 | 14 / 40 / 14 | 0-9 | Chain paid out (flame ring), the ball spun round him for 2 s while he walks the target down: 9 + fire every 6 ticks in r 6.5. |
+| pyre | 2-3 | 22 / 30 / 14 | 0-16 | Arms spread, eight ember lines drawn on the floor; fists into the floor: smoke-warned fire bursts run out to 14 blocks along the 4 straight bars, then the 4 diagonal ones (13 + fire, r 1.3). Stand between the bars. |
+| unchain | 3 | 30 / 20 / 20 | (auto, at 30%) | Kneels and strains (invulnerable ~2.5 s), tears his chains apart: a fire nova to jump (12, out to 14) + 12 bursts at r 5 (12). Then +20% speed and a burning aura (3 + fire per second within 3 blocks). |
+| verdict | 3 | 24 / 40 / 16 | (auto, every 12 s) | Spectacle: the chain whirled overhead and flung into the dark; three volleys a second apart: a shackle on every player (follows for a third of the 0.9 s warning, then locks) plus scaledCount(3) strays: 14, held fast 1.2 s and burnt. |
+
+**Lair (the boss drum).** The landing on the west outcrop (waystone) → chain bridge to the pier → stair up the back of
+the anchor chain to the gatehouse → L0 (prison of hanging cages, barracks and secret cell, forge, armoury) → L1
+(gallery, chapel, site of grace) → covered bridge → mist → the **boss drum** (radius 14, 16 high, a blackstone ring
+round a grate over the lava, chain curtains) → south mist and sealed bars → reward vault.
+
+Previews: `python3 tools/gen_models.py --preview --only chained_jailer` → `build/previews/models/chained_jailer.png`;
+held weapon: `python3 tools/art_sheet.py --kind held --only jailer_chain`.
+
+## 10. Champion of the Shattered Halo: The Fallen Seraph (Le Séraphin déchu)
+Files: `tools/wf/mobs/fallen_seraph.py` (model), `src/main/java/com/brasshaven/entity/boss/FallenSeraph.java` (moveset).
+No lair module: the arena is the existing floating disc at the centre of the halo (radius 16, open to the void, a low
+parapet broken in three places; `BOSS` in `tools/wf/structures/shattered_halo.py`, seal radius 15). Reward:
+`remembrance_fallen_seraph` → **Glaive of the Broken Halo** (`halo_glaive`, VOID 8 / -2.9, new ability SHARDS: a fan of
+five piercing halo-shard lines out to 16 blocks, 12 each, blinds; held model `halo_glaive` in `wf/held3d.py`), plus
+void shards, emeralds, diamonds, end crystals, amethyst and a 25% enchanted golden apple (`gen_data.py`). Quest:
+`end/boss_fallen_seraph`.
+
+**Concept.** A fallen seraph, 5.4 blocks with the halo, hovering with no feet: a long white robe whose hem is eaten by
+the void (dark purple with glowing cracks creeping up), a gold breastplate with a lens of light, a marble face under a
+gold blindfold that weeps light, pale hair down her back. Behind her head a great broken halo: 14 gold segments with
+two torn out at the upper right and one drifting loose. Asymmetry: the right wing whole, white and gold; the left
+burnt to the void, short and ragged with a bare broken bone. A long glaive whose blade is a crescent of halo in the
+right hand; the left arm bare marble cracked with light. Six halo shards orbit her waist: her projectiles.
+
+**Stats.** 780 health (End tier), armour 14, toughness 6, poise 110, knockback resistance 1.0, purple bar. Phase 2 at
+60% (roar; +12% speed), phase 3 at 25% (the invulnerable **shatter**, 2 s, then the disc cracks).
+
+| Move | Phase | Wind-up / active / recovery | Range | What it does |
+|---|---|---|---|---|
+| glaive | 1-3 | 16 / 4 / 14 | 0-6.5 | Glaive drawn back over the right shoulder (arc outlined in light), one sweep over 210°: 17. P2: 40% chains into thrust. |
+| thrust | 1-3 | 14 / 8 / 14 | 4-14 | Line of light marks her path; she glides 1.3 blocks a tick along it point first, 16 once per target. Stops 2.5 blocks short of the edge. P3: 35% chains into glaive. |
+| shards | 1-3 | 18 / 24 / 12 | 3.5-26 | Orbit spins up (ring on the target), six shards flung every 4 ticks at the target's position then (0.9 b/t, stop on walls): 9 + glowing. P2: fans of two (±9°). |
+| pillars | 1-3 | 20 / 22 / 12 | 0-24 | Hands to the sky: rings under every player + 3 strays (P2 5) with light falling into them, then columns of light: 14, small lift, no push. P2: a second volley on the players' new positions 0.7 s later. |
+| blink | 1-3 | 12 / 2 / 6 | 0-30 | Wings fold; portal light rings the destination at the edge of the disc opposite the target (P3: inside the gold ring); she bursts out there facing the target, then 55% shards (P2: 40% beam, 35% shards). |
+| beam | 2-3 | 24 / 40 / 16 | 0-22 | Spectacle: she rises, halo blazing; a start line on her left and dots on the safe circle (3.5 blocks) are drawn; a beam from the halo sweeps 160° left to right in 2 s, 3.5-20 blocks out, too tall to jump: 14 + blindness 1.5 s every 10 ticks. Stand under her or behind her. |
+| nova | 2-3 | 20 / 36 / 14 | 0-16 | Halo raised (ring at her feet, the disc's edge lit in portal light): a ring of light rolls out (12, jump), 0.8 s later a second rolls back in from 15 blocks toward her (12, jump; pushes inward only). |
+| shatter | 3 (once) | 40 / 4 / 16 | scheduled | Invulnerable; six fissures light up from the centre to the rim, she slams down: the disc cracks, a ring rolls out (8, jump). |
+| rain | 3 | 22 / 44 / 14 | scheduled | Shattered sky: shards hurled at the sky, 4 volleys 11 ticks apart, each a ring under every player + 3 strays, light falling 0.8 s, then 13. |
+| dive | 3 | 30 / 4 / 22 | scheduled | Seraph's fall: a gold ring follows the target for 0.8 s, locks (turns to soul fire) as she appears above it, falls 0.7 s later: 22 in r 3.5 + a ring (9, jump). Long recovery. |
+
+**Phase 3 (the disc cracks).** Particle fissures stay on the floor (no block is broken). Every ~6 s (x cycle speed) two
+opposite fissures glow for 1.2 s then flare: 10 + Slowness II 2 s, small lift. Beyond the gold ring (radius
+min(12, seal radius - 3)) the disc crumbles: 3 every half second, outlined by purple dust, so the fight closes in.
+`rain` and `dive` are never rolled: `bossTick` chains one every (150-210) x `cooldownScale()` ticks when she is idle.
+
+**Fair over the void.** `FallenSeraph.strike` overrides the engine's: every hit (moves, waves, eruptions, the NG+
+soul wave) loses the outward part of its knockback within 6 blocks of the rim, and lift is capped there. The phase-2
+roar's shove is replaced in `onPhaseTwo` by a gentle one (none near the rim). Lances, rain, beam and fissures never
+push. Her own glide stops short of the edge and she teleports back to the centre if she ever leaves the disc.
+Co-op and NG+ come from the engine (players-under-rings scale naturally, fissure timer uses `cycleSpeed()`).
+
+Previews: `python3 tools/gen_models.py --preview --only fallen_seraph` → `build/previews/models/fallen_seraph.png`;
+held glaive: `python3 tools/art_sheet.py --kind held --only halo_glaive`.
+
 ## Difficulty: co-op scaling and NG+ cycles
 
 Applied by `boss/WayfarerBoss` to **every** boss on its first server tick, whatever spawned it (boss seal,

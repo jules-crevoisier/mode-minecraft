@@ -133,6 +133,8 @@ BOSS_HOME = {
     "iron_helmsman": "walking_fortress",
     "bronze_sentinel": "fallen_colossus",
     "dune_king": "rock_necropolis",
+    "fallen_seraph": "shattered_halo",
+    "chained_jailer": "chained_bastion",
 }
 CHAPTER = {}
 for s in defs.STRUCTURES:

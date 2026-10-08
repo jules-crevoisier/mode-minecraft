@@ -75,6 +75,12 @@ public final class BossGear {
     public static final RegistryObject<Item> REMEMBRANCE_DUNE_KING = remembrance("remembrance_dune_king");
     public static final RegistryObject<Item> DUNE_KING_CROOK = weapon("dune_king_crook", p -> p.durability(600).rarity(Rarity.EPIC),
             BossWeaponItem.Ability.BEAM, 12.0F, 16.0F, 90, () -> ParticleTypes.END_ROD, BossWeaponItem.SLOW);
+    public static final RegistryObject<Item> REMEMBRANCE_CHAINED_JAILER = remembrance("remembrance_chained_jailer");
+    public static final RegistryObject<Item> JAILER_CHAIN = weapon("jailer_chain", p -> p.sword(ModMaterials.EMBER, 7.0F, -2.9F).rarity(Rarity.EPIC).fireResistant(),
+            BossWeaponItem.Ability.HOOK, 12.0F, 14.0F, 80, () -> ParticleTypes.FLAME, BossWeaponItem.FIRE);
+    public static final RegistryObject<Item> REMEMBRANCE_FALLEN_SERAPH = remembrance("remembrance_fallen_seraph");
+    public static final RegistryObject<Item> HALO_GLAIVE = weapon("halo_glaive", p -> p.sword(ModMaterials.VOID, 8.0F, -2.9F).rarity(Rarity.EPIC).fireResistant(),
+            BossWeaponItem.Ability.SHARDS, 12.0F, 16.0F, 80, () -> ParticleTypes.END_ROD, BossWeaponItem.BLIND);
 
     private BossGear() {}
 

@@ -35,8 +35,8 @@ from ..parts import LOOT, MOB, MOD
 from .nether import (BASALT, BLACK, BS, CHIS, CPBB, GBS, GILD, LAMP, PB, PBAS, PBB, PBBS, PBBSL,
                      PBBW, PBS, PBSL, brazier, chandelier, round_tower, spike)
 
-# the bastion's own warden comes with the boss pass of the overhaul; until then the drum wakes the Ash Lord
-BOSS = "brasshaven:ash_lord"
+# the bastion's own warden: the Chained Jailer (entity/boss/ChainedJailer.java, tools/BOSSES.md section 9)
+BOSS = "brasshaven:chained_jailer"
 
 # ------------------------------------------------------------------ levels
 LAVA_Y = 1                  # lava surface layer (lake floor y 0)

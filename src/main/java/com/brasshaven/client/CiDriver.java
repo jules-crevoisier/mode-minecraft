@@ -608,7 +608,7 @@ public final class CiDriver {
                 .cmd(() -> List.of("gamemode creative")); // the later steps fly over the stage
 
         // the 3D held models, in the hands of a row of armour stands (third person, as other players see them)
-        String[] held = {"kings_trident", "sentinel_greatsword", "dune_king_crook", "helmsman_anchor", "forbidden_grimoire",
+        String[] held = {"kings_trident", "sentinel_greatsword", "dune_king_crook", "jailer_chain", "halo_glaive", "helmsman_anchor", "forbidden_grimoire",
                 "jade_fang", "rune_fist", "brass_pickaxe"};
         step("held_items")
                 .cmd(() -> {
@@ -617,12 +617,12 @@ public final class CiDriver {
                     c.add("setblock " + at(0, 1, 4) + " minecraft:stone");
                     c.add("fill " + at(-9, 1, 3) + " " + at(9, 4, 6) + " minecraft:air");
                     for (int i = 0; i < held.length; i++) {
-                        c.add("summon minecraft:armor_stand " + (bx - 7 + i * 2 + 0.5) + " " + (STAGE_Y + 1) + " " + (bz + 4.5)
+                        c.add("summon minecraft:armor_stand " + (bx - held.length + 1 + i * 2 + 0.5) + " " + (STAGE_Y + 1) + " " + (bz + 4.5)
                                 + " {ShowArms:1b,NoBasePlate:1b,NoGravity:1b,Invulnerable:1b,Rotation:[180f,0f],"
                                 + "Pose:{RightArm:[-40f,0f,0f]},equipment:{mainhand:{id:\"brasshaven:" + held[i] + "\",count:1}}}");
                     }
                     c.add("time set noon");
-                    c.add("tp @s " + (bx + 0.5) + " " + (STAGE_Y + 2.2) + " " + (bz - 2.0) + " facing "
+                    c.add("tp @s " + (bx + 0.5) + " " + (STAGE_Y + 2.2) + " " + (bz + 3.5 - held.length * 1.1) + " facing "
                             + (bx + 0.5) + " " + (STAGE_Y + 2) + " " + (bz + 4.5));
                     return c;
                 })

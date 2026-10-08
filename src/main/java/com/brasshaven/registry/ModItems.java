@@ -191,6 +191,8 @@ public final class ModItems {
     public static final RegistryObject<Item> IRON_HELMSMAN_SPAWN_EGG = egg("iron_helmsman_spawn_egg", ModEntities.IRON_HELMSMAN);
     public static final RegistryObject<Item> BRONZE_SENTINEL_SPAWN_EGG = egg("bronze_sentinel_spawn_egg", ModEntities.BRONZE_SENTINEL);
     public static final RegistryObject<Item> DUNE_KING_SPAWN_EGG = egg("dune_king_spawn_egg", ModEntities.DUNE_KING);
+    public static final RegistryObject<Item> FALLEN_SERAPH_SPAWN_EGG = egg("fallen_seraph_spawn_egg", ModEntities.FALLEN_SERAPH);
+    public static final RegistryObject<Item> CHAINED_JAILER_SPAWN_EGG = egg("chained_jailer_spawn_egg", ModEntities.CHAINED_JAILER);
     // peoples and creatures of the places (tools/wf/denizens.py)
     public static final RegistryObject<Item> DWARF_SPAWN_EGG = egg("dwarf_spawn_egg", ModEntities.DWARF);
     public static final RegistryObject<Item> SYLVAN_SPAWN_EGG = egg("sylvan_spawn_egg", ModEntities.SYLVAN);

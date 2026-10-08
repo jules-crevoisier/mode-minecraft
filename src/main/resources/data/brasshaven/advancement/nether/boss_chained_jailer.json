@@ -1,0 +1,37 @@
+{
+  "display": {
+    "icon": {
+      "id": "brasshaven:jailer_chain"
+    },
+    "title": {
+      "translate": "advancements.brasshaven.nether.boss_chained_jailer.title"
+    },
+    "description": {
+      "translate": "advancements.brasshaven.nether.boss_chained_jailer.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "kill": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "entity_type": "brasshaven:chained_jailer"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "parent": "brasshaven:nether/chained_bastion",
+  "rewards": {
+    "experience": 500
+  }
+}

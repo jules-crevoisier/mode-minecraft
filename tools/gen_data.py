@@ -270,6 +270,12 @@ def entity_loot():
         "dune_king": [entry("gold_ingot", 4, 8), entry("map_fragment", 6, 10), entry("emerald", 5, 9),
                       entry("experience_bottle", 4, 7), entry("golden_apple", 1, 2), entry("diamond", 1, 2),
                       entry("lapis_lazuli", 6, 12)],
+        "fallen_seraph": [entry("void_shard", 6, 10), entry("emerald", 6, 10), entry("experience_bottle", 5, 8),
+                          entry("golden_apple", 1, 2), entry("enchanted_golden_apple", chance=0.25),
+                          entry("diamond", 2, 4), entry("end_crystal", 1, 2), entry("amethyst_shard", 6, 12)],
+        "chained_jailer": [entry("gold_ingot", 4, 8), entry("ancient_ember", 6, 10), entry("emerald", 5, 9),
+                           entry("experience_bottle", 4, 7), entry("golden_apple", 1, 2), entry("diamond", 2, 3),
+                           entry("iron_chain", 3, 6), entry("gilded_blackstone", 2, 4)],
     }
     from wf.bossgear import BOSS_GEAR, remembrance_id
     for row in BOSS_GEAR:  # every great boss always drops its remembrance
