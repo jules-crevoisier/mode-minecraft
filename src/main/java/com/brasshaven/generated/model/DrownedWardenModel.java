@@ -42,6 +42,44 @@ public final class DrownedWardenModel extends EntityModel<WayfarerRenderState> {
                     new Keyframe(1.0F, KeyframeAnimations.degreeVec(8.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(2.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(3.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
+            .addAnimation("torso", new AnimationChannel(AnimationChannel.Targets.POSITION,
+                    new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(1.5F, KeyframeAnimations.posVec(0.0F, 0.8F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(3.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
+            .addAnimation("beard", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(1.0F, KeyframeAnimations.degreeVec(-8.0F, 0.0F, 3.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(2.2F, KeyframeAnimations.degreeVec(4.0F, 0.0F, -3.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(3.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
+            .addAnimation("chain", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(1.5F, KeyframeAnimations.degreeVec(6.0F, 0.0F, 4.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(3.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
+            .addAnimation("lantern", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(1.0F, KeyframeAnimations.degreeVec(-6.0F, 10.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(2.0F, KeyframeAnimations.degreeVec(4.0F, -10.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(3.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
+            .addAnimation("arm_l", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(1.5F, KeyframeAnimations.degreeVec(-4.0F, 0.0F, -3.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(3.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
+            .addAnimation("arm_r", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(1.5F, KeyframeAnimations.degreeVec(3.0F, 0.0F, 2.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(3.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
+            .addAnimation("coral0", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.8F, KeyframeAnimations.degreeVec(4.0F, 0.0F, -3.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(3.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
+            .addAnimation("coral1", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(1.3F, KeyframeAnimations.degreeVec(4.0F, 0.0F, 3.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(3.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
+            .addAnimation("coral2", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(1.8F, KeyframeAnimations.degreeVec(4.0F, 0.0F, 2.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(3.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .build();
     public static final AnimationDefinition WALK = AnimationDefinition.Builder.withLength(1.6F).looping()
             .addAnimation("leg_r", new AnimationChannel(AnimationChannel.Targets.ROTATION,
@@ -78,6 +116,26 @@ public final class DrownedWardenModel extends EntityModel<WayfarerRenderState> {
                     new Keyframe(0.8F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(1.2F, KeyframeAnimations.posVec(0.0F, -1.5F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(1.6F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
+            .addAnimation("torso", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 6.0F, 2.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.8F, KeyframeAnimations.degreeVec(0.0F, -6.0F, -2.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(1.6F, KeyframeAnimations.degreeVec(0.0F, 6.0F, 2.0F), AnimationChannel.Interpolations.CATMULLROM)))
+            .addAnimation("cape", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(12.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.4F, KeyframeAnimations.degreeVec(18.0F, 0.0F, 2.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.8F, KeyframeAnimations.degreeVec(12.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(1.2F, KeyframeAnimations.degreeVec(18.0F, 0.0F, -2.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(1.6F, KeyframeAnimations.degreeVec(12.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
+            .addAnimation("beard", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(10.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.4F, KeyframeAnimations.degreeVec(16.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.8F, KeyframeAnimations.degreeVec(10.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(1.2F, KeyframeAnimations.degreeVec(16.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(1.6F, KeyframeAnimations.degreeVec(10.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
+            .addAnimation("chain", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(-14.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.8F, KeyframeAnimations.degreeVec(14.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(1.6F, KeyframeAnimations.degreeVec(-14.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .build();
     public static final AnimationDefinition THRUST = AnimationDefinition.Builder.withLength(1.5F)
             .addAnimation("arm_r", new AnimationChannel(AnimationChannel.Targets.ROTATION,
@@ -292,70 +350,109 @@ public final class DrownedWardenModel extends EntityModel<WayfarerRenderState> {
         PartDefinition p_bone = root.addOrReplaceChild("bone", CubeListBuilder.create(),
                 new PartPose(0.0F, 24.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_hips = p_bone.addOrReplaceChild("hips", CubeListBuilder.create()
-                .texOffs(64, 81).addBox(-10.0F, -5.0F, -6.0F, 20.0F, 7.0F, 12.0F)
+                .texOffs(108, 81).addBox(-10.0F, -5.0F, -6.0F, 20.0F, 7.0F, 12.0F)
                 .texOffs(0, 58).addBox(-11.0F, 1.0F, -7.0F, 22.0F, 9.0F, 14.0F),
                 new PartPose(0.0F, -30.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_torso = p_hips.addOrReplaceChild("torso", CubeListBuilder.create()
                 .texOffs(54, 0).addBox(-11.0F, -21.0F, -7.0F, 22.0F, 15.0F, 13.0F)
-                .texOffs(184, 81).addBox(-9.0F, -7.0F, -6.0F, 18.0F, 7.0F, 11.0F)
-                .texOffs(82, 118).addBox(-6.0F, -17.0F, -8.0F, 7.0F, 8.0F, 1.0F)
-                .texOffs(136, 101).addBox(-12.0F, -23.0F, -5.0F, 24.0F, 3.0F, 10.0F),
+                .texOffs(0, 101).addBox(-9.0F, -7.0F, -6.0F, 18.0F, 7.0F, 11.0F)
+                .texOffs(42, 133).addBox(-6.0F, -17.0F, -8.0F, 7.0F, 8.0F, 1.0F)
+                .texOffs(62, 119).addBox(-12.0F, -23.0F, -5.0F, 24.0F, 3.0F, 10.0F),
                 new PartPose(0.0F, -2.0F, 0.0F, 0.174533F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_head = p_torso.addOrReplaceChild("head", CubeListBuilder.create()
-                .texOffs(128, 58).addBox(-5.0F, -11.0F, -6.0F, 10.0F, 11.0F, 10.0F)
-                .texOffs(88, 101).addBox(-6.0F, -13.0F, -7.0F, 12.0F, 3.0F, 12.0F)
-                .texOffs(122, 118).addBox(-5.0F, -18.0F, -6.0F, 2.0F, 5.0F, 2.0F)
-                .texOffs(98, 118).addBox(-1.0F, -20.0F, -7.0F, 2.0F, 7.0F, 2.0F)
-                .texOffs(130, 118).addBox(3.0F, -18.0F, -6.0F, 2.0F, 5.0F, 2.0F)
-                .texOffs(146, 118).addBox(-6.0F, -17.0F, -1.0F, 2.0F, 4.0F, 2.0F)
-                .texOffs(154, 118).addBox(5.0F, -17.0F, -1.0F, 2.0F, 4.0F, 2.0F)
-                .texOffs(138, 118).addBox(-1.0F, -18.0F, 3.0F, 2.0F, 5.0F, 2.0F)
-                .texOffs(186, 118).addBox(-1.0F, -21.0F, -7.0F, 2.0F, 2.0F, 2.0F),
+                .texOffs(182, 58).addBox(-5.0F, -11.0F, -6.0F, 10.0F, 11.0F, 10.0F)
+                .texOffs(146, 101).addBox(-6.0F, -13.0F, -7.0F, 12.0F, 3.0F, 12.0F)
+                .texOffs(82, 133).addBox(-5.0F, -19.0F, -6.0F, 2.0F, 6.0F, 2.0F)
+                .texOffs(242, 119).addBox(-1.0F, -21.0F, -7.0F, 2.0F, 8.0F, 2.0F)
+                .texOffs(90, 133).addBox(3.0F, -19.0F, -6.0F, 2.0F, 6.0F, 2.0F)
+                .texOffs(146, 133).addBox(-6.0F, -18.0F, -1.0F, 2.0F, 5.0F, 2.0F)
+                .texOffs(74, 133).addBox(5.0F, -20.0F, -1.0F, 2.0F, 7.0F, 2.0F)
+                .texOffs(154, 133).addBox(-1.0F, -18.0F, 3.0F, 2.0F, 5.0F, 2.0F)
+                .texOffs(228, 133).addBox(-1.0F, -23.0F, -7.0F, 2.0F, 2.0F, 2.0F),
                 new PartPose(0.0F, -21.0F, -3.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_jaw = p_head.addOrReplaceChild("jaw", CubeListBuilder.create()
-                .texOffs(204, 101).addBox(-4.0F, 0.0F, -4.0F, 8.0F, 4.0F, 7.0F)
-                .texOffs(64, 118).addBox(-4.0F, 4.0F, -4.0F, 8.0F, 9.0F, 1.0F),
+                .texOffs(138, 119).addBox(-4.0F, 0.0F, -4.0F, 8.0F, 4.0F, 7.0F),
                 new PartPose(0.0F, -2.0F, -2.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
+        PartDefinition p_beard = p_jaw.addOrReplaceChild("beard", CubeListBuilder.create()
+                .texOffs(224, 119).addBox(-4.0F, 0.0F, 0.0F, 8.0F, 10.0F, 1.0F)
+                .texOffs(44, 119).addBox(-2.0F, 0.0F, -0.5F, 4.0F, 13.0F, 1.0F),
+                new PartPose(0.0F, 4.0F, -3.5F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_cape = p_torso.addOrReplaceChild("cape", CubeListBuilder.create()
                 .texOffs(8, 0).addBox(-11.0F, 0.0F, 0.0F, 22.0F, 34.0F, 1.0F),
                 new PartPose(0.0F, -20.0F, 7.0F, 0.139626F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_arm_r = p_torso.addOrReplaceChild("arm_r", CubeListBuilder.create()
-                .texOffs(168, 58).addBox(-6.0F, -6.0F, -6.0F, 10.0F, 8.0F, 12.0F)
-                .texOffs(72, 58).addBox(-4.0F, 0.0F, -4.0F, 7.0F, 15.0F, 7.0F),
+                .texOffs(72, 58).addBox(-8.0F, -8.0F, -7.0F, 13.0F, 9.0F, 14.0F)
+                .texOffs(24, 133).addBox(-9.0F, -9.0F, -3.0F, 3.0F, 3.0F, 6.0F)
+                .texOffs(126, 58).addBox(-4.0F, 0.0F, -4.0F, 7.0F, 15.0F, 7.0F),
                 new PartPose(-14.0F, -18.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_forearm_r = p_arm_r.addOrReplaceChild("forearm_r", CubeListBuilder.create()
-                .texOffs(128, 81).addBox(-4.0F, 0.0F, -4.0F, 7.0F, 12.0F, 7.0F)
-                .texOffs(0, 118).addBox(-4.0F, 12.0F, -4.0F, 7.0F, 4.0F, 7.0F),
+                .texOffs(172, 81).addBox(-4.0F, 0.0F, -4.0F, 7.0F, 12.0F, 7.0F)
+                .texOffs(168, 119).addBox(-4.0F, 12.0F, -4.0F, 7.0F, 4.0F, 7.0F)
+                .texOffs(0, 143).addBox(-3.5F, 16.0F, -4.0F, 6.0F, 2.0F, 1.0F),
                 new PartPose(0.0F, 14.0F, 0.0F, -0.349066F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_trident = p_forearm_r.addOrReplaceChild("trident", CubeListBuilder.create()
                 .texOffs(0, 0).addBox(-1.0F, -50.0F, -1.0F, 2.0F, 56.0F, 2.0F)
-                .texOffs(162, 118).addBox(-5.0F, -53.0F, -1.0F, 10.0F, 3.0F, 2.0F)
-                .texOffs(106, 118).addBox(-5.0F, -60.0F, -1.0F, 2.0F, 7.0F, 2.0F)
-                .texOffs(56, 118).addBox(-1.0F, -62.0F, -1.0F, 2.0F, 9.0F, 2.0F)
-                .texOffs(114, 118).addBox(3.0F, -60.0F, -1.0F, 2.0F, 7.0F, 2.0F)
-                .texOffs(194, 118).addBox(-1.0F, -64.0F, -1.0F, 2.0F, 2.0F, 2.0F),
+                .texOffs(162, 133).addBox(-6.0F, -53.0F, -1.5F, 12.0F, 3.0F, 3.0F)
+                .texOffs(212, 133).addBox(-2.0F, -55.0F, -2.0F, 4.0F, 2.0F, 4.0F)
+                .texOffs(0, 133).addBox(-6.0F, -61.0F, -1.0F, 2.0F, 8.0F, 2.0F)
+                .texOffs(28, 143).addBox(-7.0F, -60.0F, -0.5F, 1.0F, 2.0F, 1.0F)
+                .texOffs(54, 119).addBox(-1.0F, -65.0F, -1.0F, 2.0F, 12.0F, 2.0F)
+                .texOffs(8, 133).addBox(4.0F, -61.0F, -1.0F, 2.0F, 8.0F, 2.0F)
+                .texOffs(32, 143).addBox(6.0F, -60.0F, -0.5F, 1.0F, 2.0F, 1.0F)
+                .texOffs(236, 133).addBox(-1.0F, -67.0F, -1.0F, 2.0F, 2.0F, 2.0F),
                 new PartPose(0.0F, 13.0F, -1.0F, 0.174533F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_arm_l = p_torso.addOrReplaceChild("arm_l", CubeListBuilder.create()
-                .texOffs(212, 58).addBox(-4.0F, -6.0F, -6.0F, 10.0F, 8.0F, 12.0F)
-                .texOffs(100, 58).addBox(-3.0F, 0.0F, -4.0F, 7.0F, 15.0F, 7.0F),
+                .texOffs(0, 81).addBox(-4.0F, -6.0F, -6.0F, 10.0F, 8.0F, 12.0F)
+                .texOffs(154, 58).addBox(-3.0F, 0.0F, -4.0F, 7.0F, 15.0F, 7.0F),
                 new PartPose(14.0F, -18.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_forearm_l = p_arm_l.addOrReplaceChild("forearm_l", CubeListBuilder.create()
-                .texOffs(156, 81).addBox(-3.0F, 0.0F, -4.0F, 7.0F, 12.0F, 7.0F)
-                .texOffs(28, 118).addBox(-3.0F, 12.0F, -4.0F, 7.0F, 4.0F, 7.0F),
+                .texOffs(200, 81).addBox(-3.0F, 0.0F, -4.0F, 7.0F, 12.0F, 7.0F)
+                .texOffs(196, 119).addBox(-3.0F, 12.0F, -4.0F, 7.0F, 4.0F, 7.0F)
+                .texOffs(14, 143).addBox(-2.5F, 16.0F, -4.0F, 6.0F, 2.0F, 1.0F),
                 new PartPose(0.0F, 14.0F, 0.0F, -0.261799F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
+        PartDefinition p_coral0 = p_torso.addOrReplaceChild("coral0", CubeListBuilder.create()
+                .texOffs(130, 119).addBox(-1.0F, -10.0F, -1.0F, 2.0F, 10.0F, 2.0F)
+                .texOffs(60, 143).addBox(-3.0F, -7.0F, -0.5F, 2.0F, 1.0F, 1.0F)
+                .texOffs(36, 143).addBox(-3.0F, -9.0F, -0.5F, 1.0F, 2.0F, 1.0F),
+                new PartPose(-7.0F, -20.0F, 6.0F, -0.418879F, 0.0F, -0.244346F, 1.0F, 1.0F, 1.0F));
+        PartDefinition p_coral1 = p_torso.addOrReplaceChild("coral1", CubeListBuilder.create()
+                .texOffs(194, 101).addBox(-1.0F, -13.0F, -1.0F, 2.0F, 13.0F, 2.0F)
+                .texOffs(66, 143).addBox(1.0F, -10.0F, -0.5F, 2.0F, 1.0F, 1.0F)
+                .texOffs(40, 143).addBox(1.0F, -12.0F, -0.5F, 1.0F, 2.0F, 1.0F),
+                new PartPose(6.0F, -20.0F, 6.0F, -0.418879F, 0.0F, 0.20944F, 1.0F, 1.0F, 1.0F));
+        PartDefinition p_coral2 = p_torso.addOrReplaceChild("coral2", CubeListBuilder.create()
+                .texOffs(16, 133).addBox(-1.0F, -8.0F, -1.0F, 2.0F, 8.0F, 2.0F)
+                .texOffs(72, 143).addBox(-3.0F, -5.0F, -0.5F, 2.0F, 1.0F, 1.0F)
+                .texOffs(44, 143).addBox(-3.0F, -7.0F, -0.5F, 1.0F, 2.0F, 1.0F),
+                new PartPose(-1.0F, -20.0F, 6.0F, -0.418879F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
+        PartDefinition p_chain = p_hips.addOrReplaceChild("chain", CubeListBuilder.create()
+                .texOffs(48, 143).addBox(-0.5F, 0.0F, -0.5F, 1.0F, 2.0F, 1.0F)
+                .texOffs(244, 133).addBox(-0.5F, 2.0F, -0.5F, 1.0F, 2.0F, 2.0F)
+                .texOffs(52, 143).addBox(-0.5F, 4.0F, -0.5F, 1.0F, 2.0F, 1.0F)
+                .texOffs(250, 133).addBox(-0.5F, 6.0F, -0.5F, 1.0F, 2.0F, 2.0F)
+                .texOffs(56, 143).addBox(-0.5F, 8.0F, -0.5F, 1.0F, 2.0F, 1.0F),
+                new PartPose(9.0F, 1.0F, -5.0F, 0.0F, 0.0F, -0.139626F, 1.0F, 1.0F, 1.0F));
+        PartDefinition p_lantern = p_chain.addOrReplaceChild("lantern", CubeListBuilder.create()
+                .texOffs(58, 133).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 5.0F, 4.0F)
+                .texOffs(192, 133).addBox(-2.5F, -1.0F, -2.5F, 5.0F, 1.0F, 5.0F),
+                new PartPose(0.0F, 10.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_leg_r = p_bone.addOrReplaceChild("leg_r", CubeListBuilder.create()
-                .texOffs(124, 0).addBox(-5.0F, 0.0F, -5.0F, 10.0F, 16.0F, 10.0F),
+                .texOffs(124, 0).addBox(-5.0F, 0.0F, -5.0F, 10.0F, 16.0F, 10.0F)
+                .texOffs(202, 101).addBox(-5.5F, 2.0F, -5.5F, 11.0F, 3.0F, 11.0F),
                 new PartPose(-6.0F, -30.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_shin_r = p_leg_r.addOrReplaceChild("shin_r", CubeListBuilder.create()
-                .texOffs(0, 81).addBox(-4.0F, 0.0F, -4.0F, 8.0F, 12.0F, 8.0F)
-                .texOffs(0, 101).addBox(-5.0F, 10.0F, -7.0F, 10.0F, 5.0F, 12.0F),
+                .texOffs(44, 81).addBox(-4.0F, 0.0F, -4.0F, 8.0F, 12.0F, 8.0F)
+                .texOffs(58, 101).addBox(-5.0F, 10.0F, -7.0F, 10.0F, 5.0F, 12.0F)
+                .texOffs(98, 133).addBox(-4.5F, -2.0F, -6.0F, 9.0F, 4.0F, 3.0F),
                 new PartPose(0.0F, 15.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_leg_l = p_bone.addOrReplaceChild("leg_l", CubeListBuilder.create()
-                .texOffs(164, 0).addBox(-5.0F, 0.0F, -5.0F, 10.0F, 16.0F, 10.0F),
+                .texOffs(164, 0).addBox(-5.0F, 0.0F, -5.0F, 10.0F, 16.0F, 10.0F)
+                .texOffs(0, 119).addBox(-5.5F, 2.0F, -5.5F, 11.0F, 3.0F, 11.0F),
                 new PartPose(6.0F, -30.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_shin_l = p_leg_l.addOrReplaceChild("shin_l", CubeListBuilder.create()
-                .texOffs(32, 81).addBox(-4.0F, 0.0F, -4.0F, 8.0F, 12.0F, 8.0F)
-                .texOffs(44, 101).addBox(-5.0F, 10.0F, -7.0F, 10.0F, 5.0F, 12.0F),
+                .texOffs(76, 81).addBox(-4.0F, 0.0F, -4.0F, 8.0F, 12.0F, 8.0F)
+                .texOffs(102, 101).addBox(-5.0F, 10.0F, -7.0F, 10.0F, 5.0F, 12.0F)
+                .texOffs(122, 133).addBox(-4.5F, -2.0F, -6.0F, 9.0F, 4.0F, 3.0F),
                 new PartPose(0.0F, 15.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         return LayerDefinition.create(mesh, 256, 256);
     }

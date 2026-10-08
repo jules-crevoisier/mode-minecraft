@@ -45,6 +45,15 @@ public abstract class AbilityItem extends TooltipItem {
         return InteractionResult.SUCCESS;
     }
 
+    public int cooldownTicks() {
+        return cooldownTicks;
+    }
+
+    @Override
+    public void facts(ItemStack stack, java.util.List<Component> facts, java.util.List<Component> details) {
+        facts.add(BrassTooltip.heading(Component.translatable("tooltip.brasshaven.cooldown", BrassTooltip.seconds(cooldownTicks))));
+    }
+
     /** Server-side effect. Return false to cancel (no cooldown, no durability). */
     protected abstract boolean activate(ServerLevel level, Player player, ItemStack stack);
 

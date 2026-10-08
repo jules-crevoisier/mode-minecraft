@@ -44,8 +44,11 @@ def build():
     m.part("leg_l", "body", pivot=(1.5, 0, 0))
     m.part("arm_r", "body", pivot=(-4, -8, 0), rot=(0, 0, 10))
     m.part("arm_l", "body", pivot=(4, -8, 0), rot=(0, 0, -10))
-    m.part("wing_r", "body", pivot=(-2, -8, 2.5), rot=(0, 20, 10))
-    m.part("wing_l", "body", pivot=(2, -8, 2.5), rot=(0, -20, -10))
+    m.part("wing_r", "body", pivot=(-2, -8, 2.5), rot=(0, 20, 22))
+    m.part("wing_l", "body", pivot=(2, -8, 2.5), rot=(0, -20, -22))
+    m.part("prop", "body", pivot=(0, -5, 4.5))
+    m.part("scarf2", "scarf", pivot=(0, 0.5, 7), rot=(-20, 0, 0))
+    m.part("hook", "arm_r", pivot=(0, 7, -1), rot=(-70, 0, 0))
     m.part("tip_r", "wing_r", pivot=(-11, 0, 0))
     m.part("tip_l", "wing_l", pivot=(11, 0, 0))
 
@@ -60,6 +63,11 @@ def build():
     m.box("body", -3.5, -9.5, -2.5, 7, 2, 5, K.leather((180, 160, 130), seed=2))   # fleece collar
     m.box("body", -2.5, -8, 2, 5, 6, 2, B.bands(B.COPPER, B.COPPER_D, every=2, seed=3))   # the wing motor
     m.box("body", -0.5, -10, 3, 1, 3, 1, B.soot(B.IRON_L, 4))
+    m.box("body", -1, -6, 4, 2, 2, 1, B.iron(5))                                     # the propeller hub
+    m.box("prop", -5, -0.5, 0, 10, 1, 1, lambda f_, x, y, w, h: B.BRASS_L if x in (0, w - 1) else (B.MAHOGANY if x not in (4, 5) else B.BRASS))
+    m.box("prop", -0.5, -5, 0, 1, 10, 1, lambda f_, x, y, w, h: B.BRASS_L if y in (0, h - 1) else (B.MAHOGANY if y not in (4, 5) else B.BRASS))
+    # bandolier and a pistol holster over the jacket
+    m.box("body", -3.5, -4, -1.5, 1, 4, 3, K.leather((60, 44, 30), seed=15, stitch=B.BRASS_D))
 
     # ------------------------------------------------------------------ head: flight cap with ear flaps, glowing goggles
     def face(f_, x, y, w, h):
@@ -88,12 +96,20 @@ def build():
         m.box("head", 3 if sx > 0 else -4, -3, -2, 1, 4, 3, K.leather((180, 160, 130), seed=7))   # ear flaps
     m.box("scarf", -1.5, 0, 0, 3, 1, 7, {"*": lambda f_, x, y, w, h: SCARF if (x + y) % 3 else mul(SCARF, 0.8),
                                          "front": None})
+    m.box("scarf2", -1, 0, 0, 2, 1, 6, {"*": lambda f_, x, y, w, h: None if (f_ in ("top", "bottom") and y == h - 1 and x == 1)
+                                        else (SCARF if (x + y) % 3 else mul(SCARF, 0.8)), "front": None})
+    m.box("head", -3.5, -7, -3.5, 7, 2, 7, {"bottom": None, "*": K.leather(LEATHER_D, seed=16, stitch=(40, 30, 22))})  # cap crown
+    m.box("head", -3.5, -4, -3.5, 7, 1, 1, {"front": lambda f_, x, y, w, h: B.BRASS_D if x in (0, 6) else (40, 34, 30), "*": (40, 34, 30)})
 
     # ------------------------------------------------------------------ arms, hooked gauntlets
     for arm in ("arm_r", "arm_l"):
         m.box(arm, -1, -1, -1, 2, 8, 2, lambda f_, x, y, w, h: (60, 50, 44) if y >= h - 2 else
               K.leather(LEATHER, seed=8)(f_, x, y, w, h))
         m.box(arm, -1, 6, -2.5, 2, 1, 2, STEEL)                                  # a hooked finger guard
+    # a boarding hook in the right fist
+    m.box("hook", -0.5, -1, -0.5, 1, 6, 1, K.wood((110, 76, 46), (80, 54, 32), seed=17))
+    m.box("hook", -0.5, 5, -0.5, 1, 1, 3, STEEL)
+    m.box("hook", -0.5, 3, 2, 1, 3, 1, STEEL)
 
     # ------------------------------------------------------------------ legs ending in grappling talons
     for leg, sx in (("leg_r", -1), ("leg_l", 1)):
@@ -111,6 +127,8 @@ def build():
         m.box(wing, x0, 0, 0.5, 11, 0, 9, membrane(12 + sx))
         m.box(tip, 0 if sx > 0 else -9, -0.5, -0.5, 9, 1, 1, B.rod(B.BRASS_L, 13))
         m.box(tip, 0 if sx > 0 else -9, 0, 0.5, 9, 0, 7, membrane(14 + sx))
+        m.box(wing, (3 if sx > 0 else -4), 0, 0.5, 1, 1, 8, B.rod(B.BRASS_D, 18))     # a rib strut across the canvas
+        m.box(tip, (3 if sx > 0 else -4), 0, 0.5, 1, 1, 6, B.rod(B.BRASS_D, 19))
         m.box(wing, (0 if sx > 0 else -2), -1, -1, 2, 2, 2, B.cog(B.BRASS, B.BRASS_D, teeth=6, hub=0.0,
                                                                   faces=("top", "bottom"), edges=True))
 
@@ -123,10 +141,18 @@ def build():
     idle.rot("scarf", (0, (0, 8, 0)), (0.4, (6, -8, 0)), (0.8, (0, 8, 0)))
     idle.rot("leg_r", (0, (10, 0, 0)), (0.4, (16, 0, 0)), (0.8, (10, 0, 0)))
     idle.rot("leg_l", (0, (16, 0, 0)), (0.4, (10, 0, 0)), (0.8, (16, 0, 0)))
+    idle.rot("prop", (0, (0, 0, 0), "linear"), (0.8, (0, 0, 360), "linear"))
+    idle.rot("scarf2", (0, (0, -10, 0)), (0.4, (-8, 12, 0)), (0.8, (0, -10, 0)))
+    idle.rot("head", (0, (-4, 0, 0)), (0.4, (2, 0, 0)), (0.8, (-4, 0, 0)))
+    idle.rot("arm_r", (0, (0, 0, 0)), (0.4, (-8, 0, 4)), (0.8, (0, 0, 0)))
+    idle.rot("arm_l", (0, (0, 0, 0)), (0.4, (-8, 0, -4)), (0.8, (0, 0, 0)))
 
     walk = m.anim("walk", 0.6)
     walk.rot("body", (0, (20, 0, 0)), (0.6, (20, 0, 0)))
     walk.rot("scarf", (0, (20, 0, 0)), (0.3, (26, 0, 0)), (0.6, (20, 0, 0)))
+    walk.rot("scarf2", (0, (10, 8, 0)), (0.3, (16, -8, 0)), (0.6, (10, 8, 0)))
+    walk.rot("leg_r", (0, (30, 0, 0)), (0.6, (30, 0, 0)))
+    walk.rot("leg_l", (0, (34, 0, 0)), (0.6, (34, 0, 0)))
 
     # screech: rears back, wings wide and still, a shriek (0.75 s = 15 ticks), then the dive starts
     a = m.anim("screech", 0.9)
@@ -152,7 +178,8 @@ def build():
     a.rot("body", (0, (0, 0, 0)), (0.2, (-35, 0, 0)), (0.3, (10, 0, 0), "linear"), (0.7, (0, 0, 0)))
     a.rot("leg_r", (0, (0, 0, 0)), (0.2, (40, 0, 0)), (0.3, (-80, 0, 0), "linear"), (0.45, (-70, 0, 0)), (0.7, (0, 0, 0)))
     a.rot("leg_l", (0, (0, 0, 0)), (0.2, (40, 0, 0)), (0.3, (-70, 0, 0), "linear"), (0.45, (-60, 0, 0)), (0.7, (0, 0, 0)))
-    a.rot("arm_r", (0, (0, 0, 0)), (0.2, (-100, 0, 0)), (0.3, (-20, 0, 0), "linear"), (0.7, (0, 0, 0)))
+    a.rot("arm_r", (0, (0, 0, 0)), (0.2, (-150, 0, 10)), (0.3, (-20, 0, 0), "linear"), (0.7, (0, 0, 0)))
+    a.rot("hook", (0, (0, 0, 0)), (0.2, (30, 0, 0)), (0.3, (-30, 0, 0), "linear"), (0.7, (0, 0, 0)))
 
     # stunned: crashed into the ground, wings crumpled, dizzy head (1.6 s on the ground)
     a = m.anim("stunned", 1.6)

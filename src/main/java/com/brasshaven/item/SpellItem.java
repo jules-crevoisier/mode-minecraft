@@ -53,6 +53,12 @@ public class SpellItem extends TooltipItem {
     }
 
     @Override
+    public void facts(ItemStack stack, List<Component> facts, List<Component> details) {
+        facts.add(BrassTooltip.heading(Component.translatable("tooltip.brasshaven.spell", BrassTooltip.number(cost),
+                BrassTooltip.seconds(cooldown))));
+    }
+
+    @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if (player.getCooldowns().isOnCooldown(stack)) {

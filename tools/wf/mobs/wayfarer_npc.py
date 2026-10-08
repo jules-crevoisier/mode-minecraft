@@ -42,9 +42,10 @@ DARK = (24, 22, 26)
 def fabric(base, base2, seed=0, trim=None, trim_rows=(), buttons=None):
     """Woven cloth: a fine twill of two tones, ``trim`` rows (texel y on the side faces) and a button column."""
     def f(face, x, y, w, h):
-        c = base if (x + y * 2 + seed) % 5 else base2
-        if _h(x, y, seed) % 11 == 0:
-            c = mix(c, (255, 255, 255), 0.08)
+        k = (x + _h(seed, x // 3)) % 4                       # soft vertical folds instead of a speckled twill
+        c = base2 if k == 0 else (mix(base, (255, 255, 255), 0.07) if k == 2 else base)
+        if face not in ("top", "bottom") and y == h - 1 and h > 3:
+            c = mul(c, 0.85)
         if face in ("top", "bottom"):
             return mul(c, 0.92)
         if trim and (y in trim_rows or (y - h) in trim_rows):
@@ -108,6 +109,7 @@ def build(variant=None):
     m.part("head", "body", pivot=(0, -12, 0))
     m.part("arm_r", "body", pivot=(-6, -11, 0), rot=(0, 0, 4))
     m.part("arm_l", "body", pivot=(6, -11, 0), rot=(0, 0, -4))
+    m.part("robe", "body", pivot=(0, -1, 0))
 
     cloth = fabric(p["cloth"], p["cloth2"], seed=1, trim=p["trim"], trim_rows=(0, -1), buttons=p["trim"])
     robe = fabric(p["cloth"], p["cloth2"], seed=2, trim=p["trim"], trim_rows=(-1, -2))
@@ -133,7 +135,7 @@ def build(variant=None):
         if f_ == "front" and role == "druid" and (x * 2 + y) % 7 == 0:
             return p["trim"]                                                     # embroidered leaves
         return robe(f_, x, y, w, h)
-    m.box("body", -4.5, -1, -3.5, 9, 9, 7, skirt)
+    m.box("robe", -4.5, 0, -3.5, 9, 9, 7, skirt)
 
     def belt(f_, x, y, w, h):
         if f_ == "front" and x in (4,):
@@ -221,9 +223,53 @@ def build(variant=None):
     for arm in ("arm_r", "arm_l"):
         m.box(arm, -2, -1, -2, 4, 11, 4, sleeve)
 
+
+    # ------------------------------------------------------------------ shared details and the role's gear
+    def ro(roles, spec):
+        """``spec`` on the variants of the given roles, transparent on the others (same cubes everywhere)."""
+        def f(f_, x, y, w, h):
+            if role not in roles:
+                return None
+            return spec(f_, x, y, w, h) if callable(spec) else spec
+        return f
+
+    def mantle(f_, x, y, w, h):
+        if f_ == "bottom":
+            return None
+        if f_ != "top" and y == h - 1:
+            return p["trim"]
+        return fabric(p["cloth2"], mul(p["cloth2"], 0.85), seed=7)(f_, x, y, w, h)
+    m.box("body", -4.5, -12.5, -3.5, 9, 3, 7, mantle)                                     # shoulder collar
+    m.box("body", -5.5, -3, -1.5, 1, 3, 3, lambda f_, x, y, w, h: p["trim"] if (f_ == "right" and (x, y) == (1, 1))
+          else mul(p["belt"], 1.1))                                                        # belt pouch
+    # guild agent: the tricorne's turned-up sides and a map case poking out of the satchel
+    m.box("head", -5.5, -13, -5, 1, 2, 10, ro(("guild_agent",), lambda f_, x, y, w, h: p["trim"] if y == 0 else p["hat"]))
+    m.box("head", 4.5, -13, -5, 1, 2, 10, ro(("guild_agent",), lambda f_, x, y, w, h: p["trim"] if y == 0 else p["hat"]))
+    m.box("body", 0.5, -14, 4, 2, 5, 2, ro(("guild_agent",), lambda f_, x, y, w, h: (120, 84, 50) if y == 0 or f_ == "top"
+                                                                                  else (230, 216, 180)))
+    # scholar: a red book in the left hand and a quill behind the ear
+    m.box("arm_l", -1.5, 8, -4, 3, 5, 2, ro(("scholar",), lambda f_, x, y, w, h: (236, 228, 204) if f_ in ("front", "top")
+                                                                              and 0 < x else ((214, 176, 82) if y == 1 else (130, 30, 40))))
+    m.box("head", 4, -10, 0, 1, 5, 1, ro(("scholar",), lambda f_, x, y, w, h: (240, 240, 236) if y < 3 else (40, 40, 50)))
+    # tinkerer: a smoking chimney on the backpack and a wrench on the belt
+    m.box("body", 1, -13, 4, 2, 3, 2, ro(("tinkerer",), lambda f_, x, y, w, h: (30, 26, 26) if f_ == "top" or y == 0 else (196, 150, 70)))
+    m.box("body", 4.5, -2, -2.5, 1, 5, 1, ro(("tinkerer",), lambda f_, x, y, w, h: (190, 190, 200) if y < 4 else (120, 120, 130)))
+    m.box("body", 3.5, -2, -2.5, 3, 1, 1, ro(("tinkerer",), (190, 190, 200)))
+    # druid: a gnarled staff with a sprouting head in the left hand
+    m.box("arm_l", -0.5, -8, -3, 1, 22, 1, ro(("druid",), lambda f_, x, y, w, h: (110, 80, 50) if (y + x) % 4 else (84, 60, 36)))
+    m.box("arm_l", -1.5, -10, -4, 3, 3, 3, ro(("druid",), lambda f_, x, y, w, h: (82, 150, 60) if (x + y) % 3 else (232, 120, 160)))
+    # dwarf elder: steel pauldrons
+    for arm in ("arm_r", "arm_l"):
+        m.box(arm, -2.5, -2, -2.5, 5, 3, 5, ro(("dwarf_elder",), lambda f_, x, y, w, h: (200, 202, 210) if y == 0
+                                                                                  else ((110, 112, 122) if y == h - 1 else p["hat"])))
+
     # ------------------------------------------------------------------ animations
     idle = m.anim("idle", 4.0)
     idle.rot("body", (0, (0, 0, 0)), (2.0, (1.5, 0, 0)), (4.0, (0, 0, 0)))
+    idle.pos("body", (0, (0, 0, 0)), (2.0, (0, 0.35, 0)), (4.0, (0, 0, 0)))                  # breathing
+    idle.rot("head", (0, (0, 0, 0)), (1.2, (0, 0, 0)), (1.8, (4, 14, 0)), (2.6, (4, 14, 0)), (3.4, (0, 0, 0)),
+             (4.0, (0, 0, 0)))                                                               # a glance aside
+    idle.rot("robe", (0, (0, 0, 0)), (2.0, (-2, 0, 1)), (4.0, (0, 0, 0)))
     idle.rot("arm_r", (0, (0, 0, 0)), (2.0, (-3, 0, 2)), (4.0, (0, 0, 0)))
     idle.rot("arm_l", (0, (0, 0, 0)), (2.0, (-3, 0, -2)), (4.0, (0, 0, 0)))
 
@@ -232,13 +278,19 @@ def build(variant=None):
     walk.rot("leg_l", (0, (-24, 0, 0)), (0.6, (24, 0, 0)), (1.2, (-24, 0, 0)))
     walk.rot("arm_r", (0, (-20, 0, 0)), (0.6, (20, 0, 0)), (1.2, (-20, 0, 0)))
     walk.rot("arm_l", (0, (20, 0, 0)), (0.6, (-20, 0, 0)), (1.2, (20, 0, 0)))
+    walk.rot("body", (0, (2, -4, 0)), (0.6, (2, 4, 0)), (1.2, (2, -4, 0)))
+    walk.pos("body", (0, (0, 0, 0)), (0.3, (0, 0.7, 0)), (0.6, (0, 0, 0)), (0.9, (0, 0.7, 0)), (1.2, (0, 0, 0)))
+    walk.rot("robe", (0, (6, 0, -2)), (0.3, (10, 0, 0)), (0.6, (6, 0, 2)), (0.9, (10, 0, 0)), (1.2, (6, 0, -2)))
+    walk.rot("head", (0, (0, 4, 0)), (0.6, (0, -4, 0)), (1.2, (0, 4, 0)))
 
     # greet: the right arm goes up and waves twice (when a player talks to it)
     a = m.anim("greet", 1.6)
     a.rot("arm_r", (0, (0, 0, 0)), (0.3, (-150, 0, 20)), (0.55, (-150, 0, 40)), (0.8, (-150, 0, 10)),
           (1.05, (-150, 0, 40)), (1.3, (-150, 0, 20)), (1.6, (0, 0, 0)))
-    a.rot("body", (0, (0, 0, 0)), (0.3, (-3, 0, 0)), (1.3, (-3, 0, 0)), (1.6, (0, 0, 0)))
+    a.rot("body", (0, (0, 0, 0)), (0.3, (-3, 0, -3)), (1.3, (-3, 0, -3)), (1.6, (0, 0, 0)))
+    a.rot("head", (0, (0, 0, 0)), (0.3, (-6, 0, 6)), (0.8, (-4, 0, -4)), (1.3, (-6, 0, 6)), (1.6, (0, 0, 0)))
     # nod: a contract accepted or handed in
     a = m.anim("nod", 0.8)
     a.rot("head", (0, (0, 0, 0)), (0.2, (18, 0, 0)), (0.4, (0, 0, 0)), (0.6, (14, 0, 0)), (0.8, (0, 0, 0)))
+    a.rot("body", (0, (0, 0, 0)), (0.2, (5, 0, 0)), (0.4, (0, 0, 0)), (0.6, (4, 0, 0)), (0.8, (0, 0, 0)))
     return m

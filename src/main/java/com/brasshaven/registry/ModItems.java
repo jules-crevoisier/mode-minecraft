@@ -204,7 +204,7 @@ public final class ModItems {
     public static final RegistryObject<Item> RIFT_SENTINEL_SPAWN_EGG = egg("rift_sentinel_spawn_egg", ModEntities.RIFT_SENTINEL);
 
     /** Axe subclass keeps vanilla stripping behaviour; tree felling is handled in EquipmentEvents. */
-    public static final class LumberAxe extends AxeItem {
+    public static final class LumberAxe extends AxeItem implements com.brasshaven.item.BrassTooltip.Styled {
         public LumberAxe(Item.Properties properties) {
             super(ModMaterials.LITHITE, 6.0F, -3.1F, properties);
         }
@@ -216,8 +216,7 @@ public final class ModItems {
                                     java.util.function.Consumer<net.minecraft.network.chat.Component> builder,
                                     net.minecraft.world.item.TooltipFlag flag) {
             super.appendHoverText(stack, context, display, builder, flag);
-            builder.accept(net.minecraft.network.chat.Component.translatable(getDescriptionId() + ".desc")
-                    .withStyle(net.minecraft.ChatFormatting.GRAY));
+            com.brasshaven.item.BrassTooltip.append(stack, builder);
         }
     }
 

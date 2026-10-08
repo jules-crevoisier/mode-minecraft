@@ -29,6 +29,8 @@ import java.util.function.Predicate;
  * keep both ({@code recipes.alongsideJei}).
  */
 public final class RecipeViewer {
+    private static boolean drawnWithContents;
+
     private static final boolean JEI = ModList.isLoaded("jei");
 
     private RecipeViewer() {}
@@ -54,11 +56,21 @@ public final class RecipeViewer {
                 ItemIndex.ensure();
             }
         });
+        // drawn with the window's contents, so the item tooltips (a later stratum) stay on top of the list; after the
+        // whole screen only for a window that skips the contents pass
+        net.minecraftforge.client.event.ContainerScreenEvent.Render.Background.BUS.addListener(e -> {
+            if (panelOn(e.getContainerScreen())) {
+                RecipePanel.render(e.getContainerScreen(), e.getGuiGraphics(), e.getMouseX(), e.getMouseY(),
+                        net.minecraft.client.Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(false));
+                drawnWithContents = true;
+            }
+        });
         ScreenEvent.Render.Post.BUS.addListener(e -> {
-            if (panelOn(e.getScreen())) {
+            if (panelOn(e.getScreen()) && !drawnWithContents) {
                 RecipePanel.render((AbstractContainerScreen<?>) e.getScreen(), e.getGuiGraphics(), e.getMouseX(), e.getMouseY(),
                         e.getPartialTick());
             }
+            drawnWithContents = false;
         });
         ScreenEvent.MouseButtonPressed.Pre.BUS.addListener((Predicate<ScreenEvent.MouseButtonPressed.Pre>) e ->
                 panelOn(e.getScreen()) && RecipePanel.mouseClicked((AbstractContainerScreen<?>) e.getScreen(), e.getMouseX(),

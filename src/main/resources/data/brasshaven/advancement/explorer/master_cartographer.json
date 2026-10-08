@@ -494,9 +494,41 @@
           }
         ]
       }
+    },
+    "pilgrims_ascent": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:pilgrims_ascent"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "tidal_abbey": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:tidal_abbey"
+              }
+            }
+          }
+        ]
+      }
     }
   },
-  "parent": "brasshaven:explorer/fallen_colossus",
+  "parent": "brasshaven:explorer/tidal_abbey",
   "rewards": {
     "experience": 300,
     "loot": [

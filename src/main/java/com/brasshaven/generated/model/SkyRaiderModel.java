@@ -57,6 +57,25 @@ public final class SkyRaiderModel extends EntityModel<WayfarerRenderState> {
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(16.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.4F, KeyframeAnimations.degreeVec(10.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.8F, KeyframeAnimations.degreeVec(16.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
+            .addAnimation("prop", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+                    new Keyframe(0.8F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 360.0F), AnimationChannel.Interpolations.LINEAR)))
+            .addAnimation("scarf2", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, -10.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.4F, KeyframeAnimations.degreeVec(-8.0F, 12.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.8F, KeyframeAnimations.degreeVec(0.0F, -10.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
+            .addAnimation("head", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(-4.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.4F, KeyframeAnimations.degreeVec(2.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.8F, KeyframeAnimations.degreeVec(-4.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
+            .addAnimation("arm_r", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.4F, KeyframeAnimations.degreeVec(-8.0F, 0.0F, 4.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.8F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
+            .addAnimation("arm_l", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.4F, KeyframeAnimations.degreeVec(-8.0F, 0.0F, -4.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.8F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .build();
     public static final AnimationDefinition WALK = AnimationDefinition.Builder.withLength(0.6F).looping()
             .addAnimation("body", new AnimationChannel(AnimationChannel.Targets.ROTATION,
@@ -66,6 +85,16 @@ public final class SkyRaiderModel extends EntityModel<WayfarerRenderState> {
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(20.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.3F, KeyframeAnimations.degreeVec(26.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.6F, KeyframeAnimations.degreeVec(20.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
+            .addAnimation("scarf2", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(10.0F, 8.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.3F, KeyframeAnimations.degreeVec(16.0F, -8.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.6F, KeyframeAnimations.degreeVec(10.0F, 8.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
+            .addAnimation("leg_r", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(30.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.6F, KeyframeAnimations.degreeVec(30.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
+            .addAnimation("leg_l", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(34.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.6F, KeyframeAnimations.degreeVec(34.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .build();
     public static final AnimationDefinition SCREECH = AnimationDefinition.Builder.withLength(0.9F)
             .addAnimation("body", new AnimationChannel(AnimationChannel.Targets.ROTATION,
@@ -149,8 +178,13 @@ public final class SkyRaiderModel extends EntityModel<WayfarerRenderState> {
                     new Keyframe(0.7F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .addAnimation("arm_r", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.2F, KeyframeAnimations.degreeVec(-100.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.2F, KeyframeAnimations.degreeVec(-150.0F, 0.0F, 10.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.3F, KeyframeAnimations.degreeVec(-20.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+                    new Keyframe(0.7F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
+            .addAnimation("hook", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.2F, KeyframeAnimations.degreeVec(30.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.3F, KeyframeAnimations.degreeVec(-30.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(0.7F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .build();
     public static final AnimationDefinition STUNNED = AnimationDefinition.Builder.withLength(1.6F)
@@ -219,59 +253,79 @@ public final class SkyRaiderModel extends EntityModel<WayfarerRenderState> {
                 new PartPose(0.0F, 24.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_body = p_bone.addOrReplaceChild("body", CubeListBuilder.create()
                 .texOffs(0, 0).addBox(-3.0F, -9.0F, -2.0F, 6.0F, 9.0F, 4.0F)
-                .texOffs(0, 46).addBox(-3.5F, -9.5F, -2.5F, 7.0F, 2.0F, 5.0F)
-                .texOffs(20, 31).addBox(-2.5F, -8.0F, 2.0F, 5.0F, 6.0F, 2.0F)
-                .texOffs(30, 53).addBox(-0.5F, -10.0F, 3.0F, 1.0F, 3.0F, 1.0F),
+                .texOffs(98, 22).addBox(-3.5F, -9.5F, -2.5F, 7.0F, 2.0F, 5.0F)
+                .texOffs(20, 22).addBox(-2.5F, -8.0F, 2.0F, 5.0F, 6.0F, 2.0F)
+                .texOffs(124, 30).addBox(-0.5F, -10.0F, 3.0F, 1.0F, 3.0F, 1.0F)
+                .texOffs(20, 37).addBox(-1.0F, -6.0F, 4.0F, 2.0F, 2.0F, 1.0F)
+                .texOffs(44, 30).addBox(-3.5F, -4.0F, -1.5F, 1.0F, 4.0F, 3.0F),
                 new PartPose(0.0F, -12.0F, 0.0F, 0.20944F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_head = p_body.addOrReplaceChild("head", CubeListBuilder.create()
                 .texOffs(20, 0).addBox(-3.0F, -6.0F, -3.0F, 6.0F, 6.0F, 6.0F)
-                .texOffs(24, 46).addBox(-4.0F, -3.0F, -2.0F, 1.0F, 4.0F, 3.0F)
-                .texOffs(32, 46).addBox(3.0F, -3.0F, -2.0F, 1.0F, 4.0F, 3.0F),
+                .texOffs(52, 30).addBox(-4.0F, -3.0F, -2.0F, 1.0F, 4.0F, 3.0F)
+                .texOffs(60, 30).addBox(3.0F, -3.0F, -2.0F, 1.0F, 4.0F, 3.0F)
+                .texOffs(40, 13).addBox(-3.5F, -7.0F, -3.5F, 7.0F, 2.0F, 7.0F)
+                .texOffs(40, 41).addBox(-3.5F, -4.0F, -3.5F, 7.0F, 1.0F, 1.0F),
                 new PartPose(0.0F, -9.0F, -0.5F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_scarf = p_head.addOrReplaceChild("scarf", CubeListBuilder.create()
-                .texOffs(0, 31).addBox(-1.5F, 0.0F, 0.0F, 3.0F, 1.0F, 7.0F),
+                .texOffs(0, 22).addBox(-1.5F, 0.0F, 0.0F, 3.0F, 1.0F, 7.0F),
                 new PartPose(0.0F, -1.0F, 3.0F, 0.523599F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
+        PartDefinition p_scarf2 = p_scarf.addOrReplaceChild("scarf2", CubeListBuilder.create()
+                .texOffs(0, 30).addBox(-1.0F, 0.0F, 0.0F, 2.0F, 1.0F, 6.0F),
+                new PartPose(0.0F, 0.5F, 7.0F, -0.349066F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_leg_r = p_body.addOrReplaceChild("leg_r", CubeListBuilder.create()
-                .texOffs(40, 22).addBox(-1.0F, 0.0F, -1.0F, 2.0F, 7.0F, 2.0F)
-                .texOffs(40, 46).addBox(-1.5F, 7.0F, -2.5F, 3.0F, 1.0F, 4.0F)
-                .texOffs(50, 53).addBox(-1.5F, 8.0F, -3.0F, 1.0F, 2.0F, 1.0F)
-                .texOffs(54, 53).addBox(0.5F, 8.0F, -3.0F, 1.0F, 2.0F, 1.0F)
-                .texOffs(58, 53).addBox(-0.5F, 8.0F, 1.0F, 1.0F, 2.0F, 1.0F),
+                .texOffs(104, 13).addBox(-1.0F, 0.0F, -1.0F, 2.0F, 7.0F, 2.0F)
+                .texOffs(72, 30).addBox(-1.5F, 7.0F, -2.5F, 3.0F, 1.0F, 4.0F)
+                .texOffs(26, 37).addBox(-1.5F, 8.0F, -3.0F, 1.0F, 2.0F, 1.0F)
+                .texOffs(30, 37).addBox(0.5F, 8.0F, -3.0F, 1.0F, 2.0F, 1.0F)
+                .texOffs(34, 37).addBox(-0.5F, 8.0F, 1.0F, 1.0F, 2.0F, 1.0F),
                 new PartPose(-1.5F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_leg_l = p_body.addOrReplaceChild("leg_l", CubeListBuilder.create()
-                .texOffs(48, 22).addBox(-1.0F, 0.0F, -1.0F, 2.0F, 7.0F, 2.0F)
-                .texOffs(0, 53).addBox(-1.5F, 7.0F, -2.5F, 3.0F, 1.0F, 4.0F)
-                .texOffs(0, 58).addBox(-1.5F, 8.0F, -3.0F, 1.0F, 2.0F, 1.0F)
-                .texOffs(4, 58).addBox(0.5F, 8.0F, -3.0F, 1.0F, 2.0F, 1.0F)
-                .texOffs(8, 58).addBox(-0.5F, 8.0F, 1.0F, 1.0F, 2.0F, 1.0F),
+                .texOffs(112, 13).addBox(-1.0F, 0.0F, -1.0F, 2.0F, 7.0F, 2.0F)
+                .texOffs(86, 30).addBox(-1.5F, 7.0F, -2.5F, 3.0F, 1.0F, 4.0F)
+                .texOffs(38, 37).addBox(-1.5F, 8.0F, -3.0F, 1.0F, 2.0F, 1.0F)
+                .texOffs(42, 37).addBox(0.5F, 8.0F, -3.0F, 1.0F, 2.0F, 1.0F)
+                .texOffs(46, 37).addBox(-0.5F, 8.0F, 1.0F, 1.0F, 2.0F, 1.0F),
                 new PartPose(1.5F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_arm_r = p_body.addOrReplaceChild("arm_r", CubeListBuilder.create()
-                .texOffs(44, 0).addBox(-1.0F, -1.0F, -1.0F, 2.0F, 8.0F, 2.0F)
-                .texOffs(34, 53).addBox(-1.0F, 6.0F, -2.5F, 2.0F, 1.0F, 2.0F),
+                .texOffs(48, 0).addBox(-1.0F, -1.0F, -1.0F, 2.0F, 8.0F, 2.0F)
+                .texOffs(4, 37).addBox(-1.0F, 6.0F, -2.5F, 2.0F, 1.0F, 2.0F),
                 new PartPose(-4.0F, -8.0F, 0.0F, 0.0F, 0.0F, 0.174533F, 1.0F, 1.0F, 1.0F));
+        PartDefinition p_hook = p_arm_r.addOrReplaceChild("hook", CubeListBuilder.create()
+                .texOffs(68, 30).addBox(-0.5F, -1.0F, -0.5F, 1.0F, 6.0F, 1.0F)
+                .texOffs(100, 30).addBox(-0.5F, 5.0F, -0.5F, 1.0F, 1.0F, 3.0F)
+                .texOffs(0, 37).addBox(-0.5F, 3.0F, 2.0F, 1.0F, 3.0F, 1.0F),
+                new PartPose(0.0F, 7.0F, -1.0F, -1.22173F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_arm_l = p_body.addOrReplaceChild("arm_l", CubeListBuilder.create()
-                .texOffs(52, 0).addBox(-1.0F, -1.0F, -1.0F, 2.0F, 8.0F, 2.0F)
-                .texOffs(42, 53).addBox(-1.0F, 6.0F, -2.5F, 2.0F, 1.0F, 2.0F),
+                .texOffs(56, 0).addBox(-1.0F, -1.0F, -1.0F, 2.0F, 8.0F, 2.0F)
+                .texOffs(12, 37).addBox(-1.0F, 6.0F, -2.5F, 2.0F, 1.0F, 2.0F),
                 new PartPose(4.0F, -8.0F, 0.0F, 0.0F, 0.0F, -0.174533F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_wing_r = p_body.addOrReplaceChild("wing_r", CubeListBuilder.create()
-                .texOffs(12, 58).addBox(-11.0F, -0.5F, -0.5F, 11.0F, 1.0F, 1.0F)
-                .texOffs(0, 13).addBox(-11.0F, 0.0F, 0.5F, 11.0F, 0.0F, 9.0F)
-                .texOffs(14, 53).addBox(-2.0F, -1.0F, -1.0F, 2.0F, 2.0F, 2.0F),
-                new PartPose(-2.0F, -8.0F, 2.5F, 0.0F, 0.349066F, 0.174533F, 1.0F, 1.0F, 1.0F));
+                .texOffs(50, 37).addBox(-11.0F, -0.5F, -0.5F, 11.0F, 1.0F, 1.0F)
+                .texOffs(64, 0).addBox(-11.0F, 0.0F, 0.5F, 11.0F, 0.0F, 9.0F)
+                .texOffs(68, 13).addBox(-4.0F, 0.0F, 0.5F, 1.0F, 1.0F, 8.0F)
+                .texOffs(108, 30).addBox(-2.0F, -1.0F, -1.0F, 2.0F, 2.0F, 2.0F),
+                new PartPose(-2.0F, -8.0F, 2.5F, 0.0F, 0.349066F, 0.383972F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_tip_r = p_wing_r.addOrReplaceChild("tip_r", CubeListBuilder.create()
-                .texOffs(0, 61).addBox(-9.0F, -0.5F, -0.5F, 9.0F, 1.0F, 1.0F)
-                .texOffs(0, 39).addBox(-9.0F, 0.0F, 0.5F, 9.0F, 0.0F, 7.0F),
+                .texOffs(0, 41).addBox(-9.0F, -0.5F, -0.5F, 9.0F, 1.0F, 1.0F)
+                .texOffs(34, 22).addBox(-9.0F, 0.0F, 0.5F, 9.0F, 0.0F, 7.0F)
+                .texOffs(16, 30).addBox(-4.0F, 0.0F, 0.5F, 1.0F, 1.0F, 6.0F),
                 new PartPose(-11.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_wing_l = p_body.addOrReplaceChild("wing_l", CubeListBuilder.create()
-                .texOffs(36, 58).addBox(0.0F, -0.5F, -0.5F, 11.0F, 1.0F, 1.0F)
-                .texOffs(0, 22).addBox(0.0F, 0.0F, 0.5F, 11.0F, 0.0F, 9.0F)
-                .texOffs(22, 53).addBox(0.0F, -1.0F, -1.0F, 2.0F, 2.0F, 2.0F),
-                new PartPose(2.0F, -8.0F, 2.5F, 0.0F, -0.349066F, -0.174533F, 1.0F, 1.0F, 1.0F));
+                .texOffs(74, 37).addBox(0.0F, -0.5F, -0.5F, 11.0F, 1.0F, 1.0F)
+                .texOffs(0, 13).addBox(0.0F, 0.0F, 0.5F, 11.0F, 0.0F, 9.0F)
+                .texOffs(86, 13).addBox(3.0F, 0.0F, 0.5F, 1.0F, 1.0F, 8.0F)
+                .texOffs(116, 30).addBox(0.0F, -1.0F, -1.0F, 2.0F, 2.0F, 2.0F),
+                new PartPose(2.0F, -8.0F, 2.5F, 0.0F, -0.349066F, -0.383972F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_tip_l = p_wing_l.addOrReplaceChild("tip_l", CubeListBuilder.create()
-                .texOffs(20, 61).addBox(0.0F, -0.5F, -0.5F, 9.0F, 1.0F, 1.0F)
-                .texOffs(32, 39).addBox(0.0F, 0.0F, 0.5F, 9.0F, 0.0F, 7.0F),
+                .texOffs(20, 41).addBox(0.0F, -0.5F, -0.5F, 9.0F, 1.0F, 1.0F)
+                .texOffs(66, 22).addBox(0.0F, 0.0F, 0.5F, 9.0F, 0.0F, 7.0F)
+                .texOffs(30, 30).addBox(3.0F, 0.0F, 0.5F, 1.0F, 1.0F, 6.0F),
                 new PartPose(11.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
-        return LayerDefinition.create(mesh, 64, 64);
+        PartDefinition p_prop = p_body.addOrReplaceChild("prop", CubeListBuilder.create()
+                .texOffs(98, 37).addBox(-5.0F, -0.5F, 0.0F, 10.0F, 1.0F, 1.0F)
+                .texOffs(44, 0).addBox(-0.5F, -5.0F, 0.0F, 1.0F, 10.0F, 1.0F),
+                new PartPose(0.0F, -5.0F, 4.5F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
+        return LayerDefinition.create(mesh, 128, 64);
     }
 
     @Override

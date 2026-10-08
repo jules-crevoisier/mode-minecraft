@@ -520,6 +520,43 @@ PAGES = [
          "la prison des cages suspendues, la caserne (regarde sous le plancher), la forge, la chapelle et un lieu de "
          "grâce avant le tambour du boss ; la salle du trésor est au-delà de l'arène."),
     ], []),
+    ("pilgrims_ascent", "wonders", "minecraft:bell", ("Pilgrim's Ascent", "L'Ascension du pèlerin"), [
+        ("A 124-block fang of rock with a sheer north face over a plunge pool; up its south flank a switchback "
+         "stairway of almost 500 steps, sixteen red gates and a lantern on every landing, to a bell temple on the "
+         "summit.",
+         "Un croc de roche de 124 blocs, à-pic au nord au-dessus d'un bassin ; sur son flanc sud, un escalier en "
+         "lacets de près de 500 marches, seize portiques rouges et une lanterne à chaque palier, jusqu'au temple de "
+         "la cloche au sommet."),
+        ("Where: meadows, groves, snowy slopes, stony peaks and windswept hills.",
+         "Où : prairies, bosquets, pentes enneigées, pics rocheux et collines venteuses."),
+        ("Shrines on the way: prayer wheels, a waterfall, the bell cave (waystone), the wind-bridge to a needle "
+         "pinnacle, the hermit's cell (look under the floor). A site of grace waits before the temple; the hall is "
+         "the arena and the reward hangs over the cliff behind it. The way down: jump from its balcony into the pool.",
+         "Des sanctuaires en chemin : les moulins à prières, la cascade, la grotte de la cloche (pierre de passage), "
+         "le pont du vent vers une aiguille, la cellule de l'ermite (regarde sous le plancher). Un lieu de grâce "
+         "précède le temple ; la salle est l'arène et le trésor est suspendu au-dessus de la falaise derrière elle. "
+         "Pour redescendre : saute de son balcon dans le bassin."),
+    ], []),
+    ("tidal_abbey", "wonders", "minecraft:prismarine_bricks", ("Tidal Abbey", "Abbaye des marées"), [
+        ("A rocky tidal island off the shore: ring walls with seven towers and a sea gate, a town of stone houses "
+         "with slate roofs spiralling up the rock, and on the summit a gothic abbey whose spire tops out at 130 "
+         "blocks. A stone causeway leads there, half drowned and broken in the middle.",
+         "Une île rocheuse cernée par la marée : des remparts à sept tours et une porte sur la mer, une ville de "
+         "maisons de pierre aux toits d'ardoise qui monte en spirale autour du rocher, et au sommet une abbaye "
+         "gothique dont la flèche culmine à 130 blocs. Une chaussée de pierre y mène, à demi noyée et rompue en son "
+         "milieu."),
+        ("Where: beaches and stony shores, with the sea on one side.",
+         "Où : plages et rivages rocheux, la mer d'un côté."),
+        ("Follow the Grande Rue from the King's Gate (waystone in the court) past the well square and the parish "
+         "church to the Chatelet and the Grand Degre. Up top: the nave, the treasury behind the altar, the cloister "
+         "(look down the well), the knights' hall. The stair tower goes down to the crypt and its site of grace; "
+         "beyond is the tidal hall, the arena, then the vault and a tunnel out to the harbour.",
+         "Suis la Grande Rue depuis la porte du Roi (pierre de passage dans la cour), par la place du puits et "
+         "l'église paroissiale, jusqu'au Châtelet et au Grand Degré. En haut : la nef, le trésor derrière l'autel, "
+         "le cloître (regarde au fond du puits), la salle des chevaliers. La tour d'escalier descend à la crypte et "
+         "à son lieu de grâce ; au-delà, la salle des marées, l'arène, puis le caveau et un tunnel qui ressort au "
+         "port."),
+    ], []),
     ("shattered_halo", "wonders", "minecraft:end_crystal", ("Shattered Halo", "Halo brisé"), [
         ("A tilted ring of purpur, end stone bricks and gold, 170 blocks across, broken into five arcs floating at "
          "different heights over the void of the End, with a temple on each arc and the boss on a disc at the centre.",

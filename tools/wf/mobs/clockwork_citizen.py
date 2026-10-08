@@ -35,8 +35,9 @@ def build(variant=None):
     m.part("body", "bone", pivot=(0, -12, 0))
     m.part("head", "body", pivot=(0, -12, 0))
     m.part("key", "body", pivot=(0, -7, 4))
-    m.part("arm_r", "body", pivot=(-5.5, -10.5, 0))
-    m.part("arm_l", "body", pivot=(5.5, -10.5, 0))
+    m.part("arm_r", "body", pivot=(-6.5, -10.5, 0))
+    m.part("arm_l", "body", pivot=(6.5, -10.5, 0))
+    m.part("pendulum", "body", pivot=(0, -7, -3.8))
     m.part("tool", "arm_r", pivot=(0, 9, -0.5), rot=(-70, 0, 0))
     m.part("off", "arm_l", pivot=(0, 9, 0))
 
@@ -44,7 +45,8 @@ def build(variant=None):
     for leg in ("leg_r", "leg_l"):
         m.box(leg, -1, 0, -1, 2, 6, 2, B.rod(B.IRON_L, 1))
         m.box(leg, -1.5, 5, -1.5, 3, 5, 3, shell(2))
-        m.box(leg, -2, 10, -2.5, 4, 2, 4, B.iron(3))
+        m.box(leg, -2.5, 10, -3.5, 5, 2, 6, B.iron(3))
+        m.box(leg, -2, 4, -2, 4, 2, 4, B.rod(B.BRASS_D, 4))                       # the knee joint
 
     # ------------------------------------------------------------------ boiler chest
     def chest(f_, x, y, w, h):
@@ -53,10 +55,20 @@ def build(variant=None):
         if f_ == "front" and role == "chronometrist" and x in (w // 2 - 1, w // 2) and y >= 1:
             return (236, 230, 216) if x == w // 2 - 1 else (40, 36, 40)          # shirt front and tie
         return B.bands(p["shell"], p["shell_d"], every=3, seed=5)(f_, x, y, w, h)
-    m.box("body", -4, -12, -3, 8, 10, 6, chest)
-    m.box("body", -1.5, -10, -3.5, 3, 3, 1, B.gauge(), glow={"front": None, "*": None})
-    m.box("body", -4.5, -2, -3.5, 9, 2, 7, B.iron(6, rivet_step=3))                # hip ring
-    m.box("body", -3.5, 0, -2.5, 7, 1, 5, B.iron(7))
+    m.box("body", -5, -12, -3.5, 10, 10, 7, chest)
+    m.box("body", 1.5, -11, -4, 3, 3, 1, B.gauge(), glow={"front": None, "*": None})
+    # the pendulum window in the belly: a brass frame around amber-lit glass, the pendulum swinging behind it
+    def window(f_, x, y, w, h):
+        if x in (0, w - 1) or y in (0, h - 1):
+            return p["shell_l"] if y == 0 else p["shell_d"]
+        return None
+    m.box("body", -2.5, -8, -4, 5, 6, 1, {"front": window, "back": None, "*": p["shell_d"]})
+    m.box("body", -2, -7.5, -3.6, 4, 5, 0, {"front": lambda f_, x, y, w, h: mix(B.AMBER_D, B.SOOT, 0.55), "*": None},
+          glow={"front": lambda f_, x, y, w, h: mul(B.AMBER_D, 0.7) if (x + y) % 3 == 0 else None, "*": None})
+    m.box("pendulum", -0.5, 0, -0.1, 1, 3, 0, {"front": B.BRASS_L, "back": B.BRASS, "*": None})
+    m.box("pendulum", -1, 3, -0.15, 2, 2, 0, {"front": B.AMBER_L, "back": B.BRASS, "*": None}, glow={"front": B.AMBER, "*": None})
+    m.box("body", -5.5, -2, -4, 11, 2, 8, B.iron(6, rivet_step=3))                # hip ring
+    m.box("body", -4, 0, -3, 8, 1, 6, B.iron(7))
 
     def apron_skirt(f_, x, y, w, h):
         if role != "gearwright" or f_ != "front":
@@ -74,7 +86,7 @@ def build(variant=None):
 
     # cog shoulders
     for sx in (-1, 1):
-        m.box("body", 4 if sx > 0 else -5, -13, -2.5, 1, 5, 5,
+        m.box("body", 5 if sx > 0 else -6, -14, -3.5, 1, 7, 7,
               B.cog(p["shell"], p["shell_d"], teeth=8, hub=0.25, faces=("left", "right"), edges=True))
 
     # ------------------------------------------------------------------ the clock-dial head
@@ -106,6 +118,10 @@ def build(variant=None):
             return p["eye_l"] if y == 2 and x in (1, 5) else p["eye"]
         return None
     m.box("head", -4, -8, -3, 8, 8, 6, head, glow=head_glow)
+    m.box("head", -3, -10, -2.5, 6, 2, 5, shell(30))                                # the mantel clock's arched top
+    m.box("head", -1, -12, -1, 2, 2, 2, B.plate(B.BRASS_L, B.BRASS_D, seed=31))     # its finial
+    m.box("head", -4.5, -8.5, -3.5, 1, 9, 1, B.rod(p["shell_l"], 32))              # corner pillars
+    m.box("head", 3.5, -8.5, -3.5, 1, 9, 1, B.rod(p["shell_l"], 33))
     # antenna / ear bolts
     for sx in (-1, 1):
         m.box("head", 4 if sx > 0 else -5, -6, -1, 1, 3, 2, B.iron(13))
@@ -195,9 +211,11 @@ def build(variant=None):
     # ------------------------------------------------------------------ animations
     idle = m.anim("idle", 2.0)
     idle.rot("key", (0, (0, 0, 0), "linear"), (2.0, (0, 0, 360), "linear"))
+    idle.rot("pendulum", (0, (0, 0, 18)), (0.5, (0, 0, 0)), (1.0, (0, 0, -18)), (1.5, (0, 0, 0)), (2.0, (0, 0, 18)))
     idle.pos("body", (0, (0, 0, 0)), (1.0, (0, 0.3, 0)), (2.0, (0, 0, 0)))
+    idle.rot("body", (0, (0, 0, 1)), (1.0, (0, 0, -1)), (2.0, (0, 0, 1)))
     idle.rot("head", (0, (0, 0, 0)), (0.9, (0, 0, 0)), (1.0, (0, 0, 6), "linear"), (1.1, (0, 0, 0), "linear"),
-             (2.0, (0, 0, 0)))                                                       # a tick of the head
+             (1.9, (0, 0, 0)), (2.0, (0, -6, 0), "linear"))                          # a tick of the head
     idle.rot("arm_r", (0, (0, 0, 0)), (1.0, (-3, 0, 2)), (2.0, (0, 0, 0)))
     idle.rot("arm_l", (0, (0, 0, 0)), (1.0, (-3, 0, -2)), (2.0, (0, 0, 0)))
 
@@ -207,6 +225,9 @@ def build(variant=None):
     walk.rot("arm_r", (0, (-22, 0, 0), "linear"), (0.5, (22, 0, 0), "linear"), (1.0, (-22, 0, 0), "linear"))
     walk.rot("arm_l", (0, (22, 0, 0), "linear"), (0.5, (-22, 0, 0), "linear"), (1.0, (22, 0, 0), "linear"))
     walk.pos("body", (0, (0, 0, 0)), (0.25, (0, 0.6, 0)), (0.5, (0, 0, 0)), (0.75, (0, 0.6, 0)), (1.0, (0, 0, 0)))
+    walk.rot("body", (0, (0, 0, 3), "linear"), (0.5, (0, 0, -3), "linear"), (1.0, (0, 0, 3), "linear"))   # a stiff waddle
+    walk.rot("head", (0, (0, 0, -3), "linear"), (0.5, (0, 0, 3), "linear"), (1.0, (0, 0, -3), "linear"))
+    walk.rot("pendulum", (0, (0, 0, 24)), (0.5, (0, 0, -24)), (1.0, (0, 0, 24)))
     walk.rot("key", (0, (0, 0, 0), "linear"), (1.0, (0, 0, 360), "linear"))
 
     # greet: tips its hat (raises the right hand to the brim), the head ticks
@@ -221,6 +242,9 @@ def build(variant=None):
     a.pos("arm_r", (0, (0, 0, 0)), (0.4, (0, 0, 2)), (0.5, (0, 0, -3), "linear"), (0.7, (0, 0, -2)), (1.0, (0, 0, 0)))
     a.rot("body", (0, (0, 0, 0)), (0.4, (0, 25, 0)), (0.5, (6, -20, 0), "linear"), (1.0, (0, 0, 0)))
     a.rot("key", (0, (0, 0, 0), "linear"), (1.0, (0, 0, 720), "linear"))
+    a.rot("arm_l", (0, (0, 0, 0)), (0.4, (-30, 0, -20)), (0.5, (20, 0, -10), "linear"), (1.0, (0, 0, 0)))
+    a.rot("leg_r", (0, (0, 0, 0)), (0.4, (14, 0, 0)), (0.5, (-18, 0, 0), "linear"), (1.0, (0, 0, 0)))
+    a.rot("pendulum", (0, (0, 0, 0)), (0.4, (0, 0, -30)), (0.55, (0, 0, 40)), (0.8, (0, 0, -20)), (1.0, (0, 0, 0)))
 
     # tinker: works a bolt in front of it with the tool, sparks at each turn
     a = m.anim("tinker", 1.4)

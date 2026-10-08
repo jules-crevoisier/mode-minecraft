@@ -38,6 +38,8 @@ def build(variant=None):
     m.part("arm_l", "body", pivot=(5, -11, 0), rot=(0, 0, -6))
     m.part("tool", "arm_r", pivot=(-0.5, 9.5, -0.5), rot=(-60, 0, 0))
     m.part("off", "arm_l", pivot=(0.5, 9.5, -0.5))
+    m.part("robe", "body", pivot=(0, -1, 0))
+    m.part("hood", "body", pivot=(0, -12, 2.5))
 
     # ------------------------------------------------------------------ legs: the robe's two halves, sandals
     for leg in ("leg_r", "leg_l"):
@@ -64,7 +66,8 @@ def build(variant=None):
         if role == "cook" and f_ == "front" and 1 <= x <= w - 2:
             return (226, 220, 206) if (x + y) % 4 else (210, 204, 190)
         return K.cloth(p["robe"], p["robe2"], seed=3, trim=p["trim"], trim_rows=(-1,))(f_, x, y, w, h)
-    m.box("body", -4.5, -1, -3, 9, 5, 6, skirt)
+    m.box("robe", -4.5, 0, -3, 9, 6, 6, skirt)
+    m.box("robe", -5, 5, -3.5, 10, 6, 7, skirt)                                     # the bell of the robe
 
     def rope(f_, x, y, w, h):
         if f_ == "front" and x in (2, 3):
@@ -81,7 +84,8 @@ def build(variant=None):
             return None                                                          # the neck hole
         return K.cloth(mul(p["robe"], 0.95), p["robe2"], seed=4)(f_, x, y, w, h)
     m.box("body", -4.5, -13, -3, 9, 3, 6, cowl)
-    m.box("body", -4, -12, 2.5, 8, 4, 1, K.cloth(mul(p["robe"], 0.9), p["robe2"], seed=5))   # the hood hanging behind
+    m.box("hood", -4, 0, 0, 8, 5, 1, K.cloth(mul(p["robe"], 0.9), p["robe2"], seed=5))   # the hood hanging behind
+    m.box("hood", -2.5, 5, 0, 5, 2, 1, K.cloth(mul(p["robe"], 0.9), p["robe2"], seed=6))  # ... folded to a point
 
     # healer: a herb satchel; scribe: a scroll case; cook: a wooden spoon in the belt (one cube, painted per role)
     def hip(f_, x, y, w, h):
@@ -138,6 +142,16 @@ def build(variant=None):
     for arm in ("arm_r", "arm_l"):
         m.box(arm, -2, -1, -2, 4, 11, 4, sleeve)
 
+        def cuff(f_, x, y, w, h):
+            if f_ == "bottom":
+                return None                                                     # open: the hand shows inside
+            if f_ != "top" and y == h - 1:
+                return p["trim"]
+            return K.cloth(p["robe"], p["robe2"], seed=8)(f_, x, y, w, h)
+        m.box(arm, -2.5, 5, -2.5, 5, 4, 5, cuff)                                  # the wide sleeve flaring open
+    m.box("body", -3, -11, -2.8, 6, 6, 0, lambda f_, x, y, w, h: (p["beads"] if (x + y) % 2 else ROPE)
+          if f_ in ("front", "back") and abs(abs(x - (w - 1) / 2) - (h - 1 - y) * ((w - 1) / 2) / (h - 1)) < 0.6 else None)
+
     # ---- right hand: quill (scribe), ladle (cook), quarterstaff (warden)
     def quill(f_, x, y, w, h):
         if role != "scribe":
@@ -187,7 +201,10 @@ def build(variant=None):
     # ------------------------------------------------------------------ animations
     idle = m.anim("idle", 4.0)
     idle.rot("body", (0, (0, 0, 0)), (2.0, (1.5, 0, 0)), (4.0, (0, 0, 0)))
-    idle.rot("head", (0, (0, 0, 0)), (2.0, (3, 0, 0)), (4.0, (0, 0, 0)))
+    idle.pos("body", (0, (0, 0, 0)), (2.0, (0, 0.35, 0)), (4.0, (0, 0, 0)))             # slow, calm breathing
+    idle.rot("head", (0, (0, 0, 0)), (2.0, (4, 0, 0)), (2.8, (4, 8, 0)), (3.4, (2, 8, 0)), (4.0, (0, 0, 0)))
+    idle.rot("robe", (0, (0, 0, 0)), (2.0, (-1.5, 0, 1)), (4.0, (0, 0, 0)))
+    idle.rot("hood", (0, (0, 0, 0)), (2.0, (4, 0, 0)), (4.0, (0, 0, 0)))
     idle.rot("arm_r", (0, (0, 0, 0)), (2.0, (-3, 0, 2)), (4.0, (0, 0, 0)))
     idle.rot("arm_l", (0, (0, 0, 0)), (2.0, (-3, 0, -2)), (4.0, (0, 0, 0)))
 
@@ -196,6 +213,10 @@ def build(variant=None):
     walk.rot("leg_l", (0, (-22, 0, 0)), (0.6, (22, 0, 0)), (1.2, (-22, 0, 0)))
     walk.rot("arm_r", (0, (-12, 0, 0)), (0.6, (12, 0, 0)), (1.2, (-12, 0, 0)))
     walk.rot("arm_l", (0, (12, 0, 0)), (0.6, (-12, 0, 0)), (1.2, (12, 0, 0)))
+    walk.pos("body", (0, (0, 0, 0)), (0.3, (0, 0.6, 0)), (0.6, (0, 0, 0)), (0.9, (0, 0.6, 0)), (1.2, (0, 0, 0)))
+    walk.rot("body", (0, (2, -3, 0)), (0.6, (2, 3, 0)), (1.2, (2, -3, 0)))
+    walk.rot("robe", (0, (8, 0, -3)), (0.3, (12, 0, 0)), (0.6, (8, 0, 3)), (0.9, (12, 0, 0)), (1.2, (8, 0, -3)))
+    walk.rot("hood", (0, (10, 0, 0)), (0.3, (16, 0, 0)), (0.6, (10, 0, 0)), (0.9, (16, 0, 0)), (1.2, (10, 0, 0)))
 
     # greet: palms together and a slow bow
     a = m.anim("greet", 1.6)
@@ -210,6 +231,9 @@ def build(variant=None):
     a.rot("tool", (0, (0, 0, 0)), (0.4, (60, 0, 0)), (0.5, (60, 0, 0)), (0.8, (40, 0, 0)), (1.0, (0, 0, 0)))
     a.rot("body", (0, (0, 0, 0)), (0.4, (0, 35, 0)), (0.5, (0, -30, 0), "linear"), (0.7, (0, -25, 0)), (1.0, (0, 0, 0)))
     a.rot("leg_r", (0, (0, 0, 0)), (0.4, (-20, 0, 0)), (0.7, (-20, 0, 0)), (1.0, (0, 0, 0)))
+    a.rot("arm_l", (0, (0, 0, 0)), (0.4, (-40, 0, -30)), (0.5, (-20, 0, -10), "linear"), (1.0, (0, 0, 0)))
+    a.rot("robe", (0, (0, 0, 0)), (0.4, (0, -10, 6)), (0.5, (0, 14, -6), "linear"), (1.0, (0, 0, 0)))
+    a.pos("body", (0, (0, 0, 0)), (0.4, (0, -1, 0)), (0.5, (0, 0, -1), "linear"), (1.0, (0, 0, 0)))
 
     # scribe: writes in the book held open in the other hand
     a = m.anim("scribe", 1.6)

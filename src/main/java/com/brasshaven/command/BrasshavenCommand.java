@@ -81,6 +81,13 @@ public final class BrasshavenCommand {
                 }))
                 .then(Commands.literal("magnet").executes(ctx -> {
                     ServerPlayer player = ctx.getSource().getPlayerOrException();
+                    // the worn ring first (it only works worn), then one carried in the inventory
+                    ItemStack worn = com.brasshaven.accessory.Accessories.find(player, s -> s.getItem() instanceof MagnetRingItem);
+                    if (!worn.isEmpty()) {
+                        MagnetRingItem.toggle(player, worn);
+                        com.brasshaven.accessory.Accessories.changed(player);
+                        return 1;
+                    }
                     for (ItemStack stack : player.getInventory().getNonEquipmentItems()) {
                         if (stack.getItem() instanceof MagnetRingItem) {
                             MagnetRingItem.toggle(player, stack);

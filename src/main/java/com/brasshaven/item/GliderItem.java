@@ -9,6 +9,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,8 +20,8 @@ import java.util.Set;
 import java.util.UUID;
 
 /**
- * Brass Glider: hold it (either hand) while falling and it opens. The fall is capped to a slow sink and you drift
- * forward where you look. Nothing to click.
+ * Brass Glider: worn in the back accessory slot, or held (either hand), it opens while falling. The fall is capped to
+ * a slow sink and you drift forward where you look. Nothing to click.
  *
  * <p>Player movement is client-authoritative, so the glide itself runs on the player's own client
  * ({@link #glideClient}, before the movement of that tick). The server keeps the fall damage at zero, wears the
@@ -45,6 +46,15 @@ public class GliderItem extends GadgetItem {
         return player.getOffhandItem().getItem() instanceof GliderItem ? InteractionHand.OFF_HAND : null;
     }
 
+    /** The glider in use: held (either hand) first, else worn on the back; EMPTY when there is none. */
+    public static ItemStack glider(Player player) {
+        InteractionHand hand = heldHand(player);
+        if (hand != null) {
+            return player.getItemInHand(hand);
+        }
+        return com.brasshaven.accessory.Accessories.find(player, s -> s.getItem() instanceof GliderItem);
+    }
+
     private static boolean airborne(Player player) {
         return !player.onGround() && !player.isInWater() && !player.isInLava() && !player.isFallFlying()
                 && !player.isAutoSpinAttack() && !player.getAbilities().flying && !player.isPassenger()
@@ -53,7 +63,7 @@ public class GliderItem extends GadgetItem {
 
     /** Local player, before its movement: sink slowly and glide forward. */
     public static void glideClient(Player player) {
-        if (heldHand(player) == null || !airborne(player)) {
+        if (glider(player).isEmpty() || !airborne(player)) {
             open = false;
             return;
         }
@@ -82,7 +92,8 @@ public class GliderItem extends GadgetItem {
         UUID id = player.getUUID();
         Double lastY = LAST_Y.put(id, player.getY());
         InteractionHand hand = heldHand(player);
-        if (hand == null || !airborne(player)) {
+        ItemStack glider = glider(player);
+        if (glider.isEmpty() || !airborne(player)) {
             GLIDING.remove(id);
             return;
         }
@@ -110,7 +121,13 @@ public class GliderItem extends GadgetItem {
             }
         }
         if (player.tickCount % 40 == 0 && !player.getAbilities().instabuild) {
-            player.getItemInHand(hand).hurtAndBreak(1, player, hand.asEquipmentSlot());
+            if (hand != null) {
+                glider.hurtAndBreak(1, player, hand.asEquipmentSlot());
+            } else { // worn on the back
+                glider.hurtAndBreak(1, level, player, item -> level.playSound(null, player.getX(), player.getY(),
+                        player.getZ(), SoundEvents.ITEM_BREAK.value(), SoundSource.PLAYERS, 0.8F, 1.0F));
+                com.brasshaven.accessory.Accessories.changed(player);
+            }
         }
     }
 

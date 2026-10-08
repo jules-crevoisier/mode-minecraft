@@ -1,17 +1,19 @@
 package com.brasshaven.item;
 
-import net.minecraft.ChatFormatting;
-import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.TooltipDisplay;
 
+import java.util.List;
 import java.util.function.Consumer;
 
-/** Base item that shows its "item.brasshaven.<id>.desc" translation as a grey tooltip line. */
-public class TooltipItem extends Item {
+/**
+ * Base item with the Brasshaven tooltip ({@link BrassTooltip}): flavour, rules (".desc", ".desc2"...), key facts and
+ * "Hold Shift for details". Subclasses add their numbers in {@link #facts}.
+ */
+public class TooltipItem extends Item implements BrassTooltip.Styled, BrassTooltip.Facts {
     public TooltipItem(Properties properties) {
         super(properties);
     }
@@ -21,9 +23,10 @@ public class TooltipItem extends Item {
     public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display,
                                 Consumer<Component> builder, TooltipFlag flag) {
         super.appendHoverText(stack, context, display, builder, flag);
-        String key = getDescriptionId() + ".desc";
-        if (Language.getInstance().has(key)) {
-            builder.accept(Component.translatable(key).withStyle(ChatFormatting.GRAY));
-        }
+        BrassTooltip.append(stack, builder);
+    }
+
+    @Override
+    public void facts(ItemStack stack, List<Component> facts, List<Component> details) {
     }
 }

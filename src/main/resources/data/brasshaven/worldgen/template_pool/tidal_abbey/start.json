@@ -1,0 +1,405 @@
+{
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "brasshaven:chunked_template",
+        "size": [
+          140,
+          146,
+          198
+        ],
+        "cells": [
+          {
+            "location": "brasshaven:tidal_abbey/abbey/x0_z2",
+            "offset": [
+              15,
+              0,
+              73
+            ],
+            "size": [
+              13,
+              17,
+              12
+            ],
+            "blocks": 427
+          },
+          {
+            "location": "brasshaven:tidal_abbey/abbey/x0_z3",
+            "offset": [
+              2,
+              0,
+              85
+            ],
+            "size": [
+              26,
+              66,
+              28
+            ],
+            "blocks": 5440
+          },
+          {
+            "location": "brasshaven:tidal_abbey/abbey/x0_z4",
+            "offset": [
+              0,
+              0,
+              113
+            ],
+            "size": [
+              28,
+              62,
+              28
+            ],
+            "blocks": 17595
+          },
+          {
+            "location": "brasshaven:tidal_abbey/abbey/x0_z5",
+            "offset": [
+              0,
+              0,
+              141
+            ],
+            "size": [
+              28,
+              39,
+              29
+            ],
+            "blocks": 3632
+          },
+          {
+            "location": "brasshaven:tidal_abbey/abbey/x0_z6",
+            "offset": [
+              15,
+              0,
+              170
+            ],
+            "size": [
+              13,
+              14,
+              11
+            ],
+            "blocks": 507
+          },
+          {
+            "location": "brasshaven:tidal_abbey/abbey/x1_z2",
+            "offset": [
+              28,
+              0,
+              59
+            ],
+            "size": [
+              28,
+              33,
+              26
+            ],
+            "blocks": 4081
+          },
+          {
+            "location": "brasshaven:tidal_abbey/abbey/x1_z3",
+            "offset": [
+              28,
+              9,
+              85
+            ],
+            "size": [
+              28,
+              57,
+              28
+            ],
+            "blocks": 9564
+          },
+          {
+            "location": "brasshaven:tidal_abbey/abbey/x1_z4",
+            "offset": [
+              28,
+              11,
+              113
+            ],
+            "size": [
+              28,
+              83,
+              28
+            ],
+            "blocks": 37195
+          },
+          {
+            "location": "brasshaven:tidal_abbey/abbey/x1_z5",
+            "offset": [
+              28,
+              6,
+              141
+            ],
+            "size": [
+              28,
+              57,
+              29
+            ],
+            "blocks": 9722
+          },
+          {
+            "location": "brasshaven:tidal_abbey/abbey/x1_z6",
+            "offset": [
+              28,
+              0,
+              170
+            ],
+            "size": [
+              28,
+              40,
+              25
+            ],
+            "blocks": 4571
+          },
+          {
+            "location": "brasshaven:tidal_abbey/abbey/x2_z0",
+            "offset": [
+              64,
+              1,
+              0
+            ],
+            "size": [
+              15,
+              17,
+              28
+            ],
+            "blocks": 2848
+          },
+          {
+            "location": "brasshaven:tidal_abbey/abbey/x2_z1",
+            "offset": [
+              64,
+              1,
+              28
+            ],
+            "size": [
+              15,
+              13,
+              29
+            ],
+            "blocks": 2680
+          },
+          {
+            "location": "brasshaven:tidal_abbey/abbey/x2_z2",
+            "offset": [
+              56,
+              0,
+              57
+            ],
+            "size": [
+              28,
+              35,
+              28
+            ],
+            "blocks": 8631
+          },
+          {
+            "location": "brasshaven:tidal_abbey/abbey/x2_z3",
+            "offset": [
+              56,
+              6,
+              85
+            ],
+            "size": [
+              28,
+              48,
+              28
+            ],
+            "blocks": 18632
+          },
+          {
+            "location": "brasshaven:tidal_abbey/abbey/x2_z4",
+            "offset": [
+              56,
+              12,
+              113
+            ],
+            "size": [
+              28,
+              134,
+              28
+            ],
+            "blocks": 52592
+          },
+          {
+            "location": "brasshaven:tidal_abbey/abbey/x2_z5",
+            "offset": [
+              56,
+              12,
+              141
+            ],
+            "size": [
+              28,
+              52,
+              29
+            ],
+            "blocks": 21387
+          },
+          {
+            "location": "brasshaven:tidal_abbey/abbey/x2_z6",
+            "offset": [
+              56,
+              0,
+              170
+            ],
+            "size": [
+              28,
+              45,
+              28
+            ],
+            "blocks": 4848
+          },
+          {
+            "location": "brasshaven:tidal_abbey/abbey/x3_z2",
+            "offset": [
+              84,
+              0,
+              61
+            ],
+            "size": [
+              28,
+              33,
+              24
+            ],
+            "blocks": 3667
+          },
+          {
+            "location": "brasshaven:tidal_abbey/abbey/x3_z3",
+            "offset": [
+              84,
+              6,
+              85
+            ],
+            "size": [
+              28,
+              42,
+              28
+            ],
+            "blocks": 9286
+          },
+          {
+            "location": "brasshaven:tidal_abbey/abbey/x3_z4",
+            "offset": [
+              84,
+              12,
+              113
+            ],
+            "size": [
+              28,
+              117,
+              28
+            ],
+            "blocks": 35761
+          },
+          {
+            "location": "brasshaven:tidal_abbey/abbey/x3_z5",
+            "offset": [
+              84,
+              8,
+              141
+            ],
+            "size": [
+              28,
+              42,
+              29
+            ],
+            "blocks": 12225
+          },
+          {
+            "location": "brasshaven:tidal_abbey/abbey/x3_z6",
+            "offset": [
+              84,
+              0,
+              170
+            ],
+            "size": [
+              28,
+              38,
+              25
+            ],
+            "blocks": 3090
+          },
+          {
+            "location": "brasshaven:tidal_abbey/abbey/x4_z2",
+            "offset": [
+              112,
+              0,
+              74
+            ],
+            "size": [
+              11,
+              12,
+              11
+            ],
+            "blocks": 280
+          },
+          {
+            "location": "brasshaven:tidal_abbey/abbey/x4_z3",
+            "offset": [
+              112,
+              0,
+              85
+            ],
+            "size": [
+              24,
+              33,
+              28
+            ],
+            "blocks": 3168
+          },
+          {
+            "location": "brasshaven:tidal_abbey/abbey/x4_z4",
+            "offset": [
+              112,
+              0,
+              113
+            ],
+            "size": [
+              28,
+              40,
+              28
+            ],
+            "blocks": 6033
+          },
+          {
+            "location": "brasshaven:tidal_abbey/abbey/x4_z5",
+            "offset": [
+              112,
+              0,
+              141
+            ],
+            "size": [
+              25,
+              36,
+              29
+            ],
+            "blocks": 3797
+          },
+          {
+            "location": "brasshaven:tidal_abbey/abbey/x4_z6",
+            "offset": [
+              112,
+              0,
+              170
+            ],
+            "size": [
+              13,
+              11,
+              11
+            ],
+            "blocks": 307
+          }
+        ],
+        "projection": "rigid",
+        "processors": "brasshaven:none",
+        "ground_level_delta": 13,
+        "footprint": [
+          8,
+          0,
+          129,
+          188
+        ]
+      }
+    }
+  ]
+}

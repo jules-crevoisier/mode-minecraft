@@ -546,7 +546,8 @@
           ],
           "texture": "#t"
         }
-      }
+      },
+      "light_emission": 12
     },
     {
       "from": [
@@ -614,7 +615,8 @@
           ],
           "texture": "#t"
         }
-      }
+      },
+      "light_emission": 12
     },
     {
       "from": [
@@ -682,7 +684,8 @@
           ],
           "texture": "#t"
         }
-      }
+      },
+      "light_emission": 12
     }
   ],
   "display": {

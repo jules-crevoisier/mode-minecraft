@@ -57,20 +57,6 @@ def _grip(y0, y1, w=2.0):
     return [box(a, y0, a, a + w, y1, a + w, "wrap")]
 
 
-def sword(length=20, width=3.0, guard=7):
-    a = 8 - width / 2
-    out = _grip(3, 8) + [box(7, 1.5, 7, 9, 3, 9, "accent")]  # pommel
-    out += [box(8 - guard / 2, 8, 6.5, 8 + guard / 2, 9.5, 9.5, "accent_dark"), box(7, 8.5, 6, 9, 9, 10, "accent")]
-    out += [box(a, 9.5, 7.25, a + width, 9.5 + length, 8.75, "mid"),
-            box(7.5, 9.5, 7, 8.5, 9.5 + length, 9, "light"),
-            box(a + 0.5, 9.5 + length, 7.4, a + width - 0.5, 11 + length, 8.6, "light")]
-    return out
-
-
-def greatsword():
-    return sword(length=21, width=4.0, guard=9)  # the blade tip must stay under y 32 (model bounds)
-
-
 def blade():
     out = _grip(3, 8) + [box(6.5, 8, 6.5, 9.5, 9, 9.5, "accent")]
     out += [box(6.8, 9, 7.4, 9.2, 22, 8.6, "mid"), box(7.4, 22, 7.5, 9.0, 24, 8.5, "light"), box(8.6, 9, 7.6, 9.6, 21, 8.4, "light")]
@@ -349,7 +335,149 @@ def orb():
     return [box(5, 5, 5, 11, 11, 11, "glow"), box(4.5, 7, 7, 11.5, 9, 9, "accent"), box(7, 4, 7, 9, 5, 9, "accent_dark")]
 
 
-ARCHETYPES = {"sword": sword, "greatsword": greatsword, "blade": blade, "spear": spear,
+# ------------------------------------------------------------------ reworked and boss archetypes
+def _disc(cx, cy, z0, z1, r, key, axis="z"):
+    """A round disc (radius ~r) of stacked slabs, in the x-y plane between z0 and z1."""
+    out = []
+    for k, (wf, hf) in enumerate(((1.0, 0.55), (0.82, 0.82), (0.55, 1.0))):
+        out.append(box(cx - r * wf, cy - r * hf, z0, cx + r * wf, cy + r * hf, z1, key))
+    return out
+
+
+def _ball(cx, cy, cz, r, key):
+    """A rough sphere: three crossed slabs."""
+    a, b = r, r * 0.62
+    return [box(cx - a, cy - b, cz - b, cx + a, cy + b, cz + b, key),
+            box(cx - b, cy - a, cz - b, cx + b, cy + a, cz + b, key),
+            box(cx - b, cy - b, cz - a, cx + b, cy + b, cz + a, key)]
+
+
+def broadsword(length=17, width=4.0, guard=10):
+    """A knightly sword: a ridged blade with a darker fuller, bevelled edges, a ricasso, a winged guard and a
+    wheel pommel."""
+    a = 8 - width / 2
+    top = 10 + length
+    out = _grip(3, 8.5) + [box(6.75, 1, 6.75, 9.25, 3, 9.25, "accent"), box(7.25, 0.5, 7.25, 8.75, 1, 8.75, "accent_dark")]
+    out += [box(8 - guard / 2, 8.5, 6.75, 8 + guard / 2, 10, 9.25, "accent_dark"),
+            box(8 - guard / 2 - 1, 9, 7, 8 - guard / 2, 11, 9, "accent"),
+            box(8 + guard / 2, 9, 7, 8 + guard / 2 + 1, 11, 9, "accent"),
+            box(7, 10, 7.1, 9, 11.5, 8.9, "accent")]                                     # the ricasso collar
+    out += [box(a, 10, 7.3, a + width, top, 8.7, "mid"),
+            box(a - 0.4, 11, 7.55, a, top - 1, 8.45, "light"),                            # bevelled edges
+            box(a + width, 11, 7.55, a + width + 0.4, top - 1, 8.45, "light"),
+            box(7.6, 11.5, 7.1, 8.4, top - 2, 8.9, "dark"),                               # the fuller
+            box(a + 0.5, top, 7.45, a + width - 0.5, top + 1.5, 8.55, "light"),
+            box(7.25, top + 1.5, 7.6, 8.75, top + 2.5, 8.4, "light")]
+    return out
+
+
+def sentinel_greatsword():
+    """Sentinel's Greatsword: the Bronze Sentinel's blade cut down to a man's size: a broad tarnished-bronze blade
+    with a verdigris fuller set with glowing gold runes, a wide crossguard ending in down-turned quillons, a leather
+    grip and a heavy disc pommel."""
+    out = _grip(2, 8.5, 2.2) + [box(6.5, 0, 6.5, 9.5, 2, 9.5, "brass"), box(7, -0.8, 7, 9, 0, 9, "brass_dark")]
+    out += [box(2, 8.5, 6.6, 14, 10.2, 9.4, "brass_dark"), box(1, 7, 6.9, 2.6, 10.2, 9.1, "brass"),
+            box(13.4, 7, 6.9, 15, 10.2, 9.1, "brass"), box(6.5, 10.2, 6.9, 9.5, 11.6, 9.1, "brass")]
+    out += [box(5.5, 11.6, 7.25, 10.5, 29.5, 8.75, "mid"),
+            box(5.1, 12.5, 7.5, 5.5, 29, 8.5, "light"), box(10.5, 12.5, 7.5, 10.9, 29, 8.5, "light"),
+            box(7.4, 12, 7.1, 8.6, 27.5, 8.9, "accent_dark")]
+    for y in (13.5, 16.5, 19.5, 22.5, 25.5):
+        out.append(box(7.6, y, 7.0, 8.4, y + 1.2, 9.0, "glow"))                            # gold runes in the fuller
+    out += [box(6.5, 29.5, 7.4, 9.5, 31, 8.6, "light"), box(7.4, 31, 7.6, 8.6, 32, 8.4, "light")]
+    return out
+
+
+def crook():
+    """Dune King's Crook: a gold-and-lapis banded staff ending in a tight shepherd's hook, a jewelled cobra rearing
+    where the hook springs from the shaft."""
+    out = []
+    for i, y in enumerate(range(-4, 20, 2)):
+        out.append(box(7.1, y, 7.1, 8.9, y + 2, 8.9, "accent" if i % 3 == 2 else "mid"))
+    out += [box(6.6, -5, 6.6, 9.4, -4, 9.4, "light"), box(6.7, 19.5, 6.7, 9.3, 21, 9.3, "light")]
+    # the hook: up, over and down in square segments
+    out += [box(7.1, 21, 7.1, 8.9, 27, 8.9, "mid"), box(7.3, 27, 7.1, 9.5, 29.5, 8.9, "mid"),
+            box(9.3, 28.5, 7.1, 12.5, 30.5, 8.9, "light"), box(12, 27, 7.1, 14.2, 30, 8.9, "mid"),
+            box(13, 23.5, 7.1, 14.8, 27.2, 8.9, "mid"), box(12.4, 21.6, 7.1, 14.4, 23.6, 8.9, "accent"),
+            box(7.25, 25, 7.0, 8.9, 26, 9.0, "accent")]
+    # the cobra: a hood flaring behind the head, a ruby eye
+    out += [box(5.2, 21.5, 7.6, 7.1, 25.5, 8.4, "accent_dark"), box(4.6, 22, 7.7, 5.2, 25, 8.3, "accent"),
+            box(5.4, 25.5, 7.4, 7.2, 26.6, 8.6, "mid"), box(5.0, 25.7, 7.3, 5.6, 26.3, 8.7, "glow")]
+    return out
+
+
+def trident_big():
+    """A great trident: a long haft with a gold collar, a broad crossbar and three barbed prongs, the middle one
+    longest."""
+    out = _shaft(-3, 20, 1.6) + _grip(4, 10, 2.2)
+    out += [box(6.6, 19, 6.6, 9.4, 21, 9.4, "accent_dark"), box(3.5, 21, 7.2, 12.5, 22.5, 8.8, "mid"),
+            box(7, 22.5, 7.25, 9, 30, 8.75, "mid"), box(7.4, 30, 7.4, 8.6, 32, 8.6, "light"),
+            box(3.5, 22.5, 7.3, 5, 28, 8.7, "mid"), box(11, 22.5, 7.3, 12.5, 28, 8.7, "mid"),
+            box(3.7, 28, 7.5, 4.8, 29.5, 8.5, "light"), box(11.2, 28, 7.5, 12.3, 29.5, 8.5, "light"),
+            box(2.6, 26, 7.6, 3.5, 27.5, 8.4, "light"), box(12.5, 26, 7.6, 13.4, 27.5, 8.4, "light"),
+            box(6.2, 27.5, 7.6, 7, 29, 8.4, "light"), box(9, 27.5, 7.6, 9.8, 29, 8.4, "light"),
+            box(7.5, 21.2, 6.9, 8.5, 22.3, 9.1, "glow")]
+    return out
+
+
+def fang():
+    """Jade Fang: a curved fang of jade bound to a gold hilt, a thin glowing seam of jade light along its edge."""
+    out = _grip(3, 8.5) + [box(6.75, 1.5, 6.75, 9.25, 3, 9.25, "accent"), box(5.5, 8.5, 6.8, 10.5, 10, 9.2, "accent_dark")]
+    for i, (x0, y0, x1, y1) in enumerate(((6.4, 10, 9.8, 14), (6.8, 14, 10.4, 18), (7.4, 18, 10.6, 21.5),
+                                          (8.2, 21.5, 10.4, 24.5), (9, 24.5, 10.2, 26.5))):
+        out.append(box(x0, y0, 7.35, x1, y1, 8.65, "mid"))
+        out.append(box(x0 - 0.35, y0, 7.6, x0, y1 - 0.5, 8.4, "glow" if i < 4 else "light"))   # the cutting edge
+    out.append(box(9.2, 11, 7.2, 9.8, 20, 8.8, "dark"))                                         # the spine groove
+    return out
+
+
+def grimoire():
+    """Forbidden Grimoire: a heavy tome held shut by a brass clasp, a leather cover with raised bands on the spine,
+    cream page edges, a glowing eye sigil on the cover."""
+    return [box(4, 3, 6, 12, 14, 10, "mid"), box(4.4, 3.5, 6.4, 11.6, 13.5, 9.6, "cream"),
+            box(3.6, 2.6, 5.6, 12.4, 14.4, 6.2, "dark"), box(3.6, 2.6, 9.8, 12.4, 14.4, 10.4, "dark"),
+            box(3.2, 2.6, 5.6, 4, 14.4, 10.4, "dark"),                                   # the spine
+            box(3, 4.5, 5.5, 4.2, 5.3, 10.5, "brass"), box(3, 11.7, 5.5, 4.2, 12.5, 10.5, "brass"),
+            box(11.6, 7.5, 5.3, 12.8, 9.5, 10.7, "brass"),                              # the clasp
+            box(6.5, 7, 5.3, 9.5, 10, 5.6, "accent_dark"), box(7.25, 8, 5.1, 8.75, 9, 5.4, "glow"),
+            box(5, 12.5, 5.4, 6, 13.5, 5.6, "brass"), box(10, 3.5, 5.4, 11, 4.5, 5.6, "brass")]
+
+
+def gauntlet():
+    """Rune Fist: a stone gauntlet: a flared cuff, a broad back-of-hand plate with a glowing rune, four knuckle
+    plates and a thumb."""
+    out = [box(4.5, 0, 4.5, 11.5, 6, 11.5, "dark"), box(4, 5, 4, 12, 6.5, 12, "mid"),
+           box(4.8, 6.5, 4.8, 11.2, 12, 11.2, "mid"), box(4.5, 7.5, 3.8, 11.5, 11, 4.8, "light"),
+           box(6.5, 8.3, 3.5, 9.5, 10.3, 3.8, "glow"), box(11.2, 7, 6, 12.6, 10.5, 9, "light")]
+    for i, x in enumerate((4.9, 6.5, 8.1, 9.7)):
+        out += [box(x, 12, 4.6, x + 1.5, 14.5, 9.5, "mid"), box(x, 14.5, 4.6, x + 1.5, 15.5, 7.5, "light")]
+    out.append(box(5, 2, 4.2, 11, 3, 4.5, "glow"))
+    return out
+
+
+def horn_curved():
+    """Sculk Horn: a war horn curling like a ram's horn: a wide flared bell with a glowing sculk throat, ribbed
+    segments sweeping up and around, a bone mouthpiece at the tip."""
+    out = [box(3, 9.5, 5.5, 7.5, 14.5, 10.5, "mid"), box(2.4, 9, 5, 3, 15, 11, "accent_dark"),         # the bell
+           box(2.3, 10.2, 6.2, 2.5, 13.8, 9.8, "glow"),
+           box(7.5, 10, 6.2, 10.8, 13.5, 9.8, "light"), box(10.5, 8.5, 6.5, 12.8, 12.5, 9.5, "mid"),
+           box(12, 6, 6.5, 14, 10, 9.5, "light"), box(11, 3.5, 6.8, 13.5, 6.5, 9.2, "mid"),
+           box(8.5, 2.5, 7, 11.5, 5, 9, "light"), box(7, 3.5, 7.2, 9, 6, 8.8, "handle"),
+           box(10.4, 9.5, 6.0, 10.9, 13.7, 10.0, "accent_dark"), box(11.9, 5.8, 6.3, 14.1, 6.3, 9.7, "accent_dark")]
+    return out
+
+
+def ward_orb():
+    """Ward Orb: a round glowing orb caged in brass hoops on a brass stand."""
+    out = _ball(8, 8, 8, 3.2, "glow")
+    out += [box(4.2, 4.5, 7.5, 4.9, 11.5, 8.5, "brass"), box(11.1, 4.5, 7.5, 11.8, 11.5, 8.5, "brass"),
+            box(7.5, 4.5, 4.2, 8.5, 11.5, 4.9, "brass_dark"), box(7.5, 4.5, 11.1, 8.5, 11.5, 11.8, "brass_dark"),
+            box(4.9, 11.2, 7.5, 11.1, 11.9, 8.5, "brass"), box(7.5, 11.2, 4.9, 8.5, 11.9, 11.1, "brass"),
+            box(7.4, 11.9, 7.4, 8.6, 13, 8.6, "accent"),
+            box(5.5, 3.5, 5.5, 10.5, 4.5, 10.5, "brass"), box(6.5, 2, 6.5, 9.5, 3.5, 9.5, "brass_dark")]
+    return out
+
+
+ARCHETYPES = {"sword": broadsword, "greatsword": lambda: broadsword(length=19, width=5.0, guard=11), "blade": blade, "spear": spear,
               "trident": lambda: spear("trident"), "lance": lambda: spear("lance"), "hammer": hammer,
               "mace": mace, "staff": staff, "cane": cane, "scythe": scythe, "book": book, "fist": fist,
               "horn": horn, "wand": wand, "orb": orb, "chisel": chisel,
@@ -358,28 +486,33 @@ ARCHETYPES = {"sword": sword, "greatsword": greatsword, "blade": blade, "spear":
               "staff_sun": lambda: staff(head="sun"), "staff_root": lambda: staff(head="root"),
               "pendulum": pendulum, "anchor": anchor, "ladle": ladle, "flail": flail, "bell_hammer": bell_hammer,
               "forge_hammer": forge_hammer, "crystal_spear": crystal_spear, "axe": axe, "pickaxe": pickaxe,
-              "shovel": shovel, "hoe": hoe, "wand_block": wand_block, "caged_orb": caged_orb}
+              "shovel": shovel, "hoe": hoe, "wand_block": wand_block, "caged_orb": caged_orb,
+              "broadsword": broadsword, "sentinel_greatsword": sentinel_greatsword, "crook": crook,
+              "trident_big": trident_big, "fang": fang, "grimoire": grimoire, "gauntlet": gauntlet,
+              "horn_curved": horn_curved, "ward_orb": ward_orb}
 
 # item id -> (archetype, material, handle, accent)
 HELD = {
-    "kings_trident": ("trident", "warden", "bone", "sapphire"),
+    "kings_trident": ("trident_big", "warden", "bone", "sapphire"),
     "bell_hammer": ("bell_hammer", "gold", "dark", "gold"),
-    "forbidden_grimoire": ("book", "map", "dark", "amethyst"),
+    "forbidden_grimoire": ("grimoire", "map", "dark", "amethyst"),
     "pharaoh_flail": ("flail", "gold", "gold", "sapphire"),
-    "jade_fang": ("blade", "lithite", "gold", "emerald"),
+    "jade_fang": ("fang", "lithite", "gold", "emerald"),
     "rootmother_staff": ("staff_root", "leather", "wood", "emerald"),
     "crone_ladle": ("ladle", "iron", "dark", "amethyst"),
     "gryphon_lance": ("lance", "iron", "gold", "sapphire"),
-    "rune_fist": ("fist", "lithite", "dark", "sapphire"),
+    "rune_fist": ("gauntlet", "lithite", "dark", "sapphire"),
     "forge_king_hammer": ("forge_hammer", "ember", "dark", "gold"),
     "crystal_fang": ("crystal_spear", "void", "bone", "amethyst"),
-    "sculk_horn": ("horn", "warden", "bone", "sapphire"),
+    "sculk_horn": ("horn_curved", "warden", "bone", "sapphire"),
     "ash_greatsword": ("greatsword", "ember", "dark", "ember"),
     "golden_mace": ("mace", "gold", "gold", "ruby"),
     "soul_scythe": ("scythe", "void", "bone", "ice"),
     "void_greatblade": ("greatsword", "void", "purpur", "amethyst"),
     "clockmaker_pendulum": ("pendulum", "brass", "dark", "aether"),
     "helmsman_anchor": ("anchor", "iron", "dark", "ember"),
+    "sentinel_greatsword": ("sentinel_greatsword", "copper", "dark", "emerald"),
+    "dune_king_crook": ("crook", "gold", "gold", "sapphire"),
     "cartographer_blade": ("sword", "cartographer", "wood", "emerald"),
     "telluric_hammer": ("hammer", "lithite", "wood", "emerald"),
     "storm_staff": ("staff", "storm", "dark", "sapphire"),
@@ -395,7 +528,7 @@ HELD = {
     "steam_cane": ("cane", "iron", "dark", "gold"),
     "builder_wand": ("wand_block", "gold", "wood", "emerald"),
     "master_builder_wand": ("wand_block", "lithite", "dark", "amethyst"),
-    "ward_orb": ("caged_orb", "void", "gold", "amethyst"),
+    "ward_orb": ("ward_orb", "void", "gold", "amethyst"),
     "chisel": ("chisel", "iron", "wood", "gold"),
     "excavator_pickaxe": ("pickaxe", "lithite", "wood", "emerald"),
     "lumber_axe": ("axe", "iron", "wood", "gold"),
@@ -403,7 +536,8 @@ HELD = {
 # metal tools (wf/metals.py): brass on oak, mithril on dark wood
 for _mid, _handle in (("brass", "wood"), ("mithril", "dark")):
     for _kind in ("sword", "pickaxe", "axe", "shovel", "hoe"):
-        HELD[f"{_mid}_{_kind}"] = (_kind, _mid, _handle, "gold" if _mid == "brass" else "sapphire")
+        HELD[f"{_mid}_{_kind}"] = ("broadsword" if _kind == "sword" else _kind, _mid, _handle,
+                                   "gold" if _mid == "brass" else "sapphire")
 
 DISPLAY = {
     "thirdperson_righthand": {"rotation": [0, 90, 0], "translation": [0, 2.5, 0.5], "scale": [0.8, 0.8, 0.8]},
@@ -414,15 +548,43 @@ DISPLAY = {
 }
 
 
+# everyday tools are held smaller than the boss weapons and staves (a vanilla sword spans about 1.2 blocks in hand)
+SMALL = {"broadsword", "sword", "blade", "axe", "pickaxe", "shovel", "hoe", "chisel", "wand", "wand_block", "cane"}
+# short, hand-sized things (a book, a gauntlet, a horn, an orb): held upright in the palm, not like a blade
+COMPACT = {"book", "grimoire", "fist", "gauntlet", "horn", "horn_curved", "orb", "caged_orb", "ward_orb"}
+
+
+def display(arch):
+    """Display transforms of an archetype: DISPLAY scaled down for the small tools; compact items held upright in
+    front of the palm and a little bigger, tilted toward the camera in first person."""
+    d = {k: {kk: list(vv) for kk, vv in v.items()} for k, v in DISPLAY.items()}
+    if arch in SMALL:
+        for k in ("thirdperson_righthand", "thirdperson_lefthand"):
+            d[k]["scale"] = [0.68, 0.68, 0.68]
+            d[k]["translation"] = [0, 3.5, 0.5]
+        for k in ("firstperson_righthand", "firstperson_lefthand"):
+            d[k]["scale"] = [0.54, 0.54, 0.54]
+            d[k]["translation"] = [1.13, 3.0, 0.8]
+    elif arch in COMPACT:
+        for k, sgn in (("thirdperson_righthand", 1), ("thirdperson_lefthand", -1)):
+            d[k] = {"rotation": [75, 45 * sgn, 0], "translation": [0, 2.5, 1.5], "scale": [0.6, 0.6, 0.6]}
+        for k, sgn in (("firstperson_righthand", 1), ("firstperson_lefthand", -1)):
+            d[k] = {"rotation": [10, -45 * sgn, 0], "translation": [1.13, 4.5, 0.8], "scale": [0.6, 0.6, 0.6]}
+    return d
+
+
 def model(item_id):
     arch, *_ = HELD[item_id]
     tex = f"brasshaven:item/3d/{item_id}"
     elements = []
     for x0, y0, z0, x1, y1, z1, key in ARCHETYPES[arch]():
         uv = _cell_uv(key)
-        elements.append({"from": [x0, y0, z0], "to": [x1, y1, z1],
-                         "faces": {f: {"uv": uv, "texture": "#t"} for f in ("north", "south", "east", "west", "up", "down")}})
-    return {"textures": {"t": tex, "particle": tex}, "elements": elements, "display": DISPLAY}
+        el = {"from": [x0, y0, z0], "to": [x1, y1, z1],
+              "faces": {f: {"uv": uv, "texture": "#t"} for f in ("north", "south", "east", "west", "up", "down")}}
+        if key == "glow":
+            el["light_emission"] = 12        # gems, runes and lenses shine even in a dark cave
+        elements.append(el)
+    return {"textures": {"t": tex, "particle": tex}, "elements": elements, "display": display(arch)}
 
 
 def item_definition(item_id):

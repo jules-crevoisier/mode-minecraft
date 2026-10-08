@@ -302,6 +302,25 @@ STRUCTURES = {
                        "des cages suspendues au-dessus d'un puits ouvert sur la lave, la caserne et sa cellule secrète, "
                        "la halle de la forge, la chapelle, la salle du lieu de grâce, puis une passerelle couverte "
                        "jusqu'au tambour du boss, au sol de grilles, et la salle du trésor.",
+    "pilgrims_ascent": "Un croc de roche de 124 blocs, à-pic au nord au-dessus d'un bassin, et sur son flanc sud un "
+                       "escalier en lacets de près de 500 marches taillé dans la falaise : six rampes, seize portiques "
+                       "rouges et des lanternes à chaque palier. Au pied, le grand torii, le bassin de purification et "
+                       "une pierre de passage ; puis les sanctuaires : les moulins à prières sur l'épaule, la cascade "
+                       "qui tombe d'une gargouille de pierre, la grotte de la cloche (gargouilles, pierre de passage), "
+                       "le pont du vent qui rejoint une aiguille voisine et son pavillon, la cellule de l'ermite et sa "
+                       "cave secrète. Au sommet, une porte couverte, le lieu de grâce, puis le temple : sa salle ronde "
+                       "est l'arène, sous le beffroi de la grande cloche de bronze. Derrière, le sanctuaire suspendu "
+                       "au-dessus du vide garde le trésor, et son balcon offre la descente la plus rapide : le saut "
+                       "dans le bassin, 120 blocs plus bas.",
+    "tidal_abbey": "Une île rocheuse cernée par la marée, reliée au rivage par une chaussée de pierre à demi noyée "
+                   "et rompue en son milieu. Au pied, les remparts à tours, la barbacane et la porte du Roi ; puis la "
+                   "Grande Rue monte en spirale autour du rocher entre des maisons de pierre aux toits d'ardoise, sous "
+                   "des arches, par des lacets, des escaliers, la place du puits et le parvis de l'église paroissiale, "
+                   "jusqu'au Châtelet et au Grand Degré. Au sommet, l'abbatiale gothique (nef de 27 blocs) et sa flèche "
+                   "dont la pointe dorée culmine à 130 blocs ; à l'ouest, la Merveille : l'aumônerie, la salle des "
+                   "chevaliers et le cloître suspendu, dont le puits cache un reliquaire. Sous le rocher, la crypte "
+                   "(lieu de grâce) mène à la salle des marées, l'arène du boss éclairée par la mer à travers des "
+                   "grilles, puis au caveau du trésor et au tunnel qui ressort au port.",
     "shattered_halo": "Un anneau colossal de purpur, de briques de pierre de l'End et d'or, large de 170 blocs et "
                       "incliné au-dessus du vide de l'End, brisé en cinq arcs qui flottent chacun à sa hauteur. On "
                       "arrive sur un îlot extérieur (pierre de passage), puis les ponts imposent l'ordre : "
@@ -816,6 +835,10 @@ NEW_GROUPS = [
          "chaînes géantes, au-dessus d'un lac de lave.", "s-chained_bastion", "struct:chained_bastion"),
         ("Halo brisé", "Un anneau de 170 blocs brisé en cinq arcs flottants au-dessus du vide de l'End, un temple "
          "sur chaque arc et le boss sur un disque au centre.", "s-shattered_halo", "struct:shattered_halo"),
+        ("L'Ascension du pèlerin", "Un croc de roche de 124 blocs gravi par un escalier en lacets jusqu'au temple "
+         "de la grande cloche.", "s-pilgrims_ascent", "struct:pilgrims_ascent"),
+        ("Abbaye des marées", "Un mont rocheux cerné par la marée : remparts, une ville en spirale et une abbaye "
+         "gothique à flèche de 130 blocs, une arène dans la crypte.", "s-tidal_abbey", "struct:tidal_abbey"),
     ]),
 ]
 

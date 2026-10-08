@@ -51,6 +51,36 @@ public class BossWeaponItem extends AbilityItem {
         this.flags = flags;
     }
 
+    @Override
+    public void facts(ItemStack stack, List<net.minecraft.network.chat.Component> facts,
+                      List<net.minecraft.network.chat.Component> details) {
+        String shape = ability.name().toLowerCase(java.util.Locale.ROOT);
+        boolean radius = switch (ability) {
+            case WAVE, ROOT, CLOUD, LEAP, ARC -> true;
+            default -> false;
+        };
+        facts.add(BrassTooltip.heading(net.minecraft.network.chat.Component.translatable("tooltip.brasshaven.ability",
+                net.minecraft.network.chat.Component.translatable("tooltip.brasshaven.ability." + shape))));
+        facts.add(BrassTooltip.rule(net.minecraft.network.chat.Component.translatable("tooltip.brasshaven.ability.stats",
+                BrassTooltip.number(power),
+                net.minecraft.network.chat.Component.translatable(radius ? "tooltip.brasshaven.ability.radius"
+                        : "tooltip.brasshaven.ability.range", BrassTooltip.number(size)),
+                BrassTooltip.seconds(cooldownTicks()))));
+        String[] names = {"fire", "slow", "weak", "blind", "poison", "lift", "lifesteal"};
+        net.minecraft.network.chat.MutableComponent effects = null;
+        for (int bit = 0; bit < names.length; bit++) {
+            if ((flags & (1 << bit)) != 0) {
+                net.minecraft.network.chat.Component e = net.minecraft.network.chat.Component.translatable(
+                        "tooltip.brasshaven.ability.effect." + names[bit]);
+                effects = effects == null ? e.copy() : effects.append(", ").append(e);
+            }
+        }
+        if (effects != null) {
+            details.add(BrassTooltip.detail(net.minecraft.network.chat.Component.translatable("tooltip.brasshaven.ability.effects", effects)));
+        }
+        details.add(BrassTooltip.detail(net.minecraft.network.chat.Component.translatable("tooltip.brasshaven.ability.foes")));
+    }
+
     private static List<LivingEntity> foes(ServerLevel level, Player player, AABB box) {
         return level.getEntitiesOfClass(LivingEntity.class, box, e -> Targets.foe(player, e));
     }

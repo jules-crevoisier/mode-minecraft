@@ -3,32 +3,26 @@ package com.brasshaven.skill;
 import com.brasshaven.event.EquipmentEvents;
 import com.brasshaven.registry.ModItems;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.Item;
 
-/** Rings and amulets that boost mana just by being carried (no extra equipment slots needed). */
+/** Mana from gear: worn rings and amulets (accessory slots) and armour sets. */
 public final class ManaItems {
     private ManaItems() {}
 
-    private static boolean carries(ServerPlayer player, Item item) {
-        Inventory inv = player.getInventory();
-        for (int i = 0; i < inv.getContainerSize(); i++) {
-            if (inv.getItem(i).is(item)) {
-                return true;
-            }
-        }
-        return false;
+    /** Rings and amulets only count while worn in their accessory slot (accessory/Accessories). */
+    private static boolean wears(ServerPlayer player, Item item) {
+        return com.brasshaven.accessory.Accessories.wears(player, item);
     }
 
     public static float bonusMana(ServerPlayer player) {
         EquipmentEvents.ArmorSet set = EquipmentEvents.fullSet(player);
         float armor = set == EquipmentEvents.ArmorSet.ARCANE ? 100F : set == EquipmentEvents.ArmorSet.AETHER ? 75F : 0F;
-        return (carries(player, ModItems.ARCANE_RING.get()) ? 50F : 0F) + armor;
+        return (wears(player, ModItems.ARCANE_RING.get()) ? 50F : 0F) + armor;
     }
 
     public static float bonusRegen(ServerPlayer player) {
         float armor = EquipmentEvents.fullSet(player) == EquipmentEvents.ArmorSet.AETHER ? 1F : 0F;
-        return (carries(player, ModItems.MANA_AMULET.get()) ? 0.5F : 0F) + armor;
+        return (wears(player, ModItems.MANA_AMULET.get()) ? 0.5F : 0F) + armor;
     }
 
     /** Extra spell power from gear (the Arcanist robes). */

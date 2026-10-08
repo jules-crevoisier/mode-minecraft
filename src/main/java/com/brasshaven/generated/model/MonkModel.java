@@ -29,9 +29,23 @@ public final class MonkModel extends EntityModel<WayfarerRenderState> {
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(2.0F, KeyframeAnimations.degreeVec(1.5F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(4.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
+            .addAnimation("body", new AnimationChannel(AnimationChannel.Targets.POSITION,
+                    new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(2.0F, KeyframeAnimations.posVec(0.0F, 0.35F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(4.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .addAnimation("head", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(2.0F, KeyframeAnimations.degreeVec(3.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(2.0F, KeyframeAnimations.degreeVec(4.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(2.8F, KeyframeAnimations.degreeVec(4.0F, 8.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(3.4F, KeyframeAnimations.degreeVec(2.0F, 8.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(4.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
+            .addAnimation("robe", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(2.0F, KeyframeAnimations.degreeVec(-1.5F, 0.0F, 1.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(4.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
+            .addAnimation("hood", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(2.0F, KeyframeAnimations.degreeVec(4.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(4.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .addAnimation("arm_r", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
@@ -59,6 +73,28 @@ public final class MonkModel extends EntityModel<WayfarerRenderState> {
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(12.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.6F, KeyframeAnimations.degreeVec(-12.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(1.2F, KeyframeAnimations.degreeVec(12.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
+            .addAnimation("body", new AnimationChannel(AnimationChannel.Targets.POSITION,
+                    new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.3F, KeyframeAnimations.posVec(0.0F, 0.6F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.6F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.9F, KeyframeAnimations.posVec(0.0F, 0.6F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(1.2F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
+            .addAnimation("body", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(2.0F, -3.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.6F, KeyframeAnimations.degreeVec(2.0F, 3.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(1.2F, KeyframeAnimations.degreeVec(2.0F, -3.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
+            .addAnimation("robe", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(8.0F, 0.0F, -3.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.3F, KeyframeAnimations.degreeVec(12.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.6F, KeyframeAnimations.degreeVec(8.0F, 0.0F, 3.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.9F, KeyframeAnimations.degreeVec(12.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(1.2F, KeyframeAnimations.degreeVec(8.0F, 0.0F, -3.0F), AnimationChannel.Interpolations.CATMULLROM)))
+            .addAnimation("hood", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(10.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.3F, KeyframeAnimations.degreeVec(16.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.6F, KeyframeAnimations.degreeVec(10.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.9F, KeyframeAnimations.degreeVec(16.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(1.2F, KeyframeAnimations.degreeVec(10.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .build();
     public static final AnimationDefinition GREET = AnimationDefinition.Builder.withLength(1.6F)
             .addAnimation("arm_r", new AnimationChannel(AnimationChannel.Targets.ROTATION,
@@ -107,6 +143,21 @@ public final class MonkModel extends EntityModel<WayfarerRenderState> {
                     new Keyframe(0.4F, KeyframeAnimations.degreeVec(-20.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.7F, KeyframeAnimations.degreeVec(-20.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(1.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
+            .addAnimation("arm_l", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.4F, KeyframeAnimations.degreeVec(-40.0F, 0.0F, -30.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.5F, KeyframeAnimations.degreeVec(-20.0F, 0.0F, -10.0F), AnimationChannel.Interpolations.LINEAR),
+                    new Keyframe(1.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
+            .addAnimation("robe", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.4F, KeyframeAnimations.degreeVec(0.0F, -10.0F, 6.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.5F, KeyframeAnimations.degreeVec(0.0F, 14.0F, -6.0F), AnimationChannel.Interpolations.LINEAR),
+                    new Keyframe(1.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
+            .addAnimation("body", new AnimationChannel(AnimationChannel.Targets.POSITION,
+                    new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.4F, KeyframeAnimations.posVec(0.0F, -1.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.5F, KeyframeAnimations.posVec(0.0F, 0.0F, -1.0F), AnimationChannel.Interpolations.LINEAR),
+                    new Keyframe(1.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .build();
     public static final AnimationDefinition SCRIBE = AnimationDefinition.Builder.withLength(1.6F)
             .addAnimation("arm_l", new AnimationChannel(AnimationChannel.Targets.ROTATION,
@@ -203,33 +254,42 @@ public final class MonkModel extends EntityModel<WayfarerRenderState> {
                 new PartPose(2.0F, -12.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_body = p_bone.addOrReplaceChild("body", CubeListBuilder.create()
                 .texOffs(54, 0).addBox(-4.0F, -12.0F, -2.5F, 8.0F, 12.0F, 5.0F)
-                .texOffs(48, 27).addBox(-4.5F, -1.0F, -3.0F, 9.0F, 5.0F, 6.0F)
-                .texOffs(0, 43).addBox(-4.5F, -3.0F, -3.0F, 9.0F, 1.0F, 6.0F)
-                .texOffs(96, 43).addBox(1.5F, -2.0F, -3.2F, 1.0F, 5.0F, 0.0F)
-                .texOffs(78, 27).addBox(-4.5F, -13.0F, -3.0F, 9.0F, 3.0F, 6.0F)
-                .texOffs(60, 43).addBox(-4.0F, -12.0F, 2.5F, 8.0F, 4.0F, 1.0F)
-                .texOffs(30, 43).addBox(4.0F, -4.0F, -1.5F, 2.0F, 4.0F, 3.0F),
+                .texOffs(88, 43).addBox(-4.5F, -3.0F, -3.0F, 9.0F, 1.0F, 6.0F)
+                .texOffs(68, 52).addBox(1.5F, -2.0F, -3.2F, 1.0F, 5.0F, 0.0F)
+                .texOffs(0, 43).addBox(-4.5F, -13.0F, -3.0F, 9.0F, 3.0F, 6.0F)
+                .texOffs(118, 43).addBox(4.0F, -4.0F, -1.5F, 2.0F, 4.0F, 3.0F)
+                .texOffs(38, 52).addBox(-3.0F, -11.0F, -2.8F, 6.0F, 6.0F, 0.0F),
                 new PartPose(0.0F, -12.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_head = p_body.addOrReplaceChild("head", CubeListBuilder.create()
                 .texOffs(80, 0).addBox(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F)
-                .texOffs(108, 43).addBox(-1.0F, -4.0F, -5.0F, 2.0F, 2.0F, 1.0F),
+                .texOffs(92, 52).addBox(-1.0F, -4.0F, -5.0F, 2.0F, 2.0F, 1.0F),
                 new PartPose(0.0F, -12.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_arm_r = p_body.addOrReplaceChild("arm_r", CubeListBuilder.create()
-                .texOffs(16, 27).addBox(-2.0F, -1.0F, -2.0F, 4.0F, 11.0F, 4.0F),
+                .texOffs(16, 27).addBox(-2.0F, -1.0F, -2.0F, 4.0F, 11.0F, 4.0F)
+                .texOffs(30, 43).addBox(-2.5F, 5.0F, -2.5F, 5.0F, 4.0F, 5.0F),
                 new PartPose(-5.0F, -11.0F, 0.0F, 0.0F, 0.0F, 0.10472F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_tool = p_arm_r.addOrReplaceChild("tool", CubeListBuilder.create()
-                .texOffs(40, 43).addBox(-0.5F, -4.0F, -1.0F, 0.0F, 5.0F, 2.0F)
-                .texOffs(108, 27).addBox(-0.5F, -0.5F, -7.0F, 1.0F, 1.0F, 8.0F)
-                .texOffs(98, 43).addBox(-1.5F, -1.0F, -9.0F, 3.0F, 2.0F, 2.0F)
+                .texOffs(0, 52).addBox(-0.5F, -4.0F, -1.0F, 0.0F, 5.0F, 2.0F)
+                .texOffs(70, 43).addBox(-0.5F, -0.5F, -7.0F, 1.0F, 1.0F, 8.0F)
+                .texOffs(70, 52).addBox(-1.5F, -1.0F, -9.0F, 3.0F, 2.0F, 2.0F)
                 .texOffs(0, 0).addBox(-0.5F, -0.5F, -14.0F, 1.0F, 1.0F, 26.0F),
                 new PartPose(-0.5F, 9.5F, -0.5F, -1.0472F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_arm_l = p_body.addOrReplaceChild("arm_l", CubeListBuilder.create()
-                .texOffs(32, 27).addBox(-2.0F, -1.0F, -2.0F, 4.0F, 11.0F, 4.0F),
+                .texOffs(32, 27).addBox(-2.0F, -1.0F, -2.0F, 4.0F, 11.0F, 4.0F)
+                .texOffs(50, 43).addBox(-2.5F, 5.0F, -2.5F, 5.0F, 4.0F, 5.0F),
                 new PartPose(5.0F, -11.0F, 0.0F, 0.0F, 0.0F, -0.10472F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_off = p_arm_l.addOrReplaceChild("off", CubeListBuilder.create()
-                .texOffs(78, 43).addBox(-2.5F, 0.0F, -3.0F, 5.0F, 1.0F, 4.0F)
-                .texOffs(44, 43).addBox(-2.0F, -1.0F, -3.0F, 4.0F, 2.0F, 4.0F),
+                .texOffs(50, 52).addBox(-2.5F, 0.0F, -3.0F, 5.0F, 1.0F, 4.0F)
+                .texOffs(22, 52).addBox(-2.0F, -1.0F, -3.0F, 4.0F, 2.0F, 4.0F),
                 new PartPose(0.5F, 9.5F, -0.5F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
+        PartDefinition p_robe = p_body.addOrReplaceChild("robe", CubeListBuilder.create()
+                .texOffs(82, 27).addBox(-4.5F, 0.0F, -3.0F, 9.0F, 6.0F, 6.0F)
+                .texOffs(48, 27).addBox(-5.0F, 5.0F, -3.5F, 10.0F, 6.0F, 7.0F),
+                new PartPose(0.0F, -1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
+        PartDefinition p_hood = p_body.addOrReplaceChild("hood", CubeListBuilder.create()
+                .texOffs(4, 52).addBox(-4.0F, 0.0F, 0.0F, 8.0F, 5.0F, 1.0F)
+                .texOffs(80, 52).addBox(-2.5F, 5.0F, 0.0F, 5.0F, 2.0F, 1.0F),
+                new PartPose(0.0F, -12.0F, 2.5F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         return LayerDefinition.create(mesh, 128, 64);
     }
 

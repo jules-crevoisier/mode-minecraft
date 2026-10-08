@@ -1158,7 +1158,8 @@
           ],
           "texture": "#t"
         }
-      }
+      },
+      "light_emission": 12
     },
     {
       "from": [

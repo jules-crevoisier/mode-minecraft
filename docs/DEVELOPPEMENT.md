@@ -200,7 +200,28 @@ Journal de la refonte :
   `/brasshaven boss cycle`), refonte de 221 textures (`tools/wf/texkit.py`, `texore.py`, planches avant/après
   dans `build/texreview/`).
 
-## 6. Petits outils de débogage
+## 6. Interface : accessoires et infobulles
+
+**Accessoires.** Cinq cases à côté de l'armure (dos, deux anneaux, amulette, ceinture), ajoutées au menu
+d'inventaire de chaque joueur (indices 46 à 50, des deux côtés, `accessory/Accessories.java`) : la synchro et les
+clics passent par le menu vanilla, donc le serveur valide tout. Ce qui va où : `tools/wf/accessories.py` (`SLOTS`)
+→ tags `brasshaven:accessory/<case>` ; ajouter un accessoire = l'ajouter à la liste, régénérer, et lire son effet
+avec `Accessories.wears(joueur, objet)` (jamais en fouillant l'inventaire : **un accessoire n'agit que porté**).
+Sauvegarde dans les données persistantes du joueur (`brasshaven_accessories`, `DataVersions.ACCESSORIES`) ; à la
+mort, règle keepInventory (sinon ils tombent avec le reste, donc dans la tombe). Écran : `client/AccessoryClient.java`
+(colonne à gauche en survie, masquée quand le livre de recettes la couvre ; cinq cases à droite de l'armure dans
+l'onglet inventaire du créatif ; Maj + clic → message serveur `AccessoryMoveMsg`). Silhouettes et panneau :
+`accessories.sprites()` appelé par `gen_gui.py`.
+
+**Infobulles.** Une seule mise en page pour tous les objets (`item/BrassTooltip.java`) : nom, une phrase d'ambiance
+en italique (`item.brasshaven.<id>.flavor`, `tools/wf/tooltips.py`), la règle en clair (`.desc`, puis `.desc2`,
+`.desc3`), les faits chiffrés calculés en Java (emplacement d'accessoire, capacité et recharge des armes de boss,
+mana des sorts, bonus d'ensemble), puis « Maj enfoncée : plus de détails » quand le reste dépasse une ligne. Écrire
+les règles en phrases courtes qui commencent par l'action (« Clic droit : … », « Porté : … », « Ensemble : … »)
+avec les vrais chiffres, en anglais et en français côte à côte. `validate.py` (`check_tooltips`) vérifie les tables
+et toutes les clés `tooltip.*` utilisées en Java.
+
+## 7. Petits outils de débogage
 
 Coupe ASCII d'un plan en cache (un caractère par bloc : `#` plein, `.` air, `s`/`S` dalle basse/haute, `^v<>`
 escaliers, `H` échelle, `d` porte, `t` trappe, `$` coffre/tonneau) :

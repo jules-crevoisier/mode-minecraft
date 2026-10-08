@@ -169,6 +169,7 @@ def tags():
         [row[2] for row in BOSS_GEAR if row[6] is not None]
     write("minecraft/tags/item/swords.json", {"replace": False, "values": [f"{NS}:{s}" for s in swords]})
     __import__("wf.gadgets", fromlist=["tags"]).tags(write)
+    __import__("wf.accessories", fromlist=["tags"]).tags(write)  # accessory slots: brasshaven:accessory/<slot>
     write("minecraft/tags/item/pickaxes.json", {"replace": False, "values": [f"{NS}:excavator_pickaxe"]})
     write("minecraft/tags/item/axes.json", {"replace": False, "values": [f"{NS}:lumber_axe"]})
     for slot, piece in (("head", "helmet"), ("chest", "chestplate"), ("leg", "leggings"), ("foot", "boots")):

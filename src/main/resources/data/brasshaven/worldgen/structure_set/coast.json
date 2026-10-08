@@ -3,6 +3,10 @@
     {
       "structure": "brasshaven:coastal_lighthouse",
       "weight": 1
+    },
+    {
+      "structure": "brasshaven:tidal_abbey",
+      "weight": 1
     }
   ],
   "placement": {

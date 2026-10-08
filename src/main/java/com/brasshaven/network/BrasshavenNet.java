@@ -47,6 +47,8 @@ public final class BrasshavenNet {
                     .addMain(MapActionMsg.class, MapActionMsg.STREAM_CODEC, MapActionMsg::handle)
                     .addMain(NpcActionMsg.class, NpcActionMsg.STREAM_CODEC, NpcActionMsg::handle)
                     .addMain(RecipeFillMsg.class, RecipeFillMsg.STREAM_CODEC, RecipeFillMsg::handle)
+                    .addMain(AccessoryMoveMsg.class, AccessoryMoveMsg.STREAM_CODEC, AccessoryMoveMsg::handle)
+                    .addMain(AccessoryCreativeMsg.class, AccessoryCreativeMsg.STREAM_CODEC, AccessoryCreativeMsg::handle)
             .build();
 
     private BrasshavenNet() {}

@@ -34,14 +34,21 @@ def role_only(role, wanted, spec):
 
 
 def cloth(base, dark, seed=0, trim=None, trim_rows=(), hem=None):
-    """Woven cloth: a fine twill of two tones, ``trim`` on the given rows (negative counts from the bottom) and a
-    darker, dirtier hem on the lowest row."""
+    """Woven cloth hanging in soft vertical folds (a dark fold line, a lit crest), lit along the top edge, shadowed
+    along the bottom, ``trim`` on the given rows (negative counts from the bottom) and a darker, dirtier hem on the
+    lowest row."""
     def f(face, x, y, w, hh):
-        c = base if (x + y * 2 + seed) % 5 else dark
-        if h(x, y, seed) % 13 == 0:
-            c = mix(c, (255, 255, 255), 0.07)
         if face in ("top", "bottom"):
-            return mul(c, 0.9)
+            c = base if (x + y + seed) % 4 else dark
+            return mul(c, 1.0 if face == "top" else 0.8)
+        k = (x + h(seed, x // 3)) % 4
+        c = dark if k == 0 else (mix(base, (255, 255, 255), 0.07) if k == 2 else base)
+        if h(x, y, seed) % 23 == 0:
+            c = mix(c, dark, 0.5)
+        if y == 0 and hh > 3:
+            c = mix(c, (255, 255, 255), 0.08)
+        elif y == hh - 1 and hh > 3:
+            c = mul(c, 0.86)
         if trim is not None and (y in trim_rows or (y - hh) in trim_rows):
             return trim
         if hem is not None and y == hh - 1:

@@ -39,6 +39,10 @@
     {
       "structure": "brasshaven:fallen_colossus",
       "weight": 1
+    },
+    {
+      "structure": "brasshaven:pilgrims_ascent",
+      "weight": 1
     }
   ],
   "placement": {

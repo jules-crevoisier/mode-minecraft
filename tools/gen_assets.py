@@ -303,8 +303,9 @@ def main():
         lang_en.update(g_en)
         lang_fr.update(g_fr)
     # server guard refusals (docs/SERVER_ADMIN.md)
-    from wf import serverguard, recipe_viewer
-    for mod in (serverguard, recipe_viewer):  # + the recipe viewer (client/recipes)
+    from wf import serverguard, recipe_viewer, accessories, tooltips
+    # + the recipe viewer (client/recipes), accessory slots and the tooltip conventions (item/BrassTooltip)
+    for mod in (serverguard, recipe_viewer, accessories, tooltips):
         g_en, g_fr = mod.lang()
         lang_en.update(g_en)
         lang_fr.update(g_fr)

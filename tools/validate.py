@@ -577,6 +577,24 @@ def check_lang():
                         err(f"{lang}: missing key {key} (used in {f})")
 
 
+def check_tooltips():
+    """Tooltips (wf/tooltips.py, item/BrassTooltip): ability tables match the Java, flavours name real items, and every
+    key BrassTooltip builds from a prefix exists in both languages."""
+    from wf import tooltips, accessories
+    a = os.path.join(ASSETS, "brasshaven", "lang")
+    en = json.load(open(os.path.join(a, "en_us.json"), encoding="utf-8"))
+    fr = json.load(open(os.path.join(a, "fr_fr.json"), encoding="utf-8"))
+    tooltips.check(err, ROOT, en, fr, set(mod_ids("items")))
+    for table, name in ((en, "en_us"), (fr, "fr_fr")):
+        for sid in accessories.SLOTS:
+            if f"tooltip.brasshaven.accessory.slot.{sid}" not in table:
+                err(f"{name}: missing accessory slot name {sid}")
+        for sid, (_e, _f, _n, items) in accessories.SLOTS.items():
+            for i in items:
+                if i not in set(mod_ids("items")):
+                    err(f"accessories.py: slot {sid} lists unknown item {i}")
+
+
 def check_model_bounds():
     """Minecraft refuses a model whose elements leave the -16..32 box (the item then shows as missing)."""
     for path in glob.glob(os.path.join(ASSETS, "*", "models", "**", "*.json"), recursive=True):
@@ -1286,6 +1304,7 @@ def main():
     check_model_bounds()
     check_advancements()
     check_lang()
+    check_tooltips()
     check_tags()
     check_chisel()
     check_guide()

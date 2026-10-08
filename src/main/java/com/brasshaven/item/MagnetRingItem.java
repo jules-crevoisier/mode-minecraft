@@ -8,16 +8,13 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import org.jetbrains.annotations.Nullable;
 
-/** While enabled (shown by the enchantment glint) it pulls items and XP orbs to its holder. */
+/** Worn in a ring slot and enabled (shown by the enchantment glint), it pulls items and XP orbs to its wearer. */
 public class MagnetRingItem extends TooltipItem {
 
     public MagnetRingItem(Properties properties) {
@@ -44,14 +41,16 @@ public class MagnetRingItem extends TooltipItem {
         return InteractionResult.SUCCESS;
     }
 
-    @Override
-    public void inventoryTick(ItemStack stack, ServerLevel level, Entity owner, @Nullable EquipmentSlot slot) {
-        if (!(owner instanceof Player player) || !isEnabled(stack) || player.isSpectator()
-                || (level.getGameTime() + player.getId()) % 4 != 0) { // staggered: not every ring on the same tick
+    /**
+     * Pulls the items and XP orbs around a player to them (server option items.magnetRange). Only a ring worn in an
+     * accessory slot and switched on does this (accessory/AccessoryEvents).
+     */
+    public static void pull(Player player, ServerLevel level) {
+        if (player.isSpectator() || !player.isAlive()) {
             return;
         }
         double range = com.brasshaven.config.BrasshavenConfig.MAGNET_RANGE.get(); // server option (items.magnetRange)
-        if (range <= 0 || !player.isAlive()) {
+        if (range <= 0) {
             return;
         }
         for (ItemEntity item : level.getEntitiesOfClass(ItemEntity.class, player.getBoundingBox().inflate(range),

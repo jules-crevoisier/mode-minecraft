@@ -29,6 +29,21 @@ public final class WayfarerNpcModel extends EntityModel<WayfarerRenderState> {
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(2.0F, KeyframeAnimations.degreeVec(1.5F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(4.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
+            .addAnimation("body", new AnimationChannel(AnimationChannel.Targets.POSITION,
+                    new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(2.0F, KeyframeAnimations.posVec(0.0F, 0.35F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(4.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
+            .addAnimation("head", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(1.2F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(1.8F, KeyframeAnimations.degreeVec(4.0F, 14.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(2.6F, KeyframeAnimations.degreeVec(4.0F, 14.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(3.4F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(4.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
+            .addAnimation("robe", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(2.0F, KeyframeAnimations.degreeVec(-2.0F, 0.0F, 1.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(4.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .addAnimation("arm_r", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(2.0F, KeyframeAnimations.degreeVec(-3.0F, 0.0F, 2.0F), AnimationChannel.Interpolations.CATMULLROM),
@@ -55,6 +70,26 @@ public final class WayfarerNpcModel extends EntityModel<WayfarerRenderState> {
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(20.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.6F, KeyframeAnimations.degreeVec(-20.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(1.2F, KeyframeAnimations.degreeVec(20.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
+            .addAnimation("body", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(2.0F, -4.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.6F, KeyframeAnimations.degreeVec(2.0F, 4.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(1.2F, KeyframeAnimations.degreeVec(2.0F, -4.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
+            .addAnimation("body", new AnimationChannel(AnimationChannel.Targets.POSITION,
+                    new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.3F, KeyframeAnimations.posVec(0.0F, 0.7F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.6F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.9F, KeyframeAnimations.posVec(0.0F, 0.7F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(1.2F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
+            .addAnimation("robe", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(6.0F, 0.0F, -2.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.3F, KeyframeAnimations.degreeVec(10.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.6F, KeyframeAnimations.degreeVec(6.0F, 0.0F, 2.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.9F, KeyframeAnimations.degreeVec(10.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(1.2F, KeyframeAnimations.degreeVec(6.0F, 0.0F, -2.0F), AnimationChannel.Interpolations.CATMULLROM)))
+            .addAnimation("head", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 4.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.6F, KeyframeAnimations.degreeVec(0.0F, -4.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(1.2F, KeyframeAnimations.degreeVec(0.0F, 4.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .build();
     public static final AnimationDefinition GREET = AnimationDefinition.Builder.withLength(1.6F)
             .addAnimation("arm_r", new AnimationChannel(AnimationChannel.Targets.ROTATION,
@@ -67,8 +102,14 @@ public final class WayfarerNpcModel extends EntityModel<WayfarerRenderState> {
                     new Keyframe(1.6F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .addAnimation("body", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.3F, KeyframeAnimations.degreeVec(-3.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(1.3F, KeyframeAnimations.degreeVec(-3.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.3F, KeyframeAnimations.degreeVec(-3.0F, 0.0F, -3.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(1.3F, KeyframeAnimations.degreeVec(-3.0F, 0.0F, -3.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(1.6F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
+            .addAnimation("head", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.3F, KeyframeAnimations.degreeVec(-6.0F, 0.0F, 6.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.8F, KeyframeAnimations.degreeVec(-4.0F, 0.0F, -4.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(1.3F, KeyframeAnimations.degreeVec(-6.0F, 0.0F, 6.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(1.6F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .build();
     public static final AnimationDefinition NOD = AnimationDefinition.Builder.withLength(0.8F)
@@ -77,6 +118,12 @@ public final class WayfarerNpcModel extends EntityModel<WayfarerRenderState> {
                     new Keyframe(0.2F, KeyframeAnimations.degreeVec(18.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.4F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.6F, KeyframeAnimations.degreeVec(14.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.8F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
+            .addAnimation("body", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.2F, KeyframeAnimations.degreeVec(5.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.4F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.6F, KeyframeAnimations.degreeVec(4.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.8F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .build();
 
@@ -105,31 +152,47 @@ public final class WayfarerNpcModel extends EntityModel<WayfarerRenderState> {
         PartDefinition p_bone = root.addOrReplaceChild("bone", CubeListBuilder.create(),
                 new PartPose(0.0F, 24.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_leg_r = p_bone.addOrReplaceChild("leg_r", CubeListBuilder.create()
-                .texOffs(92, 0).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F),
+                .texOffs(96, 0).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F),
                 new PartPose(-2.0F, -12.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_leg_l = p_bone.addOrReplaceChild("leg_l", CubeListBuilder.create()
-                .texOffs(108, 0).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F),
+                .texOffs(112, 0).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F),
                 new PartPose(2.0F, -12.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_body = p_bone.addOrReplaceChild("body", CubeListBuilder.create()
-                .texOffs(32, 0).addBox(-4.0F, -12.0F, -3.0F, 8.0F, 12.0F, 6.0F)
-                .texOffs(60, 0).addBox(-4.5F, -1.0F, -3.5F, 9.0F, 9.0F, 7.0F)
-                .texOffs(42, 33).addBox(-4.5F, -2.0F, -3.5F, 9.0F, 1.0F, 7.0F)
-                .texOffs(108, 18).addBox(-3.0F, -10.0F, 3.0F, 6.0F, 7.0F, 3.0F),
+                .texOffs(36, 0).addBox(-4.0F, -12.0F, -3.0F, 8.0F, 12.0F, 6.0F)
+                .texOffs(0, 49).addBox(-4.5F, -2.0F, -3.5F, 9.0F, 1.0F, 7.0F)
+                .texOffs(68, 38).addBox(-3.0F, -10.0F, 3.0F, 6.0F, 7.0F, 3.0F)
+                .texOffs(36, 38).addBox(-4.5F, -12.5F, -3.5F, 9.0F, 3.0F, 7.0F)
+                .texOffs(102, 49).addBox(-5.5F, -3.0F, -1.5F, 1.0F, 3.0F, 3.0F)
+                .texOffs(82, 49).addBox(0.5F, -14.0F, 4.0F, 2.0F, 5.0F, 2.0F)
+                .texOffs(0, 57).addBox(1.0F, -13.0F, 4.0F, 2.0F, 3.0F, 2.0F)
+                .texOffs(118, 49).addBox(4.5F, -2.0F, -2.5F, 1.0F, 5.0F, 1.0F)
+                .texOffs(8, 57).addBox(3.5F, -2.0F, -2.5F, 3.0F, 1.0F, 1.0F),
                 new PartPose(0.0F, -12.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_head = p_body.addOrReplaceChild("head", CubeListBuilder.create()
-                .texOffs(0, 0).addBox(-4.0F, -10.0F, -4.0F, 8.0F, 10.0F, 8.0F)
-                .texOffs(74, 33).addBox(-1.0F, -4.0F, -6.0F, 2.0F, 4.0F, 2.0F)
-                .texOffs(32, 18).addBox(-5.0F, -11.0F, -5.0F, 10.0F, 1.0F, 10.0F)
-                .texOffs(18, 33).addBox(-3.0F, -14.0F, -3.0F, 6.0F, 3.0F, 6.0F)
-                .texOffs(72, 18).addBox(-4.5F, -8.0F, -4.5F, 9.0F, 2.0F, 9.0F)
-                .texOffs(0, 33).addBox(-4.0F, -3.0F, -5.0F, 8.0F, 9.0F, 1.0F),
+                .texOffs(4, 0).addBox(-4.0F, -10.0F, -4.0F, 8.0F, 10.0F, 8.0F)
+                .texOffs(110, 49).addBox(-1.0F, -4.0F, -6.0F, 2.0F, 4.0F, 2.0F)
+                .texOffs(76, 23).addBox(-5.0F, -11.0F, -5.0F, 10.0F, 1.0F, 10.0F)
+                .texOffs(104, 38).addBox(-3.0F, -14.0F, -3.0F, 6.0F, 3.0F, 6.0F)
+                .texOffs(0, 38).addBox(-4.5F, -8.0F, -4.5F, 9.0F, 2.0F, 9.0F)
+                .texOffs(86, 38).addBox(-4.0F, -3.0F, -5.0F, 8.0F, 9.0F, 1.0F)
+                .texOffs(32, 23).addBox(-5.5F, -13.0F, -5.0F, 1.0F, 2.0F, 10.0F)
+                .texOffs(54, 23).addBox(4.5F, -13.0F, -5.0F, 1.0F, 2.0F, 10.0F)
+                .texOffs(122, 49).addBox(4.0F, -10.0F, 0.0F, 1.0F, 5.0F, 1.0F),
                 new PartPose(0.0F, -12.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_arm_r = p_body.addOrReplaceChild("arm_r", CubeListBuilder.create()
-                .texOffs(0, 18).addBox(-2.0F, -1.0F, -2.0F, 4.0F, 11.0F, 4.0F),
+                .texOffs(0, 23).addBox(-2.0F, -1.0F, -2.0F, 4.0F, 11.0F, 4.0F)
+                .texOffs(32, 49).addBox(-2.5F, -2.0F, -2.5F, 5.0F, 3.0F, 5.0F),
                 new PartPose(-6.0F, -11.0F, 0.0F, 0.0F, 0.0F, 0.0698132F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_arm_l = p_body.addOrReplaceChild("arm_l", CubeListBuilder.create()
-                .texOffs(16, 18).addBox(-2.0F, -1.0F, -2.0F, 4.0F, 11.0F, 4.0F),
+                .texOffs(16, 23).addBox(-2.0F, -1.0F, -2.0F, 4.0F, 11.0F, 4.0F)
+                .texOffs(72, 49).addBox(-1.5F, 8.0F, -4.0F, 3.0F, 5.0F, 2.0F)
+                .texOffs(0, 0).addBox(-0.5F, -8.0F, -3.0F, 1.0F, 22.0F, 1.0F)
+                .texOffs(90, 49).addBox(-1.5F, -10.0F, -4.0F, 3.0F, 3.0F, 3.0F)
+                .texOffs(52, 49).addBox(-2.5F, -2.0F, -2.5F, 5.0F, 3.0F, 5.0F),
                 new PartPose(6.0F, -11.0F, 0.0F, 0.0F, 0.0F, -0.0698132F, 1.0F, 1.0F, 1.0F));
+        PartDefinition p_robe = p_body.addOrReplaceChild("robe", CubeListBuilder.create()
+                .texOffs(64, 0).addBox(-4.5F, 0.0F, -3.5F, 9.0F, 9.0F, 7.0F),
+                new PartPose(0.0F, -1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         return LayerDefinition.create(mesh, 128, 64);
     }
 

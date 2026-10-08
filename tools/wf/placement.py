@@ -111,7 +111,7 @@ FAMILIES = [
     Family("wonders", "wonder", 120, 40, {
         "clockwork_citadel": 1, "sky_harbour": 1, "sylvan_palace": 1, "inventor_manor": 1, "sky_isles": 1,
         "geothermal_foundry": 1, "tesla_observatory": 1, "walking_fortress": 1,
-        "rock_necropolis": 1, "fallen_colossus": 1,
+        "rock_necropolis": 1, "fallen_colossus": 1, "pilgrims_ascent": 1,
     }, avoid=[(V + "villages", 10), (V + "pillager_outposts", 6), (V + "woodland_mansions", 8)], min_spawn=32,
         note="surface wonders; at least 40 chunks between two of them, none within 512 blocks of 0,0"),
     Family("deep_wonders", "deep_wonder", 72, 28, {
@@ -129,6 +129,7 @@ FAMILIES = [
         note="surface entrance, random layout among three"),
     Family("coast", "coast", 44, 16, {
         "coastal_lighthouse": 1,
+        "tidal_abbey": 1,
     }, avoid=[(W, WONDER_RADIUS), (V + "villages", 4), (L, 6)],
         note="beaches only: real spacing is several times the grid"),
     Family("wayside", "small", 40, 16, {
@@ -215,8 +216,11 @@ FIT = {
     "walking_fortress": _f("land", spread=24, slope=0.9, wet=0.1),      # the crater bowl wants open, flat ground
     "rock_necropolis": _f("land", spread=28, slope=1.1, wet=0.05),      # brings its own cliff massif
     "fallen_colossus": _f("land", spread=22, slope=0.9, wet=0.08),      # a valley floor: open, flat ground
+    "pilgrims_ascent": _f("land", spread=36, slope=1.7, wet=0.05),     # brings its own rock fang: made for slopes
     # ---- coast: the dock side (template +z = south) in the sea, the cape on land, shore near sea level
     "coastal_lighthouse": _f("coast", sea_side="south", wet=0.5, land=0.5, spread=8, slope=1.0),
+    # the island (south) in the sea, the causeway's shore end (north) on the beach: the strand lands at sea level
+    "tidal_abbey": _f("coast", sea_side="south", wet=0.7, land=0.3, spread=8, slope=1.2),
     # ---- sea floor: wet share, median water depth, floor spread
     "galleon_wreck": _f("seabed", wet=0.7, depth=4, spread=8, slope=0.6),
     "sunken_temple": _f("seabed", wet=0.95, depth=6, spread=10, slope=0.6),

@@ -28,10 +28,12 @@ GADGETS = {
                         "Accroupi ou clic droit à nouveau : lâcher.",
                         "Aucun dégât de chute pendant la traction."]),
     "brass_glider": ("Brass Glider", "Planeur en laiton",
-                     ["Hold it while falling: it opens, you sink slowly",
-                      "and glide where you look. No fall damage."],
-                     ["Tiens-le en main pendant une chute : il s'ouvre,",
-                      "tu planes là où tu regardes. Aucun dégât de chute."]),
+                     ["Worn on your back or held: opens when you fall. No fall damage.",
+                      "You sink slowly and glide where you look.",
+                      "Wears 1 durability every 2 seconds of flight."],
+                     ["Porté dans le dos ou en main : s'ouvre pendant une chute. Aucun dégât de chute.",
+                      "Tu descends doucement et planes là où tu regardes.",
+                      "S'use de 1 point toutes les 2 secondes de vol."]),
     "rivet_gun": ("Rivet Gun", "Pistolet à rivets",
                   ["Use: fire a hot rivet (5 damage).",
                    "Ammo: Rivets, or iron nuggets."],
@@ -41,10 +43,12 @@ GADGETS = {
               ["Ammunition for the Rivet Gun."],
               ["Munitions du pistolet à rivets."]),
     "pocket_watch": ("Pocket Watch", "Montre à gousset",
-                     ["Its hand follows the sun.",
-                      "Use: time, day, moon phase and biome."],
-                     ["Son aiguille suit le soleil.",
-                      "Clic droit : heure, jour, phase de lune et biome."]),
+                     ["Use: time, day, moon phase and biome.",
+                      "Worn on your belt: chimes at dusk and at dawn.",
+                      "Its hand follows the sun."],
+                     ["Clic droit : heure, jour, phase de lune et biome.",
+                      "Portée à la ceinture : sonne au crépuscule et à l'aube.",
+                      "Son aiguille suit le soleil."]),
     "airship_compass": ("Airship Compass", "Boussole de dirigeable",
                         ["Use: find the nearest Sky Harbour.",
                          "In the End: the Void Ship Wreck.",
@@ -136,10 +140,10 @@ PAGES = [
          "Fabrication, en colonne : un crochet, une chaîne en fer, un lingot de laiton."),
     ], ["brasshaven:grappling_hook"]),
     ("glider", "brasshaven:brass_glider", ("Brass Glider", "Planeur en laiton"), [
-        ("Hold it in either hand and jump from somewhere high: it opens by itself. You sink slowly and glide where "
-         "you look, and landing never hurts.",
-         "Tiens-le en main et saute d'un endroit élevé : il s'ouvre tout seul. Tu descends doucement vers là où tu "
-         "regardes, sans dégâts à l'atterrissage."),
+        ("Wear it in the back slot (next to your armour in the inventory), or hold it, and jump from somewhere high: "
+         "it opens by itself. You sink slowly and glide where you look, and landing never hurts.",
+         "Porte-le dans l'emplacement du dos (à côté de l'armure, dans l'inventaire), ou tiens-le en main, et saute "
+         "d'un endroit élevé : il s'ouvre tout seul. Tu descends doucement vers là où tu regardes, sans dégâts."),
         ("With the Grappling Hook: climb a tower, then glide to the next one. It wears in flight; repair it with "
          "brass.",
          "Avec le grappin : grimpe sur une tour, puis plane jusqu'à la suivante. Il s'use en vol ; répare-le avec du "
@@ -178,7 +182,8 @@ PAGES = [
 
 def guide_pages():
     """Pages of the "gadgets" manual category (declared in guide.CATEGORIES)."""
-    return [(pid, "gadgets", icon, title, paras, items) for pid, icon, title, paras, items in PAGES]
+    from .accessories import guide_page
+    return [(pid, "gadgets", icon, title, paras, items) for pid, icon, title, paras, items in PAGES + [guide_page()]]
 
 
 # ------------------------------------------------------------------ sprite painter

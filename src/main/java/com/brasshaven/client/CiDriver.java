@@ -562,6 +562,80 @@ public final class CiDriver {
                 .waitTicks(40)
                 .shot("creative_tab");
 
+        // the five accessory slots left of the armour, filled; then a Brasshaven tooltip under the mouse
+        step("accessories")
+                .run("close", () -> closeScreen(Minecraft.getInstance()))
+                .cmd(() -> List.of("gamemode survival", "clear @s", "give @s brasshaven:kings_trident",
+                        "give @s brasshaven:arcane_ring", "give @s brasshaven:remembrance_ash_lord"))
+                .server("wear", (server, player) -> {
+                    var worn = com.brasshaven.accessory.Accessories.ensure(player);
+                    String[] ids = {"brass_glider", "magnet_ring", "arcane_ring", "mana_amulet", "pocket_watch"};
+                    for (int i = 0; i < ids.length; i++) {
+                        worn.setItem(i, new net.minecraft.world.item.ItemStack(
+                                net.minecraft.core.registries.BuiltInRegistries.ITEM.getValue(Brasshaven.id(ids[i]))));
+                    }
+                    com.brasshaven.accessory.Accessories.changed(player);
+                    if (!com.brasshaven.accessory.Accessories.wears(player, com.brasshaven.registry.ModItems.ARCANE_RING.get())) {
+                        throw new IllegalStateException("the arcane ring is not worn");
+                    }
+                    return List.of();
+                })
+                .waitTicks(10)
+                .run("open", () -> Minecraft.getInstance().gui.setScreen(
+                        new net.minecraft.client.gui.screens.inventory.InventoryScreen(Minecraft.getInstance().player)))
+                .until("InventoryScreen", () -> screen() instanceof net.minecraft.client.gui.screens.inventory.InventoryScreen, 40)
+                .run("mouse away", () -> mouseAtGui(4, 4))
+                .waitTicks(20)
+                .shot("accessories")
+                // the hotbar's first slot (the trident): GUI (8, 142) from the inventory's corner
+                .run("hover", () -> {
+                    var w = Minecraft.getInstance().getWindow();
+                    mouseAtGui((w.getGuiScaledWidth() - 176) / 2 + 16, (w.getGuiScaledHeight() - 166) / 2 + 150);
+                })
+                .waitTicks(10)
+                .shot("tooltip_trident")
+                .run("shift", () -> com.brasshaven.item.BrassTooltip.shiftDown = () -> true)
+                .waitTicks(10)
+                .shot("tooltip_trident_shift")
+                .run("unshift", () -> com.brasshaven.item.BrassTooltip.shiftDown = () -> Minecraft.getInstance().hasShiftDown())
+                .run("hover ring", () -> {
+                    var w = Minecraft.getInstance().getWindow();
+                    mouseAtGui((w.getGuiScaledWidth() - 176) / 2 + 34, (w.getGuiScaledHeight() - 166) / 2 + 150);
+                })
+                .waitTicks(10)
+                .shot("tooltip_ring")
+                .run("close", () -> closeScreen(Minecraft.getInstance()))
+                .cmd(() -> List.of("gamemode creative")); // the later steps fly over the stage
+
+        // the 3D held models, in the hands of a row of armour stands (third person, as other players see them)
+        String[] held = {"kings_trident", "sentinel_greatsword", "dune_king_crook", "helmsman_anchor", "forbidden_grimoire",
+                "jade_fang", "rune_fist", "brass_pickaxe"};
+        step("held_items")
+                .cmd(() -> {
+                    List<String> c = new ArrayList<>();
+                    // a block to clear, so the fill always changes something (an all-air fill is an error)
+                    c.add("setblock " + at(0, 1, 4) + " minecraft:stone");
+                    c.add("fill " + at(-9, 1, 3) + " " + at(9, 4, 6) + " minecraft:air");
+                    for (int i = 0; i < held.length; i++) {
+                        c.add("summon minecraft:armor_stand " + (bx - 7 + i * 2 + 0.5) + " " + (STAGE_Y + 1) + " " + (bz + 4.5)
+                                + " {ShowArms:1b,NoBasePlate:1b,Invulnerable:1b,Rotation:[180f,0f],"
+                                + "Pose:{RightArm:[-40f,0f,0f]},equipment:{mainhand:{id:\"brasshaven:" + held[i] + "\",count:1}}}");
+                    }
+                    c.add("time set noon");
+                    c.add("tp @s " + (bx + 0.5) + " " + (STAGE_Y + 2.2) + " " + (bz - 2.0) + " facing "
+                            + (bx + 0.5) + " " + (STAGE_Y + 2) + " " + (bz + 4.5));
+                    return c;
+                })
+                .run("fly", CiDriver::fly)
+                .run("hide the HUD", () -> {
+                    Minecraft mc = Minecraft.getInstance();
+                    if (!mc.gui.hud.isHidden()) {
+                        mc.gui.hud.toggle();
+                    }
+                })
+                .waitTicks(100) // the stage is 140 blocks above the inventory scene: let its chunks compile
+                .shot("held_items");
+
         String still = "{NoAI:1b,PersistenceRequired:1b,Rotation:[180f,0f]}";
         step("creatures")
                 .cmd(() -> List.of(
@@ -732,6 +806,22 @@ public final class CiDriver {
     }
 
     // ------------------------------------------------------------------ targeted runs (--focus)
+
+    /** Puts the mouse cursor at a GUI-scaled point, for hover tooltips (MouseHandler keeps it in window pixels). */
+    private static void mouseAtGui(double gx, double gy) {
+        Minecraft mc = Minecraft.getInstance();
+        double scale = (double) mc.getWindow().getScreenWidth() / mc.getWindow().getGuiScaledWidth();
+        try {
+            Field x = net.minecraft.client.MouseHandler.class.getDeclaredField("xpos");
+            Field y = net.minecraft.client.MouseHandler.class.getDeclaredField("ypos");
+            x.setAccessible(true);
+            y.setAccessible(true);
+            x.setDouble(mc.mouseHandler, gx * scale);
+            y.setDouble(mc.mouseHandler, gy * scale);
+        } catch (ReflectiveOperationException e) {
+            throw new IllegalStateException("cannot move the mouse", e);
+        }
+    }
 
     private static void focusSteps() {
         List<String> items = new ArrayList<>();

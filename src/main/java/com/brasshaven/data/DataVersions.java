@@ -39,6 +39,8 @@ public final class DataVersions {
     public static final int TERMINAL = 1;
     /** BossCycles: NG+ defeat counters per boss type (world/data/brasshaven_boss_cycles.dat). */
     public static final int BOSS_CYCLES = 1;
+    /** Worn accessories of a player (player persistent data, "brasshaven_accessories"; accessory/Accessories). */
+    public static final int ACCESSORIES = 1;
 
     public static final String FIELD = "data_version";
 

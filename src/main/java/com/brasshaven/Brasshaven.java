@@ -76,6 +76,7 @@ public final class Brasshaven {
         DangerEvents.register();
         com.brasshaven.event.QolEvents.register();
         com.brasshaven.event.GadgetEvents.register();
+        com.brasshaven.accessory.AccessoryEvents.register();
         com.brasshaven.event.OceanEvents.register();
         com.brasshaven.skill.SkillEvents.register();
         com.brasshaven.boss.BossDifficulty.register();

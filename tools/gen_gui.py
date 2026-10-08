@@ -1004,6 +1004,8 @@ def main():
     gui_social.sprites(sys.modules[__name__])
     from wf import gui_recipes  # the recipe viewer (item list, recipe screen)
     gui_recipes.sprites(sys.modules[__name__])
+    from wf import accessories  # accessory slots: empty-slot silhouettes and the side panel
+    accessories.sprites(sys.modules[__name__])
     if "--mockup" in sys.argv:
         worldmap.mockups(sys.modules[__name__])
         mockup_waystones()

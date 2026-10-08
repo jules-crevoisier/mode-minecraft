@@ -1,0 +1,377 @@
+{
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "brasshaven:chunked_template",
+        "size": [
+          147,
+          183,
+          149
+        ],
+        "cells": [
+          {
+            "location": "brasshaven:pilgrims_ascent/ascent/x0_z0",
+            "offset": [
+              7,
+              7,
+              27
+            ],
+            "size": [
+              22,
+              3,
+              3
+            ],
+            "blocks": 60
+          },
+          {
+            "location": "brasshaven:pilgrims_ascent/ascent/x0_z1",
+            "offset": [
+              0,
+              0,
+              30
+            ],
+            "size": [
+              29,
+              111,
+              30
+            ],
+            "blocks": 17357
+          },
+          {
+            "location": "brasshaven:pilgrims_ascent/ascent/x0_z2",
+            "offset": [
+              6,
+              0,
+              60
+            ],
+            "size": [
+              23,
+              57,
+              29
+            ],
+            "blocks": 5091
+          },
+          {
+            "location": "brasshaven:pilgrims_ascent/ascent/x0_z3",
+            "offset": [
+              8,
+              0,
+              89
+            ],
+            "size": [
+              21,
+              49,
+              30
+            ],
+            "blocks": 3576
+          },
+          {
+            "location": "brasshaven:pilgrims_ascent/ascent/x0_z4",
+            "offset": [
+              21,
+              0,
+              119
+            ],
+            "size": [
+              8,
+              15,
+              8
+            ],
+            "blocks": 217
+          },
+          {
+            "location": "brasshaven:pilgrims_ascent/ascent/x1_z0",
+            "offset": [
+              29,
+              0,
+              11
+            ],
+            "size": [
+              30,
+              162,
+              19
+            ],
+            "blocks": 5304
+          },
+          {
+            "location": "brasshaven:pilgrims_ascent/ascent/x1_z1",
+            "offset": [
+              29,
+              0,
+              30
+            ],
+            "size": [
+              30,
+              160,
+              30
+            ],
+            "blocks": 16204
+          },
+          {
+            "location": "brasshaven:pilgrims_ascent/ascent/x1_z2",
+            "offset": [
+              29,
+              31,
+              60
+            ],
+            "size": [
+              30,
+              105,
+              29
+            ],
+            "blocks": 12255
+          },
+          {
+            "location": "brasshaven:pilgrims_ascent/ascent/x1_z3",
+            "offset": [
+              29,
+              4,
+              89
+            ],
+            "size": [
+              30,
+              97,
+              30
+            ],
+            "blocks": 8283
+          },
+          {
+            "location": "brasshaven:pilgrims_ascent/ascent/x1_z4",
+            "offset": [
+              29,
+              0,
+              119
+            ],
+            "size": [
+              30,
+              41,
+              27
+            ],
+            "blocks": 4208
+          },
+          {
+            "location": "brasshaven:pilgrims_ascent/ascent/x2_z0",
+            "offset": [
+              59,
+              0,
+              0
+            ],
+            "size": [
+              29,
+              164,
+              30
+            ],
+            "blocks": 23456
+          },
+          {
+            "location": "brasshaven:pilgrims_ascent/ascent/x2_z1",
+            "offset": [
+              59,
+              7,
+              30
+            ],
+            "size": [
+              29,
+              176,
+              30
+            ],
+            "blocks": 24782
+          },
+          {
+            "location": "brasshaven:pilgrims_ascent/ascent/x2_z2",
+            "offset": [
+              59,
+              92,
+              60
+            ],
+            "size": [
+              29,
+              67,
+              29
+            ],
+            "blocks": 7111
+          },
+          {
+            "location": "brasshaven:pilgrims_ascent/ascent/x2_z3",
+            "offset": [
+              59,
+              7,
+              89
+            ],
+            "size": [
+              29,
+              107,
+              30
+            ],
+            "blocks": 10413
+          },
+          {
+            "location": "brasshaven:pilgrims_ascent/ascent/x2_z4",
+            "offset": [
+              59,
+              0,
+              119
+            ],
+            "size": [
+              29,
+              45,
+              30
+            ],
+            "blocks": 13469
+          },
+          {
+            "location": "brasshaven:pilgrims_ascent/ascent/x3_z0",
+            "offset": [
+              88,
+              0,
+              10
+            ],
+            "size": [
+              30,
+              161,
+              20
+            ],
+            "blocks": 8144
+          },
+          {
+            "location": "brasshaven:pilgrims_ascent/ascent/x3_z1",
+            "offset": [
+              88,
+              0,
+              30
+            ],
+            "size": [
+              30,
+              164,
+              30
+            ],
+            "blocks": 20350
+          },
+          {
+            "location": "brasshaven:pilgrims_ascent/ascent/x3_z2",
+            "offset": [
+              88,
+              29,
+              60
+            ],
+            "size": [
+              30,
+              111,
+              29
+            ],
+            "blocks": 11002
+          },
+          {
+            "location": "brasshaven:pilgrims_ascent/ascent/x3_z3",
+            "offset": [
+              88,
+              7,
+              89
+            ],
+            "size": [
+              30,
+              103,
+              30
+            ],
+            "blocks": 10168
+          },
+          {
+            "location": "brasshaven:pilgrims_ascent/ascent/x3_z4",
+            "offset": [
+              88,
+              0,
+              119
+            ],
+            "size": [
+              30,
+              41,
+              28
+            ],
+            "blocks": 5926
+          },
+          {
+            "location": "brasshaven:pilgrims_ascent/ascent/x4_z0",
+            "offset": [
+              118,
+              0,
+              22
+            ],
+            "size": [
+              8,
+              13,
+              8
+            ],
+            "blocks": 123
+          },
+          {
+            "location": "brasshaven:pilgrims_ascent/ascent/x4_z1",
+            "offset": [
+              118,
+              0,
+              30
+            ],
+            "size": [
+              27,
+              81,
+              30
+            ],
+            "blocks": 7372
+          },
+          {
+            "location": "brasshaven:pilgrims_ascent/ascent/x4_z2",
+            "offset": [
+              118,
+              0,
+              60
+            ],
+            "size": [
+              29,
+              86,
+              29
+            ],
+            "blocks": 10132
+          },
+          {
+            "location": "brasshaven:pilgrims_ascent/ascent/x4_z3",
+            "offset": [
+              118,
+              0,
+              89
+            ],
+            "size": [
+              28,
+              48,
+              30
+            ],
+            "blocks": 5196
+          },
+          {
+            "location": "brasshaven:pilgrims_ascent/ascent/x4_z4",
+            "offset": [
+              118,
+              0,
+              119
+            ],
+            "size": [
+              15,
+              19,
+              14
+            ],
+            "blocks": 848
+          }
+        ],
+        "projection": "rigid",
+        "processors": "brasshaven:aging",
+        "ground_level_delta": 13,
+        "footprint": [
+          4,
+          3,
+          142,
+          145
+        ]
+      }
+    }
+  ]
+}

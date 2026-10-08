@@ -10,3 +10,5 @@ from . import rock_necropolis  # noqa: F401
 from . import fallen_colossus  # noqa: F401
 from . import chained_bastion  # noqa: F401
 from . import shattered_halo  # noqa: F401
+from . import pilgrims_ascent  # noqa: F401
+from . import tidal_abbey  # noqa: F401

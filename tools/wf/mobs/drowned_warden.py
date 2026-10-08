@@ -17,21 +17,102 @@ PRISM_D = (52, 112, 104)
 EYE = (150, 255, 220)
 
 
-def rotten(base=SKIN, dark=SKIN_D, seed=0):
-    """Drowned flesh: mottled teal with darker patches and pale barnacle dots."""
-    sp = speckle(base, 0.1, seed, dark, freq=4)
+def _n(x, y, seed):
+    r = ((x * 73856093) ^ (y * 19349663) ^ (seed * 83492791)) & 0xFFFF
+    return (r % 1000) / 1000.0
 
+
+GLOWSPOT = (120, 240, 210)
+
+
+def rotten(base=SKIN, dark=SKIN_D, seed=0, glow_spots=False):
+    """Drowned flesh: teal skin, darker toward the bottom, sunken vein lines, pale barnacle clusters and (optionally)
+    a few bioluminescent spots (the matching glow is :func:`rotten_glow`)."""
     def f(face, x, y, w, h):
-        r = (x * 31 + y * 17 + seed * 7) % 23
-        if r == 0:
-            return SHELL
-        return sp(face, x, y, w, h)
+        if face == "bottom":
+            return mul(dark, 0.8)
+        if glow_spots and _spot(face, x, y, seed):
+            return GLOWSPOT
+        if _barnacle(face, x, y, seed):
+            return SHELL if _n(x, y, seed + 3) < 0.6 else mul(SHELL, 0.75)
+        if (x + (y // 3) + seed) % 7 == 0 and face != "top":
+            return mix(dark, (30, 60, 70), 0.4)                                    # a sunken vein
+        c = mix(base, dark, min(1.0, 0.15 + 0.6 * y / max(1, h)) if face != "top" else 0.0)
+        return mul(c, 0.94 + 0.12 * _n(x // 2, y // 2, seed))
     return f
 
 
-def armour(base=STEEL, dark=STEEL_D, rust=(120, 92, 60), seed=0):
-    plate = speckle(base, 0.07, seed, rust, freq=9)
-    return framed(plate, mul(dark, 0.9))
+def _barnacle(face, x, y, seed):
+    return face != "bottom" and _n(x // 2, y // 2, seed + 11) < 0.09 and (x + y) % 2 == 0
+
+
+def _spot(face, x, y, seed):
+    return face in ("front", "left", "right", "back") and _n(x, y, seed + 21) < 0.008
+
+
+def rotten_glow(seed=0):
+    def f(face, x, y, w, h):
+        return GLOWSPOT if _spot(face, x, y, seed) else None
+    return f
+
+
+def armour(base=STEEL, dark=STEEL_D, rust=(130, 86, 52), seed=0):
+    """Sunken plate: a gold-lit top edge, dark rim, rivets, rust streaks running down from the rivets, barnacle
+    clusters and green weed on the lower edge."""
+    def f(face, x, y, w, h):
+        if face == "bottom":
+            return mul(dark, 0.8)
+        if face == "top":
+            if _barnacle(face, x, y, seed):
+                return SHELL
+            return mix(base, (190, 210, 210), 0.18) if (x in (0, w - 1) or y in (0, h - 1)) else mul(base, 1.08)
+        if w > 3 and h > 3:
+            if y == 0:
+                return mix(base, (200, 220, 220), 0.3)
+            if x in (0, w - 1) or y == h - 1:
+                return KELP_D if (y == h - 1 and _n(x, 0, seed) < 0.4) else dark
+            if y == 1 and x % 4 == 1:
+                return GOLD_D                                                       # rivets
+            if x % 4 == 1 and y > 1 and _n(x, 0, seed + 5) < 0.6 and y < 2 + 6 * _n(x, 1, seed):
+                return mix(rust, base, 0.3)                                         # rust weeping from the rivet
+        if _barnacle(face, x, y, seed):
+            return SHELL if _n(x, y, seed + 3) < 0.6 else mul(SHELL, 0.75)
+        return mul(base, 1.06 - 0.22 * y / max(1, h) + (_n(x, y, seed) - 0.5) * 0.06)
+    return f
+
+
+def shell_paint(seed=0):
+    """A giant scallop shell: ribs fanning out, lit crests, darker grooves, a pink lip."""
+    def f(face, x, y, w, h):
+        if face == "bottom":
+            return (150, 120, 110)
+        if face == "top" or face in ("left", "right"):
+            k = (x if face == "top" else y) % 3
+        else:
+            k = x % 3
+        c = (mix(SHELL, (255, 250, 236), 0.3), SHELL, mul(SHELL, 0.72))[k]
+        if face not in ("top", "bottom") and y == h - 1:
+            c = (214, 140, 140)
+        return c
+    return f
+
+
+def coral(col, seed=0):
+    """Branching coral: lit tips, darker base, pores."""
+    def f(face, x, y, w, h):
+        if face == "top":
+            return mix(col, (255, 255, 255), 0.35)
+        if face == "bottom":
+            return mul(col, 0.6)
+        c = mul(col, 1.1 - 0.4 * y / max(1, h))
+        if (x + y + seed) % 3 == 0:
+            c = mul(c, 0.82)
+        return c
+    return f
+
+
+def coral_glow(col):
+    return {"top": mix(col, (255, 255, 255), 0.35), "*": None}
 
 
 def kelp_strands(seed=0, ragged=True):
@@ -46,6 +127,24 @@ def kelp_strands(seed=0, ragged=True):
     return f
 
 
+def sailcloth(seed=0):
+    """The cape: torn grey-blue sailcloth with kelp grown through it and a faded gold trident sigil."""
+    def f(face, x, y, w, h):
+        if face in ("top", "bottom"):
+            return KELP_D
+        if y > h - 2 - (x * 5 + seed) % 6 or (x % 7 == 3 and y > h - 9 and _n(x, y // 4, seed) < 0.7):
+            return None                                                             # rags and a split
+        if face == "back":
+            cx = (w - 1) / 2
+            if 6 <= y <= 18 and abs(x - cx) < 0.6 or (y == 8 and abs(x - cx) <= 4) or (y in (6, 7) and abs(abs(x - cx) - 4) < 0.6):
+                return mix(GOLD_D, (70, 86, 100), 0.4)                              # the sigil
+            if (x + _n(x // 3, 0, seed) * 3) % 5 < 1:
+                return KELP
+            return mul((76, 92, 108), 1.05 - 0.3 * y / h)
+        return kelp_strands(seed)(face, x, y, w, h)
+    return f
+
+
 def build():
     m = Model("drowned_warden", seed=12, shadow=1.4, walk_speed=0.8, walk_scale=1.0)
 
@@ -55,12 +154,15 @@ def build():
     m.part("torso", "hips", pivot=(0, -2, 0), rot=(10, 0, 0))
     m.part("head", "torso", pivot=(0, -21, -3))
     m.part("jaw", "head", pivot=(0, -2, -2))
+    m.part("beard", "jaw", pivot=(0, 4, -3.5))
     m.part("cape", "torso", pivot=(0, -20, 7), rot=(8, 0, 0))
     m.part("arm_r", "torso", pivot=(-14, -18, 0))
     m.part("forearm_r", "arm_r", pivot=(0, 14, 0), rot=(-20, 0, 0))
     m.part("trident", "forearm_r", pivot=(0, 13, -1), rot=(10, 0, 0))
     m.part("arm_l", "torso", pivot=(14, -18, 0))
     m.part("forearm_l", "arm_l", pivot=(0, 14, 0), rot=(-15, 0, 0))
+    m.part("chain", "hips", pivot=(9, 1, -5), rot=(0, 0, -8))
+    m.part("lantern", "chain", pivot=(0, 10, 0))
     m.part("leg_r", "bone", pivot=(-6, -30, 0))
     m.part("shin_r", "leg_r", pivot=(0, 15, 0))
     m.part("leg_l", "bone", pivot=(6, -30, 0))
@@ -68,67 +170,113 @@ def build():
 
     # ------------------------------------------------------------------ body
     # pelvis with a kelp skirt and a gold-buckled belt
-    m.box("hips", -10, -5, -6, 20, 7, 12, {"*": armour(seed=1), "front": bands([(2, GOLD), (5, armour(seed=1))])})
+    def belt(f_, x, y, w, h):
+        if f_ == "front" and y < 2:
+            return GOLD if (abs(x - w // 2) > 1 or y == 0) else (120, 255, 220)  # gold belt, a sea-gem buckle
+        return armour(seed=1)(f_, x, y, w, h)
+    m.box("hips", -10, -5, -6, 20, 7, 12, belt, glow={"front": lambda f_, x, y, w, h: (120, 255, 220)
+                                                       if y == 1 and abs(x - w // 2) <= 1 else None, "*": None})
     m.box("hips", -11, 1, -7, 22, 9, 14, {"side": kelp_strands(1), "*": None})
-    # barrel chest plate and a sunken belly
-    m.box("torso", -11, -21, -7, 22, 15, 13, {
-        "front": framed(speckle(STEEL, 0.07, 2, (120, 92, 60), freq=9), GOLD_D, 1),
-        "*": armour(seed=2)})
-    m.box("torso", -9, -7, -6, 18, 7, 11, rotten(seed=3))
-    # ribs showing through a rotten breach in the plate
-    m.box("torso", -6, -17, -8, 7, 8, 1, lambda f_, x, y, w, h: SHELL if y % 2 == 0 else (30, 40, 40))
+    # barrel chest plate (gold trim) and a sunken, rotten belly
+    def chest(f_, x, y, w, h):
+        if f_ == "front" and (y in (0, h - 1) or x in (0, w - 1)):
+            return GOLD_D if (x + y) % 3 else GOLD
+        return armour(seed=2)(f_, x, y, w, h)
+    m.box("torso", -11, -21, -7, 22, 15, 13, chest)
+    m.box("torso", -9, -7, -6, 18, 7, 11, rotten(seed=3, glow_spots=True), glow=rotten_glow(3))
+    # ribs showing through a rotten breach in the plate, a glow of sea-light inside
+    m.box("torso", -6, -17, -8, 7, 8, 1, lambda f_, x, y, w, h: SHELL if y % 2 == 0 else (20, 70, 64),
+          glow={"front": lambda f_, x, y, w, h: (60, 180, 150) if y % 2 else None, "*": None})
     # shoulder mantle of shells
-    m.box("torso", -12, -23, -5, 24, 3, 10, speckle(SHELL, 0.12, 4, (150, 140, 120), freq=3))
+    m.box("torso", -12, -23, -5, 24, 3, 10, shell_paint(4))
+    # coral growing out of his back: three branching spikes over the cape
+    for i, (x, hgt, tilt, col) in enumerate(((-7, 10, -14, (220, 80, 100)), (6, 13, 12, (230, 120, 70)),
+                                            (-1, 8, 0, (200, 90, 170)))):
+        p = m.part(f"coral{i}", "torso", pivot=(x, -20, 6), rot=(-24, 0, tilt))
+        m.box(p, -1, -hgt, -1, 2, hgt, 2, coral(col, i), glow=coral_glow(col))
+        m.box(p, (1 if i % 2 else -3), -hgt + 3, -0.5, 2, 1, 1, coral(col, i + 3))
+        m.box(p, (1 if i % 2 else -3), -hgt + 1, -0.5, 1, 2, 1, coral(col, i + 4), glow=coral_glow(col))
 
-    # head: a long drowned skull face with a coral crown
-    m.box("head", -5, -11, -6, 10, 11, 10, {
-        "front": lambda f_, x, y, w, h: EYE if y == 4 and x in (2, 3, 6, 7)
-        else (24, 36, 36) if y == 4 and x in (1, 8) else SKIN_D if y < 2 else rotten(seed=5)(f_, x, y, w, h),
-        "*": rotten(seed=5)})
+    # head: a long drowned face, sunken cheeks, glowing eyes under a heavy brow, a coral crown
+    eyes = {(2, 4), (3, 4), (6, 4), (7, 4)}
+
+    def face(f_, x, y, w, h):
+        if (x, y) in eyes:
+            return EYE
+        if y == 4 and x in (1, 8):
+            return (24, 36, 36)
+        if y == 3 and 1 <= x <= 8:
+            return mul(SKIN_D, 0.7)                                                 # the brow's shadow
+        if y < 2:
+            return SKIN_D
+        if y in (6, 7) and x in (1, 8):
+            return mix(SKIN_D, (20, 40, 40), 0.5)                                   # sunken cheeks
+        return rotten(seed=5)(f_, x, y, w, h)
+    m.box("head", -5, -11, -6, 10, 11, 10, {"front": face, "*": rotten(seed=5)},
+          glow={"front": lambda f_, x, y, w, h: EYE if (x, y) in eyes else None, "*": None})
     m.box("jaw", -4, 0, -4, 8, 4, 7, {"front": bands([(1, (30, 40, 40)), (3, rotten(seed=6))]), "*": rotten(seed=6)})
-    m.box("jaw", -4, 4, -4, 8, 9, 1, kelp_strands(2))  # kelp beard
+    m.box("beard", -4, 0, 0, 8, 10, 1, kelp_strands(2))                             # kelp beard
+    m.box("beard", -2, 0, -0.5, 4, 13, 1, kelp_strands(3))
     # crown: gold band with coral and gold points
     m.box("head", -6, -13, -7, 12, 3, 12, framed(GOLD, GOLD_D))
-    for i, (x, z, hgt, col) in enumerate(((-5, -6, 5, GOLD), (-1, -7, 7, (220, 70, 90)), (3, -6, 5, GOLD),
-                                          (-6, -1, 4, (220, 70, 90)), (5, -1, 4, (220, 70, 90)),
+    for i, (x, z, hgt, col) in enumerate(((-5, -6, 6, GOLD), (-1, -7, 8, (220, 70, 90)), (3, -6, 6, GOLD),
+                                          (-6, -1, 5, (220, 70, 90)), (5, -1, 7, (230, 120, 70)),
                                           (-1, 3, 5, GOLD))):
-        m.box("head", x, -13 - hgt, z, 2, hgt, 2, speckle(col, 0.1, 10 + i))
-    m.box("head", -1, -21, -7, 2, 2, 2, (120, 255, 220), glow=(120, 255, 220))  # sea gem on the tallest point
-    # eyes glow
-    m.parts["head"].cubes[0].glow = {"front": lambda f_, x, y, w, h: EYE if y == 4 and x in (2, 3, 6, 7) else None}
+        paint = framed(GOLD, GOLD_D) if col == GOLD else coral(col, 10 + i)
+        m.box("head", x, -13 - hgt, z, 2, hgt, 2, paint, glow=None if col == GOLD else coral_glow(col))
+    m.box("head", -1, -23, -7, 2, 2, 2, (120, 255, 220), glow=(120, 255, 220))  # sea gem on the tallest point
 
     # cape of kelp and torn sailcloth
-    m.box("cape", -11, 0, 0, 22, 34, 1, {
-        "back": lambda f_, x, y, w, h: None if y > h - 2 - (x * 5 % 4) else
-        (KELP_D if x % 4 == 0 else mix(KELP, (70, 90, 110), (y % 7) / 12)),
-        "front": kelp_strands(4), "*": KELP_D})
+    m.box("cape", -11, 0, 0, 22, 34, 1, sailcloth(4))
+
+    # a drowned ship's chain hanging from the belt, a sunken lantern at its end
+    for k in range(5):
+        m.box("chain", -0.5, k * 2, -0.5 - (k % 2) * 0.0, 1, 2, 1 + (k % 2), lambda f_, x, y, w, h: STEEL if y == 0 else STEEL_D)
+    m.box("lantern", -2, 0, -2, 4, 5, 4, {"front": lambda f_, x, y, w, h: (120, 255, 220) if 0 < x < w - 1 and 0 < y < h - 1
+                                          else GOLD_D, "back": lambda f_, x, y, w, h: (120, 255, 220) if 0 < x < w - 1 and 0 < y < h - 1
+                                          else GOLD_D, "*": GOLD_D},
+          glow={"front": lambda f_, x, y, w, h: (120, 255, 220) if 0 < x < w - 1 and 0 < y < h - 1 else None,
+                "back": lambda f_, x, y, w, h: (120, 255, 220) if 0 < x < w - 1 and 0 < y < h - 1 else None, "*": None})
+    m.box("lantern", -2.5, -1, -2.5, 5, 1, 5, GOLD_D)
 
     # ------------------------------------------------------------------ arms
     for side, sx in (("r", -1), ("l", 1)):
         arm, fore = f"arm_{side}", f"forearm_{side}"
-        # pauldron: a huge barnacled shell
-        m.box(arm, -6 if sx < 0 else -4, -6, -6, 10, 8, 12, {
-            "top": speckle(SHELL, 0.12, 20 + sx, (150, 140, 120), freq=3), "*": armour(seed=21 + sx)})
-        m.box(arm, -4 if sx < 0 else -3, 0, -4, 7, 15, 7, rotten(seed=22 + sx))
+        if sx < 0:
+            # the trident arm: a giant scallop-shell pauldron, much bigger than the other (asymmetry)
+            m.box(arm, -8, -8, -7, 13, 9, 14, shell_paint(20))
+            m.box(arm, -9, -9, -3, 3, 3, 6, coral((220, 80, 100), 21), glow=coral_glow((220, 80, 100)))
+        else:
+            m.box(arm, -4, -6, -6, 10, 8, 12, armour(seed=21 + sx))
+        m.box(arm, -4 if sx < 0 else -3, 0, -4, 7, 15, 7, rotten(seed=22 + sx, glow_spots=True), glow=rotten_glow(22 + sx))
         m.box(fore, -4 if sx < 0 else -3, 0, -4, 7, 12, 7, {"*": rotten(seed=23 + sx),
                                                             "side": bands([(3, GOLD_D), (9, rotten(seed=23 + sx))])})
-        # claw hand
+        # claw hand with long dark nails
         m.box(fore, -4 if sx < 0 else -3, 12, -4, 7, 4, 7, rotten(SKIN_D, (30, 60, 56), seed=24 + sx))
+        m.box(fore, -3.5 if sx < 0 else -2.5, 16, -4, 6, 2, 1, lambda f_, x, y, w, h: (30, 40, 40) if x % 2 == 0 else None)
 
-    # trident: shaft along the part's -y (pointing up from the fist), three prongs
-    m.box("trident", -1, -50, -1, 2, 56, 2, bands([(46, speckle(PRISM_D, 0.08, 30)), (2, GOLD), (8, PRISM_D)]))
-    m.box("trident", -5, -53, -1, 10, 3, 2, framed(GOLD, GOLD_D))
-    for i, x in enumerate((-5, -1, 3)):
-        hgt = 9 if x == -1 else 7
-        m.box("trident", x, -53 - hgt, -1, 2, hgt, 2, speckle(PRISM, 0.08, 31 + i), glow=None)
-    m.box("trident", -1, -64, -1, 2, 2, 2, (180, 255, 235), glow=(180, 255, 235))
+    # trident: shaft along the part's -y (pointing up from the fist), barbed prongs that glow
+    m.box("trident", -1, -50, -1, 2, 56, 2, bands([(4, PRISM_D), (2, GOLD), (40, framed(PRISM_D, mul(PRISM_D, 0.7))),
+                                                  (2, GOLD), (8, PRISM_D)]))
+    m.box("trident", -6, -53, -1.5, 12, 3, 3, framed(GOLD, GOLD_D))
+    m.box("trident", -2, -55, -2, 4, 2, 4, framed(GOLD, GOLD_D))
+    prong_glow = {"front": lambda f_, x, y, w, h: PRISM if y < 3 else None, "*": None}
+    for i, x in enumerate((-6, -1, 4)):
+        hgt = 12 if x == -1 else 8
+        m.box("trident", x, -53 - hgt, -1, 2, hgt, 2, coral(PRISM, 31 + i), glow=prong_glow)
+        bx = x - 1 if x < 0 else x + 2
+        if x != -1:
+            m.box("trident", bx, -53 - hgt + 1, -0.5, 1, 2, 1, PRISM)               # outward barbs
+    m.box("trident", -1, -67, -1, 2, 2, 2, (180, 255, 235), glow=(180, 255, 235))
 
     # ------------------------------------------------------------------ legs
     for side, sx in (("r", -1), ("l", 1)):
         leg, shin = f"leg_{side}", f"shin_{side}"
         m.box(leg, -5, 0, -5, 10, 16, 10, armour(seed=40 + sx))
+        m.box(leg, -5.5, 2, -5.5, 11, 3, 11, bands([(1, GOLD), (2, armour(STEEL_D, seed=43 + sx))]))
         m.box(shin, -4, 0, -4, 8, 12, 8, rotten(seed=41 + sx))
         m.box(shin, -5, 10, -7, 10, 5, 12, armour(STEEL_D, (32, 40, 46), seed=42 + sx))  # heavy sabaton
+        m.box(shin, -4.5, -2, -6, 9, 4, 3, armour(seed=44 + sx))                        # knee guard
 
     # ------------------------------------------------------------------ animations
     idle = m.anim("idle", 3.0)
@@ -136,6 +284,14 @@ def build():
     idle.rot("head", (0, (0, 0, 0)), (1.5, (-4, 3, 0)), (3, (0, 0, 0)))
     idle.rot("cape", (0, (0, 0, 0)), (1.5, (6, 0, 2)), (3, (0, 0, 0)))
     idle.rot("jaw", (0, (0, 0, 0)), (1.0, (8, 0, 0)), (2.0, (0, 0, 0)), (3, (0, 0, 0)))
+    idle.pos("torso", (0, (0, 0, 0)), (1.5, (0, 0.8, 0)), (3, (0, 0, 0)))                 # heavy breathing
+    idle.rot("beard", (0, (0, 0, 0)), (1.0, (-8, 0, 3)), (2.2, (4, 0, -3)), (3, (0, 0, 0)))
+    idle.rot("chain", (0, (0, 0, 0)), (1.5, (6, 0, 4)), (3, (0, 0, 0)))
+    idle.rot("lantern", (0, (0, 0, 0)), (1.0, (-6, 10, 0)), (2.0, (4, -10, 0)), (3, (0, 0, 0)))
+    idle.rot("arm_l", (0, (0, 0, 0)), (1.5, (-4, 0, -3)), (3, (0, 0, 0)))
+    idle.rot("arm_r", (0, (0, 0, 0)), (1.5, (3, 0, 2)), (3, (0, 0, 0)))
+    for i in range(3):
+        idle.rot(f"coral{i}", (0, (0, 0, 0)), (0.8 + i * 0.5, (4, 0, (-3, 3, 2)[i])), (3, (0, 0, 0)))
 
     walk = m.anim("walk", 1.6)
     for leg, sign in (("leg_r", 1), ("leg_l", -1)):
@@ -146,6 +302,10 @@ def build():
     walk.rot("arm_l", (0, (-18, 0, 0)), (0.8, (18, 0, 0)), (1.6, (-18, 0, 0)))
     walk.rot("arm_r", (0, (8, 0, 0)), (0.8, (-8, 0, 0)), (1.6, (8, 0, 0)))
     walk.pos("bone", (0, (0, 0, 0)), (0.4, (0, -1.5, 0)), (0.8, (0, 0, 0)), (1.2, (0, -1.5, 0)), (1.6, (0, 0, 0)))
+    walk.rot("torso", (0, (0, 6, 2)), (0.8, (0, -6, -2)), (1.6, (0, 6, 2)))
+    walk.rot("cape", (0, (12, 0, 0)), (0.4, (18, 0, 2)), (0.8, (12, 0, 0)), (1.2, (18, 0, -2)), (1.6, (12, 0, 0)))
+    walk.rot("beard", (0, (10, 0, 0)), (0.4, (16, 0, 0)), (0.8, (10, 0, 0)), (1.2, (16, 0, 0)), (1.6, (10, 0, 0)))
+    walk.rot("chain", (0, (-14, 0, 0)), (0.8, (14, 0, 0)), (1.6, (-14, 0, 0)))
 
     # thrust: pull the trident back (telegraph), lunge, recover
     a = m.anim("thrust", 1.5)

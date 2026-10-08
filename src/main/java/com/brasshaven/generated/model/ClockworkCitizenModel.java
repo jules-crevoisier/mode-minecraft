@@ -28,16 +28,27 @@ public final class ClockworkCitizenModel extends EntityModel<WayfarerRenderState
             .addAnimation("key", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(2.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 360.0F), AnimationChannel.Interpolations.LINEAR)))
+            .addAnimation("pendulum", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 18.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.5F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(1.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, -18.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(1.5F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(2.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 18.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .addAnimation("body", new AnimationChannel(AnimationChannel.Targets.POSITION,
                     new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(1.0F, KeyframeAnimations.posVec(0.0F, 0.3F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(2.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
+            .addAnimation("body", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 1.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(1.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, -1.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(2.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 1.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .addAnimation("head", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.9F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(1.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 6.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(1.1F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
-                    new Keyframe(2.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
+                    new Keyframe(1.9F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(2.0F, KeyframeAnimations.degreeVec(0.0F, -6.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)))
             .addAnimation("arm_r", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(1.0F, KeyframeAnimations.degreeVec(-3.0F, 0.0F, 2.0F), AnimationChannel.Interpolations.CATMULLROM),
@@ -70,6 +81,18 @@ public final class ClockworkCitizenModel extends EntityModel<WayfarerRenderState
                     new Keyframe(0.5F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.75F, KeyframeAnimations.posVec(0.0F, 0.6F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(1.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
+            .addAnimation("body", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 3.0F), AnimationChannel.Interpolations.LINEAR),
+                    new Keyframe(0.5F, KeyframeAnimations.degreeVec(0.0F, 0.0F, -3.0F), AnimationChannel.Interpolations.LINEAR),
+                    new Keyframe(1.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 3.0F), AnimationChannel.Interpolations.LINEAR)))
+            .addAnimation("head", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, -3.0F), AnimationChannel.Interpolations.LINEAR),
+                    new Keyframe(0.5F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 3.0F), AnimationChannel.Interpolations.LINEAR),
+                    new Keyframe(1.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, -3.0F), AnimationChannel.Interpolations.LINEAR)))
+            .addAnimation("pendulum", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 24.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.5F, KeyframeAnimations.degreeVec(0.0F, 0.0F, -24.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(1.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 24.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .addAnimation("key", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(1.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 360.0F), AnimationChannel.Interpolations.LINEAR)))
@@ -109,6 +132,22 @@ public final class ClockworkCitizenModel extends EntityModel<WayfarerRenderState
             .addAnimation("key", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(1.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 720.0F), AnimationChannel.Interpolations.LINEAR)))
+            .addAnimation("arm_l", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.4F, KeyframeAnimations.degreeVec(-30.0F, 0.0F, -20.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.5F, KeyframeAnimations.degreeVec(20.0F, 0.0F, -10.0F), AnimationChannel.Interpolations.LINEAR),
+                    new Keyframe(1.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
+            .addAnimation("leg_r", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.4F, KeyframeAnimations.degreeVec(14.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.5F, KeyframeAnimations.degreeVec(-18.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+                    new Keyframe(1.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
+            .addAnimation("pendulum", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.4F, KeyframeAnimations.degreeVec(0.0F, 0.0F, -30.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.55F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 40.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.8F, KeyframeAnimations.degreeVec(0.0F, 0.0F, -20.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(1.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)))
             .build();
     public static final AnimationDefinition TINKER = AnimationDefinition.Builder.withLength(1.4F)
             .addAnimation("arm_r", new AnimationChannel(AnimationChannel.Targets.ROTATION,
@@ -173,58 +212,70 @@ public final class ClockworkCitizenModel extends EntityModel<WayfarerRenderState
         PartDefinition p_bone = root.addOrReplaceChild("bone", CubeListBuilder.create(),
                 new PartPose(0.0F, 24.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_leg_r = p_bone.addOrReplaceChild("leg_r", CubeListBuilder.create()
-                .texOffs(24, 25).addBox(-1.0F, 0.0F, -1.0F, 2.0F, 6.0F, 2.0F)
-                .texOffs(98, 16).addBox(-1.5F, 5.0F, -1.5F, 3.0F, 5.0F, 3.0F)
-                .texOffs(92, 25).addBox(-2.0F, 10.0F, -2.5F, 4.0F, 2.0F, 4.0F),
+                .texOffs(0, 35).addBox(-1.0F, 0.0F, -1.0F, 2.0F, 6.0F, 2.0F)
+                .texOffs(76, 27).addBox(-1.5F, 5.0F, -1.5F, 3.0F, 5.0F, 3.0F)
+                .texOffs(32, 27).addBox(-2.5F, 10.0F, -3.5F, 5.0F, 2.0F, 6.0F)
+                .texOffs(106, 35).addBox(-2.0F, 4.0F, -2.0F, 4.0F, 2.0F, 4.0F),
                 new PartPose(-2.0F, -12.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_leg_l = p_bone.addOrReplaceChild("leg_l", CubeListBuilder.create()
-                .texOffs(32, 25).addBox(-1.0F, 0.0F, -1.0F, 2.0F, 6.0F, 2.0F)
-                .texOffs(110, 16).addBox(-1.5F, 5.0F, -1.5F, 3.0F, 5.0F, 3.0F)
-                .texOffs(108, 25).addBox(-2.0F, 10.0F, -2.5F, 4.0F, 2.0F, 4.0F),
+                .texOffs(8, 35).addBox(-1.0F, 0.0F, -1.0F, 2.0F, 6.0F, 2.0F)
+                .texOffs(88, 27).addBox(-1.5F, 5.0F, -1.5F, 3.0F, 5.0F, 3.0F)
+                .texOffs(54, 27).addBox(-2.5F, 10.0F, -3.5F, 5.0F, 2.0F, 6.0F)
+                .texOffs(0, 43).addBox(-2.0F, 4.0F, -2.0F, 4.0F, 2.0F, 4.0F),
                 new PartPose(2.0F, -12.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_body = p_bone.addOrReplaceChild("body", CubeListBuilder.create()
-                .texOffs(0, 0).addBox(-4.0F, -12.0F, -3.0F, 8.0F, 10.0F, 6.0F)
-                .texOffs(64, 33).addBox(-1.5F, -10.0F, -3.5F, 3.0F, 3.0F, 1.0F)
-                .texOffs(0, 16).addBox(-4.5F, -2.0F, -3.5F, 9.0F, 2.0F, 7.0F)
-                .texOffs(68, 25).addBox(-3.5F, 0.0F, -2.5F, 7.0F, 1.0F, 5.0F)
-                .texOffs(34, 33).addBox(-3.0F, -0.5F, -3.6F, 6.0F, 5.0F, 0.0F)
-                .texOffs(50, 16).addBox(-3.0F, -11.0F, 3.0F, 6.0F, 7.0F, 2.0F)
-                .texOffs(40, 25).addBox(1.5F, -16.0F, 3.2F, 2.0F, 6.0F, 2.0F)
-                .texOffs(98, 0).addBox(-5.0F, -13.0F, -2.5F, 1.0F, 5.0F, 5.0F)
-                .texOffs(110, 0).addBox(4.0F, -13.0F, -2.5F, 1.0F, 5.0F, 5.0F),
+                .texOffs(0, 0).addBox(-5.0F, -12.0F, -3.5F, 10.0F, 10.0F, 7.0F)
+                .texOffs(88, 43).addBox(1.5F, -11.0F, -4.0F, 3.0F, 3.0F, 1.0F)
+                .texOffs(78, 35).addBox(-2.5F, -8.0F, -4.0F, 5.0F, 6.0F, 1.0F)
+                .texOffs(62, 43).addBox(-2.0F, -7.5F, -3.6F, 4.0F, 5.0F, 0.0F)
+                .texOffs(0, 17).addBox(-5.5F, -2.0F, -4.0F, 11.0F, 2.0F, 8.0F)
+                .texOffs(28, 35).addBox(-4.0F, 0.0F, -3.0F, 8.0F, 1.0F, 6.0F)
+                .texOffs(50, 43).addBox(-3.0F, -0.5F, -3.6F, 6.0F, 5.0F, 0.0F)
+                .texOffs(106, 17).addBox(-3.0F, -11.0F, 3.0F, 6.0F, 7.0F, 2.0F)
+                .texOffs(16, 35).addBox(1.5F, -16.0F, 3.2F, 2.0F, 6.0F, 2.0F)
+                .texOffs(62, 0).addBox(-6.0F, -14.0F, -3.5F, 1.0F, 7.0F, 7.0F)
+                .texOffs(78, 0).addBox(5.0F, -14.0F, -3.5F, 1.0F, 7.0F, 7.0F),
                 new PartPose(0.0F, -12.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_head = p_body.addOrReplaceChild("head", CubeListBuilder.create()
-                .texOffs(28, 0).addBox(-4.0F, -8.0F, -3.0F, 8.0F, 8.0F, 6.0F)
-                .texOffs(46, 33).addBox(-5.0F, -6.0F, -1.0F, 1.0F, 3.0F, 2.0F)
-                .texOffs(52, 33).addBox(4.0F, -6.0F, -1.0F, 1.0F, 3.0F, 2.0F)
-                .texOffs(66, 16).addBox(-4.5F, -9.0F, -3.5F, 9.0F, 1.0F, 7.0F)
-                .texOffs(56, 0).addBox(-3.0F, -14.0F, -2.5F, 6.0F, 5.0F, 5.0F),
+                .texOffs(34, 0).addBox(-4.0F, -8.0F, -3.0F, 8.0F, 8.0F, 6.0F)
+                .texOffs(56, 35).addBox(-3.0F, -10.0F, -2.5F, 6.0F, 2.0F, 5.0F)
+                .texOffs(96, 43).addBox(-1.0F, -12.0F, -1.0F, 2.0F, 2.0F, 2.0F)
+                .texOffs(80, 17).addBox(-4.5F, -8.5F, -3.5F, 1.0F, 9.0F, 1.0F)
+                .texOffs(84, 17).addBox(3.5F, -8.5F, -3.5F, 1.0F, 9.0F, 1.0F)
+                .texOffs(70, 43).addBox(-5.0F, -6.0F, -1.0F, 1.0F, 3.0F, 2.0F)
+                .texOffs(76, 43).addBox(4.0F, -6.0F, -1.0F, 1.0F, 3.0F, 2.0F)
+                .texOffs(0, 27).addBox(-4.5F, -9.0F, -3.5F, 9.0F, 1.0F, 7.0F)
+                .texOffs(38, 17).addBox(-3.0F, -14.0F, -2.5F, 6.0F, 5.0F, 5.0F),
                 new PartPose(0.0F, -12.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_key = p_body.addOrReplaceChild("key", CubeListBuilder.create()
-                .texOffs(72, 33).addBox(-0.5F, -0.5F, 0.0F, 1.0F, 1.0F, 3.0F)
-                .texOffs(0, 33).addBox(-3.5F, -3.0F, 3.0F, 7.0F, 6.0F, 0.0F),
+                .texOffs(104, 43).addBox(-0.5F, -0.5F, 0.0F, 1.0F, 1.0F, 3.0F)
+                .texOffs(16, 43).addBox(-3.5F, -3.0F, 3.0F, 7.0F, 6.0F, 0.0F),
                 new PartPose(0.0F, -7.0F, 4.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_arm_r = p_body.addOrReplaceChild("arm_r", CubeListBuilder.create()
-                .texOffs(52, 25).addBox(-1.0F, -1.0F, -1.0F, 2.0F, 5.0F, 2.0F)
-                .texOffs(0, 25).addBox(-1.5F, 3.5F, -1.5F, 3.0F, 5.0F, 3.0F)
-                .texOffs(80, 33).addBox(-1.0F, 8.0F, -1.0F, 2.0F, 2.0F, 2.0F)
-                .texOffs(78, 0).addBox(-2.5F, 6.5F, -2.5F, 5.0F, 5.0F, 5.0F)
-                .texOffs(48, 25).addBox(-0.5F, 0.0F, 1.5F, 1.0F, 7.0F, 1.0F),
-                new PartPose(-5.5F, -10.5F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
+                .texOffs(90, 35).addBox(-1.0F, -1.0F, -1.0F, 2.0F, 5.0F, 2.0F)
+                .texOffs(100, 27).addBox(-1.5F, 3.5F, -1.5F, 3.0F, 5.0F, 3.0F)
+                .texOffs(112, 43).addBox(-1.0F, 8.0F, -1.0F, 2.0F, 2.0F, 2.0F)
+                .texOffs(60, 17).addBox(-2.5F, 6.5F, -2.5F, 5.0F, 5.0F, 5.0F)
+                .texOffs(24, 35).addBox(-0.5F, 0.0F, 1.5F, 1.0F, 7.0F, 1.0F),
+                new PartPose(-6.5F, -10.5F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_tool = p_arm_r.addOrReplaceChild("tool", CubeListBuilder.create()
-                .texOffs(32, 16).addBox(-0.5F, -0.5F, -7.0F, 1.0F, 1.0F, 8.0F)
-                .texOffs(58, 33).addBox(-0.5F, -1.5F, -9.0F, 1.0F, 3.0F, 2.0F)
-                .texOffs(14, 33).addBox(-1.5F, -1.5F, -3.5F, 3.0F, 3.0F, 3.0F)
-                .texOffs(88, 33).addBox(-0.5F, -2.5F, -6.5F, 1.0F, 1.0F, 3.0F),
+                .texOffs(88, 17).addBox(-0.5F, -0.5F, -7.0F, 1.0F, 1.0F, 8.0F)
+                .texOffs(82, 43).addBox(-0.5F, -1.5F, -9.0F, 1.0F, 3.0F, 2.0F)
+                .texOffs(30, 43).addBox(-1.5F, -1.5F, -3.5F, 3.0F, 3.0F, 3.0F)
+                .texOffs(120, 43).addBox(-0.5F, -2.5F, -6.5F, 1.0F, 1.0F, 3.0F),
                 new PartPose(0.0F, 9.0F, -0.5F, -1.22173F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_arm_l = p_body.addOrReplaceChild("arm_l", CubeListBuilder.create()
-                .texOffs(60, 25).addBox(-1.0F, -1.0F, -1.0F, 2.0F, 5.0F, 2.0F)
-                .texOffs(12, 25).addBox(-1.5F, 3.5F, -1.5F, 3.0F, 5.0F, 3.0F)
-                .texOffs(96, 33).addBox(-1.0F, 8.0F, -1.0F, 2.0F, 2.0F, 2.0F),
-                new PartPose(5.5F, -10.5F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
+                .texOffs(98, 35).addBox(-1.0F, -1.0F, -1.0F, 2.0F, 5.0F, 2.0F)
+                .texOffs(112, 27).addBox(-1.5F, 3.5F, -1.5F, 3.0F, 5.0F, 3.0F)
+                .texOffs(0, 49).addBox(-1.0F, 8.0F, -1.0F, 2.0F, 2.0F, 2.0F),
+                new PartPose(6.5F, -10.5F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         PartDefinition p_off = p_arm_l.addOrReplaceChild("off", CubeListBuilder.create()
-                .texOffs(26, 33).addBox(-0.5F, 0.0F, -1.5F, 1.0F, 3.0F, 3.0F),
+                .texOffs(42, 43).addBox(-0.5F, 0.0F, -1.5F, 1.0F, 3.0F, 3.0F),
                 new PartPose(0.0F, 9.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
+        PartDefinition p_pendulum = p_body.addOrReplaceChild("pendulum", CubeListBuilder.create()
+                .texOffs(8, 49).addBox(-0.5F, 0.0F, -0.1F, 1.0F, 3.0F, 0.0F)
+                .texOffs(10, 49).addBox(-1.0F, 3.0F, -0.15F, 2.0F, 2.0F, 0.0F),
+                new PartPose(0.0F, -7.0F, -3.8F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
         return LayerDefinition.create(mesh, 128, 64);
     }
 

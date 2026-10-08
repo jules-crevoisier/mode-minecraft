@@ -117,6 +117,8 @@ STRUCTURE_ICONS = {
     "shipwreck_debris": "barrel",
     "chained_bastion": "gilded_blackstone",
     "shattered_halo": "end_crystal",
+    "pilgrims_ascent": "bell",
+    "tidal_abbey": "prismarine_bricks",
 }
 # where each boss lives (its quest follows the discovery of that structure)
 BOSS_HOME = {

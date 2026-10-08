@@ -97,7 +97,12 @@ public final class BrasshavenClient {
                     com.brasshaven.client.map.ClientMap.onSystemMessage(e.getMessage());
                     return false;
                 });
+        // every Brasshaven item gets the same tooltip layout (item/BrassTooltip); the classes that don't add it
+        // themselves (vanilla tool, block and egg classes) get it here, under the name
+        com.brasshaven.item.BrassTooltip.shiftDown = () -> Minecraft.getInstance().hasShiftDown();
+        net.minecraftforge.event.entity.player.ItemTooltipEvent.BUS.addListener(BrasshavenClient::onTooltip);
         net.minecraftforge.event.entity.player.ItemTooltipEvent.BUS.addListener(TipCards::onTooltip);
+        AccessoryClient.register();
         TipCards.registerKeys();
         com.brasshaven.client.recipes.RecipeViewer.register();
         ReleaseClient.register();
@@ -125,6 +130,17 @@ public final class BrasshavenClient {
         TickEvent.ClientTickEvent.Post.BUS.addListener(event -> onClientTick());
         // scripted screenshot run for CI; inert unless the JVM has -Dbrasshaven.ci=true
         CiDriver.register();
+    }
+
+    private static void onTooltip(net.minecraftforge.event.entity.player.ItemTooltipEvent event) {
+        net.minecraft.world.item.ItemStack stack = event.getItemStack();
+        if (stack.isEmpty() || stack.getItem() instanceof com.brasshaven.item.BrassTooltip.Styled
+                || !Brasshaven.MODID.equals(net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(stack.getItem()).getNamespace())) {
+            return;
+        }
+        java.util.List<net.minecraft.network.chat.Component> lines = com.brasshaven.item.BrassTooltip.lines(stack);
+        java.util.List<net.minecraft.network.chat.Component> tip = event.getToolTip();
+        tip.addAll(Math.min(1, tip.size()), lines);
     }
 
     private static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
