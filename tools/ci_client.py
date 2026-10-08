@@ -197,6 +197,8 @@ def run_game(args):
     if args.showcase:
         cmd[3:3] = ["-Pbrasshaven.showcase=true", f"-Pbrasshaven.ci.size={args.size}",
                     f"-Pbrasshaven.showcase.slowmo={args.slowmo}"]
+    elif args.focus:
+        cmd[3:3] = [f"-Pbrasshaven.ci.focus={args.focus}"]
     log("running " + " ".join(cmd))
     start = time.time()
     proc = subprocess.Popen(cmd, cwd=ROOT, env=game_env(), stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
@@ -427,6 +429,8 @@ def main():
     ap.add_argument("--early-window", action="store_true", help="keep FML's early loading window")
     ap.add_argument("--strict", action="store_true", help="also fail on ERROR lines that do not mention the mod")
     ap.add_argument("--showcase", action="store_true", help="film the showcase tour (client/CiShowcase) with ffmpeg")
+    ap.add_argument("--focus", default="", help="targeted run, comma-separated: structure:<id>, entity:<id>, "
+                    "step:<name> (only those, with their screenshots) instead of the whole tour")
     ap.add_argument("--size", default="1280x720", help="window and Xvfb screen size in showcase mode, WxH")
     ap.add_argument("--slowmo", default="0", help="showcase slow-motion factor (0: picked from the measured fps)")
     args = ap.parse_args()
@@ -453,7 +457,7 @@ def main():
         if line.startswith(("FAIL", "SKIP")):
             failures.append(line)
     saved = collect_shots()
-    for name in EXPECTED_SHOTS:
+    for name in ([] if args.focus else EXPECTED_SHOTS):  # a targeted run only takes the shots of its focus
         if name not in saved:
             failures.append(f"FAIL screenshot {name} missing")
 

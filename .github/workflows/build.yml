@@ -17,13 +17,18 @@ on:
         description: "Film the showcase tour for the presentation videos (about 40 minutes)"
         type: boolean
         default: false
+      focus:
+        description: "Targeted test: only these, with in-game screenshots (e.g. structure:clockwork_citadel,entity:grand_clockmaker,step:quest_journal); skips the server tests"
+        type: string
+        default: ""
 
 permissions:
   contents: write
 
 # one build per branch at a time: a new push cancels the running build, so the latest code is always the one tested
+# (targeted runs have their own queue, so they never cancel the full build)
 concurrency:
-  group: build-${{ github.ref }}
+  group: build-${{ github.ref }}${{ inputs.focus && '-focus' || '' }}
   cancel-in-progress: true
 
 jobs:
@@ -96,6 +101,8 @@ jobs:
   # the two server tests run side by side on separate machines
   smoke-test:
     needs: build
+    # a targeted run (Run workflow + focus) only runs the client test on what it names
+    if: ${{ !inputs.focus }}
     runs-on: ubuntu-latest
     timeout-minutes: 50
     steps:
@@ -158,6 +165,8 @@ jobs:
   # with a render of each in place. A misfit fails the job. Each shard keeps to ~35 minutes of test.
   fit-test:
     needs: build
+    # a targeted run (Run workflow + focus) only runs the client test on what it names
+    if: ${{ !inputs.focus }}
     runs-on: ubuntu-latest
     timeout-minutes: 50
     strategy:
@@ -223,6 +232,8 @@ jobs:
   # areas loaded; reported, not gated), each recorded with Java Flight Recorder (brasshaven-ci-profile-gen.txt).
   world-test:
     needs: build
+    # a targeted run (Run workflow + focus) only runs the client test on what it names
+    if: ${{ !inputs.focus }}
     runs-on: ubuntu-latest
     timeout-minutes: 80
     steps:
@@ -312,8 +323,10 @@ jobs:
             libegl1 libxrandr2 libxcursor1 libxi6 libxinerama1 libxxf86vm1
           xvfb-run -a -s "-screen 0 1920x1080x24" glxinfo -B || true
 
-      - name: Run the client test (screens, HUD, creatures, Clockwork Citadel)
-        run: xvfb-run -a -s "-screen 0 1920x1080x24" python3 tools/ci_client.py
+      - name: Run the client test (screens, HUD, creatures, Clockwork Citadel; or only the focus)
+        env:
+          FOCUS: ${{ inputs.focus }}
+        run: xvfb-run -a -s "-screen 0 1920x1080x24" python3 tools/ci_client.py ${FOCUS:+--focus "$FOCUS"}
 
       - name: Upload the screenshots
         if: always()

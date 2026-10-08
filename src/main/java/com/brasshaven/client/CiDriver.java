@@ -76,6 +76,11 @@ public final class CiDriver {
     static final String TAG = "[brasshaven-ci] ";
     private static final long TIMEOUT_MS = Long.getLong("brasshaven.ci.timeout", 18 * 60) * 1000L;
     private static final int SETTLE_TICKS = Integer.getInteger("brasshaven.ci.settle", 200);
+    /**
+     * Targeted run (tools/ci_client.py --focus): comma-separated {@code structure:<id>}, {@code entity:<id>} and
+     * {@code step:<name>} items; only those run (plus "setup"), each with its screenshots, instead of the whole tour.
+     */
+    private static final String FOCUS = System.getProperty("brasshaven.ci.focus", "").trim();
     private static final String WORLD = "brasshaven-ci";
     /** Floor of the stage built in the sky, away from the terrain (creatures, machines). */
     static final int STAGE_Y = 200;
@@ -274,6 +279,8 @@ public final class CiDriver {
         LOGGER.info(TAG + "world settled, player at {}", mc.player.blockPosition());
         if (SHOWCASE) {
             CiShowcase.build();
+        } else if (!FOCUS.isEmpty()) {
+            focusSteps();
         } else {
             buildSteps();
         }
@@ -724,6 +731,114 @@ public final class CiDriver {
                 .shot("mega_structure");
     }
 
+    // ------------------------------------------------------------------ targeted runs (--focus)
+
+    private static void focusSteps() {
+        List<String> items = new ArrayList<>();
+        List<String> stepNames = new ArrayList<>();
+        for (String raw : FOCUS.split(",")) {
+            String item = raw.trim();
+            if (item.startsWith("step:")) {
+                stepNames.add(item.substring(5));
+            } else if (!item.isEmpty()) {
+                items.add(item);
+            }
+        }
+        LOGGER.info(TAG + "focus: steps {}, items {}", stepNames, items);
+        // the whole tour, then only "setup" and the named steps (a step that needs an earlier one names it too)
+        buildSteps();
+        STEPS.removeIf(s -> !s.name.equals("setup") && !stepNames.contains(s.name));
+        int index = 0;
+        for (String item : items) {
+            if (item.startsWith("structure:")) {
+                structureSteps(item.substring(10), index++);
+            } else if (item.startsWith("entity:")) {
+                entitySteps(item.substring(7));
+            } else {
+                step("focus_unknown").run("parse", () -> {
+                    throw new IllegalArgumentException("unknown focus item '" + item
+                            + "' (structure:<id>, entity:<id> or step:<name>)");
+                });
+            }
+        }
+    }
+
+    /** A structure placed far from the stage, shot from its four corners and from above. */
+    private static void structureSteps(String id, int index) {
+        String name = id.contains(":") ? id : Brasshaven.MODID + ":" + id;
+        String shortName = name.substring(name.indexOf(':') + 1);
+        int px = bx + 320 + index * 480;
+        int pz = bz;
+        double[][] box = new double[1][];
+        step("structure_" + shortName)
+                .run("render distance", () -> Minecraft.getInstance().options.renderDistance().set(12))
+                .server("locate " + shortName, (server, player) -> prepareStructure(server, name, px, pz, box))
+                .cmd(() -> List.of("tp @s " + centre(box[0])[0] + " " + (box[0][4] + 30) + " " + centre(box[0])[2]))
+                .run("fly", CiDriver::fly)
+                .waitTicks(60)
+                .retry("place structure", () -> List.of("place structure " + name + " " + px + " 64 " + pz), 100, 30);
+        String[] names = {"nw", "ne", "se", "sw"};
+        int[][] dirs = {{-1, -1}, {1, -1}, {1, 1}, {-1, 1}};
+        for (int k = 0; k < 4; k++) {
+            int dx = dirs[k][0];
+            int dz = dirs[k][1];
+            step("structure_" + shortName + "_" + names[k])
+                    .cmd(() -> {
+                        double[] b = box[0];
+                        double[] c = centre(b);
+                        double size = Math.max(b[3] - b[0], b[5] - b[2]);
+                        double back = size * 0.55 + 20;
+                        return List.of("tp @s " + (c[0] + dx * back) + " " + (b[4] + size * 0.3 + 10) + " "
+                                + (c[2] + dz * back) + " facing " + c[0] + " " + c[1] + " " + c[2]);
+                    })
+                    .run("fly", CiDriver::fly)
+                    .settleChunks(2400)
+                    .waitTicks(40)
+                    .shot("structure_" + shortName + "_" + names[k]);
+        }
+        step("structure_" + shortName + "_top")
+                .cmd(() -> {
+                    double[] b = box[0];
+                    double[] c = centre(b);
+                    double size = Math.max(b[3] - b[0], b[5] - b[2]);
+                    return List.of("tp @s " + c[0] + " " + (b[4] + size * 0.9 + 10) + " " + (c[2] - size * 0.2)
+                            + " facing " + c[0] + " " + b[1] + " " + c[2]);
+                })
+                .run("fly", CiDriver::fly)
+                .settleChunks(2400)
+                .waitTicks(40)
+                .shot("structure_" + shortName + "_top");
+    }
+
+    /** Centre of a {minX, minY, minZ, maxX, maxY, maxZ} box, at a third of its height. */
+    private static double[] centre(double[] b) {
+        return new double[] {(b[0] + b[3]) / 2.0, b[1] + (b[4] - b[1]) * 0.35, (b[2] + b[5]) / 2.0};
+    }
+
+    /** A creature or boss on a bare platform of the sky stage, frozen, shot from the front and the side. */
+    private static void entitySteps(String id) {
+        String name = id.contains(":") ? id : Brasshaven.MODID + ":" + id;
+        String shortName = name.substring(name.indexOf(':') + 1);
+        double ex = bx + 0.5;
+        double ez = bz + 14.5;
+        step("entity_" + shortName)
+                .cmd(() -> List.of(
+                        "kill @e[type=!minecraft:player,distance=..96]",
+                        "fill " + at(-16, 1, -6) + " " + at(16, 20, 30) + " minecraft:air",
+                        "fill " + at(-16, 0, -6) + " " + at(16, 0, 30) + " minecraft:polished_andesite",
+                        "summon " + name + " " + ex + " " + (STAGE_Y + 1) + " " + ez
+                                + " {NoAI:1b,PersistenceRequired:1b,Rotation:[180f,0f]}",
+                        "tp @s " + ex + " " + (STAGE_Y + 4) + " " + (bz - 4.5) + " facing " + ex + " " + (STAGE_Y + 2.5) + " " + ez))
+                .run("fly", CiDriver::fly)
+                .waitTicks(80)
+                .shot("entity_" + shortName + "_front")
+                .cmd(() -> List.of("tp @s " + (bx + 16.5) + " " + (STAGE_Y + 4) + " " + ez
+                        + " facing " + ex + " " + (STAGE_Y + 2.5) + " " + ez))
+                .run("fly", CiDriver::fly)
+                .waitTicks(40)
+                .shot("entity_" + shortName + "_side");
+    }
+
     /**
      * The multiplayer features (com.brasshaven.social). The test has one player, so /brasshaven social demo fills the
      * company, the inbox and the board from two demo brasshaven; the trade screen and a player card (which need a second
@@ -1129,6 +1244,35 @@ public final class CiDriver {
     }
 
     // ------------------------------------------------------------------ steps and ops
+
+    /**
+     * Server thread: generates the structure where /place structure will put it (same seed and chunk, so the same
+     * layout), stores its bounding box and force-loads its chunks.
+     */
+    private static List<String> prepareStructure(IntegratedServer server, String name, int x, int z, double[][] out) {
+        ServerLevel level = server.overworld();
+        BlockPos pos = new BlockPos(x, 64, z);
+        Holder.Reference<Structure> holder = level.registryAccess().lookupOrThrow(Registries.STRUCTURE)
+                .get(net.minecraft.resources.Identifier.parse(name))
+                .orElseThrow(() -> new IllegalStateException("no structure " + name));
+        ChunkGenerator generator = level.getChunkSource().getGenerator();
+        StructureStart start = com.brasshaven.world.SiteFit.unchecked(() -> holder.value().generate(holder, level.dimension(),
+                level.registryAccess(), generator, generator.getBiomeSource(), level.getChunkSource().randomState(),
+                level.getStructureManager(), level.getSeed(), ChunkPos.containing(pos), 0, level, b -> true));
+        if (!start.isValid()) {
+            throw new IllegalStateException(name + " did not generate at " + pos);
+        }
+        BoundingBox box = start.getBoundingBox();
+        LOGGER.info(TAG + "{} bounding box {}", name, box);
+        out[0] = new double[] {box.minX(), box.minY(), box.minZ(), box.maxX(), box.maxY(), box.maxZ()};
+        List<String> commands = new ArrayList<>();
+        int minCx = (box.minX() >> 4) - 1;
+        int maxCx = (box.maxX() >> 4) + 1;
+        for (int chz = (box.minZ() >> 4) - 1; chz <= (box.maxZ() >> 4) + 1; chz++) {
+            commands.add("forceload add " + (minCx * 16) + " " + (chz * 16) + " " + (maxCx * 16) + " " + (chz * 16));
+        }
+        return commands;
+    }
 
     static Step step(String name) {
         Step step = new Step(name);
