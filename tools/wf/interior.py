@@ -244,6 +244,10 @@ def _classify(bp, room, chk):
     for (x, z) in room.cells:
         walls, full = [], []
         access = False
+        # a hatch or ladder in the floor itself (or a ladder rising through the cell): never cover it
+        for b in (bp.blocks.get((x, y - 1, z)), bp.blocks.get((x, y, z))):
+            if b and any(h in _short(b[0]) for h in ("_trapdoor", "ladder", "scaffolding", "vine")):
+                access = True
         for d in HORIZONTAL:
             dx, dz = _dirvec(d)
             n = (x + dx, z + dz)

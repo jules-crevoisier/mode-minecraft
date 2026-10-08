@@ -188,11 +188,30 @@ def spike(bp, cx, cz, y, r, block="blackstone", stairs=BS, steep=3, round_=True,
     return yy + 1
 
 
+def _tower_door(bp, cx, cz, y0, reach, to):
+    """Cut a 3-wide, 4-high doorway from the tower's centre out to ``reach`` blocks toward ``to`` (the side axis
+    closest to that direction); a ladder in the way is kept."""
+    dx, dz = to[0] - cx, to[1] - cz
+    if dx and dz and 0.5 <= abs(dx / dz) <= 2:      # diagonal (a corner tower opening on the courtyard)
+        sx, sz = (1 if dx > 0 else -1), (1 if dz > 0 else -1)
+        cells = [(cx + sx * t + a, cz + sz * t + b) for t in range(0, int(reach / 1.41) + 2)
+                 for a, b in ((0, 0), (sx, 0), (0, sz), (-sx, sz), (sx, -sz))]
+    else:
+        ux, uz = (1 if dx > 0 else -1, 0) if abs(dx) >= abs(dz) else (0, 1 if dz > 0 else -1)
+        cells = [(cx + ux * t + uz * s, cz + uz * t + ux * s) for t in range(1, reach + 1) for s in (-1, 0, 1)]
+    for x, z in cells:
+        for y in range(y0 + 1, y0 + 5):
+            if "ladder" not in (bp.get(x, y, z) or ""):
+                bp.set(x, y, z, "air")
+
+
 def round_tower(bp, cx, cz, y0, h, r, wall=EMBER, *, base=-8, roof="spike", steep=3, solid=False,
                 band=GILD, rib=PBAS, floor=PB, floors_every=8, slit_seed=0, roof_block="blackstone",
-                roof_stairs=BS, ladder=True, crown_lamps=True, ribs=8):
+                roof_stairs=BS, ladder=True, crown_lamps=True, ribs=8, door_to=None):
     """Monumental round tower: battered base, basalt ribs, gilded bands, glowing slits, corbelled
-    machicolated crown with crenels and an optional spike roof. Returns the top y."""
+    machicolated crown with crenels and an optional spike roof. ``door_to=(x, z)``: a 3-wide, 4-high doorway
+    through the wall on the side facing that point (a hollow tower without one is a sealed room). Returns the
+    top y."""
     top = y0 + h
     for y in range(y0 + base, top + 1):
         rr = r + 1 if y < y0 + 3 else r
@@ -235,6 +254,8 @@ def round_tower(bp, cx, cz, y0, h, r, wall=EMBER, *, base=-8, roof="spike", stee
             bp.lantern(cx, fy - 1, cz, hanging=True)
         if ladder:
             bp.ladder(cx, y0 + 1, cz - r + 1, top + 1, "south")
+        if door_to is not None:
+            _tower_door(bp, cx, cz, y0, r + 2, door_to)
     # crown: two corbel courses, platform, parapet with merlons
     for (x, z) in ring_cells(cx, cz, r + 1):
         bp.set(x, top - 1, z, stair(PBBS, toward(cx, cz, x, z), "top"))
@@ -262,8 +283,9 @@ def round_tower(bp, cx, cz, y0, h, r, wall=EMBER, *, base=-8, roof="spike", stee
 
 def sq_tower(bp, x0, z0, x1, z1, y0, h, wall=EMBER, *, base=-8, roof="spike", steep=3, solid=False,
              band=GILD, quoin=BASALT, floor=PB, floors_every=8, roof_block="blackstone", roof_stairs=BS,
-             slits=True):
-    """Square tower with 2x2 corner piers, gilded bands, glowing slits, corbelled crown, spike roof."""
+             slits=True, door_to=None):
+    """Square tower with 2x2 corner piers, gilded bands, glowing slits, corbelled crown, spike roof.
+    ``door_to=(x, z)``: a doorway in the middle of the side facing that point."""
     top = y0 + h
     for y in range(y0 + base, top + 1):
         for x in range(x0, x1 + 1):
@@ -306,6 +328,8 @@ def sq_tower(bp, x0, z0, x1, z1, y0, h, wall=EMBER, *, base=-8, roof="spike", st
             bp.fill(x0 + 1, fy, z0 + 1, x1 - 1, fy, z1 - 1, floor)
             bp.lantern(mx, fy - 1, mz, hanging=True)
         bp.ladder(x0 + 1, y0 + 1, z0 + 1, top + 1, "south")
+        if door_to is not None:
+            _tower_door(bp, (x0 + x1) // 2, (z0 + z1) // 2, y0, max(x1 - x0, z1 - z0) // 2 + 2, door_to)
     # crown
     for k, (o, half) in enumerate(((1, "top"), (2, "top"))):
         yy = top - 2 + k
@@ -471,7 +495,9 @@ def _keep(bp):
     # roof + central spire tower
     arch.steep_roof(bp, x0, z0, x1, z1, top + 1, PBBS, axis="x", overhang=1, steep=1, fill=PBB, under=PBBS,
                     ridge=GILD, dormers=3, dormer_stairs=PBBS, dormer_wall=EB)
-    round_tower(bp, 0, -10, top, 24, 5, base=0, steep=3, slit_seed=99)
+    round_tower(bp, 0, -10, top, 24, 5, base=0, steep=3, slit_seed=99, door_to=(-12, -10))
+    # a ladder from the war room up through the ceiling into the roof space and the spire's door
+    bp.ladder(-11, 20, -10, top + 1, "east")
     # lavafalls from the front turrets into basins
     for sx in (-1, 1):
         tx = sx * 12
@@ -529,7 +555,7 @@ def _keep(bp):
         bp.set(dx, 7, -19, "red_wall_banner[facing=south]")
     for z in (-14, -7):
         chandelier(bp, 0, 9, z, drop=2)
-    bp.chest(-10, 2, -1, "north", LOOT + "basalt_fortress")
+    bp.chest(-9, 2, -3, "north", LOOT + "basalt_fortress")
     bp.spawner(0, 2, -10, MOB["basalt_guard"])
     # stairs to the upper floors
     arch.stair_run(bp, 10, 2, -2, "north", 9, 1, PBBS, fill=PBB, clear=3)
@@ -543,7 +569,7 @@ def _keep(bp):
     bp.set(-3, 11, -12, "anvil[facing=east]")
     bp.set(-3, 11, -11, "grindstone[face=floor,facing=east]")
     bp.set(3, 11, -12, "smithing_table")
-    bp.chest(11, 11, -19, "west", LOOT + "basalt_fortress")
+    bp.chest(9, 11, -18, "west", LOOT + "basalt_fortress")
     for z in (-15, -6):
         chandelier(bp, 0, 18, z, drop=2)
     # treasury / war room (y=19)
@@ -575,7 +601,7 @@ def _gatehouse(bp):
     zf = 31
     # flanking towers
     for tx0 in (-15, 7):
-        sq_tower(bp, tx0, 22, tx0 + 8, zf, 0, 32, base=-6, steep=3)
+        sq_tower(bp, tx0, 22, tx0 + 8, zf, 0, 32, base=-6, steep=3, door_to=(tx0 + 4, 0))
     # gate block, one step proud of the towers
     fill_pal(bp, -6, -6, 22, 6, 25, zf + 1, EMBER)
     for x in range(-6, 7):
@@ -698,11 +724,12 @@ def basalt_fortress(bp):
     curtain(bp, "west", -F_WALL, -F_WALL, F_WALL, F_H, falls=(-14, 14))
     # mid-wall towers on east and west
     for sx in (-1, 1):
-        round_tower(bp, sx * F_WALL, 0, 0, 26, 4, base=-8, roof="crenels", slit_seed=sx)
+        round_tower(bp, sx * F_WALL, 0, 0, 26, 4, base=-8, roof="crenels", slit_seed=sx, door_to=(0, 0))
         brazier(bp, sx * F_WALL, 28, 0, big=True)
     # corner towers (north-west is the great donjon)
     for (sx, sz, h, st) in ((-1, -1, 48, 4), (1, -1, 40, 3), (-1, 1, 36, 3), (1, 1, 42, 3)):
-        round_tower(bp, sx * F_WALL, sz * F_WALL, 0, h, 6, base=-12, steep=st, slit_seed=sx * 7 + sz)
+        round_tower(bp, sx * F_WALL, sz * F_WALL, 0, h, 6, base=-12, steep=st, slit_seed=sx * 7 + sz,
+                    door_to=(0, 0))
     _gatehouse(bp)
     # stair up to the west wall-walk
     arch.stair_run(bp, -20, 1, -25, "east", 20, 1, PBBS, fill=PBB, clear=3)

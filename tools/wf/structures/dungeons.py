@@ -392,8 +392,8 @@ def sand_gate(bp, t, x, z):
     for cx, cz in ((-3, -6), (3, -6), (-6, -2), (6, -2), (-6, 2), (6, 2)):
         put(cx, WALL_H - 1, cz, "iron_chain[axis=y,waterlogged=false]")
         put(cx, WALL_H - 2, cz, "lantern[hanging=true,waterlogged=false]")
-    # braziers at the four corners of the rim
-    for cx, cz in ((-4, -4), (4, -4), (-4, 4), (4, 4)):
+    # braziers at the back corners of the rim (the front ones would block the walkway to the gate)
+    for cx, cz in ((-4, -4), (4, -4)):
         put(cx, 1, cz, CUT)
         put(cx, 2, cz, "campfire[facing=north,lit=true,signal_fire=false,waterlogged=false]")
     # sanctuary at the back: a gilded altar with a lapis cat idol, candles and painted panels
@@ -418,7 +418,7 @@ def sand_gate(bp, t, x, z):
 
     # ---------------------------------------------------------------- pylon gate (battered towers) and the winged sun
     for side in (-1, 1):
-        for dz in range(HZ1 - 1, HZ1 + 3):
+        for dz in range(HZ1, HZ1 + 3):   # from the hall's front wall out: the row inside stays a walkway round the rim
             for y in range(0, 15):
                 inset = y // 4                       # the towers lean back (batter)
                 x_in, x_out = 3, 12 - inset
@@ -426,7 +426,7 @@ def sand_gate(bp, t, x, z):
                     dx = ax * side
                     if dz == HZ1 + 2 and y > 12:
                         continue
-                    outer = ax == x_out or y in (0, 14) or dz in (HZ1 - 1, HZ1 + 2)
+                    outer = ax == x_out or y in (0, 14) or dz in (HZ1, HZ1 + 2)
                     if not outer:
                         put(dx, y, dz, S)
                         continue
@@ -454,7 +454,7 @@ def sand_gate(bp, t, x, z):
                 put(ax * side, y, HZ1 + 3, "spruce_fence[east=false,north=false,south=false,west=false,waterlogged=false]")
             put(ax * side, 17, HZ1 + 4, f"{colour}_wall_banner[facing=south]")
     # doorway (5 wide, 7 tall) with posts, lintel and the winged sun disk
-    for dz in range(HZ1 - 1, HZ1 + 3):
+    for dz in range(HZ1, HZ1 + 3):
         for dx in range(-2, 3):
             for y in range(1, 8):
                 put(dx, y, dz, "air")
@@ -669,7 +669,7 @@ def well_head(bp, t, x, z):
     for dz in (-2, 2):
         put(11, 0, dz, "spruce_fence[east=false,north=false,south=false,west=false,waterlogged=false]")
         put(11, 1, dz, "spruce_planks")
-    put(13, 0, -2, "barrel[facing=up,open=false]")
+    put(9, 0, -2, "barrel[facing=up,open=false]")   # on the door side of the drum
     put(13, 0, 2, "lever[face=floor,facing=west,powered=false]")
     put(12, 3, 0, LANT)
 

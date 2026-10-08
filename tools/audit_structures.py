@@ -22,6 +22,7 @@ Usage:
     python3 tools/audit_structures.py --only guild_outpost sky_isles
     python3 tools/audit_structures.py --only villages
     python3 tools/audit_structures.py --cache build/audit/cache   # reuse built blueprints (delete to rebuild)
+    python3 tools/audit_structures.py --jobs 4                    # one structure per process
 
 Writes build/audit/structures.txt (readable, sorted by severity) and build/audit/structures.json, and prints one
 line per piece. Coordinates are blueprint coordinates (the ones the generators use; the template's origin is the
@@ -1644,22 +1645,40 @@ def _fmt_issue(name, i):
     return f"{head}{i['severity'].upper():5s} {i['category']:18s} {pos} {i['msg']}{more}{who}\n"
 
 
+def _audit_group(job):
+    sid, cache = job
+    return [audit_record(rec).run() for rec in built_pieces({sid}, cache)]
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--only", nargs="*", help="structure ids (and/or 'villages')")
     ap.add_argument("--cache", help="directory to keep built blueprints between runs (delete it to rebuild)")
     ap.add_argument("--no-villages", action="store_true")
     ap.add_argument("--out", default=os.path.join(ROOT, "build", "audit"))
+    ap.add_argument("--jobs", type=int, default=1, help="parallel processes (one structure per task)")
     args = ap.parse_args()
     only = set(args.only) if args.only else None
     if args.no_villages and not only:
         only = {s.id for s in defs.STRUCTURES}
     results = []
-    for rec in built_pieces(only, args.cache):
-        a = audit_record(rec)
-        r = a.run()
-        results.append(r)
-        print(summary_line(r), flush=True)
+    if args.jobs > 1:
+        # one task per structure (villages as one task), in parallel processes; the report keeps the usual order
+        ids = [s.id for s in defs.STRUCTURES if not only or s.id in only]
+        if not only or "villages" in only:
+            ids.append("villages")
+        import multiprocessing
+        with multiprocessing.Pool(args.jobs) as pool:
+            for rs in pool.imap(_audit_group, [(i, args.cache) for i in ids]):
+                for r in rs:
+                    results.append(r)
+                    print(summary_line(r), flush=True)
+    else:
+        for rec in built_pieces(only, args.cache):
+            a = audit_record(rec)
+            r = a.run()
+            results.append(r)
+            print(summary_line(r), flush=True)
     write_reports(results, args.out)
     e = sum(1 for r in results for i in r["issues"] if i["severity"] == "error")
     w = sum(1 for r in results for i in r["issues"] if i["severity"] == "warn")

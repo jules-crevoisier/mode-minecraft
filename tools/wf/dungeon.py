@@ -314,10 +314,14 @@ def door_frames(bp, t, cx, y, cz, dirs, half=CELL // 2):
             bp.set(xx, y + 4, zz, t.pillar)
 
 
-def dress(p, kind, cx, y, cz, level_k, dungeon):
-    """Furnish a room by kind."""
+def dress(p, kind, cx, y, cz, level_k, dungeon, dirs=()):
+    """Furnish a room by kind, keeping the 3-wide doorways on its linked sides clear."""
     bp, t, rng = p.bp, p.t, p.rng
     h = 6
+    # the wall the altar/lectern/chest stands against: one without a doorway
+    back = next((d for d in ("n", "s", "w", "e") if d not in dirs), "n")
+    bdx, bdz = DIRS[back]
+    face = {"n": "north", "s": "south", "w": "west", "e": "east"}[OPP[back]]
     if kind == "hall":
         for sx in (-3, 3):
             for sz in (-3, 3):
@@ -330,6 +334,8 @@ def dress(p, kind, cx, y, cz, level_k, dungeon):
     elif kind == "ossuary":
         for sx in (-5, 5):
             for sz in range(-4, 5):
+                if ("w" if sx < 0 else "e") in dirs and abs(sz) <= 2:
+                    continue
                 if sz % 2 == 0:
                     for yy in range(y, y + 4):
                         bp.set(cx + sx, yy, cz + sz, t.bones if (yy + sz) % 3 else t.pillar)
@@ -343,16 +349,16 @@ def dress(p, kind, cx, y, cz, level_k, dungeon):
                 for dz in (0, 1):
                     bp.set(cx + sx, y, cz + sz + dz - 1, t.pillar)
                     bp.set(cx + sx, y + 1, cz + sz + dz - 1, with_props(t.trim + "_slab", type="bottom"))
-        bp.set(cx, y, cz - 4, with_props(t.candle, candles=3, lit=True))
+        bp.set(cx + 4 * bdx, y, cz + 4 * bdz, with_props(t.candle, candles=3, lit=True))
         if rng.random() < 0.6:
-            bp.barrel(cx, y, cz + 4, "up", dungeon.loot)
+            bp.barrel(cx - 4 * bdx, y, cz - 4 * bdz, "up", dungeon.loot)
     elif kind == "shrine":
         bp.set(cx, y, cz, t.accent)
         bp.set(cx, y + 1, cz, with_props(t.candle, candles=4, lit=True))
         for sx, sz in ((-2, -2), (2, -2), (-2, 2), (2, 2)):
             bp.set(cx + sx, y, cz + sz, t.pillar)
             bp.set(cx + sx, y + 1, cz + sz, with_props(t.candle, candles=2, lit=True))
-        bp.set(cx, y, cz - 4, "lectern[facing=south,has_book=false,powered=false]")
+        bp.set(cx + 4 * bdx, y, cz + 4 * bdz, "lectern[facing=%s,has_book=false,powered=false]" % face)
     elif kind == "spawner" and t.spawners and p.spawner_count < 5:
         bp.set(cx, y, cz, t.pillar)
         bp.spawner(cx, y + 1, cz, rng.choice(t.spawners))
@@ -360,10 +366,11 @@ def dress(p, kind, cx, y, cz, level_k, dungeon):
         for i in range(5):
             bp.set(cx + rng.randint(-4, 4), y, cz + rng.randint(-4, 4), t.bones)
     elif kind == "treasure":
-        bp.set(cx, y, cz - 4, t.accent)
-        bp.chest(cx, y + 1, cz - 4, "south", dungeon.treasure if rng.random() < 0.5 else dungeon.loot)
-        bp.set(cx - 2, y, cz - 4, with_props(t.candle, candles=2, lit=True))
-        bp.set(cx + 2, y, cz - 4, with_props(t.candle, candles=2, lit=True))
+        ax, az = cx + 4 * bdx, cz + 4 * bdz
+        bp.set(ax, y, az, t.accent)
+        bp.chest(ax, y + 1, az, face, dungeon.treasure if rng.random() < 0.5 else dungeon.loot)
+        for s2 in (-2, 2):
+            bp.set(ax + s2 * abs(bdz), y, az + s2 * abs(bdx), with_props(t.candle, candles=2, lit=True))
 
 
 def arrow_trap(bp, t, cx, y, cz, d):
@@ -397,9 +404,13 @@ def spiral_down(p, cx, cz, y_top, y_bottom, open_top=True):
     for x in range(cx - r - 1, cx + r + 2):
         for z in range(cz - r - 1, cz + r + 2):
             d = math.hypot(x - cx, z - cz)
+            # the steps of draw_stairs run on the square ring at distance 3: its corners must be carved too, or
+            # every quarter turn hits a wall block above a step
+            square = max(abs(x - cx), abs(z - cz))
             for y in range(y_bottom - 1, y_top + 5):
-                if d <= r + 0.6:
-                    if d <= r - 0.4:
+                sq = square if y <= y_top else 99   # above the upper floor's feet level the opening stays round
+                if d <= r + 0.6 or sq <= r:
+                    if d <= r - 0.4 or sq <= r - 1:
                         if y_bottom <= y <= y_top + 3:
                             p.air(x, y, z, x, y, z, floor=False)
                     elif y < y_top:  # the shaft wall stops at the upper floor: no ring around the opening
@@ -412,8 +423,10 @@ def draw_stairs(bp, t, cx, cz, y_top, y_bottom):
     bp.spiral_stairs(cx, cz, y_bottom, y_top - 1, 3, t.trim + "_slab", center=t.pillar)
     for y in range(y_top, y_top + 4):
         bp.set(cx, y, cz, t.pillar)
-    for y in range(y_bottom, y_top + 3, 5):
-        bp.set(cx + 3, y + 2, cz + 3, with_props("lantern", hanging=False) if "lantern" in t.light else t.light)
+    # lights in niches of the shaft wall (the ring of steps itself stays clear)
+    for i, y in enumerate(range(y_bottom, y_top + 3, 5)):
+        x, z = ((cx + 4, cz), (cx, cz + 4), (cx - 4, cz), (cx, cz - 4))[i % 4]
+        bp.set(x, y + 2, z, with_props("lantern", hanging=False) if "lantern" in t.light else t.light)
 
 
 def arena(p, theme, lv, gw, gd, y, boss, dungeon):
@@ -534,7 +547,7 @@ def build(bp, theme, seed, boss, dungeon, levels=3, gw=5, gd=5, entrance_fn=None
         draw_stairs(bp, theme, *top)
     for lv, c, kind, cx, y, cz, dirs in rooms:
         door_frames(bp, theme, cx, y, cz, dirs)
-        dress(p, kind, cx, y, cz, lv.k, dungeon)
+        dress(p, kind, cx, y, cz, lv.k, dungeon, dirs)
     for cx, y, cz, d in trap_spots:
         arrow_trap(bp, theme, cx, y, cz, d)
     for lv in lvls:
