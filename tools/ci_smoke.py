@@ -499,7 +499,8 @@ PEOPLES = {"dwarf": ["smith", "miner", "brewer", "gemcutter", "guard"],
            "clockwork_citizen": ["gearwright", "mechanic", "chronometrist", "sentinel"],
            "monk": ["scribe", "healer", "cook", "warden"]}
 GUARDS = {"dwarf": "guard", "sylvan": "warden", "clockwork_citizen": "sentinel", "monk": "warden"}
-CREATURES = ["bandit_marksman", "sky_raider", "barnacle_crab", "lantern_wisp", "cinder_hound", "rift_sentinel"]
+CREATURES = ["bandit_marksman", "sky_raider", "barnacle_crab", "lantern_wisp", "cinder_hound", "rift_sentinel",
+             "frozen_huscarl", "magma_sentry", "oathbound_statue", "tide_wraith", "bell_monk", "void_acolyte"]
 
 
 def peoples_and_creatures(srv, failures):
@@ -526,7 +527,7 @@ def peoples_and_creatures(srv, failures):
                 f'{{Tags:["bh_folk_foe"],PersistenceRequired:1b}}', r"Summoned|Unable|Invalid|not loaded", 30)
     # each creature against a dwarven guard and a monk warden
     for k, cid in enumerate(CREATURES):
-        x, z = x0 + k * 16, z0 + 80
+        x, z = x0 + (k % 6) * 16, z0 + 80 + (k // 6) * 16
         res = srv.run(f"execute in minecraft:overworld run summon brasshaven:{cid} {x} {ground} {z} {{PersistenceRequired:1b}}",
                       r"Summoned|Unable|Unknown|Invalid|not loaded", 30)
         if not res or "Summoned" not in res:

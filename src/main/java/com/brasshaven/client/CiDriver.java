@@ -608,7 +608,7 @@ public final class CiDriver {
                 .cmd(() -> List.of("gamemode creative")); // the later steps fly over the stage
 
         // the 3D held models, in the hands of a row of armour stands (third person, as other players see them)
-        String[] held = {"kings_trident", "sentinel_greatsword", "dune_king_crook", "jailer_chain", "halo_glaive", "gatekeeper_key", "jarl_axe", "caldera_halberd", "helmsman_anchor", "forbidden_grimoire",
+        String[] held = {"kings_trident", "sentinel_greatsword", "dune_king_crook", "jailer_chain", "halo_glaive", "gatekeeper_key", "jarl_axe", "abbess_crozier", "ascetic_staff", "caldera_halberd", "helmsman_anchor", "forbidden_grimoire",
                 "jade_fang", "rune_fist", "brass_pickaxe"};
         step("held_items")
                 .cmd(() -> {

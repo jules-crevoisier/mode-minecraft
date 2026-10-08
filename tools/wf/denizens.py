@@ -276,6 +276,105 @@ CREATURES = {
                 "se téléporte. Dans les archives, observatoires, épaves et jardins de l'End."),
         wiki="Obélisque flottant de l'End : une ligne pointillée te vise, puis son rayon frappe et t'attire vers lui (gare "
              "au vide !). Casse sa ligne de vue pour esquiver ; touché plusieurs fois, il se téléporte."),
+    "frozen_huscarl": dict(
+        en="Frozen Huscarl", fr="Huscarl gelé", egg=((126, 132, 142), (150, 214, 244)),
+        homes=["glacier_hall"],
+        loot=[("iron_nugget", 1, 3, None), ("snowball", 0, 2, None), ("packed_ice", 1, 1, 0.25),
+              ("blue_ice", 1, 1, 0.08)],
+        manual=("A dead house-guard frozen at his post, a round shield on his arm and a frost axe in his fist. Blows from "
+                "the front glance off the shield: circle round him and hit his back or sides, or split his guard with an "
+                "axe (he reels for a few seconds). He raises his axe high before chopping, draws the shield to his chest "
+                "before punching with it, and turns away with the axe out behind him before a wide freezing sweep. Found "
+                "in the Glacier Hall.",
+                "Un garde de la maison mort et gelé à son poste, un bouclier rond au bras et une hache de givre au poing. "
+                "Les coups de face glissent sur le bouclier : tourne autour de lui pour frapper son dos ou ses flancs, ou "
+                "brise sa garde d'un coup de hache (il chancelle quelques secondes). Il lève sa hache bien haut avant de "
+                "frapper, ramène le bouclier contre lui avant de cogner avec, et se détourne la hache tendue derrière lui "
+                "avant un large coup glacial. Dans la Halle glaciaire."),
+        wiki="Garde gelé au bouclier rond : les coups de face glissent dessus, frappe-le de côté ou dans le dos, ou brise "
+             "sa garde à la hache. Coup de hache, coup de bouclier et large balayage glacial. Halle glaciaire."),
+    "magma_sentry": dict(
+        en="Magma-forged Sentry", fr="Sentinelle de magma", egg=((46, 42, 48), (255, 118, 26)),
+        homes=["caldera_ringwall"],
+        loot=[("iron_nugget", 1, 3, None), ("magma_cream", 0, 1, None), (W + "orichalcum_nugget", 1, 2, 0.3),
+              (W + "ancient_ember", 1, 1, 0.08)],
+        manual=("A suit of blackstone plate with a molten heart, standing guard with a halberd taller than itself. It keeps "
+                "its distance: it levels the halberd and draws it back, then thrusts four blocks out; it raises it high "
+                "over its helm, then brings it down and a line of fire runs along the ground in front of it (step off "
+                "the line). Get too close and it shoves you away with the haft. Immune to fire. Found on the Caldera "
+                "Ringwall.",
+                "Une armure de pierre noire au cœur de magma, qui monte la garde avec une hallebarde plus haute qu'elle. "
+                "Elle garde ses distances : elle abaisse la hallebarde et la ramène en arrière, puis frappe d'estoc à "
+                "quatre blocs ; elle la lève au-dessus de son heaume, puis l'abat et une ligne de feu court au sol devant "
+                "elle (sors de la ligne). Approche-toi trop et elle te repousse d'un coup de hampe. Insensible au feu. "
+                "Sur le Rempart de la caldeira."),
+        wiki="Armure de pierre noire au cœur de magma armée d'une hallebarde : estoc à quatre blocs, coup vertical qui "
+             "ouvre une ligne de feu au sol, coup de hampe de près. Insensible au feu. Rempart de la caldeira."),
+    "oathbound_statue": dict(
+        en="Oathbound Statue-Knight", fr="Chevalier-statue du serment", egg=((150, 148, 140), (255, 196, 84)),
+        homes=["kneeling_gate"],
+        loot=[("cobblestone", 1, 3, None), ("gold_nugget", 1, 3, None), (W + "marble", 1, 2, 0.3),
+              (W + "lithite_shard", 1, 1, 0.15)],
+        manual=("A stone knight kneeling on its sword, bound by an old oath to guard the gate. While it sleeps, blows "
+                "barely scratch it; come within a few steps (or strike it) and its cracks light up with gold as it rises. "
+                "It is slow but hits very hard: it raises its greatsword high before a crushing blow that shakes the "
+                "ground around, swings it far out to the side before a wide sweep, and levels the point at its hip "
+                "before striding forward four blocks. Found at the Kneeling Gate.",
+                "Un chevalier de pierre agenouillé sur son épée, lié par un vieux serment à la garde de la porte. Tant "
+                "qu'il dort, les coups l'égratignent à peine ; approche-toi à quelques pas (ou frappe-le) et ses fissures "
+                "s'illuminent d'or tandis qu'il se relève. Il est lent mais frappe très fort : il lève son espadon bien "
+                "haut avant un coup écrasant qui ébranle le sol autour, l'écarte loin sur le côté avant un large balayage, "
+                "et pointe la lame à la hanche avant de foncer de quatre blocs. À la Porte agenouillée."),
+        wiki="Chevalier de pierre agenouillé qui s'éveille quand on approche (fissures dorées). Lent : coup écrasant qui "
+             "ébranle le sol, large balayage et charge de quatre blocs pointe en avant. Porte agenouillée."),
+    "tide_wraith": dict(
+        en="Tide Wraith", fr="Spectre des marées", egg=((58, 132, 128), (196, 250, 236)),
+        homes=["tidal_abbey"],
+        loot=[("prismarine_crystals", 0, 2, None), ("kelp", 0, 2, None), (W + "pearl", 1, 1, 0.15),
+              ("nautilus_shell", 1, 1, 0.04)],
+        manual=("A drowned sailor's ghost floating over the flooded abbey, a gaff and chain round its wrist. It glides "
+                "through water as easily as air, and while it is in water arrows and blows pass through it: fight it on "
+                "dry stone. It rakes with its claws; it spreads both arms and gapes before lunging to hook you, then drags "
+                "you toward the nearest water (hit it to break free). It can sink into water and rise again right behind "
+                "you. Found in the Tidal Abbey.",
+                "Le fantôme d'un marin noyé qui flotte au-dessus de l'abbaye inondée, une gaffe et une chaîne au poignet. "
+                "Il glisse dans l'eau aussi bien que dans l'air, et tant qu'il est dans l'eau flèches et coups le "
+                "traversent : combats-le sur la pierre sèche. Il griffe ; il écarte les bras en ouvrant la mâchoire avant "
+                "de bondir pour t'accrocher, puis t'entraîne vers l'eau la plus proche (frappe-le pour te libérer). Il "
+                "peut s'enfoncer dans l'eau et resurgir juste derrière toi. Dans l'Abbaye des marées."),
+        wiki="Fantôme de marin noyé : dans l'eau, les coups le traversent. Griffes, harpon qui t'accroche et t'entraîne "
+             "vers l'eau (frappe-le pour te libérer), plongée et retour dans ton dos. Abbaye des marées."),
+    "bell_monk": dict(
+        en="Bell Monk", fr="Moine des cloches", egg=((124, 118, 108), (196, 138, 58)),
+        homes=["pilgrims_ascent"],
+        loot=[("paper", 0, 2, None), ("candle", 0, 1, None), (W + "brass_nugget", 1, 3, None),
+              ("bell", 1, 1, 0.03)],
+        manual=("A blindfolded monk under a vow of silence who lets his bells speak. He lifts his handbell and holds it "
+                "trembling, then strikes: a ring of sound runs out along the ground; jump over it as it reaches you. "
+                "Up close he swings the bell at your head. When he raises it over his cowl with both hands and shakes it "
+                "harder and harder, get away or cover your ears: the knell blinds and pushes back everyone around. "
+                "Found on Pilgrim's Ascent.",
+                "Un moine aux yeux bandés, tenu au silence, qui laisse parler ses cloches. Il lève sa clochette et la "
+                "tient tremblante, puis frappe : un anneau de son court au sol ; saute par-dessus quand il t'atteint. De "
+                "près, il te balance la cloche à la tête. Quand il la lève au-dessus de sa capuche à deux mains en la "
+                "secouant de plus en plus fort, éloigne-toi : le glas aveugle et repousse tout le monde alentour. Sur "
+                "l'Ascension du pèlerin."),
+        wiki="Moine aux yeux bandés : sa cloche lance un anneau de son au sol (saute par-dessus), cogne de près, et son "
+             "glas aveugle et repousse tout le monde autour. Ascension du pèlerin."),
+    "void_acolyte": dict(
+        en="Void Acolyte", fr="Acolyte du vide", egg=((40, 28, 56), (190, 110, 255)),
+        homes=["shattered_halo"],
+        loot=[("ender_pearl", 0, 1, None), ("amethyst_shard", 0, 2, None), (W + "void_shard", 1, 1, 0.2)],
+        manual=("A masked cultist of the Shattered Halo, a broken halo floating behind its head. It draws an orb of void "
+                "light to its chest and lets it swell, then throws it: the orb drifts after you and lifts you off the "
+                "ground; dodge it or break the line with a block. It blinks a few blocks away to flank you: the spot it "
+                "will land on flickers first. Corner it and it stabs with its dagger. Found on the Shattered Halo.",
+                "Un adepte masqué du Halo brisé, un halo cassé flottant derrière sa tête. Il ramène une orbe de lumière "
+                "du vide contre lui et la laisse grossir, puis la lance : l'orbe te suit et te soulève du sol ; esquive-la "
+                "ou coupe sa route avec un bloc. Il se téléporte à quelques blocs pour te prendre de flanc : l'endroit où "
+                "il va apparaître scintille d'abord. Coincé, il frappe de sa dague. Sur le Halo brisé."),
+        wiki="Adepte masqué au halo brisé : orbe du vide qui te suit et te soulève, téléportation de flanc (le point "
+             "d'arrivée scintille d'abord), coup de dague de près. Halo brisé."),
 }
 
 FOLK_IDS = list(PEOPLES)
@@ -573,7 +672,8 @@ def check_trades(known_items):
 
 # blocks of headroom each creature needs where it waits in a template
 CREATURE_HEIGHT = {"bandit_marksman": 2, "sky_raider": 2, "barnacle_crab": 1, "lantern_wisp": 2, "cinder_hound": 1,
-                   "rift_sentinel": 3}
+                   "rift_sentinel": 3, "frozen_huscarl": 2, "magma_sentry": 3, "oathbound_statue": 3,
+                   "tide_wraith": 2, "bell_monk": 2, "void_acolyte": 2}
 _AIR = ("minecraft:air", "minecraft:cave_air")
 _BAD_FLOOR = ("magma_block", "campfire", "fire", "lava", "cactus", "leaves", "powder_snow", "mist_gate", "spawner",
               "boss_seal", "_bed", "chest", "barrel", "scaffolding", "_slab", "_stairs", "carpet", "_fence", "_wall")

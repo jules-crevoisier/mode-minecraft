@@ -21,11 +21,11 @@ import java.util.List;
 
 /**
  * A weapon forged from a boss's Remembrance. Its right-click ability is one of a few shapes (ring, beam, dash,
- * eruptions, snare, poison cloud, leap, sweep, blink, chain hook, halo shards, frost breath), tuned per weapon by power, size, particle and flags.
+ * eruptions, snare, poison cloud, leap, sweep, blink, chain hook, halo shards, frost breath, breaking tide), tuned per weapon by power, size, particle and flags.
  * Abilities only ever hurt non-player creatures.
  */
 public class BossWeaponItem extends AbilityItem {
-    public enum Ability { WAVE, BEAM, DASH, ERUPT, ROOT, CLOUD, LEAP, ARC, BLINK, HOOK, SHARDS, BREATH, RIFT, WARD }
+    public enum Ability { WAVE, BEAM, DASH, ERUPT, ROOT, CLOUD, LEAP, ARC, BLINK, HOOK, SHARDS, BREATH, RIFT, WARD, TEMPEST, TIDE }
 
     public static final int FIRE = 1;
     public static final int SLOW = 2;
@@ -56,7 +56,7 @@ public class BossWeaponItem extends AbilityItem {
                       List<net.minecraft.network.chat.Component> details) {
         String shape = ability.name().toLowerCase(java.util.Locale.ROOT);
         boolean radius = switch (ability) {
-            case WAVE, ROOT, CLOUD, LEAP, ARC, WARD -> true;
+            case WAVE, ROOT, CLOUD, LEAP, ARC, WARD, TEMPEST -> true;
             default -> false;
         };
         facts.add(BrassTooltip.heading(net.minecraft.network.chat.Component.translatable("tooltip.brasshaven.ability",
@@ -339,6 +339,66 @@ public class BossWeaponItem extends AbilityItem {
                 }
                 level.playSound(null, player, SoundEvents.POWDER_SNOW_BREAK, SoundSource.PLAYERS, 1.2F, 0.6F);
                 level.playSound(null, player, SoundEvents.PLAYER_BREATH, SoundSource.PLAYERS, 1.0F, 0.5F);
+            }
+            case TEMPEST -> {
+                // the Storm Ascetic's staff: struck on the ground, a gust hurls every foe around the wielder away, then
+                // lightning falls on the (up to) three nearest of them
+                List<LivingEntity> caught = new java.util.ArrayList<>();
+                for (LivingEntity e : foes(level, player, player.getBoundingBox().inflate(size, 2, size))) {
+                    if (e.distanceTo(player) <= size) {
+                        Vec3 away = e.position().subtract(origin).multiply(1, 0, 1);
+                        away = away.lengthSqr() < 1.0E-4 ? flat : away.normalize();
+                        e.push(away.x * 1.3, 0.45, away.z * 1.3);
+                        e.hurtMarked = true;
+                        caught.add(e);
+                    }
+                }
+                caught.sort(java.util.Comparator.comparingDouble(e -> e.distanceToSqr(player)));
+                for (LivingEntity e : caught.subList(0, Math.min(3, caught.size()))) {
+                    var bolt = net.minecraft.world.entity.EntityTypes.LIGHTNING_BOLT.create(level,
+                            net.minecraft.world.entity.EntitySpawnReason.TRIGGERED);
+                    if (bolt != null) {
+                        bolt.snapTo(e.getX(), e.getY(), e.getZ());
+                        bolt.setVisualOnly(true);
+                        level.addFreshEntity(bolt);
+                    }
+                    hit(level, player, e, power, 0.0);
+                    level.sendParticles(particle, e.getX(), e.getY() + 1, e.getZ(), 20, 0.3, 0.8, 0.3, 0.2);
+                }
+                level.sendParticles(net.minecraft.core.particles.ParticleTypes.GUST_EMITTER_SMALL, origin.x, origin.y + 0.5,
+                        origin.z, 1, 0, 0, 0, 0);
+                ring(level, origin, size);
+                level.playSound(null, player, SoundEvents.WIND_CHARGE_BURST.value(), SoundSource.PLAYERS, 1.2F, 0.7F);
+                level.playSound(null, player, SoundEvents.BELL_RESONATE, SoundSource.PLAYERS, 0.8F, 1.2F);
+            }
+            case TIDE -> {
+                // the Abbess of the Tides' crozier: struck on the ground, a breaking wave rolls ahead in a 5-block band
+                // (stopped by walls); every foe in it is hurt once and swept along, and the sea carries the wielder
+                Vec3 eye = player.getEyePosition();
+                BlockHitResult wall = level.clip(new ClipContext(eye, eye.add(flat.scale(size)), ClipContext.Block.COLLIDER,
+                        ClipContext.Fluid.NONE, player));
+                double reach = wall.getType() == HitResult.Type.MISS ? size : wall.getLocation().distanceTo(eye) + 0.5;
+                Vec3 side = new Vec3(-flat.z, 0, flat.x);
+                for (LivingEntity e : foes(level, player, player.getBoundingBox().inflate(reach + 1, 2, reach + 1))) {
+                    Vec3 rel = e.position().subtract(origin).multiply(1, 0, 1);
+                    double along = rel.dot(flat);
+                    if (along > 0 && along <= reach && Math.abs(rel.dot(side)) <= 2.5 + e.getBbWidth() / 2) {
+                        hit(level, player, e, power, 0.2);
+                        e.push(flat.x * 1.4, 0.3, flat.z * 1.4);
+                        e.hurtMarked = true;
+                    }
+                }
+                for (double d = 1; d <= reach; d += 0.8) {
+                    for (double l = -2.5; l <= 2.5; l += 1.0) {
+                        Vec3 p = origin.add(flat.scale(d)).add(side.scale(l));
+                        level.sendParticles(particle, p.x, p.y + 0.4 + d * 0.05, p.z, 2, 0.2, 0.3, 0.2, 0.1);
+                    }
+                    Vec3 c = origin.add(flat.scale(d));
+                    level.sendParticles(net.minecraft.core.particles.ParticleTypes.FALLING_WATER, c.x, c.y + 1.8, c.z, 3, 1.5, 0.3, 1.5, 0);
+                }
+                player.addEffect(new MobEffectInstance(MobEffects.DOLPHINS_GRACE, 120, 0));
+                level.playSound(null, player, SoundEvents.GENERIC_SPLASH, SoundSource.PLAYERS, 1.2F, 0.6F);
+                level.playSound(null, player, SoundEvents.BELL_BLOCK, SoundSource.PLAYERS, 0.8F, 0.9F);
             }
             case RIFT -> {
                 // the Castellan of the Caldera's halberd: driven into the ground, it opens a molten rift that runs

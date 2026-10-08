@@ -1,0 +1,587 @@
+{
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "brasshaven:chunked_template",
+        "size": [
+          249,
+          105,
+          129
+        ],
+        "cells": [
+          {
+            "location": "brasshaven:great_aqueduct/aqueduct/x0_z0",
+            "offset": [
+              0,
+              0,
+              0
+            ],
+            "size": [
+              31,
+              58,
+              26
+            ],
+            "blocks": 5841
+          },
+          {
+            "location": "brasshaven:great_aqueduct/aqueduct/x0_z1",
+            "offset": [
+              0,
+              0,
+              26
+            ],
+            "size": [
+              31,
+              64,
+              26
+            ],
+            "blocks": 5494
+          },
+          {
+            "location": "brasshaven:great_aqueduct/aqueduct/x0_z2",
+            "offset": [
+              0,
+              0,
+              52
+            ],
+            "size": [
+              31,
+              70,
+              25
+            ],
+            "blocks": 9156
+          },
+          {
+            "location": "brasshaven:great_aqueduct/aqueduct/x0_z3",
+            "offset": [
+              0,
+              0,
+              77
+            ],
+            "size": [
+              31,
+              64,
+              26
+            ],
+            "blocks": 5531
+          },
+          {
+            "location": "brasshaven:great_aqueduct/aqueduct/x0_z4",
+            "offset": [
+              0,
+              0,
+              103
+            ],
+            "size": [
+              31,
+              58,
+              26
+            ],
+            "blocks": 5818
+          },
+          {
+            "location": "brasshaven:great_aqueduct/aqueduct/x1_z0",
+            "offset": [
+              31,
+              0,
+              0
+            ],
+            "size": [
+              31,
+              43,
+              26
+            ],
+            "blocks": 5230
+          },
+          {
+            "location": "brasshaven:great_aqueduct/aqueduct/x1_z1",
+            "offset": [
+              31,
+              1,
+              26
+            ],
+            "size": [
+              31,
+              47,
+              26
+            ],
+            "blocks": 4916
+          },
+          {
+            "location": "brasshaven:great_aqueduct/aqueduct/x1_z2",
+            "offset": [
+              31,
+              2,
+              52
+            ],
+            "size": [
+              31,
+              54,
+              25
+            ],
+            "blocks": 10961
+          },
+          {
+            "location": "brasshaven:great_aqueduct/aqueduct/x1_z3",
+            "offset": [
+              31,
+              1,
+              77
+            ],
+            "size": [
+              31,
+              52,
+              26
+            ],
+            "blocks": 5006
+          },
+          {
+            "location": "brasshaven:great_aqueduct/aqueduct/x1_z4",
+            "offset": [
+              31,
+              0,
+              103
+            ],
+            "size": [
+              31,
+              41,
+              26
+            ],
+            "blocks": 5428
+          },
+          {
+            "location": "brasshaven:great_aqueduct/aqueduct/x2_z0",
+            "offset": [
+              62,
+              0,
+              0
+            ],
+            "size": [
+              31,
+              12,
+              26
+            ],
+            "blocks": 2629
+          },
+          {
+            "location": "brasshaven:great_aqueduct/aqueduct/x2_z1",
+            "offset": [
+              62,
+              1,
+              26
+            ],
+            "size": [
+              31,
+              10,
+              26
+            ],
+            "blocks": 2590
+          },
+          {
+            "location": "brasshaven:great_aqueduct/aqueduct/x2_z2",
+            "offset": [
+              62,
+              0,
+              52
+            ],
+            "size": [
+              31,
+              65,
+              25
+            ],
+            "blocks": 20225
+          },
+          {
+            "location": "brasshaven:great_aqueduct/aqueduct/x2_z3",
+            "offset": [
+              62,
+              0,
+              77
+            ],
+            "size": [
+              31,
+              63,
+              26
+            ],
+            "blocks": 5989
+          },
+          {
+            "location": "brasshaven:great_aqueduct/aqueduct/x2_z4",
+            "offset": [
+              62,
+              0,
+              103
+            ],
+            "size": [
+              31,
+              13,
+              26
+            ],
+            "blocks": 2928
+          },
+          {
+            "location": "brasshaven:great_aqueduct/aqueduct/x3_z0",
+            "offset": [
+              93,
+              0,
+              0
+            ],
+            "size": [
+              31,
+              12,
+              26
+            ],
+            "blocks": 2760
+          },
+          {
+            "location": "brasshaven:great_aqueduct/aqueduct/x3_z1",
+            "offset": [
+              93,
+              0,
+              26
+            ],
+            "size": [
+              31,
+              12,
+              26
+            ],
+            "blocks": 2704
+          },
+          {
+            "location": "brasshaven:great_aqueduct/aqueduct/x3_z2",
+            "offset": [
+              93,
+              0,
+              52
+            ],
+            "size": [
+              31,
+              48,
+              25
+            ],
+            "blocks": 11603
+          },
+          {
+            "location": "brasshaven:great_aqueduct/aqueduct/x3_z3",
+            "offset": [
+              93,
+              1,
+              77
+            ],
+            "size": [
+              31,
+              12,
+              26
+            ],
+            "blocks": 2619
+          },
+          {
+            "location": "brasshaven:great_aqueduct/aqueduct/x3_z4",
+            "offset": [
+              93,
+              0,
+              103
+            ],
+            "size": [
+              31,
+              11,
+              26
+            ],
+            "blocks": 2507
+          },
+          {
+            "location": "brasshaven:great_aqueduct/aqueduct/x4_z0",
+            "offset": [
+              124,
+              0,
+              0
+            ],
+            "size": [
+              32,
+              12,
+              26
+            ],
+            "blocks": 2835
+          },
+          {
+            "location": "brasshaven:great_aqueduct/aqueduct/x4_z1",
+            "offset": [
+              124,
+              0,
+              26
+            ],
+            "size": [
+              32,
+              12,
+              26
+            ],
+            "blocks": 2923
+          },
+          {
+            "location": "brasshaven:great_aqueduct/aqueduct/x4_z2",
+            "offset": [
+              124,
+              0,
+              52
+            ],
+            "size": [
+              32,
+              60,
+              25
+            ],
+            "blocks": 18037
+          },
+          {
+            "location": "brasshaven:great_aqueduct/aqueduct/x4_z3",
+            "offset": [
+              124,
+              0,
+              77
+            ],
+            "size": [
+              32,
+              60,
+              26
+            ],
+            "blocks": 3452
+          },
+          {
+            "location": "brasshaven:great_aqueduct/aqueduct/x4_z4",
+            "offset": [
+              124,
+              0,
+              103
+            ],
+            "size": [
+              32,
+              13,
+              26
+            ],
+            "blocks": 2943
+          },
+          {
+            "location": "brasshaven:great_aqueduct/aqueduct/x5_z0",
+            "offset": [
+              156,
+              0,
+              0
+            ],
+            "size": [
+              31,
+              12,
+              26
+            ],
+            "blocks": 2594
+          },
+          {
+            "location": "brasshaven:great_aqueduct/aqueduct/x5_z1",
+            "offset": [
+              156,
+              1,
+              26
+            ],
+            "size": [
+              31,
+              12,
+              26
+            ],
+            "blocks": 2547
+          },
+          {
+            "location": "brasshaven:great_aqueduct/aqueduct/x5_z2",
+            "offset": [
+              156,
+              0,
+              52
+            ],
+            "size": [
+              31,
+              65,
+              25
+            ],
+            "blocks": 20854
+          },
+          {
+            "location": "brasshaven:great_aqueduct/aqueduct/x5_z3",
+            "offset": [
+              156,
+              0,
+              77
+            ],
+            "size": [
+              31,
+              63,
+              26
+            ],
+            "blocks": 5269
+          },
+          {
+            "location": "brasshaven:great_aqueduct/aqueduct/x5_z4",
+            "offset": [
+              156,
+              0,
+              103
+            ],
+            "size": [
+              31,
+              13,
+              26
+            ],
+            "blocks": 2797
+          },
+          {
+            "location": "brasshaven:great_aqueduct/aqueduct/x6_z0",
+            "offset": [
+              187,
+              0,
+              0
+            ],
+            "size": [
+              31,
+              42,
+              26
+            ],
+            "blocks": 4969
+          },
+          {
+            "location": "brasshaven:great_aqueduct/aqueduct/x6_z1",
+            "offset": [
+              187,
+              1,
+              26
+            ],
+            "size": [
+              31,
+              89,
+              26
+            ],
+            "blocks": 5087
+          },
+          {
+            "location": "brasshaven:great_aqueduct/aqueduct/x6_z2",
+            "offset": [
+              187,
+              0,
+              52
+            ],
+            "size": [
+              31,
+              93,
+              25
+            ],
+            "blocks": 20752
+          },
+          {
+            "location": "brasshaven:great_aqueduct/aqueduct/x6_z3",
+            "offset": [
+              187,
+              1,
+              77
+            ],
+            "size": [
+              31,
+              89,
+              26
+            ],
+            "blocks": 5689
+          },
+          {
+            "location": "brasshaven:great_aqueduct/aqueduct/x6_z4",
+            "offset": [
+              187,
+              0,
+              103
+            ],
+            "size": [
+              31,
+              42,
+              26
+            ],
+            "blocks": 4887
+          },
+          {
+            "location": "brasshaven:great_aqueduct/aqueduct/x7_z0",
+            "offset": [
+              218,
+              0,
+              0
+            ],
+            "size": [
+              31,
+              48,
+              26
+            ],
+            "blocks": 5476
+          },
+          {
+            "location": "brasshaven:great_aqueduct/aqueduct/x7_z1",
+            "offset": [
+              218,
+              0,
+              26
+            ],
+            "size": [
+              31,
+              92,
+              26
+            ],
+            "blocks": 13482
+          },
+          {
+            "location": "brasshaven:great_aqueduct/aqueduct/x7_z2",
+            "offset": [
+              218,
+              0,
+              52
+            ],
+            "size": [
+              31,
+              105,
+              25
+            ],
+            "blocks": 45909
+          },
+          {
+            "location": "brasshaven:great_aqueduct/aqueduct/x7_z3",
+            "offset": [
+              218,
+              0,
+              77
+            ],
+            "size": [
+              31,
+              90,
+              26
+            ],
+            "blocks": 10800
+          },
+          {
+            "location": "brasshaven:great_aqueduct/aqueduct/x7_z4",
+            "offset": [
+              218,
+              0,
+              103
+            ],
+            "size": [
+              31,
+              47,
+              26
+            ],
+            "blocks": 6074
+          }
+        ],
+        "projection": "rigid",
+        "processors": "brasshaven:none",
+        "ground_level_delta": 4,
+        "footprint": [
+          0,
+          0,
+          248,
+          128
+        ]
+      }
+    }
+  ]
+}

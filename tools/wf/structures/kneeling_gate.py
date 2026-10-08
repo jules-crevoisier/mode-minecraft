@@ -970,7 +970,7 @@ def heart_chamber(S, east):
                     continue
                 S.set(u, f, v, "stone_brick_wall")
         S.set(wu0 - 1, f, (wv0 + wv1) // 2, "air")
-        S.spawner(-5, f, 6, MOB_KNIGHT)
+        S.spawner(-5, f, 6, "brasshaven:oathbound_statue")
     else:
         # the wardens' armoury: armour stands, racks, the captain's bunk
         for u in (-5, -2, 1):
@@ -1804,5 +1804,6 @@ register(StructureDef(
      "windswept_forest"],
     [Piece("gate", kneeling_gate, views=VIEWS)],
     spacing=80, separation=32, adaptation="none", max_distance=128, foundation=False,
-    spawns=[("brasshaven:skeleton_knight", 6, 1, 2), ("minecraft:stray", 4, 1, 2)],
+    spawns=[("brasshaven:skeleton_knight", 6, 1, 2), ("minecraft:stray", 4, 1, 2), ("brasshaven:oathbound_statue", 3, 1, 1)],
+    creatures=[("oathbound_statue", 6)],
     title_fr="La Porte agenouillée", title_en="Kneeling Gate"))

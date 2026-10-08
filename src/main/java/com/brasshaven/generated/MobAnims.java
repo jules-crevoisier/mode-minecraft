@@ -630,6 +630,65 @@ public final class MobAnims {
 
         private OathboundGatekeeper() {}
     }
+    public static final class StormAscetic {
+        public static final int STAFF = 0;
+        public static final int VAULT = 1;
+        public static final int GUST = 2;
+        public static final int LIGHTNING = 3;
+        public static final int BEADS = 4;
+        public static final int SPIN = 5;
+        public static final int MIRROR = 6;
+        public static final int TEMPEST = 7;
+        public static final int CYCLONE = 8;
+        public static final int TOLL = 9;
+        public static final int THUNDER = 10;
+        public static final int ROAR = 11;
+        public static final int STAGGER = 12;
+        public static final int COUNT = 13;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {42, 46, 54, 56, 58, 30, 34, 62, 64, 64, 76, 48, 48};
+
+        private StormAscetic() {}
+    }
+    public static final class StormIllusion {
+        public static final int STAFF = 0;
+        public static final int VAULT = 1;
+        public static final int GUST = 2;
+        public static final int LIGHTNING = 3;
+        public static final int BEADS = 4;
+        public static final int SPIN = 5;
+        public static final int MIRROR = 6;
+        public static final int TEMPEST = 7;
+        public static final int CYCLONE = 8;
+        public static final int TOLL = 9;
+        public static final int THUNDER = 10;
+        public static final int ROAR = 11;
+        public static final int STAGGER = 12;
+        public static final int COUNT = 13;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {42, 46, 54, 56, 58, 30, 34, 62, 64, 64, 76, 48, 48};
+
+        private StormIllusion() {}
+    }
+    public static final class TideAbbess {
+        public static final int SWEEP = 0;
+        public static final int CENSER = 1;
+        public static final int TIDEWAVE = 2;
+        public static final int ACOLYTES = 3;
+        public static final int TOLL = 4;
+        public static final int SURGE = 5;
+        public static final int BAPTISM = 6;
+        public static final int THURIBLE = 7;
+        public static final int FLOOD = 8;
+        public static final int RIPTIDE = 9;
+        public static final int ROAR = 10;
+        public static final int STAGGER = 11;
+        public static final int COUNT = 12;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {34, 38, 76, 36, 54, 38, 60, 46, 70, 76, 40, 40};
+
+        private TideAbbess() {}
+    }
     public static final class GlowJellyfish {
 
         public static final int COUNT = 0;
@@ -792,5 +851,71 @@ public final class MobAnims {
         public static final int[] TICKS = {28, 12, 16};
 
         private RiftSentinel() {}
+    }
+    public static final class FrozenHuscarl {
+        public static final int CHOP = 0;
+        public static final int BASH = 1;
+        public static final int CLEAVE = 2;
+        public static final int BLOCK = 3;
+        public static final int STAGGER = 4;
+        public static final int COUNT = 5;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {26, 16, 32, 8, 24};
+
+        private FrozenHuscarl() {}
+    }
+    public static final class MagmaSentry {
+        public static final int THRUST = 0;
+        public static final int SLAM = 1;
+        public static final int SHOVE = 2;
+        public static final int COUNT = 3;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {28, 34, 14};
+
+        private MagmaSentry() {}
+    }
+    public static final class OathboundStatue {
+        public static final int DORMANT = 0;
+        public static final int WAKE = 1;
+        public static final int SLAM = 2;
+        public static final int SWEEP = 3;
+        public static final int CHARGE = 4;
+        public static final int COUNT = 5;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {80, 32, 38, 30, 44};
+
+        private OathboundStatue() {}
+    }
+    public static final class TideWraith {
+        public static final int RAKE = 0;
+        public static final int GRAB = 1;
+        public static final int SINK = 2;
+        public static final int RISE = 3;
+        public static final int COUNT = 4;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {16, 32, 18, 14};
+
+        private TideWraith() {}
+    }
+    public static final class BellMonk {
+        public static final int WAVE = 0;
+        public static final int BASH = 1;
+        public static final int KNELL = 2;
+        public static final int COUNT = 3;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {30, 14, 40};
+
+        private BellMonk() {}
+    }
+    public static final class VoidAcolyte {
+        public static final int CAST = 0;
+        public static final int BLINK = 1;
+        public static final int REFORM = 2;
+        public static final int STAB = 3;
+        public static final int COUNT = 4;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {22, 10, 8, 14};
+
+        private VoidAcolyte() {}
     }
 }

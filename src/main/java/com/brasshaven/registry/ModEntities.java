@@ -41,6 +41,9 @@ import com.brasshaven.entity.boss.DuneKing;
 import com.brasshaven.entity.boss.FallenSeraph;
 import com.brasshaven.entity.boss.FrostJarl;
 import com.brasshaven.entity.boss.OathboundGatekeeper;
+import com.brasshaven.entity.boss.StormAscetic;
+import com.brasshaven.entity.boss.StormIllusion;
+import com.brasshaven.entity.boss.TideAbbess;
 import com.brasshaven.entity.automaton.BrassGolem;
 import com.brasshaven.entity.automaton.ClockworkSpider;
 import com.brasshaven.entity.automaton.HotRivetEntity;
@@ -59,6 +62,12 @@ import com.brasshaven.entity.mob.BarnacleCrab;
 import com.brasshaven.entity.mob.CinderHound;
 import com.brasshaven.entity.mob.LanternWisp;
 import com.brasshaven.entity.mob.RiftSentinel;
+import com.brasshaven.entity.mob.FrozenHuscarl;
+import com.brasshaven.entity.mob.MagmaSentry;
+import com.brasshaven.entity.mob.OathboundStatue;
+import com.brasshaven.entity.mob.TideWraith;
+import com.brasshaven.entity.mob.BellMonk;
+import com.brasshaven.entity.mob.VoidAcolyte;
 import com.brasshaven.entity.mob.SkyRaider;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -216,6 +225,15 @@ public final class ModEntities {
     public static final RegistryObject<EntityType<OathboundGatekeeper>> OATHBOUND_GATEKEEPER = ENTITIES.register("oathbound_gatekeeper",
             () -> EntityType.Builder.<OathboundGatekeeper>of(OathboundGatekeeper::new, MobCategory.MONSTER)
                     .sized(OathboundGatekeeper.WIDTH, OathboundGatekeeper.HEIGHT).clientTrackingRange(10).build(ENTITIES.key("oathbound_gatekeeper")));
+    public static final RegistryObject<EntityType<StormAscetic>> STORM_ASCETIC = ENTITIES.register("storm_ascetic",
+            () -> EntityType.Builder.<StormAscetic>of(StormAscetic::new, MobCategory.MONSTER)
+                    .sized(StormAscetic.WIDTH, StormAscetic.HEIGHT).clientTrackingRange(10).build(ENTITIES.key("storm_ascetic")));
+    public static final RegistryObject<EntityType<StormIllusion>> STORM_ILLUSION = ENTITIES.register("storm_illusion",
+            () -> EntityType.Builder.<StormIllusion>of(StormIllusion::new, MobCategory.MONSTER)
+                    .sized(StormIllusion.WIDTH, StormIllusion.HEIGHT).clientTrackingRange(10).build(ENTITIES.key("storm_illusion")));
+    public static final RegistryObject<EntityType<TideAbbess>> TIDE_ABBESS = ENTITIES.register("tide_abbess",
+            () -> EntityType.Builder.<TideAbbess>of(TideAbbess::new, MobCategory.MONSTER)
+                    .sized(TideAbbess.WIDTH, TideAbbess.HEIGHT).clientTrackingRange(10).build(ENTITIES.key("tide_abbess")));
     public static final RegistryObject<EntityType<HotRivetEntity>> HOT_RIVET = ENTITIES.register("hot_rivet",
             () -> EntityType.Builder.<HotRivetEntity>of(HotRivetEntity::new, MobCategory.MISC)
                     .sized(0.25F, 0.25F).clientTrackingRange(6).updateInterval(2).build(ENTITIES.key("hot_rivet")));
@@ -275,10 +293,28 @@ public final class ModEntities {
     public static final RegistryObject<EntityType<RiftSentinel>> RIFT_SENTINEL = ENTITIES.register("rift_sentinel",
             () -> EntityType.Builder.<RiftSentinel>of(RiftSentinel::new, MobCategory.MONSTER)
                     .sized(RiftSentinel.WIDTH, RiftSentinel.HEIGHT).clientTrackingRange(8).build(ENTITIES.key("rift_sentinel")));
+    public static final RegistryObject<EntityType<FrozenHuscarl>> FROZEN_HUSCARL = ENTITIES.register("frozen_huscarl",
+            () -> EntityType.Builder.<FrozenHuscarl>of(FrozenHuscarl::new, MobCategory.MONSTER)
+                    .sized(FrozenHuscarl.WIDTH, FrozenHuscarl.HEIGHT).clientTrackingRange(8).build(ENTITIES.key("frozen_huscarl")));
+    public static final RegistryObject<EntityType<MagmaSentry>> MAGMA_SENTRY = ENTITIES.register("magma_sentry",
+            () -> EntityType.Builder.<MagmaSentry>of(MagmaSentry::new, MobCategory.MONSTER)
+                    .sized(MagmaSentry.WIDTH, MagmaSentry.HEIGHT).fireImmune().clientTrackingRange(8).build(ENTITIES.key("magma_sentry")));
+    public static final RegistryObject<EntityType<OathboundStatue>> OATHBOUND_STATUE = ENTITIES.register("oathbound_statue",
+            () -> EntityType.Builder.<OathboundStatue>of(OathboundStatue::new, MobCategory.MONSTER)
+                    .sized(OathboundStatue.WIDTH, OathboundStatue.HEIGHT).clientTrackingRange(8).build(ENTITIES.key("oathbound_statue")));
+    public static final RegistryObject<EntityType<TideWraith>> TIDE_WRAITH = ENTITIES.register("tide_wraith",
+            () -> EntityType.Builder.<TideWraith>of(TideWraith::new, MobCategory.MONSTER)
+                    .sized(TideWraith.WIDTH, TideWraith.HEIGHT).clientTrackingRange(8).build(ENTITIES.key("tide_wraith")));
+    public static final RegistryObject<EntityType<BellMonk>> BELL_MONK = ENTITIES.register("bell_monk",
+            () -> EntityType.Builder.<BellMonk>of(BellMonk::new, MobCategory.MONSTER)
+                    .sized(BellMonk.WIDTH, BellMonk.HEIGHT).clientTrackingRange(8).build(ENTITIES.key("bell_monk")));
+    public static final RegistryObject<EntityType<VoidAcolyte>> VOID_ACOLYTE = ENTITIES.register("void_acolyte",
+            () -> EntityType.Builder.<VoidAcolyte>of(VoidAcolyte::new, MobCategory.MONSTER)
+                    .sized(VoidAcolyte.WIDTH, VoidAcolyte.HEIGHT).clientTrackingRange(8).build(ENTITIES.key("void_acolyte")));
 
     /** Every boss with an Elden Ring style fight (demo command, quests). */
     public static List<RegistryObject<? extends EntityType<? extends com.brasshaven.boss.WayfarerBoss>>> bosses() {
-        return List.of(DROWNED_WARDEN, VOID_WARDEN, GRAVE_KNIGHT, BONE_MATRIARCH, WEEPING_LADY, LARVA_MOTHER, BELL_KEEPER, ARCHIVIST, SAND_PHARAOH, JADE_JAGUAR, ROOT_MOTHER, SWAMP_CRONE, GRYPHON_KNIGHT, RUNE_COLOSSUS, FORGE_KING, CRYSTAL_SPIDER, SCULK_SPAWN, ASH_LORD, PIGLIN_KING, SOUL_REAPER, GRAND_CLOCKMAKER, IRON_HELMSMAN, BRONZE_SENTINEL, DUNE_KING, FALLEN_SERAPH, CHAINED_JAILER, CALDERA_CASTELLAN, FROST_JARL, OATHBOUND_GATEKEEPER);
+        return List.of(DROWNED_WARDEN, VOID_WARDEN, GRAVE_KNIGHT, BONE_MATRIARCH, WEEPING_LADY, LARVA_MOTHER, BELL_KEEPER, ARCHIVIST, SAND_PHARAOH, JADE_JAGUAR, ROOT_MOTHER, SWAMP_CRONE, GRYPHON_KNIGHT, RUNE_COLOSSUS, FORGE_KING, CRYSTAL_SPIDER, SCULK_SPAWN, ASH_LORD, PIGLIN_KING, SOUL_REAPER, GRAND_CLOCKMAKER, IRON_HELMSMAN, BRONZE_SENTINEL, DUNE_KING, FALLEN_SERAPH, CHAINED_JAILER, CALDERA_CASTELLAN, FROST_JARL, OATHBOUND_GATEKEEPER, STORM_ASCETIC, TIDE_ABBESS);
     }
 
     public static void registerAttributes(EntityAttributeCreationEvent event) {
@@ -325,6 +361,9 @@ public final class ModEntities {
         event.put(CALDERA_CASTELLAN.get(), CalderaCastellan.attributes().build());
         event.put(FROST_JARL.get(), FrostJarl.attributes().build());
         event.put(OATHBOUND_GATEKEEPER.get(), OathboundGatekeeper.attributes().build());
+        event.put(STORM_ASCETIC.get(), StormAscetic.attributes().build());
+        event.put(STORM_ILLUSION.get(), StormIllusion.attributes().build());
+        event.put(TIDE_ABBESS.get(), TideAbbess.attributes().build());
         event.put(GLOW_JELLYFISH.get(), GlowJellyfish.attributes().build());
         event.put(REEF_FISH.get(), ReefFish.attributes().build());
         event.put(MANTA_RAY.get(), MantaRay.attributes().build());
@@ -340,13 +379,20 @@ public final class ModEntities {
         event.put(LANTERN_WISP.get(), LanternWisp.attributes().build());
         event.put(CINDER_HOUND.get(), CinderHound.attributes().build());
         event.put(RIFT_SENTINEL.get(), RiftSentinel.attributes().build());
+        event.put(FROZEN_HUSCARL.get(), FrozenHuscarl.attributes().build());
+        event.put(MAGMA_SENTRY.get(), MagmaSentry.attributes().build());
+        event.put(OATHBOUND_STATUE.get(), OathboundStatue.attributes().build());
+        event.put(TIDE_WRAITH.get(), TideWraith.attributes().build());
+        event.put(BELL_MONK.get(), BellMonk.attributes().build());
+        event.put(VOID_ACOLYTE.get(), VoidAcolyte.attributes().build());
     }
 
     /** Natural/structure spawning rules: on the ground, in the dark, like vanilla monsters. */
     public static void registerSpawnPlacements(SpawnPlacementRegisterEvent event) {
         for (EntityType<? extends Monster> type : List.of(RUIN_WALKER.get(), MAP_WRAITH.get(), BASALT_GUARD.get(), VOID_STALKER.get(),
                 SKELETON_KNIGHT.get(), CRYPT_CRAWLER.get(), BANSHEE.get(), GARGOYLE.get(), EMBER_IMP.get(), VOID_LARVA.get(), CLOCKWORK_SPIDER.get(), STEAM_DRONE.get(),
-                BANDIT_MARKSMAN.get(), SKY_RAIDER.get(), LANTERN_WISP.get(), CINDER_HOUND.get(), RIFT_SENTINEL.get())) {
+                BANDIT_MARKSMAN.get(), SKY_RAIDER.get(), LANTERN_WISP.get(), CINDER_HOUND.get(), RIFT_SENTINEL.get(),
+                FROZEN_HUSCARL.get(), MAGMA_SENTRY.get(), OATHBOUND_STATUE.get(), TIDE_WRAITH.get(), BELL_MONK.get(), VOID_ACOLYTE.get())) {
             register(event, type);
         }
         // the Barnacle Crab spawns under water (the sunken structures' spawn lists)
@@ -366,7 +412,8 @@ public final class ModEntities {
         for (EntityType<?> type : List.of(RUIN_WALKER.get(), MAP_WRAITH.get(), BASALT_GUARD.get(), VOID_STALKER.get(),
                 SKELETON_KNIGHT.get(), CRYPT_CRAWLER.get(), BANSHEE.get(), GARGOYLE.get(), EMBER_IMP.get(), VOID_LARVA.get(),
                 CLOCKWORK_SPIDER.get(), STEAM_DRONE.get(), GLOW_JELLYFISH.get(), REEF_FISH.get(), MANTA_RAY.get(), WHALE.get(),
-                BANDIT_MARKSMAN.get(), SKY_RAIDER.get(), BARNACLE_CRAB.get(), LANTERN_WISP.get(), CINDER_HOUND.get(), RIFT_SENTINEL.get())) {
+                BANDIT_MARKSMAN.get(), SKY_RAIDER.get(), BARNACLE_CRAB.get(), LANTERN_WISP.get(), CINDER_HOUND.get(), RIFT_SENTINEL.get(),
+                FROZEN_HUSCARL.get(), MAGMA_SENTRY.get(), OATHBOUND_STATUE.get(), TIDE_WRAITH.get(), BELL_MONK.get(), VOID_ACOLYTE.get())) {
             capped(event, type);
         }
     }

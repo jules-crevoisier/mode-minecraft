@@ -40,7 +40,8 @@ from ..megakit import fbm, hash01, hash3
 from ..parts import LOOT, MOD
 
 # placeholder boss until the abbey gets its own: the warden of the drowned citadel
-BOSS = "brasshaven:drowned_warden"
+# the abbey's own saint: the Abbess of the Tides (entity/boss/TideAbbess.java, tools/BOSSES.md)
+BOSS = "brasshaven:tide_abbess"
 
 # ------------------------------------------------------------------ dimensions
 R0, RK = 42.0, 0.55          # rock radius at height y: R0 - RK * y (plus noise)
@@ -1223,7 +1224,7 @@ def knights_hall(S):
     for (x, z) in ((-49, -13), (-35, -13), (-49, 9), (-35, 9)):
         S.set(x, f + 4, z, with_props("red_wall_banner", facing="east" if x < -40 else "west"))
     bp.chest(-35, f, -6, "west", loot=LOOT + "abbey_knights")
-    bp.spawner(-44, f, -2, "brasshaven:skeleton_knight")
+    bp.spawner(-44, f, -2, "brasshaven:tide_wraith")
 
 
 def cloister(S):
@@ -2053,5 +2054,5 @@ register(StructureDef(
     "tidal_abbey", "overworld", ["beach", "stony_shore"],
     [Piece("abbey", tidal_abbey, views=VIEWS)],
     spacing=80, separation=32, heightmap="WORLD_SURFACE_WG", adaptation="none", processors="none", max_distance=116,
-    foundation=False, spawns=[("minecraft:drowned", 6, 1, 2), ("brasshaven:skeleton_knight", 2, 1, 1)],
+    foundation=False, spawns=[("minecraft:drowned", 6, 1, 2), ("brasshaven:skeleton_knight", 2, 1, 1), ("brasshaven:tide_wraith", 5, 1, 2)],
     title_fr="Abbaye des marées", title_en="Tidal Abbey"))

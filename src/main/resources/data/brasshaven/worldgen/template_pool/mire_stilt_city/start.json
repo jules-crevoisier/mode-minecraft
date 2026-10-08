@@ -1,0 +1,685 @@
+{
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "brasshaven:chunked_template",
+        "size": [
+          204,
+          114,
+          219
+        ],
+        "cells": [
+          {
+            "location": "brasshaven:mire_stilt_city/city/x0_z0",
+            "offset": [
+              27,
+              10,
+              28
+            ],
+            "size": [
+              2,
+              4,
+              3
+            ],
+            "blocks": 16
+          },
+          {
+            "location": "brasshaven:mire_stilt_city/city/x0_z1",
+            "offset": [
+              6,
+              9,
+              31
+            ],
+            "size": [
+              23,
+              13,
+              32
+            ],
+            "blocks": 2033
+          },
+          {
+            "location": "brasshaven:mire_stilt_city/city/x0_z2",
+            "offset": [
+              0,
+              9,
+              63
+            ],
+            "size": [
+              29,
+              19,
+              31
+            ],
+            "blocks": 4549
+          },
+          {
+            "location": "brasshaven:mire_stilt_city/city/x0_z3",
+            "offset": [
+              0,
+              1,
+              94
+            ],
+            "size": [
+              29,
+              27,
+              31
+            ],
+            "blocks": 5276
+          },
+          {
+            "location": "brasshaven:mire_stilt_city/city/x0_z4",
+            "offset": [
+              0,
+              9,
+              125
+            ],
+            "size": [
+              29,
+              19,
+              31
+            ],
+            "blocks": 3127
+          },
+          {
+            "location": "brasshaven:mire_stilt_city/city/x0_z5",
+            "offset": [
+              12,
+              9,
+              156
+            ],
+            "size": [
+              17,
+              14,
+              26
+            ],
+            "blocks": 1196
+          },
+          {
+            "location": "brasshaven:mire_stilt_city/city/x1_z0",
+            "offset": [
+              29,
+              9,
+              9
+            ],
+            "size": [
+              29,
+              17,
+              22
+            ],
+            "blocks": 2333
+          },
+          {
+            "location": "brasshaven:mire_stilt_city/city/x1_z1",
+            "offset": [
+              29,
+              9,
+              31
+            ],
+            "size": [
+              29,
+              19,
+              32
+            ],
+            "blocks": 4697
+          },
+          {
+            "location": "brasshaven:mire_stilt_city/city/x1_z2",
+            "offset": [
+              29,
+              0,
+              63
+            ],
+            "size": [
+              29,
+              55,
+              31
+            ],
+            "blocks": 8213
+          },
+          {
+            "location": "brasshaven:mire_stilt_city/city/x1_z3",
+            "offset": [
+              29,
+              0,
+              94
+            ],
+            "size": [
+              29,
+              51,
+              31
+            ],
+            "blocks": 9786
+          },
+          {
+            "location": "brasshaven:mire_stilt_city/city/x1_z4",
+            "offset": [
+              29,
+              0,
+              125
+            ],
+            "size": [
+              29,
+              28,
+              31
+            ],
+            "blocks": 5446
+          },
+          {
+            "location": "brasshaven:mire_stilt_city/city/x1_z5",
+            "offset": [
+              29,
+              9,
+              156
+            ],
+            "size": [
+              29,
+              14,
+              32
+            ],
+            "blocks": 4087
+          },
+          {
+            "location": "brasshaven:mire_stilt_city/city/x1_z6",
+            "offset": [
+              38,
+              9,
+              188
+            ],
+            "size": [
+              20,
+              11,
+              20
+            ],
+            "blocks": 1140
+          },
+          {
+            "location": "brasshaven:mire_stilt_city/city/x2_z0",
+            "offset": [
+              58,
+              9,
+              0
+            ],
+            "size": [
+              29,
+              63,
+              31
+            ],
+            "blocks": 5356
+          },
+          {
+            "location": "brasshaven:mire_stilt_city/city/x2_z1",
+            "offset": [
+              58,
+              9,
+              31
+            ],
+            "size": [
+              29,
+              62,
+              32
+            ],
+            "blocks": 5086
+          },
+          {
+            "location": "brasshaven:mire_stilt_city/city/x2_z2",
+            "offset": [
+              58,
+              9,
+              63
+            ],
+            "size": [
+              29,
+              24,
+              31
+            ],
+            "blocks": 5285
+          },
+          {
+            "location": "brasshaven:mire_stilt_city/city/x2_z3",
+            "offset": [
+              58,
+              1,
+              94
+            ],
+            "size": [
+              29,
+              40,
+              31
+            ],
+            "blocks": 8020
+          },
+          {
+            "location": "brasshaven:mire_stilt_city/city/x2_z4",
+            "offset": [
+              58,
+              9,
+              125
+            ],
+            "size": [
+              29,
+              31,
+              31
+            ],
+            "blocks": 7642
+          },
+          {
+            "location": "brasshaven:mire_stilt_city/city/x2_z5",
+            "offset": [
+              58,
+              9,
+              156
+            ],
+            "size": [
+              29,
+              15,
+              32
+            ],
+            "blocks": 5375
+          },
+          {
+            "location": "brasshaven:mire_stilt_city/city/x2_z6",
+            "offset": [
+              58,
+              9,
+              188
+            ],
+            "size": [
+              29,
+              21,
+              31
+            ],
+            "blocks": 3671
+          },
+          {
+            "location": "brasshaven:mire_stilt_city/city/x3_z0",
+            "offset": [
+              87,
+              6,
+              0
+            ],
+            "size": [
+              30,
+              101,
+              31
+            ],
+            "blocks": 12384
+          },
+          {
+            "location": "brasshaven:mire_stilt_city/city/x3_z1",
+            "offset": [
+              87,
+              9,
+              31
+            ],
+            "size": [
+              30,
+              101,
+              32
+            ],
+            "blocks": 11080
+          },
+          {
+            "location": "brasshaven:mire_stilt_city/city/x3_z2",
+            "offset": [
+              87,
+              9,
+              63
+            ],
+            "size": [
+              30,
+              29,
+              31
+            ],
+            "blocks": 7390
+          },
+          {
+            "location": "brasshaven:mire_stilt_city/city/x3_z3",
+            "offset": [
+              87,
+              9,
+              94
+            ],
+            "size": [
+              30,
+              31,
+              31
+            ],
+            "blocks": 8783
+          },
+          {
+            "location": "brasshaven:mire_stilt_city/city/x3_z4",
+            "offset": [
+              87,
+              9,
+              125
+            ],
+            "size": [
+              30,
+              24,
+              31
+            ],
+            "blocks": 6409
+          },
+          {
+            "location": "brasshaven:mire_stilt_city/city/x3_z5",
+            "offset": [
+              87,
+              9,
+              156
+            ],
+            "size": [
+              30,
+              23,
+              32
+            ],
+            "blocks": 7577
+          },
+          {
+            "location": "brasshaven:mire_stilt_city/city/x3_z6",
+            "offset": [
+              87,
+              9,
+              188
+            ],
+            "size": [
+              30,
+              21,
+              31
+            ],
+            "blocks": 5325
+          },
+          {
+            "location": "brasshaven:mire_stilt_city/city/x4_z0",
+            "offset": [
+              117,
+              9,
+              2
+            ],
+            "size": [
+              29,
+              62,
+              29
+            ],
+            "blocks": 4831
+          },
+          {
+            "location": "brasshaven:mire_stilt_city/city/x4_z1",
+            "offset": [
+              117,
+              9,
+              31
+            ],
+            "size": [
+              29,
+              61,
+              32
+            ],
+            "blocks": 5234
+          },
+          {
+            "location": "brasshaven:mire_stilt_city/city/x4_z2",
+            "offset": [
+              117,
+              9,
+              63
+            ],
+            "size": [
+              29,
+              34,
+              31
+            ],
+            "blocks": 5816
+          },
+          {
+            "location": "brasshaven:mire_stilt_city/city/x4_z3",
+            "offset": [
+              117,
+              9,
+              94
+            ],
+            "size": [
+              29,
+              31,
+              31
+            ],
+            "blocks": 6760
+          },
+          {
+            "location": "brasshaven:mire_stilt_city/city/x4_z4",
+            "offset": [
+              117,
+              9,
+              125
+            ],
+            "size": [
+              29,
+              24,
+              31
+            ],
+            "blocks": 5404
+          },
+          {
+            "location": "brasshaven:mire_stilt_city/city/x4_z5",
+            "offset": [
+              117,
+              9,
+              156
+            ],
+            "size": [
+              29,
+              17,
+              32
+            ],
+            "blocks": 5301
+          },
+          {
+            "location": "brasshaven:mire_stilt_city/city/x4_z6",
+            "offset": [
+              117,
+              9,
+              188
+            ],
+            "size": [
+              29,
+              16,
+              30
+            ],
+            "blocks": 3499
+          },
+          {
+            "location": "brasshaven:mire_stilt_city/city/x5_z0",
+            "offset": [
+              146,
+              9,
+              11
+            ],
+            "size": [
+              29,
+              14,
+              20
+            ],
+            "blocks": 1533
+          },
+          {
+            "location": "brasshaven:mire_stilt_city/city/x5_z1",
+            "offset": [
+              146,
+              9,
+              31
+            ],
+            "size": [
+              29,
+              33,
+              32
+            ],
+            "blocks": 5163
+          },
+          {
+            "location": "brasshaven:mire_stilt_city/city/x5_z2",
+            "offset": [
+              146,
+              9,
+              63
+            ],
+            "size": [
+              29,
+              35,
+              31
+            ],
+            "blocks": 8348
+          },
+          {
+            "location": "brasshaven:mire_stilt_city/city/x5_z3",
+            "offset": [
+              146,
+              9,
+              94
+            ],
+            "size": [
+              29,
+              54,
+              31
+            ],
+            "blocks": 13067
+          },
+          {
+            "location": "brasshaven:mire_stilt_city/city/x5_z4",
+            "offset": [
+              146,
+              9,
+              125
+            ],
+            "size": [
+              29,
+              18,
+              31
+            ],
+            "blocks": 5364
+          },
+          {
+            "location": "brasshaven:mire_stilt_city/city/x5_z5",
+            "offset": [
+              146,
+              9,
+              156
+            ],
+            "size": [
+              29,
+              20,
+              32
+            ],
+            "blocks": 4943
+          },
+          {
+            "location": "brasshaven:mire_stilt_city/city/x5_z6",
+            "offset": [
+              146,
+              9,
+              188
+            ],
+            "size": [
+              26,
+              14,
+              17
+            ],
+            "blocks": 1011
+          },
+          {
+            "location": "brasshaven:mire_stilt_city/city/x6_z0",
+            "offset": [
+              175,
+              10,
+              30
+            ],
+            "size": [
+              1,
+              4,
+              1
+            ],
+            "blocks": 4
+          },
+          {
+            "location": "brasshaven:mire_stilt_city/city/x6_z1",
+            "offset": [
+              175,
+              9,
+              31
+            ],
+            "size": [
+              18,
+              14,
+              32
+            ],
+            "blocks": 1707
+          },
+          {
+            "location": "brasshaven:mire_stilt_city/city/x6_z2",
+            "offset": [
+              175,
+              9,
+              63
+            ],
+            "size": [
+              28,
+              20,
+              31
+            ],
+            "blocks": 3900
+          },
+          {
+            "location": "brasshaven:mire_stilt_city/city/x6_z3",
+            "offset": [
+              175,
+              9,
+              94
+            ],
+            "size": [
+              29,
+              51,
+              31
+            ],
+            "blocks": 4687
+          },
+          {
+            "location": "brasshaven:mire_stilt_city/city/x6_z4",
+            "offset": [
+              175,
+              9,
+              125
+            ],
+            "size": [
+              25,
+              18,
+              31
+            ],
+            "blocks": 3246
+          },
+          {
+            "location": "brasshaven:mire_stilt_city/city/x6_z5",
+            "offset": [
+              175,
+              10,
+              156
+            ],
+            "size": [
+              16,
+              12,
+              22
+            ],
+            "blocks": 750
+          }
+        ],
+        "projection": "rigid",
+        "processors": "brasshaven:none",
+        "ground_level_delta": 12,
+        "footprint": [
+          0,
+          0,
+          203,
+          218
+        ]
+      }
+    }
+  ]
+}

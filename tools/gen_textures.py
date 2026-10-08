@@ -116,6 +116,8 @@ EGGS = {
     "caldera_castellan": ((56, 50, 58), (255, 116, 26)),
     "oathbound_gatekeeper": ((204, 196, 174), (110, 232, 236)),
     "frost_jarl": ((46, 64, 108), (160, 226, 250)),
+    "storm_ascetic": ((214, 138, 46), (176, 226, 255)),
+    "tide_abbess": ((40, 84, 90), (110, 238, 214)),
 }
 
 
@@ -170,6 +172,8 @@ EMBLEMS = {
     "caldera_castellan": ["#.#.#", "#####", "#...#", "#.#.#", "#####"],  # crater crown round a needle
     "oathbound_gatekeeper": [".###.", ".#.#.", ".###.", "..#..", "..##."],  # the gate's key
     "frost_jarl": ["#.#.#", "#####", ".###.", ".###.", "..#.."],        # ice crown over a beard
+    "storm_ascetic": ["..##.", ".##..", "####.", "..##.", ".##.."],    # a bolt of lightning
+    "tide_abbess": [".###.", "#...#", "#.#.#", "#..#.", "#...."],       # the crozier's spiral
 }
 
 

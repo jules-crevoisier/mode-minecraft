@@ -45,6 +45,10 @@
     "explorer/caldera_ringwall",
     "explorer/glacier_hall",
     "explorer/kneeling_gate",
+    "explorer/drowned_dam",
+    "explorer/mire_stilt_city",
+    "explorer/inverted_spire",
+    "explorer/great_aqueduct",
     "explorer/master_cartographer",
     "explorer/boss_bell_keeper",
     "explorer/boss_archivist",
@@ -62,7 +66,9 @@
     "explorer/boss_dune_king",
     "explorer/boss_caldera_castellan",
     "explorer/boss_oathbound_gatekeeper",
-    "explorer/boss_frost_jarl"
+    "explorer/boss_frost_jarl",
+    "explorer/boss_storm_ascetic",
+    "explorer/boss_tide_abbess"
   ],
   "depths": [
     "depths/lithite",

@@ -1,0 +1,923 @@
+{
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "brasshaven:chunked_template",
+        "size": [
+          225,
+          114,
+          244
+        ],
+        "cells": [
+          {
+            "location": "brasshaven:drowned_dam/dam/x0_z0",
+            "offset": [
+              19,
+              3,
+              23
+            ],
+            "size": [
+              9,
+              19,
+              7
+            ],
+            "blocks": 227
+          },
+          {
+            "location": "brasshaven:drowned_dam/dam/x0_z1",
+            "offset": [
+              11,
+              3,
+              30
+            ],
+            "size": [
+              17,
+              37,
+              31
+            ],
+            "blocks": 1817
+          },
+          {
+            "location": "brasshaven:drowned_dam/dam/x0_z2",
+            "offset": [
+              2,
+              3,
+              61
+            ],
+            "size": [
+              26,
+              56,
+              31
+            ],
+            "blocks": 3251
+          },
+          {
+            "location": "brasshaven:drowned_dam/dam/x0_z3",
+            "offset": [
+              2,
+              3,
+              92
+            ],
+            "size": [
+              26,
+              55,
+              30
+            ],
+            "blocks": 3235
+          },
+          {
+            "location": "brasshaven:drowned_dam/dam/x0_z4",
+            "offset": [
+              2,
+              3,
+              122
+            ],
+            "size": [
+              26,
+              55,
+              30
+            ],
+            "blocks": 3244
+          },
+          {
+            "location": "brasshaven:drowned_dam/dam/x0_z5",
+            "offset": [
+              2,
+              3,
+              152
+            ],
+            "size": [
+              26,
+              55,
+              31
+            ],
+            "blocks": 3129
+          },
+          {
+            "location": "brasshaven:drowned_dam/dam/x0_z6",
+            "offset": [
+              2,
+              3,
+              183
+            ],
+            "size": [
+              26,
+              20,
+              30
+            ],
+            "blocks": 1094
+          },
+          {
+            "location": "brasshaven:drowned_dam/dam/x0_z7",
+            "offset": [
+              0,
+              5,
+              214
+            ],
+            "size": [
+              24,
+              16,
+              26
+            ],
+            "blocks": 534
+          },
+          {
+            "location": "brasshaven:drowned_dam/dam/x1_z0",
+            "offset": [
+              28,
+              3,
+              3
+            ],
+            "size": [
+              28,
+              44,
+              27
+            ],
+            "blocks": 2065
+          },
+          {
+            "location": "brasshaven:drowned_dam/dam/x1_z1",
+            "offset": [
+              28,
+              11,
+              30
+            ],
+            "size": [
+              28,
+              76,
+              31
+            ],
+            "blocks": 4355
+          },
+          {
+            "location": "brasshaven:drowned_dam/dam/x1_z2",
+            "offset": [
+              28,
+              36,
+              61
+            ],
+            "size": [
+              28,
+              52,
+              31
+            ],
+            "blocks": 5912
+          },
+          {
+            "location": "brasshaven:drowned_dam/dam/x1_z3",
+            "offset": [
+              28,
+              24,
+              92
+            ],
+            "size": [
+              28,
+              64,
+              30
+            ],
+            "blocks": 4852
+          },
+          {
+            "location": "brasshaven:drowned_dam/dam/x1_z4",
+            "offset": [
+              28,
+              3,
+              122
+            ],
+            "size": [
+              28,
+              96,
+              30
+            ],
+            "blocks": 7856
+          },
+          {
+            "location": "brasshaven:drowned_dam/dam/x1_z5",
+            "offset": [
+              28,
+              3,
+              152
+            ],
+            "size": [
+              28,
+              77,
+              31
+            ],
+            "blocks": 3673
+          },
+          {
+            "location": "brasshaven:drowned_dam/dam/x1_z6",
+            "offset": [
+              28,
+              3,
+              183
+            ],
+            "size": [
+              28,
+              18,
+              29
+            ],
+            "blocks": 992
+          },
+          {
+            "location": "brasshaven:drowned_dam/dam/x1_z7",
+            "offset": [
+              28,
+              5,
+              226
+            ],
+            "size": [
+              28,
+              14,
+              14
+            ],
+            "blocks": 195
+          },
+          {
+            "location": "brasshaven:drowned_dam/dam/x2_z0",
+            "offset": [
+              56,
+              3,
+              0
+            ],
+            "size": [
+              28,
+              63,
+              30
+            ],
+            "blocks": 3778
+          },
+          {
+            "location": "brasshaven:drowned_dam/dam/x2_z1",
+            "offset": [
+              56,
+              47,
+              30
+            ],
+            "size": [
+              28,
+              39,
+              31
+            ],
+            "blocks": 5813
+          },
+          {
+            "location": "brasshaven:drowned_dam/dam/x2_z2",
+            "offset": [
+              56,
+              56,
+              61
+            ],
+            "size": [
+              28,
+              10,
+              31
+            ],
+            "blocks": 7960
+          },
+          {
+            "location": "brasshaven:drowned_dam/dam/x2_z3",
+            "offset": [
+              56,
+              3,
+              92
+            ],
+            "size": [
+              28,
+              95,
+              30
+            ],
+            "blocks": 15342
+          },
+          {
+            "location": "brasshaven:drowned_dam/dam/x2_z4",
+            "offset": [
+              56,
+              3,
+              122
+            ],
+            "size": [
+              28,
+              94,
+              30
+            ],
+            "blocks": 17604
+          },
+          {
+            "location": "brasshaven:drowned_dam/dam/x2_z5",
+            "offset": [
+              56,
+              3,
+              152
+            ],
+            "size": [
+              28,
+              83,
+              31
+            ],
+            "blocks": 15348
+          },
+          {
+            "location": "brasshaven:drowned_dam/dam/x2_z6",
+            "offset": [
+              56,
+              1,
+              183
+            ],
+            "size": [
+              28,
+              29,
+              31
+            ],
+            "blocks": 933
+          },
+          {
+            "location": "brasshaven:drowned_dam/dam/x2_z7",
+            "offset": [
+              56,
+              5,
+              214
+            ],
+            "size": [
+              28,
+              14,
+              24
+            ],
+            "blocks": 325
+          },
+          {
+            "location": "brasshaven:drowned_dam/dam/x3_z0",
+            "offset": [
+              84,
+              3,
+              0
+            ],
+            "size": [
+              28,
+              63,
+              30
+            ],
+            "blocks": 3582
+          },
+          {
+            "location": "brasshaven:drowned_dam/dam/x3_z1",
+            "offset": [
+              84,
+              51,
+              30
+            ],
+            "size": [
+              28,
+              37,
+              31
+            ],
+            "blocks": 7517
+          },
+          {
+            "location": "brasshaven:drowned_dam/dam/x3_z2",
+            "offset": [
+              84,
+              50,
+              61
+            ],
+            "size": [
+              28,
+              28,
+              31
+            ],
+            "blocks": 8249
+          },
+          {
+            "location": "brasshaven:drowned_dam/dam/x3_z3",
+            "offset": [
+              84,
+              4,
+              92
+            ],
+            "size": [
+              28,
+              104,
+              30
+            ],
+            "blocks": 22605
+          },
+          {
+            "location": "brasshaven:drowned_dam/dam/x3_z4",
+            "offset": [
+              84,
+              5,
+              122
+            ],
+            "size": [
+              28,
+              99,
+              30
+            ],
+            "blocks": 19325
+          },
+          {
+            "location": "brasshaven:drowned_dam/dam/x3_z5",
+            "offset": [
+              84,
+              2,
+              152
+            ],
+            "size": [
+              28,
+              39,
+              31
+            ],
+            "blocks": 21770
+          },
+          {
+            "location": "brasshaven:drowned_dam/dam/x3_z6",
+            "offset": [
+              84,
+              1,
+              183
+            ],
+            "size": [
+              28,
+              42,
+              31
+            ],
+            "blocks": 4242
+          },
+          {
+            "location": "brasshaven:drowned_dam/dam/x3_z7",
+            "offset": [
+              84,
+              3,
+              214
+            ],
+            "size": [
+              28,
+              23,
+              30
+            ],
+            "blocks": 1064
+          },
+          {
+            "location": "brasshaven:drowned_dam/dam/x4_z0",
+            "offset": [
+              112,
+              3,
+              0
+            ],
+            "size": [
+              29,
+              62,
+              30
+            ],
+            "blocks": 3578
+          },
+          {
+            "location": "brasshaven:drowned_dam/dam/x4_z1",
+            "offset": [
+              112,
+              50,
+              30
+            ],
+            "size": [
+              29,
+              34,
+              31
+            ],
+            "blocks": 8396
+          },
+          {
+            "location": "brasshaven:drowned_dam/dam/x4_z2",
+            "offset": [
+              112,
+              50,
+              61
+            ],
+            "size": [
+              29,
+              16,
+              31
+            ],
+            "blocks": 9546
+          },
+          {
+            "location": "brasshaven:drowned_dam/dam/x4_z3",
+            "offset": [
+              112,
+              5,
+              92
+            ],
+            "size": [
+              29,
+              109,
+              30
+            ],
+            "blocks": 22574
+          },
+          {
+            "location": "brasshaven:drowned_dam/dam/x4_z4",
+            "offset": [
+              112,
+              5,
+              122
+            ],
+            "size": [
+              29,
+              99,
+              30
+            ],
+            "blocks": 20922
+          },
+          {
+            "location": "brasshaven:drowned_dam/dam/x4_z5",
+            "offset": [
+              112,
+              2,
+              152
+            ],
+            "size": [
+              29,
+              39,
+              31
+            ],
+            "blocks": 23878
+          },
+          {
+            "location": "brasshaven:drowned_dam/dam/x4_z6",
+            "offset": [
+              112,
+              1,
+              183
+            ],
+            "size": [
+              29,
+              42,
+              31
+            ],
+            "blocks": 3357
+          },
+          {
+            "location": "brasshaven:drowned_dam/dam/x4_z7",
+            "offset": [
+              112,
+              3,
+              214
+            ],
+            "size": [
+              29,
+              10,
+              30
+            ],
+            "blocks": 627
+          },
+          {
+            "location": "brasshaven:drowned_dam/dam/x5_z0",
+            "offset": [
+              141,
+              3,
+              0
+            ],
+            "size": [
+              28,
+              63,
+              30
+            ],
+            "blocks": 3736
+          },
+          {
+            "location": "brasshaven:drowned_dam/dam/x5_z1",
+            "offset": [
+              141,
+              53,
+              30
+            ],
+            "size": [
+              28,
+              35,
+              31
+            ],
+            "blocks": 6238
+          },
+          {
+            "location": "brasshaven:drowned_dam/dam/x5_z2",
+            "offset": [
+              141,
+              56,
+              61
+            ],
+            "size": [
+              28,
+              10,
+              31
+            ],
+            "blocks": 8233
+          },
+          {
+            "location": "brasshaven:drowned_dam/dam/x5_z3",
+            "offset": [
+              141,
+              3,
+              92
+            ],
+            "size": [
+              28,
+              73,
+              30
+            ],
+            "blocks": 14295
+          },
+          {
+            "location": "brasshaven:drowned_dam/dam/x5_z4",
+            "offset": [
+              141,
+              3,
+              122
+            ],
+            "size": [
+              28,
+              86,
+              30
+            ],
+            "blocks": 16807
+          },
+          {
+            "location": "brasshaven:drowned_dam/dam/x5_z5",
+            "offset": [
+              141,
+              3,
+              152
+            ],
+            "size": [
+              28,
+              83,
+              31
+            ],
+            "blocks": 15311
+          },
+          {
+            "location": "brasshaven:drowned_dam/dam/x5_z6",
+            "offset": [
+              141,
+              1,
+              183
+            ],
+            "size": [
+              28,
+              29,
+              31
+            ],
+            "blocks": 1462
+          },
+          {
+            "location": "brasshaven:drowned_dam/dam/x5_z7",
+            "offset": [
+              141,
+              5,
+              214
+            ],
+            "size": [
+              28,
+              16,
+              27
+            ],
+            "blocks": 553
+          },
+          {
+            "location": "brasshaven:drowned_dam/dam/x6_z0",
+            "offset": [
+              169,
+              3,
+              6
+            ],
+            "size": [
+              28,
+              51,
+              24
+            ],
+            "blocks": 2309
+          },
+          {
+            "location": "brasshaven:drowned_dam/dam/x6_z1",
+            "offset": [
+              169,
+              12,
+              30
+            ],
+            "size": [
+              28,
+              78,
+              31
+            ],
+            "blocks": 4010
+          },
+          {
+            "location": "brasshaven:drowned_dam/dam/x6_z2",
+            "offset": [
+              169,
+              52,
+              61
+            ],
+            "size": [
+              28,
+              24,
+              31
+            ],
+            "blocks": 5900
+          },
+          {
+            "location": "brasshaven:drowned_dam/dam/x6_z3",
+            "offset": [
+              169,
+              20,
+              92
+            ],
+            "size": [
+              28,
+              67,
+              30
+            ],
+            "blocks": 5272
+          },
+          {
+            "location": "brasshaven:drowned_dam/dam/x6_z4",
+            "offset": [
+              169,
+              0,
+              122
+            ],
+            "size": [
+              28,
+              90,
+              30
+            ],
+            "blocks": 16593
+          },
+          {
+            "location": "brasshaven:drowned_dam/dam/x6_z5",
+            "offset": [
+              169,
+              3,
+              152
+            ],
+            "size": [
+              28,
+              77,
+              31
+            ],
+            "blocks": 6629
+          },
+          {
+            "location": "brasshaven:drowned_dam/dam/x6_z6",
+            "offset": [
+              169,
+              3,
+              183
+            ],
+            "size": [
+              28,
+              17,
+              31
+            ],
+            "blocks": 893
+          },
+          {
+            "location": "brasshaven:drowned_dam/dam/x6_z7",
+            "offset": [
+              170,
+              5,
+              214
+            ],
+            "size": [
+              27,
+              17,
+              22
+            ],
+            "blocks": 762
+          },
+          {
+            "location": "brasshaven:drowned_dam/dam/x7_z0",
+            "offset": [
+              197,
+              3,
+              19
+            ],
+            "size": [
+              8,
+              15,
+              11
+            ],
+            "blocks": 247
+          },
+          {
+            "location": "brasshaven:drowned_dam/dam/x7_z1",
+            "offset": [
+              197,
+              3,
+              30
+            ],
+            "size": [
+              28,
+              51,
+              31
+            ],
+            "blocks": 2701
+          },
+          {
+            "location": "brasshaven:drowned_dam/dam/x7_z2",
+            "offset": [
+              197,
+              3,
+              61
+            ],
+            "size": [
+              28,
+              59,
+              31
+            ],
+            "blocks": 3811
+          },
+          {
+            "location": "brasshaven:drowned_dam/dam/x7_z3",
+            "offset": [
+              197,
+              3,
+              92
+            ],
+            "size": [
+              28,
+              59,
+              30
+            ],
+            "blocks": 3559
+          },
+          {
+            "location": "brasshaven:drowned_dam/dam/x7_z4",
+            "offset": [
+              197,
+              3,
+              122
+            ],
+            "size": [
+              28,
+              59,
+              30
+            ],
+            "blocks": 3468
+          },
+          {
+            "location": "brasshaven:drowned_dam/dam/x7_z5",
+            "offset": [
+              197,
+              3,
+              152
+            ],
+            "size": [
+              28,
+              58,
+              31
+            ],
+            "blocks": 3420
+          },
+          {
+            "location": "brasshaven:drowned_dam/dam/x7_z6",
+            "offset": [
+              197,
+              3,
+              183
+            ],
+            "size": [
+              28,
+              17,
+              31
+            ],
+            "blocks": 1193
+          },
+          {
+            "location": "brasshaven:drowned_dam/dam/x7_z7",
+            "offset": [
+              197,
+              5,
+              214
+            ],
+            "size": [
+              24,
+              15,
+              17
+            ],
+            "blocks": 384
+          }
+        ],
+        "projection": "rigid",
+        "processors": "brasshaven:none",
+        "ground_level_delta": 6,
+        "footprint": [
+          0,
+          0,
+          224,
+          243
+        ]
+      }
+    }
+  ]
+}

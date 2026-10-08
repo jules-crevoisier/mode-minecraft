@@ -146,6 +146,10 @@ STRUCTURE_KIND = {
     "caldera_ringwall": "military",
     "glacier_hall": "food",
     "kneeling_gate": "military",
+    "drowned_dam": "workshop",
+    "inverted_spire": "mine",
+    "mire_stilt_city": "food",
+    "great_aqueduct": "workshop",
     "tesla_observatory": "clockwork", "crystal_cathedral": "library", "sunken_submarine": "harbour",
     "diving_bell": "harbour", "coral_shrine": "harbour", "shipwreck_debris": "harbour",
     # vanilla villages and outposts extended by wf/village.py, the sea-floor props of wf/ocean.py

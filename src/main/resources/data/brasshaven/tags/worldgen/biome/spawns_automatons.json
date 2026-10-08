@@ -16,7 +16,6 @@
     {
       "id": "minecraft:eroded_badlands",
       "required": false
-    },
-    "brasshaven:volcanic_highlands"
+    }
   ]
 }

@@ -1086,7 +1086,7 @@ def gate(bp, arc):
                 bp.set(x, y, z, "air")
     # furnishing: chest guarded by an enderman spawner, banners, rods on the columns, a hanging chandelier
     bp.chest(cx + 6, F, cz + 2, "west", loot=LOOT + "halo_gate")
-    bp.spawner(cx + 5, F, cz - 1, "minecraft:enderman")
+    bp.spawner(cx + 5, F, cz - 1, "brasshaven:void_acolyte")
     for (dx, dz) in ((-4, -4), (-4, 3), (3, -4), (3, 3)):
         bp.set(cx + dx - 1, F + 8, cz + dz, "end_rod[facing=west]")
         bp.set(cx + dx + 2, F + 8, cz + dz + 1, "end_rod[facing=east]")
@@ -1368,5 +1368,5 @@ register(StructureDef(
     [Piece("halo", shattered_halo, views=VIEWS)],
     spacing=40, separation=14, adaptation="none", height=("uniform", 30, 40), processors="none", max_distance=116,
     ground=ARENA_Y - 1,
-    spawns=[("minecraft:enderman", 10, 1, 2), (MOB["void_stalker"], 5, 1, 2)],
+    spawns=[("minecraft:enderman", 10, 1, 2), (MOB["void_stalker"], 5, 1, 2), ("brasshaven:void_acolyte", 6, 1, 2)],
     title_fr="Halo brisé", title_en="Shattered Halo"))

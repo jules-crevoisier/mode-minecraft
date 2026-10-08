@@ -1,0 +1,42 @@
+{
+  "display": {
+    "icon": {
+      "id": "minecraft:mangrove_roots"
+    },
+    "title": {
+      "translate": "advancements.brasshaven.explorer.mire_stilt_city.title"
+    },
+    "description": {
+      "translate": "advancements.brasshaven.explorer.mire_stilt_city.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "found": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:mire_stilt_city"
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "parent": "brasshaven:first_steps/guild_outpost",
+  "rewards": {
+    "experience": 40,
+    "loot": [
+      "brasshaven:rewards/discovery"
+    ]
+  }
+}

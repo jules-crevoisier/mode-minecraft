@@ -1136,7 +1136,7 @@ def gatehouse(bp):
         bp.set(lx, 29, lz, LANT_H)
     # the guardians: skeleton knights in the hall
     bp.spawner(-6, GF, 95, MOB_KNIGHT)
-    bp.spawner(4, GF, 92, MOB_KNIGHT)
+    bp.spawner(4, GF, 92, "brasshaven:magma_sentry")
     # banners and a statue plinth in the hall
     for (sx, sz) in ((-8, 99), (8, 99)):
         bp.set(sx, GF, sz, CH)
@@ -1258,7 +1258,7 @@ def east_bastion(bp):
     bp.set(99, FR, -2, "grindstone[face=floor,facing=north]")
     bp.chest(100, FR, 0, "west", loot=LOOT + "caldera_armory")
     bp.chest(99, FR, 2, "west", loot=LOOT + "caldera_armory")
-    bp.spawner(95, FR, -3, MOB_KNIGHT)
+    bp.spawner(95, FR, -3, "brasshaven:magma_sentry")
     for (lx, lz) in ((88, 0), (96, 0)):
         bp.chain(lx, FR + 5, lz, FR + 6)
         bp.set(lx, FR + 4, lz, LANT_H)
@@ -2550,5 +2550,5 @@ register(StructureDef(
      "windswept_forest"],
     [Piece("ringwall", caldera_ringwall, views=VIEWS)],
     spacing=80, separation=32, adaptation="none", processors="none", max_distance=128,
-    foundation=False, spawns=[(MOB_SKELETON, 8, 1, 2), (MOB_KNIGHT, 4, 1, 1)],
+    foundation=False, spawns=[(MOB_SKELETON, 8, 1, 2), (MOB_KNIGHT, 4, 1, 1), ("brasshaven:magma_sentry", 5, 1, 1)],
     title_fr="Le Rempart de la caldeira", title_en="Caldera Ringwall"))

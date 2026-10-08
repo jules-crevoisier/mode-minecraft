@@ -17,6 +17,12 @@
           "weight": 2,
           "minCount": 1,
           "maxCount": 1
+        },
+        {
+          "type": "brasshaven:tide_wraith",
+          "weight": 5,
+          "minCount": 1,
+          "maxCount": 2
         }
       ]
     }

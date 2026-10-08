@@ -196,6 +196,8 @@ public final class ModItems {
     public static final RegistryObject<Item> CALDERA_CASTELLAN_SPAWN_EGG = egg("caldera_castellan_spawn_egg", ModEntities.CALDERA_CASTELLAN);
     public static final RegistryObject<Item> FROST_JARL_SPAWN_EGG = egg("frost_jarl_spawn_egg", ModEntities.FROST_JARL);
     public static final RegistryObject<Item> OATHBOUND_GATEKEEPER_SPAWN_EGG = egg("oathbound_gatekeeper_spawn_egg", ModEntities.OATHBOUND_GATEKEEPER);
+    public static final RegistryObject<Item> STORM_ASCETIC_SPAWN_EGG = egg("storm_ascetic_spawn_egg", ModEntities.STORM_ASCETIC);
+    public static final RegistryObject<Item> TIDE_ABBESS_SPAWN_EGG = egg("tide_abbess_spawn_egg", ModEntities.TIDE_ABBESS);
     // peoples and creatures of the places (tools/wf/denizens.py)
     public static final RegistryObject<Item> DWARF_SPAWN_EGG = egg("dwarf_spawn_egg", ModEntities.DWARF);
     public static final RegistryObject<Item> SYLVAN_SPAWN_EGG = egg("sylvan_spawn_egg", ModEntities.SYLVAN);
@@ -207,6 +209,12 @@ public final class ModItems {
     public static final RegistryObject<Item> LANTERN_WISP_SPAWN_EGG = egg("lantern_wisp_spawn_egg", ModEntities.LANTERN_WISP);
     public static final RegistryObject<Item> CINDER_HOUND_SPAWN_EGG = egg("cinder_hound_spawn_egg", ModEntities.CINDER_HOUND);
     public static final RegistryObject<Item> RIFT_SENTINEL_SPAWN_EGG = egg("rift_sentinel_spawn_egg", ModEntities.RIFT_SENTINEL);
+    public static final RegistryObject<Item> FROZEN_HUSCARL_SPAWN_EGG = egg("frozen_huscarl_spawn_egg", ModEntities.FROZEN_HUSCARL);
+    public static final RegistryObject<Item> MAGMA_SENTRY_SPAWN_EGG = egg("magma_sentry_spawn_egg", ModEntities.MAGMA_SENTRY);
+    public static final RegistryObject<Item> OATHBOUND_STATUE_SPAWN_EGG = egg("oathbound_statue_spawn_egg", ModEntities.OATHBOUND_STATUE);
+    public static final RegistryObject<Item> TIDE_WRAITH_SPAWN_EGG = egg("tide_wraith_spawn_egg", ModEntities.TIDE_WRAITH);
+    public static final RegistryObject<Item> BELL_MONK_SPAWN_EGG = egg("bell_monk_spawn_egg", ModEntities.BELL_MONK);
+    public static final RegistryObject<Item> VOID_ACOLYTE_SPAWN_EGG = egg("void_acolyte_spawn_egg", ModEntities.VOID_ACOLYTE);
 
     /** Axe subclass keeps vanilla stripping behaviour; tree felling is handled in EquipmentEvents. */
     public static final class LumberAxe extends AxeItem implements com.brasshaven.item.BrassTooltip.Styled {

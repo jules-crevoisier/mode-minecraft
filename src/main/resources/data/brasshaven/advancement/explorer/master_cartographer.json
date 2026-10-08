@@ -574,9 +574,73 @@
           }
         ]
       }
+    },
+    "drowned_dam": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:drowned_dam"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "mire_stilt_city": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:mire_stilt_city"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "inverted_spire": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:inverted_spire"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "great_aqueduct": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:great_aqueduct"
+              }
+            }
+          }
+        ]
+      }
     }
   },
-  "parent": "brasshaven:explorer/kneeling_gate",
+  "parent": "brasshaven:explorer/great_aqueduct",
   "rewards": {
     "experience": 300,
     "loot": [

@@ -41,6 +41,8 @@ from . import chained_jailer
 from . import frost_jarl
 from . import caldera_castellan
 from . import oathbound_gatekeeper
+from . import storm_ascetic
+from . import tide_abbess
 # living oceans
 from . import glow_jellyfish
 from . import reef_fish
@@ -60,6 +62,12 @@ from . import barnacle_crab
 from . import lantern_wisp
 from . import cinder_hound
 from . import rift_sentinel
+from . import frozen_huscarl
+from . import magma_sentry
+from . import oathbound_statue
+from . import tide_wraith
+from . import bell_monk
+from . import void_acolyte
 
 MODELS = [
     drowned_warden.build,
@@ -104,6 +112,9 @@ MODELS = [
     frost_jarl.build,
     caldera_castellan.build,
     oathbound_gatekeeper.build,
+    storm_ascetic.build,
+    storm_ascetic.build_illusion,
+    tide_abbess.build,
     glow_jellyfish.build,
     reef_fish.build,
     manta_ray.build,
@@ -120,4 +131,10 @@ MODELS = [
     lantern_wisp.build,
     cinder_hound.build,
     rift_sentinel.build,
+    frozen_huscarl.build,
+    magma_sentry.build,
+    oathbound_statue.build,
+    tide_wraith.build,
+    bell_monk.build,
+    void_acolyte.build,
 ]

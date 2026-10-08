@@ -122,6 +122,10 @@ STRUCTURE_ICONS = {
     "caldera_ringwall": "lodestone",
     "glacier_hall": "packed_ice",
     "kneeling_gate": "bell",
+    "drowned_dam": "brasshaven:valve_wheel",
+    "inverted_spire": "iron_chain",
+    "great_aqueduct": "cut_sandstone",
+    "mire_stilt_city": "mangrove_roots",
 }
 # where each boss lives (its quest follows the discovery of that structure)
 BOSS_HOME = {
@@ -141,6 +145,8 @@ BOSS_HOME = {
     "caldera_castellan": "caldera_ringwall",
     "oathbound_gatekeeper": "kneeling_gate",
     "frost_jarl": "glacier_hall",
+    "storm_ascetic": "pilgrims_ascent",
+    "tide_abbess": "tidal_abbey",
 }
 CHAPTER = {}
 for s in defs.STRUCTURES:

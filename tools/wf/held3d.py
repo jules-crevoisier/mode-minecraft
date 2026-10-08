@@ -581,6 +581,51 @@ def gate_key():
     return out
 
 
+def tide_crozier():
+    """Crozier of the Drowned Abbess: a long black driftwood staff banded in verdigris, a knop, and for a crook a
+    nautilus spiral of teal shell curling over forward, a sea-glass lamp hanging in its curl."""
+    import math
+    out = _shaft(-6, 22, 1.6, "handle") + _grip(3, 9, 2.2)
+    out += [box(6.8, -7, 6.8, 9.2, -6, 9.2, "brass_dark"), box(7.1, 13, 7.1, 8.9, 14, 8.9, "accent_dark"),
+            box(6.6, 21, 6.6, 9.4, 23, 9.4, "brass"), box(6.9, 23, 6.9, 9.1, 24, 9.1, "brass_dark")]
+    cx, cy = 4.6, 25.4                                                   # the spiral turns round this point
+    for k in range(13):
+        a = math.radians(-60 + 30 * k)
+        r = 5.6 * math.exp(-0.07 * k)
+        x, y = cx + r * math.cos(a), cy + r * math.sin(a)
+        h = 0.95 if k < 5 else (0.75 if k < 9 else 0.55)
+        out.append(box(x - h, y - h, 8 - h, x + h, y + h, 8 + h, "light" if k % 3 == 0 else "mid"))
+    out += [box(4.3, 23.4, 7.7, 4.9, 25.6, 8.3, "brass_dark"),              # the lamp's chain
+            box(3.7, 21.6, 7.1, 5.5, 23.4, 8.9, "glow")]                  # the sea-glass lamp
+    return out
+
+
+def ascetic_staff():
+    """Staff of the Storm Ascetic: a long gnarled haft with a bronze ferrule, a string of prayer beads wound under the
+    grip, and at the top an open bronze ring (a pilgrim's ringed staff) hung with four jangling rings and pierced by a
+    spike of lightning."""
+    import math
+    out = [box(7.2, -7, 7.2, 8.8, 23, 8.8, "handle"), box(6.9, -8, 6.9, 9.1, -6.5, 9.1, "brass_dark"),
+           box(6.8, 3, 6.8, 9.2, 9, 9.2, "wrap")]
+    for y, dx in ((-2, 0.4), (6, -0.4), (14, 0.3), (19, -0.3)):            # knots in the wood
+        out.append(box(7.0 + dx, y, 7.0, 9.0 + dx, y + 1.2, 9.0, "handle_dark"))
+    for k in range(10):                                                    # a loop of prayer beads round the haft
+        a = math.radians(k * 36)
+        x, z, y = 8 + 1.6 * math.cos(a), 8 + 1.6 * math.sin(a), 11.5 - 1.6 * math.sin(a)
+        out.append(box(x - 0.55, y - 0.55, z - 0.55, x + 0.55, y + 0.55, z + 0.55, "accent" if k == 7 else "cream"))
+    out += [box(7.6, 8.4, 6.0, 8.4, 9.9, 6.8, "accent_dark")]             # the tassel under the guru bead
+    out += [box(6.8, 23, 6.8, 9.2, 24.5, 9.2, "brass")]
+    cx, cy, r = 8.0, 27.2, 3.9
+    for a in range(0, 360, 30):
+        x, y = cx + r * math.sin(math.radians(a)), cy + r * math.cos(math.radians(a))
+        out.append(box(x - 0.7, y - 0.7, 7.4, x + 0.7, y + 0.7, 8.6, "brass" if a % 60 else "brass_dark"))
+    for x, y in ((4.0, 25.4), (12.0, 25.4), (5.2, 23.6), (10.8, 23.6)):   # the jangling rings
+        out.append(box(x - 0.5, y - 1.2, 7.6, x + 0.5, y + 0.2, 8.4, "steel"))
+    out += [box(7.6, 24.5, 7.6, 8.4, 31.2, 8.4, "glow"),                  # the spike of lightning
+            box(8.4, 28.4, 7.7, 9.4, 29.0, 8.3, "glow"), box(6.6, 26.0, 7.7, 7.6, 26.6, 8.3, "glow")]
+    return out
+
+
 ARCHETYPES = {"sword": broadsword, "greatsword": lambda: broadsword(length=19, width=5.0, guard=11), "blade": blade, "spear": spear,
               "trident": lambda: spear("trident"), "lance": lambda: spear("lance"), "hammer": hammer,
               "mace": mace, "staff": staff, "cane": cane, "scythe": scythe, "book": book, "fist": fist,
@@ -592,7 +637,7 @@ ARCHETYPES = {"sword": broadsword, "greatsword": lambda: broadsword(length=19, w
               "forge_hammer": forge_hammer, "crystal_spear": crystal_spear, "axe": axe, "pickaxe": pickaxe,
               "shovel": shovel, "hoe": hoe, "wand_block": wand_block, "caged_orb": caged_orb,
               "broadsword": broadsword, "sentinel_greatsword": sentinel_greatsword, "crook": crook, "chain_flail": chain_flail, "gate_key": gate_key, "halo_glaive": halo_glaive, "caldera_halberd": caldera_halberd,
-              "dane_axe": dane_axe,
+              "dane_axe": dane_axe, "tide_crozier": tide_crozier, "ascetic_staff": ascetic_staff,
               "trident_big": trident_big, "fang": fang, "grimoire": grimoire, "gauntlet": gauntlet,
               "horn_curved": horn_curved, "ward_orb": ward_orb}
 
@@ -623,6 +668,8 @@ HELD = {
     "gatekeeper_key": ("gate_key", "gold", "wood", "aether"),
     "caldera_halberd": ("caldera_halberd", "obsidian", "dark", "ember"),
     "jarl_axe": ("dane_axe", "frost", "dark", "ice"),
+    "ascetic_staff": ("ascetic_staff", "storm", "wood", "sapphire"),
+    "abbess_crozier": ("tide_crozier", "warden", "dark", "aether"),
     "cartographer_blade": ("sword", "cartographer", "wood", "emerald"),
     "telluric_hammer": ("hammer", "lithite", "wood", "emerald"),
     "storm_staff": ("staff", "storm", "dark", "sapphire"),

@@ -364,6 +364,34 @@
           }
         ]
       }
+    },
+    "storm_ascetic": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "entity_type": "brasshaven:storm_ascetic"
+            }
+          }
+        ]
+      }
+    },
+    "tide_abbess": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "entity_type": "brasshaven:tide_abbess"
+            }
+          }
+        ]
+      }
     }
   },
   "parent": "brasshaven:end/void_warden",

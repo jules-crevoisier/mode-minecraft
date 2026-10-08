@@ -1204,7 +1204,7 @@ def galleries(bp):
         a = math.radians(ang)
         hang(bp, round(16 * math.sin(a)), round(APSE_Z - 16 * math.cos(a)), GAL_TOP - 2, GAL_TOP + 1)
     bp.spawner(-16, F1, -40, MOB_STRAY)
-    bp.spawner(16, F1, -84, MOB_STRAY)
+    bp.spawner(16, F1, -84, "brasshaven:frozen_huscarl")
     bp.chest(-18, F1, -72, "east", loot=LOOT + "glacier_armory")
     bp.chest(18, F1, -46, "west", loot=LOOT + "glacier_armory")
     bp.barrel(-18, F1, -74, "up")
@@ -1384,7 +1384,7 @@ def frozen_warriors(bp):
             wall_lamp(bp, x, F0 + 3, z)
     for z in range(-82, -100, -6):
         hang(bp, -36, z, F0 + 5, F0 + 9)
-    bp.spawner(-36, F0, -90, MOB_KNIGHT)
+    bp.spawner(-36, F0, -90, "brasshaven:frozen_huscarl")
     bp.chest(-36, F0, -103, "south", loot=LOOT + "glacier_crypt")
     bp.chest(-44, F0, -103, "south", loot=LOOT + "glacier_crypt")
 
@@ -1973,5 +1973,5 @@ register(StructureDef(
     ["snowy_plains", "ice_spikes", "snowy_taiga", "grove", "snowy_slopes"],
     [Piece("hall", glacier_hall, views=VIEWS)],
     spacing=80, separation=32, adaptation="none", processors="none", max_distance=128, foundation=False,
-    spawns=[("minecraft:stray", 10, 1, 2), ("brasshaven:skeleton_knight", 4, 1, 1)],
+    spawns=[("minecraft:stray", 10, 1, 2), ("brasshaven:skeleton_knight", 4, 1, 1), ("brasshaven:frozen_huscarl", 6, 1, 2)],
     title_fr="Halle glaciaire des jarls", title_en="Glacier Hall of the Frost Jarls"))

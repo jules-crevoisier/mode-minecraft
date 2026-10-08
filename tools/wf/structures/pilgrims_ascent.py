@@ -41,8 +41,8 @@ from ..defs import Piece, StructureDef, register
 from ..megakit import hash01, hash3
 from ..parts import LOOT, MOD
 
-# the ascent's own guardian comes with the boss pass; until then the temple wakes the Bell Keeper
-BOSS = "brasshaven:bell_keeper"
+# the summit's own guardian: the Storm Ascetic (entity/boss/StormAscetic.java, tools/BOSSES.md)
+BOSS = "brasshaven:storm_ascetic"
 MOB_STRAY = "minecraft:stray"
 MOB_GARGOYLE = "brasshaven:gargoyle"
 MOB_KNIGHT = "brasshaven:skeleton_knight"
@@ -805,7 +805,7 @@ def pinnacle(bp):
                     bp.set(x, f + 5 + i, z, TOP_W if i == 0 else ROOF)
     bp.set(PX, f + 10, PZ, "lightning_rod")
     bp.set(PX, f + 4, PZ, "bell[attachment=ceiling,facing=east,powered=false]")
-    bp.spawner(PX - 1, f, PZ - 4, MOB_KNIGHT)
+    bp.spawner(PX - 1, f, PZ - 4, "brasshaven:bell_monk")
     bp.chest(PX - 5, f, PZ, "east", loot=LOOT + "ascent_pinnacle")
     stone_lantern(bp, PX - 4, f, PZ + 4)
     stone_lantern(bp, PX - 4, f, PZ - 4)
@@ -1373,7 +1373,7 @@ def pilgrims_ascent(bp):
             bp.set(x, f1 - 1, z, "andesite")
             for y in range(f1, f1 + 3):
                 bp.set(x, y, z, "air")
-    bp.spawner(-12, f1, zi - 2, MOB_STRAY)
+    bp.spawner(-12, f1, zi - 2, "brasshaven:bell_monk")
     summit(bp)
     plunge_pool(bp)
     plants(bp, P)
@@ -1405,5 +1405,5 @@ register(StructureDef(
      "windswept_forest"],
     [Piece("ascent", pilgrims_ascent, views=VIEWS)],
     spacing=80, separation=32, adaptation="beard_thin", max_distance=116,
-    spawns=[("minecraft:stray", 10, 1, 2), ("brasshaven:skeleton_knight", 4, 1, 1)],
+    spawns=[("minecraft:stray", 10, 1, 2), ("brasshaven:skeleton_knight", 4, 1, 1), ("brasshaven:bell_monk", 6, 1, 2)],
     title_fr="L'Ascension du pèlerin", title_en="Pilgrim's Ascent"))

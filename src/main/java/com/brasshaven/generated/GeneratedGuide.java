@@ -63,8 +63,12 @@ public final class GeneratedGuide {
             new Page("pilgrims_ascent", "wonders", "minecraft:bell", 3, List.of()),
             new Page("caldera_ringwall", "wonders", "minecraft:lodestone", 3, List.of()),
             new Page("tidal_abbey", "wonders", "minecraft:prismarine_bricks", 3, List.of()),
+            new Page("inverted_spire", "wonders", "minecraft:iron_chain", 2, List.of()),
+            new Page("great_aqueduct", "wonders", "minecraft:cut_sandstone", 2, List.of()),
             new Page("kneeling_gate", "wonders", "minecraft:bell", 2, List.of()),
+            new Page("drowned_dam", "wonders", "brasshaven:valve_wheel", 2, List.of()),
             new Page("glacier_hall", "wonders", "minecraft:packed_ice", 3, List.of()),
+            new Page("mire_stilt_city", "wonders", "minecraft:mangrove_roots", 3, List.of()),
             new Page("shattered_halo", "wonders", "minecraft:end_crystal", 3, List.of()),
             new Page("iron_helmsman", "wonders", "brasshaven:remembrance_iron_helmsman", 2, List.of("brasshaven:remembrance_iron_helmsman", "brasshaven:helmsman_anchor")),
             new Page("iron_helmsman_broadside", "wonders", "minecraft:tnt", 2, List.of()),
@@ -80,6 +84,10 @@ public final class GeneratedGuide {
             new Page("caldera_castellan_heat", "wonders", "minecraft:magma_block", 2, List.of()),
             new Page("frost_jarl", "wonders", "brasshaven:remembrance_frost_jarl", 2, List.of("brasshaven:remembrance_frost_jarl", "brasshaven:jarl_axe")),
             new Page("frost_jarl_winter", "wonders", "minecraft:blue_ice", 2, List.of()),
+            new Page("tide_abbess", "wonders", "brasshaven:remembrance_tide_abbess", 2, List.of("brasshaven:remembrance_tide_abbess", "brasshaven:abbess_crozier")),
+            new Page("tide_abbess_flood", "wonders", "minecraft:heart_of_the_sea", 2, List.of()),
+            new Page("storm_ascetic", "wonders", "brasshaven:remembrance_storm_ascetic", 2, List.of("brasshaven:remembrance_storm_ascetic", "brasshaven:ascetic_staff")),
+            new Page("storm_ascetic_bell", "wonders", "minecraft:bell", 2, List.of()),
             new Page("oathbound_gatekeeper", "wonders", "brasshaven:remembrance_oathbound_gatekeeper", 2, List.of("brasshaven:remembrance_oathbound_gatekeeper", "brasshaven:gatekeeper_key")),
             new Page("oathbound_gatekeeper_oath", "wonders", "minecraft:bell", 2, List.of()),
             new Page("tesla_observatory", "wonders", "minecraft:lightning_rod", 3, List.of()),
@@ -150,7 +158,13 @@ public final class GeneratedGuide {
             new Page("barnacle_crab", "peoples", "brasshaven:barnacle_crab_spawn_egg", 1, List.of("brasshaven:barnacle_crab_spawn_egg")),
             new Page("lantern_wisp", "peoples", "brasshaven:lantern_wisp_spawn_egg", 1, List.of("brasshaven:lantern_wisp_spawn_egg")),
             new Page("cinder_hound", "peoples", "brasshaven:cinder_hound_spawn_egg", 1, List.of("brasshaven:cinder_hound_spawn_egg")),
-            new Page("rift_sentinel", "peoples", "brasshaven:rift_sentinel_spawn_egg", 1, List.of("brasshaven:rift_sentinel_spawn_egg"))
+            new Page("rift_sentinel", "peoples", "brasshaven:rift_sentinel_spawn_egg", 1, List.of("brasshaven:rift_sentinel_spawn_egg")),
+            new Page("frozen_huscarl", "peoples", "brasshaven:frozen_huscarl_spawn_egg", 1, List.of("brasshaven:frozen_huscarl_spawn_egg")),
+            new Page("magma_sentry", "peoples", "brasshaven:magma_sentry_spawn_egg", 1, List.of("brasshaven:magma_sentry_spawn_egg")),
+            new Page("oathbound_statue", "peoples", "brasshaven:oathbound_statue_spawn_egg", 1, List.of("brasshaven:oathbound_statue_spawn_egg")),
+            new Page("tide_wraith", "peoples", "brasshaven:tide_wraith_spawn_egg", 1, List.of("brasshaven:tide_wraith_spawn_egg")),
+            new Page("bell_monk", "peoples", "brasshaven:bell_monk_spawn_egg", 1, List.of("brasshaven:bell_monk_spawn_egg")),
+            new Page("void_acolyte", "peoples", "brasshaven:void_acolyte_spawn_egg", 1, List.of("brasshaven:void_acolyte_spawn_egg"))
     );
 
     public static final List<Tip> TIPS = List.of(

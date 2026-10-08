@@ -1,0 +1,363 @@
+{
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "brasshaven:chunked_template",
+        "size": [
+          82,
+          153,
+          177
+        ],
+        "cells": [
+          {
+            "location": "brasshaven:inverted_spire/spire/x0_z1",
+            "offset": [
+              4,
+              0,
+              21
+            ],
+            "size": [
+              16,
+              121,
+              23
+            ],
+            "blocks": 6023
+          },
+          {
+            "location": "brasshaven:inverted_spire/spire/x0_z2",
+            "offset": [
+              0,
+              0,
+              44
+            ],
+            "size": [
+              20,
+              130,
+              22
+            ],
+            "blocks": 19352
+          },
+          {
+            "location": "brasshaven:inverted_spire/spire/x0_z3",
+            "offset": [
+              3,
+              0,
+              66
+            ],
+            "size": [
+              17,
+              119,
+              22
+            ],
+            "blocks": 5904
+          },
+          {
+            "location": "brasshaven:inverted_spire/spire/x0_z4",
+            "offset": [
+              18,
+              6,
+              88
+            ],
+            "size": [
+              2,
+              4,
+              1
+            ],
+            "blocks": 6
+          },
+          {
+            "location": "brasshaven:inverted_spire/spire/x1_z0",
+            "offset": [
+              21,
+              0,
+              0
+            ],
+            "size": [
+              20,
+              106,
+              21
+            ],
+            "blocks": 2962
+          },
+          {
+            "location": "brasshaven:inverted_spire/spire/x1_z1",
+            "offset": [
+              20,
+              0,
+              21
+            ],
+            "size": [
+              21,
+              138,
+              23
+            ],
+            "blocks": 40523
+          },
+          {
+            "location": "brasshaven:inverted_spire/spire/x1_z2",
+            "offset": [
+              20,
+              0,
+              44
+            ],
+            "size": [
+              21,
+              147,
+              22
+            ],
+            "blocks": 55282
+          },
+          {
+            "location": "brasshaven:inverted_spire/spire/x1_z3",
+            "offset": [
+              20,
+              0,
+              66
+            ],
+            "size": [
+              21,
+              138,
+              22
+            ],
+            "blocks": 39308
+          },
+          {
+            "location": "brasshaven:inverted_spire/spire/x1_z4",
+            "offset": [
+              20,
+              0,
+              88
+            ],
+            "size": [
+              21,
+              118,
+              16
+            ],
+            "blocks": 2063
+          },
+          {
+            "location": "brasshaven:inverted_spire/spire/x1_z5",
+            "offset": [
+              29,
+              109,
+              111
+            ],
+            "size": [
+              12,
+              14,
+              22
+            ],
+            "blocks": 768
+          },
+          {
+            "location": "brasshaven:inverted_spire/spire/x1_z6",
+            "offset": [
+              31,
+              109,
+              133
+            ],
+            "size": [
+              10,
+              9,
+              11
+            ],
+            "blocks": 351
+          },
+          {
+            "location": "brasshaven:inverted_spire/spire/x2_z0",
+            "offset": [
+              41,
+              0,
+              0
+            ],
+            "size": [
+              21,
+              120,
+              21
+            ],
+            "blocks": 4721
+          },
+          {
+            "location": "brasshaven:inverted_spire/spire/x2_z1",
+            "offset": [
+              41,
+              0,
+              21
+            ],
+            "size": [
+              21,
+              138,
+              23
+            ],
+            "blocks": 44270
+          },
+          {
+            "location": "brasshaven:inverted_spire/spire/x2_z2",
+            "offset": [
+              41,
+              0,
+              44
+            ],
+            "size": [
+              21,
+              153,
+              22
+            ],
+            "blocks": 55424
+          },
+          {
+            "location": "brasshaven:inverted_spire/spire/x2_z3",
+            "offset": [
+              41,
+              0,
+              66
+            ],
+            "size": [
+              21,
+              138,
+              22
+            ],
+            "blocks": 36546
+          },
+          {
+            "location": "brasshaven:inverted_spire/spire/x2_z4",
+            "offset": [
+              41,
+              0,
+              88
+            ],
+            "size": [
+              21,
+              118,
+              23
+            ],
+            "blocks": 2752
+          },
+          {
+            "location": "brasshaven:inverted_spire/spire/x2_z5",
+            "offset": [
+              41,
+              109,
+              111
+            ],
+            "size": [
+              4,
+              9,
+              4
+            ],
+            "blocks": 107
+          },
+          {
+            "location": "brasshaven:inverted_spire/spire/x2_z6",
+            "offset": [
+              41,
+              109,
+              138
+            ],
+            "size": [
+              21,
+              9,
+              16
+            ],
+            "blocks": 718
+          },
+          {
+            "location": "brasshaven:inverted_spire/spire/x3_z1",
+            "offset": [
+              62,
+              0,
+              21
+            ],
+            "size": [
+              18,
+              121,
+              23
+            ],
+            "blocks": 7688
+          },
+          {
+            "location": "brasshaven:inverted_spire/spire/x3_z2",
+            "offset": [
+              62,
+              0,
+              44
+            ],
+            "size": [
+              20,
+              130,
+              22
+            ],
+            "blocks": 22445
+          },
+          {
+            "location": "brasshaven:inverted_spire/spire/x3_z3",
+            "offset": [
+              62,
+              0,
+              66
+            ],
+            "size": [
+              19,
+              119,
+              22
+            ],
+            "blocks": 6352
+          },
+          {
+            "location": "brasshaven:inverted_spire/spire/x3_z4",
+            "offset": [
+              62,
+              7,
+              88
+            ],
+            "size": [
+              1,
+              7,
+              1
+            ],
+            "blocks": 7
+          },
+          {
+            "location": "brasshaven:inverted_spire/spire/x3_z6",
+            "offset": [
+              62,
+              109,
+              151
+            ],
+            "size": [
+              6,
+              9,
+              4
+            ],
+            "blocks": 153
+          },
+          {
+            "location": "brasshaven:inverted_spire/spire/x3_z7",
+            "offset": [
+              64,
+              109,
+              155
+            ],
+            "size": [
+              16,
+              9,
+              22
+            ],
+            "blocks": 1522
+          }
+        ],
+        "projection": "rigid",
+        "processors": "brasshaven:none",
+        "ground_level_delta": 114,
+        "footprint": [
+          8,
+          16,
+          79,
+          176
+        ]
+      }
+    }
+  ]
+}

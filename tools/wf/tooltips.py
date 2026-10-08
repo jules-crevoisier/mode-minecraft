@@ -29,6 +29,8 @@ ABILITIES = {
     "ward": ("Oath ward", "Garde du serment", "radius"),
     "rift": ("Molten rift", "Faille de magma", "range"),
     "breath": ("Frost breath", "Souffle de givre", "range"),
+    "tempest": ("Tempest", "Tempête", "radius"),
+    "tide": ("Breaking tide", "Lame de fond", "range"),
 }
 # BossWeaponItem flags, in bit order
 ABILITY_EFFECTS = {
@@ -135,6 +137,9 @@ FLAVOR = {
                        "Elle a ouvert le col mille ans durant ; elle ouvre désormais les crânes."),
     "caldera_halberd": ("Forged in the throat of a dead volcano.", "Forgée dans la gorge d'un volcan éteint."),
     "jarl_axe": ("The winter he swore to bring never ended.", "L'hiver qu'il avait juré d'apporter n'a jamais fini."),
+    "ascetic_staff": ("Its rings still ring with the storm he prayed to.", "Ses anneaux tintent encore de l'orage qu'il priait."),
+    "abbess_crozier": ("She led her flock into the sea; the sea still follows her staff.",
+                       "Elle a mené son troupeau dans la mer ; la mer suit encore sa crosse."),
 }
 
 # armour sets: one flavour per set prefix (all four pieces)

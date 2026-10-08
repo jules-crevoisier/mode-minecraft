@@ -532,6 +532,114 @@ Co-op and NG+ come from the engine: spikes and rings under every player scale na
 Previews: `python3 tools/gen_models.py --preview --only frost_jarl` → `build/previews/models/frost_jarl.png`;
 held axe: `python3 tools/art_sheet.py --kind held --only jarl_axe`.
 
+## 14. Champion of Pilgrim's Ascent: The Storm Ascetic (L'Ascète des tempêtes)
+Files: `tools/wf/mobs/storm_ascetic.py` (model; `build_illusion()` gives the `storm_illusion` copy),
+`src/main/java/com/brasshaven/entity/boss/StormAscetic.java` (moveset), `StormIllusion.java` (the mirror images). No
+lair module: the arena is the summit temple's round hall (radius 14.4, 17 high, two doors with mist, the great bell in
+the belfry above; `BOSS` in `tools/wf/structures/pilgrims_ascent.py`, seal radius 13), reached by the stairway and the
+site of grace at the covered gate. Reward: `remembrance_storm_ascetic` → **Staff of the Storm Ascetic**
+(`ascetic_staff`, LITHITE 7 / -2.6, new ability shape **TEMPEST** in `BossWeaponItem`: a gust hurls every foe within 6
+blocks away, then visual lightning falls on the three nearest, 10 each; held model `ascetic_staff` in `wf/held3d.py`,
+sprite `staff_storm`), plus gold, map fragments, emeralds, diamonds, lightning rods, breeze rods and a 25% bell
+(`gen_data.py`). Quest: `explorer/boss_storm_ascetic`.
+
+**Concept.** The hermit of the summit, a gaunt, hunched old monk (4.7 blocks, 5.4 with the staff) who has meditated
+under the great bell until the storm answers him: a long gnarled staff taller than himself crowned by an open bronze
+ring with four jangling rings and a spike of lightning; a great round straw hat hung flat on his back; nine prayer beads
+as big as fists orbiting his chest (his projectiles). Asymmetry: the right shoulder and arm bare, bony and scarred with
+a glowing lightning-fern; the saffron robe thrown over the left shoulder only, its huge left sleeve streaming in the
+wind; a long white beard and two prayer streamers blown sideways. The illusions are the same model, pale storm-blue and
+slightly see-through (the tell).
+
+**Stats.** 580 health (colossal overworld tier), armour 12, toughness 4, poise 100, knockback resistance 1.0, yellow
+bar, no fall damage. Three phases: phase 2 at 65% (roar, +10% speed, a gentle shove); phase 3 at 30%, driven by the
+class (like the Jailer): when he is free he chains `toll`, then every 15 s (scaled by `cooldownScale()`) `thunder`.
+`mirror`, `toll` and `thunder` have range 9999 so the picker never chooses them.
+
+| Move | Phase | Wind-up / active / recovery | Range | What it does |
+|---|---|---|---|---|
+| staff | 1-3 | 14 / 14 / 14 | 0-7.5 | Staff back over the right shoulder (arc in cloud), sweep 130° out to 7: 15. Turns up to 40° (active tick 2), line marked, thrust at tick 10 down 9 blocks: 14. P2: 40% chains into vault (far) or spin. |
+| vault | 1-3 | 20 / 10 / 16 | 7-22 | Staff planted: a ring follows the target 12 ticks then locks (sparks); arc 5.5 high, lands on active tick 9 (anim 1.45 s): 16 in r 3.2 + wind ring (8, to r 8, jump). Destination clamped 2.5 inside the hall. |
+| gust | 1-3 | 18 / 24 / 12 | 0-11 | Palm out; cone (±40°, 12 long) and the **wind wall** ring (radius - 3) drawn. 1.2 s of wind: +0.13 b/t away from him (speed capped 0.6), 5 once. Past the ring - 1.5 the outward push and any outward speed are cancelled. P2: 50% chains into lightning. |
+| lightning | 1-3 | 22 / 20 / 14 | 0-26 | Staff to the sky; rings follow every player 12 ticks then lock, + 3 strays (P2 5); visual bolts: 14 in r 1.8, small lift, no push. P2: a second volley on the players' new positions at active tick 14. |
+| beads | 1-3 | 16 / 32 / 10 | 4-22 | Beads spin up (ring on the target); 8 (P2 9) flung every 2 ticks in a fan (8°/10° apart) toward the target, 0.8 b/t out to 14 (or a wall), then back to him at 0.9 b/t: 7 out, 7 back. |
+| spin | 1-3 | 12 / 4 / 14 | 0-3.5 | Anti-hug: ring at 4.5, one turn of the staff: 13, knockback 0.9. |
+| tempest | 2-3 | 16 / 30 / 16 | 0-7.5 | Sweep (tick 0, 14), turn 40°, backhand (tick 10, 13), turn 40°, line + three rings marked, slam (tick 22): 18 within 4, then bolts at 3/6/9 blocks: 12 each. |
+| cyclone | 2-3 | 20 / 30 / 14 | 0-10 | Staff whirled overhead (ring at 12); 20 ticks of pull toward him (0.07 b/t, inward only), then a wind ring (12, to r 12, jump). |
+| mirror | 2-3 | 20 / 4 / 10 | scheduled | 4.5 s after the roar, then every 26 s × cooldownScale when no illusion lives: three (co-op up to four) cloud rings 6 blocks round the target; he reappears on one, `storm_illusion`s on the others. Illusion: 1 HP, any blow pops it; staff combo (8 + 7) or a single marked bolt (9); fades after 16 s, if he dies, resets or leaves phase 2; never saved. |
+| toll | 3 (once) | 40 / 6 / 18 | scheduled | Kneels, invulnerable 3.3 s, staff to the bell; strikes the floor: the bell answers, thunder ring from the hall's centre (8, jump), +12% speed. |
+| thunder | 3 | 20 / 40 / 16 | scheduled | Staff raised (rings at his feet and at 14); the bell tolls three times (active 0, 13, 26): three thunder rings from him (11, to r 14, jump). |
+
+**Phase 3 (the great bell).** Every 8 s × `cooldownScale()` the bell tolls on its own, whatever he is doing: 1.2 s of
+sparks gathering at the hall's centre and a hum (`BELL_RESONATE`), then a thunder ring rolls from the centre to the walls
+(9, jump it). Reset: speed modifiers removed, illusions dispelled.
+
+**Fair on the summit.** `StormAscetic.strike` overrides the engine's (like the Fallen Seraph): every hit (moves, waves,
+the NG+ soul wave) loses the outward part of its knockback within 5 blocks of the edge, the rest is halved and lift is
+capped at 0.35. The roar's shove is replaced by a tamed one. Bolts and beads barely push; the cyclone only pulls
+inward; the gust stops at the wind wall it draws first. His vault lands inside the hall and he teleports back to the
+centre if he ever leaves it. Co-op and NG+ come from the engine (rings under every player scale naturally, the mirror
+uses `scaledCount`, the bell, thunder and mirror timers use `cooldownScale()`).
+
+Previews: `python3 tools/gen_models.py --preview --only storm_ascetic` → `build/previews/models/storm_ascetic.png`
+(`--only storm_illusion` for the copy); held staff: `python3 tools/art_sheet.py --kind held --only ascetic_staff`.
+
+## 15. Champion of the Tidal Abbey: The Abbess of the Tides (L'Abbesse des Marées)
+Files: `tools/wf/mobs/tide_abbess.py` (model), `src/main/java/com/brasshaven/entity/boss/TideAbbess.java` (moveset).
+No lair module: the arena is the abbey's existing rotunda under the church (radius 16, 11-block walls under a shallow
+dome, eight pillars, glazed sea-light shafts, a prismarine compass on the floor; `BOSS` in
+`tools/wf/structures/tidal_abbey.py`, seal radius 14). It replaces the reused Drowned Warden. Reward:
+`remembrance_tide_abbess` → **Crozier of the Drowned Abbess** (`abbess_crozier`, LITHITE 7 / -2.9, new ability shape
+**TIDE** in `BossWeaponItem`: a breaking wave rolls 12 blocks ahead in a 5-block band (stopped by walls), 10 to every
+foe in it, swept along and slowed, and the wielder gets Dolphin's Grace for 6 s; held model `tide_crozier` in
+`wf/held3d.py`, sprite `crozier` in `wf/itemart_shapes.py`), plus gold, map fragments, emeralds, diamonds, prismarine
+crystals, nautilus shells and a 20% heart of the sea (`gen_data.py`). Quest: `explorer/boss_tide_abbess`.
+
+**Concept.** The abbey's drowned saint, 5.4 blocks with her coral crown: a tall, stooped abbess who walked into the sea
+at the last high tide. A seamless robe of sea-dark linen to the floor (she glides; the hem is torn into rags and trails
+algae and barnacles), a faded crimson chasuble with a tarnished gold orphrey cross crusted with barnacles, a wimple and a
+long grey-green veil, a drowned grey-green face with two glowing sea-glass eyes, red, orange and violet coral grown
+through the veil. Asymmetry: a tall crozier of black driftwood banded in verdigris in her right hand, its crook a
+nautilus spiral with a sea-glass lamp hanging in the curl; a bronze bell-censer swinging from her left hand on a long
+chain (brine glows through its pierced lid); barnacles and a starfish on her right shoulder and breast; kelp from her
+left hip and right sleeve.
+
+**Stats.** 560 health (colossal overworld tier), armour 12, toughness 4, poise 105, knockback resistance 1.0, water
+movement efficiency 1.0, breathes water, green bar. Three phases: phase 2 at 65% (roar, +10% speed, a small water
+wave); phase 3 at 30%, driven by the class (like the Chained Jailer): when she is free she chains `flood`, then every
+12 s (x `cooldownScale()`) `riptide`. `acolytes`, `flood` and `riptide` have range 999 so the picker never rolls them.
+
+| Move | Phase | Wind-up / active / recovery | Range | What it does |
+|---|---|---|---|---|
+| sweep | 1-3 | 16 / 4 / 14 | 0-7 | Crozier drawn back over the right shoulder (arc in splashes), swept over 200°: 15. P2: 35% chains thurible (close) or surge. |
+| censer | 1-3 | 18 / 6 / 14 | 0-6.5 | Censer swung back low, flung round over 140° (6 out): 12 + Slowness II 2 s; three brine clouds stay on the arc 5 s (7 s in the flood): 3 + Slowness every half second. P2: 30% chains surge if the target is far. |
+| tidewave | 1-3 | 22 / 40 / 14 | 0-30 | Spectacle: crozier raised; the start line behind her and the edges of the gaps (3.6 wide, sea glass) are drawn across the whole arena. A wall of water 2.6 high rolls from behind her toward the target at 0.6 b/t (0.8 flooded): 13 + swept along, once per wave, too tall to jump. Two gaps (one in phase 3); the first is always within 9 blocks of the target across the wave. P2: a second wave at 90°, 34 ticks later with its own plan drawn. |
+| toll | 1-3 | 20 / 20 / 14 | 0-18 | Censer raised over the crown (sea-glass rings close in): rung; for 14 ticks everyone within 20 blocks is drawn toward her (+0.11 b/t, capped 0.6), then the brine bursts at r 5 (14, thrown out). Run against the pull. P2: 50% chains sweep. |
+| surge | 1-3 | 14 / 10 / 14 | 5-20 | Line of sea glass 10 blocks (15 flooded); she glides 1.0 b/t (1.5 flooded) ferrule first, 14 once per target, stops on walls. P2: 40% chains sweep. |
+| acolytes | 1-3 | 18 / 4 / 14 | scheduled | First after 12 s, then every 30 s x cooldownScale when there is room: bubbling rings, then vanilla drowned rise (minion tag). Alive at most `scaledCount(2)` (`scaledCount(3)` in the flood), at most `scaledCount(2)` per call. Discarded when she dies. |
+| baptism | 2-3 | 18 / 30 / 12 | 0-26 | Crozier overhead; a geyser on every player (follows for a third of its 1 s warning, then locks) plus `scaledCount(2)` strays: 14 + thrown up. Two volleys a second apart (three in the flood). |
+| thurible | 2-3 | 16 / 16 / 14 | 0-6.5 | Forehand censer swing at the impact, a 35° turn toward the target, the arc re-drawn, backhand 12 ticks later: 12 + brine clouds each. |
+| flood | 3 (once, again after a drain) | 30 / 20 / 20 | scheduled | Kneels, invulnerable ~2.6 s, rings the censer three times as rings of water spread; then the crozier strikes: the rotunda floods (see below), a ring of water rolls out (12, jump), +35% speed while the water stands. |
+| riptide | 3 | 20 / 40 / 16 | scheduled | Spectacle: bows into the flood; three marks (every player up to three, then random spots, clamped in the arena) follow for 14 ticks, then lock, linked by sea-glass lines; she swims mark to mark in 13 ticks each (up to 1.6 b/t): 14 to whoever is within 2.2, once per leg. |
+
+**The flood is real, temporary water.** `callFlood` places a water source on every open floor cell (air over a sturdy
+block) within min(15, seal radius + 1) of the seal, one block deep: players wade (water drag, plus Slowness I every
+second while they stand in it); she wades at full speed (`WATER_MOVEMENT_EFFICIENCY` 1, `getFluidJumpThreshold` 2.5 so
+the float goal does not bob her, no water path malus) and +35% faster. Before filling, every water cell of the box
+(radius + 6, floor -2 to +1) is recorded; the drain removes every `Blocks.WATER` block of that box that was not there
+before (the placed sources, their flow and any source the water made by itself at the edges); flow further out dries
+once nothing feeds it. The drain runs when no player is within radius + 14 of the arena (death, flight), when the
+fight resets to phase 1, in `onDefeated`, in `remove()` for any destroying removal, and after a reload (the flag, box
+and pre-existing water are saved as `AbbessFlood`/`AbbessPreWater`). If players come back to a drained phase-3 fight,
+she calls the flood again.
+
+**Co-op and NG+** come from the engine: health, damage, poise, cooldowns (acolyte and riptide timers use
+`cooldownScale()`), compressed wind-ups, the soul wave. Geysers and riptide marks under every player scale naturally;
+acolytes and baptism strays use `scaledCount`.
+
+Previews: `python3 tools/gen_models.py --preview --only tide_abbess` → `build/previews/models/tide_abbess.png`;
+held crozier: `python3 tools/art_sheet.py --kind held --only abbess_crozier`.
+
 ## Difficulty: co-op scaling and NG+ cycles
 
 Applied by `boss/WayfarerBoss` to **every** boss on its first server tick, whatever spawned it (boss seal,

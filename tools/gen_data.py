@@ -285,6 +285,13 @@ def entity_loot():
         "frost_jarl": [entry("gold_ingot", 4, 8), entry("map_fragment", 6, 10), entry("emerald", 5, 9),
                        entry("experience_bottle", 4, 7), entry("golden_apple", 1, 2), entry("diamond", 2, 3),
                        entry("blue_ice", 4, 8), entry("goat_horn", chance=0.35)],
+        "storm_ascetic": [entry("gold_ingot", 4, 8), entry("map_fragment", 6, 10), entry("emerald", 5, 9),
+                          entry("experience_bottle", 4, 7), entry("golden_apple", 1, 2), entry("diamond", 2, 3),
+                          entry("lightning_rod", 2, 4), entry("breeze_rod", 2, 4), entry("bell", chance=0.25)],
+        "tide_abbess": [entry("gold_ingot", 4, 8), entry("map_fragment", 6, 10), entry("emerald", 5, 9),
+                        entry("experience_bottle", 4, 7), entry("golden_apple", 1, 2), entry("diamond", 2, 3),
+                        entry("prismarine_crystals", 6, 12), entry("nautilus_shell", 1, 2),
+                        entry("heart_of_the_sea", chance=0.2)],
     }
     from wf.bossgear import BOSS_GEAR, remembrance_id
     for row in BOSS_GEAR:  # every great boss always drops its remembrance

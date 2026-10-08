@@ -385,6 +385,24 @@ def dane_axe(a):
     a.px(11, 5, "B", "dark")
 
 
+@painted("crozier")
+def crozier(a):
+    """Crozier of the Drowned Abbess: a long dark driftwood staff with verdigris bands, a knop, and a nautilus crook
+    curling over at the top with a glowing sea-glass lamp hanging in its curl."""
+    shaft(a, 10, key="H", grip=(1, 4), butt="B")
+    collar(a, 7, key="V")
+    collar(a, 10, key="B")
+    cx, cy = 11.6, 3.9
+    for k in range(13):
+        ang = math.radians(150 - 30 * k)
+        r = 3.4 * math.exp(-0.09 * k)
+        a.seg("M", cx + r * math.cos(ang), cy - r * math.sin(ang), cx + r * 0.92 * math.cos(ang - 0.5),
+              cy - r * 0.92 * math.sin(ang - 0.5), 0.55 if k < 7 else 0.4)
+    a.shade_dir("M", -0.6, 1.0)
+    a.px(12, 5, "E", "light")
+    a.px(12, 6, "E", "mid")
+
+
 @painted("gate_key")
 def gate_key(a):
     """Key of the Kneeling Gate: a great gold key held like a mace: the ring bow at the butt with a soul-blue gem,

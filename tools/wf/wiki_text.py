@@ -335,6 +335,30 @@ STRUCTURES = {
                         "(lieu de grâce), puis la brume ouvre l'arène au sommet ; derrière des barreaux scellés, le "
                         "caveau, et le saut dans le lac. Raccourcis : portes de fer à sens unique dans les tours, une "
                         "échelle sous une trappe, la poterne d'eau qui ramène de la grève à la cour de la porte.",
+    "great_aqueduct": "Un aqueduc de grès de 240 blocs qui franchit une vallée sur trois rangs d'arcades (arches de "
+                      "12, 8 et 4 blocs), le canal en eau au sommet. Au fond de la vallée, une rivière, un pont de "
+                      "dalles et une pierre de passage au pied de la tour d'escalier ouest. La route de la crête "
+                      "monte à la maison de la source (lieu de grâce) où l'eau sort de la colline : salle voûtée, "
+                      "vanne, cascade et une grotte secrète derrière. On suit le chemin de halage le long du canal "
+                      "jusqu'à la brèche : une section effondrée où la maison du gardien des vannes s'est bâtie "
+                      "sur le tablier, avec son jardin et sa grue ; une trappe cache une salle dans une pile. Un "
+                      "escalier de gravats remonte dans la galerie d'entretien percée dans les piles : magasins, "
+                      "dortoir, atelier, salle des lampes (lieu de grâce), archives, salle des jauges. Au bout, le "
+                      "castellum sur son plateau : la salle des vannes, la salle de distribution, le logis du "
+                      "gardien, le beffroi et sa tourelle. Une seconde tour descend à l'antichambre (lieu de grâce) "
+                      "puis, passé la brume, dans la grande citerne voûtée sous le castellum : l'arène du boss ; "
+                      "derrière des barreaux scellés, le caveau, et le tunnel de vidange dont la porte de fer ramène "
+                      "dans la vallée. Raccourcis : portes de fer à sens unique dans les tours, l'escalier de la brèche.",
+    "drowned_dam": "Un barrage-voûte de pierre et de laiton long de 170 blocs et haut de 66 ferme un fer à cheval "
+                   "de roche ; derrière lui, un lac a englouti un village dont le clocher perce encore la surface. "
+                   "Depuis le camp des arpenteurs (pierre de passage), le chemin contourne un éperon rocheux jusqu'à "
+                   "la cour des travaux. Par la salle des génératrices I, l'escalier à noyau de la tour ouest monte "
+                   "à la risberme ; la maison des vannes et sa galerie noyée (fenêtres sur le village sous l'eau), "
+                   "puis la tour de contrôle et sa salle des cadrans (lieu de grâce) au sommet. On suit le "
+                   "couronnement jusqu'à la tour est, on redescend 66 marches jusqu'à la salle des génératrices II "
+                   "(lieu de grâce) et la grande salle des turbines (arène), le caveau derrière des barreaux "
+                   "scellés. Raccourcis : le puits d'ascenseur depuis le chevalement, le puits du déversoir, les "
+                   "portes de fer à sens unique ; des échelles descendent la face amont pour nager jusqu'au village.",
     "kneeling_gate": "Deux chevaliers de pierre de 70 blocs agenouillés face à face de part et d'autre d'un col de "
                      "montagne, qui portent entre leurs gantelets un linteau de pierre et le pavillon doré de sa "
                      "clef de voûte. Sous le linteau, le bourg du péage : la place et son puits, la barrière, le "
@@ -349,6 +373,33 @@ STRUCTURES = {
                      "(lieu de grâce) et, passé la brume, dans la salle sous la porte : l'arène du boss, sous la grille "
                      "du puits ; derrière des barreaux scellés, le caveau, et une porte de fer qui ramène au corps de "
                      "garde ouest.",
+    "inverted_spire": "Une tour gothique bâtie à l'envers dans un gouffre de 110 blocs : en surface, on ne voit qu'un "
+                      "anneau de pinacles autour d'un trou noir, quatre chaînes géantes et la flèche de cuivre de la "
+                      "lanterne au milieu. Depuis le camp des pèlerins, la route mène à la porte du rebord ; un pont "
+                      "file jusqu'à la cour de la couronne (pierre de passage). Une rampe en spirale descend autour de "
+                      "la tour, six tours complets ; à chaque palier on traverse la salle en anneau autour du puits "
+                      "de lumière : la bibliothèque du chapitre, le réfectoire (pont vers la carrière et son escalier "
+                      "jusqu'au rebord, porte de fer à sens unique), la chapelle renversée (bancs au plafond, autel "
+                      "suspendu ; pont vers l'ossuaire et son lieu de grâce), la crypte des racines (pont rompu), la "
+                      "défaite (améthyste, murs qui se défont dans le vide, pont de cristal vers le reliquaire) et le "
+                      "sanctuaire de la pointe. Un long couloir et un escalier taillé descendent au lac souterrain "
+                      "(lieu de grâce) ; passé la brume, l'arène sur une île, sous la pointe de la flèche. Derrière, "
+                      "le caveau aux barreaux scellés. Pour remonter : deux ascenseurs à bulles dans des tubes de "
+                      "verre, de la grève à l'ossuaire et de la grève sud jusqu'au rebord.",
+    "mire_stilt_city": "Une ville de bois sur pilotis de 200 blocs au-dessus d'une mangrove : des passerelles sur trois "
+                       "niveaux, des ponts de corde et des huttes de pêcheurs. On arrive par une chaussée depuis un "
+                       "îlot (pierre de passage), on franchit la palissade et ses deux tours de garde (brisée à "
+                       "l'ouest : le chemin de traverse), puis le marché aux anguilles et les ruelles basses mènent à "
+                       "la maison de l'escalier. Au deuxième niveau, la place du marché autour de l'arbre (lieu de "
+                       "grâce) ; un pont de corde mène à l'ouest au clocher noyé (escalier vers le beffroi et vers la "
+                       "crypte engloutie, son trésor caché et un tunnel qui ressort dans une hutte par une porte de "
+                       "fer), un autre à l'est au fumoir, sa salle des foyers et son escalier jusqu'à la galerie. Le "
+                       "chemin haut fait le tour par l'est et le nord jusqu'au palier (lieu de grâce) et au grand "
+                       "escalier couvert ; passé la brume, la grande salle ronde de la reine-sorcière, haute de 34 "
+                       "blocs sur sa forêt de pilotis, sous un toit en chapeau de sorcière tordu qui culmine à 100 "
+                       "blocs. Derrière le trône, le caveau scellé et une trappe qui plonge de 33 blocs dans le "
+                       "bassin de la reine. Raccourcis : la porte de fer de la crypte, le monte-charge en "
+                       "échafaudage, l'échelle de la place au palier, la trappe du caveau.",
     "tidal_abbey": "Une île rocheuse cernée par la marée, reliée au rivage par une chaussée de pierre à demi noyée "
                    "et rompue en son milieu. Au pied, les remparts à tours, la barbacane et la porte du Roi ; puis la "
                    "Grande Rue monte en spirale autour du rocher entre des maisons de pierre aux toits d'ardoise, sous "
@@ -525,6 +576,15 @@ MOBS = {
                   "barbe de frimas qui s'ouvre pour son souffle, peau de loup sur les épaules. Une hache barbue de glace "
                   "bleue dans la main droite, un bouclier rond givré au bras gauche, des cristaux de glace qui lui "
                   "poussent dans le dos.",
+    "tide_abbess": "Championne de l'Abbaye des marées : l'abbesse noyée, une sainte de 5,4 blocs revenue de la mer. "
+                   "Robe de lin sombre jusqu'au sol, chasuble cramoisie couverte de bernacles, voile couronné de corail, "
+                   "visage gris-vert aux yeux de verre marin. Une crosse dont la volute est un nautile dans la main "
+                   "droite, un encensoir-cloche au bout d'une chaîne dans la gauche.",
+    "storm_ascetic": "Champion de l'Ascension du pèlerin : l'ermite du sommet, un vieux moine décharné de 4,7 blocs "
+                     "penché sur un bâton plus grand que lui, coiffé d'un anneau de bronze à grelots qui crépite "
+                     "d'éclairs. Un grand chapeau de paille dans le dos, neuf grains de chapelet qui tournent autour de "
+                     "sa poitrine, l'épaule droite nue et marquée d'une cicatrice de foudre, la robe safran jetée sur "
+                     "l'épaule gauche, une longue barbe blanche soufflée par le vent.",
     "glow_jellyfish": "Une cloche translucide qui pulse et dérive dans toutes les mers, en rose, azur, ambre ou "
                       "violet ; elle brille la nuit. La toucher pique un peu (poison). Sa gelée donne une lampe ou la "
                       "vision nocturne.",
@@ -747,6 +807,29 @@ BOSS_MOVES = {
                            "annoncée 1 s par de la fumée et des gouttes de lave (13 et feu). Ensuite, son armure est "
                            "fragile 3 s (+30 % de dégâts) : c'est le moment de frapper."),
     ],
+    "tide_abbess": [
+        ("Balayage de crosse", "1 à 3", "La crosse tirée sur l'épaule droite (0,8 s, l'arc tracé d'écume), puis balayée "
+                                        "sur 200° (15). Recule hors de l'arc."),
+        ("Encensoir", "1 à 3", "L'encensoir ramené bas derrière elle (0,9 s), puis lancé en arc devant (12, ralenti) ; "
+                               "trois nuages de saumure restent 5 s (3 et ralenti chaque demi-seconde)."),
+        ("Vague de marée", "1 à 3", "La crosse levée (1,1 s) : la ligne de départ derrière elle et les brèches sont "
+                                    "tracées au sol. Un mur d'eau traverse toute la rotonde (13, emporté), trop haut "
+                                    "pour être sauté : tiens-toi dans une brèche. Phase 2 : une seconde vague en travers."),
+        ("Glas", "1 à 3", "L'encensoir levé au-dessus de la couronne (1 s) : la marée attire tout le monde à 20 blocs "
+                          "pendant 0,7 s, puis la saumure éclate autour d'elle (14, rayon 5). Cours contre le courant."),
+        ("Ruée", "1 à 3", "Penchée dans le courant (0,7 s, une ligne de bulles), elle glisse le long de la ligne (14). "
+                          "Dans l'inondation, la ruée va moitié plus loin."),
+        ("Acolytes noyés", "1 à 3", "Toutes les 30 s : des noyés se lèvent des anneaux de bulles (deux au plus, plus "
+                                    "à plusieurs)."),
+        ("Baptême", "2 et 3", "La crosse levée (0,9 s), des cercles se referment sur chaque joueur : des geysers "
+                              "jaillissent (14, projeté), deux salves (trois inondée)."),
+        ("Encensoir double", "2 et 3", "Coup droit puis revers 0,6 s plus tard, chacun annoncé ; chacun laisse de la "
+                                       "saumure."),
+        ("Déluge", "3", "À 30 %, agenouillée (invulnérable 2,5 s), elle sonne trois fois : la rotonde s'inonde, une "
+                        "onde roule (12, saute-la). Tu patauges, elle nage vite."),
+        ("Lame de fond", "3", "Toutes les 12 s : trois marques (sur les joueurs) reliées de verre marin, puis elle "
+                              "nage de l'une à l'autre en 2 s (14). Écarte-toi des lignes."),
+    ],
     "frost_jarl": [
         ("Bouclier", "1 à 3", "Entre deux attaques, son bouclier te fait face : les coups portés de face perdent 65 %. "
                               "Frappe pendant qu'il se reprend, ou par le flanc."),
@@ -775,6 +858,33 @@ BOSS_MOVES = {
                             "le sol blanchit 1,2 s avant une pulsation (7) : saute à ce moment."),
         ("Blizzard", "3", "Toutes les 13 s : la hache tendue vers l'oculus (1,2 s), puis trois salves de pics tombent, "
                           "chacune annoncée par un cercle sous chaque joueur (14). Change de place à chaque salve."),
+    ],
+    "storm_ascetic": [
+        ("Combo du bâton", "1 à 3", "Le bâton ramené sur l'épaule droite (0,7 s, l'arc tracé de vent), un large "
+                                    "balayage (15), puis il se tourne vers toi et porte un long coup d'estoc le long "
+                                    "d'une ligne marquée (14, 9 blocs). Recule hors de l'arc, puis écarte-toi de la ligne."),
+        ("Saut à la perche", "1 à 3", "Il plante le bâton (1 s) : un cercle te suit puis se fige, il saute et retombe "
+                                      "dessus (16), et un anneau de vent roule (8). Sors du cercle, saute l'anneau."),
+        ("Rafale", "1 à 3", "La paume tendue (0,9 s : le cône est tracé, et un anneau de nuages près des murs), puis le "
+                            "vent souffle 1,2 s et te pousse loin de lui (5). Il ne te pousse jamais au-delà de l'anneau."),
+        ("Appel de la foudre", "1 à 3", "Le bâton levé au ciel (1,1 s) : des cercles suivent chaque joueur puis se "
+                                        "figent ; la foudre tombe dessus (14). En phase 2, une seconde salve 0,7 s plus "
+                                        "tard là où tu es allé."),
+        ("Chapelet", "1 à 3", "Les grains tournent plus vite (0,8 s), puis il les lance en éventail vers toi ; chacun va "
+                              "à 14 blocs et revient vers lui (7 à l'aller, 7 au retour)."),
+        ("Moulinet", "1 à 3", "Si tu le colles : un cercle à 4,5 blocs (0,6 s), puis un tour complet du bâton (13)."),
+        ("Reflets", "2 et 3", "Il tourbillonne (1 s) pendant que trois cercles de nuages se tracent autour de toi ; il "
+                              "réapparaît sur l'un d'eux, deux reflets sur les autres. Un reflet meurt au moindre "
+                              "coup ; ils frappent moins fort et disparaissent après 16 s."),
+        ("Tempête", "2 et 3", "Trois coups : un balayage (14), un revers (13), puis le bâton abattu le long d'une ligne "
+                              "marquée (18) qui appelle trois éclairs (12)."),
+        ("Cyclone", "2 et 3", "Le bâton tournoie au-dessus de sa tête (1 s) : le vent t'attire vers lui 1 s, puis un "
+                              "anneau de vent roule (12). Saute-le."),
+        ("La grande cloche", "3", "À 30 %, il s'agenouille (invulnérable) et frappe le sol : la cloche répond, un anneau "
+                                  "de tonnerre roule depuis le centre (8). Ensuite elle sonne seule toutes les 8 s "
+                                  "environ (annoncée par des étincelles au centre) : saute chaque anneau (9)."),
+        ("Tonnerre", "3", "Toutes les 15 s environ : le bâton levé (1 s), puis la cloche sonne trois fois et trois "
+                          "anneaux roulent depuis lui (11)."),
     ],
 }
 # Difficulté des boss (bestiaire) : coop et cycles NG+ (boss/WayfarerBoss, tools/BOSSES.md)
@@ -810,9 +920,15 @@ BOSS_FACTS = {
                          "ses coups et dresse des murs d'obsidienne (toujours temporaires). Phase 3 à 30 % : il puise "
                          "la chaleur du volcan et fait entrer les cheminées du sol en éruption ; après chaque éruption "
                          "son armure est fragile 3 s.",
+    "tide_abbess": "560 PV, armure 12, posture 105, barre verte. Phase 2 à 65 % : elle rugit, accélère, double ses "
+                   "vagues et fait jaillir des geysers. Phase 3 à 30 % : elle inonde la rotonde (de la vraie eau, "
+                   "retirée à la fin du combat) et nage beaucoup plus vite que toi.",
     "frost_jarl": "540 PV, armure 14, posture 110, barre bleue. Son bouclier pare les coups de face entre ses "
                   "attaques. Phase 2 à 65 % : il rugit, accélère et enchaîne ses coups. Phase 3 à 30 % : il gèle la "
                   "salle, le sol pulse et le blizzard tombe.",
+    "storm_ascetic": "580 PV, armure 12, posture 100, barre jaune. Phase 2 à 65 % : il rugit, accélère et se "
+                     "dédouble en reflets. Phase 3 à 30 % : la grande cloche répond et sonne seule, anneau après "
+                     "anneau. Aucun coup ne te projette dehors près du bord : l'arène est un sommet.",
 }
 
 # Descente vers un repaire : étapes dans l'ordre
@@ -1123,11 +1239,22 @@ NEW_GROUPS = [
          "struct:glacier_hall"),
         ("Rempart de la caldeira", "Un cratère de volcan ceint d'une enceinte à seize pans, un lac et une aiguille "
          "de roche portant un donjon et l'arène du boss.", "s-caldera_ringwall", "struct:caldera_ringwall"),
+        ("Le Grand Aqueduc", "Un aqueduc de 240 blocs sur trois rangs d'arcades au-dessus d'une vallée : la "
+         "maison de la source, une brèche habitée, une galerie dans les piles, le castellum et une arène dans sa "
+         "citerne.", "s-great_aqueduct", "struct:great_aqueduct"),
         ("La Porte agenouillée", "Deux chevaliers de pierre de 70 blocs agenouillés de part et d'autre d'un col, "
          "un linteau entre leurs mains, des salles dans leurs corps et une arène sous la porte.", "s-kneeling_gate",
          "struct:kneeling_gate"),
+        ("Barrage de la vallée engloutie", "Un barrage-voûte de pierre et de laiton de 170 blocs sur un lac qui a "
+         "noyé un village, des salles des turbines à son pied.", "s-drowned_dam", "struct:drowned_dam"),
+        ("La Flèche renversée", "Une tour bâtie vers le bas dans un gouffre de 110 blocs : une rampe en spirale, "
+         "des niveaux de plus en plus étranges et l'arène sur une île du lac souterrain.", "s-inverted_spire",
+         "struct:inverted_spire"),
         ("Abbaye des marées", "Un mont rocheux cerné par la marée : remparts, une ville en spirale et une abbaye "
          "gothique à flèche de 130 blocs, une arène dans la crypte.", "s-tidal_abbey", "struct:tidal_abbey"),
+        ("La Cité des pilotis", "Une ville de bois sur pilotis au-dessus d'une mangrove : passerelles sur trois "
+         "niveaux, ponts de corde, un fumoir, un clocher noyé et la salle de la reine-sorcière sous un chapeau "
+         "tordu.", "s-mire_stilt_city", "struct:mire_stilt_city"),
     ]),
 ]
 
@@ -1219,6 +1346,14 @@ TEST_CHECKLIST = [
      "Il apparaît à 6 blocs. Frappe-le de flanc ou pendant qu'il se reprend (son bouclier pare de face), sors du cône "
      "du souffle et des cercles de pics ; à 65 %, tiens-toi entre les anneaux du givre éclaté ; à 30 %, bouge sans "
      "cesse et saute quand le sol blanchit. Pour le vrai repaire : /brasshaven tp glacier_hall (dans la corne)."),
+    ("L'Ascète des tempêtes", ["/brasshaven boss storm_ascetic"],
+     "Il apparaît à 6 blocs. Recule hors de l'arc du bâton puis de la ligne d'estoc, sors des cercles de foudre ; sa "
+     "rafale s'arrête à l'anneau de nuages. À 65 %, frappe les reflets (un coup suffit) ; à 30 %, saute chaque anneau "
+     "de la cloche. Pour le vrai repaire : /brasshaven tp pilgrims_ascent (le temple du sommet)."),
+    ("L'Abbesse des Marées", ["/brasshaven boss tide_abbess"],
+     "Elle apparaît à 6 blocs. Sors des nuages de saumure, tiens-toi dans les brèches des vagues, cours contre le "
+     "glas ; à 30 %, la rotonde s'inonde (vraie eau, retirée quand elle tombe ou quand le combat se réinitialise). "
+     "Pour le vrai repaire : /brasshaven tp tidal_abbey (sous l'église)."),
     ("Merveilles en surface", ["/brasshaven tp inventor_manor", "/brasshaven tp sylvan_palace",
                                "/brasshaven tp geothermal_foundry", "/brasshaven tp tesla_observatory",
                                "/brasshaven tp sky_isles"],

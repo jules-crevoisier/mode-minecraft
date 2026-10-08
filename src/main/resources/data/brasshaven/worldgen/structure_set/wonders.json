@@ -55,6 +55,22 @@
     {
       "structure": "brasshaven:kneeling_gate",
       "weight": 1
+    },
+    {
+      "structure": "brasshaven:drowned_dam",
+      "weight": 1
+    },
+    {
+      "structure": "brasshaven:inverted_spire",
+      "weight": 1
+    },
+    {
+      "structure": "brasshaven:mire_stilt_city",
+      "weight": 1
+    },
+    {
+      "structure": "brasshaven:great_aqueduct",
+      "weight": 1
     }
   ],
   "placement": {

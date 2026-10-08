@@ -115,6 +115,10 @@ FAMILIES = [
         "glacier_hall": 1,
         "caldera_ringwall": 1,
         "kneeling_gate": 1,
+        "drowned_dam": 1,
+        "inverted_spire": 1,
+        "mire_stilt_city": 1,
+        "great_aqueduct": 1,
     }, avoid=[(V + "villages", 10), (V + "pillager_outposts", 6), (V + "woodland_mansions", 8)], min_spawn=32,
         note="surface wonders; at least 40 chunks between two of them, none within 512 blocks of 0,0"),
     Family("deep_wonders", "deep_wonder", 72, 28, {
@@ -223,6 +227,11 @@ FIT = {
     "caldera_ringwall": _f("land", spread=30, slope=1.5, wet=0.05),    # brings its own massif: any rolling upland
     "glacier_hall": _f("land", spread=26, slope=1.2, wet=0.08),        # brings its own glacier: a cold valley floor
     "kneeling_gate": _f("land", spread=30, slope=1.5, wet=0.05),      # brings its own pass flanks: an upland saddle
+    "drowned_dam": _f("land", spread=20, slope=1.2, wet=0.08),        # brings its own ridge and lake: a valley floor
+    "inverted_spire": _f("land", spread=8, slope=0.9, wet=0.05),     # a hole in flat ground: the crown sits level
+    # brings its own bog two blocks deep and clears two layers over it: any flat marsh with some open water
+    "mire_stilt_city": _f("wetland", spread=4, slope=0.6, wet=0.95, min_wet=0.25, drop=2),
+    "great_aqueduct": _f("land", spread=30, slope=1.5, wet=0.12),     # brings its own valley and ridges
     # ---- coast: the dock side (template +z = south) in the sea, the cape on land, shore near sea level
     "coastal_lighthouse": _f("coast", sea_side="south", wet=0.5, land=0.5, spread=8, slope=1.0),
     # the island (south) in the sea, the causeway's shore end (north) on the beach: the strand lands at sea level

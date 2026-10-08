@@ -90,6 +90,12 @@ public final class BossGear {
     public static final RegistryObject<Item> REMEMBRANCE_FROST_JARL = remembrance("remembrance_frost_jarl");
     public static final RegistryObject<Item> JARL_AXE = weapon("jarl_axe", p -> p.sword(ModMaterials.LITHITE, 8.0F, -3.1F).rarity(Rarity.EPIC),
             BossWeaponItem.Ability.BREATH, 10.0F, 9.0F, 90, () -> ParticleTypes.SNOWFLAKE, BossWeaponItem.SLOW);
+    public static final RegistryObject<Item> REMEMBRANCE_STORM_ASCETIC = remembrance("remembrance_storm_ascetic");
+    public static final RegistryObject<Item> ASCETIC_STAFF = weapon("ascetic_staff", p -> p.sword(ModMaterials.LITHITE, 7.0F, -2.6F).rarity(Rarity.EPIC),
+            BossWeaponItem.Ability.TEMPEST, 10.0F, 6.0F, 90, () -> ParticleTypes.ELECTRIC_SPARK, 0);
+    public static final RegistryObject<Item> REMEMBRANCE_TIDE_ABBESS = remembrance("remembrance_tide_abbess");
+    public static final RegistryObject<Item> ABBESS_CROZIER = weapon("abbess_crozier", p -> p.sword(ModMaterials.LITHITE, 7.0F, -2.9F).rarity(Rarity.EPIC),
+            BossWeaponItem.Ability.TIDE, 10.0F, 12.0F, 90, () -> ParticleTypes.SPLASH, BossWeaponItem.SLOW);
 
     private BossGear() {}
 

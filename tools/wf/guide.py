@@ -579,6 +579,37 @@ PAGES = [
          "à son lieu de grâce ; au-delà, la salle des marées, l'arène, puis le caveau et un tunnel qui ressort au "
          "port."),
     ], []),
+    ("inverted_spire", "wonders", "minecraft:iron_chain", ("Inverted Spire", "La Flèche renversée"), [
+        ("A gothic tower built downward into a 110-block sinkhole. From the surface: a crowned ring of pinnacles round "
+         "a black hole, four giant chains and a copper lantern spire. Where: plains, meadows, forests, taiga, savanna.",
+         "Une tour gothique bâtie vers le bas dans un gouffre de 110 blocs. En surface : un anneau de pinacles autour "
+         "d'un trou noir, quatre chaînes géantes et une flèche-lanterne de cuivre. Où : plaines, prairies, forêts, "
+         "taïga, savane."),
+        ("Cross to the crown court (waystone) and take the spiral ramp down: each landing leads through a ring room "
+         "(library, refectory, inverted chapel, root crypt, the unmaking, the tip sanctum). Bridges reach the shaft "
+         "wall: the quarry stair back to the rim, the ossuary (site of grace), the reliquary. At the bottom, a lake, "
+         "the arena on its island and the vault; bubble lifts carry you back up.",
+         "Passe le pont jusqu'à la cour de la couronne (pierre de passage) et descends la rampe en spirale : chaque "
+         "palier traverse une salle en anneau (bibliothèque, réfectoire, chapelle renversée, crypte des racines, la "
+         "défaite, le sanctuaire de la pointe). Des ponts mènent à la paroi : l'escalier de la carrière vers le "
+         "rebord, l'ossuaire (lieu de grâce), le reliquaire. Au fond, un lac, l'arène sur son île et le caveau ; des "
+         "ascenseurs à bulles te remontent."),
+    ], []),
+    ("great_aqueduct", "wonders", "minecraft:cut_sandstone", ("The Great Aqueduct", "Le Grand Aqueduc"), [
+        ("A 240-block sandstone aqueduct crosses a river valley on three tiers of arches (12, 8 and 4 wide), "
+         "the water channel on top and a castellum on the eastern ridge. Where: plains, meadows, savannas.",
+         "Un aqueduc de grès de 240 blocs franchit une vallée sur trois rangs d'arcades (12, 8 et 4 blocs), le "
+         "canal au sommet et un castellum sur la crête est. Où : plaines, prairies, savanes."),
+        ("From the valley waystone, the ridge road climbs to the spring house (site of grace). Follow the towpath "
+         "to the breach and the sluice-keeper's house, climb into the maintenance gallery inside the piers (lamp "
+         "room: site of grace) and on to the castellum. A stair descends to the antechamber and the arena in the "
+         "great cistern; behind sealed bars, the vault, and a drain tunnel back to the valley.",
+         "Depuis la pierre de la vallée, la route de la crête monte à la maison de la source (lieu de grâce). Le "
+         "chemin de halage mène à la brèche et à la maison du gardien des vannes ; on monte dans la galerie "
+         "d'entretien des piles (salle des lampes : lieu de grâce) jusqu'au castellum. Un escalier descend à "
+         "l'antichambre et à l'arène de la grande citerne ; derrière des barreaux scellés, le caveau, et un tunnel "
+         "de vidange qui ramène à la vallée."),
+    ], []),
     ("kneeling_gate", "wonders", "minecraft:bell", ("Kneeling Gate", "La Porte agenouillée"), [
         ("Two 70-block stone knights kneel across a mountain pass, a stone lintel held between their gauntlets "
          "over a toll town. Where: meadows, groves, snowy slopes, stony peaks, windswept hills.",
@@ -590,6 +621,23 @@ PAGES = [
          "Depuis le corps de garde ouest, un escalier monte dans le corps (ceinture, cœur, heaume) puis par le "
          "bras jusqu'au linteau : lieu de grâce dans le pavillon. Dans le chevalier est : trésor, puits, porte de "
          "fer sur la place, et l'escalier de l'arène sous la porte et de son caveau scellé."),
+    ], []),
+    ("drowned_dam", "wonders", "brasshaven:valve_wheel", ("Dam of the Drowned Valley", "Barrage de la vallée engloutie"), [
+        ("A curved stone-and-brass arch dam 170 blocks long and 66 high closes a horseshoe of rock; behind it a lake "
+         "has drowned a village whose bell tower still breaks the surface. Where: meadows, windswept hills, taigas, "
+         "forests.",
+         "Un barrage-voûte de pierre et de laiton long de 170 blocs et haut de 66 ferme un fer à cheval de roche ; "
+         "derrière lui un lac a noyé un village dont le clocher perce encore la surface. Où : prairies, collines "
+         "venteuses, taïgas, forêts."),
+        ("From the works yard, Generator Hall I and the west tower's stair lead to the berm, the valve house and "
+         "its drowned gallery, then the control tower (site of grace at the crest). Along the crest to the east "
+         "tower, down to Generator Hall II (site of grace) and the turbine chamber: the arena and its sealed vault. "
+         "Shortcuts: the lift shaft, the spillway drop, one-way iron doors.",
+         "Depuis la cour des travaux, la salle des génératrices I et l'escalier de la tour ouest mènent à la "
+         "risberme, à la maison des vannes et sa galerie noyée, puis à la tour de contrôle (lieu de grâce au "
+         "sommet). Par le couronnement jusqu'à la tour est, on redescend à la salle II (lieu de grâce) et à la "
+         "salle des turbines : l'arène et son caveau scellé. Raccourcis : le puits d'ascenseur, le déversoir, "
+         "les portes de fer à sens unique."),
     ], []),
     ("glacier_hall", "wonders", "minecraft:packed_ice", ("Glacier Hall of the Frost Jarls", "Halle glaciaire des jarls"), [
         ("A glacier tongue 200 blocks long whose snout is carved into a facade: a frieze, the Jarl's eye, two "
@@ -613,6 +661,27 @@ PAGES = [
          "dans le lac), puis l'escalier du jarl monte dans la corne jusqu'au lieu de grâce et à l'arène. Au-delà : "
          "le caveau, et le Saut du jarl, 47 blocs de chute dans la source que la rivière de fonte emporte jusqu'à "
          "une grotte de glace au front du glacier."),
+    ], []),
+    ("mire_stilt_city", "wonders", "minecraft:mangrove_roots", ("Mire Stilt-City", "La Cité des pilotis"), [
+        ("A timber town on piles over a mangrove swamp, 200 blocks across: boardwalks on three levels, rope "
+         "bridges, fishers' huts, a smoking smokehouse, a drowned bell tower, and the witch-queen's round hall raised "
+         "34 blocks on a forest of stilts under a crooked witch's-hat roof that tops out at 100 blocks.",
+         "Une ville de bois sur pilotis de 200 blocs au-dessus d'une mangrove : des passerelles sur trois niveaux, "
+         "des ponts de corde, des huttes de pêcheurs, un fumoir qui fume, un clocher noyé, et la salle ronde de la "
+         "reine-sorcière, haute de 34 blocs sur une forêt de pilotis, sous un toit en chapeau de sorcière tordu qui "
+         "culmine à 100 blocs."),
+        ("Where: swamps and mangrove swamps.", "Où : marais et mangroves."),
+        ("From the islet (waystone) take the causeway through the palisade gate, cross the Eel Market and climb the "
+         "Ladderhouse to the market square (waystone). West: the drowned bell tower, its belfry and the sunken "
+         "undercroft (a hidden hoard, a tunnel out through a one-way iron door). East: the smokehouse and its stair to "
+         "the High Walk, which leads round to the landing (site of grace) and the covered grand stair. Past the mist: "
+         "the queen's hall, the vault behind the throne, and a trapdoor that drops 33 blocks into the queen's pool.",
+         "Depuis l'îlot (pierre de passage), prends la chaussée, passe la porte de la palissade, traverse le marché "
+         "aux anguilles et monte par la maison de l'escalier jusqu'à la place du marché (pierre de passage). À "
+         "l'ouest : le clocher noyé, son beffroi et la crypte engloutie (un trésor caché, un tunnel qui ressort par "
+         "une porte de fer à sens unique). À l'est : le fumoir et son escalier vers le chemin haut, qui mène au "
+         "palier (lieu de grâce) et au grand escalier couvert. Passé la brume : la salle de la reine, le caveau "
+         "derrière le trône, et une trappe qui plonge de 33 blocs dans le bassin de la reine."),
     ], []),
     ("shattered_halo", "wonders", "minecraft:end_crystal", ("Shattered Halo", "Halo brisé"), [
         ("A tilted ring of purpur, end stone bricks and gold, 170 blocks across, broken into five arcs floating at "
@@ -816,6 +885,65 @@ PAGES = [
          "right-click breathes a cone of frost that freezes foes solid.",
          "Son Souvenir, quatre fragments de carte et deux diamants forgent la Hache barbue du Jarl de givre, dont le "
          "clic droit souffle un cône de givre qui gèle les ennemis sur place."),
+    ], []),
+    ("tide_abbess", "wonders", "brasshaven:remembrance_tide_abbess", ("The Abbess of the Tides", "L'Abbesse des Marées"), [
+        ("Down the narrow stair under the Tidal Abbey's church, in the rotunda lit by shafts of sea light, the drowned "
+         "abbess waits (560 health, armour 12): a tall saint in a barnacled chasuble and a veil crowned with coral, a "
+         "nautilus crozier in her right hand and a bell-censer swinging from her left.",
+         "En bas de l'escalier étroit sous l'église de l'Abbaye des marées, dans la rotonde éclairée de puits de "
+         "lumière marine, attend l'abbesse noyée (560 PV, armure 12) : une sainte élancée en chasuble couverte de "
+         "bernacles, un voile couronné de corail, une crosse-nautile dans la main droite et un encensoir-cloche "
+         "balancé dans la gauche."),
+        ("She sweeps with the crozier, swings the censer (its brine smoke lingers: leave it), glides down a line of "
+         "bubbles, tolls the bell to draw everyone in before the brine bursts round her (run against the pull), and "
+         "strikes the floor to send a wall of water across the whole rotunda: it is too tall to jump, so stand in one "
+         "of the gaps marked in sea glass. Her drowned acolytes rise every half minute.",
+         "Elle balaie de sa crosse, lance l'encensoir (sa fumée de saumure reste : sors-en), glisse le long d'une "
+         "ligne de bulles, sonne la cloche pour attirer tout le monde avant que la saumure n'éclate autour d'elle "
+         "(cours contre l'attraction), et frappe le sol pour lancer un mur d'eau à travers toute la rotonde : trop "
+         "haut pour être sauté, tiens-toi dans une des brèches marquées de verre marin. Ses acolytes noyés se lèvent "
+         "toutes les trente secondes."),
+    ], ["brasshaven:remembrance_tide_abbess", "brasshaven:abbess_crozier"]),
+    ("tide_abbess_flood", "wonders", "minecraft:heart_of_the_sea", ("Abbess: the Flood", "Abbesse : le Déluge"), [
+        ("At 65% a second wave crosses the first, geysers burst under every player and she swings the censer twice. "
+         "At 30% she kneels and floods the rotunda: you wade, she swims, and every 12 s she dives into the riptide "
+         "and swims through three marks. The water drains when she falls.",
+         "À 65 %, une seconde vague croise la première, des geysers jaillissent sous chaque joueur et elle frappe "
+         "deux fois de l'encensoir. À 30 %, elle s'agenouille et inonde la rotonde : tu patauges, elle nage, et "
+         "toutes les 12 s elle plonge dans la lame de fond et traverse trois marques. L'eau se retire à sa chute."),
+        ("Her Remembrance, four Map Fragments and two diamonds forge the Crozier of the Drowned Abbess, whose "
+         "right-click sends a breaking wave ahead that sweeps foes along.",
+         "Son Souvenir, quatre fragments de carte et deux diamants forgent la Crosse de l'Abbesse noyée, dont le clic "
+         "droit lance une vague qui emporte les ennemis."),
+    ], []),
+    ("storm_ascetic", "wonders", "brasshaven:remembrance_storm_ascetic", ("The Storm Ascetic", "L'Ascète des tempêtes"), [
+        ("In the bell temple on the summit of Pilgrim's Ascent, the hermit waits under the great bell (580 health, armour "
+         "12): a gaunt old monk with a staff taller than himself, a straw hat on his back and nine prayer beads circling "
+         "him. The storm answers him.",
+         "Dans le temple de la cloche, au sommet de l'Ascension du pèlerin, l'ermite attend sous la grande cloche (580 PV, "
+         "armure 12) : un vieux moine décharné, un bâton plus grand que lui, un chapeau de paille dans le dos et neuf "
+         "grains de chapelet qui tournent autour de lui. L'orage lui répond."),
+        ("His staff reaches far: a sweep, then a thrust down a marked line. He vaults onto the ring that follows you "
+         "(jump the wind), flings his beads out and back, calls lightning on the rings under your feet and whirls the "
+         "staff if you hug him. His gust pushes you toward the walls, but never past the ring of cloud it draws.",
+         "Son bâton porte loin : un balayage, puis un coup d'estoc le long d'une ligne marquée. Il saute à la perche sur "
+         "le cercle qui te suit (saute le vent), lance ses grains qui reviennent vers lui, appelle la foudre sur les "
+         "cercles sous tes pieds et fait tournoyer le bâton si tu le colles. Sa rafale te pousse vers les murs, jamais "
+         "au-delà de l'anneau de nuages qu'elle trace."),
+    ], ["brasshaven:remembrance_storm_ascetic", "brasshaven:ascetic_staff"]),
+    ("storm_ascetic_bell", "wonders", "minecraft:bell", ("Ascetic: the great bell", "Ascète : la grande cloche"), [
+        ("At 65% he splits into three: two mirror images that die to any blow, the real one among them. He strikes three "
+         "times (the last blow calls lightning down a line) and draws you in before a ring of wind. At 30% he kneels and "
+         "the great bell answers: from then on it tolls by itself every eight seconds, a ring of thunder you must jump, "
+         "and he rings it three times in a row.",
+         "À 65 %, il se dédouble : deux reflets qui meurent au moindre coup, le vrai parmi eux. Il frappe trois fois (le "
+         "dernier coup appelle la foudre le long d'une ligne) et t'attire avant un anneau de vent. À 30 %, il "
+         "s'agenouille et la grande cloche répond : dès lors elle sonne seule toutes les huit secondes, un anneau de "
+         "tonnerre à sauter, et il la fait sonner trois fois de suite."),
+        ("His Remembrance, four Map Fragments and two diamonds forge the Staff of the Storm Ascetic, whose right-click "
+         "hurls foes away with a gust and calls lightning on the three nearest.",
+         "Son Souvenir, quatre fragments de carte et deux diamants forgent le Bâton de l'Ascète des tempêtes, dont le "
+         "clic droit repousse les ennemis d'une rafale et appelle la foudre sur les trois plus proches."),
     ], []),
     ("oathbound_gatekeeper", "wonders", "brasshaven:remembrance_oathbound_gatekeeper",
      ("The Oathbound Gatekeeper", "Le Gardien du Serment"), [

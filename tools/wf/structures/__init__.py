@@ -15,3 +15,7 @@ from . import tidal_abbey  # noqa: F401
 from . import caldera_ringwall  # noqa: F401
 from . import glacier_hall  # noqa: F401
 from . import kneeling_gate  # noqa: F401
+from . import drowned_dam  # noqa: F401
+from . import mire_stilt_city  # noqa: F401
+from . import inverted_spire  # noqa: F401
+from . import great_aqueduct  # noqa: F401

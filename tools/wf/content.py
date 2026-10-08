@@ -202,6 +202,9 @@ ENTITIES = {
     "caldera_castellan": ("The Castellan of the Caldera", "Le Châtelain de la caldeira"),
     "oathbound_gatekeeper": ("The Oathbound Gatekeeper", "Le Gardien du Serment"),
     "frost_jarl": ("The Frost Jarl", "Le Jarl de givre"),
+    "storm_ascetic": ("The Storm Ascetic", "L'Ascète des tempêtes"),
+    "storm_illusion": ("Mirror Image of the Ascetic", "Reflet de l'Ascète"),
+    "tide_abbess": ("The Abbess of the Tides", "L'Abbesse des Marées"),
     "hot_rivet": ("Hot Rivet", "Rivet brûlant"),
     "boomerang": ("Boomerang", "Boomerang"),
 }
@@ -242,6 +245,8 @@ SPAWN_EGGS = ["ruin_walker", "map_wraith", "basalt_guard", "void_stalker", "drow
               "caldera_castellan",
               "oathbound_gatekeeper",
               "frost_jarl",
+              "storm_ascetic",
+              "tide_abbess",
               ]
 
 # Misc translated messages used from Java (key suffix -> (en, fr))

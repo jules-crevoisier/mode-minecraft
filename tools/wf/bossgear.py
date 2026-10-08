@@ -7,7 +7,7 @@ ability: WAVE (ring around you), BEAM (line ahead), DASH (rush through enemies),
 a line), ROOT (snare around you), CLOUD (poison cloud where you look), LEAP (bound forward), ARC (wide
 sweep), BLINK (teleport ahead and strike), HOOK (a chain
 thrown ahead drags the first foe to you), SHARDS (a fan of piercing shards ahead), BREATH (a cone of frost
-breath ahead that freezes foes solid). flags: fire, slow, weak, blind, poison, lift, lifesteal.
+breath ahead that freezes foes solid), TIDE (a breaking wave ahead that sweeps foes along). flags: fire, slow, weak, blind, poison, lift, lifesteal.
 """
 
 TIER_MATERIAL = {"overworld": "map_fragment", "depths": "lithite_shard", "nether": "ancient_ember", "end": "void_shard"}
@@ -135,6 +135,22 @@ BOSS_GEAR = [
      ("Remembrance of the Frost Jarl", "Souvenir du Jarl de givre"),
      ("LITHITE", 8.0, -3.1), "BREATH", 10.0, 9.0, 90, "SNOWFLAKE", "slow", ("dane_axe", "frost", "dark", "ice"),
      ("frost", "ice")),
+    ("storm_ascetic", "overworld", "ascetic_staff", ("Staff of the Storm Ascetic", "Bâton de l'Ascète des tempêtes"),
+     ("Use: strike the staff on the ground; a gust hurls every foe around you away and lightning falls on the three "
+      "nearest.",
+      "Clic droit : frappe le sol du bâton ; une rafale repousse tous les ennemis autour de toi et la foudre tombe sur "
+      "les trois plus proches."),
+     ("Remembrance of the Storm Ascetic", "Souvenir de l'Ascète des tempêtes"),
+     ("LITHITE", 7.0, -2.6), "TEMPEST", 10.0, 6.0, 90, "ELECTRIC_SPARK", "", ("staff_storm", "storm", "wood", "ice"),
+     ("storm", "ice")),
+    ("tide_abbess", "overworld", "abbess_crozier", ("Crozier of the Drowned Abbess", "Crosse de l'Abbesse noyée"),
+     ("Use: strike the crozier down; a breaking wave rolls ahead and sweeps every foe in it along, and the sea "
+      "carries you (Dolphin's Grace, 6 s).",
+      "Clic droit : frappe le sol de la crosse ; une vague déferle devant toi et emporte tous les ennemis sur son "
+      "passage, et la mer te porte (Grâce du dauphin, 6 s)."),
+     ("Remembrance of the Abbess", "Souvenir de l'Abbesse"),
+     ("LITHITE", 7.0, -2.9), "TIDE", 10.0, 12.0, 90, "SPLASH", "slow", ("crozier", "warden", "dark", "aether"),
+     ("warden", "aether")),
 ]
 
 
