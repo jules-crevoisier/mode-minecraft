@@ -448,6 +448,44 @@ level design can talk to each other.
 4. Ask yourself: what is the dominant? Where does the eye go first? Where do I feel small? Where do I look out?
    Where is the shortcut? If any answer is "nowhere", the build is not done.
 
+## 15. Reference mod: When Dungeons Arise (jules, 2026-10-08)
+
+jules pointed to *When Dungeons Arise* (WDA, ~40 structures by Aureljz) as the target level for structures. Its
+public pages give names and a philosophy, no sizes; the points marked (seen) come from the CurseForge page and
+changelogs, the others are our reading of the mod. Take the principles, never its assets or layouts.
+
+What it does well, and what we copy in spirit:
+1. **One readable silhouette per structure** (seen: "imposing", "massive"). Each is identifiable from 200
+   blocks: thorn-covered twin towers (Thornborn Towers), a giant stag (Ceryneian Hind), a palace of minarets
+   (Shiraz Palace), sky galleons (Heavenly Conqueror / Rider / Challenger), a war galley (Typhon). Our rule:
+   name the silhouette in one noun phrase before building (§2), and check it in the far preview (§14).
+2. **Variety of kind, not of skin** (seen: temples, palaces, fortresses, cities, ships at sea, airships with no
+   port, mines, coliseums, tree houses). Half of WDA is not a "building on the ground": things that sail, fly,
+   hang, or are a creature. §12 concepts 3, 7, 8, 9 and 14 go that way; prioritise them over another castle.
+3. **Assembled from rooms and passages** (seen: randomised layouts). Big structures are jigsaw kits, so two
+   copies differ. Ours are mostly one fixed blueprint; colossal builds should expose variant wings or rooms
+   (Python seed per variant, as the dungeon layouts already do) so a second visit is not a replay.
+4. **Too big is a real risk** (seen: Thornborn Towers were "a little too big, even for this mod", smaller
+   variants added). Keep the §1 colossal budget, and ship a smaller variant of the largest builds.
+5. **Broken-bridge terminators** (seen). A passage that ends in a collapse is a cheap way to suggest a larger
+   whole and a view out. Use them at kit edges, with a rail so the audit's walk graph stays clean.
+6. **Loot gradient** (seen: ship loot from gold nuggets to rare treasure; guides: perimeter chests poor, vault
+   best). Map it: entrance and perimeter tier 1, mid-level tier 2, vault behind the boss or the hardest climb
+   tier 3. One vault per structure, never loot scattered evenly.
+7. **Difficulty by tier, mobs with gear** (seen: late-game dungeons such as Shiraz Palace and Keep Kayra field
+   mobs in enchanted diamond; easy windmills and houses). Each structure gets a declared tier (early / mid /
+   late) that sets spawner density, mob equipment and loot tables; easy small sites sit between the big ones.
+8. **Structures that point to other structures** (seen: passive structures hold explorer maps to dungeons).
+   Our small sites (camps, huts, waystones) should carry a map or a journal clue to a colossal neighbour.
+9. **Placement in clusters** (seen: structures "usually spawn together"). A colossal build reads bigger with
+   one or two small satellites (camp, wreck, watch post) on the approach (§7).
+
+Where Brasshaven must go further than WDA: real bosses with arenas (§10), shortcuts that loop back (C-rules),
+and interiors whose rooms make sense (§8). WDA mostly relies on spawner density; we use level design.
+
+Sources: https://www.curseforge.com/minecraft/mc-mods/when-dungeons-arise ,
+https://www.minecraft-guides.com/mod/when-dungeons-arise/ , https://craftdownunder.co/guides/mods/when-dungeons-arise
+
 ---
 
 ## Sources
