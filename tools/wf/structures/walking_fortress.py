@@ -21,7 +21,7 @@ import math
 from .. import interior as INT
 from ..arch import stair, stair_run
 from ..defs import Piece, StructureDef, register
-from ..megakit import (BARS, BRASS, BRASS_SLAB, BRASS_STAIRS, COPPER, EDISON, GAUGE, GEAR, HANG_LAMP, IRON,
+from ..megakit import (BARS, BRASS, BRASS_SLAB, BRASS_STAIRS, COPPER, EDISON, GAUGE, GEAR, HANG_LAMP, IRON, TABLE,
                        IRON_SLAB, IRON_STAIRS, IRON_WALL, MAHOGANY, MAHOGANY_STAIRS, PIPES, SMOKE, TREAD, TREAD_SLAB, VERD, W,
                        chimney, fbm, hash01, hash3, is_air, lantern_post, railing, smoke)
 from ..parts import LOOT, MOD
@@ -844,6 +844,64 @@ def scavenger_camp(bp):
     bp.set(cx + 3, y, cz - 2, "crafting_table")
 
 
+def dressing(bp):
+    """Light and clutter for the decks (the first in-game shots were dim, bare halls)."""
+    # hold: amber lamps flush in the ceiling, cargo chains with lanterns hanging between the pillar rows
+    for z in range(-26, 27, 6):
+        for x in (-13, -4, 4, 13):
+            if bp.get(x, ENGINE - 1, z) not in (None, "air") and bp.get(x, ENGINE - 2, z) in (None, "air"):
+                bp.set(x, ENGINE - 1, z, EDISON)
+    for (x, z) in ((-4, -16), (4, -8), (-4, 8), (4, 16), (-14, -24), (14, 0), (-14, 20)):
+        bp.set(x, ENGINE - 2, z, "chain[axis=y]")
+        bp.set(x, ENGINE - 3, z, "lantern[hanging=true]")
+    # loose crates and coal sacks in the lanes
+    for (x, z) in ((-6, -22), (6, -14), (-6, 2), (6, 18), (-15, -4), (15, 8)):
+        bp.set(x, HOLD, z, "spruce_planks")
+        bp.set(x, HOLD + 1, z, "spruce_trapdoor[facing=north,half=bottom,open=false]")
+    for (x, z) in ((-5, -10), (5, 6), (-16, 14)):
+        bp.set(x, HOLD, z, "coal_block")
+    # engine room: more lamps over the catwalk and the furnace glow
+    for z in range(-15, 14, 5):
+        for x in (-8, 8):
+            if bp.get(x, GUN - 2, z) in (None, "air"):
+                bp.set(x, GUN - 2, z, HANG_LAMP)
+    # gun deck: a red runner down the centre, chart tables, shot racks, more lamps
+    for z in range(-26, 13):
+        for x in (-1, 0, 1):
+            if bp.get(x, GUN, z) in (None, "air") and bp.get(x, GUN - 1, z) not in (None, "air"):
+                bp.set(x, GUN, z, "red_carpet" if x == 0 else "black_carpet")
+    for z in (-18, -2):
+        for x in (-4, 4):
+            bp.set(x, GUN, z, TABLE)
+            bp.set(x, GUN + 1, z, "lantern")
+    for z in range(-20, 21, 8):
+        for s in (-1, 1):
+            w = int(hull_w(GUN + 1, z))
+            x = s * (w - 7)
+            for dz in (-3, 3):
+                if bp.get(x, GUN, z + dz) in (None, "air"):
+                    bp.set(x, GUN, z + dz, "coal_block")
+    for z in range(-20, 24, 7):
+        for x in (-14, 14):
+            if bp.get(x, DECK - 2, z) in (None, "air"):
+                bp.set(x, DECK - 2, z, HANG_LAMP)
+    # cockpit: the pilots' console under the eyes, two seats, levers and gauges
+    zc = HEAD_Z + 3
+    for x in range(-6, 7):
+        if bp.get(x, GUN, zc) in (None, "air"):
+            bp.set(x, GUN, zc, IRON)
+            bp.set(x, GUN + 1, zc, GAUGE if x % 3 == 0 else (BRASS_SLAB if x % 3 == 1 else
+                                                            "lever[face=floor,facing=south,powered=false]"))
+    for x in (-3, 3):
+        bp.set(x, GUN, zc + 2, stair(MAHOGANY_STAIRS, "south"))
+    bp.set(0, GUN, zc + 1, MAHOGANY)
+    bp.set(0, GUN + 1, zc + 1, GEAR)
+    for x in (-6, 6):
+        for y in range(GUN, GUN + 4):
+            if bp.get(x, y, zc + 4) in (None, "air"):
+                bp.set(x, y, zc + 4, PIPES)
+
+
 def walking_fortress(bp):
     crater(bp)
     hull(bp)
@@ -862,6 +920,7 @@ def walking_fortress(bp):
     companionway(bp)
     bridge_tower(bp)
     arena(bp)
+    dressing(bp)
     fallen_stack(bp)
     rubble(bp)
     scavenger_camp(bp)

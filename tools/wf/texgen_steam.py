@@ -46,8 +46,12 @@ def _rivet(cv, x, y, base):
 
 
 def riveted_plate(base, seed=0, patina=None, patina_amount=0.0):
-    """Two plates with a seam, rivets along the edges; optional verdigris patches."""
+    """Two plates with a seam, rivets along the edges; optional verdigris patches. A patina_amount of 0.6 or more
+    is a fully weathered plate: the verdigris is the surface and the copper only shows on the rivets."""
     rng = random.Random(seed)
+    copper = base
+    if patina and patina_amount >= 0.6:
+        base = mix(base, patina, 0.78)
     cv = _base(base, seed, 0.035)
     # brushed streaks
     for y in range(16):
@@ -67,6 +71,13 @@ def riveted_plate(base, seed=0, patina=None, patina_amount=0.0):
             for dx, dy in ((0, 0), (1, 0), (0, 1)):
                 if 0 <= x + dx < 16 and 0 <= y + dy < 16 and rng.random() < 0.8:
                     cv.set(x + dx, y + dy, mix(cv.get(x + dx, y + dy), patina, 0.55 + rng.uniform(0, 0.3)))
+        if patina_amount >= 0.6:
+            # copper rubbed bright on the rivet heads, darker patina pooled under them
+            for x in (2, 6, 10, 13):
+                for y in (2, 11):
+                    cv.set(x, y, mul(copper, 1.35))
+                    if y + 2 < 16:
+                        cv.set(x, y + 2, mul(patina, 0.7))
     return cv
 
 
