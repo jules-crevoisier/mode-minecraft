@@ -615,15 +615,27 @@ public final class CiDriver {
                     List<String> c = new ArrayList<>();
                     // a block to clear, so the fill always changes something (an all-air fill is an error)
                     c.add("setblock " + at(0, 1, 4) + " minecraft:stone");
-                    c.add("fill " + at(-9, 1, 3) + " " + at(9, 4, 6) + " minecraft:air");
+                    c.add("fill " + at(-16, 1, 3) + " " + at(16, 7, 6) + " minecraft:air");
+                    // two floating rows of stands, 1.7 apart, so each model stays big enough to read
+                    int perRow = (held.length + 1) / 2;
+                    double back = Math.max(8.5, perRow * 1.7 / 2.2);
                     for (int i = 0; i < held.length; i++) {
-                        c.add("summon minecraft:armor_stand " + (bx - held.length + 1 + i * 2 + 0.5) + " " + (STAGE_Y + 1) + " " + (bz + 4.5)
+                        int row = i / perRow;
+                        int inRow = Math.min(perRow, held.length - row * perRow);
+                        double x = bx + 0.5 + ((i % perRow) - (inRow - 1) / 2.0) * 1.7;
+                        double y = STAGE_Y + 1 + (1 - row) * 2.7;
+                        c.add("summon minecraft:armor_stand " + x + " " + y + " " + (bz + 4.5)
                                 + " {ShowArms:1b,NoBasePlate:1b,NoGravity:1b,Invulnerable:1b,Rotation:[180f,0f],"
                                 + "Pose:{RightArm:[-40f,0f,0f]},equipment:{mainhand:{id:\"brasshaven:" + held[i] + "\",count:1}}}");
                     }
                     c.add("time set noon");
-                    c.add("tp @s " + (bx + 0.5) + " " + (STAGE_Y + 2.2) + " " + (bz + 3.5 - held.length * 1.1) + " facing "
-                            + (bx + 0.5) + " " + (STAGE_Y + 2) + " " + (bz + 4.5));
+                    // something to stand on (fly does nothing outside creative, and the stage may not exist yet)
+                    c.add("gamemode creative");
+                    c.add("setblock " + (int) Math.floor(bx + 0.5) + " " + STAGE_Y + " " + (int) Math.floor(bz + 4.5 - back)
+                            + " minecraft:barrier");
+                    // tp facing aims from the feet: aim 1.62 below the stands' middle so the eyes look at it
+                    c.add("tp @s " + (bx + 0.5) + " " + (STAGE_Y + 1) + " " + (bz + 4.5 - back) + " facing "
+                            + (bx + 0.5) + " " + (STAGE_Y + 3.2 - 1.62) + " " + (bz + 4.5));
                     return c;
                 })
                 .run("fly", CiDriver::fly)
@@ -633,7 +645,7 @@ public final class CiDriver {
                         mc.gui.hud.toggle();
                     }
                 })
-                .waitTicks(100) // the stage is 140 blocks above the inventory scene: let its chunks compile
+                .waitTicks(200) // the stage may be the first thing the client sees, or 140 blocks above the inventory scene: let its chunks load and compile
                 .shot("held_items");
 
         String still = "{NoAI:1b,PersistenceRequired:1b,Rotation:[180f,0f]}";
@@ -1192,7 +1204,8 @@ public final class CiDriver {
         double eye = aim + d * 0.18; // a little above, looking slightly down
         double feet = Math.max(STAGE_Y + 1, eye - 1.62);
         LOGGER.info(TAG + "{} box {}x{}: camera {} blocks away", name, w, h, String.format("%.1f", d));
-        return new double[] {d, feet, aim};
+        // tp ... facing turns the player from its feet, not its eyes: shift the aim down by the eye height
+        return new double[] {d, feet, aim - 1.62};
     }
 
     /**
