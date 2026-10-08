@@ -748,12 +748,23 @@ public final class CiDriver {
         // the whole tour, then only "setup" and the named steps (a step that needs an earlier one names it too)
         buildSteps();
         STEPS.removeIf(s -> !s.name.equals("setup") && !stepNames.contains(s.name));
+        // clean pictures: no HUD, no hand
+        step("focus_view").run("hide the HUD", () -> {
+            // the F1 flag, by reflection: its field moved between versions, and a missing one only costs the HUD
+            try {
+                Field f = Minecraft.getInstance().options.getClass().getField("hideGui");
+                f.setBoolean(Minecraft.getInstance().options, true);
+            } catch (ReflectiveOperationException e) {
+                LOGGER.warn(TAG + "could not hide the HUD: {}", e.toString());
+            }
+        });
         int index = 0;
+        int creatures = 0;
         for (String item : items) {
             if (item.startsWith("structure:")) {
                 structureSteps(item.substring(10), index++);
             } else if (item.startsWith("entity:")) {
-                entitySteps(item.substring(7));
+                entitySteps(item.substring(7), creatures++);
             } else {
                 step("focus_unknown").run("parse", () -> {
                     throw new IllegalArgumentException("unknown focus item '" + item
@@ -815,24 +826,25 @@ public final class CiDriver {
         return new double[] {(b[0] + b[3]) / 2.0, b[1] + (b[4] - b[1]) * 0.35, (b[2] + b[5]) / 2.0};
     }
 
-    /** A creature or boss on a bare platform of the sky stage, frozen, shot from the front and the side. */
-    private static void entitySteps(String id) {
+    /** A creature or boss on its own bare platform in the sky, frozen, shot from the front and the side. */
+    private static void entitySteps(String id, int index) {
         String name = id.contains(":") ? id : Brasshaven.MODID + ":" + id;
         String shortName = name.substring(name.indexOf(':') + 1);
+        int oz = 40 + index * 48; // a fresh patch of sky for each one, so the platform fill always changes blocks
         double ex = bx + 0.5;
-        double ez = bz + 14.5;
+        double ez = bz + oz + 10.5;
         step("entity_" + shortName)
-                .cmd(() -> List.of(
-                        "kill @e[type=!minecraft:player,distance=..96]",
-                        "fill " + at(-16, 1, -6) + " " + at(16, 20, 30) + " minecraft:air",
-                        "fill " + at(-16, 0, -6) + " " + at(16, 0, 30) + " minecraft:polished_andesite",
-                        "summon " + name + " " + ex + " " + (STAGE_Y + 1) + " " + ez
-                                + " {NoAI:1b,PersistenceRequired:1b,Rotation:[180f,0f]}",
-                        "tp @s " + ex + " " + (STAGE_Y + 4) + " " + (bz - 4.5) + " facing " + ex + " " + (STAGE_Y + 2.5) + " " + ez))
+                .cmd(() -> List.of("tp @s " + ex + " " + (STAGE_Y + 4) + " " + (bz + oz - 0.5) + " facing "
+                        + ex + " " + (STAGE_Y + 2.5) + " " + ez))
                 .run("fly", CiDriver::fly)
+                .waitTicks(40)
+                .cmd(() -> List.of(
+                        "fill " + at(-12, 0, oz - 4) + " " + at(12, 0, oz + 22) + " minecraft:polished_andesite",
+                        "summon " + name + " " + ex + " " + (STAGE_Y + 1) + " " + ez
+                                + " {NoAI:1b,PersistenceRequired:1b,Rotation:[180f,0f]}"))
                 .waitTicks(80)
                 .shot("entity_" + shortName + "_front")
-                .cmd(() -> List.of("tp @s " + (bx + 16.5) + " " + (STAGE_Y + 4) + " " + ez
+                .cmd(() -> List.of("tp @s " + (bx + 11.5) + " " + (STAGE_Y + 4) + " " + ez
                         + " facing " + ex + " " + (STAGE_Y + 2.5) + " " + ez))
                 .run("fly", CiDriver::fly)
                 .waitTicks(40)
