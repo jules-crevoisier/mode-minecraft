@@ -45,8 +45,8 @@ from ..defs import Piece, StructureDef, register
 from ..megakit import fbm, hash01, hash3
 from ..parts import LOOT, MOD
 
-# placeholder boss until the stilt-city gets its own: the Swamp Crone holds court in the witch-queen's hall
-BOSS = "brasshaven:swamp_crone"
+# the Bog Hierophant holds court in the witch-queen's hall (entity/boss/BogHierophant.java, tools/BOSSES.md)
+BOSS = "brasshaven:bog_hierophant"
 MOB_DROWNED = "minecraft:drowned"
 MOB_BOGGED = "minecraft:bogged"
 MOB_WITCH = "minecraft:witch"
@@ -737,6 +737,7 @@ def gate(S):
     # guards in the court
     bp.spawner(-7, L1, 67, MOB_BOGGED)
     bp.spawner(7, L1, 74, MOB_DROWNED)
+    bp.spawner(0, L1, 70, "brasshaven:bog_leech_man")
     for (x, z) in ((-8, 75), (8, 66)):
         S.set(x, L1, z, "spruce_fence")
         S.set(x, L1 + 1, z, LANT)
@@ -1606,6 +1607,7 @@ def undercroft(S):
         S.walk[(x, z)] = []
     bp.spawner(-57, f, 9, MOB_DROWNED)
     bp.spawner(-62, f, 17, MOB_BOGGED)
+    bp.spawner(-54, f, 14, "brasshaven:bog_leech_man")
     # the ossuary niche (east): the undercroft chest
     for z in range(6, 14):
         S.set(-44, f + 1, z, "bone_block[axis=y]" if z % 2 else "skeleton_skull[rotation=4]")
@@ -1760,5 +1762,6 @@ register(StructureDef(
     "mire_stilt_city", "overworld", ["swamp", "mangrove_swamp"],
     [Piece("city", mire_stilt_city, views=VIEWS)],
     spacing=80, separation=32, adaptation="none", processors="none", max_distance=128, foundation=False,
-    spawns=[("minecraft:drowned", 5, 1, 2), ("minecraft:bogged", 3, 1, 2), ("minecraft:witch", 1, 1, 1)],
+    spawns=[("minecraft:drowned", 5, 1, 2), ("minecraft:bogged", 3, 1, 2), ("minecraft:witch", 1, 1, 1),
+            ("brasshaven:bog_leech_man", 4, 1, 2)],
     title_fr="La Cité des pilotis", title_en="Mire Stilt-City"))

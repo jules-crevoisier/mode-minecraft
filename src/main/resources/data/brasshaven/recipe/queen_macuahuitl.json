@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    " M ",
+    "MRM",
+    "DMD"
+  ],
+  "key": {
+    "M": "brasshaven:map_fragment",
+    "R": "brasshaven:remembrance_strangler_queen",
+    "D": "minecraft:diamond"
+  },
+  "result": {
+    "id": "brasshaven:queen_macuahuitl",
+    "count": 1
+  }
+}

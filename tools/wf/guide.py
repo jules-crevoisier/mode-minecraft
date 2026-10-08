@@ -595,6 +595,26 @@ PAGES = [
          "rebord, l'ossuaire (lieu de grâce), le reliquaire. Au fond, un lac, l'arène sur son île et le caveau ; des "
          "ascenseurs à bulles te remontent."),
     ], []),
+    ("dreadnought_wreck", "wonders", "brasshaven:dark_iron_plating",
+     ("The Leviathan Dreadnought Wreck", "L'Épave du cuirassé Léviathan"), [
+        ("A 180-block brass-and-iron steam ironclad lies aground on an ocean reef, broken in two: the bow tilted "
+         "and half-drowned, the stern upright with its bridge tower, tripod mast, three funnels (one toppled) and "
+         "four great turrets. Where: deep and warm oceans.",
+         "Un cuirassé à vapeur de laiton et de fer de 180 blocs gît sur un récif, brisé en deux : la proue inclinée "
+         "et à demi noyée, la poupe droite avec sa passerelle, son mât tripode, trois cheminées (dont une couchée) "
+         "et quatre grandes tourelles. Où : océans profonds et chauds."),
+        ("From the castaways' camp on the reef islet (waystone), cross the plank bridge over the breach. Enter "
+         "the stern through the hull breach: crew quarters, officers' mess, the magazine and its hoist. Climb "
+         "through the engine room (site of grace) and the upper-deck cabins (site of grace) to the captain's "
+         "cabin; the drowned torpedo deck waits in the bow. Past the mist, the boiler hall is the boss arena; "
+         "behind sealed bars, the strongroom, and the ammunition hoist ladder whose iron door leads back to the deck.",
+         "Depuis le campement des naufragés sur l'îlot (pierre de passage), franchis la brèche par la passerelle de "
+         "planches. On entre dans la poupe par la déchirure de la coque : poste d'équipage, carré des officiers, "
+         "soute à munitions et son monte-charge. On traverse la salle des machines (lieu de grâce) et les cabines "
+         "du pont supérieur (lieu de grâce) jusqu'à la cabine du capitaine ; le pont des torpilles noyé attend "
+         "dans la proue. Passé la brume, la chaufferie est l'arène du boss ; derrière des barreaux scellés, la "
+         "chambre forte, et l'échelle du monte-charge dont la porte de fer ramène au pont."),
+    ], []),
     ("great_aqueduct", "wonders", "minecraft:cut_sandstone", ("The Great Aqueduct", "Le Grand Aqueduc"), [
         ("A 240-block sandstone aqueduct crosses a river valley on three tiers of arches (12, 8 and 4 wide), "
          "the water channel on top and a castellum on the eastern ridge. Where: plains, meadows, savannas.",
@@ -609,6 +629,23 @@ PAGES = [
          "d'entretien des piles (salle des lampes : lieu de grâce) jusqu'au castellum. Un escalier descend à "
          "l'antichambre et à l'arène de la grande citerne ; derrière des barreaux scellés, le caveau, et un tunnel "
          "de vidange qui ramène à la vallée."),
+    ], []),
+    ("sun_ziggurat", "wonders", "minecraft:sunflower", ("Sun-Engine Ziggurat", "La Ziggourat du Moteur solaire"), [
+        ("A seven-stepped sandstone pyramid 140 blocks wide, crowned by a colossal brass orrery whose amber "
+         "sun-lens focuses daylight down a shaft through the core. Where: open desert.",
+         "Une pyramide de grès à sept degrés, large de 140 blocs, couronnée d'un colossal planétaire de laiton dont "
+         "la lentille d'ambre concentre le jour dans un puits au cœur. Où : désert ouvert."),
+        ("From the waystone camp, an avenue of sphinxes leads to the processional ramp and the pylon gate. The "
+         "hypostyle hall of 25 columns is a site of grace; the sand-flooded lower halls lie below. Climb through "
+         "the astronomer-priests' quarter and the terraces to the lens-calibration chamber, pass the sealed tomb "
+         "gallery, and descend the annex to the antechamber (site of grace). Through the mist, the sun chamber "
+         "under the lens is the arena; behind sealed bars, the vault and a lift down the core back to the halls.",
+         "Depuis le campement et sa pierre, une allée de sphinx mène à la rampe processionnelle et au pylône. La "
+         "salle hypostyle de 25 colonnes est un lieu de grâce ; les salles basses ensablées sont dessous. On monte "
+         "par le quartier des prêtres-astronomes et les terrasses jusqu'à la chambre de calibrage de la lentille, "
+         "on passe la galerie des tombeaux scellés et l'on descend l'annexe jusqu'à l'antichambre (lieu de grâce). "
+         "Passé la brume, la chambre du soleil sous la lentille est l'arène ; derrière des barreaux scellés, le "
+         "caveau et un ascenseur qui redescend par le cœur jusqu'aux salles basses."),
     ], []),
     ("kneeling_gate", "wonders", "minecraft:bell", ("Kneeling Gate", "La Porte agenouillée"), [
         ("Two 70-block stone knights kneel across a mountain pass, a stone lintel held between their gauntlets "
@@ -661,6 +698,27 @@ PAGES = [
          "dans le lac), puis l'escalier du jarl monte dans la corne jusqu'au lieu de grâce et à l'arène. Au-delà : "
          "le caveau, et le Saut du jarl, 47 blocs de chute dans la source que la rivière de fonte emporte jusqu'à "
          "une grotte de glace au front du glacier."),
+    ], []),
+    ("canopy_city", "wonders", "minecraft:jungle_log", ("Canopy Temple-City", "La Cité-temple de la canopée"), [
+        ("A lost city 220 blocks across: a 66-high stepped temple strangled by roots, ringed by five colossal hollow "
+         "trunks whose platform districts are joined by rope bridges and brass zip-lines. Where: jungles.",
+         "Une cité perdue de 220 blocs : un temple à degrés de 66 blocs étranglé par les racines, entouré de cinq "
+         "troncs colossaux et creux dont les quartiers sont reliés par des ponts de corde et des tyroliennes de "
+         "laiton. Où : jungles."),
+        ("From the explorers' camp and its waystone, climb the trunks' spiral stairs to the market (site of grace) "
+         "and the high ward, and cross to the temple's upper terrace. Inside, descend through the glyph library, "
+         "the dart-trap corridor, the jade-and-gold sanctum (site of grace), the offering hall and the "
+         "root-choked crypt to the flooded cenote and its waterfall; its spiral ledge climbs back to a site of "
+         "grace (iron door to the library) and the summit stair. Through the mist, the arena under the broken brass sun-disc; behind sealed bars, the "
+         "vault. A one-way iron door leads to the east trunk, whose brass elevator is the shortcut down.",
+         "Depuis le campement et sa pierre, on monte par les escaliers en spirale des troncs jusqu'au marché (lieu "
+         "de grâce) et au quartier haut, puis on passe sur la terrasse supérieure du temple. Dedans, on descend "
+         "par la bibliothèque des glyphes, le couloir des fléchettes, le sanctuaire de jade et d'or (lieu de "
+         "grâce), la salle des offrandes et la crypte envahie de racines jusqu'au cénote noyé et à sa cascade ; sa "
+         "corniche en spirale remonte à un lieu de grâce (porte de fer vers la bibliothèque) et à l'escalier du "
+         "sommet. Passé la brume, l'arène sous le disque "
+         "solaire de laiton brisé ; derrière des barreaux scellés, le caveau. Une porte de fer à sens unique mène "
+         "au tronc est, dont l'ascenseur de laiton est le raccourci vers le sol."),
     ], []),
     ("mire_stilt_city", "wonders", "minecraft:mangrove_roots", ("Mire Stilt-City", "La Cité des pilotis"), [
         ("A timber town on piles over a mangrove swamp, 200 blocks across: boardwalks on three levels, rope "
@@ -915,6 +973,252 @@ PAGES = [
          "right-click sends a breaking wave ahead that sweeps foes along.",
          "Son Souvenir, quatre fragments de carte et deux diamants forgent la Crosse de l'Abbesse noyée, dont le clic "
          "droit lance une vague qui emporte les ennemis."),
+    ], []),
+    ("abyssal_architect", "wonders", "brasshaven:remembrance_abyssal_architect", ("The Abyssal Architect",
+                                                                                  "L'Architecte de l'abîme"), [
+        ("At the bottom of the Inverted Spire, on the island in the underground lake, the builder of the spire hangs "
+         "from chains under its point and drops onto the island when you come (600 health, armour 12): a gaunt, "
+         "four-armed priest in a slate cassock, a limestone mask with three soul-blue slits, a plumb-bob flail in one "
+         "hand and a compass-blade in another.",
+         "Au fond de la Flèche renversée, sur l'île du lac souterrain, le bâtisseur de la flèche pend à des chaînes "
+         "sous sa pointe et se laisse tomber sur l'île à ton arrivée (600 PV, armure 12) : un prêtre décharné à "
+         "quatre bras en soutane d'ardoise, un masque de calcaire fendu de trois fentes bleu d'âme, un fléau à fil à "
+         "plomb dans une main et une lame-compas dans une autre."),
+        ("His flail circles out to 8 blocks: hug him, the chalk ring at his feet is safe. The plumb-bob is hurled "
+         "down a chalk line and reeled back along it (step off the line), stones fall from the vault on marks that "
+         "follow you and leave rubble for a few seconds, and he swings across the arena on a chain to land on a "
+         "ring.",
+         "Son fléau tournoie jusqu'à 8 blocs : colle-toi à lui, l'anneau de craie à ses pieds est sûr. Le plomb est "
+         "lancé le long d'une ligne de craie puis ramené le long de celle-ci (quitte la ligne), des pierres tombent de "
+         "la voûte sur des marques qui te suivent et laissent des gravats quelques secondes, et il traverse l'arène "
+         "pendu à une chaîne pour retomber sur un anneau."),
+    ], ["brasshaven:remembrance_abyssal_architect", "brasshaven:architect_plumb"]),
+    ("abyssal_architect_unmoored", "wonders", "minecraft:iron_chain", ("Architect: the Unmooring", "Architecte : le Désamarrage"), [
+        ("At 65% he scribes a circle round his compass (outer ring first, then the inner disc), snuffs his lantern "
+         "to blind everyone for 3 s (listen for his echoing steps and watch for soul-blue footprints, then roll when "
+         "the blade snicks open) and drops a checkerboard of the vault in two halves. At 30% the island breaks up: "
+         "tiles marked by cracks crumble into the lake for 5 s and rise again, and every 15 s he swings round the "
+         "arena on the ceiling chains and dives three times. The island is whole again when he falls.",
+         "À 65 %, il trace un cercle autour de son compas (l'anneau extérieur, puis le disque intérieur), souffle sa "
+         "lanterne pour aveugler tout le monde 3 s (écoute ses pas qui résonnent, guette les empreintes bleu d'âme, "
+         "puis roule quand la lame s'ouvre) et fait tomber un damier de la voûte en deux moitiés. À 30 %, l'île se "
+         "disloque : les dalles marquées de fissures s'effondrent dans le lac 5 s puis remontent, et toutes les 15 s "
+         "il tourne autour de l'arène pendu aux chaînes du plafond et plonge trois fois. L'île redevient entière à sa "
+         "chute."),
+        ("His Remembrance, four Map Fragments and two diamonds forge the Plumb of the Abyssal Architect, whose "
+         "right-click lets the plumb-bob fall on the spot you aim at, crushing and pinning foes.",
+         "Son Souvenir, quatre fragments de carte et deux diamants forgent le Fil à plomb de l'Architecte de l'abîme, "
+         "dont le clic droit laisse tomber le plomb sur le point visé, écrasant et clouant les ennemis."),
+    ], []),
+    ("lock_master", "wonders", "brasshaven:remembrance_lock_master", ("The Lock-Master", "Le Maître des écluses"), [
+        ("Down the stair under the Great Aqueduct's castellum, in the great cistern under its dome of columns, the "
+         "Lock-Master waits (600 health, armour 14): a hulking hydraulic warden in riveted brass, a whole sluice gate "
+         "on his left arm and a pressure-lance longer than he is tall in his right.",
+         "En bas de l'escalier sous le castellum du Grand Aqueduc, dans la grande citerne sous sa coupole à colonnes, "
+         "attend le Maître des écluses (600 PV, armure 14) : un gardien hydraulique massif en laiton riveté, une "
+         "vanne entière au bras gauche et une lance à pression plus longue que lui dans la droite."),
+        ("His lance thrusts reach 9 blocks; anyone who lingers behind him gets the spin. When he walks behind his "
+         "gate it blocks every frontal hit: break it with a heavy blow or strike his back, and he reels open. His "
+         "jets sweep in front of him (hide behind a column), and gates of iron bars drop from the dome on the tiles "
+         "marked in brass round every player.",
+         "Ses coups de lance portent à 9 blocs ; qui s'attarde dans son dos prend le moulinet. Quand il avance "
+         "derrière sa vanne, elle pare tout coup de face : brise-la d'un coup lourd ou frappe-le dans le dos, et il "
+         "chancelle, ouvert. Ses jets balaient devant lui (cache-toi derrière une colonne), et des grilles de fer "
+         "tombent de la coupole sur les dalles marquées de laiton autour de chaque joueur."),
+    ], ["brasshaven:remembrance_lock_master", "brasshaven:pressure_lance"]),
+    ("lock_master_flush", "wonders", "minecraft:piston", ("Lock-Master: the Flush", "Maître des écluses : la Chasse d'eau"), [
+        ("At 65% his jets sweep there and back, he thrusts three times, rams down a line (bait him into a gate: he "
+         "reels) and slams steam round him. At 30% he opens the sluices: a current sweeps the floor (the lee of a "
+         "column or a gate shelters you) while he charges four times down the arena, again every 22 s.",
+         "À 65 %, ses jets balaient aller et retour, il frappe trois fois d'estoc, fonce le long d'une ligne (attire-le "
+         "contre une grille : il chancelle) et fait jaillir la vapeur autour de lui. À 30 %, il ouvre les vannes : un "
+         "courant balaie le sol (l'abri d'une colonne ou d'une grille te protège) pendant qu'il charge quatre fois à "
+         "travers l'arène, puis toutes les 22 s."),
+        ("His Remembrance, four Map Fragments and two diamonds forge the Pressure-Lance of the Lock-Master, whose "
+         "right-click shoots a jet of water that hurls foes to its far end.",
+         "Son Souvenir, quatre fragments de carte et deux diamants forgent la Lance à pression du Maître des écluses, "
+         "dont le clic droit tire un jet d'eau qui projette les ennemis au bout."),
+    ], []),
+    ("turbine_tyrant", "wonders", "brasshaven:remembrance_turbine_tyrant", ("The Turbine Tyrant", "Le Tyran des turbines"), [
+        ("Past Generator Hall II at the foot of the Dam of the Drowned Valley, in the main turbine chamber, the dam's "
+         "engineer waits (600 health, armour 14), fused into his turbine: a walking scroll-case on hydraulic legs, a "
+         "turbine rotor for a right arm and a valve-wrench as long as a man in his left fist.",
+         "Au-delà de la salle des générateurs II, au pied du Barrage de la vallée engloutie, dans la grande salle des "
+         "turbines, attend l'ingénieur du barrage (600 PV, armure 14), soudé à sa turbine : une volute qui marche sur "
+         "des jambes hydrauliques, un rotor de turbine pour bras droit et une clé à vanne grande comme un homme dans "
+         "le poing gauche."),
+        ("Hear the rotor whine before it sweeps; step off the line his wrench marks, the crack runs on and blows any "
+         "grate it crosses. When he cranks his valve, get off the hissing copper grates. When he swells and the gauges "
+         "climb, break his line of sight: a pillar or a generator in its alcove, or simply get out of range. Only "
+         "those he can see take the blast.",
+         "Écoute le rotor siffler avant le balayage ; écarte-toi de la ligne que marque sa clé, la fissure court et "
+         "fait sauter les grilles qu'elle croise. Quand il tourne sa vanne, quitte les grilles de cuivre qui sifflent. "
+         "Quand il gonfle et que les manomètres montent, coupe sa ligne de vue : un pilier, un générateur dans son "
+         "alcôve, ou sors de sa portée. Seuls ceux qu'il voit prennent l'explosion."),
+    ], ["brasshaven:remembrance_turbine_tyrant", "brasshaven:tyrant_wrench"]),
+    ("turbine_tyrant_overload", "wonders", "minecraft:redstone_block", ("Tyrant: the Overload", "Tyran : la Surchauffe"), [
+        ("At 65% he combos rotor, wrench and rotor, draws everyone in with his spinning rotor before he whirls, blows "
+         "the grates one after another round the chamber, and his blast reaches 19 blocks. At 30% he kneels and "
+         "overloads: faster, the grates blow on their own, and every 11 s he dashes across the chamber through three "
+         "marks, leaving sparks that burn.",
+         "À 65 %, il enchaîne rotor, clé et rotor, aspire tout le monde avec son rotor avant de tournoyer, fait sauter "
+         "les grilles l'une après l'autre autour de la salle, et son explosion porte à 19 blocs. À 30 %, il "
+         "s'agenouille et surchauffe : plus rapide, les grilles sautent d'elles-mêmes, et toutes les 11 s il fonce à "
+         "travers la salle par trois marques en laissant des étincelles qui brûlent."),
+        ("His Remembrance, four Map Fragments and two diamonds forge the Valve-Wrench of the Turbine Tyrant, whose "
+         "right-click vents a blast of steam at every foe you can see around you.",
+         "Son Souvenir, quatre fragments de carte et deux diamants forgent la Clé à vanne du Tyran des turbines, dont "
+         "le clic droit lâche un jet de vapeur sur tous les ennemis que tu vois autour de toi."),
+    ], []),
+    ("bog_hierophant", "wonders", "brasshaven:remembrance_bog_hierophant", ("The Bog Hierophant", "Le Hiérophante des tourbières"), [
+        ("At the top of the Mire Stilt-City, up the grand stair from the High Walk, the rotting bishop holds court in the "
+         "witch-queen's hall (600 health, armour 12): a hunched prelate on two stilt legs bound in mangrove roots, a "
+         "mantle of living moss, a crooked mitre, a lantern-crozier of black wood and a cloud of marsh-flies.",
+         "Au sommet de la Cité des pilotis, en haut du grand escalier depuis la Haute Promenade, l'évêque pourrissant "
+         "tient sa cour dans la salle de la reine-sorcière (600 PV, armure 12) : un prélat voûté sur deux jambes "
+         "d'échassier liées de racines, un manteau de mousse vivante, une mitre de travers, une crosse-lanterne de bois "
+         "noir et un nuage de mouches des marais."),
+        ("He sweeps with the crozier, slams the lantern down a line, strides through you on his long legs and stamps "
+         "if you hug him. His lantern marks you: 2.5 s later a poison bloom bursts where you stand, so step away from "
+         "your friends. He opens circles of real mud that slow, then root you: get out within a second. Leeches drop "
+         "off his robe every half minute.",
+         "Il balaie de sa crosse, abat la lanterne le long d'une ligne, te traverse sur ses longues jambes et piétine "
+         "si tu restes collé. Sa lanterne te marque : 2,5 s plus tard une floraison de poison éclate où tu te tiens, "
+         "éloigne-toi des autres. Il ouvre des cercles de vraie boue qui ralentissent puis retiennent : sors-en en "
+         "moins d'une seconde. Des sangsues tombent de sa robe toutes les trente secondes."),
+    ], ["brasshaven:remembrance_bog_hierophant", "brasshaven:hierophant_crozier"]),
+    ("bog_hierophant_fire", "wonders", "minecraft:lantern", ("Hierophant: the Swamp Fire", "Hiérophante : le Feu des marais"), [
+        ("At 65% eight lanterns kindle round the hall and he burns away into a will-o'-wisp that flits from lantern to "
+         "lantern, then rises behind you: a ring and a chime mark the spot, turn round and step aside. A swarm of "
+         "marsh-flies hunts you. At 30% the swamp gas ignites: every 11 s lines of fire roll across the hall, too tall "
+         "to jump, so cross through the gaps; afterwards he is spent and takes more damage.",
+         "À 65 %, huit lanternes s'allument autour de la salle et il se consume en feu follet qui saute de lanterne en "
+         "lanterne, puis se relève derrière toi : un cercle et un tintement marquent l'endroit, retourne-toi et "
+         "écarte-toi. Un essaim de mouches te poursuit. À 30 %, le gaz des marais s'embrase : toutes les 11 s, des "
+         "lignes de feu roulent à travers la salle, trop hautes pour être sautées, passe par les brèches ; ensuite il "
+         "est épuisé et encaisse davantage."),
+        ("His Remembrance, four Map Fragments and two diamonds forge the Lantern-Crozier of the Bog Hierophant, whose "
+         "right-click opens a sinking bog where you look that drags foes in, holds them fast and poisons them.",
+         "Son Souvenir, quatre fragments de carte et deux diamants forgent la Crosse-lanterne du Hiérophante, dont le "
+         "clic droit ouvre une tourbière là où tu regardes : elle attire les ennemis, les retient et les empoisonne."),
+    ], []),
+    ("strangler_queen", "wonders", "brasshaven:remembrance_strangler_queen", ("The Strangler Fig Queen", "La Reine-figuier étrangleur"), [
+        ("On the summit terrace of the Canopy Temple-City, through the mist under the broken brass sun-disc, the fig "
+         "that strangled the temple has crowned itself (620 health, armour 12): a towering woman of woven roots and "
+         "jade, an orchid crown, a jade mask with golden eyes, a thorned root-whip for a left arm and a jade "
+         "macuahuitl in her right hand.",
+         "Sur la terrasse au sommet de la Cité-temple de la canopée, passé la brume, sous le disque solaire de laiton "
+         "brisé, le figuier qui a étranglé le temple s'est couronné (620 PV, armure 12) : une femme immense de racines "
+         "tressées et de jade, une couronne d'orchidées, un masque de jade aux yeux d'or, un fouet de racine épineux "
+         "pour bras gauche et un macuahuitl de jade dans la main droite."),
+        ("Her whip lashes 11 blocks down a green line and drags you in; her macuahuitl cuts twice in front of her. "
+         "Roots burst from the floor in lines (stand between them) and in rings that roll outward (jump them). Her "
+         "pollen clouds slow you more and more, then blind you: leave them. She swings on a vine to whoever runs "
+         "away, and thorns burst round her if you hug her. Near the terrace edge her blows never throw you over.",
+         "Son fouet claque à 11 blocs le long d'une ligne verte et te ramène ; son macuahuitl taille deux fois devant "
+         "elle. Des racines jaillissent du sol en lignes (place-toi entre elles) et en anneaux qui s'élargissent "
+         "(saute-les). Ses nuages de pollen te ralentissent de plus en plus puis t'aveuglent : sors-en. Elle se "
+         "balance sur une liane jusqu'à qui s'enfuit, et des épines jaillissent si tu restes collé. Près du bord de "
+         "la terrasse, ses coups ne te jettent jamais dans le vide."),
+    ], ["brasshaven:remembrance_strangler_queen", "brasshaven:queen_macuahuitl"]),
+    ("strangler_queen_canopy", "wonders", "minecraft:mangrove_roots", ("Queen: Canopy and Cages", "Reine : Canopée et cages"), [
+        ("At 65% she climbs into the sun-disc where you cannot reach her: jaguar spirits drop to hunt you (more in a "
+         "larger party) and seed-bombs fall on marked players, so step out of the circles. Kill every spirit and she "
+         "falls early, exposed. She plunges onto a circle that follows her target and then locks. At 30% she "
+         "blooms once, then every 12 s root cages snap shut round marked players: get out of the circle before it "
+         "closes, or break the roots from inside before she comes to harvest the cage.",
+         "À 65 %, elle grimpe dans le disque solaire, hors d'atteinte : des esprits-jaguars tombent te chasser (plus "
+         "nombreux en groupe) et des graines-bombes tombent sur les joueurs marqués, sors des cercles. Tue tous les "
+         "esprits et elle chute plus tôt, exposée. Elle s'écrase sur un cercle qui suit sa cible puis se fige. À "
+         "30 %, elle fleurit une fois, puis toutes les 12 s des cages de racines se referment sur les joueurs "
+         "marqués : sors du cercle avant qu'il se ferme, ou casse les racines de l'intérieur avant qu'elle vienne "
+         "moissonner la cage."),
+        ("Her Remembrance, four Map Fragments and two diamonds forge the Jade Macuahuitl of the Strangler Queen, whose "
+         "right-click cracks a root lash along your aim: the first foe it meets is caged where it stands and the "
+         "cage's thorns whip the foes beside it.",
+         "Son Souvenir, quatre fragments de carte et deux diamants forgent le Macuahuitl de jade de la Reine-figuier, "
+         "dont le clic droit fait claquer un fouet de racine dans ta visée : le premier ennemi touché est mis en cage "
+         "sur place et les épines de la cage fouettent ceux qui l'entourent."),
+    ], []),
+    ("solar_hierarch", "wonders", "brasshaven:remembrance_solar_hierarch", ("The Solar Hierarch", "Le Hiérarque solaire"), [
+        ("In the sun chamber under the lens of the Sun-Engine Ziggurat, past the antechamber and the mist, the last "
+         "priest of the noon keeps watch (620 health, armour 12): a tall gilded automaton in a striped headdress, a brass "
+         "sun-disc halo at his back with three little planets wheeling round it, a sun-staff in his right hand and a "
+         "mirror-shield on his left arm. When the fight starts six sandstone gnomons rise round the floor: they are your "
+         "cover, because no light of his passes through them.",
+         "Dans la chambre du soleil sous la lentille de la Ziggourat du Moteur solaire, passé l'antichambre et la brume, "
+         "le dernier prêtre du midi monte la garde (620 PV, armure 12) : un grand automate doré coiffé d'un némès rayé, "
+         "un halo-disque de laiton dans le dos où tournent trois petites planètes, un bâton solaire en main droite et un "
+         "bouclier-miroir au bras gauche. Au début du combat, six gnomons de grès se dressent autour de la salle : ce "
+         "sont tes abris, car aucune de ses lumières ne les traverse."),
+        ("His mirror guards his front against blows and throws arrows back at the archer: hit him from the side or "
+         "behind, or keep hitting the mirror until it cracks and he reels (he then takes more damage). Strike the mirror "
+         "three times quickly and he bashes you away with it. He sweeps, thrusts with fire and chains a three-hit combo "
+         "that ends in a slam. When the mirror flares, look away or stand behind a gnomon: the flash blinds.",
+         "Son miroir garde son front contre les coups et renvoie les flèches au tireur : frappe-le de côté ou de dos, "
+         "ou frappe le miroir jusqu'à ce qu'il se fende et qu'il chancelle (il encaisse alors davantage). Frappe le "
+         "miroir trois fois de suite et il te repousse d'un coup de bouclier. Il balaie, perce d'une estocade de feu et "
+         "enchaîne un combo en trois coups qui finit en frappe au sol. Quand le miroir s'embrase, détourne le regard ou "
+         "mets-toi derrière un gnomon : l'éclair aveugle."),
+    ], ["brasshaven:remembrance_solar_hierarch", "brasshaven:hierarch_sunstaff"]),
+    ("solar_hierarch_sun", "wonders", "minecraft:sunflower", ("Hierarch: Sun and Planets", "Hiérarque : Soleil et planètes"), [
+        ("He calls down the sun-lance: a beam falls down the shaft, bounces off his mirror and crawls after you; a "
+         "gnomon stops it. He spins his planets in rings round the room: jump the low ring, duck behind a gnomon for "
+         "the high one. Below 65% he leaps onto you, sends rings of fire and adds a second beam and a third ring whose "
+         "turn reverses (blue chevrons warn you).",
+         "Il appelle la lance solaire : un rayon tombe du puits, rebondit sur son miroir et rampe vers toi ; un gnomon "
+         "l'arrête. Il fait tourner ses planètes en anneaux autour de la salle : saute l'anneau bas, cache-toi derrière "
+         "un gnomon pour l'anneau haut. Sous 65 %, il bondit sur toi, lance des anneaux de feu et ajoute un second "
+         "rayon et un troisième anneau qui change de sens (des chevrons bleus préviennent)."),
+    ], []),
+    ("solar_hierarch_eclipse", "wonders", "minecraft:clock", ("Hierarch: the Eclipse", "Hiérarque : l'Éclipse"), [
+        ("At 30% he calls the eclipse: the room goes dark (only his halo and the beam stay lit), a burst knocks you "
+         "back and he grows faster. Six sun-sigils light up round the floor; every few seconds he blinks between "
+         "them, and the next one to flare is the one he lands on: a corona of fire bursts round him there, so keep "
+         "away from the bright sigil. A lone pillar of light wanders the room all the while.",
+         "À 30 %, il appelle l'éclipse : la salle s'assombrit (seuls son halo et le rayon restent allumés), une onde te "
+         "repousse et il accélère. Six sceaux solaires s'allument au sol ; toutes les quelques secondes il saute de l'un "
+         "à l'autre, et le prochain à s'embraser est celui où il apparaît : une couronne de feu éclate autour de lui, "
+         "alors éloigne-toi du sceau brillant. Une colonne de lumière erre dans la salle tout ce temps."),
+        ("His Remembrance, four Map Fragments and two diamonds forge the Sun-Staff of the Solar Hierarch, whose "
+         "right-click looses a ray of sunlight that glances off walls up to three times and burns every foe it crosses.",
+         "Son Souvenir, quatre fragments de carte et deux diamants forgent le Bâton solaire du Hiérarque, dont le clic "
+         "droit décoche un rayon de soleil qui ricoche jusqu'à trois fois sur les murs et brûle chaque ennemi traversé."),
+    ], []),
+    ("drowned_admiral", "wonders", "brasshaven:remembrance_drowned_admiral", ("The Drowned Admiral", "L'Amiral noyé"), [
+        ("Deep in the stern of the Leviathan Dreadnought Wreck, past the engine room and the mist of the stokehold, the "
+         "last admiral of the ship holds the boiler hall (620 health, armour 12): a towering naval officer in a "
+         "waterlogged greatcoat, a brass diving helmet under a bicorne, a boarding cutlass in his right hand and a deck "
+         "cannon for a left forearm.",
+         "Au fond de la poupe de l'Épave du cuirassé Léviathan, passé la salle des machines et la brume de la "
+         "chaufferie, le dernier amiral du navire tient la salle des chaudières (620 PV, armure 12) : un officier de "
+         "marine immense en redingote gorgée d'eau, un casque de scaphandre de laiton sous un bicorne, un sabre "
+         "d'abordage dans la main droite et un canon de pont pour avant-bras gauche."),
+        ("He cuts forehand and backhand, lunges point first and stamps if you hug him. His cannon's red laser follows "
+         "you a little slower than a sidestep, then turns yellow and locks: step across before the shell bursts. He "
+         "flings a boarding hook down a grey chain line (whoever it catches is dragged to his feet) and bursts the "
+         "boiler valves: lanes of scalding steam run from the fireboxes toward each player and linger.",
+         "Il frappe en coup droit et en revers, fend la pointe en avant et piétine si tu restes collé. Le laser rouge "
+         "de son canon te suit un peu moins vite qu'un pas de côté, puis vire au jaune et se fige : passe en travers "
+         "avant l'obus. Il lance un grappin d'abordage le long d'une chaîne grise (qui est pris est traîné à ses "
+         "pieds) et fait sauter les vannes des chaudières : des couloirs de vapeur brûlante partent des foyers vers "
+         "chaque joueur et y restent."),
+    ], ["brasshaven:remembrance_drowned_admiral", "brasshaven:admiral_cutlass"]),
+    ("drowned_admiral_scuttle", "wonders", "minecraft:nautilus_shell", ("Admiral: the Scuttling", "Amiral : le Sabordage"), [
+        ("At 65% he fires broadsides of three shots, chains cuts into a leaping chop and charges helmet first: bait the "
+         "charge into a boiler or a wall and he reels for two seconds. At 30% he scuttles his ship: seawater floods the "
+         "hall knee-deep for 18 s (real water, drained afterwards), you wade while he moves at full speed, and two to "
+         "four drowned marines board, more with more players. He scuttles again 12 s after each ebb.",
+         "À 65 %, il tire des bordées de trois coups, enchaîne ses coups de sabre en un bond écrasant et charge casque "
+         "baissé : attire la charge contre une chaudière ou un mur et il chancelle deux secondes. À 30 %, il saborde "
+         "son navire : la mer envahit la salle jusqu'aux genoux pendant 18 s (de la vraie eau, retirée ensuite), tu "
+         "patauges pendant qu'il avance à pleine vitesse, et deux à quatre marins noyés montent à l'abordage, plus "
+         "s'il y a plus de joueurs. Il recommence 12 s après chaque décrue."),
+        ("His Remembrance, four Map Fragments and two diamonds forge the Boarding Cutlass of the Drowned Admiral, whose "
+         "right-click fires a deck-cannon shell along your aim that bursts on the first foe or wall with splash damage.",
+         "Son Souvenir, quatre fragments de carte et deux diamants forgent le Sabre d'abordage de l'Amiral noyé, dont "
+         "le clic droit tire un obus de canon de pont dans ta visée : il éclate sur le premier ennemi ou mur, avec des "
+         "dégâts de zone."),
     ], []),
     ("storm_ascetic", "wonders", "brasshaven:remembrance_storm_ascetic", ("The Storm Ascetic", "L'Ascète des tempêtes"), [
         ("In the bell temple on the summit of Pilgrim's Ascent, the hermit waits under the great bell (580 health, armour "

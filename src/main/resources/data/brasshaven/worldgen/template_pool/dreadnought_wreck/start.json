@@ -1,0 +1,321 @@
+{
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "brasshaven:chunked_template",
+        "size": [
+          221,
+          100,
+          95
+        ],
+        "cells": [
+          {
+            "location": "brasshaven:dreadnought_wreck/wreck/x0_z0",
+            "offset": [
+              17,
+              4,
+              7
+            ],
+            "size": [
+              14,
+              35,
+              25
+            ],
+            "blocks": 585
+          },
+          {
+            "location": "brasshaven:dreadnought_wreck/wreck/x0_z1",
+            "offset": [
+              0,
+              4,
+              32
+            ],
+            "size": [
+              31,
+              46,
+              31
+            ],
+            "blocks": 5300
+          },
+          {
+            "location": "brasshaven:dreadnought_wreck/wreck/x0_z2",
+            "offset": [
+              1,
+              4,
+              63
+            ],
+            "size": [
+              30,
+              12,
+              20
+            ],
+            "blocks": 688
+          },
+          {
+            "location": "brasshaven:dreadnought_wreck/wreck/x1_z0",
+            "offset": [
+              31,
+              4,
+              1
+            ],
+            "size": [
+              32,
+              41,
+              31
+            ],
+            "blocks": 5926
+          },
+          {
+            "location": "brasshaven:dreadnought_wreck/wreck/x1_z1",
+            "offset": [
+              31,
+              12,
+              32
+            ],
+            "size": [
+              32,
+              66,
+              31
+            ],
+            "blocks": 26749
+          },
+          {
+            "location": "brasshaven:dreadnought_wreck/wreck/x1_z2",
+            "offset": [
+              31,
+              4,
+              63
+            ],
+            "size": [
+              32,
+              35,
+              23
+            ],
+            "blocks": 2203
+          },
+          {
+            "location": "brasshaven:dreadnought_wreck/wreck/x2_z0",
+            "offset": [
+              63,
+              4,
+              4
+            ],
+            "size": [
+              32,
+              37,
+              28
+            ],
+            "blocks": 5511
+          },
+          {
+            "location": "brasshaven:dreadnought_wreck/wreck/x2_z1",
+            "offset": [
+              63,
+              12,
+              32
+            ],
+            "size": [
+              32,
+              57,
+              31
+            ],
+            "blocks": 27679
+          },
+          {
+            "location": "brasshaven:dreadnought_wreck/wreck/x2_z2",
+            "offset": [
+              63,
+              4,
+              63
+            ],
+            "size": [
+              32,
+              41,
+              32
+            ],
+            "blocks": 3765
+          },
+          {
+            "location": "brasshaven:dreadnought_wreck/wreck/x3_z0",
+            "offset": [
+              95,
+              4,
+              3
+            ],
+            "size": [
+              31,
+              35,
+              29
+            ],
+            "blocks": 5029
+          },
+          {
+            "location": "brasshaven:dreadnought_wreck/wreck/x3_z1",
+            "offset": [
+              95,
+              12,
+              32
+            ],
+            "size": [
+              31,
+              88,
+              31
+            ],
+            "blocks": 23543
+          },
+          {
+            "location": "brasshaven:dreadnought_wreck/wreck/x3_z2",
+            "offset": [
+              95,
+              4,
+              63
+            ],
+            "size": [
+              31,
+              35,
+              31
+            ],
+            "blocks": 2857
+          },
+          {
+            "location": "brasshaven:dreadnought_wreck/wreck/x4_z0",
+            "offset": [
+              126,
+              4,
+              0
+            ],
+            "size": [
+              32,
+              34,
+              32
+            ],
+            "blocks": 4597
+          },
+          {
+            "location": "brasshaven:dreadnought_wreck/wreck/x4_z1",
+            "offset": [
+              126,
+              4,
+              32
+            ],
+            "size": [
+              32,
+              35,
+              31
+            ],
+            "blocks": 14884
+          },
+          {
+            "location": "brasshaven:dreadnought_wreck/wreck/x4_z2",
+            "offset": [
+              126,
+              4,
+              63
+            ],
+            "size": [
+              32,
+              31,
+              21
+            ],
+            "blocks": 1433
+          },
+          {
+            "location": "brasshaven:dreadnought_wreck/wreck/x5_z0",
+            "offset": [
+              158,
+              2,
+              1
+            ],
+            "size": [
+              31,
+              34,
+              31
+            ],
+            "blocks": 4631
+          },
+          {
+            "location": "brasshaven:dreadnought_wreck/wreck/x5_z1",
+            "offset": [
+              158,
+              0,
+              32
+            ],
+            "size": [
+              31,
+              41,
+              31
+            ],
+            "blocks": 24765
+          },
+          {
+            "location": "brasshaven:dreadnought_wreck/wreck/x5_z2",
+            "offset": [
+              158,
+              4,
+              63
+            ],
+            "size": [
+              31,
+              26,
+              26
+            ],
+            "blocks": 1768
+          },
+          {
+            "location": "brasshaven:dreadnought_wreck/wreck/x6_z0",
+            "offset": [
+              189,
+              4,
+              24
+            ],
+            "size": [
+              30,
+              23,
+              8
+            ],
+            "blocks": 482
+          },
+          {
+            "location": "brasshaven:dreadnought_wreck/wreck/x6_z1",
+            "offset": [
+              189,
+              0,
+              32
+            ],
+            "size": [
+              32,
+              35,
+              26
+            ],
+            "blocks": 9897
+          },
+          {
+            "location": "brasshaven:dreadnought_wreck/wreck/x6_z2",
+            "offset": [
+              189,
+              4,
+              65
+            ],
+            "size": [
+              6,
+              16,
+              22
+            ],
+            "blocks": 370
+          }
+        ],
+        "projection": "rigid",
+        "processors": "brasshaven:none",
+        "ground_level_delta": 4,
+        "footprint": [
+          0,
+          0,
+          220,
+          94
+        ]
+      }
+    }
+  ]
+}

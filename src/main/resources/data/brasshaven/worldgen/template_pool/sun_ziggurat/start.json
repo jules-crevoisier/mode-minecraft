@@ -1,0 +1,671 @@
+{
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "brasshaven:chunked_template",
+        "size": [
+          185,
+          110,
+          229
+        ],
+        "cells": [
+          {
+            "location": "brasshaven:sun_ziggurat/ziggurat/x0_z0",
+            "offset": [
+              14,
+              0,
+              0
+            ],
+            "size": [
+              17,
+              20,
+              29
+            ],
+            "blocks": 3693
+          },
+          {
+            "location": "brasshaven:sun_ziggurat/ziggurat/x0_z1",
+            "offset": [
+              14,
+              0,
+              29
+            ],
+            "size": [
+              17,
+              18,
+              28
+            ],
+            "blocks": 3401
+          },
+          {
+            "location": "brasshaven:sun_ziggurat/ziggurat/x0_z2",
+            "offset": [
+              14,
+              0,
+              57
+            ],
+            "size": [
+              17,
+              18,
+              29
+            ],
+            "blocks": 3482
+          },
+          {
+            "location": "brasshaven:sun_ziggurat/ziggurat/x0_z3",
+            "offset": [
+              0,
+              0,
+              86
+            ],
+            "size": [
+              31,
+              18,
+              28
+            ],
+            "blocks": 4096
+          },
+          {
+            "location": "brasshaven:sun_ziggurat/ziggurat/x0_z4",
+            "offset": [
+              0,
+              0,
+              114
+            ],
+            "size": [
+              31,
+              18,
+              29
+            ],
+            "blocks": 3610
+          },
+          {
+            "location": "brasshaven:sun_ziggurat/ziggurat/x0_z5",
+            "offset": [
+              14,
+              0,
+              143
+            ],
+            "size": [
+              17,
+              20,
+              29
+            ],
+            "blocks": 2679
+          },
+          {
+            "location": "brasshaven:sun_ziggurat/ziggurat/x0_z6",
+            "offset": [
+              17,
+              4,
+              172
+            ],
+            "size": [
+              14,
+              9,
+              11
+            ],
+            "blocks": 800
+          },
+          {
+            "location": "brasshaven:sun_ziggurat/ziggurat/x1_z0",
+            "offset": [
+              31,
+              0,
+              0
+            ],
+            "size": [
+              31,
+              43,
+              29
+            ],
+            "blocks": 6401
+          },
+          {
+            "location": "brasshaven:sun_ziggurat/ziggurat/x1_z1",
+            "offset": [
+              31,
+              13,
+              29
+            ],
+            "size": [
+              31,
+              51,
+              28
+            ],
+            "blocks": 6231
+          },
+          {
+            "location": "brasshaven:sun_ziggurat/ziggurat/x1_z2",
+            "offset": [
+              31,
+              13,
+              57
+            ],
+            "size": [
+              31,
+              49,
+              29
+            ],
+            "blocks": 7850
+          },
+          {
+            "location": "brasshaven:sun_ziggurat/ziggurat/x1_z3",
+            "offset": [
+              31,
+              2,
+              86
+            ],
+            "size": [
+              31,
+              62,
+              28
+            ],
+            "blocks": 9913
+          },
+          {
+            "location": "brasshaven:sun_ziggurat/ziggurat/x1_z4",
+            "offset": [
+              31,
+              2,
+              114
+            ],
+            "size": [
+              31,
+              52,
+              29
+            ],
+            "blocks": 11156
+          },
+          {
+            "location": "brasshaven:sun_ziggurat/ziggurat/x1_z5",
+            "offset": [
+              31,
+              0,
+              143
+            ],
+            "size": [
+              31,
+              21,
+              29
+            ],
+            "blocks": 4440
+          },
+          {
+            "location": "brasshaven:sun_ziggurat/ziggurat/x1_z6",
+            "offset": [
+              31,
+              4,
+              172
+            ],
+            "size": [
+              30,
+              12,
+              28
+            ],
+            "blocks": 4134
+          },
+          {
+            "location": "brasshaven:sun_ziggurat/ziggurat/x1_z7",
+            "offset": [
+              33,
+              4,
+              200
+            ],
+            "size": [
+              29,
+              8,
+              27
+            ],
+            "blocks": 1266
+          },
+          {
+            "location": "brasshaven:sun_ziggurat/ziggurat/x2_z0",
+            "offset": [
+              62,
+              0,
+              0
+            ],
+            "size": [
+              30,
+              41,
+              29
+            ],
+            "blocks": 6187
+          },
+          {
+            "location": "brasshaven:sun_ziggurat/ziggurat/x2_z1",
+            "offset": [
+              62,
+              3,
+              29
+            ],
+            "size": [
+              30,
+              70,
+              28
+            ],
+            "blocks": 10555
+          },
+          {
+            "location": "brasshaven:sun_ziggurat/ziggurat/x2_z2",
+            "offset": [
+              62,
+              6,
+              57
+            ],
+            "size": [
+              30,
+              102,
+              29
+            ],
+            "blocks": 38964
+          },
+          {
+            "location": "brasshaven:sun_ziggurat/ziggurat/x2_z3",
+            "offset": [
+              62,
+              2,
+              86
+            ],
+            "size": [
+              30,
+              99,
+              28
+            ],
+            "blocks": 29339
+          },
+          {
+            "location": "brasshaven:sun_ziggurat/ziggurat/x2_z4",
+            "offset": [
+              62,
+              2,
+              114
+            ],
+            "size": [
+              30,
+              57,
+              29
+            ],
+            "blocks": 13160
+          },
+          {
+            "location": "brasshaven:sun_ziggurat/ziggurat/x2_z5",
+            "offset": [
+              62,
+              0,
+              143
+            ],
+            "size": [
+              30,
+              36,
+              29
+            ],
+            "blocks": 8742
+          },
+          {
+            "location": "brasshaven:sun_ziggurat/ziggurat/x2_z6",
+            "offset": [
+              74,
+              3,
+              172
+            ],
+            "size": [
+              18,
+              14,
+              28
+            ],
+            "blocks": 3868
+          },
+          {
+            "location": "brasshaven:sun_ziggurat/ziggurat/x2_z7",
+            "offset": [
+              62,
+              4,
+              200
+            ],
+            "size": [
+              30,
+              30,
+              29
+            ],
+            "blocks": 5018
+          },
+          {
+            "location": "brasshaven:sun_ziggurat/ziggurat/x3_z0",
+            "offset": [
+              92,
+              0,
+              0
+            ],
+            "size": [
+              31,
+              44,
+              29
+            ],
+            "blocks": 6735
+          },
+          {
+            "location": "brasshaven:sun_ziggurat/ziggurat/x3_z1",
+            "offset": [
+              92,
+              6,
+              29
+            ],
+            "size": [
+              31,
+              67,
+              28
+            ],
+            "blocks": 10742
+          },
+          {
+            "location": "brasshaven:sun_ziggurat/ziggurat/x3_z2",
+            "offset": [
+              92,
+              6,
+              57
+            ],
+            "size": [
+              31,
+              104,
+              29
+            ],
+            "blocks": 43118
+          },
+          {
+            "location": "brasshaven:sun_ziggurat/ziggurat/x3_z3",
+            "offset": [
+              92,
+              6,
+              86
+            ],
+            "size": [
+              31,
+              96,
+              28
+            ],
+            "blocks": 26790
+          },
+          {
+            "location": "brasshaven:sun_ziggurat/ziggurat/x3_z4",
+            "offset": [
+              92,
+              6,
+              114
+            ],
+            "size": [
+              31,
+              53,
+              29
+            ],
+            "blocks": 12695
+          },
+          {
+            "location": "brasshaven:sun_ziggurat/ziggurat/x3_z5",
+            "offset": [
+              92,
+              0,
+              143
+            ],
+            "size": [
+              31,
+              36,
+              29
+            ],
+            "blocks": 9283
+          },
+          {
+            "location": "brasshaven:sun_ziggurat/ziggurat/x3_z6",
+            "offset": [
+              92,
+              3,
+              172
+            ],
+            "size": [
+              19,
+              14,
+              28
+            ],
+            "blocks": 4091
+          },
+          {
+            "location": "brasshaven:sun_ziggurat/ziggurat/x3_z7",
+            "offset": [
+              92,
+              4,
+              200
+            ],
+            "size": [
+              31,
+              30,
+              29
+            ],
+            "blocks": 4790
+          },
+          {
+            "location": "brasshaven:sun_ziggurat/ziggurat/x4_z0",
+            "offset": [
+              123,
+              0,
+              0
+            ],
+            "size": [
+              31,
+              43,
+              29
+            ],
+            "blocks": 6395
+          },
+          {
+            "location": "brasshaven:sun_ziggurat/ziggurat/x4_z1",
+            "offset": [
+              123,
+              6,
+              29
+            ],
+            "size": [
+              31,
+              58,
+              28
+            ],
+            "blocks": 5882
+          },
+          {
+            "location": "brasshaven:sun_ziggurat/ziggurat/x4_z2",
+            "offset": [
+              123,
+              6,
+              57
+            ],
+            "size": [
+              31,
+              56,
+              29
+            ],
+            "blocks": 12024
+          },
+          {
+            "location": "brasshaven:sun_ziggurat/ziggurat/x4_z3",
+            "offset": [
+              123,
+              6,
+              86
+            ],
+            "size": [
+              31,
+              58,
+              28
+            ],
+            "blocks": 7339
+          },
+          {
+            "location": "brasshaven:sun_ziggurat/ziggurat/x4_z4",
+            "offset": [
+              123,
+              13,
+              114
+            ],
+            "size": [
+              31,
+              41,
+              29
+            ],
+            "blocks": 6167
+          },
+          {
+            "location": "brasshaven:sun_ziggurat/ziggurat/x4_z5",
+            "offset": [
+              123,
+              0,
+              143
+            ],
+            "size": [
+              31,
+              21,
+              29
+            ],
+            "blocks": 3973
+          },
+          {
+            "location": "brasshaven:sun_ziggurat/ziggurat/x4_z6",
+            "offset": [
+              128,
+              4,
+              172
+            ],
+            "size": [
+              26,
+              11,
+              28
+            ],
+            "blocks": 2445
+          },
+          {
+            "location": "brasshaven:sun_ziggurat/ziggurat/x4_z7",
+            "offset": [
+              123,
+              4,
+              200
+            ],
+            "size": [
+              30,
+              10,
+              27
+            ],
+            "blocks": 2127
+          },
+          {
+            "location": "brasshaven:sun_ziggurat/ziggurat/x5_z0",
+            "offset": [
+              154,
+              0,
+              0
+            ],
+            "size": [
+              17,
+              20,
+              29
+            ],
+            "blocks": 3677
+          },
+          {
+            "location": "brasshaven:sun_ziggurat/ziggurat/x5_z1",
+            "offset": [
+              154,
+              0,
+              29
+            ],
+            "size": [
+              31,
+              18,
+              28
+            ],
+            "blocks": 4478
+          },
+          {
+            "location": "brasshaven:sun_ziggurat/ziggurat/x5_z2",
+            "offset": [
+              154,
+              0,
+              57
+            ],
+            "size": [
+              17,
+              18,
+              29
+            ],
+            "blocks": 3467
+          },
+          {
+            "location": "brasshaven:sun_ziggurat/ziggurat/x5_z3",
+            "offset": [
+              154,
+              0,
+              86
+            ],
+            "size": [
+              17,
+              18,
+              28
+            ],
+            "blocks": 3362
+          },
+          {
+            "location": "brasshaven:sun_ziggurat/ziggurat/x5_z4",
+            "offset": [
+              154,
+              0,
+              114
+            ],
+            "size": [
+              17,
+              18,
+              29
+            ],
+            "blocks": 3492
+          },
+          {
+            "location": "brasshaven:sun_ziggurat/ziggurat/x5_z5",
+            "offset": [
+              154,
+              0,
+              143
+            ],
+            "size": [
+              17,
+              20,
+              29
+            ],
+            "blocks": 2329
+          },
+          {
+            "location": "brasshaven:sun_ziggurat/ziggurat/x5_z6",
+            "offset": [
+              154,
+              4,
+              172
+            ],
+            "size": [
+              10,
+              8,
+              10
+            ],
+            "blocks": 380
+          }
+        ],
+        "projection": "rigid",
+        "processors": "brasshaven:none",
+        "ground_level_delta": 7,
+        "footprint": [
+          0,
+          0,
+          184,
+          228
+        ]
+      }
+    }
+  ]
+}

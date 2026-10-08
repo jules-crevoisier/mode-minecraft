@@ -31,6 +31,13 @@ ABILITIES = {
     "breath": ("Frost breath", "Souffle de givre", "range"),
     "tempest": ("Tempest", "Tempête", "radius"),
     "tide": ("Breaking tide", "Lame de fond", "range"),
+    "plumb": ("Falling plumb", "Chute du plomb", "range"),
+    "jet": ("Pressure jet", "Jet sous pression", "range"),
+    "mire": ("Sinking bog", "Tourbière engloutissante", "range"),
+    "cage": ("Root cage", "Cage de racines", "range"),
+    "pressure": ("Pressure vent", "Purge de vapeur", "radius"),
+    "broadside": ("Cannon broadside", "Bordée de canon", "range"),
+    "prism": ("Reflected sunray", "Rayon réfléchi", "range"),
 }
 # BossWeaponItem flags, in bit order
 ABILITY_EFFECTS = {
@@ -140,6 +147,16 @@ FLAVOR = {
     "ascetic_staff": ("Its rings still ring with the storm he prayed to.", "Ses anneaux tintent encore de l'orage qu'il priait."),
     "abbess_crozier": ("She led her flock into the sea; the sea still follows her staff.",
                        "Elle a mené son troupeau dans la mer ; la mer suit encore sa crosse."),
+    "architect_plumb": ("He built downward until the plumb line touched the abyss.",
+                        "Il a bâti vers le bas jusqu'à ce que le fil à plomb touche l'abîme."),
+    "hierophant_crozier": ("His lantern led a whole town into the bog; it still knows the way.",
+                           "Sa lanterne a mené toute une ville dans la tourbière ; elle en connaît encore le chemin."),
+    "queen_macuahuitl": ("The fig strangled the temple and crowned itself; its teeth are the temple's jade.",
+                         "Le figuier a étranglé le temple et s'est couronné ; ses dents sont le jade du temple."),
+    "hierarch_sunstaff": ("He kept the noon for a dead empire; the staff still remembers where the sun stood.",
+                          "Il gardait le midi d'un empire mort ; le bâton se souvient encore où se tenait le soleil."),
+    "admiral_cutlass": ("He went down with his ship and kept the cannon loaded.",
+                        "Il a sombré avec son navire et gardé le canon chargé."),
 }
 
 # armour sets: one flavour per set prefix (all four pieces)

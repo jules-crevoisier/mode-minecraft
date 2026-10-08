@@ -96,6 +96,27 @@ public final class BossGear {
     public static final RegistryObject<Item> REMEMBRANCE_TIDE_ABBESS = remembrance("remembrance_tide_abbess");
     public static final RegistryObject<Item> ABBESS_CROZIER = weapon("abbess_crozier", p -> p.sword(ModMaterials.LITHITE, 7.0F, -2.9F).rarity(Rarity.EPIC),
             BossWeaponItem.Ability.TIDE, 10.0F, 12.0F, 90, () -> ParticleTypes.SPLASH, BossWeaponItem.SLOW);
+    public static final RegistryObject<Item> REMEMBRANCE_ABYSSAL_ARCHITECT = remembrance("remembrance_abyssal_architect");
+    public static final RegistryObject<Item> ARCHITECT_PLUMB = weapon("architect_plumb", p -> p.sword(ModMaterials.LITHITE, 8.0F, -3.0F).rarity(Rarity.EPIC),
+            BossWeaponItem.Ability.PLUMB, 12.0F, 16.0F, 90, () -> ParticleTypes.SOUL, BossWeaponItem.SLOW);
+    public static final RegistryObject<Item> REMEMBRANCE_LOCK_MASTER = remembrance("remembrance_lock_master");
+    public static final RegistryObject<Item> PRESSURE_LANCE = weapon("pressure_lance", p -> p.sword(ModMaterials.LITHITE, 8.0F, -3.0F).rarity(Rarity.EPIC),
+            BossWeaponItem.Ability.JET, 11.0F, 14.0F, 80, () -> ParticleTypes.SPLASH, 0);
+    public static final RegistryObject<Item> REMEMBRANCE_BOG_HIEROPHANT = remembrance("remembrance_bog_hierophant");
+    public static final RegistryObject<Item> HIEROPHANT_CROZIER = weapon("hierophant_crozier", p -> p.sword(ModMaterials.LITHITE, 8.0F, -3.0F).rarity(Rarity.EPIC),
+            BossWeaponItem.Ability.MIRE, 9.0F, 12.0F, 100, () -> ParticleTypes.SPORE_BLOSSOM_AIR, BossWeaponItem.POISON | BossWeaponItem.SLOW);
+    public static final RegistryObject<Item> REMEMBRANCE_STRANGLER_QUEEN = remembrance("remembrance_strangler_queen");
+    public static final RegistryObject<Item> QUEEN_MACUAHUITL = weapon("queen_macuahuitl", p -> p.sword(ModMaterials.LITHITE, 8.0F, -3.0F).rarity(Rarity.EPIC),
+            BossWeaponItem.Ability.CAGE, 10.0F, 14.0F, 90, () -> ParticleTypes.HAPPY_VILLAGER, 0);
+    public static final RegistryObject<Item> REMEMBRANCE_SOLAR_HIERARCH = remembrance("remembrance_solar_hierarch");
+    public static final RegistryObject<Item> HIERARCH_SUNSTAFF = weapon("hierarch_sunstaff", p -> p.sword(ModMaterials.LITHITE, 8.0F, -3.0F).rarity(Rarity.EPIC),
+            BossWeaponItem.Ability.PRISM, 10.0F, 24.0F, 90, () -> ParticleTypes.END_ROD, BossWeaponItem.FIRE);
+    public static final RegistryObject<Item> REMEMBRANCE_DROWNED_ADMIRAL = remembrance("remembrance_drowned_admiral");
+    public static final RegistryObject<Item> ADMIRAL_CUTLASS = weapon("admiral_cutlass", p -> p.sword(ModMaterials.LITHITE, 7.0F, -2.4F).rarity(Rarity.EPIC),
+            BossWeaponItem.Ability.BROADSIDE, 13.0F, 24.0F, 100, () -> ParticleTypes.LARGE_SMOKE, BossWeaponItem.FIRE);
+    public static final RegistryObject<Item> REMEMBRANCE_TURBINE_TYRANT = remembrance("remembrance_turbine_tyrant");
+    public static final RegistryObject<Item> TYRANT_WRENCH = weapon("tyrant_wrench", p -> p.sword(ModMaterials.LITHITE, 8.0F, -3.0F).rarity(Rarity.EPIC),
+            BossWeaponItem.Ability.PRESSURE, 12.0F, 8.0F, 100, () -> ParticleTypes.CLOUD, BossWeaponItem.FIRE);
 
     private BossGear() {}
 

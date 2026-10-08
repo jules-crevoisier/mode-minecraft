@@ -403,6 +403,105 @@ def crozier(a):
     a.px(12, 6, "E", "mid")
 
 
+@painted("cutlass")
+def cutlass(a):
+    """Boarding Cutlass of the Drowned Admiral: a broad steel blade curving up from the bottom-left to a clipped point,
+    a brass basket hilt wrapped round a leather grip, a sea-green glint along the blade and barnacles on its back."""
+    a.seg("L", 1.5, 14.5, 3.5, 12.5, 0.7)                     # the grip
+    a.px(1, 15, "B", "light")                                 # the pommel
+    a.px(0, 15, "B", "dark")
+    a.seg("B", 2.0, 10.5, 6.5, 14.5, 0.8)                     # the guard across the blade's root
+    a.seg("B", 1.0, 12.0, 2.5, 15.5, 0.5)                     # the basket's knuckle bow
+    for k in range(10):                                       # the blade, broad and curving back toward its tip
+        t = k / 9
+        x0, y0 = 4.5 + t * 8.5, 11.5 - t * 9.0 - math.sin(t * math.pi) * 0.9
+        a.disc("M", x0, y0, 1.6 - t * 0.6)
+    a.seg("M", 12.6, 3.4, 14.4, 1.4, 0.5)                     # the clipped point
+    a.shade_dir("M", -0.6, 1.0)
+    for (x, y) in ((6, 9), (8, 7), (10, 5)):
+        a.px(x, y, "E", "mid")                                # the sea-green glint along the fuller
+    a.px(9, 9, "Q", "light")                                  # barnacles on the back of the blade
+    a.px(12, 6, "Q", "mid")
+
+
+@painted("valve_wrench")
+def valve_wrench(a):
+    """Valve-Wrench of the Turbine Tyrant: a long steel handle with a leather grip and a hot glowing gauge at its
+    neck, and an open-ended jaw at the head (a ring split toward the tip), a brass worm screw on its side."""
+    shaft(a, 9, key="M", grip=(1, 4), butt="X")
+    cx, cy = 12.3, 3.7
+    a.disc("M", cx, cy, 3.3)
+    a.clear(lambda x, y: (x - cx) ** 2 + (y - cy) ** 2 < 1.7)                  # the jaw's mouth
+    a.clear(lambda x, y: ((x - cx) - (cy - y)) / 1.414 > 0.3 and abs((x - cx) + (cy - y)) / 1.414 < 1.2)
+    a.disc("R", 9.3, 6.7, 1.0)                                                  # the overheated gauge
+    a.px(9, 6, "R", "light")
+    a.px(10, 5, "B", "light")                                                   # the worm screw
+    a.px(11, 6, "B", "dark")
+    a.shade_dir("M", -0.6, 1.0)
+
+
+@painted("sunstaff")
+def sunstaff(a):
+    """Sun-Staff of the Solar Hierarch: a gilded haft with brass bands and a leather grip, and at its head a gold
+    sun-ring with short rays round a glowing ember orb."""
+    shaft(a, 8, key="H", grip=(1, 4), butt="B")
+    collar(a, 6, key="B")
+    cx, cy = 11.6, 4.4
+    for k in range(8):                                        # the rays
+        ang = math.radians(22.5 + 45 * k)
+        a.seg("B", cx + 2.6 * math.cos(ang), cy - 2.6 * math.sin(ang), cx + 4.0 * math.cos(ang),
+              cy - 4.0 * math.sin(ang), 0.45)
+    a.ring("M", cx, cy, 1.6, 2.9)                             # the sun ring
+    a.disc("A", cx, cy, 1.6)                                  # the ember orb
+    a.shade_dir("M", -0.6, 1.0)
+    a.px(11, 4, "A", "light")
+    a.px(12, 5, "A", "dark")
+
+
+@painted("plumb")
+def plumb(a):
+    """Plumb of the Abyssal Architect: a dark rule for a haft with brass graduations, a brass crossbar at its head, a
+    short chain hanging from the bar's end and a great lead plumb-bob capped in brass, a soul-blue line down it."""
+    shaft(a, 9, key="H", grip=(1, 4), butt="B")
+    for i in (5, 7):
+        a.px(1 + i, 14 - i, "B", "light")
+    a.seg("B", 8.0, 3.0, 12.5, 7.5, 0.5)                      # the crossbar across the head
+    a.px(8, 3, "B", "light")
+    a.px(12, 7, "B", "dark")
+    for y in (8, 9):                                          # the chain off the bar's end
+        a.px(12, y, "I", "light" if y % 2 == 0 else "dark")
+    a.disc("X", 12.5, 11.4, 2.6)                              # the lead bob
+    a.seg("X", 12.5, 12.5, 12.5, 15.4, 0.8)                   # its point
+    a.shade_dir("X", -0.6, 1.0)
+    a.px(11, 10, "B", "light")                                # the brass cap
+    a.px(12, 10, "B", "mid")
+    a.px(13, 10, "B", "dark")
+    a.px(12, 12, "E", "light")                                # the plumb line
+    a.px(12, 13, "E", "mid")
+
+
+@painted("macuahuitl")
+def macuahuitl(a):
+    """Jade Macuahuitl of the Strangler Queen: a root-wrapped wooden haft with a leather grip and a gold band, and a
+    broad flat jade paddle running up to a rounded tip, both edges set with dark obsidian teeth and a gold sun-mark
+    near its root."""
+    shaft(a, 6, key="H", grip=(1, 4), butt="B")
+    collar(a, 5, key="B")
+    for k in range(9):                                        # the paddle, widening a touch toward its tip
+        t = k / 8
+        a.disc("M", 7.0 + t * 5.8, 8.0 - t * 5.8, 1.5 + t * 0.6)
+    a.shade_dir("M", -0.6, 1.0)
+    for k in range(5):                                        # the obsidian teeth along both edges
+        t = (k + 0.5) / 5
+        cx, cy = 7.0 + t * 5.8, 8.0 - t * 5.8
+        r = 1.5 + t * 0.6 + 1.0
+        a.px(int(round(cx - r * 0.707)), int(round(cy - r * 0.707)), "X", "dark")
+        a.px(int(round(cx + r * 0.707)), int(round(cy + r * 0.707)), "X", "mid")
+    a.px(8, 7, "A", "light")                                  # the sun-mark
+    a.px(9, 6, "A", "mid")
+    a.px(11, 4, "S", "light")                                 # a glint of living jade
+
+
 @painted("gate_key")
 def gate_key(a):
     """Key of the Kneeling Gate: a great gold key held like a mace: the ring bow at the butt with a soul-blue gem,

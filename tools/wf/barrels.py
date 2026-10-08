@@ -143,6 +143,7 @@ STRUCTURE_KIND = {
     "sylvan_palace": "sylvan", "inventor_manor": "clockwork", "sky_isles": "sylvan", "geothermal_foundry": "workshop",
     "walking_fortress": "workshop", "rock_necropolis": "food", "fallen_colossus": "military", "pilgrims_ascent": "food",
     "tidal_abbey": "harbour",
+    "dreadnought_wreck": "military",
     "caldera_ringwall": "military",
     "glacier_hall": "food",
     "kneeling_gate": "military",
@@ -150,6 +151,8 @@ STRUCTURE_KIND = {
     "inverted_spire": "mine",
     "mire_stilt_city": "food",
     "great_aqueduct": "workshop",
+    "sun_ziggurat": "library",
+    "canopy_city": "sylvan",
     "tesla_observatory": "clockwork", "crystal_cathedral": "library", "sunken_submarine": "harbour",
     "diving_bell": "harbour", "coral_shrine": "harbour", "shipwreck_debris": "harbour",
     # vanilla villages and outposts extended by wf/village.py, the sea-floor props of wf/ocean.py

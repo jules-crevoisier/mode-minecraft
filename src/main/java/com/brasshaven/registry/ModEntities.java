@@ -44,6 +44,14 @@ import com.brasshaven.entity.boss.OathboundGatekeeper;
 import com.brasshaven.entity.boss.StormAscetic;
 import com.brasshaven.entity.boss.StormIllusion;
 import com.brasshaven.entity.boss.TideAbbess;
+import com.brasshaven.entity.boss.AbyssalArchitect;
+import com.brasshaven.entity.boss.LockMaster;
+import com.brasshaven.entity.boss.BogHierophant;
+import com.brasshaven.entity.boss.StranglerQueen;
+import com.brasshaven.entity.boss.JaguarSpirit;
+import com.brasshaven.entity.boss.SolarHierarch;
+import com.brasshaven.entity.boss.DrownedAdmiral;
+import com.brasshaven.entity.boss.TurbineTyrant;
 import com.brasshaven.entity.automaton.BrassGolem;
 import com.brasshaven.entity.automaton.ClockworkSpider;
 import com.brasshaven.entity.automaton.HotRivetEntity;
@@ -234,6 +242,30 @@ public final class ModEntities {
     public static final RegistryObject<EntityType<TideAbbess>> TIDE_ABBESS = ENTITIES.register("tide_abbess",
             () -> EntityType.Builder.<TideAbbess>of(TideAbbess::new, MobCategory.MONSTER)
                     .sized(TideAbbess.WIDTH, TideAbbess.HEIGHT).clientTrackingRange(10).build(ENTITIES.key("tide_abbess")));
+    public static final RegistryObject<EntityType<AbyssalArchitect>> ABYSSAL_ARCHITECT = ENTITIES.register("abyssal_architect",
+            () -> EntityType.Builder.<AbyssalArchitect>of(AbyssalArchitect::new, MobCategory.MONSTER)
+                    .sized(AbyssalArchitect.WIDTH, AbyssalArchitect.HEIGHT).clientTrackingRange(10).build(ENTITIES.key("abyssal_architect")));
+    public static final RegistryObject<EntityType<LockMaster>> LOCK_MASTER = ENTITIES.register("lock_master",
+            () -> EntityType.Builder.<LockMaster>of(LockMaster::new, MobCategory.MONSTER)
+                    .sized(LockMaster.WIDTH, LockMaster.HEIGHT).clientTrackingRange(10).build(ENTITIES.key("lock_master")));
+    public static final RegistryObject<EntityType<BogHierophant>> BOG_HIEROPHANT = ENTITIES.register("bog_hierophant",
+            () -> EntityType.Builder.<BogHierophant>of(BogHierophant::new, MobCategory.MONSTER)
+                    .sized(BogHierophant.WIDTH, BogHierophant.HEIGHT).clientTrackingRange(10).build(ENTITIES.key("bog_hierophant")));
+    public static final RegistryObject<EntityType<StranglerQueen>> STRANGLER_QUEEN = ENTITIES.register("strangler_queen",
+            () -> EntityType.Builder.<StranglerQueen>of(StranglerQueen::new, MobCategory.MONSTER)
+                    .sized(StranglerQueen.WIDTH, StranglerQueen.HEIGHT).clientTrackingRange(10).build(ENTITIES.key("strangler_queen")));
+    public static final RegistryObject<EntityType<JaguarSpirit>> JAGUAR_SPIRIT = ENTITIES.register("jaguar_spirit",
+            () -> EntityType.Builder.<JaguarSpirit>of(JaguarSpirit::new, MobCategory.MONSTER)
+                    .sized(JaguarSpirit.WIDTH, JaguarSpirit.HEIGHT).clientTrackingRange(10).build(ENTITIES.key("jaguar_spirit")));
+    public static final RegistryObject<EntityType<DrownedAdmiral>> DROWNED_ADMIRAL = ENTITIES.register("drowned_admiral",
+            () -> EntityType.Builder.<DrownedAdmiral>of(DrownedAdmiral::new, MobCategory.MONSTER)
+                    .sized(DrownedAdmiral.WIDTH, DrownedAdmiral.HEIGHT).clientTrackingRange(10).build(ENTITIES.key("drowned_admiral")));
+    public static final RegistryObject<EntityType<TurbineTyrant>> TURBINE_TYRANT = ENTITIES.register("turbine_tyrant",
+            () -> EntityType.Builder.<TurbineTyrant>of(TurbineTyrant::new, MobCategory.MONSTER)
+                    .sized(TurbineTyrant.WIDTH, TurbineTyrant.HEIGHT).fireImmune().clientTrackingRange(10).build(ENTITIES.key("turbine_tyrant")));
+    public static final RegistryObject<EntityType<SolarHierarch>> SOLAR_HIERARCH = ENTITIES.register("solar_hierarch",
+            () -> EntityType.Builder.<SolarHierarch>of(SolarHierarch::new, MobCategory.MONSTER)
+                    .sized(SolarHierarch.WIDTH, SolarHierarch.HEIGHT).fireImmune().clientTrackingRange(10).build(ENTITIES.key("solar_hierarch")));
     public static final RegistryObject<EntityType<HotRivetEntity>> HOT_RIVET = ENTITIES.register("hot_rivet",
             () -> EntityType.Builder.<HotRivetEntity>of(HotRivetEntity::new, MobCategory.MISC)
                     .sized(0.25F, 0.25F).clientTrackingRange(6).updateInterval(2).build(ENTITIES.key("hot_rivet")));
@@ -311,10 +343,32 @@ public final class ModEntities {
     public static final RegistryObject<EntityType<VoidAcolyte>> VOID_ACOLYTE = ENTITIES.register("void_acolyte",
             () -> EntityType.Builder.<VoidAcolyte>of(VoidAcolyte::new, MobCategory.MONSTER)
                     .sized(VoidAcolyte.WIDTH, VoidAcolyte.HEIGHT).clientTrackingRange(8).build(ENTITIES.key("void_acolyte")));
+    // second pack: the creatures of the colossal structures (tools/wf/denizens.py)
+    public static final RegistryObject<EntityType<com.brasshaven.entity.mob.SluiceDrowned>> SLUICE_DROWNED = ENTITIES.register("sluice_drowned",
+            () -> EntityType.Builder.<com.brasshaven.entity.mob.SluiceDrowned>of(com.brasshaven.entity.mob.SluiceDrowned::new, MobCategory.MONSTER)
+                    .sized(com.brasshaven.entity.mob.SluiceDrowned.WIDTH, com.brasshaven.entity.mob.SluiceDrowned.HEIGHT).clientTrackingRange(8).build(ENTITIES.key("sluice_drowned")));
+    public static final RegistryObject<EntityType<com.brasshaven.entity.mob.TurbineAutomaton>> TURBINE_AUTOMATON = ENTITIES.register("turbine_automaton",
+            () -> EntityType.Builder.<com.brasshaven.entity.mob.TurbineAutomaton>of(com.brasshaven.entity.mob.TurbineAutomaton::new, MobCategory.MONSTER)
+                    .sized(com.brasshaven.entity.mob.TurbineAutomaton.WIDTH, com.brasshaven.entity.mob.TurbineAutomaton.HEIGHT).clientTrackingRange(8).build(ENTITIES.key("turbine_automaton")));
+    public static final RegistryObject<EntityType<com.brasshaven.entity.mob.BogLeechMan>> BOG_LEECH_MAN = ENTITIES.register("bog_leech_man",
+            () -> EntityType.Builder.<com.brasshaven.entity.mob.BogLeechMan>of(com.brasshaven.entity.mob.BogLeechMan::new, MobCategory.MONSTER)
+                    .sized(com.brasshaven.entity.mob.BogLeechMan.WIDTH, com.brasshaven.entity.mob.BogLeechMan.HEIGHT).clientTrackingRange(8).build(ENTITIES.key("bog_leech_man")));
+    public static final RegistryObject<EntityType<com.brasshaven.entity.mob.AbyssCrawler>> ABYSS_CRAWLER = ENTITIES.register("abyss_crawler",
+            () -> EntityType.Builder.<com.brasshaven.entity.mob.AbyssCrawler>of(com.brasshaven.entity.mob.AbyssCrawler::new, MobCategory.MONSTER)
+                    .sized(com.brasshaven.entity.mob.AbyssCrawler.WIDTH, com.brasshaven.entity.mob.AbyssCrawler.HEIGHT).clientTrackingRange(8).build(ENTITIES.key("abyss_crawler")));
+    public static final RegistryObject<EntityType<com.brasshaven.entity.mob.RustMiteMother>> RUST_MITE_MOTHER = ENTITIES.register("rust_mite_mother",
+            () -> EntityType.Builder.<com.brasshaven.entity.mob.RustMiteMother>of(com.brasshaven.entity.mob.RustMiteMother::new, MobCategory.MONSTER)
+                    .sized(com.brasshaven.entity.mob.RustMiteMother.WIDTH, com.brasshaven.entity.mob.RustMiteMother.HEIGHT).clientTrackingRange(8).build(ENTITIES.key("rust_mite_mother")));
+    public static final RegistryObject<EntityType<com.brasshaven.entity.mob.RustMite>> RUST_MITE = ENTITIES.register("rust_mite",
+            () -> EntityType.Builder.<com.brasshaven.entity.mob.RustMite>of(com.brasshaven.entity.mob.RustMite::new, MobCategory.MONSTER)
+                    .sized(com.brasshaven.entity.mob.RustMite.WIDTH, com.brasshaven.entity.mob.RustMite.HEIGHT).clientTrackingRange(8).build(ENTITIES.key("rust_mite")));
+    public static final RegistryObject<EntityType<com.brasshaven.entity.mob.BoilerGunner>> BOILER_GUNNER = ENTITIES.register("boiler_gunner",
+            () -> EntityType.Builder.<com.brasshaven.entity.mob.BoilerGunner>of(com.brasshaven.entity.mob.BoilerGunner::new, MobCategory.MONSTER)
+                    .sized(com.brasshaven.entity.mob.BoilerGunner.WIDTH, com.brasshaven.entity.mob.BoilerGunner.HEIGHT).clientTrackingRange(10).build(ENTITIES.key("boiler_gunner")));
 
     /** Every boss with an Elden Ring style fight (demo command, quests). */
     public static List<RegistryObject<? extends EntityType<? extends com.brasshaven.boss.WayfarerBoss>>> bosses() {
-        return List.of(DROWNED_WARDEN, VOID_WARDEN, GRAVE_KNIGHT, BONE_MATRIARCH, WEEPING_LADY, LARVA_MOTHER, BELL_KEEPER, ARCHIVIST, SAND_PHARAOH, JADE_JAGUAR, ROOT_MOTHER, SWAMP_CRONE, GRYPHON_KNIGHT, RUNE_COLOSSUS, FORGE_KING, CRYSTAL_SPIDER, SCULK_SPAWN, ASH_LORD, PIGLIN_KING, SOUL_REAPER, GRAND_CLOCKMAKER, IRON_HELMSMAN, BRONZE_SENTINEL, DUNE_KING, FALLEN_SERAPH, CHAINED_JAILER, CALDERA_CASTELLAN, FROST_JARL, OATHBOUND_GATEKEEPER, STORM_ASCETIC, TIDE_ABBESS);
+        return List.of(DROWNED_WARDEN, VOID_WARDEN, GRAVE_KNIGHT, BONE_MATRIARCH, WEEPING_LADY, LARVA_MOTHER, BELL_KEEPER, ARCHIVIST, SAND_PHARAOH, JADE_JAGUAR, ROOT_MOTHER, SWAMP_CRONE, GRYPHON_KNIGHT, RUNE_COLOSSUS, FORGE_KING, CRYSTAL_SPIDER, SCULK_SPAWN, ASH_LORD, PIGLIN_KING, SOUL_REAPER, GRAND_CLOCKMAKER, IRON_HELMSMAN, BRONZE_SENTINEL, DUNE_KING, FALLEN_SERAPH, CHAINED_JAILER, CALDERA_CASTELLAN, FROST_JARL, OATHBOUND_GATEKEEPER, STORM_ASCETIC, TIDE_ABBESS, LOCK_MASTER, BOG_HIEROPHANT, SOLAR_HIERARCH, DROWNED_ADMIRAL, TURBINE_TYRANT, ABYSSAL_ARCHITECT, STRANGLER_QUEEN);
     }
 
     public static void registerAttributes(EntityAttributeCreationEvent event) {
@@ -364,6 +418,14 @@ public final class ModEntities {
         event.put(STORM_ASCETIC.get(), StormAscetic.attributes().build());
         event.put(STORM_ILLUSION.get(), StormIllusion.attributes().build());
         event.put(TIDE_ABBESS.get(), TideAbbess.attributes().build());
+        event.put(ABYSSAL_ARCHITECT.get(), AbyssalArchitect.attributes().build());
+        event.put(LOCK_MASTER.get(), LockMaster.attributes().build());
+        event.put(BOG_HIEROPHANT.get(), BogHierophant.attributes().build());
+        event.put(STRANGLER_QUEEN.get(), StranglerQueen.attributes().build());
+        event.put(JAGUAR_SPIRIT.get(), JaguarSpirit.attributes().build());
+        event.put(DROWNED_ADMIRAL.get(), DrownedAdmiral.attributes().build());
+        event.put(TURBINE_TYRANT.get(), TurbineTyrant.attributes().build());
+        event.put(SOLAR_HIERARCH.get(), SolarHierarch.attributes().build());
         event.put(GLOW_JELLYFISH.get(), GlowJellyfish.attributes().build());
         event.put(REEF_FISH.get(), ReefFish.attributes().build());
         event.put(MANTA_RAY.get(), MantaRay.attributes().build());
@@ -385,6 +447,13 @@ public final class ModEntities {
         event.put(TIDE_WRAITH.get(), TideWraith.attributes().build());
         event.put(BELL_MONK.get(), BellMonk.attributes().build());
         event.put(VOID_ACOLYTE.get(), VoidAcolyte.attributes().build());
+        event.put(SLUICE_DROWNED.get(), com.brasshaven.entity.mob.SluiceDrowned.attributes().build());
+        event.put(TURBINE_AUTOMATON.get(), com.brasshaven.entity.mob.TurbineAutomaton.attributes().build());
+        event.put(BOG_LEECH_MAN.get(), com.brasshaven.entity.mob.BogLeechMan.attributes().build());
+        event.put(ABYSS_CRAWLER.get(), com.brasshaven.entity.mob.AbyssCrawler.attributes().build());
+        event.put(RUST_MITE_MOTHER.get(), com.brasshaven.entity.mob.RustMiteMother.attributes().build());
+        event.put(RUST_MITE.get(), com.brasshaven.entity.mob.RustMite.attributes().build());
+        event.put(BOILER_GUNNER.get(), com.brasshaven.entity.mob.BoilerGunner.attributes().build());
     }
 
     /** Natural/structure spawning rules: on the ground, in the dark, like vanilla monsters. */
@@ -393,6 +462,10 @@ public final class ModEntities {
                 SKELETON_KNIGHT.get(), CRYPT_CRAWLER.get(), BANSHEE.get(), GARGOYLE.get(), EMBER_IMP.get(), VOID_LARVA.get(), CLOCKWORK_SPIDER.get(), STEAM_DRONE.get(),
                 BANDIT_MARKSMAN.get(), SKY_RAIDER.get(), LANTERN_WISP.get(), CINDER_HOUND.get(), RIFT_SENTINEL.get(),
                 FROZEN_HUSCARL.get(), MAGMA_SENTRY.get(), OATHBOUND_STATUE.get(), TIDE_WRAITH.get(), BELL_MONK.get(), VOID_ACOLYTE.get())) {
+            register(event, type);
+        }
+        for (EntityType<? extends Monster> type : List.of(SLUICE_DROWNED.get(), TURBINE_AUTOMATON.get(), BOG_LEECH_MAN.get(),
+                ABYSS_CRAWLER.get(), RUST_MITE_MOTHER.get(), RUST_MITE.get(), BOILER_GUNNER.get())) {
             register(event, type);
         }
         // the Barnacle Crab spawns under water (the sunken structures' spawn lists)
@@ -414,6 +487,10 @@ public final class ModEntities {
                 CLOCKWORK_SPIDER.get(), STEAM_DRONE.get(), GLOW_JELLYFISH.get(), REEF_FISH.get(), MANTA_RAY.get(), WHALE.get(),
                 BANDIT_MARKSMAN.get(), SKY_RAIDER.get(), BARNACLE_CRAB.get(), LANTERN_WISP.get(), CINDER_HOUND.get(), RIFT_SENTINEL.get(),
                 FROZEN_HUSCARL.get(), MAGMA_SENTRY.get(), OATHBOUND_STATUE.get(), TIDE_WRAITH.get(), BELL_MONK.get(), VOID_ACOLYTE.get())) {
+            capped(event, type);
+        }
+        for (EntityType<?> type : List.of(SLUICE_DROWNED.get(), TURBINE_AUTOMATON.get(), BOG_LEECH_MAN.get(), ABYSS_CRAWLER.get(),
+                RUST_MITE_MOTHER.get(), RUST_MITE.get(), BOILER_GUNNER.get())) {
             capped(event, type);
         }
     }

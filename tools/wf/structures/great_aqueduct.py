@@ -52,8 +52,9 @@ from ..defs import Piece, StructureDef, register
 from ..megakit import hash01, hash3, is_air
 from ..parts import LOOT, MOD
 
-# placeholder guardian until the aqueduct gets its own: the warden of the drowned citadel rises in the cistern
-BOSS = "brasshaven:drowned_warden"
+# the Lock-Master (entity/boss/LockMaster.java) rises in the great cistern: its ring of columns shelters from his jets
+# and his flush, his sluice gates drop from the dome
+BOSS = "brasshaven:lock_master"
 MOB_KNIGHT = "brasshaven:skeleton_knight"
 MOB_CRAWLER = "brasshaven:crypt_crawler"
 MOB_GARGOYLE = "brasshaven:gargoyle"
@@ -681,6 +682,7 @@ def furnish_room(bp, x0, x1, kind):
             bp.set(x, f + 1, -5, "brasshaven:copper_pipes")
             bp.set(x, f + 2, -5, "brasshaven:copper_pipes")
         bp.spawner(cx, f, -2, MOB_KNIGHT)
+        bp.spawner(x1 - 1, f, -3, "brasshaven:sluice_drowned")
         bp.chest(x0, f, -1, "east", loot=LOOT + "ga_valve")
 
 
@@ -1367,6 +1369,7 @@ def valve_hall(bp):
     bp.chest(x1, f, -8, "west", loot=LOOT + "ga_valve")
     bp.chest(x0, f, 8, "east", loot=LOOT + "ga_valve")
     bp.spawner(108, f, -2, MOB_KNIGHT)
+    bp.spawner(98, f, 3, "brasshaven:sluice_drowned")
     # the corridor south to the boss stair (x 110..112, z 10..29)
     for x in range(110, 113):
         for z in range(z1 + 1, BN[1] - 5):
@@ -1676,5 +1679,5 @@ register(StructureDef(
     ["plains", "sunflower_plains", "meadow", "savanna", "savanna_plateau"],
     [Piece("aqueduct", great_aqueduct, views=VIEWS)],
     spacing=80, separation=32, adaptation="none", processors="none", max_distance=128, foundation=False,
-    spawns=[(MOB_SKELETON, 8, 1, 2), (MOB_KNIGHT, 3, 1, 1)],
+    spawns=[(MOB_SKELETON, 8, 1, 2), (MOB_KNIGHT, 3, 1, 1), ("brasshaven:sluice_drowned", 5, 1, 2)],
     title_fr="Le Grand Aqueduc", title_en="The Great Aqueduct"))

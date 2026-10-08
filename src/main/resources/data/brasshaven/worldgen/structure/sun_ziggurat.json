@@ -1,0 +1,50 @@
+{
+  "type": "brasshaven:fitted_jigsaw",
+  "biomes": "#brasshaven:has_structure/sun_ziggurat",
+  "step": "surface_structures",
+  "spawn_overrides": {
+    "monster": {
+      "bounding_box": "piece",
+      "spawns": [
+        {
+          "type": "minecraft:husk",
+          "weight": 8,
+          "minCount": 1,
+          "maxCount": 2
+        },
+        {
+          "type": "brasshaven:crypt_crawler",
+          "weight": 3,
+          "minCount": 1,
+          "maxCount": 1
+        }
+      ]
+    }
+  },
+  "terrain_adaptation": "none",
+  "start_pool": "brasshaven:sun_ziggurat/start",
+  "size": 1,
+  "max_distance_from_center": 128,
+  "use_expansion_hack": false,
+  "start_height": {
+    "absolute": 0
+  },
+  "project_start_to_heightmap": "WORLD_SURFACE_WG",
+  "fit": {
+    "mode": "land",
+    "spread": 14,
+    "slope": 0.9,
+    "wet": 0.04,
+    "min_wet": 0.0,
+    "land": 0.5,
+    "drop": 10,
+    "depth": 0,
+    "clearance": 0,
+    "cover": 0,
+    "lift": 0,
+    "open": 0.0,
+    "ground": 6,
+    "pond": 0.0,
+    "theme": "sand"
+  }
+}

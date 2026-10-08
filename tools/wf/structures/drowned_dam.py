@@ -42,8 +42,9 @@ from ..megakit import (BRASS, BRASS_SLAB, BRASS_STAIRS, COPPER, COPPER_STAIRS, E
                        VERD_STAIRS, W, hash01, hash3, is_air, out_facing)
 from ..parts import LOOT, MOD
 
-# placeholder boss until the dam gets its own: the Grand Clockmaker wakes in the turbine chamber
-BOSS = "brasshaven:grand_clockmaker"
+# the dam's own boss: the Turbine Tyrant wakes in the turbine chamber (tools/BOSSES.md; its vents are the copper
+# grates of tyrant_floor, its pressure blast is dodged behind the four pillars)
+BOSS = "brasshaven:turbine_tyrant"
 MOB_SPIDER = W + "clockwork_spider"
 MOB_DRONE = W + "steam_drone"
 MOB_DROWNED = "minecraft:drowned"
@@ -1017,6 +1018,7 @@ def hall_one(bp):
         bp.set(-27, 7, z, f"{W}wall_cog[facing=west]")
     bp.spawner(-35, 1, 33, MOB_SPIDER)
     bp.spawner(-35, 1, 55, MOB_DRONE)
+    bp.spawner(-31, 1, 33, W + "turbine_automaton")
     # the passage to the west tower (3 wide)
     for x in range(-46, -42):
         for z in range(31, 34):
@@ -1053,6 +1055,7 @@ def hall_two(bp):
         bp.set(27, 7, z, f"{W}wall_cog[facing=east]")
     bp.spawner(35, 1, 33, MOB_SPIDER)
     bp.spawner(35, 1, 13, MOB_DRONE)
+    bp.spawner(31, 1, 33, W + "turbine_automaton")
     # the site of grace in the south bay, benches round it
     bp.set(38, 1, 55, MOD["waystone"])
     for x in (36, 40):
@@ -1061,6 +1064,28 @@ def hall_two(bp):
     # the passage to the chamber: lamps, a gauge plaque
     bp.set(27, 4, 33, EDISON)
     bp.set(27, 4, 37, EDISON)
+
+
+def tyrant_floor(bp):
+    """The Turbine Tyrant's chamber floor: eight 3 x 3 copper grates over the steam mains on a ring 12 blocks round
+    the seal (the boss finds them and blows them), and four cast-iron columns on the diagonals (2 x 2, 13 high) to
+    hide behind from his pressure blast."""
+    ax, az = AC
+    for k in range(8):
+        a = math.pi * 2 * k / 8
+        gx, gz = round(ax + 12 * math.cos(a)), round(az + 12 * math.sin(a))
+        for x in range(gx - 1, gx + 2):
+            for z in range(gz - 1, gz + 2):
+                bp.set(x, 0, z, "waxed_exposed_copper_grate")
+    for sx in (-1, 1):
+        for z0 in (20, 41):
+            xs = (10, 11) if sx > 0 else (-11, -10)
+            for x in xs:
+                for z in (z0, z0 + 1):
+                    bp.set(x, 0, z, IRON_BR)
+                    for y in range(1, 14):
+                        bp.set(x, y, z, BRASS if y in (4, 9) else (IRON_BR if y in (1, 12, 13) else PA))
+            bp.set(xs[0] if sx > 0 else xs[1], 14, z0, LANT)
 
 
 def arena(bp):
@@ -1079,6 +1104,7 @@ def arena(bp):
                 bp.set(x, 0, z, IRON_BR)
             elif d < 2:
                 bp.set(x, 0, z, BRASS_T)
+    tyrant_floor(bp)
     # alcove generators
     for c in ALCOVES:
         for x in range(c - 3, c + 4):
@@ -2514,5 +2540,5 @@ register(StructureDef(
      "old_growth_pine_taiga", "forest", "birch_forest"],
     [Piece("dam", drowned_dam, views=VIEWS)],
     spacing=80, separation=32, adaptation="none", processors="none", max_distance=128,
-    foundation=False, spawns=[(MOB_DROWNED, 4, 1, 2), ("minecraft:zombie", 4, 1, 2)],
+    foundation=False, spawns=[(MOB_DROWNED, 4, 1, 2), ("minecraft:zombie", 4, 1, 2), (W + "turbine_automaton", 4, 1, 1)],
     title_fr="Barrage de la vallée engloutie", title_en="Dam of the Drowned Valley"))

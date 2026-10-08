@@ -375,6 +375,126 @@ CREATURES = {
                 "il va apparaître scintille d'abord. Coincé, il frappe de sa dague. Sur le Halo brisé."),
         wiki="Adepte masqué au halo brisé : orbe du vide qui te suit et te soulève, téléportation de flanc (le point "
              "d'arrivée scintille d'abord), coup de dague de près. Halo brisé."),
+    # ---- second pack: the creatures of the colossal structures that had none of their own
+    "sluice_drowned": dict(
+        en="Sluice Drowned", fr="Noyé de l'écluse", egg=((64, 80, 96), (176, 146, 58)),
+        homes=["great_aqueduct"],
+        loot=[("rotten_flesh", 0, 2, None), ("copper_ingot", 0, 1, None), ("string", 0, 2, None),
+              ("tripwire_hook", 1, 1, 0.12)],
+        manual=("The drowned lock-keeper of the Great Aqueduct, in a sou'wester and waders, a boat-hook taller than "
+                "himself in his fist. He raises the hook and whirls it over his hat before casting it at you from up to "
+                "seven blocks away: it hooks you and hauls you to his feet, so break his line of sight or step aside. "
+                "Up close he draws the pole back along his arm before jabbing with the spike, and swings it out wide "
+                "behind him before a low sweep that knocks you off your feet. He swims and breathes under water. Found "
+                "in the Great Aqueduct.",
+                "Le gardien d'écluse noyé du Grand Aqueduc, en suroît et cuissardes, une gaffe plus haute que lui au "
+                "poing. Il lève la gaffe et la fait tournoyer au-dessus de son chapeau avant de la lancer sur toi jusqu'à "
+                "sept blocs : elle t'accroche et te ramène à ses pieds, alors coupe sa ligne de vue ou écarte-toi. De "
+                "près, il ramène la perche le long de son bras avant de piquer de la pointe, et la balance loin derrière "
+                "lui avant un balayage bas qui te fauche. Il nage et respire sous l'eau. Dans le Grand Aqueduc."),
+        wiki="Gardien d'écluse noyé armé d'une gaffe : il la fait tournoyer puis la lance à sept blocs pour t'attirer à "
+             "lui, pique de la pointe et fauche bas. Nage et respire sous l'eau. Grand Aqueduc."),
+    "turbine_automaton": dict(
+        en="Turbine Automaton", fr="Automate à turbine", egg=((186, 112, 58), (78, 156, 138)),
+        homes=["drowned_dam"],
+        loot=[(W + "brass_nugget", 1, 3, None), ("copper_ingot", 0, 2, None), ("redstone", 0, 2, None),
+              (W + "brass_gear", 1, 1, 0.2)],
+        manual=("A barrel-chested maintenance machine of the drowned dam, green with verdigris, a rotor turning in its "
+                "chest. When it crouches and its rotor spins faster and faster while steam screams from its stacks, it "
+                "is about to dash in a straight line: step out of the way and it skids past. Up close it raises both "
+                "paddle hands over its head before slamming them down, and sinks onto its haunches with arms thrown wide "
+                "before venting a scalding cloud around it. When it breaks, its boiler bursts: do not stand next to it. "
+                "Found in the Dam of the Drowned Valley.",
+                "Une machine d'entretien trapue du barrage noyé, verte de vert-de-gris, un rotor tournant dans la "
+                "poitrine. Quand elle s'accroupit et que son rotor tourne de plus en plus vite pendant que la vapeur "
+                "hurle de ses cheminées, elle va foncer en ligne droite : écarte-toi et elle passe en dérapant. De près, "
+                "elle lève ses deux pales au-dessus de sa tête avant de les abattre, et s'affaisse bras écartés avant "
+                "de lâcher un nuage brûlant autour d'elle. Quand elle se brise, sa chaudière éclate : ne reste pas à "
+                "côté. Dans le Barrage de la vallée noyée."),
+        wiki="Machine à turbine du barrage : son rotor s'emballe avant une charge en ligne droite, coup double des "
+             "pales, nuage de vapeur brûlante ; sa chaudière éclate à sa mort. Barrage de la vallée noyée."),
+    "bog_leech_man": dict(
+        en="Bog Leech-Man", fr="Homme-sangsue", egg=((66, 72, 44), (176, 70, 84)),
+        homes=["mire_stilt_city"],
+        loot=[("slime_ball", 0, 2, None), ("rotten_flesh", 0, 1, None), ("lily_pad", 0, 1, None),
+              ("spider_eye", 1, 1, 0.2)],
+        manual=("A hunched thing of the bog with a round lamprey mouth for a face, lurking in the water under the "
+                "stilt-city. It sinks low on its frog legs and flares its mouth before it leaps, from the water or the "
+                "boards, up to eight blocks: if it reaches you it latches on and drinks your blood, healing itself, until "
+                "you hit it twice or it has drunk for three seconds. It draws its claw back over its shoulder before a "
+                "raking swipe. It swims fast; fight it away from the water. Found in the Mire Stilt-City.",
+                "Une créature voûtée des tourbières, une bouche ronde de lamproie en guise de visage, tapie dans l'eau "
+                "sous la cité sur pilotis. Elle se ramasse sur ses pattes de grenouille et ouvre grand la bouche avant "
+                "de bondir, de l'eau ou des planches, jusqu'à huit blocs : si elle t'atteint, elle s'accroche et boit "
+                "ton sang en se soignant, jusqu'à ce que tu la frappes deux fois ou qu'elle ait bu trois secondes. Elle "
+                "ramène sa griffe par-dessus l'épaule avant de lacérer. Elle nage vite : combats-la loin de l'eau. Dans "
+                "la Cité des marais sur pilotis."),
+        wiki="Créature des tourbières à bouche de lamproie : elle bondit hors de l'eau, s'accroche et boit ton sang "
+             "(frappe-la deux fois pour t'en défaire), lacère de ses griffes. Cité des marais sur pilotis."),
+    "abyss_crawler": dict(
+        en="Abyss Crawler", fr="Rampant de l'abîme", egg=((214, 210, 200), (90, 170, 255)),
+        homes=["inverted_spire"],
+        loot=[("string", 0, 2, None), ("bone", 0, 2, None), ("ink_sac", 0, 1, None), ("echo_shard", 1, 1, 0.03)],
+        manual=("A long, pale, eyeless crawler on six spindly legs, blue lights along its spine. It walks up walls and "
+                "waits clinging under ceilings; when you pass beneath it curls up tight and grit trickles down, then it "
+                "drops onto you: look up, and step aside when the grit falls. On the ground it rears and lifts its "
+                "forelegs before raking you, and rears up high while its four-way jaw peels open before a screech that "
+                "blinds you with darkness. Found in the Inverted Spire.",
+                "Un long rampant pâle et aveugle sur six pattes grêles, des lueurs bleues le long de l'échine. Il marche "
+                "sur les murs et attend accroché sous les plafonds ; quand tu passes dessous, il se roule en boule et du "
+                "gravier tombe, puis il se laisse choir sur toi : lève les yeux et écarte-toi quand le gravier tombe. Au "
+                "sol, il se cabre et lève ses pattes avant de te lacérer, et se dresse pendant que sa mâchoire en quatre "
+                "s'ouvre avant un cri qui t'aveugle de ténèbres. Dans la Flèche inversée."),
+        wiki="Rampant pâle et aveugle qui marche sur les murs et se laisse tomber des plafonds (du gravier tombe "
+             "d'abord) ; lacère de ses pattes et pousse un cri qui plonge dans les ténèbres. Flèche inversée."),
+    "rust_mite_mother": dict(
+        en="Rust Mite Swarm-Mother", fr="Mère des mites de rouille", egg=((156, 78, 38), (255, 140, 50)),
+        homes=["fallen_colossus"],
+        loot=[("iron_nugget", 1, 4, None), ("copper_ingot", 0, 1, None), (W + "rust_rock", 1, 2, 0.3),
+              ("raw_iron", 1, 1, 0.1)],
+        manual=("A tick with an enormous swollen abdomen of flaking rust, nesting in the Fallen Colossus. Its bite "
+                "corrodes your armour. Its abdomen pumps three times while it rears before it spits a gobbet of rust "
+                "that slows and weakens you. Once, it plants its legs while its abdomen swells and shudders, its pores "
+                "glowing: kill it fast or step back, for its brood bursts out, two or three tiny rust mites. Found in "
+                "the Fallen Colossus.",
+                "Une tique à l'énorme abdomen gonflé de rouille écailleuse, nichée dans le Colosse abattu. Sa morsure "
+                "ronge ton armure. Son abdomen palpite trois fois pendant qu'elle se cabre avant de cracher un paquet de "
+                "rouille qui ralentit et affaiblit. Une fois, elle se plante sur ses pattes pendant que son abdomen "
+                "enfle et tremble, ses pores luisants : tue-la vite ou recule, car sa couvée éclate, deux ou trois "
+                "minuscules mites de rouille. Dans le Colosse abattu."),
+        wiki="Tique de rouille au gros abdomen : morsure qui ronge l'armure, crachat de rouille qui ralentit, et une "
+             "fois sa couvée éclate en deux ou trois mites. Colosse abattu."),
+    "rust_mite": dict(
+        en="Rust Mite", fr="Mite de rouille", egg=((206, 120, 62), (62, 56, 56)),
+        homes=["fallen_colossus"],
+        loot=[("iron_nugget", 0, 1, None)],
+        manual=("The brood of the Rust Mite Swarm-Mother: a flake of rust on six needle legs. Tiny, fast and frail; it "
+                "rears and spreads its mandibles before it bites, and crumbles away after a minute. Found in the Fallen "
+                "Colossus.",
+                "La couvée de la Mère des mites de rouille : un éclat de rouille sur six pattes en aiguille. Minuscule, "
+                "rapide et fragile ; elle se cabre et écarte ses mandibules avant de mordre, et s'effrite au bout d'une "
+                "minute. Dans le Colosse abattu."),
+        wiki="Couvée minuscule de la Mère des mites de rouille : rapide, fragile, mord et s'effrite au bout d'une "
+             "minute. Colosse abattu."),
+    "boiler_gunner": dict(
+        en="Boiler Gunner", fr="Canonnier-chaudière", egg=((66, 64, 68), (190, 150, 70)),
+        homes=["walking_fortress"],
+        loot=[("gunpowder", 1, 3, None), ("coal", 0, 2, None), (W + "brass_nugget", 1, 3, None),
+              (W + "brass_gear", 1, 1, 0.15)],
+        manual=("A walking boiler whose right arm is a flak cannon, left aboard the Walking Fortress Wreck. It is slow "
+                "but shoots from far: it plants its feet and raises the cannon while the gauge on its head climbs into "
+                "the red and a trail of smoke marks where it aims; the aim locks a quarter of a second before the shot, "
+                "and the shell bursts in a cloud of flak there: keep moving. Get close and it swings its firebox door "
+                "open before belching fire, or lifts a foot high before stamping a shockwave. Found in the Walking "
+                "Fortress Wreck.",
+                "Une chaudière ambulante dont le bras droit est un canon de DCA, restée à bord de l'épave de la "
+                "Forteresse marchante. Lente mais elle tire de loin : elle se campe et lève le canon pendant que la "
+                "jauge de sa tête monte dans le rouge et qu'une traînée de fumée marque sa visée ; la visée se fige un "
+                "quart de seconde avant le tir et l'obus éclate là en une gerbe d'éclats : reste en mouvement. De près, "
+                "elle ouvre la porte de son foyer avant de cracher du feu, ou lève un pied bien haut avant de frapper "
+                "le sol d'une onde de choc. Dans l'épave de la Forteresse marchante."),
+        wiki="Chaudière ambulante au bras-canon : visée signalée par la fumée puis obus à éclats, jet de feu de son "
+             "foyer et coup de pied qui ébranle le sol. Lente. Forteresse marchante."),
 }
 
 FOLK_IDS = list(PEOPLES)
@@ -674,6 +794,8 @@ def check_trades(known_items):
 CREATURE_HEIGHT = {"bandit_marksman": 2, "sky_raider": 2, "barnacle_crab": 1, "lantern_wisp": 2, "cinder_hound": 1,
                    "rift_sentinel": 3, "frozen_huscarl": 2, "magma_sentry": 3, "oathbound_statue": 3,
                    "tide_wraith": 2, "bell_monk": 2, "void_acolyte": 2}
+CREATURE_HEIGHT.update({"sluice_drowned": 2, "turbine_automaton": 2, "bog_leech_man": 2, "abyss_crawler": 1,
+                        "rust_mite_mother": 1, "rust_mite": 1, "boiler_gunner": 3})
 _AIR = ("minecraft:air", "minecraft:cave_air")
 _BAD_FLOOR = ("magma_block", "campfire", "fire", "lava", "cactus", "leaves", "powder_snow", "mist_gate", "spawner",
               "boss_seal", "_bed", "chest", "barrel", "scaffolding", "_slab", "_stairs", "carpet", "_fence", "_wall")

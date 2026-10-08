@@ -1,0 +1,37 @@
+{
+  "display": {
+    "icon": {
+      "id": "brasshaven:admiral_cutlass"
+    },
+    "title": {
+      "translate": "advancements.brasshaven.explorer.boss_drowned_admiral.title"
+    },
+    "description": {
+      "translate": "advancements.brasshaven.explorer.boss_drowned_admiral.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "kill": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "entity_type": "brasshaven:drowned_admiral"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "parent": "brasshaven:explorer/dreadnought_wreck",
+  "rewards": {
+    "experience": 500
+  }
+}

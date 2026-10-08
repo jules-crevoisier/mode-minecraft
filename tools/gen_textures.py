@@ -118,6 +118,13 @@ EGGS = {
     "frost_jarl": ((46, 64, 108), (160, 226, 250)),
     "storm_ascetic": ((214, 138, 46), (176, 226, 255)),
     "tide_abbess": ((40, 84, 90), (110, 238, 214)),
+    "abyssal_architect": ((54, 56, 64), (96, 226, 246)),
+    "lock_master": ((192, 150, 68), (70, 196, 236)),
+    "bog_hierophant": ((78, 106, 46), (196, 244, 96)),
+    "strangler_queen": ((86, 62, 40), (96, 214, 150)),
+    "solar_hierarch": ((214, 170, 72), (255, 178, 70)),
+    "drowned_admiral": ((38, 46, 74), (96, 236, 196)),
+    "turbine_tyrant": ((104, 98, 94), (255, 178, 70)),
 }
 
 
@@ -174,6 +181,13 @@ EMBLEMS = {
     "frost_jarl": ["#.#.#", "#####", ".###.", ".###.", "..#.."],        # ice crown over a beard
     "storm_ascetic": ["..##.", ".##..", "####.", "..##.", ".##.."],    # a bolt of lightning
     "tide_abbess": [".###.", "#...#", "#.#.#", "#..#.", "#...."],       # the crozier's spiral
+    "abyssal_architect": ["..#..", "..#..", ".###.", "#####", ".###."],  # a plumb-bob on its line
+    "lock_master": ["#####", "#.#.#", "#####", "#.#.#", "#####"],       # a sluice gate in its frame
+    "bog_hierophant": ["..#..", ".###.", "#####", ".#.#.", "#.#.#"],    # a mitre over stilts
+    "strangler_queen": ["#.#.#", ".###.", "..#..", ".###.", "#.#.#"],   # an orchid crown over roots
+    "solar_hierarch": ["#.#.#", ".###.", "##.##", ".###.", "#.#.#"],    # a rayed sun-disc
+    "drowned_admiral": ["#####", ".###.", "#...#", "#...#", ".###."],   # a bicorne over a diving helmet
+    "turbine_tyrant": ["#...#", ".#.#.", "..#..", ".#.#.", "#...#"],    # a four-bladed rotor
 }
 
 

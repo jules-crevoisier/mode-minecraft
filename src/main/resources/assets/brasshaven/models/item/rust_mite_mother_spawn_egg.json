@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "brasshaven:item/rust_mite_mother_spawn_egg"
+  }
+}

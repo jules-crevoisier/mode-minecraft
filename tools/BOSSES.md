@@ -640,6 +640,431 @@ acolytes and baptism strays use `scaledCount`.
 Previews: `python3 tools/gen_models.py --preview --only tide_abbess` → `build/previews/models/tide_abbess.png`;
 held crozier: `python3 tools/art_sheet.py --kind held --only abbess_crozier`.
 
+## 16. Champion of the Dam of the Drowned Valley: The Turbine Tyrant (Le Tyran des turbines)
+Files: `tools/wf/mobs/turbine_tyrant.py` (model), `src/main/java/com/brasshaven/entity/boss/TurbineTyrant.java`
+(moveset). No lair module: the arena is the dam's main turbine chamber (interior 37 x 39, x -18..18, z 12..50, air to
+y 24, three generators in north-wall alcoves, the vault behind bars in the south wall, mists on both passages; `BOSS` in
+`tools/wf/structures/drowned_dam.py`, seal radius 17), reached by the east tower's newel stair and Generator Hall II's
+site of grace. It replaces the reused Grand Clockmaker. `tyrant_floor()` adds to the chamber eight 3 x 3 copper grates
+on a ring 12 round the seal (his steam vents) and four 2 x 2 cast-iron columns on the diagonals, 13 high (cover from
+the blast). Reward: `remembrance_turbine_tyrant` → **Valve-Wrench of the Turbine Tyrant** (`tyrant_wrench`, LITHITE
+8 / -3.0, new ability shape **PRESSURE** in `BossWeaponItem`: a steam blast round the wielder, radius 8, that only
+reaches foes in the wielder's line of sight (walls shield them), 12 within 3 blocks falling to half at the edge, hurled
+away and set alight, and Speed II 3 s for the wielder; held model `valve_wrench` in `wf/held3d.py`, sprite
+`valve_wrench` in `wf/itemart_shapes.py`), plus gold, map fragments, emeralds, diamonds, copper, redstone blocks,
+pistons and a 15% heavy core (`gen_data.py`). Quest: `explorer/boss_turbine_tyrant`.
+
+**Concept.** The dam's engineer, fused into the turbine he would not leave when the valley flooded: 5.7 blocks with his
+smokestacks. His body is a round scroll-case of riveted gunmetal and brass on two hydraulic legs (piston rods, iron
+boots), the turbine's intake glowing amber in his belly with the impeller turning inside; the engineer's soot-black
+torso grows from its top (leather apron with brass buckles, an iron pauldron right, a brass one left), a flat cap, amber
+goggles, a respirator with a hose into the case. Asymmetry: the right arm ends in a four-bladed turbine rotor that
+always spins; the left fist holds a valve-wrench as long as a man, its jaw open on a brass worm screw; a copper outlet
+pipe curls out of his left flank, a valve wheel and three gauges sit on the case's right shoulder, the left smokestack
+is bent.
+
+**Stats.** 600 health, armour 14, toughness 5, poise 115, knockback resistance 1.0, fire immune, yellow bar. Three
+phases: phase 2 at 65% (roar, +10% speed, a steam ring); phase 3 at 30%, driven by the class (like the Jailer): when
+he is free he chains `overload`, then every 11 s (x `cooldownScale()`) `dash`. `overload` and `dash` have range 999
+so the picker never rolls them. **He places no block**: cracks, steam columns and spark trails are timed effects,
+cleared with the rest when the fight resets.
+
+**The vents.** On his first use he scans the floor (the layer under his home) within the arena for copper grates and
+groups touching grates into vents, sorted round the chamber. Without grates (spawned by command or egg) he uses
+eight virtual 3 x 3 vents on a ring 12 blocks round his spawn point. A vent hisses (white smoke on its grates, a ring of
+hot dust for its last 8 ticks), then a steam column bursts up 3.5 blocks: 10 + thrown up, then 3 every 5 ticks while
+you stay on it.
+
+| Move | Phase | Wind-up / active / recovery | Range | What it does |
+|---|---|---|---|---|
+| rotor | 1-3 | 22 / 4 / 16 | 0-7.5 | Rotor drawn back right with a rising flute whine (arc in brass dust), swept over 240° out to 7: 16. P2: 35% chains wrench (close) or charge. |
+| wrench | 1-3 | 20 / 4 / 16 | 0-12 | Wrench overhead (ring at 4 ahead and the crack line marked in hot dust), slammed: 18 in r 2.8; a crack runs on at 1 b/t to 20 out (stops at a wall or pillar): 12 + lift once; every vent it crosses blows at once (warn 6, column 16). P2: three cracks at -20/0/20°, 40% chains rotor. |
+| vents | 1-3 | 18 / 30 / 14 | 0-30 | Cranks his shoulder valve: P1 every other vent (warn 24, column 30), P2 every vent but two opposite ones (marked in brass), column 40 once overloaded. |
+| pressure | 1-3 | 46 / 10 / 20 | 0-30 | Spectacle: 2.3 s of build-up (ring of steam at the reach, flute rising, a bell cue 0.6 s before, stacks smoking harder), then a radial blast: 22 + knockback 2 + Slowness II 2 s to everyone within 16 (19 in P2) **whom he can see** (a ray from his chest to the head and to the body of each player, both blocked = safe) and to anyone within 3.5. Hide behind a column or a generator, or out-range him. |
+| charge | 1-3 | 16 / 12 / 14 | 6-22 | Shoulders down (path marked 14 out), barrels at 1.15 b/t: 15 once, knockback 1.6; stops dead on a wall. |
+| stomp | 1-3 | 12 / 4 / 14 | 0-4 | Anti-hug: ring at 4.5, the leg slams: 13, knockback 1.4. P2: 40% chains rotor. |
+| grind | 2-3 | 18 / 30 / 16 | 0-7.5 | Rotor (active 0, anim 0.9 s, 14, ±110°), turn 40°, slam ring + line re-marked, wrench (tick 12, 1.5 s, 16 + a crack to 11), turn 40°, rotor back (tick 24, 2.1 s, 14). |
+| vortex | 2-3 | 20 / 30 / 14 | 0-16 | Rotor raised like a fan, rings closing; 24 ticks of pull toward him (0.09 b/t, capped 0.55, inward only) within 14, then a whirl at tick 26 (2.3 s): 16 in r 4.8. |
+| cascade | 2-3 | 18 / 30 / 14 | 0-30 | (vents animation) The vents blow one after another round the chamber, 5 ticks apart, from the one nearest the target (warn 16, column 14); overloaded, a second run goes the other way 1 s later. |
+| overload | 3 (once) | 30 / 20 / 20 | scheduled | Kneels, invulnerable ~2.6 s, cranks his own heart: spark ring (12, jump), +20% speed. |
+| dash | 3 | 20 / 45 / 16 | scheduled | Three marks (every player up to three, then random spots, clamped in the arena) follow 14 ticks then lock, linked by sparks; he runs mark to mark in 15 ticks each (up to 1.8 b/t): 14 within 2.2 once per leg, dropping spark patches every 2 ticks that burn 4 s (3 + 2 s of fire every half second). |
+
+**Phase 3 (overload).** Every 9 s x `cooldownScale()` a third of the vents blow on their own (warn 30, column 30,
+a bell cue), whatever he is doing. Reset: overloaded and the speed modifiers are cleared, effects are dropped by the
+engine. Co-op and NG+ come from the engine (dash marks and the blast scale naturally with players; the dash and the
+passive vent timers use `cooldownScale()`).
+
+Previews: `python3 tools/gen_models.py --preview --only turbine_tyrant` → `build/previews/models/turbine_tyrant.png`;
+held wrench: `python3 tools/art_sheet.py --kind held --only tyrant_wrench`.
+
+## 17. Champion of the Great Aqueduct: The Lock-Master (Le Maître des écluses)
+Files: `tools/wf/mobs/lock_master.py` (model), `src/main/java/com/brasshaven/entity/boss/LockMaster.java` (moveset).
+No lair module: the arena is the aqueduct's existing great cistern under the castellum (`cistern()` in
+`tools/wf/structures/great_aqueduct.py`: floor radius 17.5, a dome 17 high at the centre and 9 at the wall, a ring of
+eight 2 x 2 columns at radius 12, a water gutter at radius 15-16 and a basin ring round the seal; seal radius 16, `BOSS`
+in the same file). It replaces the reused Drowned Warden. Reward: `remembrance_lock_master` → **Pressure-Lance of the
+Lock-Master** (`pressure_lance`, LITHITE 8 / -3.0, new ability shape **JET** in `BossWeaponItem`: a high-pressure jet
+14 blocks along the aim, stopped by walls, 11 to every foe in it, each hurled to the far end of the jet; the recoil
+pushes the wielder back half a block and puts out fire; held model `pressure_lance` in `wf/held3d.py`, sprite `lance`),
+plus gold, map fragments, emeralds, diamonds, copper, pistons and a 15% heart of the sea (`gen_data.py`). Quest:
+`explorer/boss_lock_master`.
+
+**Concept.** A hulking hydraulic warden, 5.2 blocks: a riveted brass boiler of a body on short piston legs (hydraulic
+rams down the thighs), the head sunk low between the shoulders, a round diving helm with one glowing porthole and a
+spoked valve wheel bolted on top for a crown. Asymmetry: a whole sluice gate on the left arm (iron frame, wet oak
+planks, straps, a valve wheel in its middle, rack teeth down its edge), a pressure-lance longer than he is tall in the
+right (brass vamplate, a copper hose coiled down the shaft, a glowing nozzle for a point), a big valve wheel on the
+right pauldron, two banded copper tanks on his back with glowing sight glasses. Verdigris everywhere.
+
+**Stats.** 600 health (colossal overworld tier), armour 14, toughness 5, poise 120, knockback resistance 1, yellow bar,
+preferred range 6. Three phases: phase 2 at 65% (roar, +10% speed, a small steam wave); phase 3 at 30%, driven by the
+class (like the Chained Jailer / Abbess): when he is free he chains `flush`, then again every 22 s (x
+`cooldownScale()`, counted from the start of the last flush). `reel` and `flush` have range 999 so the picker never
+rolls them. Anyone who stays behind him within 6.5 blocks for 1.2 s gets a `spin` (at most every 8 s).
+
+**The guard.** During the bash wind-up (`guarding`) every frontal hit (source within 78° of his facing, not
+`BYPASSES_SHIELD`) under 11 damage is blocked (shield sound, sparks). A frontal hit of 11+ (a crit, an axe, a charged
+bow) or any hit from behind (more than 107° off his facing, +25% damage) breaks the guard: he chains `reel` (2 s open,
++30% damage taken for 2 s). A surge that rams one of his own gates also ends in `reel`.
+
+| Move | Phase | Wind-up / active / recovery | Range | What it does |
+|---|---|---|---|---|
+| thrust | 1-3 | 16 / 4 / 14 | 0-10 | Lance drawn back (line of water-light, foam for the last 6 ticks), driven ahead: line 9.5 x 2, 16. P2: 30% chains spin if close. |
+| spin | 1-3 | 18 / 4 / 16 | 0-6 | Brass ring r 6.5, then a full turn at knee height: 13 all round. Also the answer to back-stabbers (above). |
+| bash | 1-3 | 24 / 8 / 16 | 0-12 | Walks behind the raised gate (guarding, 0.07 b/t, line of brass 7), then rushes 6 ticks at 1.0 b/t (1.2 in P3): 14 once, knockback 1.7. P2: 50% chains thrust. |
+| jets | 1-3 | 20 / 40 / 16 | 0-26 | Both sweep edges drawn (stopped where the jet will stop) plus the arc. A jet 18 long (22 in P3) from the nozzle sweeps 100° (P1 once over 2 s; P2+ there and back, 1 s each way); the body turns with it. 10 (11) once per pass, pushed back. `level.clip` per tick: columns and gates stop it. |
+| sluice | 1-3 | 20 / 10 / 18 | 0-26 | Marks a 3-tile gate across the line from him on every player (up to 4) plus `scaledCount(1/2/3)` strays (P1/P2/P3), max 7; brass squares on the tiles, drips from the vault above. After the slam each gate drops 10 + 3i ticks later (warning >= 1.5 s): 18 + Slowness II to whoever stands under it (that column stays open), else iron bars 3 high stand 9 s (11 s in P3). |
+| skewer | 2-3 | 14 / 24 / 14 | 0-10 | Three thrusts at active 0, 10, 20: 13 each, turning up to 30° toward the target between them. |
+| surge | 2-3 | 16 / 14 / 16 | 6-22 | Line 16; rams at 1.15 b/t: 15 once (+Slowness in P3). Into a gate: the gate bursts and he reels. 40% chains thrust. |
+| burst | 2-3 | 18 / 4 / 16 | 0-7 | Steam ring r 6, then 14 inside, then a wave to 12 (7, jump it). |
+| flush | 3 (scheduled) | 30 / 136 / 20 | scheduled | Invulnerable 1.6 s, foam chevrons show the current's direction (one of 8). Then a current for 6.8 s pushes every player on the floor downstream (+0.07 b/t, capped 0.42) unless a block stands within 3 blocks upstream (columns, gates: the lee). Meanwhile four 34-tick charges: aim 12 ticks at a player (cycling through them, line 16), charge 18 ticks at 1.1 b/t (16 once, stops at walls, bursts gates), rest. First flush: +12% speed and a ring wave (12, jump). |
+| reel | any (on guard break) | 6 / 4 / 30 | never rolled | Shield flung aside, open for 2 s. |
+
+**Gates are real, temporary blocks** (`Blocks.IRON_BARS`, at most 150): only placed in air over a sturdy floor, inside
+radius 15, never on a creature. Each is remembered with the tick it lifts; `clearGates` removes them when they expire,
+when a charge bursts them, at once when no player is within radius + 14, in `onDefeated`, in `remove()` for any
+destroying removal, and after a reload (saved as `LockGates`, removed on the first tick). Only blocks still iron bars
+are removed.
+
+**Co-op and NG+** come from the engine (health, damage, poise, cooldowns, compressed wind-ups, the soul wave); the gates
+scale per player (one each) plus `scaledCount` strays, flush charges cycle through the players, the flush interval and
+the back-spin delay use `cooldownScale()`.
+
+Previews: `python3 tools/gen_models.py --preview --only lock_master` → `build/previews/models/lock_master.png`;
+held lance: `python3 tools/art_sheet.py --kind held --only pressure_lance`.
+
+## 18. Champion of the Mire Stilt-City: The Bog Hierophant (Le Hiérophante des tourbières)
+Files: `tools/wf/mobs/bog_hierophant.py` (model), `src/main/java/com/brasshaven/entity/boss/BogHierophant.java`
+(moveset). No lair module: the arena is the stilt-city's existing witch-queen's hall, 34 blocks over the swamp (a round
+floor of radius 17.5 under a crooked cone, eight 2x2 posts at radius 12.5 as cover, the throne dais on one side, four
+cauldrons on soul campfires, one door with mist; `BOSS` in `tools/wf/structures/mire_stilt_city.py`, seal radius 16),
+reached by the High Walk, its site of grace and the grand stair. It replaces the reused Swamp Crone. Reward:
+`remembrance_bog_hierophant` → **Lantern-Crozier of the Bog Hierophant** (`hierophant_crozier`, LITHITE 8 / -3.0, new
+ability shape **MIRE** in `BossWeaponItem`: the bog opens where you look, up to 12 blocks (short of walls); every foe
+within 4 blocks of it takes 9, is dragged toward its heart, held fast (Slowness VII 3 s) and poisoned (Poison II 5 s);
+held model `lantern_crozier` in `wf/held3d.py`, sprite `crozier`), plus gold, map fragments, emeralds, diamonds, mud,
+slime balls, lanterns and a 30% spore blossom (`gen_data.py`). Quest: `explorer/boss_bog_hierophant`.
+
+**Concept.** The rotting bishop of the swamp, a "bishop on stilts", 5.9 blocks with his mitre: a hunched prelate who
+stalks on two long, thin legs bound in mangrove roots like the piles of his own town (root toes splayed in the mud,
+leeches on the shins), an open cope of living moss with a dripping hem over a rotted purple chasuble and a tarnished
+orphrey gone to verdigris, a mossy hump pierced by vertebrae, a skull-like face of grey-green bog flesh with marsh-light
+eyes, a slack jaw and a beard of hanging moss, a tall crooked mitre of mouldy linen with a toadstool on it. Asymmetry: a
+tall crozier of twisted black mangrove wood in his right hand, its crook curling over a caged lantern of swamp-fire; a
+bare bone-thin left arm with a hooked claw and a rosary of finger bones; a lily pad and brown toadstools on the left
+shoulder; a cloud of marsh-flies circling his head (14 specks, four of them glowing).
+
+**Stats.** 600 health (colossal overworld tier, the hardest so far), armour 12, toughness 4, poise 110, knockback
+resistance 1.0, no fall damage, green bar. Three phases: phase 2 at 65% (roar, +10% speed, eight bog lanterns kindle round
+the hall); phase 3 at 30%, driven by the class like the Chained Jailer: when he is free he chains `kindle`, then every
+11 s (x `cooldownScale()`) `firelines`. `leeches`, `kindle` and `firelines` have range 999 so the picker never rolls them.
+
+| Move | Phase | Wind-up / active / recovery | Range | What it does |
+|---|---|---|---|---|
+| sweep | 1-3 | 16 / 4 / 14 | 0-7.5 | Crozier drawn back over the right shoulder (arc in swamp-fire), swept over 200°, 7 out: 16. P2: 35% chains reap (close) or lure (far). |
+| slam | 1-3 | 20 / 3 / 16 | 0-9 | Lifted in both hands (mud line 8 long, ring at the tip): 19 down the line (half-width 1.4); a 2.5-radius mud circle opens where the lantern lands. |
+| lure | 1-3 | 18 / 10 / 14 | 3-22 | Lantern held out (a thread of swamp-fire to the target): the target is marked (P2: every player in the hall, up to 4). The mark's ring follows for 38 ticks, locks for 12, then blooms: 12 + Poison II 4 s in r 3, and lingers 2 s (2 + poison every half second). Get away from your friends. |
+| mire | 1-3 | 20 / 30 / 14 | 0-22 | Crozier planted, claw drawn down: rings of mud dust follow the target (12 ticks) and every other player, plus strays (3 circles, P2 4, P3 5, r 3). At the impact the floor in each circle turns to real mud for 5 s: 8 on opening, Slowness III inside, after 1 s rooted (Slowness VII, motion stopped, 2 a second). P3: each circle bursts in flame when it closes (8 + fire). |
+| stomp | 1-3 | 12 / 3 / 12 | 0-4.5 | A stilt raised (mud ring): 12 in r 4.5, shove, Slowness II 2 s. P2: + a mud ring to jump (8, out to 9). |
+| stride | 1-3 | 14 / 10 / 12 | 6-18 | Leans in (mud line 10 long), strides 1 b/t for 10 ticks (stops on walls): 15 once per target. P2: 40% chains sweep. |
+| leeches | 1-3 | 16 / 4 / 14 | scheduled | First after 13 s, then every 28 s x cooldownScale when there is room: mud rings, then vanilla silverfish drop off his robe (minion tag). Alive at most `scaledCount(2)` (P2 `scaledCount(3)`), at most `scaledCount(2)` per call. Discarded when he dies. |
+| reap | 2-3 | 16 / 16 / 14 | 0-7.5 | Forehand sweep at the impact (15), a 35° turn, arc re-drawn, backhand 12 ticks later (15). |
+| swarm | 2-3 | 18 / 40 / 14 | 0-16 | Arms spread, jaw open: the marsh-fly swarm hunts the target for 2 s at 0.23 b/t (0.27 kindled; a sprint outruns it): 3 every half second, Poison I 3 s and Hunger II once. With 3+ players a second, slower swarm takes another player. |
+| wisp | 2-3 | 18 / 70 / 16 | 0-30 | Spectacle: he burns away into a marsh-light (hidden and untouchable) and flits to three of the eight lanterns (active 0, 15, 30; each flares and chimes). At 44 a ring of swamp-fire, the strike arc and a soul chime mark the spot 2.6 blocks behind the target (locked); at 52 he rises there facing the target; at 60 he strikes over 120°, 4.5 out: 17 + Poison I. Turn round and step aside. |
+| kindle | 3 (once) | 30 / 20 / 20 | scheduled | Kneels, invulnerable ~2.6 s, lantern lifted while swamp gas bubbles over the floor; dashed down: a ring of fire (12, jump), +12% speed, flames round him. |
+| firelines | 3 | 20 / 50 / 14 | scheduled | Spectacle: lantern swung round his head while the plan is drawn (small flames on the start line, swamp-fire on the gap edges); then burning gas rolls across the hall at 0.5 b/t, 3 high (too tall to jump): 12 + fire 4 s once per line outside the gaps (3.6 wide). Patterns in turn: **volley** (three parallel lines 16 ticks apart, the first gap on the target's side, each next gap shifted 5-8 blocks; a second gap in co-op), **cross** (two lines at 90°, 24 ticks apart, two gaps each, one within 7 blocks of the target), **ring** (a ring closes from the wall to the centre at 0.32 b/t with two radial lanes). Afterwards he is spent for 2.5 s (+25% damage): the punish window. |
+
+**The blocks are temporary.** The mud circles replace only plain full floor blocks with air above them (no block
+entities) within the arena, at most 400 at a time; every original block state is recorded with the tick it comes back
+and only a block that is still mud is restored. The eight lanterns (vanilla lanterns on the wisp anchors at radius 10
+between the posts, pulled in if blocked) are only placed into air over a sturdy floor. Everything is put back when it
+expires (checked every tick, so a lost effect cannot leave mud behind), as soon as no player is within radius + 14 of
+the arena (death, flight; the lanterns come back when players return in phase 2), when the fight resets to phase 1, in
+`onDefeated`, in `remove()` for any destroying removal, and after a reload (mud positions and states and lantern
+positions are saved as `HierophantMudPos`/`HierophantMudStates`/`HierophantLanterns` and restored on the first tick).
+He never places fire: the fire lines, blooms and swarms are particles and hit checks.
+
+**Co-op and NG+** come from the engine: health, damage, poise, cooldowns (leech and fire-line timers use
+`cooldownScale()`), compressed wind-ups (the wisp's hops key off active ticks, unchanged), the soul wave. Lure marks and
+mire circles land on every player; leeches use `scaledCount`; the second swarm and extra fire-line gaps appear in co-op.
+
+Previews: `python3 tools/gen_models.py --preview --only bog_hierophant` → `build/previews/models/bog_hierophant.png`;
+held crozier: `python3 tools/art_sheet.py --kind held --only hierophant_crozier`.
+
+## 19. Champion of the Inverted Spire: The Abyssal Architect (L'Architecte de l'abîme)
+Files: `tools/wf/mobs/abyssal_architect.py` (model), `src/main/java/com/brasshaven/entity/boss/AbyssalArchitect.java`
+(moveset). No lair module: the arena is the spire's existing island in the underground lake (floor radius 17.5, a low
+blackstone wall at 20, eight soul-fire pillars at 18.6, the spire's point 12 blocks over the centre with a soul lantern
+at its tip, mist on the north and south causeways; `BOSS` in `tools/wf/structures/inverted_spire.py`, seal radius 15).
+It replaces the reused Sculk Spawn. Reward: `remembrance_abyssal_architect` → **Plumb of the Abyssal Architect**
+(`architect_plumb`, LITHITE 8 / -3.0, new ability shape **PLUMB** in `BossWeaponItem`: the plumb-bob falls from on
+high onto the spot you aim at, up to 16 blocks, 12 to every foe within 2.5 and Slowness IV 2 s (pinned); held model
+`architect_plumb` in `wf/held3d.py`, sprite `plumb` in `wf/itemart_shapes.py`), plus gold, map fragments, emeralds,
+diamonds, iron chains, echo shards, soul lanterns and a 20% recovery compass (`gen_data.py`). Quest:
+`explorer/boss_abyssal_architect`.
+
+**Concept.** The builder-priest who raised the spire downward into the dark, 5.7 blocks (7 with his chains): a gaunt,
+stooped marionette of a priest. Three iron chains rise from a harness on his back to broken hooks high over his
+pinnacle mitre; a limestone mask with three soul-blue slits; a narrow slate cassock to the floor, its torn hem marked
+like a mason's rule, a chalk sketch of the inverted spire on the skirt, a gold-stitched stole with square-and-compass
+glyphs, a short hooded ash cape. Four arms: the long upper pair holds a **plumb-bob flail** (right: a long chain and a
+great lead bob capped in brass with a glowing plumb line) and a **compass-blade** (left: giant dividers, one leg a steel
+blade); the thin lower pair, growing from his ribs, holds a brass set-square and a soul lantern.
+
+**Stats.** 600 health (colossal overworld tier), armour 12, toughness 4, poise 110, knockback resistance 1.0, blue bar,
+no fall damage. Three phases: phase 2 at 65% (roar, +10% speed, a small shock ring); phase 3 at 30%, driven by the
+class (like the Chained Jailer): when he is free he chains `unmoor`, then every 15 s (x `cooldownScale()`)
+`chainswing`. `descend`, `unmoor` and `chainswing` have range 999 so the picker never rolls them.
+
+| Move | Phase | Wind-up / active / recovery | Range | What it does |
+|---|---|---|---|---|
+| descend | entrance | 30 / 30 / 16 | scheduled | When the fight starts (and again after a reset) he hangs from the chains under the spire's point (headroom - 6.6, up to 7 up; chains drawn to the tip), a soul ring under him; then lets go: landing 14 within 3.5 + shock ring (8, to r 9, jump). |
+| compass | 1-3 | 12 / 4 / 12 | 0-5.5 | Arc chalked (±65°, 4.8): slash 13. P2: 40% chains flail (close) or plummet. |
+| flail | 1-3 | 18 / 6 / 14 | 0-9 | Outer ring (8.5, soul) and safe inner ring (2.2, chalk) drawn while the bob whirls overhead: 15 + knockback to everyone between 2.2 and 8.5. Hug him. P2: 35% chains compass if you hugged. |
+| plummet | 1-3 | 20 / 14 / 14 | 4-16 | Chalk line 11 long and a soul ring at its end, both turning with him: the bob crashes in the ring (17 + Slowness III 2 s), then at active tick 8 it is reeled back along the line (9 once, dragged toward him). |
+| masonry | 1-3 | 22 / 34 / 14 | 0-30 | Dust trickles over the players; at the impact a chalk ring follows each player 10 ticks then locks (+ `scaledCount(3)` strays, 4 in P2), dust falling down a shrinking column: 15 within 2.2 after 26 ticks, and a pile of 1-2 rubble blocks for 8-9.5 s. P2: a second volley 1 s later. |
+| swingdrop | 1-3 | 18 / 12 / 16 | 7-26 | Gap-closer: a ring follows the target 12 ticks, locks (chalk); he swings in a 4-block arc on a chain (drawn to the tip) and lands at active tick 9: 16 within 3 + shock ring (7, to r 7, jump). P2: 40% chains compass. |
+| scribe | 2-3 | 16 / 20 / 14 | 0-9 | Outer ring 9 (soul) and split 4.5 (chalk): one turn round the planted compass, 14 between 4.5 and 9; the inner disc is marked, then at active tick 14: 14 within 4.5. Stand outside, or step in after the first cut. |
+| eclipse | 2-3 | 20 / 48 / 14 | 0-20 | Darkness closes in a ring of ink; the lantern is snuffed: Blindness 3 s and Darkness to every player in the arena, he turns invisible. 30 ticks of stalking toward a point 2.5 behind the target: every 6 ticks an echoing footstep (sound) and a soul-blue footprint ring. Tick 30: the blade snicks open (sound, arc ±80° at 5 shown); tick 40: visible again, slash 16. |
+| keystone | 2-3 | 20 / 60 / 14 | 0-30 | A checkerboard of 4-block squares (random offset) over the floor: one half marked with chalk and dust, falls at active tick 24 (14 to anyone in those squares), the other half marked then, falls at tick 48. |
+| unmoor | 3 (once) | 30 / 10 / 20 | scheduled | Invulnerable 2.6 s, plumb raised, chains rattling, a closing chalk ring; the bob is driven into the floor: shock ring (12, to r 12, jump), +12% speed, the floor cycle starts. |
+| chainswing | 3 | 24 / 100 / 18 | scheduled | Crouch, climb onto a circle under the chains (radius min(11, arena - 3), height headroom - 6.1, 3 to 6.5), chains drawn to the tip. Three 30-tick cycles: swing round (0.07 rad/tick) while a soul ring follows the target 14 ticks then locks (chalk), dive on it in 5 ticks: 16 within 3.2 + shock ring (7, to r 6, jump), rise back. He stays on the floor after the third slam (16 ticks + recovery 18: the punish window). |
+
+**Phase 3: the island breaks up (real, temporary blocks).** A cycle runs while players are in the arena: 1.5 s after the
+unmoor, then every 7 s x `cooldownScale()` after the floor reforms, a pattern is picked (rings 3 wide, eight spokes,
+3x3 checkers, a four-armed spiral, or halves: the outer ring on one side and the inner ring on the other; random turn
+and parity). For 2 s its floor columns are marked with chalk (soul dust and crumbs in the last 0.6 s, gravel cracking
+sounds); then each column (the floor block and three below, within min(16, seal radius) of the centre, never within
+2.5 of the seal or 3 of him, never a block entity, only where every cell and its neighbours are solid so the water
+cannot spread) turns to water: the tiles crumble into the lake. Whoever is in that water is dragged at by the abyss
+(3 and Slowness II every half second, pulled down). After 5 s the columns rise again.
+
+**Every changed block is temporary.** Rubble and crumbled columns are recorded with their original block state and a
+lifetime; they are restored when the lifetime runs out, at once when no player is within radius + 14 of the arena,
+when the fight resets to phase 1, in `onDefeated`, in `remove()` for any destroying removal, and after a reload (the
+map is saved as `ArchitectBlocks`, restored on the first tick). Restoring goes deepest first and lifts any creature
+standing inside a restored block onto it.
+
+**Co-op and NG+** come from the engine: health, damage, poise, cooldowns (the chain swing and floor timers use
+`cooldownScale()`), compressed wind-ups, the soul wave. Marks under every player scale naturally; masonry strays use
+`scaledCount`. Gravity and visibility always come back when the move that took them ends (stagger, reset, chain).
+
+Previews: `python3 tools/gen_models.py --preview --only abyssal_architect` →
+`build/previews/models/abyssal_architect.png`; held plumb: `python3 tools/art_sheet.py --kind held --only architect_plumb`.
+
+## 20. Champion of the Leviathan Dreadnought Wreck: The Drowned Admiral (L'Amiral noyé)
+Files: `tools/wf/mobs/drowned_admiral.py` (model), `src/main/java/com/brasshaven/entity/boss/DrownedAdmiral.java`
+(moveset). No lair module: the arena is the wreck's existing boiler hall in the stern (hold deck, 40 x 31, 17 high, four
+giant boilers at the corners with lit fireboxes facing the centre, side galleries, the funnel uptakes open to the sky,
+brass rings on the floor at radius 10 and 17, mist across the stokehold passage; `BOSS` in
+`tools/wf/structures/dreadnought_wreck.py`, seal radius 18), reached by the engine room and its site of grace. It
+replaces the reused Iron Helmsman. Reward: `remembrance_drowned_admiral` → **Boarding Cutlass of the Drowned Admiral**
+(`admiral_cutlass`, LITHITE 7 / -2.4, new ability shape **BROADSIDE** in `BossWeaponItem`: a deck-cannon shell fired
+along the look line bursts on the first foe or wall up to 24 blocks, 13 within 1 block of the burst falling to half at
+3.5, foes hurled away and set ablaze, the recoil kicks the wielder back; held model `admiral_cutlass` in
+`wf/held3d.py`, sprite `cutlass` in `wf/itemart_shapes.py`), plus gold, map fragments, emeralds, diamonds, copper,
+gunpowder, nautilus shells, a 35% spyglass and a 15% heart of the sea (`gen_data.py`). Quest:
+`explorer/boss_drowned_admiral`.
+
+**Concept.** The last commander of the Leviathan, 5.9 blocks with his hat: "a diving helmet under an admiral's
+bicorne". A waterlogged navy greatcoat with crimson lapels and lining, tarnished gold buttons, epaulettes with dripping
+bullion fringes and long split tails crusted with salt; sodden white breeches in lead-soled diving boots with brass toe
+caps; instead of a head, a round copper-and-brass diving helmet on a riveted corselet, a glowing sea-green front port
+and two side ports, an air hose to a copper tank on his back, and a sodden bicorne worn athwart on the dome. Asymmetry:
+a broad boarding cutlass with a brass basket hilt in his right hand; his left forearm is a deck cannon (an iron breech
+at the elbow, a banded barrel wrapped in chain, a brass muzzle with an ember glow in the bore), a four-pronged boarding
+hook hanging under it. Barnacles on boots, shoulders, helmet and coat; kelp hanging from the hem, sleeves and hat.
+
+**Stats.** 620 health (colossal overworld tier), armour 12, toughness 4, poise 115, knockback resistance 1.0, blue bar,
+no fall damage, breathes water, wades (water movement efficiency 1, no water path malus). Three phases: phase 2 at 65%
+(roar, +10% speed, a splash ring); phase 3 at 30%, driven by the class like the Chained Jailer: when he is free he
+chains `scuttle`, then again 12 s (x `cooldownScale()`) after each flood drains. `scuttle` and `reel` have range 999
+so the picker never rolls them.
+
+| Move | Phase | Wind-up / active / recovery | Range | What it does |
+|---|---|---|---|---|
+| slash | 1-3 | 14 / 18 / 14 | 0-6.5 | Cutlass drawn back over the right shoulder (rust arc ±65°, 5.5): forehand 14, a 30° turn toward the target, arc re-drawn, backhand 14 at active 10. P2: 35% chains stamp (close) or hook. |
+| thrust | 1-3 | 16 / 8 / 14 | 3.5-12 | Point drawn back at the hip (rust line 9 long), lunge 0.9 b/t (1.15 in the flood) for 8 ticks: 16 once per target. |
+| cannon | 1-3 | 28 / 6 / 16 | 6-32 | Cannon arm raised: a red aim laser from the muzzle through the aim point to the wall; the aim point slides toward the target's chest at 0.33 b/t (a strafe outruns it) for 20 ticks, then locks (yellow, a click, a ring of r 3.5 where it will burst). The shell bursts on the first creature on the line (+4 direct) or the wall: 18 at the burst falling to 9 at 3.5, hurled away. |
+| valves | 1-3 | 24 / 50 / 14 | 0-32 | Cutlass raised as a signal: 2 (P2 3, P3 4) of the boiler fireboxes (lit blast furnaces on the floor within the arena; four virtual valves round the centre if there are none) mark lanes 3 wide toward the players (rust edges following them until wind-up tick 14, then white and locked), up to the first wall (30 max). The chop bursts them: 13 (16 over the flood) and a shove down the lane, too tall to jump (3.5); the steam lingers 2.5 s: 4 and Slowness II every half second. |
+| hook | 1-3 | 18 / 14 / 14 | 6-22 | Grapnel whirled under the cannon: a grey chain line to the target and a ring on it (locked at wind-up tick 12, yellow). Flung at 2 b/t up to 22 blocks (walls stop it): the first creature it touches takes 8, Slowness III 1.5 s, and is hauled to 2.5 blocks in front of him over 8 ticks. If someone was hooked: 40% (P2 70%) chains slash. |
+| stamp | 1-3 | 12 / 3 / 12 | 0-4.5 | Lead boot raised (rust ring r 4): 12 in r 4, shove, Slowness II 2 s. P2: + a splash ring to jump (8, out to 9). |
+| broadside | 2-3 | 24 / 44 / 16 | 8-32 | Three cannon shots (15 each) at active 0, 20, 40; before each the laser tracks for 11 ticks (he turns 12°/tick) and locks for 8. |
+| boarding | 2-3 | 16 / 30 / 16 | 0-9 | Forehand 15 at the impact, backhand 15 at active 10, a yellow ring locks on the target at 12, he leaps at 16 (up to 8 blocks) and chops at 24: 18 in r 3 + a splash ring (8, out to 7, jump). |
+| charge | 2-3 | 16 / 12 / 14 | 7-22 | Helmet lowered (brine line 14 long), charges 1.0 b/t (1.35 in the flood): 15 once per target. Ramming a boiler or a wall after active tick 2 chains `reel`. |
+| reel | 2-3 | 10 / 20 / 10 | chained | Stagger animation, crits over his helmet; for 44 ticks he takes +30% damage. Bait the charge into a boiler. |
+| scuttle | 3 (recurring) | 30 / 20 / 20 | scheduled | Kneels and drives the cutlass into the deck, invulnerable 52 ticks (bubbles and falling water over the hall, a closing brine ring, the hull groaning). The sea cocks open: the hall floods knee-deep for 18 s, a splash ring (12, out to 12, jump), +12% speed (once), 2-4 drowned marines board. |
+
+**The flood (real, temporary water).** Every air cell over a sturdy floor at the floor level within 20 of the centre
+(a 41 x 41 square cut to radius 24, so the whole rectangular hall) becomes a water source; water that already stood in
+the box (the sea outside the hull) is recorded and never touched. While flooded the players wading get Slowness II every
+second and he gets +25% speed (`drowned_admiral_wading`, removed when the water goes). The water drains (every water
+block in the box at floor level -2..+1 that was not there before, flowing water included; box = radius + 8, enough for
+the 7-block spread into the stokehold passage, which the mist stops) when the 18 s run out (a bubbling warning 3 s
+before), at once when no player is within radius + 14, when the fight resets to phase 1, in `onDefeated`, in `remove()`
+for any destroying removal, and on the first tick after a reload (`AdmiralFlood`/`AdmiralPreWater` saved). It is the
+only block he places: the steam, the shells, the laser and the hook are particles and hit checks.
+
+**Drowned marines.** Vanilla drowned in chainmail helmets (no burning under the funnel uptakes) with iron swords or
+tridents (drop chance 0), minion-tagged; alive at most 2 solo, 3 with two players, 4 with three or more (each scuttle
+tops them up). Discarded on defeat and when the fight resets.
+
+**Co-op and NG+** come from the engine: health, damage, poise, cooldowns (the scuttle timer uses `cooldownScale()`),
+compressed wind-ups, the soul wave. Steam lanes aim at different players, the marines scale with the player count.
+
+Previews: `python3 tools/gen_models.py --preview --only drowned_admiral` → `build/previews/models/drowned_admiral.png`;
+held cutlass: `python3 tools/art_sheet.py --kind held --only admiral_cutlass`.
+
+## 21. Champion of the Sun-Engine Ziggurat: The Solar Hierarch (Le Hiérarque solaire)
+Files: `tools/wf/mobs/solar_hierarch.py` (model), `src/main/java/com/brasshaven/entity/boss/SolarHierarch.java`
+(moveset). No lair module: the arena is the ziggurat's existing sun chamber under the lens (`BOSS` in
+`tools/wf/structures/sun_ziggurat.py`, seal radius 16), reached by the annex and the antechamber's site of grace. It
+replaces the placeholder Sand Pharaoh. Reward: `remembrance_solar_hierarch` → **Sun-Staff of the Solar Hierarch**
+(`hierarch_sunstaff`, LITHITE 8 / -3.0, new ability shape **PRISM** in `BossWeaponItem`: a sunray along the look line
+that glances off block faces like light off a mirror, up to 3 bounces and 24 blocks in all, 10 to every foe it crosses
+(once each), +25% per bounce, sets them ablaze; held model `solar_staff` in `wf/held3d.py`, sprite `sunstaff` in
+`wf/itemart_shapes.py`), plus gold, map fragments, emeralds, diamonds, chiseled sandstone, glowstone, lapis and a 30%
+spyglass (`gen_data.py`). Quest: `explorer/boss_solar_hierarch`.
+
+**Concept.** The last priest of the noon, 5.8 blocks: "a gilded priest-automaton who keeps a dead empire's sun". A gold
+mask with amber eyes under a gold-and-lapis striped nemes and a small crown; a pleated linen robe under a gold apron
+stamped with a sun, a broad collar and lapis pauldrons; at his back a brass sun-disc halo of twelve rays (spinning in the
+spectacle moves) with three little planets on an orbit ring. Asymmetry: a long sun-staff with a glowing amber orb in his
+right hand, a polished round mirror-shield on his left forearm. 147 cubes, 256 x 256 texture.
+
+**Stats.** 620 health, armour 12, toughness 4, poise 115, knockback resistance 1.0, yellow bar, no fall damage, fire
+immune. Three phases: phase 2 at 65% (roar, +10% speed, ring); phase 3 at 30%, driven by the class like the Chained
+Jailer: when he is free he chains `eclipse` once, then `sigils` every 11 s (x `cooldownScale()`). `bash`, `reel`,
+`eclipse` and `sigils` have range 999 so the picker never rolls them.
+
+**The mirror guard.** Between moves and during his staff moves (sweep, thrust, combo, bash, flare, descent) the mirror
+blocks every frontal hit (within 60° of his facing): the hit is cancelled with a shield clang and fills a guard meter
+(heavy hits of 12+ count x1.5). At `guardMax` (50, +25% per extra player) the mirror cracks: the hit lands and he
+chains `reel` (2 s) and takes +30% damage for 2.5 s. Three blocks within 2 s while idle chain `bash`. The meter drains
+after 3 s without blocks. Projectiles that hit the mirror are deflected back at their shooter (`deflection()`
+override). Not guarded: spectacle moves (flash, sunlance, orrery, eclipse, sigils), staggers, reels.
+
+**Gnomons (temporary blocks).** When a player comes within reach he raises six 2 x 2 sandstone gnomons, 4 high
+(chiseled, cut, cut, chiseled), at radius clamp(0.6 x floor radius, 6, 9.5), one layer every 4 ticks; only into air
+over a sturdy floor, never into a block entity or an entity. They are the room's cover: no light of his passes them
+(sunlance rays, orrery arms and the flash all ray-clip against blocks). Every block he places is recorded with the state
+it replaced and restored (top first) when no player is within radius + 14, when the fight resets to phase 1, in
+`onDefeated`, in `remove()`, and on the first tick after a reload (`HierarchBlocks` saved). They rise again next fight.
+
+| Move | Phase | Wind-up / active / recovery | Range | What it does |
+|---|---|---|---|---|
+| sweep | 1-3 | 14 / 4 / 14 | 0-6 | Staff cocked over the shoulder (gold arc ±75°, 5.6), swept: 14. P2: 35% chains thrust (far) or combo (close). |
+| thrust | 1-3 | 16 / 4 / 14 | 3-9 | Orb drawn to the hip (line 8.5), lunge 0.9: 16 + fire 3 s. P2: 40% chains sweep. |
+| combo | 1-3 | 14 / 28 / 16 | 0-6 | Forehand 12, backhand 12 at active 10 after a 35° turn, staff raised and slammed down a line (6 x 1.4) at 22: 17. P2: the slam sends a fire ring (7, out to 6, jump). |
+| bash | riposte | 10 / 4 / 12 | chained | Mirror shoved forward: 9 in ±60° r 3.8, knockback, Slowness. |
+| reel | guard break | 6 / 4 / 30 | chained | Stagger pose; +30% damage taken for 50 ticks; the meter resets. |
+| flash | 1-3 | 18 / 6 / 14 | 0-14 | Mirror raised to the lens (glows): a cone ±35°, 12.5 long, line of sight from the mirror: 8 + fire 2 s; Blindness 2.5 s to those looking at him. |
+| sunlance | 1-3 | 30 / 120 / 20 | 0-40 | Blinks to the centre; a column of light falls down the shaft onto the mirror, the reflected ray's spot chases the target at 0.105 b/t (P2 0.13), clipped by blocks: 5 + fire every half second while in it. P2: a second ray hunts another player, or a delayed echo of the first when solo. |
+| orrery | 1-3 | 24 / 90 / 20 | 0-40 | Blinks to the centre; planet arms sweep round him from the centre to the walls: P1 2 arms (low/high) at 4°/t; P2 3 arms at 5°/t, reversing at active 45 (blue chevrons from 35). Low arm (11): jump. High arm (14): only a gnomon shadow saves you. Once per arm per pass, with a tangential shove. |
+| flare | 2-3 | 20 / 30 / 14 | 0-12 | Staff planted: three fire rings to jump (10, out to 11) at active 0, 12, 24. |
+| descent | 2-3 | 18 / 12 / 16 | 6-24 | A ring follows the target for 12 ticks, locks; arc leap, lands at active 9: 18 in r 3 + a ring (8, out to 7). 40% chains sweep. |
+| eclipse | 3 (once) | 30 / 20 / 20 | scheduled | Invulnerable 52 ticks; a burst ring (12, out to 12), +12% speed, Darkness on everyone in the arena (refreshed every 2 s), a wandering pillar of light (4 + fire, r 1.4) for the rest of the fight. |
+| sigils | 3 (recurring) | 16 / 66 / 24 | scheduled | Six sun-sigils round the floor; he blinks to one at active 0, 22, 44 (the third is the one nearest the target), the next sigil flares from 6 ticks ahead; a corona 8 ticks after landing: 13 in r 4.5 + fire 3 s. |
+
+**Co-op and NG+** come from the engine: health, damage, poise, cooldowns (the sigil timer uses `cooldownScale()`),
+compressed wind-ups, the soul wave. The guard meter scales with the player count, the second sun-lance ray picks another
+player.
+
+Previews: `python3 tools/gen_models.py --preview --only solar_hierarch` → `build/previews/models/solar_hierarch.png`;
+held staff: `python3 tools/art_sheet.py --kind held --only hierarch_sunstaff`.
+
+## 22. Champion of the Canopy Temple-City: The Strangler Fig Queen (La Reine-figuier étrangleur)
+Files: `tools/wf/mobs/strangler_queen.py` (model `strangler_queen`, and `build_spirit` → `jaguar_spirit`),
+`src/main/java/com/brasshaven/entity/boss/StranglerQueen.java` (moveset), `JaguarSpirit.java` (her adds). No lair
+module: the arena is the temple-city's existing summit terrace (floor y 66, a 1-block parapet, the dais on the north
+side, braziers, fallen disc pieces, the broken brass sun-disc standing over the dais with its froglight eyes; `BOSS` in
+`tools/wf/structures/canopy_city.py`, seal radius 18). She replaces the reused Jade Jaguar. Reward:
+`remembrance_strangler_queen` → **Jade Macuahuitl of the Strangler Queen** (`queen_macuahuitl`, LITHITE 8 / -3.0, new
+ability shape **CAGE** in `BossWeaponItem`: a root lash runs along your aim up to 14 blocks (stops on walls); the first
+foe it meets takes 10, is caged where it stands (motion stopped, Slowness VII 3 s, Weakness II 5 s, a ring of root
+particles) and the cage's thorns whip every other foe within 3 blocks of it for half damage, dragging them against the
+bars; held model `queen_macuahuitl` in `wf/held3d.py`, sprite `macuahuitl`), plus gold, map fragments, emeralds,
+diamonds, cocoa beans, vines, mangrove roots, jungle saplings and a 15% sniffer egg (`gen_data.py`). Quest:
+`explorer/boss_strangler_queen`.
+
+**Concept.** The strangler fig that smothered the temple and crowned itself in its place: a towering woman 5.8 blocks
+tall, woven from aerial roots and inlaid with the temple's jade. Her skirt is a cascade of root strands that splay into
+eight buttress roots on the floor; a jade belt with a gold sun buckle, a jade pectoral and bead collar over a mossy
+bark chest, a jade mask with glowing gold eyes, a mane of pale hanging roots and a crown of bromeliad spikes and five
+glowing orchids. Asymmetry: her left arm unravels into a five-segment thorned root whip with a barbed tip, longer than
+she is; her right hand holds a jade macuahuitl edged with obsidian teeth. Her adds are translucent jade jaguar spirits
+(`entityTranslucent`, pulsing glow).
+
+**Stats.** 620 health, armour 12, toughness 4, poise 115, knockback resistance 1.0, no fall damage, green bar. Three
+phases: phase 2 at 65% (roar, +10% speed, the canopy comes soon after); phase 3 at 30%, driven by the class like the
+Chained Jailer: when she is free she chains `overgrowth` once, then every 12 s (x `cooldownScale()`) `cages`, and
+`harvest` when a cage still holds someone. `canopy` is scheduled in phase 2 only (every 800 free ticks x
+`cooldownScale()`), `plunge` always follows it. Range 999 / weight 0 keeps the scheduled moves out of the picker.
+
+| Move | Phase | Wind-up / active / recovery | Range | What it does |
+|---|---|---|---|---|
+| lash | 1-3 | 16 / 4 / 14 | 0-12 | Whip drawn back (a green line 11 long): 14 down the line (half-width 1.1) and a pull toward her. |
+| combo | 1-3 | 14 / 24 / 14 | 0-6.5 | Macuahuitl cuts at 0.7 s and 1.2 s: 13 each over ±75°, 5.5 out. P2: a thrust at 1.7 s, 6.5 out: 16. |
+| rootline | 1-3 | 20 / 20 / 14 | 0-20 | Hands into the floor: 3 root runs (P2 5) fan out toward the target at 1.2 b/t: 12 and a lift. Stand between the lines. |
+| rootring | 1-3 | 22 / 30 / 14 | 0-14 | Arms raised: root bands burst at radius 4, 8 and 12, 12 ticks apart (11 each, jump them). P2: a return wave rolls back inward. |
+| pollen | 1-3 | 18 / 10 / 14 | 0-22 | Crown shaken: pollen clouds (r 4.5, 8 s) on the target and around. Staying inside builds Slowness I → II → III and Mining Fatigue; after 4 s, Blindness + Nausea + 4. Leave the cloud and it fades. |
+| swing | 1-3 | 16 / 12 / 14 | 7-22 | Whip thrown up into the canopy: she swings over 9 ticks to a safe landing next to the target: 15. |
+| thorns | 1-3 | 12 / 3 / 12 | 0-4.5 | Anti-hug: thorns burst round her, 11 in r 4.5. P2: a wave to 8 (7). |
+| whipstorm | 2-3 | 18 / 16 / 14 | 0-9 | The whip spins round her twice: 14 between 2.5 and 9 blocks at active 0 and 8. Hug her or back off. |
+| snare | 2-3 | 18 / 16 / 14 | 3-12 | Whip cast down a 12-block line: the first player hit takes 8 and is reeled in, then a macuahuitl backhand arc (16). |
+| canopy | 2 | 20 / 180 / 4 | scheduled | She climbs into the sun-disc (found at runtime from its froglight eyes, so a rotated jigsaw piece still works), invulnerable and weightless. Jaguar spirits drop at tick 10 (`scaledCount(2)`, at most `scaledCount(3)` alive); seed-bomb volleys on marked players at ticks 30, 80 and 130 (marked circle, then 13 in r 2.5). If every spirit dies after tick 50 she drops early and is **exposed** (+30% damage taken and slowed for 4 s). |
+| plunge | 2 | 24 / 4 / 22 | chained | A ring follows the target for 14 ticks, then locks; she crashes onto it: 17 in r 3.5, then a root wave out to 10 (8, jump it). |
+| overgrowth | 3 (once) | 30 / 20 / 20 | scheduled | Guarded about 2.6 s while roots swell; a growth wave (13), then +12% speed and root dust at her feet. |
+| cages | 3 | 24 / 16 / 14 | scheduled | Up to 4 players are marked; each ring follows its player for 12 ticks, then locks. At the impact a cage of real mangrove roots snaps shut on each spot (8-cell ring 3 high plus a roof). A player caught inside takes 6, then 2 a second while strangled. Get out before it closes, or break the roots. |
+| harvest | 3 | 20 / 4 / 22 | chained | 50 ticks after a cage closes on someone, she steps up to it and tears it open: 18 in r 2.5. |
+
+**Spirits.** `jaguar_spirit` (22 health, 6 damage, speed 0.34, never saved, no loot, minion tag): it stalks the nearest
+player, claws at ≤ 2.8 blocks (hit at tick 8) and pounces from 4-9 blocks (leaps at tick 10, 8 damage once during
+ticks 10-20). It never pushes outward. It fades after 45 s, when the Queen dies or leaves, or when the fight resets to
+phase 1, and ignores damage from bosses and minions.
+
+**Fair edges.** The summit has a drop on every side, so her `strike` override caps push at 1.4. Beyond 9 blocks from
+the centre the outward part of any push is removed and the rest halved, and lift is capped at 0.35. If a probe 2 blocks
+along the push finds no floor, the push is zeroed. Lash, snare and the roots pull inward instead of outward.
+
+**The blocks are temporary.** Cages place `minecraft:mangrove_roots` only into air, never inside an entity, at most
+320 at a time, each with a 140-tick life. Every original state is recorded and put back:
+- when the cage expires or is harvested;
+- when no player is within radius + 14 of the arena;
+- when the fight resets to phase 1;
+- in `onDefeated` and in `remove()`;
+- after a reload (positions are saved as `QueenCageBlocks` and restored on the first tick).
+
+Pollen, seed-bombs and root lines are particles and hit checks only.
+
+**Co-op and NG+** come from the engine (`BossDifficulty`, `BossCycles`): health, damage, poise, cooldowns (the canopy
+and cage timers use `cooldownScale()`) and compressed wind-ups that still play every authored tick. Spirits use
+`scaledCount`. Cages and seed-bombs land on every player, up to 4.
+
+Previews: `python3 tools/gen_models.py --preview --only strangler_queen` (and `--only jaguar_spirit`) →
+`build/previews/models/strangler_queen.png`, `jaguar_spirit.png`; held macuahuitl:
+`python3 tools/art_sheet.py --kind held --only queen_macuahuitl`.
+
 ## Difficulty: co-op scaling and NG+ cycles
 
 Applied by `boss/WayfarerBoss` to **every** boss on its first server tick, whatever spawned it (boss seal,

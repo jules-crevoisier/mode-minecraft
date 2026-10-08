@@ -17,6 +17,12 @@
           "weight": 5,
           "minCount": 1,
           "maxCount": 2
+        },
+        {
+          "type": "brasshaven:void_acolyte",
+          "weight": 6,
+          "minCount": 1,
+          "maxCount": 2
         }
       ]
     }

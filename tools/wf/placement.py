@@ -119,6 +119,9 @@ FAMILIES = [
         "inverted_spire": 1,
         "mire_stilt_city": 1,
         "great_aqueduct": 1,
+        "dreadnought_wreck": 1,   # the only sea member: in oceans the wonders grid is all its own
+        "sun_ziggurat": 1,
+        "canopy_city": 1,
     }, avoid=[(V + "villages", 10), (V + "pillager_outposts", 6), (V + "woodland_mansions", 8)], min_spawn=32,
         note="surface wonders; at least 40 chunks between two of them, none within 512 blocks of 0,0"),
     Family("deep_wonders", "deep_wonder", 72, 28, {
@@ -232,6 +235,10 @@ FIT = {
     # brings its own bog two blocks deep and clears two layers over it: any flat marsh with some open water
     "mire_stilt_city": _f("wetland", spread=4, slope=0.6, wet=0.95, min_wet=0.25, drop=2),
     "great_aqueduct": _f("land", spread=30, slope=1.5, wet=0.12),     # brings its own valley and ridges
+    # on the sea floor (12+ deep, flat): the reef and the islet come with it; decks stay dry pockets at any depth
+    "dreadnought_wreck": _f("seabed", wet=0.9, depth=12, spread=12, slope=0.8, drop=6),
+    "sun_ziggurat": _f("land", spread=14, slope=0.9, wet=0.04),       # open desert floor: the plinth sits level
+    "canopy_city": _f("land", spread=18, slope=1.2, wet=0.12),       # jungle floor: brings its own ground disc and footings
     # ---- coast: the dock side (template +z = south) in the sea, the cape on land, shore near sea level
     "coastal_lighthouse": _f("coast", sea_side="south", wet=0.5, land=0.5, spread=8, slope=1.0),
     # the island (south) in the sea, the causeway's shore end (north) on the beach: the strand lands at sea level

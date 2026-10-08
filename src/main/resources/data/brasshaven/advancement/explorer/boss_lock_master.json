@@ -1,0 +1,37 @@
+{
+  "display": {
+    "icon": {
+      "id": "brasshaven:pressure_lance"
+    },
+    "title": {
+      "translate": "advancements.brasshaven.explorer.boss_lock_master.title"
+    },
+    "description": {
+      "translate": "advancements.brasshaven.explorer.boss_lock_master.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "kill": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "entity_type": "brasshaven:lock_master"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "parent": "brasshaven:explorer/great_aqueduct",
+  "rewards": {
+    "experience": 500
+  }
+}

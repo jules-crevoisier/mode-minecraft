@@ -382,6 +382,24 @@ lairs, ruins and small sites).
 14. **Inverted Spire.** A tower built downward into a 150-deep sinkhole, with balconies, bridges to the shaft
     walls and a floor-by-floor descent ending in an underground lake with an arena on an island. Seen from the
     surface it is just a ring of pinnacles around a void.
+15. **Sun-Engine Ziggurat.** A 150-wide, 80-high stepped pyramid in desert or badlands, crowned by a colossal
+    brass orrery and a sun-lens that focuses light down a shaft to the sun chamber (the boss arena). A
+    processional ramp lined with brass sphinxes climbs one face; inside, sand-flooded lower halls, a hypostyle
+    hall of 5×5 columns, the astronomer-priests' quarter, a lens-calibration chamber and a sealed tomb gallery,
+    with an elevator shaft through the core as the shortcut back.
+16. **Leviathan Dreadnought Wreck.** A 188-long brass-and-iron steam ironclad run aground on an ocean reef and
+    broken in two: the stern upright under a bridge tower and tripod mast, one of its three funnels fallen
+    across the deck, the bow pitched nose-down and half-submerged with its turrets raising their barrels. Enter
+    through the breach from a castaways' islet: crew quarters, officers' mess, the main deck, the officers'
+    cabins (hub), the engine room's catwalks and the boss in the boiler hall; the magazine's ammunition hoist
+    is the shortcut back. Optional: captain's cabin and stern walk, spotting top, the flooded torpedo deck.
+17. **Canopy Temple-City.** A 220-wide lost city in jungle: a 66-high stepped stone temple strangled by roots,
+    ringed by five hollow custom-built trunks (16 wide, 56-74 high) that carry platform districts at three
+    heights joined by sagging rope bridges and brass zip-line pulleys. Climb the trunks' spiral stairs past
+    dwellings to the market and the high ward, cross to the temple's upper terrace, then descend: glyph
+    library, site of grace, dart-trap corridor, jade-and-gold sanctum, offering hall, root-choked crypt and
+    the flooded cenote with its waterfall, whose spiral ledge climbs back up to the summit arena under a
+    broken brass sun-disc. A brass elevator in the east trunk is the shortcut back.
 
 ---
 

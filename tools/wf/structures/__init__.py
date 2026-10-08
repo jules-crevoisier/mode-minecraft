@@ -19,3 +19,6 @@ from . import drowned_dam  # noqa: F401
 from . import mire_stilt_city  # noqa: F401
 from . import inverted_spire  # noqa: F401
 from . import great_aqueduct  # noqa: F401
+from . import sun_ziggurat  # noqa: F401
+from . import dreadnought_wreck  # noqa: F401
+from . import canopy_city  # noqa: F401

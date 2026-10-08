@@ -600,6 +600,97 @@ def tide_crozier():
     return out
 
 
+
+def valve_wrench():
+    """Valve-Wrench of the Turbine Tyrant: a long riveted steel handle with a leather grip and an iron pommel, a
+    brass collar with a glowing pressure gauge at the neck, and a heavy adjustable head: a fixed jaw and a sliding
+    jaw held open by a brass worm screw, the hot glow of the turbine in the throat between them."""
+    out = [box(7.1, -7, 7.1, 8.9, 21, 8.9, "steel"), box(6.8, -8.5, 6.8, 9.2, -6.5, 9.2, "iron_dark"),
+           box(6.7, 2, 6.7, 9.3, 9, 9.3, "wrap")]
+    for y in (-3, 12, 17):                                                  # rivets / bands down the handle
+        out.append(box(6.9, y, 6.9, 9.1, y + 0.8, 9.1, "iron_dark"))
+    out += [box(6.6, 19, 6.6, 9.4, 21, 9.4, "brass"),                      # the collar
+            box(9.2, 19.4, 7.4, 10.6, 20.8, 8.6, "glow")]                  # the gauge
+    out += [box(3.5, 21, 6.6, 12.5, 25, 9.4, "mid"),                       # the head
+            box(3.5, 25, 6.6, 6.0, 31, 9.4, "light"),                      # fixed jaw
+            box(10.0, 25, 6.6, 12.5, 29.5, 9.4, "mid"),                    # sliding jaw
+            box(6.0, 25, 7.4, 10.0, 26, 8.6, "accent"),                    # the hot throat
+            box(6.6, 22, 6.2, 9.4, 24, 6.6, "brass"), box(6.6, 22, 9.4, 9.4, 24, 9.8, "brass_dark"),   # worm screw
+            box(3.2, 30, 6.8, 6.2, 31.4, 9.2, "outline")]
+    return out
+
+
+def lantern_crozier():
+    """Lantern-Crozier of the Bog Hierophant: a tall staff of twisted black mangrove wood wrapped in moss, a knop of
+    bone, a crook curling over forward and a caged lantern of swamp-fire hanging from its tip."""
+    import math
+    out = [box(7.2, -7, 7.2, 8.8, 22, 8.8, "handle"), box(6.9, -8, 6.9, 9.1, -6.5, 9.1, "iron_dark"),
+           box(6.8, 3, 6.8, 9.2, 9, 9.2, "wrap")]
+    for y, dx in ((-3, 0.35), (1, -0.35), (12, 0.35), (16, -0.35)):     # the twist of the wood
+        out.append(box(7.0 + dx, y, 7.0, 9.0 + dx, y + 1.4, 9.0, "handle_dark"))
+    out += [box(6.7, 13.5, 6.7, 9.3, 15.5, 9.3, "accent_dark"),            # moss grown round the staff
+            box(6.5, 21, 6.5, 9.5, 23.5, 9.5, "cream"), box(6.8, 22, 6.8, 9.2, 22.6, 9.2, "brass_dark")]  # bone knop
+    cx, cy, r = 4.4, 25.4, 3.8                                             # the crook curls over toward -x
+    for k in range(9):
+        a = math.radians(-12 + 24 * k)
+        x, y = cx + r * math.cos(a), cy + r * math.sin(a)
+        h = 0.95 if k < 5 else 0.8
+        out.append(box(x - h, y - h, 8 - h, x + h, y + h, 8 + h, "handle" if k % 2 else "handle_dark"))
+    lx = cx - r                                                          # under the crook's tip
+    out += [box(lx - 0.25, 21.6, 7.75, lx + 0.25, 24.6, 8.25, "iron_dark"),        # the lantern's chain
+            box(lx - 1.6, 20.8, 6.4, lx + 1.6, 21.6, 9.6, "iron_dark"),            # lid
+            box(lx - 1.2, 17.0, 6.8, lx + 1.2, 20.8, 9.2, "glow"),                 # the swamp-fire
+            box(lx - 1.3, 18.6, 6.7, lx + 1.3, 19.1, 9.3, "iron_dark"),            # a cage bar
+            box(lx - 1.6, 16.2, 6.4, lx + 1.6, 17.0, 9.6, "iron_dark")]
+    return out
+
+
+
+def pressure_lance():
+    """Pressure-Lance of the Lock-Master: an iron lance with a brass vamplate cone over the grip, a copper hose coiled
+    down the shaft to a small pressure tank at the butt, a gauge by the grip, and for a point a brass nozzle glowing
+    with the water behind it, a steel spike through it."""
+    out = [box(7.1, -7, 7.1, 8.9, 24, 8.9, "iron_dark"), box(7.6, -6, 6.95, 8.4, 23, 7.1, "steel"),  # the shaft
+           box(6.6, -9, 6.6, 9.4, -4.5, 9.4, "accent_dark"), box(6.9, -9.6, 6.9, 9.1, -9, 9.1, "brass_dark")]   # tank
+    out += _grip(-3, 4, 2.2)
+    out += [box(5.0, 4, 5.0, 11.0, 5, 11.0, "mid"), box(5.6, 5, 5.6, 10.4, 6.5, 10.4, "light"),       # vamplate
+            box(6.2, 6.5, 6.2, 9.8, 8, 9.8, "mid"), box(6.8, 8, 6.8, 9.2, 9.5, 9.2, "dark")]
+    out += [box(9.2, 1, 7.4, 10.4, 2.4, 8.6, "cream")]                    # the gauge
+    for y in (11, 14, 17, 20):                                            # the coiled copper hose
+        out.append(box(6.9, y, 6.9, 9.1, y + 1.1, 9.1, "brass" if y % 2 else "brass_dark"))
+    out += [box(6.6, 23.5, 6.6, 9.4, 26.5, 9.4, "light"), box(6.9, 26.5, 6.9, 9.1, 27.2, 9.1, "glow"),  # nozzle
+            box(7.5, 27.2, 7.5, 8.5, 31.5, 8.5, "steel"), box(7.7, 31.5, 7.7, 8.3, 32, 8.3, "cream")]
+    return out
+
+
+def architect_plumb():
+    """Plumb of the Abyssal Architect: a mason's rule for a haft (dark wood, brass graduations, a wrapped grip), a
+    long brass crossbar at its head like a gallows, and from its far end a short chain with a great lead plumb-bob
+    capped in brass, a soul-blue plumb line glowing down its side."""
+    out = _shaft(-6, 22, 1.8, "handle") + _grip(2, 9, 2.3)
+    out += [box(6.8, -7, 6.8, 9.2, -6, 9.2, "brass_dark")]
+    for y in (11, 13.5, 16, 18.5):                                         # brass graduations on the rule
+        out.append(box(6.9, y, 6.9, 9.1, y + 0.6, 9.1, "brass"))
+    out += [box(6.4, 22, 7.2, 16.5, 23.6, 8.8, "brass"),                   # the crossbar, out to one side
+            box(16.0, 21.2, 7.4, 17.0, 23.8, 8.6, "brass_dark"),
+            box(7.2, 23.6, 7.2, 8.8, 24.8, 8.8, "iron_dark"),
+            box(8.6, 19.5, 7.6, 10.6, 22, 8.4, "brass_dark")]               # a brace under it
+    for k, y in enumerate((22.0, 20.2, 18.4)):                             # the chain
+        if k % 2 == 0:
+            out.append(box(15.0, y - 1.8, 7.6, 16.2, y, 8.4, "steel"))
+        else:
+            out.append(box(15.3, y - 1.8, 7.2, 15.9, y, 8.8, "steel"))
+    cx, top = 15.6, 16.6
+    out += [box(cx - 1.8, top - 1.2, 6.2, cx + 1.8, top, 9.8, "brass"),                 # the cap
+            box(cx - 3.0, top - 5.0, 5.0, cx + 3.0, top - 1.2, 11.0, "mid"),          # the lead body
+            box(cx - 2.2, top - 7.4, 5.8, cx + 2.2, top - 5.0, 10.2, "dark"),
+            box(cx - 1.2, top - 9.2, 6.8, cx + 1.2, top - 7.4, 9.2, "dark"),
+            box(cx - 0.5, top - 10.6, 7.5, cx + 0.5, top - 9.2, 8.5, "brass"),         # the point
+            box(cx - 3.2, top - 2.4, 4.8, cx + 3.2, top - 1.8, 11.2, "brass_dark"),    # a girdle
+            box(cx - 0.35, top - 7.4, 4.8, cx + 0.35, top - 1.2, 5.0, "glow")]        # the plumb line
+    return out
+
+
 def ascetic_staff():
     """Staff of the Storm Ascetic: a long gnarled haft with a bronze ferrule, a string of prayer beads wound under the
     grip, and at the top an open bronze ring (a pilgrim's ringed staff) hung with four jangling rings and pierced by a
@@ -626,6 +717,78 @@ def ascetic_staff():
     return out
 
 
+def solar_staff():
+    """Sun-Staff of the Solar Hierarch: a long gilded staff banded in brass with a wrapped grip and a gold butt-cap,
+    a flared collar, and at its head an open sun-disc: a ring of gold set with twelve short rays round a glowing
+    ember orb, a lapis-dark band behind the orb like the lens of the Sun-Engine."""
+    import math
+    out = [box(7.2, -7, 7.2, 8.8, 22, 8.8, "mid"), box(6.8, -8.5, 6.8, 9.2, -6.5, 9.2, "light"),
+           box(6.8, 3, 6.8, 9.2, 9, 9.2, "wrap")]
+    for y in (-3, 12, 16.5):                                               # brass bands down the staff
+        out.append(box(6.9, y, 6.9, 9.1, y + 1.0, 9.1, "brass_dark"))
+    out += [box(6.6, 20, 6.6, 9.4, 21.4, 9.4, "light"), box(6.2, 21.4, 6.2, 9.8, 22.6, 9.8, "brass")]  # the collar
+    cx, cy, r = 8.0, 26.2, 3.8
+    for a in range(0, 360, 30):                                            # the sun ring
+        x, y = cx + r * math.sin(math.radians(a)), cy + r * math.cos(math.radians(a))
+        out.append(box(x - 0.8, y - 0.8, 7.3, x + 0.8, y + 0.8, 8.7, "light" if a % 60 else "mid"))
+    for a in range(15, 360, 30):                                           # twelve short rays
+        if 150 < a < 210:
+            continue                                                       # none down into the collar
+        x, y = cx + 5.0 * math.sin(math.radians(a)), cy + 5.0 * math.cos(math.radians(a))
+        out.append(box(x - 0.45, y - 0.45, 7.6, x + 0.45, y + 0.45, 8.4, "brass"))
+    out += [box(5.8, 24.0, 7.6, 10.2, 28.4, 8.4, "accent_dark"),            # the dark lens behind the orb
+            box(6.5, 24.7, 6.9, 9.5, 27.7, 9.1, "glow"),                   # the ember orb
+            box(7.2, 22.6, 7.4, 8.8, 23.4, 8.6, "brass_dark")]
+    return out
+
+
+def admiral_cutlass():
+    """Boarding Cutlass of the Drowned Admiral: a broad, slightly curved naval blade (a bright edge, a dark spine, a
+    sea-green glow along the fuller), a brass basket hilt whose shell wraps the knuckles, a leather grip and a lion-head
+    pommel, barnacles crusting the back of the blade."""
+    out = _grip(2.5, 8.5, 2.2) + [box(6.6, 0.8, 6.6, 9.4, 2.5, 9.4, "brass"), box(7.1, 0, 7.1, 8.9, 0.8, 8.9, "brass_dark")]
+    out += [box(4.6, 8.5, 6.2, 11.4, 10, 9.8, "brass"),                        # the guard plate
+            box(4.6, 2.5, 5.6, 11.4, 8.5, 6.2, "brass_dark"),                  # the basket's shell over the knuckles
+            box(4.6, 2.5, 6.2, 5.4, 8.5, 8.4, "brass"), box(10.6, 2.5, 6.2, 11.4, 8.5, 8.4, "brass"),
+            box(7.4, 1.6, 5.6, 8.6, 2.5, 6.4, "brass"),                        # the knuckle bow joins the pommel
+            box(5.6, 4.5, 5.4, 6.4, 6.5, 5.6, "accent"), box(9.6, 4.5, 5.4, 10.4, 6.5, 5.6, "accent")]  # verdigris
+    x = 5.8
+    for k in range(9):                                                        # the blade, curving toward +x
+        y0 = 10 + k * 2.1
+        w = 4.2 if k < 7 else (3.2 if k == 7 else 2.2)
+        out += [box(x, y0, 7.3, x + w, y0 + 2.2, 8.7, "mid"),
+                box(x - 0.4, y0, 7.55, x, y0 + 2.2, 8.45, "light"),            # the edge
+                box(x + w, y0, 7.45, x + w + 0.3, y0 + 2.2, 8.55, "dark")]     # the spine
+        if 1 <= k <= 6:
+            out.append(box(x + w * 0.55, y0 + 0.2, 7.2, x + w * 0.75, y0 + 1.9, 8.8, "glow"))   # sea-glow fuller
+        x += 0.1 * k
+    out += [box(x - 0.2, 28.9, 7.6, x + 1.2, 30.2, 8.4, "light")]              # the clipped point
+    for (bx, by) in ((9.6, 13), (10.4, 19.5), (10.9, 23)):                    # barnacles on the spine
+        out.append(box(bx, by, 7.0, bx + 1.0, by + 1.0, 9.0, "cream"))
+    return out
+
+
+def queen_macuahuitl():
+    """Jade Macuahuitl of the Strangler Queen: a haft of dark fig wood wound with living root and a wrapped grip, a
+    gold sun-band at its throat, and a broad flat paddle of jade with a rounded tip, both edges set with a row of dark
+    obsidian teeth, a glowing green vein running up its face and a moss tuft at the root."""
+    out = [box(7.2, -6, 7.2, 8.8, 11, 8.8, "handle"), box(6.9, -7, 6.9, 9.1, -5.6, 9.1, "brass_dark")]
+    out += _grip(-1, 6, 2.2)
+    for y, dx in ((6.5, 0.35), (8.6, -0.35)):                             # roots wound round the haft
+        out.append(box(6.9 + dx, y, 6.9, 9.1 + dx, y + 1.0, 9.1, "handle_dark"))
+    out += [box(6.6, 10.4, 6.6, 9.4, 11.6, 9.4, "brass"),                  # the gold sun-band
+            box(6.9, 11.0, 6.4, 9.1, 12.2, 6.6, "accent")]
+    out += [box(5.6, 11.6, 7.3, 10.4, 25.0, 8.7, "mid"),                   # the jade paddle
+            box(6.2, 25.0, 7.35, 9.8, 26.4, 8.65, "mid"), box(7.0, 26.4, 7.4, 9.0, 27.0, 8.6, "light"),
+            box(6.0, 12.0, 7.2, 6.8, 24.6, 8.8, "light"),                  # a bevel along one edge
+            box(9.4, 12.0, 7.2, 10.2, 24.6, 8.8, "dark"),                  # and the shade on the other
+            box(7.7, 13.0, 7.15, 8.3, 23.5, 8.85, "glow"),                 # the living vein
+            box(6.6, 11.6, 7.0, 9.4, 12.6, 9.0, "accent_dark")]            # moss at the root
+    for y in (13.0, 15.4, 17.8, 20.2, 22.6):                              # obsidian teeth on both edges
+        out += [box(4.5, y, 7.6, 5.6, y + 1.4, 8.4, "iron_dark"), box(10.4, y, 7.6, 11.5, y + 1.4, 8.4, "iron_dark")]
+    return out
+
+
 ARCHETYPES = {"sword": broadsword, "greatsword": lambda: broadsword(length=19, width=5.0, guard=11), "blade": blade, "spear": spear,
               "trident": lambda: spear("trident"), "lance": lambda: spear("lance"), "hammer": hammer,
               "mace": mace, "staff": staff, "cane": cane, "scythe": scythe, "book": book, "fist": fist,
@@ -637,9 +800,11 @@ ARCHETYPES = {"sword": broadsword, "greatsword": lambda: broadsword(length=19, w
               "forge_hammer": forge_hammer, "crystal_spear": crystal_spear, "axe": axe, "pickaxe": pickaxe,
               "shovel": shovel, "hoe": hoe, "wand_block": wand_block, "caged_orb": caged_orb,
               "broadsword": broadsword, "sentinel_greatsword": sentinel_greatsword, "crook": crook, "chain_flail": chain_flail, "gate_key": gate_key, "halo_glaive": halo_glaive, "caldera_halberd": caldera_halberd,
-              "dane_axe": dane_axe, "tide_crozier": tide_crozier, "ascetic_staff": ascetic_staff,
+              "dane_axe": dane_axe, "tide_crozier": tide_crozier, "architect_plumb": architect_plumb, "pressure_lance": pressure_lance, "lantern_crozier": lantern_crozier, "ascetic_staff": ascetic_staff,
+              "valve_wrench": valve_wrench, "admiral_cutlass": admiral_cutlass, "solar_staff": solar_staff,
               "trident_big": trident_big, "fang": fang, "grimoire": grimoire, "gauntlet": gauntlet,
               "horn_curved": horn_curved, "ward_orb": ward_orb}
+ARCHETYPES["queen_macuahuitl"] = queen_macuahuitl
 
 # item id -> (archetype, material, handle, accent)
 HELD = {
@@ -670,6 +835,13 @@ HELD = {
     "jarl_axe": ("dane_axe", "frost", "dark", "ice"),
     "ascetic_staff": ("ascetic_staff", "storm", "wood", "sapphire"),
     "abbess_crozier": ("tide_crozier", "warden", "dark", "aether"),
+    "architect_plumb": ("architect_plumb", "iron", "dark", "aether"),
+    "pressure_lance": ("pressure_lance", "brass", "dark", "aether"),
+    "hierophant_crozier": ("lantern_crozier", "leather", "dark", "emerald"),
+    "queen_macuahuitl": ("queen_macuahuitl", "lithite", "dark", "emerald"),
+    "hierarch_sunstaff": ("solar_staff", "gold", "gold", "ember"),
+    "admiral_cutlass": ("admiral_cutlass", "iron", "dark", "aether"),
+    "tyrant_wrench": ("valve_wrench", "iron", "dark", "ember"),
     "cartographer_blade": ("sword", "cartographer", "wood", "emerald"),
     "telluric_hammer": ("hammer", "lithite", "wood", "emerald"),
     "storm_staff": ("staff", "storm", "dark", "sapphire"),

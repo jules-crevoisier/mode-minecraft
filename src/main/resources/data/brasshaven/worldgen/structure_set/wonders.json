@@ -71,6 +71,18 @@
     {
       "structure": "brasshaven:great_aqueduct",
       "weight": 1
+    },
+    {
+      "structure": "brasshaven:dreadnought_wreck",
+      "weight": 1
+    },
+    {
+      "structure": "brasshaven:sun_ziggurat",
+      "weight": 1
+    },
+    {
+      "structure": "brasshaven:canopy_city",
+      "weight": 1
     }
   ],
   "placement": {

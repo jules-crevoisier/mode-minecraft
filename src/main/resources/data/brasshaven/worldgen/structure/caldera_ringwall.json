@@ -17,6 +17,12 @@
           "weight": 4,
           "minCount": 1,
           "maxCount": 1
+        },
+        {
+          "type": "brasshaven:magma_sentry",
+          "weight": 5,
+          "minCount": 1,
+          "maxCount": 1
         }
       ]
     }

@@ -1,0 +1,37 @@
+{
+  "display": {
+    "icon": {
+      "id": "brasshaven:architect_plumb"
+    },
+    "title": {
+      "translate": "advancements.brasshaven.explorer.boss_abyssal_architect.title"
+    },
+    "description": {
+      "translate": "advancements.brasshaven.explorer.boss_abyssal_architect.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "kill": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "entity_type": "brasshaven:abyssal_architect"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "parent": "brasshaven:explorer/inverted_spire",
+  "rewards": {
+    "experience": 500
+  }
+}

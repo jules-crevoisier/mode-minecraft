@@ -392,6 +392,104 @@
           }
         ]
       }
+    },
+    "abyssal_architect": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "entity_type": "brasshaven:abyssal_architect"
+            }
+          }
+        ]
+      }
+    },
+    "lock_master": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "entity_type": "brasshaven:lock_master"
+            }
+          }
+        ]
+      }
+    },
+    "bog_hierophant": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "entity_type": "brasshaven:bog_hierophant"
+            }
+          }
+        ]
+      }
+    },
+    "strangler_queen": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "entity_type": "brasshaven:strangler_queen"
+            }
+          }
+        ]
+      }
+    },
+    "solar_hierarch": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "entity_type": "brasshaven:solar_hierarch"
+            }
+          }
+        ]
+      }
+    },
+    "drowned_admiral": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "entity_type": "brasshaven:drowned_admiral"
+            }
+          }
+        ]
+      }
+    },
+    "turbine_tyrant": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "entity_type": "brasshaven:turbine_tyrant"
+            }
+          }
+        ]
+      }
     }
   },
   "parent": "brasshaven:end/void_warden",

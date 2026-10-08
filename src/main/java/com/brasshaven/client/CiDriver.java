@@ -608,7 +608,7 @@ public final class CiDriver {
                 .cmd(() -> List.of("gamemode creative")); // the later steps fly over the stage
 
         // the 3D held models, in the hands of a row of armour stands (third person, as other players see them)
-        String[] held = {"kings_trident", "sentinel_greatsword", "dune_king_crook", "jailer_chain", "halo_glaive", "gatekeeper_key", "jarl_axe", "abbess_crozier", "ascetic_staff", "caldera_halberd", "helmsman_anchor", "forbidden_grimoire",
+        String[] held = {"kings_trident", "sentinel_greatsword", "dune_king_crook", "jailer_chain", "halo_glaive", "gatekeeper_key", "jarl_axe", "abbess_crozier", "architect_plumb", "pressure_lance", "hierophant_crozier", "queen_macuahuitl", "hierarch_sunstaff", "admiral_cutlass", "tyrant_wrench", "ascetic_staff", "caldera_halberd", "helmsman_anchor", "forbidden_grimoire",
                 "jade_fang", "rune_fist", "brass_pickaxe"};
         step("held_items")
                 .cmd(() -> {
@@ -894,13 +894,13 @@ public final class CiDriver {
                 })
                 .retry("place structure", () -> List.of(in(dim) + "place structure " + name + " " + px + " 64 " + pz), 100, 30);
         if (surface) {
-            outsideSteps(shortName, box);
+            outsideSteps(name, shortName, box);
         }
         interiorSteps(name, shortName, dim);
     }
 
     /** The four corners, the walk-up, the low view inside the footprint and the top view (surface structures). */
-    private static void outsideSteps(String shortName, double[][] box) {
+    private static void outsideSteps(String name, String shortName, double[][] box) {
         String[] names = {"nw", "ne", "se", "sw"};
         int[][] dirs = {{-1, -1}, {1, -1}, {1, 1}, {-1, 1}};
         for (int k = 0; k < 4; k++) {
@@ -913,11 +913,21 @@ public final class CiDriver {
                         double size = Math.max(b[3] - b[0], b[5] - b[2]);
                         double back = size * 0.45 + 14;
                         double height = b[4] - b[1];
+                        // builds sunk mostly below their ground layer (a tower hanging in a sinkhole): only the part
+                        // above the ground counts, and the camera aims at the ground, so it shows the opening from
+                        // above at an angle instead of sitting in the rock beside the buried part
+                        Placed placed = PLACED.get(name);
+                        int layer = groundLayer(shortName);
+                        double ground = placed != null && layer >= 0 ? placed.origin().getY() + layer : b[1];
+                        boolean sunk = ground - b[1] > height * 0.5;
+                        double base = sunk ? ground : b[1];
+                        double above = b[4] - base;
                         // tall builds (spires, abbeys): from two thirds up, not from above the top, which shows a
                         // floating island against the unloaded ground
-                        double y = height > size * 0.5 ? b[1] + height * 0.66 : b[4] + size * 0.12 + 6;
+                        double y = above > size * 0.5 ? base + above * 0.66 : b[4] + size * 0.12 + 6;
+                        double lookY = sunk ? ground : c[1];
                         return List.of("tp @s " + (c[0] + dx * back) + " " + y + " "
-                                + (c[2] + dz * back) + " facing " + c[0] + " " + c[1] + " " + c[2]);
+                                + (c[2] + dz * back) + " facing " + c[0] + " " + lookY + " " + c[2]);
                     })
                     .run("fly", CiDriver::fly)
                     .settleChunks(2400)
@@ -1009,10 +1019,11 @@ public final class CiDriver {
         /** "x y z" in template coordinates (block corner) to the world, at the middle of that block. */
         Vec3 world(String local) {
             String[] p = local.split(" ");
-            Vec3 v = new Vec3(Double.parseDouble(p[0]) + 0.5, Double.parseDouble(p[1]), Double.parseDouble(p[2]) + 0.5);
-            Vec3 t = net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.transform(
-                    v, net.minecraft.world.level.block.Mirror.NONE, rotation, BlockPos.ZERO);
-            return t.add(origin.getX(), origin.getY(), origin.getZ());
+            // rotate the block, then take its middle (rotating the middle lands a block off for 90/180/270)
+            BlockPos t = net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.transform(
+                    new BlockPos(Integer.parseInt(p[0]), Integer.parseInt(p[1]), Integer.parseInt(p[2])),
+                    net.minecraft.world.level.block.Mirror.NONE, rotation, BlockPos.ZERO);
+            return new Vec3(origin.getX() + t.getX() + 0.5, origin.getY() + t.getY(), origin.getZ() + t.getZ() + 0.5);
         }
     }
 
@@ -1134,9 +1145,15 @@ public final class CiDriver {
         int oz = 40 + index * 48; // a fresh patch of sky for each one, so the platform fill always changes blocks
         double ex = bx + 0.5;
         double ez = bz + oz + 10.5;
+        // camera distance, feet height and aim height from the creature's bounding box (read when the step runs:
+        // the registries are not there yet when the steps are listed)
+        double[][] frame = new double[1][];
         step("entity_" + shortName)
-                .cmd(() -> List.of("tp @s " + ex + " " + (STAGE_Y + 4) + " " + (bz + oz - 0.5) + " facing "
-                        + ex + " " + (STAGE_Y + 2.5) + " " + ez))
+                .cmd(() -> {
+                    frame[0] = entityFrame(name);
+                    return List.of("tp @s " + ex + " " + frame[0][1] + " " + (ez - frame[0][0]) + " facing "
+                            + ex + " " + frame[0][2] + " " + ez);
+                })
                 .run("fly", CiDriver::fly)
                 .waitTicks(40)
                 .cmd(() -> List.of(
@@ -1145,11 +1162,37 @@ public final class CiDriver {
                                 + " {NoAI:1b,PersistenceRequired:1b,Rotation:[180f,0f]}"))
                 .waitTicks(80)
                 .shot("entity_" + shortName + "_front")
-                .cmd(() -> List.of("tp @s " + (bx + 11.5) + " " + (STAGE_Y + 4) + " " + ez
-                        + " facing " + ex + " " + (STAGE_Y + 2.5) + " " + ez))
+                .cmd(() -> List.of("tp @s " + (ex + frame[0][0]) + " " + frame[0][1] + " " + ez
+                        + " facing " + ex + " " + frame[0][2] + " " + ez))
                 .run("fly", CiDriver::fly)
                 .waitTicks(40)
                 .shot("entity_" + shortName + "_side");
+    }
+
+    /**
+     * {distance from the creature's middle, camera feet y, aim y} for an entity standing on the stage (feet at
+     * STAGE_Y + 1), so that it fills about half the frame height (default 70 degree FOV, 16:9): a 2-block mob is
+     * shot from about 3.3 blocks, a 7-block boss from about 11. Models often overhang their box a little: margin added.
+     */
+    private static double[] entityFrame(String name) {
+        double h = 2.0;
+        double w = 0.8;
+        var type = net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE
+                .getOptional(net.minecraft.resources.Identifier.tryParse(name));
+        if (type.isPresent()) {
+            var dims = type.get().getDimensions();
+            h = dims.height();
+            w = dims.width();
+        }
+        // the visible frame at distance d is 1.4 d high and 2.5 d wide: the box takes ~45% of the height, ~40% of
+        // the width at its middle, a bit more at its near face (plus w / 2 so the camera stays clear of it)
+        double d = Math.max(Math.max(h / 0.8, w / 1.1), 1.6) + w / 2 + 0.5;
+        d = Math.min(d, 40);
+        double aim = STAGE_Y + 1 + h * 0.5;
+        double eye = aim + d * 0.18; // a little above, looking slightly down
+        double feet = Math.max(STAGE_Y + 1, eye - 1.62);
+        LOGGER.info(TAG + "{} box {}x{}: camera {} blocks away", name, w, h, String.format("%.1f", d));
+        return new double[] {d, feet, aim};
     }
 
     /**

@@ -1022,6 +1022,54 @@
           }
         ]
       }
+    },
+    "sun_ziggurat": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:sun_ziggurat"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "dreadnought_wreck": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:dreadnought_wreck"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "canopy_city": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:canopy_city"
+              }
+            }
+          }
+        ]
+      }
     }
   },
   "parent": "brasshaven:end/void_warden",

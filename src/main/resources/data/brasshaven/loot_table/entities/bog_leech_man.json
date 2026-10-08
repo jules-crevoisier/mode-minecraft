@@ -1,0 +1,123 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:slime_ball",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 0,
+                "max": 2
+              },
+              "add": false
+            },
+            {
+              "function": "minecraft:enchanted_count_increase",
+              "enchantment": "minecraft:looting",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 0,
+                "max": 1
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:rotten_flesh",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 0,
+                "max": 1
+              },
+              "add": false
+            },
+            {
+              "function": "minecraft:enchanted_count_increase",
+              "enchantment": "minecraft:looting",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 0,
+                "max": 1
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:lily_pad",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 0,
+                "max": 1
+              },
+              "add": false
+            },
+            {
+              "function": "minecraft:enchanted_count_increase",
+              "enchantment": "minecraft:looting",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 0,
+                "max": 1
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:spider_eye",
+          "functions": [
+            {
+              "function": "minecraft:enchanted_count_increase",
+              "enchantment": "minecraft:looting",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 0,
+                "max": 1
+              }
+            }
+          ]
+        }
+      ],
+      "conditions": [
+        {
+          "condition": "minecraft:random_chance",
+          "chance": 0.2
+        }
+      ]
+    }
+  ],
+  "random_sequence": "brasshaven:entities/bog_leech_man"
+}

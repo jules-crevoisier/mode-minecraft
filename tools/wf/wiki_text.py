@@ -335,6 +335,7 @@ STRUCTURES = {
                         "(lieu de grâce), puis la brume ouvre l'arène au sommet ; derrière des barreaux scellés, le "
                         "caveau, et le saut dans le lac. Raccourcis : portes de fer à sens unique dans les tours, une "
                         "échelle sous une trappe, la poterne d'eau qui ramène de la grève à la cour de la porte.",
+    "dreadnought_wreck": "Un cuirassé à vapeur de laiton et de fer long de 180 blocs, échoué sur un récif et brisé en deux : la proue inclinée à demi noyée, la poupe droite avec sa tour de passerelle, son mât tripode, trois cheminées (dont une couchée sur le pont) et quatre tourelles aux canons énormes. Sur un îlot de récif, un campement de naufragés et une pierre de passage ; une passerelle de planches franchit la brèche. Dans la poupe : le poste d'équipage, le carré des officiers, le puits de la soute à munitions et son monte-charge, la salle des machines (cylindres, bielles, passerelles ; lieu de grâce), les cabines du pont supérieur (lieu de grâce) et la cabine du capitaine sous les fenêtres de poupe. Dans la proue noyée, le pont des torpilles. Passé la brume, la chaufferie des chaudières : l'arène du boss ; derrière des barreaux scellés, la chambre forte, et le monte-charge à échelle dont la porte de fer ramène au pont.",
     "great_aqueduct": "Un aqueduc de grès de 240 blocs qui franchit une vallée sur trois rangs d'arcades (arches de "
                       "12, 8 et 4 blocs), le canal en eau au sommet. Au fond de la vallée, une rivière, un pont de "
                       "dalles et une pierre de passage au pied de la tour d'escalier ouest. La route de la crête "
@@ -349,6 +350,22 @@ STRUCTURES = {
                       "puis, passé la brume, dans la grande citerne voûtée sous le castellum : l'arène du boss ; "
                       "derrière des barreaux scellés, le caveau, et le tunnel de vidange dont la porte de fer ramène "
                       "dans la vallée. Raccourcis : portes de fer à sens unique dans les tours, l'escalier de la brèche.",
+    "sun_ziggurat": "Une pyramide de grès à sept degrés, large de 140 blocs et haute de 70, posée sur le sable "
+                    "du désert et couronnée d'un colossal planétaire de laiton : quatre jambes arquées, deux "
+                    "anneaux portant les planètes et un soleil de pierre lumineuse. Sous lui, une lentille d'ambre "
+                    "concentre le jour dans un puits qui traverse le cœur. Depuis le campement et sa pierre de "
+                    "passage, une allée de sphinx et d'obélisques mène à la rampe processionnelle bordée de sphinx "
+                    "de laiton, puis au pylône et à ses portes de laiton. Derrière la salle des offrandes, la salle "
+                    "hypostyle de 5 × 5 colonnes à chapiteaux de lotus (lieu de grâce) ; dessous, les salles basses "
+                    "envahies de sable : grenier, citerne sèche, salle des machines, sanctuaire du soleil enfoui et "
+                    "un vestibule effondré. On monte par le quartier des prêtres-astronomes (réfectoire, dortoir, "
+                    "salle des étoiles, scriptorium) et les escaliers des terrasses jusqu'à la chambre de calibrage "
+                    "de la lentille, autour du tambour de verre du puits. La galerie des tombeaux scellés s'ouvre "
+                    "par la brèche des pilleurs. L'annexe au dôme de cuivre descend à l'antichambre (lieu de "
+                    "grâce) ; passé la brume, la chambre du soleil sous la lentille est l'arène du boss. Derrière "
+                    "des barreaux scellés, le caveau, et un ascenseur à colonne de bulles qui redescend par le cœur "
+                    "jusqu'aux salles basses. Raccourcis : portes de fer vers la rampe, les terrasses et la galerie "
+                    "des tombeaux, et un escalier en colimaçon des salles basses à la salle hypostyle.",
     "drowned_dam": "Un barrage-voûte de pierre et de laiton long de 170 blocs et haut de 66 ferme un fer à cheval "
                    "de roche ; derrière lui, un lac a englouti un village dont le clocher perce encore la surface. "
                    "Depuis le camp des arpenteurs (pierre de passage), le chemin contourne un éperon rocheux jusqu'à "
@@ -386,6 +403,20 @@ STRUCTURES = {
                       "(lieu de grâce) ; passé la brume, l'arène sur une île, sous la pointe de la flèche. Derrière, "
                       "le caveau aux barreaux scellés. Pour remonter : deux ascenseurs à bulles dans des tubes de "
                       "verre, de la grève à l'ossuaire et de la grève sud jusqu'au rebord.",
+    "canopy_city": "Une cité perdue de 220 blocs dans la jungle : au centre, un temple de pierre à six degrés haut "
+                   "de 66 blocs, étranglé par les racines ; autour, cinq troncs colossaux et creux, larges de 16 "
+                   "blocs, portent des plates-formes sur trois hauteurs reliées par des ponts de corde et des "
+                   "tyroliennes à poulies de laiton. Depuis le campement des explorateurs et sa pierre de passage, "
+                   "on monte par les escaliers en spirale des troncs (logis, entrepôts, atelier de tissage) jusqu'au "
+                   "marché (lieu de grâce) et au quartier haut, puis un pont mène à la terrasse supérieure du "
+                   "temple. Dedans, on descend : la bibliothèque des glyphes, le couloir des fléchettes et ses "
+                   "fosses à pointes, le sanctuaire de jade et d'or (lieu de grâce), la salle des offrandes et la "
+                   "crypte envahie de racines, d'où un passage mène au fond du cénote noyé et à sa cascade ; un "
+                   "tunnel immergé y cache une grotte. La corniche en spirale du cénote remonte au lieu de grâce "
+                   "(porte de fer vers la bibliothèque) et à l'escalier du sommet : passé la brume, l'arène sous le "
+                   "disque solaire de laiton brisé ; "
+                   "derrière des barreaux scellés, le caveau. Une porte de fer à sens unique ouvre l'escalier de la "
+                   "terrasse est et le pont du tronc est, dont l'ascenseur de laiton ramène au sol.",
     "mire_stilt_city": "Une ville de bois sur pilotis de 200 blocs au-dessus d'une mangrove : des passerelles sur trois "
                        "niveaux, des ponts de corde et des huttes de pêcheurs. On arrive par une chaussée depuis un "
                        "îlot (pierre de passage), on franchit la palissade et ses deux tours de garde (brisée à "
@@ -580,6 +611,38 @@ MOBS = {
                    "Robe de lin sombre jusqu'au sol, chasuble cramoisie couverte de bernacles, voile couronné de corail, "
                    "visage gris-vert aux yeux de verre marin. Une crosse dont la volute est un nautile dans la main "
                    "droite, un encensoir-cloche au bout d'une chaîne dans la gauche.",
+    "lock_master": "Champion du Grand Aqueduc : le gardien de la grande citerne, un colosse hydraulique de 5,2 blocs "
+                   "en laiton riveté, verdi par l'eau. Un casque de scaphandre à hublot lumineux couronné d'un volant "
+                   "de vanne, deux réservoirs de cuivre dans le dos, une vanne d'écluse entière au bras gauche pour "
+                   "bouclier et une lance à pression plus longue que lui dans la droite.",
+    "bog_hierophant": "Champion de la Cité des pilotis : un évêque pourrissant de 5,9 blocs, perché sur deux jambes "
+                      "d'échassier liées de racines de palétuvier, comme les pilotis de sa ville. Un manteau de mousse "
+                      "vivante, une mitre de lin moisi de travers, un visage de tourbe aux yeux de feu follet, une barbe "
+                      "de mousse. Une crosse de palétuvier noir dont la volute porte une lanterne de feu des marais dans "
+                      "la main droite, un bras d'os griffu dans la gauche, et un nuage de mouches des marais autour de "
+                      "la tête.",
+    "strangler_queen": "Championne de la Cité-temple de la canopée : la Reine-figuier étrangleur, une femme immense "
+                       "de 5,8 blocs tissée de racines aériennes et de jade, qui a étouffé le temple et s'est couronnée "
+                       "à sa place. Une jupe de racines-contreforts qui s'étalent sur le sol, un masque de jade aux "
+                       "yeux d'or, une chevelure de racines pâles et une couronne de broméliacées et d'orchidées "
+                       "lumineuses. Le bras gauche est un fouet de racine épineux plus long qu'elle, la main droite "
+                       "tient un macuahuitl de jade aux dents d'obsidienne.",
+    "solar_hierarch": "Champion de la Ziggourat du Moteur solaire : le dernier prêtre du midi, un grand automate "
+                      "doré de 5,8 blocs. Un némès rayé d'or et de lapis, un masque d'or aux yeux d'ambre, une robe de "
+                      "lin plissée sous un tablier d'or frappé du soleil ; dans le dos, un halo-disque de laiton à "
+                      "douze rayons où tournent trois petites planètes. Un bâton solaire à l'orbe d'ambre dans la main "
+                      "droite et un bouclier-miroir d'argent poli au bras gauche.",
+    "drowned_admiral": "Champion de l'Épave du cuirassé Léviathan : le dernier amiral du navire, un officier de marine "
+                       "de 5,9 blocs revenu du fond. Une redingote bleu marine gorgée d'eau à revers cramoisis, des "
+                       "épaulettes d'or qui dégouttent, des bottes de scaphandre à semelles de plomb ; à la place de la "
+                       "tête, un casque de scaphandre de laiton au hublot vert d'eau, coiffé d'un bicorne détrempé. Un "
+                       "sabre d'abordage à garde-panier dans la main droite, et pour avant-bras gauche un canon de pont, "
+                       "un grappin d'abordage enroulé dessous. Des bernacles et du varech partout.",
+    "turbine_tyrant": "Champion du Barrage de la vallée engloutie : l'ingénieur du barrage, soudé à la turbine qu'il "
+                      "n'a pas voulu quitter quand la vallée fut noyée. Une volute de fonte et de laiton de 5,7 blocs "
+                      "sur deux jambes hydrauliques, l'ouïe de la turbine qui rougeoie dans son ventre, deux cheminées "
+                      "dans le dos ; un rotor à quatre pales pour bras droit, une clé à vanne grande comme un homme dans "
+                      "le poing gauche, une casquette et des lunettes ambrées.",
     "storm_ascetic": "Champion de l'Ascension du pèlerin : l'ermite du sommet, un vieux moine décharné de 4,7 blocs "
                      "penché sur un bâton plus grand que lui, coiffé d'un anneau de bronze à grelots qui crépite "
                      "d'éclairs. Un grand chapeau de paille dans le dos, neuf grains de chapelet qui tournent autour de "
@@ -830,6 +893,151 @@ BOSS_MOVES = {
         ("Lame de fond", "3", "Toutes les 12 s : trois marques (sur les joueurs) reliées de verre marin, puis elle "
                               "nage de l'une à l'autre en 2 s (14). Écarte-toi des lignes."),
     ],
+    "lock_master": [
+        ("Estoc", "1 à 3", "La lance ramenée le long du flanc (0,8 s, une ligne de lumière marque sa portée), puis "
+                           "plongée droit devant : 9,5 blocs (16). Écarte-toi de la ligne."),
+        ("Moulinet", "1 à 3", "La lance ramenée en travers (0,9 s, un anneau de laiton), puis balayée tout autour de lui "
+                              "(13, rayon 6,5). Il le lance aussi sur qui s'attarde dans son dos."),
+        ("Coup de vanne", "1 à 3", "Il avance 1,2 s derrière sa vanne levée : elle pare tout coup de face. Un coup "
+                                   "lourd (11 et plus) ou un coup dans le dos brise sa garde : il chancelle 2 s (+30 % "
+                                   "de dégâts). Sinon il fonce (14)."),
+        ("Jets sous pression", "1 à 3", "La lance braquée à la hanche (1 s, les bords du balayage tracés), puis un jet "
+                                        "d'eau balaie 100° devant lui (10, repoussé). Les colonnes et les grilles "
+                                        "l'arrêtent. Phase 2 : aller et retour."),
+        ("Vannes", "1 à 3", "La lance levée vers la coupole (1 s) : des dalles marquées de laiton sur et autour de "
+                            "chaque joueur, l'eau goutte de la voûte au-dessus. Des grilles de fer tombent dessus "
+                            "(18) et restent 9 s comme des murs."),
+        ("Brochette", "2 et 3", "Trois estocs à 0,5 s d'écart (13 chacun), il se tourne vers toi entre chaque."),
+        ("Bélier", "2 et 3", "Accroupi (0,8 s, une ligne de 16 blocs), il fonce propulsé par ses réservoirs (15). "
+                             "Contre une grille il la brise et chancelle."),
+        ("Vapeur", "2 et 3", "La vanne levée (0,9 s, un anneau de vapeur) puis plantée : la vapeur jaillit autour de "
+                             "lui (14, rayon 6), puis une onde roule jusqu'à 12 (7, saute-la)."),
+        ("Chasse d'eau", "3", "À 30 %, puis toutes les 22 s : il tourne son volant (invulnérable 1,5 s, des chevrons "
+                              "d'écume montrent le sens), un courant balaie le sol 6,8 s (l'abri d'une colonne ou "
+                              "d'une grille te protège) et il charge quatre fois (16)."),
+    ],
+    "bog_hierophant": [
+        ("Balayage de crosse", "1 à 3", "La crosse tirée sur l'épaule droite (0,8 s, l'arc tracé de feu des marais), "
+                                        "balayée sur 200° (16)."),
+        ("Lanterne abattue", "1 à 3", "La crosse levée à deux mains (1 s, une ligne de boue) puis abattue : 19 sur la "
+                                      "ligne, et la tourbière s'ouvre là où la lanterne tombe."),
+        ("Leurre", "1 à 3", "Il tend la lanterne (0,9 s) : le feu follet te marque. 2,5 s plus tard, une floraison de "
+                            "poison éclate où tu te tiens (12, poison) : éloigne-toi des autres. Phase 2 : il marque "
+                            "tout le monde."),
+        ("Boue engloutissante", "1 à 3", "Crosse plantée (1 s) : des cercles de vraie boue s'ouvrent sur toi et autour "
+                                         "(8). Dedans, tu ralentis, puis au bout d'une seconde tu es pris (2 par seconde). "
+                                         "La boue disparaît après 5 s."),
+        ("Piétinement", "1 à 3", "Une échasse levée (0,6 s) puis abattue autour de lui (12, rayon 4,5). Phase 2 : un "
+                                 "anneau de boue à sauter."),
+        ("Enjambée", "1 à 3", "Penché sur ses longues jambes (0,7 s, une ligne de boue), il traverse 10 blocs (15)."),
+        ("Sangsues", "1 à 3", "Toutes les 28 s : des sangsues (poissons d'argent) tombent de sa robe, deux au plus."),
+        ("Moisson", "2 et 3", "Coup droit puis revers 0,6 s plus tard (15 chacun)."),
+        ("Essaim", "2 et 3", "Bras écartés (0,9 s) : les mouches des marais te poursuivent 2 s, un peu moins vite qu'un "
+                             "sprint (3 par demi-seconde, poison, faim). Cours."),
+        ("Feu follet", "2 et 3", "Huit lanternes s'allument autour de la salle. Il se consume en feu follet, invisible et "
+                                 "intouchable, saute de lanterne en lanterne, puis un cercle et un tintement marquent "
+                                 "l'endroit derrière toi (0,8 s) : il s'y relève et frappe (17). Retourne-toi et "
+                                 "écarte-toi."),
+        ("Embrasement", "3", "À 30 %, agenouillé (invulnérable 2,5 s), il fracasse la lanterne : le gaz des marais "
+                             "s'enflamme, une onde de feu (12, saute-la)."),
+        ("Lignes de feu", "3", "Toutes les 11 s : des lignes de gaz en feu roulent à travers la salle (12, brûlure), trop "
+                               "hautes pour être sautées : passe par les brèches. Trois lignes parallèles, deux en "
+                               "croix, ou un anneau qui se referme avec deux couloirs. Après, il est épuisé 2,5 s "
+                               "(+25 % de dégâts)."),
+    ],
+    "strangler_queen": [
+        ("Coup de fouet", "1 à 3", "Le fouet ramené en arrière (0,8 s, une ligne verte de 11 blocs), puis claqué "
+                                   "droit devant (14) : il te ramène vers elle."),
+        ("Combo de macuahuitl", "1 à 3", "Deux taillades en arc devant elle à 0,7 et 1,2 s (13 puis 13). Phase 2 : un "
+                                         "estoc final à 1,7 s qui porte à 6,5 blocs (16)."),
+        ("Racines en ligne", "1 à 3", "Mains plongées dans le sol (1 s) : trois lignes de racines (cinq en phase 2) "
+                                      "jaillissent vers toi en éventail (12, projeté en l'air). Mets-toi entre deux "
+                                      "lignes."),
+        ("Anneaux de racines", "1 à 3", "Bras levés (1,1 s) : trois anneaux de racines jaillissent l'un après l'autre "
+                                        "à 4, 8 puis 12 blocs (11). Phase 2 : une vague revient de l'extérieur vers elle."),
+        ("Pollen", "1 à 3", "Elle secoue sa couronne (0,9 s) : des nuages de pollen doré (rayon 4,5) restent 8 s. "
+                            "Dedans, la lenteur monte (I, II, III), puis au bout de 4 s tu es aveuglé et nauséeux (4). "
+                            "Sors du nuage."),
+        ("Liane", "1 à 3", "Fouet lancé vers une branche (0,8 s) : elle se balance jusqu'à toi (7 à 22 blocs) et "
+                           "retombe (15)."),
+        ("Épines", "1 à 3", "Quand tu restes collé à elle : des épines jaillissent autour d'elle (11, rayon 4,5). "
+                            "Phase 2 : une onde jusqu'à 8 blocs (7)."),
+        ("Tempête de fouet", "2 et 3", "Le fouet tourne autour d'elle (0,9 s) : deux tours (14) entre 2,5 et 9 blocs. "
+                                       "Colle-toi à elle ou recule hors de portée."),
+        ("Collet", "2 et 3", "Le fouet lancé en ligne (12 blocs, 0,9 s) : le premier pris est ramené à elle (8), puis "
+                             "un revers de macuahuitl (16)."),
+        ("Canopée", "2", "À 65 % puis environ toutes les 40 s de combat : elle grimpe dans le disque solaire, intouchable. "
+                              "Des esprits-jaguars tombent (deux, plus en groupe), et des graines-bombes tombent sur "
+                              "les joueurs marqués (13, rayon 2,5). Tue tous les esprits : elle chute plus tôt, "
+                              "exposée (+30 % de dégâts 4 s)."),
+        ("Chute", "2", "Après la canopée : un cercle suit sa cible puis se fige ; elle s'écrase dessus (17, rayon "
+                            "3,5) et une onde roule (8, saute-la)."),
+        ("Floraison", "3", "À 30 %, une fois (invulnérable 2,6 s) : une onde de croissance (13), puis elle accélère."),
+        ("Cages de racines", "3", "Toutes les 12 s : jusqu'à quatre joueurs marqués, un cercle les suit 0,6 s puis "
+                                  "se fige. Sors-en avant que la cage se referme (1,2 s). Pris, tu subis 6 puis 2 "
+                                  "par seconde : casse les racines (vraies racines de palétuvier, retirées après "
+                                  "7 s). Sinon elle vient moissonner la cage (18)."),
+    ],
+    "solar_hierarch": [
+        ("Garde du miroir", "1 à 3", "Entre ses attaques (et pendant ses coups de bâton), le miroir pare tout coup de "
+                                     "face et renvoie les projectiles au tireur. Frappe de côté ou de dos ; ou frappe "
+                                     "le miroir : chaque coup paré le fend (les coups lourds davantage, plus il y a de "
+                                     "joueurs plus il tient), et brisé il chancelle 1,5 s puis encaisse +30 % 2,5 s."),
+        ("Riposte", "1 à 3", "Trois coups parés en 2 s : il te repousse d'un coup de bouclier (0,5 s, 9, lenteur)."),
+        ("Balayage solaire", "1 à 3", "Le bâton armé sur l'épaule (0,7 s, l'arc tracé) puis balayé sur 150° (14). "
+                                      "Phase 2 : il enchaîne une estocade ou le combo."),
+        ("Estocade ardente", "1 à 3", "L'orbe ramené à la hanche (0,8 s, une ligne de 8,5 blocs) puis il fend à travers "
+                                      "toi (16, feu)."),
+        ("Combo du midi", "1 à 3", "Coup droit (0,7 s, 12), revers en se tournant vers toi (12), puis le bâton levé au "
+                                   "ciel et abattu en ligne (17). Phase 2 : la frappe au sol lâche un anneau de feu."),
+        ("Éclat du miroir", "1 à 3", "Le miroir levé vers la lentille (0,9 s, il s'embrase) : un cône de lumière de 12 "
+                                     "blocs (8, feu). Si tu le regardes, tu es aveuglé 2,5 s. Un gnomon t'abrite."),
+        ("Lance solaire", "1 à 3", "Il saute au centre et lève le miroir (1,5 s, la colonne du puits s'allume) : le "
+                                   "rayon renvoyé par son miroir rampe vers toi un peu moins vite que tu ne marches "
+                                   "pendant 6 s (5 par demi-seconde, feu). Un gnomon l'arrête. Phase 2 : un second "
+                                   "rayon chasse un autre joueur, ou suit ta trace en écho si tu es seul."),
+        ("Planétaire", "1 à 3", "Il saute au centre, le bâton au ciel (1,2 s) : ses planètes tracent des rayons qui "
+                                "tournent autour de lui 4,5 s. L'anneau bas se saute (11), l'anneau haut ne se saute "
+                                "pas : abrite-toi derrière un gnomon (14). Phase 2 : trois rayons, et à mi-course "
+                                "le sens s'inverse (chevrons bleus pour prévenir)."),
+        ("Éruption solaire", "2 et 3", "Le bâton planté (1 s) : trois anneaux de feu de 11 blocs à sauter (10 "
+                                       "chacun)."),
+        ("Descente", "2 et 3", "Il se ramasse (0,9 s) : un cercle te suit puis se fige, il bondit et retombe dessus "
+                               "(18, rayon 3) avec une onde à sauter (8)."),
+        ("Éclipse", "3", "À 30 %, invulnérable 2,5 s : la salle s'assombrit (ténèbres), une onde te repousse (12) et "
+                         "il accélère. Une colonne de lumière erre dans la salle (4, feu)."),
+        ("Sceaux solaires", "3", "Toutes les 11 s : six sceaux s'allument au sol et il saute de l'un à l'autre trois "
+                                 "fois ; le prochain à s'embraser est celui où il apparaît, et une couronne de feu y "
+                                 "éclate 0,4 s plus tard (13, rayon 4,5). Le troisième est le plus proche de toi."),
+    ],
+    "drowned_admiral": [
+        ("Coups de sabre", "1 à 3", "Le sabre tiré sur l'épaule droite (0,7 s, l'arc tracé de rouille) : un coup droit, "
+                                    "il se tourne vers toi, un revers 0,5 s plus tard (14 chacun)."),
+        ("Estocade", "1 à 3", "Pieds plantés, la pointe ramenée à la hanche (0,8 s, une ligne de 9 blocs), puis il fend "
+                              "à travers toi (16)."),
+        ("Canon de pont", "1 à 3", "Le bras-canon levé (1,4 s) : un laser rouge te suit un peu moins vite qu'un pas de "
+                                   "côté, puis se fige en jaune (déclic). L'obus éclate sur le premier joueur ou mur "
+                                   "touché : 18 au centre, moitié à 3,5 blocs, projeté. Déplace-toi en travers."),
+        ("Vannes des chaudières", "1 à 3", "Le sabre levé comme un signal (1,2 s) : des couloirs partent des foyers des "
+                                           "chaudières vers les joueurs (ils te suivent puis se figent en blanc). Les "
+                                           "vannes sautent : 13 et repoussé, puis la vapeur reste 2,5 s (4 par "
+                                           "demi-seconde, ralenti). Deux couloirs, trois en phase 2, quatre en phase 3."),
+        ("Grappin d'abordage", "1 à 3", "Le grappin tourne sous le canon (0,9 s, une chaîne grise vers toi, un cercle "
+                                        "qui se fige) puis part en ligne droite : s'il te prend, 8 et tu es traîné à "
+                                        "ses pieds, souvent suivi des coups de sabre. Sors de la ligne."),
+        ("Botte de plomb", "1 à 3", "Une botte levée (0,6 s) puis abattue autour de lui (12, rayon 4). Phase 2 : un "
+                                    "anneau d'eau à sauter."),
+        ("Bordée", "2 et 3", "Trois tirs de canon visés à une seconde d'écart (15 chacun), le laser se refige avant "
+                             "chacun."),
+        ("Abordage", "2 et 3", "Coup droit, revers, puis il bondit sur l'endroit marqué en jaune et l'écrase (18, rayon "
+                               "3) ; un anneau d'eau à sauter."),
+        ("Charge", "2 et 3", "Casque baissé (0,8 s, une ligne de 14 blocs) il fonce (15). S'il heurte une chaudière ou "
+                             "un mur, il chancelle 2 s (+30 % de dégâts) : place-toi devant une chaudière."),
+        ("Sabordage", "3", "À 30 %, agenouillé (invulnérable 2,5 s), il plante le sabre dans le pont : la mer envahit "
+                           "la chaufferie jusqu'aux genoux pendant 18 s (de la vraie eau, retirée ensuite). Tu pataug"
+                           "es et ralentis, lui avance à pleine vitesse ; 2 à 4 marins noyés montent à l'abordage "
+                           "selon le nombre de joueurs. Il recommence 12 s après chaque décrue."),
+    ],
     "frost_jarl": [
         ("Bouclier", "1 à 3", "Entre deux attaques, son bouclier te fait face : les coups portés de face perdent 65 %. "
                               "Frappe pendant qu'il se reprend, ou par le flanc."),
@@ -858,6 +1066,32 @@ BOSS_MOVES = {
                             "le sol blanchit 1,2 s avant une pulsation (7) : saute à ce moment."),
         ("Blizzard", "3", "Toutes les 13 s : la hache tendue vers l'oculus (1,2 s), puis trois salves de pics tombent, "
                           "chacune annoncée par un cercle sous chaque joueur (14). Change de place à chaque salve."),
+    ],
+    "turbine_tyrant": [
+        ("Balayage du rotor", "1 à 3", "Le rotor ramené à droite pendant qu'il siffle de plus en plus aigu (1,1 s, l'arc "
+                                        "tracé de laiton), puis balayé sur 240° (16). Recule hors de l'arc."),
+        ("Coup de clé", "1 à 3", "La clé hissée sur l'épaule (1 s, la ligne marquée), abattue devant lui (18) ; une "
+                                 "fissure court sur 16 blocs (12, projeté) et fait sauter les grilles qu'elle croise. "
+                                 "Trois fissures en phase 2."),
+        ("Vapeur", "1 à 3", "Il tourne sa vanne (0,9 s) : les grilles du sol sifflent 1,2 s puis crachent 1,5 s (10, "
+                            "puis 3 chaque quart de seconde). Une grille sur deux en phase 1, toutes sauf deux en phase 2."),
+        ("Surpression", "1 à 3", "Il gonfle 2,3 s (la portée tracée de vapeur, les manomètres montent), puis tout "
+                                 "explose autour de lui sur 16 blocs (19 en phase 2) : 22 et projeté. Cache-toi "
+                                 "derrière un pilier ou un générateur, ou sors de la portée : seuls ceux qu'il voit "
+                                 "sont touchés."),
+        ("Bélier", "1 à 3", "Épaules baissées (0,8 s, sa course marquée), il charge 13 blocs (15)."),
+        ("Piétinement", "1 à 3", "Si tu le colles : une jambe levée (0,6 s, un cercle de vapeur), puis un coup au sol "
+                                 "(13, rayon 4,5)."),
+        ("Broyeur", "2 et 3", "Rotor (14), coup de clé 0,6 s plus tard (16, une courte fissure), puis rotor dans "
+                              "l'autre sens (14) ; il se tourne vers toi entre les coups."),
+        ("Tourbillon", "2 et 3", "Le rotor levé comme un ventilateur (1 s) : il aspire tout le monde à 14 blocs pendant "
+                                 "1,2 s, puis tournoie (16, rayon 4,8). Cours contre l'aspiration."),
+        ("Cascade", "2 et 3", "Les grilles sautent l'une après l'autre autour de la salle, à partir de la plus proche "
+                              "de toi ; en phase 3, une seconde vague repart dans l'autre sens."),
+        ("Surchauffe", "3", "À 30 %, il s'agenouille (invulnérable 2,5 s) et tourne sa propre vanne : un anneau "
+                            "d'étincelles roule (12, saute-le), il accélère et les grilles sautent seules toutes les 9 s."),
+        ("Ruée", "3", "Toutes les 11 s : trois marques (sur les joueurs) reliées d'étincelles, puis il fonce de l'une "
+                      "à l'autre en 2,25 s (14) et laisse des étincelles qui brûlent 4 s (3 et feu)."),
     ],
     "storm_ascetic": [
         ("Combo du bâton", "1 à 3", "Le bâton ramené sur l'épaule droite (0,7 s, l'arc tracé de vent), un large "
@@ -923,9 +1157,34 @@ BOSS_FACTS = {
     "tide_abbess": "560 PV, armure 12, posture 105, barre verte. Phase 2 à 65 % : elle rugit, accélère, double ses "
                    "vagues et fait jaillir des geysers. Phase 3 à 30 % : elle inonde la rotonde (de la vraie eau, "
                    "retirée à la fin du combat) et nage beaucoup plus vite que toi.",
+    "lock_master": "600 PV, armure 14, posture 120, barre jaune. Sa vanne pare les coups de face quand il avance "
+                   "derrière : un coup lourd ou un coup dans le dos la brise. Phase 2 à 65 % : il rugit, accélère et "
+                   "enchaîne. Phase 3 à 30 % : il ouvre les vannes, un courant balaie la citerne et il charge. Ses "
+                   "grilles sont toujours temporaires.",
+    "bog_hierophant": "600 PV, armure 12, posture 110, barre verte. Phase 2 à 65 % : il rugit, allume huit "
+                      "lanternes et se change en feu follet pour frapper dans le dos. Phase 3 à 30 % : le gaz des "
+                      "marais s'embrase en lignes de feu. La boue et les lanternes qu'il pose sont retirées à la fin "
+                      "du combat.",
+    "strangler_queen": "620 PV, armure 12, posture 115, barre verte. Phase 2 à 65 % : elle rugit, accélère, ajoute "
+                       "fouet tournant et collet et grimpe dans le disque solaire d'où tombent esprits-jaguars et "
+                       "graines-bombes. Phase 3 à 30 % : la floraison, puis des cages de racines se referment sur les "
+                       "joueurs marqués. Ses reculs près du bord de la terrasse sont plafonnés. Les racines de ses "
+                       "cages sont temporaires et retirées à la fin du combat ou si tout le monde s'en va.",
+    "solar_hierarch": "620 PV, armure 12, posture 115, barre jaune. Son miroir pare les coups de face et renvoie "
+                      "les projectiles tant qu'il n'est pas brisé. Phase 2 à 65 % : il rugit, accélère, enchaîne, "
+                      "bondit et double ses rayons. Phase 3 à 30 % : l'éclipse, la salle s'assombrit et il saute de "
+                      "sceau en sceau. Les six gnomons de grès qu'il dresse sont temporaires et retirés à la fin du "
+                      "combat ou si tout le monde s'en va.",
+    "drowned_admiral": "620 PV, armure 12, posture 115, barre bleue. Phase 2 à 65 % : il rugit, accélère, enchaîne "
+                       "ses coups, tire des bordées et charge. Phase 3 à 30 % : il saborde le navire, la chaufferie "
+                       "s'inonde à hauteur de genou (eau temporaire, retirée à chaque décrue et à la fin du combat) et "
+                       "des marins noyés montent à bord.",
     "frost_jarl": "540 PV, armure 14, posture 110, barre bleue. Son bouclier pare les coups de face entre ses "
                   "attaques. Phase 2 à 65 % : il rugit, accélère et enchaîne ses coups. Phase 3 à 30 % : il gèle la "
                   "salle, le sol pulse et le blizzard tombe.",
+    "turbine_tyrant": "600 PV, armure 14, posture 115, barre jaune. Phase 2 à 65 % : il rugit, accélère, enchaîne "
+                      "ses coups et son explosion porte plus loin. Phase 3 à 30 % : il surchauffe, les grilles "
+                      "sautent seules et il fonce à travers la salle. Il ne pose aucun bloc.",
     "storm_ascetic": "580 PV, armure 12, posture 100, barre jaune. Phase 2 à 65 % : il rugit, accélère et se "
                      "dédouble en reflets. Phase 3 à 30 % : la grande cloche répond et sonne seule, anneau après "
                      "anneau. Aucun coup ne te projette dehors près du bord : l'arène est un sommet.",
@@ -1239,9 +1498,13 @@ NEW_GROUPS = [
          "struct:glacier_hall"),
         ("Rempart de la caldeira", "Un cratère de volcan ceint d'une enceinte à seize pans, un lac et une aiguille "
          "de roche portant un donjon et l'arène du boss.", "s-caldera_ringwall", "struct:caldera_ringwall"),
+        ("L'Épave du cuirassé Léviathan", "Un cuirassé à vapeur de 180 blocs échoué et brisé en deux sur un récif océanique : salle des machines, pont des torpilles noyé, soute à munitions et une arène dans la chaufferie.", "s-dreadnought_wreck", "struct:dreadnought_wreck"),
         ("Le Grand Aqueduc", "Un aqueduc de 240 blocs sur trois rangs d'arcades au-dessus d'une vallée : la "
          "maison de la source, une brèche habitée, une galerie dans les piles, le castellum et une arène dans sa "
          "citerne.", "s-great_aqueduct", "struct:great_aqueduct"),
+        ("La Ziggourat du Moteur solaire", "Une pyramide à degrés de 140 blocs dans le désert, couronnée d'un "
+         "planétaire de laiton dont la lentille éclaire l'arène de la chambre du soleil.", "s-sun_ziggurat",
+         "struct:sun_ziggurat"),
         ("La Porte agenouillée", "Deux chevaliers de pierre de 70 blocs agenouillés de part et d'autre d'un col, "
          "un linteau entre leurs mains, des salles dans leurs corps et une arène sous la porte.", "s-kneeling_gate",
          "struct:kneeling_gate"),
@@ -1255,6 +1518,9 @@ NEW_GROUPS = [
         ("La Cité des pilotis", "Une ville de bois sur pilotis au-dessus d'une mangrove : passerelles sur trois "
          "niveaux, ponts de corde, un fumoir, un clocher noyé et la salle de la reine-sorcière sous un chapeau "
          "tordu.", "s-mire_stilt_city", "struct:mire_stilt_city"),
+        ("La Cité-temple de la canopée", "Une cité perdue dans la jungle : un temple à degrés étranglé par les "
+         "racines, cinq troncs colossaux portant des quartiers reliés par des ponts de corde, un cénote noyé et "
+         "une arène sous un disque solaire de laiton brisé.", "s-canopy_city", "struct:canopy_city"),
     ]),
 ]
 
@@ -1354,6 +1620,35 @@ TEST_CHECKLIST = [
      "Elle apparaît à 6 blocs. Sors des nuages de saumure, tiens-toi dans les brèches des vagues, cours contre le "
      "glas ; à 30 %, la rotonde s'inonde (vraie eau, retirée quand elle tombe ou quand le combat se réinitialise). "
      "Pour le vrai repaire : /brasshaven tp tidal_abbey (sous l'église)."),
+    ("Le Maître des écluses", ["/brasshaven boss lock_master"],
+     "Il apparaît à 6 blocs. Écarte-toi de la ligne d'estoc, ne reste pas dans son dos, frappe sa vanne d'un coup "
+     "lourd ou contourne-la ; cache-toi derrière une colonne quand le jet balaie, sors des dalles marquées ; à 30 %, "
+     "abrite-toi du courant dans le sillage d'une colonne. Pour le vrai repaire : /brasshaven tp great_aqueduct (la "
+     "grande citerne sous le castellum)."),
+    ("Le Hiérophante des tourbières", ["/brasshaven boss bog_hierophant"],
+     "Il apparaît à 6 blocs. Recule hors de l'arc de la crosse, sors des cercles de boue avant d'être pris, éloigne-toi "
+     "des autres quand tu es marqué ; à 65 %, guette le tintement derrière toi ; à 30 %, passe par les brèches des "
+     "lignes de feu. Pour le vrai repaire : /brasshaven tp mire_stilt_city (la salle de la reine-sorcière, en haut)."),
+    ("La Reine-figuier étrangleur", ["/brasshaven boss strangler_queen"],
+     "Elle apparaît à 6 blocs. Écarte-toi de la ligne du fouet, glisse-toi entre les lignes de racines, saute les "
+     "anneaux, sors du pollen ; à 65 %, tue les esprits-jaguars pour la faire chuter et sors des cercles des "
+     "graines ; à 30 %, sors du cercle avant que la cage se referme, ou casse-la. Vérifie que les racines "
+     "disparaissent quand elle tombe. Pour le vrai repaire : /brasshaven tp canopy_city (la terrasse au sommet du "
+     "temple, sous le disque solaire)."),
+    ("Le Hiérarque solaire", ["/brasshaven boss solar_hierarch"],
+     "Il apparaît à 6 blocs et dresse six gnomons de grès autour de lui (retirés à sa mort). Frappe-le de côté ou de "
+     "dos, ou brise le miroir ; tire une flèche de face : elle doit revenir. Cache-toi derrière un gnomon pour l'éclat, "
+     "la lance solaire et l'anneau haut, saute l'anneau bas ; à 30 %, éloigne-toi du sceau qui s'embrase. Pour le "
+     "vrai repaire : /brasshaven tp sun_ziggurat (la chambre du soleil sous la lentille)."),
+    ("L'Amiral noyé", ["/brasshaven boss drowned_admiral"],
+     "Il apparaît à 6 blocs (sans chaudières, quatre vannes virtuelles autour de lui). Pas de côté quand le laser du "
+     "canon se fige, sors de la ligne du grappin et des couloirs de vapeur ; à 65 %, attire sa charge contre un mur ; "
+     "à 30 %, reste mobile dans l'eau et occupe-toi des marins. Pour le vrai repaire : /brasshaven tp dreadnought_wreck "
+     "(la chaufferie, à la poupe)."),
+    ("Le Tyran des turbines", ["/brasshaven boss turbine_tyrant"],
+     "Il apparaît à 6 blocs (sans grilles, il crée huit évents virtuels autour de lui). Recule hors du rotor, écarte-toi "
+     "des fissures, quitte les grilles qui sifflent ; pendant la surpression, coupe sa ligne de vue ou sors de la "
+     "portée. Pour le vrai repaire : /brasshaven tp drowned_dam (la salle des turbines)."),
     ("Merveilles en surface", ["/brasshaven tp inventor_manor", "/brasshaven tp sylvan_palace",
                                "/brasshaven tp geothermal_foundry", "/brasshaven tp tesla_observatory",
                                "/brasshaven tp sky_isles"],

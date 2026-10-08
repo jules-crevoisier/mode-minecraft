@@ -125,7 +125,10 @@ STRUCTURE_ICONS = {
     "drowned_dam": "brasshaven:valve_wheel",
     "inverted_spire": "iron_chain",
     "great_aqueduct": "cut_sandstone",
+    "dreadnought_wreck": "brasshaven:dark_iron_plating",
+    "sun_ziggurat": "sunflower",
     "mire_stilt_city": "mangrove_roots",
+    "canopy_city": "jungle_log",
 }
 # where each boss lives (its quest follows the discovery of that structure)
 BOSS_HOME = {
@@ -147,6 +150,13 @@ BOSS_HOME = {
     "frost_jarl": "glacier_hall",
     "storm_ascetic": "pilgrims_ascent",
     "tide_abbess": "tidal_abbey",
+    "abyssal_architect": "inverted_spire",
+    "lock_master": "great_aqueduct",
+    "bog_hierophant": "mire_stilt_city",
+    "strangler_queen": "canopy_city",
+    "solar_hierarch": "sun_ziggurat",
+    "drowned_admiral": "dreadnought_wreck",
+    "turbine_tyrant": "drowned_dam",
 }
 CHAPTER = {}
 for s in defs.STRUCTURES:

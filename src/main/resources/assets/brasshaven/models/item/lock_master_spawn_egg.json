@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "brasshaven:item/lock_master_spawn_egg"
+  }
+}

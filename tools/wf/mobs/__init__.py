@@ -43,6 +43,13 @@ from . import caldera_castellan
 from . import oathbound_gatekeeper
 from . import storm_ascetic
 from . import tide_abbess
+from . import abyssal_architect
+from . import lock_master
+from . import bog_hierophant
+from . import strangler_queen
+from . import solar_hierarch
+from . import drowned_admiral
+from . import turbine_tyrant
 # living oceans
 from . import glow_jellyfish
 from . import reef_fish
@@ -68,6 +75,14 @@ from . import oathbound_statue
 from . import tide_wraith
 from . import bell_monk
 from . import void_acolyte
+# second pack of creatures of the colossal structures
+from . import sluice_drowned
+from . import turbine_automaton
+from . import bog_leech_man
+from . import abyss_crawler
+from . import rust_mite_mother
+from . import rust_mite
+from . import boiler_gunner
 
 MODELS = [
     drowned_warden.build,
@@ -115,6 +130,14 @@ MODELS = [
     storm_ascetic.build,
     storm_ascetic.build_illusion,
     tide_abbess.build,
+    abyssal_architect.build,
+    lock_master.build,
+    bog_hierophant.build,
+    strangler_queen.build,
+    strangler_queen.build_spirit,
+    solar_hierarch.build,
+    drowned_admiral.build,
+    turbine_tyrant.build,
     glow_jellyfish.build,
     reef_fish.build,
     manta_ray.build,
@@ -137,4 +160,11 @@ MODELS = [
     tide_wraith.build,
     bell_monk.build,
     void_acolyte.build,
+    sluice_drowned.build,
+    turbine_automaton.build,
+    bog_leech_man.build,
+    abyss_crawler.build,
+    rust_mite_mother.build,
+    rust_mite.build,
+    boiler_gunner.build,
 ]

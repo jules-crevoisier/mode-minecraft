@@ -590,6 +590,7 @@ def engine_room(bp):
     bp.chest(8, cy + 1, 4, "west", loot=LOOT + "walker_engine")
     bp.spawner(0, ENGINE, 14, W + "steam_drone")
     bp.spawner(-14, ENGINE, -10, W + "steam_drone")
+    bp.spawner(12, ENGINE, -4, W + "boiler_gunner")
     # stair up to the gun deck, along the east wall, climbing north
     stair_run(bp, 11, ENGINE, 14, "north", GUN - ENGINE, 3, IRON_STAIRS, fill=IRON, clear=4)
 
@@ -637,6 +638,7 @@ def gun_deck(bp):
         bp.set(-6, DECK - 2, z, HANG_LAMP)
         bp.set(6, DECK - 2, z, HANG_LAMP)
     bp.spawner(0, GUN, -6, W + "steam_drone")
+    bp.spawner(-6, GUN, 8, W + "boiler_gunner")
     # stair up to the top deck, centre line, climbing south, arriving behind the arena
     stair_run(bp, 1, GUN, 14, "south", DECK - GUN, 3, IRON_STAIRS, fill=IRON, clear=4)   # x = 1..-1
 

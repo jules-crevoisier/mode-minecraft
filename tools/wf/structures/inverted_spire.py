@@ -50,8 +50,9 @@ from ..megakit import fbm, hash01, hash3
 from ..parts import LOOT, MOD
 from .chained_bastion import giant_chain
 
-# placeholder until the spire gets its own boss: the Sculk Spawn rises from the lake
-BOSS = "brasshaven:sculk_spawn"
+# the spire's own builder: the Abyssal Architect hangs from chains under the point and drops onto the island
+# (entity/boss/AbyssalArchitect.java, tools/BOSSES.md); his phase 3 crumbles the island floor (temporarily)
+BOSS = "brasshaven:abyssal_architect"
 MOB_KNIGHT = "brasshaven:skeleton_knight"
 MOB_SKELETON = "minecraft:skeleton"
 MOB_BANSHEE = "brasshaven:banshee"
@@ -1040,6 +1041,8 @@ def chapel(S):
     bp.chest(x, f, z, in_dir(x, z), loot=LOOT + "is_chapel")
     x, z = P(90, 6.2)
     bp.spawner(x, f, z, MOB_BANSHEE)
+    x, z = P(250, 5.2)
+    bp.spawner(x, f, z, "brasshaven:abyss_crawler")
     level_lights(S, f, count=2)
 
 
@@ -1082,6 +1085,8 @@ def crypt(S):
     bp.chest(x, f, z, in_dir(x, z), loot=LOOT + "is_crypt")
     x, z = P(90, 5.0)
     bp.spawner(x, f, z, MOB_CRAWLER)
+    x, z = P(270, 5.0)
+    bp.spawner(x, f, z, "brasshaven:abyss_crawler")
     level_lights(S, f, soul=True, count=3)
 
 
@@ -1711,13 +1716,19 @@ def inverted_spire(bp):
     footings(S)
 
 
-# camera spots for the CI focus run: (name, feet, look at), blueprint coordinates
+def xyz(b, r, y):
+    """(x, y, z) of bearing b, radius r at height y (pt gives (x, z): never splice it straight into a 3-tuple)."""
+    x, z = pt(b, r)
+    return x, y, z
+
+
+# camera spots for the CI focus run: (name, feet, look at), blueprint coordinates (x, y, z)
 VIEWS = [
     ("crown_court", (2, 1, 20), (0, 20, -6)),
-    ("descent", (*pt(250, 15.8), -10), (*pt(330, 12.0), -30)),
-    ("chapter_library", (*pt(150, 7.4), LV[1]), (*pt(60, 7.0), LV[1] + 3)),
-    ("inverted_chapel", (*pt(250, 6.2), LV[3]), (*pt(330, 6.0), LV[3] + 6)),
-    ("root_crypt", (*pt(140, 5.2), LV[4]), (*pt(60, 5.2), LV[4] + 4)),
+    ("descent", xyz(250, 15.8, -15), xyz(310, 16.5, -18)),
+    ("chapter_library", xyz(150, 7.4, LV[1]), xyz(60, 7.0, LV[1] + 3)),
+    ("inverted_chapel", xyz(250, 6.2, LV[3]), xyz(330, 6.0, LV[3] + 6)),
+    ("root_crypt", xyz(140, 5.2, LV[4]), xyz(60, 5.2, LV[4] + 4)),
     ("ossuary_gallery", (8, LV[3], -31), (-6, LV[3] + 2, -34)),
     ("arena", (0, FA, -30), (0, FA + 10, 0)),
 ]
@@ -1728,5 +1739,5 @@ register(StructureDef(
     ["plains", "sunflower_plains", "meadow", "forest", "birch_forest", "taiga", "savanna", "old_growth_birch_forest"],
     [Piece("spire", inverted_spire, views=VIEWS)],
     spacing=80, separation=32, adaptation="none", processors="none", max_distance=128, foundation=False,
-    spawns=[(MOB_SKELETON, 6, 1, 2), (MOB_CRAWLER, 3, 1, 1)],
+    spawns=[(MOB_SKELETON, 6, 1, 2), (MOB_CRAWLER, 3, 1, 1), ("brasshaven:abyss_crawler", 4, 1, 2)],
     title_fr="La Flèche renversée", title_en="Inverted Spire"))

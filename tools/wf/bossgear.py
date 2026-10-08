@@ -7,7 +7,11 @@ ability: WAVE (ring around you), BEAM (line ahead), DASH (rush through enemies),
 a line), ROOT (snare around you), CLOUD (poison cloud where you look), LEAP (bound forward), ARC (wide
 sweep), BLINK (teleport ahead and strike), HOOK (a chain
 thrown ahead drags the first foe to you), SHARDS (a fan of piercing shards ahead), BREATH (a cone of frost
-breath ahead that freezes foes solid), TIDE (a breaking wave ahead that sweeps foes along). flags: fire, slow, weak, blind, poison, lift, lifesteal.
+breath ahead that freezes foes solid), TIDE (a breaking wave ahead that sweeps foes along), PRESSURE (a
+steam blast round you that only reaches foes in your line of sight, stronger up close), BROADSIDE (a cannon
+shell along your aim that bursts with splash damage on the first foe or wall), PRISM (a sunray along your aim
+that glances off block faces up to 3 times), CAGE (a root lash along your aim that cages the first foe and
+whips the foes beside it). flags: fire, slow, weak, blind, poison, lift, lifesteal.
 """
 
 TIER_MATERIAL = {"overworld": "map_fragment", "depths": "lithite_shard", "nether": "ancient_ember", "end": "void_shard"}
@@ -151,6 +155,71 @@ BOSS_GEAR = [
      ("Remembrance of the Abbess", "Souvenir de l'Abbesse"),
      ("LITHITE", 7.0, -2.9), "TIDE", 10.0, 12.0, 90, "SPLASH", "slow", ("crozier", "warden", "dark", "aether"),
      ("warden", "aether")),
+    ("abyssal_architect", "overworld", "architect_plumb", ("Plumb of the Abyssal Architect", "Fil à plomb de l'Architecte de l'abîme"),
+     ("Use: let the plumb-bob fall from on high onto the spot you aim at (up to 16 blocks); it crushes every foe "
+      "within 2.5 blocks of it and pins them to the ground for 2 s.",
+      "Clic droit : laisse tomber le plomb de très haut sur le point visé (jusqu'à 16 blocs) ; il écrase tous les "
+      "ennemis à 2,5 blocs et les cloue au sol 2 s."),
+     ("Remembrance of the Architect", "Souvenir de l'Architecte"),
+     ("LITHITE", 8.0, -3.0), "PLUMB", 12.0, 16.0, 90, "SOUL", "slow", ("plumb", "iron", "dark", "aether"),
+     ("iron", "aether")),
+    ("lock_master", "overworld", "pressure_lance", ("Pressure-Lance of the Lock-Master", "Lance à pression du Maître des écluses"),
+     ("Use: open the nozzle; a high-pressure jet of water shoots 14 blocks along your aim (walls stop it), hurts every "
+      "foe in it and hurls it to the far end; the recoil pushes you a step back and puts out fire.",
+      "Clic droit : ouvre la buse ; un jet d'eau sous pression file sur 14 blocs dans ta visée (les murs l'arrêtent), "
+      "blesse tous les ennemis sur son passage et les projette au bout ; le recul te repousse d'un pas et t'éteint."),
+     ("Remembrance of the Lock-Master", "Souvenir du Maître des écluses"),
+     ("LITHITE", 8.0, -3.0), "JET", 11.0, 14.0, 80, "SPLASH", "", ("lance", "brass", "dark", "aether"),
+     ("brass", "aether")),
+    ("bog_hierophant", "overworld", "hierophant_crozier", ("Lantern-Crozier of the Bog Hierophant",
+                                                          "Crosse-lanterne du Hiérophante des tourbières"),
+     ("Use: swing the lantern toward a spot up to 12 blocks away; the bog opens there, drags every foe within 4 blocks "
+      "into its heart, holds them fast for 3 s and a poison bloom bursts on them.",
+      "Clic droit : balance la lanterne vers un point jusqu'à 12 blocs ; la tourbière s'y ouvre, attire tous les "
+      "ennemis à 4 blocs en son cœur, les retient 3 s et une floraison de poison éclate sur eux."),
+     ("Remembrance of the Hierophant", "Souvenir du Hiérophante"),
+     ("LITHITE", 8.0, -3.0), "MIRE", 9.0, 12.0, 100, "SPORE_BLOSSOM_AIR", "poison,slow", ("crozier", "leather", "dark", "emerald"),
+     ("leather", "emerald")),
+    ("strangler_queen", "overworld", "queen_macuahuitl", ("Jade Macuahuitl of the Strangler Queen",
+                                                         "Macuahuitl de jade de la Reine-figuier"),
+     ("Use: crack a lash of living root along your aim (up to 14 blocks); the first foe it meets is caged where it "
+      "stands, held fast for 3 s and weakened, and the cage's thorns whip every other foe within 3 blocks, dragging "
+      "them against the bars for half damage.",
+      "Clic droit : fais claquer un fouet de racine vivante dans ta visée (jusqu'à 14 blocs) ; le premier ennemi "
+      "touché est mis en cage sur place, retenu 3 s et affaibli, et les épines de la cage fouettent tous les autres "
+      "ennemis à 3 blocs, les plaquant contre les barreaux pour moitié moins de dégâts."),
+     ("Remembrance of the Strangler Queen", "Souvenir de la Reine-figuier"),
+     ("LITHITE", 8.0, -3.0), "CAGE", 10.0, 14.0, 90, "HAPPY_VILLAGER", "", ("macuahuitl", "lithite", "wood", "gold"),
+     ("lithite", "emerald")),
+    ("solar_hierarch", "overworld", "hierarch_sunstaff", ("Sun-Staff of the Solar Hierarch", "Bâton solaire du Hiérarque"),
+     ("Use: loose a ray of focused sunlight along your aim; it glances off walls, floors and ceilings like light off a "
+      "mirror (up to 3 bounces, 24 blocks in all), burns every foe it crosses once and grows a quarter hotter with "
+      "each bounce.",
+      "Clic droit : décoche un rayon de soleil concentré dans ta visée ; il ricoche sur les murs, sols et plafonds "
+      "comme la lumière sur un miroir (jusqu'à 3 rebonds, 24 blocs en tout), brûle une fois chaque ennemi traversé "
+      "et chauffe d'un quart de plus à chaque rebond."),
+     ("Remembrance of the Hierarch", "Souvenir du Hiérarque"),
+     ("LITHITE", 8.0, -3.0), "PRISM", 10.0, 24.0, 90, "END_ROD", "fire", ("sunstaff", "gold", "gold", "ember"),
+     ("gold", "ember")),
+    ("drowned_admiral", "overworld", "admiral_cutlass", ("Boarding Cutlass of the Drowned Admiral",
+                                                         "Sabre d'abordage de l'Amiral noyé"),
+     ("Use: fire the deck cannon along your aim; the shell bursts on the first foe or wall it meets (up to 24 blocks): "
+      "full damage within 1 block of the burst, half at 3.5, foes hurled away and set ablaze; the recoil kicks you a "
+      "step back.",
+      "Clic droit : tire au canon de pont dans ta visée ; l'obus éclate sur le premier ennemi ou mur rencontré (jusqu'à "
+      "24 blocs) : pleins dégâts à 1 bloc de l'explosion, moitié à 3,5, ennemis projetés et enflammés ; le recul te "
+      "repousse d'un pas."),
+     ("Remembrance of the Admiral", "Souvenir de l'Amiral"),
+     ("LITHITE", 7.0, -2.4), "BROADSIDE", 13.0, 24.0, 100, "LARGE_SMOKE", "fire", ("cutlass", "iron", "dark", "aether"),
+     ("brass", "aether")),
+    ("turbine_tyrant", "overworld", "tyrant_wrench", ("Valve-Wrench of the Turbine Tyrant", "Clé à vanne du Tyran des turbines"),
+     ("Use: open the valve; a blast of scalding steam bursts from you and hurls away every foe you can see within 8 "
+      "blocks (walls shield them), full force up close, half at the edge, and the overload speeds you up for 3 s.",
+      "Clic droit : ouvre la vanne ; un jet de vapeur brûlante jaillit de toi et repousse tous les ennemis que tu vois "
+      "à 8 blocs (les murs les protègent), pleine force de près, moitié au bord, et la surpression t'accélère 3 s."),
+     ("Remembrance of the Turbine Tyrant", "Souvenir du Tyran des turbines"),
+     ("LITHITE", 8.0, -3.0), "PRESSURE", 12.0, 8.0, 100, "CLOUD", "fire", ("valve_wrench", "iron", "dark", "ember"),
+     ("brass", "ember")),
 ]
 
 

@@ -1,0 +1,56 @@
+{
+  "type": "brasshaven:fitted_jigsaw",
+  "biomes": "#brasshaven:has_structure/dreadnought_wreck",
+  "step": "surface_structures",
+  "spawn_overrides": {
+    "monster": {
+      "bounding_box": "piece",
+      "spawns": [
+        {
+          "type": "minecraft:drowned",
+          "weight": 6,
+          "minCount": 1,
+          "maxCount": 2
+        },
+        {
+          "type": "brasshaven:skeleton_knight",
+          "weight": 2,
+          "minCount": 1,
+          "maxCount": 1
+        },
+        {
+          "type": "brasshaven:tide_wraith",
+          "weight": 3,
+          "minCount": 1,
+          "maxCount": 2
+        }
+      ]
+    }
+  },
+  "terrain_adaptation": "none",
+  "start_pool": "brasshaven:dreadnought_wreck/start",
+  "size": 1,
+  "max_distance_from_center": 116,
+  "use_expansion_hack": false,
+  "start_height": {
+    "absolute": 0
+  },
+  "project_start_to_heightmap": "OCEAN_FLOOR_WG",
+  "fit": {
+    "mode": "seabed",
+    "spread": 12,
+    "slope": 0.8,
+    "wet": 0.9,
+    "min_wet": 0.0,
+    "land": 0.5,
+    "drop": 6,
+    "depth": 12,
+    "clearance": 0,
+    "cover": 0,
+    "lift": 0,
+    "open": 0.0,
+    "ground": 3,
+    "pond": 0.0,
+    "theme": "sand"
+  }
+}

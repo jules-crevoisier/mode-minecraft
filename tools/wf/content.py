@@ -205,6 +205,14 @@ ENTITIES = {
     "storm_ascetic": ("The Storm Ascetic", "L'Ascète des tempêtes"),
     "storm_illusion": ("Mirror Image of the Ascetic", "Reflet de l'Ascète"),
     "tide_abbess": ("The Abbess of the Tides", "L'Abbesse des Marées"),
+    "abyssal_architect": ("The Abyssal Architect", "L'Architecte de l'abîme"),
+    "lock_master": ("The Lock-Master", "Le Maître des écluses"),
+    "bog_hierophant": ("The Bog Hierophant", "Le Hiérophante des tourbières"),
+    "strangler_queen": ("The Strangler Fig Queen", "La Reine-figuier étrangleur"),
+    "jaguar_spirit": ("Jaguar Spirit of the Queen", "Esprit-jaguar de la Reine"),
+    "solar_hierarch": ("The Solar Hierarch", "Le Hiérarque solaire"),
+    "drowned_admiral": ("The Drowned Admiral", "L'Amiral noyé"),
+    "turbine_tyrant": ("The Turbine Tyrant", "Le Tyran des turbines"),
     "hot_rivet": ("Hot Rivet", "Rivet brûlant"),
     "boomerang": ("Boomerang", "Boomerang"),
 }
@@ -247,6 +255,13 @@ SPAWN_EGGS = ["ruin_walker", "map_wraith", "basalt_guard", "void_stalker", "drow
               "frost_jarl",
               "storm_ascetic",
               "tide_abbess",
+              "abyssal_architect",
+              "lock_master",
+              "bog_hierophant",
+              "strangler_queen",
+              "solar_hierarch",
+              "drowned_admiral",
+              "turbine_tyrant",
               ]
 
 # Misc translated messages used from Java (key suffix -> (en, fr))

@@ -841,6 +841,7 @@ def forearm_and_elbow(bp, B):
     lay_floor(bp, B, range(ex - 6, ex + 7), range(ez - 6, ez + 7), 2, main=False)
     bp.chest(ex + 4, 2, ez + 1, "west", loot=LOOT + "colossus_arm")
     bp.spawner(ex + 3, 2, ez - 3, MOB["ruin_walker"])
+    bp.spawner(ex - 3, 2, ez + 1, "brasshaven:rust_mite_mother")
     hang(bp, B, ex, 10, ez)
     for (dx, dz) in ((-4, 3), (4, 4), (-3, -3)):
         bp.set(ex + dx, 2, ez + dz, "cobblestone" if dx < 0 else "mossy_cobblestone_slab[type=bottom,waterlogged=false]")
@@ -911,6 +912,7 @@ def hall(bp, B):
     # loot and the guardian of the hall
     bp.chest(-8, f, -2, "west", loot=LOOT + "colossus_hall")
     bp.spawner(-12, f, -3, "brasshaven:gargoyle")
+    bp.spawner(-18, f, 0, "brasshaven:rust_mite_mother")
     # fallen shell plates on the floor under the breach
     for (x, z) in ((-20, 6), (-21, 6), (-24, 7), (-13, 5)):
         if (x, f, z) in B.carve:

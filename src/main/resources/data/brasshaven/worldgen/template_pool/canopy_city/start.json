@@ -1,0 +1,755 @@
+{
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "brasshaven:chunked_template",
+        "size": [
+          228,
+          110,
+          216
+        ],
+        "cells": [
+          {
+            "location": "brasshaven:canopy_city/city/x0_z1",
+            "offset": [
+              20,
+              5,
+              44
+            ],
+            "size": [
+              8,
+              3,
+              18
+            ],
+            "blocks": 175
+          },
+          {
+            "location": "brasshaven:canopy_city/city/x0_z2",
+            "offset": [
+              0,
+              2,
+              62
+            ],
+            "size": [
+              28,
+              81,
+              31
+            ],
+            "blocks": 4533
+          },
+          {
+            "location": "brasshaven:canopy_city/city/x0_z3",
+            "offset": [
+              0,
+              2,
+              93
+            ],
+            "size": [
+              28,
+              80,
+              30
+            ],
+            "blocks": 13831
+          },
+          {
+            "location": "brasshaven:canopy_city/city/x0_z4",
+            "offset": [
+              6,
+              4,
+              123
+            ],
+            "size": [
+              22,
+              78,
+              31
+            ],
+            "blocks": 2425
+          },
+          {
+            "location": "brasshaven:canopy_city/city/x0_z5",
+            "offset": [
+              21,
+              5,
+              154
+            ],
+            "size": [
+              7,
+              23,
+              25
+            ],
+            "blocks": 433
+          },
+          {
+            "location": "brasshaven:canopy_city/city/x1_z0",
+            "offset": [
+              34,
+              2,
+              13
+            ],
+            "size": [
+              23,
+              77,
+              18
+            ],
+            "blocks": 3643
+          },
+          {
+            "location": "brasshaven:canopy_city/city/x1_z1",
+            "offset": [
+              28,
+              2,
+              31
+            ],
+            "size": [
+              29,
+              77,
+              31
+            ],
+            "blocks": 7468
+          },
+          {
+            "location": "brasshaven:canopy_city/city/x1_z2",
+            "offset": [
+              28,
+              2,
+              62
+            ],
+            "size": [
+              29,
+              80,
+              31
+            ],
+            "blocks": 7705
+          },
+          {
+            "location": "brasshaven:canopy_city/city/x1_z3",
+            "offset": [
+              28,
+              2,
+              93
+            ],
+            "size": [
+              29,
+              81,
+              30
+            ],
+            "blocks": 14542
+          },
+          {
+            "location": "brasshaven:canopy_city/city/x1_z4",
+            "offset": [
+              28,
+              2,
+              123
+            ],
+            "size": [
+              29,
+              80,
+              31
+            ],
+            "blocks": 4695
+          },
+          {
+            "location": "brasshaven:canopy_city/city/x1_z5",
+            "offset": [
+              28,
+              2,
+              154
+            ],
+            "size": [
+              29,
+              71,
+              31
+            ],
+            "blocks": 10383
+          },
+          {
+            "location": "brasshaven:canopy_city/city/x1_z6",
+            "offset": [
+              41,
+              2,
+              185
+            ],
+            "size": [
+              16,
+              66,
+              9
+            ],
+            "blocks": 224
+          },
+          {
+            "location": "brasshaven:canopy_city/city/x2_z0",
+            "offset": [
+              57,
+              2,
+              0
+            ],
+            "size": [
+              29,
+              76,
+              31
+            ],
+            "blocks": 9656
+          },
+          {
+            "location": "brasshaven:canopy_city/city/x2_z1",
+            "offset": [
+              57,
+              2,
+              31
+            ],
+            "size": [
+              29,
+              77,
+              31
+            ],
+            "blocks": 15610
+          },
+          {
+            "location": "brasshaven:canopy_city/city/x2_z2",
+            "offset": [
+              57,
+              2,
+              62
+            ],
+            "size": [
+              29,
+              76,
+              31
+            ],
+            "blocks": 7040
+          },
+          {
+            "location": "brasshaven:canopy_city/city/x2_z3",
+            "offset": [
+              57,
+              2,
+              93
+            ],
+            "size": [
+              29,
+              78,
+              30
+            ],
+            "blocks": 7725
+          },
+          {
+            "location": "brasshaven:canopy_city/city/x2_z4",
+            "offset": [
+              57,
+              2,
+              123
+            ],
+            "size": [
+              29,
+              69,
+              31
+            ],
+            "blocks": 7591
+          },
+          {
+            "location": "brasshaven:canopy_city/city/x2_z5",
+            "offset": [
+              57,
+              2,
+              154
+            ],
+            "size": [
+              29,
+              73,
+              31
+            ],
+            "blocks": 19549
+          },
+          {
+            "location": "brasshaven:canopy_city/city/x2_z6",
+            "offset": [
+              57,
+              2,
+              185
+            ],
+            "size": [
+              29,
+              67,
+              22
+            ],
+            "blocks": 2564
+          },
+          {
+            "location": "brasshaven:canopy_city/city/x3_z0",
+            "offset": [
+              86,
+              4,
+              0
+            ],
+            "size": [
+              28,
+              29,
+              31
+            ],
+            "blocks": 4350
+          },
+          {
+            "location": "brasshaven:canopy_city/city/x3_z1",
+            "offset": [
+              86,
+              2,
+              31
+            ],
+            "size": [
+              28,
+              75,
+              31
+            ],
+            "blocks": 4153
+          },
+          {
+            "location": "brasshaven:canopy_city/city/x3_z2",
+            "offset": [
+              86,
+              6,
+              62
+            ],
+            "size": [
+              28,
+              104,
+              31
+            ],
+            "blocks": 12497
+          },
+          {
+            "location": "brasshaven:canopy_city/city/x3_z3",
+            "offset": [
+              86,
+              0,
+              93
+            ],
+            "size": [
+              28,
+              79,
+              30
+            ],
+            "blocks": 23685
+          },
+          {
+            "location": "brasshaven:canopy_city/city/x3_z4",
+            "offset": [
+              86,
+              2,
+              123
+            ],
+            "size": [
+              28,
+              64,
+              31
+            ],
+            "blocks": 11255
+          },
+          {
+            "location": "brasshaven:canopy_city/city/x3_z5",
+            "offset": [
+              86,
+              3,
+              154
+            ],
+            "size": [
+              28,
+              72,
+              31
+            ],
+            "blocks": 9332
+          },
+          {
+            "location": "brasshaven:canopy_city/city/x3_z6",
+            "offset": [
+              86,
+              4,
+              185
+            ],
+            "size": [
+              28,
+              22,
+              31
+            ],
+            "blocks": 2798
+          },
+          {
+            "location": "brasshaven:canopy_city/city/x4_z0",
+            "offset": [
+              114,
+              4,
+              1
+            ],
+            "size": [
+              28,
+              26,
+              30
+            ],
+            "blocks": 3078
+          },
+          {
+            "location": "brasshaven:canopy_city/city/x4_z1",
+            "offset": [
+              114,
+              2,
+              31
+            ],
+            "size": [
+              28,
+              28,
+              31
+            ],
+            "blocks": 4752
+          },
+          {
+            "location": "brasshaven:canopy_city/city/x4_z2",
+            "offset": [
+              114,
+              0,
+              62
+            ],
+            "size": [
+              28,
+              99,
+              31
+            ],
+            "blocks": 11292
+          },
+          {
+            "location": "brasshaven:canopy_city/city/x4_z3",
+            "offset": [
+              114,
+              0,
+              93
+            ],
+            "size": [
+              28,
+              79,
+              30
+            ],
+            "blocks": 21627
+          },
+          {
+            "location": "brasshaven:canopy_city/city/x4_z4",
+            "offset": [
+              114,
+              2,
+              123
+            ],
+            "size": [
+              28,
+              64,
+              31
+            ],
+            "blocks": 7956
+          },
+          {
+            "location": "brasshaven:canopy_city/city/x4_z5",
+            "offset": [
+              114,
+              3,
+              154
+            ],
+            "size": [
+              28,
+              65,
+              31
+            ],
+            "blocks": 7782
+          },
+          {
+            "location": "brasshaven:canopy_city/city/x4_z6",
+            "offset": [
+              114,
+              4,
+              185
+            ],
+            "size": [
+              28,
+              63,
+              30
+            ],
+            "blocks": 1934
+          },
+          {
+            "location": "brasshaven:canopy_city/city/x5_z0",
+            "offset": [
+              142,
+              4,
+              7
+            ],
+            "size": [
+              29,
+              26,
+              24
+            ],
+            "blocks": 1982
+          },
+          {
+            "location": "brasshaven:canopy_city/city/x5_z1",
+            "offset": [
+              142,
+              2,
+              31
+            ],
+            "size": [
+              29,
+              27,
+              31
+            ],
+            "blocks": 4116
+          },
+          {
+            "location": "brasshaven:canopy_city/city/x5_z2",
+            "offset": [
+              142,
+              2,
+              62
+            ],
+            "size": [
+              29,
+              86,
+              31
+            ],
+            "blocks": 5668
+          },
+          {
+            "location": "brasshaven:canopy_city/city/x5_z3",
+            "offset": [
+              142,
+              2,
+              93
+            ],
+            "size": [
+              29,
+              85,
+              30
+            ],
+            "blocks": 5726
+          },
+          {
+            "location": "brasshaven:canopy_city/city/x5_z4",
+            "offset": [
+              142,
+              2,
+              123
+            ],
+            "size": [
+              29,
+              66,
+              31
+            ],
+            "blocks": 6305
+          },
+          {
+            "location": "brasshaven:canopy_city/city/x5_z5",
+            "offset": [
+              142,
+              2,
+              154
+            ],
+            "size": [
+              29,
+              67,
+              31
+            ],
+            "blocks": 22731
+          },
+          {
+            "location": "brasshaven:canopy_city/city/x5_z6",
+            "offset": [
+              142,
+              2,
+              185
+            ],
+            "size": [
+              29,
+              66,
+              23
+            ],
+            "blocks": 1964
+          },
+          {
+            "location": "brasshaven:canopy_city/city/x6_z0",
+            "offset": [
+              171,
+              5,
+              22
+            ],
+            "size": [
+              13,
+              22,
+              9
+            ],
+            "blocks": 248
+          },
+          {
+            "location": "brasshaven:canopy_city/city/x6_z1",
+            "offset": [
+              171,
+              4,
+              31
+            ],
+            "size": [
+              29,
+              27,
+              31
+            ],
+            "blocks": 3408
+          },
+          {
+            "location": "brasshaven:canopy_city/city/x6_z2",
+            "offset": [
+              171,
+              2,
+              62
+            ],
+            "size": [
+              29,
+              87,
+              31
+            ],
+            "blocks": 6213
+          },
+          {
+            "location": "brasshaven:canopy_city/city/x6_z3",
+            "offset": [
+              171,
+              1,
+              93
+            ],
+            "size": [
+              29,
+              88,
+              30
+            ],
+            "blocks": 17500
+          },
+          {
+            "location": "brasshaven:canopy_city/city/x6_z4",
+            "offset": [
+              171,
+              2,
+              123
+            ],
+            "size": [
+              29,
+              87,
+              31
+            ],
+            "blocks": 4029
+          },
+          {
+            "location": "brasshaven:canopy_city/city/x6_z5",
+            "offset": [
+              171,
+              2,
+              154
+            ],
+            "size": [
+              29,
+              67,
+              31
+            ],
+            "blocks": 5220
+          },
+          {
+            "location": "brasshaven:canopy_city/city/x6_z6",
+            "offset": [
+              171,
+              5,
+              185
+            ],
+            "size": [
+              4,
+              2,
+              3
+            ],
+            "blocks": 14
+          },
+          {
+            "location": "brasshaven:canopy_city/city/x7_z1",
+            "offset": [
+              200,
+              5,
+              51
+            ],
+            "size": [
+              13,
+              25,
+              11
+            ],
+            "blocks": 271
+          },
+          {
+            "location": "brasshaven:canopy_city/city/x7_z2",
+            "offset": [
+              200,
+              2,
+              62
+            ],
+            "size": [
+              18,
+              82,
+              31
+            ],
+            "blocks": 2857
+          },
+          {
+            "location": "brasshaven:canopy_city/city/x7_z3",
+            "offset": [
+              200,
+              1,
+              93
+            ],
+            "size": [
+              28,
+              85,
+              30
+            ],
+            "blocks": 6951
+          },
+          {
+            "location": "brasshaven:canopy_city/city/x7_z4",
+            "offset": [
+              200,
+              4,
+              123
+            ],
+            "size": [
+              20,
+              23,
+              31
+            ],
+            "blocks": 1681
+          },
+          {
+            "location": "brasshaven:canopy_city/city/x7_z5",
+            "offset": [
+              200,
+              5,
+              154
+            ],
+            "size": [
+              11,
+              22,
+              10
+            ],
+            "blocks": 448
+          }
+        ],
+        "projection": "rigid",
+        "processors": "brasshaven:none",
+        "ground_level_delta": 7,
+        "footprint": [
+          1,
+          0,
+          223,
+          215
+        ]
+      }
+    }
+  ]
+}
