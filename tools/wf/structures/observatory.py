@@ -825,14 +825,12 @@ def library(bp):
     bp.set(x0 + 1, 1, z1 - 1, "lectern[facing=east,has_book=false,powered=false]")
     bp.chest(x1 - 1, 1, z1 - 1, "west", loot=LOOT + "observatory_study")
     # stair to the upper floor (north-east corner)
-    for i in range(h1 - 1):
+    for i in range(h1):                 # the last step sits in the upper floor: it lands level with it
         x = x1 - 1 - i
         bp.set(x, i + 1, z0 + 1, stair(MAHOGANY_STAIRS, "west"))
         for yy in range(i + 2, i + 5):
             if yy >= h1:
                 bp.set(x, yy, z0 + 1, "air")
-    bp.set(x1 - h1, h1, z0 + 1, "air")
-    bp.set(x1 - h1 + 1, h1, z0 + 1, "air")
     # upper floor laboratory: long benches with brewing stands, a tesla model, an aether still
     yy = h1 + 1
     for x in range(x0 + 2, x1 - 1):

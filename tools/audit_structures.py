@@ -1366,8 +1366,11 @@ class Audit:
             if n < 3:
                 continue
             ti = W.idx(t)
-            # the climber's node at the top ladder cell
-            ns = self.nodes_at(ti[0], ti[2], 16 * ti[1], 16 * ti[1])
+            # the climber's node at the top ladder cell (or in the hatch right above it: a trapdoor over a
+            # ladder climbs like one once opened)
+            hatch = "_trapdoor" in self.blocks.get((t[0], t[1] + 1, t[2]), ("",))[0]
+            hy = 16 * (ti[1] + 1) if hatch else 16 * ti[1]
+            ns = self.nodes_at(ti[0], ti[2], hy, hy) or self.nodes_at(ti[0], ti[2], 16 * ti[1], 16 * ti[1])
             if not ns:
                 continue
             node = ns[0]

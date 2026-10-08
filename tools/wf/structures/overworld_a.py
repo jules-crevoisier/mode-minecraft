@@ -813,7 +813,7 @@ def guild_outpost(style):
         A.furnish(bp, hx0 + 4, 7, hz0, hx1 - 1, hz0 + 1, "library", wood=wood)
         for i in range(6):
             bp.stairs(hx1 - 1 - i, 1 + i, hz0 + 1, wst, "west")
-        bp.fill(hx1 - 6, 6, hz0 + 1, hx1 - 1, 6, hz0 + 1, "air")
+        bp.fill(hx1 - 5, 6, hz0 + 1, hx1 - 1, 6, hz0 + 1, "air")   # the stairwell; the top step stays
         bp.fill(hx1 - 6, 7, hz0 + 1, hx1 - 1, 8, hz0 + 1, "air")
 
         # ---------------------------------------------------------- map tower (north-east)
@@ -1366,7 +1366,8 @@ def monastery(bp):
     bp.chest(dx0 + 1, P + 7, dz1 - 1, "east", LOOT + "monastery")
     for i in range(6):
         bp.stairs(dx0 + 1, P + 1 + i, 30 - i, "spruce_stairs", "north")
-        bp.set(dx0 + 1, P + 6, 30 - i, "air")
+        if i < 5:                      # open the floor above the flight, not the top step itself
+            bp.set(dx0 + 1, P + 6, 30 - i, "air")
     for z in range(dz0 + 3, dz1, 6):
         bp.lantern(64, P + 5, z, hanging=True)
         bp.lantern(64, P + 11, z, hanging=True)

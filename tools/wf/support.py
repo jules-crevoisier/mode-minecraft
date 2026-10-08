@@ -525,6 +525,20 @@ def repair(bp, ctx, passes=12):
                 changed = True
         if not changed:
             break
+    # a chest under a solid block never opens: it becomes a barrel with the same loot (barrels open anyway)
+    chk = Checker(blocks, ctx)
+    for p, (name, props, data) in list(blocks.items()):
+        if short(name) in ("chest", "trapped_chest") and props.get("type", "single") == "single" \
+                and chk.full((p[0], p[1] + 1, p[2]), "down"):
+            blocks[p] = ("minecraft:barrel", {"facing": "up", "open": "false"}, data)
+            count("chests under a solid block made barrels")
+    # a hatch over a ladder must stay usable: no rug on top of it (a carpet hides it and blocks the click)
+    for p, (name, props, data) in list(blocks.items()):
+        if short(name).endswith("_trapdoor") and blocks.get((p[0], p[1] - 1, p[2]), ("",))[0] == "minecraft:ladder":
+            up = (p[0], p[1] + 1, p[2])
+            if blocks.get(up, ("",))[0].endswith("carpet"):
+                blocks[up] = AIR_STATE
+                count("rugs lifted off hatches")
     return done
 
 
