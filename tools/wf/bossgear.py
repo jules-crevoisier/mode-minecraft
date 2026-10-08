@@ -11,7 +11,11 @@ breath ahead that freezes foes solid), TIDE (a breaking wave ahead that sweeps f
 steam blast round you that only reaches foes in your line of sight, stronger up close), BROADSIDE (a cannon
 shell along your aim that bursts with splash damage on the first foe or wall), PRISM (a sunray along your aim
 that glances off block faces up to 3 times), CAGE (a root lash along your aim that cages the first foe and
-whips the foes beside it). flags: fire, slow, weak, blind, poison, lift, lifesteal.
+whips the foes beside it), SCARAB (a scarab along your aim that bursts into a swarm leaping from foe to
+foe), TONGS (seize the nearest foe ahead and hurl it along your aim, bowling through the foes in its
+way), ZENITH (gravity inverted at the aimed spot: foes near it are drawn in and hurled
+up), FUSE (a bundle of lit dynamite flung along your aim: it sticks to the first foe or
+lands, and blows 1.5 s later, hurling the foes round it). flags: fire, slow, weak, blind, poison, lift, lifesteal.
 """
 
 TIER_MATERIAL = {"overworld": "map_fragment", "depths": "lithite_shard", "nether": "ancient_ember", "end": "void_shard"}
@@ -220,6 +224,58 @@ BOSS_GEAR = [
      ("Remembrance of the Turbine Tyrant", "Souvenir du Tyran des turbines"),
      ("LITHITE", 8.0, -3.0), "PRESSURE", 12.0, 8.0, 100, "CLOUD", "fire", ("valve_wrench", "iron", "dark", "ember"),
      ("brass", "ember")),
+    ("fourth_king", "overworld", "fourth_king_sceptre", ("Scarab Sceptre of the Fourth King",
+                                                          "Sceptre-scarabée du Quatrième Roi"),
+     ("Use: loose a scarab along your aim (up to 16 blocks); it bursts into a swarm on the first foe or wall it meets, "
+      "and the swarm leaps from foe to foe (up to 4 leaps within 5 blocks, a fifth weaker each time), poisoning and "
+      "starving every foe it bites; you drink 1 health per foe bitten.",
+      "Clic droit : lâche un scarabée dans ta visée (jusqu'à 16 blocs) ; il éclate en essaim sur le premier ennemi ou "
+      "mur rencontré, et l'essaim saute d'ennemi en ennemi (jusqu'à 4 sauts à 5 blocs, un cinquième plus faible à "
+      "chaque fois), empoisonnant et affamant chaque ennemi mordu ; tu bois 1 PV par ennemi mordu."),
+     ("Remembrance of the Fourth King", "Souvenir du Quatrième Roi"),
+     ("LITHITE", 8.0, -3.0), "SCARAB", 9.0, 16.0, 90, "SOUL_FIRE_FLAME", "", ("scarab_sceptre", "gold", "dark", "sapphire"),
+     ("gold", "sapphire")),
+    ("colossus_heart", "overworld", "heart_lodeblade", ("Lodeblade of the Colossus's Heart",
+                                                        "Lame-aimant du Cœur du Colosse"),
+     ("Use: the engine-heart beats once; every foe you can see within 9 blocks is dragged to within a step of you, "
+      "hurt (harder the more armour it wears) and slowed for 2 s, and loose items and experience in reach fly to you.",
+      "Clic droit : le cœur-moteur bat une fois ; chaque ennemi que tu vois à 9 blocs est traîné jusqu'à un pas de "
+      "toi, blessé (d'autant plus qu'il porte d'armure) et ralenti 2 s, et les objets et l'expérience à portée "
+      "volent jusqu'à toi."),
+     ("Remembrance of the Colossus's Heart", "Souvenir du Cœur du Colosse"),
+     ("LITHITE", 9.0, -3.1), "MAGNET", 8.0, 9.0, 100, "WAX_OFF", "", ("greatsword", "copper", "dark", "ember"),
+     ("copper", "ember")),
+    ("anvil_warden", "nether", "warden_tongs", ("Searing Tongs of the Anvil Warden", "Pince ardente du Gardien de l'enclume"),
+     ("Use: seize the nearest foe in front of you (within 4.5 blocks) in the white-hot tongs and hurl it along your aim "
+      "(up to 10 blocks, walls stop it): every foe it crashes through takes three quarters of the damage, and it slams "
+      "down at the end, ablaze, scorching every foe within 2.5 blocks for half.",
+      "Clic droit : saisis dans la pince chauffée à blanc l'ennemi le plus proche devant toi (jusqu'à 4,5 blocs) et "
+      "lance-le dans ta visée (jusqu'à 10 blocs, les murs l'arrêtent) : chaque ennemi qu'il percute subit les trois "
+      "quarts des dégâts, et il s'écrase au bout, embrasé, brûlant pour moitié tous les ennemis à 2,5 blocs."),
+     ("Remembrance of the Anvil Warden", "Souvenir du Gardien de l'enclume"),
+     ("EMBER", 8.0, -3.0), "TONGS", 12.0, 10.0, 90, "FLAME", "fire", ("tongs", "iron", "dark", "ember"),
+     ("ember", "ember")),
+    ("star_curator", "end", "curator_astrolabe", ("Astrolabe of the Star-Eater Curator",
+                                                  "Astrolabe du Conservateur dévoreur d'étoiles"),
+     ("Use: turn the astrolabe and invert gravity at the spot you aim at (up to 16 blocks); every foe within 4 blocks "
+      "of it is hurt, drawn to its heart and hurled upward, floating helpless for 1.5 s (Levitation III) and glowing "
+      "for 4 s before it falls back down.",
+      "Clic droit : tourne l'astrolabe et inverse la gravité là où tu vises (jusqu'à 16 blocs) ; chaque ennemi à "
+      "4 blocs est blessé, attiré en son cœur et projeté vers le haut, flottant sans défense 1,5 s (Lévitation III) "
+      "et luisant 4 s avant de retomber."),
+     ("Remembrance of the Star-Eater Curator", "Souvenir du Conservateur dévoreur d'étoiles"),
+     ("VOID", 8.0, -3.0), "ZENITH", 10.0, 16.0, 100, "END_ROD", "", ("astrolabe_staff", "void", "purpur", "amethyst"),
+     ("void", "amethyst")),
+    ("mine_baron", "overworld", "baron_drillpick", ("Drill-Pick of the Mine Baron", "Pic-foreuse du Baron de la mine"),
+     ("Use: fling a bundle of lit dynamite along your aim (up to 14 blocks); it sticks to the first foe it meets or lies "
+      "where it lands, its fuse burns 1.5 s, then it blows without breaking a block: every foe within 3.5 blocks is "
+      "hurt (half at the edge), set ablaze and hurled away, and the foe it stuck to takes half again.",
+      "Clic droit : lance un fagot de dynamite allumée dans ta visée (jusqu'à 14 blocs) ; il se colle au premier "
+      "ennemi rencontré ou reste où il tombe, sa mèche brûle 1,5 s, puis il saute sans briser un bloc : chaque ennemi "
+      "à 3,5 blocs est blessé (moitié au bord), embrasé et projeté, et l'ennemi qui le portait subit moitié plus."),
+     ("Remembrance of the Mine Baron", "Souvenir du Baron de la mine"),
+     ("LITHITE", 8.5, -3.0), "FUSE", 12.0, 14.0, 100, "FLAME", "fire", ("drillpick", "gold", "dark", "ember"),
+     ("gold", "ember")),
 ]
 
 

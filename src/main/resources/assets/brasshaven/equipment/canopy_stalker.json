@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "brasshaven:canopy_stalker"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "brasshaven:canopy_stalker"
+      }
+    ]
+  }
+}

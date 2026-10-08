@@ -77,6 +77,9 @@ def mod_ids(kind):
         relic = os.path.join(java, "relic", "RelicGear.java")
         if os.path.exists(relic):
             ids |= set(re.findall(r'\b(?:weapon|armor|accessory)\("([a-z0-9_]+)"', open(relic, encoding="utf-8").read()))
+        colossal = os.path.join(java, "colossal", "ColossalGear.java")  # vault gear (wf/colossal_gear.py)
+        if os.path.exists(colossal):
+            ids |= set(re.findall(r'\b(?:weapon|armor)\("([a-z0-9_]+)"', open(colossal, encoding="utf-8").read()))
     return ids
 
 

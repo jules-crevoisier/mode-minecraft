@@ -403,6 +403,19 @@ STRUCTURES = {
                       "(lieu de grâce) ; passé la brume, l'arène sur une île, sous la pointe de la flèche. Derrière, "
                       "le caveau aux barreaux scellés. Pour remonter : deux ascenseurs à bulles dans des tubes de "
                       "verre, de la grève à l'ossuaire et de la grève sud jusqu'au rebord.",
+    "mesa_minecity": "Une ville-champignon de 200 blocs taillée dans une butte rayée des badlands, haute de 56 "
+                     "blocs : au sommet, un chevalement de bois et de fer porte une roue de 19 blocs ; sur les trois "
+                     "terrasses, des saloons à fausse façade, un dortoir, une forge et le bureau du télégraphe, "
+                     "reliés par des escaliers taillés, des ponts sur tréteaux et des échelles ; une voie de "
+                     "wagonnets s'enroule autour de la butte jusqu'au sommet. Depuis le relais de diligence et sa "
+                     "pierre de passage, on suit la grand-rue et on grimpe jusqu'à la salle des treuils (lieu de "
+                     "grâce). Dedans, on descend : le bocard et ses dix pilons, ses engrenages géants et son volant, "
+                     "le niveau 15 (dépôt de dynamite, bureau du patron et son coffre-fort), le niveau de roulage "
+                     "(lieu de grâce, galerie vers la sortie est), la galerie noyée sous une passerelle, le puits "
+                     "effondré autour de la cage tombée et l'antichambre (lieu de grâce). Passé la brume, une "
+                     "caverne de 42 blocs autour d'un filon colossal d'or et de cuivre à moitié exploité ; derrière "
+                     "des barreaux scellés, la chambre forte et le monte-wagon à bulles qui remonte au niveau de "
+                     "roulage.",
     "canopy_city": "Une cité perdue de 220 blocs dans la jungle : au centre, un temple de pierre à six degrés haut "
                    "de 66 blocs, étranglé par les racines ; autour, cinq troncs colossaux et creux, larges de 16 "
                    "blocs, portent des plates-formes sur trois hauteurs reliées par des ponts de corde et des "
@@ -417,6 +430,7 @@ STRUCTURES = {
                    "disque solaire de laiton brisé ; "
                    "derrière des barreaux scellés, le caveau. Une porte de fer à sens unique ouvre l'escalier de la "
                    "terrasse est et le pont du tronc est, dont l'ascenseur de laiton ramène au sol.",
+    "titan_forge": "Une forge colossale de 217 blocs sur un lac de lave du Nether (deltas de basalte, forêt carmin), bâtie dans et autour d'un titan de basalte et de laiton agenouillé, haut de 85 blocs, penché sur une enclume grande comme un donjon, le marteau levé. Depuis l'avant-poste des forgerons et sa pierre de passage, une chaussée de basalte et l'Arche du péage mènent au portail du socle, entre deux cascades de lave versées par des creusets dans des moules. Dans le socle : la halle de coulée et ses canaux de lave sous verre, les chambres des soufflets de cuir géants, le grand escalier jusqu'à la terrasse des creusets (pierre de passage). Dans le titan : une porte dans le genou, l'escalier en colimaçon de la cuisse, le casernement des forgerons, l'armurerie, la halle de fusion dans le dos sous les cheminées, le joug ; puis le bras gauche descend jusqu'à la salle du treuil (pierre de passage) et le pont-grue de l'avant-bras mène dans la main posée sur l'enclume. Passé la brume, l'arène sur la table de l'enclume, sous le marteau. Derrière des barreaux scellés, le caveau dans le talon de l'enclume. En option : la mine de scories et sa galerie cachée, la galerie des marteaux dans le bras levé, le nid du maître de forge dans le heaume. Pour revenir : l'ascenseur dans la colonne vertébrale du titan.",
     "mire_stilt_city": "Une ville de bois sur pilotis de 200 blocs au-dessus d'une mangrove : des passerelles sur trois "
                        "niveaux, des ponts de corde et des huttes de pêcheurs. On arrive par une chaussée depuis un "
                        "îlot (pierre de passage), on franchit la palissade et ses deux tours de garde (brisée à "
@@ -440,6 +454,19 @@ STRUCTURES = {
                    "chevaliers et le cloître suspendu, dont le puits cache un reliquaire. Sous le rocher, la crypte "
                    "(lieu de grâce) mène à la salle des marées, l'arène du boss éclairée par la mer à travers des "
                    "grilles, puis au caveau du trésor et au tunnel qui ressort au port.",
+    "starfall_library": "Une archive flottante de 170 blocs sur les îles extérieures de l'End : une tour-fuseau de "
+                        "purpur et de laiton haute de 125 blocs, coiffée d'un dôme d'astrolabe, entourée de trois "
+                        "galeries de lecture en anneau suspendues à trois hauteurs par des rayons de chaînes et de "
+                        "barres de l'End. Une météorite tombée s'est fichée dans son flanc et a fendu les "
+                        "rayonnages. Depuis l'îlot d'arrivée, un pont mène à la grande porte : la salle des cartes et "
+                        "sa carte du ciel au sol, puis les canyons de rayonnages (pierre de passage), avec échelles "
+                        "roulantes et passerelles, l'escalier mural jusqu'au scriptorium des copistes, la terrasse, "
+                        "la grande salle à l'armillaire (pierre de passage) et l'observatoire à lentille sous le dôme. "
+                        "Une rampe redescend vers les galeries ; la galerie brisée se traverse sur des livres ouverts "
+                        "flottants (un bassin de laiton rattrape les chutes) jusqu'au dos de la météorite. Un escalier "
+                        "en vrille descend dans la roche jusqu'au lieu de grâce, puis à l'arène dans la chambre du "
+                        "cratère. Derrière des barreaux scellés, la réserve interdite ; son tube pneumatique remonte "
+                        "à la salle des cartes.",
     "shattered_halo": "Un anneau colossal de purpur, de briques de pierre de l'End et d'or, large de 170 blocs et "
                       "incliné au-dessus du vide de l'End, brisé en cinq arcs qui flottent chacun à sa hauteur. On "
                       "arrive sur un îlot extérieur (pierre de passage), puis les ponts imposent l'ordre : "
@@ -621,6 +648,16 @@ MOBS = {
                       "de mousse. Une crosse de palétuvier noir dont la volute porte une lanterne de feu des marais dans "
                       "la main droite, un bras d'os griffu dans la gauche, et un nuage de mouches des marais autour de "
                       "la tête.",
+    "star_curator": "Champion de la Bibliothèque de la chute d'étoile : le Conservateur dévoreur d'étoiles, un érudit "
+                    "de 5,6 blocs en longue robe d'indigo bordée de laiton, brodée de constellations lumineuses, sous "
+                    "une pèlerine raide et un haut col. À la place de la tête, la météorite qui a ruiné sa "
+                    "bibliothèque : une roche calcinée fendue sur un ciel étoilé, deux étoiles pour yeux, un éclat qui "
+                    "flotte à côté. Cinq livres tournent autour de lui ; un bâton-astrolabe dans la main droite, la "
+                    "gauche levée paume ouverte.",
+    "mine_baron": "Champion de la Ville minière de la Mesa rouille : le Baron de la mine, un contremaître énorme et "
+                  "avide de 5,6 blocs sanglé dans un exosquelette à vapeur riveté, chaudière fumante sur le dos. Un "
+                  "bras-foreuse pneumatique à droite, un pic-marteau à gauche, un casque de mineur à lanterne, un "
+                  "gilet à chaîne de montre tendu sur la bedaine. Blessé, il se cuirasse de minerai d'or.",
     "strangler_queen": "Championne de la Cité-temple de la canopée : la Reine-figuier étrangleur, une femme immense "
                        "de 5,8 blocs tissée de racines aériennes et de jade, qui a étouffé le temple et s'est couronnée "
                        "à sa place. Une jupe de racines-contreforts qui s'étalent sur le sol, un masque de jade aux "
@@ -638,11 +675,27 @@ MOBS = {
                        "tête, un casque de scaphandre de laiton au hublot vert d'eau, coiffé d'un bicorne détrempé. Un "
                        "sabre d'abordage à garde-panier dans la main droite, et pour avant-bras gauche un canon de pont, "
                        "un grappin d'abordage enroulé dessous. Des bernacles et du varech partout.",
+    "fourth_king": "Champion de la Nécropole des rois : le Quatrième Roi, celui dont on a ciselé le visage sur la "
+                   "façade, relevé en monarque momifié décharné de 6 blocs. Un masque de grès et de lapis fendu, "
+                   "la moitié droite creusée au ciseau avec un œil bleu qui brûle au fond, une couronne blanche "
+                   "brisée, un collier d'or et de lapis, un fléau à trois chaînes dans la main droite et un sceptre "
+                   "au scarabée surmonté d'un disque solaire dans la gauche.",
+    "colossus_heart": "Champion du Colosse abattu : le Cœur du Colosse, un cœur-moteur de laiton qui bat encore "
+                      "dans le heaume et qui anime un chevalier de 6 blocs fait de plaques de bronze et de gravats "
+                      "tenus ensemble par des attaches d'ambre. Un espadon à la longue allonge, une plaque-bouclier "
+                      "qu'il lance comme un boomerang, un heaume qui flotte au-dessus des épaules ; à 65 % l'armure "
+                      "vole en éclats et tourne autour du cœur à nu.",
     "turbine_tyrant": "Champion du Barrage de la vallée engloutie : l'ingénieur du barrage, soudé à la turbine qu'il "
                       "n'a pas voulu quitter quand la vallée fut noyée. Une volute de fonte et de laiton de 5,7 blocs "
                       "sur deux jambes hydrauliques, l'ouïe de la turbine qui rougeoie dans son ventre, deux cheminées "
                       "dans le dos ; un rotor à quatre pales pour bras droit, une clé à vanne grande comme un homme dans "
                       "le poing gauche, une casquette et des lunettes ambrées.",
+    "anvil_warden": "Champion de la Forge du Titan de basalte : le forgeron pour qui la forge fut bâtie, un golem "
+                    "voûté de 5,6 blocs en basalte prismatique dont chaque joint rougeoie de la chaleur du four. Pour "
+                    "tête, un creuset de graphite cerclé de laiton qui déborde de métal en fusion, une fente "
+                    "lumineuse pour visière ; un marteau de forge à la face chauffée à blanc dans la main droite, une "
+                    "longue pince tenant un lingot ardent dans la gauche, un tablier de cuir roussi, un seau de trempe "
+                    "à la hanche et trois colonnes de basalte en fusion qui lui sortent de l'omoplate.",
     "storm_ascetic": "Champion de l'Ascension du pèlerin : l'ermite du sommet, un vieux moine décharné de 4,7 blocs "
                      "penché sur un bâton plus grand que lui, coiffé d'un anneau de bronze à grelots qui crépite "
                      "d'éclairs. Un grand chapeau de paille dans le dos, neuf grains de chapelet qui tournent autour de "
@@ -945,6 +998,73 @@ BOSS_MOVES = {
                                "croix, ou un anneau qui se referme avec deux couloirs. Après, il est épuisé 2,5 s "
                                "(+25 % de dégâts)."),
     ],
+    "star_curator": [
+        ("Bâton", "1 à 3", "L'astrolabe ramené sur l'épaule (0,7 s, l'arc tracé), deux balayages devant lui à 0,7 et "
+                           "1,2 s (13 chacun). Phase 2 : un estoc à 1,7 s qui porte à 7 blocs (16)."),
+        ("Volée de livres", "1 à 3", "Main levée (0,9 s) : trois livres (en phase 2, deux par joueur) te poursuivent "
+                                     "lentement (7, puis 6). Une flèche ou un coup en abat un."),
+        ("Puits de gravité", "1 à 3", "Bâton planté (1 s) : pendant 1,5 s tout le monde à 15 blocs est attiré vers "
+                                      "lui (sprinte vers l'extérieur), puis le puits implose (15, rayon 4). Phase 2 : "
+                                      "une onde jusqu'à 10 blocs (8, saute-la)."),
+        ("Chute d'étoiles", "1 à 3", "L'astrolabe levé vers le dôme (0,8 s) : un cercle suit chaque joueur 0,7 s puis "
+                                     "se fige, un éclat tombe 0,8 s plus tard (14, rayon 2,5) ; d'autres tombent au "
+                                     "hasard. Phase 2 : une seconde volée."),
+        ("Orbite", "1 à 3", "Quand tu restes collé : les livres tournoient jusqu'à 5 blocs (11). Phase 2 : une onde "
+                            "jusqu'à 9 (7)."),
+        ("Lance", "1 à 3", "Bâton pointé (0,8 s, une ligne tracée) : il fond sur toi le long de la ligne (15)."),
+        ("Tempête de pages", "2 et 3", "Bras levés (1,2 s) : 1,5 s d'alerte, puis 7 s de tempête. Hors des cercles "
+                                       "dorés qui tournent dans le cratère, tu es aveuglé et coupé (2 par seconde). "
+                                       "Il continue d'attaquer."),
+        ("Constellation", "2 et 3", "Il trace six étoiles au sol (1 s, une près de chaque joueur), puis les lignes "
+                                    "qui les relient éclatent l'une après l'autre (13). Sors des lignes."),
+        ("Inversion", "3", "À 30 %, une fois (invulnérable 3 s) : il s'élève, une onde (12, saute-la), puis il "
+                           "accélère et la gravité du cratère s'inverse."),
+        ("Pulsations", "3", "Toutes les 8 s : 1,5 s d'alerte (des anneaux dorés autour des brasiers de cristal, sauf "
+                            "celui où il se tient), puis tout joueur hors d'un anneau est soulevé (4, lévitation "
+                            "1,3 s), puis redescend en chute lente."),
+        ("Lance d'étoiles", "3", "Toutes les 10 s : il se téléporte sur un brasier de cristal, vise (0,9 s, la ligne "
+                                 "te suit puis se fige) et tire un rayon à travers le cratère (16), qui touche aussi "
+                                 "les joueurs en l'air."),
+    ],
+    "mine_baron": [
+        ("Foreuse", "1 à 3", "La foreuse armée (0,8 s, une ligne rouge de 6,5 blocs devant lui), puis deux poussées "
+                             "(9 chacune, à 0,55 s d'écart). Fais un pas de côté."),
+        ("Coup de pic", "1 à 3", "Le pic-marteau levé (1 s, un cercle doré devant lui) : 18 dans le cercle, puis "
+                                 "trois gerbes d'or jaillissent en ligne jusqu'à 9,5 blocs (11). Phase 2 : trois "
+                                 "lignes en éventail."),
+        ("Charge de forage", "1 à 3", "De loin (6 à 24 blocs) : accroupi derrière la foreuse (0,9 s, le chemin tracé "
+                                      "en rouge sur 14 blocs), il fonce (13, gros recul). S'il percute la roche, la "
+                                      "foreuse se coince et trois pierres tombent autour de lui."),
+        ("Dynamite", "1 à 3", "Il allume des fagots sur la lanterne de son casque (0,9 s) : des cercles dorés te "
+                              "suivent puis rougissent et se figent ; les fagots tombent et leur mèche brûle 1,1 s "
+                              "(0,9 en phase 2, 0,8 en phase 3), puis sautent (14, rayon 3, projeté). Aucun bloc "
+                              "n'est détruit."),
+        ("Échappement", "1 à 3", "Si tu restes dans son dos : un sifflement (0,7 s, le cône de vapeur tracé derrière "
+                                 "lui), puis la chaudière purge (13 dans un cône de 6 blocs derrière lui, 6 tout "
+                                 "autour). Frappe le dos par à-coups, sans t'y installer."),
+        ("Éboulement", "1 à 3", "Il frappe la paroi (1,1 s) : des cercles sous chaque joueur et ailleurs, de la "
+                                "poussière qui tombe, puis des rochers (13, rayon 1,8, ralenti). En phase 3, il en "
+                                "appelle un toutes les 13 s."),
+        ("Enchaînement", "2 et 3", "Foreuse, pic en arc, puis le pic planté (10, 12 et 16, une onde au sol de 8) en "
+                                   "1,5 s. Recule dès le premier coup."),
+        ("Filon éclaté", "2 et 3", "Il frappe le sol (1 s) : des lignes d'éruptions d'or filent vers trois joueurs "
+                                   "au plus (12 chacune). Sors de la ligne."),
+        ("Mèche", "2 et 3", "Il lance un tonneau de poudre au loin ; une étincelle court le long de la mèche tracée "
+                            "au sol (6 et enflamme si tu es dessus), puis le tonneau saute (20, rayon 5) et quatre "
+                            "gerbes jaillissent autour. Va loin du tonneau, saute la mèche."),
+        ("Cuirasse d'or", "2", "Au rugissement, le minerai monte sur lui : il ne prend plus qu'un cinquième des "
+                               "dégâts. Des géodes d'or luisent sur sa chaudière (3, plus une par joueur, 6 au "
+                               "plus) : chaque coup de 3 ou plus porté dans son dos en fait sauter une et passe en "
+                               "entier. Sans géode, il chancelle 3 s (+30 % de dégâts). Toutes les 26 s, il se "
+                               "recuirasse : 1,5 s d'alerte (l'or afflue vers lui), casse le flot à 60 dégâts pour "
+                               "le faire chanceler. Des tireurs bandits arrivent la première fois."),
+        ("Coup de grisou", "3", "À 30 %, il fait sauter les étais : toutes les lampes de la caverne s'éteignent "
+                                "(elles reviennent à la fin), seule sa lanterne et les mèches éclairent. Le filon "
+                                "crépite : une étincelle toutes les 1,2 à 2,5 s (alerte, puis 7 à 3,5 blocs)."),
+        ("Coup de lanterne", "3", "Il braque sa lanterne (0,9 s, le cône tracé) : dans son faisceau, à vue, tu es "
+                                  "aveuglé 3 s et ralenti (4), puis il charge le premier aveuglé. Coupe sa ligne de "
+                                  "vue derrière un étai ou sors du cône."),
+    ],
     "strangler_queen": [
         ("Coup de fouet", "1 à 3", "Le fouet ramené en arrière (0,8 s, une ligne verte de 11 blocs), puis claqué "
                                    "droit devant (14) : il te ramène vers elle."),
@@ -1067,6 +1187,91 @@ BOSS_MOVES = {
         ("Blizzard", "3", "Toutes les 13 s : la hache tendue vers l'oculus (1,2 s), puis trois salves de pics tombent, "
                           "chacune annoncée par un cercle sous chaque joueur (14). Change de place à chaque salve."),
     ],
+    "fourth_king": [
+        ("Fléau", "1 à 3", "Trois coups de fléau devant lui : deux balayages en arc à 0,7 et 1,2 s (12 chacun), "
+                           "puis un fracas en ligne à 1,7 s qui porte à 7 blocs (15). Phase 2 : il enchaîne parfois "
+                           "un coup de sceptre ou le rayon haut."),
+        ("Sceptre", "1 à 3", "Sceptre levé haut (1 s), puis abattu (20, rayon 3 devant lui). Phase 2 : une onde "
+                             "jusqu'à 10 blocs (9)."),
+        ("Rayon bas", "1 à 3", "Le disque s'allume (1,1 s), puis un rayon au ras du sol balaie l'arène de sa droite "
+                               "vers sa gauche sur 100° (120° en phase 2) pendant 2 s (15, lenteur II). Saute-le "
+                               "quand il passe : en l'air, il ne te touche pas."),
+        ("Rayon haut", "1 à 3", "Le sceptre levé à hauteur de tête (1 s) : le rayon oscille à hauteur de poitrine sur "
+                                "40° (50° en phase 2) pendant 1,5 s (16). Rien sous quoi se baisser : fais un pas "
+                                "de côté hors de l'éventail, ou colle-toi à lui (moins de 2,5 blocs)."),
+        ("Pluie de sable", "1 à 3", "Il lève les bras vers le plafond (0,9 s) : des cercles de sable marquent le "
+                                    "sol sous toi et ailleurs, et le sable tombe 1,5 s plus tard (14, rayon 2,2, "
+                                    "lenteur II et cécité). Phase 2 : un cercle sur chaque joueur et plus de cercles "
+                                    "perdus. Le sable enterre les essaims de scarabées qu'il touche."),
+        ("Essaim de scarabées", "1 à 3", "Il tend le sceptre (0,8 s) : un essaim noir et vert sort du sol et suit "
+                                          "un joueur pendant 12 s (3 toutes les demi-secondes, poison et faim). Plus "
+                                          "rapide en phase 2, deux à la fois. Attire-le sous une pluie de sable pour "
+                                          "l'enterrer."),
+        ("Procession", "1 à 3", "Quand tu t'éloignes (8 à 24 blocs) : il glisse vers toi sans marcher (12 au contact), "
+                                "puis abat le fléau en ligne devant lui (16)."),
+        ("Bourrasque de sable", "1 à 3", "Quand tu restes collé : il frappe le sol, le sable jaillit autour de lui "
+                                          "(11, rayon 4,5). Phase 2 : une onde jusqu'à 8 blocs (7)."),
+        ("Vases canopes", "1 à 3", "Quatre vases canopes (un de plus par joueur, six au plus) se dressent autour "
+                                   "de l'arène. Toutes les 21 s environ, s'il est blessé, il s'agenouille et les "
+                                   "draine pendant 2,5 s : chaque vase encore debout lui rend 3,5 % de ses PV (4,5 % "
+                                   "en phase 2). Casse-les (un coup suffit). Ils reviennent à 65 %."),
+        ("Le Tombeau scellé", "3", "À 30 %, il plante le sceptre (invulnérable 3 s) : les lanternes s'éteignent, les "
+                                   "étoiles du plafond deviennent bleues, l'oculus se ferme et le noir tombe sur "
+                                   "l'arène (obscurité), puis une onde jusqu'à 13 blocs (12, saute-la). Les esprits "
+                                   "des trois autres rois apparaissent au bord de la salle, et il devient plus rapide."),
+        ("Regards des rois", "3", "Les esprits balaient la salle de leur regard : un cône bleu à la fois entre deux "
+                                  "jugements (6, coupe sa ligne de vue derrière une colonne ou le roi). Toutes les "
+                                  "15 s, le Verdict : les trois esprits regardent en même temps et leurs cônes "
+                                  "tournent dans la salle pendant 4 s (8, flétrissement). Reste dans l'angle mort "
+                                  "entre deux cônes."),
+    ],
+    "colossus_heart": [
+        ("Fauchage", "1 et 3", "L'espadon ramené par-dessus l'épaule droite (0,9 s, l'arc tracé en or), puis balayé "
+                               "sur 210° jusqu'à 7,5 blocs (16). Recule hors de l'arc. Phase 3 : plus large, et "
+                               "souvent suivi d'un coup d'espadon."),
+        ("Coup d'espadon", "1 et 3", "L'espadon levé à deux mains (1,1 s, un cercle à 4 blocs devant lui et la ligne de "
+                                     "la fissure en points d'or), planté dans le sol (20, rayon 2,8) ; une fissure "
+                                     "court ensuite jusqu'à 16 blocs (13, projeté). Phase 3 : trois fissures en "
+                                     "éventail."),
+        ("Fente", "1 et 3", "Quand tu t'éloignes (5 à 15 blocs) : la lame ramenée à la hanche (0,8 s, la ligne tracée "
+                            "sur 12 blocs), puis une fente qui le porte 9 blocs en avant (15). Pas de côté. Phase 3 : "
+                            "souvent suivie d'un fauchage."),
+        ("Plaque-bouclier", "1 et 3", "Il ramène la plaque-bouclier contre lui (0,9 s, sa boucle tracée en vert-de-gris "
+                                      "au sol), puis la lance : elle file en boucle jusqu'à toi et revient (2 s, 12 à "
+                                      "chaque passage). Sors de la boucle tracée. Phase 3 : deux boucles, la seconde "
+                                      "en miroir."),
+        ("Gravats", "1 à 3", "Les bras levés, le cœur qui flamboie (1 s) : des blocs s'arrachent aux murs du heaume au-"
+                             "dessus de cercles qui suivent leurs joueurs 0,6 s puis se figent (ils rougissent) ; les "
+                             "blocs sont lancés l'un après l'autre (13, rayon 2,5, projeté). Bouge dès que le cercle "
+                             "rougit."),
+        ("Aimant", "1 à 3", "Bras ouverts, le cœur qui enfle (0,7 s, un anneau de fer se resserre) : pendant 1,4 s, tout "
+                            "joueur à 16 blocs (18 en phase 3) et tout objet au sol est attiré vers lui, plus fort pour "
+                            "chaque pièce d'armure de métal portée ; puis tout se referme d'un coup (14 à 4,5 blocs, 16 "
+                            "à 5 blocs quand ce sont les plaques). Cours à contre-sens, ou retire une pièce de fer."),
+        ("L'éclatement", "2", "À 65 %, il rugit et son armure vole en éclats (invulnérable 1,5 s) : le cœur est à nu "
+                              "(armure −8, il prend 35 % de dégâts en plus). Quatre plaques tournent autour de lui "
+                              "entre 1,8 et 4,2 blocs (6 au contact) : frappe entre deux plaques."),
+        ("Anneaux", "2", "Le cœur s'élève et glisse au centre du heaume (1 s, les deux premières bandes tracées en "
+                         "rouge) : les plaques balaient les bandes de 2 à 5,5 et de 8,5 à 11,5 blocs pendant 1,75 s, "
+                         "puis (0,7 s d'avertissement ambre) celles de 0 à 2, de 5,5 à 8,5 et au-delà de 11,5 pendant "
+                         "1,5 s (10 par passage). Chaque anneau a une brèche de 70° qui tourne. Tiens-toi sur les "
+                         "anneaux de tuf ciselé du sol pour la première vague, puis change de bande."),
+        ("Pluie de plaques", "2", "Les plaques forment une couronne au-dessus du cœur (0,8 s), puis six plaques "
+                                  "partent un quart de seconde l'une après l'autre, chacune le long d'une ligne tracée "
+                                  "0,4 s avant vers un joueur (9 au premier touché). Fais un pas de côté à chaque "
+                                  "ligne."),
+        ("Purge", "2", "Quand tu restes collé : le cœur se contracte (0,7 s, un cercle ambre de 4 blocs), puis éclate "
+                       "(14, repoussé), une onde de vapeur jusqu'à 9 blocs (8, saute-la) et des mites de rouille "
+                       "sortent des fissures (2, plus en groupe, 4 au plus)."),
+        ("La Reforge", "3", "À 30 %, les anneaux se referment sur le cœur (1,5 s, invulnérable) : l'armure se ressoude, "
+                            "plus grande de 15 % et plus rapide, des fissures d'ambre sur chaque plaque ; un choc "
+                            "autour de lui (12 à 5 blocs) et une onde à sauter (12, jusqu'à 14 blocs)."),
+        ("Le heaume s'effondre", "3", "Toutes les 10 s environ, il plante l'espadon pointe en bas (0,9 s, 14 à 2,5 "
+                                      "blocs devant lui) : le plafond lâche des blocs sur trois cercles autour de "
+                                      "chaque joueur (un sur lui, deux près) et quelques cercles perdus, une demi-"
+                                      "seconde plus tard (14, rayon 1,8, lenteur). Chaque chute laisse un tas de "
+                                      "gravats 8 s, retiré ensuite et à la fin du combat."),
+    ],
     "turbine_tyrant": [
         ("Balayage du rotor", "1 à 3", "Le rotor ramené à droite pendant qu'il siffle de plus en plus aigu (1,1 s, l'arc "
                                         "tracé de laiton), puis balayé sur 240° (16). Recule hors de l'arc."),
@@ -1092,6 +1297,36 @@ BOSS_MOVES = {
                             "d'étincelles roule (12, saute-le), il accélère et les grilles sautent seules toutes les 9 s."),
         ("Ruée", "3", "Toutes les 11 s : trois marques (sur les joueurs) reliées d'étincelles, puis il fonce de l'une "
                       "à l'autre en 2,25 s (14) et laisse des étincelles qui brûlent 4 s (3 et feu)."),
+    ],
+    "anvil_warden": [
+        ("Frappe", "1 à 3", "Le marteau hissé sur l'épaule (0,9 s, le cercle et la ligne tracés de braises), abattu "
+                            "devant lui (16, rayon 2,8) ; une onde de choc court sur l'enclume (10, projeté). Trois "
+                            "ondes en éventail en phase 2."),
+        ("Combo du marteau", "1 à 3", "Coup droit à 0,7 s puis revers à 1,2 s (13 chacun, feu). Phase 2 : un coup "
+                                      "vertical en ligne à 1,7 s (16) qui fend l'enclume devant lui."),
+        ("Pince", "1 à 3", "La pince ouverte et tendue (0,8 s, une ligne étroite de 5,5 blocs) : le premier pris "
+                           "subit 8, est soulevé 0,6 s puis jeté (6) vers le milieu de l'enclume, jamais vers le bord."),
+        ("Éclaboussure", "1 à 3", "Le creuset penché (1 s) : des dalles marquées (sur toi et à côté ; en phase 2 sur "
+                                  "chaque joueur, plus des dalles au hasard) reçoivent du métal en fusion (12, feu) "
+                                  "qui laisse une flaque brûlante 3 s (3 par demi-seconde)."),
+        ("Trempe", "1 à 3", "Si tu le colles : le lingot plongé dans le seau (0,6 s), la vapeur jaillit (11, rayon 5) "
+                            "et brûle 2 s. Phase 2 : des geysers sous les joueurs éloignés (9)."),
+        ("Charge", "1 à 3", "Tête baissée (0,8 s, la course marquée), il fonce jusqu'à toi (14) puis remonte le "
+                            "marteau (12, projeté)."),
+        ("Séisme", "2 et 3", "Marteau et pince levés (1 s) : deux anneaux de choc à 0,6 s d'écart (10 chacun) : "
+                             "saute-les tous les deux."),
+        ("Lingot", "2 et 3", "Un cercle suit sa cible puis se fige (0,9 s) ; le lingot ardent y éclate (13, feu, une "
+                             "flaque). En phase 3, il rebondit 5 blocs plus loin."),
+        ("Marteau du titan", "1 à 3", "Quelques fois par phase : il lève le marteau vers le titan et frappe trois fois "
+                                      "sa pince (2 s). La zone sous le marteau géant est cerclée de rouge, des scories "
+                                      "en tombent ; puis le marteau s'abat (26, feu) et une onde roule depuis le bord "
+                                      "jusqu'à 17 blocs (8, saute-la). Loin de la forge, la zone se pose autour de sa "
+                                      "cible."),
+        ("Surchauffe", "3", "À 30 %, une fois (invulnérable 2,6 s) : il boit son creuset, l'enclume rougit, une onde "
+                            "de feu (12) ; il accélère et laisse une traînée de flaques brûlantes."),
+        ("Purge", "3", "Toutes les 15 s environ : bras croisés, le creuset déborde (2 s, la portée de 14 blocs "
+                       "cerclée de rouge), puis une nappe de vapeur et de scories rase l'enclume (20, feu). Abrite-toi "
+                       "derrière la racine de la bigorne, les doigts du titan ou un brasero, ou sors de la portée."),
     ],
     "storm_ascetic": [
         ("Combo du bâton", "1 à 3", "Le bâton ramené sur l'épaule droite (0,7 s, l'arc tracé de vent), un large "
@@ -1165,6 +1400,16 @@ BOSS_FACTS = {
                       "lanternes et se change en feu follet pour frapper dans le dos. Phase 3 à 30 % : le gaz des "
                       "marais s'embrase en lignes de feu. La boue et les lanternes qu'il pose sont retirées à la fin "
                       "du combat.",
+    "star_curator": "780 PV, armure 14, posture 125, barre violette. Phase 2 à 65 % : il rugit, accélère, enchaîne, "
+                    "déchaîne la tempête de pages et trace des constellations. Phase 3 à 30 % : la gravité du cratère "
+                    "s'inverse, des pulsations soulèvent ceux qui ne sont pas près d'un brasier de cristal et il saute "
+                    "de brasier en brasier. Il ne pose aucun bloc ; chaque lévitation finit en chute lente au-dessus "
+                    "du sol.",
+    "mine_baron": "600 PV, armure 12, posture 130, barre jaune. Phase 2 à 65 % : il rugit et se cuirasse de "
+                  "minerai (un cinquième des dégâts) ; frappe les géodes d'or de son dos pour la briser. Phase 3 à "
+                  "30 % : il fait sauter les étais, la caverne s'éteint, il accélère et le filon crépite. Les lampes "
+                  "éteintes et les lumières de sa lanterne et des mèches sont temporaires : tout revient à la fin "
+                  "du combat, à sa mort ou si tout le monde s'en va. La dynamite ne casse aucun bloc.",
     "strangler_queen": "620 PV, armure 12, posture 115, barre verte. Phase 2 à 65 % : elle rugit, accélère, ajoute "
                        "fouet tournant et collet et grimpe dans le disque solaire d'où tombent esprits-jaguars et "
                        "graines-bombes. Phase 3 à 30 % : la floraison, puis des cages de racines se referment sur les "
@@ -1182,9 +1427,23 @@ BOSS_FACTS = {
     "frost_jarl": "540 PV, armure 14, posture 110, barre bleue. Son bouclier pare les coups de face entre ses "
                   "attaques. Phase 2 à 65 % : il rugit, accélère et enchaîne ses coups. Phase 3 à 30 % : il gèle la "
                   "salle, le sol pulse et le blizzard tombe.",
+    "fourth_king": "640 PV, armure 12, posture 120, barre bleue. Phase 2 à 65 % : il rugit, accélère, les vases "
+                   "reviennent, les rayons s'élargissent et les coups s'enchaînent. Phase 3 à 30 % : le tombeau se "
+                   "scelle dans l'obscurité et les esprits des trois autres rois balaient la salle de leur regard. "
+                   "Les vases, le noir des lanternes, les étoiles bleues et l'oculus fermé sont temporaires et "
+                   "restaurés à la fin du combat ou si tout le monde s'en va.",
+    "colossus_heart": "640 PV, armure 14, posture 120, barre jaune. Phase 2 à 65 % : l'armure éclate, le cœur est à "
+                      "nu (armure −8, +35 % de dégâts reçus) et les plaques tournent autour de lui. Phase 3 à 30 % : "
+                      "l'armure se ressoude, plus grande et plus rapide, et le heaume s'effondre sur les joueurs. Les "
+                      "tas de gravats sont temporaires (8 s) et retirés à la fin du combat ou si tout le monde s'en va ; "
+                      "les blocs lancés ne se posent jamais.",
     "turbine_tyrant": "600 PV, armure 14, posture 115, barre jaune. Phase 2 à 65 % : il rugit, accélère, enchaîne "
                       "ses coups et son explosion porte plus loin. Phase 3 à 30 % : il surchauffe, les grilles "
                       "sautent seules et il fonce à travers la salle. Il ne pose aucun bloc.",
+    "anvil_warden": "640 PV, armure 14, posture 130, barre rouge, insensible au feu. Phase 2 à 65 % : il rugit, "
+                    "accélère, triple ses ondes et ajoute séisme, lingot et geysers ; le marteau du titan tombe plus "
+                    "souvent. Phase 3 à 30 % : il surchauffe, laisse des flaques de feu et purge l'enclume. Près du "
+                    "bord, ses coups ne te jettent jamais dans la lave. Il ne pose aucun bloc.",
     "storm_ascetic": "580 PV, armure 12, posture 100, barre jaune. Phase 2 à 65 % : il rugit, accélère et se "
                      "dédouble en reflets. Phase 3 à 30 % : la grande cloche répond et sonne seule, anneau après "
                      "anneau. Aucun coup ne te projette dehors près du bord : l'arène est un sommet.",
@@ -1192,6 +1451,29 @@ BOSS_FACTS = {
 
 # Descente vers un repaire : étapes dans l'ordre
 LAIRS = {
+    "star_curator": [
+        ("La Bibliothèque de la chute d'étoile", "Traverse la galerie brisée sur les livres flottants jusqu'au dos de "
+                                                 "la météorite."),
+        ("La vrille", "Un escalier en vrille descend 36 blocs dans la météorite (géode d'améthyste au deuxième "
+                      "tour), puis un tunnel passe sous la place jusqu'au lieu de grâce."),
+        ("Le cratère", "L'arène : une chambre de 17 blocs de rayon sous un dôme de 13 à 19 blocs, quatre braseros "
+                       "de lumière stellaire couronnés d'améthyste (les nœuds de cristal), un éclat de météorite dans "
+                       "le mur sud-est, l'oculus au-dessus. Le Conservateur se réveille quand tu approches du sceau."),
+        ("La réserve interdite", "Derrière des barreaux scellés à l'ouest ; son tube pneumatique remonte à la salle "
+                                 "des cartes."),
+    ],
+    "mine_baron": [
+        ("La ville", "Depuis le relais de diligence (pierre de passage), monte la grand-rue et les terrasses jusqu'à "
+                     "la salle des treuils au sommet (lieu de grâce)."),
+        ("La descente", "Le bocard, le niveau 15 (dynamite, bureau du patron), le niveau de roulage (pierre), la "
+                        "galerie noyée et le puits effondré jusqu'à l'antichambre (pierre)."),
+        ("La caverne du filon", "L'arène : une caverne d'environ 21 blocs de rayon sous un dôme de 21 blocs, un filon "
+                                "d'or et de cuivre penché au milieu, des échafaudages, un derrick et des étais tout "
+                                "autour, huit lanternes suspendues. Passé la brume, le Baron se réveille quand tu "
+                                "approches du sceau."),
+        ("La chambre forte", "À l'est, derrière des barreaux scellés qui s'ouvrent à sa mort ; le monte-wagon ramène "
+                             "en haut."),
+    ],
     "grand_clockmaker": [
         ("Citadelle d'horlogerie", "Entre dans la grande tour-horloge. Dans le hall d'entrée, côté est, un escalier "
                                    "s'ouvre dans le sol."),
@@ -1220,21 +1502,31 @@ LAIRS = {
     "bronze_sentinel": [
         ("Le poignet brisé", "Entre par la main tendue du Colosse abattu : le tunnel de l'avant-bras mène à la salle "
                              "du coude, puis l'escalier du bras monte au balcon de la salle des côtes."),
-        ("La salle des côtes", "Une voûte de 30 blocs ouverte sur le ciel. Le grand escalier remonte au gorgerin et à "
-                               "sa pierre de voyage (le lieu de grâce)."),
+        ("La salle des côtes", "Une voûte de 30 blocs ouverte sur le ciel. Descends l'escalier jusqu'au sol : sous la "
+                               "brèche, la Sentinelle se réveille quand tu approches de son sceau (pas de brume : "
+                               "elle se rendort si tout le monde s'éloigne)."),
+        ("Le gorgerin", "Le grand escalier remonte au gorgerin et à sa pierre de voyage (le lieu de grâce) ; au-delà, "
+                        "le cou mène au heaume du Cœur du Colosse."),
+    ],
+    "colossus_heart": [
+        ("Le poignet brisé", "Entre par la main tendue du Colosse abattu : le tunnel de l'avant-bras mène à la salle "
+                             "du coude, puis l'escalier du bras monte au balcon de la salle des côtes."),
+        ("La salle des côtes", "Une voûte de 30 blocs ouverte sur le ciel, gardée par la Sentinelle d'airain. Le "
+                               "grand escalier remonte au gorgerin et à sa pierre de voyage (le lieu de grâce)."),
         ("Le cou", "Un tunnel étroit mène dans le heaume, derrière la brume."),
-        ("Le heaume", "L'arène : une salle ronde d'environ 14 blocs de rayon et 16 de haut sous les barreaux de la "
-                      "visière, braseros autour. La Sentinelle se réveille quand tu approches du sceau."),
+        ("Le heaume", "L'arène : une salle ronde d'environ 14 blocs de rayon et 13 de haut au centre sous les "
+                      "barreaux de la visière, deux anneaux de tuf ciselé au sol, braseros autour. Le Cœur se "
+                      "réveille quand tu approches du sceau."),
         ("La salle forte", "Sous le sol de l'arène, derrière des barreaux scellés qui s'ouvrent à sa mort ; une "
                            "porte de fer ressort par la joue."),
     ],
-    "dune_king": [
+    "fourth_king": [
         ("La place cachée", "Au bout du canyon, passe le portail entre les quatre rois assis : la salle hypostyle."),
         ("Les tombeaux", "Trois niveaux descendent : salle d'embaumement et galerie des niches, puis galerie "
                          "inondée, couloir piégé et trésor."),
         ("Le lieu de grâce", "Tout en bas (y −37) : pierre de voyage, puis un couloir étroit et la brume."),
         ("L'arène du roi", "Une salle ronde de 16 blocs de rayon et 18 de haut, une estrade avec deux colosses "
-                           "assis et des statues de chacals. Le Roi des dunes se réveille quand tu approches du sceau."),
+                           "assis et des statues de chacals. Le Quatrième Roi se réveille quand tu approches du sceau."),
         ("La salle forte", "Derrière la brume sud et des barreaux scellés ; le puits du roi remonte jusqu'au "
                            "vestibule."),
     ],
@@ -1521,6 +1813,16 @@ NEW_GROUPS = [
         ("La Cité-temple de la canopée", "Une cité perdue dans la jungle : un temple à degrés étranglé par les "
          "racines, cinq troncs colossaux portant des quartiers reliés par des ponts de corde, un cénote noyé et "
          "une arène sous un disque solaire de laiton brisé.", "s-canopy_city", "struct:canopy_city"),
+        ("La Ville minière de la Mesa rouille", "Une ville-champignon taillée dans une butte rayée des badlands : "
+         "un chevalement à roue géante, des saloons sur les terrasses, une voie de wagonnets sur tréteaux, un "
+         "bocard et une arène autour d'un filon d'or et de cuivre.", "s-mesa_minecity", "struct:mesa_minecity"),
+        ("La Forge du Titan de basalte", "Une forge colossale sur un lac de lave du Nether, bâtie dans un titan "
+         "de basalte et de laiton agenouillé sur une enclume géante : halle de coulée, soufflets de cuir, mine de "
+         "scories, et une arène sur l'enclume, sous le marteau levé.", "s-titan_forge", "struct:titan_forge"),
+        ("La Bibliothèque de la chute d'étoile", "Une archive flottante de l'End autour d'une tour-fuseau de purpur "
+         "et de laiton, trois galeries en anneau et une météorite fichée dans son flanc : canyons de rayonnages, "
+         "scriptorium, observatoire, et une arène dans la chambre du cratère.", "s-starfall_library",
+         "struct:starfall_library"),
     ]),
 ]
 
@@ -1585,10 +1887,11 @@ TEST_CHECKLIST = [
     ("La Sentinelle d'airain", ["/brasshaven boss bronze_sentinel"],
      "Elle apparaît à 6 blocs. Contourne le mur de pavois, saute l'onde du piétinement, écarte-toi de la fissure ; à "
      "mi-vie, ses plaques tombent, puis sors du cercle doré de la chute. Pour le vrai repaire : /brasshaven tp "
-     "fallen_colossus (le heaume)."),
+     "fallen_colossus (le sol de la salle des côtes)."),
     ("Le Roi des dunes", ["/brasshaven boss dune_king"],
      "Il apparaît à 6 blocs. Évite la ligne de la crosse et le cône de sable ; à mi-vie, il flotte : saute les "
-     "scarabées et le rayon du jugement. Pour le vrai repaire : /brasshaven tp rock_necropolis (tout en bas)."),
+     "scarabées et le rayon du jugement. Pour le vrai repaire : /brasshaven tp rock_necropolis (la salle "
+     "hypostyle, au fond)."),
     ("Le Séraphin déchu", ["/brasshaven boss fallen_seraph"],
      "Elle apparaît à 6 blocs. Écarte-toi de la ligne de l'estoc, sors des cercles de lumière ; à 60 %, colle-toi "
      "sous elle pendant le balayage et saute les deux anneaux de la nova ; à 25 %, le disque se brise : reste "
@@ -1629,6 +1932,18 @@ TEST_CHECKLIST = [
      "Il apparaît à 6 blocs. Recule hors de l'arc de la crosse, sors des cercles de boue avant d'être pris, éloigne-toi "
      "des autres quand tu es marqué ; à 65 %, guette le tintement derrière toi ; à 30 %, passe par les brèches des "
      "lignes de feu. Pour le vrai repaire : /brasshaven tp mire_stilt_city (la salle de la reine-sorcière, en haut)."),
+    ("Le Conservateur dévoreur d'étoiles", ["/brasshaven boss star_curator"],
+     "Il apparaît à 6 blocs (sans brasiers, quatre nœuds virtuels sur les diagonales). Abats ses livres à l'arc, "
+     "sprinte contre le puits de gravité, sors des cercles d'étoiles ; à 65 %, reste dans les cercles dorés pendant la "
+     "tempête de pages ; à 30 %, tiens-toi dans un anneau doré à chaque pulsation et vérifie que tu redescends "
+     "toujours en chute lente, même s'il meurt pendant que tu flottes. Pour le vrai repaire : /brasshaven tp "
+     "starfall_library (la chambre du cratère sous la tour)."),
+    ("Le Baron de la mine", ["/brasshaven boss mine_baron"],
+     "Il apparaît à 6 blocs (sans lampes autour, le coup de grisou n'éteint rien). Pas de côté pour la foreuse, sors "
+     "des cercles de dynamite quand ils rougissent, ne reste pas dans son dos ; à 65 %, frappe les géodes d'or de "
+     "sa chaudière par derrière jusqu'à le faire chanceler, et casse le flot d'or quand il se recuirasse ; à 30 %, "
+     "vérifie que les lampes s'éteignent puis reviennent à sa mort, et coupe le faisceau de la lanterne. Pour le "
+     "vrai repaire : /brasshaven tp mesa_minecity (la caverne du filon)."),
     ("La Reine-figuier étrangleur", ["/brasshaven boss strangler_queen"],
      "Elle apparaît à 6 blocs. Écarte-toi de la ligne du fouet, glisse-toi entre les lignes de racines, saute les "
      "anneaux, sors du pollen ; à 65 %, tue les esprits-jaguars pour la faire chuter et sors des cercles des "
@@ -1645,10 +1960,25 @@ TEST_CHECKLIST = [
      "canon se fige, sors de la ligne du grappin et des couloirs de vapeur ; à 65 %, attire sa charge contre un mur ; "
      "à 30 %, reste mobile dans l'eau et occupe-toi des marins. Pour le vrai repaire : /brasshaven tp dreadnought_wreck "
      "(la chaufferie, à la poupe)."),
+    ("Le Quatrième Roi", ["/brasshaven boss fourth_king"],
+     "Il apparaît à 6 blocs et dresse quatre vases canopes autour de lui (retirés à sa mort). Casse les vases avant "
+     "qu'il ne les draine ; saute le rayon bas, fais un pas de côté pour le rayon haut, sors des cercles de sable et "
+     "attire l'essaim dessous ; à 30 %, vérifie que les lanternes s'éteignent puis reviennent à sa mort, et cache-toi "
+     "des regards des esprits. Pour le vrai repaire : /brasshaven tp rock_necropolis (tout en bas)."),
+    ("Le Cœur du Colosse", ["/brasshaven boss colossus_heart"],
+     "Il apparaît à 6 blocs. Sors de l'arc du fauchage et de la boucle de la plaque-bouclier, bouge quand les cercles "
+     "de gravats rougissent, cours à contre-sens de l'aimant ; à 65 %, l'armure éclate : frappe le cœur entre les "
+     "plaques, reste sur les bandes sûres des anneaux ; à 30 %, il se ressoude plus grand : vérifie que les tas de "
+     "gravats disparaissent après 8 s et à sa mort. Pour le vrai repaire : /brasshaven tp fallen_colossus (le heaume)."),
     ("Le Tyran des turbines", ["/brasshaven boss turbine_tyrant"],
      "Il apparaît à 6 blocs (sans grilles, il crée huit évents virtuels autour de lui). Recule hors du rotor, écarte-toi "
      "des fissures, quitte les grilles qui sifflent ; pendant la surpression, coupe sa ligne de vue ou sors de la "
      "portée. Pour le vrai repaire : /brasshaven tp drowned_dam (la salle des turbines)."),
+    ("Le Gardien de l'enclume", ["/brasshaven boss anvil_warden"],
+     "Il apparaît à 6 blocs (prends de la résistance au feu). Écarte-toi de la ligne de l'onde, sors des dalles "
+     "marquées et des flaques, ne reste pas devant la pince ; quand il frappe trois fois sa pince, sors de la zone "
+     "rouge puis saute l'onde ; à 30 %, cache-toi derrière un obstacle ou sors de la portée pendant la purge. Pour le "
+     "vrai repaire : /brasshaven tp titan_forge (l'arène sur l'enclume, sous le marteau du titan)."),
     ("Merveilles en surface", ["/brasshaven tp inventor_manor", "/brasshaven tp sylvan_palace",
                                "/brasshaven tp geothermal_foundry", "/brasshaven tp tesla_observatory",
                                "/brasshaven tp sky_isles"],

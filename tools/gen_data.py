@@ -319,6 +319,26 @@ def entity_loot():
                            entry("experience_bottle", 4, 7), entry("golden_apple", 1, 2), entry("diamond", 2, 3),
                            entry("copper_ingot", 10, 20), entry("redstone_block", 2, 4), entry("piston", 2, 4),
                            entry("heavy_core", chance=0.15)],
+        "anvil_warden": [entry("gold_ingot", 4, 8), entry("ancient_ember", 6, 10), entry("emerald", 5, 9),
+                         entry("experience_bottle", 4, 7), entry("golden_apple", 1, 2), entry("diamond", 2, 3),
+                         entry("iron_block", 2, 4), entry("magma_block", 4, 8), entry("anvil", 1, 1),
+                         entry("netherite_scrap", 1, 2, chance=0.3)],
+        "fourth_king": [entry("gold_ingot", 5, 9), entry("map_fragment", 6, 10), entry("emerald", 5, 9),
+                        entry("experience_bottle", 4, 7), entry("golden_apple", 1, 2), entry("diamond", 2, 3),
+                        entry("lapis_lazuli", 8, 16), entry("chiseled_sandstone", 4, 8), entry("decorated_pot", 1, 2),
+                        entry("enchanted_golden_apple", chance=0.08)],
+        "colossus_heart": [entry("gold_ingot", 5, 9), entry("map_fragment", 6, 10), entry("emerald", 5, 9),
+                           entry("experience_bottle", 4, 7), entry("golden_apple", 1, 2), entry("diamond", 2, 3),
+                           entry("copper_block", 3, 6), entry("iron_ingot", 8, 16), entry("lodestone", 1, 1),
+                           entry("heavy_core", chance=0.12)],
+        "star_curator": [entry("void_shard", 6, 10), entry("emerald", 6, 10), entry("experience_bottle", 5, 8),
+                         entry("golden_apple", 1, 2), entry("enchanted_golden_apple", chance=0.2), entry("diamond", 2, 4),
+                         entry("amethyst_shard", 8, 16), entry("chiseled_bookshelf", 1, 2), entry("book", 3, 6),
+                         entry("end_crystal", 1, 1), entry("recovery_compass", chance=0.15)],
+        "mine_baron": [entry("gold_ingot", 6, 12), entry("raw_gold", 6, 12), entry("emerald", 5, 9),
+                       entry("experience_bottle", 4, 7), entry("golden_apple", 1, 2), entry("diamond", 2, 4),
+                       entry("tnt", 3, 6), entry("lantern", 2, 4), entry("rail", 8, 16),
+                       entry("gold_block", 1, 2, chance=0.25)],
     }
     from wf.bossgear import BOSS_GEAR, remembrance_id
     for row in BOSS_GEAR:  # every great boss always drops its remembrance
@@ -640,6 +660,9 @@ def main():
         extra_tags.setdefault(rel, []).extend(values)
     # relic gear of the colossal structures (wf/relics.py): repair tags, armour slots, swords
     for rel, values in __import__("wf.relics", fromlist=["tags"]).tags(write).items():
+        extra_tags.setdefault(rel, []).extend(values)
+    # vault gear of the colossal structures (wf/colossal_gear.py): repair tags, armour slots, swords, axes
+    for rel, values in __import__("wf.colossal_gear", fromlist=["tags"]).tags(write).items():
         extra_tags.setdefault(rel, []).extend(values)
     for rel, values in extra_tags.items():
         path = os.path.join(DATA, rel)

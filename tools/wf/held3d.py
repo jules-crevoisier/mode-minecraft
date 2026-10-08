@@ -789,6 +789,64 @@ def queen_macuahuitl():
     return out
 
 
+def scarab_sceptre():
+    """Scarab Sceptre of the Fourth King: a long gilded sceptre with a dark wrapped grip, lapis bands and a gold
+    butt-knob, a flared lotus collar, and at its head a lapis scarab with gilded wing-cases spread wide, its forelegs
+    raising a glowing sun-disc above it; a broken notch in the disc's rim."""
+    import math
+    out = [box(7.25, -8, 7.25, 8.75, 18, 8.75, "mid"), box(6.8, -9.5, 6.8, 9.2, -7.5, 9.2, "light"),
+           box(6.9, -2, 6.9, 9.1, 4.5, 9.1, "wrap")]
+    for y in (-6.5, 6, 10, 14):                                            # lapis bands down the sceptre
+        out.append(box(6.95, y, 6.95, 9.05, y + 1.0, 9.05, "accent_dark" if y < 0 else "accent"))
+    out += [box(6.6, 17, 6.6, 9.4, 18.2, 9.4, "dark"),                    # the lotus collar
+            box(6.0, 18.2, 6.0, 10.0, 19.4, 10.0, "light"),
+            box(5.6, 19.4, 6.4, 6.6, 20.6, 9.6, "mid"), box(9.4, 19.4, 6.4, 10.4, 20.6, 9.6, "mid")]
+    out += [box(6.4, 19.4, 6.4, 9.6, 23.4, 9.6, "accent_dark"),           # the scarab's body
+            box(6.8, 23.4, 6.8, 9.2, 24.6, 9.2, "accent"),                 # its head
+            box(7.6, 19.6, 6.2, 8.4, 23.2, 6.4, "glow")]                   # the gilt seam down its back
+    for side in (-1, 1):                                                   # gilded wing-cases spread wide
+        for k in range(4):
+            x0 = 8 + side * (1.6 + k * 1.0)
+            y0 = 20.0 + k * 1.1
+            xa, xb = (x0, x0 + 1.4) if side > 0 else (x0 - 1.4, x0)
+            out.append(box(xa, y0, 7.1, xb, y0 + 2.4 - k * 0.3, 8.9, "light" if k % 2 else "mid"))
+        out.append(box(8 + side * 1.4 - 0.4, 24.4, 7.6, 8 + side * 1.4 + 0.4, 26.4, 8.4, "dark"))  # the forelegs
+    cx, cy, r = 8.0, 28.4, 2.8
+    for a in range(0, 360, 30):                                            # the sun-disc's gold rim
+        if a == 60:
+            continue                                                       # the notch the chisel left
+        x, y = cx + r * math.sin(math.radians(a)), cy + r * math.cos(math.radians(a))
+        out.append(box(x - 0.7, y - 0.7, 7.3, x + 0.7, y + 0.7, 8.7, "light" if a % 60 else "mid"))
+    out += [box(6.1, 26.5, 7.5, 9.9, 30.3, 8.5, "glow"),                  # the glowing disc
+            box(6.9, 27.3, 7.2, 9.1, 29.5, 8.8, "accent")]                 # its lapis eye
+    return out
+
+
+def warden_tongs():
+    """Searing Tongs of the Anvil Warden: a smith's tongs as long as a sword, two dark iron reins bound in leather at
+    the grip and spreading a little toward their ends, a brass rivet at the joint, long jaws heat-tinted toward their
+    tips and a white-hot billet held between them."""
+    out = []
+    for k in range(8):                                                     # the reins, spreading toward the butt
+        y0 = -6 + k * 2.0
+        spread = 1.9 - k * 0.12
+        out += [box(8 - spread - 0.6, y0, 7.4, 8 - spread + 0.6, y0 + 2.0, 8.6, "mid"),
+                box(8 + spread - 0.6, y0, 7.4, 8 + spread + 0.6, y0 + 2.0, 8.6, "dark")]
+    out += [box(6.0, 0, 7.1, 10.0, 5.5, 8.9, "wrap"),                      # the leather grip round both reins
+            box(6.3, -7.2, 7.3, 7.6, -6, 8.7, "iron_dark"), box(8.4, -7.2, 7.3, 9.7, -6, 8.7, "iron_dark")]
+    out += [box(6.4, 10, 6.6, 9.6, 12.4, 9.4, "brass"),                    # the rivet at the joint
+            box(7.4, 10.6, 6.2, 8.6, 11.8, 6.6, "brass_dark")]
+    for k in range(7):                                                     # the jaws, closing on the billet
+        y0 = 12.4 + k * 2.0
+        gap = 1.1 + (0.4 if k >= 5 else 0.0)
+        key = "dark" if k < 4 else "accent_dark"
+        out += [box(8 - gap - 0.9, y0, 7.45, 8 - gap, y0 + 2.0, 8.55, "light" if k < 4 else key),
+                box(8 + gap, y0, 7.45, 8 + gap + 0.9, y0 + 2.0, 8.55, key)]
+    out += [box(6.6, 22.4, 6.2, 9.4, 27.2, 9.8, "accent"),                 # the white-hot billet
+            box(6.9, 23.0, 6.0, 9.1, 26.6, 10.0, "glow")]
+    return out
+
+
 ARCHETYPES = {"sword": broadsword, "greatsword": lambda: broadsword(length=19, width=5.0, guard=11), "blade": blade, "spear": spear,
               "trident": lambda: spear("trident"), "lance": lambda: spear("lance"), "hammer": hammer,
               "mace": mace, "staff": staff, "cane": cane, "scythe": scythe, "book": book, "fist": fist,
@@ -805,6 +863,101 @@ ARCHETYPES = {"sword": broadsword, "greatsword": lambda: broadsword(length=19, w
               "trident_big": trident_big, "fang": fang, "grimoire": grimoire, "gauntlet": gauntlet,
               "horn_curved": horn_curved, "ward_orb": ward_orb}
 ARCHETYPES["queen_macuahuitl"] = queen_macuahuitl
+ARCHETYPES["warden_tongs"] = warden_tongs
+ARCHETYPES["scarab_sceptre"] = scarab_sceptre
+
+
+def heart_lodeblade():
+    """Lodeblade of the Colossus's Heart: a broad greatsword of loose bronze plates held apart by a glowing amber
+    tether (gaps between the plates show the light), a guard of bent copper pipe with valve-wheel ends, and a small
+    brass engine-heart caged at the throat of the blade, its amber seam glowing; an iron rib for a grip and a gauge
+    pommel."""
+    out = _grip(1.5, 8.5, 2.2) + [box(6.4, -0.6, 6.6, 9.6, 1.5, 9.4, "brass"),              # the gauge pommel
+                                   box(7.2, -0.2, 6.4, 8.8, 1.1, 6.6, "cream")]
+    out += [box(2.5, 8.5, 7.0, 13.5, 9.8, 9.0, "accent_dark"),                             # copper-pipe guard
+            box(1.4, 7.4, 6.8, 2.8, 10.6, 9.2, "brass_dark"), box(13.2, 7.4, 6.8, 14.6, 10.6, 9.2, "brass_dark")]
+    out += [box(6.2, 9.8, 6.4, 9.8, 12.6, 9.6, "brass"),                                   # the caged heart
+            box(7.4, 10.3, 6.2, 8.6, 12.2, 9.8, "glow"),
+            box(5.8, 10.1, 7.2, 6.2, 12.4, 8.8, "iron_dark"), box(9.8, 10.1, 7.2, 10.2, 12.4, 8.8, "iron_dark")]
+    out += [box(7.0, 12.6, 7.6, 9.0, 29.0, 8.4, "accent")]                                   # the amber tether
+    y = 12.9
+    for k, h in enumerate((2.4, 2.3, 2.2, 2.1, 2.0, 1.8)):                                 # loose plates, gaps between
+        w = 6.0 - k * 0.3
+        a0 = 8 - w / 2 + (0.2 if k % 2 else -0.2)                                       # each sits a little askew
+        out += [box(a0, y, 7.45, a0 + w, y + h, 8.55, "mid"),
+                box(a0 - 0.4, y + 0.3, 7.6, a0, y + h - 0.3, 8.4, "light"),               # the edge
+                box(a0 + w, y + 0.3, 7.6, a0 + w + 0.4, y + h - 0.3, 8.4, "light"),
+                box(a0 + 0.6, y + h - 0.5, 7.35, a0 + w - 0.6, y + h, 8.65, "dark")]      # the lip of the plate
+        y += h + 0.6
+    out += [box(6.6, y, 7.5, 9.4, y + 1.4, 8.5, "light"), box(7.4, y + 1.4, 7.6, 8.6, y + 2.4, 8.4, "light")]
+    return out
+
+
+ARCHETYPES["heart_lodeblade"] = heart_lodeblade
+
+def curator_astrolabe():
+    """Astrolabe of the Star-Eater Curator: a tall dark staff ringed with brass collars, a wrapped grip and a brass
+    spike at its foot; at its head a brass astrolabe disc engraved with a glowing star map, held inside two crossed
+    armillary hoops that circle a white star, and a chip of meteorite riding on the outer hoop."""
+    import math
+    out = [box(7.25, -10, 7.25, 8.75, 17.5, 8.75, "handle"), box(7.6, -12, 7.6, 8.4, -10, 8.4, "brass_dark")]
+    out += _grip(-2, 5, 2.2)
+    for y in (-8, 7, 11, 14.5):                                             # brass collars down the staff
+        out.append(box(6.95, y, 6.95, 9.05, y + 0.8, 9.05, "brass"))
+    out += [box(6.6, 16.9, 6.6, 9.4, 18.1, 9.4, "brass_dark")]            # the throne under the disc
+    cx, cy, r = 8.0, 23.5, 5.0
+    out += [box(4.6, 20.1, 7.6, 11.4, 26.9, 8.4, "brass_dark"),           # the mater
+            box(5.4, 20.9, 7.5, 10.6, 26.1, 8.5, "accent_dark"),          # its engraved star map
+            box(7.4, 22.9, 7.3, 8.6, 24.1, 8.7, "glow")]                  # the pin
+    for a in range(0, 360, 45):                                           # the rete's glowing pointers
+        x, y = cx + 2.0 * math.sin(math.radians(a)), cy + 2.0 * math.cos(math.radians(a))
+        out.append(box(x - 0.3, y - 0.3, 7.4, x + 0.3, y + 0.3, 8.6, "accent"))
+    for a in range(0, 360, 30):                                           # hoop one, in the disc's plane
+        x, y = cx + r * math.sin(math.radians(a)), cy + r * math.cos(math.radians(a))
+        out.append(box(x - 0.6, y - 0.6, 7.5, x + 0.6, y + 0.6, 8.5, "brass"))
+    for a in range(0, 360, 30):                                           # hoop two, across it
+        z, y = 8.0 + r * math.sin(math.radians(a)), cy + r * math.cos(math.radians(a))
+        if abs(z - 8.0) < 1.0 and abs(y - cy) < 4.0:
+            continue
+        out.append(box(7.5, y - 0.6, z - 0.6, 8.5, y + 0.6, z + 0.6, "light"))
+    out += [box(7.1, 29.0, 7.1, 8.9, 30.8, 8.9, "glow"),                  # the white star on top
+            box(11.4, 26.8, 7.2, 13.0, 28.4, 8.8, "iron_dark")]           # the meteorite chip on the hoop
+    return out
+
+
+ARCHETYPES["curator_astrolabe"] = curator_astrolabe
+
+
+def baron_drillpick():
+    """Drill-Pick of the Mine Baron: a long mahogany haft bound in leather with an iron butt cap and brass collars,
+    two sticks of dynamite strapped below the head with a lit fuse; the head is a riveted iron block with a gold pick
+    spike tapering out on one side and a fluted steel drill cone banded in brass boring out on the other."""
+    out = [box(7.2, -8, 7.2, 8.8, 18, 8.8, "handle"), box(6.9, -9.4, 6.9, 9.1, -8, 9.1, "iron_dark")]
+    out += _grip(-3, 4, 2.3)
+    for y in (5.0, 16.4):                                                   # brass collars
+        out.append(box(6.8, y, 6.8, 9.2, y + 0.9, 9.2, "brass"))
+    out += [box(8.8, 10.5, 7.0, 10.4, 15.5, 8.6, "accent"),                # two sticks of dynamite on the haft
+            box(8.8, 10.5, 8.6, 10.4, 15.0, 10.2, "accent_dark"),
+            box(8.6, 12.4, 6.8, 10.6, 13.2, 10.4, "wrap"),                  # their strap
+            box(9.4, 15.5, 7.6, 9.8, 16.6, 8.0, "ink"), box(9.3, 16.6, 7.5, 9.9, 17.2, 8.1, "glow")]  # the lit fuse
+    out += [box(5.6, 17.6, 6.0, 10.4, 22.4, 10.0, "iron_dark"),            # the riveted head block
+            box(5.3, 18.2, 6.6, 5.6, 21.8, 9.4, "brass_dark"), box(10.4, 18.2, 6.6, 10.7, 21.8, 9.4, "brass_dark")]
+    for x, y in ((6.4, 21.8), (9.6, 21.8), (6.4, 17.8), (9.6, 17.8)):
+        out.append(box(x - 0.4, y, 5.8, x + 0.4, y + 0.6, 6.0, "brass"))
+    for k, (w, h) in enumerate(((3.6, 3.6), (3.0, 3.0), (2.4, 2.4), (1.8, 1.8), (1.2, 1.2), (0.7, 0.7))):
+        x1 = 5.3 - k * 1.2                                                  # the gold pick spike, tapering out
+        out.append(box(x1 - 1.2, 20.0 - h / 2 + k * 0.25, 8 - w / 2, x1, 20.0 + h / 2 + k * 0.25, 8 + w / 2,
+                       "light" if k % 2 else "mid"))
+    for k in range(7):                                                      # the drill cone, fluted and banded
+        w = 4.0 - k * 0.55
+        x0 = 10.7 + k * 1.0
+        out.append(box(x0, 20.0 - w / 2, 8 - w / 2, x0 + 1.0, 20.0 + w / 2, 8 + w / 2,
+                       "brass" if k == 0 else ("steel" if k % 2 == 0 else "outline")))
+    out.append(box(17.7, 19.7, 7.7, 18.5, 20.3, 8.3, "steel"))              # the drill point
+    return out
+
+
+ARCHETYPES["baron_drillpick"] = baron_drillpick
 
 # item id -> (archetype, material, handle, accent)
 HELD = {
@@ -842,6 +995,11 @@ HELD = {
     "hierarch_sunstaff": ("solar_staff", "gold", "gold", "ember"),
     "admiral_cutlass": ("admiral_cutlass", "iron", "dark", "aether"),
     "tyrant_wrench": ("valve_wrench", "iron", "dark", "ember"),
+    "warden_tongs": ("warden_tongs", "iron", "dark", "ember"),
+    "fourth_king_sceptre": ("scarab_sceptre", "gold", "dark", "sapphire"),
+    "heart_lodeblade": ("heart_lodeblade", "copper", "dark", "ember"),
+    "curator_astrolabe": ("curator_astrolabe", "void", "purpur", "amethyst"),
+    "baron_drillpick": ("baron_drillpick", "gold", "dark", "ember"),
     "cartographer_blade": ("sword", "cartographer", "wood", "emerald"),
     "telluric_hammer": ("hammer", "lithite", "wood", "emerald"),
     "storm_staff": ("staff", "storm", "dark", "sapphire"),
@@ -933,3 +1091,7 @@ def textures():
 # the relic weapons of the colossal structures (wf/relics.py, archetypes in wf/relicart.py)
 from . import relicart as _relicart  # noqa: E402
 _relicart.register_held(ARCHETYPES, HELD)
+
+# the vault weapons of the colossal structures (wf/colossal_gear.py, archetypes in wf/colossal_art.py)
+from . import colossal_art as _colossal_art  # noqa: E402
+_colossal_art.register_held(ARCHETYPES, HELD)

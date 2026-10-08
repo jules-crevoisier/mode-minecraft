@@ -18,7 +18,7 @@ Layout (x along the ship, stern at x = -96, the break at x = 0, bow towards +x; 
   * the stern section (96 long, upright): hull decks hold / lower / middle / main (feet 15 / 23 / 29 / 35), the bridge
     tower and its tripod mast at the break, funnels at x -26 and -50, the stump of the second at x -38 with the
     funnel itself fallen across the starboard deck, the aft deckhouse, the superfiring X turret and the Y turret;
-  * the bow section (80 long): tilted 15 degrees nose-down, rolled and swung, its broken end raised on the islet, its
+  * the bow section (80 long): tilted 22 degrees nose-down, rolled and swung, its broken end raised on the islet, its
     nose buried in the sand; turrets A and B (superfiring); inside, the forward mess deck, the forecastle tween deck
     and, under the water, the flooded torpedo deck;
   * the route: camp (waystone) -> the breach -> crew quarters (lower deck) -> stair -> officers' mess (middle deck)
@@ -80,7 +80,8 @@ F2 = -38                 # the fallen one's stump
 
 # the bow: local (u along the bow from its broken end, h above its keel, v across) -> world
 B_O = (14.0, KEEL - 1.0, 1.0)
-PITCH, ROLL, YAW = math.radians(18), math.radians(5), math.radians(-7)
+PITCH, ROLL, YAW = math.radians(22), math.radians(5), math.radians(-7)
+BOW_WL = SEA + 3          # the bow's flooded compartments: water up to the sill of their doors (y 25)
 CP, SP = math.cos(PITCH), math.sin(PITCH)
 CR, SR = math.cos(ROLL), math.sin(ROLL)
 CY, SY = math.cos(YAW), math.sin(YAW)
@@ -308,11 +309,11 @@ def bow_inside(s, v, h, w):
     if 142 <= s < 145 and av < 1.6 and LOW_H - 1.5 <= h < LOW_H + 0.5:
         return AIR
     # the broken end's watertight bulkhead (door on the middle deck), the forecastle break (door on the main deck)
-    if S_BOW0 + 2.5 <= s < S_BOW0 + 3.5:
+    if S_BOW0 + 2.5 <= s < S_BOW0 + 4.0:
         if av < 1.6 and MID_H + 0.5 <= h < MID_H + 3.5:
             return AIR
         return IRON_BR if int(h) % 4 == 0 else IRON
-    if FC_S - 0.5 <= s < FC_S + 0.5 and MAIN_H + 0.5 <= h:
+    if FC_S - 0.75 <= s < FC_S + 0.75 and MAIN_H + 0.5 <= h:
         if av < 1.6 and h < MAIN_H + 3.5:
             return AIR
         return IRON_BR if av > w - 3 else IRON
@@ -1619,7 +1620,7 @@ def bow(S):
                 if u < -1 or u > L - S_BOW0 + 1 or abs(v) > 21 or h < -1.5 or h > 41:
                     continue
                 s = S_BOW0 + u
-                jag = int(3.2 * fbm(h * 1.7, v * 1.5, 3.0, 78))
+                jag = min(2, int(3.2 * fbm(h * 1.7, v * 1.5, 3.0, 78)))   # the watertight bulkhead stays whole
                 if u < jag:
                     continue
                 spec = ship_cell(s, v, h, "bow")
@@ -1630,7 +1631,9 @@ def bow(S):
                 if spec == AIR and y <= 1:
                     spec = "sand"
                 if spec == AIR:
-                    if y <= SEA:
+                    # flooded: everything under the middle deck (hold, lower deck, torpedo deck) and the rest up to
+                    # the door sills; only the top of the forward mess deck keeps a pocket of trapped air
+                    if y <= max(SEA, BOW_WL) or h < MID_H - 1.5:
                         S.set(x, y, z, "water")
                     else:
                         S.air(x, y, z)
@@ -1640,6 +1643,8 @@ def bow(S):
                     S.set(x, y, z, spec)
                 S.bow.add((x, y, z))
     smooth_bow(S)
+    bow_doors(S)
+    flood_bow(S)
     bow_rooms(S)
 
 
@@ -1668,6 +1673,90 @@ def smooth_bow(S):
             S.set(x, y, z, f"{name}[type=bottom,waterlogged=false]")
 
 
+def bow_doors(S):
+    """Doors in the bow's two openings (the watertight bulkhead at the broken end, on the middle deck, and the
+    forecastle break, on the main deck): a door holds water back, so the flooded compartments stay full above a
+    shallow sea and the trapped air stays dry under a deep one; the rest of each opening is plated over."""
+    bp = S.bp
+    for (u0, u1, f) in ((2.5, 4.0, MID_H), (FC_S - S_BOW0 - 0.75, FC_S - S_BOW0 + 0.75, MAIN_H)):
+        cells = {}
+        for p in S.bow:
+            if bp.get(*p) not in (AIR, "minecraft:water"):
+                continue
+            u, h, v = bow_local(*p)
+            if u0 <= u < u1 and abs(v) < 1.6 and f + 0.5 <= h < f + 3.5:
+                cells[p] = u
+        if not cells:
+            continue
+        # the door: the column nearest the centre line with two open cells over a solid sill
+        best = None
+        for (x, y, z), u in cells.items():
+            if (x, y + 1, z) not in cells or (x, y - 1, z) in cells:
+                continue
+            below = bp.get(x, y - 1, z)
+            if below in (None, AIR, "minecraft:water") or not is_solid(below):
+                continue
+            key = (abs(z - round(bow_world(u, f + 1.0, 0.0)[2])), y)
+            if best is None or key < best[0]:
+                best = (key, (x, y, z), u)
+        if best is None:
+            continue
+        _, (dx, dy, dz), du = best
+        keep = set()
+        for (x, y, z), u in cells.items():
+            if z == dz and y in (dy, dy + 1) and x != dx:
+                keep.add((x, y, z))
+                if u < du:                                   # the outer side of the door is the sea's
+                    bp.remove(x, y, z)
+                    S.inner.discard((x, y, z))
+                    S.bow.discard((x, y, z))
+                else:
+                    S.set(x, y, z, AIR if y > BOW_WL else "water")
+        for p in cells:
+            if p not in keep and p not in ((dx, dy, dz), (dx, dy + 1, dz)):
+                S.set(*p, IRON_BR)
+        face = "west"
+        bp.door(dx, dy, dz, face, wood="spruce")
+        S.inner.add((dx, dy, dz))
+        S.inner.add((dx, dy + 1, dz))
+
+
+def flood_bow(S):
+    """Settle the bow's water: open cells level with or under water fill too (no still wall of water inside the
+    hull), every hole in the plating above the sea is plugged, and whatever can be waterlogged in the water is."""
+    bp = S.bp
+    water = "minecraft:water"
+    todo = [p for p in S.bow if bp.get(*p) == water]
+    seen = set(todo)
+    while todo:
+        x, y, z = todo.pop()
+        for dx, dy, dz in ((1, 0, 0), (-1, 0, 0), (0, 0, 1), (0, 0, -1), (0, -1, 0)):
+            q = (x + dx, y + dy, z + dz)
+            b = bp.get(*q)
+            if b == AIR and q in S.bow:
+                bp.set(*q, "water")
+                S.inner.discard(q)
+            elif b is None and q[1] > SEA:
+                bp.set(*q, IRON)
+                S.bow.add(q)
+                continue
+            else:
+                continue
+            if q not in seen:
+                seen.add(q)
+                todo.append(q)
+    # waterlog what stands in the water (never a block that touches the trapped air: it would spill into it)
+    for q in list(S.bow):
+        b = bp.blocks.get(q)
+        if not b or b[1].get("waterlogged") != "false":
+            continue
+        x, y, z = q
+        nbs = [bp.get(x + dx, y + dy, z + dz) for dx, dy, dz in ((1, 0, 0), (-1, 0, 0), (0, 0, 1), (0, 0, -1),
+                                                                  (0, 1, 0))]
+        if any(n == water for n in nbs) and not any(n in (None, AIR) for n in nbs[:4]) and nbs[4] != AIR:
+            bp.blocks[q] = (b[0], dict(b[1], waterlogged="true"), b[2])
+
+
 def bow_spot(S, u, v, h_feet, need_dry=False):
     """A standable cell near bow-local (u, v) on the deck whose feet are at h_feet: (x, y, z) or None."""
     x, y, z = ri(bow_world(u, h_feet + 0.5, v))
@@ -1691,15 +1780,15 @@ def bow_rooms(S):
             continue
         x, y, z = p
         if what == "chest":
-            (chest if y > SEA else wet_chest)(S, x, y, z, "east", "dw_bow")
+            (chest if bp.get(x, y, z) == AIR else wet_chest)(S, x, y, z, "east", "dw_bow")
         elif what == "barrel":
             bp.barrel(x, y, z, "up")
         elif what == "table":
             S.set(x, y, z, stair("spruce_stairs", "east", "top"))
-        elif what == "lamp" and y > SEA:
+        elif what == "lamp" and bp.get(x, y, z) == AIR:
             S.set(x, y, z, LANT)
     p = bow_spot(S, 10, 0, MID_H + 1)
-    if p and p[1] > SEA:
+    if p and bp.get(*p) == AIR:
         x, y, z = p
         S.set(x, y + 3, z, HANG_LAMP) if S.bp.get(x, y + 3, z) == AIR else None
     # the forecastle tween deck: the bosun's store
@@ -1709,22 +1798,34 @@ def bow_rooms(S):
             continue
         x, y, z = p
         if what == "chest":
-            (chest if y > SEA else wet_chest)(S, x, y, z, "east", "dw_bow")
+            (chest if bp.get(x, y, z) == AIR else wet_chest)(S, x, y, z, "east", "dw_bow")
         elif what == "barrel":
             bp.barrel(x, y, z, "up")
         elif what == "spawner":
             bp.spawner(x, y, z, MOB_DROWNED)
-        elif what == "lamp" and y > SEA:
+        elif what == "lamp" and bp.get(x, y, z) == AIR:
             S.set(x, y, z, LANT)
     # the flooded torpedo deck: the torpedo store chests, a crab den
     for (u, v) in ((53, -1), (55, 1)):
         p = bow_spot(S, u, v, LOW_H + 1)
         if p:
             x, y, z = p
-            (chest if y > SEA else wet_chest)(S, x, y, z, "east", "dw_torpedo")
+            (chest if bp.get(x, y, z) == AIR else wet_chest)(S, x, y, z, "east", "dw_torpedo")
     p = bow_spot(S, 47, 0, LOW_H + 1)
     if p:
         bp.spawner(*p, MOB_CRAB)
+    # the flooded lower deck: seagrass in the silt on the deck, sea pickles glowing between the torpedo racks
+    for (x, y, z) in sorted(S.bow):
+        if bp.get(x, y, z) != "minecraft:water" or not is_solid(bp.get(x, y - 1, z) or "minecraft:air"):
+            continue
+        u, h, v = bow_local(x, y, z)
+        if not LOW_H < h < MID_H - 1.5 or bp.get(x, y - 1, z) == "minecraft:sand":
+            continue
+        hv = hash3(x, y, z, 141)
+        if hv < 0.035 and 40 <= u < 62:
+            bp.set(x, y, z, f"sea_pickle[pickles={1 + int(hash3(x, y, z, 143) * 4)},waterlogged=true]")
+        elif hv < 0.13:
+            bp.set(x, y, z, "seagrass")
     # anchor chains from the hawse pipes down to the sand
     for v in (-4.5, 4.5):
         x, y, z = ri(bow_world(L - S_BOW0 - 9, FC_H - 2, v * 1.0 + (1.6 if v > 0 else -1.6)))
@@ -1851,6 +1952,106 @@ def gap(S):
                     pass
 
 
+def breach(S):
+    """The way in from the sea. The lower deck's broken end is closed by a patched bulkhead with an airlock in it: a
+    short iron vestibule with a pair of doors at each end (a door holds the sea back, so the crew quarters stay dry
+    at any depth and nothing is a still wall of water), its brass collar lit by sea lanterns so it reads from afar
+    and from under the surface. A ladder hung with chains runs down the broken hull from the main deck to the
+    vestibule's sill: a diver coming from the surface (deep water drowns the islet) follows it down to the door. The
+    torn mess bulkhead gets glass in its holes."""
+    bp = S.bp
+    water = "minecraft:water"
+    xb, y0, y1 = 1, LF - 1, MF - 2                       # bulkhead x, y 22 (sill) .. 27 (under the middle deck)
+    # the air left forward of the bulkheads would be a dry pocket open to the sea: it goes
+    for p in list(S.inner):
+        x, y, z = p
+        if (x > xb and LF <= y <= MF - 2) or (x > X_FWD and MF - 1 <= y <= DECK - 2):
+            if bp.get(*p) == AIR:
+                bp.remove(*p)
+                S.inner.discard(p)
+    for z, y in ((-4, MF + 1), (3, MF + 1), (4, MF + 2), (-12, MF + 2)):
+        S.set(X_FWD, y, z, "glass")
+    # the patched bulkhead
+    for y in range(y0, y1 + 1):
+        rr = max(zr(0, y), zr(xb, y)) + 1
+        for z in range(-rr, rr + 1):
+            h = hash3(xb, y, z, 151)
+            spec = IRON_BR if (y - KEEL) % 6 == 0 or abs(z) >= rr - 1 or z % 7 == 3 else (RUST if h < 0.18 else IRON)
+            S.set(xb, y, z, spec)
+            S.inner.discard((xb, y, z))
+        for z in (-rr, rr):                              # the hull plating's torn edge meets it
+            if bp.get(xb - 1, y, z) in (None, AIR):
+                S.set(xb - 1, y, z, IRON_BR)
+    # the vestibule: x 2..4, z -2..1, floor y 22, air y 23..25, roof y 26; doors at x 1 and x 4 (z -1, 0)
+    for x in range(xb + 1, xb + 4):
+        for z in range(-2, 2):
+            S.set(x, y0, z, TREAD)
+            S.set(x, y0 + 4, z, IRON_BR if (x + z) % 3 else BRASS)
+            for y in range(y0 + 1, y0 + 4):
+                if z in (-2, 1):
+                    S.set(x, y, z, BRASS if x == xb + 3 else (IRON_BR if y == y0 + 1 else IRON))
+                else:
+                    S.air(x, y, z)
+            yy = y0 - 1
+            while yy >= y0 - 4 and bp.get(x, yy, z) in (None, AIR, water):
+                S.set(x, yy, z, IRON)                    # the vestibule stands on the islet's rock
+                yy -= 1
+    for x in (xb, xb + 3):
+        for z, hinge in ((-1, "left"), (0, "right")):
+            bp.door(x, LF, z, "east", wood="spruce", hinge=hinge)
+            S.inner.update({(x, LF, z), (x, LF + 1, z)})
+        for z in (-1, 0):
+            S.set(x, LF + 2, z, BRASS)                   # the lintel
+    S.set(xb + 3, y0 + 4, -2, "sea_lantern")
+    S.set(xb + 3, y0 + 4, 1, "sea_lantern")
+    S.set(xb + 1, y0 + 4, -1, "sea_lantern")
+    S.set(xb + 4, y0 + 4, -2, BRASS_STAIRS + "[facing=west,half=top,shape=straight,waterlogged=false]")
+    S.set(xb + 4, y0 + 4, 1, BRASS_STAIRS + "[facing=west,half=top,shape=straight,waterlogged=false]")
+    # the landing in front of the outer doors and under the ladder: the islet's rock, raised where it dips
+    for x in range(xb + 1, xb + 7):
+        for z in range(-6, 3):
+            if xb + 1 <= x <= xb + 3 and -2 <= z <= 1:
+                continue
+            if bp.get(x, y0, z) in (None, AIR, water):
+                S.set(x, y0, z, "andesite" if hash3(x, y0, z, 153) < 0.5 else "cobblestone")
+                for yy in range(y0 - 1, y0 - 4, -1):
+                    if bp.get(x, yy, z) in (None, AIR, water):
+                        S.set(x, yy, z, "andesite")
+            for y in range(y0 + 1, y0 + 4):
+                if x > xb + 3 and -1 <= z <= 0 and bp.get(x, y, z) not in (None, AIR, water):
+                    bp.remove(x, y, z)                   # nothing in front of the outer doors
+    # the ladder down the broken hull: an iron stile at x 1, the ladder on its east face, chains beside it
+    lz = -5
+    for y in range(y1 + 1, DECK + 1):
+        S.set(xb, y, lz, IRON_BR if y % 3 == 0 else IRON)
+    for y in range(LF, DECK + 1):
+        wet = "true" if y <= SEA else "false"
+        S.set(xb + 1, y, lz, f"ladder[facing=east,waterlogged={wet}]")
+        for cz in (lz - 1, lz + 1):
+            if bp.get(xb + 1, y, cz) in (None, AIR, water):
+                S.set(xb + 1, y, cz, f"iron_chain[axis=y,waterlogged={wet}]")
+    for cz in (lz - 1, lz + 1):
+        if bp.get(xb, DECK, cz) in (None, AIR, water):
+            S.set(xb, DECK, cz, IRON)
+        S.set(xb + 1, DECK + 1, cz, IRON_WALL)           # the davit posts the chains hang from
+    S.set(xb + 1, DECK + 2, lz - 1, LANT)
+    S.set(xb + 1, DECK + 2, lz + 1, IRON_WALL)
+    S.set(xb + 1, DECK + 3, lz + 1, LANT)
+
+
+def bed_bow(S):
+    """The bow, driven nose-first into the reef, sits bedded in the sand it ploughed up: no pocket of open sea is
+    left trapped between its keel and the sea floor."""
+    high = {}
+    for (x, y, z) in S.bow:
+        if S.bp.get(x, y, z) not in (None, AIR, "minecraft:water") and y > high.get((x, z), -99):
+            high[(x, z)] = y
+    for (x, z), yh in high.items():
+        for y in range(1, min(yh, 6)):
+            if S.bp.get(x, y, z) is None:
+                S.set(x, y, z, "sand" if hash01(x * 3 + y, z, 161) < 0.8 else "gravel")
+
+
 # ------------------------------------------------------------------ final passes
 def drop_outside_air(S):
     """Air written outside the hull and the superstructures would dig a dry hole in the sea: drop it."""
@@ -1891,7 +2092,9 @@ def dreadnought_wreck(bp):
     lights_main_path(S)
     bow(S)
     reef(S)
+    bed_bow(S)
     gap(S)
+    breach(S)
     drop_outside_air(S)
 
 

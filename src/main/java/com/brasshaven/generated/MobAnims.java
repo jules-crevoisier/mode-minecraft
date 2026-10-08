@@ -840,6 +840,107 @@ public final class MobAnims {
 
         private TurbineTyrant() {}
     }
+    public static final class AnvilWarden {
+        public static final int SLAM = 0;
+        public static final int COMBO = 1;
+        public static final int GRAB = 2;
+        public static final int SPLASH = 3;
+        public static final int QUENCH = 4;
+        public static final int CHARGE = 5;
+        public static final int QUAKE = 6;
+        public static final int BILLET = 7;
+        public static final int TITAN = 8;
+        public static final int OVERHEAT = 9;
+        public static final int VENT = 10;
+        public static final int ROAR = 11;
+        public static final int STAGGER = 12;
+        public static final int COUNT = 13;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {40, 52, 50, 44, 28, 48, 52, 38, 66, 70, 70, 40, 40};
+
+        private AnvilWarden() {}
+    }
+    public static final class ColossusHeart {
+        public static final int SWEEP = 0;
+        public static final int CLEAVE = 1;
+        public static final int LUNGE = 2;
+        public static final int SHIELDTHROW = 3;
+        public static final int RUBBLE = 4;
+        public static final int MAGNET = 5;
+        public static final int RINGS = 6;
+        public static final int PLATESTORM = 7;
+        public static final int VENT = 8;
+        public static final int REFORGE = 9;
+        public static final int QUAKE = 10;
+        public static final int BURST = 11;
+        public static final int STAGGER = 12;
+        public static final int COUNT = 13;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {35, 44, 42, 70, 58, 62, 104, 60, 32, 70, 62, 50, 50};
+
+        private ColossusHeart() {}
+    }
+    public static final class FourthKing {
+        public static final int FLAIL = 0;
+        public static final int SMITE = 1;
+        public static final int BEAM_LOW = 2;
+        public static final int BEAM_HIGH = 3;
+        public static final int SANDFALL = 4;
+        public static final int SWARM = 5;
+        public static final int DRAIN = 6;
+        public static final int PROCESSION = 7;
+        public static final int SANDBURST = 8;
+        public static final int SEAL = 9;
+        public static final int VERDICT = 10;
+        public static final int ROAR = 11;
+        public static final int STAGGER = 12;
+        public static final int COUNT = 13;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {54, 42, 78, 66, 38, 34, 86, 44, 27, 70, 120, 40, 40};
+
+        private FourthKing() {}
+    }
+    public static final class StarCurator {
+        public static final int STAFF = 0;
+        public static final int VOLLEY = 1;
+        public static final int WELL = 2;
+        public static final int STARFALL = 3;
+        public static final int ORBIT = 4;
+        public static final int LANCE = 5;
+        public static final int PAGESTORM = 6;
+        public static final int CONSTELLATION = 7;
+        public static final int INVERT = 8;
+        public static final int BLINK = 9;
+        public static final int STARLANCE = 10;
+        public static final int ROAR = 11;
+        public static final int STAGGER = 12;
+        public static final int COUNT = 13;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {52, 42, 76, 80, 40, 42, 44, 64, 80, 24, 42, 40, 40};
+
+        private StarCurator() {}
+    }
+    public static final class MineBaron {
+        public static final int DRILL = 0;
+        public static final int SLAM = 1;
+        public static final int CHARGE = 2;
+        public static final int DYNAMITE = 3;
+        public static final int EXHAUST = 4;
+        public static final int CAVEIN = 5;
+        public static final int COMBO = 6;
+        public static final int VEINBURST = 7;
+        public static final int FUSELINE = 8;
+        public static final int GREED = 9;
+        public static final int OREBREAK = 10;
+        public static final int BLACKOUT = 11;
+        public static final int GLARE = 12;
+        public static final int STAGGER = 13;
+        public static final int COUNT = 14;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {46, 40, 52, 56, 30, 66, 58, 56, 70, 50, 80, 70, 40, 50};
+
+        private MineBaron() {}
+    }
     public static final class GlowJellyfish {
 
         public static final int COUNT = 0;

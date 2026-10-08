@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "brasshaven:turbine_engineer"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "brasshaven:turbine_engineer"
+      }
+    ]
+  }
+}

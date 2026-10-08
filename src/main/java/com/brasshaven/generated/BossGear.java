@@ -117,6 +117,21 @@ public final class BossGear {
     public static final RegistryObject<Item> REMEMBRANCE_TURBINE_TYRANT = remembrance("remembrance_turbine_tyrant");
     public static final RegistryObject<Item> TYRANT_WRENCH = weapon("tyrant_wrench", p -> p.sword(ModMaterials.LITHITE, 8.0F, -3.0F).rarity(Rarity.EPIC),
             BossWeaponItem.Ability.PRESSURE, 12.0F, 8.0F, 100, () -> ParticleTypes.CLOUD, BossWeaponItem.FIRE);
+    public static final RegistryObject<Item> REMEMBRANCE_FOURTH_KING = remembrance("remembrance_fourth_king");
+    public static final RegistryObject<Item> FOURTH_KING_SCEPTRE = weapon("fourth_king_sceptre", p -> p.sword(ModMaterials.LITHITE, 8.0F, -3.0F).rarity(Rarity.EPIC),
+            BossWeaponItem.Ability.SCARAB, 9.0F, 16.0F, 90, () -> ParticleTypes.SOUL_FIRE_FLAME, 0);
+    public static final RegistryObject<Item> REMEMBRANCE_COLOSSUS_HEART = remembrance("remembrance_colossus_heart");
+    public static final RegistryObject<Item> HEART_LODEBLADE = weapon("heart_lodeblade", p -> p.sword(ModMaterials.LITHITE, 9.0F, -3.1F).rarity(Rarity.EPIC),
+            BossWeaponItem.Ability.MAGNET, 8.0F, 9.0F, 100, () -> ParticleTypes.WAX_OFF, 0);
+    public static final RegistryObject<Item> REMEMBRANCE_ANVIL_WARDEN = remembrance("remembrance_anvil_warden");
+    public static final RegistryObject<Item> WARDEN_TONGS = weapon("warden_tongs", p -> p.sword(ModMaterials.EMBER, 8.0F, -3.0F).rarity(Rarity.EPIC).fireResistant(),
+            BossWeaponItem.Ability.TONGS, 12.0F, 10.0F, 90, () -> ParticleTypes.FLAME, BossWeaponItem.FIRE);
+    public static final RegistryObject<Item> REMEMBRANCE_STAR_CURATOR = remembrance("remembrance_star_curator");
+    public static final RegistryObject<Item> CURATOR_ASTROLABE = weapon("curator_astrolabe", p -> p.sword(ModMaterials.VOID, 8.0F, -3.0F).rarity(Rarity.EPIC).fireResistant(),
+            BossWeaponItem.Ability.ZENITH, 10.0F, 16.0F, 100, () -> ParticleTypes.END_ROD, 0);
+    public static final RegistryObject<Item> REMEMBRANCE_MINE_BARON = remembrance("remembrance_mine_baron");
+    public static final RegistryObject<Item> BARON_DRILLPICK = weapon("baron_drillpick", p -> p.sword(ModMaterials.LITHITE, 8.5F, -3.0F).rarity(Rarity.EPIC),
+            BossWeaponItem.Ability.FUSE, 12.0F, 14.0F, 100, () -> ParticleTypes.FLAME, BossWeaponItem.FIRE);
 
     private BossGear() {}
 

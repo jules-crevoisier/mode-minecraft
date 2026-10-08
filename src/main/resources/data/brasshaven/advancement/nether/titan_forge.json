@@ -1,0 +1,42 @@
+{
+  "display": {
+    "icon": {
+      "id": "minecraft:anvil"
+    },
+    "title": {
+      "translate": "advancements.brasshaven.nether.titan_forge.title"
+    },
+    "description": {
+      "translate": "advancements.brasshaven.nether.titan_forge.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "found": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:titan_forge"
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "parent": "brasshaven:nether/enter",
+  "rewards": {
+    "experience": 60,
+    "loot": [
+      "brasshaven:rewards/discovery"
+    ]
+  }
+}

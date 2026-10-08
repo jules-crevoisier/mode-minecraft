@@ -50,6 +50,11 @@ from . import strangler_queen
 from . import solar_hierarch
 from . import drowned_admiral
 from . import turbine_tyrant
+from . import anvil_warden
+from . import colossus_heart
+from . import fourth_king
+from . import star_curator
+from . import mine_baron
 # living oceans
 from . import glow_jellyfish
 from . import reef_fish
@@ -138,6 +143,11 @@ MODELS = [
     solar_hierarch.build,
     drowned_admiral.build,
     turbine_tyrant.build,
+    anvil_warden.build,
+    colossus_heart.build,
+    fourth_king.build,
+    star_curator.build,
+    mine_baron.build,
     glow_jellyfish.build,
     reef_fish.build,
     manta_ray.build,

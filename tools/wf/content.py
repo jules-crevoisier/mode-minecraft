@@ -213,6 +213,11 @@ ENTITIES = {
     "solar_hierarch": ("The Solar Hierarch", "Le Hiérarque solaire"),
     "drowned_admiral": ("The Drowned Admiral", "L'Amiral noyé"),
     "turbine_tyrant": ("The Turbine Tyrant", "Le Tyran des turbines"),
+    "anvil_warden": ("The Anvil Warden", "Le Gardien de l'enclume"),
+    "fourth_king": ("The Fourth King", "Le Quatrième Roi"),
+    "colossus_heart": ("The Colossus's Heart", "Le Cœur du Colosse"),
+    "star_curator": ("The Star-Eater Curator", "Le Conservateur dévoreur d'étoiles"),
+    "mine_baron": ("The Mine Baron", "Le Baron de la mine"),
     "hot_rivet": ("Hot Rivet", "Rivet brûlant"),
     "boomerang": ("Boomerang", "Boomerang"),
 }
@@ -262,6 +267,11 @@ SPAWN_EGGS = ["ruin_walker", "map_wraith", "basalt_guard", "void_stalker", "drow
               "solar_hierarch",
               "drowned_admiral",
               "turbine_tyrant",
+              "anvil_warden",
+              "fourth_king",
+              "colossus_heart",
+              "star_curator",
+              "mine_baron",
               ]
 
 # Misc translated messages used from Java (key suffix -> (en, fr))
@@ -662,3 +672,12 @@ def _relics():
 
 
 _relics()
+
+
+# vault gear of the colossal structures (tools/wf/colossal_gear.py)
+def _colossal():
+    from .colossal_gear import register_content
+    register_content(ITEMS)
+
+
+_colossal()

@@ -291,15 +291,7 @@ def riser_details(bp):
                             spec = EDISON
                         bp.set(px, y, pz, spec)
                 elif hgt >= 9 and au < R - 3 and abs(au % 12 - 6) <= 1:
-                    for y in range(ylo + 2, ylo + 6):
-                        bp.set(x, y, z, AIR)
-                        bx, bz = fxz(face, u, R - 1)
-                        bp.set(bx, y, bz, ENGR if (au % 12 == 6 and y == ylo + 4) else CHIS)
-                    bp.set(x, ylo + 6, z, CHIS)
-                    bp.set(x, ylo + 1, z, CUT)
-                    if au % 12 == 6:
-                        sx, sz = fxz(face, u, R)
-                        bp.set(sx, ylo + 2, sz, CUT_SL + "[type=bottom,waterlogged=false]")
+                    bay(bp, face, k, u, ylo, top, hgt)
             # parapet on the terrace edge
             for u in range(-R + 1, R):
                 x, z = fxz(face, u, R)
@@ -325,6 +317,120 @@ def riser_details(bp):
                 bp.set(px, top + 3, pz, CUT)
                 bp.set(px, top + 4, pz, BRASS)
                 bp.set(sx * (R + 1), top + 1, sz * (R + 1), stair(SMO_ST, "south" if sz < 0 else "north"))
+
+
+def bay(bp, face, k, u, ylo, top, hgt):
+    """One column (3 per bay) of the panel between two pilasters. The bays vary (BUILDING §4: no repeated module):
+    the plain niche with its brass sun disc, a tall niche, twin slits round a mullion, a relief panel standing +1 with
+    a terracotta sun, or a blind bay."""
+    R = TIERS[k][0]
+    au = abs(u)
+    mid = au % 12 == 6
+    x, z = fxz(face, u, R)
+    bx, bz = fxz(face, u, R - 1)
+    v = hash3(FACES.index(face), k, u // 12, 61)
+    if v < 0.34 or (v < 0.52 and hgt < 11):
+        for y in range(ylo + 2, ylo + 6):
+            bp.set(x, y, z, AIR)
+            bp.set(bx, y, bz, ENGR if (mid and y == ylo + 4) else CHIS)
+        bp.set(x, ylo + 6, z, CHIS)
+        bp.set(x, ylo + 1, z, CUT)
+        if mid:
+            bp.set(x, ylo + 2, z, CUT_SL + "[type=bottom,waterlogged=false]")
+    elif v < 0.52:                                   # a tall niche, the disc high in it
+        y1 = top - 3
+        for y in range(ylo + 2, y1 + 1):
+            bp.set(x, y, z, AIR)
+            bp.set(bx, y, bz, ENGR if (mid and y == y1 - 1) else (BTERRA if mid and y == ylo + 2 else CHIS))
+        bp.set(x, y1 + 1, z, CHIS)
+        bp.set(x, ylo + 1, z, CUT)
+    elif v < 0.70:                                   # twin slits round a mullion
+        for y in range(ylo + 2, ylo + 6):
+            if mid:
+                bp.set(x, y, z, CUT)
+            else:
+                bp.set(x, y, z, AIR)
+                bp.set(bx, y, bz, CHIS if y != ylo + 3 else TERRA)
+        bp.set(x, ylo + 6, z, CHIS)
+        bp.set(x, ylo + 1, z, CUT)
+    elif v < 0.86:                                   # a relief panel standing proud of the riser
+        ox, oz = fxz(face, u, R + 1)
+        for y in range(ylo + 2, ylo + 6):
+            if mid and y == ylo + 4:
+                spec = YTERRA
+            elif mid and y == ylo + 3:
+                spec = OTERRA
+            elif y in (ylo + 2, ylo + 5) or not mid:
+                spec = CUT if y != ylo + 5 or mid else CHIS
+            else:
+                spec = SMO
+            bp.set(ox, y, oz, spec)
+        bp.set(ox, ylo + 6, oz, stair(SMO_ST, OPP[face], "top"))
+        bp.set(ox, ylo + 1, oz, stair(SMO_ST if k > 1 else MUD_ST, OPP[face]))
+    # else: a blind bay (the plain masonry, its band boundaries already jittered)
+
+
+# the collapsed stretches of riser: face, tier, centre u, half width (off the stairs and the main route)
+COLLAPSES = (("west", 1, 30, 8), ("north", 2, 28, 7), ("west", 3, 22, 6), ("north", 4, 15, 5), ("east", 0, -40, 8))
+MASONRY = {"minecraft:" + m for m in (SS, CUT, SMO, CHIS, MUD, PMUD, TERRA, BTERRA, "sand", "brass_block")} | {
+    "minecraft:" + m for m in (SS_W, MUD_W, SMO_ST, MUD_ST)}
+
+
+def collapses(bp):
+    """A few stretches of riser have slumped: a ragged notch bitten out of the top of the riser (cornice, eave,
+    parapet and the two outer courses), the inner course left standing, and the fallen masonry heaped on the terrace
+    below, spilling 3-6 blocks out (BUILDING §5: rubble at the foot of breaches)."""
+    for face, k, u0, hw in COLLAPSES:
+        R, top = TIERS[k]
+        ylo = TIERS[k - 1][1] + 1 if k > 0 else 1
+        hgt = top - ylo + 1
+        fc = OPP[face]
+        for u in range(u0 - hw, u0 + hw + 1):
+            t = 1.0 - abs(u - u0) / (hw + 1.0)
+            dn = int(round(min(1.0, t * 1.3) * hgt * 0.8)) + int(hash01(u, k, 62) * 2.5)
+            y0 = top - dn + 1
+            cells = [(fxz(face, u, R + w), y) for w in (2, 1, 0, -1) for y in range(y0, top + 5)]
+            # never open a room: the course behind must be solid masonry and no carved air within reach
+            back = [fxz(face, u, R - d) for d in (2, 3, 4)]
+            if any(bp.get(bx, y, bz) == AIR for (bx, bz) in back for y in range(y0 - 1, top + 2)):
+                continue
+            bx, bz = back[0]
+            if any(bp.get(bx, y, bz) is None for y in range(y0, top + 1)):
+                continue
+            if any(bp.get(cx, y, cz) not in (None, AIR) and bp.get(cx, y, cz) not in MASONRY and
+                   not bp.get(cx, y, cz).endswith("lantern") and "brass" not in bp.get(cx, y, cz) and
+                   "edison" not in bp.get(cx, y, cz) for ((cx, cz), y) in cells):
+                continue
+            for ((cx, cz), y) in cells:
+                if bp.get(cx, y, cz) is not None:
+                    bp.set(cx, y, cz, AIR)
+            # the broken lip of the inner course: a step or two crumbled out of it
+            if t > 0.5 and hash01(u, k, 63) < 0.6:
+                bp.set(bx, top, bz, AIR)
+                for (ix, iz) in (fxz(face, u, R - 3),):
+                    if bp.get(ix, top, iz) not in (None, AIR):
+                        bp.set(ix, top, iz, stair(SS_ST, face) if hash01(u, k, 64) < 0.5 else SS)
+            # the scree on the terrace below
+            reach = 2 + int(t * 5 + hash01(u, k, 65) * 2)
+            for w in range(1, reach + 1):
+                hh = max(0, int(round((1.0 - (w - 1) / reach) * t * 3.2)))
+                x, z = fxz(face, u, R + w)
+                for y in range(ylo, ylo + hh):
+                    if bp.get(x, y, z) in (None, AIR):
+                        hv = hash3(x, y, z, 66)
+                        bp.set(x, y, z, SAND if hv < 0.4 else (SS if hv < 0.7 else (CUT if hv < 0.9 else CHIS)))
+                y = ylo + hh
+                if bp.get(x, y, z) in (None, AIR) and bp.get(x, y - 1, z) not in (None, AIR):
+                    hv = hash3(x, y, z, 67)
+                    if hv < 0.45:
+                        bp.set(x, y, z, stair(SS_ST if hv < 0.25 else SMO_ST, fc))
+                    elif hv < 0.75:
+                        bp.set(x, y, z, SMO_SL + "[type=bottom,waterlogged=false]")
+            # a fallen block or two further out
+            if hash01(u, k, 68) < 0.3:
+                x, z = fxz(face, u, R + reach + 1 + int(hash01(u, k, 69) * 2))
+                if bp.get(x, ylo, z) in (None, AIR) and bp.get(x, ylo - 1, z) not in (None, AIR):
+                    bp.set(x, ylo, z, CUT if hash01(u, k, 70) < 0.5 else CHIS)
 
 
 def wind_sand(bp):
@@ -1896,6 +2002,62 @@ def footings(bp):
                 bp.set(x, -d, z, SS if d == 1 else SAND)
 
 
+CORE_BUDGET = 66000          # entries spent on the pyramid's core (the piece stays under ~445k)
+
+
+def core_fill(bp):
+    """The pyramid's core: the shells used to enclose an unset void (in game: whatever the desert left there, a dark
+    sealed cavity that spawns mobs). Small pockets between the rooms are bricked up whole; the core is packed with
+    sand on a sandstone bed from the ground up as far as the entry budget allows; every floor left in the rest of
+    the void gets a bottom slab of sandstone, on which nothing spawns."""
+    void = set()
+    for x in range(-RMAX, RMAX + 1):
+        for z in range(-RMAX, RMAX + 1):
+            top = ptop(x, z)
+            for y in range(1, top + 1):
+                if (x, y, z) not in bp.blocks:
+                    void.add((x, y, z))
+    nb = ((1, 0, 0), (-1, 0, 0), (0, 1, 0), (0, -1, 0), (0, 0, 1), (0, 0, -1))
+    small, seen = set(), set()
+    for c in void:
+        if c in seen:
+            continue
+        comp, todo = [c], [c]
+        seen.add(c)
+        while todo:
+            x, y, z = todo.pop()
+            for dx, dy, dz in nb:
+                q = (x + dx, y + dy, z + dz)
+                if q in void and q not in seen:
+                    seen.add(q)
+                    comp.append(q)
+                    todo.append(q)
+        if len(comp) < 400:
+            small.update(comp)
+
+    def plan(yb):
+        packed = {c for c in void if c[1] <= yb} - small
+        rest = void - small - packed
+        slabs = {c for c in rest if (c[0], c[1] - 1, c[2]) not in rest}
+        return packed, slabs
+
+    yb = 1
+    packed, slabs = plan(yb)
+    while yb < 70:
+        p2, l2 = plan(yb + 1)
+        if len(small) + len(p2) + len(l2) > CORE_BUDGET:
+            break
+        yb, packed, slabs = yb + 1, p2, l2
+    for c in small:
+        bp.set(*c, body(*c))
+    for (x, y, z) in sorted(packed, key=lambda c: c[1]):
+        below = (x, y - 1, z)
+        loose = y > 1 and (below in packed or below in small)
+        bp.set(x, y, z, SAND if loose and hash3(x, y, z, 93) < 0.7 else (SS if y > 1 else PMUD))
+    for c in slabs:
+        bp.set(*c, "sandstone_slab[type=bottom,waterlogged=false]")
+
+
 # ------------------------------------------------------------------ builder
 def sun_ziggurat(bp):
     apron(bp)
@@ -1918,8 +2080,10 @@ def sun_ziggurat(bp):
     terrace_stairs(bp)
     dunes(bp)
     camp(bp)
+    collapses(bp)
     seal(bp)
     footings(bp)
+    core_fill(bp)
 
 
 VIEWS = [

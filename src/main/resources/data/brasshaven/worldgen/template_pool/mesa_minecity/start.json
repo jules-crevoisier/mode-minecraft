@@ -1,0 +1,699 @@
+{
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "brasshaven:chunked_template",
+        "size": [
+          145,
+          140,
+          200
+        ],
+        "cells": [
+          {
+            "location": "brasshaven:mesa_minecity/city/x0_z1",
+            "offset": [
+              0,
+              1,
+              39
+            ],
+            "size": [
+              21,
+              27,
+              5
+            ],
+            "blocks": 2088
+          },
+          {
+            "location": "brasshaven:mesa_minecity/city/x0_z2",
+            "offset": [
+              0,
+              1,
+              44
+            ],
+            "size": [
+              21,
+              27,
+              10
+            ],
+            "blocks": 4222
+          },
+          {
+            "location": "brasshaven:mesa_minecity/city/x0_z4",
+            "offset": [
+              3,
+              31,
+              105
+            ],
+            "size": [
+              18,
+              6,
+              6
+            ],
+            "blocks": 263
+          },
+          {
+            "location": "brasshaven:mesa_minecity/city/x0_z5",
+            "offset": [
+              0,
+              31,
+              111
+            ],
+            "size": [
+              21,
+              9,
+              19
+            ],
+            "blocks": 1746
+          },
+          {
+            "location": "brasshaven:mesa_minecity/city/x1_z0",
+            "offset": [
+              26,
+              24,
+              7
+            ],
+            "size": [
+              15,
+              50,
+              15
+            ],
+            "blocks": 1864
+          },
+          {
+            "location": "brasshaven:mesa_minecity/city/x1_z1",
+            "offset": [
+              21,
+              1,
+              22
+            ],
+            "size": [
+              20,
+              77,
+              22
+            ],
+            "blocks": 6967
+          },
+          {
+            "location": "brasshaven:mesa_minecity/city/x1_z2",
+            "offset": [
+              21,
+              1,
+              44
+            ],
+            "size": [
+              20,
+              82,
+              23
+            ],
+            "blocks": 9785
+          },
+          {
+            "location": "brasshaven:mesa_minecity/city/x1_z3",
+            "offset": [
+              22,
+              24,
+              67
+            ],
+            "size": [
+              19,
+              62,
+              22
+            ],
+            "blocks": 5315
+          },
+          {
+            "location": "brasshaven:mesa_minecity/city/x1_z4",
+            "offset": [
+              21,
+              24,
+              89
+            ],
+            "size": [
+              20,
+              23,
+              22
+            ],
+            "blocks": 351
+          },
+          {
+            "location": "brasshaven:mesa_minecity/city/x1_z5",
+            "offset": [
+              21,
+              31,
+              111
+            ],
+            "size": [
+              13,
+              7,
+              18
+            ],
+            "blocks": 573
+          },
+          {
+            "location": "brasshaven:mesa_minecity/city/x1_z7",
+            "offset": [
+              39,
+              32,
+              163
+            ],
+            "size": [
+              2,
+              2,
+              10
+            ],
+            "blocks": 32
+          },
+          {
+            "location": "brasshaven:mesa_minecity/city/x2_z0",
+            "offset": [
+              41,
+              24,
+              1
+            ],
+            "size": [
+              21,
+              48,
+              21
+            ],
+            "blocks": 6756
+          },
+          {
+            "location": "brasshaven:mesa_minecity/city/x2_z1",
+            "offset": [
+              41,
+              1,
+              22
+            ],
+            "size": [
+              21,
+              89,
+              22
+            ],
+            "blocks": 19912
+          },
+          {
+            "location": "brasshaven:mesa_minecity/city/x2_z2",
+            "offset": [
+              41,
+              1,
+              44
+            ],
+            "size": [
+              21,
+              89,
+              23
+            ],
+            "blocks": 26575
+          },
+          {
+            "location": "brasshaven:mesa_minecity/city/x2_z3",
+            "offset": [
+              41,
+              24,
+              67
+            ],
+            "size": [
+              21,
+              71,
+              22
+            ],
+            "blocks": 20723
+          },
+          {
+            "location": "brasshaven:mesa_minecity/city/x2_z4",
+            "offset": [
+              41,
+              24,
+              89
+            ],
+            "size": [
+              21,
+              44,
+              22
+            ],
+            "blocks": 5100
+          },
+          {
+            "location": "brasshaven:mesa_minecity/city/x2_z5",
+            "offset": [
+              51,
+              29,
+              111
+            ],
+            "size": [
+              11,
+              15,
+              22
+            ],
+            "blocks": 844
+          },
+          {
+            "location": "brasshaven:mesa_minecity/city/x2_z6",
+            "offset": [
+              46,
+              29,
+              133
+            ],
+            "size": [
+              16,
+              17,
+              23
+            ],
+            "blocks": 624
+          },
+          {
+            "location": "brasshaven:mesa_minecity/city/x2_z7",
+            "offset": [
+              41,
+              29,
+              156
+            ],
+            "size": [
+              21,
+              21,
+              17
+            ],
+            "blocks": 499
+          },
+          {
+            "location": "brasshaven:mesa_minecity/city/x3_z0",
+            "offset": [
+              62,
+              24,
+              0
+            ],
+            "size": [
+              21,
+              52,
+              22
+            ],
+            "blocks": 10168
+          },
+          {
+            "location": "brasshaven:mesa_minecity/city/x3_z1",
+            "offset": [
+              62,
+              1,
+              22
+            ],
+            "size": [
+              21,
+              89,
+              22
+            ],
+            "blocks": 30735
+          },
+          {
+            "location": "brasshaven:mesa_minecity/city/x3_z2",
+            "offset": [
+              62,
+              1,
+              44
+            ],
+            "size": [
+              21,
+              138,
+              23
+            ],
+            "blocks": 36157
+          },
+          {
+            "location": "brasshaven:mesa_minecity/city/x3_z3",
+            "offset": [
+              62,
+              1,
+              67
+            ],
+            "size": [
+              21,
+              102,
+              22
+            ],
+            "blocks": 24649
+          },
+          {
+            "location": "brasshaven:mesa_minecity/city/x3_z4",
+            "offset": [
+              62,
+              24,
+              89
+            ],
+            "size": [
+              21,
+              55,
+              22
+            ],
+            "blocks": 6948
+          },
+          {
+            "location": "brasshaven:mesa_minecity/city/x3_z5",
+            "offset": [
+              62,
+              29,
+              111
+            ],
+            "size": [
+              21,
+              19,
+              22
+            ],
+            "blocks": 2185
+          },
+          {
+            "location": "brasshaven:mesa_minecity/city/x3_z6",
+            "offset": [
+              62,
+              29,
+              133
+            ],
+            "size": [
+              21,
+              17,
+              23
+            ],
+            "blocks": 2065
+          },
+          {
+            "location": "brasshaven:mesa_minecity/city/x3_z7",
+            "offset": [
+              62,
+              29,
+              156
+            ],
+            "size": [
+              21,
+              15,
+              22
+            ],
+            "blocks": 1130
+          },
+          {
+            "location": "brasshaven:mesa_minecity/city/x3_z8",
+            "offset": [
+              71,
+              31,
+              178
+            ],
+            "size": [
+              12,
+              3,
+              22
+            ],
+            "blocks": 473
+          },
+          {
+            "location": "brasshaven:mesa_minecity/city/x4_z0",
+            "offset": [
+              83,
+              24,
+              1
+            ],
+            "size": [
+              21,
+              51,
+              21
+            ],
+            "blocks": 6909
+          },
+          {
+            "location": "brasshaven:mesa_minecity/city/x4_z1",
+            "offset": [
+              83,
+              1,
+              22
+            ],
+            "size": [
+              21,
+              89,
+              22
+            ],
+            "blocks": 28905
+          },
+          {
+            "location": "brasshaven:mesa_minecity/city/x4_z2",
+            "offset": [
+              83,
+              1,
+              44
+            ],
+            "size": [
+              21,
+              139,
+              23
+            ],
+            "blocks": 37174
+          },
+          {
+            "location": "brasshaven:mesa_minecity/city/x4_z3",
+            "offset": [
+              83,
+              1,
+              67
+            ],
+            "size": [
+              21,
+              96,
+              22
+            ],
+            "blocks": 22543
+          },
+          {
+            "location": "brasshaven:mesa_minecity/city/x4_z4",
+            "offset": [
+              83,
+              24,
+              89
+            ],
+            "size": [
+              21,
+              52,
+              22
+            ],
+            "blocks": 6447
+          },
+          {
+            "location": "brasshaven:mesa_minecity/city/x4_z5",
+            "offset": [
+              83,
+              29,
+              111
+            ],
+            "size": [
+              19,
+              20,
+              22
+            ],
+            "blocks": 2117
+          },
+          {
+            "location": "brasshaven:mesa_minecity/city/x4_z6",
+            "offset": [
+              83,
+              29,
+              133
+            ],
+            "size": [
+              11,
+              14,
+              23
+            ],
+            "blocks": 1053
+          },
+          {
+            "location": "brasshaven:mesa_minecity/city/x4_z7",
+            "offset": [
+              83,
+              29,
+              156
+            ],
+            "size": [
+              9,
+              15,
+              22
+            ],
+            "blocks": 198
+          },
+          {
+            "location": "brasshaven:mesa_minecity/city/x4_z8",
+            "offset": [
+              83,
+              31,
+              179
+            ],
+            "size": [
+              15,
+              7,
+              19
+            ],
+            "blocks": 702
+          },
+          {
+            "location": "brasshaven:mesa_minecity/city/x5_z0",
+            "offset": [
+              104,
+              24,
+              5
+            ],
+            "size": [
+              20,
+              37,
+              17
+            ],
+            "blocks": 2824
+          },
+          {
+            "location": "brasshaven:mesa_minecity/city/x5_z1",
+            "offset": [
+              104,
+              0,
+              22
+            ],
+            "size": [
+              20,
+              75,
+              22
+            ],
+            "blocks": 9945
+          },
+          {
+            "location": "brasshaven:mesa_minecity/city/x5_z2",
+            "offset": [
+              104,
+              1,
+              44
+            ],
+            "size": [
+              20,
+              75,
+              23
+            ],
+            "blocks": 13081
+          },
+          {
+            "location": "brasshaven:mesa_minecity/city/x5_z3",
+            "offset": [
+              104,
+              24,
+              67
+            ],
+            "size": [
+              20,
+              51,
+              22
+            ],
+            "blocks": 7686
+          },
+          {
+            "location": "brasshaven:mesa_minecity/city/x5_z4",
+            "offset": [
+              104,
+              24,
+              89
+            ],
+            "size": [
+              20,
+              27,
+              18
+            ],
+            "blocks": 1757
+          },
+          {
+            "location": "brasshaven:mesa_minecity/city/x6_z0",
+            "offset": [
+              124,
+              30,
+              8
+            ],
+            "size": [
+              4,
+              28,
+              14
+            ],
+            "blocks": 430
+          },
+          {
+            "location": "brasshaven:mesa_minecity/city/x6_z1",
+            "offset": [
+              124,
+              30,
+              22
+            ],
+            "size": [
+              11,
+              26,
+              22
+            ],
+            "blocks": 826
+          },
+          {
+            "location": "brasshaven:mesa_minecity/city/x6_z2",
+            "offset": [
+              124,
+              30,
+              44
+            ],
+            "size": [
+              11,
+              22,
+              23
+            ],
+            "blocks": 1327
+          },
+          {
+            "location": "brasshaven:mesa_minecity/city/x6_z3",
+            "offset": [
+              124,
+              30,
+              67
+            ],
+            "size": [
+              5,
+              18,
+              22
+            ],
+            "blocks": 719
+          },
+          {
+            "location": "brasshaven:mesa_minecity/city/x6_z4",
+            "offset": [
+              124,
+              30,
+              89
+            ],
+            "size": [
+              21,
+              14,
+              22
+            ],
+            "blocks": 491
+          },
+          {
+            "location": "brasshaven:mesa_minecity/city/x6_z5",
+            "offset": [
+              130,
+              32,
+              111
+            ],
+            "size": [
+              15,
+              3,
+              8
+            ],
+            "blocks": 162
+          }
+        ],
+        "projection": "rigid",
+        "processors": "brasshaven:none",
+        "ground_level_delta": 33,
+        "footprint": [
+          0,
+          0,
+          144,
+          199
+        ]
+      }
+    }
+  ]
+}

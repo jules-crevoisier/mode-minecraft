@@ -38,6 +38,11 @@ ABILITIES = {
     "pressure": ("Pressure vent", "Purge de vapeur", "radius"),
     "broadside": ("Cannon broadside", "Bordée de canon", "range"),
     "prism": ("Reflected sunray", "Rayon réfléchi", "range"),
+    "tongs": ("Tong hurl", "Jet de pince", "range"),
+    "scarab": ("Scarab swarm", "Essaim de scarabées", "range"),
+    "magnet": ("Lodestone pull", "Attraction magnétique", "radius"),
+    "zenith": ("Gravity inversion", "Inversion de gravité", "range"),
+    "fuse": ("Lit dynamite", "Dynamite allumée", "range"),
 }
 # BossWeaponItem flags, in bit order
 ABILITY_EFFECTS = {
@@ -157,6 +162,16 @@ FLAVOR = {
                           "Il gardait le midi d'un empire mort ; le bâton se souvient encore où se tenait le soleil."),
     "admiral_cutlass": ("He went down with his ship and kept the cannon loaded.",
                         "Il a sombré avec son navire et gardé le canon chargé."),
+    "warden_tongs": ("They held the titan's iron while it was still white; they have never cooled.",
+                     "Elles tenaient le fer du titan encore blanc ; elles n'ont jamais refroidi."),
+    "fourth_king_sceptre": ("They chiselled away his face and his name; the scarabs remember both.",
+                            "On a effacé au ciseau son visage et son nom ; les scarabées se souviennent des deux."),
+    "heart_lodeblade": ("The colossus fell; its heart kept beating and pulled the armour back on.",
+                        "Le colosse est tombé ; son cœur a continué de battre et a ramené l'armure sur lui."),
+    "curator_astrolabe": ("He catalogued the stars until one fell on him; now he keeps it for a head.",
+                          "Il cataloguait les étoiles jusqu'à ce que l'une lui tombe dessus ; il la garde pour tête."),
+    "baron_drillpick": ("He bought the mountain, then blasted it open for the gold inside; he still owes the miners.",
+                        "Il a acheté la montagne, puis l'a éventrée pour l'or ; il doit encore leur paie aux mineurs."),
 }
 
 # armour sets: one flavour per set prefix (all four pieces)

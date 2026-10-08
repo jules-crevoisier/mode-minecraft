@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "brasshaven:sun_priest"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "brasshaven:sun_priest"
+      }
+    ]
+  }
+}

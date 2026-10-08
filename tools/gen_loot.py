@@ -12,6 +12,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from wf.parts import USE_MOD_BLOCKS  # noqa: E402  (same switch for blocks and items)
 from wf import barrels  # noqa: E402  (the modest supplies of structure barrels)
 from wf import relics  # noqa: E402  (relic gear pools of the colossal structures)
+from wf import colossal_gear  # noqa: E402  (vault gear pools of the newer colossal structures)
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 OUT = os.path.join(ROOT, "src", "main", "resources", "data", "brasshaven", "loot_table", "chests")
@@ -342,6 +343,20 @@ TABLES = {
     "cc_offering": ("rune", (1, 3), (1, 2), (1, 2), "overworld"),
     "cc_crypt": ("jungle", (1, 2), (1, 2), (2, 3), "overworld"),
     "cc_cenote": ("ocean", (1, 2), (1, 3), (2, 3), "overworld"),
+    "mm_camp": ("guild", (2, 5), (0, 1), (0, 1), "overworld"),
+    "mm_town": ("bandit", (2, 4), (0, 1), (0, 1), "overworld"),
+    "mm_saloon": ("bandit", (2, 4), (1, 2), (0, 1), "overworld"),
+    "mm_dwelling": ("mine", (2, 4), (0, 1), (0, 1), "overworld"),
+    "mm_terrace": ("mine", (1, 3), (1, 2), (0, 1), "overworld"),
+    "mm_hoist": ("clockwork", (1, 3), (1, 2), (1, 1), "overworld"),
+    "mm_mill": ("foundry", (1, 3), (1, 2), (1, 1), "overworld"),
+    "mm_dynamite": ("ordnance", (2, 4), (1, 2), (1, 1), "overworld"),
+    "mm_haulage": ("mine", (2, 4), (1, 2), (0, 1), "overworld"),
+    "mm_shaft": ("mine", (1, 3), (1, 2), (1, 1), "overworld"),
+    "mm_office": ("guild", (1, 3), (1, 2), (1, 2), "overworld"),
+    "mm_flooded": ("mine", (1, 2), (1, 2), (1, 2), "overworld"),
+    "mm_safe": ("mine", (1, 2), (1, 2), (2, 3), "overworld"),
+    "mm_vault": ("mine", (1, 2), (1, 3), (3, 4), "overworld"),
     "cc_vault": ("jungle", (1, 2), (1, 3), (3, 4), "overworld"),
     "is_camp": ("guild", (2, 5), (0, 1), (0, 1), "overworld"),
     "is_chapter": ("library", (1, 3), (1, 2), (0, 1), "overworld"),
@@ -383,6 +398,18 @@ TABLES = {
     "chained_forge": ("nether", (1, 3), (1, 2), (1, 1), "nether"),
     "chained_chapel": ("soul", (1, 3), (1, 3), (1, 2), "nether"),
     "chained_vault": ("piglin", (1, 2), (1, 3), (3, 4), "nether"),
+    # titan_forge (Forge of the Basalt Titan): better deeper, the vault in the anvil's heel last
+    "tf_outpost": ("nether", (2, 4), (0, 1), (0, 1), "nether"),
+    "tf_casting": ("foundry", (2, 4), (1, 2), (0, 1), "nether"),
+    "tf_bellows": ("foundry", (2, 3), (1, 2), (0, 1), "nether"),
+    "tf_barracks": ("fortress", (2, 4), (1, 2), (0, 1), "nether"),
+    "tf_mine": ("nether", (1, 3), (1, 2), (1, 1), "nether"),
+    "tf_armoury": ("fortress", (1, 3), (1, 3), (1, 1), "nether"),
+    "tf_smelting": ("foundry", (1, 3), (1, 2), (1, 2), "nether"),
+    "tf_drift": ("nether", (1, 2), (1, 3), (1, 2), "nether"),
+    "tf_hammer": ("fortress", (1, 2), (1, 3), (2, 3), "nether"),
+    "tf_eyrie": ("foundry", (1, 2), (1, 3), (2, 3), "nether"),
+    "tf_vault": ("piglin", (1, 2), (1, 3), (3, 5), "nether"),
     "void_observatory": ("end", (1, 3), (1, 2), (1, 2), "end"),
     "chorus_garden": ("end", (2, 4), (1, 2), (0, 1), "end"),
     "end_archive": ("end", (1, 3), (1, 3), (1, 2), "end"),
@@ -397,6 +424,17 @@ TABLES = {
     "halo_gate": ("end", (1, 3), (1, 2), (1, 2), "end"),
     "halo_crypt": ("end", (1, 2), (1, 3), (2, 3), "end"),
     "halo_vault": ("end", (1, 2), (1, 3), (3, 4), "end"),
+    # starfall_library (The Starfall Library): better higher and deeper, the forbidden stacks behind the boss last
+    "sl_camp": ("end", (2, 4), (0, 1), (0, 1), "end"),
+    "sl_maproom": ("library", (2, 4), (1, 2), (0, 1), "end"),
+    "sl_gallery": ("end", (2, 3), (1, 2), (0, 1), "end"),
+    "sl_stacks": ("library", (1, 3), (1, 2), (1, 1), "end"),
+    "sl_scriptorium": ("library", (1, 3), (1, 3), (1, 1), "end"),
+    "sl_index": ("library", (1, 3), (1, 3), (1, 2), "end"),
+    "sl_gallery_high": ("end", (1, 3), (1, 3), (1, 2), "end"),
+    "sl_observatory": ("end", (1, 2), (1, 3), (2, 3), "end"),
+    "sl_meteorite": ("end", (1, 2), (1, 3), (2, 3), "end"),
+    "sl_vault": ("library", (1, 2), (1, 3), (3, 5), "end"),
     "citadel_common": ("citadel", (3, 6), (1, 2), (0, 1), "overworld"),
     "citadel_armory": ("citadel", (1, 3), (2, 4), (0, 1), "overworld"),
     "citadel_library": ("library", (1, 3), (1, 3), (1, 1), "overworld"),
@@ -446,6 +484,7 @@ def table(name, spec):
     if USE_MOD_BLOCKS:
         pools.append(pool((1, 2), MOD_ITEMS[tier]))
         pools += relics.loot_pools(name)  # relic gear of the colossal structures, rarer deeper in
+        pools += colossal_gear.loot_pools(name)  # vault gear: deep chests and vaults only
     return {"type": "minecraft:chest", "pools": pools, "random_sequence": f"brasshaven:chests/{name}"}
 
 

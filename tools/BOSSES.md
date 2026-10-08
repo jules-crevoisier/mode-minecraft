@@ -226,8 +226,9 @@ Previews: `python3 tools/gen_models.py --preview --only iron_helmsman` → `buil
 
 ## 7. Champion of the Fallen Colossus: The Bronze Sentinel (La Sentinelle d'airain)
 Files: `tools/wf/mobs/bronze_sentinel.py` (model), `src/main/java/com/brasshaven/entity/boss/BronzeSentinel.java`
-(moveset). No lair module: the arena is the toppled statue's helm, whose seal wakes it (`BOSS` in
-`tools/wf/structures/fallen_colossus.py`). Reward: `remembrance_bronze_sentinel` → **Greatsword of the Sentinel**
+(moveset). No lair module: it stands guard on the rib hall floor of the toppled statue, under the breach, whose seal
+wakes it (`SENTINEL` in `tools/wf/structures/fallen_colossus.py`, radius 11, no mist; the helm now belongs to the
+Colossus's Heart, section 24). Reward: `remembrance_bronze_sentinel` → **Greatsword of the Sentinel**
 (`sentinel_greatsword`, LITHITE 8 / -3.2, ERUPT: a crack of rune light tears along a 12-block line and throws foes up),
 plus copper, map fragments, emeralds, diamonds and moss (`gen_data.py`). Quest: `explorer/boss_bronze_sentinel`.
 
@@ -251,10 +252,10 @@ bar, phase 2 at 50%: the plates fall away (armour -6, +20% speed).
 | topple | 2 | 20 / 20 / 18 | 5-22 | Spectacle: crouch while a gold ring follows the target; leap, the ring locks where the target stood (max 18 blocks), lands sword-first a second later: 22 in r 4 + a ring (9). Long stuck recovery. |
 | beams | 2 | 20 / 50 / 14 | 0-30 | Blade raised to the sky and driven into the floor; 3 volleys (0.8 s apart) of 32-block rune-light lines, one through every player plus one stray, warned 0.9 s by gold dots, then flaring (14). Step aside; too tall to jump. |
 
-**Lair (the helm).** In by the broken wrist: forearm tunnel → elbow chamber → arm stair → balcony of the rib hall (30-block
-vault opened by a breach) → grand stair to the gorget dais and its waystone (site of grace) → neck tunnel → mist → the
-**helm** arena (radius ~14, ceiling ~16, tuff rings on the floor, soul and plain campfires round the wall, daylight
-through the visor bars) → the vault under the arena floor behind sealed bars, an iron door out through the cheek.
+**Lair (the rib hall).** In by the broken wrist: forearm tunnel → elbow chamber → arm stair → balcony of the rib hall (30-block
+vault opened by a breach; the Sentinel's seal is on its floor under the breach) → grand stair to the gorget dais and its waystone (site of grace) → neck tunnel → mist → the
+**helm** arena of the Colossus's Heart (section 24) → the vault under the arena floor behind sealed bars, an iron door
+out through the cheek.
 
 Previews: `python3 tools/gen_models.py --preview --only bronze_sentinel` → `build/previews/models/bronze_sentinel.png`.
 
@@ -1064,6 +1065,356 @@ and cage timers use `cooldownScale()`) and compressed wind-ups that still play e
 Previews: `python3 tools/gen_models.py --preview --only strangler_queen` (and `--only jaguar_spirit`) →
 `build/previews/models/strangler_queen.png`, `jaguar_spirit.png`; held macuahuitl:
 `python3 tools/art_sheet.py --kind held --only queen_macuahuitl`.
+
+## 23. Champion of the Necropolis of Kings: The Fourth King (Le Quatrième Roi)
+Files: `tools/wf/mobs/fourth_king.py` (model `fourth_king`), `src/main/java/com/brasshaven/entity/boss/FourthKing.java`
+(moveset, canopic jars, swarms, sealed tomb). No lair module: the arena is the necropolis' existing king's arena at the
+bottom (floor y -37, radius 16, 17 high, columns at 15.6, jackals at 13.2, hung lanterns and ochre froglight stars in
+the vault, an oculus shaft over the centre; `BOSS` in `tools/wf/structures/rock_necropolis.py`, seal radius 15). He
+replaces the reused Dune King there (the Dune King stays in the Rust Mesa Mine-City), and the fourth king of the façade
+(x 34) now has his face chiselled away. Reward: `remembrance_fourth_king` → **Scarab Sceptre of the Fourth King**
+(`fourth_king_sceptre`, LITHITE 8 / -3.0, new ability shape **SCARAB** in `BossWeaponItem`: a scarab flies along your
+aim up to 16 blocks (stops on walls) and bursts into a swarm on the first foe or wall; the swarm bites (9, Poison II
+4 s, Hunger II 8 s) and leaps to the nearest unbitten foe within 5 blocks, up to 4 leaps, 20% weaker each leap; the
+wielder heals 1 per foe bitten; held model `scarab_sceptre` in `wf/held3d.py`, sprite `scarab_sceptre`), plus gold, map
+fragments, emeralds, diamonds, lapis, chiselled sandstone, decorated pots and an 8% enchanted golden apple
+(`gen_data.py`). Quest: `explorer/boss_fourth_king`.
+
+**Concept.** The fourth of the seated kings, the one whose face and name were chiselled off the façade, risen as a
+gaunt mummified monarch 6 blocks tall: wrapped shins and ribs, a pleated kilt, a gold-and-lapis collar, a lapis-striped
+cape, a cracked sandstone-and-lapis mask whose right half is hollowed out with one blue eye burning in the hole, and a
+snapped white crown. Right hand: a three-chain flail; left: a scarab sceptre crowned with a glowing sun-disc.
+
+**Stats.** 640 health, armour 12, toughness 4, poise 120, knockback resistance 1.0, no fall damage, blue bar. Phase 2
+at 65% (roar, +10% speed, the jars rise again, wider beams, chained follow-ups); phase 3 at 30%, driven by the class
+like the Chained Jailer: `seal` once, then the gaze and `verdict` every 15 s (x `cooldownScale()`). `drain` is
+scheduled in every phase (every 21 s x `cooldownScale()` when jars stand and he is below 92%). Range 999 / weight 0
+keeps the scheduled moves out of the picker.
+
+| Move | Phase | Wind-up / active / recovery | Range | What it does |
+|---|---|---|---|---|
+| flail | 1-3 | 14 / 26 / 14 | 0-6.5 | Lashes at 0.7 s and 1.2 s (12 each, ±70°, 5.5 out), then an overhead smash down a 7-block line (15). P2: 35% chains `smite` or `beam_high`. |
+| smite | 1-3 | 20 / 4 / 18 | 0-7 | Sceptre brought down 3.5 ahead: 20 in r 3. P2: a wave to 10 (9). |
+| beam_low | 1-3 | 22 / 40 / 16 | 0-16 | Ankle-high beam sweeping from his right to his left over 100° (P2 120°): 15 + Slowness II, grounded players only. Jump it. P2: 40% chains `beam_high`. |
+| beam_high | 1-3 | 20 / 30 / 16 | 0-16 | Chest-high beam swinging back and forth over ±40° (P2 ±50°): 16. Nothing to duck under: sidestep out of the fan, or stand within 2.5 blocks. |
+| sandfall | 1-3 | 18 / 6 / 14 | 0-24 | Marked circles on the target and `scaledCount(2)` strays (P2: every player and `scaledCount(4)` strays, +1 when sealed); sand pours 30 ticks later (P2 26): 14 in r 2.2 + Slowness II + Blindness. Buries any scarab swarm it lands on. |
+| swarm | 1-3 | 16 / 4 / 14 | 0-22 | A scarab swarm rises (at most `scaledCount(1)`, P2 2) and follows one player for 12 s (0.19 b/t, P2 0.23): 3 + Poison + Hunger every 10 ticks within 1.4. |
+| procession | 1-3 | 14 / 16 / 14 | 8-24 | He glides toward the target for 8 ticks (12 on contact), then smashes the flail down a line (16). |
+| sandburst | 1-3 | 12 / 3 / 12 | 0-4.5 | Anti-hug: 11 in r 4.5. P2: a wave to 8 (7). |
+| drain | 1-3 | 20 / 50 / 16 | scheduled | He kneels and draws streams from every standing jar; at the end he heals 3.5% (P2 4.5%) of max health per jar still standing. |
+| seal | 3 (once) | 30 / 20 / 20 | scheduled | Guarded 62 ticks. The tomb seals: lanterns go out, froglight/glowstone stars turn blue terracotta, the oculus is stopped with chiselled sandstone, Darkness on every fighter (refreshed every 40 ticks), a wave to 13 (12), +12% speed. Three king spirits appear round the walls. |
+| gaze | 3 | 20 warn + 70 sweep | between verdicts | One spirit at a time sweeps a cone (half-angle 11°) across the room: 6, line of sight required (a column or the king blocks it), 10-tick per-target cooldown. |
+| verdict | 3 | 24 / 80 / 16 | scheduled | All three spirits' cones turn together (2.4°/tick), reaching from 3 out to the walls and back: 8 + Wither. Stand in the gap between two cones. |
+
+**Canopic jars.** `minecraft:decorated_pot` blocks, 4 + 1 per extra player (at most 6), at radius 9.5 round the centre
+(nearest free floor cell), raised at the fight start and again on phase 2. A broken jar is detected each tick and its
+dropped pot item removed.
+
+**The blocks are temporary.** Jars, extinguished lanterns, blue stars and the oculus plug are recorded with their
+original state and put back (only if the block is still the one placed, top first):
+- when no player is within radius + 14 of the arena;
+- when the fight resets to phase 1;
+- in `onDefeated` and in `remove()`;
+- after a reload (positions are saved as `KingBlocks` and restored on the first tick).
+
+Beams, sand, swarms and gazes are particles and hit checks only.
+
+**Co-op and NG+** come from the engine (`BossDifficulty`, `BossCycles`): health, damage, poise, cooldowns (the drain
+and verdict timers use `cooldownScale()`) and compressed wind-ups that still play every authored tick. Strays, swarms
+and jars scale with the party.
+
+Previews: `python3 tools/gen_models.py --preview --only fourth_king` → `build/previews/models/fourth_king.png`; held
+sceptre: `python3 tools/art_sheet.py --kind held --only fourth_king_sceptre`.
+
+## 24. Champion of the Fallen Colossus: The Colossus's Heart (Le Cœur du Colosse)
+Files: `tools/wf/mobs/colossus_heart.py` (model `colossus_heart`, texture variants `whole`, `burst`, `reforged`),
+`src/main/java/com/brasshaven/entity/boss/ColossusHeart.java` (moveset). No lair module: the arena is the statue's helm
+(`BOSS` in `tools/wf/structures/fallen_colossus.py`, seal radius 13). It replaces the Bronze Sentinel there; the
+Sentinel keeps its fight in the same structure, now sealed under the breach on the rib hall floor
+(`SENTINEL`, seal radius 11, no mist), so its quest and Bane of Legends stay reachable. Reward:
+`remembrance_colossus_heart` → **Lodeblade of the Colossus's Heart** (`heart_lodeblade`, LITHITE 9 / -3.1, new ability
+shape **MAGNET** in `BossWeaponItem`: the heart beats once; every foe the wielder can see within 9 blocks is dragged to
+within 1.5 blocks of them, takes 8 plus 0.4 per point of its armour (at most +6) and Slowness II for 2 s, and loose
+items and experience orbs in reach fly to the wielder; held model `heart_lodeblade` in `wf/held3d.py`, sprite
+`greatsword`), plus gold, map fragments, emeralds, diamonds, copper blocks, iron, a lodestone and a 12% heavy core
+(`gen_data.py`). Quest: `explorer/boss_colossus_heart`.
+
+**Concept.** The colossus fell, but its brass engine-heart kept beating in the helm. It drags loose bronze plates and
+rubble together into a knight six blocks tall, held by glowing amber tethers: an iron rib cage around the heart (wide
+gaps so the beating brass shows), copper pipes, a pressure gauge and a valve wheel, a broad bronze greatsword with a
+long reach in the right hand, a round shield-plate on the left forearm, and the empty helm floating a hand above the
+shoulders, its visor slit glowing amber. Bronze with verdigris drips, amber only at the seams and the heart. Variant
+`burst`: the armour is gone, the bare heart, rib cage and tethers remain, and two rings of plates orbit it. Variant
+`reforged`: the armour back on, each plate cracked with a glowing amber seam (plus `Attributes.SCALE` +15%).
+
+**Stats.** 640 health, armour 14, toughness 5, attack 15, poise 120, knockback resistance 1.0, no fall damage, yellow
+bar. Three phases. Phase 2 at 65%: the **burst** (the roar animation; the plates fly off at roar tick 30 and the model
+switches to `burst`): armour -8 (`colossus_heart_open`), +35% damage taken while open, four plates orbit the heart
+(r 1.8-4.2, 6 per touch, 15-tick cooldown per player, not during `rings`). Phase 3 at 30%, driven by the class like the
+Chained Jailer: `reforge` once (form `reforged`, open armour modifier removed, +15% scale, +10% speed), then `quake`
+every 200 ticks x `cooldownScale()`. Range 999 / weight 0 keeps both out of the picker.
+
+**Three forms on a two-phase picker.** Knight moves (`sweep`, `cleave`, `lunge`, `shieldthrow`) are only legal in
+armour (phase 1 and 3), plate moves (`rings`, `platestorm`, `vent`) only while open (phase 2); `rubble` and `magnet`
+work in every form. A move rolled in the wrong form hands over at its `start` step (`gate` → `redirect`) to a weighted
+pick among the legal moves whose range and own cooldown fit, falling back to `platestorm` (open) or `rubble` (armour).
+
+| Move | Phase | Wind-up / active / recovery | Range | What it does |
+|---|---|---|---|---|
+| sweep | 1, 3 | 18 / 3 / 14 | 0-8.5 | Greatsword drawn back over the right shoulder (arcs drawn in gold), swept over 210° out to 7.5 (x scale): 16. P3: 45% chains into cleave. |
+| cleave | 1, 3 | 22 / 4 / 18 | 0-12 | Raised two-handed (ring 4 ahead, the crack's line in gold dots), driven in: 20 in r 2.8, then a crack runs on to 16 blocks (13, thrown up). P3: three cracks at ±22°. |
+| lunge | 1, 3 | 16 / 10 / 16 | 5-15 | Blade at the hip (line drawn 12 ahead), a dash of 1.15 b/t for 8 ticks: 15 once per target. P3: 40% chains into sweep. |
+| shieldthrow | 1, 3 | 18 / 40 / 12 | 4-20 | Shield-plate drawn across the body (its loop drawn in verdigris), flung: a falling-block plate (never placed) flies a loop out past the target on its right and back on its left: 12 per pass (10-tick cooldown per target). P3: two loops, the second mirrored. |
+| rubble | 1-3 | 20 / 24 / 14 | 0-30 | Arms raised: a ring follows every player for 12 ticks (gold), then locks (red); chunks torn from the helm wall (dust at the source) are hurled one every 3 ticks on a 14-tick arc: 13 in r 2.5, lift. |
+| magnet | 1-3 | 14 / 34 / 14 | 0-16 | Arms wide, an iron ring closing in: for 1.4 s every player within 16 (P3 18, x1.2 pull) and every dropped item is dragged in, +0.022 b/t per metal armour piece; the clang at active 30: 14 in r 4.5 (16 in r 5 while open), red ring for the last half second. |
+| rings | 2 | 20 / 70 / 14 | 0-30 | The heart glides to the arena centre during the wind-up (first bands drawn red). Ticks 0-34: plates sweep bands 2-5.5 and 8.5-11.5; ticks 25-39 amber warning of the next bands; ticks 40-69: bands 0-2, 5.5-8.5 and 11.5-15.5. Each band has a turning 70° gap: 10 per pass, 12-tick cooldown. The first wave's safe bands are the floor's chiselled tuff rings (d 6-7, 12-13). |
+| platestorm | 2 | 16 / 30 / 14 | 0-26 | Plates gather in a crown, then 6 shots every 5 ticks, each down a line drawn 8 ticks before toward a player, 1.6 b/t: 9 to the first creature on the line. |
+| vent | 2 | 14 / 4 / 14 | 0-6 | Anti-hug: amber ring r 4, the heart bursts: 14 in r 4 (pushed), a steam wave to 9 (8, jump it), rust mites spill out (`scaledCount(2)`, at most `scaledCount(4)` alive). |
+| reforge | 3 (once) | 30 / 20 / 20 | scheduled | Invulnerable 54 ticks; a spiral of plates closes on the heart; the armour slams back on: 12 in r 5 and a wave to 14 (12). |
+| quake | 3 | 18 / 30 / 14 | scheduled | Sword point-down (ring ahead): 14 in r 2.5. Three marks per player (on them and two within 2-5 blocks, up to 4 players) plus `scaledCount(2)` strays; each warned 10 ticks (ring + dust), then a chunk falls from the ceiling: 14 in r 1.8 + Slowness, and leaves a heap of rubble. |
+
+**Adds.** `rust_mite` from `vent` only (4 health, 2 damage, crumbles after 60 s, minion tag); the live ones are
+discarded on death, reset or when the arena empties.
+
+**The blocks are temporary.** Thrown shields, hurled rubble and falling debris are `FallingBlockEntity` visuals with
+drops cancelled: they are discarded before landing and never placed. The only placed blocks are the quake's heaps:
+`minecraft:tuff` / `minecraft:cobbled_deepslate`, 1-2 high, only into air on solid ground and never inside an entity,
+at most 80 at a time, each with a 160-tick life. They are removed (only if still that block):
+- when their time is up;
+- when no player is within radius + 14 of the arena;
+- when the fight resets to phase 1 (`resetForm` also restores the whole form, scale and armour);
+- in `onDefeated` and in `remove()`;
+- after a reload (positions are saved as `HeartRubble` and removed on the first tick).
+
+**Co-op and NG+** come from the engine (`BossDifficulty`, `BossCycles`): health, damage, poise, cooldowns (the quake
+timer uses `cooldownScale()`) and compressed wind-ups. Mites and stray debris use `scaledCount`; rubble, magnet,
+platestorm and quake marks land on every player (up to 4 for the marks).
+
+Previews: `python3 tools/gen_models.py --preview --only colossus_heart` → `build/previews/models/colossus_heart.png`,
+`colossus_heart_burst.png`, `colossus_heart_reforged.png`; held lodeblade:
+`python3 tools/art_sheet.py --kind held --only heart_lodeblade`.
+
+## 25. Champion of the Forge of the Basalt Titan: The Anvil Warden (Le Gardien de l'enclume)
+Files: `tools/wf/mobs/anvil_warden.py` (model `anvil_warden`), `src/main/java/com/brasshaven/entity/boss/AnvilWarden.java`
+(moveset). No lair module: the arena is the forge's existing anvil face (`arena()` in `tools/wf/structures/titan_forge.py`,
+`BOSS` there, seal radius 16): a 49 x 39 slab at feet 36, rimmed by a 1-high iron parapet, 34 blocks over the lava lake;
+the titan's left hand and fingers lie on its north-west corner (2-9 blocks high), the root of the anvil's horn rises
+1-2 blocks at the east edge (z -3..3) and runs on east as a narrow walkway, braziers stand in three corners, and the
+titan's great hammer hangs with its face 30 blocks over the floor (centre 4 blocks west of the seal). It replaces the
+reused Forge King. Reward: `remembrance_anvil_warden` → **Searing Tongs of the Anvil Warden** (`warden_tongs`, EMBER
+8 / -3.0, fire-resistant, new ability shape **TONGS** in `BossWeaponItem`: the nearest foe in front of you, within 4.5
+blocks and 50° of your aim, is seized and hurled up to 10 blocks along your aim (walls stop it); every other foe it
+crashes through takes 75% (9), it slams down at the end for 12 and burns 5 s, and every foe within 2.5 blocks of the
+impact takes half; bosses and creatures wider than 2 blocks are seared but not moved; no target = no cooldown; held model
+`warden_tongs` in `wf/held3d.py`, sprite shape `tongs` in `wf/itemart_shapes.py`), plus gold, Ancient Embers, emeralds,
+diamonds, iron and magma blocks, an anvil and a 30% netherite scrap (`gen_data.py`). Quest: `nether/boss_anvil_warden`.
+
+**Concept.** The smith the titan's forge was built for: a hunched golem of columnar basalt 5.6 blocks tall whose every
+joint glows with the forge's heat. For a head it wears a graphite crucible banded in brass, its spout jutting forward,
+molten metal brimming at the lip and a glowing visor slit. Asymmetry: its heavier right arm (iron pauldron, brass
+bracer) carries a forge hammer whose white-hot head nearly drags on the floor; its left arm holds long tongs out in
+front of it with a glowing billet in their jaws. A scorched leather apron, a quench bucket on the left hip, three
+basalt columns with molten tops jutting from the left shoulder-blade.
+
+**Stats.** 640 health, armour 14, toughness 6, poise 130, knockback resistance 1.0, fire immune, no fall damage, red
+bar. Three phases: phase 2 at 65% (roar, +8% speed, the titan's hammer 2 s after the roar); phase 3 at 30%, driven by
+the class like the Chained Jailer: when free it chains `overheat` once, then `vent` every 300 ticks of fighting
+(x `cooldownScale()`). `titan` is scheduled in every phase: first after 300 fighting ticks, then every 600 (phase 1),
+460 (phase 2), 420 (phase 3) ticks x `cooldownScale()`; the scheduled timers count real fighting time and fire at the
+next free moment, and never within 100 ticks of each other. Range 999 / weight 0 keeps them out of the picker.
+
+| Move | Phase | Wind-up / active / recovery | Range | What it does |
+|---|---|---|---|---|
+| slam | 1-3 | 18 / 6 / 16 | 0-8 | Hammer overhead (circle and crack line in embers): 16 in r 2.8 at 3.5 ahead, then a shockwave runs 14 along the anvil at 0.9 b/t (P3 1.15): 10 and a toss, half-width 1.2, dies where the face ends. P2: three lines at -28/0/+28. P2 end: 35% chains quench (close) or charge. |
+| combo | 1-3 | 14 / 24 / 14 | 0-6.5 | Hammer forehand and backhand at 0.7 s and 1.2 s: 13 each over ±75°, 5.5 out, 2 s fire. P2: overhead at 1.7 s, 16 down a 6.5 line plus a short shockwave (9). P3 end: 50% chains charge if you are past 7. |
+| grab | 1-3 | 16 / 20 / 14 | 0-6 | Tongs thrust (narrow line 5.5): the first player caught takes 8, is lifted and held 12 ticks, then flung (6) toward the anvil's centre to a floor spot at least 3 inside the edge (behind it if it stands in the middle). |
+| splash | 1-3 | 20 / 10 / 14 | 3-24 | Crucible tipped: 3 marked tiles (target + two beside it; P2 every player up to 4 + 2 strays, P3 3 strays), following until 0.7 s. Globs fly 10 ticks: 12 in r 2.2, 3 s fire, a burning patch r 2 for 3 s (P3 5 s). |
+| quench | 1-3 | 12 / 4 / 12 | 0-5 | Anti-hug: steam burst 11 in r 5, then 2 every 0.5 s for 2 s inside. P2: steam geysers (16-tick warning, 9 in r 1.8) under up to 3 players farther than 6. |
+| charge | 1-3 | 16 / 16 / 16 | 7-24 | Path and end ring drawn; it runs to 1.5 short of you in 12 ticks (14 to anyone in the way), then an uppercut at 1.4 s: 12 over ±70°, 4.5 out. The end point is always a safe floor spot inside the face. |
+| quake | 2-3 | 20 / 16 / 16 | 0-12 | Hammer slam (14 in r 3) and a ring wave to 12 (10, jump it); 12 ticks later the tongs-fist sends a second ring (P3 faster). |
+| billet | 2-3 | 18 / 6 / 14 | 8-26 | A ring follows the target until tick 14, then locks; the billet flies 12 ticks and bursts: 13 in r 2.5, 4 s fire, a patch. P3: it bounces 5 blocks on along the throw (10 in r 2). |
+| titan | 1-3 | 40 / 10 / 16 | scheduled | It beats its hammer on the tongs three times (ticks 8, 16, 24: clangs and a flash of the rim). The zone under the titan's hammer (found at runtime: the columns 26-34 above the floor within 14 of the seal that hold blocks, their mean and their area give the centre and radius, 5-9; about 7.7 here) is ringed in red with a shrinking inner ring, ash and falling lava from the hammer's face. Impact: 26 in the zone, 3 s fire; a shockwave rolls from the zone's rim to 17 (8, jump it). Away from the forge the zone (r 6) falls round the target. |
+| overheat | 3 (once) | 30 / 20 / 20 | scheduled | Guarded 2.6 s while it drinks the crucible; a fire wave to 13 (12), +18% speed; from then on fire lasts 1 s longer, patches 5 s, a burning trail (r 1.3, 4 s, every 1.2 blocks it moves), red embers over the whole face. |
+| vent | 3 | 40 / 6 / 24 | scheduled | Arms locked, crucible boiling over (2 s, the 14 reach ringed in red). A sheet of slag-steam rolls out at 0.8 above the floor: everyone within 14 whose line from it at that height is clear takes 20, 5 s fire and a push. Cover = any solid block on that line: the horn's root (stand on the horn walkway east of it), the titan's fingers and hand, a brazier. The streams are drawn stopping at blocks. |
+
+Burning patches: 3 every 10 ticks to whoever stands in one (|dy| < 1.3) plus 2 s fire; at most 24 at a time.
+
+**Fair edges.** The face drops 34 blocks into lava, so the `strike` override caps push at 1.3; beyond 12 blocks from the
+centre the outward part of any push is removed and the rest halved, lift is capped at 0.3; if a probe 2.5 blocks along
+the push finds no floor within 2.5 below, the push is cancelled. The grab throw, the charge end, the splash and billet
+spots are clamped inside the face (reach 15) and checked for floor; shockwaves die where the floor ends.
+
+**No blocks.** It places nothing: patches, trail, steam and the titan's blow are particles and hit checks. They are
+cleared when the fight resets to phase 1, when no player is within radius + 14, on death and on removal.
+
+**Co-op and NG+** come from the engine (`BossDifficulty`, `BossCycles`): health, damage, poise, cooldowns (the titan and
+vent timers use `cooldownScale()`) and compressed wind-ups. Splash tiles, geysers and the vent hit every player.
+
+Previews: `python3 tools/gen_models.py --preview --only anvil_warden` → `build/previews/models/anvil_warden.png`; held
+tongs: `python3 tools/art_sheet.py --kind held --only warden_tongs`.
+
+## 26. Champion of the Starfall Library: The Star-Eater Curator (Le Conservateur dévoreur d'étoiles)
+Files: `tools/wf/mobs/star_curator.py` (model), `src/main/java/com/brasshaven/entity/boss/StarCurator.java` (moveset,
+with its tomes as a private `ShulkerBullet` subclass). No lair module: the arena is the library's existing crater chamber
+under the island (`arena()` in `tools/wf/structures/starfall_library.py`: floor radius 17.4, glassy obsidian walls, a dome
+13 high at the wall and 19 at the centre, the oculus shaft overhead, a meteorite fragment in the south-east wall, four
+starlight braziers crowned with amethyst clusters at radius 14.9 on the diagonals; seal radius 16, mist on the grace
+stair). `BOSS` there is `brasshaven:star_curator` (it replaces the borrowed Archivist). Reward:
+`remembrance_star_curator` → **Astrolabe of the Star-Eater Curator** (`curator_astrolabe`, VOID 8 / -3.0, new ability
+shape **ZENITH** in `BossWeaponItem`: gravity inverts at the aimed spot, up to 16 blocks short of walls; every foe
+within 4 blocks of it takes 10, is drawn toward its heart and hurled up, Levitation III 1.5 s and Glowing 4 s; held model
+`curator_astrolabe` in `wf/held3d.py`, sprite `astrolabe_staff` in `wf/itemart_shapes.py`), plus void shards, emeralds,
+diamonds, amethyst shards, chiseled bookshelves, books, an end crystal, a 20% enchanted golden apple and a 15% recovery
+compass (`gen_data.py`). Quest: `end/boss_star_curator`.
+
+**Concept.** The keeper who catalogued the stars until one fell on his archive, 5.6 blocks: a very tall, narrow scholar
+in a floor-length robe of indigo velvet (three flaring tiers, a torn hem, brass edging, a purpur front panel,
+constellations stitched in glowing thread), a stiff brass-rimmed purpur mantle and a standing collar, an astrolabe
+pectoral. His head is the meteorite: a charred, knobbly rock split open across the face on a starfield (nebula, two
+bright stars for eyes, an ember rim), a chip of rock and four motes circling it. Five books orbit at chest height.
+Asymmetry: the right hand holds the astrolabe staff (a dark shaft ringed in brass, an astrolabe disc inside two
+turning armillary hoops round a white star); the left is raised palm-up with a page and a mote of light on it.
+
+**Stats.** 780 health (End tier), armour 14, toughness 5, poise 125, knockback resistance 1.0, purple bar, no fall
+damage. Three phases: phase 2 at 65% (roar, +10% speed); phase 3 at 30%, driven by the class (like the Chained
+Jailer): when he is free he chains `invert` once, then every 10 s (x `cooldownScale()`) `blink`, which always chains
+`starlance`; the gravity pulses run on their own timer. Range 999 / weight 0 keeps the scheduled moves out of the picker.
+
+| Move | Phase | Wind-up / active / recovery | Range | What it does |
+|---|---|---|---|---|
+| staff | 1-3 | 14 / 24 / 14 | 0-6.5 | Arc drawn (±70°, 5.5): sweeps at active 0 and 10 (13 each). P2: a thrust at active 20 down a 7-block line (16); 35% chains orbit (close) or lance. |
+| volley | 1-3 | 18 / 10 / 14 | 5-28 | Books spin in: 3 tomes at the target (P2: 2 per player up to 4 players, + `scaledCount(1)` at the target), 7 (P2 6) and Slowness 1.5 s. Tomes are shulker bullets underneath: they drift after their target (weak homing) and **any hit or arrow shoots one down**; they crumble after 8 s and are never saved. P2: 30% chains lance at range. |
+| well | 1-3 | 20 / 40 / 16 | 0-14 | Core ring (r 4) drawn, dust streaming in. For 30 ticks every player within 15 is drawn toward him (0.11-0.16 b/t every other tick: sprinting outward holds), the core flashing faster; at active 30 it implodes: 15 within 4. P2: a ring to 10 (8, jump). |
+| starfall | 1-3 | 16 / 50 / 14 | 0-30 | A ring follows each player (up to 4) for 14 ticks, locks, a shard falls 16 ticks (a falling light): 14 within 2.5; `scaledCount(2)` strays. P2: a second volley at active 25. |
+| orbit | 1-3 | 12 / 16 / 12 | 0-4.5 | Anti-hug: the books spin out, 11 within 5. P2: a page ring to 9 (7, jump). |
+| lance | 1-3 | 16 / 10 / 16 | 6-20 | Gap-closer: the line drawn (to 3 past the target, at most 14, inside the arena); he streaks along it in 6 ticks: 15 within 1.6 of his path. P2: 40% chains staff. |
+| pagestorm | 2-3 | 24 / 6 / 14 | 0-30 | Starts a storm effect (not while one runs) and goes on fighting: 1.5 s of warning, then 7 s. Safe circles (r 3, one per player, 2-4) wheel round the centre at radius min(9, reach - 4), 0.016 rad/tick. Outside them: Blindness (refreshed) and 2 a second. |
+| constellation | 2-3 | 20 / 30 / 14 | 0-30 | Six stars (one near each player, up to 4, the rest at least 4 apart), joined nearest-first; the lines are drawn for 1 s, then burst one after another every 3 ticks: 13 and a toss within 1 of a line. |
+| invert | 3 (once) | 40 / 20 / 20 | scheduled | Guarded 64 ticks: he rises, robe streaming up, dust rising off the floor; a ring of force (12, to 13, jump), +12% speed, the pulse and blink timers start. |
+| blink | 3 | 14 / 4 / 6 | scheduled | A pillar of light over the next node (one with the target within 12 when possible, never his current one); he teleports there, then `starlance`. |
+| starlance | 3 | 18 / 6 / 18 | chained | The line to the far wall (2 x reach + 1, at most 30) turns with the target for 10 ticks, then locks: a beam, 16 within 1.3 of the line, players within 4 blocks above the floor included (so floating players are hit). 18 ticks of recovery at the node: the punish window. |
+
+**Crystal nodes.** Found at runtime (so a rotated piece still works): every amethyst cluster 1-3 blocks over the seal's
+floor within radius + 3 that stands on a solid block (the brazier crowns; the dome's hanging clusters are too high), each
+turned into a standing spot 2.5-4.5 blocks toward the centre (deduplicated within 3). With fewer than 3 (the demo spawn),
+four virtual nodes on the diagonals at 0.75 x reach. In phase 3 motes of light rise over the nodes.
+
+**Gravity pulses (phase 3).** Every 8 s (x `cooldownScale()`, at least 4.5 s, plus the warning): 1.5 s of warning (dust
+rising off the whole floor; golden anchor rings, r 3.5, round every node except the one he stands at). Then every player
+outside an anchor who stands on floor (within 1.5 of it) with 6 free blocks above takes 4 and gets Levitation II for 26
+ticks (about 2 blocks up). While afloat, anyone further than reach - 3 from the centre is drawn inward. At tick 56 the
+Levitation is removed and Slow Falling (3 s) given, so **every lift ends softly on the floor and never over a drop**. The
+same release runs when the fight resets, when he dies and when he is removed.
+
+**No blocks.** He places no blocks at all: tomes, shards, storms, constellations and pulses are particles, hit checks,
+effects and short-lived projectiles. Push safety: his `strike` caps pushes at 1.3 and lift at 0.5, and near the wall (or
+where a probe 2 blocks along the push finds no floor) the outward part is removed.
+
+**Co-op and NG+** come from the engine: health, damage (tomes deal his damage through `strike`), poise, cooldowns (blink
+and pulse timers use `cooldownScale()`), compressed wind-ups, the soul wave. Marks, circles and tomes scale with the
+players; strays use `scaledCount`.
+
+Previews: `python3 tools/gen_models.py --preview --only star_curator` → `build/previews/models/star_curator.png`; held
+astrolabe: `python3 tools/art_sheet.py --kind held --only curator_astrolabe`.
+
+## 27. Champion of the Rust Mesa Mine-City: The Mine Baron (Le Baron de la mine)
+Files:
+- `tools/wf/mobs/mine_baron.py`: model `mine_baron`, texture variants `bare`, `gilded`, `cracked`.
+- `src/main/java/com/brasshaven/entity/boss/MineBaron.java`: the moveset.
+
+There is no lair module. The arena is the existing cavern round the vein: `BOSS` in
+`tools/wf/structures/mesa_minecity.py`, seal radius 20, floor radius about 21, dome about 21 high.
+
+The Mine Baron replaces the Dune King there. The Dune King's quest and Bane of Legends stay reachable: his seal now sits in
+the floor of the Necropolis of Kings' hypostyle hall (`DUNE_KING` in `rock_necropolis.py`, `hall()`, seal at (0, F0-1, -46),
+radius 12, no mist, like the Sentinel). His `BOSS_HOME` is `rock_necropolis` again.
+
+Reward: `remembrance_mine_baron` forges the **Drill-Pick of the Mine Baron** (`baron_drillpick`, LITHITE 8.5 / -3.0).
+- It has a new ability shape, **FUSE**, in `BossWeaponItem`. A bundle of lit dynamite flies along the aim (up to 14
+  blocks). It sticks to the first foe it meets, or lies where it lands. Its fuse burns 30 ticks; the pending charges are
+  ticked by `item/BlastCharges.java`, a server-tick listener registered on first use. Then it blows, breaking no block:
+  - power 12 near the heart, falling to half at 3.5 blocks;
+  - set ablaze (flag `fire`) and hurled away;
+  - the foe it stuck to takes x1.5.
+- Held model `baron_drillpick` in `wf/held3d.py`, sprite `drillpick` in `wf/itemart_shapes.py`.
+
+Loot (`gen_data.py`): gold ingots, raw gold, emeralds, diamonds, TNT, lanterns, rails and a 25% gold block.
+Quest: `explorer/boss_mine_baron`.
+
+**Concept.** A huge, greedy foreman, 5.6 blocks tall, strapped into a riveted steam exo-rig:
+- a smoking boiler on his back, with brass pistons at the hips and knees;
+- a pneumatic drill for a right arm and a pickaxe-hammer in his left fist;
+- a miner's hard hat with a lantern;
+- a waistcoat with a watch chain stretched over the belly.
+
+Variant `gilded`: crusts of gold-veined ore lock over his shoulders, arms, chest and thighs, and four glowing gold geodes
+sit on the boiler: the weak spots. Variant `cracked`: half the crust and two geodes remain.
+
+**Stats.**
+- 600 health, armour 12, toughness 4, attack 14, poise 130, speed 0.24, knockback resistance 1.0.
+- No fall damage, yellow bar.
+
+**Phase 2 at 65%, gold greed.** The roar (`greed` animation) locks the crust on 30 ticks later:
+- Chunks = min(6, 3 + extra players).
+- While armoured, he takes x0.2 damage. A player hit from behind (dot < -0.25 from the source position) of 3 or more,
+  at least 8 ticks after the last chunk, knocks a chunk off and goes through in full.
+- The form turns `cracked` at half the chunks. At 0 it turns `bare` and `orebreak` follows (dazed 60 ticks, +30% damage taken).
+- Every 520 ticks x `cooldownScale()` without armour, he `regild`s. In its 30-tick wind-up, gold streams in; 60 x
+  (1 + 0.25 per extra player) damage breaks it into `orebreak`, otherwise the crust is back.
+- The first gilding calls `scaledCount(1) + 1` bandit marksmen (minion tag).
+
+**Phase 3 at 30%, the blackout.** It is driven by the class like the Chained Jailer: `blackout` runs once (guard 74
+ticks, bundles thrown at the walls), then `goDark`:
+- every light block within radius + 4 (feet -2 to +26) is temporarily set to air; this covers every vanilla
+  light-emitting block with no block entity, apart from fluids, `light` and fire;
+- the crust is blasted off;
+- +12% speed (`mine_baron_dark`).
+
+From then on:
+- A `light` block (level 14) follows his helmet lamp.
+- The `glare` beam and the burning fuse carry their own moving light.
+- Dynamite lights its landing spot (level 11).
+- The vein sparks: every max(24, 50 x `cooldownScale()`) ticks, 1 + (players-1)/2 sparks land on exposed ore. Each warns
+  12 ticks with a flicker of light, then deals 7 within 3.5.
+- `cavein` comes every 260 ticks x `cooldownScale()`.
+
+Scheduled moves (`exhaust`, `orebreak`, `regild`, `blackout`) use range 999 / weight 0 and are chained from `bossTick`.
+`glare` only acts in the dark: before that, `gate` redirects it.
+
+| Move | Phase | Wind-up / active / recovery | Range | What it does |
+|---|---|---|---|---|
+| drill | 1-3 | 16 / 14 / 16 | 0-7.5 | A red line 6.5 ahead, then two thrusts (active 0 and 11): 9 each down the line. |
+| slam | 1-3 | 20 / 4 / 16 | 0-9 | Gold ring 3.5 ahead: 18 in r 2.6, then ore eruptions at 5.5 / 7.5 / 9.5 (11, staggered 4 ticks). P2: three lines at ±25°. |
+| charge | 1-3 | 18 / 16 / 18 | 6-24 | Path drawn 14 ahead, a rush at 1 b/t: 13 once per target and a heavy shove. Jams on rock: three debris marks round him. |
+| dynamite | 1-3 | 18 / 24 / 14 | 4-28 | Rings follow the marked players for 12 ticks (gold), then lock (red). Bundles (falling TNT visuals, never placed) fly 12 ticks, fizz 22 / 18 / 16 ticks (P1 / P2 / P3), then blow: 14 in r 3, hurled. |
+| exhaust | 1-3 | 14 / 4 / 12 | scheduled | When someone loiters at his back for 26 ticks (40 while armoured), at most once per 100 ticks: 13 in a cone 6 deep behind him (±65°), 6 within 2.6. |
+| cavein | 1-3 | 22 / 30 / 14 | 0-30 | Hits the wall: marks on every player plus strays (warned 14 ticks, dust from the ceiling), then a falling stone: 13 in r 1.8 + Slowness. |
+| combo | 2-3 | 14 / 30 / 14 | 0-6.5 | Drill jab 10 (line 5), pick backhand 12 (±90°, 5.5), overhead slam 16 in r 2.4 + wave 8 to 7. |
+| veinburst | 2-3 | 20 / 20 / 16 | 4-24 | Gold lines toward up to 3 players: ore eruptions every 1.2 blocks out to 18, 12 each. |
+| fuseline | 2-3 | 16 / 40 / 14 | 6-26 | Keg lobbed onto a red ring r 5; a spark runs along the fuse (6 + fire to whoever it passes), then the keg blows: 20 in r 5 and 4 eruptions. |
+| glare | 3 | 18 / 10 / 12 | 0-20 | Lamp cone ±35°, 18 deep, line of sight from the lamp: Blindness 60, Slowness, 4. Then he charges the first one blinded. |
+| orebreak | 2 | 10 / 60 / 10 | scheduled | Last chunk off, or regild broken: on one knee, +30% damage taken. |
+| regild | 2 | 30 / 10 / 10 | scheduled | See phase 2. |
+| blackout | 3 (once) | 30 / 20 / 20 | scheduled | Guarded; blows the props; see phase 3. |
+
+**The blocks are temporary.**
+- The only placed blocks are `minecraft:light` blocks, and only into air.
+- The lamps he puts out are recorded with their original state.
+- Thrown bundles, kegs and stones are `FallingBlockEntity` visuals with drops cancelled, discarded before landing.
+- Every change is restored, and only where the block is still the one he set:
+  - when the fight resets to phase 1 (`resetForm`);
+  - when no player is within radius + 14;
+  - in `onDefeated` and `remove()`;
+  - after a reload (saved as `BaronBlocks`, restored on the first tick).
+- Bandits are discarded on death, reset or an empty arena.
+
+**Co-op and NG+** come from the engine (`BossDifficulty`, `BossCycles`). Co-op scaling also adds chunks per extra player,
+raises the regild break threshold, and scales bandits and sparks per player. Timers use `cooldownScale()`.
+
+Previews:
+- `python3 tools/gen_models.py --preview --only mine_baron` writes `build/previews/models/mine_baron.png`,
+  `mine_baron_gilded.png` and `mine_baron_cracked.png`.
+- Held drill-pick: `python3 tools/art_sheet.py --kind held --only baron_drillpick`.
 
 ## Difficulty: co-op scaling and NG+ cycles
 

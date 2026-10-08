@@ -314,9 +314,17 @@ class Plan:
 STRATA = ("stone", "andesite", "stone", "tuff", "andesite", "stone", "diorite", "stone", "tuff", "andesite")
 
 
+# the outer slopes' cover (BUILDING §5 gradients, §7): a vegetation potential falling with height and steepness,
+# raised on north faces and in damp hollows; scree gullies running straight down the slopes, fanning at their feet
+MOSSN = nfbm(GXF, GZF, 7.0, 43)
+NFACE = np.gradient(HMAP.astype(float), axis=1)          # dH/dz > 0: the slope falls toward the north
+GULLY = (np.arctan2(GXF, GZF - BZ) * 34 / (2 * math.pi) + (nfbm(GXF, GZF, 9.0, 47) - 0.5) * 0.9) % 1.0
+
+
 def rock_block(x, y, z, top, d, sl):
     h = hash3(x, y, z, 7)
-    s = y + int(5 * JIT[ai(x, 0, z)[0], ai(x, 0, z)[2]])
+    i, _, k = ai(x, 0, z)
+    s = y + int(5 * JIT[i, k]) + (1 if h < 0.18 else 0)
     if d < 0:                                        # inside the bowl
         if y <= WL:
             if top:
@@ -326,17 +334,40 @@ def rock_block(x, y, z, top, d, sl):
             if top:
                 return "coarse_dirt" if h < 0.4 else ("gravel" if h < 0.65 else ("mud" if h < 0.8 else "cobblestone"))
             return "packed_mud" if h < 0.5 else "tuff"
+    hf = y / float(RIDGE)
+    north = NFACE[i, k] > 0.5
+    veg = 1.3 - 1.0 * hf - max(0.0, sl - 2.0) * 0.16 + (float(MOSSN[i, k]) - 0.5) * 1.1 + (0.15 if north else 0.0)
+    gully = y > 2 and sl >= 1 and float(GULLY[i, k]) < 0.05 + 0.09 * max(0.0, 1.0 - hf * 1.6)
+    rock = STRATA[(s // 3) % len(STRATA)]
     if top:
         if y <= 2:
             return "grass_block[snowy=false]" if h < 0.7 else ("coarse_dirt" if h < 0.85 else "gravel")
-        if sl > 2:
-            return STRATA[(s // 3) % len(STRATA)]
-        if sl > 1:
-            return "grass_block[snowy=false]" if h < 0.45 else ("moss_block" if h < 0.55 else "stone")
-        return "grass_block[snowy=false]" if h < 0.85 else ("podzol[snowy=false]" if h < 0.93 else "coarse_dirt")
+        if gully:                                    # scree: gravel and broken stone washed down the slope
+            return "gravel" if h < 0.5 else ("coarse_dirt" if h < 0.68 else ("cobblestone" if h < 0.85 else
+                                                                             "andesite"))
+        if sl <= 1:
+            return "grass_block[snowy=false]" if h < 0.85 else ("podzol[snowy=false]" if h < 0.93 else "coarse_dirt")
+        if veg > 0.55:
+            return "grass_block[snowy=false]" if h < 0.75 else ("moss_block" if h < 0.83 else (
+                "podzol[snowy=false]" if h < 0.9 else "coarse_dirt"))
+        if veg > 0.3:
+            return "grass_block[snowy=false]" if h < 0.4 else ("moss_block" if h < 0.58 else (
+                "coarse_dirt" if h < 0.7 else ("mossy_cobblestone" if h < 0.82 else rock)))
+        if veg > 0.08:
+            return "mossy_cobblestone" if h < 0.2 else ("moss_block" if h < 0.28 else (
+                "gravel" if h < 0.36 else ("cobblestone" if h < 0.46 else rock)))
+        return "gravel" if h < 0.08 else ("cobblestone" if h < 0.15 else (
+            "mossy_cobblestone" if h < (0.3 if north else 0.2) else rock))
+    depth = int(HMAP[i, k]) - y
+    if y > 2 and not gully and depth <= 1 and veg > 0.3:
+        return "dirt" if h < 0.6 else ("coarse_dirt" if h < 0.85 else "rooted_dirt")
+    if y > 2 and depth <= 3 and veg > 0.08 and h < 0.3:
+        return "mossy_cobblestone" if h < 0.2 else "moss_block"
+    if gully and depth <= 1:
+        return "cobblestone" if h < 0.5 else "andesite"
     if y < 6 and h < 0.25:
         return "mossy_cobblestone"
-    return STRATA[(s // 3) % len(STRATA)]
+    return rock
 
 
 def dam_block(x, y, z):
@@ -2425,13 +2456,37 @@ def vegetation(bp, P):
     # grass tufts on the rock tops
     for i, y, k in tops.tolist():
         x, z = int(XS[i]), int(ZS[k])
-        if bp.get(x, y, z) != "minecraft:grass_block" or not is_air(bp, x, y + 1, z) or bp.get(x, y + 1, z) is not None:
+        b = bp.get(x, y, z)
+        if b not in ("minecraft:grass_block", "minecraft:moss_block", "minecraft:podzol") or \
+                bp.get(x, y + 1, z) is not None:
             continue
         h = hash3(x, y, z, 109)
-        if h < 0.08:
+        if b == "minecraft:moss_block":
+            if h < 0.35:
+                bp.set(x, y + 1, z, "moss_carpet")
+        elif b == "minecraft:podzol":
+            if h < 0.25:
+                bp.set(x, y + 1, z, "fern")
+        elif h < 0.08:
             bp.set(x, y + 1, z, "short_grass")
         elif h < 0.11:
             bp.set(x, y + 1, z, "fern")
+    # boulders fallen from the ridge, resting on the outer slopes (mossy on their north side)
+    for i, y, k in tops.tolist():
+        x, z = int(XS[i]), int(ZS[k])
+        if DIST[i, k] < 4 or y < 4 or y > RIDGE - 6 or SLOPE[i, k] > 3 or hash3(x, y, z, 119) > 0.0035:
+            continue
+        if busy(x, z) or (abs(x) <= 92 and R_CR - 6 < GR[i, k] < R_UP + 12):
+            continue
+        cells = [(0, 1, 0), (1, 1, 0), (0, 1, 1), (0, 2, 0)] + ([(1, 1, 1), (-1, 1, 0)] if hash01(x, z, 121) < 0.5
+                                                               else [])
+        if any(bp.get(x + a, y + b, z + c) is not None for a, b, c in cells):
+            continue
+        if any(bp.get(x + a, y + b - 1, z + c) is None for a, b, c in cells if b == 1):
+            continue
+        for a, b, c in cells:
+            bp.set(x + a, y + b, z + c, "mossy_cobblestone" if c <= 0 and hash3(x + a, y + b, z + c, 123) < 0.6
+                   else ("cobblestone" if hash3(x + a, y + b, z + c, 125) < 0.5 else "andesite"))
     # the reservoir: seagrass and kelp on the bed, lily pads in the shallows, snags on the drawdown ring
     for i, k in np.argwhere(BOWL).tolist():
         x, z = int(XS[i]), int(ZS[k])

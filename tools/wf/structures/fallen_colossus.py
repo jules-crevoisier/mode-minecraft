@@ -11,10 +11,11 @@ Layout, ground y = 0; the head lies to the west (x < 0), the chest faces south (
   * the way in is the broken wrist: the forearm is a tunnel to the elbow chamber, then a stair climbs the upper arm
     and comes out on a balcony high in the rib hall (the release after the compression of the arm);
   * the rib hall: the chest is a 30-high vault of stone ribs, opened to the sky by a breach in the breastplate. A stair
-    goes down to its floor (the hub), the grand stair climbs back up to the gorget dais and its waystone;
+    goes down to its floor (the hub, where the Bronze Sentinel stands guard), the grand stair climbs back up to the gorget dais and its waystone;
   * side routes: the shoulder (a stair from the balcony up into the pauldron loft, a window north over the sword) and
     the hip (the crypt in the pelvis, then a tunnel down the left leg out of the knee: a second way in, a loop);
-  * the neck tunnel (compression) leads into the helmet: the boss arena (radius 14, ceiling 16) under the visor bars;
+  * the neck tunnel (compression) leads into the helmet: the boss arena of the Colossus's Heart (radius 14, ceiling
+    16) under the visor bars;
     the reward vault is below its floor (sealed bars), with a one-way iron door out through the cheek.
 Loot gradient (§15.6): forearm and camp tier 1, hall / crypt / loft tier 2, vault tier 3. One secret: a hatch in a
 dark corner of the hall floor opens onto the knight's tomb below.
@@ -28,8 +29,10 @@ from ..defs import Piece, StructureDef, register
 from ..megakit import fbm, hash01, hash3
 from ..parts import LOOT, MOB, MOD
 
-# the colossus' own boss comes with the boss pass of the overhaul; until then the helmet wakes the Rune Colossus
-BOSS = "brasshaven:bronze_sentinel"
+# the colossus' own heart wakes in the helmet (entity/boss/ColossusHeart.java); its old champion, the Bronze
+# Sentinel, now stands guard in the rib hall on the way up
+BOSS = "brasshaven:colossus_heart"
+SENTINEL = "brasshaven:bronze_sentinel"
 
 # ------------------------------------------------------------------ dimensions
 YC = 15                                  # body axis height (torso, pelvis): the right flank is up
@@ -913,6 +916,7 @@ def hall(bp, B):
     bp.chest(-8, f, -2, "west", loot=LOOT + "colossus_hall")
     bp.spawner(-12, f, -3, "brasshaven:gargoyle")
     bp.spawner(-18, f, 0, "brasshaven:rust_mite_mother")
+    bp.boss_seal(-24, f - 1, 1, SENTINEL, 11)                    # the Sentinel wakes under the breach
     # fallen shell plates on the floor under the breach
     for (x, z) in ((-20, 6), (-21, 6), (-24, 7), (-13, 5)):
         if (x, f, z) in B.carve:

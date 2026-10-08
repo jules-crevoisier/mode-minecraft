@@ -38,9 +38,10 @@ from ..defs import Piece, StructureDef, register
 from ..megakit import hash01, hash3
 from ..parts import LOOT, MOD
 
-# the necropolis' own king comes with the boss pass of the overhaul; until then the arena wakes the Sand Pharaoh
-BOSS = "brasshaven:dune_king"
+# the necropolis' own king: the Fourth King, the seated king whose face was chiselled off the façade, risen
+BOSS = "brasshaven:fourth_king"
 MOB_CRAWLER = "brasshaven:crypt_crawler"
+DUNE_KING = "brasshaven:dune_king"   # the hall's guardian (his old home, the Mesa Mine-City, has the Mine Baron)
 
 # ------------------------------------------------------------------ dimensions
 MX0, MX1 = -88, 88          # massif array (x)
@@ -601,11 +602,17 @@ def king_cells(scale=1.0):
     return cells
 
 
-def king(bp, cx, broken=False):
+def king(bp, cx, broken=False, defaced=False):
+    """One seated king. `defaced`: the fourth king, whose face was chiselled away (the boss of the arena below):
+    the nose, mouth and eyes are gone and the face is left rough and pitted."""
     cells = king_cells()
     cut = {}
     for (u, y, v), spec in cells.items():
         x, z = cx + u, FZ + v
+        if defaced and 31 <= y <= 36 and abs(u) <= 3 and v >= 8:
+            if v == 9 or hash01(u * 7 + y, v, 85) < 0.4:
+                continue                                    # chiselled out
+            spec = SS
         if broken:
             top = 23 + int(hash01(u, v, 83) * 4)
             if y > top:
@@ -937,6 +944,9 @@ def hall(bp, C):
     bp.door(-17, F0, -20, "west", wood="iron")
     bp.set(-18, F0 + 1, -21, "lever[face=wall,facing=west,powered=false]")
     bp.set(-16, F0 + 2, -20, CHRS)
+    # the Dune King, the necropolis' old guardian, still holds the far end of the hall (no mist: the hall is the
+    # way through, like the Sentinel of the Fallen Colossus); his seal sits in the floor of the south aisle
+    bp.boss_seal(0, F0 - 1, -46, DUNE_KING, 12)
 
 
 def sanctuary(bp):
@@ -1528,7 +1538,7 @@ def rock_necropolis(bp):
     plaza(bp)
     facade(bp, C)
     for kx in KINGS:
-        king(bp, kx, broken=kx == BROKEN)
+        king(bp, kx, broken=kx == BROKEN, defaced=kx == KINGS[-1])
     upper_storey(bp, C)
     hall(bp, C)
     sanctuary(bp)

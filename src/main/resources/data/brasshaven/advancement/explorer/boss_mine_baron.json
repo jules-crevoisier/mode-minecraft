@@ -1,0 +1,37 @@
+{
+  "display": {
+    "icon": {
+      "id": "brasshaven:baron_drillpick"
+    },
+    "title": {
+      "translate": "advancements.brasshaven.explorer.boss_mine_baron.title"
+    },
+    "description": {
+      "translate": "advancements.brasshaven.explorer.boss_mine_baron.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "kill": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "entity_type": "brasshaven:mine_baron"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "parent": "brasshaven:explorer/mesa_minecity",
+  "rewards": {
+    "experience": 500
+  }
+}

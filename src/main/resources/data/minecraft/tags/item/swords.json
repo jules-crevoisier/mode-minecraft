@@ -36,6 +36,11 @@
     "brasshaven:hierarch_sunstaff",
     "brasshaven:admiral_cutlass",
     "brasshaven:tyrant_wrench",
+    "brasshaven:fourth_king_sceptre",
+    "brasshaven:heart_lodeblade",
+    "brasshaven:warden_tongs",
+    "brasshaven:curator_astrolabe",
+    "brasshaven:baron_drillpick",
     "brasshaven:brass_sword",
     "brasshaven:mithril_sword",
     "brasshaven:magma_maul",
@@ -44,6 +49,9 @@
     "brasshaven:oathbreaker",
     "brasshaven:toll_billhook",
     "brasshaven:undertow_glaive",
-    "brasshaven:starfall_lance"
+    "brasshaven:starfall_lance",
+    "brasshaven:sluice_hook",
+    "brasshaven:bog_lantern_flail",
+    "brasshaven:solar_khopesh"
   ]
 }

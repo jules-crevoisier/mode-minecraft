@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    " M ",
+    "MRM",
+    "DMD"
+  ],
+  "key": {
+    "M": "brasshaven:map_fragment",
+    "R": "brasshaven:remembrance_mine_baron",
+    "D": "minecraft:diamond"
+  },
+  "result": {
+    "id": "brasshaven:baron_drillpick",
+    "count": 1
+  }
+}

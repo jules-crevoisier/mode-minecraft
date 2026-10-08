@@ -400,6 +400,35 @@ lairs, ruins and small sites).
     library, site of grace, dart-trap corridor, jade-and-gold sanctum, offering hall, root-choked crypt and
     the flooded cenote with its waterfall, whose spiral ledge climbs back up to the summit arena under a
     broken brass sun-disc. A brass elevator in the east trunk is the shortcut back.
+18. **Forge of the Basalt Titan (Nether).** A ~190-wide forge over a lava lake in basalt deltas or crimson
+    forest, built into and around an 85-high basalt-and-brass titan kneeling on a forge plinth and bent over a
+    giant anvil, its right hand raising a sledgehammer over the anvil, its left arm reaching down to it as a
+    crane-bridge. Crucibles on the plinth pour lava falls into moulds in the lake. Enter through the gate in the
+    plinth: casting hall with glass-covered lava channels, bellows chambers with giant leather bellows, an
+    optional slag mine, the crucible terrace (hub), then up the knee and thigh to the forgemasters' barracks in
+    the pelvis, the armoury in the belly and the smelting hall in its back, whose chimneys rise from its spine.
+    From the neck (site of grace), the hammer-gallery climbs the raised arm (optional) and the crane-bridge
+    descends the other arm to the boss arena on the anvil under the hammer. A lift in the spine is the shortcut
+    back; the vault sits in the anvil's heel, with a stair down to the lake.
+19. **The Starfall Library (End).** A ~170-wide floating archive over the outer islands: a 125-high spindle
+    tower of purpur and brass (plinth, stacks, scriptorium, upper hall, domed lens observatory and a needle
+    hung with armillary rings) on a rock island, orbited by three ring-shaped reading galleries at three heights
+    held by chain-and-end-rod spokes. A meteorite lies wedged in its south-east flank, having torn through the
+    middle gallery and cracked the map room open. Enter by the great door (or the side bridge to the low ring):
+    map room with a giant floor star-chart, the bookshelf canyons with rolling ladders and catwalks (hub), the
+    copyists' scriptorium, the upper hall, the lens observatory at the top; then outside, ramps down to the high
+    and middle rings, across the broken gallery on floating book-platforms over a catch basin onto the
+    meteorite, down a corkscrew fissure inside it to the site of grace and the boss arena in the crater chamber
+    under the tower. The sealed forbidden-stacks vault behind it has a pneumatic-tube lift back up to the map room.
+20. **Rust Mesa Mine-City (badlands).** A ~200-wide boomtown carved into and stacked on a striped terracotta
+    butte 56 high, crowned by a timber-and-iron headframe whose giant winding wheel tops out above 100. Main
+    Street with false-front saloons leads to a stair up the talus; cliff-dwellings and saloons sit on three
+    terraces of the south face, linked by cliff stairs, ladders and trestle bridges over a cleft, while a
+    mine-cart railway on tall trestles spirals once round the butte to the summit. From the hoist house (hub,
+    site of grace) descend inside: the stepped stamp mill with giant gears, the dynamite store and the
+    mine-boss office with its vault, the haulage level, the flooded lower gallery and the collapsed shaft, to
+    the boss arena in a vast excavated cavern round a half-dug colossal gold-and-copper vein. A cart-lift is
+    the shortcut back to the haulage adit; the main shaft is a drop from the hub with a ladderway up.
 
 ---
 

@@ -608,8 +608,9 @@ public final class CiDriver {
                 .cmd(() -> List.of("gamemode creative")); // the later steps fly over the stage
 
         // the 3D held models, in the hands of a row of armour stands (third person, as other players see them)
-        String[] held = {"kings_trident", "sentinel_greatsword", "dune_king_crook", "jailer_chain", "halo_glaive", "gatekeeper_key", "jarl_axe", "abbess_crozier", "architect_plumb", "pressure_lance", "hierophant_crozier", "queen_macuahuitl", "hierarch_sunstaff", "admiral_cutlass", "tyrant_wrench", "ascetic_staff", "caldera_halberd", "helmsman_anchor", "forbidden_grimoire",
-                "jade_fang", "rune_fist", "brass_pickaxe"};
+        String[] held = {"kings_trident", "sentinel_greatsword", "dune_king_crook", "jailer_chain", "halo_glaive", "gatekeeper_key", "jarl_axe", "abbess_crozier", "architect_plumb", "pressure_lance", "hierophant_crozier", "queen_macuahuitl", "curator_astrolabe", "warden_tongs", "hierarch_sunstaff", "admiral_cutlass", "tyrant_wrench", "ascetic_staff", "caldera_halberd", "helmsman_anchor", "forbidden_grimoire",
+                "jade_fang", "rune_fist", "brass_pickaxe", "fourth_king_sceptre", "heart_lodeblade", "baron_drillpick",
+                "sluice_hook", "rivet_cannon", "bog_lantern_flail", "solar_khopesh", "boarding_axe", "jade_blowpipe"};
         step("held_items")
                 .cmd(() -> {
                     List<String> c = new ArrayList<>();
@@ -647,6 +648,40 @@ public final class CiDriver {
                 })
                 .waitTicks(200) // the stage may be the first thing the client sees, or 140 blocks above the inventory scene: let its chunks load and compile
                 .shot("held_items");
+
+        // the structure armour sets, worn, each stand holding its structure's weapon (com.brasshaven.colossal)
+        String[][] sets = {{"lockkeeper", "sluice_hook"}, {"turbine_engineer", "rivet_cannon"}, {"bog_pilgrim", "bog_lantern_flail"},
+                {"sun_priest", "solar_khopesh"}, {"ironclad", "boarding_axe"}, {"canopy_stalker", "jade_blowpipe"}};
+        step("colossal_gear")
+                .cmd(() -> {
+                    List<String> c = new ArrayList<>();
+                    c.add("setblock " + at(0, 1, 12) + " minecraft:stone");
+                    c.add("fill " + at(-8, 1, 10) + " " + at(8, 4, 14) + " minecraft:air");
+                    c.add("fill " + at(-8, 0, 4) + " " + at(8, 0, 14) + " minecraft:polished_andesite");
+                    for (int i = 0; i < sets.length; i++) {
+                        String p = "brasshaven:" + sets[i][0] + "_";
+                        double x = bx + 0.5 + (i - (sets.length - 1) / 2.0) * 2.2;
+                        c.add("summon minecraft:armor_stand " + x + " " + (STAGE_Y + 1) + " " + (bz + 12.5)
+                                + " {ShowArms:1b,NoBasePlate:1b,Invulnerable:1b,Rotation:[160f,0f],Pose:{RightArm:[-40f,0f,0f]},equipment:{"
+                                + "head:{id:\"" + p + "helmet\",count:1},chest:{id:\"" + p + "chestplate\",count:1},"
+                                + "legs:{id:\"" + p + "leggings\",count:1},feet:{id:\"" + p + "boots\",count:1},"
+                                + "mainhand:{id:\"brasshaven:" + sets[i][1] + "\",count:1}}}");
+                    }
+                    c.add("time set noon");
+                    c.add("gamemode creative");
+                    c.add("tp @s " + (bx + 0.5) + " " + (STAGE_Y + 1) + " " + (bz + 12.5 - 7) + " facing "
+                            + (bx + 0.5) + " " + (STAGE_Y + 1 + 1.1 - 1.62) + " " + (bz + 12.5));
+                    return c;
+                })
+                .run("fly", CiDriver::fly)
+                .run("hide the HUD", () -> {
+                    Minecraft mc = Minecraft.getInstance();
+                    if (!mc.gui.hud.isHidden()) {
+                        mc.gui.hud.toggle();
+                    }
+                })
+                .waitTicks(200)
+                .shot("colossal_gear");
 
         String still = "{NoAI:1b,PersistenceRequired:1b,Rotation:[180f,0f]}";
         step("creatures")

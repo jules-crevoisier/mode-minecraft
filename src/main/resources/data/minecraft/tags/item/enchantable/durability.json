@@ -1,6 +1,8 @@
 {
   "replace": false,
   "values": [
-    "brasshaven:gale_staff"
+    "brasshaven:gale_staff",
+    "brasshaven:rivet_cannon",
+    "brasshaven:jade_blowpipe"
   ]
 }

@@ -458,6 +458,25 @@ def sunstaff(a):
     a.px(12, 5, "A", "dark")
 
 
+@painted("scarab_sceptre")
+def scarab_sceptre(a):
+    """Scarab Sceptre of the Fourth King: a gilded haft with a dark grip and lapis bands, and at its head a lapis
+    scarab with gilded wing-cases spread, holding up a glowing sun-disc with a lapis eye."""
+    shaft(a, 7, key="M", grip=(1, 4), butt="B")
+    for i in (5, 7):
+        a.px(1 + i, 14 - i, "A", "dark")
+    cx, cy = 9.6, 6.4                                         # the scarab, tipped along the haft
+    a.disc("A", cx, cy, 1.7)
+    a.seg("M", cx - 3.0, cy - 0.2, cx - 0.6, cy + 1.6, 0.6)   # the wing-cases
+    a.seg("M", cx + 0.2, cy + 3.0, cx + 1.8, cy + 0.6, 0.6)
+    a.px(int(cx), int(cy), "A", "light")
+    a.disc("E", 12.4, 3.6, 1.9)                               # the glowing sun-disc
+    a.ring("M", 12.4, 3.6, 1.9, 2.8)
+    a.px(12, 3, "A", "mid")                                   # its lapis eye
+    a.px(14, 2, "M", "light")
+    a.shade_dir("M", -0.6, 1.0)
+
+
 @painted("plumb")
 def plumb(a):
     """Plumb of the Abyssal Architect: a dark rule for a haft with brass graduations, a brass crossbar at its head, a
@@ -478,6 +497,24 @@ def plumb(a):
     a.px(13, 10, "B", "dark")
     a.px(12, 12, "E", "light")                                # the plumb line
     a.px(12, 13, "E", "mid")
+
+
+@painted("astrolabe_staff")
+def astrolabe_staff(a):
+    """Astrolabe of the Star-Eater Curator: a dark staff with brass collars and a leather grip, and at its head a brass
+    astrolabe disc inside a hoop, a glowing star at its heart and another on top."""
+    shaft(a, 8, key="H", grip=(1, 4), butt="B")
+    for i in (5, 7):
+        a.px(1 + i, 14 - i, "B", "light")
+    cx, cy = 11.4, 4.6
+    a.ring("B", cx, cy, 2.6, 3.5)                             # the armillary hoop
+    a.disc("M", cx, cy, 2.2)                                  # the mater
+    a.shade_dir("M", -0.6, 1.0)
+    a.px(11, 4, "P", "light")                                 # the star at its heart
+    a.px(10, 3, "A", "mid")
+    a.px(12, 6, "A", "mid")
+    a.px(13, 3, "A", "light")
+    a.px(14, 1, "P", "light")                                 # the star on top
 
 
 @painted("macuahuitl")
@@ -641,3 +678,43 @@ def hammer(a):
         a.px(x, 1, "M", "shine")
     a.px(9, 6, "B")
     a.px(10, 6, "B", "dark")
+
+
+@painted("tongs")
+def tongs(a):
+    """Searing Tongs of the Anvil Warden: two dark iron reins bound in leather near the butt, a brass rivet at the
+    joint, the jaws reaching up to the corner and a white-hot billet held between their tips."""
+    a.seg("M", 1.5, 14.5, 9.5, 6.5, 0.55)                     # the near rein, up to the rivet
+    a.seg("M", 3.0, 15.0, 10.0, 7.5, 0.55)                    # the far rein
+    for i in (1, 3):
+        a.px(2 + i, 13 - i, "L", "mid")                       # the leather binding
+        a.px(3 + i, 13 - i, "L", "dark")
+    a.disc("B", 9.8, 6.8, 1.1)                                # the rivet
+    a.seg("M", 10.0, 5.6, 13.2, 2.4, 0.5)                     # the jaws, a little apart
+    a.seg("M", 11.2, 6.6, 14.2, 3.6, 0.5)
+    a.shade_dir("M", -0.6, 1.0)
+    a.disc("F", 13.6, 2.6, 1.3)                               # the billet
+    a.px(13, 2, "F", "shine")
+    a.px(10, 6, "B", "light")
+
+
+@painted("drillpick")
+def drillpick(a):
+    """Drill-Pick of the Mine Baron: a mahogany haft bound in leather, an iron head with a gold pick spike reaching
+    up-left and a brass-banded drill cone boring down-right, a lit fuse glowing at the collar."""
+    shaft(a, 8, grip=(1, 5))
+    a.disc("X", 10.0, 5.5, 2.0)                               # the iron boss of the head
+    a.seg("M", 9.0, 4.5, 4.0, 0.8, 0.85)                      # the pick spike, up to its point
+    a.seg("M", 5.5, 1.6, 3.2, 0.4, 0.45)
+    a.shade_dir("M", -0.5, 1.0)
+    a.seg("I", 11.0, 6.5, 15.2, 10.4, 1.25)                   # the drill cone, wide at the head
+    a.seg("I", 13.0, 8.5, 15.4, 11.0, 0.6)
+    a.shade_dir("I", 0.4, 1.0)
+    for x, y in ((12, 6), (13, 8), (14, 9)):                  # the brass spiral of the flutes
+        a.px(x, y, "B", "light")
+        a.px(x - 1, y + 1, "B", "dark")
+    a.px(10, 4, "X", "light")
+    a.px(9, 6, "B")                                           # the collar
+    a.px(8, 7, "B", "dark")
+    a.px(11, 4, "a", "shine")                                 # the fuse spark
+    a.px(12, 3, "F", "light")

@@ -720,6 +720,58 @@ PAGES = [
          "solaire de laiton brisé ; derrière des barreaux scellés, le caveau. Une porte de fer à sens unique mène "
          "au tronc est, dont l'ascenseur de laiton est le raccourci vers le sol."),
     ], []),
+    ("mesa_minecity", "wonders", "minecraft:rail", ("Rust Mesa Mine-City", "La Ville minière de la Mesa rouille"), [
+        ("A boomtown 200 blocks long carved into a striped badlands butte: a timber headframe with a giant winding "
+         "wheel on the summit, saloons and shacks on the terraces, a mine-cart railway wound round the cliffs on "
+         "trestles. Where: badlands, eroded and wooded badlands.",
+         "Une ville-champignon de 200 blocs taillée dans une butte rayée des badlands : un chevalement de bois "
+         "coiffé d'une roue géante au sommet, saloons et cabanes sur les terrasses, une voie de wagonnets enroulée "
+         "autour des falaises sur des tréteaux. Où : badlands, badlands érodés et boisés."),
+        ("From the stagecoach camp (waystone), climb Main Street and the terraces to the hoist house on the "
+         "summit (waystone). Inside, go down through the stamp mill, level 15 (dynamite store, boss's office and "
+         "vault), the haulage level (waystone), the flooded gallery and the collapsed shaft to the antechamber "
+         "(waystone). Through the mist, the cavern round the half-dug vein; behind sealed bars, the strongroom and "
+         "the cart-lift, the shortcut back.",
+         "Depuis le relais de diligence (pierre), on monte la grand-rue et les terrasses jusqu'à la salle des "
+         "treuils au sommet (pierre). Dedans, on descend par le bocard, le niveau 15 (dynamite, bureau et coffre "
+         "du patron), le niveau de roulage (pierre), la galerie noyée et le puits effondré jusqu'à l'antichambre "
+         "(pierre). Passé la brume, la caverne du filon ; derrière des barreaux scellés, la chambre forte et le "
+         "monte-wagon, raccourci du retour."),
+    ], []),
+    ("titan_forge", "wonders", "minecraft:anvil", ("Forge of the Basalt Titan", "La Forge du Titan de basalte"), [
+        ("A forge 217 blocks across over a Nether lava lake, built into a kneeling basalt-and-brass titan 85 high, "
+         "its hammer raised over a giant anvil. Where: basalt deltas, crimson forests.",
+         "Une forge de 217 blocs sur un lac de lave du Nether, bâtie dans un titan de basalte et de laiton "
+         "agenouillé, haut de 85 blocs, le marteau levé sur une enclume géante. Où : deltas de basalte, forêts "
+         "carmin."),
+        ("From the outpost (waystone), cross the causeway to the plinth: casting hall, giant bellows, grand stair "
+         "to the crucible terrace (waystone). Up the titan from its knee: barracks, armoury, smelting hall, then the "
+         "left arm to the winch room (waystone) and the crane-bridge into the hand. Through the mist, the arena on "
+         "the anvil; behind sealed bars, the vault. The spine lift is the shortcut back.",
+         "Depuis l'avant-poste (pierre de passage), la chaussée mène au socle : halle de coulée, soufflets géants, "
+         "grand escalier vers la terrasse des creusets (pierre). On monte dans le titan par le genou : casernement, "
+         "armurerie, halle de fusion, puis le bras gauche jusqu'au treuil (pierre) et le pont-grue jusque dans la "
+         "main. Passé la brume, l'arène sur l'enclume ; derrière des barreaux scellés, le caveau. L'ascenseur de la "
+         "colonne est le raccourci du retour."),
+    ], []),
+    ("starfall_library", "wonders", "minecraft:chiseled_bookshelf", ("The Starfall Library",
+                                                                      "La Bibliothèque de la chute d'étoile"), [
+        ("A floating archive 170 blocks across among the outer End islands: a purpur-and-brass spindle tower 125 "
+         "high under an astrolabe dome, three ring galleries hung round it on chain-and-rod spokes, and a fallen "
+         "meteorite wedged in its side. Where: outer End islands.",
+         "Une archive flottante de 170 blocs parmi les îles extérieures de l'End : une tour-fuseau de purpur et de "
+         "laiton haute de 125 blocs sous un dôme d'astrolabe, trois galeries en anneau suspendues par des rayons de "
+         "chaînes et de barres, et une météorite fichée dans son flanc. Où : îles extérieures de l'End."),
+        ("From the islet, cross to the great door: map room, bookshelf canyons (waystone), the wall stair to the "
+         "scriptorium, the upper hall (waystone) and the lens observatory. Ramp down to the galleries, cross the "
+         "broken one on floating books (a basin catches falls), corkscrew down the meteorite to the grace and the "
+         "crater arena. Behind sealed bars, the forbidden stacks; their pneumatic tube is the shortcut back.",
+         "Depuis l'îlot, on gagne la grande porte : salle des cartes, canyons de rayonnages (pierre de passage), "
+         "escalier mural vers le scriptorium, grande salle (pierre) et observatoire à lentille. Une rampe redescend "
+         "aux galeries ; on traverse la galerie brisée sur des livres flottants (un bassin rattrape les chutes), "
+         "puis on descend en vrille dans la météorite jusqu'au lieu de grâce et à l'arène du cratère. Derrière des "
+         "barreaux scellés, la réserve interdite ; son tube pneumatique est le raccourci du retour."),
+    ], []),
     ("mire_stilt_city", "wonders", "minecraft:mangrove_roots", ("Mire Stilt-City", "La Cité des pilotis"), [
         ("A timber town on piles over a mangrove swamp, 200 blocks across: boardwalks on three levels, rope "
          "bridges, fishers' huts, a smoking smokehouse, a drowned bell tower, and the witch-queen's round hall raised "
@@ -786,10 +838,10 @@ PAGES = [
          "le clic droit envoie une bordée d'explosions enflammées sur la ligne devant toi."),
     ], []),
     ("bronze_sentinel", "wonders", "brasshaven:remembrance_bronze_sentinel", ("The Bronze Sentinel", "La Sentinelle d'airain"), [
-        ("The living guardian of the Fallen Colossus waits inside the statue's helm (460 health, armour 14): a "
+        ("The living guardian of the Fallen Colossus stands in the rib hall under the breach (460 health, armour 14): a "
          "knight automaton of stone and verdigris bronze, a tower shield on one arm and a long greatsword in the "
          "other, its broken visor glowing gold.",
-         "Le gardien vivant du Colosse abattu attend dans le heaume de la statue (460 PV, armure 14) : un "
+         "Le gardien vivant du Colosse abattu se dresse dans la salle des côtes, sous la brèche (460 PV, armure 14) : un "
          "chevalier-automate de pierre et de bronze vert-de-gris, un pavois à un bras et un long espadon à l'autre, "
          "sa visière brisée luisant d'or."),
         ("It bashes with the shield, brings the greatsword down (a crack runs on along the ground), sweeps wide and "
@@ -810,9 +862,9 @@ PAGES = [
          "droit déchire une fissure de lumière runique sur la ligne devant toi."),
     ], []),
     ("dune_king", "wonders", "brasshaven:remembrance_dune_king", ("The Dune King", "Le Roi des dunes"), [
-        ("At the bottom of the Necropolis of Kings, the undead pharaoh waits in his arena (460 health): a mummy "
+        ("In the hypostyle hall of the Necropolis of Kings, the undead pharaoh guards the far aisle (460 health): a mummy "
          "king under a double crown, crook and flail in hand, four canopic jars circling him.",
-         "Tout en bas de la Nécropole des rois, le pharaon mort-vivant attend dans son arène (460 PV) : un roi "
+         "Dans la salle hypostyle de la Nécropole des rois, le pharaon mort-vivant garde le fond de l'allée (460 PV) : un roi "
          "momifié sous la double couronne, la crosse et le fléau en main, quatre vases canopes tournant autour de lui."),
         ("He lashes with the flail, hooks you in with the crook, blows a cone of blinding sand, raises husks from "
          "the floor and makes his jars spit curse bolts: keep moving sideways.",
@@ -1070,6 +1122,44 @@ PAGES = [
          "Son Souvenir, quatre fragments de carte et deux diamants forgent la Clé à vanne du Tyran des turbines, dont "
          "le clic droit lâche un jet de vapeur sur tous les ennemis que tu vois autour de toi."),
     ], []),
+    ("anvil_warden", "wonders", "brasshaven:remembrance_anvil_warden", ("The Anvil Warden", "Le Gardien de l'enclume"), [
+        ("Down the titan's forearm, through the mist in its hand, the arena is the face of the giant anvil, 34 blocks "
+         "over the lava lake under the titan's raised hammer. The smith the forge was built for waits there (640 "
+         "health, armour 14, immune to fire): a hunched basalt golem with molten seams, a crucible for a helm, a forge "
+         "hammer in its right hand and long tongs in its left.",
+         "En descendant l'avant-bras du titan, passé la brume dans sa main, l'arène est la face de l'enclume géante, "
+         "34 blocs au-dessus du lac de lave, sous le marteau levé du titan. Le forgeron pour qui la forge fut bâtie y "
+         "attend (640 PV, armure 14, insensible au feu) : un golem de basalte voûté aux joints en fusion, un creuset "
+         "pour heaume, un marteau de forge dans la main droite et une longue pince dans la gauche."),
+        ("Its slam sends a shockwave running along the anvil: step off the ember line. Its tongs grab whoever stands "
+         "in front of it and fling them toward the middle; its crucible splashes molten metal onto marked tiles that "
+         "burn for a while; hug it and steam bursts out. A few times per phase it beats its hammer on the tongs three "
+         "times to signal the titan: get out of the red zone under the great hammer, then jump the shockwave. Near the "
+         "edge its blows never throw you into the lava.",
+         "Sa frappe envoie une onde de choc qui court sur l'enclume : quitte la ligne de braises. Sa pince saisit qui "
+         "se tient devant lui et le jette vers le milieu ; son creuset éclabousse de métal en fusion des dalles "
+         "marquées qui brûlent un moment ; colle-le et la vapeur jaillit. Quelques fois par phase, il frappe trois "
+         "fois sa pince du marteau pour appeler le titan : sors de la zone rouge sous le marteau géant, puis saute "
+         "l'onde. Près du bord, ses coups ne te jettent jamais dans la lave."),
+    ], ["brasshaven:remembrance_anvil_warden", "brasshaven:warden_tongs"]),
+    ("anvil_warden_overheat", "wonders", "minecraft:magma_block", ("Warden: the Overheat", "Gardien : la Surchauffe"), [
+        ("At 65% it triples its shockwaves, slams twice in a row (jump both rings), hurls a white-hot billet at whoever "
+         "keeps away and raises steam geysers under them. At 30% it drinks its crucible and overheats: the anvil glows "
+         "red, it moves faster and leaves burning patches behind it, and every 15 s it vents a sheet of slag-steam "
+         "over the anvil. Put something solid between you and it (the root of the anvil's horn, the titan's fingers, a "
+         "brazier) or get more than 14 blocks away.",
+         "À 65 %, il triple ses ondes, frappe deux fois de suite (saute les deux anneaux), lance un lingot chauffé à "
+         "blanc sur qui reste à distance et fait jaillir des geysers sous ses pieds. À 30 %, il boit son creuset et "
+         "surchauffe : l'enclume rougit, il va plus vite et laisse des flaques brûlantes derrière lui, et toutes les "
+         "15 s il purge une nappe de vapeur et de scories sur l'enclume. Mets un obstacle entre toi et lui (la racine "
+         "de la bigorne, les doigts du titan, un brasero) ou éloigne-toi à plus de 14 blocs."),
+        ("Its Remembrance, four Ancient Embers and two diamonds forge the Searing Tongs of the Anvil Warden, whose "
+         "right-click seizes the nearest foe in front of you and hurls it along your aim, bowling through the foes in "
+         "its way.",
+         "Son Souvenir, quatre braises anciennes et deux diamants forgent la Pince ardente du Gardien de l'enclume, "
+         "dont le clic droit saisit l'ennemi le plus proche devant toi et le lance dans ta visée, renversant les "
+         "ennemis sur son passage."),
+    ], []),
     ("bog_hierophant", "wonders", "brasshaven:remembrance_bog_hierophant", ("The Bog Hierophant", "Le Hiérophante des tourbières"), [
         ("At the top of the Mire Stilt-City, up the grand stair from the High Walk, the rotting bishop holds court in the "
          "witch-queen's hall (600 health, armour 12): a hunched prelate on two stilt legs bound in mangrove roots, a "
@@ -1101,6 +1191,110 @@ PAGES = [
          "right-click opens a sinking bog where you look that drags foes in, holds them fast and poisons them.",
          "Son Souvenir, quatre fragments de carte et deux diamants forgent la Crosse-lanterne du Hiérophante, dont le "
          "clic droit ouvre une tourbière là où tu regardes : elle attire les ennemis, les retient et les empoisonne."),
+    ], []),
+    ("fourth_king", "wonders", "brasshaven:remembrance_fourth_king", ("The Fourth King", "Le Quatrième Roi"), [
+        ("At the bottom of the Necropolis of Kings, past the mist, the king whose face was chiselled off the façade "
+         "has risen (640 health, armour 12): a gaunt mummified monarch six blocks tall in a cracked mask of sandstone "
+         "and lapis, half of it hollowed out, a three-chain flail in one hand and a scarab sceptre in the other.",
+         "Tout en bas de la Nécropole des rois, passé la brume, le roi dont on a effacé le visage sur la façade s'est "
+         "relevé (640 PV, armure 12) : un monarque momifié décharné de six blocs, au masque de grès et de lapis fendu "
+         "et à moitié creusé, un fléau à trois chaînes d'une main et un sceptre au scarabée de l'autre."),
+        ("His flail strikes three times in front of him. His sceptre's beam sweeps either low across the floor (jump "
+         "it) or at chest height (step out of its fan: there is nothing to duck under). Sand pours from the ceiling "
+         "on marked circles, and a scarab swarm follows one player: lead it under the falling sand to bury it.",
+         "Son fléau frappe trois fois devant lui. Le rayon de son sceptre balaie soit au ras du sol (saute-le), soit "
+         "à hauteur de poitrine (sors de l'éventail : rien sous quoi se baisser). Le sable tombe du plafond sur des "
+         "cercles marqués, et un essaim de scarabées suit un joueur : attire-le sous le sable pour l'enterrer."),
+    ], ["brasshaven:remembrance_fourth_king", "brasshaven:fourth_king_sceptre"]),
+    ("fourth_king_tomb", "wonders", "minecraft:decorated_pot", ("Fourth King: Jars and the Sealed Tomb",
+                                                                "Quatrième Roi : vases et tombeau scellé"), [
+        ("Canopic jars stand round the arena (more in a larger party). When he is hurt he kneels and drains them, "
+         "healing for every jar still standing: break them first, one blow each. They rise again at 65%. At 30% he "
+         "seals the tomb: the lanterns die, the oculus closes and darkness falls, and the spirits of the three other "
+         "kings sweep the room with their gaze. Hide from the blue cones behind a column, and every 15 s stand in "
+         "the blind gap between the three turning cones of the Verdict.",
+         "Des vases canopes se dressent autour de l'arène (plus nombreux en groupe). Quand il est blessé, il "
+         "s'agenouille et les draine, se soignant pour chaque vase encore debout : casse-les d'abord, un coup "
+         "chacun. Ils reviennent à 65 %. À 30 %, il scelle le tombeau : les lanternes s'éteignent, l'oculus se ferme "
+         "et le noir tombe, et les esprits des trois autres rois balaient la salle de leur regard. Cache-toi des "
+         "cônes bleus derrière une colonne, et toutes les 15 s, place-toi dans l'angle mort entre les trois cônes "
+         "tournants du Verdict."),
+        ("His Remembrance, four Map Fragments and two diamonds forge the Scarab Sceptre of the Fourth King, whose "
+         "right-click looses a scarab along your aim: it bursts into a swarm that leaps from foe to foe, poisoning "
+         "and starving them, and you drink a little health from each bite.",
+         "Son Souvenir, quatre fragments de carte et deux diamants forgent le Sceptre-scarabée du Quatrième Roi, dont "
+         "le clic droit lâche un scarabée dans ta visée : il éclate en un essaim qui saute d'ennemi en ennemi, les "
+         "empoisonne et les affame, et chaque morsure te rend un peu de vie."),
+    ], []),
+    ("colossus_heart", "wonders", "brasshaven:remembrance_colossus_heart", ("The Colossus's Heart", "Le Cœur du Colosse"), [
+        ("In the helm of the Fallen Colossus, past the mist, the statue's brass engine-heart still beats (640 health, "
+         "armour 14): it pulls loose bronze plates and rubble together into a knight six blocks tall, a greatsword "
+         "with a long reach in one hand and a shield-plate in the other, its empty helm floating over the shoulders.",
+         "Dans le heaume du Colosse abattu, passé la brume, le cœur-moteur de laiton de la statue bat encore (640 PV, "
+         "armure 14) : il rassemble plaques de bronze et gravats en un chevalier de six blocs, un espadon à la longue "
+         "allonge d'une main et une plaque-bouclier de l'autre, son heaume vide flottant au-dessus des épaules."),
+        ("It sweeps wide and cleaves the floor (a crack runs on), lunges at you from afar and flings its shield in a "
+         "loop that comes back. Rubble torn from the walls is hurled at rings that follow you until they turn red, "
+         "and its magnet drags you in (harder in metal armour) before everything slams shut: run against the pull.",
+         "Il fauche large et fend le sol (une fissure court ensuite), fond sur toi de loin et lance sa plaque-bouclier "
+         "en une boucle qui revient. Des gravats arrachés aux murs sont lancés sur des cercles qui te suivent jusqu'à "
+         "rougir, et son aimant t'attire (plus fort en armure de métal) avant que tout se referme : cours à "
+         "contre-sens."),
+    ], ["brasshaven:remembrance_colossus_heart", "brasshaven:heart_lodeblade"]),
+    ("colossus_heart_burst", "wonders", "minecraft:copper_block", ("Heart: Burst and Reforged",
+                                                                   "Cœur : éclatement et reforge"), [
+        ("At 65% the armour bursts into plates that orbit the bare heart: it takes more damage, but four plates "
+         "circle it and the rest sweep the helm in rings (stand on the chiselled tuff rings of the floor for the "
+         "first wave, then change band), fly at you down drawn lines, or the heart vents steam and rust mites. At "
+         "30% the plates slam back on, bigger and faster, and the helm sheds debris on marked circles: the heaps of "
+         "rubble left behind vanish after a few seconds.",
+         "À 65 %, l'armure éclate en plaques qui tournent autour du cœur à nu : il prend plus de dégâts, mais quatre "
+         "plaques gravitent autour de lui et les autres balaient le heaume en anneaux (tiens-toi sur les anneaux de "
+         "tuf ciselé du sol pour la première vague, puis change de bande), filent sur toi le long de lignes tracées, "
+         "ou le cœur purge vapeur et mites de rouille. À 30 %, les plaques se ressoudent, plus grandes et plus "
+         "rapides, et le heaume lâche des blocs sur des cercles marqués : les tas de gravats disparaissent après "
+         "quelques secondes."),
+        ("Its Remembrance, four Map Fragments and two diamonds forge the Lodeblade of the Colossus's Heart, whose "
+         "right-click beats the heart once: every foe you can see nearby is dragged to your feet, hurt harder the "
+         "more armour it wears, and loose items and experience fly to you.",
+         "Son Souvenir, quatre fragments de carte et deux diamants forgent la Lame-aimant du Cœur du Colosse, dont "
+         "le clic droit fait battre le cœur une fois : chaque ennemi que tu vois alentour est traîné à tes pieds, "
+         "d'autant plus blessé qu'il porte d'armure, et les objets et l'expérience volent jusqu'à toi."),
+    ], []),
+    ("mine_baron", "wonders", "brasshaven:remembrance_mine_baron", ("The Mine Baron", "Le Baron de la mine"), [
+        ("In the cavern round the half-dug vein of the Rust Mesa Mine-City, past the mist, the Mine Baron waits "
+         "(600 health, armour 12): a huge greedy foreman in a riveted steam exo-rig, a pneumatic drill for a right "
+         "arm, a pickaxe-hammer in his left fist and a lantern on his helmet.",
+         "Dans la caverne du filon à moitié creusé de la Ville minière de la Mesa rouille, passé la brume, le Baron "
+         "de la mine attend (600 PV, armure 12) : un contremaître énorme et avide dans un exosquelette à vapeur "
+         "riveté, une foreuse pneumatique pour bras droit, un pic-marteau au poing gauche et une lanterne au casque."),
+        ("He thrusts the drill down a red line, slams the pick (gold bursts run on), charges from afar, throws lit "
+         "dynamite on rings that follow you until they turn red, and hits the wall so rocks fall on marks. Do not "
+         "linger at his back: the boiler vents. The dynamite never breaks a block.",
+         "Il pousse sa foreuse le long d'une ligne rouge, abat son pic (des gerbes d'or courent ensuite), charge de "
+         "loin, lance de la dynamite allumée sur des cercles qui te suivent jusqu'à rougir, et frappe la paroi pour "
+         "faire tomber des rochers sur des marques. Ne reste pas dans son dos : la chaudière purge. La dynamite ne "
+         "casse aucun bloc."),
+    ], ["brasshaven:remembrance_mine_baron", "brasshaven:baron_drillpick"]),
+    ("mine_baron_greed", "wonders", "minecraft:raw_gold_block", ("Baron: Gold Greed and Blackout",
+                                                                 "Baron : avidité et coup de grisou"), [
+        ("At 65% he armours up in ore and takes only a fifth of the damage: hit the glowing gold geodes on his "
+         "boiler from behind to knock the ore off, one per hit; with none left he reels, wide open. Every 26 s he "
+         "tries to regild (gold streams in): break the stream with 60 damage. At 30% he blows the support beams: "
+         "every lamp in the cavern goes out (they come back when the fight ends) but his helmet lantern and the "
+         "burning fuses, the vein sparks, and his lantern beam blinds whoever it sees.",
+         "À 65 %, il se cuirasse de minerai et ne prend plus qu'un cinquième des dégâts : frappe par derrière les "
+         "géodes d'or qui luisent sur sa chaudière pour faire sauter le minerai, une par coup ; sans géode, il "
+         "chancelle, sans défense. Toutes les 26 s, il tente de se recuirasser (l'or afflue) : casse le flot à 60 "
+         "dégâts. À 30 %, il fait sauter les étais : toutes les lampes de la caverne s'éteignent (elles reviennent à "
+         "la fin du combat) sauf la lanterne de son casque et les mèches, le filon crépite, et le faisceau de sa "
+         "lanterne aveugle qui il voit."),
+        ("His Remembrance, four Map Fragments and two diamonds forge the Drill-Pick of the Mine Baron, whose "
+         "right-click flings a bundle of lit dynamite along your aim: it sticks to the first foe or lands, then "
+         "blows 1.5 s later, hurling and burning every foe around it, without breaking a block.",
+         "Son Souvenir, quatre fragments de carte et deux diamants forgent le Pic-foreuse du Baron de la mine, dont "
+         "le clic droit lance un fagot de dynamite allumée dans ta visée : il se colle au premier ennemi ou tombe, "
+         "puis saute 1,5 s plus tard, projetant et brûlant tous les ennemis autour, sans briser un bloc."),
     ], []),
     ("strangler_queen", "wonders", "brasshaven:remembrance_strangler_queen", ("The Strangler Fig Queen", "La Reine-figuier étrangleur"), [
         ("On the summit terrace of the Canopy Temple-City, through the mist under the broken brass sun-disc, the fig "
@@ -1139,6 +1333,47 @@ PAGES = [
          "Son Souvenir, quatre fragments de carte et deux diamants forgent le Macuahuitl de jade de la Reine-figuier, "
          "dont le clic droit fait claquer un fouet de racine dans ta visée : le premier ennemi touché est mis en cage "
          "sur place et les épines de la cage fouettent ceux qui l'entourent."),
+    ], []),
+    ("star_curator", "wonders", "brasshaven:remembrance_star_curator", ("The Star-Eater Curator",
+                                                                         "Le Conservateur dévoreur d'étoiles"), [
+        ("In the crater chamber under the Starfall Library, past the corkscrew down the meteorite, the grace and the "
+         "mist, the keeper of the archive waits (780 health, armour 14): a tall robed scholar in indigo and brass whose "
+         "head is the meteorite that wrecked his library, cracked open on a starfield. Five books orbit him and he "
+         "fights with an astrolabe staff.",
+         "Dans la chambre du cratère sous la Bibliothèque de la chute d'étoile, au bout de la vrille dans la "
+         "météorite, du lieu de grâce et de la brume, le gardien de l'archive attend (780 PV, armure 14) : un grand "
+         "érudit en robe d'indigo et de laiton dont la tête est la météorite qui a ruiné sa bibliothèque, fendue sur "
+         "un ciel étoilé. Cinq livres tournent autour de lui et il se bat avec un bâton-astrolabe."),
+        ("His staff sweeps twice in front of him. His books fly after you, slowly: an arrow or a blow shoots each one "
+         "down. When he plants the staff, gravity pulls you toward him for a second and a half before it implodes: "
+         "sprint outward. Star-shards fall on circles that follow you, then lock: step out. Hug him and the books "
+         "spin out; run and he streaks through you along a line.",
+         "Son bâton balaie deux fois devant lui. Ses livres te poursuivent lentement : une flèche ou un coup abat "
+         "chacun d'eux. Quand il plante le bâton, la gravité t'attire vers lui une seconde et demie avant d'imploser : "
+         "sprinte vers l'extérieur. Des éclats d'étoile tombent sur des cercles qui te suivent puis se figent : "
+         "sors-en. Colle-toi à lui et les livres tournoient ; fuis et il fond sur toi en ligne droite."),
+    ], ["brasshaven:remembrance_star_curator", "brasshaven:curator_astrolabe"]),
+    ("star_curator_gravity", "wonders", "minecraft:amethyst_cluster", ("Curator: Pages and Gravity",
+                                                                      "Conservateur : pages et gravité"), [
+        ("At 65% he tears his books open: for seven seconds a storm of pages blinds and cuts whoever is outside the "
+         "golden circles wheeling round the crater, and he keeps fighting meanwhile. He also draws constellations on "
+         "the floor whose lines burst star by star. At 30% the crater's gravity inverts: every eight seconds a pulse "
+         "lifts everyone who is not standing in a golden ring round a crystal brazier (never the one he stands at), "
+         "and you float back down slowly; every ten seconds he blinks to a brazier and fires a star-lance across the "
+         "crater that hits floating players too.",
+         "À 65 %, il déchire ses livres : sept secondes durant, une tempête de pages aveugle et coupe qui se trouve "
+         "hors des cercles dorés qui tournent dans le cratère, et il continue de se battre. Il trace aussi des "
+         "constellations au sol dont les lignes éclatent étoile après étoile. À 30 %, la gravité du cratère "
+         "s'inverse : toutes les huit secondes une pulsation soulève tous ceux qui ne sont pas dans un anneau doré "
+         "autour d'un brasier de cristal (jamais celui où il se tient), puis tu redescends doucement ; toutes les dix "
+         "secondes il se téléporte sur un brasier et tire une lance d'étoiles à travers le cratère, qui touche aussi "
+         "les joueurs en l'air."),
+        ("His Remembrance, four Void Shards and two diamonds forge the Astrolabe of the Star-Eater Curator, whose "
+         "right-click inverts gravity where you aim: the foes there are drawn together and float up, helpless and "
+         "glowing.",
+         "Son Souvenir, quatre éclats du vide et deux diamants forgent l'Astrolabe du Conservateur dévoreur "
+         "d'étoiles, dont le clic droit inverse la gravité là où tu vises : les ennemis y sont rassemblés et "
+         "s'envolent, sans défense et luisants."),
     ], []),
     ("solar_hierarch", "wonders", "brasshaven:remembrance_solar_hierarch", ("The Solar Hierarch", "Le Hiérarque solaire"), [
         ("In the sun chamber under the lens of the Sun-Engine Ziggurat, past the antechamber and the mist, the last "

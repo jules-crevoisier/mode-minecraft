@@ -52,6 +52,7 @@
     "explorer/sun_ziggurat",
     "explorer/dreadnought_wreck",
     "explorer/canopy_city",
+    "explorer/mesa_minecity",
     "explorer/master_cartographer",
     "explorer/boss_bell_keeper",
     "explorer/boss_archivist",
@@ -78,7 +79,10 @@
     "explorer/boss_strangler_queen",
     "explorer/boss_solar_hierarch",
     "explorer/boss_drowned_admiral",
-    "explorer/boss_turbine_tyrant"
+    "explorer/boss_turbine_tyrant",
+    "explorer/boss_fourth_king",
+    "explorer/boss_colossus_heart",
+    "explorer/boss_mine_baron"
   ],
   "depths": [
     "depths/lithite",
@@ -111,6 +115,7 @@
     "nether/soul_tower",
     "nether/piglin_market",
     "nether/chained_bastion",
+    "nether/titan_forge",
     "nether/ancient_ember",
     "nether/ember_scythe",
     "nether/storm_staff",
@@ -119,7 +124,8 @@
     "nether/boss_ash_lord",
     "nether/boss_piglin_king",
     "nether/boss_soul_reaper",
-    "nether/boss_chained_jailer"
+    "nether/boss_chained_jailer",
+    "nether/boss_anvil_warden"
   ],
   "end": [
     "end/enter",
@@ -130,12 +136,14 @@
     "end/void_nest",
     "end/void_crypt",
     "end/shattered_halo",
+    "end/starfall_library",
     "end/void_shard",
     "end/void_spear",
     "end/void_armor",
     "end/void_warden",
     "end/boss_larva_mother",
     "end/boss_fallen_seraph",
+    "end/boss_star_curator",
     "end/legends_bane",
     "end/legend"
   ]

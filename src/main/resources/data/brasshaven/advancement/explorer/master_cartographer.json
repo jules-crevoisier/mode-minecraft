@@ -686,9 +686,25 @@
           }
         ]
       }
+    },
+    "mesa_minecity": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:mesa_minecity"
+              }
+            }
+          }
+        ]
+      }
     }
   },
-  "parent": "brasshaven:explorer/canopy_city",
+  "parent": "brasshaven:explorer/mesa_minecity",
   "rewards": {
     "experience": 300,
     "loot": [

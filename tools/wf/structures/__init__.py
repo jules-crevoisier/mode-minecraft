@@ -22,3 +22,6 @@ from . import great_aqueduct  # noqa: F401
 from . import sun_ziggurat  # noqa: F401
 from . import dreadnought_wreck  # noqa: F401
 from . import canopy_city  # noqa: F401
+from . import mesa_minecity  # noqa: F401
+from . import titan_forge  # noqa: F401
+from . import starfall_library  # noqa: F401

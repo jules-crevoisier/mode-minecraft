@@ -1,0 +1,37 @@
+{
+  "display": {
+    "icon": {
+      "id": "brasshaven:fourth_king_sceptre"
+    },
+    "title": {
+      "translate": "advancements.brasshaven.explorer.boss_fourth_king.title"
+    },
+    "description": {
+      "translate": "advancements.brasshaven.explorer.boss_fourth_king.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "kill": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "entity_type": "brasshaven:fourth_king"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "parent": "brasshaven:explorer/rock_necropolis",
+  "rewards": {
+    "experience": 500
+  }
+}

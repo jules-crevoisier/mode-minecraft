@@ -153,6 +153,9 @@ STRUCTURE_KIND = {
     "great_aqueduct": "workshop",
     "sun_ziggurat": "library",
     "canopy_city": "sylvan",
+    "mesa_minecity": "mine",
+    "titan_forge": "workshop",
+    "starfall_library": "library",
     "tesla_observatory": "clockwork", "crystal_cathedral": "library", "sunken_submarine": "harbour",
     "diving_bell": "harbour", "coral_shrine": "harbour", "shipwreck_debris": "harbour",
     # vanilla villages and outposts extended by wf/village.py, the sea-floor props of wf/ocean.py

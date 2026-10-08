@@ -19,6 +19,10 @@
     {
       "structure": "brasshaven:chained_bastion",
       "weight": 1
+    },
+    {
+      "structure": "brasshaven:titan_forge",
+      "weight": 1
     }
   ],
   "placement": {

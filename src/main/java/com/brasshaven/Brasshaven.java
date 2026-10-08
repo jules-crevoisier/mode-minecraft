@@ -52,6 +52,7 @@ public final class Brasshaven {
         com.brasshaven.registry.ModOcean.init();
         com.brasshaven.registry.ModSocial.init();
         com.brasshaven.relic.RelicGear.init(); // relic gear of the colossal structures
+        com.brasshaven.colossal.ColossalGear.init(); // vault gear of the newer colossal structures
         ModBlocks.BLOCKS.register(modBus);
         ModItems.ITEMS.register(modBus);
         ModBlockEntities.BLOCK_ENTITIES.register(modBus);
@@ -79,6 +80,7 @@ public final class Brasshaven {
         com.brasshaven.event.GadgetEvents.register();
         com.brasshaven.accessory.AccessoryEvents.register();
         com.brasshaven.relic.RelicEvents.register();
+        com.brasshaven.colossal.ColossalEvents.register();
         com.brasshaven.event.OceanEvents.register();
         com.brasshaven.skill.SkillEvents.register();
         com.brasshaven.boss.BossDifficulty.register();

@@ -125,6 +125,11 @@ EGGS = {
     "solar_hierarch": ((214, 170, 72), (255, 178, 70)),
     "drowned_admiral": ((38, 46, 74), (96, 236, 196)),
     "turbine_tyrant": ((104, 98, 94), (255, 178, 70)),
+    "anvil_warden": ((58, 54, 62), (255, 120, 28)),
+    "fourth_king": ((176, 160, 128), (40, 66, 160)),
+    "colossus_heart": ((150, 104, 58), (255, 176, 64)),
+    "star_curator": ((46, 34, 84), (190, 220, 255)),
+    "mine_baron": ((120, 84, 56), (255, 206, 80)),
 }
 
 
@@ -188,6 +193,11 @@ EMBLEMS = {
     "solar_hierarch": ["#.#.#", ".###.", "##.##", ".###.", "#.#.#"],    # a rayed sun-disc
     "drowned_admiral": ["#####", ".###.", "#...#", "#...#", ".###."],   # a bicorne over a diving helmet
     "turbine_tyrant": ["#...#", ".#.#.", "..#..", ".#.#.", "#...#"],    # a four-bladed rotor
+    "anvil_warden": ["#####", ".###.", "..#..", ".###.", "#####"],     # an anvil seen from the side
+    "fourth_king": ["#.#.#", "#####", "##.#.", "##...", ".#..."],    # a crown over a half-chiselled face
+    "colossus_heart": [".#.#.", "#####", "#####", ".###.", "..#.."],    # the engine-heart
+    "star_curator": ["#...#", ".###.", "##.##", ".###.", "#...#"],      # a cracked star in its orbit
+    "mine_baron": ["#####", ".###.", "..#..", "..#..", ".#.#."],       # a pickaxe over a nugget
 }
 
 
@@ -428,6 +438,7 @@ def main():
     from wf import held3d
     written.update(held3d.textures())
     written.update(__import__("wf.relicart", fromlist=["textures"]).textures())  # relic gear (wf/relics.py)
+    written.update(__import__("wf.colossal_art", fromlist=["textures"]).textures())  # vault gear (wf/colossal_gear.py)
     from wf import gadgets
     written.update(gadgets.textures())
     from wf import worldblocks

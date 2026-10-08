@@ -48,10 +48,13 @@ import com.brasshaven.entity.boss.AbyssalArchitect;
 import com.brasshaven.entity.boss.LockMaster;
 import com.brasshaven.entity.boss.BogHierophant;
 import com.brasshaven.entity.boss.StranglerQueen;
+import com.brasshaven.entity.boss.FourthKing;
 import com.brasshaven.entity.boss.JaguarSpirit;
 import com.brasshaven.entity.boss.SolarHierarch;
 import com.brasshaven.entity.boss.DrownedAdmiral;
 import com.brasshaven.entity.boss.TurbineTyrant;
+import com.brasshaven.entity.boss.AnvilWarden;
+import com.brasshaven.entity.boss.ColossusHeart;
 import com.brasshaven.entity.automaton.BrassGolem;
 import com.brasshaven.entity.automaton.ClockworkSpider;
 import com.brasshaven.entity.automaton.HotRivetEntity;
@@ -254,6 +257,12 @@ public final class ModEntities {
     public static final RegistryObject<EntityType<StranglerQueen>> STRANGLER_QUEEN = ENTITIES.register("strangler_queen",
             () -> EntityType.Builder.<StranglerQueen>of(StranglerQueen::new, MobCategory.MONSTER)
                     .sized(StranglerQueen.WIDTH, StranglerQueen.HEIGHT).clientTrackingRange(10).build(ENTITIES.key("strangler_queen")));
+    public static final RegistryObject<EntityType<com.brasshaven.entity.boss.StarCurator>> STAR_CURATOR = ENTITIES.register("star_curator",
+            () -> EntityType.Builder.<com.brasshaven.entity.boss.StarCurator>of(com.brasshaven.entity.boss.StarCurator::new, MobCategory.MONSTER)
+                    .sized(com.brasshaven.entity.boss.StarCurator.WIDTH, com.brasshaven.entity.boss.StarCurator.HEIGHT).clientTrackingRange(10).build(ENTITIES.key("star_curator")));
+    public static final RegistryObject<EntityType<FourthKing>> FOURTH_KING = ENTITIES.register("fourth_king",
+            () -> EntityType.Builder.<FourthKing>of(FourthKing::new, MobCategory.MONSTER)
+                    .sized(FourthKing.WIDTH, FourthKing.HEIGHT).clientTrackingRange(10).build(ENTITIES.key("fourth_king")));
     public static final RegistryObject<EntityType<JaguarSpirit>> JAGUAR_SPIRIT = ENTITIES.register("jaguar_spirit",
             () -> EntityType.Builder.<JaguarSpirit>of(JaguarSpirit::new, MobCategory.MONSTER)
                     .sized(JaguarSpirit.WIDTH, JaguarSpirit.HEIGHT).clientTrackingRange(10).build(ENTITIES.key("jaguar_spirit")));
@@ -263,6 +272,15 @@ public final class ModEntities {
     public static final RegistryObject<EntityType<TurbineTyrant>> TURBINE_TYRANT = ENTITIES.register("turbine_tyrant",
             () -> EntityType.Builder.<TurbineTyrant>of(TurbineTyrant::new, MobCategory.MONSTER)
                     .sized(TurbineTyrant.WIDTH, TurbineTyrant.HEIGHT).fireImmune().clientTrackingRange(10).build(ENTITIES.key("turbine_tyrant")));
+    public static final RegistryObject<EntityType<AnvilWarden>> ANVIL_WARDEN = ENTITIES.register("anvil_warden",
+            () -> EntityType.Builder.<AnvilWarden>of(AnvilWarden::new, MobCategory.MONSTER)
+                    .sized(AnvilWarden.WIDTH, AnvilWarden.HEIGHT).fireImmune().clientTrackingRange(10).build(ENTITIES.key("anvil_warden")));
+    public static final RegistryObject<EntityType<com.brasshaven.entity.boss.MineBaron>> MINE_BARON = ENTITIES.register("mine_baron",
+            () -> EntityType.Builder.<com.brasshaven.entity.boss.MineBaron>of(com.brasshaven.entity.boss.MineBaron::new, MobCategory.MONSTER)
+                    .sized(com.brasshaven.entity.boss.MineBaron.WIDTH, com.brasshaven.entity.boss.MineBaron.HEIGHT).clientTrackingRange(10).build(ENTITIES.key("mine_baron")));
+    public static final RegistryObject<EntityType<ColossusHeart>> COLOSSUS_HEART = ENTITIES.register("colossus_heart",
+            () -> EntityType.Builder.<ColossusHeart>of(ColossusHeart::new, MobCategory.MONSTER)
+                    .sized(ColossusHeart.WIDTH, ColossusHeart.HEIGHT).clientTrackingRange(10).build(ENTITIES.key("colossus_heart")));
     public static final RegistryObject<EntityType<SolarHierarch>> SOLAR_HIERARCH = ENTITIES.register("solar_hierarch",
             () -> EntityType.Builder.<SolarHierarch>of(SolarHierarch::new, MobCategory.MONSTER)
                     .sized(SolarHierarch.WIDTH, SolarHierarch.HEIGHT).fireImmune().clientTrackingRange(10).build(ENTITIES.key("solar_hierarch")));
@@ -368,7 +386,7 @@ public final class ModEntities {
 
     /** Every boss with an Elden Ring style fight (demo command, quests). */
     public static List<RegistryObject<? extends EntityType<? extends com.brasshaven.boss.WayfarerBoss>>> bosses() {
-        return List.of(DROWNED_WARDEN, VOID_WARDEN, GRAVE_KNIGHT, BONE_MATRIARCH, WEEPING_LADY, LARVA_MOTHER, BELL_KEEPER, ARCHIVIST, SAND_PHARAOH, JADE_JAGUAR, ROOT_MOTHER, SWAMP_CRONE, GRYPHON_KNIGHT, RUNE_COLOSSUS, FORGE_KING, CRYSTAL_SPIDER, SCULK_SPAWN, ASH_LORD, PIGLIN_KING, SOUL_REAPER, GRAND_CLOCKMAKER, IRON_HELMSMAN, BRONZE_SENTINEL, DUNE_KING, FALLEN_SERAPH, CHAINED_JAILER, CALDERA_CASTELLAN, FROST_JARL, OATHBOUND_GATEKEEPER, STORM_ASCETIC, TIDE_ABBESS, LOCK_MASTER, BOG_HIEROPHANT, SOLAR_HIERARCH, DROWNED_ADMIRAL, TURBINE_TYRANT, ABYSSAL_ARCHITECT, STRANGLER_QUEEN);
+        return List.of(DROWNED_WARDEN, VOID_WARDEN, GRAVE_KNIGHT, BONE_MATRIARCH, WEEPING_LADY, LARVA_MOTHER, BELL_KEEPER, ARCHIVIST, SAND_PHARAOH, JADE_JAGUAR, ROOT_MOTHER, SWAMP_CRONE, GRYPHON_KNIGHT, RUNE_COLOSSUS, FORGE_KING, CRYSTAL_SPIDER, SCULK_SPAWN, ASH_LORD, PIGLIN_KING, SOUL_REAPER, GRAND_CLOCKMAKER, IRON_HELMSMAN, BRONZE_SENTINEL, DUNE_KING, FALLEN_SERAPH, CHAINED_JAILER, CALDERA_CASTELLAN, FROST_JARL, OATHBOUND_GATEKEEPER, STORM_ASCETIC, TIDE_ABBESS, LOCK_MASTER, BOG_HIEROPHANT, SOLAR_HIERARCH, DROWNED_ADMIRAL, TURBINE_TYRANT, ABYSSAL_ARCHITECT, STRANGLER_QUEEN, FOURTH_KING, COLOSSUS_HEART, ANVIL_WARDEN, STAR_CURATOR, MINE_BARON);
     }
 
     public static void registerAttributes(EntityAttributeCreationEvent event) {
@@ -422,9 +440,14 @@ public final class ModEntities {
         event.put(LOCK_MASTER.get(), LockMaster.attributes().build());
         event.put(BOG_HIEROPHANT.get(), BogHierophant.attributes().build());
         event.put(STRANGLER_QUEEN.get(), StranglerQueen.attributes().build());
+        event.put(STAR_CURATOR.get(), com.brasshaven.entity.boss.StarCurator.attributes().build());
+        event.put(FOURTH_KING.get(), FourthKing.attributes().build());
         event.put(JAGUAR_SPIRIT.get(), JaguarSpirit.attributes().build());
         event.put(DROWNED_ADMIRAL.get(), DrownedAdmiral.attributes().build());
         event.put(TURBINE_TYRANT.get(), TurbineTyrant.attributes().build());
+        event.put(ANVIL_WARDEN.get(), AnvilWarden.attributes().build());
+        event.put(COLOSSUS_HEART.get(), ColossusHeart.attributes().build());
+        event.put(MINE_BARON.get(), com.brasshaven.entity.boss.MineBaron.attributes().build());
         event.put(SOLAR_HIERARCH.get(), SolarHierarch.attributes().build());
         event.put(GLOW_JELLYFISH.get(), GlowJellyfish.attributes().build());
         event.put(REEF_FISH.get(), ReefFish.attributes().build());

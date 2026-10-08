@@ -129,6 +129,9 @@ STRUCTURE_ICONS = {
     "sun_ziggurat": "sunflower",
     "mire_stilt_city": "mangrove_roots",
     "canopy_city": "jungle_log",
+    "mesa_minecity": "rail",
+    "titan_forge": "anvil",
+    "starfall_library": "chiseled_bookshelf",
 }
 # where each boss lives (its quest follows the discovery of that structure)
 BOSS_HOME = {
@@ -157,6 +160,11 @@ BOSS_HOME = {
     "solar_hierarch": "sun_ziggurat",
     "drowned_admiral": "dreadnought_wreck",
     "turbine_tyrant": "drowned_dam",
+    "anvil_warden": "titan_forge",
+    "fourth_king": "rock_necropolis",
+    "colossus_heart": "fallen_colossus",
+    "star_curator": "starfall_library",
+    "mine_baron": "mesa_minecity",
 }
 CHAPTER = {}
 for s in defs.STRUCTURES:

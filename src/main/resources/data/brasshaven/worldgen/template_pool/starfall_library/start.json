@@ -1,0 +1,972 @@
+{
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "brasshaven:chunked_template",
+        "size": [
+          127,
+          176,
+          167
+        ],
+        "cells": [
+          {
+            "location": "brasshaven:starfall_library/library/x0_z1",
+            "offset": [
+              10,
+              57,
+              22
+            ],
+            "size": [
+              6,
+              16,
+              8
+            ],
+            "blocks": 287
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x0_z2",
+            "offset": [
+              3,
+              56,
+              30
+            ],
+            "size": [
+              13,
+              18,
+              16
+            ],
+            "blocks": 2083
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x0_z3",
+            "offset": [
+              0,
+              56,
+              46
+            ],
+            "size": [
+              16,
+              20,
+              15
+            ],
+            "blocks": 2103
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x0_z4",
+            "offset": [
+              0,
+              56,
+              61
+            ],
+            "size": [
+              16,
+              18,
+              15
+            ],
+            "blocks": 2174
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x0_z5",
+            "offset": [
+              1,
+              56,
+              76
+            ],
+            "size": [
+              15,
+              20,
+              15
+            ],
+            "blocks": 2179
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x0_z6",
+            "offset": [
+              7,
+              56,
+              91
+            ],
+            "size": [
+              9,
+              18,
+              14
+            ],
+            "blocks": 929
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x1_z0",
+            "offset": [
+              23,
+              57,
+              9
+            ],
+            "size": [
+              9,
+              16,
+              6
+            ],
+            "blocks": 333
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x1_z1",
+            "offset": [
+              16,
+              56,
+              15
+            ],
+            "size": [
+              16,
+              41,
+              15
+            ],
+            "blocks": 2709
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x1_z2",
+            "offset": [
+              16,
+              39,
+              30
+            ],
+            "size": [
+              16,
+              83,
+              16
+            ],
+            "blocks": 2690
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x1_z3",
+            "offset": [
+              16,
+              35,
+              46
+            ],
+            "size": [
+              16,
+              88,
+              15
+            ],
+            "blocks": 1527
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x1_z4",
+            "offset": [
+              16,
+              33,
+              61
+            ],
+            "size": [
+              16,
+              89,
+              15
+            ],
+            "blocks": 2617
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x1_z5",
+            "offset": [
+              16,
+              30,
+              76
+            ],
+            "size": [
+              16,
+              92,
+              15
+            ],
+            "blocks": 2285
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x1_z6",
+            "offset": [
+              16,
+              32,
+              91
+            ],
+            "size": [
+              16,
+              47,
+              15
+            ],
+            "blocks": 2854
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x1_z7",
+            "offset": [
+              17,
+              40,
+              106
+            ],
+            "size": [
+              15,
+              34,
+              12
+            ],
+            "blocks": 1385
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x2_z0",
+            "offset": [
+              32,
+              56,
+              2
+            ],
+            "size": [
+              16,
+              18,
+              13
+            ],
+            "blocks": 2090
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x2_z1",
+            "offset": [
+              32,
+              39,
+              15
+            ],
+            "size": [
+              16,
+              83,
+              15
+            ],
+            "blocks": 2767
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x2_z2",
+            "offset": [
+              32,
+              24,
+              30
+            ],
+            "size": [
+              16,
+              105,
+              16
+            ],
+            "blocks": 6530
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x2_z3",
+            "offset": [
+              32,
+              19,
+              46
+            ],
+            "size": [
+              16,
+              127,
+              15
+            ],
+            "blocks": 11519
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x2_z4",
+            "offset": [
+              32,
+              22,
+              61
+            ],
+            "size": [
+              16,
+              125,
+              15
+            ],
+            "blocks": 13913
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x2_z5",
+            "offset": [
+              32,
+              17,
+              76
+            ],
+            "size": [
+              16,
+              106,
+              15
+            ],
+            "blocks": 9334
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x2_z6",
+            "offset": [
+              32,
+              21,
+              91
+            ],
+            "size": [
+              16,
+              102,
+              15
+            ],
+            "blocks": 5533
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x2_z7",
+            "offset": [
+              32,
+              31,
+              106
+            ],
+            "size": [
+              16,
+              51,
+              15
+            ],
+            "blocks": 4078
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x2_z8",
+            "offset": [
+              38,
+              56,
+              121
+            ],
+            "size": [
+              10,
+              22,
+              16
+            ],
+            "blocks": 656
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x2_z9",
+            "offset": [
+              40,
+              40,
+              137
+            ],
+            "size": [
+              8,
+              22,
+              15
+            ],
+            "blocks": 418
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x2_z10",
+            "offset": [
+              37,
+              20,
+              152
+            ],
+            "size": [
+              11,
+              43,
+              15
+            ],
+            "blocks": 1955
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x3_z0",
+            "offset": [
+              48,
+              56,
+              0
+            ],
+            "size": [
+              16,
+              41,
+              15
+            ],
+            "blocks": 2589
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x3_z1",
+            "offset": [
+              48,
+              35,
+              15
+            ],
+            "size": [
+              16,
+              88,
+              15
+            ],
+            "blocks": 4225
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x3_z2",
+            "offset": [
+              48,
+              21,
+              30
+            ],
+            "size": [
+              16,
+              117,
+              16
+            ],
+            "blocks": 11297
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x3_z3",
+            "offset": [
+              48,
+              6,
+              46
+            ],
+            "size": [
+              16,
+              164,
+              15
+            ],
+            "blocks": 29983
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x3_z4",
+            "offset": [
+              48,
+              0,
+              61
+            ],
+            "size": [
+              16,
+              176,
+              15
+            ],
+            "blocks": 32864
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x3_z5",
+            "offset": [
+              48,
+              12,
+              76
+            ],
+            "size": [
+              16,
+              138,
+              15
+            ],
+            "blocks": 19659
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x3_z6",
+            "offset": [
+              48,
+              16,
+              91
+            ],
+            "size": [
+              16,
+              107,
+              15
+            ],
+            "blocks": 9969
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x3_z7",
+            "offset": [
+              48,
+              27,
+              106
+            ],
+            "size": [
+              16,
+              53,
+              15
+            ],
+            "blocks": 4878
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x3_z8",
+            "offset": [
+              48,
+              38,
+              121
+            ],
+            "size": [
+              16,
+              39,
+              16
+            ],
+            "blocks": 1592
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x3_z9",
+            "offset": [
+              48,
+              42,
+              137
+            ],
+            "size": [
+              8,
+              14,
+              15
+            ],
+            "blocks": 368
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x3_z10",
+            "offset": [
+              48,
+              23,
+              152
+            ],
+            "size": [
+              10,
+              39,
+              15
+            ],
+            "blocks": 1215
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x4_z0",
+            "offset": [
+              64,
+              56,
+              0
+            ],
+            "size": [
+              15,
+              41,
+              15
+            ],
+            "blocks": 2391
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x4_z1",
+            "offset": [
+              64,
+              37,
+              15
+            ],
+            "size": [
+              15,
+              86,
+              15
+            ],
+            "blocks": 3316
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x4_z2",
+            "offset": [
+              64,
+              21,
+              30
+            ],
+            "size": [
+              15,
+              117,
+              16
+            ],
+            "blocks": 10146
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x4_z3",
+            "offset": [
+              64,
+              7,
+              46
+            ],
+            "size": [
+              15,
+              163,
+              15
+            ],
+            "blocks": 27946
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x4_z4",
+            "offset": [
+              64,
+              3,
+              61
+            ],
+            "size": [
+              15,
+              167,
+              15
+            ],
+            "blocks": 30625
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x4_z5",
+            "offset": [
+              64,
+              12,
+              76
+            ],
+            "size": [
+              15,
+              138,
+              15
+            ],
+            "blocks": 19205
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x4_z6",
+            "offset": [
+              64,
+              14,
+              91
+            ],
+            "size": [
+              15,
+              109,
+              15
+            ],
+            "blocks": 10397
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x4_z7",
+            "offset": [
+              64,
+              27,
+              106
+            ],
+            "size": [
+              15,
+              53,
+              15
+            ],
+            "blocks": 4542
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x4_z8",
+            "offset": [
+              64,
+              38,
+              121
+            ],
+            "size": [
+              15,
+              36,
+              6
+            ],
+            "blocks": 1098
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x5_z0",
+            "offset": [
+              79,
+              56,
+              2
+            ],
+            "size": [
+              16,
+              18,
+              13
+            ],
+            "blocks": 2099
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x5_z1",
+            "offset": [
+              79,
+              38,
+              15
+            ],
+            "size": [
+              16,
+              84,
+              15
+            ],
+            "blocks": 2845
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x5_z2",
+            "offset": [
+              79,
+              23,
+              30
+            ],
+            "size": [
+              16,
+              106,
+              16
+            ],
+            "blocks": 6038
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x5_z3",
+            "offset": [
+              79,
+              16,
+              46
+            ],
+            "size": [
+              16,
+              130,
+              15
+            ],
+            "blocks": 12103
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x5_z4",
+            "offset": [
+              79,
+              12,
+              61
+            ],
+            "size": [
+              16,
+              135,
+              15
+            ],
+            "blocks": 16081
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x5_z5",
+            "offset": [
+              79,
+              14,
+              76
+            ],
+            "size": [
+              16,
+              120,
+              15
+            ],
+            "blocks": 16630
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x5_z6",
+            "offset": [
+              79,
+              11,
+              91
+            ],
+            "size": [
+              16,
+              112,
+              15
+            ],
+            "blocks": 9952
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x5_z7",
+            "offset": [
+              79,
+              31,
+              106
+            ],
+            "size": [
+              16,
+              43,
+              15
+            ],
+            "blocks": 3627
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x5_z8",
+            "offset": [
+              79,
+              58,
+              121
+            ],
+            "size": [
+              10,
+              15,
+              4
+            ],
+            "blocks": 226
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x6_z0",
+            "offset": [
+              95,
+              57,
+              9
+            ],
+            "size": [
+              9,
+              16,
+              6
+            ],
+            "blocks": 333
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x6_z1",
+            "offset": [
+              95,
+              56,
+              15
+            ],
+            "size": [
+              16,
+              41,
+              15
+            ],
+            "blocks": 2718
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x6_z2",
+            "offset": [
+              95,
+              36,
+              30
+            ],
+            "size": [
+              16,
+              86,
+              16
+            ],
+            "blocks": 2837
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x6_z3",
+            "offset": [
+              95,
+              28,
+              46
+            ],
+            "size": [
+              16,
+              95,
+              15
+            ],
+            "blocks": 4109
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x6_z4",
+            "offset": [
+              95,
+              23,
+              61
+            ],
+            "size": [
+              16,
+              100,
+              15
+            ],
+            "blocks": 6842
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x6_z5",
+            "offset": [
+              95,
+              22,
+              76
+            ],
+            "size": [
+              16,
+              100,
+              15
+            ],
+            "blocks": 8474
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x6_z6",
+            "offset": [
+              95,
+              24,
+              91
+            ],
+            "size": [
+              16,
+              55,
+              15
+            ],
+            "blocks": 5558
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x6_z7",
+            "offset": [
+              95,
+              49,
+              106
+            ],
+            "size": [
+              15,
+              25,
+              12
+            ],
+            "blocks": 1364
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x7_z1",
+            "offset": [
+              111,
+              57,
+              22
+            ],
+            "size": [
+              6,
+              16,
+              8
+            ],
+            "blocks": 278
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x7_z2",
+            "offset": [
+              111,
+              56,
+              30
+            ],
+            "size": [
+              13,
+              38,
+              16
+            ],
+            "blocks": 2131
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x7_z3",
+            "offset": [
+              111,
+              56,
+              46
+            ],
+            "size": [
+              16,
+              35,
+              15
+            ],
+            "blocks": 2707
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x7_z4",
+            "offset": [
+              111,
+              33,
+              61
+            ],
+            "size": [
+              16,
+              57,
+              15
+            ],
+            "blocks": 3549
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x7_z5",
+            "offset": [
+              111,
+              33,
+              76
+            ],
+            "size": [
+              15,
+              47,
+              15
+            ],
+            "blocks": 3297
+          },
+          {
+            "location": "brasshaven:starfall_library/library/x7_z6",
+            "offset": [
+              111,
+              38,
+              91
+            ],
+            "size": [
+              9,
+              35,
+              14
+            ],
+            "blocks": 1067
+          }
+        ],
+        "projection": "rigid",
+        "processors": "brasshaven:none"
+      }
+    }
+  ]
+}

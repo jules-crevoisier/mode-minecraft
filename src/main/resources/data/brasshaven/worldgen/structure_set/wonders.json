@@ -83,6 +83,10 @@
     {
       "structure": "brasshaven:canopy_city",
       "weight": 1
+    },
+    {
+      "structure": "brasshaven:mesa_minecity",
+      "weight": 1
     }
   ],
   "placement": {

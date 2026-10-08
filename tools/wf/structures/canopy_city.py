@@ -2399,6 +2399,63 @@ def approach(S):
     S.solid(4, 4, 112, JADE)
 
 
+# ------------------------------------------------------------------ the temple core
+CORE_BUDGET = 76000          # entries spent on the core between the rooms (the piece stays under ~440k)
+
+
+def core_fill(S):
+    """The masonry core between the rooms: the unset void inside the stepped mass would keep whatever the terrain
+    left there (a dark sealed cavity that spawns mobs). Small pockets are filled whole, the core is filled solid from
+    the ground up as far as the entry budget allows, and every floor left in the rest of the void (the top of the
+    fill, the backs of vaults and stairs) gets a bottom slab, on which nothing spawns."""
+    bp = S.bp
+    void = set()
+    for x in range(-HW[0], HW[0] + 1):
+        for z in range(-HW[0], HW[0] + 1):
+            m = mm(x, z)
+            for y in range(1, SF):
+                if m <= hw_at(y) and (x, y, z) not in bp.blocks:
+                    void.add((x, y, z))
+    nb = ((1, 0, 0), (-1, 0, 0), (0, 1, 0), (0, -1, 0), (0, 0, 1), (0, 0, -1))
+    # pockets of fewer than 400 cells: filled whole
+    small, seen = set(), set()
+    for c in void:
+        if c in seen:
+            continue
+        comp, todo = [c], [c]
+        seen.add(c)
+        while todo:
+            x, y, z = todo.pop()
+            for dx, dy, dz in nb:
+                q = (x + dx, y + dy, z + dz)
+                if q in void and q not in seen:
+                    seen.add(q)
+                    comp.append(q)
+                    todo.append(q)
+        if len(comp) < 400:
+            small.update(comp)
+
+    def plan(yb):
+        solid = small | {c for c in void if c[1] <= yb}
+        rest = void - solid
+        slabs = {c for c in rest if (c[0], c[1] - 1, c[2]) not in rest}
+        return solid, slabs
+
+    yb = 1
+    solid, slabs = plan(yb)
+    while yb < SF:
+        s2, l2 = plan(yb + 1)
+        if len(s2) + len(l2) > CORE_BUDGET:
+            break
+        yb, solid, slabs = yb + 1, s2, l2
+    for (x, y, z) in solid:
+        h = hash3(x, y, z, 91)
+        bp.set(x, y, z, "stone" if h < 0.6 else ("tuff" if h < 0.8 else ("andesite" if h < 0.92 else "cobblestone")))
+    for (x, y, z) in slabs:
+        bp.set(x, y, z, "cobblestone_slab[type=bottom,waterlogged=false]" if hash3(x, y, z, 92) < 0.5
+               else "stone_slab[type=bottom,waterlogged=false]")
+
+
 # ------------------------------------------------------------------ builder
 def canopy_city(bp):
     S = Site(bp)
@@ -2429,6 +2486,7 @@ def canopy_city(bp):
     camp(S)
     rails(S)
     jungle(S)
+    core_fill(S)
 
 
 # camera spots for the CI focus run: (name, feet, look at), blueprint coordinates

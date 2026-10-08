@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "brasshaven:lockkeeper"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "brasshaven:lockkeeper"
+      }
+    ]
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "display": {
+    "icon": {
+      "id": "minecraft:chiseled_bookshelf"
+    },
+    "title": {
+      "translate": "advancements.brasshaven.end.starfall_library.title"
+    },
+    "description": {
+      "translate": "advancements.brasshaven.end.starfall_library.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "found": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:starfall_library"
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "parent": "brasshaven:end/enter",
+  "rewards": {
+    "experience": 80,
+    "loot": [
+      "brasshaven:rewards/discovery"
+    ]
+  }
+}

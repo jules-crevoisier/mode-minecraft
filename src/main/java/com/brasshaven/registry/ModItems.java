@@ -202,8 +202,13 @@ public final class ModItems {
     public static final RegistryObject<Item> LOCK_MASTER_SPAWN_EGG = egg("lock_master_spawn_egg", ModEntities.LOCK_MASTER);
     public static final RegistryObject<Item> BOG_HIEROPHANT_SPAWN_EGG = egg("bog_hierophant_spawn_egg", ModEntities.BOG_HIEROPHANT);
     public static final RegistryObject<Item> STRANGLER_QUEEN_SPAWN_EGG = egg("strangler_queen_spawn_egg", ModEntities.STRANGLER_QUEEN);
+    public static final RegistryObject<Item> STAR_CURATOR_SPAWN_EGG = egg("star_curator_spawn_egg", ModEntities.STAR_CURATOR);
+    public static final RegistryObject<Item> FOURTH_KING_SPAWN_EGG = egg("fourth_king_spawn_egg", ModEntities.FOURTH_KING);
     public static final RegistryObject<Item> DROWNED_ADMIRAL_SPAWN_EGG = egg("drowned_admiral_spawn_egg", ModEntities.DROWNED_ADMIRAL);
     public static final RegistryObject<Item> TURBINE_TYRANT_SPAWN_EGG = egg("turbine_tyrant_spawn_egg", ModEntities.TURBINE_TYRANT);
+    public static final RegistryObject<Item> ANVIL_WARDEN_SPAWN_EGG = egg("anvil_warden_spawn_egg", ModEntities.ANVIL_WARDEN);
+    public static final RegistryObject<Item> COLOSSUS_HEART_SPAWN_EGG = egg("colossus_heart_spawn_egg", ModEntities.COLOSSUS_HEART);
+    public static final RegistryObject<Item> MINE_BARON_SPAWN_EGG = egg("mine_baron_spawn_egg", ModEntities.MINE_BARON);
     public static final RegistryObject<Item> SOLAR_HIERARCH_SPAWN_EGG = egg("solar_hierarch_spawn_egg", ModEntities.SOLAR_HIERARCH);
     // peoples and creatures of the places (tools/wf/denizens.py)
     public static final RegistryObject<Item> DWARF_SPAWN_EGG = egg("dwarf_spawn_egg", ModEntities.DWARF);
