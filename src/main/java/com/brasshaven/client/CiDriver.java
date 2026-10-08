@@ -618,7 +618,7 @@ public final class CiDriver {
                     c.add("fill " + at(-9, 1, 3) + " " + at(9, 4, 6) + " minecraft:air");
                     for (int i = 0; i < held.length; i++) {
                         c.add("summon minecraft:armor_stand " + (bx - 7 + i * 2 + 0.5) + " " + (STAGE_Y + 1) + " " + (bz + 4.5)
-                                + " {ShowArms:1b,NoBasePlate:1b,Invulnerable:1b,Rotation:[180f,0f],"
+                                + " {ShowArms:1b,NoBasePlate:1b,NoGravity:1b,Invulnerable:1b,Rotation:[180f,0f],"
                                 + "Pose:{RightArm:[-40f,0f,0f]},equipment:{mainhand:{id:\"brasshaven:" + held[i] + "\",count:1}}}");
                     }
                     c.add("time set noon");
@@ -912,7 +912,11 @@ public final class CiDriver {
                         double[] c = centre(b);
                         double size = Math.max(b[3] - b[0], b[5] - b[2]);
                         double back = size * 0.45 + 14;
-                        return List.of("tp @s " + (c[0] + dx * back) + " " + (b[4] + size * 0.12 + 6) + " "
+                        double height = b[4] - b[1];
+                        // tall builds (spires, abbeys): from two thirds up, not from above the top, which shows a
+                        // floating island against the unloaded ground
+                        double y = height > size * 0.5 ? b[1] + height * 0.66 : b[4] + size * 0.12 + 6;
+                        return List.of("tp @s " + (c[0] + dx * back) + " " + y + " "
                                 + (c[2] + dz * back) + " facing " + c[0] + " " + c[1] + " " + c[2]);
                     })
                     .run("fly", CiDriver::fly)

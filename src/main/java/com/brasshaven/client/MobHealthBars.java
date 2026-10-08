@@ -123,7 +123,8 @@ public final class MobHealthBars {
             return; // cheap checks first: finding the entity behind a render state is an entity search
         }
         LivingEntity entity = find(mc, state);
-        if (entity == null || entity instanceof Player || entity instanceof WayfarerBoss || !entity.isAlive()) {
+        if (entity == null || entity instanceof Player || entity instanceof WayfarerBoss || !entity.isAlive()
+                || entity instanceof net.minecraft.world.entity.decoration.ArmorStand) {
             return;
         }
         Track t = TRACKS.get(entity.getId());
