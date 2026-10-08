@@ -312,6 +312,43 @@ STRUCTURES = {
                        "est l'arène, sous le beffroi de la grande cloche de bronze. Derrière, le sanctuaire suspendu "
                        "au-dessus du vide garde le trésor, et son balcon offre la descente la plus rapide : le saut "
                        "dans le bassin, 120 blocs plus bas.",
+    "glacier_hall": "Une langue de glacier longue de 200 blocs, au front taillé en façade : une frise, l'œil du jarl, "
+                    "deux statues de jarls de 34 blocs et une porte en arc, sous l'arête d'un toit de longhouse qui "
+                    "perce la glace ; à l'est, une corne de roche de 126 blocs. Devant, la moraine, des pierres levées "
+                    "et le camp des jarls. Dedans, la halle-cathédrale : une nef de glace à côtes et à colonnes de "
+                    "glace tassée, des bas-côtés aux guerriers gelés, des tribunes, la croisée et sa pierre de "
+                    "passage, la salle du trône dans l'abside, puis la salle des gardes, la cave à hydromel, "
+                    "l'armurerie, les cuisines, la bibliothèque du scalde, la salle des guerriers gelés et le dortoir "
+                    "des huscarls. Au nord, un pont franchit la crevasse (rompu en son milieu) ; l'escalier du jarl "
+                    "monte dans la corne jusqu'au lieu de grâce et à l'arène sous un dôme ouvert sur le ciel. Derrière, "
+                    "le caveau du trésor, et le Saut du jarl : 47 blocs de chute dans la source, d'où la rivière de "
+                    "fonte ressort par une grotte de glace au front du glacier.",
+    "caldera_ringwall": "Un ancien volcan de 250 blocs de large dont le cratère porte une enceinte circulaire : seize "
+                        "pans de courtine crénelée sur la crête, des tours à toits rouges et, au milieu du lac de "
+                        "cratère, une aiguille de roche couronnée d'un donjon à flèche de cuivre. Au pied, le camp et "
+                        "sa pierre de passage, puis la route jusqu'à la barbacane et le châtelet : un grand escalier de "
+                        "trois volées monte dans sa salle jusqu'à la cour de la porte (lieu de grâce, écuries). On "
+                        "suit le chemin de ronde de tour en tour (tourelles, bastion de l'arsenal, caserne) jusqu'à la "
+                        "cour du nord (lieu de grâce, grande salle, cuisines), puis on descend dans les souterrains : "
+                        "la citerne, la prison et son ossuaire secret, la galerie à arcades d'où un pont sur piles "
+                        "franchit le lac jusqu'à l'aiguille. Un escalier à noyau monte dans la roche jusqu'au donjon "
+                        "(lieu de grâce), puis la brume ouvre l'arène au sommet ; derrière des barreaux scellés, le "
+                        "caveau, et le saut dans le lac. Raccourcis : portes de fer à sens unique dans les tours, une "
+                        "échelle sous une trappe, la poterne d'eau qui ramène de la grève à la cour de la porte.",
+    "kneeling_gate": "Deux chevaliers de pierre de 70 blocs agenouillés face à face de part et d'autre d'un col de "
+                     "montagne, qui portent entre leurs gantelets un linteau de pierre et le pavillon doré de sa "
+                     "clef de voûte. Sous le linteau, le bourg du péage : la place et son puits, la barrière, le "
+                     "bureau du péage, l'auberge, la forge et l'écurie, une pierre de passage. Dans le socle de la "
+                     "statue ouest, le corps de garde ; un escalier à noyau monte dans la cuisse jusqu'à la salle de "
+                     "la ceinture, la chambre du cœur (fenêtres à travers la cuirasse), la gorgerette et la cellule "
+                     "des guetteurs derrière les yeux du heaume. Par l'épaulière on sort sur le bras, on gravit "
+                     "l'avant-bras jusqu'au gantelet et l'on traverse le linteau à 63 blocs de haut (lieu de grâce et "
+                     "cloche du péage dans le pavillon). On redescend dans la statue est : le trésor du péage dans son "
+                     "heaume, le puits de la chambre du cœur (raccourci à sens unique), son corps de garde dont la "
+                     "porte de fer s'ouvre sur la place. De là, un second escalier descend à la chapelle des gardiens "
+                     "(lieu de grâce) et, passé la brume, dans la salle sous la porte : l'arène du boss, sous la grille "
+                     "du puits ; derrière des barreaux scellés, le caveau, et une porte de fer qui ramène au corps de "
+                     "garde ouest.",
     "tidal_abbey": "Une île rocheuse cernée par la marée, reliée au rivage par une chaussée de pierre à demi noyée "
                    "et rompue en son milieu. Au pied, les remparts à tours, la barbacane et la porte du Roi ; puis la "
                    "Grande Rue monte en spirale autour du rocher entre des maisons de pierre aux toits d'ardoise, sous "
@@ -930,6 +967,14 @@ NEW_GROUPS = [
          "sur chaque arc et le boss sur un disque au centre.", "s-shattered_halo", "struct:shattered_halo"),
         ("L'Ascension du pèlerin", "Un croc de roche de 124 blocs gravi par un escalier en lacets jusqu'au temple "
          "de la grande cloche.", "s-pilgrims_ascent", "struct:pilgrims_ascent"),
+        ("Halle glaciaire des jarls", "Une halle-cathédrale taillée dans une langue de glacier : une façade à "
+         "statues, une nef de glace, un pont sur la crevasse et une arène dans une corne de roche.", "s-glacier_hall",
+         "struct:glacier_hall"),
+        ("Rempart de la caldeira", "Un cratère de volcan ceint d'une enceinte à seize pans, un lac et une aiguille "
+         "de roche portant un donjon et l'arène du boss.", "s-caldera_ringwall", "struct:caldera_ringwall"),
+        ("La Porte agenouillée", "Deux chevaliers de pierre de 70 blocs agenouillés de part et d'autre d'un col, "
+         "un linteau entre leurs mains, des salles dans leurs corps et une arène sous la porte.", "s-kneeling_gate",
+         "struct:kneeling_gate"),
         ("Abbaye des marées", "Un mont rocheux cerné par la marée : remparts, une ville en spirale et une abbaye "
          "gothique à flèche de 130 blocs, une arène dans la crypte.", "s-tidal_abbey", "struct:tidal_abbey"),
     ]),

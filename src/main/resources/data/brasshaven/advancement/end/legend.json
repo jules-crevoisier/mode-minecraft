@@ -910,6 +910,54 @@
           }
         ]
       }
+    },
+    "caldera_ringwall": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:caldera_ringwall"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "glacier_hall": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:glacier_hall"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "kneeling_gate": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:kneeling_gate"
+              }
+            }
+          }
+        ]
+      }
     }
   },
   "parent": "brasshaven:end/void_warden",

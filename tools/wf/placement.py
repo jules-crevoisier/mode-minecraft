@@ -112,6 +112,9 @@ FAMILIES = [
         "clockwork_citadel": 1, "sky_harbour": 1, "sylvan_palace": 1, "inventor_manor": 1, "sky_isles": 1,
         "geothermal_foundry": 1, "tesla_observatory": 1, "walking_fortress": 1,
         "rock_necropolis": 1, "fallen_colossus": 1, "pilgrims_ascent": 1,
+        "glacier_hall": 1,
+        "caldera_ringwall": 1,
+        "kneeling_gate": 1,
     }, avoid=[(V + "villages", 10), (V + "pillager_outposts", 6), (V + "woodland_mansions", 8)], min_spawn=32,
         note="surface wonders; at least 40 chunks between two of them, none within 512 blocks of 0,0"),
     Family("deep_wonders", "deep_wonder", 72, 28, {
@@ -217,6 +220,9 @@ FIT = {
     "rock_necropolis": _f("land", spread=28, slope=1.1, wet=0.05),      # brings its own cliff massif
     "fallen_colossus": _f("land", spread=22, slope=0.9, wet=0.08),      # a valley floor: open, flat ground
     "pilgrims_ascent": _f("land", spread=36, slope=1.7, wet=0.05),     # brings its own rock fang: made for slopes
+    "caldera_ringwall": _f("land", spread=30, slope=1.5, wet=0.05),    # brings its own massif: any rolling upland
+    "glacier_hall": _f("land", spread=26, slope=1.2, wet=0.08),        # brings its own glacier: a cold valley floor
+    "kneeling_gate": _f("land", spread=30, slope=1.5, wet=0.05),      # brings its own pass flanks: an upland saddle
     # ---- coast: the dock side (template +z = south) in the sea, the cape on land, shore near sea level
     "coastal_lighthouse": _f("coast", sea_side="south", wet=0.5, land=0.5, spread=8, slope=1.0),
     # the island (south) in the sea, the causeway's shore end (north) on the beach: the strand lands at sea level

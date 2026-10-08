@@ -1,0 +1,699 @@
+{
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "brasshaven:chunked_template",
+        "size": [
+          161,
+          132,
+          249
+        ],
+        "cells": [
+          {
+            "location": "brasshaven:glacier_hall/hall/x0_z0",
+            "offset": [
+              15,
+              0,
+              18
+            ],
+            "size": [
+              12,
+              46,
+              13
+            ],
+            "blocks": 860
+          },
+          {
+            "location": "brasshaven:glacier_hall/hall/x0_z1",
+            "offset": [
+              5,
+              0,
+              31
+            ],
+            "size": [
+              22,
+              54,
+              31
+            ],
+            "blocks": 4484
+          },
+          {
+            "location": "brasshaven:glacier_hall/hall/x0_z2",
+            "offset": [
+              4,
+              0,
+              62
+            ],
+            "size": [
+              23,
+              48,
+              31
+            ],
+            "blocks": 3941
+          },
+          {
+            "location": "brasshaven:glacier_hall/hall/x0_z3",
+            "offset": [
+              4,
+              0,
+              93
+            ],
+            "size": [
+              23,
+              47,
+              31
+            ],
+            "blocks": 4034
+          },
+          {
+            "location": "brasshaven:glacier_hall/hall/x0_z4",
+            "offset": [
+              5,
+              0,
+              124
+            ],
+            "size": [
+              22,
+              45,
+              32
+            ],
+            "blocks": 4215
+          },
+          {
+            "location": "brasshaven:glacier_hall/hall/x0_z5",
+            "offset": [
+              8,
+              0,
+              156
+            ],
+            "size": [
+              19,
+              41,
+              31
+            ],
+            "blocks": 3872
+          },
+          {
+            "location": "brasshaven:glacier_hall/hall/x0_z6",
+            "offset": [
+              2,
+              0,
+              187
+            ],
+            "size": [
+              25,
+              41,
+              31
+            ],
+            "blocks": 1961
+          },
+          {
+            "location": "brasshaven:glacier_hall/hall/x0_z7",
+            "offset": [
+              0,
+              0,
+              218
+            ],
+            "size": [
+              27,
+              21,
+              25
+            ],
+            "blocks": 591
+          },
+          {
+            "location": "brasshaven:glacier_hall/hall/x1_z0",
+            "offset": [
+              27,
+              0,
+              4
+            ],
+            "size": [
+              27,
+              71,
+              27
+            ],
+            "blocks": 2977
+          },
+          {
+            "location": "brasshaven:glacier_hall/hall/x1_z1",
+            "offset": [
+              27,
+              0,
+              31
+            ],
+            "size": [
+              27,
+              74,
+              31
+            ],
+            "blocks": 3789
+          },
+          {
+            "location": "brasshaven:glacier_hall/hall/x1_z2",
+            "offset": [
+              27,
+              0,
+              62
+            ],
+            "size": [
+              27,
+              63,
+              31
+            ],
+            "blocks": 4424
+          },
+          {
+            "location": "brasshaven:glacier_hall/hall/x1_z3",
+            "offset": [
+              27,
+              18,
+              93
+            ],
+            "size": [
+              27,
+              45,
+              31
+            ],
+            "blocks": 8026
+          },
+          {
+            "location": "brasshaven:glacier_hall/hall/x1_z4",
+            "offset": [
+              27,
+              18,
+              124
+            ],
+            "size": [
+              27,
+              43,
+              32
+            ],
+            "blocks": 9025
+          },
+          {
+            "location": "brasshaven:glacier_hall/hall/x1_z5",
+            "offset": [
+              27,
+              0,
+              156
+            ],
+            "size": [
+              27,
+              57,
+              31
+            ],
+            "blocks": 4316
+          },
+          {
+            "location": "brasshaven:glacier_hall/hall/x1_z6",
+            "offset": [
+              27,
+              0,
+              187
+            ],
+            "size": [
+              27,
+              73,
+              31
+            ],
+            "blocks": 3925
+          },
+          {
+            "location": "brasshaven:glacier_hall/hall/x1_z7",
+            "offset": [
+              27,
+              0,
+              218
+            ],
+            "size": [
+              27,
+              19,
+              26
+            ],
+            "blocks": 2789
+          },
+          {
+            "location": "brasshaven:glacier_hall/hall/x2_z0",
+            "offset": [
+              54,
+              0,
+              0
+            ],
+            "size": [
+              26,
+              78,
+              31
+            ],
+            "blocks": 3159
+          },
+          {
+            "location": "brasshaven:glacier_hall/hall/x2_z1",
+            "offset": [
+              54,
+              0,
+              31
+            ],
+            "size": [
+              26,
+              79,
+              31
+            ],
+            "blocks": 6928
+          },
+          {
+            "location": "brasshaven:glacier_hall/hall/x2_z2",
+            "offset": [
+              54,
+              0,
+              62
+            ],
+            "size": [
+              26,
+              77,
+              31
+            ],
+            "blocks": 9065
+          },
+          {
+            "location": "brasshaven:glacier_hall/hall/x2_z3",
+            "offset": [
+              54,
+              18,
+              93
+            ],
+            "size": [
+              26,
+              59,
+              31
+            ],
+            "blocks": 24367
+          },
+          {
+            "location": "brasshaven:glacier_hall/hall/x2_z4",
+            "offset": [
+              54,
+              18,
+              124
+            ],
+            "size": [
+              26,
+              59,
+              32
+            ],
+            "blocks": 25717
+          },
+          {
+            "location": "brasshaven:glacier_hall/hall/x2_z5",
+            "offset": [
+              54,
+              18,
+              156
+            ],
+            "size": [
+              26,
+              59,
+              31
+            ],
+            "blocks": 24775
+          },
+          {
+            "location": "brasshaven:glacier_hall/hall/x2_z6",
+            "offset": [
+              54,
+              0,
+              187
+            ],
+            "size": [
+              26,
+              77,
+              31
+            ],
+            "blocks": 15952
+          },
+          {
+            "location": "brasshaven:glacier_hall/hall/x2_z7",
+            "offset": [
+              54,
+              0,
+              218
+            ],
+            "size": [
+              26,
+              20,
+              31
+            ],
+            "blocks": 3963
+          },
+          {
+            "location": "brasshaven:glacier_hall/hall/x3_z0",
+            "offset": [
+              80,
+              0,
+              0
+            ],
+            "size": [
+              27,
+              119,
+              31
+            ],
+            "blocks": 9804
+          },
+          {
+            "location": "brasshaven:glacier_hall/hall/x3_z1",
+            "offset": [
+              80,
+              0,
+              31
+            ],
+            "size": [
+              27,
+              113,
+              31
+            ],
+            "blocks": 12384
+          },
+          {
+            "location": "brasshaven:glacier_hall/hall/x3_z2",
+            "offset": [
+              80,
+              0,
+              62
+            ],
+            "size": [
+              27,
+              77,
+              31
+            ],
+            "blocks": 12369
+          },
+          {
+            "location": "brasshaven:glacier_hall/hall/x3_z3",
+            "offset": [
+              80,
+              2,
+              93
+            ],
+            "size": [
+              27,
+              74,
+              31
+            ],
+            "blocks": 24407
+          },
+          {
+            "location": "brasshaven:glacier_hall/hall/x3_z4",
+            "offset": [
+              80,
+              6,
+              124
+            ],
+            "size": [
+              27,
+              70,
+              32
+            ],
+            "blocks": 26862
+          },
+          {
+            "location": "brasshaven:glacier_hall/hall/x3_z5",
+            "offset": [
+              80,
+              6,
+              156
+            ],
+            "size": [
+              27,
+              70,
+              31
+            ],
+            "blocks": 23929
+          },
+          {
+            "location": "brasshaven:glacier_hall/hall/x3_z6",
+            "offset": [
+              80,
+              0,
+              187
+            ],
+            "size": [
+              27,
+              77,
+              31
+            ],
+            "blocks": 15478
+          },
+          {
+            "location": "brasshaven:glacier_hall/hall/x3_z7",
+            "offset": [
+              80,
+              0,
+              218
+            ],
+            "size": [
+              27,
+              20,
+              31
+            ],
+            "blocks": 4798
+          },
+          {
+            "location": "brasshaven:glacier_hall/hall/x4_z0",
+            "offset": [
+              107,
+              0,
+              3
+            ],
+            "size": [
+              27,
+              132,
+              28
+            ],
+            "blocks": 12474
+          },
+          {
+            "location": "brasshaven:glacier_hall/hall/x4_z1",
+            "offset": [
+              107,
+              0,
+              31
+            ],
+            "size": [
+              27,
+              126,
+              31
+            ],
+            "blocks": 15122
+          },
+          {
+            "location": "brasshaven:glacier_hall/hall/x4_z2",
+            "offset": [
+              107,
+              0,
+              62
+            ],
+            "size": [
+              27,
+              63,
+              31
+            ],
+            "blocks": 3675
+          },
+          {
+            "location": "brasshaven:glacier_hall/hall/x4_z3",
+            "offset": [
+              107,
+              2,
+              93
+            ],
+            "size": [
+              27,
+              61,
+              31
+            ],
+            "blocks": 10443
+          },
+          {
+            "location": "brasshaven:glacier_hall/hall/x4_z4",
+            "offset": [
+              107,
+              2,
+              124
+            ],
+            "size": [
+              27,
+              60,
+              32
+            ],
+            "blocks": 15050
+          },
+          {
+            "location": "brasshaven:glacier_hall/hall/x4_z5",
+            "offset": [
+              107,
+              0,
+              156
+            ],
+            "size": [
+              27,
+              58,
+              31
+            ],
+            "blocks": 7619
+          },
+          {
+            "location": "brasshaven:glacier_hall/hall/x4_z6",
+            "offset": [
+              107,
+              0,
+              187
+            ],
+            "size": [
+              27,
+              66,
+              31
+            ],
+            "blocks": 7189
+          },
+          {
+            "location": "brasshaven:glacier_hall/hall/x4_z7",
+            "offset": [
+              107,
+              0,
+              218
+            ],
+            "size": [
+              27,
+              21,
+              29
+            ],
+            "blocks": 2926
+          },
+          {
+            "location": "brasshaven:glacier_hall/hall/x5_z0",
+            "offset": [
+              134,
+              0,
+              18
+            ],
+            "size": [
+              10,
+              12,
+              13
+            ],
+            "blocks": 683
+          },
+          {
+            "location": "brasshaven:glacier_hall/hall/x5_z1",
+            "offset": [
+              134,
+              0,
+              31
+            ],
+            "size": [
+              19,
+              53,
+              31
+            ],
+            "blocks": 3463
+          },
+          {
+            "location": "brasshaven:glacier_hall/hall/x5_z2",
+            "offset": [
+              134,
+              0,
+              62
+            ],
+            "size": [
+              22,
+              50,
+              31
+            ],
+            "blocks": 3295
+          },
+          {
+            "location": "brasshaven:glacier_hall/hall/x5_z3",
+            "offset": [
+              134,
+              0,
+              93
+            ],
+            "size": [
+              27,
+              53,
+              31
+            ],
+            "blocks": 3521
+          },
+          {
+            "location": "brasshaven:glacier_hall/hall/x5_z4",
+            "offset": [
+              134,
+              0,
+              124
+            ],
+            "size": [
+              21,
+              45,
+              32
+            ],
+            "blocks": 3787
+          },
+          {
+            "location": "brasshaven:glacier_hall/hall/x5_z5",
+            "offset": [
+              134,
+              0,
+              156
+            ],
+            "size": [
+              16,
+              40,
+              31
+            ],
+            "blocks": 3595
+          },
+          {
+            "location": "brasshaven:glacier_hall/hall/x5_z6",
+            "offset": [
+              134,
+              0,
+              187
+            ],
+            "size": [
+              23,
+              19,
+              31
+            ],
+            "blocks": 1129
+          },
+          {
+            "location": "brasshaven:glacier_hall/hall/x5_z7",
+            "offset": [
+              134,
+              0,
+              218
+            ],
+            "size": [
+              23,
+              13,
+              27
+            ],
+            "blocks": 188
+          }
+        ],
+        "projection": "rigid",
+        "processors": "brasshaven:none",
+        "ground_level_delta": 6,
+        "footprint": [
+          0,
+          0,
+          160,
+          248
+        ]
+      }
+    }
+  ]
+}

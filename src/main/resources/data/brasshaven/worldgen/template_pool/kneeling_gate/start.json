@@ -1,0 +1,923 @@
+{
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "brasshaven:chunked_template",
+        "size": [
+          249,
+          105,
+          249
+        ],
+        "cells": [
+          {
+            "location": "brasshaven:kneeling_gate/gate/x0_z0",
+            "offset": [
+              0,
+              24,
+              0
+            ],
+            "size": [
+              27,
+              38,
+              31
+            ],
+            "blocks": 4515
+          },
+          {
+            "location": "brasshaven:kneeling_gate/gate/x0_z1",
+            "offset": [
+              0,
+              24,
+              31
+            ],
+            "size": [
+              30,
+              44,
+              31
+            ],
+            "blocks": 6012
+          },
+          {
+            "location": "brasshaven:kneeling_gate/gate/x0_z2",
+            "offset": [
+              0,
+              24,
+              62
+            ],
+            "size": [
+              31,
+              43,
+              31
+            ],
+            "blocks": 6238
+          },
+          {
+            "location": "brasshaven:kneeling_gate/gate/x0_z3",
+            "offset": [
+              0,
+              24,
+              93
+            ],
+            "size": [
+              31,
+              56,
+              31
+            ],
+            "blocks": 6755
+          },
+          {
+            "location": "brasshaven:kneeling_gate/gate/x0_z4",
+            "offset": [
+              0,
+              24,
+              124
+            ],
+            "size": [
+              31,
+              57,
+              32
+            ],
+            "blocks": 6162
+          },
+          {
+            "location": "brasshaven:kneeling_gate/gate/x0_z5",
+            "offset": [
+              0,
+              24,
+              156
+            ],
+            "size": [
+              30,
+              44,
+              31
+            ],
+            "blocks": 5714
+          },
+          {
+            "location": "brasshaven:kneeling_gate/gate/x0_z6",
+            "offset": [
+              0,
+              24,
+              187
+            ],
+            "size": [
+              31,
+              41,
+              31
+            ],
+            "blocks": 5753
+          },
+          {
+            "location": "brasshaven:kneeling_gate/gate/x0_z7",
+            "offset": [
+              0,
+              24,
+              218
+            ],
+            "size": [
+              31,
+              42,
+              31
+            ],
+            "blocks": 5560
+          },
+          {
+            "location": "brasshaven:kneeling_gate/gate/x1_z0",
+            "offset": [
+              43,
+              24,
+              13
+            ],
+            "size": [
+              19,
+              31,
+              18
+            ],
+            "blocks": 1363
+          },
+          {
+            "location": "brasshaven:kneeling_gate/gate/x1_z1",
+            "offset": [
+              45,
+              24,
+              31
+            ],
+            "size": [
+              17,
+              28,
+              23
+            ],
+            "blocks": 669
+          },
+          {
+            "location": "brasshaven:kneeling_gate/gate/x1_z2",
+            "offset": [
+              31,
+              24,
+              64
+            ],
+            "size": [
+              27,
+              6,
+              28
+            ],
+            "blocks": 56
+          },
+          {
+            "location": "brasshaven:kneeling_gate/gate/x1_z3",
+            "offset": [
+              31,
+              24,
+              101
+            ],
+            "size": [
+              31,
+              57,
+              23
+            ],
+            "blocks": 8299
+          },
+          {
+            "location": "brasshaven:kneeling_gate/gate/x1_z4",
+            "offset": [
+              31,
+              24,
+              124
+            ],
+            "size": [
+              31,
+              57,
+              26
+            ],
+            "blocks": 8193
+          },
+          {
+            "location": "brasshaven:kneeling_gate/gate/x1_z5",
+            "offset": [
+              41,
+              24,
+              158
+            ],
+            "size": [
+              21,
+              21,
+              29
+            ],
+            "blocks": 1264
+          },
+          {
+            "location": "brasshaven:kneeling_gate/gate/x1_z6",
+            "offset": [
+              42,
+              24,
+              187
+            ],
+            "size": [
+              20,
+              29,
+              30
+            ],
+            "blocks": 961
+          },
+          {
+            "location": "brasshaven:kneeling_gate/gate/x1_z7",
+            "offset": [
+              48,
+              24,
+              241
+            ],
+            "size": [
+              1,
+              6,
+              1
+            ],
+            "blocks": 6
+          },
+          {
+            "location": "brasshaven:kneeling_gate/gate/x2_z0",
+            "offset": [
+              62,
+              24,
+              10
+            ],
+            "size": [
+              31,
+              34,
+              21
+            ],
+            "blocks": 2917
+          },
+          {
+            "location": "brasshaven:kneeling_gate/gate/x2_z1",
+            "offset": [
+              62,
+              24,
+              31
+            ],
+            "size": [
+              31,
+              29,
+              29
+            ],
+            "blocks": 1861
+          },
+          {
+            "location": "brasshaven:kneeling_gate/gate/x2_z2",
+            "offset": [
+              72,
+              24,
+              72
+            ],
+            "size": [
+              14,
+              6,
+              19
+            ],
+            "blocks": 18
+          },
+          {
+            "location": "brasshaven:kneeling_gate/gate/x2_z3",
+            "offset": [
+              62,
+              24,
+              94
+            ],
+            "size": [
+              31,
+              76,
+              30
+            ],
+            "blocks": 23242
+          },
+          {
+            "location": "brasshaven:kneeling_gate/gate/x2_z4",
+            "offset": [
+              62,
+              6,
+              124
+            ],
+            "size": [
+              31,
+              96,
+              32
+            ],
+            "blocks": 29525
+          },
+          {
+            "location": "brasshaven:kneeling_gate/gate/x2_z5",
+            "offset": [
+              62,
+              24,
+              164
+            ],
+            "size": [
+              27,
+              30,
+              23
+            ],
+            "blocks": 1671
+          },
+          {
+            "location": "brasshaven:kneeling_gate/gate/x2_z6",
+            "offset": [
+              62,
+              24,
+              187
+            ],
+            "size": [
+              27,
+              30,
+              23
+            ],
+            "blocks": 1333
+          },
+          {
+            "location": "brasshaven:kneeling_gate/gate/x2_z7",
+            "offset": [
+              75,
+              24,
+              219
+            ],
+            "size": [
+              10,
+              6,
+              13
+            ],
+            "blocks": 18
+          },
+          {
+            "location": "brasshaven:kneeling_gate/gate/x3_z0",
+            "offset": [
+              93,
+              24,
+              0
+            ],
+            "size": [
+              27,
+              13,
+              31
+            ],
+            "blocks": 1147
+          },
+          {
+            "location": "brasshaven:kneeling_gate/gate/x3_z1",
+            "offset": [
+              93,
+              24,
+              31
+            ],
+            "size": [
+              31,
+              11,
+              31
+            ],
+            "blocks": 875
+          },
+          {
+            "location": "brasshaven:kneeling_gate/gate/x3_z2",
+            "offset": [
+              93,
+              24,
+              62
+            ],
+            "size": [
+              31,
+              6,
+              31
+            ],
+            "blocks": 361
+          },
+          {
+            "location": "brasshaven:kneeling_gate/gate/x3_z3",
+            "offset": [
+              93,
+              0,
+              93
+            ],
+            "size": [
+              31,
+              103,
+              31
+            ],
+            "blocks": 14097
+          },
+          {
+            "location": "brasshaven:kneeling_gate/gate/x3_z4",
+            "offset": [
+              93,
+              6,
+              124
+            ],
+            "size": [
+              31,
+              97,
+              32
+            ],
+            "blocks": 18503
+          },
+          {
+            "location": "brasshaven:kneeling_gate/gate/x3_z5",
+            "offset": [
+              93,
+              24,
+              156
+            ],
+            "size": [
+              31,
+              15,
+              31
+            ],
+            "blocks": 1296
+          },
+          {
+            "location": "brasshaven:kneeling_gate/gate/x3_z6",
+            "offset": [
+              97,
+              24,
+              187
+            ],
+            "size": [
+              27,
+              17,
+              31
+            ],
+            "blocks": 1033
+          },
+          {
+            "location": "brasshaven:kneeling_gate/gate/x3_z7",
+            "offset": [
+              94,
+              24,
+              218
+            ],
+            "size": [
+              30,
+              6,
+              23
+            ],
+            "blocks": 175
+          },
+          {
+            "location": "brasshaven:kneeling_gate/gate/x4_z0",
+            "offset": [
+              132,
+              24,
+              17
+            ],
+            "size": [
+              24,
+              7,
+              14
+            ],
+            "blocks": 114
+          },
+          {
+            "location": "brasshaven:kneeling_gate/gate/x4_z1",
+            "offset": [
+              124,
+              24,
+              31
+            ],
+            "size": [
+              32,
+              12,
+              31
+            ],
+            "blocks": 347
+          },
+          {
+            "location": "brasshaven:kneeling_gate/gate/x4_z2",
+            "offset": [
+              124,
+              24,
+              62
+            ],
+            "size": [
+              24,
+              15,
+              31
+            ],
+            "blocks": 1142
+          },
+          {
+            "location": "brasshaven:kneeling_gate/gate/x4_z3",
+            "offset": [
+              124,
+              0,
+              93
+            ],
+            "size": [
+              32,
+              103,
+              31
+            ],
+            "blocks": 15178
+          },
+          {
+            "location": "brasshaven:kneeling_gate/gate/x4_z4",
+            "offset": [
+              124,
+              6,
+              124
+            ],
+            "size": [
+              32,
+              99,
+              32
+            ],
+            "blocks": 19602
+          },
+          {
+            "location": "brasshaven:kneeling_gate/gate/x4_z5",
+            "offset": [
+              124,
+              24,
+              156
+            ],
+            "size": [
+              31,
+              9,
+              30
+            ],
+            "blocks": 316
+          },
+          {
+            "location": "brasshaven:kneeling_gate/gate/x4_z6",
+            "offset": [
+              124,
+              24,
+              194
+            ],
+            "size": [
+              32,
+              40,
+              24
+            ],
+            "blocks": 3744
+          },
+          {
+            "location": "brasshaven:kneeling_gate/gate/x4_z7",
+            "offset": [
+              124,
+              24,
+              218
+            ],
+            "size": [
+              32,
+              23,
+              31
+            ],
+            "blocks": 2581
+          },
+          {
+            "location": "brasshaven:kneeling_gate/gate/x5_z0",
+            "offset": [
+              167,
+              24,
+              14
+            ],
+            "size": [
+              20,
+              12,
+              17
+            ],
+            "blocks": 134
+          },
+          {
+            "location": "brasshaven:kneeling_gate/gate/x5_z1",
+            "offset": [
+              156,
+              24,
+              31
+            ],
+            "size": [
+              31,
+              39,
+              26
+            ],
+            "blocks": 4893
+          },
+          {
+            "location": "brasshaven:kneeling_gate/gate/x5_z2",
+            "offset": [
+              165,
+              24,
+              66
+            ],
+            "size": [
+              11,
+              6,
+              25
+            ],
+            "blocks": 18
+          },
+          {
+            "location": "brasshaven:kneeling_gate/gate/x5_z3",
+            "offset": [
+              156,
+              24,
+              94
+            ],
+            "size": [
+              31,
+              76,
+              30
+            ],
+            "blocks": 23242
+          },
+          {
+            "location": "brasshaven:kneeling_gate/gate/x5_z4",
+            "offset": [
+              156,
+              6,
+              124
+            ],
+            "size": [
+              31,
+              96,
+              26
+            ],
+            "blocks": 29519
+          },
+          {
+            "location": "brasshaven:kneeling_gate/gate/x5_z5",
+            "offset": [
+              156,
+              24,
+              167
+            ],
+            "size": [
+              21,
+              6,
+              20
+            ],
+            "blocks": 30
+          },
+          {
+            "location": "brasshaven:kneeling_gate/gate/x5_z6",
+            "offset": [
+              156,
+              24,
+              193
+            ],
+            "size": [
+              31,
+              42,
+              25
+            ],
+            "blocks": 4180
+          },
+          {
+            "location": "brasshaven:kneeling_gate/gate/x5_z7",
+            "offset": [
+              156,
+              24,
+              218
+            ],
+            "size": [
+              31,
+              28,
+              21
+            ],
+            "blocks": 1752
+          },
+          {
+            "location": "brasshaven:kneeling_gate/gate/x6_z0",
+            "offset": [
+              187,
+              24,
+              7
+            ],
+            "size": [
+              31,
+              16,
+              24
+            ],
+            "blocks": 266
+          },
+          {
+            "location": "brasshaven:kneeling_gate/gate/x6_z1",
+            "offset": [
+              187,
+              24,
+              31
+            ],
+            "size": [
+              18,
+              31,
+              24
+            ],
+            "blocks": 2498
+          },
+          {
+            "location": "brasshaven:kneeling_gate/gate/x6_z2",
+            "offset": [
+              199,
+              24,
+              72
+            ],
+            "size": [
+              1,
+              6,
+              1
+            ],
+            "blocks": 6
+          },
+          {
+            "location": "brasshaven:kneeling_gate/gate/x6_z3",
+            "offset": [
+              187,
+              25,
+              101
+            ],
+            "size": [
+              25,
+              56,
+              23
+            ],
+            "blocks": 8222
+          },
+          {
+            "location": "brasshaven:kneeling_gate/gate/x6_z4",
+            "offset": [
+              187,
+              25,
+              124
+            ],
+            "size": [
+              25,
+              56,
+              26
+            ],
+            "blocks": 8094
+          },
+          {
+            "location": "brasshaven:kneeling_gate/gate/x6_z5",
+            "offset": [
+              200,
+              24,
+              178
+            ],
+            "size": [
+              1,
+              6,
+              1
+            ],
+            "blocks": 6
+          },
+          {
+            "location": "brasshaven:kneeling_gate/gate/x6_z6",
+            "offset": [
+              187,
+              24,
+              200
+            ],
+            "size": [
+              16,
+              28,
+              18
+            ],
+            "blocks": 1541
+          },
+          {
+            "location": "brasshaven:kneeling_gate/gate/x6_z7",
+            "offset": [
+              187,
+              24,
+              218
+            ],
+            "size": [
+              7,
+              22,
+              4
+            ],
+            "blocks": 143
+          },
+          {
+            "location": "brasshaven:kneeling_gate/gate/x7_z0",
+            "offset": [
+              218,
+              24,
+              0
+            ],
+            "size": [
+              31,
+              42,
+              31
+            ],
+            "blocks": 5593
+          },
+          {
+            "location": "brasshaven:kneeling_gate/gate/x7_z1",
+            "offset": [
+              218,
+              24,
+              31
+            ],
+            "size": [
+              31,
+              42,
+              31
+            ],
+            "blocks": 5769
+          },
+          {
+            "location": "brasshaven:kneeling_gate/gate/x7_z2",
+            "offset": [
+              223,
+              24,
+              62
+            ],
+            "size": [
+              26,
+              35,
+              31
+            ],
+            "blocks": 4649
+          },
+          {
+            "location": "brasshaven:kneeling_gate/gate/x7_z3",
+            "offset": [
+              220,
+              24,
+              93
+            ],
+            "size": [
+              29,
+              48,
+              31
+            ],
+            "blocks": 5467
+          },
+          {
+            "location": "brasshaven:kneeling_gate/gate/x7_z4",
+            "offset": [
+              219,
+              24,
+              124
+            ],
+            "size": [
+              30,
+              47,
+              32
+            ],
+            "blocks": 6143
+          },
+          {
+            "location": "brasshaven:kneeling_gate/gate/x7_z5",
+            "offset": [
+              218,
+              24,
+              156
+            ],
+            "size": [
+              31,
+              47,
+              31
+            ],
+            "blocks": 5452
+          },
+          {
+            "location": "brasshaven:kneeling_gate/gate/x7_z6",
+            "offset": [
+              219,
+              24,
+              187
+            ],
+            "size": [
+              30,
+              47,
+              31
+            ],
+            "blocks": 5923
+          },
+          {
+            "location": "brasshaven:kneeling_gate/gate/x7_z7",
+            "offset": [
+              221,
+              24,
+              218
+            ],
+            "size": [
+              28,
+              40,
+              31
+            ],
+            "blocks": 4589
+          }
+        ],
+        "projection": "rigid",
+        "processors": "brasshaven:aging",
+        "ground_level_delta": 29,
+        "footprint": [
+          0,
+          0,
+          248,
+          248
+        ]
+      }
+    }
+  ]
+}

@@ -119,6 +119,9 @@ STRUCTURE_ICONS = {
     "shattered_halo": "end_crystal",
     "pilgrims_ascent": "bell",
     "tidal_abbey": "prismarine_bricks",
+    "caldera_ringwall": "lodestone",
+    "glacier_hall": "packed_ice",
+    "kneeling_gate": "bell",
 }
 # where each boss lives (its quest follows the discovery of that structure)
 BOSS_HOME = {

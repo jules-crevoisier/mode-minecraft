@@ -43,6 +43,18 @@
     {
       "structure": "brasshaven:pilgrims_ascent",
       "weight": 1
+    },
+    {
+      "structure": "brasshaven:glacier_hall",
+      "weight": 1
+    },
+    {
+      "structure": "brasshaven:caldera_ringwall",
+      "weight": 1
+    },
+    {
+      "structure": "brasshaven:kneeling_gate",
+      "weight": 1
     }
   ],
   "placement": {

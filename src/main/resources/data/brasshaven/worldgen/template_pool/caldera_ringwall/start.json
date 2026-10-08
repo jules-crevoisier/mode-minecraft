@@ -1,0 +1,923 @@
+{
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "brasshaven:chunked_template",
+        "size": [
+          253,
+          145,
+          252
+        ],
+        "cells": [
+          {
+            "location": "brasshaven:caldera_ringwall/ringwall/x0_z0",
+            "offset": [
+              0,
+              0,
+              2
+            ],
+            "size": [
+              32,
+              16,
+              30
+            ],
+            "blocks": 1465
+          },
+          {
+            "location": "brasshaven:caldera_ringwall/ringwall/x0_z1",
+            "offset": [
+              2,
+              0,
+              32
+            ],
+            "size": [
+              30,
+              16,
+              31
+            ],
+            "blocks": 1718
+          },
+          {
+            "location": "brasshaven:caldera_ringwall/ringwall/x0_z2",
+            "offset": [
+              2,
+              0,
+              63
+            ],
+            "size": [
+              30,
+              19,
+              31
+            ],
+            "blocks": 2143
+          },
+          {
+            "location": "brasshaven:caldera_ringwall/ringwall/x0_z3",
+            "offset": [
+              2,
+              0,
+              94
+            ],
+            "size": [
+              30,
+              30,
+              32
+            ],
+            "blocks": 2626
+          },
+          {
+            "location": "brasshaven:caldera_ringwall/ringwall/x0_z4",
+            "offset": [
+              2,
+              0,
+              126
+            ],
+            "size": [
+              30,
+              29,
+              32
+            ],
+            "blocks": 3013
+          },
+          {
+            "location": "brasshaven:caldera_ringwall/ringwall/x0_z5",
+            "offset": [
+              2,
+              0,
+              158
+            ],
+            "size": [
+              30,
+              19,
+              31
+            ],
+            "blocks": 2515
+          },
+          {
+            "location": "brasshaven:caldera_ringwall/ringwall/x0_z6",
+            "offset": [
+              2,
+              0,
+              189
+            ],
+            "size": [
+              30,
+              15,
+              31
+            ],
+            "blocks": 1452
+          },
+          {
+            "location": "brasshaven:caldera_ringwall/ringwall/x0_z7",
+            "offset": [
+              2,
+              0,
+              220
+            ],
+            "size": [
+              30,
+              12,
+              31
+            ],
+            "blocks": 1509
+          },
+          {
+            "location": "brasshaven:caldera_ringwall/ringwall/x1_z0",
+            "offset": [
+              32,
+              0,
+              2
+            ],
+            "size": [
+              31,
+              15,
+              30
+            ],
+            "blocks": 1400
+          },
+          {
+            "location": "brasshaven:caldera_ringwall/ringwall/x1_z1",
+            "offset": [
+              32,
+              0,
+              32
+            ],
+            "size": [
+              31,
+              71,
+              31
+            ],
+            "blocks": 3179
+          },
+          {
+            "location": "brasshaven:caldera_ringwall/ringwall/x1_z2",
+            "offset": [
+              32,
+              0,
+              63
+            ],
+            "size": [
+              31,
+              71,
+              31
+            ],
+            "blocks": 5561
+          },
+          {
+            "location": "brasshaven:caldera_ringwall/ringwall/x1_z3",
+            "offset": [
+              32,
+              15,
+              94
+            ],
+            "size": [
+              31,
+              74,
+              32
+            ],
+            "blocks": 7576
+          },
+          {
+            "location": "brasshaven:caldera_ringwall/ringwall/x1_z4",
+            "offset": [
+              32,
+              16,
+              126
+            ],
+            "size": [
+              31,
+              75,
+              32
+            ],
+            "blocks": 9094
+          },
+          {
+            "location": "brasshaven:caldera_ringwall/ringwall/x1_z5",
+            "offset": [
+              32,
+              0,
+              158
+            ],
+            "size": [
+              31,
+              69,
+              31
+            ],
+            "blocks": 6091
+          },
+          {
+            "location": "brasshaven:caldera_ringwall/ringwall/x1_z6",
+            "offset": [
+              32,
+              0,
+              189
+            ],
+            "size": [
+              31,
+              69,
+              31
+            ],
+            "blocks": 3291
+          },
+          {
+            "location": "brasshaven:caldera_ringwall/ringwall/x1_z7",
+            "offset": [
+              32,
+              0,
+              220
+            ],
+            "size": [
+              31,
+              15,
+              31
+            ],
+            "blocks": 1484
+          },
+          {
+            "location": "brasshaven:caldera_ringwall/ringwall/x2_z0",
+            "offset": [
+              63,
+              0,
+              2
+            ],
+            "size": [
+              32,
+              20,
+              30
+            ],
+            "blocks": 2151
+          },
+          {
+            "location": "brasshaven:caldera_ringwall/ringwall/x2_z1",
+            "offset": [
+              63,
+              0,
+              32
+            ],
+            "size": [
+              32,
+              71,
+              31
+            ],
+            "blocks": 5771
+          },
+          {
+            "location": "brasshaven:caldera_ringwall/ringwall/x2_z2",
+            "offset": [
+              63,
+              10,
+              63
+            ],
+            "size": [
+              32,
+              68,
+              31
+            ],
+            "blocks": 8614
+          },
+          {
+            "location": "brasshaven:caldera_ringwall/ringwall/x2_z3",
+            "offset": [
+              63,
+              9,
+              94
+            ],
+            "size": [
+              32,
+              39,
+              32
+            ],
+            "blocks": 6065
+          },
+          {
+            "location": "brasshaven:caldera_ringwall/ringwall/x2_z4",
+            "offset": [
+              63,
+              9,
+              126
+            ],
+            "size": [
+              32,
+              41,
+              32
+            ],
+            "blocks": 8317
+          },
+          {
+            "location": "brasshaven:caldera_ringwall/ringwall/x2_z5",
+            "offset": [
+              63,
+              9,
+              158
+            ],
+            "size": [
+              32,
+              66,
+              31
+            ],
+            "blocks": 8945
+          },
+          {
+            "location": "brasshaven:caldera_ringwall/ringwall/x2_z6",
+            "offset": [
+              63,
+              0,
+              189
+            ],
+            "size": [
+              32,
+              69,
+              31
+            ],
+            "blocks": 6705
+          },
+          {
+            "location": "brasshaven:caldera_ringwall/ringwall/x2_z7",
+            "offset": [
+              63,
+              0,
+              220
+            ],
+            "size": [
+              32,
+              21,
+              30
+            ],
+            "blocks": 2471
+          },
+          {
+            "location": "brasshaven:caldera_ringwall/ringwall/x3_z0",
+            "offset": [
+              95,
+              0,
+              2
+            ],
+            "size": [
+              31,
+              28,
+              30
+            ],
+            "blocks": 2830
+          },
+          {
+            "location": "brasshaven:caldera_ringwall/ringwall/x3_z1",
+            "offset": [
+              95,
+              14,
+              32
+            ],
+            "size": [
+              31,
+              62,
+              31
+            ],
+            "blocks": 13992
+          },
+          {
+            "location": "brasshaven:caldera_ringwall/ringwall/x3_z2",
+            "offset": [
+              95,
+              9,
+              63
+            ],
+            "size": [
+              31,
+              54,
+              31
+            ],
+            "blocks": 13337
+          },
+          {
+            "location": "brasshaven:caldera_ringwall/ringwall/x3_z3",
+            "offset": [
+              95,
+              9,
+              94
+            ],
+            "size": [
+              31,
+              132,
+              32
+            ],
+            "blocks": 16584
+          },
+          {
+            "location": "brasshaven:caldera_ringwall/ringwall/x3_z4",
+            "offset": [
+              95,
+              9,
+              126
+            ],
+            "size": [
+              31,
+              93,
+              32
+            ],
+            "blocks": 15929
+          },
+          {
+            "location": "brasshaven:caldera_ringwall/ringwall/x3_z5",
+            "offset": [
+              95,
+              9,
+              158
+            ],
+            "size": [
+              31,
+              98,
+              31
+            ],
+            "blocks": 7732
+          },
+          {
+            "location": "brasshaven:caldera_ringwall/ringwall/x3_z6",
+            "offset": [
+              95,
+              9,
+              189
+            ],
+            "size": [
+              31,
+              56,
+              31
+            ],
+            "blocks": 16840
+          },
+          {
+            "location": "brasshaven:caldera_ringwall/ringwall/x3_z7",
+            "offset": [
+              95,
+              0,
+              220
+            ],
+            "size": [
+              31,
+              98,
+              31
+            ],
+            "blocks": 19317
+          },
+          {
+            "location": "brasshaven:caldera_ringwall/ringwall/x4_z0",
+            "offset": [
+              126,
+              0,
+              2
+            ],
+            "size": [
+              32,
+              31,
+              30
+            ],
+            "blocks": 2874
+          },
+          {
+            "location": "brasshaven:caldera_ringwall/ringwall/x4_z1",
+            "offset": [
+              126,
+              18,
+              32
+            ],
+            "size": [
+              32,
+              60,
+              31
+            ],
+            "blocks": 11124
+          },
+          {
+            "location": "brasshaven:caldera_ringwall/ringwall/x4_z2",
+            "offset": [
+              126,
+              9,
+              63
+            ],
+            "size": [
+              32,
+              49,
+              31
+            ],
+            "blocks": 8956
+          },
+          {
+            "location": "brasshaven:caldera_ringwall/ringwall/x4_z3",
+            "offset": [
+              126,
+              9,
+              94
+            ],
+            "size": [
+              32,
+              136,
+              32
+            ],
+            "blocks": 18169
+          },
+          {
+            "location": "brasshaven:caldera_ringwall/ringwall/x4_z4",
+            "offset": [
+              126,
+              9,
+              126
+            ],
+            "size": [
+              32,
+              93,
+              32
+            ],
+            "blocks": 17595
+          },
+          {
+            "location": "brasshaven:caldera_ringwall/ringwall/x4_z5",
+            "offset": [
+              126,
+              9,
+              158
+            ],
+            "size": [
+              32,
+              101,
+              31
+            ],
+            "blocks": 8375
+          },
+          {
+            "location": "brasshaven:caldera_ringwall/ringwall/x4_z6",
+            "offset": [
+              126,
+              2,
+              189
+            ],
+            "size": [
+              32,
+              63,
+              31
+            ],
+            "blocks": 22325
+          },
+          {
+            "location": "brasshaven:caldera_ringwall/ringwall/x4_z7",
+            "offset": [
+              126,
+              0,
+              220
+            ],
+            "size": [
+              32,
+              98,
+              31
+            ],
+            "blocks": 19616
+          },
+          {
+            "location": "brasshaven:caldera_ringwall/ringwall/x5_z0",
+            "offset": [
+              158,
+              0,
+              2
+            ],
+            "size": [
+              31,
+              21,
+              30
+            ],
+            "blocks": 2284
+          },
+          {
+            "location": "brasshaven:caldera_ringwall/ringwall/x5_z1",
+            "offset": [
+              158,
+              0,
+              32
+            ],
+            "size": [
+              31,
+              71,
+              31
+            ],
+            "blocks": 5698
+          },
+          {
+            "location": "brasshaven:caldera_ringwall/ringwall/x5_z2",
+            "offset": [
+              158,
+              10,
+              63
+            ],
+            "size": [
+              31,
+              68,
+              31
+            ],
+            "blocks": 8192
+          },
+          {
+            "location": "brasshaven:caldera_ringwall/ringwall/x5_z3",
+            "offset": [
+              158,
+              9,
+              94
+            ],
+            "size": [
+              31,
+              47,
+              32
+            ],
+            "blocks": 6107
+          },
+          {
+            "location": "brasshaven:caldera_ringwall/ringwall/x5_z4",
+            "offset": [
+              158,
+              9,
+              126
+            ],
+            "size": [
+              31,
+              47,
+              32
+            ],
+            "blocks": 6657
+          },
+          {
+            "location": "brasshaven:caldera_ringwall/ringwall/x5_z5",
+            "offset": [
+              158,
+              9,
+              158
+            ],
+            "size": [
+              31,
+              66,
+              31
+            ],
+            "blocks": 8590
+          },
+          {
+            "location": "brasshaven:caldera_ringwall/ringwall/x5_z6",
+            "offset": [
+              158,
+              0,
+              189
+            ],
+            "size": [
+              31,
+              69,
+              31
+            ],
+            "blocks": 5719
+          },
+          {
+            "location": "brasshaven:caldera_ringwall/ringwall/x5_z7",
+            "offset": [
+              158,
+              0,
+              220
+            ],
+            "size": [
+              31,
+              22,
+              31
+            ],
+            "blocks": 3377
+          },
+          {
+            "location": "brasshaven:caldera_ringwall/ringwall/x6_z0",
+            "offset": [
+              189,
+              0,
+              2
+            ],
+            "size": [
+              32,
+              16,
+              30
+            ],
+            "blocks": 1146
+          },
+          {
+            "location": "brasshaven:caldera_ringwall/ringwall/x6_z1",
+            "offset": [
+              189,
+              0,
+              32
+            ],
+            "size": [
+              32,
+              71,
+              31
+            ],
+            "blocks": 3056
+          },
+          {
+            "location": "brasshaven:caldera_ringwall/ringwall/x6_z2",
+            "offset": [
+              189,
+              0,
+              63
+            ],
+            "size": [
+              32,
+              72,
+              31
+            ],
+            "blocks": 5837
+          },
+          {
+            "location": "brasshaven:caldera_ringwall/ringwall/x6_z3",
+            "offset": [
+              189,
+              14,
+              94
+            ],
+            "size": [
+              32,
+              51,
+              32
+            ],
+            "blocks": 9616
+          },
+          {
+            "location": "brasshaven:caldera_ringwall/ringwall/x6_z4",
+            "offset": [
+              189,
+              17,
+              126
+            ],
+            "size": [
+              32,
+              48,
+              32
+            ],
+            "blocks": 9887
+          },
+          {
+            "location": "brasshaven:caldera_ringwall/ringwall/x6_z5",
+            "offset": [
+              189,
+              0,
+              158
+            ],
+            "size": [
+              32,
+              69,
+              31
+            ],
+            "blocks": 5940
+          },
+          {
+            "location": "brasshaven:caldera_ringwall/ringwall/x6_z6",
+            "offset": [
+              189,
+              0,
+              189
+            ],
+            "size": [
+              32,
+              69,
+              31
+            ],
+            "blocks": 3750
+          },
+          {
+            "location": "brasshaven:caldera_ringwall/ringwall/x6_z7",
+            "offset": [
+              189,
+              0,
+              220
+            ],
+            "size": [
+              32,
+              12,
+              31
+            ],
+            "blocks": 1793
+          },
+          {
+            "location": "brasshaven:caldera_ringwall/ringwall/x7_z0",
+            "offset": [
+              221,
+              0,
+              0
+            ],
+            "size": [
+              31,
+              13,
+              32
+            ],
+            "blocks": 1193
+          },
+          {
+            "location": "brasshaven:caldera_ringwall/ringwall/x7_z1",
+            "offset": [
+              221,
+              0,
+              32
+            ],
+            "size": [
+              30,
+              16,
+              31
+            ],
+            "blocks": 1272
+          },
+          {
+            "location": "brasshaven:caldera_ringwall/ringwall/x7_z2",
+            "offset": [
+              221,
+              0,
+              63
+            ],
+            "size": [
+              30,
+              14,
+              31
+            ],
+            "blocks": 2471
+          },
+          {
+            "location": "brasshaven:caldera_ringwall/ringwall/x7_z3",
+            "offset": [
+              221,
+              0,
+              94
+            ],
+            "size": [
+              30,
+              65,
+              32
+            ],
+            "blocks": 6273
+          },
+          {
+            "location": "brasshaven:caldera_ringwall/ringwall/x7_z4",
+            "offset": [
+              221,
+              0,
+              126
+            ],
+            "size": [
+              32,
+              65,
+              32
+            ],
+            "blocks": 7155
+          },
+          {
+            "location": "brasshaven:caldera_ringwall/ringwall/x7_z5",
+            "offset": [
+              221,
+              0,
+              158
+            ],
+            "size": [
+              30,
+              19,
+              31
+            ],
+            "blocks": 2279
+          },
+          {
+            "location": "brasshaven:caldera_ringwall/ringwall/x7_z6",
+            "offset": [
+              221,
+              0,
+              189
+            ],
+            "size": [
+              30,
+              12,
+              31
+            ],
+            "blocks": 1040
+          },
+          {
+            "location": "brasshaven:caldera_ringwall/ringwall/x7_z7",
+            "offset": [
+              221,
+              0,
+              220
+            ],
+            "size": [
+              32,
+              16,
+              32
+            ],
+            "blocks": 1427
+          }
+        ],
+        "projection": "rigid",
+        "processors": "brasshaven:none",
+        "ground_level_delta": 3,
+        "footprint": [
+          0,
+          0,
+          252,
+          251
+        ]
+      }
+    }
+  ]
+}

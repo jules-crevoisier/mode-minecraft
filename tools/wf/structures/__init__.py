@@ -12,3 +12,6 @@ from . import chained_bastion  # noqa: F401
 from . import shattered_halo  # noqa: F401
 from . import pilgrims_ascent  # noqa: F401
 from . import tidal_abbey  # noqa: F401
+from . import caldera_ringwall  # noqa: F401
+from . import glacier_hall  # noqa: F401
+from . import kneeling_gate  # noqa: F401

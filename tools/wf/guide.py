@@ -537,6 +537,28 @@ PAGES = [
          "précède le temple ; la salle est l'arène et le trésor est suspendu au-dessus de la falaise derrière elle. "
          "Pour redescendre : saute de son balcon dans le bassin."),
     ], []),
+    ("caldera_ringwall", "wonders", "minecraft:lodestone", ("Caldera Ringwall", "Le Rempart de la caldeira"), [
+        ("A dead volcano 250 blocks across whose crater rim carries a sixteen-sided curtain wall with red-roofed "
+         "towers; in the crater lake a needle of rock rises, crowned by a keep with a copper spire.",
+         "Un volcan éteint de 250 blocs de large dont la crête porte une enceinte à seize pans et des tours à toits "
+         "rouges ; au milieu du lac de cratère se dresse une aiguille de roche couronnée d'un donjon à flèche de "
+         "cuivre."),
+        ("Where: meadows, groves, snowy slopes, stony peaks and windswept hills.",
+         "Où : prairies, bosquets, pentes enneigées, pics rocheux et collines venteuses."),
+        ("From the camp (waystone) the road reaches the barbican and the gatehouse, whose grand stair climbs to the "
+         "gate court and its site of grace. Walk the ramparts from tower to tower (armoury bastion, barracks) to the "
+         "north court (site of grace, great hall), then go down into the undercroft: cistern, prison (a secret below "
+         "the last cell) and the arcade where a bridge crosses the lake to the needle. Its stair climbs to the keep "
+         "(site of grace) and the arena on the summit; the vault lies behind sealed bars, and the way down is a leap "
+         "into the lake. Shortcuts: one-way iron doors in the towers, a ladder under a hatch, the water gate.",
+         "Depuis le camp (pierre de passage), la route mène à la barbacane et au châtelet, dont le grand escalier "
+         "monte à la cour de la porte et à son lieu de grâce. Suis le chemin de ronde de tour en tour (bastion de "
+         "l'arsenal, caserne) jusqu'à la cour du nord (lieu de grâce, grande salle), puis descends aux souterrains : "
+         "la citerne, la prison (un secret sous la dernière cellule) et la galerie d'où un pont franchit le lac "
+         "jusqu'à l'aiguille. Son escalier monte au donjon (lieu de grâce) et à l'arène au sommet ; le caveau est "
+         "derrière des barreaux scellés, et pour redescendre on saute dans le lac. Raccourcis : portes de fer à sens "
+         "unique dans les tours, une échelle sous une trappe, la poterne d'eau."),
+    ], []),
     ("tidal_abbey", "wonders", "minecraft:prismarine_bricks", ("Tidal Abbey", "Abbaye des marées"), [
         ("A rocky tidal island off the shore: ring walls with seven towers and a sea gate, a town of stone houses "
          "with slate roofs spiralling up the rock, and on the summit a gothic abbey whose spire tops out at 130 "
@@ -556,6 +578,41 @@ PAGES = [
          "le cloître (regarde au fond du puits), la salle des chevaliers. La tour d'escalier descend à la crypte et "
          "à son lieu de grâce ; au-delà, la salle des marées, l'arène, puis le caveau et un tunnel qui ressort au "
          "port."),
+    ], []),
+    ("kneeling_gate", "wonders", "minecraft:bell", ("Kneeling Gate", "La Porte agenouillée"), [
+        ("Two 70-block stone knights kneel across a mountain pass, a stone lintel held between their gauntlets "
+         "over a toll town. Where: meadows, groves, snowy slopes, stony peaks, windswept hills.",
+         "Deux chevaliers de pierre de 70 blocs agenouillés de part et d'autre d'un col portent un linteau au-dessus "
+         "d'un bourg de péage. Où : prairies, bosquets, pentes enneigées, pics pierreux, collines venteuses."),
+        ("From the west guard-house a stair climbs the body (girdle hall, heart chamber, helm) and out along the "
+         "arm onto the lintel: site of grace in the keystone pavilion. Down the east knight: treasury, drop well, "
+         "an iron door to the square, and a stair to the arena under the gate and its sealed vault.",
+         "Depuis le corps de garde ouest, un escalier monte dans le corps (ceinture, cœur, heaume) puis par le "
+         "bras jusqu'au linteau : lieu de grâce dans le pavillon. Dans le chevalier est : trésor, puits, porte de "
+         "fer sur la place, et l'escalier de l'arène sous la porte et de son caveau scellé."),
+    ], []),
+    ("glacier_hall", "wonders", "minecraft:packed_ice", ("Glacier Hall of the Frost Jarls", "Halle glaciaire des jarls"), [
+        ("A glacier tongue 200 blocks long whose snout is carved into a facade: a frieze, the Jarl's eye, two "
+         "34-block jarl statues and an arched gate under a longhouse roof ridge breaking through the ice, with a "
+         "126-block rock horn rising on the east side.",
+         "Une langue de glacier longue de 200 blocs dont le front est taillé en façade : une frise, l'œil du jarl, "
+         "deux statues de jarls de 34 blocs et une porte en arc sous l'arête d'un toit de longhouse qui perce la "
+         "glace ; à l'est se dresse une corne de roche de 126 blocs."),
+        ("Where: snowy plains, ice spikes, snowy taiga, groves and snowy slopes.",
+         "Où : plaines enneigées, pics de glace, taïga enneigée, bosquets et pentes enneigées."),
+        ("Through the gate (waystone on the terrace) lies the ice nave with its ribs and frozen warriors; the "
+         "crossing has a second waystone. Side rooms: guard room, mead store, armoury, kitchens, the skald's "
+         "library, the frozen warriors' hall and the huscarls' sleeping hall. Past the throne apse a bridge crosses "
+         "the crevasse (it is broken: jump the gap or drop to the lake), then the Jarl's stair climbs into the horn "
+         "to the site of grace and the arena. Beyond: the vault, and the Jarl's Leap, a 47-block plunge into the "
+         "spring that the meltwater river carries out through an ice cave in the snout.",
+         "Passé la porte (pierre de passage sur la terrasse), la nef de glace, ses côtes et ses guerriers gelés ; "
+         "la croisée a une seconde pierre de passage. Autour : la salle des gardes, la cave à hydromel, "
+         "l'armurerie, les cuisines, la bibliothèque du scalde, la salle des guerriers gelés et le dortoir des "
+         "huscarls. Après l'abside du trône, un pont franchit la crevasse (il est rompu : saute la brèche ou tombe "
+         "dans le lac), puis l'escalier du jarl monte dans la corne jusqu'au lieu de grâce et à l'arène. Au-delà : "
+         "le caveau, et le Saut du jarl, 47 blocs de chute dans la source que la rivière de fonte emporte jusqu'à "
+         "une grotte de glace au front du glacier."),
     ], []),
     ("shattered_halo", "wonders", "minecraft:end_crystal", ("Shattered Halo", "Halo brisé"), [
         ("A tilted ring of purpur, end stone bricks and gold, 170 blocks across, broken into five arcs floating at "
