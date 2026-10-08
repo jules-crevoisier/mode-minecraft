@@ -750,29 +750,12 @@ public final class CiDriver {
         STEPS.removeIf(s -> !s.name.equals("setup") && !stepNames.contains(s.name));
         // clean pictures: no HUD, no hand
         step("focus_view").run("hide the HUD", () -> {
-            // the F1 flag, by reflection: its field moved between versions, and a missing one only costs the HUD
+            // the F1 toggle (Gui.handleKeybinds): hides the HUD and the hand
             Minecraft mc = Minecraft.getInstance();
-            int found = 0;
-            for (Object owner : new Object[] {mc.options, mc.gui, mc}) {
-                for (Class<?> c = owner.getClass(); c != null && c != Object.class; c = c.getSuperclass()) {
-                    for (Field f : c.getDeclaredFields()) {
-                        if (f.getType() == boolean.class && !Modifier.isStatic(f.getModifiers())
-                                && f.getName().toLowerCase(java.util.Locale.ROOT).contains("hidegui")) {
-                            try {
-                                f.setAccessible(true);
-                                f.setBoolean(owner, true);
-                                found++;
-                                LOGGER.info(TAG + "HUD hidden through {}.{}", c.getSimpleName(), f.getName());
-                            } catch (ReflectiveOperationException | RuntimeException e) {
-                                LOGGER.warn(TAG + "could not set {}.{}: {}", c.getSimpleName(), f.getName(), e.toString());
-                            }
-                        }
-                    }
-                }
+            if (!mc.gui.hud.isHidden()) {
+                mc.gui.hud.toggle();
             }
-            if (found == 0) {
-                LOGGER.warn(TAG + "no hideGui flag found: the HUD stays on the screenshots");
-            }
+            LOGGER.info(TAG + "HUD hidden: {}", mc.gui.hud.isHidden());
         });
         int index = 0;
         int creatures = 0;
@@ -832,6 +815,14 @@ public final class CiDriver {
                     int gz = (int) Math.floor(b[5] + 12);
                     int gy = server.overworld().getHeight(
                             net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, gx, gz);
+                    // a clear pocket around the camera: no leaves or trunk right in front of the lens
+                    var level = server.overworld();
+                    for (BlockPos p : BlockPos.betweenClosed(gx - 2, gy, gz - 4, gx + 2, gy + 3, gz + 1)) {
+                        var state = level.getBlockState(p);
+                        if (state.is(net.minecraft.tags.BlockTags.LEAVES) || state.is(net.minecraft.tags.BlockTags.LOGS)) {
+                            level.removeBlock(p, false);
+                        }
+                    }
                     return List.of("tp @s " + (gx + 0.5) + " " + gy + " " + (gz + 0.5) + " facing "
                             + c[0] + " " + (gy + (b[4] - gy) * 0.45) + " " + c[2]);
                 })
@@ -839,6 +830,30 @@ public final class CiDriver {
                 .settleChunks(2400)
                 .waitTicks(40)
                 .shot("structure_" + shortName + "_ground");
+        // standing inside the structure's footprint, looking up: how big it feels to a player
+        step("structure_" + shortName + "_low")
+                .server("ground inside", (server, player) -> {
+                    double[] b = box[0];
+                    double[] c = centre(b);
+                    double size = Math.max(b[3] - b[0], b[5] - b[2]);
+                    int gx = (int) Math.floor(c[0] - size * 0.28);
+                    int gz = (int) Math.floor(c[2] + size * 0.28);
+                    var level = server.overworld();
+                    int gy = level.getHeight(
+                            net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, gx, gz);
+                    for (BlockPos p : BlockPos.betweenClosed(gx - 2, gy, gz - 2, gx + 2, gy + 3, gz + 2)) {
+                        var state = level.getBlockState(p);
+                        if (state.is(net.minecraft.tags.BlockTags.LEAVES) || state.is(net.minecraft.tags.BlockTags.LOGS)) {
+                            level.removeBlock(p, false);
+                        }
+                    }
+                    return List.of("tp @s " + (gx + 0.5) + " " + gy + " " + (gz + 0.5) + " facing "
+                            + c[0] + " " + (gy + (b[4] - gy) * 0.55) + " " + c[2]);
+                })
+                .run("fly", CiDriver::fly)
+                .settleChunks(2400)
+                .waitTicks(40)
+                .shot("structure_" + shortName + "_low");
         step("structure_" + shortName + "_top")
                 .cmd(() -> {
                     double[] b = box[0];

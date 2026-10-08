@@ -57,12 +57,13 @@ public final class GeneratedContent {
             new StructureInfo("sunken_submarine", "overworld"),
             new StructureInfo("diving_bell", "overworld"),
             new StructureInfo("coral_shrine", "overworld"),
-            new StructureInfo("shipwreck_debris", "overworld")
+            new StructureInfo("shipwreck_debris", "overworld"),
+            new StructureInfo("walking_fortress", "overworld")
     );
 
     public static final List<Chapter> CHAPTERS = List.of(
             new Chapter("first_steps", List.of("first_steps/guild_outpost", "first_steps/map_fragment", "first_steps/waystone", "first_steps/sorting_chest", "first_steps/guild_terminal", "first_steps/backpack", "first_steps/blade", "first_steps/explorer_armor")),
-            new Chapter("explorer", List.of("explorer/mountain_monastery", "explorer/forgotten_library", "explorer/coastal_lighthouse", "explorer/giant_tree", "explorer/desert_oasis", "explorer/witch_huts", "explorer/sky_island", "explorer/jungle_ziggurat", "explorer/ruined_watchtower", "explorer/bandit_camp", "explorer/rune_circle", "explorer/ice_observatory", "explorer/galleon_wreck", "explorer/sunken_temple", "explorer/forgotten_catacombs", "explorer/sand_hypogeum", "explorer/clockwork_citadel", "explorer/sky_harbour", "explorer/sylvan_palace", "explorer/inventor_manor", "explorer/sky_isles", "explorer/geothermal_foundry", "explorer/tesla_observatory", "explorer/sunken_submarine", "explorer/diving_bell", "explorer/coral_shrine", "explorer/shipwreck_debris", "explorer/master_cartographer", "explorer/boss_bell_keeper", "explorer/boss_archivist", "explorer/boss_sand_pharaoh", "explorer/boss_jade_jaguar", "explorer/boss_root_mother", "explorer/boss_swamp_crone", "explorer/boss_gryphon_knight", "explorer/boss_rune_colossus", "explorer/boss_grave_knight", "explorer/boss_bone_matriarch", "explorer/boss_grand_clockmaker")),
+            new Chapter("explorer", List.of("explorer/mountain_monastery", "explorer/forgotten_library", "explorer/coastal_lighthouse", "explorer/giant_tree", "explorer/desert_oasis", "explorer/witch_huts", "explorer/sky_island", "explorer/jungle_ziggurat", "explorer/ruined_watchtower", "explorer/bandit_camp", "explorer/rune_circle", "explorer/ice_observatory", "explorer/galleon_wreck", "explorer/sunken_temple", "explorer/forgotten_catacombs", "explorer/sand_hypogeum", "explorer/clockwork_citadel", "explorer/sky_harbour", "explorer/sylvan_palace", "explorer/inventor_manor", "explorer/sky_isles", "explorer/geothermal_foundry", "explorer/tesla_observatory", "explorer/sunken_submarine", "explorer/diving_bell", "explorer/coral_shrine", "explorer/shipwreck_debris", "explorer/walking_fortress", "explorer/master_cartographer", "explorer/boss_bell_keeper", "explorer/boss_archivist", "explorer/boss_sand_pharaoh", "explorer/boss_jade_jaguar", "explorer/boss_root_mother", "explorer/boss_swamp_crone", "explorer/boss_gryphon_knight", "explorer/boss_rune_colossus", "explorer/boss_grave_knight", "explorer/boss_bone_matriarch", "explorer/boss_grand_clockmaker")),
             new Chapter("depths", List.of("depths/lithite", "depths/dwarven_mine", "depths/dwarven_forge", "depths/crystal_grotto", "depths/sealed_lab", "depths/lithite_well", "depths/undercity", "depths/dwarven_city", "depths/crystal_cathedral", "depths/telluric_hammer", "depths/excavator_pickaxe", "depths/lumber_axe", "depths/frost_blade", "depths/boomerang", "depths/sunken_citadel", "depths/drowned_warden", "depths/boss_forge_king", "depths/boss_crystal_spider", "depths/boss_sculk_spawn", "depths/boss_weeping_lady")),
             new Chapter("nether", List.of("nether/enter", "nether/basalt_fortress", "nether/chain_bridge", "nether/piglin_sanctuary", "nether/lava_foundry", "nether/soul_tower", "nether/piglin_market", "nether/ancient_ember", "nether/ember_scythe", "nether/storm_staff", "nether/ember_armor", "nether/all", "nether/boss_ash_lord", "nether/boss_piglin_king", "nether/boss_soul_reaper")),
             new Chapter("end", List.of("end/enter", "end/void_observatory", "end/chorus_garden", "end/end_archive", "end/void_ship", "end/void_nest", "end/void_crypt", "end/void_shard", "end/void_spear", "end/void_armor", "end/void_warden", "end/boss_larva_mother", "end/legends_bane", "end/legend"))
@@ -131,6 +132,7 @@ public final class GeneratedContent {
             java.util.Map.entry("diving_bell", List.of("Diving Bell", "Cloche de plongée")),
             java.util.Map.entry("coral_shrine", List.of("Coral Shrine", "Sanctuaire de corail")),
             java.util.Map.entry("shipwreck_debris", List.of("Shipwreck Debris", "Débris de naufrage")),
+            java.util.Map.entry("walking_fortress", List.of("Walking Fortress", "Forteresse marchante")),
             java.util.Map.entry("village", List.of("Village", "Village"))
     );
 
@@ -208,6 +210,7 @@ public final class GeneratedContent {
             java.util.Map.entry("explorer/sunken_temple", "40|brasshaven:map_fragment*2"),
             java.util.Map.entry("explorer/sylvan_palace", "40|brasshaven:map_fragment*2"),
             java.util.Map.entry("explorer/tesla_observatory", "40|brasshaven:map_fragment*2"),
+            java.util.Map.entry("explorer/walking_fortress", "40|brasshaven:map_fragment*2"),
             java.util.Map.entry("explorer/witch_huts", "40|brasshaven:map_fragment*2"),
             java.util.Map.entry("first_steps/backpack", "20|"),
             java.util.Map.entry("first_steps/blade", "30|"),

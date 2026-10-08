@@ -263,6 +263,12 @@ STRUCTURES = {
                           "de 55 blocs et une gare de wagonnets. Dans la montagne : la Forge des Profondeurs, une nef "
                           "voûtée à colonnes de fer avec deux marteaux-pilons au-dessus d'un canal de lave, et au fond "
                           "le Cœur, une salle en coupole autour d'un puits de lave.",
+    "walking_fortress": "L'épave d'un marcheur de siège en laiton, figé en plein pas au milieu d'un cratère brûlé : "
+                        "quatre jambes de 60 blocs, une coque rivetée de 70 blocs portée à 55 blocs du sol, deux "
+                        "cheminées et un mât qui montent à 130. On entre par la brèche d'un pied, on monte l'escalier en "
+                        "colimaçon de la jambe, la salle du genou puis l'escalier de la cuisse jusqu'à la cale. Au-dessus : "
+                        "la salle des machines, le pont des canons, et sur le pont supérieur l'arène du boss devant la "
+                        "tour de commandement et sa salle forte.",
     "tesla_observatory": "Un campus scientifique perché sur un piton de montagne. À l'ouest, le Grand Observatoire : "
                          "un tambour de pierre crème sous une coupole de cuivre vert-de-gris, fendue pour un télescope "
                          "de laiton de 30 blocs. Au nord-est, la Tour Tesla : 70 blocs de treillis autour d'une bobine "
@@ -625,6 +631,8 @@ NEW_GROUPS = [
          "s-geothermal_foundry", "struct:geothermal_foundry"),
         ("Observatoire Tesla", "Coupole, télescope géant, bobine Tesla de 70 blocs et planétarium sur un piton.",
          "s-tesla_observatory", "struct:tesla_observatory"),
+        ("Forteresse marchante", "Un marcheur de siège géant figé dans un cratère : on monte par ses jambes.",
+         "s-walking_fortress", "struct:walking_fortress"),
     ]),
 ]
 

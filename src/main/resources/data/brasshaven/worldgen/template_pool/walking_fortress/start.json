@@ -1,0 +1,377 @@
+{
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "brasshaven:chunked_template",
+        "size": [
+          157,
+          138,
+          157
+        ],
+        "cells": [
+          {
+            "location": "brasshaven:walking_fortress/walker/x0_z0",
+            "offset": [
+              16,
+              0,
+              16
+            ],
+            "size": [
+              15,
+              12,
+              15
+            ],
+            "blocks": 537
+          },
+          {
+            "location": "brasshaven:walking_fortress/walker/x0_z1",
+            "offset": [
+              1,
+              0,
+              31
+            ],
+            "size": [
+              30,
+              58,
+              32
+            ],
+            "blocks": 5234
+          },
+          {
+            "location": "brasshaven:walking_fortress/walker/x0_z2",
+            "offset": [
+              0,
+              0,
+              63
+            ],
+            "size": [
+              31,
+              16,
+              31
+            ],
+            "blocks": 6347
+          },
+          {
+            "location": "brasshaven:walking_fortress/walker/x0_z3",
+            "offset": [
+              1,
+              0,
+              94
+            ],
+            "size": [
+              30,
+              60,
+              32
+            ],
+            "blocks": 5206
+          },
+          {
+            "location": "brasshaven:walking_fortress/walker/x0_z4",
+            "offset": [
+              16,
+              0,
+              126
+            ],
+            "size": [
+              15,
+              12,
+              15
+            ],
+            "blocks": 535
+          },
+          {
+            "location": "brasshaven:walking_fortress/walker/x1_z0",
+            "offset": [
+              31,
+              0,
+              2
+            ],
+            "size": [
+              32,
+              16,
+              29
+            ],
+            "blocks": 5161
+          },
+          {
+            "location": "brasshaven:walking_fortress/walker/x1_z1",
+            "offset": [
+              31,
+              4,
+              31
+            ],
+            "size": [
+              32,
+              94,
+              32
+            ],
+            "blocks": 22481
+          },
+          {
+            "location": "brasshaven:walking_fortress/walker/x1_z2",
+            "offset": [
+              31,
+              4,
+              63
+            ],
+            "size": [
+              32,
+              94,
+              31
+            ],
+            "blocks": 12089
+          },
+          {
+            "location": "brasshaven:walking_fortress/walker/x1_z3",
+            "offset": [
+              31,
+              4,
+              94
+            ],
+            "size": [
+              32,
+              94,
+              32
+            ],
+            "blocks": 20268
+          },
+          {
+            "location": "brasshaven:walking_fortress/walker/x1_z4",
+            "offset": [
+              31,
+              0,
+              126
+            ],
+            "size": [
+              32,
+              16,
+              29
+            ],
+            "blocks": 5167
+          },
+          {
+            "location": "brasshaven:walking_fortress/walker/x2_z0",
+            "offset": [
+              63,
+              0,
+              0
+            ],
+            "size": [
+              31,
+              95,
+              31
+            ],
+            "blocks": 7117
+          },
+          {
+            "location": "brasshaven:walking_fortress/walker/x2_z1",
+            "offset": [
+              63,
+              4,
+              31
+            ],
+            "size": [
+              31,
+              133,
+              32
+            ],
+            "blocks": 38833
+          },
+          {
+            "location": "brasshaven:walking_fortress/walker/x2_z2",
+            "offset": [
+              63,
+              4,
+              63
+            ],
+            "size": [
+              31,
+              98,
+              31
+            ],
+            "blocks": 39540
+          },
+          {
+            "location": "brasshaven:walking_fortress/walker/x2_z3",
+            "offset": [
+              63,
+              4,
+              94
+            ],
+            "size": [
+              31,
+              134,
+              32
+            ],
+            "blocks": 29148
+          },
+          {
+            "location": "brasshaven:walking_fortress/walker/x2_z4",
+            "offset": [
+              63,
+              0,
+              126
+            ],
+            "size": [
+              31,
+              17,
+              31
+            ],
+            "blocks": 6488
+          },
+          {
+            "location": "brasshaven:walking_fortress/walker/x3_z0",
+            "offset": [
+              94,
+              0,
+              1
+            ],
+            "size": [
+              32,
+              42,
+              30
+            ],
+            "blocks": 6932
+          },
+          {
+            "location": "brasshaven:walking_fortress/walker/x3_z1",
+            "offset": [
+              94,
+              4,
+              31
+            ],
+            "size": [
+              32,
+              94,
+              32
+            ],
+            "blocks": 19209
+          },
+          {
+            "location": "brasshaven:walking_fortress/walker/x3_z2",
+            "offset": [
+              94,
+              4,
+              63
+            ],
+            "size": [
+              32,
+              94,
+              31
+            ],
+            "blocks": 14084
+          },
+          {
+            "location": "brasshaven:walking_fortress/walker/x3_z3",
+            "offset": [
+              94,
+              4,
+              94
+            ],
+            "size": [
+              32,
+              94,
+              32
+            ],
+            "blocks": 19634
+          },
+          {
+            "location": "brasshaven:walking_fortress/walker/x3_z4",
+            "offset": [
+              94,
+              0,
+              126
+            ],
+            "size": [
+              32,
+              16,
+              29
+            ],
+            "blocks": 5166
+          },
+          {
+            "location": "brasshaven:walking_fortress/walker/x4_z0",
+            "offset": [
+              126,
+              0,
+              14
+            ],
+            "size": [
+              15,
+              27,
+              17
+            ],
+            "blocks": 615
+          },
+          {
+            "location": "brasshaven:walking_fortress/walker/x4_z1",
+            "offset": [
+              126,
+              0,
+              31
+            ],
+            "size": [
+              30,
+              64,
+              32
+            ],
+            "blocks": 5347
+          },
+          {
+            "location": "brasshaven:walking_fortress/walker/x4_z2",
+            "offset": [
+              126,
+              0,
+              63
+            ],
+            "size": [
+              31,
+              55,
+              31
+            ],
+            "blocks": 6437
+          },
+          {
+            "location": "brasshaven:walking_fortress/walker/x4_z3",
+            "offset": [
+              126,
+              0,
+              94
+            ],
+            "size": [
+              30,
+              58,
+              32
+            ],
+            "blocks": 5196
+          },
+          {
+            "location": "brasshaven:walking_fortress/walker/x4_z4",
+            "offset": [
+              126,
+              0,
+              126
+            ],
+            "size": [
+              15,
+              11,
+              15
+            ],
+            "blocks": 528
+          }
+        ],
+        "projection": "rigid",
+        "processors": "brasshaven:none",
+        "ground_level_delta": 9,
+        "footprint": [
+          4,
+          4,
+          152,
+          152
+        ]
+      }
+    }
+  ]
+}

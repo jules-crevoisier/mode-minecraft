@@ -141,6 +141,7 @@ STRUCTURE_KIND = {
     "sunken_citadel": "harbour", "forgotten_catacombs": "food", "sand_hypogeum": "food", "lithite_well": "mine",
     "clockwork_citadel": "clockwork", "sky_harbour": "clockwork", "undercity": "clockwork", "dwarven_city": "mine",
     "sylvan_palace": "sylvan", "inventor_manor": "clockwork", "sky_isles": "sylvan", "geothermal_foundry": "workshop",
+    "walking_fortress": "workshop",
     "tesla_observatory": "clockwork", "crystal_cathedral": "library", "sunken_submarine": "harbour",
     "diving_bell": "harbour", "coral_shrine": "harbour", "shipwreck_debris": "harbour",
     # vanilla villages and outposts extended by wf/village.py, the sea-floor props of wf/ocean.py

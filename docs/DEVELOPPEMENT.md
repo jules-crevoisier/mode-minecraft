@@ -117,7 +117,9 @@ python3 tools/ci_client.py --focus structure:giant_tree,entity:grand_clockmaker,
 
 `ci_client.py` lance Minecraft sans écran (Xvfb + rendu logiciel), crée un monde créatif, joue les étapes
 demandées puis quitte. Pour une structure : elle est posée avec `/place structure` et photographiée sous quatre
-angles (`nw`, `ne`, `se`, `sw`), au sol à hauteur d'yeux (`ground`) et du dessus (`top`). Pour une créature :
+angles (`nw`, `ne`, `se`, `sw`), au sol à hauteur d'yeux (`ground`), au pied de la structure en regardant vers
+le haut (`low`) et du dessus (`top`). Attention : `/place` pose la structure sur un terrain déjà généré, donc sans
+l'adaptation du relief qu'elle aura en vrai (sur une colline, le cratère de la Forteresse reste entaillé). Pour une créature :
 `front` et `side`. `step:<nom>` rejoue une étape nommée de la visite complète (`client/CiDriver.java`).
 
 Résultats dans `build/ci-client/` : `brasshaven-shot-<nom>.png`, le rapport `ci-client-report.txt` (PASS/FAIL par
@@ -183,6 +185,11 @@ Journal de la refonte :
   « secrètes » qu'il fallait casser. Les secrets restent cachés mais s'ouvrent sans pioche : trappe au ras du sol,
   porte perdue entre des bibliothèques, passage derrière une toile d'araignée ou un rideau de racines. Les barreaux
   scellés des salles du trésor (ouverts à la mort du boss) comptent comme une trappe pour l'audit.
+  Référence donnée par jules : *When Dungeons Arise* (leçons dans `tools/BUILDING.md` §15). Première structure
+  colossale : la **Forteresse marchante** (`tools/wf/structures/walking_fortress.py`), un marcheur de siège de
+  130 blocs de haut dans un cratère de 150 ; on monte par l'intérieur des jambes. Audit à 0 erreur.
+  Captures de test : interface masquée (bascule F1 de `Hud`), poche dégagée devant la caméra au sol, nouvelle vue
+  `_low` prise au pied de la structure.
 
 ## 6. Petits outils de débogage
 

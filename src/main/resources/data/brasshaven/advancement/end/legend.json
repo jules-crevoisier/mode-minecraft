@@ -798,6 +798,22 @@
           }
         ]
       }
+    },
+    "walking_fortress": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:walking_fortress"
+              }
+            }
+          }
+        ]
+      }
     }
   },
   "parent": "brasshaven:end/void_warden",

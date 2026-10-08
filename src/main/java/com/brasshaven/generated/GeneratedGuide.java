@@ -56,6 +56,7 @@ public final class GeneratedGuide {
             new Page("inventor_manor", "wonders", "brasshaven:redstone_timer", 3, List.of()),
             new Page("sky_isles", "wonders", "brasshaven:aether_crystal", 3, List.of()),
             new Page("geothermal_foundry", "wonders", "minecraft:magma_block", 3, List.of()),
+            new Page("walking_fortress", "wonders", "brasshaven:gear_panel", 3, List.of()),
             new Page("tesla_observatory", "wonders", "minecraft:lightning_rod", 3, List.of()),
             new Page("crystal_cathedral", "wonders", "minecraft:amethyst_block", 3, List.of()),
             new Page("sorting_chest", "storage", "brasshaven:sorting_chest", 3, List.of("brasshaven:sorting_chest")),

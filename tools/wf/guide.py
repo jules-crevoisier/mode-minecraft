@@ -458,6 +458,19 @@ PAGES = [
          "Dans la montagne se cache la Forge des Profondeurs : marteaux-pilons, hauts fourneaux et, au fond, le "
          "Cœur autour d'un puits de lave. Une potion de résistance au feu aide."),
     ], []),
+    ("walking_fortress", "wonders", "brasshaven:gear_panel", ("Walking Fortress", "Forteresse marchante"), [
+        ("The wreck of a brass siege walker frozen mid-stride in a scorched crater: four 60-block legs, a riveted "
+         "hull carried 55 blocks up, smokestacks and a mast reaching y 130.",
+         "L'épave d'un marcheur de siège en laiton figé en plein pas dans un cratère brûlé : quatre jambes de 60 "
+         "blocs, une coque rivetée portée à 55 blocs du sol, des cheminées et un mât qui montent à 130."),
+        ("Where: badlands, savannas, plains and deserts.",
+         "Où : badlands, savanes, plaines et déserts."),
+        ("The way in is a breach in a planted foot: climb the spiral inside the leg, cross the knee, take the stair "
+         "up the thigh into the hold. The boss waits on the top deck; the vault is in the bridge tower.",
+         "On entre par la brèche d'un pied posé : l'escalier en colimaçon de la jambe, la salle du genou, puis "
+         "l'escalier de la cuisse jusqu'à la cale. Le boss attend sur le pont supérieur ; la salle forte est dans "
+         "la tour de commandement."),
+    ], []),
     ("tesla_observatory", "wonders", "minecraft:lightning_rod", ("Tesla Observatory", "Observatoire Tesla"), [
         ("A science campus on a rocky crag: a copper dome with a 30-block telescope, a 70-block Tesla tower and an "
          "orrery under a glass dome.",
