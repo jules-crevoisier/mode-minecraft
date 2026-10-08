@@ -1,268 +1,55 @@
 {
- "fallen_colossus": [
-  {
-   "name": "entrance",
-   "feet": [
-    66,
-    10,
-    115
-   ],
-   "look": [
-    66,
-    12,
-    95
-   ]
-  },
-  {
-   "name": "balcony",
-   "feet": [
-    71,
-    23,
-    68
-   ],
-   "look": [
-    92,
-    32,
-    57
-   ]
-  },
-  {
-   "name": "rib_hall",
-   "feet": [
-    94,
-    11,
-    60
-   ],
-   "look": [
-    74,
-    28,
-    59
-   ]
-  },
-  {
-   "name": "hip_crypt",
-   "feet": [
-    110,
-    11,
-    62
-   ],
-   "look": [
-    102,
-    13,
-    56
-   ]
-  },
-  {
-   "name": "loft",
-   "feet": [
-    62,
-    35,
-    66
-   ],
-   "look": [
-    62,
-    37,
-    53
-   ]
-  },
-  {
-   "name": "arena",
-   "feet": [
-    57,
-    22,
-    59
-   ],
-   "look": [
-    34,
-    26,
-    59
-   ]
-  },
-  {
-   "name": "valley",
-   "feet": [
-    134,
-    9,
-    121
-   ],
-   "look": [
-    79,
-    30,
-    59
-   ]
-  }
- ],
- "rock_necropolis": [
-  {
-   "name": "canyon",
-   "feet": [
-    87,
-    40,
-    171
-   ],
-   "look": [
-    99,
-    53,
-    144
-   ]
-  },
-  {
-   "name": "facade",
-   "feet": [
-    101,
-    40,
-    138
-   ],
-   "look": [
-    92,
-    101,
-    100
-   ]
-  },
-  {
-   "name": "hall",
-   "feet": [
-    92,
-    42,
-    88
-   ],
-   "look": [
-    92,
-    50,
-    50
-   ]
-  },
-  {
-   "name": "gallery",
-   "feet": [
-    20,
-    30,
-    70
-   ],
-   "look": [
-    20,
-    32,
-    28
-   ]
-  },
-  {
-   "name": "treasury",
-   "feet": [
-    107,
-    18,
-    11
-   ],
-   "look": [
-    116,
-    20,
-    5
-   ]
-  },
-  {
-   "name": "arena",
-   "feet": [
-    92,
-    2,
-    58
-   ],
-   "look": [
-    92,
-    8,
-    85
-   ]
-  }
- ],
- "walking_fortress": [
-  {
-   "name": "knee",
-   "feet": [
-    42,
-    51,
-    51
-   ],
-   "look": [
-    34,
-    53,
-    57
-   ]
-  },
-  {
-   "name": "hold",
-   "feet": [
-    84,
-    68,
-    100
-   ],
-   "look": [
-    75,
-    70,
-    54
-   ]
-  },
-  {
-   "name": "engine",
-   "feet": [
-    70,
-    82,
-    92
-   ],
-   "look": [
-    80,
-    79,
-    66
-   ]
-  },
-  {
-   "name": "gun_deck",
-   "feet": [
-    67,
-    88,
-    101
-   ],
-   "look": [
-    83,
-    90,
-    54
-   ]
-  },
-  {
-   "name": "cockpit",
-   "feet": [
-    78,
-    88,
-    40
-   ],
-   "look": [
-    78,
-    90,
-    26
-   ]
-  },
-  {
-   "name": "bridge",
-   "feet": [
-    84,
-    97,
-    55
-   ],
-   "look": [
-    72,
-    98,
-    48
-   ]
-  },
-  {
-   "name": "arena",
-   "feet": [
-    91,
-    97,
-    98
-   ],
-   "look": [
-    78,
-    100,
-    60
-   ]
-  }
- ]
+ "bandit_camp": {"ground": 6, "views": []},
+ "basalt_fortress": {"ground": 14, "views": []},
+ "chain_bridge": {"ground": 24, "views": []},
+ "chained_bastion": {"ground": 45, "views": [{"name": "landing", "feet": [16, 28, 63], "look": [106, 52, 56]}, {"name": "chain_climb", "feet": [52, 37, 63], "look": [65, 50, 60]}, {"name": "prison", "feet": [84, 46, 61], "look": [104, 40, 56]}, {"name": "forge", "feet": [85, 46, 69], "look": [110, 51, 80]}, {"name": "chapel", "feet": [85, 56, 38], "look": [115, 60, 38]}, {"name": "grace", "feet": [123, 56, 62], "look": [136, 59, 50]}, {"name": "arena", "feet": [150, 56, 56], "look": [174, 62, 56]}]},
+ "chorus_garden": {"ground": 42, "views": []},
+ "clockwork_citadel": {"ground": 23, "views": []},
+ "coastal_lighthouse": {"ground": 6, "views": []},
+ "coral_shrine": {"ground": 4, "views": []},
+ "crystal_cathedral": {"ground": 10, "views": []},
+ "crystal_grotto": {"ground": 48, "views": []},
+ "desert_oasis": {"ground": 49, "views": []},
+ "diving_bell": {"ground": 4, "views": []},
+ "dwarven_city": {"ground": 8, "views": []},
+ "dwarven_forge": {"ground": 42, "views": []},
+ "dwarven_mine": {"ground": 34, "views": []},
+ "end_archive": {"ground": 38, "views": []},
+ "fallen_colossus": {"ground": 8, "views": [{"name": "entrance", "feet": [66, 10, 115], "look": [66, 12, 95]}, {"name": "balcony", "feet": [71, 23, 68], "look": [92, 32, 57]}, {"name": "rib_hall", "feet": [94, 11, 60], "look": [74, 28, 59]}, {"name": "hip_crypt", "feet": [110, 11, 62], "look": [102, 13, 56]}, {"name": "loft", "feet": [62, 35, 66], "look": [62, 37, 53]}, {"name": "arena", "feet": [57, 22, 59], "look": [34, 26, 59]}, {"name": "valley", "feet": [134, 9, 121], "look": [79, 30, 59]}]},
+ "forgotten_catacombs": {"ground": 41, "views": []},
+ "forgotten_library": {"ground": 35, "views": []},
+ "galleon_wreck": {"ground": 5, "views": []},
+ "geothermal_foundry": {"ground": 12, "views": []},
+ "giant_tree": {"ground": 28, "views": []},
+ "guild_outpost": {"ground": 6, "views": []},
+ "ice_observatory": {"ground": 8, "views": []},
+ "inventor_manor": {"ground": 12, "views": []},
+ "jungle_ziggurat": {"ground": 42, "views": []},
+ "lava_foundry": {"ground": 16, "views": []},
+ "lithite_well": {"ground": 41, "views": []},
+ "mountain_monastery": {"ground": 31, "views": []},
+ "piglin_market": {"ground": 8, "views": []},
+ "piglin_sanctuary": {"ground": 10, "views": []},
+ "rock_necropolis": {"ground": 39, "views": [{"name": "canyon", "feet": [87, 40, 171], "look": [99, 53, 144]}, {"name": "facade", "feet": [101, 40, 138], "look": [92, 101, 100]}, {"name": "hall", "feet": [92, 42, 88], "look": [92, 50, 50]}, {"name": "gallery", "feet": [20, 30, 70], "look": [20, 32, 28]}, {"name": "treasury", "feet": [107, 18, 11], "look": [116, 20, 5]}, {"name": "arena", "feet": [92, 2, 58], "look": [92, 8, 85]}]},
+ "ruined_watchtower": {"ground": 6, "views": []},
+ "rune_circle": {"ground": 32, "views": []},
+ "sand_hypogeum": {"ground": 41, "views": []},
+ "sealed_lab": {"ground": 32, "views": []},
+ "shipwreck_debris": {"ground": 4, "views": []},
+ "sky_harbour": {"ground": 12, "views": []},
+ "sky_island": {"ground": 12, "views": []},
+ "sky_isles": {"ground": 7, "views": []},
+ "soul_tower": {"ground": 6, "views": []},
+ "sunken_citadel": {"ground": 4, "views": []},
+ "sunken_submarine": {"ground": 4, "views": []},
+ "sunken_temple": {"ground": 7, "views": []},
+ "sylvan_palace": {"ground": 12, "views": []},
+ "tesla_observatory": {"ground": 26, "views": []},
+ "undercity": {"ground": 6, "views": []},
+ "void_crypt": {"ground": 27, "views": []},
+ "void_nest": {"ground": 49, "views": []},
+ "void_observatory": {"ground": 36, "views": []},
+ "void_ship": {"ground": 38, "views": []},
+ "walking_fortress": {"ground": 8, "views": [{"name": "knee", "feet": [42, 51, 51], "look": [34, 53, 57]}, {"name": "hold", "feet": [84, 68, 100], "look": [75, 70, 54]}, {"name": "engine", "feet": [70, 82, 92], "look": [80, 79, 66]}, {"name": "gun_deck", "feet": [67, 88, 101], "look": [83, 90, 54]}, {"name": "cockpit", "feet": [78, 88, 40], "look": [78, 90, 26]}, {"name": "bridge", "feet": [84, 97, 55], "look": [72, 98, 48]}, {"name": "arena", "feet": [91, 97, 98], "look": [78, 100, 60]}]},
+ "witch_huts": {"ground": 31, "views": []}
 }

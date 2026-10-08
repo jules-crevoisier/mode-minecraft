@@ -789,7 +789,10 @@ public final class CiDriver {
                 // /place lands on whatever terrain is there (often a wooded hillside that buries the build); worldgen
                 // picks flat sites (wf/placement.py FIT), so level the site first, then locate again on the flat
                 .server("level the site", (server, player) -> {
-                    levelSite(server.overworld(), px, pz, box[0]);
+                    Placed placed = PLACED.get(name);
+                    int layer = groundLayer(shortName);
+                    levelSite(server.overworld(), px, pz, box[0],
+                            placed != null && layer >= 0 ? placed.origin().getY() + layer : Integer.MIN_VALUE);
                     prepareStructure(server, name, px, pz, box); // same chunks, already force-loaded: only the height moves
                     return List.of();
                 })
@@ -866,7 +869,7 @@ public final class CiDriver {
                     double[] b = box[0];
                     double[] c = centre(b);
                     double size = Math.max(b[3] - b[0], b[5] - b[2]);
-                    return List.of("tp @s " + c[0] + " " + (b[4] + size * 0.9 + 10) + " " + (c[2] - size * 0.2)
+                    return List.of("tp @s " + c[0] + " " + (Math.min(b[4] + size * 0.5 + 10, 330)) + " " + (c[2] - size * 0.2)
                             + " facing " + c[0] + " " + b[1] + " " + c[2]);
                 })
                 .run("fly", CiDriver::fly)
@@ -915,7 +918,7 @@ public final class CiDriver {
             var root = com.google.gson.JsonParser.parseString(Files.readString(file.toPath(), StandardCharsets.UTF_8))
                     .getAsJsonObject();
             if (root.has(shortName)) {
-                for (var e : root.getAsJsonArray(shortName)) {
+                for (var e : root.getAsJsonObject(shortName).getAsJsonArray("views")) {
                     var o = e.getAsJsonObject();
                     out.add(new String[] {o.get("name").getAsString(), xyz(o.getAsJsonArray("feet")),
                             xyz(o.getAsJsonArray("look"))});
@@ -927,17 +930,35 @@ public final class CiDriver {
         return out;
     }
 
+    /** The structure's ground layer above its template's lowest layer (tools/ci_views.json), or -1. */
+    private static int groundLayer(String shortName) {
+        File file = new File("../tools/ci_views.json");
+        try {
+            var root = com.google.gson.JsonParser.parseString(Files.readString(file.toPath(), StandardCharsets.UTF_8))
+                    .getAsJsonObject();
+            return root.has(shortName) ? root.getAsJsonObject(shortName).get("ground").getAsInt() : -1;
+        } catch (IOException | RuntimeException e) {
+            LOGGER.warn(TAG + "no ground layer for {}: {}", shortName, e.toString());
+            return -1;
+        }
+    }
+
     private static String xyz(com.google.gson.JsonArray a) {
         return a.get(0).getAsInt() + " " + a.get(1).getAsInt() + " " + a.get(2).getAsInt();
     }
 
     /** Flat ground over the structure's box and a 16-block margin: the surface of the centre column (its top
-     *  block and the one under it) at the centre's height, air above it up to the box top + 40. */
-    private static void levelSite(ServerLevel level, int px, int pz, double[] b) {
+     *  block and the one under it) at the height the structure will start from, air above it up to the box top + 40. */
+    private static void levelSite(ServerLevel level, int px, int pz, double[] b, int ground) {
         var heightmap = net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES;
-        int g = level.getHeight(heightmap, px, pz) - 1;
-        var top = level.getBlockState(new BlockPos(px, g, pz));
-        var filler = level.getBlockState(new BlockPos(px, g - 2, pz));
+        // the structure's ground layer (its start height comes from the generator's noise surface and a site fit, not
+        // from the world as it is now); without it, the noise surface at the centre
+        var source = level.getChunkSource();
+        int g = ground != Integer.MIN_VALUE ? ground : source.getGenerator().getBaseHeight(px, pz,
+                net.minecraft.world.level.levelgen.Heightmap.Types.WORLD_SURFACE_WG, level, source.randomState()) - 1;
+        int surface = level.getHeight(heightmap, px, pz) - 1;
+        var top = level.getBlockState(new BlockPos(px, surface, pz));
+        var filler = level.getBlockState(new BlockPos(px, surface - 2, pz));
         if (!top.isSolid()) {
             top = net.minecraft.world.level.block.Blocks.GRASS_BLOCK.defaultBlockState();
         }
