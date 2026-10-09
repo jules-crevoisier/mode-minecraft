@@ -922,7 +922,13 @@ public final class CiDriver {
         String dim = dimensionOf(shortName);
         boolean surface = dim.equals("overworld");
         step("structure_" + shortName)
-                .run("render distance", () -> Minecraft.getInstance().options.renderDistance().set(18))
+                .run("render distance", () -> {
+                    Minecraft.getInstance().options.renderDistance().set(18);
+                    var server = Minecraft.getInstance().getSingleplayerServer();
+                    if (server != null) {
+                        server.execute(() -> server.getPlayerList().setViewDistance(18)); // the server must send that far too
+                    }
+                })
                 .server("locate " + shortName, (server, player) -> prepareStructure(server, name, px, pz, box, dim))
                 .cmd(() -> List.of(in(dim) + "tp @s " + centre(box[0])[0] + " "
                         + (surface ? box[0][4] + 30 : centre(box[0])[1]) + " " + centre(box[0])[2]))
@@ -1818,25 +1824,6 @@ public final class CiDriver {
         }
 
         /** Waits until no chunk section is left to compile for 20 ticks in a row (or maxTicks, without failing). */
-        private static boolean chunksArrived() {
-            Minecraft mc = Minecraft.getInstance();
-            if (mc.level == null || mc.player == null) {
-                return true;
-            }
-            int r = Math.max(2, mc.options.renderDistance().get() - 2);
-            int px = mc.player.chunkPosition().x();
-            int pz = mc.player.chunkPosition().z();
-            var source = mc.level.getChunkSource();
-            for (int dx = -r; dx <= r; dx++) {
-                for (int dz = -r; dz <= r; dz++) {
-                    if (dx * dx + dz * dz <= r * r && !source.hasChunk(px + dx, pz + dz)) {
-                        return false;
-                    }
-                }
-            }
-            return true;
-        }
-
         Step settleChunks(int maxTicks) {
             return add(new Op("chunks rendered") {
                 int quiet;
@@ -1844,8 +1831,8 @@ public final class CiDriver {
                 @Override
                 boolean tick() {
                     // "all sections rendered" is also true while the server has not sent the chunks yet (right after
-                    // a long teleport nothing is queued): wait until the chunks around the camera have arrived too
-                    quiet = Minecraft.getInstance().levelRenderer.hasRenderedAllSections() && chunksArrived() ? quiet + 1 : 0;
+                    // a long teleport nothing is queued): give the server 10 s to send them first
+                    quiet = age >= 200 && Minecraft.getInstance().levelRenderer.hasRenderedAllSections() ? quiet + 1 : 0;
                     if (age >= maxTicks) {
                         LOGGER.warn(TAG + "{}: chunks still compiling after {} ticks, going on", name, maxTicks);
                         return true;
