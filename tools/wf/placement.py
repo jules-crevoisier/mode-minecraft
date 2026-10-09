@@ -125,6 +125,8 @@ FAMILIES = [
         "mesa_minecity": 1,
         "airship_graveyard": 1,
         "cloud_pagoda": 1,
+        "icebound_fleet": 1,
+        "clockwork_asylum": 1,
     }, avoid=[(V + "villages", 10), (V + "pillager_outposts", 6), (V + "woodland_mansions", 8)], min_spawn=32,
         note="surface wonders; at least 40 chunks between two of them, none within 512 blocks of 0,0"),
     Family("deep_wonders", "deep_wonder", 72, 28, {
@@ -163,6 +165,7 @@ FAMILIES = [
         "basalt_fortress": 2, "piglin_sanctuary": 2, "piglin_market": 2, "lava_foundry": 2,
         "chained_bastion": 1,
         "titan_forge": 1,
+        "soul_engine": 1,
     }, avoid=[(V + "nether_complexes", 4)]),
     Family("nether_small", "nether", 30, 10, {
         "chain_bridge": 2, "soul_tower": 2,
@@ -247,6 +250,9 @@ FIT = {
     "mesa_minecity": _f("land", spread=20, slope=1.4, wet=0.05),     # badlands floor: the butte brings its own talus and footings
     "airship_graveyard": _f("land", spread=10, slope=0.8, wet=0.06),
     "cloud_pagoda": _f("land", spread=24, slope=1.5, wet=0.05),     # cherry grove / meadow: the massif brings its own hill and skirt  # open, flat grassland: the field brings its own ground layer
+    # pack ice on flat snow or a frozen sea's edge: the water surface counts as ground, the ice field comes with it
+    "icebound_fleet": _f("wetland", spread=5, slope=0.9, wet=0.95, min_wet=0.0, drop=2),
+    "clockwork_asylum": _f("land", spread=22, slope=1.4, wet=0.05),  # dark forest / pale garden: brings its own hill and yard
     # ---- coast: the dock side (template +z = south) in the sea, the cape on land, shore near sea level
     "coastal_lighthouse": _f("coast", sea_side="south", wet=0.5, land=0.5, spread=8, slope=1.0),
     # the island (south) in the sea, the causeway's shore end (north) on the beach: the strand lands at sea level
@@ -278,6 +284,7 @@ FIT = {
     "piglin_market": _f("cavern", open=0.3),
     "chained_bastion": _f("cavern", open=0.4),   # hangs in a big cavern: open air at the floor of the bastion
     "titan_forge": _f("cavern", open=0.35),      # needs a big cavern: open air over the anvil face
+    "soul_engine": _f("cavern", open=0.35),      # stands on a soul sand valley floor: open air over its apron
     # ---- End: monuments floating over the void beside the outer islands; they rise above an island in the way
     "void_observatory": _f("sky", clearance=4, lift=32),
     "chorus_garden": _f("sky", clearance=4, lift=32),
@@ -687,6 +694,8 @@ def check_fit(data_dir):
             continue
         biomes = biome_set(sdef)
         theme = fit.get("theme", "stone")
+        if mode == "wetland" and theme == "snow":
+            biomes = biomes - {"frozen_ocean", "deep_frozen_ocean", "frozen_river"}  # brings its own pack ice
         if mode in ("land", "wetland", "coast") and dim == "overworld" and biomes & WATERY:
             errors.append(f"{sid}: land structure listed in water biomes {sorted(biomes & WATERY)}")
         if mode == "seabed" and biomes - WATERY - SHORE:

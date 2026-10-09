@@ -775,6 +775,27 @@ PAGES = [
          "main. Passé la brume, l'arène sur l'enclume ; derrière des barreaux scellés, le caveau. L'ascenseur de la "
          "colonne est le raccourci du retour."),
     ], []),
+    ("soul_engine", "wonders", "minecraft:bone_block", ("The Soul Engine", "Le Moteur des âmes"), [
+        ("A machine-ossuary 178 by 195 blocks on a Nether valley floor: a cathedral-sized engine block of "
+         "blackstone and tarnished brass fed by bone conveyors, six colossal pistons frozen at different heights, "
+         "ribbed chimneys venting blue flame, warped fungus eating its walls. Where: soul sand valleys, warped "
+         "forests.",
+         "Une machine-ossuaire de 178 sur 195 blocs au fond d'une vallée du Nether : un bloc moteur grand comme une "
+         "cathédrale, de pierre noire et de laiton terni, nourri par des convoyeurs d'os, six pistons colossaux "
+         "figés à des hauteurs différentes, des cheminées nervurées qui crachent une flamme bleue, des champignons "
+         "biscornus qui dévorent ses murs. Où : vallées de sable des âmes, forêts biscornues."),
+        ("From the pilgrims' camp (waystone), under the ribcage arch to the bone gate and the pressure hall "
+         "(waystone). North: bone hoppers, the soul-soil bunker, the soul furnace; up its stair to the stokers' mess, "
+         "the governor's control room and the valve room, then up the piston shaft to the grace. Through the mist, "
+         "the arena on the crankshaft deck; behind sealed bars, the soul reliquary. Optional: the piston gallery "
+         "and the ossuary under the engine. Shortcuts: the piston lift, the bone chute, the furnace's one-way door.",
+         "Depuis le camp des pèlerins (pierre de passage), sous l'arche en cage thoracique jusqu'à la porte d'os et "
+         "la salle des pressions (pierre). Au nord : les trémies d'os, la soute, la fournaise des âmes ; son "
+         "escalier monte au réfectoire des chauffeurs, à la salle du gouverneur et à la salle des vannes, puis le "
+         "puits de piston mène au lieu de grâce. Passé la brume, l'arène sur le pont du vilebrequin ; derrière des "
+         "barreaux scellés, le reliquaire des âmes. En option : la galerie des pistons et l'ossuaire sous le moteur. "
+         "Raccourcis : l'ascenseur à piston, la goulotte d'os, la porte à sens unique de la fournaise."),
+    ], []),
     ("starfall_library", "wonders", "minecraft:chiseled_bookshelf", ("The Starfall Library",
                                                                       "La Bibliothèque de la chute d'étoile"), [
         ("A floating archive 170 blocks across among the outer End islands: a purpur-and-brass spindle tower 125 "
@@ -823,6 +844,42 @@ PAGES = [
          "a room per tier up to the arena on the open top; the vault's well drops you back to the prayer hall.",
          "Depuis le camp (pierre) : porte de lune, pont des carpes, terrasses, sanctuaire du dragon (pierre), dojo. "
          "Dedans, une salle par étage jusqu'à l'arène du toit ; le puits du caveau ramène à la salle de prière."),
+    ], []),
+    ("icebound_fleet", "wonders", "minecraft:packed_ice", ("The Icebound Fleet", "La Flotte prise dans les glaces"), [
+        ("A polar expedition frozen into the pack ice, 220 blocks across: a colossal dark-iron paddle icebreaker "
+         "locked at a list, its copper funnels leaning and its ram bow up on a pressure ridge, two timber supply "
+         "ships, a brass drilling derrick and a whale skeleton in the ice. Where: frozen seas, snowy plains, ice "
+         "spikes and snowy beaches.",
+         "Une expédition polaire prise dans la banquise, 220 blocs : un brise-glace colossal à aubes en fer sombre, "
+         "figé de guingois, cheminées de cuivre penchées et étrave en éperon sur une crête de pression, deux "
+         "navires ravitailleurs en bois, un derrick de forage en laiton et une baleine prise dans la glace. Où : "
+         "mers gelées, plaines enneigées, pics de glace et plages enneigées."),
+        ("From the sledge camp (waystone) to the drilling camp (waystone); the Fulmar's frozen hold and chart room, "
+         "the rope bridge to the Petrel (galley waystone), its ice door onto the snow trench and the icebreaker's "
+         "breached bunker. Boiler room, crew mess (waystone), officers' mess, captain's cabin, up the funnel's "
+         "stair to the wheelhouse (site of grace), then the arena on the bow deck. The strongroom's ice slide, the "
+         "mess hatch and the cargo crane lead back.",
+         "Du camp des traîneaux (pierre) au camp de forage (pierre) ; la cale gelée et la salle des cartes du "
+         "Fulmar, le pont de cordes vers le Pétrel (pierre dans la cuisine), sa porte de glace sur la tranchée de "
+         "neige et la soute éventrée du brise-glace. Chaudières, carré de l'équipage (pierre), carré des officiers, "
+         "cabine du capitaine, l'escalier de la cheminée jusqu'à la timonerie (lieu de grâce), puis l'arène sur le "
+         "gaillard d'avant. La glissade de la chambre forte, l'écoutille du carré et la grue ramènent en arrière."),
+    ], []),
+    ("clockwork_asylum", "wonders", "minecraft:clock", ("The Clockwork Asylum", "L'Asile mécanique"), [
+        ("A gothic hilltop sanatorium turned automaton workshop, 185 blocks across: a 100-high clock tower with four "
+         "cracked faces, two barred ward wings, a chapel, a broken greenhouse and a walled cemetery. Where: dark "
+         "forests and pale gardens.",
+         "Un sanatorium gothique au sommet d'une colline devenu atelier d'automates, 185 blocs : une tour de "
+         "l'horloge haute de 100 blocs aux quatre cadrans fêlés, deux ailes grillagées, une chapelle, une serre "
+         "brisée et un cimetière clos. Où : forêts sombres et jardins pâles."),
+        ("From the woodcutters' camp (waystone) ride the funicular up from the gatehouse, cross the cemetery to the "
+         "main hall (waystone). The wards hold the cells, the operating theatre, the baths and the archive; the "
+         "clockwork leads up to the site of grace and the arena behind the cracked dial. The funicular, the laundry "
+         "chute and the chapel's one-way door lead back.",
+         "Depuis le camp des bûcherons (pierre), prends le funiculaire de la conciergerie, traverse le cimetière "
+         "jusqu'au grand hall (pierre). Les ailes : cellules, amphithéâtre opératoire, bains, archives ; le "
+         "mécanisme monte au lieu de grâce et à l'arène derrière le cadran fêlé. Le funiculaire, la goulotte de la "
+         "buanderie et la porte à sens unique de la chapelle ramènent en arrière."),
     ], []),
     ("mire_stilt_city", "wonders", "minecraft:mangrove_roots", ("Mire Stilt-City", "La Cité des pilotis"), [
         ("A timber town on piles over a mangrove swamp, 200 blocks across: boardwalks on three levels, rope "
@@ -1459,6 +1516,80 @@ PAGES = [
          "Son Souvenir, quatre éclats de lithite et deux diamants forgent la Baguette-diapason du Chantre creux, dont "
          "le clic droit lance un cri en cône devant toi qui blesse, repousse et affaiblit chaque ennemi touché ; là où "
          "il heurte un mur, son écho éclate à nouveau."),
+    ], []),
+    ("soul_stoker", "wonders", "brasshaven:remembrance_soul_stoker", ("The Soul Stoker", "Le Chauffeur des âmes"), [
+        ("On the crankshaft deck under the crankcase roof of the Soul Engine, past the piston shaft, the site of grace "
+         "and the mist, the Soul Stoker waits (620 health, armour 14): a hulking furnace-man four blocks tall, a "
+         "blackstone boiler for a torso with a grated firebox burning blue soul fire, a skull-faced furnace door for a "
+         "helmet, chimneys venting blue flame on his back, a giant coal shovel for one arm and a piston fist for the "
+         "other.",
+         "Sur le pont du vilebrequin, sous le toit du carter du Moteur des âmes, passé la cheminée du piston, le lieu "
+         "de grâce et la brume, le Chauffeur des âmes attend (620 PV, armure 14) : un homme-fourneau massif de quatre "
+         "blocs, une chaudière de blackstone pour torse où un foyer grillagé brûle d'un feu d'âmes bleu, une porte de "
+         "four à visage de crâne pour casque, des cheminées crachant des flammes bleues dans le dos, une pelle à "
+         "charbon géante au bout d'un bras et un poing à piston au bout de l'autre."),
+        ("His shovel sweeps in front of him and flings embers that land on rings marked as they fly. He cocks his "
+         "piston fist for a long breath while a line follows you, then punches a shockwave down it: step aside. He "
+         "stokes his firebox with three shovelfuls of souls, a gauge climbing over his head, and vents a cone of blue "
+         "flame. Rammed into the deck, his shovel cracks open soul-fire vents marked in rings, one under you.",
+         "Sa pelle balaie devant lui et projette des braises qui retombent sur des cercles marqués dès leur envol. Il "
+         "arme son poing à piston un long moment pendant qu'une ligne te suit, puis frappe une onde de choc le long "
+         "de celle-ci : fais un pas de côté. Il attise son foyer de trois pelletées d'âmes, une jauge montant "
+         "au-dessus de sa tête, et crache un cône de flammes bleues. Plantée dans le pont, sa pelle ouvre des évents "
+         "de feu d'âmes marqués par des cercles, l'un sous toi."),
+    ], ["brasshaven:remembrance_soul_stoker", "brasshaven:stoker_shovel"]),
+    ("soul_stoker_overpressure", "wonders", "minecraft:soul_lantern", ("Stoker: Overpressure", "Chauffeur : surpression"), [
+        ("At 65% he roars and grows faster: he charges down a lane drawn to you, opens his firebox for wither "
+         "skeletons, flings more embers and opens more vents. At 30% his safety valves blow (jump the wave) and the "
+         "deck takes up the engine's crank rhythm: strips across the deck burn in turn every three seconds, each pulse "
+         "drawn two seconds ahead, so keep hopping to a safe strip. Every eleven seconds three rings of blue flame roll "
+         "out of him, each with a gap drawn first that turns a little each ring; the rhythm stops while they roll.",
+         "À 65 %, il rugit et accélère : il charge le long d'un couloir tracé jusqu'à toi, ouvre son foyer pour des "
+         "squelettes wither, projette plus de braises et ouvre plus d'évents. À 30 %, ses soupapes sautent (saute "
+         "l'onde) et le pont prend le rythme du vilebrequin : des bandes à travers le pont brûlent tour à tour toutes "
+         "les trois secondes, chaque pulsation tracée deux secondes avant ; saute sans cesse sur une bande sûre. "
+         "Toutes les onze secondes, trois anneaux de flammes bleues partent de lui, chacun avec une brèche tracée "
+         "d'avance qui tourne un peu à chaque anneau ; le rythme s'arrête pendant ce temps."),
+        ("His Remembrance, four Ancient Embers and two diamonds forge the Soul-Fire Shovel of the Stoker, whose "
+         "right-click flings a fan of five soul embers along your aim: each bursts on the first foe or where it lands, "
+         "and a foe caught by several bursts is hurt the more and set ablaze.",
+         "Son Souvenir, quatre braises anciennes et deux diamants forgent la Pelle à feu d'âmes du Chauffeur, dont le "
+         "clic droit lance un éventail de cinq braises d'âmes dans ta visée : chacune éclate sur le premier ennemi ou "
+         "là où elle tombe, et un ennemi pris par plusieurs éclats est d'autant plus blessé, et embrasé."),
+    ], []),
+    ("asylum_director", "wonders", "brasshaven:remembrance_asylum_director", ("The Asylum Director", "La Directrice de l'asile"), [
+        ("In the clock stage atop the Clockwork Asylum's tower, past the mist, the Asylum Director waits (600 health, "
+         "armour 12): a tall surgeon in a stained white coat and a brass plague mask, a clockwork heart behind glass, "
+         "four brass surgical arms spread from her back like a spider's legs.",
+         "Dans l'étage de l'horloge, au sommet de la tour de l'Asile mécanique, passé la brume, la Directrice attend "
+         "(600 PV, armure 12) : une grande chirurgienne en blouse tachée et masque de peste en laiton, un cœur "
+         "mécanique sous verre, quatre bras chirurgicaux de laiton déployés dans son dos comme des pattes d'araignée."),
+        ("Her scalpel lunges down a red line, her saw sweeps wide, her syringe dart slows. When she winds her watch, a "
+         "clock ghost forms at your feet: three seconds later you snap back to it and its ring bursts, so step out. "
+         "Her pendulum swings along drawn lanes; she calls clockwork spiders.",
+         "Son scalpel fond le long d'une ligne rouge, sa scie balaie large, sa fléchette ralentit. Quand elle remonte "
+         "sa montre, un fantôme d'horloge se forme à tes pieds : trois secondes plus tard, tu y reviens et son cercle "
+         "éclate, alors sors-en. Son pendule passe le long de couloirs tracés ; elle appelle des araignées."),
+    ], ["brasshaven:remembrance_asylum_director", "brasshaven:director_bonesaw"]),
+    ("asylum_director_midnight", "wonders", "minecraft:clock", ("Director: Midnight", "Directrice : minuit"), [
+        ("At 65% she roars and quickens: her forceps seize you down a red line and her saw cuts, she dissects the four "
+         "quarters round her one after another (the next drawn red, the one after white), and she slips through time "
+         "to appear behind you. At 30% the great clock strikes midnight (jump the wave): from then on she strides to "
+         "the dial's centre and the hour and minute hands sweep three quarters of the way round, a quarter apart, "
+         "after four chimes. Stand in the golden gap between them and walk with it.",
+         "À 65 %, elle rugit et accélère : sa pince te saisit le long d'une ligne rouge et sa scie taille, elle "
+         "dissèque les quatre quarts autour d'elle l'un après l'autre (le prochain tracé en rouge, le suivant en "
+         "blanc), et elle glisse à travers le temps pour paraître derrière toi. À 30 %, la grande horloge sonne minuit "
+         "(saute l'onde) : désormais elle gagne le centre du cadran et les aiguilles des heures et des minutes font "
+         "les trois quarts d'un tour, à un quart l'une de l'autre, après quatre coups de cloche. Tiens-toi dans la "
+         "brèche dorée entre elles et avance avec elle."),
+        ("Her Remembrance, four map fragments and two diamonds forge the Bone-Saw of the Asylum Director, whose "
+         "right-click rips you forward along your aim, cutting every foe you pass; two seconds later its pocket watch "
+         "snaps you back to where you started and the saw's echo cuts there (sneak to stay).",
+         "Son Souvenir, quatre fragments de carte et deux diamants forgent la Scie à os de la Directrice de l'asile, "
+         "dont le clic droit te projette dans ta visée en taillant chaque ennemi traversé ; deux secondes plus tard, "
+         "sa montre de gousset te ramène à ton point de départ et l'écho de la scie y taille (accroupis-toi pour "
+         "rester)."),
     ], []),
     ("strangler_queen", "wonders", "brasshaven:remembrance_strangler_queen", ("The Strangler Fig Queen", "La Reine-figuier étrangleur"), [
         ("On the summit terrace of the Canopy Temple-City, through the mist under the broken brass sun-disc, the fig "

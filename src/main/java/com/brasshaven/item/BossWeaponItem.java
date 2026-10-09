@@ -25,7 +25,7 @@ import java.util.List;
  * Abilities only ever hurt non-player creatures.
  */
 public class BossWeaponItem extends AbilityItem {
-    public enum Ability { WAVE, BEAM, DASH, ERUPT, ROOT, CLOUD, LEAP, ARC, BLINK, HOOK, SHARDS, BREATH, RIFT, WARD, TEMPEST, TIDE, JET, PRESSURE, MIRE, PLUMB, BROADSIDE, PRISM, CAGE, SCARAB, MAGNET, TONGS, ZENITH, FUSE, DRAGON, SHRIEK, GRAPPLE }
+    public enum Ability { WAVE, BEAM, DASH, ERUPT, ROOT, CLOUD, LEAP, ARC, BLINK, HOOK, SHARDS, BREATH, RIFT, WARD, TEMPEST, TIDE, JET, PRESSURE, MIRE, PLUMB, BROADSIDE, PRISM, CAGE, SCARAB, MAGNET, TONGS, ZENITH, FUSE, DRAGON, SHRIEK, GRAPPLE, STOKE, REWIND }
 
     public static final int FIRE = 1;
     public static final int SLOW = 2;
@@ -1031,6 +1031,100 @@ public class BossWeaponItem extends AbilityItem {
                     player.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 60, 0));
                     player.fallDistance = 0;
                 }
+            }
+            case STOKE -> {
+                // the Soul Stoker's shovel: a shovelful of soul embers flung in a fan along the aim (five embers, 12
+                // degrees apart, up to `size` blocks, walls stop them); each bursts on the first foe it meets or where
+                // it lands, 1.6 blocks round. A foe caught by several bursts takes one hit, the stronger the more
+                // embers caught it (60% of the power for one, +20% for each more, at most 140%), set ablaze (flag fire)
+                Vec3 eye = player.getEyePosition();
+                java.util.Map<LivingEntity, Integer> caught = new java.util.HashMap<>();
+                for (int k = -2; k <= 2; k++) {
+                    double r = Math.toRadians(k * 12.0);
+                    Vec3 dir = new Vec3(look.x * Math.cos(r) - look.z * Math.sin(r), look.y, look.x * Math.sin(r) + look.z * Math.cos(r)).normalize();
+                    BlockHitResult wall = level.clip(new ClipContext(eye, eye.add(dir.scale(size)), ClipContext.Block.COLLIDER,
+                            ClipContext.Fluid.NONE, player));
+                    double reach = wall.getType() == HitResult.Type.MISS ? size : Math.max(0.5, wall.getLocation().distanceTo(eye) - 0.3);
+                    Vec3 spot = eye.add(dir.scale(reach));
+                    boolean struck = false;
+                    for (double d = 1.0; d <= reach && !struck; d += 0.5) {
+                        Vec3 p = eye.add(dir.scale(d)).add(0, -0.3 - d * d * 0.004, 0);
+                        if (((int) (d * 2)) % 2 == 0) {
+                            level.sendParticles(particle, p.x, p.y, p.z, 1, 0.03, 0.03, 0.03, 0.0);
+                        }
+                        if (!foes(level, player, new AABB(p, p).inflate(0.8)).isEmpty()) {
+                            spot = p;
+                            struck = true;
+                        }
+                    }
+                    if (!struck && wall.getType() == HitResult.Type.MISS) {
+                        BlockHitResult floor = level.clip(new ClipContext(spot, spot.add(0, -5, 0), ClipContext.Block.COLLIDER,
+                                ClipContext.Fluid.NONE, player));
+                        if (floor.getType() != HitResult.Type.MISS) {
+                            spot = floor.getLocation().add(0, 0.2, 0);
+                        }
+                    }
+                    for (LivingEntity e : foes(level, player, new AABB(spot, spot).inflate(1.6, 1.6, 1.6))) {
+                        if (e.getBoundingBox().getCenter().distanceTo(spot) <= 1.6 + e.getBbWidth() / 2 + e.getBbHeight() / 2) {
+                            caught.merge(e, 1, Integer::sum);
+                        }
+                    }
+                    level.sendParticles(net.minecraft.core.particles.ParticleTypes.SOUL_FIRE_FLAME, spot.x, spot.y, spot.z, 10, 0.5, 0.3, 0.5, 0.04);
+                    level.sendParticles(net.minecraft.core.particles.ParticleTypes.SOUL, spot.x, spot.y, spot.z, 2, 0.3, 0.2, 0.3, 0.02);
+                }
+                for (java.util.Map.Entry<LivingEntity, Integer> e : caught.entrySet()) {
+                    hit(level, player, e.getKey(), power * Math.min(1.4F, 0.6F + 0.2F * (e.getValue() - 1)), 0.4);
+                }
+                level.playSound(null, player, SoundEvents.FIRECHARGE_USE, SoundSource.PLAYERS, 1.0F, 0.8F);
+                level.playSound(null, player, SoundEvents.SOUL_ESCAPE.value(), SoundSource.PLAYERS, 1.2F, 0.7F);
+            }
+            case REWIND -> {
+                // the Asylum Director's bone-saw: the wielder rips forward along the aim (up to `size` blocks, stopped by
+                // walls), sawing every foe passed (flag slow); the pocket watch remembers the starting spot, and 2 s
+                // later the wielder is snapped back to it (sneak to stay), the saw's echo cutting the foes round it for
+                // half the power
+                Vec3 feet = origin;
+                double run = 0;
+                for (double d = 0.5; d <= size; d += 0.5) {
+                    Vec3 p = origin.add(flat.scale(d));
+                    net.minecraft.core.BlockPos at = net.minecraft.core.BlockPos.containing(p.add(0, 0.2, 0));
+                    if (!level.getBlockState(at).getCollisionShape(level, at).isEmpty()
+                            || !level.getBlockState(at.above()).getCollisionShape(level, at.above()).isEmpty()) {
+                        break;
+                    }
+                    run = d;
+                    feet = p;
+                }
+                java.util.Set<LivingEntity> cut = new java.util.HashSet<>();
+                for (double d = 0.5; d <= run; d += 0.5) {
+                    Vec3 p = origin.add(flat.scale(d));
+                    level.sendParticles(particle, p.x, p.y + 1.0, p.z, 2, 0.25, 0.4, 0.25, 0.0);
+                    for (LivingEntity e : foes(level, player, new AABB(p, p).inflate(1.3, 1.5, 1.3))) {
+                        if (cut.add(e)) {
+                            hit(level, player, e, power, 0.4);
+                            level.sendParticles(net.minecraft.core.particles.ParticleTypes.SWEEP_ATTACK, e.getX(), e.getY() + 1.0,
+                                    e.getZ(), 1, 0, 0, 0, 0);
+                        }
+                    }
+                }
+                if (run > 0.5) {
+                    Vec3 v = flat.scale(Math.min(2.6, run * 0.32));
+                    player.setDeltaMovement(v.x, 0.12, v.z);
+                    player.hurtMarked = true;
+                }
+                if (player instanceof net.minecraft.server.level.ServerPlayer sp) {
+                    Rewinds.mark(level, sp, origin, 40, (lvl, who, spot) -> {
+                        for (LivingEntity e : foes(lvl, who, new AABB(spot, spot).inflate(2.5, 1.5, 2.5))) {
+                            if (e.position().distanceTo(spot) <= 2.5 + e.getBbWidth() / 2) {
+                                hit(lvl, who, e, power * 0.5F, 0.6);
+                            }
+                        }
+                        ring(lvl, spot, 2.5);
+                        lvl.playSound(null, spot.x, spot.y, spot.z, SoundEvents.PLAYER_ATTACK_SWEEP, SoundSource.PLAYERS, 1.0F, 1.3F);
+                    });
+                }
+                level.playSound(null, player, SoundEvents.GRINDSTONE_USE, SoundSource.PLAYERS, 1.0F, 1.5F);
+                level.playSound(null, player, SoundEvents.NOTE_BLOCK_CHIME.value(), SoundSource.PLAYERS, 0.8F, 0.7F);
             }
             case DRAGON -> {
                 // the Chime Abbot's dragon staff: the brass dragon's spirit rushes along the aim (up to `size` blocks,

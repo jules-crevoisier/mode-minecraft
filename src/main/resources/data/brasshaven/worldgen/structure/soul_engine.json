@@ -1,0 +1,67 @@
+{
+  "type": "brasshaven:fitted_jigsaw",
+  "biomes": "#brasshaven:has_structure/soul_engine",
+  "step": "surface_structures",
+  "spawn_overrides": {
+    "monster": {
+      "bounding_box": "piece",
+      "spawns": [
+        {
+          "type": "minecraft:wither_skeleton",
+          "weight": 6,
+          "minCount": 1,
+          "maxCount": 2
+        },
+        {
+          "type": "minecraft:skeleton",
+          "weight": 6,
+          "minCount": 1,
+          "maxCount": 3
+        },
+        {
+          "type": "brasshaven:grave_knight",
+          "weight": 3,
+          "minCount": 1,
+          "maxCount": 1
+        },
+        {
+          "type": "brasshaven:crypt_crawler",
+          "weight": 3,
+          "minCount": 1,
+          "maxCount": 2
+        },
+        {
+          "type": "brasshaven:cinder_hound",
+          "weight": 2,
+          "minCount": 1,
+          "maxCount": 1
+        }
+      ]
+    }
+  },
+  "terrain_adaptation": "none",
+  "start_pool": "brasshaven:soul_engine/start",
+  "size": 1,
+  "max_distance_from_center": 128,
+  "use_expansion_hack": false,
+  "start_height": {
+    "absolute": 15
+  },
+  "fit": {
+    "mode": "cavern",
+    "spread": 8,
+    "slope": 0.8,
+    "wet": 0.05,
+    "min_wet": 0.0,
+    "land": 0.5,
+    "drop": 10,
+    "depth": 0,
+    "clearance": 0,
+    "cover": 0,
+    "lift": 0,
+    "open": 0.35,
+    "ground": 20,
+    "pond": 0.0,
+    "theme": "stone"
+  }
+}

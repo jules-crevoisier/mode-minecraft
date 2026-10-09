@@ -351,6 +351,15 @@ def entity_loot():
                           entry("golden_apple", 1, 2), entry("diamond", 2, 4), entry("amethyst_shard", 8, 16),
                           entry("bell", 1, 1), entry("note_block", 2, 4), entry("echo_shard", 2, 4),
                           entry("disc_fragment_5", 1, 1, chance=0.2)],
+        "soul_stoker": [entry("ancient_ember", 6, 10), entry("emerald", 5, 9), entry("experience_bottle", 4, 7),
+                        entry("golden_apple", 1, 2), entry("diamond", 2, 4), entry("soul_lantern", 2, 4),
+                        entry("soul_torch", 8, 16), entry("coal_block", 2, 4), entry("bone_block", 2, 4),
+                        entry("piston", 2, 3), entry("netherite_scrap", 1, 2, chance=0.25),
+                        entry("enchanted_golden_apple", chance=0.08)],
+        "asylum_director": [entry("map_fragment", 6, 10), entry("emerald", 5, 9), entry("experience_bottle", 4, 7),
+                            entry("golden_apple", 1, 2), entry("diamond", 2, 4), entry("clock", 1, 1),
+                            entry("glass_bottle", 4, 8), entry("glistering_melon_slice", 2, 4), entry("gold_ingot", 3, 6),
+                            entry("iron_ingot", 6, 12), entry("enchanted_golden_apple", chance=0.08)],
     }
     from wf.bossgear import BOSS_GEAR, remembrance_id
     for row in BOSS_GEAR:  # every great boss always drops its remembrance

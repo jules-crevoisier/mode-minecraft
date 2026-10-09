@@ -155,10 +155,13 @@ STRUCTURE_KIND = {
     "canopy_city": "sylvan",
     "mesa_minecity": "mine",
     "titan_forge": "workshop",
+    "soul_engine": "workshop",
     "airship_graveyard": "workshop",
     "echo_cathedral": "library",
     "starfall_library": "library",
     "cloud_pagoda": "food",
+    "icebound_fleet": "harbour",
+    "clockwork_asylum": "clockwork",
     "tesla_observatory": "clockwork", "crystal_cathedral": "library", "sunken_submarine": "harbour",
     "diving_bell": "harbour", "coral_shrine": "harbour", "shipwreck_debris": "harbour",
     # vanilla villages and outposts extended by wf/village.py, the sea-floor props of wf/ocean.py

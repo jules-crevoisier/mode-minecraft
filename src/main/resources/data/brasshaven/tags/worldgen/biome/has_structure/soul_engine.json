@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "minecraft:soul_sand_valley",
+      "required": false
+    },
+    {
+      "id": "minecraft:warped_forest",
+      "required": false
+    }
+  ]
+}

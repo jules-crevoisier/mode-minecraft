@@ -18,7 +18,9 @@ up), FUSE (a bundle of lit dynamite flung along your aim: it sticks to the first
 lands, and blows 1.5 s later, hurling the foes round it), SHRIEK (a cone of sound ahead, stopped by walls, whose echo bursts
 where it meets one), GRAPPLE (a harpoon along your aim reels the wielder to the first foe or wall it
 bites, a cut on arrival, Slow Falling), DRAGON (the brass dragon's spirit
-rushes along your aim, flinging aside and blinding every foe it passes). flags: fire, slow, weak, blind, poison, lift, lifesteal.
+rushes along your aim, flinging aside and blinding every foe it passes), STOKE (a fan of five soul embers along
+your aim, each bursting on the first foe or where it lands; a foe caught by more of them is hurt more), REWIND (a saw rush
+along your aim; 2 s later the pocket watch snaps you back to where you started, its echo cutting there). flags: fire, slow, weak, blind, poison, lift, lifesteal.
 """
 
 TIER_MATERIAL = {"overworld": "map_fragment", "depths": "lithite_shard", "nether": "ancient_ember", "end": "void_shard"}
@@ -310,6 +312,27 @@ BOSS_GEAR = [
      ("Remembrance of the Hollow Cantor", "Souvenir du Chantre creux"),
      ("LITHITE", 8.0, -2.8), "SHRIEK", 11.0, 12.0, 90, "NOTE", "weak", ("tuning_fork", "brass", "dark", "amethyst"),
      ("brass", "amethyst")),
+    ("soul_stoker", "nether", "stoker_shovel", ("Soul-Fire Shovel of the Stoker", "Pelle à feu d'âmes du Chauffeur"),
+     ("Use: fling a shovelful of soul embers in a fan along your aim (five embers, up to 12 blocks, walls stop them); "
+      "each bursts on the first foe it meets or where it lands, 1.6 blocks round. A foe caught by one burst takes 60% "
+      "of the damage, +20% for each more burst that catches it (140% at most), and is set ablaze.",
+      "Clic droit : lance une pelletée de braises d'âmes en éventail dans ta visée (cinq braises, jusqu'à 12 blocs, "
+      "les murs les arrêtent) ; chacune éclate sur le premier ennemi rencontré ou là où elle tombe, sur 1,6 bloc. Un "
+      "ennemi pris par une braise subit 60 % des dégâts, +20 % par braise de plus (140 % au plus), et s'embrase."),
+     ("Remembrance of the Soul Stoker", "Souvenir du Chauffeur des âmes"),
+     ("EMBER", 8.0, -3.0), "STOKE", 12.0, 12.0, 80, "SOUL_FIRE_FLAME", "fire", ("coal_shovel", "iron", "dark", "aether"),
+     ("iron", "aether")),
+    ("asylum_director", "overworld", "director_bonesaw", ("Bone-Saw of the Asylum Director", "Scie à os de la Directrice de l'asile"),
+     ("Use: the saw rips you forward along your aim (up to 8 blocks, walls stop you), cutting and slowing every foe "
+      "you pass. The pocket watch on its handle remembers where you started: 2 s later it snaps you back there and "
+      "the saw's echo cuts every foe within 2.5 blocks of the spot for half the damage. Sneak when it chimes to stay.",
+      "Clic droit : la scie te projette dans ta visée (jusqu'à 8 blocs, les murs t'arrêtent), taillant et ralentissant "
+      "chaque ennemi traversé. La montre de gousset de sa poignée retient ton point de départ : 2 s plus tard, elle t'y "
+      "ramène et l'écho de la scie taille les ennemis à 2,5 blocs de ce point pour moitié. Accroupis-toi quand elle "
+      "sonne pour rester où tu es."),
+     ("Remembrance of the Asylum Director", "Souvenir de la Directrice de l'asile"),
+     ("LITHITE", 7.5, -2.6), "REWIND", 10.0, 8.0, 80, "CRIT", "slow", ("bone_saw", "iron", "dark", "aether"),
+     ("brass", "aether")),
 ]
 
 

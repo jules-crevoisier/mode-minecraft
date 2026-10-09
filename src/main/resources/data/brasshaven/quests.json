@@ -55,6 +55,8 @@
     "explorer/mesa_minecity",
     "explorer/airship_graveyard",
     "explorer/cloud_pagoda",
+    "explorer/icebound_fleet",
+    "explorer/clockwork_asylum",
     "explorer/master_cartographer",
     "explorer/boss_bell_keeper",
     "explorer/boss_archivist",
@@ -86,7 +88,8 @@
     "explorer/boss_colossus_heart",
     "explorer/boss_mine_baron",
     "explorer/boss_chime_abbot",
-    "explorer/boss_corsair_captain"
+    "explorer/boss_corsair_captain",
+    "explorer/boss_asylum_director"
   ],
   "depths": [
     "depths/lithite",
@@ -122,6 +125,7 @@
     "nether/piglin_market",
     "nether/chained_bastion",
     "nether/titan_forge",
+    "nether/soul_engine",
     "nether/ancient_ember",
     "nether/ember_scythe",
     "nether/storm_staff",
@@ -131,7 +135,8 @@
     "nether/boss_piglin_king",
     "nether/boss_soul_reaper",
     "nether/boss_chained_jailer",
-    "nether/boss_anvil_warden"
+    "nether/boss_anvil_warden",
+    "nether/boss_soul_stoker"
   ],
   "end": [
     "end/enter",

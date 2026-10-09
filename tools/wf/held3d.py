@@ -1035,6 +1035,52 @@ def cantor_baton():
 
 ARCHETYPES["cantor_baton"] = cantor_baton
 
+
+def stoker_shovel():
+    """Soul-Fire Shovel of the Stoker: a long dark haft bound in iron, a leather-wrapped grip and a brass D-grip knob at
+    the butt, an iron socket, and a wide black-iron scoop with turned-up sides, heaped with glowing soul embers."""
+    out = [box(7.25, -10, 7.25, 8.75, 19, 8.75, "handle"), box(6.6, -12.4, 6.6, 9.4, -10.4, 9.4, "brass"),
+           box(7.1, -10.6, 7.1, 8.9, -10.0, 8.9, "brass_dark")]
+    out += _grip(-4, 3, 2.2)
+    for y in (6.0, 11.0, 16.0):                                             # iron bands
+        out.append(box(6.9, y, 6.9, 9.1, y + 0.8, 9.1, "iron_dark"))
+    out += [box(6.6, 18.6, 6.6, 9.4, 21.0, 9.4, "iron_dark"),              # the socket
+            box(3.0, 21.0, 8.4, 13.0, 31.0, 9.4, "iron_dark"),              # the scoop's back
+            box(2.4, 21.0, 6.4, 3.4, 30.0, 9.4, "outline"),                 # its turned-up sides
+            box(12.6, 21.0, 6.4, 13.6, 30.0, 9.4, "outline"),
+            box(3.0, 30.4, 8.2, 13.0, 31.4, 9.4, "dark"),                  # the worn cutting edge
+            box(3.4, 22.0, 6.8, 12.6, 27.0, 8.4, "accent_dark"),            # the heap of embers
+            box(4.4, 23.0, 6.4, 11.6, 26.0, 7.0, "accent"),
+            box(6.0, 24.0, 6.1, 7.4, 25.4, 6.5, "glow"), box(9.0, 23.2, 6.1, 10.2, 24.4, 6.5, "glow")]
+    return out
+
+
+ARCHETYPES["stoker_shovel"] = stoker_shovel
+
+
+def director_bonesaw():
+    """Bone-Saw of the Asylum Director: a mahogany pistol handle with a brass guard, a long steel blade toothed along its
+    front edge and stiffened by a dark-iron spine, a brass cap at the tip; a brass pocket watch (cream face, an aether
+    glint) hangs from the guard on a short chain."""
+    out = [box(7.2, -6, 7.2, 8.8, 6, 8.8, "handle"), box(6.8, -7.4, 6.8, 9.2, -6, 9.2, "brass"),
+           box(6.4, 6, 6.6, 12.6, 7.6, 9.4, "brass"), box(6.4, 5.6, 6.6, 7.2, 6, 9.4, "brass_dark")]
+    out += _grip(-4, 4, 1.9)
+    out += [box(7.0, 7.6, 7.3, 8.2, 27.0, 8.7, "iron_dark"),                # the spine
+            box(8.2, 7.6, 7.6, 12.0, 26.0, 8.4, "steel"),                   # the blade
+            box(8.2, 7.6, 7.55, 9.0, 26.0, 8.45, "light"),
+            box(6.8, 26.4, 7.1, 9.0, 27.8, 8.9, "brass")]                   # the tip cap
+    for y in range(8, 26, 2):                                               # the teeth
+        out.append(box(12.0, y, 7.7, 12.8, y + 1, 8.3, "mid"))
+    for y in (4.6, 3.6):                                                    # the watch's chain
+        out.append(box(6.0, y, 7.75, 6.5, y + 0.8, 8.25, "brass_dark"))
+    out += [box(4.0, 0.4, 7.4, 7.6, 3.6, 8.6, "brass"),                     # the pocket watch
+            box(4.4, 0.8, 7.2, 7.2, 3.2, 7.4, "cream"),
+            box(5.5, 1.8, 7.0, 6.1, 2.4, 7.2, "glow")]
+    return out
+
+
+ARCHETYPES["director_bonesaw"] = director_bonesaw
+
 # item id -> (archetype, material, handle, accent)
 HELD = {
     "kings_trident": ("trident_big", "warden", "bone", "sapphire"),
@@ -1079,6 +1125,8 @@ HELD = {
     "abbot_dragonstaff": ("abbot_dragonstaff", "copper", "dark", "ruby"),
     "corsair_harpoon": ("corsair_harpoon", "brass", "dark", "ember"),
     "cantor_baton": ("cantor_baton", "brass", "dark", "amethyst"),
+    "stoker_shovel": ("stoker_shovel", "iron", "dark", "aether"),
+    "director_bonesaw": ("director_bonesaw", "iron", "dark", "aether"),
     "cartographer_blade": ("sword", "cartographer", "wood", "emerald"),
     "telluric_hammer": ("hammer", "lithite", "wood", "emerald"),
     "storm_staff": ("staff", "storm", "dark", "sapphire"),

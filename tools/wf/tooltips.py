@@ -46,6 +46,8 @@ ABILITIES = {
     "dragon": ("Brass dragon's rush", "Ruée du dragon d'airain", "range"),
     "grapple": ("Harpoon grapple", "Grappin-harpon", "range"),
     "shriek": ("Sonic shriek", "Cri sonique", "range"),
+    "stoke": ("Soul embers", "Braises d'âmes", "range"),
+    "rewind": ("Rewinding saw rush", "Ruée de la scie à rebours", "range"),
 }
 # BossWeaponItem flags, in bit order
 ABILITY_EFFECTS = {
@@ -181,6 +183,10 @@ FLAVOR = {
                         "Elle a pris d'assaut le dernier dirigeable de la flotte avec lui et n'a plus jamais touché terre."),
     "cantor_baton": ("His choir fell silent long ago; he still beats time for it, and the cathedral still answers.",
                      "Son chœur s'est tu depuis longtemps ; il bat encore la mesure, et la cathédrale répond toujours."),
+    "stoker_shovel": ("He fed the engine souls for a thousand years, and it was never full.",
+                      "Il a nourri le moteur d'âmes pendant mille ans, et jamais il n'a été rassasié."),
+    "director_bonesaw": ("She never lost a patient; she simply wound the clock back and began again.",
+                         "Elle n'a jamais perdu un patient ; elle remontait l'horloge et recommençait."),
 }
 
 # armour sets: one flavour per set prefix (all four pieces)

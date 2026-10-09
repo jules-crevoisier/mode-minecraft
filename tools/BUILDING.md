@@ -459,6 +459,49 @@ lairs, ruins and small sites).
     scroll library, armoury of practice weapons, meditation hall with a sand garden, mechanical orrery of the
     seasons, abbot's quarters, chime engine, last stair). The boss waits on the open top tier under the spire;
     the counterweight lift in the central pillar drops back to the prayer hall.
+24. **The Soul Engine (Nether: soul sand valley / warped forest).** A ~180-wide machine-ossuary on the valley floor
+    (fixed height, cavern fit; every open interior volume is explicit air so the netherrack cannot fill it): a
+    cathedral-sized engine block of blackstone, soul soil and tarnished brass (105 x 85, 40 high) on a battered
+    plinth with buttresses every 13 blocks, fed by two bone conveyors on trestles, crowned by a crankcase whose six
+    colossal pistons stand frozen at different heights over the crank trench, four ribbed chimneys venting blue
+    flame, warped fungus eating the west and north walls. From the lost pilgrims' camp, the bone road passes under a
+    ribcage arch (the reveal) to the bone gate's wicket; the gate tunnel opens into the pressure hall (hub) round its
+    pressure vessel. North: the bone hopper hall, the soul-soil bunker, the soul furnace (three soul-fire fireboxes
+    open on the east facade, the boiler drum); its stair climbs to the stokers' mess, the governor's control room
+    (flyball governor, gauge wall, balcony over the hub) and the valve room, then a newel stair in a disused
+    cylinder sleeve (the piston shaft) rises to the site of grace on the crankcase. Through the mist, the boss on
+    the crankshaft deck (39 x 39) beside the trench of connecting rods and the flywheel bay; the soul reliquary
+    behind sealed bars. Optional: the piston gallery (spare pistons on cradles, catwalk) and the ossuary below
+    (bone-ribbed nave, the charnel pit and its bone throne, the builders' crypt, whose stair climbs back into the
+    gallery: a loop). Shortcuts: the piston lift (grace -> ossuary stair hall), the bone chute (reliquary -> hay in
+    the gallery), the furnace's one-way iron door into the hub.
+25. **The Clockwork Asylum (dark forest / pale garden).** A ~185-wide gothic sanatorium turned automaton
+    workshop on a steep wooded hill (a 4-thick noise-faced shell, rock outcrops, crooked dark oaks): a 100-high
+    clock tower with four cracked dials (glass ring, brass hour marks, iron hands) and a tall spire over a central
+    hall, two long ward wings of barred lancet windows ending in pavilions, a chapel, a broken greenhouse and a
+    walled cemetery with crooked iron fences and a mausoleum. From the woodcutters' camp at the foot, the
+    gatehouse's funicular (powered rails, minecart) climbs the slope to the station yard; the cemetery leads to the
+    main hall (hub, gallery, Iron Orderly). West wing: patient cells, the operating theatre with brass surgical
+    arms, the conversion ward; east wing: the ward, the records archive, the laundry and its chute; below, the
+    hydrotherapy baths and the basement stair back to the hall. The tower flights climb through the clock
+    mechanism (great wheel, escapement, pendulum shaft) to the site of grace; through the mist, the boss in the
+    35 x 35 clock chamber behind the cracked dial; the director's office behind sealed bars, whose drop shaft
+    falls into a pool and back to the mechanism. Shortcuts: the funicular down, the laundry chute to the
+    basement, the chapel's one-way iron door.
+26. **The Icebound Fleet (frozen ocean / ice spikes / snowy plains).** A ~220-wide polar expedition frozen into the
+    pack ice (wetland fit: the sea surface counts as ground, the build lays its own ice field one or two layers
+    deep, every walked pocket under it sealed): a colossal 120-long dark-iron paddle icebreaker locked at a list,
+    two fat leaning copper funnels, a raked ram bow ridden up on a pressure ridge, paddle wheels half sunk in holes
+    of black water; beside it two small timber supply ships (Fulmar, Petrel) joined by a sagging rope bridge, a
+    brass ice-drill derrick, pressure ridges, blue packed-ice spires and the spine of a frozen-over whale. From the
+    sledge camp, under the whale's ribs and through a gap in the ridge (the reveal) to the drilling camp (hub);
+    the Fulmar's frozen hold and chart room, the Petrel's kennels and galley, its ice door (opens from inside) onto
+    a snow trench that sinks under the ice into the icebreaker's crushed coal bunker. Inside: the 27-high boiler
+    room (four boilers, paddle shaft, galleries), the crew mess, the officers' mess, the captain's cabin; out on
+    the boat deck, a newel stair inside the forward funnel and a gantry to the wheelhouse (site of grace), then
+    the enclosed bridge stair and the mist to the arena on the forecastle under the bridge front. The expedition
+    strongroom below the bow behind sealed bars; shortcuts: the ice slide out of the ram's breach, the crew mess's
+    one-way hatch to the side-deck gangway, the cargo crane's jib dropping into a fishing hole by the trench.
 
 ---
 

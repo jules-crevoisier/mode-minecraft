@@ -133,6 +133,8 @@ EGGS = {
     "chime_abbot": ((176, 36, 50), (240, 206, 120)),
     "corsair_captain": ((38, 74, 86), (236, 190, 84)),
     "hollow_cantor": ((44, 46, 58), (150, 236, 230)),
+    "soul_stoker": ((44, 38, 46), (60, 210, 240)),
+    "asylum_director": ((226, 222, 206), (120, 236, 150)),
 }
 
 
@@ -204,6 +206,8 @@ EMBLEMS = {
     "chime_abbot": [".###.", "#...#", "#.#.#", "#...#", "#.#.#"],      # a halo of hanging chimes
     "corsair_captain": ["#.#.#", ".###.", "##.##", ".###.", "#.#.#"],  # a rotor turning on its hub
     "hollow_cantor": ["#...#", "#...#", ".###.", "..#..", "..#.."],    # a tuning fork
+    "soul_stoker": [".#.#.", "#####", "#.#.#", "#####", ".###."],      # a furnace door with a grate
+    "asylum_director": [".###.", "#.#.#", "#.##.", "#...#", ".###."],  # a pocket watch
 }
 
 

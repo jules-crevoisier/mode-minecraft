@@ -761,6 +761,26 @@ def dragon_staff(a):
     a.px(14, 8, "V", "mid")
 
 
+@painted("coal_shovel")
+def coal_shovel(a):
+    """Soul-Fire Shovel of the Stoker: a dark haft bound in iron with a leather wrap and a brass D-grip knob at the
+    bottom left, an iron socket, and at the top right a wide sooty scoop heaped with blue soul embers."""
+    shaft(a, 8, key="H", grip=(1, 4), butt="B")
+    for i in (5, 7):
+        a.px(1 + i, 14 - i, "X", "light")
+    a.seg("X", 8.4, 7.6, 9.8, 6.2, 0.7)                      # the socket
+    for y in range(16):                                      # the scoop: a squared spade along the diagonal
+        for x in range(16):
+            v = ((x + 0.5 - 9.6) - (y + 0.5 - 6.4)) / 1.414
+            u = ((x + 0.5 - 9.6) + (y + 0.5 - 6.4)) / 1.414
+            if 0.4 <= v <= 7.2 and abs(u) <= 2.9:
+                edge = v > 6.4 or abs(u) > 2.2
+                a.px(x, y, "X", "light" if v > 6.4 else ("dark" if edge else "mid"))
+                if not edge and 1.2 <= v <= 5.4 and (x * 7 + y * 3) % 5 < 3:
+                    a.px(x, y, "A", "light" if (x + y) % 3 == 0 else "mid")      # the soul embers heaped in it
+    a.px(14, 1, "a", "shine")                                # a spark
+
+
 @painted("drillpick")
 def drillpick(a):
     """Drill-Pick of the Mine Baron: a mahogany haft bound in leather, an iron head with a gold pick spike reaching
@@ -781,3 +801,24 @@ def drillpick(a):
     a.px(8, 7, "B", "dark")
     a.px(11, 4, "a", "shine")                                 # the fuse spark
     a.px(12, 3, "F", "light")
+
+
+@painted("bone_saw")
+def bone_saw(a):
+    """Bone-Saw of the Asylum Director: a mahogany handle at the bottom left with a brass guard, a long steel blade
+    toothed along one edge running up to the top right, a dark-iron spine, and a brass pocket watch hanging from the
+    guard with an aether glint."""
+    a.seg("W", 2.0, 14.0, 4.5, 11.5, 0.8)                     # the handle
+    a.seg("B", 3.5, 10.5, 6.0, 13.0, 0.6)                     # the brass guard
+    a.seg("I", 5.5, 10.5, 13.5, 2.5, 1.1)                     # the blade
+    a.shade_dir("I", -0.5, 1.0)
+    a.seg("X", 4.8, 9.8, 12.8, 1.8, 0.45)                     # the spine
+    for x in (8, 10, 12):                                     # the teeth along the lower edge
+        a.px(x, 18 - x, "I", "light")
+        a.px(x + 1, 18 - x, "I", "dark")
+    a.px(14, 2, "B", "light")                                 # the tip cap
+    a.px(6, 12, "B", "dark")                                  # the chain
+    a.disc("B", 7.6, 13.6, 1.4)                               # the pocket watch
+    a.px(7, 13, "Q", "light")
+    a.px(8, 14, "E", "light")
+

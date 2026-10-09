@@ -28,3 +28,6 @@ from . import starfall_library  # noqa: F401
 from . import airship_graveyard  # noqa: F401
 from . import echo_cathedral  # noqa: F401
 from . import cloud_pagoda  # noqa: F401
+from . import icebound_fleet  # noqa: F401
+from . import soul_engine  # noqa: F401
+from . import clockwork_asylum  # noqa: F401

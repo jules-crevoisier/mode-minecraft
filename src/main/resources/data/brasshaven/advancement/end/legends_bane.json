@@ -602,6 +602,34 @@
           }
         ]
       }
+    },
+    "soul_stoker": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "entity_type": "brasshaven:soul_stoker"
+            }
+          }
+        ]
+      }
+    },
+    "asylum_director": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "entity_type": "brasshaven:asylum_director"
+            }
+          }
+        ]
+      }
     }
   },
   "parent": "brasshaven:end/void_warden",

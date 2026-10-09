@@ -1,0 +1,685 @@
+{
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "brasshaven:chunked_template",
+        "size": [
+          221,
+          73,
+          200
+        ],
+        "cells": [
+          {
+            "location": "brasshaven:icebound_fleet/fleet/x0_z1",
+            "offset": [
+              1,
+              13,
+              32
+            ],
+            "size": [
+              31,
+              17,
+              25
+            ],
+            "blocks": 710
+          },
+          {
+            "location": "brasshaven:icebound_fleet/fleet/x0_z2",
+            "offset": [
+              0,
+              6,
+              57
+            ],
+            "size": [
+              32,
+              36,
+              29
+            ],
+            "blocks": 2494
+          },
+          {
+            "location": "brasshaven:icebound_fleet/fleet/x0_z3",
+            "offset": [
+              5,
+              13,
+              86
+            ],
+            "size": [
+              27,
+              7,
+              28
+            ],
+            "blocks": 2048
+          },
+          {
+            "location": "brasshaven:icebound_fleet/fleet/x0_z4",
+            "offset": [
+              4,
+              7,
+              114
+            ],
+            "size": [
+              28,
+              24,
+              29
+            ],
+            "blocks": 4322
+          },
+          {
+            "location": "brasshaven:icebound_fleet/fleet/x0_z5",
+            "offset": [
+              16,
+              12,
+              143
+            ],
+            "size": [
+              16,
+              18,
+              26
+            ],
+            "blocks": 739
+          },
+          {
+            "location": "brasshaven:icebound_fleet/fleet/x1_z0",
+            "offset": [
+              35,
+              13,
+              10
+            ],
+            "size": [
+              28,
+              12,
+              19
+            ],
+            "blocks": 736
+          },
+          {
+            "location": "brasshaven:icebound_fleet/fleet/x1_z1",
+            "offset": [
+              32,
+              1,
+              29
+            ],
+            "size": [
+              31,
+              72,
+              28
+            ],
+            "blocks": 8110
+          },
+          {
+            "location": "brasshaven:icebound_fleet/fleet/x1_z2",
+            "offset": [
+              32,
+              0,
+              57
+            ],
+            "size": [
+              31,
+              73,
+              29
+            ],
+            "blocks": 11784
+          },
+          {
+            "location": "brasshaven:icebound_fleet/fleet/x1_z3",
+            "offset": [
+              32,
+              10,
+              86
+            ],
+            "size": [
+              31,
+              25,
+              28
+            ],
+            "blocks": 2601
+          },
+          {
+            "location": "brasshaven:icebound_fleet/fleet/x1_z4",
+            "offset": [
+              32,
+              7,
+              114
+            ],
+            "size": [
+              31,
+              43,
+              29
+            ],
+            "blocks": 6977
+          },
+          {
+            "location": "brasshaven:icebound_fleet/fleet/x1_z5",
+            "offset": [
+              32,
+              12,
+              143
+            ],
+            "size": [
+              31,
+              33,
+              28
+            ],
+            "blocks": 2314
+          },
+          {
+            "location": "brasshaven:icebound_fleet/fleet/x1_z6",
+            "offset": [
+              32,
+              13,
+              171
+            ],
+            "size": [
+              31,
+              19,
+              18
+            ],
+            "blocks": 1148
+          },
+          {
+            "location": "brasshaven:icebound_fleet/fleet/x2_z0",
+            "offset": [
+              63,
+              13,
+              1
+            ],
+            "size": [
+              32,
+              37,
+              28
+            ],
+            "blocks": 4017
+          },
+          {
+            "location": "brasshaven:icebound_fleet/fleet/x2_z1",
+            "offset": [
+              63,
+              1,
+              29
+            ],
+            "size": [
+              32,
+              72,
+              28
+            ],
+            "blocks": 14401
+          },
+          {
+            "location": "brasshaven:icebound_fleet/fleet/x2_z2",
+            "offset": [
+              63,
+              0,
+              57
+            ],
+            "size": [
+              32,
+              73,
+              29
+            ],
+            "blocks": 22150
+          },
+          {
+            "location": "brasshaven:icebound_fleet/fleet/x2_z3",
+            "offset": [
+              63,
+              13,
+              86
+            ],
+            "size": [
+              32,
+              6,
+              28
+            ],
+            "blocks": 1984
+          },
+          {
+            "location": "brasshaven:icebound_fleet/fleet/x2_z4",
+            "offset": [
+              63,
+              7,
+              114
+            ],
+            "size": [
+              32,
+              25,
+              29
+            ],
+            "blocks": 4023
+          },
+          {
+            "location": "brasshaven:icebound_fleet/fleet/x2_z5",
+            "offset": [
+              63,
+              13,
+              143
+            ],
+            "size": [
+              32,
+              17,
+              28
+            ],
+            "blocks": 1797
+          },
+          {
+            "location": "brasshaven:icebound_fleet/fleet/x2_z6",
+            "offset": [
+              63,
+              13,
+              171
+            ],
+            "size": [
+              32,
+              7,
+              28
+            ],
+            "blocks": 2063
+          },
+          {
+            "location": "brasshaven:icebound_fleet/fleet/x3_z0",
+            "offset": [
+              95,
+              13,
+              0
+            ],
+            "size": [
+              31,
+              3,
+              29
+            ],
+            "blocks": 1783
+          },
+          {
+            "location": "brasshaven:icebound_fleet/fleet/x3_z1",
+            "offset": [
+              95,
+              1,
+              29
+            ],
+            "size": [
+              31,
+              45,
+              28
+            ],
+            "blocks": 9959
+          },
+          {
+            "location": "brasshaven:icebound_fleet/fleet/x3_z2",
+            "offset": [
+              95,
+              0,
+              57
+            ],
+            "size": [
+              31,
+              52,
+              29
+            ],
+            "blocks": 13592
+          },
+          {
+            "location": "brasshaven:icebound_fleet/fleet/x3_z3",
+            "offset": [
+              95,
+              13,
+              86
+            ],
+            "size": [
+              31,
+              5,
+              28
+            ],
+            "blocks": 1991
+          },
+          {
+            "location": "brasshaven:icebound_fleet/fleet/x3_z4",
+            "offset": [
+              95,
+              7,
+              114
+            ],
+            "size": [
+              31,
+              47,
+              29
+            ],
+            "blocks": 9639
+          },
+          {
+            "location": "brasshaven:icebound_fleet/fleet/x3_z5",
+            "offset": [
+              95,
+              13,
+              143
+            ],
+            "size": [
+              31,
+              9,
+              28
+            ],
+            "blocks": 2196
+          },
+          {
+            "location": "brasshaven:icebound_fleet/fleet/x3_z6",
+            "offset": [
+              95,
+              13,
+              171
+            ],
+            "size": [
+              31,
+              22,
+              29
+            ],
+            "blocks": 2689
+          },
+          {
+            "location": "brasshaven:icebound_fleet/fleet/x4_z0",
+            "offset": [
+              126,
+              13,
+              1
+            ],
+            "size": [
+              32,
+              2,
+              28
+            ],
+            "blocks": 1558
+          },
+          {
+            "location": "brasshaven:icebound_fleet/fleet/x4_z1",
+            "offset": [
+              126,
+              1,
+              29
+            ],
+            "size": [
+              32,
+              55,
+              28
+            ],
+            "blocks": 5511
+          },
+          {
+            "location": "brasshaven:icebound_fleet/fleet/x4_z2",
+            "offset": [
+              126,
+              1,
+              57
+            ],
+            "size": [
+              32,
+              61,
+              29
+            ],
+            "blocks": 7464
+          },
+          {
+            "location": "brasshaven:icebound_fleet/fleet/x4_z3",
+            "offset": [
+              126,
+              13,
+              86
+            ],
+            "size": [
+              32,
+              11,
+              28
+            ],
+            "blocks": 3181
+          },
+          {
+            "location": "brasshaven:icebound_fleet/fleet/x4_z4",
+            "offset": [
+              126,
+              7,
+              114
+            ],
+            "size": [
+              32,
+              43,
+              29
+            ],
+            "blocks": 4988
+          },
+          {
+            "location": "brasshaven:icebound_fleet/fleet/x4_z5",
+            "offset": [
+              126,
+              13,
+              143
+            ],
+            "size": [
+              32,
+              8,
+              28
+            ],
+            "blocks": 2221
+          },
+          {
+            "location": "brasshaven:icebound_fleet/fleet/x4_z6",
+            "offset": [
+              126,
+              13,
+              171
+            ],
+            "size": [
+              32,
+              9,
+              27
+            ],
+            "blocks": 1811
+          },
+          {
+            "location": "brasshaven:icebound_fleet/fleet/x5_z0",
+            "offset": [
+              158,
+              13,
+              10
+            ],
+            "size": [
+              31,
+              24,
+              19
+            ],
+            "blocks": 964
+          },
+          {
+            "location": "brasshaven:icebound_fleet/fleet/x5_z1",
+            "offset": [
+              158,
+              13,
+              29
+            ],
+            "size": [
+              31,
+              22,
+              28
+            ],
+            "blocks": 2730
+          },
+          {
+            "location": "brasshaven:icebound_fleet/fleet/x5_z2",
+            "offset": [
+              158,
+              13,
+              57
+            ],
+            "size": [
+              31,
+              6,
+              29
+            ],
+            "blocks": 1887
+          },
+          {
+            "location": "brasshaven:icebound_fleet/fleet/x5_z3",
+            "offset": [
+              158,
+              9,
+              86
+            ],
+            "size": [
+              31,
+              54,
+              28
+            ],
+            "blocks": 3746
+          },
+          {
+            "location": "brasshaven:icebound_fleet/fleet/x5_z4",
+            "offset": [
+              158,
+              13,
+              114
+            ],
+            "size": [
+              31,
+              11,
+              29
+            ],
+            "blocks": 2677
+          },
+          {
+            "location": "brasshaven:icebound_fleet/fleet/x5_z5",
+            "offset": [
+              158,
+              13,
+              143
+            ],
+            "size": [
+              31,
+              12,
+              28
+            ],
+            "blocks": 2341
+          },
+          {
+            "location": "brasshaven:icebound_fleet/fleet/x5_z6",
+            "offset": [
+              158,
+              13,
+              171
+            ],
+            "size": [
+              31,
+              3,
+              19
+            ],
+            "blocks": 822
+          },
+          {
+            "location": "brasshaven:icebound_fleet/fleet/x6_z0",
+            "offset": [
+              189,
+              15,
+              20
+            ],
+            "size": [
+              8,
+              32,
+              9
+            ],
+            "blocks": 582
+          },
+          {
+            "location": "brasshaven:icebound_fleet/fleet/x6_z1",
+            "offset": [
+              189,
+              13,
+              29
+            ],
+            "size": [
+              19,
+              30,
+              28
+            ],
+            "blocks": 1217
+          },
+          {
+            "location": "brasshaven:icebound_fleet/fleet/x6_z2",
+            "offset": [
+              189,
+              13,
+              57
+            ],
+            "size": [
+              29,
+              26,
+              29
+            ],
+            "blocks": 2152
+          },
+          {
+            "location": "brasshaven:icebound_fleet/fleet/x6_z3",
+            "offset": [
+              189,
+              13,
+              86
+            ],
+            "size": [
+              32,
+              17,
+              28
+            ],
+            "blocks": 1978
+          },
+          {
+            "location": "brasshaven:icebound_fleet/fleet/x6_z4",
+            "offset": [
+              189,
+              13,
+              114
+            ],
+            "size": [
+              31,
+              9,
+              29
+            ],
+            "blocks": 2368
+          },
+          {
+            "location": "brasshaven:icebound_fleet/fleet/x6_z5",
+            "offset": [
+              189,
+              13,
+              143
+            ],
+            "size": [
+              21,
+              5,
+              28
+            ],
+            "blocks": 804
+          },
+          {
+            "location": "brasshaven:icebound_fleet/fleet/x6_z6",
+            "offset": [
+              189,
+              13,
+              171
+            ],
+            "size": [
+              21,
+              9,
+              21
+            ],
+            "blocks": 972
+          }
+        ],
+        "projection": "rigid",
+        "processors": "brasshaven:none",
+        "ground_level_delta": 15,
+        "footprint": [
+          0,
+          0,
+          220,
+          199
+        ]
+      }
+    }
+  ]
+}

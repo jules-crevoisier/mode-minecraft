@@ -95,6 +95,14 @@
     {
       "structure": "brasshaven:cloud_pagoda",
       "weight": 1
+    },
+    {
+      "structure": "brasshaven:icebound_fleet",
+      "weight": 1
+    },
+    {
+      "structure": "brasshaven:clockwork_asylum",
+      "weight": 1
     }
   ],
   "placement": {

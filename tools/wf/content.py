@@ -221,6 +221,8 @@ ENTITIES = {
     "chime_abbot": ("The Chime Abbot", "L'Abbé des carillons"),
     "corsair_captain": ("The Corsair Captain", "La Capitaine corsaire"),
     "hollow_cantor": ("The Hollow Cantor", "Le Chantre creux"),
+    "soul_stoker": ("The Soul Stoker", "Le Chauffeur des âmes"),
+    "asylum_director": ("The Asylum Director", "La Directrice de l'asile"),
     "hot_rivet": ("Hot Rivet", "Rivet brûlant"),
     "boomerang": ("Boomerang", "Boomerang"),
 }
@@ -278,6 +280,8 @@ SPAWN_EGGS = ["ruin_walker", "map_wraith", "basalt_guard", "void_stalker", "drow
               "chime_abbot",
               "corsair_captain",
               "hollow_cantor",
+              "soul_stoker",
+              "asylum_director",
               ]
 
 # Misc translated messages used from Java (key suffix -> (en, fr))

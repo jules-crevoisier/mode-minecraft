@@ -1642,6 +1642,147 @@ Previews:
 - `python3 tools/gen_models.py --preview --only chime_abbot` writes `build/previews/models/chime_abbot.png`.
 - Held dragon staff: `python3 tools/art_sheet.py --kind held --only abbot_dragonstaff`.
 
+## 31. Champion of the Soul Engine: The Soul Stoker (Le Chauffeur des âmes)
+Files:
+- `tools/wf/mobs/soul_stoker.py`: model `soul_stoker` (123 cubes, 256x256).
+- `src/main/java/com/brasshaven/entity/boss/SoulStoker.java`: the moveset.
+
+There is no lair module. The arena is the crankshaft deck in the crankcase: `BOSS` in
+`tools/wf/structures/soul_engine.py` (`arena()`), seal at (0, 41, -7) (blueprint), radius 18; a 39 x 39 deck (feet 42,
+x -19..19, z -26..12), 16 blocks of air to the crankcase roof (girders and soul chandeliers at y 58), the railing over
+the 9-block crank trench on the north side, the flywheel bay east, the sealed reliquary bars in the west wall, four big
+soul braziers at (±16, -23 / 9). The Soul Stoker replaces the borrowed Gryphon Knight there; the Gryphon Knight keeps its
+own lair and `BOSS_HOME` (`sky_island`).
+
+Reward: `remembrance_soul_stoker` forges the **Soul-Fire Shovel of the Stoker** (`stoker_shovel`, EMBER 8 / -3.0).
+- It has a new ability shape, **STOKE**, in `BossWeaponItem`: five soul embers flung in a fan along the aim (12° apart,
+  up to 12 blocks, walls stop them). Each bursts on the first foe within 0.8 of its flight or where it lands (dropped to
+  the floor), 1.6 blocks round. A foe caught by k bursts takes one hit of power 12 x min(1.4, 0.6 + 0.2 (k - 1)),
+  knockback 0.4, set ablaze (flag `fire`). Cooldown 80.
+- Held model `stoker_shovel` in `wf/held3d.py`, sprite `coal_shovel` in `wf/itemart_shapes.py`.
+
+Loot (`gen_data.py`): ancient embers, emeralds, experience bottles, golden apples, diamonds, soul lanterns, soul torches,
+coal and bone blocks, pistons, a 25% netherite scrap, an 8% enchanted golden apple. Quest: `nether/boss_soul_stoker`.
+
+**Concept.** A hulking furnace-man about 4 blocks tall:
+- a squat boiler drum of polished blackstone in brass hoops for a torso, a grated firebox mouth in the belly glowing
+  blue (glow layer), a pressure gauge and a valve wheel on the chest, riveted iron pauldrons;
+- a furnace-door helmet: an iron door with brass hinges and a latch, a bone-white skull hammered into it whose eye-holes
+  and nose burn blue; a latch-bar jaw that drops when he roars or vents;
+- two ribbed chimneys on his back joined by a manifold, blue flame over their rims (scaled up in the anims);
+- a broad leather belt with a buckle, five bone chains hanging from it, each ending in a soul lantern;
+- asymmetry: the right arm ends in a giant coal shovel (iron-bound haft, D-grip knob, a sooty scoop heaped with soul
+  embers), the left is a piston arm: a copper cylinder with brass piston rods, a steel sleeve with a gauge and an iron
+  fist on a rod that shoots out when he punches.
+
+**Stats.**
+- 620 health, armour 14, toughness 5, attack 14, poise 130, speed 0.24, knockback resistance 1.0.
+- Fire immune (entity type and class), no fall damage, blue bar.
+- Phase 2 at 65% (roar, +10% speed, `soul_stoker_wrath`). Phase 3 at 30%, driven by the class like the Chained Jailer:
+  when he is free he chains `overpressure` once (guarded 64 ticks), then every 220 ticks x `cooldownScale()` (at least
+  120) `ringblast`. Range 999 / weight 0 keeps the scheduled moves out of the picker.
+
+| Move | Phase | Wind-up / active / recovery | Range | What it does |
+|---|---|---|---|---|
+| shovel | 1-3 | 16 / 20 / 16 | 0-7 | Arc drawn in soul dust (±75°, 5.5): 13, push 0.9. At impact 3 embers (P2 5) fly in a fan ±36° to spots 7-10 ahead (clamped to the deck); each ring (r 1.7) is drawn as it flies, red for the last 8 ticks, and bursts 18 ticks after impact: 8, fire 2 s. P2: 30% chains piston (close) or stoke. |
+| piston | 1-3 | 28 / 12 / 18 | 0-14 | A line 14 long (half width 1.3) drawn in soul dust; he turns up to 5°/tick toward the target until wind-up 18, then it locks and turns red (10 ticks). Steam at the fist. Impact: 18 and push 1.2 within 4 of the fist; a shockwave front runs from 4 to 14 at 1.25 b/t: 10 and lift 0.55 (once), stopping where the deck ends. P2: 35% chains shovel if the target is within 6.5. |
+| stoke | 1-3 | 40 / 16 / 20 | 0-12 | Scoops of souls into the firebox at wind-up 6, 16, 26; a gauge of 8 dust dots over his head fills blue to red. Cone ±32°, 11 deep (P2 13) drawn from wind-up 12, he turns 3°/tick until 28, then red. Impact: 15 and soul fire 4 s in the cone; flame particles for 12 ticks. |
+| vents | 1-3 | 20 / 34 / 14 | 0-30 | 5 vents (P2 7, plus one under each other player up to 3), one under the target, at least 3.5 apart and 2.5 from him, only on floor level with the seal. Rings (r 2) and smoke from the start; vent k erupts at active 6 + 5k, its ring red for the last 10 ticks: 12, lift 0.6, soul fire 3 s. |
+| charge | 2-3 | 24 / 16 / 16 | 6-22 | A lane (half width 1.4) through the target, 6-16 long, drawn from the start, red from wind-up 16. Active: he steps 1.1 a tick along it (teleport steps, only onto floor level with the seal with 5 blocks of headroom and inside the deck); 15 and push 1.1 to whoever is within 1.8 (once), then a slam where he stops (r 3, 8). |
+| thralls | 2-3 | 20 / 10 / 16 | 0-30 | Cooldown 700. Souls at the firebox, then 2 wither skeletons (`summon`, +1 per 2 extra players) unless 3 minions already stand in the arena. |
+| overpressure | 3 (once) | 40 / 20 / 20 | scheduled | Guarded 64 ticks: the gauge fills, rings of soul dust grow round him, steam. Impact: a wave to 12 (10, jump), +12% speed (`soul_stoker_overpressure`), the crank rhythm starts, the ring timer at 100 ticks. |
+| ringblast | 3 | 20 / 40 / 16 | scheduled | Three gap angles (the first 50° off the target's bearing, then 25° further the same way each ring) drawn as lines from him (blue, gold, red) from the start; rings at active 0, 12, 24 roll out at 0.5 b/t over the whole deck, too tall to jump: outside the gap (±26°) 10 and soul fire 3 s (once a ring). |
+
+**Crank rhythm (phase 3).** Strips 4 wide run along x (the crankshaft) across the deck. Every 60 ticks the strips of one
+parity pulse (the parity alternates each pulse): 40 ticks of warning (their edges in soul dust every 4 ticks, red for the
+last 12, small flames from tick 20, a piston sound), then 6 ticks of soul-fire jets: 5 and soul fire 2 s once a pulse to
+any player on one. It is paused (and restarts from a full warning) while `ringblast` or `overpressure` runs.
+
+**No blocks.** He places no blocks at all: embers, vents, rings, the crank strips and the gauge are particles, hit checks
+and effects. Nothing to restore.
+
+**No deaths off the edge.** His `strike` caps pushes at 1.2 and lift at 0.6 (0.25 within 3 blocks of the rim). In the
+square metric, a push that points outward is removed on each axis where the target is within 3 blocks of the rim, and
+the whole push where a probe 2 blocks along it finds no floor (the crank trench beyond the railing). The engine's
+phase-2 roar shove is corrected the same way in `onPhaseTwo`. The charge stops at the deck's edge, at walls and props.
+
+**Co-op and NG+** come from the engine (`BossDifficulty`, `BossCycles`): health, damage (every hit goes through
+`strike`), poise, cooldowns (the ring timer uses `cooldownScale()`), compressed wind-ups. Thralls scale with
+`summon`; phase-2 vents add one per extra player.
+
+Previews:
+- `python3 tools/gen_models.py --preview --only soul_stoker` writes `build/previews/models/soul_stoker.png`.
+- Held shovel: `python3 tools/art_sheet.py --kind held --only stoker_shovel`.
+
+## 32. Champion of the Clockwork Asylum: The Asylum Director (La Directrice de l'asile)
+Files:
+- `tools/wf/mobs/asylum_director.py`: model `asylum_director` (93 cubes, 128x128, one texture).
+- `src/main/java/com/brasshaven/entity/boss/AsylumDirector.java`: the moveset.
+
+There is no lair module. The arena is the clock stage at the top of the tower (`clock_stage()` in
+`tools/wf/structures/clockwork_asylum.py`): 35 x 35 inside, 18 high, behind the four dials (the south one cracked), the
+floor laid out as a clock face with a glass pendulum window in the middle, seal at (0, FC, TZ), radius 17. The stair from
+the winding room comes up through the floor at the west (the mist at its head). `BOSS` there is
+`brasshaven:asylum_director` (it replaces the borrowed Gryphon Knight, whose own home, quest and seal on the sky island are
+untouched). `BOSS_HOME` is `clockwork_asylum`.
+
+Reward: `remembrance_asylum_director` forges the **Bone-Saw of the Asylum Director** (`director_bonesaw`, LITHITE
+7.5 / -2.6).
+- It has a new ability shape, **REWIND**, in `BossWeaponItem`: the saw rips the wielder forward along the aim (up to 8
+  blocks, stopped by walls), power 10 to every foe passed (flag `slow`). The start is remembered as a clock ghost
+  (`item/Rewinds.java`, ticked from the server tick like `BlastCharges`); 40 ticks later the wielder is snapped back to it
+  (not if sneaking, dead, in another level or more than 32 blocks away) and the saw's echo deals half the power within 2.5.
+- Held model `director_bonesaw` in `wf/held3d.py`, sprite `bone_saw` in `wf/itemart_shapes.py`.
+
+Loot (`gen_data.py`): map fragments, emeralds, experience bottles, golden apples, diamonds, a clock, glass bottles,
+glistering melon slices, gold and iron ingots, an 8% enchanted golden apple. Quest: `explorer/boss_asylum_director`.
+
+**Concept.** The surgeon who turned the sanatorium into an automaton workshop, 3.6 blocks, tall and thin (hitbox 1.2 x
+3.7): a long stained white coat (open below the belt, split tails), dark trousers and buttoned boots, black rubber gloves
+with long fingers; a brass plague-doctor mask with a curved beak and two glowing green lenses, a white surgical cap over a
+grey bun, a head mirror; a high collar and a black cravat; a glass plate in the chest over a ticking clockwork heart
+(red-amber glow, it pulses in the idle). On her back a brass harness with a turning cog carries four spindly surgical arms
+spread like a spider's legs: scalpel and bone saw high, forceps and syringe low. A pocket watch hangs from her left hand.
+
+**Stats.**
+- 600 health, armour 12, toughness 4, attack 13, poise 110, speed 0.27, knockback resistance 1.0, step 1.25.
+- No fall damage, white bar.
+- Phase 2 at 65% (roar, +10% speed, `asylum_director_wrath`). Phase 3 at 30%, driven by the class like the Chained
+  Jailer: when she is free she chains `midnight` once (guarded 64 ticks), then every 360 ticks x `cooldownScale()` (at
+  least 200; the first 50 ticks after midnight) `hands`. Range 999 / weight 0 keeps the scheduled moves out of the picker.
+
+| Move | Phase | Wind-up / active / recovery | Range | What it does |
+|---|---|---|---|---|
+| scalpel | 1-3 | 14 / 8 / 14 | 2.5-11 | Turns toward the target for 10 ticks (white line), then a red line locks (up to 7, only over floor level with the seal, inside the room); she lunges along it in 5 ticks: 13 to each one within 1.4 of her path (once). |
+| saw | 1-3 | 16 / 24 / 14 | 0-6 | Arc drawn (+-100°, 5.5): 14. P2: turn (30°) at active 5, arc red 6-13, back sweep at active 14 (11); 30% chains dissect (close) or forceps. |
+| syringe | 1-3 | 18 / 12 / 12 | 5-24 | A green line follows the target for 12 ticks, then red; a dart flies 1.5 b/t (24 at most, walls stop it): 8 + Slowness II 3 s. P2: a fan of 3 (+-12°). |
+| rewind | 1-3 | 20 / 8 / 14 | 0-28 | At impact a clock ghost marks the target (P2: every player, up to 4) where they stand (on the floor). It runs backward 60 ticks (a tick every 10, chimes at 50 and 55); then the player is teleported back to it if they moved more than a block (no hold, momentum zeroed). Its ring (r 2), drawn all along and red from tick 50, bursts 14 ticks after the snap: 12. |
+| pendulum | 1-3 | 24 / 36 / 14 | 0-30 | Lanes through the room's centre (half width 1.5, wall to wall), the first through the target, each next one turned 45° (one way per cast). Swing k at active 12k: the lane is drawn 24 ticks before (brass), red the last 12; the bob crosses in 10 ticks: 14 and a shove out of the lane (1.0). 2 swings, 3 in P2. |
+| spiders | 1-3 | 18 / 4 / 14 | 0-30 | 2 (P2 3) clockwork spiders, `scaledCount`, never more than 4 alive (minion tag). |
+| forceps | 2-3 | 16 / 22 / 14 | 0-8 | Red line (7, half width 0.9): the first one in it takes 8 and is hauled to 1.6 ahead of her over active 1-6 (velocity, no hold), then let go; arc drawn 6-13, cut at active 14 (+-60°, 3.8): 10. |
+| dissect | 2-3 | 16 / 30 / 14 | 0-5 | The four quarters round her facing (r 4.5, +-45°) in a random order, struck at active 0, 8, 16, 24: 9 each. The next quarter is drawn red for the 8 ticks before, the one after it white. |
+| timeslip | 2-3 | 12 / 2 / 8 | 7-28 | A clock ghost 2.5 behind the target (following until tick 6, then red, a standing spot); she teleports there, then chains saw. |
+| midnight | 3 (once) | 40 / 20 / 20 | scheduled | Guarded 64 ticks; a growing clock face, a bell every 4 ticks; a wave to 14 (11, jump), +12% speed (`asylum_director_midnight`), the hands' timer starts. |
+| hands | 3 | 30 / 180 / 16 | scheduled | She teleports to the centre. The minute hand starts 45° clockwise of the target, the hour hand 90° behind it, so the target starts in the gap. Wind-up and active 0-10: both hands drawn red from the centre to the walls, the gap gold, a bell every 10 then 5 ticks. Then both turn clockwise 270° in 170 ticks (1.59°/tick: 0.17 b/t at 6 blocks out); she faces the minute hand. Each hand deals 12 once (half width 0.9, from 0.6 out) and a small shove away from it. Safe: the gap, which moves. |
+
+**No blocks.** She places no blocks at all: the ghosts, lanes, pendulum, darts and hands are particles and hit checks.
+The spiders are discarded on death, removal, a reset or an empty arena; a reset also cancels every pending rewind (an
+epoch counter), so nobody is snapped back after the fight ends.
+
+**Fair edges.** Her `strike` caps pushes at 1.2 and lift at 0.45 (0.2 within 3 blocks of a wall); in the square metric the
+outward part of a push is removed near the walls, and all of it where a probe 1 or 2 blocks along it finds no floor (the
+stairwell). The engine's phase-2 roar shove is corrected the same way. Teleports (time-slip, hands) land only on floor
+level with the seal with 4 blocks of headroom; the lunge never leaves such floor. The rewind's teleport is the only loss of
+control, and only back to where the player stood 3 s earlier inside the room.
+
+**Co-op and NG+** come from the engine (`BossDifficulty`, `BossCycles`): health, damage (every hit goes through
+`strike`), poise, cooldowns (the hands' timer uses `cooldownScale()`), compressed wind-ups, the soul wave. Spiders scale
+with `scaledCount`; the phase-2 rewind marks every player.
+
+Previews:
+- `python3 tools/gen_models.py --preview --only asylum_director` writes `build/previews/models/asylum_director.png`.
+- Held bone-saw: `python3 tools/art_sheet.py --kind held --only director_bonesaw`.
+
 ## Difficulty: co-op scaling and NG+ cycles
 
 Applied by `boss/WayfarerBoss` to **every** boss on its first server tick, whatever spawned it (boss seal,

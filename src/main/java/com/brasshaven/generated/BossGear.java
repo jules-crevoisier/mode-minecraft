@@ -141,6 +141,12 @@ public final class BossGear {
     public static final RegistryObject<Item> REMEMBRANCE_HOLLOW_CANTOR = remembrance("remembrance_hollow_cantor");
     public static final RegistryObject<Item> CANTOR_BATON = weapon("cantor_baton", p -> p.sword(ModMaterials.LITHITE, 8.0F, -2.8F).rarity(Rarity.EPIC),
             BossWeaponItem.Ability.SHRIEK, 11.0F, 12.0F, 90, () -> ParticleTypes.NOTE, BossWeaponItem.WEAK);
+    public static final RegistryObject<Item> REMEMBRANCE_SOUL_STOKER = remembrance("remembrance_soul_stoker");
+    public static final RegistryObject<Item> STOKER_SHOVEL = weapon("stoker_shovel", p -> p.sword(ModMaterials.EMBER, 8.0F, -3.0F).rarity(Rarity.EPIC).fireResistant(),
+            BossWeaponItem.Ability.STOKE, 12.0F, 12.0F, 80, () -> ParticleTypes.SOUL_FIRE_FLAME, BossWeaponItem.FIRE);
+    public static final RegistryObject<Item> REMEMBRANCE_ASYLUM_DIRECTOR = remembrance("remembrance_asylum_director");
+    public static final RegistryObject<Item> DIRECTOR_BONESAW = weapon("director_bonesaw", p -> p.sword(ModMaterials.LITHITE, 7.5F, -2.6F).rarity(Rarity.EPIC),
+            BossWeaponItem.Ability.REWIND, 10.0F, 8.0F, 80, () -> ParticleTypes.CRIT, BossWeaponItem.SLOW);
 
     private BossGear() {}
 

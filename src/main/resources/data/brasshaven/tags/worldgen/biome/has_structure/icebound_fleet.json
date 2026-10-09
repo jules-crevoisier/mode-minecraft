@@ -1,0 +1,25 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "minecraft:frozen_ocean",
+      "required": false
+    },
+    {
+      "id": "minecraft:deep_frozen_ocean",
+      "required": false
+    },
+    {
+      "id": "minecraft:ice_spikes",
+      "required": false
+    },
+    {
+      "id": "minecraft:snowy_plains",
+      "required": false
+    },
+    {
+      "id": "minecraft:snowy_beach",
+      "required": false
+    }
+  ]
+}

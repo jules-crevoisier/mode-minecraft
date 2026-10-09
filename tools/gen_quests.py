@@ -131,10 +131,13 @@ STRUCTURE_ICONS = {
     "canopy_city": "jungle_log",
     "mesa_minecity": "rail",
     "titan_forge": "anvil",
+    "soul_engine": "bone_block",
     "airship_graveyard": "brasshaven:brass_plating",
     "echo_cathedral": "bell",
     "starfall_library": "chiseled_bookshelf",
     "cloud_pagoda": "cherry_sapling",
+    "icebound_fleet": "packed_ice",
+    "clockwork_asylum": "brasshaven:wall_cog",
 }
 # where each boss lives (its quest follows the discovery of that structure)
 BOSS_HOME = {
@@ -171,6 +174,8 @@ BOSS_HOME = {
     "chime_abbot": "cloud_pagoda",
     "corsair_captain": "airship_graveyard",
     "hollow_cantor": "echo_cathedral",
+    "soul_stoker": "soul_engine",
+    "asylum_director": "clockwork_asylum",
 }
 CHAPTER = {}
 for s in defs.STRUCTURES:

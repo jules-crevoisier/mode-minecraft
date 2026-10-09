@@ -23,6 +23,10 @@
     {
       "structure": "brasshaven:titan_forge",
       "weight": 1
+    },
+    {
+      "structure": "brasshaven:soul_engine",
+      "weight": 1
     }
   ],
   "placement": {

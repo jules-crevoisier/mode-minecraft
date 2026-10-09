@@ -443,6 +443,24 @@ STRUCTURES = {
                       "reliquaire. L'ascenseur du puits d'orgue ramène de la crypte à la croisée (lieu de grâce). "
                       "Les capteurs de sculk ne sont qu'un décor : ni gardien ni hurleur.",
     "titan_forge": "Une forge colossale de 217 blocs sur un lac de lave du Nether (deltas de basalte, forêt carmin), bâtie dans et autour d'un titan de basalte et de laiton agenouillé, haut de 85 blocs, penché sur une enclume grande comme un donjon, le marteau levé. Depuis l'avant-poste des forgerons et sa pierre de passage, une chaussée de basalte et l'Arche du péage mènent au portail du socle, entre deux cascades de lave versées par des creusets dans des moules. Dans le socle : la halle de coulée et ses canaux de lave sous verre, les chambres des soufflets de cuir géants, le grand escalier jusqu'à la terrasse des creusets (pierre de passage). Dans le titan : une porte dans le genou, l'escalier en colimaçon de la cuisse, le casernement des forgerons, l'armurerie, la halle de fusion dans le dos sous les cheminées, le joug ; puis le bras gauche descend jusqu'à la salle du treuil (pierre de passage) et le pont-grue de l'avant-bras mène dans la main posée sur l'enclume. Passé la brume, l'arène sur la table de l'enclume, sous le marteau. Derrière des barreaux scellés, le caveau dans le talon de l'enclume. En option : la mine de scories et sa galerie cachée, la galerie des marteaux dans le bras levé, le nid du maître de forge dans le heaume. Pour revenir : l'ascenseur dans la colonne vertébrale du titan.",
+    "soul_engine": "Une machine-ossuaire monstrueuse de 178 × 195 blocs au fond d'une vallée de sable des âmes du "
+                   "Nether : un bloc moteur grand comme une cathédrale, de pierre noire, de terre des âmes et de "
+                   "laiton terni, nourri par deux convoyeurs d'os, coiffé d'un carter où six pistons colossaux sont "
+                   "figés à des hauteurs différentes, flanqué de quatre cheminées nervurées qui crachent une flamme "
+                   "bleue, ses murs extérieurs dévorés par les champignons biscornus. Depuis le camp des pèlerins "
+                   "perdus (pierre de passage), la route d'os passe sous l'arche en cage thoracique jusqu'à la porte "
+                   "d'os et son guichet. Le couloir de la porte débouche dans la salle des pressions (pierre de "
+                   "passage) et sa cuve géante ; au nord, la salle des trémies où les os tombent des convoyeurs, la "
+                   "soute à terre des âmes, puis la fournaise des âmes et ses trois foyers ouverts sur la façade est. "
+                   "Le grand escalier monte au balcon des chauffeurs : le réfectoire, la salle de contrôle du "
+                   "gouverneur et son régulateur à boules, la salle des vannes, puis le puits de piston, un "
+                   "escalier à noyau dans une chemise de cylindre désaffectée, jusqu'au lieu de grâce sur le carter. "
+                   "Passé la brume, l'arène sur le pont du vilebrequin, au cœur du moteur, devant la tranchée des "
+                   "bielles et le volant d'inertie. Derrière des barreaux scellés, le reliquaire des âmes. En "
+                   "option : la galerie des pistons et sa passerelle, et sous le moteur l'ossuaire : la nef des "
+                   "voûtes d'os, la fosse aux charniers et son trône d'os, la crypte des bâtisseurs, dont l'escalier "
+                   "remonte dans la galerie. Pour revenir : l'ascenseur à piston du lieu de grâce, la goulotte d'os "
+                   "du reliquaire et la porte de la fournaise, qui ne s'ouvre que d'un côté.",
     "mire_stilt_city": "Une ville de bois sur pilotis de 200 blocs au-dessus d'une mangrove : des passerelles sur trois "
                        "niveaux, des ponts de corde et des huttes de pêcheurs. On arrive par une chaussée depuis un "
                        "îlot (pierre de passage), on franchit la palissade et ses deux tours de garde (brisée à "
@@ -491,6 +509,35 @@ STRUCTURES = {
                     "et la dernière salle (lieu de grâce). Passé la brume, l'arène sur le toit ouvert sous la "
                     "flèche ; derrière des barreaux scellés, le caveau, d'où le puits du contrepoids ramène à "
                     "la salle de prière.",
+    "icebound_fleet": "Une expédition polaire de 220 × 200 blocs prise dans la banquise, sur une mer gelée, une "
+                      "plaine enneigée ou parmi les pics de glace : un brise-glace colossal à roues à aubes, coque "
+                      "de fer sombre longue de 120 blocs, gîtant sur tribord, ses deux cheminées de cuivre penchées "
+                      "et son étrave en éperon montée sur une crête de pression ; à côté, deux petits navires "
+                      "ravitailleurs en bois, un derrick de forage en laiton, des aiguilles de glace bleue et le "
+                      "squelette d'une baleine pris dans la glace. On arrive par le camp des traîneaux (pierre de "
+                      "passage), sous l'échine de la baleine, jusqu'au camp de forage (pierre de passage) ; sur le "
+                      "Fulmar : la cale gelée sous la glace et la salle des cartes, puis le pont de cordes vers le "
+                      "Pétrel : chenil, cuisine (pierre de passage) et la porte de glace qui ne s'ouvre que de "
+                      "l'intérieur, sur la tranchée de neige. Elle mène à la brèche de la soute à charbon du "
+                      "brise-glace : salle des chaudières haute de 27 blocs, carré de l'équipage (pierre de "
+                      "passage), carré des officiers, cabine du capitaine ; puis l'escalier en colimaçon dans la "
+                      "cheminée avant, la passerelle et la timonerie (lieu de grâce). Passé la brume, l'arène sur "
+                      "le gaillard d'avant, sous la passerelle ; derrière des barreaux scellés, la chambre forte de "
+                      "l'expédition, d'où la glissade de glace ramène au camp de forage. Raccourcis : l'écoutille "
+                      "à sens unique du carré vers le pont latéral, la porte de glace du Pétrel et la flèche de la "
+                      "grue de chargement, qui plonge dans un trou de pêche près de la tranchée.",
+    "clockwork_asylum": "Un sanatorium gothique de 185 blocs au sommet d'une colline de forêt sombre ou de jardin "
+                        "pâle, devenu atelier d'automates : une tour de l'horloge haute de 100 blocs aux quatre "
+                        "cadrans fêlés, deux longues ailes de salles aux fenêtres grillagées, une chapelle, une serre "
+                        "brisée et un cimetière clos aux grilles de fer tordues. On arrive par le camp des bûcherons "
+                        "(pierre de passage), le funiculaire de la conciergerie et le cimetière jusqu'au grand hall "
+                        "(pierre de passage). Dans les ailes : les cellules, l'amphithéâtre opératoire aux bras "
+                        "chirurgicaux de laiton, les bains d'hydrothérapie, la salle des archives, la buanderie ; en "
+                        "option la chapelle et la serre. Le mécanisme de l'horloge (engrenages, puits du balancier) "
+                        "mène au lieu de grâce ; passé la brume, l'arène dans la chambre de l'horloge derrière le "
+                        "cadran fêlé ; derrière des barreaux scellés, le bureau du directeur. Raccourcis : le "
+                        "funiculaire, la goulotte de la buanderie vers le sous-sol, la porte à sens unique de la "
+                        "chapelle.",
     "starfall_library": "Une archive flottante de 170 blocs sur les îles extérieures de l'End : une tour-fuseau de "
                         "purpur et de laiton haute de 125 blocs, coiffée d'un dôme d'astrolabe, entourée de trois "
                         "galeries de lecture en anneau suspendues à trois hauteurs par des rayons de chaînes et de "
@@ -711,6 +758,19 @@ MOBS = {
                      "blocs, de laiton terni et de deepslate. Sa cage thoracique est un buffet d'orgue où luisent "
                      "sept petits tuyaux, un éventail de tuyaux d'orgue s'ouvre derrière sa capuche vide et sans "
                      "visage, et il dirige d'une longue baguette terminée par un diapason. Le son contre le silence.",
+    "soul_stoker": "Champion du Moteur des âmes : le Chauffeur des âmes, un homme-fourneau massif d'environ 4 blocs. "
+                   "Son torse est une chaudière de blackstone cerclée de laiton, au ventre une gueule de foyer grillagée "
+                   "où brûle un feu d'âmes bleu, un manomètre sur la poitrine ; sa tête, une porte de four au visage de "
+                   "crâne dont les orbites brûlent en bleu ; deux cheminées dans le dos crachent des flammes bleues. "
+                   "Le bras droit finit en pelle à charbon géante, le gauche en poing monté sur piston ; à sa ceinture "
+                   "pendent des chaînes d'os et des lanternes d'âmes.",
+    "asylum_director": "Championne de l'Asile mécanique : la Directrice de l'asile, une chirurgienne grande et "
+                       "maigre d'environ 3,6 blocs, en longue blouse blanche tachée. Un masque de médecin de peste en "
+                       "laiton au long bec et aux verres verts lumineux cache son visage, sous un calot blanc et un "
+                       "miroir frontal ; derrière une plaque de verre, un cœur mécanique bat dans sa poitrine ; quatre "
+                       "bras chirurgicaux de laiton (scalpel, scie à os, seringue, pince) se déploient dans son dos "
+                       "comme des pattes d'araignée, et une montre de gousset pend de sa main gauche. Le temps et le "
+                       "scalpel.",
     "strangler_queen": "Championne de la Cité-temple de la canopée : la Reine-figuier étrangleur, une femme immense "
                        "de 5,8 blocs tissée de racines aériennes et de jade, qui a étouffé le temple et s'est couronnée "
                        "à sa place. Une jupe de racines-contreforts qui s'étalent sur le sol, un masque de jade aux "
@@ -1209,6 +1269,75 @@ BOSS_MOVES = {
                          "chacune avec une brèche), puis les rangées de souffles s'éloignent de lui l'une après "
                          "l'autre, toutes les 0,3 s, chacune rougissant 0,7 s avant (13). Tiens-toi dans les brèches."),
     ],
+    "soul_stoker": [
+        ("Pelletée", "1 à 3", "La pelle ramenée en travers du corps (0,8 s, l'arc tracé en poussière bleue) : un "
+                              "balayage (13), puis les braises qu'elle projette volent devant lui et retombent sur des "
+                              "cercles marqués dès leur départ, rouges à la fin (0,9 s plus tard : 8 et embrasé ; trois "
+                              "braises, cinq en phase 2)."),
+        ("Coup de piston", "1 à 3", "Les pieds plantés, le poing armé loin derrière, la vapeur qui siffle (1,4 s) : une "
+                                    "ligne de 14 blocs tracée au sol le suit lentement, puis se fige et rougit 0,5 s "
+                                    "avant. Le poing (18 à 4 blocs), puis une onde de choc qui court le long de la "
+                                    "ligne (10 et projeté). Sors de la ligne sur le côté."),
+        ("Attiser", "1 à 3", "Trois pelletées d'âmes dans son foyer (0,3, 0,8 et 1,3 s) pendant qu'une jauge de "
+                             "poussière monte au-dessus de sa tête, du bleu au rouge ; le cône (11 blocs, 13 en phase 2) "
+                             "est tracé dès 0,6 s, te suit lentement, rougit et se fige 0,6 s avant. À 2 s, un cône de "
+                             "flammes bleues jaillit du foyer : 15 et embrasé 4 s."),
+        ("Évents", "1 à 3", "La pelle levée haut (1 s) puis plantée dans le pont. Des évents sont marqués au sol dès "
+                            "le début (cinq, sept en phase 2, un sous toi ; en phase 2 un sous chaque joueur) : des "
+                            "cercles bleus sur de la fumée. Ils s'ouvrent l'un après l'autre, toutes les 0,25 s, chaque "
+                            "cercle rougissant 0,5 s avant : 12, projeté et embrasé 3 s."),
+        ("Charge", "2 et 3", "De loin (6 blocs et plus) : il se ramasse, les cheminées rugissent (1,2 s, un couloir "
+                             "tracé de lui jusqu'à toi et au-delà, rouge à la fin), puis il le dévale comme une "
+                             "locomotive folle (15 et bousculé) et s'arrête net au bout ou contre un obstacle (8 "
+                             "autour de lui)."),
+        ("Serviteurs", "2 et 3", "Il ouvre son foyer (1 s) : deux squelettes wither (plus un tous les deux joueurs de "
+                                 "plus) sortent du feu d'âmes, sauf si trois de ses serviteurs sont déjà sur le pont."),
+        ("Surpression", "3", "À 30 %, une fois (invulnérable 3 s) : il étreint sa chaudière, tremble, la jauge monte "
+                             "(2 s), puis les soupapes sautent : une onde à sauter (10), il accélère. Désormais le pont "
+                             "suit le rythme du vilebrequin : des bandes de 4 blocs à travers le pont (le long du "
+                             "vilebrequin) brûlent en alternance toutes les 3 s, chaque pulsation tracée 2 s avant "
+                             "(rouge la dernière 0,6 s) : 5 et embrasé. Change de bande à chaque pulsation."),
+        ("Souffle des soupapes", "3", "Toutes les 11 s : il frappe sa chaudière (1 s) ; trois brèches sont tracées en "
+                                      "lignes depuis lui (bleue, dorée, rouge). Trois anneaux de flammes bleues, trop "
+                                      "hauts pour être sautés, partent de lui à 0,6 s d'écart, chacun avec sa brèche, "
+                                      "tournée de 25° à chaque anneau (10 et embrasé). Le rythme du pont s'arrête "
+                                      "pendant ce temps."),
+    ],
+    "asylum_director": [
+        ("Scalpel", "1 à 3", "Le bras-scalpel ramené par-dessus l'épaule (0,7 s) : elle se tourne vers toi, puis une "
+                             "ligne rouge se fige (7 blocs au plus, seulement sur le sol) et elle fond le long d'elle "
+                             "(13 à qui se trouve sur son chemin). Fais un pas de côté."),
+        ("Scie", "1 à 3", "Le bras-scie levé haut à sa gauche (0,8 s, un arc très large tracé) : un balayage devant "
+                          "elle (14). Phase 2 : elle se tourne et revient en sens inverse 0,7 s plus tard (11)."),
+        ("Seringue", "1 à 3", "Le bras-seringue vise par-dessus son épaule (0,9 s, une ligne verte te suit puis "
+                              "rougit) : une fléchette (8 et ralenti 3 s), arrêtée par les murs. Phase 2 : un éventail "
+                              "de trois."),
+        ("Retour en arrière", "1 à 3", "Elle remonte sa montre (1 s) : un fantôme d'horloge se forme à tes pieds (à "
+                                       "ceux de chaque joueur en phase 2) et tourne à rebours 3 s, puis te ramène à "
+                                       "lui ; son cercle, tracé tout du long et rouge à la fin, éclate 0,7 s après "
+                                       "(12). Sors-en dès que tu reviens."),
+        ("Pendule", "1 à 3", "La montre levée haut (1,2 s) pendant que le couloir du grand pendule est tracé à "
+                             "travers le centre de la salle, rouge 0,6 s avant : il le traverse en 0,5 s (14, rejeté "
+                             "hors du couloir). Le couloir suivant tourne de 45° ; deux passages, trois en phase 2."),
+        ("Araignées", "1 à 3", "Elle frappe le sol de ses quatre bras (0,9 s, des étincelles) : deux araignées "
+                               "mécaniques (trois en phase 2, une de plus tous les deux joueurs), jamais plus de "
+                               "quatre."),
+        ("Pince", "2 et 3", "Le bras-pince jaillit le long d'une ligne rouge (0,8 s, 7 blocs) : la première cible "
+                            "est saisie (8), ramenée devant elle et lâchée, puis l'arc de la scie est tracé et elle "
+                            "taille 0,7 s plus tard (10)."),
+        ("Dissection", "2 et 3", "Les quatre bras levés (0,8 s) : les quatre quarts autour d'elle (4,5 blocs) sont "
+                                 "frappés l'un après l'autre toutes les 0,4 s (9) ; le prochain est tracé en rouge, "
+                                 "le suivant en blanc. Passe d'un quart à l'autre."),
+        ("Glissement", "2 et 3", "Elle remonte sa montre et s'amincit (0,6 s, un fantôme d'horloge 2,5 blocs "
+                                 "derrière toi), disparaît et reparaît là, puis balaie de sa scie."),
+        ("Minuit", "3", "À 30 % : elle s'élève, bras écartés comme des aiguilles (2 s, invulnérable, douze coups de "
+                        "cloche), puis la grande horloge sonne : une onde à sauter (11), elle accélère."),
+        ("Les aiguilles", "3", "Toutes les 18 s environ : elle gagne le centre du cadran et tend les bras (1,5 s, les "
+                               "deux aiguilles tracées en rouge jusqu'aux murs, la brèche entre elles en or, un coup "
+                               "de cloche toutes les 0,5 s), puis les aiguilles font les trois quarts d'un tour en "
+                               "8,5 s, à un quart l'une de l'autre (12 par aiguille qui te traverse). Reste dans la "
+                               "brèche et suis-la."),
+    ],
     "strangler_queen": [
         ("Coup de fouet", "1 à 3", "Le fouet ramené en arrière (0,8 s, une ligne verte de 11 blocs), puis claqué "
                                    "droit devant (14) : il te ramène vers elle."),
@@ -1569,6 +1698,15 @@ BOSS_FACTS = {
                      "et le requiem. Les bourgeons d'améthyste de la résonance sont temporaires (ils ne lâchent rien) "
                      "et retirés à la fin du coup, du combat, à sa mort ou si tout le monde s'en va ; les choristes "
                      "aussi.",
+    "soul_stoker": "620 PV, armure 14, posture 130, barre bleue, insensible au feu. Phase 2 à 65 % : il rugit, "
+                   "accélère, ajoute la charge et ses serviteurs squelettes wither, projette plus de braises et "
+                   "ouvre plus d'évents. Phase 3 à 30 % : la surpression, le rythme du vilebrequin sur le pont et "
+                   "les anneaux des soupapes. Il ne pose aucun bloc, et près du bord et de la tranchée ses coups ne "
+                   "te poussent jamais dans le vide.",
+    "asylum_director": "600 PV, armure 12, posture 110, barre blanche. Phase 2 à 65 % : elle rugit, accélère et "
+                       "ajoute pince, dissection et glissement. Phase 3 à 30 % : minuit, puis les aiguilles de la "
+                       "grande horloge. Elle ne pose aucun bloc ; ses araignées disparaissent à sa mort, si le combat "
+                       "repart ou si tout le monde s'en va, et un retour en arrière en attente est annulé.",
     "strangler_queen": "620 PV, armure 12, posture 115, barre verte. Phase 2 à 65 % : elle rugit, accélère, ajoute "
                        "fouet tournant et collet et grimpe dans le disque solaire d'où tombent esprits-jaguars et "
                        "graines-bombes. Phase 3 à 30 % : la floraison, puis des cages de racines se referment sur les "
@@ -1667,6 +1805,31 @@ LAIRS = {
                                  "blocs derrière. Passé la brume, le Chantre se réveille quand tu approches du sceau."),
         ("Le reliquaire", "Derrière l'orgue, au bout du passage sous les grands tuyaux, derrière des barreaux scellés "
                           "qui s'ouvrent à sa mort ; la grille du chœur ouvre le raccourci vers la croisée."),
+    ],
+    "soul_stoker": [
+        ("Le Moteur des âmes", "Depuis le camp des pèlerins perdus (pierre de passage) sur le sable des âmes, la route "
+                               "d'os et la porte d'os jusqu'au hall de pression (pierre de passage)."),
+        ("Les entrailles", "La trémie à os, le bunker de terre des âmes, le hall des fourneaux d'âmes, le grand "
+                           "escalier jusqu'au balcon des chauffeurs, la salle du régulateur, puis l'escalier en "
+                           "vis dans une chemise de piston jusqu'au lieu de grâce sur le carter."),
+        ("Le pont du vilebrequin", "L'arène : 39 blocs de côté sous le toit du carter (16 blocs de haut), la "
+                                   "tranchée du vilebrequin et ses six bielles au nord derrière une balustrade, la "
+                                   "baie du volant à l'est. Passé la brume, le Chauffeur se réveille quand tu "
+                                   "approches du sceau au centre."),
+        ("Le reliquaire", "Derrière des barreaux scellés dans le mur ouest, ouverts à sa mort ; la chute d'os ramène "
+                          "au hall de pression."),
+    ],
+    "asylum_director": [
+        ("L'asile", "Du camp des bûcherons (pierre de passage), la grille, le cimetière, le grand escalier et le "
+                    "grand hall (pierre de passage) ; l'aile ouest, le théâtre opératoire et la salle de conversion "
+                    "ramènent à la galerie du hall."),
+        ("La tour de l'horloge", "Cinq étages de mécanisme autour du puits du pendule : salle de remontage du bas, "
+                                 "échappement, rouages, grande roue, puis la salle de remontage (lieu de grâce)."),
+        ("L'étage de l'horloge", "L'arène : une salle de 35 blocs de côté et 18 de haut derrière les quatre cadrans, "
+                                 "le sud fendu, un sol dessiné en cadran. Passé la brume en haut du dernier escalier, "
+                                 "la Directrice se réveille quand tu approches du sceau au centre."),
+        ("Le bureau de la directrice", "Dans l'oriel nord, derrière des barreaux scellés ; son puits privé "
+                                       "redescend vers la salle de remontage du bas."),
     ],
     "grand_clockmaker": [
         ("Citadelle d'horlogerie", "Entre dans la grande tour-horloge. Dans le hall d'entrée, côté est, un escalier "
@@ -2017,6 +2180,10 @@ NEW_GROUPS = [
         ("La Forge du Titan de basalte", "Une forge colossale sur un lac de lave du Nether, bâtie dans un titan "
          "de basalte et de laiton agenouillé sur une enclume géante : halle de coulée, soufflets de cuir, mine de "
          "scories, et une arène sur l'enclume, sous le marteau levé.", "s-titan_forge", "struct:titan_forge"),
+        ("Le Moteur des âmes", "Une machine-ossuaire de pierre noire et de laiton terni au fond d'une vallée de "
+         "sable des âmes du Nether, nourrie par des convoyeurs d'os, six pistons colossaux sur son carter : salle "
+         "des pressions, fournaise des âmes, ossuaire de voûtes d'os, et une arène sur le pont du vilebrequin.",
+         "s-soul_engine", "struct:soul_engine"),
         ("La Bibliothèque de la chute d'étoile", "Une archive flottante de l'End autour d'une tour-fuseau de purpur "
          "et de laiton, trois galeries en anneau et une météorite fichée dans son flanc : canyons de rayonnages, "
          "scriptorium, observatoire, et une arène dans la chambre du cratère.", "s-starfall_library",
@@ -2025,6 +2192,14 @@ NEW_GROUPS = [
          "terrasses, étangs aux carpes et porte de lune, enlacée par le squelette de laiton d'un dragon "
          "mécanique : un étage par salle, un ascenseur à contrepoids, et une arène sur le toit ouvert.",
          "s-cloud_pagoda", "struct:cloud_pagoda"),
+        ("La Flotte prise dans les glaces", "Un brise-glace colossal à roues à aubes figé dans la banquise, "
+         "gîtant, ses cheminées de cuivre penchées, avec deux navires ravitailleurs, un derrick de forage en laiton "
+         "et une baleine prise dans la glace : salle des chaudières, carrés, cabine du capitaine, et une arène sur "
+         "le gaillard d'avant.", "s-icebound_fleet", "struct:icebound_fleet"),
+        ("L'Asile mécanique", "Un sanatorium gothique sur une colline de forêt sombre, devenu atelier "
+         "d'automates : une tour de l'horloge aux cadrans fêlés, des ailes de cellules grillagées, un amphithéâtre "
+         "opératoire, des bains d'hydrothérapie, un funiculaire, et une arène derrière le cadran de l'horloge.",
+         "s-clockwork_asylum", "struct:clockwork_asylum"),
         ("Le Cimetière des dirigeables", "Un champ d'épaves dans la savane autour d'un mât d'amarrage haut de 90 "
          "blocs : un dirigeable encore amarré sous son enveloppe dégonflée, des épaves écrasées, le bidonville des "
          "ferrailleurs, une usine à gaz, et une arène sur le pont supérieur du dirigeable.", "s-airship_graveyard",
@@ -2167,6 +2342,18 @@ TEST_CHECKLIST = [
      "avant que le sol sonne et vérifie que les bourgeons d'améthyste disparaissent ; à 65 %, entre dans le silence "
      "et frappe-le pour le révéler ; à 30 %, esquive les souffles de tuyau et tiens-toi dans les brèches du requiem. "
      "Pour le vrai repaire : /brasshaven tp echo_cathedral (le chœur et l'abside, devant l'orgue)."),
+    ("Le Chauffeur des âmes", ["/brasshaven boss soul_stoker"],
+     "Il apparaît à 6 blocs. Pas de côté pour la pelletée puis sors des cercles des braises, quitte la ligne du piston "
+     "avant qu'elle rougisse, sors du cône quand il attise, quitte chaque évent avant qu'il rougisse ; à 65 %, "
+     "écarte-toi du couloir de la charge et tue les squelettes wither ; à 30 %, change de bande à chaque pulsation "
+     "du pont et tiens-toi dans les brèches des anneaux. Vérifie qu'aucun coup ne te jette dans la tranchée. Pour le "
+     "vrai repaire : /brasshaven tp soul_engine (le pont du vilebrequin, dans le carter)."),
+    ("La Directrice de l'asile", ["/brasshaven boss asylum_director"],
+     "Elle apparaît à 6 blocs. Fais un pas de côté hors de la ligne du scalpel, recule hors de l'arc de la scie, "
+     "esquive la fléchette ; quand un fantôme d'horloge se forme à tes pieds, éloigne-toi puis sors de son cercle dès "
+     "que tu y es ramené ; sors des couloirs du pendule et tue les araignées ; à 65 %, passe d'un quart à l'autre "
+     "pendant la dissection ; à 30 %, saute l'onde de minuit et suis la brèche dorée entre les aiguilles. Pour le "
+     "vrai repaire : /brasshaven tp clockwork_asylum (l'étage de l'horloge, en haut de la tour)."),
     ("La Reine-figuier étrangleur", ["/brasshaven boss strangler_queen"],
      "Elle apparaît à 6 blocs. Écarte-toi de la ligne du fouet, glisse-toi entre les lignes de racines, saute les "
      "anneaux, sors du pollen ; à 65 %, tue les esprits-jaguars pour la faire chuter et sors des cercles des "

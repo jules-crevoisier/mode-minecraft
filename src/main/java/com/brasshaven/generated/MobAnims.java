@@ -997,6 +997,43 @@ public final class MobAnims {
 
         private HollowCantor() {}
     }
+    public static final class SoulStoker {
+        public static final int SHOVEL = 0;
+        public static final int PISTON = 1;
+        public static final int STOKE = 2;
+        public static final int VENTS = 3;
+        public static final int THRALLS = 4;
+        public static final int CHARGE = 5;
+        public static final int OVERPRESSURE = 6;
+        public static final int RINGBLAST = 7;
+        public static final int ROAR = 8;
+        public static final int STAGGER = 9;
+        public static final int COUNT = 10;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {52, 58, 76, 68, 46, 56, 80, 76, 40, 40};
+
+        private SoulStoker() {}
+    }
+    public static final class AsylumDirector {
+        public static final int SCALPEL = 0;
+        public static final int SAW = 1;
+        public static final int SYRINGE = 2;
+        public static final int REWIND = 3;
+        public static final int PENDULUM = 4;
+        public static final int SPIDERS = 5;
+        public static final int FORCEPS = 6;
+        public static final int DISSECT = 7;
+        public static final int TIMESLIP = 8;
+        public static final int MIDNIGHT = 9;
+        public static final int HANDS = 10;
+        public static final int ROAR = 11;
+        public static final int STAGGER = 12;
+        public static final int COUNT = 13;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {36, 54, 42, 42, 74, 36, 52, 60, 22, 80, 226, 40, 40};
+
+        private AsylumDirector() {}
+    }
     public static final class GlowJellyfish {
 
         public static final int COUNT = 0;

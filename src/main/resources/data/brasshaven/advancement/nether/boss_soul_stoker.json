@@ -1,0 +1,37 @@
+{
+  "display": {
+    "icon": {
+      "id": "brasshaven:stoker_shovel"
+    },
+    "title": {
+      "translate": "advancements.brasshaven.nether.boss_soul_stoker.title"
+    },
+    "description": {
+      "translate": "advancements.brasshaven.nether.boss_soul_stoker.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "kill": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "entity_type": "brasshaven:soul_stoker"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "parent": "brasshaven:nether/soul_engine",
+  "rewards": {
+    "experience": 500
+  }
+}

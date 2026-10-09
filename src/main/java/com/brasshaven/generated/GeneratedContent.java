@@ -80,14 +80,17 @@ public final class GeneratedContent {
             new StructureInfo("starfall_library", "end"),
             new StructureInfo("airship_graveyard", "overworld"),
             new StructureInfo("echo_cathedral", "overworld"),
-            new StructureInfo("cloud_pagoda", "overworld")
+            new StructureInfo("cloud_pagoda", "overworld"),
+            new StructureInfo("icebound_fleet", "overworld"),
+            new StructureInfo("soul_engine", "nether"),
+            new StructureInfo("clockwork_asylum", "overworld")
     );
 
     public static final List<Chapter> CHAPTERS = List.of(
             new Chapter("first_steps", List.of("first_steps/guild_outpost", "first_steps/map_fragment", "first_steps/waystone", "first_steps/sorting_chest", "first_steps/guild_terminal", "first_steps/backpack", "first_steps/blade", "first_steps/explorer_armor")),
-            new Chapter("explorer", List.of("explorer/mountain_monastery", "explorer/forgotten_library", "explorer/coastal_lighthouse", "explorer/giant_tree", "explorer/desert_oasis", "explorer/witch_huts", "explorer/sky_island", "explorer/jungle_ziggurat", "explorer/ruined_watchtower", "explorer/bandit_camp", "explorer/rune_circle", "explorer/ice_observatory", "explorer/galleon_wreck", "explorer/sunken_temple", "explorer/forgotten_catacombs", "explorer/sand_hypogeum", "explorer/clockwork_citadel", "explorer/sky_harbour", "explorer/sylvan_palace", "explorer/inventor_manor", "explorer/sky_isles", "explorer/geothermal_foundry", "explorer/tesla_observatory", "explorer/sunken_submarine", "explorer/diving_bell", "explorer/coral_shrine", "explorer/shipwreck_debris", "explorer/walking_fortress", "explorer/rock_necropolis", "explorer/fallen_colossus", "explorer/pilgrims_ascent", "explorer/tidal_abbey", "explorer/caldera_ringwall", "explorer/glacier_hall", "explorer/kneeling_gate", "explorer/drowned_dam", "explorer/mire_stilt_city", "explorer/inverted_spire", "explorer/great_aqueduct", "explorer/sun_ziggurat", "explorer/dreadnought_wreck", "explorer/canopy_city", "explorer/mesa_minecity", "explorer/airship_graveyard", "explorer/cloud_pagoda", "explorer/master_cartographer", "explorer/boss_bell_keeper", "explorer/boss_archivist", "explorer/boss_sand_pharaoh", "explorer/boss_jade_jaguar", "explorer/boss_root_mother", "explorer/boss_swamp_crone", "explorer/boss_gryphon_knight", "explorer/boss_rune_colossus", "explorer/boss_grave_knight", "explorer/boss_bone_matriarch", "explorer/boss_grand_clockmaker", "explorer/boss_iron_helmsman", "explorer/boss_bronze_sentinel", "explorer/boss_dune_king", "explorer/boss_caldera_castellan", "explorer/boss_oathbound_gatekeeper", "explorer/boss_frost_jarl", "explorer/boss_storm_ascetic", "explorer/boss_tide_abbess", "explorer/boss_abyssal_architect", "explorer/boss_lock_master", "explorer/boss_bog_hierophant", "explorer/boss_strangler_queen", "explorer/boss_solar_hierarch", "explorer/boss_drowned_admiral", "explorer/boss_turbine_tyrant", "explorer/boss_fourth_king", "explorer/boss_colossus_heart", "explorer/boss_mine_baron", "explorer/boss_chime_abbot", "explorer/boss_corsair_captain")),
+            new Chapter("explorer", List.of("explorer/mountain_monastery", "explorer/forgotten_library", "explorer/coastal_lighthouse", "explorer/giant_tree", "explorer/desert_oasis", "explorer/witch_huts", "explorer/sky_island", "explorer/jungle_ziggurat", "explorer/ruined_watchtower", "explorer/bandit_camp", "explorer/rune_circle", "explorer/ice_observatory", "explorer/galleon_wreck", "explorer/sunken_temple", "explorer/forgotten_catacombs", "explorer/sand_hypogeum", "explorer/clockwork_citadel", "explorer/sky_harbour", "explorer/sylvan_palace", "explorer/inventor_manor", "explorer/sky_isles", "explorer/geothermal_foundry", "explorer/tesla_observatory", "explorer/sunken_submarine", "explorer/diving_bell", "explorer/coral_shrine", "explorer/shipwreck_debris", "explorer/walking_fortress", "explorer/rock_necropolis", "explorer/fallen_colossus", "explorer/pilgrims_ascent", "explorer/tidal_abbey", "explorer/caldera_ringwall", "explorer/glacier_hall", "explorer/kneeling_gate", "explorer/drowned_dam", "explorer/mire_stilt_city", "explorer/inverted_spire", "explorer/great_aqueduct", "explorer/sun_ziggurat", "explorer/dreadnought_wreck", "explorer/canopy_city", "explorer/mesa_minecity", "explorer/airship_graveyard", "explorer/cloud_pagoda", "explorer/icebound_fleet", "explorer/clockwork_asylum", "explorer/master_cartographer", "explorer/boss_bell_keeper", "explorer/boss_archivist", "explorer/boss_sand_pharaoh", "explorer/boss_jade_jaguar", "explorer/boss_root_mother", "explorer/boss_swamp_crone", "explorer/boss_gryphon_knight", "explorer/boss_rune_colossus", "explorer/boss_grave_knight", "explorer/boss_bone_matriarch", "explorer/boss_grand_clockmaker", "explorer/boss_iron_helmsman", "explorer/boss_bronze_sentinel", "explorer/boss_dune_king", "explorer/boss_caldera_castellan", "explorer/boss_oathbound_gatekeeper", "explorer/boss_frost_jarl", "explorer/boss_storm_ascetic", "explorer/boss_tide_abbess", "explorer/boss_abyssal_architect", "explorer/boss_lock_master", "explorer/boss_bog_hierophant", "explorer/boss_strangler_queen", "explorer/boss_solar_hierarch", "explorer/boss_drowned_admiral", "explorer/boss_turbine_tyrant", "explorer/boss_fourth_king", "explorer/boss_colossus_heart", "explorer/boss_mine_baron", "explorer/boss_chime_abbot", "explorer/boss_corsair_captain", "explorer/boss_asylum_director")),
             new Chapter("depths", List.of("depths/lithite", "depths/dwarven_mine", "depths/dwarven_forge", "depths/crystal_grotto", "depths/sealed_lab", "depths/lithite_well", "depths/undercity", "depths/dwarven_city", "depths/crystal_cathedral", "depths/echo_cathedral", "depths/telluric_hammer", "depths/excavator_pickaxe", "depths/lumber_axe", "depths/frost_blade", "depths/boomerang", "depths/sunken_citadel", "depths/drowned_warden", "depths/boss_forge_king", "depths/boss_crystal_spider", "depths/boss_sculk_spawn", "depths/boss_weeping_lady", "depths/boss_hollow_cantor")),
-            new Chapter("nether", List.of("nether/enter", "nether/basalt_fortress", "nether/chain_bridge", "nether/piglin_sanctuary", "nether/lava_foundry", "nether/soul_tower", "nether/piglin_market", "nether/chained_bastion", "nether/titan_forge", "nether/ancient_ember", "nether/ember_scythe", "nether/storm_staff", "nether/ember_armor", "nether/all", "nether/boss_ash_lord", "nether/boss_piglin_king", "nether/boss_soul_reaper", "nether/boss_chained_jailer", "nether/boss_anvil_warden")),
+            new Chapter("nether", List.of("nether/enter", "nether/basalt_fortress", "nether/chain_bridge", "nether/piglin_sanctuary", "nether/lava_foundry", "nether/soul_tower", "nether/piglin_market", "nether/chained_bastion", "nether/titan_forge", "nether/soul_engine", "nether/ancient_ember", "nether/ember_scythe", "nether/storm_staff", "nether/ember_armor", "nether/all", "nether/boss_ash_lord", "nether/boss_piglin_king", "nether/boss_soul_reaper", "nether/boss_chained_jailer", "nether/boss_anvil_warden", "nether/boss_soul_stoker")),
             new Chapter("end", List.of("end/enter", "end/void_observatory", "end/chorus_garden", "end/end_archive", "end/void_ship", "end/void_nest", "end/void_crypt", "end/shattered_halo", "end/starfall_library", "end/void_shard", "end/void_spear", "end/void_armor", "end/void_warden", "end/boss_larva_mother", "end/boss_fallen_seraph", "end/boss_star_curator", "end/legends_bane", "end/legend"))
     );
 
@@ -177,6 +180,9 @@ public final class GeneratedContent {
             java.util.Map.entry("airship_graveyard", List.of("The Airship Graveyard", "Le Cimetière des dirigeables")),
             java.util.Map.entry("echo_cathedral", List.of("The Echo Cathedral", "La Cathédrale de l'Écho")),
             java.util.Map.entry("cloud_pagoda", List.of("The Cloud Pagoda", "La Pagode des nuages")),
+            java.util.Map.entry("icebound_fleet", List.of("The Icebound Fleet", "La Flotte prise dans les glaces")),
+            java.util.Map.entry("soul_engine", List.of("The Soul Engine", "Le Moteur des âmes")),
+            java.util.Map.entry("clockwork_asylum", List.of("The Clockwork Asylum", "L'Asile mécanique")),
             java.util.Map.entry("village", List.of("Village", "Village"))
     );
 
@@ -226,6 +232,7 @@ public final class GeneratedContent {
             java.util.Map.entry("explorer/bandit_camp", "40|brasshaven:map_fragment*2"),
             java.util.Map.entry("explorer/boss_abyssal_architect", "500|"),
             java.util.Map.entry("explorer/boss_archivist", "500|"),
+            java.util.Map.entry("explorer/boss_asylum_director", "500|"),
             java.util.Map.entry("explorer/boss_bell_keeper", "500|"),
             java.util.Map.entry("explorer/boss_bog_hierophant", "500|"),
             java.util.Map.entry("explorer/boss_bone_matriarch", "250|"),
@@ -257,6 +264,7 @@ public final class GeneratedContent {
             java.util.Map.entry("explorer/boss_turbine_tyrant", "500|"),
             java.util.Map.entry("explorer/caldera_ringwall", "40|brasshaven:map_fragment*2"),
             java.util.Map.entry("explorer/canopy_city", "40|brasshaven:map_fragment*2"),
+            java.util.Map.entry("explorer/clockwork_asylum", "40|brasshaven:map_fragment*2"),
             java.util.Map.entry("explorer/clockwork_citadel", "40|brasshaven:map_fragment*2"),
             java.util.Map.entry("explorer/cloud_pagoda", "40|brasshaven:map_fragment*2"),
             java.util.Map.entry("explorer/coastal_lighthouse", "40|brasshaven:map_fragment*2"),
@@ -274,6 +282,7 @@ public final class GeneratedContent {
             java.util.Map.entry("explorer/glacier_hall", "40|brasshaven:map_fragment*2"),
             java.util.Map.entry("explorer/great_aqueduct", "40|brasshaven:map_fragment*2"),
             java.util.Map.entry("explorer/ice_observatory", "40|brasshaven:map_fragment*2"),
+            java.util.Map.entry("explorer/icebound_fleet", "40|brasshaven:map_fragment*2"),
             java.util.Map.entry("explorer/inventor_manor", "40|brasshaven:map_fragment*2"),
             java.util.Map.entry("explorer/inverted_spire", "40|brasshaven:map_fragment*2"),
             java.util.Map.entry("explorer/jungle_ziggurat", "40|brasshaven:map_fragment*2"),
@@ -315,6 +324,7 @@ public final class GeneratedContent {
             java.util.Map.entry("nether/boss_chained_jailer", "500|"),
             java.util.Map.entry("nether/boss_piglin_king", "500|"),
             java.util.Map.entry("nether/boss_soul_reaper", "500|"),
+            java.util.Map.entry("nether/boss_soul_stoker", "500|"),
             java.util.Map.entry("nether/chain_bridge", "60|brasshaven:map_fragment*2"),
             java.util.Map.entry("nether/chained_bastion", "60|brasshaven:map_fragment*2"),
             java.util.Map.entry("nether/ember_armor", "100|"),
@@ -323,6 +333,7 @@ public final class GeneratedContent {
             java.util.Map.entry("nether/lava_foundry", "60|brasshaven:map_fragment*2"),
             java.util.Map.entry("nether/piglin_market", "60|brasshaven:map_fragment*2"),
             java.util.Map.entry("nether/piglin_sanctuary", "60|brasshaven:map_fragment*2"),
+            java.util.Map.entry("nether/soul_engine", "60|brasshaven:map_fragment*2"),
             java.util.Map.entry("nether/soul_tower", "60|brasshaven:map_fragment*2"),
             java.util.Map.entry("nether/storm_staff", "40|"),
             java.util.Map.entry("nether/titan_forge", "60|brasshaven:map_fragment*2"),

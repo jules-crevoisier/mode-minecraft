@@ -58,6 +58,8 @@ from . import mine_baron
 from . import chime_abbot
 from . import corsair_captain
 from . import hollow_cantor
+from . import soul_stoker
+from . import asylum_director
 # living oceans
 from . import glow_jellyfish
 from . import reef_fish
@@ -162,6 +164,8 @@ MODELS = [
     chime_abbot.build,
     corsair_captain.build,
     hollow_cantor.build,
+    soul_stoker.build,
+    asylum_director.build,
     glow_jellyfish.build,
     reef_fish.build,
     manta_ray.build,
