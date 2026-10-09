@@ -803,6 +803,94 @@ def drillpick(a):
     a.px(12, 3, "F", "light")
 
 
+@painted("ice_anchor")
+def ice_anchor(a):
+    """Ice Anchor of the Frozen Commodore: a dark-iron grip with a brass ring at the bottom left and a few steel chain
+    links trailing from it, a brass-capped stock, a heavy shank and a broad crown with spade flukes at the top right,
+    crusted with pale ice, an icicle hanging under each fluke and a cold blue glint at the crown."""
+    import math as _m
+    shaft(a, 5, key="X", grip=(1, 4), butt=None)
+    a.disc("B", 1.5, 14.5, 1.6)                               # the ring at the butt
+    a.clear(lambda x, y: (x - 1.5) ** 2 + (y - 14.5) ** 2 < 0.5)
+    for x, y, t in ((0, 12, "light"), (0, 11, "dark"), (1, 10, "light")):
+        a.px(x, y, "I", t)                                    # the chain trailing off the ring
+    a.seg("X", 3.0, 8.0, 7.5, 12.5, 0.7)                      # the stock
+    a.px(3, 8, "B", "light")
+    a.px(7, 12, "B", "dark")
+    diag(a, "X", 5, 10, 6)                                    # the shank
+    cx, cy, r = 9.0, 6.2, 5.6
+
+    def arm(x, y):
+        d = _m.hypot(x - cx, y - cy)
+        ang = _m.degrees(_m.atan2(y - cy, x - cx))
+        off = abs(((ang + 45) + 180) % 360 - 180)
+        return r - 1.2 <= d <= r + 0.6 and off <= 80
+    a.paint("M", arm)
+    for sgn in (-1, 1):                                       # spade flukes and their icicles
+        t = _m.radians(-45 + sgn * 80)
+        fx, fy = cx + _m.cos(t) * r, cy + _m.sin(t) * r
+        a.disc("M", fx, fy, 1.7)
+        a.px(fx - 0.5, fy - 0.5, "M", "light")
+    a.shade_dir("M", -0.5, 1.0)
+    for x, y in ((14, 8), (14, 9), (3, 2), (2, 3)):
+        a.px(x, y, "G", "light")                              # the icicles
+    for x, y in ((8, 2), (11, 2), (13, 4), (7, 3)):
+        a.px(x, y, "G", "shine")                              # frost on the crown
+    a.px(7, 8, "G", "light")
+    a.px(6, 9, "G", "mid")
+    a.px(11, 4, "A", "light")                                 # the cold glint
+    a.px(10, 5, "A", "mid")
+
+
+@painted("spore_staff")
+def spore_staff(a):
+    """Stirring Staff of the Spore Alchemist: a long dark pole from the bottom left with a brass ferrule and a
+    wrapped grip, a little red-capped mushroom (white warts) growing off the pole with a white thread hanging under
+    it, and at the top right a round glass flask of glowing green brew on a brass collar, corked."""
+    shaft(a, 10, key="H", grip=(1, 4))
+    a.px(4, 11, "B", "light")                                 # a brass collar
+    a.px(5, 11, "B", "dark")
+    a.seg("Q", 6.6, 8.4, 7.6, 7.4, 0.5)                       # the mushroom's stalk off the pole
+    a.disc("M", 8.0, 6.2, 1.6, "dark")                        # its red cap
+    a.px(8, 5, "M", "mid")
+    a.px(7, 6, "Q", "light")                                  # warts
+    a.px(9, 6, "Q", "light")
+    a.px(6, 9, "Q", "mid")                                    # a mycelium thread
+    a.px(6, 10, "Q", "dark")
+    a.px(10, 5, "B", "light")                                 # the flask's collar
+    a.px(11, 4, "B", "dark")
+    a.disc("A", 12.4, 2.8, 2.3)                               # the flask of glowing brew
+    a.shade_dir("A", -0.5, 1.0)
+    a.px(11, 2, "G", "shine")                                 # the glint on the glass
+    a.px(13, 1, "G", "light")
+    a.px(14, 0, "W", "light")                                 # the cork
+
+
+@painted("pruning_shears")
+def pruning_shears(a):
+    """Pruning Shears of the Head Gardener: long loppers on the diagonal. Two red-lacquered grips with brass end caps
+    at the bottom left, a brass pivot bolt in the middle, two long steel blades opening in a narrow V toward the top
+    right with hooked points, and a sprig of green ivy round the bolt."""
+    a.seg("Z", 0.8, 13.6, 6.2, 8.4, 0.75)                     # the two grips, slightly apart
+    a.seg("Z", 2.4, 15.0, 7.4, 9.8, 0.75)
+    a.shade_dir("Z", -0.5, 1.0)
+    a.px(0, 14, "B", "light")                                 # their brass end caps
+    a.px(2, 15, "B", "dark")
+    a.disc("B", 7.2, 8.8, 1.3)                                # the pivot bolt
+    a.px(7, 8, "B", "light")
+    a.seg("I", 7.8, 7.6, 12.0, 1.4, 0.7)                      # the upper blade
+    a.seg("I", 8.6, 8.4, 14.6, 4.0, 0.7)                      # the lower blade
+    a.shade_dir("I", -0.5, 1.0)
+    a.px(12, 1, "I", "shine")                                 # the hooked points
+    a.px(15, 3, "I", "shine")
+    a.px(13, 1, "I", "dark")
+    a.px(14, 4, "I", "dark")
+    a.px(10, 5, "I", "shine")                                 # the ground edges
+    a.px(11, 5, "I", "light")
+    for x, y, t in ((5, 9, "light"), (6, 10, "mid"), (8, 10, "dark"), (9, 9, "light")):
+        a.px(x, y, "A", t)                                    # the ivy
+
+
 @painted("bone_saw")
 def bone_saw(a):
     """Bone-Saw of the Asylum Director: a mahogany handle at the bottom left with a brass guard, a long steel blade

@@ -293,6 +293,15 @@ public final class ModEntities {
     public static final RegistryObject<EntityType<com.brasshaven.entity.boss.AsylumDirector>> ASYLUM_DIRECTOR = ENTITIES.register("asylum_director",
             () -> EntityType.Builder.<com.brasshaven.entity.boss.AsylumDirector>of(com.brasshaven.entity.boss.AsylumDirector::new, MobCategory.MONSTER)
                     .sized(com.brasshaven.entity.boss.AsylumDirector.WIDTH, com.brasshaven.entity.boss.AsylumDirector.HEIGHT).fireImmune().clientTrackingRange(10).build(ENTITIES.key("asylum_director")));
+    public static final RegistryObject<EntityType<com.brasshaven.entity.boss.FrostCommodore>> FROST_COMMODORE = ENTITIES.register("frost_commodore",
+            () -> EntityType.Builder.<com.brasshaven.entity.boss.FrostCommodore>of(com.brasshaven.entity.boss.FrostCommodore::new, MobCategory.MONSTER)
+                    .sized(com.brasshaven.entity.boss.FrostCommodore.WIDTH, com.brasshaven.entity.boss.FrostCommodore.HEIGHT).clientTrackingRange(10).build(ENTITIES.key("frost_commodore")));
+    public static final RegistryObject<EntityType<com.brasshaven.entity.boss.SporeAlchemist>> SPORE_ALCHEMIST = ENTITIES.register("spore_alchemist",
+            () -> EntityType.Builder.<com.brasshaven.entity.boss.SporeAlchemist>of(com.brasshaven.entity.boss.SporeAlchemist::new, MobCategory.MONSTER)
+                    .sized(com.brasshaven.entity.boss.SporeAlchemist.WIDTH, com.brasshaven.entity.boss.SporeAlchemist.HEIGHT).clientTrackingRange(10).build(ENTITIES.key("spore_alchemist")));
+    public static final RegistryObject<EntityType<com.brasshaven.entity.boss.ThornGardener>> THORN_GARDENER = ENTITIES.register("thorn_gardener",
+            () -> EntityType.Builder.<com.brasshaven.entity.boss.ThornGardener>of(com.brasshaven.entity.boss.ThornGardener::new, MobCategory.MONSTER)
+                    .sized(com.brasshaven.entity.boss.ThornGardener.WIDTH, com.brasshaven.entity.boss.ThornGardener.HEIGHT).clientTrackingRange(10).build(ENTITIES.key("thorn_gardener")));
     public static final RegistryObject<EntityType<ColossusHeart>> COLOSSUS_HEART = ENTITIES.register("colossus_heart",
             () -> EntityType.Builder.<ColossusHeart>of(ColossusHeart::new, MobCategory.MONSTER)
                     .sized(ColossusHeart.WIDTH, ColossusHeart.HEIGHT).clientTrackingRange(10).build(ENTITIES.key("colossus_heart")));
@@ -423,7 +432,7 @@ public final class ModEntities {
 
     /** Every boss with an Elden Ring style fight (demo command, quests). */
     public static List<RegistryObject<? extends EntityType<? extends com.brasshaven.boss.WayfarerBoss>>> bosses() {
-        return List.of(DROWNED_WARDEN, VOID_WARDEN, GRAVE_KNIGHT, BONE_MATRIARCH, WEEPING_LADY, LARVA_MOTHER, BELL_KEEPER, ARCHIVIST, SAND_PHARAOH, JADE_JAGUAR, ROOT_MOTHER, SWAMP_CRONE, GRYPHON_KNIGHT, RUNE_COLOSSUS, FORGE_KING, CRYSTAL_SPIDER, SCULK_SPAWN, ASH_LORD, PIGLIN_KING, SOUL_REAPER, GRAND_CLOCKMAKER, IRON_HELMSMAN, BRONZE_SENTINEL, DUNE_KING, FALLEN_SERAPH, CHAINED_JAILER, CALDERA_CASTELLAN, FROST_JARL, OATHBOUND_GATEKEEPER, STORM_ASCETIC, TIDE_ABBESS, LOCK_MASTER, BOG_HIEROPHANT, SOLAR_HIERARCH, DROWNED_ADMIRAL, TURBINE_TYRANT, ABYSSAL_ARCHITECT, STRANGLER_QUEEN, FOURTH_KING, COLOSSUS_HEART, ANVIL_WARDEN, STAR_CURATOR, MINE_BARON, CHIME_ABBOT, CORSAIR_CAPTAIN, HOLLOW_CANTOR, SOUL_STOKER, ASYLUM_DIRECTOR);
+        return List.of(DROWNED_WARDEN, VOID_WARDEN, GRAVE_KNIGHT, BONE_MATRIARCH, WEEPING_LADY, LARVA_MOTHER, BELL_KEEPER, ARCHIVIST, SAND_PHARAOH, JADE_JAGUAR, ROOT_MOTHER, SWAMP_CRONE, GRYPHON_KNIGHT, RUNE_COLOSSUS, FORGE_KING, CRYSTAL_SPIDER, SCULK_SPAWN, ASH_LORD, PIGLIN_KING, SOUL_REAPER, GRAND_CLOCKMAKER, IRON_HELMSMAN, BRONZE_SENTINEL, DUNE_KING, FALLEN_SERAPH, CHAINED_JAILER, CALDERA_CASTELLAN, FROST_JARL, OATHBOUND_GATEKEEPER, STORM_ASCETIC, TIDE_ABBESS, LOCK_MASTER, BOG_HIEROPHANT, SOLAR_HIERARCH, DROWNED_ADMIRAL, TURBINE_TYRANT, ABYSSAL_ARCHITECT, STRANGLER_QUEEN, FOURTH_KING, COLOSSUS_HEART, ANVIL_WARDEN, STAR_CURATOR, MINE_BARON, CHIME_ABBOT, CORSAIR_CAPTAIN, HOLLOW_CANTOR, SOUL_STOKER, ASYLUM_DIRECTOR, FROST_COMMODORE, SPORE_ALCHEMIST, THORN_GARDENER);
     }
 
     public static void registerAttributes(EntityAttributeCreationEvent event) {
@@ -490,6 +499,9 @@ public final class ModEntities {
         event.put(HOLLOW_CANTOR.get(), com.brasshaven.entity.boss.HollowCantor.attributes().build());
         event.put(SOUL_STOKER.get(), com.brasshaven.entity.boss.SoulStoker.attributes().build());
         event.put(ASYLUM_DIRECTOR.get(), com.brasshaven.entity.boss.AsylumDirector.attributes().build());
+        event.put(FROST_COMMODORE.get(), com.brasshaven.entity.boss.FrostCommodore.attributes().build());
+        event.put(SPORE_ALCHEMIST.get(), com.brasshaven.entity.boss.SporeAlchemist.attributes().build());
+        event.put(THORN_GARDENER.get(), com.brasshaven.entity.boss.ThornGardener.attributes().build());
         event.put(SOLAR_HIERARCH.get(), SolarHierarch.attributes().build());
         event.put(GLOW_JELLYFISH.get(), GlowJellyfish.attributes().build());
         event.put(REEF_FISH.get(), ReefFish.attributes().build());

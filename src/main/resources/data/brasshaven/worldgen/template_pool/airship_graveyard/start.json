@@ -412,10 +412,10 @@
             ],
             "size": [
               28,
-              101,
+              102,
               29
             ],
-            "blocks": 21237
+            "blocks": 21240
           },
           {
             "location": "brasshaven:airship_graveyard/field/x4_z3",
@@ -426,10 +426,10 @@
             ],
             "size": [
               28,
-              101,
+              102,
               29
             ],
-            "blocks": 25682
+            "blocks": 25685
           },
           {
             "location": "brasshaven:airship_graveyard/field/x4_z4",
@@ -510,10 +510,10 @@
             ],
             "size": [
               29,
-              101,
+              102,
               29
             ],
-            "blocks": 19029
+            "blocks": 19031
           },
           {
             "location": "brasshaven:airship_graveyard/field/x5_z3",
@@ -527,7 +527,7 @@
               103,
               29
             ],
-            "blocks": 22815
+            "blocks": 22817
           },
           {
             "location": "brasshaven:airship_graveyard/field/x5_z4",

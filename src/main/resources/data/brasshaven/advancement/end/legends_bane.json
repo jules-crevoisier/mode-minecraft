@@ -630,6 +630,48 @@
           }
         ]
       }
+    },
+    "frost_commodore": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "entity_type": "brasshaven:frost_commodore"
+            }
+          }
+        ]
+      }
+    },
+    "spore_alchemist": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "entity_type": "brasshaven:spore_alchemist"
+            }
+          }
+        ]
+      }
+    },
+    "thorn_gardener": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "entity_type": "brasshaven:thorn_gardener"
+            }
+          }
+        ]
+      }
     }
   },
   "parent": "brasshaven:end/void_warden",

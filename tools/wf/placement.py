@@ -127,10 +127,12 @@ FAMILIES = [
         "cloud_pagoda": 1,
         "icebound_fleet": 1,
         "clockwork_asylum": 1,
+        "spore_refinery": 1,
     }, avoid=[(V + "villages", 10), (V + "pillager_outposts", 6), (V + "woodland_mansions", 8)], min_spawn=32,
         note="surface wonders; at least 40 chunks between two of them, none within 512 blocks of 0,0"),
     Family("deep_wonders", "deep_wonder", 72, 28, {
         "undercity": 1, "dwarven_city": 1, "crystal_cathedral": 1, "echo_cathedral": 1,
+        "verdant_arboretum": 1,
     }, avoid=[(V + "ancient_cities", 8), (V + "trial_chambers", 4)], min_spawn=32,
         note="underground wonders"),
     Family("landmarks", "medium", 60, 24, {
@@ -253,6 +255,7 @@ FIT = {
     # pack ice on flat snow or a frozen sea's edge: the water surface counts as ground, the ice field comes with it
     "icebound_fleet": _f("wetland", spread=5, slope=0.9, wet=0.95, min_wet=0.0, drop=2),
     "clockwork_asylum": _f("land", spread=22, slope=1.4, wet=0.05),  # dark forest / pale garden: brings its own hill and yard
+    "spore_refinery": _f("land", spread=12, slope=1.0, wet=0.2),  # mushroom island / old-growth taiga: lays its own mycelium disc
     # ---- coast: the dock side (template +z = south) in the sea, the cape on land, shore near sea level
     "coastal_lighthouse": _f("coast", sea_side="south", wet=0.5, land=0.5, spread=8, slope=1.0),
     # the island (south) in the sea, the causeway's shore end (north) on the beach: the strand lands at sea level
@@ -275,6 +278,7 @@ FIT = {
     "dwarven_city": _f("underground", cover=10, lift=2),
     "crystal_cathedral": _f("underground", cover=10, lift=6),
     "echo_cathedral": _f("underground", cover=10, lift=2),
+    "verdant_arboretum": _f("underground", cover=10, lift=6),   # carves its own lush cavern round the dome
     # ---- Nether: open air (or the lava sea) above the deck
     "basalt_fortress": _f("cavern", open=0.3),
     "chain_bridge": _f("cavern", open=0.6),

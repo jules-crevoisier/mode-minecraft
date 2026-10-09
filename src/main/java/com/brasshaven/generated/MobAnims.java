@@ -1034,6 +1034,59 @@ public final class MobAnims {
 
         private AsylumDirector() {}
     }
+    public static final class FrostCommodore {
+        public static final int ANCHOR = 0;
+        public static final int THROW = 1;
+        public static final int SPIKES = 2;
+        public static final int BREATH = 3;
+        public static final int HURL = 4;
+        public static final int STRAYS = 5;
+        public static final int FLARE = 6;
+        public static final int BLIZZARD = 7;
+        public static final int RAMSHOCK = 8;
+        public static final int ROAR = 9;
+        public static final int STAGGER = 10;
+        public static final int COUNT = 11;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {54, 74, 64, 70, 46, 46, 38, 80, 86, 40, 40};
+
+        private FrostCommodore() {}
+    }
+    public static final class SporeAlchemist {
+        public static final int STAFF = 0;
+        public static final int SPRAY = 1;
+        public static final int FLASK = 2;
+        public static final int SPROUT = 3;
+        public static final int SHROUD = 4;
+        public static final int BOGGED = 5;
+        public static final int BLOOM = 6;
+        public static final int EXHALE = 7;
+        public static final int ROAR = 8;
+        public static final int STAGGER = 9;
+        public static final int COUNT = 10;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {50, 60, 44, 42, 74, 46, 80, 76, 40, 40};
+
+        private SporeAlchemist() {}
+    }
+    public static final class ThornGardener {
+        public static final int SNIP = 0;
+        public static final int LUNGE = 1;
+        public static final int THORNS = 2;
+        public static final int SNARE = 3;
+        public static final int SPRAY = 4;
+        public static final int CALL = 5;
+        public static final int POLLEN = 6;
+        public static final int IGNITE = 7;
+        public static final int PHOTOSYNTH = 8;
+        public static final int ROAR = 9;
+        public static final int STAGGER = 10;
+        public static final int COUNT = 11;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {44, 50, 58, 48, 60, 46, 44, 80, 96, 40, 40};
+
+        private ThornGardener() {}
+    }
     public static final class GlowJellyfish {
 
         public static final int COUNT = 0;

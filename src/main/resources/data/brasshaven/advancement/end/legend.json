@@ -1214,6 +1214,38 @@
           }
         ]
       }
+    },
+    "spore_refinery": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:spore_refinery"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "verdant_arboretum": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:verdant_arboretum"
+              }
+            }
+          }
+        ]
+      }
     }
   },
   "parent": "brasshaven:end/void_warden",

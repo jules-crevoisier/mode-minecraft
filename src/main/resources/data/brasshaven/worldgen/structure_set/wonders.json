@@ -103,6 +103,10 @@
     {
       "structure": "brasshaven:clockwork_asylum",
       "weight": 1
+    },
+    {
+      "structure": "brasshaven:spore_refinery",
+      "weight": 1
     }
   ],
   "placement": {

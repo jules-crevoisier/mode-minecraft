@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    " M ",
+    "MRM",
+    "DMD"
+  ],
+  "key": {
+    "M": "brasshaven:map_fragment",
+    "R": "brasshaven:remembrance_spore_alchemist",
+    "D": "minecraft:diamond"
+  },
+  "result": {
+    "id": "brasshaven:alchemist_staff",
+    "count": 1
+  }
+}

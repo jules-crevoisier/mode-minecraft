@@ -15,6 +15,10 @@
     {
       "structure": "brasshaven:echo_cathedral",
       "weight": 1
+    },
+    {
+      "structure": "brasshaven:verdant_arboretum",
+      "weight": 1
     }
   ],
   "placement": {

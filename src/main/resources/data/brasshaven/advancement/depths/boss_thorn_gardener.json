@@ -1,0 +1,37 @@
+{
+  "display": {
+    "icon": {
+      "id": "brasshaven:gardener_shears"
+    },
+    "title": {
+      "translate": "advancements.brasshaven.depths.boss_thorn_gardener.title"
+    },
+    "description": {
+      "translate": "advancements.brasshaven.depths.boss_thorn_gardener.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "kill": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "entity_type": "brasshaven:thorn_gardener"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "parent": "brasshaven:depths/verdant_arboretum",
+  "rewards": {
+    "experience": 500
+  }
+}

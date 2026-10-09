@@ -1237,7 +1237,7 @@ def chapel_furnish(S, sx, i, z0, z1):
     face = "west" if sx > 0 else "east"
     for z in range(zm - 1, zm + 2):
         bp.set(xa, 1, z, CHI if z == zm else POL)
-        bp.set(xa, 2, z, slab(POL_SL))
+        bp.set(xa, 2, z, slab(POL_SL) if z != zm else POL)      # a full block in the middle holds the candles
     bp.set(sx * 26, 5, zm, "cyan_stained_glass_pane")
     bp.set(sx * 26, 6, zm, "cyan_stained_glass_pane")
     bp.set(sx * 26, 7, zm, "cyan_stained_glass_pane")
@@ -1284,8 +1284,9 @@ def chapel_furnish(S, sx, i, z0, z1):
             bp.set(sx * 23, 1, z, "lectern[facing=%s,has_book=false,powered=false]" % face)
         bp.set(xa, 3, zm, "candle[candles=3,lit=true,waterlogged=false]")
         bp.chest(sx * 22, 1, z0, face, loot=LOOT + "ec_chapel")
-    bp.set(sx * 24, 9, zm, CHAIN)
-    bp.set(sx * 24, 8, zm, LANT_H)
+    for y in range(6, 10):
+        bp.set(sx * 24, y, zm, CHAIN)
+    bp.set(sx * 24, 5, zm, LANT_H)
 
 
 # ------------------------------------------------------------------ choir, apse, organ
@@ -1488,7 +1489,9 @@ def pipe(S, px, pz, y0, top, pr, ix, iz, alt=0):
                 if d > r + 0.4:
                     continue
                 front = (dx * ix + dz * iz) > r - 0.9 and abs(dx * iz - dz * ix) < max(0.8, r * 0.45)
-                if front and y0 + 3 <= y <= y0 + 5:
+                if front and y == y0 + 4:
+                    spec = "shroomlight"                        # a warm glow deep in the mouth
+                elif front and y0 + 3 <= y <= y0 + 5:
                     spec = PB                                   # the mouth
                 elif front and y == y0 + 6:
                     spec = IRON                                 # the upper lip
@@ -1650,12 +1653,13 @@ def crypt(S):
     for (x, z) in ((-6, -56), (6, -56), (-6, -68), (6, -68), (0, -76), (12, -60), (-12, -60)):
         top = crypt_ceiling(x, z)
         if bp.get(x, top, z) == AIR:
-            bp.set(x, top, z, CHAIN)
-            bp.set(x, top - 1, z, SOUL_H)
+            for y in range(KF + 4, top + 1):
+                bp.set(x, y, z, CHAIN)
+            bp.set(x, KF + 3, z, SOUL_H)
     bp.chest(-15, KF, -60, "east", loot=LOOT + "ec_crypt")
     bp.chest(2, KF, -77, "west", loot=LOOT + "ec_crypt")
     for (x, z) in ((-15, -59), (-15, -61), (1, -77)):
-        if bp.get(x, KF - 1, z) == WATER:
+        if bp.get(x, KF - 1, z) == "minecraft:water":
             bp.set(x, KF - 1, z, TIL)
     bp.set(-15, KF - 1, -60, TIL)
     bp.set(2, KF - 1, -77, TIL)
@@ -1672,7 +1676,7 @@ def tomb(S, tx, tz):
         for z in range(tz - 2, tz + 3):
             if crypt_column(x, z) or not in_chevet(x, z, -1.0):
                 continue
-            if bp.get(x, -10, z) in (WATER,):
+            if bp.get(x, -10, z) == "minecraft:water":
                 bp.set(x, -10, z, "sculk" if hash01(x, z, 9) < 0.5 else TIL)
     for x in range(tx - 1, tx + 1):
         for z in range(tz - 1, tz + 2):
@@ -1684,6 +1688,13 @@ def tomb(S, tx, tz):
            if hash01(tx, tz, 12) < 0.5 else "candle[candles=2,lit=true,waterlogged=false]")
     bp.set(tx - 2, -9, tz - 1, "sculk_vein[down=true,east=false,north=false,south=false,up=false,west=false,"
                                "waterlogged=false]")
+    # lit candles on the lid's ends (on full blocks: a slab lid would not hold them)
+    for z in (tz - 1, tz + 1):
+        x = tx - 1
+        if crypt_column(x, z):
+            continue
+        bp.set(x, -8, z, POL)
+        bp.set(x, -7, z, CANDLES % (3 if z < tz else 4))
 
 
 def lift(S):
@@ -1957,22 +1968,28 @@ def furnish(S):
         for x in (-1, 0, 1):
             if bp.get(x, 1, z) == AIR:
                 bp.set(x, 1, z, "black_carpet" if x == 0 else "gray_carpet")
-    # chandeliers on chains from the vault
+    # chandeliers on long chains from the vault, low over the pews (lighting() adds the rest of the nave's lights)
     for z in (33, 19, 6, -7, -20, -36):
         top = vault_top(0)
-        for y in range(25, top):
+        for y in range(7, top):
             bp.set(0, y, z, CHAIN)
-        bp.set(0, 24, z, CHANDELIER)
+        bp.set(0, 6, z, CHANDELIER)
     for c in COLS:
         for sx in (-1, 1):
             bp.set(sx * 6, 1, c, "candle[candles=3,lit=true,waterlogged=false]") if bp.get(sx * 6, 1, c) == AIR \
                 else None
-    # aisle lamps
+    # aisle lamps, hung low on chains under the aisle vault
     for z in range(-26, 40, 6):
         for sx in (-1, 1):
             x = sx * 17
-            if bp.get(x, 11, z) == AIR and bp.get(x, 12, z) not in (None, AIR):
-                bp.set(x, 11, z, HANG_LAMP)
+            if bp.get(x, 5, z) == AIR:
+                top = 6
+                while bp.get(x, top, z) == AIR and top < 14:
+                    top += 1
+                if bp.get(x, top, z) not in (None, AIR):
+                    for y in range(6, top):
+                        bp.set(x, y, z, CHAIN)
+                    bp.set(x, 5, z, HANG_LAMP)
             if bp.get(x, GAL + 4, z) == AIR and bp.get(x, GAL + 6, z) not in (None, AIR):
                 bp.set(x, GAL + 5, z, CHAIN)
                 bp.set(x, GAL + 4, z, LANT_H)
@@ -2020,9 +2037,208 @@ def furnish(S):
         bp.set(x, 1, z, "candle[candles=3,lit=true,waterlogged=false]")
     for sx in (-1, 1):
         x = sx * 21
-        for y in range(25, 36):
+        for y in range(9, 36):
             bp.set(x, y, -36, CHAIN)
-        bp.set(x, 24, -36, CHANDELIER)
+        bp.set(x, 8, -36, CHANDELIER)
+
+
+# ------------------------------------------------------------------ lighting
+CANDLES = "candle[candles=%d,lit=true,waterlogged=false]"
+SOUL_FIRE = "soul_campfire[facing=north,lit=true,signal_fire=false,waterlogged=false]"
+
+
+def hang(S, x, y, z, spec, top=60):
+    """Hang `spec` at (x, y, z) on an iron chain up to the first solid block above (within `top`)."""
+    bp = S.bp
+    if bp.get(x, y, z) != AIR:
+        return False
+    t = y + 1
+    while t < top and bp.get(x, t, z) == AIR:
+        t += 1
+    if bp.get(x, t, z) in (None, AIR):
+        return False
+    for yy in range(y + 1, t):
+        bp.set(x, yy, z, CHAIN)
+    bp.set(x, y, z, spec)
+    return True
+
+
+def lighting(S):
+    """Gloomy but readable (§15): every main room keeps its walkable floor at light 8 or more with lights that
+    belong to the place: lanterns in niches of the columns and candles on their plinths, candelabra in the arcades,
+    chandeliers low on chains, soul-fire braziers outside, glowing organ pipe mouths, ripples of ochre light in the
+    arena floor, froglights in the crypt pool, sea lanterns behind the rose windows."""
+    bp = S.bp
+    # the columns: a lantern in a niche on each free face, candles on the plinth toward the nave
+    for c in COLS + [CROSS_S, CROSS_N]:
+        for sx in (-1, 1):
+            cx = sx * 10
+            for (x, z, ox, oz) in ((cx - 3 * sx, c, -sx, 0), (cx + 3 * sx, c, sx, 0), (cx, c - 3, 0, -1),
+                                   (cx, c + 3, 0, 1)):
+                if bp.get(x + ox, 3, z + oz) == AIR and bp.get(x + ox, 4, z + oz) == AIR:
+                    bp.set(x, 3, z, LANT)
+                    bp.set(x, 4, z, CHI)
+            for z in (c - 2, c + 2):
+                x = sx * 6
+                if "polished_blackstone_brick_stairs" in (bp.get(x, 2, z) or "") and bp.get(x, 3, z) == AIR:
+                    bp.set(x, 2, z, PBB)
+                    bp.set(x, 3, z, CANDLES % 4)
+    # lanterns on long chains over the pews, along the column lines between the chandeliers
+    for c in COLS + [38]:
+        for x in (-3, 3):
+            hang(S, x, 6, c, LANT_H)
+    # the triforium over the loft: lanterns on the parapet ends and hung in the gallery
+    for sx in (-1, 1):
+        for z in (30, 40):
+            if bp.get(sx * 7, GAL + 1, z) == "minecraft:" + POL_W and bp.get(sx * 7, GAL + 2, z) == AIR:
+                bp.set(sx * 7, GAL + 2, z, LANT)
+        hang(S, sx * 11, GAL + 3, 35, LANT_H, top=GAL + 8)
+    # candle posts at the inner ends of every other pew
+    for z in range(32, -21, -4):
+        for x in (-2, 2):
+            if "dark_oak_stairs" in (bp.get(x, 1, z) or "") and bp.get(x, 2, z) == AIR:
+                bp.set(x, 1, z, POL_W)
+                bp.set(x, 2, z, CANDLES % 4)
+    # candelabra in the arcades between nave and aisles
+    for z0, z1 in BAYS:
+        mid = (z0 + z1) // 2
+        for sx in (-1, 1):
+            x = sx * 10
+            if bp.get(x, 1, mid) == AIR:
+                bp.set(x, 1, mid, PBB)
+                bp.set(x, 2, mid, IRON_WALL)
+                bp.set(x, 3, mid, LANT)
+    # aisles: votive candles on the chapel thresholds' sides, lanterns on the outer wall between the windows
+    for z in range(-28, 40, 6):
+        for sx in (-1, 1):
+            x = sx * 19
+            if bp.get(x, 1, z) == AIR and bp.get(sx * 20, 1, z) not in (None, AIR) and bp.get(x, 2, z) == AIR:
+                bp.set(x, 1, z, POL_W)
+                bp.set(x, 2, z, SOUL)
+    # the crossing and the transepts: more chandeliers low on chains, lanterns at the transept walls
+    for x in (-25, -12, 12, 25):
+        hang(S, x, 8, -36, CHANDELIER)
+    for x in (-4, 4):
+        for z in (-30, -42):
+            hang(S, x, 6, z, LANT_H)
+    for x in (-7, 6):
+        hang(S, x, 6, -36, LANT_H)
+    for sx in (-1, 1):
+        for z in (TRZ0, TRZ1):
+            for ax in (16, 22, 27):
+                x = sx * ax
+                if bp.get(x, 1, z) == AIR and bp.get(x, 2, z) == AIR:
+                    bp.set(x, 1, z, POL_W)
+                    bp.set(x, 2, z, LANT)
+    # the narthex: candle stands by the portal and the stoups
+    for (x, z) in ((-5, 47), (5, 47), (-10, 42), (10, 42), (-10, 47), (10, 47)):
+        if bp.get(x, 1, z) == AIR:
+            bp.set(x, 1, z, POL_W)
+            bp.set(x, 2, z, LANT)
+    # the forecourt: the stone choristers hold up lanterns, soul-fire braziers along the way, lamp posts
+    for z in (56, 60, 64):
+        for sx in (-1, 1):
+            x = sx * 6 - sx                     # on the raised hand (a top stair)
+            if "stairs" in (bp.get(x, 4, z) or "") and bp.get(x, 5, z) == AIR:
+                bp.set(x, 5, z, LANT)
+    for z in (54, 58, 62, 66):
+        for sx in (-1, 1):
+            x = sx * 4
+            if bp.get(x, 0, z) not in (None, AIR):
+                bp.set(x, 1, z, PBB)
+                bp.set(x, 2, z, SOUL_FIRE)
+    for sx in (-1, 1):
+        for z in (55, 60, 65):
+            x = sx * 12
+            if bp.get(x, 0, z) not in (None, AIR) and bp.get(x, 1, z) == AIR:
+                bp.set(x, 1, z, PBB)
+                bp.set(x, 2, z, POL_W)
+                bp.set(x, 3, z, POL_W)
+                bp.set(x, 4, z, LANT)
+    # the rose windows: sea lanterns behind the tracery ring (lit from within, seen from the nave and outside)
+    for du in range(-7, 8):
+        for dy in range(-7, 8):
+            d = math.hypot(du, dy)
+            if abs(d - 6.3 * 0.55) < 0.5 and (du + dy) % 2 == 0 and bp.get(du, 29 + dy, 51) == AIR:
+                bp.set(du, 29 + dy, 51, "sea_lantern")
+    for sx in (-1, 1):
+        zm = (TRZ0 + TRZ1) / 2.0
+        for du in range(-6, 7):
+            for dy in range(-6, 7):
+                d = math.hypot(du, dy)
+                z = int(round(zm + du))
+                if abs(d - 5.2 * 0.55) < 0.5 and (du + dy) % 2 == 0 and \
+                        bp.get(sx * 30, 25 + dy, z) == "minecraft:" + POL:
+                    bp.set(sx * 29, 25 + dy, z, "sea_lantern")
+    # the arena: ripples of ochre light in the brass rings, candles and lanterns on the organ console
+    for rr, step, off in ((11, 30, 15), (6, 45, 22.5)):
+        for k in range(int(360 / step)):
+            a = math.radians(off + k * step)
+            best = None
+            for x in range(int(round(math.sin(a) * rr)) - 1, int(round(math.sin(a) * rr)) + 2):
+                for z in range(int(round(AZ + math.cos(a) * rr)) - 1, int(round(AZ + math.cos(a) * rr)) + 2):
+                    if bp.get(x, 8, z) in (BRASS, IRON) and bp.get(x, CHF, z) == AIR and in_chevet(x, z):
+                        e = abs(math.hypot(x, z - AZ) - rr) + 0.3 * math.hypot(x - math.sin(a) * rr,
+                                                                                z - AZ - math.cos(a) * rr)
+                        if best is None or e < best[0]:
+                            best = (e, x, z)
+            if best:
+                bp.set(best[1], 8, best[2], "ochre_froglight[axis=y]")
+    for x in (-3, 3):
+        bp.set(x, CHF + 2, -71, MAHOGANY)
+        bp.set(x, CHF + 3, -71, CANDLES % 4)
+    for x in (-2, 2):
+        bp.set(x, CHF + 3, -71, CANDLES % 3) if bp.get(x, CHF + 2, -71) == MAHOGANY else None
+    for (x, z) in ((-4, -72), (4, -72), (-4, -67), (4, -67)):
+        if bp.get(x, CHF, z) == AIR:
+            bp.set(x, CHF, z, IRON_WALL)
+            bp.set(x, CHF + 1, z, LANT)
+    # the choir by the screen: soul lanterns on the wall posts
+    for x in (-9, 9):
+        hang(S, x, CHF + 5, -54, SOUL_H, top=30)
+    for x in (-17, 17):
+        for z in (-53, -57):
+            if bp.get(x, CHF, z) == AIR and bp.get(x, CHF + 1, z) == AIR:
+                bp.set(x, CHF, z, IRON_WALL)
+                bp.set(x, CHF + 1, z, LANT)
+    hang(S, 0, CHF + 2, -77, LANT_H, top=CHF + 4)            # the reliquary passage
+    # the flooded crypt: froglights in the bed of the pool, glimmering up through the black water
+    for x in range(-17, 18):
+        for z in range(-79, -51):
+            if bp.get(x, -10, z) == "minecraft:water" and x % 4 == 0 and (z + (x // 4) * 2) % 4 == 0 and \
+                    hash01(x, z, 171) < 0.9:
+                bp.set(x, -11, z, "verdant_froglight[axis=y]" if hash01(x, z, 172) < 0.5
+                       else "pearlescent_froglight[axis=y]")
+    for x in (7, 13):
+        hang(S, x, KF + 3, -53, LANT_H, top=8)
+    # the annex: lanterns on the causeway posts
+    for z in range(-49, -31, 6):
+        for x in (-5, 5):
+            if bp.get(x, KF, z) == AIR and bp.get(x, KF - 1, z) not in (None, AIR, WATER):
+                bp.set(x, KF, z, POL_W)
+                bp.set(x, KF + 1, z, LANT)
+    # the dormitory: lanterns on the bunk barrels, candles on the tables, a lamp over the cantor's desk
+    for x in range(42, 54, 3):
+        if bp.get(x + 1, GAL + 1, -24) == AIR:
+            bp.set(x + 1, GAL + 1, -24, LANT)
+        if bp.get(x + 1, GAL, -37) == AIR:
+            bp.set(x + 1, GAL, -37, PBB)
+            bp.set(x + 1, GAL + 1, -37, CANDLES % 3)
+    for x in range(43, 53, 3):
+        if bp.get(x, GAL + 1, -31) == AIR:
+            bp.set(x, GAL + 1, -31, CANDLES % 2)
+    for x in (41, 47, 53):
+        for z in (-33, -28):
+            hang(S, x, GAL + 3, z, LANT_H, top=GAL + 8)        # from the ribs of the vault
+    for x in (44, 50):
+        if bp.get(x, GAL + 6, -31) == AIR:
+            bp.set(x, GAL + 6, -31, CHAIN)                       # the old lamps' chains reach the rock
+    # the bell chamber: a soul lantern hangs from the clapper inside the cracked bell, lanterns from the beam
+    bp.set(-16, 34, 46, SOUL_H)
+    for x in (-21, -11):
+        if bp.get(x, 41, 46) == AIR and bp.get(x, 42, 46) not in (None, AIR):
+            bp.set(x, 41, 46, CHAIN)
+            bp.set(x, 40, 46, LANT_H)
 
 
 def yards(S):
@@ -2123,6 +2339,7 @@ def echo_cathedral(bp):
     dormitory(S)
     library(S)
     furnish(S)
+    lighting(S)
     yards(S)
     cave_dressing(S)
     hollow_cores(S)

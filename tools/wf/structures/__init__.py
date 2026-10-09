@@ -31,3 +31,5 @@ from . import cloud_pagoda  # noqa: F401
 from . import icebound_fleet  # noqa: F401
 from . import soul_engine  # noqa: F401
 from . import clockwork_asylum  # noqa: F401
+from . import spore_refinery  # noqa: F401
+from . import verdant_arboretum  # noqa: F401

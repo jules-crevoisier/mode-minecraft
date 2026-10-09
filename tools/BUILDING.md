@@ -503,6 +503,38 @@ lairs, ruins and small sites).
     strongroom below the bow behind sealed bars; shortcuts: the ice slide out of the ram's breach, the crew mess's
     one-way hatch to the side-deck gangway, the cargo crane's jib dropping into a fishing hole by the trench.
 
+27. **The Spore Refinery (mushroom fields; old-growth taiga as fallback).** A ~180-wide alchemists' spore works
+    grown into and around three colossal mushrooms on a mycelium disc: a 90-high fly agaric (20-wide stem, a skirt-ring
+    at 70, a 68-wide red cap with a flat top at 88), a flat-capped brown mushroom (62) and a small red dome (50), each
+    stem hollowed round an 11 x 11 newel stair, strapped with brass bands, wound with a copper pipe and hung with spore
+    vats and bracket fungi; brick halls with green copper roofs between them, gill fins and glowing shroomlight under
+    every cap. From the gatherers' camp, past mushroom lamps, through the pipe gate whose arch frames the agaric (the
+    reveal) into the press yard (hub) round its great vat: the screw-press hall (monitor roof, two smokestacks, a
+    gallery), the fermentation hall's vats, up the brown stem to the drying lofts under its cap (site of grace), the
+    rope bridge to the agaric's stem, up its newel to the gills chamber on the skirt-ring (site of grace) and up the
+    ramp through the cap, mist in its tunnel, to the fenced arena on the cap (42 wide, open sky). Optional: the
+    distillery and its columns, the alchemists' ring lab under the small cap and its catwalk on a pylon back to the
+    agaric (a loop), the spore cellars beneath the roots. The refined-spore vault sits inside the cap's central
+    gill-boss behind sealed bars; its drop well down the core (the cap lift) lands in a pool at the stem's foot, whose
+    iron door opens only from inside; the lofts' spore chute drops into the fermentation hall; the cellars' iron
+    stair-house door opens only from the stair.
+
+28. **The Sunken Arboretum (lush caves; fixed height 40-60 down).** A ~185-long botanical research complex in a
+    lush cavern it carves for itself, the roof hugging the buildings: a brass-and-glass palm house (27-radius drum,
+    a ribbed glass dome to 50, the eight major ribs running on as a collar into the cavern roof so the dome seems
+    to hold it up), glow berries and spore blossoms in the ribs, palms and ferns inside. An aqueduct on arches
+    crosses the west terrace and falls as a waterfall into the lily lake south of the dome (dripleaf islands, a
+    causeway). From the botanists' camp in a side tunnel (waystone) to the lake shore station (hub, waystone,
+    arcaded deck): the west terrace with the propagation greenhouse (two wings), the waterfall grotto, the seed
+    vault tunnelled into the rock; north, the specimen laboratory (jar tanks, dissection table, archive) and the
+    passage to the herbarium turret; east, the pump house (beam engine, flywheel, boilers, smokestack) and the
+    azalea hedge maze round a fountain court. Up the rib catwalks (east from the maze, west from the greenhouse
+    lawn through a lever gate) to the dome's cornice deck (site of grace, kiosk), mist on the east bridge, the
+    arena on a 33-wide lily-pad platform under the hanging sun-lamp machine. The herbarium vault sits north of the
+    dome behind sealed bars, a stair turret leading back down to the lab. Shortcuts: the dripleaf board off the
+    cornice drops into the moat and the lake, the pump house's bubble-column lift rises to the cornice, the
+    greenhouse's south iron door opens only from inside onto the shore.
+
 ---
 
 ## 13. Gap analysis: arch.py, megakit.py and STYLE.md against this guide

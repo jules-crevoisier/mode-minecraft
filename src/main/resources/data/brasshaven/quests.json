@@ -57,6 +57,7 @@
     "explorer/cloud_pagoda",
     "explorer/icebound_fleet",
     "explorer/clockwork_asylum",
+    "explorer/spore_refinery",
     "explorer/master_cartographer",
     "explorer/boss_bell_keeper",
     "explorer/boss_archivist",
@@ -89,7 +90,9 @@
     "explorer/boss_mine_baron",
     "explorer/boss_chime_abbot",
     "explorer/boss_corsair_captain",
-    "explorer/boss_asylum_director"
+    "explorer/boss_asylum_director",
+    "explorer/boss_frost_commodore",
+    "explorer/boss_spore_alchemist"
   ],
   "depths": [
     "depths/lithite",
@@ -102,6 +105,7 @@
     "depths/dwarven_city",
     "depths/crystal_cathedral",
     "depths/echo_cathedral",
+    "depths/verdant_arboretum",
     "depths/telluric_hammer",
     "depths/excavator_pickaxe",
     "depths/lumber_axe",
@@ -113,7 +117,8 @@
     "depths/boss_crystal_spider",
     "depths/boss_sculk_spawn",
     "depths/boss_weeping_lady",
-    "depths/boss_hollow_cantor"
+    "depths/boss_hollow_cantor",
+    "depths/boss_thorn_gardener"
   ],
   "nether": [
     "nether/enter",

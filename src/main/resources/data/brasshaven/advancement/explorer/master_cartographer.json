@@ -766,9 +766,25 @@
           }
         ]
       }
+    },
+    "spore_refinery": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:spore_refinery"
+              }
+            }
+          }
+        ]
+      }
     }
   },
-  "parent": "brasshaven:explorer/clockwork_asylum",
+  "parent": "brasshaven:explorer/spore_refinery",
   "rewards": {
     "experience": 300,
     "loot": [

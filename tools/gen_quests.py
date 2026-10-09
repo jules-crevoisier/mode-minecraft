@@ -138,6 +138,8 @@ STRUCTURE_ICONS = {
     "cloud_pagoda": "cherry_sapling",
     "icebound_fleet": "packed_ice",
     "clockwork_asylum": "brasshaven:wall_cog",
+    "spore_refinery": "red_mushroom",
+    "verdant_arboretum": "big_dripleaf",
 }
 # where each boss lives (its quest follows the discovery of that structure)
 BOSS_HOME = {
@@ -176,6 +178,9 @@ BOSS_HOME = {
     "hollow_cantor": "echo_cathedral",
     "soul_stoker": "soul_engine",
     "asylum_director": "clockwork_asylum",
+    "frost_commodore": "icebound_fleet",
+    "spore_alchemist": "spore_refinery",
+    "thorn_gardener": "verdant_arboretum",
 }
 CHAPTER = {}
 for s in defs.STRUCTURES:

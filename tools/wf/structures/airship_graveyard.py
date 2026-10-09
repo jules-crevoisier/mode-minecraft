@@ -36,7 +36,8 @@ from ..arch import stair
 from ..defs import Piece, StructureDef, register
 from ..megakit import (BRASS, BRASS_SLAB, BRASS_STAIRS, CHANDELIER, COPPER, EDISON, GAUGE, GEAR, HANG_LAMP, IRON,
                        IRON_SLAB, IRON_STAIRS, IRON_WALL, LEATHER, MAHOGANY, MAHOGANY_STAIRS, PIPES, SMOKE,
-                       SMOKE_STAIRS, TABLE, TREAD, TREAD_SLAB, TREAD_STAIRS, VERD, W, fbm, hash01, hash3, vnoise)
+                       SMOKE_STAIRS, TABLE, TREAD, TREAD_SLAB, TREAD_STAIRS, VERD, W, fbm, hash01, hash3, lantern_post,
+                       vnoise)
 from ..parts import LOOT, MOD
 from .caldera_ringwall import newel
 
@@ -972,6 +973,111 @@ def gondola_rooms(C):
     C.set(X(57), g + 3, Z(0), CHAIN)
 
 
+# ------------------------------------------------------------------ set dressing: hold, winch house, top deck
+CRATES = ("spruce_planks", "stripped_spruce_wood[axis=y]", MAHOGANY, "oak_planks", "dark_oak_planks",
+          "stripped_dark_oak_wood[axis=x]")      # crates only: a barrel deep in a stack would be loot out of reach
+
+
+def put(C, x, y, z, spec):
+    """Set only into air written on purpose (never into a wall, a stair or a piece of furniture)."""
+    if C.get(x, y, z) == AIR:
+        C.set(x, y, z, spec)
+        return True
+    return False
+
+
+def crate_stack(C, x0, z0, w, d, y, hmax, seed, lash=True, lamp=False):
+    """A block of cargo w x d: crates and barrels 1..hmax high (tallest at the back), lashed with chains."""
+    tops = {}
+    for i in range(w):
+        for j in range(d):
+            x, z = x0 + i, z0 + j
+            h = 1 + int(hash01(x, z, seed) * hmax)
+            h = max(1, min(hmax, h))
+            for k in range(h):
+                if not put(C, x, y + k, z, CRATES[int(hash3(x, y + k, z, seed + 1) * len(CRATES))]):
+                    break
+                tops[(x, z)] = y + k
+    if lash and w >= 2:
+        # a lashing chain over the top row along x
+        zt = z0 + d // 2
+        yt = min(tops.get((x0 + i, zt), y) for i in range(w)) + 1
+        if all(C.get(x0 + i, yt, zt) == AIR for i in range(w)):
+            for i in range(w):
+                C.set(x0 + i, yt, zt, "iron_chain[axis=x,waterlogged=false]")
+    if lamp and tops:
+        (x, z), t = max(tops.items(), key=lambda kv: (-kv[1], kv[0]))
+        put(C, x, t + 1, z, LANT)
+    return tops
+
+
+def ballast_tank(C, u0, u1, vc, g):
+    """A ballast tank lying along the hull: copper, brass bands, rounded shoulders, a valve and a gauge."""
+    for u in range(u0, u1 + 1):
+        band = u in (u0, u1) or (u - u0) % 3 == 0
+        for dv in (-1, 0, 1):
+            for dy in (0, 1, 2):
+                x, z, y = X(u), Z(vc + dv), g + dy
+                if dv and dy == 2:
+                    put(C, x, y, z, stair(COPPER_ST, "north" if dv > 0 else "south", "bottom"))
+                elif u in (u0, u1):
+                    put(C, x, y, z, IRON)
+                else:
+                    put(C, x, y, z, BRASS if band else COPPER)
+    put(C, X(u0 - 1), g + 1, Z(vc), f"{VALVE}[facing=west]")
+    put(C, X((u0 + u1) // 2), g + 3, Z(vc), GAUGE)
+    for u in (u0 + 1, u1 - 1):
+        for y in range(g + 3, UPF - 2):
+            put(C, X(u), y, Z(vc), PIPES)
+
+
+def hold_cargo(C):
+    """The cargo hold was a bare iron box: stacks of crates and barrels lashed down along the sides, two ballast
+    tanks, cargo nets hung from the deck beams, crates hanging on chains, an overhead crane rail with its trolley
+    over the hatch, lanterns on the stacks (feet LOF; the middle of the hold, v -2..2, stays clear)."""
+    g = LOF
+    # the old low tank lines go: two proper ballast tanks take their place (the ladder at u 45, v 8 stays free)
+    for u in range(40, 48):
+        for v in (-7, 7):
+            for y in (g, g + 1):
+                if C.get(X(u), y, Z(v)) in (COPPER, BRASS):
+                    C.air(X(u), y, Z(v))
+    ballast_tank(C, 39, 47, -7, g)
+    ballast_tank(C, 36, 42, 7, g)
+    # cargo stacks (u, v, w along u, d along v, max height)
+    for i, (u, v, w, d, h) in enumerate(((56, -8, 3, 3, 3), (59, -8, 3, 2, 2), (47, 6, 2, 3, 3),
+                                         (59, 6, 4, 3, 3), (77, -8, 4, 2, 2), (49, -8, 1, 1, 2),
+                                         (33, -8, 2, 2, 2))):
+        crate_stack(C, X(u), Z(v), w, d, g, h, 211 + i, lamp=i in (0, 3, 4))
+    # cargo nets hung from the deck beams over the stacks' aisle side
+    for (u0, u1, v) in ((56, 61, -5), (59, 62, 5), (47, 48, 5)):
+        for u in range(u0, u1 + 1):
+            for y in range(g + 3, UPF - 2):
+                put(C, X(u), y, Z(v), "iron_bars")
+    # crates hanging on chains from the beams (above head height)
+    for (u, v) in ((45, -4), (44, 4), (53, -4), (79, -6)):
+        if C.get(X(u), UPF - 2, Z(v)) not in (None, AIR) and C.get(X(u), g + 3, Z(v)) == AIR:
+            put(C, X(u), UPF - 3, Z(v), CHAIN)
+            put(C, X(u), g + 3, Z(v), "stripped_spruce_wood[axis=y]" if u % 2 else "oak_planks")
+    # the crane rail along v -3 under the deck beams, its trolley and hook over the hatch
+    for u in range(33, 63):
+        put(C, X(u), UPF - 3, Z(-3), IRON_SLAB + "[type=top,waterlogged=false]")
+    for u in (55, 59):
+        put(C, X(u), UPF - 3, Z(-2), IRON_SLAB + "[type=top,waterlogged=false]")
+        put(C, X(u), UPF - 3, Z(-1), IRON_SLAB + "[type=top,waterlogged=false]")
+    C.set(X(50), UPF - 3, Z(-3), GEAR)                                   # the trolley
+    put(C, X(50), g + 3, Z(-3), "stripped_dark_oak_wood[axis=x]")        # a crate on the hook
+    # lamps over the south bays (as over the north ones), lanterns in the bays
+    for u in (36, 44, 52):
+        if C.get(X(u), g + 4, Z(5)) == AIR and C.get(X(u), UPF - 2, Z(5)) not in (None, AIR):
+            C.set(X(u), g + 4, Z(5), HANG_LAMP)
+    if C.get(X(44), g + 4, Z(-5)) == AIR:
+        C.set(X(44), g + 4, Z(-5), HANG_LAMP)
+    for (u, v) in ((41, -4), (58, 4), (62, -4), (80, 5)):
+        lamp_hang(C, X(u), g + 3, Z(v), drop=1, spec=LANT_H) if C.get(X(u), g + 4, Z(v)) == AIR and \
+            C.get(X(u), g + 3, Z(v)) == AIR and C.get(X(u), UPF - 2, Z(v)) not in (None, AIR) else None
+
+
 def roof_details(C):
     """Mooring cables from the ring to the nose, a mooring line from the tail to a ground anchor, lamps along the
     envelope's equator, the ship's name plate."""
@@ -1098,6 +1204,49 @@ def deck(C):
 
 
 COPPER_ST = W + "copper_plating_stairs"
+
+def deck_dressing(C):
+    """Set dressing round the edge of the top deck (the fight floor itself stays open): rigging posts along both
+    bulwarks with the stays strung between them overhead, tall vent cowls, two capstans by the sealed gate at the
+    bow end, lamp posts in the corners."""
+    y = DY + 1
+    # rigging posts on the bulwarks' inner side (v +-16), stays strung between their heads (above head height)
+    posts = (46, 56, 66, 76, 86)
+    for v in (-16, 16):
+        for u in posts:
+            x, z = X(u), Z(v)
+            if not put(C, x, y, z, IRON):
+                continue
+            for k in (1, 2):
+                put(C, x, y + k, z, IRON_WALL)
+            put(C, x, y + 3, z, BRASS)
+            if C.get(x, y + 4, z) in (None, AIR):
+                C.set(x, y + 4, z, LANT)
+        for u in range(posts[0] + 1, posts[-1]):
+            if u not in posts:
+                put(C, X(u), y + 3, Z(v), "iron_chain[axis=x,waterlogged=false]")
+    # tall vent cowls at the edge, mouths turned outboard
+    for u in (61, 71):
+        for v in (-15, 15):
+            x, z = X(u), Z(v)
+            if put(C, x, y, z, COPPER):
+                put(C, x, y + 1, z, PIPES)
+                put(C, x, y + 2, z, stair(COPPER_ST, "north" if v > 0 else "south", "bottom"))
+    # two capstans by the sealed gate (u 45, v +-7): a drum with its bars, a pawl ring of iron slabs round its foot
+    for v in (-7, 7):
+        x, z = X(45), Z(v)
+        if put(C, x, y, z, IRON):
+            put(C, x, y + 1, z, BRASS)
+            put(C, x, y + 2, z, IRON_SLAB + "[type=bottom,waterlogged=false]")
+            for fc, (dx, dz) in (("east", (1, 0)), ("west", (-1, 0)), ("north", (0, -1)), ("south", (0, 1))):
+                put(C, x + dx, y + 1, z + dz, f"lightning_rod[facing={fc},powered=false,waterlogged=false]")
+    # lamp posts in the four corners
+    for u in (43, 93):
+        for v in (-15, 15):
+            x, z = X(u), Z(v)
+            if C.get(x, y, z) == AIR and C.get(x, y + 3, z) == AIR:
+                lantern_post(C.bp, x, y, z, h=3)
+
 
 
 def gangway(C):
@@ -1552,6 +1701,118 @@ def winch_house(C):
     for (x, z) in ((TX + 7, TZ + 7), (TX - 7, TZ + 7), (TX - 7, TZ - 7), (TX + 7, TZ - 7)):
         C.set(x, TF, z, IRON_WALL)
         C.set(x, TF + 1, z, LANT)
+
+
+def disk_x(C, x, yc, zc, r, spec, only_air=True):
+    """A disc in the plane x (a gear, a flange), centre (yc, zc)."""
+    ri = int(math.ceil(r)) + 1
+    for y in range(int(yc) - ri, int(yc) + ri + 2):
+        for z in range(int(zc) - ri, int(zc) + ri + 2):
+            d = math.hypot(y - yc, z - zc)
+            if d <= r + 0.3:
+                sp = spec(y, z, d) if callable(spec) else spec
+                if only_air:
+                    put(C, x, y, z, sp)
+                else:
+                    C.set(x, y, z, sp)
+
+
+def gear_x(C, x, yc, zc, r, seed=0):
+    """A gear wheel in the plane x: a toothed rim (teeth every other cell round the rim), brass spokes, an iron hub."""
+    def spec(y, z, d):
+        if d < 0.8:
+            return IRON
+        if d > r - 0.7:
+            ang = math.atan2(y - yc, z - zc)
+            return GEAR if int(round(ang * r)) % 2 == 0 else BRASS
+        dy, dz = abs(y - yc), abs(z - zc)
+        return BRASS if dy < 0.6 or dz < 0.6 else None
+    ri = int(math.ceil(r)) + 1
+    for y in range(int(yc) - ri, int(yc) + ri + 2):
+        for z in range(int(zc) - ri, int(zc) + ri + 2):
+            d = math.hypot(y - yc, z - zc)
+            if d <= r + 0.3:
+                sp = spec(y, z, d)
+                if sp:
+                    put(C, x, y, z, sp)
+
+
+def winch_room(C):
+    """The winch house ground floor was a bare hall round the mast's core: the mooring winch gets flanges and its
+    cable spool, a gear train drives the cargo lift on the core's east face, a boiler with its firebox and flue
+    stands in the south-west corner, a workbench and tool racks along the south wall, lanterns on the machines."""
+    # the winch drum: bigger brass flanges at both ends
+    for x in (TX - 8, TX + 8):
+        disk_x(C, x, 3.5, TZ - 8, 2.9, lambda y, z, d: BRASS if d > 2.0 else IRON)
+    # the cable spool beside it: axis z, two flanges, the reel of cable between them, on iron chocks
+    sx, sy = TX + 9, 3.5
+    for z in (TZ - 4, TZ):
+        for y in range(1, 7):
+            for x in range(sx - 3, sx + 4):
+                d = math.hypot(x - sx, y - sy)
+                if d <= 2.6:
+                    put(C, x, y, z, BRASS if d > 1.8 else IRON)
+    for z in range(TZ - 3, TZ):
+        for y in range(1, 7):
+            for x in range(sx - 3, sx + 4):
+                d = math.hypot(x - sx, y - sy)
+                if d <= 0.8:
+                    put(C, x, y, z, IRON)
+                elif d <= 1.9:
+                    put(C, x, y, z, "iron_chain[axis=x,waterlogged=false]" if (y + z) % 2 else
+                        "iron_chain[axis=y,waterlogged=false]")
+    # the gear train on the core's east face: the great wheel, an idler and the motor's pinion
+    gx = TX + 2
+    gear_x(C, gx, 3.5, TZ - 1.5, 2.6)
+    gear_x(C, gx, 2.0, TZ + 3.0, 1.6)
+    gear_x(C, gx, 5.0, TZ - 5.5, 1.4)
+    # the motor driving it: a small steam engine on the floor east of the train
+    for (x, z) in ((gx + 1, TZ + 3), (gx + 2, TZ + 3)):
+        put(C, x, 1, z, SMOKE)
+        put(C, x, 2, z, IRON)
+    put(C, gx + 1, 3, TZ + 3, GAUGE)
+    put(C, gx + 2, 3, TZ + 3, PIPES)
+    for y in range(4, 7):
+        put(C, gx + 2, y, TZ + 3, PIPES)
+    # the boiler: a horizontal drum on a brick firebox in the south-west corner, its flue up through the ceiling
+    bx0, bx1, bz, by = WX0 + 4, WX0 + 9, WZ1 - 5, 3.0
+    for x in range(bx0, bx1 + 1):
+        for y in range(1, 6):
+            for z in range(bz - 2, bz + 3):
+                d = math.hypot(y - by, z - bz)
+                if x == bx0:
+                    if d <= 2.0:
+                        put(C, x, y, z, SMOKE if y <= 2 else IRON)
+                elif d <= 2.0:
+                    put(C, x, y, z, BRASS if x in (bx0 + 1, bx1) or (x - bx0) % 3 == 0 else COPPER)
+    for x in range(bx0 + 1, bx1 + 1):
+        for z in range(bz - 2, bz + 3):
+            put(C, x, 1, z, SMOKE if z in (bz - 2, bz + 2) else IRON)        # the boiler's cradle
+    C.set(bx0, 1, bz, "blast_furnace[facing=west,lit=true]") if C.get(bx0, 1, bz) == SMOKE else None
+    for y in range(6, 7):
+        put(C, bx1 - 1, y, bz, PIPES)
+    put(C, bx0 + 2, 5, bz, GAUGE)
+    put(C, bx0 + 4, 5, bz, GAUGE)
+    put(C, bx1 + 1, 2, bz, f"{VALVE}[facing=east]")
+    # the workbench and the tool racks along the south wall, west of the door
+    z = WZ1 - 1
+    for (x, spec) in ((TX - 9, "smithing_table"), (TX - 8, TABLE), (TX - 7, "anvil[facing=east]"),
+                      (TX - 6, "crafting_table"), (TX - 5, "grindstone[face=floor,facing=north]")):
+        put(C, x, 1, z, spec)
+    for x in range(TX - 9, TX - 4):
+        put(C, x, 3, z, f"{SHELF}[facing=north]")
+        put(C, x, 4, z, f"{COG}[facing=north]" if x % 2 else f"{SHELF}[facing=north]")
+    put(C, TX - 8, 2, z, LANT)
+    # a rack of spare chain and hooks hanging from the ceiling by the door
+    for x in (TX + 3, TX + 5):
+        for y in range(3, 7):
+            put(C, x, y, WZ1 - 2, CHAIN)
+    # lanterns on the boiler, lamps behind the drum and in the dark corners
+    put(C, bx0 + 3, 6, bz, LANT)
+    for (x, z) in ((WX0 + 2, WZ0 + 2), (TX - 4, WZ0 + 1), (TX + 4, WZ0 + 1), (WX1 - 2, WZ0 + 2), (WX1 - 1, TZ - 2),
+                   (WX0 + 2, WZ1 - 3)):
+        if C.get(x, 5, z) == AIR and C.get(x, 6, z) == AIR and C.get(x, 7, z) not in (None, AIR):
+            lamp_hang(C, x, 5, z)
 
 
 # ------------------------------------------------------------------ the gas works
@@ -2394,6 +2655,7 @@ def airship_graveyard(bp):
     core = mast_stair(C)
     lift_shaft(C, core)
     balcony(C)
+    winch_room(C)
     gas_works(C)
     gasometer(C, G1, 201)
     gasometer(C, G2, 202)
@@ -2408,8 +2670,10 @@ def airship_graveyard(bp):
     line_hull(C)
     hull_rooms(C)
     gondola_rooms(C)
+    hold_cargo(C)
     roof_details(C)
     deck(C)
+    deck_dressing(C)
     gangway(C)
     ring_walkway(C)
     crown(C)

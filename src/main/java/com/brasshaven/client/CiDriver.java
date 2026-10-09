@@ -609,7 +609,7 @@ public final class CiDriver {
 
         // the 3D held models, in the hands of a row of armour stands (third person, as other players see them)
         String[] held = {"kings_trident", "sentinel_greatsword", "dune_king_crook", "jailer_chain", "halo_glaive", "gatekeeper_key", "jarl_axe", "abbess_crozier", "architect_plumb", "pressure_lance", "hierophant_crozier", "queen_macuahuitl", "curator_astrolabe", "warden_tongs", "hierarch_sunstaff", "admiral_cutlass", "tyrant_wrench", "ascetic_staff", "caldera_halberd", "helmsman_anchor", "forbidden_grimoire",
-                "jade_fang", "rune_fist", "brass_pickaxe", "fourth_king_sceptre", "heart_lodeblade", "baron_drillpick", "abbot_dragonstaff", "corsair_harpoon", "cantor_baton", "stoker_shovel", "director_bonesaw",
+                "jade_fang", "rune_fist", "brass_pickaxe", "fourth_king_sceptre", "heart_lodeblade", "baron_drillpick", "abbot_dragonstaff", "corsair_harpoon", "cantor_baton", "stoker_shovel", "director_bonesaw", "commodore_anchor", "alchemist_staff", "gardener_shears",
                 "sluice_hook", "rivet_cannon", "bog_lantern_flail", "solar_khopesh", "boarding_axe", "jade_blowpipe"};
         step("held_items")
                 .cmd(() -> {
@@ -939,6 +939,7 @@ public final class CiDriver {
                     levelSite(server.overworld(), px, pz, box[0],
                             placed != null && layer >= 0 ? placed.origin().getY() + layer : Integer.MIN_VALUE);
                     prepareStructure(server, name, px, pz, box, dim); // same chunks, already force-loaded: only the height moves
+                    clearFogBiomes(server.overworld(), box[0]);
                     return List.of();
                 })
                 .retry("place structure", () -> List.of(in(dim) + "place structure " + name + " " + px + " 64 " + pz), 100, 30);
@@ -1181,6 +1182,39 @@ public final class CiDriver {
             }
         }
         LOGGER.info(TAG + "levelled the site at y {} ({} blocks changed)", g, changed);
+    }
+
+    /** Plains in place of any short-fog biome (crimson_mire ends its fog at 112 blocks, volcanic_highlands at 192)
+     *  over the box and the outside cameras' reach: a corner camera sits ~150 blocks from a colossal build's middle,
+     *  so in such a biome its shot is nothing but fog colour. Worldgen does not put these builds in those biomes. */
+    private static void clearFogBiomes(ServerLevel level, double[] b) {
+        double size = Math.max(b[3] - b[0], b[5] - b[2]);
+        int reach = (int) Math.ceil(size * 0.45 + 14 + 24); // outsideSteps' corner offset, plus the fog blend radius
+        int cx = (int) Math.floor((b[0] + b[3]) / 2.0);
+        int cz = (int) Math.floor((b[2] + b[5]) / 2.0);
+        BoundingBox region = new BoundingBox(cx - reach, level.getMinY(), cz - reach, cx + reach, level.getMaxY(), cz + reach);
+        Holder<net.minecraft.world.level.biome.Biome> plains = level.registryAccess()
+                .lookupOrThrow(Registries.BIOME).getOrThrow(net.minecraft.world.level.biome.Biomes.PLAINS);
+        int[] changed = {0};
+        List<net.minecraft.world.level.chunk.ChunkAccess> chunks = new ArrayList<>();
+        for (int chz = region.minZ() >> 4; chz <= region.maxZ() >> 4; chz++) {
+            for (int chx = region.minX() >> 4; chx <= region.maxX() >> 4; chx++) {
+                var chunk = level.getChunk(chx, chz); // loads (or generates) it if the player's view does not reach it
+                chunk.fillBiomesFromNoise((qx, qy, qz, sampler) -> {
+                    var have = chunk.getNoiseBiome(qx, qy, qz);
+                    if (region.isInside(qx << 2, qy << 2, qz << 2) && have.value().getAttributes()
+                            .contains(net.minecraft.world.attribute.EnvironmentAttributes.FOG_END_DISTANCE)) {
+                        changed[0]++;
+                        return plains;
+                    }
+                    return have;
+                }, level.getChunkSource().randomState().sampler());
+                chunk.markUnsaved();
+                chunks.add(chunk);
+            }
+        }
+        level.getChunkSource().chunkMap.resendBiomesForChunks(chunks);
+        LOGGER.info(TAG + "short-fog biomes cleared around the site ({} biome cells)", changed[0]);
     }
 
     /** Centre of a {minX, minY, minZ, maxX, maxY, maxZ} box, at a third of its height. */

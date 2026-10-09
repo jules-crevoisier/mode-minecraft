@@ -60,6 +60,9 @@ from . import corsair_captain
 from . import hollow_cantor
 from . import soul_stoker
 from . import asylum_director
+from . import frost_commodore
+from . import spore_alchemist
+from . import thorn_gardener
 # living oceans
 from . import glow_jellyfish
 from . import reef_fish
@@ -166,6 +169,9 @@ MODELS = [
     hollow_cantor.build,
     soul_stoker.build,
     asylum_director.build,
+    frost_commodore.build,
+    spore_alchemist.build,
+    thorn_gardener.build,
     glow_jellyfish.build,
     reef_fish.build,
     manta_ray.build,

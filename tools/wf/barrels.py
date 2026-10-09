@@ -162,6 +162,8 @@ STRUCTURE_KIND = {
     "cloud_pagoda": "food",
     "icebound_fleet": "harbour",
     "clockwork_asylum": "clockwork",
+    "spore_refinery": "food",
+    "verdant_arboretum": "sylvan",
     "tesla_observatory": "clockwork", "crystal_cathedral": "library", "sunken_submarine": "harbour",
     "diving_bell": "harbour", "coral_shrine": "harbour", "shipwreck_debris": "harbour",
     # vanilla villages and outposts extended by wf/village.py, the sea-floor props of wf/ocean.py

@@ -538,6 +538,34 @@ STRUCTURES = {
                         "cadran fêlé ; derrière des barreaux scellés, le bureau du directeur. Raccourcis : le "
                         "funiculaire, la goulotte de la buanderie vers le sous-sol, la porte à sens unique de la "
                         "chapelle.",
+    "verdant_arboretum": "Un complexe de recherche botanique de 155 × 185 blocs au fond d'une immense grotte "
+                         "luxuriante, 40 à 60 blocs sous la surface : une serre-palmarium de laiton et de verre "
+                         "dont la coupole de 50 blocs soutient la voûte de ses nervures, éclairée de baies "
+                         "lumineuses et de fleurs à spores, une cascade artificielle qui nourrit un lac de "
+                         "nénuphars et d'îlots de grandes feuilles tombantes, des serres en terrasses, des "
+                         "aqueducs d'irrigation et une lampe-soleil mécanique suspendue à la voûte. On arrive par "
+                         "le camp des botanistes dans un tunnel latéral (pierre de passage), puis la station du "
+                         "rivage (pierre de passage) ; de là : les serres de multiplication, la grainothèque, le "
+                         "laboratoire des spécimens et ses bocaux, la salle des pompes et son balancier, le "
+                         "labyrinthe d'azalées. On monte par les passerelles des nervures jusqu'à la corniche de "
+                         "la coupole (lieu de grâce) ; passé la brume, l'arène sur l'île-nénuphar sous la "
+                         "lampe-soleil ; derrière des barreaux scellés, le coffre de l'herbier. Raccourcis : la "
+                         "chute par les grandes feuilles dans le lac, l'ascenseur à eau de la salle des pompes, "
+                         "la porte de serre qui ne s'ouvre que de l'intérieur.",
+    "spore_refinery": "Une raffinerie d'alchimistes de 180 blocs sur une île de mycélium (ou, à défaut, dans une "
+                      "vieille taïga), poussée dans et autour de trois champignons colossaux : une amanite rouge "
+                      "haute de 90 blocs au chapeau large de 68, un bolet brun au chapeau plat et une petite "
+                      "amanite, leurs pieds creusés en tours à escalier, cerclés de laiton et enroulés de tuyaux "
+                      "de cuivre et de cuves à spores. On arrive par le camp des cueilleurs (pierre de passage) et "
+                      "la porte aux tuyaux jusqu'à la cour des presses (pierre de passage) ; de là : la halle des "
+                      "presses à vis géantes, la halle de fermentation et ses cuves, l'escalier du bolet jusqu'aux "
+                      "séchoirs sous le chapeau brun (lieu de grâce), puis le pont de corde vers la grande amanite. "
+                      "En option : la distillerie et ses colonnes, le laboratoire des alchimistes sous la petite "
+                      "amanite et sa passerelle, les caves à spores sous les racines. On monte le pied de "
+                      "l'amanite jusqu'à la chambre des lamelles (lieu de grâce) ; passé la brume, l'arène au "
+                      "sommet du chapeau ; derrière des barreaux scellés, le coffre des spores raffinées. "
+                      "Raccourcis : l'ascenseur du chapeau (un puits jusqu'au pied, porte de fer qui ne s'ouvre "
+                      "que de l'intérieur), la goulotte à spores des séchoirs et la porte à sens unique des caves.",
     "starfall_library": "Une archive flottante de 170 blocs sur les îles extérieures de l'End : une tour-fuseau de "
                         "purpur et de laiton haute de 125 blocs, coiffée d'un dôme d'astrolabe, entourée de trois "
                         "galeries de lecture en anneau suspendues à trois hauteurs par des rayons de chaînes et de "
@@ -771,6 +799,23 @@ MOBS = {
                        "bras chirurgicaux de laiton (scalpel, scie à os, seringue, pince) se déploient dans son dos "
                        "comme des pattes d'araignée, et une montre de gousset pend de sa main gauche. Le temps et le "
                        "scalpel.",
+    "spore_alchemist": "Champion de la Raffinerie de spores : l'Alchimiste des spores, un alchimiste voûté de 3,5 "
+                       "blocs à moitié dévoré par le champignon qu'il raffinait. Un tablier de cuir sur une blouse "
+                       "prune, un masque respiratoire de laiton aux verres d'un vert luisant, une bosse qui est une "
+                       "amanite tue-mouches poussée dans son dos, des fils de mycélium qui pendent de ses manches et des "
+                       "polypores sur ses épaules. Dans son dos, une cuve à spores de laiton dont les tuyaux nourrissent "
+                       "le pistolet à buse de sa main gauche ; dans la droite, un long bâton-mélangeur coiffé d'une fiole.",
+    "thorn_gardener": "Champion de l'Arboretum englouti : le Jardinier en chef, un grand automate jardinier de laiton "
+                      "de 3,8 blocs que le jardin a envahi. Un corps de cuivre riveté d'où la mousse et le lierre "
+                      "débordent par chaque jointure, une cloche de verre pour tête où pousse une fleur lumineuse, de "
+                      "très longs bras terminés en sécateurs, un arrosoir changé en canon sur le dos avec son tuyau, et "
+                      "des racines qui traînent derrière ses bottes-pots de fleurs.",
+    "frost_commodore": "Champion de la Flotte prise dans les glaces : le Commodore gelé, le chef de l'expédition, "
+                       "mort mais maintenu debout par un appareil de survie en laiton couvert de givre. Une silhouette "
+                       "massive de 3,8 blocs en capote doublée de fourrure croûtée de glace, une barbe gelée, une "
+                       "capuche de fer en cloche de scaphandre dont la visière fêlée et givrée luit d'un bleu pâle, "
+                       "une chaudière dans le dos qui crache une vapeur froide. Dans sa main droite, une ancre prise "
+                       "dans la glace au bout de sa chaîne ; dans la gauche, un pistolet de signalisation.",
     "strangler_queen": "Championne de la Cité-temple de la canopée : la Reine-figuier étrangleur, une femme immense "
                        "de 5,8 blocs tissée de racines aériennes et de jade, qui a étouffé le temple et s'est couronnée "
                        "à sa place. Une jupe de racines-contreforts qui s'étalent sur le sol, un masque de jade aux "
@@ -1338,6 +1383,93 @@ BOSS_MOVES = {
                                "8,5 s, à un quart l'une de l'autre (12 par aiguille qui te traverse). Reste dans la "
                                "brèche et suis-la."),
     ],
+    "spore_alchemist": [
+        ("Bâton", "1 à 3", "Le bâton ramené par-dessus l'épaule (0,8 s, un arc tracé en vert) : un balayage devant lui "
+                           "(13). Il se tourne, un cercle rouge s'allume 3,5 blocs devant lui et la fiole s'y abat "
+                           "0,6 s plus tard (11 et poison). Phase 2 : il enchaîne parfois pulvérisation ou fioles."),
+        ("Pulvérisation", "1 à 3", "Le pistolet braqué (1,2 s, un cône vert qui te suit puis rougit) : des spores "
+                                   "pendant 1 s (3 et poison, quatre fois si tu restes dedans), puis un nuage de spores "
+                                   "persiste 5 s à 5 blocs devant lui. Contourne-le."),
+        ("Fioles", "1 à 3", "Deux fioles (trois en phase 2) visent des cercles tracés de la couleur de leur breuvage : "
+                            "vert poison, gris lenteur, noir cécité ; la première te suit, un cercle rouge s'allume "
+                            "dedans à la fin. Elles éclatent 0,8 s après le lancer (8 et l'effet)."),
+        ("Pousse", "1 à 3", "Le bâton planté dans le chapeau (0,9 s) : un cercle brun sous chaque joueur et sur deux "
+                            "autres points (quatre en phase 2), rouge à la fin ; 1,5 s plus tard un champignon en jaillit "
+                            "(10, soulevé, poison) et reste debout 6 s, sauf là où quelqu'un se tient."),
+        ("Voile de spores", "2 et 3", "La vanne de la cuve ouverte (1 s), il disparaît dans un nuage (invulnérable) ; un "
+                                      "cercle vert, rouge à la fin, marque l'endroit où il ressort, près de toi mais "
+                                      "jamais sur quelqu'un : 1,5 s plus tard il en jaillit (11, repoussé, poison)."),
+        ("Bogged", "2 et 3", "Il remue le chapeau de son bâton (1 s) : deux bogged (un de plus tous les deux joueurs) "
+                             "sortent du mycélium, jamais plus de trois."),
+        ("Floraison", "3", "À 30 % : sa bosse enfle (2 s, invulnérable), il frappe le chapeau : une onde à sauter (10), "
+                           "il accélère. Le chapeau respire : des évents près du bord crachent des spores sur des "
+                           "cercles marqués toutes les 4 s (8 et poison), et un champ de fils de mycélium ralentit "
+                           "quiconque reste à moins de 6 blocs de lui."),
+        ("Expiration", "3", "Toutes les 16 s environ : le chapeau inspire (2,5 s), l'anneau doré s'embrase et un côté "
+                            "de l'anneau (l'extérieur, puis l'intérieur, à tour de rôle) se remplit de spores, rouges à "
+                            "la fin ; puis il expire : 9 et poison II pour qui est de ce côté. L'anneau lui-même est "
+                            "toujours sûr ; sauter ne sert à rien, traverse l'anneau."),
+    ],
+    "thorn_gardener": [
+        ("Coups de sécateur", "1 à 3", "Les deux sécateurs grands ouverts (0,8 s, un arc tracé en vert) : le droit se "
+                                       "referme devant lui (12). Il se tourne, l'arc du gauche est tracé en rouge et se "
+                                       "referme 0,4 s plus tard (10). Phase 2 : il enchaîne parfois l'arrosage ou la fente."),
+        ("Fente", "1 à 3", "Accroupi, le sécateur droit ouvert en arrière (1,1 s) : un couloir vert te suit puis rougit "
+                           "et se fige ; il bondit le long du couloir et les lames se referment au bout (15 jusqu'à 3 "
+                           "blocs au-delà). Sors du couloir."),
+        ("Lignes d'épines", "1 à 3", "Les sécateurs plantés dans la feuille (1 s) : trois lignes (cinq en phase 2) "
+                                     "marquées depuis lui, l'une vers toi, rouges à la fin ; les épines jaillissent le "
+                                     "long de chacune (11, soulevé, ralenti 1 s)."),
+        ("Liane", "1 à 3", "Le sécateur gauche planté à ses pieds (1,2 s) : un cercle vert sous toi te suit puis se fige "
+                           "en rouge, une liane rampe vers lui. Elle se referme : 6 et enraciné 1,5 s. Frappe n'importe "
+                           "quoi, ou prends un coup, et elle se déchire aussitôt."),
+        ("Arrosage", "1 à 3", "Le canon-arrosoir braqué par-dessus l'épaule (1,3 s, un cône bleu qui te suit puis rougit) : "
+                              "un jet d'eau pendant 1 s, 3 et une petite poussée quatre fois, jamais hors de la feuille. "
+                              "Deux plaques fertilisées (trois en phase 2) sont marquées 1,5 s, puis des buissons "
+                              "d'épines y poussent (7) et restent 5 s."),
+        ("Appel du jardin", "2 et 3", "Les sécateurs claqués au-dessus de sa tête (1 s) : deux grenouilles "
+                                      "dards et araignées-horloges (une de plus tous les deux joueurs), jamais plus de trois."),
+        ("Pollen", "2 et 3", "Il secoue sa cloche (0,9 s) : des cercles jaunes sous toi et les autres joueurs ; la fleur "
+                             "éclate et le pollen y retombe 0,8 s plus tard (8, ralenti 2 s)."),
+        ("Lampe solaire", "3", "À 30 % : les sécateurs levés vers la lampe (2 s, invulnérable), une onde à sauter (10), il "
+                               "accélère. Des rayons de soleil balaient ensuite la feuille : un cercle doré et son "
+                               "chemin tracés 1,5 s (rouges à la fin), puis le rayon suit le chemin lentement : 4 et "
+                               "enflammé toutes les 0,5 s si tu restes dedans."),
+        ("Photosynthèse", "3", "Toutes les 16 s environ : il plante ses sécateurs et lève la tête vers la lampe dans un "
+                               "cercle de lumière (rayon 3) ; pendant 2,5 s il regagne 1 % de sa vie toutes les 0,5 s, "
+                               "sauf si un joueur se tient dans le cercle pour lui faire de l'ombre. Il ne frappe pas : "
+                               "c'est le moment de taper."),
+    ],
+    "frost_commodore": [
+        ("Ancre", "1 à 3", "L'ancre ramenée par-dessus l'épaule (0,9 s, un arc tracé en givre) : un coup en arc "
+                           "devant lui (14). Il se tourne aussitôt, l'arc du revers est tracé en rouge, et il revient "
+                           "en sens inverse 0,6 s plus tard (11). Phase 2 : il enchaîne parfois souffle ou jet de glace."),
+        ("Lancer d'ancre", "1 à 3", "L'ancre tourne au-dessus de sa tête (1,2 s) ; une ligne de givre te suit puis "
+                                    "rougit et se fige. L'ancre file le long d'elle (12), mord au bout (8 dans un "
+                                    "cercle tracé pendant son vol), puis la chaîne la ramène le long de la même ligne, "
+                                    "tracée en rouge : 10, ralenti et tiré vers lui. Sors de la ligne et n'y reviens pas."),
+        ("Pics de glace", "1 à 3", "L'ancre levée haut puis plantée dans le pont (1 s) : trois lignes (cinq en "
+                                   "phase 2) marquées depuis lui, l'une vers toi, rouges à la fin ; les pics jaillissent "
+                                   "le long de chacune, un bloc par tick (12 et soulevé)."),
+        ("Souffle glacial", "1 à 3", "Il renverse la tête, l'appareil le remplit de froid (1,5 s, un cône tracé qui "
+                                     "te suit puis rougit), puis souffle par sa visière fêlée pendant 1 s : 4, ralenti "
+                                     "et givre, quatre fois si tu restes dedans."),
+        ("Blocs de glace", "1 à 3", "Il traîne l'ancre dans la glace puis la relève (1 s) : deux blocs (trois en "
+                                    "phase 2) volent vers des cercles tracés, le premier sous toi ; ils éclatent "
+                                    "(11) et laissent 5 s une plaque glissante de glace compactée."),
+        ("Équipage gelé", "2 et 3", "Le pistolet levé (1 s), une fusée de détresse : deux vagabonds (une de plus "
+                                   "tous les deux joueurs) montent sur le pont, jamais plus de trois."),
+        ("Fusée", "2 et 3", "Le pistolet braqué sur toi (0,8 s, une ligne orange puis rouge) : une fusée file le "
+                            "long d'elle et éclate sur le premier touché ou au bout (9 et enflammé)."),
+        ("Blizzard", "3", "À 30 % : il ouvre en grand les soupapes de l'appareil (2 s, invulnérable) et frappe le "
+                          "pont : une onde à sauter (10), il accélère. Le pont se couvre de neige et de givre "
+                          "(léger ralentissement, pas de glissade) et des stalactites tombent du gréement toutes les "
+                          "3 s sur des cercles marqués (rouges à la fin) : 10."),
+        ("Coup de bélier", "3", "Toutes les 14 s environ : il plante l'ancre, la cloche du navire sonne trois fois "
+                                "(1,5 s, le bout du pont côté proue tracé en rouge), puis le navire éperonne la "
+                                "banquise : deux vagues roulent sur tout le pont de la proue à la poupe, à 1 s "
+                                "d'écart (9 et poussé vers la poupe). Saute-les. Les stalactites attendent."),
+    ],
     "strangler_queen": [
         ("Coup de fouet", "1 à 3", "Le fouet ramené en arrière (0,8 s, une ligne verte de 11 blocs), puis claqué "
                                    "droit devant (14) : il te ramène vers elle."),
@@ -1707,6 +1839,21 @@ BOSS_FACTS = {
                        "ajoute pince, dissection et glissement. Phase 3 à 30 % : minuit, puis les aiguilles de la "
                        "grande horloge. Elle ne pose aucun bloc ; ses araignées disparaissent à sa mort, si le combat "
                        "repart ou si tout le monde s'en va, et un retour en arrière en attente est annulé.",
+    "spore_alchemist": "620 PV, armure 11, posture 105, barre verte. Phase 2 à 65 % : il rugit, accélère, ajoute le "
+                       "voile de spores et ses bogged, plus de fioles et de pousses. Phase 3 à 30 % : la floraison, les "
+                       "évents, le champ de mycélium et l'expiration. Ses seuls blocs sont les champignons des pousses, "
+                       "retirés au bout de 6 s, à sa mort, si le combat repart ou si tout le monde s'en va ; ses coups "
+                       "ne te poussent jamais vers une cage d'escalier ni vers le bord du chapeau.",
+    "thorn_gardener": "650 PV, armure 12, posture 115, barre verte. Phase 2 à 65 % : il rugit, accélère, ajoute "
+                      "l'appel du jardin et le pollen. Phase 3 à 30 % : la lampe solaire s'allume, ses rayons balaient "
+                      "la feuille et il se nourrit de lumière. Ses seuls blocs sont les buissons d'épines, retirés au "
+                      "bout de 5 s, à sa mort, si le combat repart ou si tout le monde s'en va ; ses coups ne te "
+                      "poussent jamais contre le rebord ni dans l'eau.",
+    "frost_commodore": "640 PV, armure 13, posture 120, barre blanche. Phase 2 à 65 % : il rugit, accélère, "
+                       "ajoute la fusée et son équipage gelé, plus de pics et de blocs de glace. Phase 3 à 30 % : le "
+                       "blizzard, les stalactites et le coup de bélier. Ses seuls blocs sont les plaques de glace "
+                       "compactée, remises en place au bout de 5 s, à sa mort, si le combat repart ou si tout le monde "
+                       "s'en va ; ses coups ne te poussent jamais contre le bastingage ni par-dessus.",
     "strangler_queen": "620 PV, armure 12, posture 115, barre verte. Phase 2 à 65 % : elle rugit, accélère, ajoute "
                        "fouet tournant et collet et grimpe dans le disque solaire d'où tombent esprits-jaguars et "
                        "graines-bombes. Phase 3 à 30 % : la floraison, puis des cages de racines se referment sur les "
@@ -1830,6 +1977,25 @@ LAIRS = {
                                  "la Directrice se réveille quand tu approches du sceau au centre."),
         ("Le bureau de la directrice", "Dans l'oriel nord, derrière des barreaux scellés ; son puits privé "
                                        "redescend vers la salle de remontage du bas."),
+    ],
+    "spore_alchemist": [
+        ("Le sommet de l'amanite", "L'arène : le dessus plat du chapeau de la grande amanite, environ 42 blocs de "
+                                   "large, ciel ouvert, une clôture de laiton et des lampes-champignons tout autour, "
+                                   "un anneau doré incrusté au milieu et deux ouvertures d'escalier bordées de garde-"
+                                   "corps (la rampe d'arrivée et l'escalier du coffre). Passé la brume au sommet de la "
+                                   "rampe, l'Alchimiste se réveille quand tu approches du sceau."),
+    ],
+    "thorn_gardener": [
+        ("La feuille de nénuphar", "L'arène : un nénuphar géant de 33 blocs de large au rebord rouge relevé, sur un "
+                                   "pilier de laiton au milieu du bassin de la serre, sous la lampe solaire suspendue "
+                                   "à la couronne du dôme. Passé la brume de la porte de la corniche et le pont de la "
+                                   "nervure, le Jardinier se réveille quand tu approches du sceau."),
+    ],
+    "frost_commodore": [
+        ("Le gaillard d'avant", "L'arène : le pont du gaillard du brise-glace, environ 34 blocs de large, la "
+                                "passerelle à l'arrière, la proue devant, un bastingage de deux blocs tout autour ; le "
+                                "pont gîte un peu sur tribord. Passé la brume au pied de l'escalier de la passerelle, "
+                                "le Commodore se réveille quand tu approches du sceau."),
     ],
     "grand_clockmaker": [
         ("Citadelle d'horlogerie", "Entre dans la grande tour-horloge. Dans le hall d'entrée, côté est, un escalier "
@@ -2200,6 +2366,14 @@ NEW_GROUPS = [
          "d'automates : une tour de l'horloge aux cadrans fêlés, des ailes de cellules grillagées, un amphithéâtre "
          "opératoire, des bains d'hydrothérapie, un funiculaire, et une arène derrière le cadran de l'horloge.",
          "s-clockwork_asylum", "struct:clockwork_asylum"),
+        ("L'Arboretum englouti", "Un arboretum de laiton et de verre au fond d'une grotte luxuriante : une "
+         "coupole de 50 blocs dont les nervures portent la voûte, un lac de nénuphars nourri par une cascade, "
+         "serres en terrasses, grainothèque, laboratoire des spécimens, labyrinthe d'azalées, et une arène sur "
+         "une île-nénuphar sous la lampe-soleil.", "s-verdant_arboretum", "struct:verdant_arboretum"),
+        ("La Raffinerie de spores", "Une raffinerie d'alchimistes poussée dans trois champignons colossaux sur "
+         "une île de mycélium : presses à vis, cuves de fermentation, distillerie, séchoirs sous le chapeau brun, "
+         "ponts de corde, et une arène au sommet de la grande amanite.", "s-spore_refinery",
+         "struct:spore_refinery"),
         ("Le Cimetière des dirigeables", "Un champ d'épaves dans la savane autour d'un mât d'amarrage haut de 90 "
          "blocs : un dirigeable encore amarré sous son enveloppe dégonflée, des épaves écrasées, le bidonville des "
          "ferrailleurs, une usine à gaz, et une arène sur le pont supérieur du dirigeable.", "s-airship_graveyard",
@@ -2354,6 +2528,25 @@ TEST_CHECKLIST = [
      "que tu y es ramené ; sors des couloirs du pendule et tue les araignées ; à 65 %, passe d'un quart à l'autre "
      "pendant la dissection ; à 30 %, saute l'onde de minuit et suis la brèche dorée entre les aiguilles. Pour le "
      "vrai repaire : /brasshaven tp clockwork_asylum (l'étage de l'horloge, en haut de la tour)."),
+    ("L'Alchimiste des spores", ["/brasshaven boss spore_alchemist"],
+     "Il apparaît à 6 blocs. Recule hors de l'arc du bâton puis du cercle rouge de la fiole, sors du cône de la "
+     "pulvérisation et contourne le nuage qu'elle laisse, quitte les cercles colorés des fioles, sors des cercles bruns "
+     "des pousses et vérifie que les champignons disparaissent après 6 s ; à 65 %, attends qu'il ressorte du voile sur "
+     "son cercle et tue les bogged ; à 30 %, saute l'onde de la floraison, évite les évents, éloigne-toi de lui contre "
+     "le mycélium et traverse l'anneau doré à chaque expiration. Pour le vrai repaire : /brasshaven tp spore_refinery "
+     "(le sommet de la grande amanite)."),
+    ("Le Jardinier en chef", ["/brasshaven boss thorn_gardener"],
+     "Il apparaît à 6 blocs. Recule hors des deux arcs du sécateur, sors du couloir de la fente, glisse-toi entre les "
+     "lignes d'épines, sors du cercle de la liane (ou frappe pour te libérer), quitte le cône de l'arrosage et vérifie "
+     "que les buissons d'épines disparaissent ; à 65 %, tue les grenouilles et araignées et sors des cercles de pollen ; "
+     "à 30 %, saute l'onde, esquive les rayons et entre dans son cercle de lumière pour l'empêcher de guérir. Pour le "
+     "vrai repaire : /brasshaven tp verdant_arboretum (le nénuphar sous le dôme)."),
+    ("Le Commodore gelé", ["/brasshaven boss frost_commodore"],
+     "Il apparaît à 6 blocs. Recule hors de l'arc de l'ancre puis du revers rouge, quitte la ligne du lancer et reste "
+     "hors d'elle pendant le retour de l'ancre, glisse-toi entre les lignes de pics, sors du cône du souffle, quitte "
+     "les cercles des blocs de glace et vérifie que les plaques glissantes disparaissent ; à 65 %, esquive la fusée et "
+     "tue les vagabonds ; à 30 %, saute l'onde du blizzard, sors des cercles des stalactites et saute les deux vagues "
+     "du coup de bélier. Pour le vrai repaire : /brasshaven tp icebound_fleet (le gaillard d'avant du brise-glace)."),
     ("La Reine-figuier étrangleur", ["/brasshaven boss strangler_queen"],
      "Elle apparaît à 6 blocs. Écarte-toi de la ligne du fouet, glisse-toi entre les lignes de racines, saute les "
      "anneaux, sors du pollen ; à 65 %, tue les esprits-jaguars pour la faire chuter et sors des cercles des "

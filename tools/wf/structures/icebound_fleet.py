@@ -45,8 +45,8 @@ from ..megakit import (BRASS, BRASS_SLAB, BRASS_STAIRS, CHANDELIER, COPPER, EDIS
 from ..parts import LOOT, MOD
 from .airship_graveyard import Ctx, newel_laps, write_steps
 
-# no boss of its own yet: the Gryphon Knight (a flier) holds the open forecastle under the bridge
-BOSS = "brasshaven:gryphon_knight"
+# the champion of the forecastle deck: the Frozen Commodore (entity/boss/FrostCommodore.java, tools/BOSSES.md)
+BOSS = "brasshaven:frost_commodore"
 MOB_STRAY = "minecraft:stray"
 MOB_DRONE = W + "steam_drone"
 MOB_GUNNER = W + "boiler_gunner"

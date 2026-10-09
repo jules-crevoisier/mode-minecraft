@@ -1783,6 +1783,262 @@ Previews:
 - `python3 tools/gen_models.py --preview --only asylum_director` writes `build/previews/models/asylum_director.png`.
 - Held bone-saw: `python3 tools/art_sheet.py --kind held --only director_bonesaw`.
 
+## 33. Champion of the Icebound Fleet: The Frozen Commodore (Le Commodore gelé)
+Files:
+- `tools/wf/mobs/frost_commodore.py`: model `frost_commodore` (103 cubes, 256x128).
+- `src/main/java/com/brasshaven/entity/boss/FrostCommodore.java`: the moveset.
+
+There is no lair module. The arena is the icebreaker's forecastle deck (`tools/wf/structures/icebound_fleet.py`, the seal
+at the arena centre `AC`, radius 18): about 34 wide, the bridge front aft (the stair from the wheelhouse comes down to
+the mist at the arena door), the bow tapering ahead, a two-high bulwark all round, capstans, hatches and the sealed hood
+on the deck; the deck lists about 4° to starboard (floor within ±1 block of the seal). `BOSS` there is
+`brasshaven:frost_commodore` (it replaces the borrowed Gryphon Knight, whose own home, quest and seal on the sky island
+are untouched). `BOSS_HOME` is `icebound_fleet`. The structure may be rotated: the class finds the bow at runtime as
+the axis direction with the longest run of open deck (three parallel probes).
+
+Reward: `remembrance_frost_commodore` forges the **Ice Anchor of the Frozen Commodore** (`commodore_anchor`, LITHITE
+8.5 / -3.0).
+- It has a new ability shape, **ANCHOR**, in `BossWeaponItem`: the anchor is hurled along the aim on its chain
+  (`item/AnchorThrows.java`, ticked from the server tick like `Rewinds`): 2 blocks a tick up to 12 blocks (walls stop
+  it). It bites the first foe it meets (full power) or the end of its throw; frost bursts there for half the power
+  within 2 blocks. It lies 5 ticks, then the chain drags it back to the wielder at 1.5 blocks a tick: every foe within
+  1.3 of its way back takes 70% of the power, is hauled 0.8 toward the wielder and slowed (flag `slow`). Cooldown 80.
+- Held model `commodore_anchor` in `wf/held3d.py`, sprite `ice_anchor` in `wf/itemart_shapes.py`.
+
+Loot (`gen_data.py`): map fragments, emeralds, experience bottles, golden apples, diamonds, blue and packed ice, iron
+chain, a spyglass, a compass, an 8% enchanted golden apple. Quest: `explorer/boss_frost_commodore`.
+
+**Concept.** The expedition's commander, dead in the ice but kept moving by a frost-rimed brass life-support rig,
+3.8 blocks (hitbox 1.8 x 3.8):
+- a long navy greatcoat lined and collared with grey fur, double-breasted with brass buttons, gold epaulettes, a ribbon
+  bar; patches of ice crust all over, icicles off the hem, the cuffs and the beard;
+- an iron hood made like a diving bell on a brass collar ring, frost on its dome, a round porthole visor with guard
+  bars, cracked and frosted, glowing pale blue (glow layer); a frozen white beard spills out under it;
+- on his back a copper boiler drum in brass hoops (the rig), iced over, a gauge and a glowing pilot window, two vent
+  pipes over the shoulders venting cold steam (scaled in the anims), hoses into the hood;
+- asymmetry: the right hand grips a huge ice-encrusted anchor by the shank (its stock across, the crown and spade
+  flukes near the ground, chain links wound round the forearm); the left hand holds a stubby brass flare pistol with a
+  glowing flare in its mouth.
+
+**Stats.**
+- 640 health, armour 13, toughness 4, attack 14, poise 120, speed 0.25, knockback resistance 1.0, step 1.5.
+- No fall damage, cannot freeze, white bar.
+- Phase 2 at 65% (roar, +10% speed, `frost_commodore_wrath`). Phase 3 at 30%, driven by the class like the Chained
+  Jailer: when he is free he chains `blizzard` once (guarded 64 ticks), then every 280 ticks x `cooldownScale()` (at
+  least 160; the first 140 ticks after the blizzard) `ramshock`. Range 999 / weight 0 keeps the scheduled moves out of
+  the picker.
+
+| Move | Phase | Wind-up / active / recovery | Range | What it does |
+|---|---|---|---|---|
+| anchor | 1-3 | 18 / 22 / 14 | 0-6.5 | Arc drawn in frost (±80°, 5.5): forehand at impact, 14, push 1.0. At active 2 he turns up to 30° toward the target and the backhand's arc is drawn red (active 2-11); backhand at active 12: 11, push 0.8. P2: 30% chains breath (within 7) or hurl. |
+| throw | 1-3 | 24 / 36 / 14 | 4-18 | A line (half width 1.2) over open deck up to 16, drawn in frost; he turns 4°/tick until wind-up 14, then it locks red. The anchor crosses it in 10 ticks (12, once), bites at the end (8 in r 2; the ring drawn during the flight), lies 6 ticks with the way back drawn red, then is dragged back to his hand in 14 ticks: 10, Slowness II 2 s, frost, hauled 0.7 toward him (once). |
+| spikes | 1-3 | 20 / 30 / 14 | 0-24 | 3 lines (P2 5), 25° apart, the middle one at the target, up to 16 over open deck, drawn from the start, red from wind-up 12. At impact spikes burst along each line one point a tick from him outward: 12 and lift 0.5 (once per line). |
+| breath | 1-3 | 30 / 24 / 16 | 0-10 | Cone ±30°, 10 deep, drawn from wind-up 8; he turns 3°/tick until 20, then red. Active 0-19: snow and cold cloud; hits at active 0, 5, 10, 15: 4, Slowness II 3 s, frost (no push). |
+| hurl | 1-3 | 20 / 12 / 14 | 5-24 | 2 rings (P2 3, r 2): the target (following until wind-up 12), the other players, then open deck 4-7 from the target, at least 4 apart. All red from wind-up 12. Blocks of ice fly 18 ticks from impact: 11, push 0.4 out of the ring, then a 3 x 3 slippery patch of packed ice for 100 ticks. |
+| strays | 2-3 | 20 / 10 / 16 | 0-30 | Cooldown 700. A signal flare fired straight up; 2 strays (`summon`, +1 per 2 extra players) unless 3 minions already stand in the arena. |
+| flare | 2-3 | 16 / 10 / 12 | 6-26 | A line (half width 0.6) up to 24 over open deck drawn in orange; he turns 5°/tick until wind-up 10, then red. The flare flies 1.6 b/t and bursts on the first one it meets or at the end: 9 and fire 2 s in r 2. |
+| blizzard | 3 (once) | 40 / 20 / 20 | scheduled | Guarded 64 ticks; rings of frost grow round him, steam. Impact: a wave to 14 (10, jump; it hits only who stands within 0.6 of the floor), +12% speed (`frost_commodore_blizzard`), the blizzard starts (ram timer 140, icicles 40). |
+| ramshock | 3 | 30 / 40 / 16 | scheduled | The ship's bell at wind-up 0, 10, 20; the bow end of the deck drawn (frost, red from 18). At impact and at active 20: a wave front across the whole deck rolls from the bow end to the stern end at 0.7 b/t: 9 and a shove of 0.5 sternward to whoever stands on the floor where it passes (once a wave). Jump it. |
+
+**Blizzard (phase 3).** Snow over the deck every 2 ticks, frost dust on it every 10; every 5 ticks each player on the
+deck gets frozen ticks up to 120 (the frost overlay, never the 140 that hurts) and every 20 ticks Slowness I for 1.5 s.
+No sliding: the deck itself is not changed. Every 60 ticks x `cooldownScale()` (at least 34) a volley of icicles:
+`scaledCount(3)` spots plus one over the target and one over each other player (up to 3), on open deck, at least 3.5
+apart. Each ring (r 1.6) is drawn for 30 ticks (red for the last 10, the icicle falling from 12 blocks up in that time),
+then 10 and Slowness I 2 s. The icicles wait while `ramshock` or `blizzard` runs and while the ram waves roll.
+
+**Temporary blocks.** The slippery patches are the only blocks he places: packed ice over plain full deck blocks (air
+above, no block entity, not ice already) in the 3 x 3 under each block of ice. Each goes back after 100 ticks (only
+where it is still packed ice), and all of them when the fight resets (phase back to 1), the arena empties, he dies, is
+removed, and on the first tick after a reload (saved in `CommodoreBlocks`). His strays are discarded on death and
+reset.
+
+**Fair edges.** His `strike` caps pushes at 1.2 and lift at 0.45. A push is dropped entirely when a probe 1.5 or 3
+blocks along it finds no open deck (the bulwark, a prop, the arena's edge, a drop), and then the lift is capped at 0.2;
+the engine's phase-2 roar shove is corrected the same way. The throw, spikes and flare lines only run over open deck.
+The deck's list is handled by measuring every floor height locally (waves hit whoever stands within 0.6 of the floor
+under them).
+
+**Co-op and NG+** come from the engine (`BossDifficulty`, `BossCycles`): health, damage (every hit goes through
+`strike`), poise, cooldowns (the ram and icicle timers use `cooldownScale()`), compressed wind-ups. Strays scale with
+`summon`; icicles with `scaledCount` and one per player; phase-2 ice blocks land on every player (up to 3).
+
+Previews:
+- `python3 tools/gen_models.py --preview --only frost_commodore` writes `build/previews/models/frost_commodore.png`.
+- Held anchor: `python3 tools/art_sheet.py --kind held --only commodore_anchor`.
+
+## 34. Champion of the Spore Refinery: The Spore Alchemist (L'Alchimiste des spores)
+Files:
+- `tools/wf/mobs/spore_alchemist.py`: model `spore_alchemist` (89 cubes, 256x128).
+- `src/main/java/com/brasshaven/entity/boss/SporeAlchemist.java`: the moveset.
+
+There is no lair module. The arena is the open-sky top of the giant fly agaric's cap
+(`tools/wf/structures/spore_refinery.py`, the seal 4 blocks north of the cap's axis, radius 19): about 42 wide, fenced
+at r 21 (from the axis) with brass railings and stem posts crowned by mushroom lamps, a gilded ring inlaid at r 14 round
+the axis, and two railed stairwell openings in the floor (the arrival ramp east of the axis, the vault stair south of
+it). `BOSS` there is `brasshaven:spore_alchemist` (it replaces the borrowed Gryphon Knight, whose own home, quest and
+seal on the sky island are untouched). `BOSS_HOME` is `spore_refinery`. The class finds the gilded ring at runtime
+(the `gilded_trim` blocks in the floor layer round the seal: their centroid and mean radius; without at least 24 it uses
+the arena centre and 0.7 x radius), and checks the floor is flat (70% of samples within 0.6 of the seal's level: the
+floor tolerance is then 0.6, else 1.6), so stair treads one block down count as holes.
+
+Reward: `remembrance_spore_alchemist` forges the **Stirring Staff of the Spore Alchemist** (`alchemist_staff`, LITHITE
+7.5 / -2.8).
+- It has a new ability shape, **TETHER**, in `BossWeaponItem`: a spore flask flung along the aim
+  (`item/SporeTethers.java`, ticked from the server tick like `AnchorThrows`): 1.5 blocks a tick up to 12 blocks
+  (walls stop it). It shatters on the first foe it meets or at the end of its flight (dropped to the floor when within
+  1.5): every foe within 2.5 takes the full power (flag `poison`). Mycelium threads tether every foe within 4 to the
+  spot for 60 ticks (Slowness II for 70 ticks; a foe more than 2.5 from it is dragged back), and when they snap the
+  spores burst again: half the power to every tethered foe still within 6. Cooldown 90.
+- Held model `alchemist_staff` in `wf/held3d.py`, sprite `spore_staff` in `wf/itemart_shapes.py`.
+
+Loot (`gen_data.py`): map fragments, emeralds, experience bottles, golden apples, diamonds, red and brown mushrooms,
+mycelium, glass bottles, fermented spider eyes, an 8% enchanted golden apple. Quest: `explorer/boss_spore_alchemist`.
+
+**Concept.** A hunched alchemist half-consumed by the fungus he refined, 3.5 blocks (hitbox 1.6 x 3.5):
+- stooped forward (the chest pitched 26°), a long stained leather apron and bib (test tubes in its pocket) over a plum
+  work coat, a belt of vials (two glow), white mycelium threads trailing from the cuffs, the coat tails and the boots;
+- a rough hood with a brass respirator faceplate: a grilled snout, two copper filter canisters and two round goggle
+  lenses glowing spore-green (glow layer);
+- the hump is a fly agaric sprouting from his back (red cap with white warts, gills under it, a pale stalk with its
+  ring, two little caps budding beside it; it swells in the anims);
+- orange bracket fungi on both shoulders; mottled grey-green hands;
+- a brass spore-tank in copper bands on his lower back (a glowing gauge window, a valve with a red wheel), a hose to
+  the left hand;
+- asymmetry: the right hand leans on a long dark stirring staff (brass ferrule and collars, a small red mushroom on the
+  pole, a round flask of glowing green brew at the tip); the left hand holds a brass nozzle-gun with a copper nozzle and
+  a glowing spore reservoir.
+
+**Stats.**
+- 620 health, armour 11, toughness 3, attack 13, poise 105, speed 0.24, knockback resistance 1.0, step 1.5.
+- No fall damage, green bar; Poison, Slowness and Blindness do not take on him (his own clouds).
+- Phase 2 at 65% (roar, +10% speed, `spore_alchemist_wrath`). Phase 3 at 30%, driven by the class like the Chained
+  Jailer: when he is free he chains `bloom` once (guarded 64 ticks), then every 320 ticks x `cooldownScale()` (at
+  least 180; the first 140 ticks after the bloom) `exhale`. Range 999 / weight 0 keeps the scheduled moves out of the
+  picker.
+
+| Move | Phase | Wind-up / active / recovery | Range | What it does |
+|---|---|---|---|---|
+| staff | 1-3 | 16 / 20 / 14 | 0-6 | Arc drawn green (±75°, 5): the sweep at impact, 13, push 0.9. At active 1 he turns up to 30° toward the target and a ring (r 2) 3.5 ahead is drawn red (active 1-11); the flask comes down on it at active 12: 11, lift 0.3, Poison I 2 s. P2: 30% chains spray (within 8) or flask. |
+| spray | 1-3 | 24 / 20 / 16 | 0-9.5 | Cone ±28°, 9 deep, drawn from wind-up 6; he turns 3°/tick until 16, then red. Active 0-19: spores; hits at active 0, 5, 10, 15: 3 and Poison I 3 s (no push). At active 19 a lingering cloud (area effect cloud of Poison I, r 2.5 shrinking, 100 ticks, its edge drawn green every 8 ticks) 5 ahead on open cap. |
+| flask | 1-3 | 20 / 10 / 14 | 4-24 | 2 rings (P2 3, r 2.2) in the brew's colour (the first always poison, the rest random: green poison, grey slowness, black blindness): the target (following until wind-up 12), the other players, then open cap 4-7 from the target, at least 4 apart; a red ring inside each from wind-up 12. Flights 16 ticks from impact: 8, push 0.3 out of the ring, then Poison II 3 s / Slowness II 3 s / Blindness 2 s. |
+| sprout | 1-3 | 18 / 8 / 16 | 0-26 | At impact a ring (r 1.5) under each player (up to 4) plus `scaledCount(2)` (P2 4) open spots within the ring + 4, at least 3 apart; drawn brown for 30 ticks (red for the last 10), then the mushroom bursts: 10, lift 0.5, Poison I 2 s; a stem and a red mushroom block stand there 120 ticks if both blocks are air and no creature is in them. |
+| shroud | 2-3 | 20 / 40 / 14 | 0-30 | A cloud grows round him. At impact he hides (invisible, guarded until he comes out) and picks a spot 5-8 from the target, at least 4.5 from every player, the whole ring (r 3) over open cap, 4 blocks clear. The ring is drawn active 0-29 (red from 20); he moves there at active 20 and bursts out at active 30: 11, push 0.6 out of the ring, Poison I 3 s. |
+| bogged | 2-3 | 20 / 10 / 16 | 0-30 | Cooldown 700. 2 bogged (`summon`, +1 per 2 extra players) unless 3 minions already stand in the arena. |
+| bloom | 3 (once) | 40 / 20 / 20 | scheduled | Guarded 64 ticks; rings of spores grow round him. Impact: a wave to 14 (10, jump; it hits only who stands within 0.6 of the floor), +12% speed (`spore_alchemist_bloom`), the cap starts breathing (exhale timer 140, vents 60). |
+| exhale | 3 | 50 / 10 / 16 | scheduled | Alternates the outside of the gilded ring (first) and the inside. Wind-up: the ring drawn gold every 2 ticks and 40 spore motes over the side that will breathe out (green, red from 36). Impact: 9 and Poison II 3 s to every player on that side (inside: closer than ring - 1; outside: further than ring + 1; within 3.5 of the floor's level, so jumping does not help). The ring's band is always safe. |
+
+**The cap breathes (phase 3).** Every 80 ticks x `cooldownScale()` (at least 40) `scaledCount(2) + 1` vents spread
+round the ring's centre, each as far out as ring + 4 or 2.5 short of the last open cap along its ray, nudged inward
+until the whole ring (r 2) lies over open cap; each ring is drawn 30 ticks (red for the last 10), then a geyser: 8,
+lift 0.4, Poison I 2 s (no push). The vents wait while `exhale` or `bloom` runs or he is guarded. The mycelium tether
+field: every 5 ticks threads are drawn from him to every player within 6 (and a ring of threads every 10), and every
+20 ticks they get Slowness I for 1.5 s; walk out of it.
+
+**Temporary blocks.** The sprouted mushrooms are the only blocks he places: a mushroom stem and a red mushroom block
+over the open cap floor (both air before, nobody in them, at most 28 at once), set without neighbour shape updates so
+the cap's mushroom blocks keep their faces. Each goes back after 120 ticks (only where it is still that block), and
+all of them when the fight resets (phase back to 1), the arena empties, he dies, is removed, and on the first tick
+after a reload (saved in `AlchemistBlocks`). His bogged are discarded on death and reset; the shroud's invisibility is
+lifted when the move is cut short, on reset, death and reload.
+
+**Fair edges.** His `strike` caps pushes at 1.1 and lift at 0.45. A push is dropped entirely when a probe 1.5 or 3
+blocks along it finds no open cap (a stairwell, a railing, the fence, the edge), and then the lift is capped at 0.2;
+the phase-2 roar shove is corrected the same way. "Open cap" also means no further than ring + 6 from the ring's
+centre, short of the fence. Flask, sprout, vent and shroud spots only land on open cap, never over the stairwells.
+
+**Co-op and NG+** come from the engine (`BossDifficulty`, `BossCycles`): health, damage (every hit goes through
+`strike`/`shove`), poise, cooldowns (the exhale and vent timers use `cooldownScale()`), compressed wind-ups. Bogged
+scale with `summon`; sprouts and vents with `scaledCount` and one per player; phase-2 flasks land on every player (up
+to 3).
+
+Previews:
+- `python3 tools/gen_models.py --preview --only spore_alchemist` writes `build/previews/models/spore_alchemist.png`.
+- Held staff: `python3 tools/art_sheet.py --kind held --only alchemist_staff`.
+
+## 35. Champion of the Sunken Arboretum: The Head Gardener (Le Jardinier en chef)
+Files:
+- `tools/wf/mobs/thorn_gardener.py`: model `thorn_gardener` (89 cubes, 256x128).
+- `src/main/java/com/brasshaven/entity/boss/ThornGardener.java`: the moveset.
+
+There is no lair module. The arena is the giant lily pad in the palm house dome (`tools/wf/structures/verdant_arboretum.py`,
+`arena()`, the seal at the dome centre on the pad, radius 17): a flat pad of radius 16 (33 across) with a red upturned
+rim 2.5 high, on a brass pedestal over the dome's pool, under the hanging sun-lamp (its core about 19 above the pad). The
+east and north rib bridges land in notches of the rim. `BOSS` there is `brasshaven:thorn_gardener` (it replaces the
+borrowed Gryphon Knight, whose own home, quest and seal on the sky island are untouched). `BOSS_HOME` is
+`verdant_arboretum`. "Open pad" in the class means floor within 0.6 of the seal's level with two blocks of air over it,
+inside the arena radius: the rim and the water are never open pad.
+
+Reward: `remembrance_thorn_gardener` forges the **Pruning Shears of the Head Gardener** (`gardener_shears`, LITHITE
+8.0 / -2.6).
+- It has a new ability shape, **PRUNE**, in `BossWeaponItem`: the blades open and snap shut along the aim (up to 7
+  blocks, walls stop them, 1.2 to each side). Every foe between them takes the power, 150% under half health; thorns
+  burst round each foe cut, snaring it and the foes within 1.5 (Slowness III 1.5 s; flag `slow` adds the usual slow);
+  each cut heals the wielder 1 (4 at most). Cooldown 70. Instant, no ticker.
+- Held model `gardener_shears` in `wf/held3d.py`, sprite `pruning_shears` in `wf/itemart_shapes.py`.
+
+Loot (`gen_data.py`): map fragments, emeralds, experience bottles, golden apples, diamonds, sweet berries, bone meal,
+moss, azaleas, shears, an 8% enchanted golden apple. Quest: `explorer/boss_thorn_gardener`.
+
+**Concept.** A tall brass gardening automaton left to tend the palm house alone until the garden grew into it,
+3.8 blocks (hitbox 1.6 x 3.8):
+- a barrel-chested riveted copper body, brass seam straps, verdigris toward the waist, a glowing green chlorophyll
+  porthole; moss cushions on the shoulders, ivy strands (flat planes) hanging from the seams front, back and sides;
+- a glass bell jar for a head (see-through: brass frame, glints and condensation only) on a brass collar, moss inside
+  and a magenta-and-gold flower growing in it (glow layer), scaled and swayed in the anims;
+- very long arms: brass upper arms, red-lacquered shear-grip forearms, and at each wrist two steel blades on a brass
+  pivot bolt that open and snap (`jaw_?a` / `jaw_?b`);
+- a verdigris watering can on his back made into a cannon: a brass barrel over his RIGHT shoulder to a sprinkler rose
+  (water glints in the glow layer), a ribbed hose looping to his hip;
+- piston legs in terracotta flowerpot boots, roots out of the toes and trailing behind, a fan of fine roots flat
+  on the ground.
+
+**Stats.**
+- 650 health, armour 12, toughness 4, attack 14, poise 115, speed 0.26, knockback resistance 1.0, step 1.5.
+- No fall damage, green bar.
+- Phase 2 at 65% (roar, +10% speed, `thorn_gardener_wrath`). Phase 3 at 30%, driven by the class like the Chained
+  Jailer: when he is free he chains `ignite` once (guarded 64 ticks), then every 320 ticks x `cooldownScale()` (at least
+  200; the first 200 ticks after the ignition) `photosynth`. Range 999 / weight 0 keeps the scheduled moves out of the
+  picker.
+
+| Move | Phase | Wind-up / active / recovery | Range | What it does |
+|---|---|---|---|---|
+| snip | 1-3 | 16 / 14 / 14 | 0-6 | Arc drawn green (±70°, 5): right shears at impact, 12, push 0.6. At active 1 he turns up to 25° toward the target and the left arc is drawn red (active 1-7); left shears at active 8: 10, push 0.5. P2: 30% chains spray (within 7) or lunge. |
+| lunge | 1-3 | 22 / 12 / 16 | 4-12 | A lane (half width 1.0) over open pad up to 9, plus 3 for the blades, drawn green; he turns 4°/tick until wind-up 14, then it locks red. Active 0-4 he moves down the lane (to 1 short of its end, `move`, collisions kept); at active 4 the blades close on the whole lane from his start to 3 past him: 15, push 0.5. |
+| thorns | 1-3 | 20 / 24 / 14 | 0-22 | 3 lines (P2 5), 22° apart, the middle one at the target, up to 15 over open pad, drawn from the start, red from wind-up 12. At impact thorns burst along each line one point a tick: 11, lift 0.4, Slowness I 1 s (once per line). |
+| snare | 1-3 | 24 / 10 / 14 | 3-18 | A ring (r 1.6) under the target, following until wind-up 14, then red; a vine creeps to it from his feet. Impact: 6 and a player is rooted 30 ticks (Slowness X, ambient off); it tears at once when that player hits anything (`getLastHurtMobTimestamp` changes) or loses health to anything, and on reset, death, removal, or an empty arena. Mobs get Slowness IV 1.5 s. |
+| spray | 1-3 | 26 / 20 / 14 | 0-11 | Cone ±25°, 11 deep, drawn blue from wind-up 6; he turns 3°/tick until 16, then red. Active 0-19: water jet; hits at active 0, 5, 10, 15: 3, a push of 0.35 away (dropped where it would leave the pad), puts out fire. At active 19: 2 patches (P2 3) in the cone, 4-10 out, 3 apart: each ring (r 1.5) drawn 30 ticks (red the last 10), then 7 in it, lift 0.3, and sweet berry bushes (age 2) in the air over the moss cells of the plus round it, for 100 ticks. |
+| call | 2-3 | 20 / 10 / 16 | 0-30 | Cooldown 600. Dart frog assassins and clockwork spiders alternately, `scaledCount(2)`, at most 3 alive, on open pad 3.5 from him; tagged minions, discarded on death and reset. |
+| pollen | 2-3 | 18 / 12 / 14 | 0-24 | Rings (r 2.2) drawn yellow: the target, the other players, then open pad 4-7 from the target, 4 apart; 2 (P3 3, at least one per player up to 4). At impact puffs arc from the bloom in 16 ticks (rings red): 8, Slowness I 2 s. |
+| ignite | 3 (once) | 40 / 20 / 20 | scheduled | Guarded 64 ticks; gold rings grow round him, light rains from the lamp. Impact: a ring of light to 14 (10, jump; it hits only who stands within 0.6 of the floor), +12% speed (`thorn_gardener_sun`), the sunbeams start (first volley 50 ticks later). |
+| photosynth | 3 | 30 / 50 / 16 | scheduled | A gold ring r 3 round him, a column of light growing down from the lamp. Active pulses at 5, 15, 25, 35, 45: +1% max health unless a player stands within 3 (+ half width) of him, in which case the pulse is lost (smoke over the shading players). No damage at all in this move. |
+
+**Sun-lamp (phase 3).** Light motes drift over the pad. Every 90 ticks x `cooldownScale()` (at least 50) a volley of
+sunbeams, `min(4, scaledCount(2))` of them: one across the target, one across each of up to 2 other players, the rest
+across random open pad. Each starts 3-5 blocks back from its mark on a random bearing and runs through it to 4 beyond,
+clipped to open pad. The ring (r 2) and the path are drawn gold for 30 ticks (red the last 10), then the beam (a column
+from the lamp) sweeps the path at 0.22 blocks a tick (slower than walking): 4 and fire 2 s, at most every 10 ticks per
+target. New volleys wait while `ignite` or `photosynth` runs.
+
+**Temporary blocks.** The thorn bushes are the only blocks he places: sweet berry bushes in plain air over the pad, only
+where a bush can survive (the moss tiles; elsewhere particles only). Each goes back to air after 100 ticks (only where
+it is still a sweet berry bush), and all of them when the fight resets (phase back to 1), the arena empties, he dies, is
+removed, and on the first tick after a reload (saved in `GardenerBlocks`).
+
+**Fair edges.** His `strike` caps pushes at 1.0 and lift at 0.4. A push is dropped entirely when a probe 1.5 or 3 blocks
+along it finds no open pad (the rim, the bridge notches, the water), and then the lift is capped at 0.2; the spray and the
+engine's phase-2 roar shove are corrected the same way. Lines, lanes, patches, rings and beams only use open pad. The
+snare is short (1.5 s), clearly drawn, and breaks the moment anything hurts the rooted player, so no follow-up lands on
+a held player for free. Photosynthesis heals at most 5% and is fully blocked by standing next to him.
+
+**Co-op and NG+** come from the engine (`BossDifficulty`, `BossCycles`): health, damage (every hit goes through
+`strike`), poise, cooldowns (the beam and photosynthesis timers use `cooldownScale()`), compressed wind-ups. Adds scale
+with `scaledCount`; sunbeams with `scaledCount` and one per player; pollen rings land on every player (up to 4).
+
+Previews:
+- `python3 tools/gen_models.py --preview --only thorn_gardener` writes `build/previews/models/thorn_gardener.png`.
+- Held shears: `python3 tools/art_sheet.py --kind held --only gardener_shears`.
+
 ## Difficulty: co-op scaling and NG+ cycles
 
 Applied by `boss/WayfarerBoss` to **every** boss on its first server tick, whatever spawned it (boss seal,

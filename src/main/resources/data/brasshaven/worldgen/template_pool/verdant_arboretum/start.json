@@ -1,0 +1,384 @@
+{
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "brasshaven:chunked_template",
+        "size": [
+          155,
+          62,
+          185
+        ],
+        "cells": [
+          {
+            "location": "brasshaven:verdant_arboretum/arboretum/x0_z0",
+            "offset": [
+              24,
+              13,
+              21
+            ],
+            "size": [
+              7,
+              11,
+              10
+            ],
+            "blocks": 469
+          },
+          {
+            "location": "brasshaven:verdant_arboretum/arboretum/x0_z1",
+            "offset": [
+              0,
+              13,
+              31
+            ],
+            "size": [
+              31,
+              13,
+              31
+            ],
+            "blocks": 5756
+          },
+          {
+            "location": "brasshaven:verdant_arboretum/arboretum/x0_z2",
+            "offset": [
+              18,
+              13,
+              62
+            ],
+            "size": [
+              13,
+              21,
+              30
+            ],
+            "blocks": 5133
+          },
+          {
+            "location": "brasshaven:verdant_arboretum/arboretum/x0_z3",
+            "offset": [
+              15,
+              13,
+              92
+            ],
+            "size": [
+              16,
+              24,
+              31
+            ],
+            "blocks": 5237
+          },
+          {
+            "location": "brasshaven:verdant_arboretum/arboretum/x1_z0",
+            "offset": [
+              31,
+              13,
+              6
+            ],
+            "size": [
+              31,
+              20,
+              25
+            ],
+            "blocks": 9523
+          },
+          {
+            "location": "brasshaven:verdant_arboretum/arboretum/x1_z1",
+            "offset": [
+              31,
+              3,
+              31
+            ],
+            "size": [
+              31,
+              42,
+              31
+            ],
+            "blocks": 18977
+          },
+          {
+            "location": "brasshaven:verdant_arboretum/arboretum/x1_z2",
+            "offset": [
+              31,
+              0,
+              62
+            ],
+            "size": [
+              31,
+              45,
+              30
+            ],
+            "blocks": 22696
+          },
+          {
+            "location": "brasshaven:verdant_arboretum/arboretum/x1_z3",
+            "offset": [
+              31,
+              0,
+              92
+            ],
+            "size": [
+              31,
+              37,
+              31
+            ],
+            "blocks": 23585
+          },
+          {
+            "location": "brasshaven:verdant_arboretum/arboretum/x1_z4",
+            "offset": [
+              31,
+              6,
+              123
+            ],
+            "size": [
+              31,
+              27,
+              17
+            ],
+            "blocks": 4994
+          },
+          {
+            "location": "brasshaven:verdant_arboretum/arboretum/x2_z0",
+            "offset": [
+              62,
+              13,
+              0
+            ],
+            "size": [
+              31,
+              32,
+              31
+            ],
+            "blocks": 20296
+          },
+          {
+            "location": "brasshaven:verdant_arboretum/arboretum/x2_z1",
+            "offset": [
+              62,
+              1,
+              31
+            ],
+            "size": [
+              31,
+              61,
+              31
+            ],
+            "blocks": 44090
+          },
+          {
+            "location": "brasshaven:verdant_arboretum/arboretum/x2_z2",
+            "offset": [
+              62,
+              0,
+              62
+            ],
+            "size": [
+              31,
+              62,
+              30
+            ],
+            "blocks": 44683
+          },
+          {
+            "location": "brasshaven:verdant_arboretum/arboretum/x2_z3",
+            "offset": [
+              62,
+              0,
+              92
+            ],
+            "size": [
+              31,
+              43,
+              31
+            ],
+            "blocks": 37210
+          },
+          {
+            "location": "brasshaven:verdant_arboretum/arboretum/x2_z4",
+            "offset": [
+              62,
+              1,
+              123
+            ],
+            "size": [
+              31,
+              37,
+              31
+            ],
+            "blocks": 18667
+          },
+          {
+            "location": "brasshaven:verdant_arboretum/arboretum/x2_z5",
+            "offset": [
+              84,
+              6,
+              154
+            ],
+            "size": [
+              9,
+              6,
+              12
+            ],
+            "blocks": 480
+          },
+          {
+            "location": "brasshaven:verdant_arboretum/arboretum/x3_z0",
+            "offset": [
+              93,
+              13,
+              1
+            ],
+            "size": [
+              31,
+              32,
+              30
+            ],
+            "blocks": 16070
+          },
+          {
+            "location": "brasshaven:verdant_arboretum/arboretum/x3_z1",
+            "offset": [
+              93,
+              1,
+              31
+            ],
+            "size": [
+              31,
+              59,
+              31
+            ],
+            "blocks": 35941
+          },
+          {
+            "location": "brasshaven:verdant_arboretum/arboretum/x3_z2",
+            "offset": [
+              93,
+              0,
+              62
+            ],
+            "size": [
+              31,
+              59,
+              30
+            ],
+            "blocks": 36539
+          },
+          {
+            "location": "brasshaven:verdant_arboretum/arboretum/x3_z3",
+            "offset": [
+              93,
+              0,
+              92
+            ],
+            "size": [
+              31,
+              42,
+              31
+            ],
+            "blocks": 32445
+          },
+          {
+            "location": "brasshaven:verdant_arboretum/arboretum/x3_z4",
+            "offset": [
+              93,
+              3,
+              123
+            ],
+            "size": [
+              31,
+              35,
+              22
+            ],
+            "blocks": 12674
+          },
+          {
+            "location": "brasshaven:verdant_arboretum/arboretum/x3_z5",
+            "offset": [
+              93,
+              6,
+              161
+            ],
+            "size": [
+              31,
+              13,
+              24
+            ],
+            "blocks": 5093
+          },
+          {
+            "location": "brasshaven:verdant_arboretum/arboretum/x4_z0",
+            "offset": [
+              124,
+              13,
+              10
+            ],
+            "size": [
+              27,
+              30,
+              21
+            ],
+            "blocks": 7902
+          },
+          {
+            "location": "brasshaven:verdant_arboretum/arboretum/x4_z1",
+            "offset": [
+              124,
+              6,
+              31
+            ],
+            "size": [
+              30,
+              37,
+              31
+            ],
+            "blocks": 19757
+          },
+          {
+            "location": "brasshaven:verdant_arboretum/arboretum/x4_z2",
+            "offset": [
+              124,
+              6,
+              62
+            ],
+            "size": [
+              31,
+              31,
+              30
+            ],
+            "blocks": 13867
+          },
+          {
+            "location": "brasshaven:verdant_arboretum/arboretum/x4_z3",
+            "offset": [
+              124,
+              6,
+              92
+            ],
+            "size": [
+              31,
+              28,
+              31
+            ],
+            "blocks": 12178
+          },
+          {
+            "location": "brasshaven:verdant_arboretum/arboretum/x4_z4",
+            "offset": [
+              124,
+              6,
+              123
+            ],
+            "size": [
+              19,
+              24,
+              12
+            ],
+            "blocks": 1685
+          }
+        ],
+        "projection": "rigid",
+        "processors": "brasshaven:none"
+      }
+    }
+  ]
+}

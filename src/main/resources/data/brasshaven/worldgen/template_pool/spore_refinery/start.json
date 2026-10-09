@@ -1,0 +1,531 @@
+{
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "brasshaven:chunked_template",
+        "size": [
+          180,
+          111,
+          173
+        ],
+        "cells": [
+          {
+            "location": "brasshaven:spore_refinery/refinery/x0_z0",
+            "offset": [
+              24,
+              9,
+              21
+            ],
+            "size": [
+              6,
+              6,
+              8
+            ],
+            "blocks": 172
+          },
+          {
+            "location": "brasshaven:spore_refinery/refinery/x0_z1",
+            "offset": [
+              5,
+              9,
+              29
+            ],
+            "size": [
+              25,
+              66,
+              29
+            ],
+            "blocks": 2252
+          },
+          {
+            "location": "brasshaven:spore_refinery/refinery/x0_z2",
+            "offset": [
+              0,
+              9,
+              58
+            ],
+            "size": [
+              30,
+              68,
+              28
+            ],
+            "blocks": 15748
+          },
+          {
+            "location": "brasshaven:spore_refinery/refinery/x0_z3",
+            "offset": [
+              0,
+              9,
+              86
+            ],
+            "size": [
+              30,
+              68,
+              29
+            ],
+            "blocks": 7775
+          },
+          {
+            "location": "brasshaven:spore_refinery/refinery/x0_z4",
+            "offset": [
+              11,
+              9,
+              115
+            ],
+            "size": [
+              19,
+              13,
+              29
+            ],
+            "blocks": 1491
+          },
+          {
+            "location": "brasshaven:spore_refinery/refinery/x0_z5",
+            "offset": [
+              27,
+              9,
+              144
+            ],
+            "size": [
+              3,
+              7,
+              4
+            ],
+            "blocks": 49
+          },
+          {
+            "location": "brasshaven:spore_refinery/refinery/x1_z0",
+            "offset": [
+              30,
+              9,
+              6
+            ],
+            "size": [
+              30,
+              80,
+              23
+            ],
+            "blocks": 2089
+          },
+          {
+            "location": "brasshaven:spore_refinery/refinery/x1_z1",
+            "offset": [
+              30,
+              13,
+              29
+            ],
+            "size": [
+              30,
+              82,
+              29
+            ],
+            "blocks": 4690
+          },
+          {
+            "location": "brasshaven:spore_refinery/refinery/x1_z2",
+            "offset": [
+              30,
+              10,
+              58
+            ],
+            "size": [
+              30,
+              74,
+              28
+            ],
+            "blocks": 22210
+          },
+          {
+            "location": "brasshaven:spore_refinery/refinery/x1_z3",
+            "offset": [
+              30,
+              10,
+              86
+            ],
+            "size": [
+              30,
+              67,
+              29
+            ],
+            "blocks": 12648
+          },
+          {
+            "location": "brasshaven:spore_refinery/refinery/x1_z4",
+            "offset": [
+              30,
+              9,
+              115
+            ],
+            "size": [
+              30,
+              14,
+              29
+            ],
+            "blocks": 3655
+          },
+          {
+            "location": "brasshaven:spore_refinery/refinery/x1_z5",
+            "offset": [
+              30,
+              9,
+              144
+            ],
+            "size": [
+              30,
+              9,
+              17
+            ],
+            "blocks": 1459
+          },
+          {
+            "location": "brasshaven:spore_refinery/refinery/x2_z0",
+            "offset": [
+              60,
+              9,
+              0
+            ],
+            "size": [
+              30,
+              98,
+              29
+            ],
+            "blocks": 7913
+          },
+          {
+            "location": "brasshaven:spore_refinery/refinery/x2_z1",
+            "offset": [
+              60,
+              0,
+              29
+            ],
+            "size": [
+              30,
+              111,
+              29
+            ],
+            "blocks": 25603
+          },
+          {
+            "location": "brasshaven:spore_refinery/refinery/x2_z2",
+            "offset": [
+              60,
+              1,
+              58
+            ],
+            "size": [
+              30,
+              106,
+              28
+            ],
+            "blocks": 22612
+          },
+          {
+            "location": "brasshaven:spore_refinery/refinery/x2_z3",
+            "offset": [
+              60,
+              2,
+              86
+            ],
+            "size": [
+              30,
+              54,
+              29
+            ],
+            "blocks": 8629
+          },
+          {
+            "location": "brasshaven:spore_refinery/refinery/x2_z4",
+            "offset": [
+              60,
+              13,
+              115
+            ],
+            "size": [
+              30,
+              19,
+              29
+            ],
+            "blocks": 4233
+          },
+          {
+            "location": "brasshaven:spore_refinery/refinery/x2_z5",
+            "offset": [
+              60,
+              9,
+              144
+            ],
+            "size": [
+              30,
+              11,
+              27
+            ],
+            "blocks": 2844
+          },
+          {
+            "location": "brasshaven:spore_refinery/refinery/x3_z0",
+            "offset": [
+              90,
+              9,
+              3
+            ],
+            "size": [
+              30,
+              98,
+              26
+            ],
+            "blocks": 7076
+          },
+          {
+            "location": "brasshaven:spore_refinery/refinery/x3_z1",
+            "offset": [
+              90,
+              0,
+              29
+            ],
+            "size": [
+              30,
+              108,
+              29
+            ],
+            "blocks": 25222
+          },
+          {
+            "location": "brasshaven:spore_refinery/refinery/x3_z2",
+            "offset": [
+              90,
+              1,
+              58
+            ],
+            "size": [
+              30,
+              106,
+              28
+            ],
+            "blocks": 21152
+          },
+          {
+            "location": "brasshaven:spore_refinery/refinery/x3_z3",
+            "offset": [
+              90,
+              13,
+              86
+            ],
+            "size": [
+              30,
+              42,
+              29
+            ],
+            "blocks": 10097
+          },
+          {
+            "location": "brasshaven:spore_refinery/refinery/x3_z4",
+            "offset": [
+              90,
+              13,
+              115
+            ],
+            "size": [
+              30,
+              19,
+              29
+            ],
+            "blocks": 4267
+          },
+          {
+            "location": "brasshaven:spore_refinery/refinery/x3_z5",
+            "offset": [
+              90,
+              9,
+              144
+            ],
+            "size": [
+              30,
+              12,
+              29
+            ],
+            "blocks": 2955
+          },
+          {
+            "location": "brasshaven:spore_refinery/refinery/x4_z0",
+            "offset": [
+              120,
+              9,
+              7
+            ],
+            "size": [
+              30,
+              78,
+              22
+            ],
+            "blocks": 1938
+          },
+          {
+            "location": "brasshaven:spore_refinery/refinery/x4_z1",
+            "offset": [
+              120,
+              10,
+              29
+            ],
+            "size": [
+              30,
+              84,
+              29
+            ],
+            "blocks": 4244
+          },
+          {
+            "location": "brasshaven:spore_refinery/refinery/x4_z2",
+            "offset": [
+              120,
+              11,
+              58
+            ],
+            "size": [
+              30,
+              58,
+              28
+            ],
+            "blocks": 19009
+          },
+          {
+            "location": "brasshaven:spore_refinery/refinery/x4_z3",
+            "offset": [
+              120,
+              10,
+              86
+            ],
+            "size": [
+              30,
+              53,
+              29
+            ],
+            "blocks": 13520
+          },
+          {
+            "location": "brasshaven:spore_refinery/refinery/x4_z4",
+            "offset": [
+              120,
+              9,
+              115
+            ],
+            "size": [
+              30,
+              15,
+              29
+            ],
+            "blocks": 3605
+          },
+          {
+            "location": "brasshaven:spore_refinery/refinery/x4_z5",
+            "offset": [
+              120,
+              9,
+              144
+            ],
+            "size": [
+              30,
+              8,
+              17
+            ],
+            "blocks": 1390
+          },
+          {
+            "location": "brasshaven:spore_refinery/refinery/x5_z0",
+            "offset": [
+              150,
+              9,
+              25
+            ],
+            "size": [
+              7,
+              7,
+              4
+            ],
+            "blocks": 115
+          },
+          {
+            "location": "brasshaven:spore_refinery/refinery/x5_z1",
+            "offset": [
+              150,
+              9,
+              29
+            ],
+            "size": [
+              20,
+              12,
+              29
+            ],
+            "blocks": 1791
+          },
+          {
+            "location": "brasshaven:spore_refinery/refinery/x5_z2",
+            "offset": [
+              150,
+              9,
+              58
+            ],
+            "size": [
+              30,
+              56,
+              28
+            ],
+            "blocks": 11389
+          },
+          {
+            "location": "brasshaven:spore_refinery/refinery/x5_z3",
+            "offset": [
+              150,
+              9,
+              86
+            ],
+            "size": [
+              30,
+              54,
+              29
+            ],
+            "blocks": 4781
+          },
+          {
+            "location": "brasshaven:spore_refinery/refinery/x5_z4",
+            "offset": [
+              150,
+              9,
+              115
+            ],
+            "size": [
+              19,
+              12,
+              29
+            ],
+            "blocks": 1509
+          },
+          {
+            "location": "brasshaven:spore_refinery/refinery/x5_z5",
+            "offset": [
+              150,
+              9,
+              144
+            ],
+            "size": [
+              1,
+              6,
+              1
+            ],
+            "blocks": 6
+          }
+        ],
+        "projection": "rigid",
+        "processors": "brasshaven:none",
+        "ground_level_delta": 15,
+        "footprint": [
+          0,
+          0,
+          179,
+          172
+        ]
+      }
+    }
+  ]
+}

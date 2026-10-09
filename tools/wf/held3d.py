@@ -1081,6 +1081,89 @@ def director_bonesaw():
 
 ARCHETYPES["director_bonesaw"] = director_bonesaw
 
+
+def commodore_anchor():
+    """Ice Anchor of the Frozen Commodore: a short iron-bound grip with a brass ring at the butt and a few chain links
+    wound round it, a thick dark-iron shank under a brass-capped stock, a broad crown of two curved arms ending in
+    spade flukes, every edge crusted with pale ice and a long icicle hanging from each fluke."""
+    out = _shaft(-3, 11, 2.0, "iron_dark") + _grip(-1, 7, 2.4)
+    out += [box(6.4, -5.4, 7.5, 9.6, -3.2, 8.5, "brass"), box(5.8, -4.8, 7.5, 6.6, -2.6, 8.5, "brass"),
+            box(9.4, -4.8, 7.5, 10.2, -2.6, 8.5, "brass")]                   # the ring
+    for k, y in enumerate((7.4, 8.6, 9.8)):                                 # chain links wound round the shank
+        out.append(box(6.6 if k % 2 == 0 else 7.3, y, 7.3 if k % 2 == 0 else 6.6, 9.4 if k % 2 == 0 else 8.7, y + 1.0,
+                       8.7 if k % 2 == 0 else 9.4, "steel"))
+    out += [box(2.0, 11.4, 7, 14.0, 13.0, 9, "iron_dark"), box(1.4, 11.2, 6.8, 2.4, 13.2, 9.2, "brass"),
+            box(13.6, 11.2, 6.8, 14.6, 13.2, 9.2, "brass"),                  # the stock
+            box(6.6, 13.0, 6.6, 9.4, 27.0, 9.4, "dark"),                     # the shank
+            box(6.4, 19.0, 6.4, 9.6, 20.0, 9.6, "brass"),
+            box(6.4, 14.0, 6.2, 7.4, 26.0, 6.6, "light"), box(8.8, 16.0, 9.4, 9.8, 24.0, 9.8, "light")]   # ice crust
+    for x0, y0, x1, y1, k in ((5.0, 26, 11.0, 29.5, "mid"), (2.5, 25, 5.0, 28, "mid"), (11.0, 25, 13.5, 28, "mid"),
+                              (1.0, 22.5, 3.0, 26, "mid"), (13.0, 22.5, 15.0, 26, "mid")):
+        out.append(box(x0, y0, 6.8, x1, y1, 9.2, k))
+    out += [box(-0.6, 19.5, 6.4, 3.4, 23.0, 9.6, "dark"), box(12.6, 19.5, 6.4, 16.6, 23.0, 9.6, "dark"),   # flukes
+            box(-0.2, 23.0, 6.2, 3.0, 23.6, 9.8, "light"), box(13.0, 23.0, 6.2, 16.2, 23.6, 9.8, "light"),
+            box(0.6, 16.5, 7.4, 1.6, 19.5, 8.6, "glow"), box(14.4, 17.0, 7.4, 15.4, 19.5, 8.6, "glow"),  # icicles
+            box(5.4, 29.4, 6.6, 10.6, 30.4, 9.4, "light"),                  # frost along the crown
+            box(7.0, 27.4, 6.4, 9.0, 29.0, 9.6, "accent"), box(7.4, 27.8, 6.2, 8.6, 28.6, 9.8, "glow")]
+    return out
+
+
+ARCHETYPES["commodore_anchor"] = commodore_anchor
+
+
+def alchemist_staff():
+    """Stirring Staff of the Spore Alchemist: a long dark-wood pole with a brass ferrule and brass collars, a wrapped
+    grip, a little red-capped mushroom growing out of the pole with mycelium threads hanging from it, and at the top a
+    round glass flask of glowing green brew on a brass cradle, corked."""
+    out = _shaft(-8, 24, 1.6, "handle_dark") + _grip(2, 9, 2.2)
+    out += [box(7.0, -9.4, 7.0, 9.0, -8, 9.0, "brass"),                     # the ferrule
+            box(6.8, 10.0, 6.8, 9.2, 11.0, 9.2, "brass"),                   # collars
+            box(6.8, 22.6, 6.8, 9.2, 24.0, 9.2, "brass")]
+    out += [box(9.0, 15.0, 7.4, 10.2, 16.6, 8.6, "cream"),                  # the mushroom on the pole: its stalk
+            box(8.6, 16.6, 5.8, 13.8, 18.4, 10.2, "dark"),            # its cap (red)
+            box(9.4, 18.4, 6.6, 13.0, 19.4, 9.4, "dark"),
+            box(10.2, 17.4, 5.6, 10.8, 18.0, 5.8, "cream"),                 # white warts
+            box(12.4, 17.0, 10.2, 13.0, 17.6, 10.4, "cream"),
+            box(11.0, 19.4, 7.6, 11.6, 19.6, 8.2, "cream"),
+            box(6.3, 12.0, 8.0, 6.8, 15.0, 8.5, "cream"),                   # mycelium threads
+            box(9.2, 12.6, 7.6, 9.6, 15.0, 8.0, "cream")]
+    out += [box(6.0, 24.0, 6.0, 10.0, 24.8, 10.0, "brass_dark"),            # the cradle
+            box(7.4, 24.8, 7.4, 8.6, 26.0, 8.6, "steel"),                   # the flask's neck
+            box(5.2, 26.0, 5.2, 10.8, 30.2, 10.8, "accent"),                # the bulb full of glowing brew
+            box(5.6, 30.2, 5.6, 10.4, 31.4, 10.4, "steel"),                 # the empty glass above the brew
+            box(10.8, 27.0, 7.0, 11.0, 29.0, 8.0, "glow"),                  # a glint on the glass
+            box(7.4, 31.4, 7.4, 8.6, 32.0, 8.6, "handle")]                  # the cork
+    return out
+
+
+ARCHETYPES["alchemist_staff"] = alchemist_staff
+
+
+def gardener_shears():
+    """Pruning Shears of the Head Gardener: long loppers. Two red-lacquered grips (brass end caps) run up from the hand
+    to a brass pivot bolt; above it two long steel blades open in a narrow V, each with a bright ground edge, a hooked
+    point and a dark spine; a sprig of ivy curls round the bolt."""
+    out = []
+    for sx, k in ((-1, 0), (1, 1)):
+        x = 8 + sx * 1.3
+        out += [box(x - 0.9, -6, 7.1, x + 0.9, 11, 8.9, "accent"),            # the grips
+                box(x - 1.1, -7.4, 6.9, x + 1.1, -6, 9.1, "brass"),
+                box(x - 0.9, 2, 7.0, x + 0.9, 2.8, 9.0, "accent_dark"), box(x - 0.9, 6, 7.0, x + 0.9, 6.8, 9.0, "accent_dark")]
+    out += [box(5.8, 10.6, 6.6, 10.2, 13.4, 9.4, "brass"), box(7.2, 11.4, 6.2, 8.8, 12.6, 9.8, "brass_dark")]   # the bolt
+    for i in range(7):                                                      # the blades, stepping apart
+        y = 13.4 + i * 2.2
+        off = 0.3 + i * 0.55
+        out += [box(8 - off - 1.2, y, 7.5, 8 - off, y + 2.2, 8.5, "steel"),
+                box(8 - off - 1.5, y, 7.6, 8 - off - 1.2, y + 2.2, 8.4, "dark"),
+                box(8 + off, y, 7.5, 8 + off + 1.2, y + 2.2, 8.5, "light"),
+                box(8 + off + 1.2, y, 7.6, 8 + off + 1.5, y + 2.2, 8.4, "dark")]
+    out += [box(2.6, 28.8, 7.55, 4.4, 30.0, 8.45, "steel"), box(11.6, 28.8, 7.55, 13.4, 30.0, 8.45, "light"),    # points
+            box(9.6, 12.0, 6.2, 11.4, 13.0, 6.8, "glow"), box(4.8, 11.0, 9.2, 6.4, 12.0, 9.8, "glow")]             # ivy
+    return out
+
+
+ARCHETYPES["gardener_shears"] = gardener_shears
+
 # item id -> (archetype, material, handle, accent)
 HELD = {
     "kings_trident": ("trident_big", "warden", "bone", "sapphire"),
@@ -1127,6 +1210,9 @@ HELD = {
     "cantor_baton": ("cantor_baton", "brass", "dark", "amethyst"),
     "stoker_shovel": ("stoker_shovel", "iron", "dark", "aether"),
     "director_bonesaw": ("director_bonesaw", "iron", "dark", "aether"),
+    "commodore_anchor": ("commodore_anchor", "frost", "dark", "ice"),
+    "alchemist_staff": ("alchemist_staff", "ember", "dark", "emerald"),
+    "gardener_shears": ("gardener_shears", "iron", "dark", "ruby"),
     "cartographer_blade": ("sword", "cartographer", "wood", "emerald"),
     "telluric_hammer": ("hammer", "lithite", "wood", "emerald"),
     "storm_staff": ("staff", "storm", "dark", "sapphire"),

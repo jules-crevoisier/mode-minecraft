@@ -360,6 +360,18 @@ def entity_loot():
                             entry("golden_apple", 1, 2), entry("diamond", 2, 4), entry("clock", 1, 1),
                             entry("glass_bottle", 4, 8), entry("glistering_melon_slice", 2, 4), entry("gold_ingot", 3, 6),
                             entry("iron_ingot", 6, 12), entry("enchanted_golden_apple", chance=0.08)],
+        "frost_commodore": [entry("map_fragment", 6, 10), entry("emerald", 5, 9), entry("experience_bottle", 4, 7),
+                            entry("golden_apple", 1, 2), entry("diamond", 2, 4), entry("blue_ice", 4, 8),
+                            entry("packed_ice", 8, 16), entry("iron_chain", 4, 8), entry("spyglass", 1, 1),
+                            entry("compass", 1, 1), entry("enchanted_golden_apple", chance=0.08)],
+        "spore_alchemist": [entry("map_fragment", 6, 10), entry("emerald", 5, 9), entry("experience_bottle", 4, 7),
+                            entry("golden_apple", 1, 2), entry("diamond", 2, 4), entry("red_mushroom", 6, 12),
+                            entry("brown_mushroom", 6, 12), entry("mycelium", 4, 8), entry("glass_bottle", 4, 8),
+                            entry("fermented_spider_eye", 2, 4), entry("enchanted_golden_apple", chance=0.08)],
+        "thorn_gardener": [entry("map_fragment", 6, 10), entry("emerald", 5, 9), entry("experience_bottle", 4, 7),
+                           entry("golden_apple", 1, 2), entry("diamond", 2, 4), entry("sweet_berries", 8, 16),
+                           entry("bone_meal", 8, 16), entry("moss_block", 4, 8), entry("azalea", 2, 4),
+                           entry("flowering_azalea", 1, 3), entry("shears", 1, 1), entry("enchanted_golden_apple", chance=0.08)],
     }
     from wf.bossgear import BOSS_GEAR, remembrance_id
     for row in BOSS_GEAR:  # every great boss always drops its remembrance

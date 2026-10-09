@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "minecraft:lush_caves",
+      "required": false
+    }
+  ]
+}

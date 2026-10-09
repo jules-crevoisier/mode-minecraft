@@ -20,7 +20,12 @@ where it meets one), GRAPPLE (a harpoon along your aim reels the wielder to the 
 bites, a cut on arrival, Slow Falling), DRAGON (the brass dragon's spirit
 rushes along your aim, flinging aside and blinding every foe it passes), STOKE (a fan of five soul embers along
 your aim, each bursting on the first foe or where it lands; a foe caught by more of them is hurt more), REWIND (a saw rush
-along your aim; 2 s later the pocket watch snaps you back to where you started, its echo cutting there). flags: fire, slow, weak, blind, poison, lift, lifesteal.
+along your aim; 2 s later the pocket watch snaps you back to where you started, its echo cutting there), ANCHOR (the ice anchor hurled along your aim on its chain bites the first foe or
+the end of its throw, then drags back to you, hitting, hauling and slowing every foe it passes; frost bursts where it
+bit), TETHER (a spore flask along your aim shatters on the first foe or where it lands; mycelium threads tether the foes
+round the spot for 3 s, dragging back those that stray, then burst again), PRUNE (shears snap shut along your aim,
+cutting every foe between the blades, more to those under half health; thorns snare round each foe cut, each cut heals
+the wielder 1). flags: fire, slow, weak, blind, poison, lift, lifesteal.
 """
 
 TIER_MATERIAL = {"overworld": "map_fragment", "depths": "lithite_shard", "nether": "ancient_ember", "end": "void_shard"}
@@ -333,6 +338,40 @@ BOSS_GEAR = [
      ("Remembrance of the Asylum Director", "Souvenir de la Directrice de l'asile"),
      ("LITHITE", 7.5, -2.6), "REWIND", 10.0, 8.0, 80, "CRIT", "slow", ("bone_saw", "iron", "dark", "aether"),
      ("brass", "aether")),
+    ("frost_commodore", "overworld", "commodore_anchor", ("Ice Anchor of the Frozen Commodore", "Ancre de glace du Commodore gelé"),
+     ("Use: hurl the anchor along your aim on its chain (up to 12 blocks, walls stop it); it bites the first foe it "
+      "meets or the end of its throw, then the chain drags it back to you: every foe it passes on the way back is "
+      "hit again, hauled toward you and slowed, and where it bit the frost bursts round it.",
+      "Clic droit : lance l'ancre dans ta visée au bout de sa chaîne (jusqu'à 12 blocs, les murs l'arrêtent) ; elle "
+      "mord le premier ennemi rencontré ou le bout de sa course, puis la chaîne la ramène à toi : chaque ennemi "
+      "qu'elle croise au retour est frappé de nouveau, tiré vers toi et ralenti, et là où elle a mordu, le givre éclate "
+      "autour d'elle."),
+     ("Remembrance of the Frozen Commodore", "Souvenir du Commodore gelé"),
+     ("LITHITE", 8.5, -3.0), "ANCHOR", 11.0, 12.0, 80, "SNOWFLAKE", "slow", ("ice_anchor", "frost", "dark", "ice"),
+     ("frost", "ice")),
+    ("spore_alchemist", "overworld", "alchemist_staff", ("Stirring Staff of the Spore Alchemist", "Bâton-mélangeur de l'Alchimiste des spores"),
+     ("Use: fling a spore flask along your aim (up to 12 blocks, walls stop it); it shatters on the first foe it meets "
+      "or where its flight ends, poisoning every foe within 2.5 blocks. Mycelium threads then tether every foe within 4 "
+      "blocks to the spot for 3 s, dragging back and slowing those that stray, and when they snap the spores burst "
+      "again for half the damage.",
+      "Clic droit : lance une fiole de spores dans ta visée (jusqu'à 12 blocs, les murs l'arrêtent) ; elle éclate sur le "
+      "premier ennemi rencontré ou au bout de sa course et empoisonne les ennemis à 2,5 blocs. Des fils de mycélium "
+      "attachent ensuite au point d'impact, pendant 3 s, les ennemis à 4 blocs, ramenant et ralentissant ceux qui "
+      "s'éloignent, et quand ils cassent, les spores éclatent de nouveau pour moitié."),
+     ("Remembrance of the Spore Alchemist", "Souvenir de l'Alchimiste des spores"),
+     ("LITHITE", 7.5, -2.8), "TETHER", 10.0, 12.0, 90, "SPORE_BLOSSOM_AIR", "poison", ("spore_staff", "ember", "dark", "emerald"),
+     ("brass", "emerald")),
+    ("thorn_gardener", "overworld", "gardener_shears", ("Pruning Shears of the Head Gardener", "Sécateur du Jardinier en chef"),
+     ("Use: the blades open and snap shut along your aim (up to 7 blocks, walls stop them): every foe between them is cut, "
+      "and a foe under half health is pruned for 50% more. Thorns burst round each foe cut, snaring it and the foes "
+      "next to it, and every cut regrows you 1 health (4 at most).",
+      "Clic droit : les lames s'ouvrent et se referment dans ta visée (jusqu'à 7 blocs, les murs les arrêtent) : chaque "
+      "ennemi entre elles est taillé, et un ennemi sous la moitié de sa vie est élagué pour 50 % de plus. Des épines "
+      "jaillissent autour de chaque ennemi taillé, l'entravant avec ses voisins, et chaque coup te rend 1 point de vie "
+      "(4 au plus)."),
+     ("Remembrance of the Head Gardener", "Souvenir du Jardinier en chef"),
+     ("LITHITE", 8.0, -2.6), "PRUNE", 11.0, 7.0, 70, "HAPPY_VILLAGER", "slow", ("pruning_shears", "iron", "dark", "emerald"),
+     ("brass", "emerald")),
 ]
 
 

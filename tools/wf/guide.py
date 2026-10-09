@@ -881,6 +881,40 @@ PAGES = [
          "mécanisme monte au lieu de grâce et à l'arène derrière le cadran fêlé. Le funiculaire, la goulotte de la "
          "buanderie et la porte à sens unique de la chapelle ramènent en arrière."),
     ], []),
+    ("verdant_arboretum", "wonders", "minecraft:big_dripleaf", ("The Sunken Arboretum", "L'Arboretum englouti"), [
+        ("A botanical research complex in a vast lush cavern 40-60 blocks down, 185 blocks long: a brass-and-glass "
+         "palm house whose 50-high dome holds up the cavern roof on its ribs, a waterfall-fed lily lake with "
+         "dripleaf islands, terraced greenhouses, aqueducts and a sun-lamp hung from the roof. Where: lush caves.",
+         "Un complexe de recherche botanique au fond d'une immense grotte luxuriante, 40 à 60 blocs sous terre, "
+         "185 blocs de long : une serre-palmarium de laiton et de verre dont la coupole de 50 blocs porte la voûte, "
+         "un lac de nénuphars nourri par une cascade, des serres en terrasses, des aqueducs et une lampe-soleil "
+         "pendue à la voûte. Où : grottes luxuriantes."),
+        ("From the botanists' camp in a side tunnel (waystone) to the lake shore station (waystone): greenhouses, "
+         "seed vault, specimen lab, pump house, azalea maze; up the rib catwalks to the dome cornice (waystone) and "
+         "the arena on the lily-pad island. The dripleaf drop, the pump-house water lift and the greenhouse's "
+         "one-way door lead back.",
+         "Depuis le camp des botanistes (pierre) jusqu'à la station du rivage (pierre) : serres, grainothèque, "
+         "laboratoire, salle des pompes, labyrinthe d'azalées ; par les passerelles des nervures jusqu'à la "
+         "corniche (pierre) et l'arène sur l'île-nénuphar. La chute des grandes feuilles, l'ascenseur à eau et la "
+         "porte de la serre ramènent en arrière."),
+    ], []),
+    ("spore_refinery", "wonders", "minecraft:red_mushroom", ("The Spore Refinery", "La Raffinerie de spores"), [
+        ("An alchemists' spore works grown into three colossal mushrooms, 180 blocks across: a 90-high fly agaric "
+         "with a 68-wide cap, a flat brown mushroom and a small red one, their stems hollowed into stair towers "
+         "and wrapped in brass pipes and spore vats. Where: mushroom fields, else old-growth taigas.",
+         "Une raffinerie d'alchimistes poussée dans trois champignons colossaux, 180 blocs : une amanite haute de "
+         "90 blocs au chapeau large de 68, un bolet brun et une petite amanite, leurs pieds creusés en tours à "
+         "escalier, enroulés de tuyaux de laiton et de cuves à spores. Où : champs de champignons, sinon vieilles "
+         "taïgas."),
+        ("From the gatherers' camp (waystone) to the press yard (waystone): the screw-press hall, the fermentation "
+         "hall, up the brown stem to the drying lofts (waystone), the rope bridge, then up the great stem to the "
+         "gills chamber (waystone) and the arena on top of the cap. Optional: distillery, alchemists' lab, spore "
+         "cellars. The cap lift, the spore chute and the cellars' one-way door lead back.",
+         "Depuis le camp des cueilleurs (pierre) jusqu'à la cour des presses (pierre) : la halle des presses, la "
+         "fermentation, le pied du bolet jusqu'aux séchoirs (pierre), le pont de corde, puis le pied de l'amanite "
+         "jusqu'à la chambre des lamelles (pierre) et l'arène au sommet. En option : distillerie, laboratoire, "
+         "caves. L'ascenseur du chapeau, la goulotte à spores et la porte des caves ramènent en arrière."),
+    ], []),
     ("mire_stilt_city", "wonders", "minecraft:mangrove_roots", ("Mire Stilt-City", "La Cité des pilotis"), [
         ("A timber town on piles over a mangrove swamp, 200 blocks across: boardwalks on three levels, rope "
          "bridges, fishers' huts, a smoking smokehouse, a drowned bell tower, and the witch-queen's round hall raised "
@@ -1590,6 +1624,118 @@ PAGES = [
          "dont le clic droit te projette dans ta visée en taillant chaque ennemi traversé ; deux secondes plus tard, "
          "sa montre de gousset te ramène à ton point de départ et l'écho de la scie y taille (accroupis-toi pour "
          "rester)."),
+    ], []),
+    ("frost_commodore", "wonders", "brasshaven:remembrance_frost_commodore", ("The Frozen Commodore", "Le Commodore gelé"), [
+        ("On the forecastle deck of the Icebound Fleet's icebreaker, past the mist at the foot of the bridge stair, the "
+         "expedition's commander waits (640 health, armour 13): dead in the ice but kept moving by a frost-rimed brass "
+         "rig, a huge figure in a fur-lined greatcoat, an iron diving hood with a cracked visor glowing pale blue, an "
+         "ice-crusted anchor on its chain and a signal-flare pistol.",
+         "Sur le gaillard d'avant du brise-glace de la Flotte prise dans les glaces, passé la brume au pied de "
+         "l'escalier de la passerelle, le chef de l'expédition attend (640 PV, armure 13) : mort dans la glace mais "
+         "maintenu debout par un appareil de laiton givré, une silhouette immense en capote doublée de fourrure, une "
+         "capuche de scaphandre en fer à la visière fêlée d'un bleu pâle, une ancre prise dans la glace au bout de sa "
+         "chaîne et un pistolet de signalisation."),
+        ("His anchor swings twice (the backhand drawn red first). He hurls it down a drawn line: it bites at the end "
+         "and the chain drags it back along the same line, so step out and stay out. Ice spikes burst along marked "
+         "lines, his freezing breath fills a drawn cone and slows, and blocks of ice land on marked rings, leaving "
+         "slippery patches for five seconds.",
+         "Son ancre frappe deux fois (le revers tracé en rouge d'abord). Il la lance le long d'une ligne tracée : elle "
+         "mord au bout et la chaîne la ramène par la même ligne, alors sors-en et restes-en dehors. Des pics de glace "
+         "jaillissent le long de lignes marquées, son souffle glacial emplit un cône tracé et ralentit, et des blocs "
+         "de glace tombent sur des cercles marqués en laissant cinq secondes des plaques glissantes."),
+    ], ["brasshaven:remembrance_frost_commodore", "brasshaven:commodore_anchor"]),
+    ("frost_commodore_blizzard", "wonders", "minecraft:blue_ice", ("Commodore: Blizzard", "Commodore : blizzard"), [
+        ("At 65% he roars and quickens: his flare pistol fires down a drawn line and its signal calls strays of his "
+         "frozen crew onto the deck. At 30% the rig's valves blow (jump the wave) and a blizzard closes in: the deck "
+         "frosts over and slows you a little, icicles fall from the rigging onto marked circles every few seconds, and "
+         "every fourteen seconds the ship's bell rings three times before the icebreaker rams a floe: two waves roll "
+         "the length of the deck from the bow to the stern. Jump them.",
+         "À 65 %, il rugit et accélère : son pistolet tire une fusée le long d'une ligne tracée et son signal appelle "
+         "des vagabonds de son équipage gelé sur le pont. À 30 %, les soupapes de l'appareil sautent (saute l'onde) "
+         "et un blizzard se lève : le pont se givre et te ralentit un peu, des stalactites tombent du gréement sur des "
+         "cercles marqués toutes les quelques secondes, et toutes les quatorze secondes la cloche du navire sonne "
+         "trois fois avant que le brise-glace n'éperonne la banquise : deux vagues roulent sur tout le pont de la "
+         "proue à la poupe. Saute-les."),
+        ("His Remembrance, four map fragments and two diamonds forge the Ice Anchor of the Frozen Commodore, whose "
+         "right-click hurls the anchor on its chain along your aim: it bites the first foe or the end of its throw, "
+         "frost bursting round it, then drags back to you, hitting, hauling in and slowing every foe it passes.",
+         "Son Souvenir, quatre fragments de carte et deux diamants forgent l'Ancre de glace du Commodore gelé, dont le "
+         "clic droit lance l'ancre au bout de sa chaîne dans ta visée : elle mord le premier ennemi ou le bout de sa "
+         "course, le givre éclatant autour, puis revient vers toi en frappant, tirant et ralentissant chaque ennemi "
+         "qu'elle croise."),
+    ], []),
+    ("spore_alchemist", "wonders", "brasshaven:remembrance_spore_alchemist", ("The Spore Alchemist", "L'Alchimiste des spores"), [
+        ("On top of the Spore Refinery's giant fly agaric, past the mist at the head of the ramp, the alchemist who "
+         "refined its spores waits (620 health, armour 11), half-consumed by them: hunched under a fly agaric that "
+         "grows out of his back, a brass respirator with glowing green lenses, a spore-tank feeding the nozzle-gun in "
+         "his left hand and a flask-tipped stirring staff in his right.",
+         "Au sommet de la grande amanite de la Raffinerie de spores, passé la brume en haut de la rampe, l'alchimiste "
+         "qui raffinait ses spores attend (620 PV, armure 11), à moitié dévoré par elles : voûté sous une amanite qui "
+         "lui pousse dans le dos, un masque respiratoire de laiton aux verres verts luisants, une cuve à spores qui "
+         "nourrit le pistolet à buse de sa main gauche et un bâton-mélangeur coiffé d'une fiole dans la droite."),
+        ("His staff sweeps, then its flask comes down on a red ring. His nozzle-gun sprays a drawn cone of spores and "
+         "leaves a lingering poison cloud. He lobs flasks onto rings coloured by their brew (green poison, grey "
+         "slowness, black blindness), and rings open under your feet where mushrooms burst out a moment later and "
+         "stand as obstacles for six seconds.",
+         "Son bâton balaie, puis sa fiole s'abat sur un cercle rouge. Son pistolet pulvérise un cône de spores tracé et "
+         "laisse un nuage de poison. Il lance des fioles sur des cercles de la couleur de leur breuvage (vert poison, "
+         "gris lenteur, noir cécité), et des cercles s'ouvrent sous tes pieds d'où jaillissent des champignons qui "
+         "restent six secondes comme obstacles."),
+    ], ["brasshaven:remembrance_spore_alchemist", "brasshaven:alchemist_staff"]),
+    ("spore_alchemist_bloom", "wonders", "minecraft:red_mushroom_block", ("Alchemist: Bloom", "Alchimiste : floraison"), [
+        ("At 65% he roars and quickens: he vanishes into a spore cloud and bursts out of a marked ring near you, and "
+         "stirs bogged up out of the mycelium. At 30% his hump blooms (jump the wave) and the cap breathes: vents near "
+         "the edge burst on marked rings, mycelium threads slow you while you stay close to him, and every sixteen "
+         "seconds the gilded ring flares while one side of it fills with spores: cross the ring before the cap "
+         "breathes out.",
+         "À 65 %, il rugit et accélère : il disparaît dans un nuage de spores et ressort d'un cercle marqué près de "
+         "toi, et fait sortir des bogged du mycélium. À 30 %, sa bosse fleurit (saute l'onde) et le chapeau respire : "
+         "des évents près du bord crachent sur des cercles marqués, des fils de mycélium te ralentissent tant que tu "
+         "restes près de lui, et toutes les seize secondes l'anneau doré s'embrase pendant qu'un de ses côtés se "
+         "remplit de spores : traverse l'anneau avant que le chapeau n'expire."),
+        ("His Remembrance, four map fragments and two diamonds forge the Stirring Staff of the Spore Alchemist, whose "
+         "right-click flings a spore flask along your aim: it poisons the foes round where it shatters, then mycelium "
+         "threads tether them there for three seconds before the spores burst again.",
+         "Son Souvenir, quatre fragments de carte et deux diamants forgent le Bâton-mélangeur de l'Alchimiste des "
+         "spores, dont le clic droit lance une fiole de spores dans ta visée : elle empoisonne les ennemis autour du "
+         "point d'impact, puis des fils de mycélium les y attachent trois secondes avant que les spores n'éclatent de "
+         "nouveau."),
+    ], []),
+    ("thorn_gardener", "wonders", "brasshaven:remembrance_thorn_gardener", ("The Head Gardener", "Le Jardinier en chef"), [
+        ("On the giant lily pad in the pool of the Sunken Arboretum's palm house, under the hanging sun-lamp, past the "
+         "mist of the cornice door, the last gardener still tends the garden (650 health, armour 12): a tall brass "
+         "automaton overgrown with moss and ivy, a glass bell jar for a head with a glowing flower inside, long arms "
+         "ending in pruning shears and a watering can made into a cannon on his back.",
+         "Sur le nénuphar géant du bassin de la serre de l'Arboretum englouti, sous la lampe solaire suspendue, passé la "
+         "brume de la porte de la corniche, le dernier jardinier soigne encore le jardin (650 PV, armure 12) : un grand "
+         "automate de laiton envahi de mousse et de lierre, une cloche de verre pour tête où luit une fleur, de longs "
+         "bras terminés en sécateurs et un arrosoir changé en canon sur le dos."),
+        ("His shears snip twice (the second arc drawn red first) and lunge down a drawn lane. Thorns burst along marked "
+         "lines, a vine snare closes on a marked ring and roots you for a moment (hit anything to tear it), and his "
+         "watering cannon sprays a drawn cone that pushes a little and fertilizes patches where thorn bushes spring up "
+         "for five seconds. Near the rim his blows never throw you into the water.",
+         "Ses sécateurs taillent deux fois (le second arc tracé en rouge d'abord) et se fendent le long d'un couloir "
+         "tracé. Des épines jaillissent le long de lignes marquées, une liane se referme sur un cercle marqué et "
+         "t'enracine un instant (frappe n'importe quoi pour la déchirer), et son canon-arrosoir arrose un cône tracé qui "
+         "pousse un peu et fertilise des plaques où des buissons d'épines poussent cinq secondes. Près du rebord, ses "
+         "coups ne te jettent jamais à l'eau."),
+    ], ["brasshaven:remembrance_thorn_gardener", "brasshaven:gardener_shears"]),
+    ("thorn_gardener_sun", "wonders", "minecraft:sweet_berries", ("Gardener: Sun-Lamp", "Jardinier : lampe solaire"), [
+        ("At 65% he roars and quickens: he clacks his shears to call dart frogs and clockwork spiders, and shakes "
+         "pollen onto marked rings. At 30% the sun-lamp ignites (jump the wave): sunbeams sweep the pad along drawn "
+         "paths, and every sixteen seconds he basks in a ring of light to heal; step into the ring to shade him and he "
+         "gains nothing, while he stands still for your blows.",
+         "À 65 %, il rugit et accélère : il claque ses sécateurs pour appeler grenouilles-dards et araignées-horloges, et "
+         "secoue du pollen sur des cercles marqués. À 30 %, la lampe solaire s'allume (saute l'onde) : des rayons "
+         "balaient la feuille le long de chemins tracés, et toutes les seize secondes il se baigne dans un cercle de "
+         "lumière pour guérir ; entre dans le cercle pour lui faire de l'ombre et il ne gagne rien, immobile sous tes "
+         "coups."),
+        ("His Remembrance, four map fragments and two diamonds forge the Pruning Shears of the Head Gardener, whose "
+         "right-click snaps the blades shut along your aim: every foe between them is cut (more if under half health), "
+         "thorns snare round each one, and every cut heals you a little.",
+         "Son Souvenir, quatre fragments de carte et deux diamants forgent le Sécateur du Jardinier en chef, dont le "
+         "clic droit referme les lames dans ta visée : chaque ennemi entre elles est taillé (davantage s'il est sous la "
+         "moitié de sa vie), des épines l'entravent, et chaque coup te soigne un peu."),
     ], []),
     ("strangler_queen", "wonders", "brasshaven:remembrance_strangler_queen", ("The Strangler Fig Queen", "La Reine-figuier étrangleur"), [
         ("On the summit terrace of the Canopy Temple-City, through the mist under the broken brass sun-disc, the fig "

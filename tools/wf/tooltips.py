@@ -48,6 +48,9 @@ ABILITIES = {
     "shriek": ("Sonic shriek", "Cri sonique", "range"),
     "stoke": ("Soul embers", "Braises d'âmes", "range"),
     "rewind": ("Rewinding saw rush", "Ruée de la scie à rebours", "range"),
+    "anchor": ("Ice anchor throw", "Lancer d'ancre de glace", "range"),
+    "tether": ("Spore flask tether", "Fiole de spores et mycélium", "range"),
+    "prune": ("Pruning snip", "Coup de sécateur", "range"),
 }
 # BossWeaponItem flags, in bit order
 ABILITY_EFFECTS = {
@@ -187,6 +190,12 @@ FLAVOR = {
                       "Il a nourri le moteur d'âmes pendant mille ans, et jamais il n'a été rassasié."),
     "director_bonesaw": ("She never lost a patient; she simply wound the clock back and began again.",
                          "Elle n'a jamais perdu un patient ; elle remontait l'horloge et recommençait."),
+    "commodore_anchor": ("He swore to bring the fleet home through the ice; the rig still keeps him to his word.",
+                         "Il avait juré de ramener la flotte à travers la glace ; l'appareil le tient encore à sa parole."),
+    "gardener_shears": ("Nobody came back to the palm house; he kept pruning, and the garden kept growing into him.",
+                        "Personne n'est revenu à la serre ; il a continué de tailler, et le jardin a continué de pousser en lui."),
+    "alchemist_staff": ("He stirred the vats until the spores stirred him back.",
+                        "Il a remué les cuves jusqu'à ce que les spores le remuent à leur tour."),
 }
 
 # armour sets: one flavour per set prefix (all four pieces)

@@ -135,6 +135,9 @@ EGGS = {
     "hollow_cantor": ((44, 46, 58), (150, 236, 230)),
     "soul_stoker": ((44, 38, 46), (60, 210, 240)),
     "asylum_director": ((226, 222, 206), (120, 236, 150)),
+    "frost_commodore": ((70, 92, 120), (170, 226, 255)),
+    "spore_alchemist": ((196, 38, 34), (120, 236, 96)),
+    "thorn_gardener": ((176, 112, 58), (236, 86, 170)),
 }
 
 
@@ -208,6 +211,9 @@ EMBLEMS = {
     "hollow_cantor": ["#...#", "#...#", ".###.", "..#..", "..#.."],    # a tuning fork
     "soul_stoker": [".#.#.", "#####", "#.#.#", "#####", ".###."],      # a furnace door with a grate
     "asylum_director": [".###.", "#.#.#", "#.##.", "#...#", ".###."],  # a pocket watch
+    "frost_commodore": ["..#..", ".###.", "..#..", "#.#.#", ".###."],  # an anchor
+    "spore_alchemist": [".###.", "#####", "#.#.#", "..#..", ".###."],  # a toadstool over a flask
+    "thorn_gardener": ["#...#", ".#.#.", "..#..", ".#.#.", "##.##"],   # open pruning shears
 }
 
 

@@ -25,7 +25,7 @@ import java.util.List;
  * Abilities only ever hurt non-player creatures.
  */
 public class BossWeaponItem extends AbilityItem {
-    public enum Ability { WAVE, BEAM, DASH, ERUPT, ROOT, CLOUD, LEAP, ARC, BLINK, HOOK, SHARDS, BREATH, RIFT, WARD, TEMPEST, TIDE, JET, PRESSURE, MIRE, PLUMB, BROADSIDE, PRISM, CAGE, SCARAB, MAGNET, TONGS, ZENITH, FUSE, DRAGON, SHRIEK, GRAPPLE, STOKE, REWIND }
+    public enum Ability { WAVE, BEAM, DASH, ERUPT, ROOT, CLOUD, LEAP, ARC, BLINK, HOOK, SHARDS, BREATH, RIFT, WARD, TEMPEST, TIDE, JET, PRESSURE, MIRE, PLUMB, BROADSIDE, PRISM, CAGE, SCARAB, MAGNET, TONGS, ZENITH, FUSE, DRAGON, SHRIEK, GRAPPLE, STOKE, REWIND, ANCHOR, TETHER, PRUNE }
 
     public static final int FIRE = 1;
     public static final int SLOW = 2;
@@ -1125,6 +1125,75 @@ public class BossWeaponItem extends AbilityItem {
                 }
                 level.playSound(null, player, SoundEvents.GRINDSTONE_USE, SoundSource.PLAYERS, 1.0F, 1.5F);
                 level.playSound(null, player, SoundEvents.NOTE_BLOCK_CHIME.value(), SoundSource.PLAYERS, 0.8F, 0.7F);
+            }
+            case TETHER -> {
+                // the Spore Alchemist's staff: a spore flask flung along the aim (up to `size` blocks, walls stop it)
+                // shatters on the first foe or where its flight ends: the foes within 2.5 take the power (flag poison);
+                // mycelium threads tether every foe within 4 of the spot for 3 s (dragged back when they stray past
+                // 2.5, slowed), and when the threads snap the spores burst again for half the power (see SporeTethers)
+                SporeTethers.fling(level, player, look, size, power, particle, (lvl, foe, dmg) -> hit(lvl, player, foe, dmg, 0.0),
+                        e -> Targets.foe(player, e));
+                level.playSound(null, player, SoundEvents.SPLASH_POTION_THROW, SoundSource.PLAYERS, 1.0F, 0.7F);
+                level.playSound(null, player, SoundEvents.BOTTLE_FILL, SoundSource.PLAYERS, 0.8F, 0.6F);
+            }
+            case PRUNE -> {
+                // the Head Gardener's pruning shears: the blades open and snap shut along the aim (up to `size` blocks,
+                // walls stop them, 1.2 to each side): every foe between them is cut; a foe under half health is pruned for
+                // 50% more; thorns burst round each foe cut, snaring it and the foes within 1.5 (Slowness III 1.5 s), and
+                // every cut regrows the wielder 1 health (4 at most)
+                Vec3 eye = player.getEyePosition();
+                BlockHitResult wall = level.clip(new ClipContext(eye, eye.add(look.scale(size)), ClipContext.Block.COLLIDER,
+                        ClipContext.Fluid.NONE, player));
+                double reach = wall.getType() == HitResult.Type.MISS ? size : Math.max(1.0, wall.getLocation().distanceTo(eye) - 0.3);
+                Vec3 side = new Vec3(-flat.z, 0, flat.x);
+                java.util.Set<LivingEntity> cut = new java.util.LinkedHashSet<>();
+                for (double d = 0.75; d <= reach; d += 0.75) {
+                    Vec3 p = eye.add(look.scale(d)).subtract(0, 0.5, 0);
+                    double open = 1.2 * Math.min(1.0, d / 2.0);
+                    for (int sgn = -1; sgn <= 1; sgn += 2) {
+                        Vec3 q = p.add(side.scale(sgn * open));
+                        level.sendParticles(particle, q.x, q.y, q.z, 1, 0.05, 0.05, 0.05, 0.0);
+                    }
+                    for (LivingEntity e : foes(level, player, new AABB(p, p).inflate(1.2, 1.5, 1.2))) {
+                        cut.add(e);
+                    }
+                }
+                int healed = 0;
+                for (LivingEntity e : cut) {
+                    boolean prune = e.getHealth() < e.getMaxHealth() * 0.5F;
+                    hit(level, player, e, prune ? power * 1.5F : power, 0.3);
+                    level.sendParticles(net.minecraft.core.particles.ParticleTypes.SWEEP_ATTACK, e.getX(), e.getY() + 1.0, e.getZ(),
+                            1, 0, 0, 0, 0);
+                    level.sendParticles(new net.minecraft.core.particles.BlockParticleOption(net.minecraft.core.particles.ParticleTypes.BLOCK,
+                            net.minecraft.world.level.block.Blocks.SWEET_BERRY_BUSH.defaultBlockState()), e.getX(), e.getY() + 0.4, e.getZ(),
+                            16, 0.5, 0.3, 0.5, 0.05);
+                    for (LivingEntity n : foes(level, player, e.getBoundingBox().inflate(1.5, 1.0, 1.5))) {
+                        n.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 30, 2));
+                    }
+                    if (healed < 4) {
+                        player.heal(1.0F);
+                        healed++;
+                    }
+                }
+                Vec3 tip = eye.add(look.scale(reach)).subtract(0, 0.5, 0);
+                level.sendParticles(net.minecraft.core.particles.ParticleTypes.SWEEP_ATTACK, tip.x, tip.y, tip.z, 1, 0, 0, 0, 0);
+                level.playSound(null, player, SoundEvents.SHEEP_SHEAR, SoundSource.PLAYERS, 1.2F, 0.6F);
+                level.playSound(null, player, SoundEvents.SWEET_BERRY_BUSH_PLACE, SoundSource.PLAYERS, 1.0F, 0.8F);
+            }
+            case ANCHOR -> {
+                // the Frozen Commodore's ice anchor: hurled along the aim on its chain (up to `size` blocks, walls stop
+                // it); it bites the first foe or the end of its throw, then the chain drags it back to the wielder:
+                // every foe it passes on the way back is hit again for 70%, hauled toward the wielder and slowed (flag
+                // slow); where it bit, frost bursts for half the power within 2 blocks (see AnchorThrows)
+                AnchorThrows.hurl(level, player, look, size, power, particle, (lvl, foe, dmg, pull) -> {
+                    hit(lvl, player, foe, dmg, 0.0);
+                    if (pull != null) {
+                        foe.push(pull.x, 0.15, pull.z);
+                        foe.hurtMarked = true;
+                    }
+                }, e -> Targets.foe(player, e));
+                level.playSound(null, player, SoundEvents.CHAIN_BREAK, SoundSource.PLAYERS, 1.0F, 0.6F);
+                level.playSound(null, player, SoundEvents.PLAYER_ATTACK_SWEEP, SoundSource.PLAYERS, 0.8F, 0.6F);
             }
             case DRAGON -> {
                 // the Chime Abbot's dragon staff: the brass dragon's spirit rushes along the aim (up to `size` blocks,

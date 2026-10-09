@@ -147,6 +147,15 @@ public final class BossGear {
     public static final RegistryObject<Item> REMEMBRANCE_ASYLUM_DIRECTOR = remembrance("remembrance_asylum_director");
     public static final RegistryObject<Item> DIRECTOR_BONESAW = weapon("director_bonesaw", p -> p.sword(ModMaterials.LITHITE, 7.5F, -2.6F).rarity(Rarity.EPIC),
             BossWeaponItem.Ability.REWIND, 10.0F, 8.0F, 80, () -> ParticleTypes.CRIT, BossWeaponItem.SLOW);
+    public static final RegistryObject<Item> REMEMBRANCE_FROST_COMMODORE = remembrance("remembrance_frost_commodore");
+    public static final RegistryObject<Item> COMMODORE_ANCHOR = weapon("commodore_anchor", p -> p.sword(ModMaterials.LITHITE, 8.5F, -3.0F).rarity(Rarity.EPIC),
+            BossWeaponItem.Ability.ANCHOR, 11.0F, 12.0F, 80, () -> ParticleTypes.SNOWFLAKE, BossWeaponItem.SLOW);
+    public static final RegistryObject<Item> REMEMBRANCE_SPORE_ALCHEMIST = remembrance("remembrance_spore_alchemist");
+    public static final RegistryObject<Item> ALCHEMIST_STAFF = weapon("alchemist_staff", p -> p.sword(ModMaterials.LITHITE, 7.5F, -2.8F).rarity(Rarity.EPIC),
+            BossWeaponItem.Ability.TETHER, 10.0F, 12.0F, 90, () -> ParticleTypes.SPORE_BLOSSOM_AIR, BossWeaponItem.POISON);
+    public static final RegistryObject<Item> REMEMBRANCE_THORN_GARDENER = remembrance("remembrance_thorn_gardener");
+    public static final RegistryObject<Item> GARDENER_SHEARS = weapon("gardener_shears", p -> p.sword(ModMaterials.LITHITE, 8.0F, -2.6F).rarity(Rarity.EPIC),
+            BossWeaponItem.Ability.PRUNE, 11.0F, 7.0F, 70, () -> ParticleTypes.HAPPY_VILLAGER, BossWeaponItem.SLOW);
 
     private BossGear() {}
 
