@@ -2039,6 +2039,270 @@ Previews:
 - `python3 tools/gen_models.py --preview --only thorn_gardener` writes `build/previews/models/thorn_gardener.png`.
 - Held shears: `python3 tools/art_sheet.py --kind held --only gardener_shears`.
 
+## 36. Champion of the Abyssal Station: The Abyssal Diver (Le Scaphandrier des abysses)
+Files:
+- `tools/wf/mobs/abyss_diver.py`: model `abyss_diver` (79 cubes, 256x128).
+- `src/main/java/com/brasshaven/entity/boss/AbyssDiver.java`: the moveset.
+
+There is no lair module. The arena is the drill chamber at the bottom of the trench (`tools/wf/structures/abyssal_station.py`,
+`arena()`, the seal 6 blocks east of the chamber's middle, radius 18): a round air-filled room 34 wide under the brass
+skylight dome, sealed from the sea, the drill string hanging over the borehole (shroomlight and magma) in the middle,
+four hydraulic struts rising from the wall to the drill collar, spoil heaps against the wall. `BOSS` there is
+`brasshaven:abyss_diver` (it replaces the borrowed Gryphon Knight, whose own home, quest and seal on the sky island are
+untouched). `BOSS_HOME` is `abyssal_station`. The class finds the chamber's middle at runtime (the centroid of the
+shroomlight cells in the floor layer round the seal; without at least 4 it uses the seal's spot), and "open floor" means
+floor within 0.6 of the seal's level with two blocks of air over it, within 14.5 of the middle (short of the struts'
+feet and the heaps; radius - 3 without the borehole).
+
+Reward: `remembrance_abyss_diver` forges the **Drill-Lance of the Abyssal Diver** (`diver_drill_lance`, LITHITE 8.5 / -3.0).
+- It has a new ability shape, **BORE**, in `BossWeaponItem`: the drill bores along the aim (up to 8 blocks, walls stop it,
+  1.0 to each side). Every foe in the bore takes the power plus half its armour value (at most +6: the pressure cracks
+  plating), is drawn in toward a point 2 blocks ahead of the wielder and gets Glowing for 5 s; flag `slow`. Cooldown 80.
+  Instant, no ticker.
+- Held model `diver_drill_lance` in `wf/held3d.py`, sprite `drill_lance` in `wf/itemart_shapes.py`.
+
+Loot (`gen_data.py`): map fragments, emeralds, experience bottles, golden apples, diamonds, prismarine crystals,
+nautilus shells, glow ink sacs, copper ingots, a 15% heart of the sea, an 8% enchanted golden apple. Quest:
+`explorer/boss_abyss_diver`.
+
+**Concept.** The station's chief diver fused with his armoured diving suit, 3.8 blocks (hitbox 1.8 x 3.8):
+- a huge round brass hard-hat (stacked boxes for roundness, a row of bolts, verdigris), a 10 x 10 front porthole with a
+  grille glowing bioluminescent teal (glow layer), two small side ports, a top valve with its wheel, an air elbow behind;
+- a riveted brass corselet the helmet sits in, lead chest weights front and back, over a patched, salt-stained canvas suit
+  (chest pitched 8° forward: hulking); a leather weight belt with four lead weights;
+- two copper pressure tanks in brass hoops on his back with a gauge, ribbed rubber hoses to the helmet and round to the
+  drill arm (the tanks swell in the anims);
+- asymmetry: the RIGHT arm is a brass motor housing with cooling slots and a giant stepped spiral drill (part `drill`,
+  spun about its axis in the anims, ending on a whole turn); the LEFT hand holds a rivet gun (dark iron, brass bands, a
+  brass drum magazine) with a barbed harpoon in its barrel;
+- lead boots with brass toe caps and straps; barnacle clusters on the helmet, corselet, pauldrons, boots and tanks; kelp
+  strands (planes) hanging from the belt, the tanks and the right pauldron.
+
+**Stats.**
+- 660 health, armour 13, toughness 4, attack 14, poise 120, speed 0.24, knockback resistance 1.0, step 1.5.
+- No fall damage, blue bar, breathes underwater; Blindness and Darkness do not take on him (his own silt).
+- Phase 2 at 65% (roar, +10% speed, `abyss_diver_wrath`). Phase 3 at 30%, driven by the class like the Chained Jailer:
+  when he is free he chains `groan` once (guarded 64 ticks), then every 360 ticks x `cooldownScale()` (at least 220; the
+  first 160 ticks after the groan) `overcharge`. Range 999 / weight 0 keeps the scheduled moves out of the picker.
+
+| Move | Phase | Wind-up / active / recovery | Range | What it does |
+|---|---|---|---|---|
+| thrust | 1-3 | 22 / 12 / 16 | 4-12 | A lane (half width 1.0) over open floor up to 8, plus 2.5 for the drill, drawn aqua; he turns 4°/tick until wind-up 14, then it locks red. Active 0-4 he moves down the lane (to 1 short of its end, `move`, collisions kept); at active 4 everyone in the lane from his start to 2.5 past him: 14, push 0.6. |
+| grind | 1-3 | 16 / 30 / 14 | 0-5.5 | Arc ±40°, 4.5 deep, drawn aqua (red from wind-up 10, turning 3°/tick until then). Active 0-29: sparks, the arc red; bites at active 0, 10, 20: 5 each (no push; 10 ticks apart so hurt frames never eat them). P2: 30% chains slam (within 6) or rivets. |
+| rivets | 1-3 | 20 / 24 / 14 | 5-24 | 3 lines (P2 5), 9° apart, from the gun muzzle to the first wall (at most 22), drawn on the floor aqua, following (4°/tick) until wind-up 12, then red. Volleys at active 0, 10, 20 along the same lines: each rivet flies 2 blocks a tick and stops on the first creature within 0.7 of it: 5, push 0.3. |
+| slam | 1-3 | 24 / 12 / 16 | 0-8 | A ring r 5 round him drawn aqua (red from 16). Impact: 12, push 0.6, lift 0.4 within the ring; then a wave runs from 5 to 11 (0.5 a tick): 6, jump it (it hits only who stands within 0.6 of the floor). |
+| harpoon | 1-3 | 20 / 14 / 14 | 6-18 | A line from the muzzle to the first wall (at most 18), drawn aqua, following (5°/tick) until wind-up 12, then red. At impact the harpoon flies 2 blocks a tick: the first creature it bites takes 6 and is hauled toward him (velocity min(1.2, travel / 6), lift 0.3; travel = distance - 3, at most 7: never closer than 3). P2: 50% chains grind if it bit someone. |
+| silt | 2-3 | 18 / 10 / 14 | 0-14 | A ring r 4.5 drawn dark (red from 12), ink rising off him. Impact: 4, push 0.7, lift 0.2 and Blindness 2 s within the ring; a silt cloud stays there 80 ticks (edge drawn every 8 ticks): every 10 ticks whoever is in it gets Blindness 1.5 s. |
+| call | 2-3 | 20 / 10 / 16 | 0-30 | Cooldown 600. Drowned marines and drowned alternately, `scaledCount(2)`, at most 3 alive, on open floor 3.5 from him; tagged minions, discarded on death and reset. |
+| groan | 3 (once) | 40 / 20 / 20 | scheduled | Guarded 64 ticks; aqua rings grow round him, water drips from the dome (particles), the hull creaks. Impact: a wave to 14 (10, jump), the hull starts groaning (spikes 50 ticks later, the first jelly 30). |
+| overcharge | 3 | 30 / 10 / 16 | scheduled | A ring r 3.5 drawn yellow (red from 20), sparks. Impact: 8, push 0.8, lift 0.3 within it; then 140 ticks of overcharge: +20% speed (transient `abyss_diver_overcharge`), his hits x1.15, damage taken x1.15. |
+
+**The hull groans (phase 3).** Water drips from the dome and the hull creaks (particles and sounds: nothing is opened or
+placed). Pressure spikes: every 70 ticks x `cooldownScale()` (at least 40), `min(5, scaledCount(2) + 1)` circles: under
+the target, under up to 2 other players, the rest on random open floor, at least 3 apart; each ring (r 2, an inner ring
+r 0.9) drawn aqua 30 ticks (red the last 10), then it bursts: 8, lift 0.5 (no push). Bioluminescent jellies (particles
+only): every 100 ticks x `cooldownScale()` (at least 60), while fewer than `min(5, scaledCount(2) + 1)` drift, one
+appears on open floor at least 6 from every player at chest height; it drifts 0.05 a tick toward the nearest player
+(only over open floor), a ring r 1 drawn under it; a player within 1.4 (and 1.6 in height) lights its fuse: 12 ticks,
+its ring r 2 red, then it bursts: 7, push 0.5, lift 0.3, Slowness I 1 s within 2. Each fades harmlessly after 400 ticks.
+Spikes and jellies wait while `groan` runs or he is guarded.
+
+**Blocks.** He places and breaks none: the chamber is an air pocket under the sea, so every hazard (silt, spikes,
+jellies, drips) is particles, sounds and damage. His drowned are discarded on death and reset; the jellies are cleared on
+reset, death, when the chamber empties and on reload; the overcharge modifier is transient (never saved) and removed on
+reset and death.
+
+**Fair edges.** His `strike` caps pushes at 1.0 and lift at 0.45. A push is dropped entirely when a probe 1.5 or 3 blocks
+along it finds no open floor (the wall, a strut, a spoil heap), and then the lift is capped at 0.2; the engine's phase-2
+roar shove is corrected the same way. The harpoon's haul only pulls toward him and stops 3 short. Lanes, spikes, adds
+and jellies only use open floor. The silt blinds for 2 s at most and its cloud is drawn.
+
+**Co-op and NG+** come from the engine (`BossDifficulty`, `BossCycles`): health, damage (every hit goes through
+`strike`/`shove`), poise, cooldowns (the spike, jelly and overcharge timers use `cooldownScale()`), compressed wind-ups.
+Adds scale with `scaledCount`; spikes and jellies with `scaledCount` and one spike per player (up to 3).
+
+Previews:
+- `python3 tools/gen_models.py --preview --only abyss_diver` writes `build/previews/models/abyss_diver.png`.
+- Held drill-lance: `python3 tools/art_sheet.py --kind held --only diver_drill_lance`.
+
+## 37. Champion of the Timber Fortress: The Lumber Jarl (Le Jarl du bois)
+Files:
+- `tools/wf/mobs/lumber_jarl.py`: model `lumber_jarl` (74 cubes, 256x256).
+- `src/main/java/com/brasshaven/entity/boss/LumberJarl.java`: the moveset.
+
+There is no lair module. The arena is the keep's crown (`tools/wf/structures/timber_fortress.py`, `platform()` and
+`arena()`, the seal at K(8, 10) on the deck at y 64, radius 20): a 49-wide timber platform railed in brass round the
+beam engine (bed plate, flywheel r 7 in the north-south plane 8 north of the keep's axis, cylinder, columns), a gilded
+ring inlaid at r 12 round the axis, two stair houses (south-west with the mist, north-east with the sealed bars), the
+stave spire and the smokestack in two corners. `BOSS` there is `brasshaven:lumber_jarl` (it replaces the borrowed
+Gryphon Knight, whose own home, quest and seal on the sky island are untouched). `BOSS_HOME` is `timber_fortress`. The
+class finds the gilded ring at runtime (the `gilded_trim` blocks in the floor layer round the seal; their centroid is
+the keep's axis, without at least 24 it uses the arena centre), which places the flywheel. "Open deck" means floor
+within 0.6 of the seal's level with two blocks of air over it, inside the arena radius and inside the railing square
+(23 from the axis): the engine's bed, the stair houses and their wells, the railing and the drop are never open deck.
+
+Reward: `remembrance_lumber_jarl` forges the **Steam Chainsaw-Axe of the Lumber Jarl** (`jarl_chainaxe`, LITHITE
+9.0 / -3.1).
+- It has a new ability shape, **FELL**, in `BossWeaponItem`: a chainsaw sweep in front (3.5 blocks, ±70°: the power to
+  every foe in it), then the ground splits along the aim (up to 9 blocks, stopped by walls and drops, like the RIFT
+  footing): 70% and a throw upward to every foe on the split, 50% more to a foe caught by both. Cooldown 80. Instant,
+  no ticker.
+- Held model `jarl_chainaxe` in `wf/held3d.py`, sprite `chainsaw_axe` in `wf/itemart_shapes.py`.
+
+Loot (`gen_data.py`): map fragments, emeralds, experience bottles, golden apples, diamonds, spruce logs, stripped
+spruce logs, an iron axe, coal, iron chains, an 8% enchanted golden apple. Quest: `explorer/boss_lumber_jarl`.
+
+**Concept.** A giant lumberjack warlord, 4 blocks (hitbox 1.8 x 4.0):
+- a horned iron helm under a fur brim (a nose guard, a brass crest knob, two ox horns curving up and out), a fierce
+  face, a great red beard with a moustache and two long braids ringed in iron;
+- a red-and-black buffalo-check shirt over a barrel chest (the belly bulges), a chainmail mantle over the shoulders
+  and upper chest, a fur collar, leather harness straps with brass buckles, a wide belt with a brass buckle;
+- plaid trousers, leather bindings, fur cuffs, heavy iron-shod boots;
+- a log-carrier harness on his back: an iron frame, two spruce logs across (rings showing at the ends), straps, a
+  spare saw blade on each side and a little stack;
+- the steam chainsaw-axe in his right hand (both hands in the swings): a long iron-banded ash haft with two leather
+  grips, a brass engine at its head with a glowing firebox (glow layer) and a sooty smokestack, a steel bar with its
+  toothed chain jutting forward, a bearded axe blade behind.
+
+**Stats.**
+- 660 health, armour 13, toughness 4, attack 15, poise 120, speed 0.25, knockback resistance 1.0, step 1.5.
+- No fall damage, red bar.
+- Phase 2 at 65% (roar, +10% speed, `lumber_jarl_wrath`). Phase 3 at 30%, driven by the class like the Chained
+  Jailer: when he is free he chains `overdrive` once (guarded 64 ticks); the engine hazards then run from the class.
+  Range 999 / weight 0 keeps the scheduled move out of the picker.
+
+| Move | Phase | Wind-up / active / recovery | Range | What it does |
+|---|---|---|---|---|
+| sweep | 1-3 | 18 / 16 / 14 | 0-6.5 | Arc drawn orange (±80°, reach 5.5, P3 7; red from wind-up 12), the engine revving. Bites at active 0, 5, 10, 15: 4 each to whoever is in the arc, push 0.25 (each bite clears the i-frames so all four can land). |
+| chop | 1-3 | 24 / 16 / 16 | 0-16 | A line (half width 1.0) over open deck up to 14 and a ring (r 2) 2 ahead, drawn orange; he turns 4°/tick until wind-up 16, then red. Impact: 16 in the ring, push 0.6; the split runs from 2 out one block a tick: 10, lift 0.45 (once), and bursts at its end: 6 within 2.5, push 0.5. P2: 30% chains roll (target past 6) or sweep. |
+| blade | 1-3 | 20 / 12 / 16 | 5-20 | A loop drawn gold (red from wind-up 14): out along his facing (to the target + 2, at most 14, over open deck) bulging 3.5 to one side, back on the other. At impact the blade flies it a point a tick (about 2.4 points a block): 9, push 0.3, lift 0.2, again after 12 ticks (out and back). P2: two blades on mirrored loops. |
+| timber | 1-3 | 20 / 10 / 16 | 0-30 | At the start a lane (6 x 2, along x or z) under each player (up to 4) and `scaledCount(2)` (P2 3) on open deck 4-9 from the target, 3-3.5 apart, drawn brown; at impact red for 10 ticks, then three spruce logs drop from 12 above (falling-block visuals, removed when they reach the deck); the crash: 11 and Slowness I 1.5 s in the lane. |
+| roll | 1-3 | 26 / 10 / 14 | 4-24 | A lane (half width 1.5) over open deck up to 22, drawn brown; he turns 3°/tick until wind-up 16, then red. At impact a log (a weightless falling-block visual) rolls down it at 0.7 a tick: 10, lift 0.3 and a push of 0.7 out of the lane's side (once). |
+| call | 2-3 | 20 / 10 / 16 | 0-30 | Cooldown 700. Vindicators and bandit marksmen alternately, `scaledCount(2)`, at most 3 alive, on open deck 3.5 from him; tagged minions, discarded on death and reset. |
+| overdrive | 3 (once) | 40 / 20 / 20 | scheduled | Guarded 64 ticks; orange rings grow round him, the flywheel smokes and sparks. Impact: a wave to 14 (10, jump; it hits only who stands within 0.6 of the floor), +12% speed (`lumber_jarl_overdrive`), the engine hazards start (sparks 60 ticks later, vents 40), the sweep's reach grows to 7. |
+
+**The engine overdrives (phase 3).** Smoke and sparks pour off the flywheel. Every 140 ticks x `cooldownScale()` (at
+least 80) a spark sweep: a wedge (±35°, 22 long) from the ground under the flywheel toward the target, drawn orange for
+30 ticks (red the last 10), then a jet of sparks sweeps across it from one edge to the other in 24 ticks (alternately
+each way): 6 and fire 2 s, once per sweep, to whoever the jet (1 wide) crosses. Every 100 ticks x `cooldownScale()` (at
+least 60) `scaledCount(2) + 1` steam vents (the first within 2 of the target, the rest 3-10 from it, 4 apart, on open
+deck): each ring (r 1.8) drawn white for 30 ticks (red the last 10), then 7 and lift 0.4. Both wait while `overdrive`
+runs or he is guarded.
+
+**Temporary blocks.** None. The falling and rolling logs are `FallingBlockEntity` visuals (put into an air cell for an
+instant and lifted out, `disableDrop`, no item): removed when they reach the deck or end their run, after 60 ticks at
+most, when the fight resets (phase back to 1), the arena empties, he dies or is removed, and on the first tick after a
+reload (found by the tag `brasshaven_jarl_log`). His crew is discarded on death and reset.
+
+**Fair edges.** His `strike` caps pushes at 1.0 and lift at 0.45. A push is dropped entirely when a probe 1.5 or 3
+blocks along it finds no open deck (the railing, a stair house or its well, the engine, the edge), and then the lift is
+capped at 0.2; the roll's side push and the engine's phase-2 roar shove are corrected the same way. Lines, lanes, rings
+and vents only use open deck. The multi-bite sweep is 16 at most and fully drawn before it starts.
+
+**Co-op and NG+** come from the engine (`BossDifficulty`, `BossCycles`): health, damage (every hit goes through
+`strike`/`shove`), poise, cooldowns (the spark and vent timers use `cooldownScale()`), compressed wind-ups. The crew
+scales with `scaledCount`; timber lanes land on every player (up to 4) plus `scaledCount` more; vents with
+`scaledCount`.
+
+Previews:
+- `python3 tools/gen_models.py --preview --only lumber_jarl` writes `build/previews/models/lumber_jarl.png`.
+- Held axe: `python3 tools/art_sheet.py --kind held --only jarl_chainaxe`.
+
+## 38. Champion of the Hollow Moon: The Moon Warden (La Gardienne de la lune)
+Files:
+- `tools/wf/mobs/moon_warden.py`: model `moon_warden` (76 cubes, 128x128, five texture variants: the dial's phase).
+- `src/main/java/com/brasshaven/entity/boss/MoonWarden.java`: the moveset.
+
+There is no lair module. The arena is the core platform of the Hollow Moon (`tools/wf/structures/hollow_moon.py`,
+`pillar_and_platform()` / `arena_dress()`, the seal at the centre, radius 15): a flat disc of radius 17 (34 across, feet
+50) ringed by a brass railing over the void, three short amethyst posts at r 13.5, the bridge mouth (ring 3) and the
+reliquary kiosk open in the rail; the glowing core (a sphere of sea lanterns and crying obsidian, r 4.3) hangs 16 over
+the centre in its armillary rings. `BOSS` there is `brasshaven:moon_warden` (it replaces the borrowed Gryphon Knight,
+whose own home, quest and seal on the sky island are untouched). `BOSS_HOME` is `hollow_moon`. "Open platform" in the
+class means floor within 0.6 of the seal's level (1.6 if the floor round the seal is rough: a command spawn) with two
+blocks of air over it, inside the arena radius: the rail, the posts and the void are never open platform.
+
+Reward: `remembrance_moon_warden` forges the **Astrolabe Blade of the Moon Warden** (`moon_astroblade`, VOID 9.0 / -2.6).
+- It has a new ability shape, **ORBIT**, in `BossWeaponItem`: three brass planets fly out from the wielder along spiral
+  arms (out to 10 blocks, 120° apart, each winding 9° a step so that one of them ends on the aim; blocks stop an arm).
+  Every foe a planet passes is hit for the power (once per arm; flag `slow` adds the usual slow) and drawn 0.35 toward
+  the wielder; where the arm on the aim ends a small gravity well pulls the foes within 3 to its centre. Cooldown 80.
+  Instant, no ticker.
+- Held model `moon_astroblade` in `wf/held3d.py`, sprite `astro_blade` in `wf/itemart_shapes.py`.
+
+Loot (`gen_data.py`): void shards, emeralds, experience bottles, golden apples, diamonds, end rods, amethyst shards,
+chorus fruit, ender pearls, a clock, a 15% enchanted golden apple. Quest: `explorer/boss_moon_warden`.
+
+**Concept.** An elegant celestial automaton that kept the moon machine turning after its astronomers left, 3.6 blocks
+(hitbox 1.4 x 3.6), levitating:
+- a slender porcelain-white body in gold inlay, a narrow waist, a glowing moonstone in the bodice, gold-capped shoulders;
+- a round moon-phase dial for a face (gold bezel, night sky, the moon disc lit to the phase), crown points, and behind
+  it a gold halo (r 10) and two orrery hubs whose brass arms carry four small planets, turning in the idle loop
+  (`halo`, `orrery`, `orrery2`);
+- very long porcelain arms in gold rings, a pierced gold astrolabe at each wrist and a long pale blade under it
+  (`blade_?`);
+- a cloak of starfield (glowing stars) with gold edges from the shoulders (`cape`, `cape_lo`), a skirt of starfield over
+  purpur flaring in three tiers to a gold hem that never touches the floor; four end-rod thrusters under it (END_ROD
+  particles under her in game).
+- Texture variants (`modelVariant()` = synched `DATA_MOON`): 0 full, 1 waning, 2 new, 3 waxing, 4 eclipse (a black disc
+  in a gold corona).
+
+**Stats.**
+- 720 health, armour 12, toughness 5, attack 15, poise 120, speed 0.27, knockback resistance 1.0, step 1.5.
+- No fall damage, purple bar.
+- Phase 2 at 65% (roar, +10% speed, `moon_warden_wrath`). Phase 3 at 30%, driven by the class like the Chained
+  Jailer: when she is free she chains `eclipse` once (guarded 64 ticks). Range 999 / weight 0 keeps the scheduled moves
+  (`shade`, `radiance`, `eclipse`) out of the picker.
+- **Moon cycle** (phases 1-2): every 220 ticks x `cooldownScale()` (at least 120) of fighting while she is free, the
+  dial turns full -> waning -> new -> waxing -> full (she starts waxing). Turning to the new moon chains `shade`, to the
+  full moon `radiance`; in the crescents (waxing, waning) the second blade of `sweep` throws a crescent. The cycle stops
+  at the eclipse (dial variant 4).
+
+| Move | Phase | Wind-up / active / recovery | Range | What it does |
+|---|---|---|---|---|
+| sweep | 1-3 | 18 / 14 / 14 | 0-6.5 | Arc drawn silver (±80°, 5.5): right blade at impact, 13, push 0.5. At active 1 she turns up to 25° and the arc is drawn red (active 1-7); left blade at active 8: 11, push 0.4. Crescent phases: at active 8 a crescent (±40°) flies out from 2 to 13 at 0.55 a tick: 7 once. P2: 30% chains flip (within 8) or orbit. |
+| orbit | 1-3 | 24 / 30 / 14 | 0-20 | 3 spirals (P2 5) spread evenly round her facing, 1.8 + 0.7 a point, 11° of turn a point, clipped to open platform within radius - 0.5; drawn gold from the start, red from wind-up 16. At impact a planet runs each spiral one point a tick: 9 (once a spiral), lift 0.1. |
+| well | 1-3 | 28 / 20 / 14 | 0-18 | A point at the target moved inside radius - 5; inner ring r 2.5 violet (red from wind-up 18), reach r 7 dotted. Active 0-15: everyone within 7 gets +0.045 a tick toward it (horizontal speed capped at 0.3, slower than walking away). Active 16: 10 and lift 0.35 in the inner ring. |
+| flip | 1-3 | 22 / 10 / 16 | 0-20 | Rings r 2.5 under the target and up to 2 other players (P2 +1 near the target), kept inside radius - 3, 4 apart; they follow their players until wind-up 12, then red. Impact: 7, no push, horizontal speed zeroed, Levitation II 20 ticks and Slow Falling 80 ticks. |
+| shade | 1-2 (new moon) | 24 / 40 / 14 | scheduled | Lines (2, `scaledCount`, +1 in P2, at most 4) through the target, other players, random platform, up to 9 each way, inside radius - 1.5; drawn in shadow, red from wind-up 14. At impact the shades run them one after another (6 ticks apart) at 0.9 a tick: 9 and Slowness I 1 s (once a line). |
+| radiance | 1-2 (full moon) | 30 / 30 / 14 | scheduled | Gold rings converge on her. Impact: a ring of moonlight runs out to the arena radius at 0.5 a tick: 10, lift 0.3, only to who stands within 0.6 of the floor (jump it). P2: a second ring at active 14. |
+| comet | 2-3 | 30 / 10 / 18 | 5-18 | No gravity; she rises 0.12 a tick for 24 ticks. A ring r 3 at the target (inside radius - 3) follows until wind-up 20, then red. Active 0-4 she moves onto it (`move`, collisions kept); active 5: gravity back, 13 and lift 0.3 in r 3. Gravity is also restored by `bossTick` whenever no comet runs. |
+| summon | 2-3 | 20 / 10 / 16 | 0-30 | Cooldown 600. Void larvae and star motes alternately, `scaledCount(2)`, at most 3 alive, 3.5 from her; tagged minions, discarded on death and reset. |
+| eclipse | 3 (once) | 40 / 20 / 20 | scheduled | Guarded 64 ticks; dark rings converge, a corona round the core. Impact: the core's sea lanterns become tinted glass, Darkness 2 s on the fighters, a dark ring runs to the arena radius (10, lift 0.3, jump it), +10% speed (`moon_warden_eclipse`), dial variant 4; the hazards start. |
+
+**Eclipse (phase 3).** Dark motes drift, a corona flickers round the core.
+- *Gravity sweep*: first 80 ticks after the eclipse, then every 300 ticks x `cooldownScale()` (at least 200, counted
+  between sweeps). Three beams 120° apart, radial lines from 2.5 out to the arena radius, a line of particles down from
+  the core to each. Drawn 40 ticks (violet, red the last 10, gold arrows beside each beam showing the way it will turn;
+  Darkness 1.5 s at the start), then they turn for 140 ticks at 0.75° a tick (0.2 blocks a tick at the rim, less than
+  walking; the direction alternates every sweep): 5 and Slowness I 1 s to whoever is within 0.8 (+ half width) of a beam,
+  at most every 10 ticks. Walk with the gap; the centre (r < 2.5) is never swept.
+- *Meteors*: every 110 ticks x `cooldownScale()` (at least 60), only between sweeps: `min(4, scaledCount(2))` circles
+  (r 2.2): the target, up to 2 other players (inside radius - 2), the rest random platform, 3 apart. Drawn 30 ticks
+  (red the last 10), the meteor falls in the last 12: 8 and lift 0.3.
+- Both wait while `eclipse` runs.
+
+**Temporary blocks.** The only blocks she changes are the core's sea lanterns (within 6 of the point 16 over the
+arena centre), turned to tinted glass at the eclipse. They go back (only where still tinted glass) when the fight
+resets (phase back to 1), the arena empties, she dies, is removed, and on the first tick after a reload (saved in
+`MoonBlocks`; a reload mid-eclipse dims the core again at once).
+
+**Fair edges (the void).** Her `strike` caps pushes at 0.8 and lift at 0.4. A push is kept only when open platform lies
+1.5 and 3 blocks along it within radius - 1.5 of the centre; otherwise it becomes a pull toward the centre (at most 0.5)
+and the lift is capped at 0.2. Almost every move pushes nothing at all (only the two sweeps do); the engine's phase-2
+roar shove is cut to 30% and corrected the same way. The flip lifts straight up and gives Slow Falling, its rings sit
+inside radius - 3; the well and the comet target points pulled inside the rim; lines, spirals and beams only use open
+platform.
+
+**Co-op and NG+** come from the engine (`BossDifficulty`, `BossCycles`): health, damage (every hit goes through
+`strike`), poise, cooldowns (the moon, sweep and meteor timers use `cooldownScale()`), compressed wind-ups. Adds,
+shades and meteors scale with `scaledCount`; flip rings and meteors land on every player (up to 3).
+
+Previews:
+- `python3 tools/gen_models.py --preview --only moon_warden` writes `build/previews/models/moon_warden.png` (and one
+  sheet per dial variant).
+- Held blade: `python3 tools/art_sheet.py --kind held --only moon_astroblade`.
+
 ## Difficulty: co-op scaling and NG+ cycles
 
 Applied by `boss/WayfarerBoss` to **every** boss on its first server tick, whatever spawned it (boss seal,

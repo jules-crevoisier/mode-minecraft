@@ -659,6 +659,20 @@
         ]
       }
     },
+    "lumber_jarl": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "entity_type": "brasshaven:lumber_jarl"
+            }
+          }
+        ]
+      }
+    },
     "thorn_gardener": {
       "trigger": "minecraft:player_killed_entity",
       "conditions": {
@@ -668,6 +682,34 @@
             "entity": "this",
             "predicate": {
               "entity_type": "brasshaven:thorn_gardener"
+            }
+          }
+        ]
+      }
+    },
+    "abyss_diver": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "entity_type": "brasshaven:abyss_diver"
+            }
+          }
+        ]
+      }
+    },
+    "moon_warden": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "entity_type": "brasshaven:moon_warden"
             }
           }
         ]

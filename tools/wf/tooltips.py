@@ -50,7 +50,10 @@ ABILITIES = {
     "rewind": ("Rewinding saw rush", "Ruée de la scie à rebours", "range"),
     "anchor": ("Ice anchor throw", "Lancer d'ancre de glace", "range"),
     "tether": ("Spore flask tether", "Fiole de spores et mycélium", "range"),
+    "fell": ("Felling cut", "Coupe d'abattage", "range"),
     "prune": ("Pruning snip", "Coup de sécateur", "range"),
+    "bore": ("Pressure bore", "Forage sous pression", "range"),
+    "orbit": ("Orrery orbit", "Orbite de l'orrery", "range"),
 }
 # BossWeaponItem flags, in bit order
 ABILITY_EFFECTS = {
@@ -192,8 +195,14 @@ FLAVOR = {
                          "Elle n'a jamais perdu un patient ; elle remontait l'horloge et recommençait."),
     "commodore_anchor": ("He swore to bring the fleet home through the ice; the rig still keeps him to his word.",
                          "Il avait juré de ramener la flotte à travers la glace ; l'appareil le tient encore à sa parole."),
+    "jarl_chainaxe": ("He swore the forest would fall before his engine stopped; the engine has not stopped.",
+                      "Il a juré que la forêt tomberait avant que son moteur ne s'arrête ; le moteur ne s'est pas arrêté."),
     "gardener_shears": ("Nobody came back to the palm house; he kept pruning, and the garden kept growing into him.",
                         "Personne n'est revenu à la serre ; il a continué de tailler, et le jardin a continué de pousser en lui."),
+    "moon_astroblade": ("She kept the moon turning long after the last astronomer left; she never asked who it was for.",
+                        "Elle a fait tourner la lune longtemps après le départ du dernier astronome, sans jamais demander pour qui."),
+    "diver_drill_lance": ("He went down to drill the last metre himself; the suit came back up without him, and it is still drilling.",
+                          "Il est descendu forer lui-même le dernier mètre ; le scaphandre est remonté sans lui, et il fore toujours."),
     "alchemist_staff": ("He stirred the vats until the spores stirred him back.",
                         "Il a remué les cuves jusqu'à ce que les spores le remuent à leur tour."),
 }

@@ -196,6 +196,9 @@ def structure_json(sdef, ground_offset, fit_info=None):
         js["start_height"] = {"absolute": sdef.height_offset}
         js["project_start_to_heightmap"] = sdef.heightmap
     js["fit"] = placement.fit_json(sdef, fit_info)
+    if getattr(sdef, "liquid_settings", None):
+        # e.g. "ignore_waterlogging": sealed air pockets under the sea (the structure waterlogs its own blocks)
+        js["liquid_settings"] = sdef.liquid_settings
     return js
 
 

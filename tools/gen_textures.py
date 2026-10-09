@@ -137,7 +137,10 @@ EGGS = {
     "asylum_director": ((226, 222, 206), (120, 236, 150)),
     "frost_commodore": ((70, 92, 120), (170, 226, 255)),
     "spore_alchemist": ((196, 38, 34), (120, 236, 96)),
+    "lumber_jarl": ((178, 38, 34), (226, 214, 184)),
     "thorn_gardener": ((176, 112, 58), (236, 86, 170)),
+    "abyss_diver": ((190, 150, 70), (80, 255, 214)),
+    "moon_warden": ((236, 232, 226), (176, 206, 255)),
 }
 
 
@@ -213,7 +216,10 @@ EMBLEMS = {
     "asylum_director": [".###.", "#.#.#", "#.##.", "#...#", ".###."],  # a pocket watch
     "frost_commodore": ["..#..", ".###.", "..#..", "#.#.#", ".###."],  # an anchor
     "spore_alchemist": [".###.", "#####", "#.#.#", "..#..", ".###."],  # a toadstool over a flask
+    "lumber_jarl": ["#...#", "#.#.#", ".###.", "..#..", "..#.."],      # a horned helm over an axe haft
     "thorn_gardener": ["#...#", ".#.#.", "..#..", ".#.#.", "##.##"],   # open pruning shears
+    "abyss_diver": [".###.", "#...#", "#.#.#", "#...#", ".###."],      # a diving helmet's porthole
+    "moon_warden": [".##..", "#....", "#....", "#....", ".##.."],      # a crescent moon
 }
 
 

@@ -1,0 +1,447 @@
+{
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "brasshaven:chunked_template",
+        "size": [
+          180,
+          108,
+          179
+        ],
+        "cells": [
+          {
+            "location": "brasshaven:abyssal_station/station/x0_z1",
+            "offset": [
+              21,
+              38,
+              38
+            ],
+            "size": [
+              9,
+              17,
+              21
+            ],
+            "blocks": 517
+          },
+          {
+            "location": "brasshaven:abyssal_station/station/x0_z2",
+            "offset": [
+              0,
+              42,
+              68
+            ],
+            "size": [
+              30,
+              16,
+              22
+            ],
+            "blocks": 2927
+          },
+          {
+            "location": "brasshaven:abyssal_station/station/x0_z3",
+            "offset": [
+              0,
+              42,
+              90
+            ],
+            "size": [
+              30,
+              19,
+              29
+            ],
+            "blocks": 4052
+          },
+          {
+            "location": "brasshaven:abyssal_station/station/x0_z4",
+            "offset": [
+              0,
+              42,
+              119
+            ],
+            "size": [
+              30,
+              16,
+              27
+            ],
+            "blocks": 464
+          },
+          {
+            "location": "brasshaven:abyssal_station/station/x1_z1",
+            "offset": [
+              30,
+              38,
+              38
+            ],
+            "size": [
+              30,
+              17,
+              22
+            ],
+            "blocks": 5851
+          },
+          {
+            "location": "brasshaven:abyssal_station/station/x1_z2",
+            "offset": [
+              30,
+              38,
+              60
+            ],
+            "size": [
+              30,
+              21,
+              30
+            ],
+            "blocks": 3453
+          },
+          {
+            "location": "brasshaven:abyssal_station/station/x1_z3",
+            "offset": [
+              30,
+              38,
+              90
+            ],
+            "size": [
+              30,
+              23,
+              29
+            ],
+            "blocks": 5414
+          },
+          {
+            "location": "brasshaven:abyssal_station/station/x1_z4",
+            "offset": [
+              30,
+              38,
+              119
+            ],
+            "size": [
+              30,
+              23,
+              29
+            ],
+            "blocks": 6705
+          },
+          {
+            "location": "brasshaven:abyssal_station/station/x1_z5",
+            "offset": [
+              56,
+              42,
+              150
+            ],
+            "size": [
+              4,
+              19,
+              29
+            ],
+            "blocks": 417
+          },
+          {
+            "location": "brasshaven:abyssal_station/station/x2_z1",
+            "offset": [
+              60,
+              38,
+              38
+            ],
+            "size": [
+              25,
+              17,
+              22
+            ],
+            "blocks": 2484
+          },
+          {
+            "location": "brasshaven:abyssal_station/station/x2_z2",
+            "offset": [
+              60,
+              38,
+              60
+            ],
+            "size": [
+              30,
+              34,
+              30
+            ],
+            "blocks": 6594
+          },
+          {
+            "location": "brasshaven:abyssal_station/station/x2_z3",
+            "offset": [
+              60,
+              38,
+              90
+            ],
+            "size": [
+              30,
+              38,
+              29
+            ],
+            "blocks": 9617
+          },
+          {
+            "location": "brasshaven:abyssal_station/station/x2_z4",
+            "offset": [
+              60,
+              38,
+              119
+            ],
+            "size": [
+              30,
+              64,
+              30
+            ],
+            "blocks": 3609
+          },
+          {
+            "location": "brasshaven:abyssal_station/station/x2_z5",
+            "offset": [
+              60,
+              38,
+              149
+            ],
+            "size": [
+              30,
+              65,
+              30
+            ],
+            "blocks": 5982
+          },
+          {
+            "location": "brasshaven:abyssal_station/station/x3_z1",
+            "offset": [
+              94,
+              38,
+              44
+            ],
+            "size": [
+              26,
+              12,
+              16
+            ],
+            "blocks": 2083
+          },
+          {
+            "location": "brasshaven:abyssal_station/station/x3_z2",
+            "offset": [
+              90,
+              38,
+              60
+            ],
+            "size": [
+              30,
+              34,
+              30
+            ],
+            "blocks": 7741
+          },
+          {
+            "location": "brasshaven:abyssal_station/station/x3_z3",
+            "offset": [
+              90,
+              38,
+              90
+            ],
+            "size": [
+              30,
+              39,
+              29
+            ],
+            "blocks": 11416
+          },
+          {
+            "location": "brasshaven:abyssal_station/station/x3_z4",
+            "offset": [
+              90,
+              38,
+              119
+            ],
+            "size": [
+              30,
+              64,
+              30
+            ],
+            "blocks": 3681
+          },
+          {
+            "location": "brasshaven:abyssal_station/station/x3_z5",
+            "offset": [
+              90,
+              38,
+              149
+            ],
+            "size": [
+              30,
+              70,
+              29
+            ],
+            "blocks": 6841
+          },
+          {
+            "location": "brasshaven:abyssal_station/station/x4_z1",
+            "offset": [
+              120,
+              38,
+              32
+            ],
+            "size": [
+              30,
+              20,
+              28
+            ],
+            "blocks": 4943
+          },
+          {
+            "location": "brasshaven:abyssal_station/station/x4_z2",
+            "offset": [
+              120,
+              0,
+              60
+            ],
+            "size": [
+              30,
+              71,
+              30
+            ],
+            "blocks": 5151
+          },
+          {
+            "location": "brasshaven:abyssal_station/station/x4_z3",
+            "offset": [
+              120,
+              1,
+              90
+            ],
+            "size": [
+              30,
+              66,
+              29
+            ],
+            "blocks": 9415
+          },
+          {
+            "location": "brasshaven:abyssal_station/station/x4_z4",
+            "offset": [
+              120,
+              38,
+              119
+            ],
+            "size": [
+              29,
+              15,
+              30
+            ],
+            "blocks": 2920
+          },
+          {
+            "location": "brasshaven:abyssal_station/station/x4_z5",
+            "offset": [
+              122,
+              38,
+              149
+            ],
+            "size": [
+              28,
+              14,
+              19
+            ],
+            "blocks": 760
+          },
+          {
+            "location": "brasshaven:abyssal_station/station/x5_z0",
+            "offset": [
+              153,
+              16,
+              0
+            ],
+            "size": [
+              23,
+              33,
+              30
+            ],
+            "blocks": 11423
+          },
+          {
+            "location": "brasshaven:abyssal_station/station/x5_z1",
+            "offset": [
+              150,
+              1,
+              30
+            ],
+            "size": [
+              22,
+              53,
+              30
+            ],
+            "blocks": 18279
+          },
+          {
+            "location": "brasshaven:abyssal_station/station/x5_z2",
+            "offset": [
+              150,
+              1,
+              60
+            ],
+            "size": [
+              30,
+              88,
+              30
+            ],
+            "blocks": 25357
+          },
+          {
+            "location": "brasshaven:abyssal_station/station/x5_z3",
+            "offset": [
+              150,
+              1,
+              90
+            ],
+            "size": [
+              30,
+              63,
+              29
+            ],
+            "blocks": 19020
+          },
+          {
+            "location": "brasshaven:abyssal_station/station/x5_z4",
+            "offset": [
+              156,
+              15,
+              119
+            ],
+            "size": [
+              21,
+              34,
+              30
+            ],
+            "blocks": 14686
+          },
+          {
+            "location": "brasshaven:abyssal_station/station/x5_z5",
+            "offset": [
+              150,
+              16,
+              149
+            ],
+            "size": [
+              27,
+              35,
+              20
+            ],
+            "blocks": 6450
+          }
+        ],
+        "projection": "rigid",
+        "processors": "brasshaven:none",
+        "ground_level_delta": 45,
+        "footprint": [
+          0,
+          0,
+          177,
+          178
+        ]
+      }
+    }
+  ]
+}

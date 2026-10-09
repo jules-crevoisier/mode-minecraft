@@ -135,11 +135,14 @@ STRUCTURE_ICONS = {
     "airship_graveyard": "brasshaven:brass_plating",
     "echo_cathedral": "bell",
     "starfall_library": "chiseled_bookshelf",
+    "hollow_moon": "clock",
     "cloud_pagoda": "cherry_sapling",
     "icebound_fleet": "packed_ice",
     "clockwork_asylum": "brasshaven:wall_cog",
     "spore_refinery": "red_mushroom",
+    "timber_fortress": "spruce_log",
     "verdant_arboretum": "big_dripleaf",
+    "abyssal_station": "sea_lantern",
 }
 # where each boss lives (its quest follows the discovery of that structure)
 BOSS_HOME = {
@@ -180,7 +183,10 @@ BOSS_HOME = {
     "asylum_director": "clockwork_asylum",
     "frost_commodore": "icebound_fleet",
     "spore_alchemist": "spore_refinery",
+    "lumber_jarl": "timber_fortress",
     "thorn_gardener": "verdant_arboretum",
+    "abyss_diver": "abyssal_station",
+    "moon_warden": "hollow_moon",
 }
 CHAPTER = {}
 for s in defs.STRUCTURES:

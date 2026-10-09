@@ -19,6 +19,10 @@
     {
       "structure": "brasshaven:starfall_library",
       "weight": 1
+    },
+    {
+      "structure": "brasshaven:hollow_moon",
+      "weight": 1
     }
   ],
   "placement": {

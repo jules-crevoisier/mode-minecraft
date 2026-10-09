@@ -63,6 +63,9 @@ from . import asylum_director
 from . import frost_commodore
 from . import spore_alchemist
 from . import thorn_gardener
+from . import lumber_jarl
+from . import abyss_diver
+from . import moon_warden
 # living oceans
 from . import glow_jellyfish
 from . import reef_fish
@@ -172,6 +175,9 @@ MODELS = [
     frost_commodore.build,
     spore_alchemist.build,
     thorn_gardener.build,
+    lumber_jarl.build,
+    abyss_diver.build,
+    moon_warden.build,
     glow_jellyfish.build,
     reef_fish.build,
     manta_ray.build,

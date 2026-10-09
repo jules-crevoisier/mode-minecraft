@@ -1,0 +1,524 @@
+{
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "brasshaven:chunked_template",
+        "size": [
+          178,
+          165,
+          200
+        ],
+        "cells": [
+          {
+            "location": "brasshaven:hollow_moon/moon/x0_z1",
+            "offset": [
+              24,
+              71,
+              44
+            ],
+            "size": [
+              6,
+              47,
+              13
+            ],
+            "blocks": 659
+          },
+          {
+            "location": "brasshaven:hollow_moon/moon/x0_z2",
+            "offset": [
+              18,
+              27,
+              57
+            ],
+            "size": [
+              12,
+              102,
+              29
+            ],
+            "blocks": 4962
+          },
+          {
+            "location": "brasshaven:hollow_moon/moon/x0_z3",
+            "offset": [
+              0,
+              28,
+              86
+            ],
+            "size": [
+              30,
+              100,
+              28
+            ],
+            "blocks": 4345
+          },
+          {
+            "location": "brasshaven:hollow_moon/moon/x0_z4",
+            "offset": [
+              2,
+              70,
+              114
+            ],
+            "size": [
+              28,
+              66,
+              29
+            ],
+            "blocks": 107
+          },
+          {
+            "location": "brasshaven:hollow_moon/moon/x0_z5",
+            "offset": [
+              26,
+              128,
+              143
+            ],
+            "size": [
+              4,
+              10,
+              5
+            ],
+            "blocks": 88
+          },
+          {
+            "location": "brasshaven:hollow_moon/moon/x1_z0",
+            "offset": [
+              43,
+              43,
+              2
+            ],
+            "size": [
+              16,
+              84,
+              27
+            ],
+            "blocks": 1877
+          },
+          {
+            "location": "brasshaven:hollow_moon/moon/x1_z1",
+            "offset": [
+              30,
+              26,
+              29
+            ],
+            "size": [
+              29,
+              126,
+              28
+            ],
+            "blocks": 12998
+          },
+          {
+            "location": "brasshaven:hollow_moon/moon/x1_z2",
+            "offset": [
+              30,
+              19,
+              57
+            ],
+            "size": [
+              29,
+              138,
+              29
+            ],
+            "blocks": 17999
+          },
+          {
+            "location": "brasshaven:hollow_moon/moon/x1_z3",
+            "offset": [
+              30,
+              20,
+              86
+            ],
+            "size": [
+              29,
+              137,
+              28
+            ],
+            "blocks": 14454
+          },
+          {
+            "location": "brasshaven:hollow_moon/moon/x1_z4",
+            "offset": [
+              30,
+              28,
+              114
+            ],
+            "size": [
+              29,
+              109,
+              29
+            ],
+            "blocks": 2443
+          },
+          {
+            "location": "brasshaven:hollow_moon/moon/x1_z5",
+            "offset": [
+              30,
+              126,
+              143
+            ],
+            "size": [
+              24,
+              12,
+              19
+            ],
+            "blocks": 217
+          },
+          {
+            "location": "brasshaven:hollow_moon/moon/x2_z0",
+            "offset": [
+              59,
+              28,
+              10
+            ],
+            "size": [
+              30,
+              112,
+              19
+            ],
+            "blocks": 7502
+          },
+          {
+            "location": "brasshaven:hollow_moon/moon/x2_z1",
+            "offset": [
+              59,
+              17,
+              29
+            ],
+            "size": [
+              30,
+              143,
+              28
+            ],
+            "blocks": 17438
+          },
+          {
+            "location": "brasshaven:hollow_moon/moon/x2_z2",
+            "offset": [
+              59,
+              2,
+              57
+            ],
+            "size": [
+              30,
+              162,
+              29
+            ],
+            "blocks": 22127
+          },
+          {
+            "location": "brasshaven:hollow_moon/moon/x2_z3",
+            "offset": [
+              59,
+              3,
+              86
+            ],
+            "size": [
+              30,
+              155,
+              28
+            ],
+            "blocks": 16181
+          },
+          {
+            "location": "brasshaven:hollow_moon/moon/x2_z4",
+            "offset": [
+              59,
+              20,
+              114
+            ],
+            "size": [
+              30,
+              141,
+              29
+            ],
+            "blocks": 8605
+          },
+          {
+            "location": "brasshaven:hollow_moon/moon/x2_z5",
+            "offset": [
+              75,
+              13,
+              143
+            ],
+            "size": [
+              14,
+              150,
+              28
+            ],
+            "blocks": 2419
+          },
+          {
+            "location": "brasshaven:hollow_moon/moon/x2_z6",
+            "offset": [
+              78,
+              37,
+              171
+            ],
+            "size": [
+              11,
+              23,
+              28
+            ],
+            "blocks": 953
+          },
+          {
+            "location": "brasshaven:hollow_moon/moon/x3_z0",
+            "offset": [
+              89,
+              28,
+              0
+            ],
+            "size": [
+              30,
+              112,
+              29
+            ],
+            "blocks": 8008
+          },
+          {
+            "location": "brasshaven:hollow_moon/moon/x3_z1",
+            "offset": [
+              89,
+              16,
+              29
+            ],
+            "size": [
+              30,
+              144,
+              28
+            ],
+            "blocks": 18397
+          },
+          {
+            "location": "brasshaven:hollow_moon/moon/x3_z2",
+            "offset": [
+              89,
+              0,
+              57
+            ],
+            "size": [
+              30,
+              165,
+              29
+            ],
+            "blocks": 26363
+          },
+          {
+            "location": "brasshaven:hollow_moon/moon/x3_z3",
+            "offset": [
+              89,
+              3,
+              86
+            ],
+            "size": [
+              30,
+              161,
+              28
+            ],
+            "blocks": 18536
+          },
+          {
+            "location": "brasshaven:hollow_moon/moon/x3_z4",
+            "offset": [
+              89,
+              20,
+              114
+            ],
+            "size": [
+              30,
+              122,
+              29
+            ],
+            "blocks": 9511
+          },
+          {
+            "location": "brasshaven:hollow_moon/moon/x3_z5",
+            "offset": [
+              89,
+              16,
+              143
+            ],
+            "size": [
+              30,
+              126,
+              28
+            ],
+            "blocks": 2291
+          },
+          {
+            "location": "brasshaven:hollow_moon/moon/x3_z6",
+            "offset": [
+              89,
+              29,
+              171
+            ],
+            "size": [
+              19,
+              77,
+              29
+            ],
+            "blocks": 3591
+          },
+          {
+            "location": "brasshaven:hollow_moon/moon/x4_z0",
+            "offset": [
+              119,
+              38,
+              0
+            ],
+            "size": [
+              19,
+              92,
+              29
+            ],
+            "blocks": 2357
+          },
+          {
+            "location": "brasshaven:hollow_moon/moon/x4_z1",
+            "offset": [
+              119,
+              27,
+              29
+            ],
+            "size": [
+              29,
+              126,
+              28
+            ],
+            "blocks": 15016
+          },
+          {
+            "location": "brasshaven:hollow_moon/moon/x4_z2",
+            "offset": [
+              119,
+              18,
+              57
+            ],
+            "size": [
+              29,
+              140,
+              29
+            ],
+            "blocks": 17913
+          },
+          {
+            "location": "brasshaven:hollow_moon/moon/x4_z3",
+            "offset": [
+              119,
+              18,
+              86
+            ],
+            "size": [
+              29,
+              140,
+              28
+            ],
+            "blocks": 15386
+          },
+          {
+            "location": "brasshaven:hollow_moon/moon/x4_z4",
+            "offset": [
+              119,
+              22,
+              114
+            ],
+            "size": [
+              29,
+              120,
+              29
+            ],
+            "blocks": 5193
+          },
+          {
+            "location": "brasshaven:hollow_moon/moon/x4_z5",
+            "offset": [
+              119,
+              139,
+              143
+            ],
+            "size": [
+              9,
+              4,
+              17
+            ],
+            "blocks": 63
+          },
+          {
+            "location": "brasshaven:hollow_moon/moon/x5_z1",
+            "offset": [
+              148,
+              64,
+              40
+            ],
+            "size": [
+              9,
+              61,
+              17
+            ],
+            "blocks": 1387
+          },
+          {
+            "location": "brasshaven:hollow_moon/moon/x5_z2",
+            "offset": [
+              148,
+              30,
+              57
+            ],
+            "size": [
+              30,
+              104,
+              29
+            ],
+            "blocks": 5353
+          },
+          {
+            "location": "brasshaven:hollow_moon/moon/x5_z3",
+            "offset": [
+              148,
+              28,
+              86
+            ],
+            "size": [
+              14,
+              105,
+              28
+            ],
+            "blocks": 3498
+          },
+          {
+            "location": "brasshaven:hollow_moon/moon/x5_z4",
+            "offset": [
+              148,
+              73,
+              114
+            ],
+            "size": [
+              4,
+              13,
+              5
+            ],
+            "blocks": 59
+          },
+          {
+            "location": "brasshaven:hollow_moon/moon/x5_z5",
+            "offset": [
+              153,
+              120,
+              148
+            ],
+            "size": [
+              8,
+              12,
+              7
+            ],
+            "blocks": 246
+          }
+        ],
+        "projection": "rigid",
+        "processors": "brasshaven:none"
+      }
+    }
+  ]
+}

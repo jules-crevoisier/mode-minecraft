@@ -128,6 +128,8 @@ FAMILIES = [
         "icebound_fleet": 1,
         "clockwork_asylum": 1,
         "spore_refinery": 1,
+        "timber_fortress": 1,
+        "abyssal_station": 1,     # deep oceans only (shares the sea with the dreadnought wreck)
     }, avoid=[(V + "villages", 10), (V + "pillager_outposts", 6), (V + "woodland_mansions", 8)], min_spawn=32,
         note="surface wonders; at least 40 chunks between two of them, none within 512 blocks of 0,0"),
     Family("deep_wonders", "deep_wonder", 72, 28, {
@@ -176,6 +178,7 @@ FAMILIES = [
         "end_archive": 2, "void_crypt": 2, "void_nest": 1,
         "shattered_halo": 1,
         "starfall_library": 1,
+        "hollow_moon": 1,
     }, avoid=[(V + "end_cities", 4)]),
     Family("end_small", "end", 32, 10, {
         "chorus_garden": 3, "void_observatory": 2, "void_ship": 2,
@@ -256,6 +259,9 @@ FIT = {
     "icebound_fleet": _f("wetland", spread=5, slope=0.9, wet=0.95, min_wet=0.0, drop=2),
     "clockwork_asylum": _f("land", spread=22, slope=1.4, wet=0.05),  # dark forest / pale garden: brings its own hill and yard
     "spore_refinery": _f("land", spread=12, slope=1.0, wet=0.2),  # mushroom island / old-growth taiga: lays its own mycelium disc
+    "timber_fortress": _f("land", spread=10, slope=1.0, wet=0.12),  # taiga river bend: lays its own yard, hill and river
+    # deep sea floor (22+ deep, flat): the domes sit on their own footings; the tower's deck clears the surface
+    "abyssal_station": _f("seabed", wet=0.95, depth=22, spread=8, slope=0.7, drop=4),
     # ---- coast: the dock side (template +z = south) in the sea, the cape on land, shore near sea level
     "coastal_lighthouse": _f("coast", sea_side="south", wet=0.5, land=0.5, spread=8, slope=1.0),
     # the island (south) in the sea, the causeway's shore end (north) on the beach: the strand lands at sea level
@@ -297,6 +303,7 @@ FIT = {
     "void_nest": _f("sky", clearance=4, lift=32),
     "shattered_halo": _f("sky", clearance=4, lift=32),   # floats over the void between the outer islands
     "starfall_library": _f("sky", clearance=4, lift=32),  # a floating archive among the outer islands
+    "hollow_moon": _f("sky", clearance=4, lift=32),       # a clockwork moon crashed onto an outer island
     "void_crypt": _f("land", spread=6, slope=0.7, wet=0.0),            # mausoleum on an End island
 }
 

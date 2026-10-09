@@ -368,10 +368,22 @@ def entity_loot():
                             entry("golden_apple", 1, 2), entry("diamond", 2, 4), entry("red_mushroom", 6, 12),
                             entry("brown_mushroom", 6, 12), entry("mycelium", 4, 8), entry("glass_bottle", 4, 8),
                             entry("fermented_spider_eye", 2, 4), entry("enchanted_golden_apple", chance=0.08)],
+        "lumber_jarl": [entry("map_fragment", 6, 10), entry("emerald", 5, 9), entry("experience_bottle", 4, 7),
+                        entry("golden_apple", 1, 2), entry("diamond", 2, 4), entry("spruce_log", 16, 32),
+                        entry("stripped_spruce_log", 8, 16), entry("iron_axe", 1, 1), entry("coal", 6, 12),
+                        entry("iron_chain", 4, 8), entry("enchanted_golden_apple", chance=0.08)],
         "thorn_gardener": [entry("map_fragment", 6, 10), entry("emerald", 5, 9), entry("experience_bottle", 4, 7),
                            entry("golden_apple", 1, 2), entry("diamond", 2, 4), entry("sweet_berries", 8, 16),
                            entry("bone_meal", 8, 16), entry("moss_block", 4, 8), entry("azalea", 2, 4),
                            entry("flowering_azalea", 1, 3), entry("shears", 1, 1), entry("enchanted_golden_apple", chance=0.08)],
+        "abyss_diver": [entry("map_fragment", 6, 10), entry("emerald", 5, 9), entry("experience_bottle", 4, 7),
+                        entry("golden_apple", 1, 2), entry("diamond", 2, 4), entry("prismarine_crystals", 6, 12),
+                        entry("nautilus_shell", 1, 3), entry("glow_ink_sac", 4, 8), entry("copper_ingot", 6, 12),
+                        entry("heart_of_the_sea", chance=0.15), entry("enchanted_golden_apple", chance=0.08)],
+        "moon_warden": [entry("void_shard", 6, 10), entry("emerald", 6, 10), entry("experience_bottle", 5, 8),
+                        entry("golden_apple", 1, 2), entry("diamond", 2, 4), entry("end_rod", 4, 8),
+                        entry("amethyst_shard", 8, 16), entry("chorus_fruit", 6, 12), entry("ender_pearl", 3, 6),
+                        entry("clock", 1, 1), entry("enchanted_golden_apple", chance=0.15)],
     }
     from wf.bossgear import BOSS_GEAR, remembrance_id
     for row in BOSS_GEAR:  # every great boss always drops its remembrance

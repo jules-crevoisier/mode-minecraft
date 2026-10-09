@@ -1087,6 +1087,58 @@ public final class MobAnims {
 
         private ThornGardener() {}
     }
+    public static final class LumberJarl {
+        public static final int SWEEP = 0;
+        public static final int CHOP = 1;
+        public static final int BLADE = 2;
+        public static final int TIMBER = 3;
+        public static final int ROLL = 4;
+        public static final int CALL = 5;
+        public static final int OVERDRIVE = 6;
+        public static final int ROAR = 7;
+        public static final int STAGGER = 8;
+        public static final int COUNT = 9;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {48, 56, 48, 46, 50, 46, 80, 40, 40};
+
+        private LumberJarl() {}
+    }
+    public static final class AbyssDiver {
+        public static final int THRUST = 0;
+        public static final int GRIND = 1;
+        public static final int RIVETS = 2;
+        public static final int SLAM = 3;
+        public static final int HARPOON = 4;
+        public static final int SILT = 5;
+        public static final int CALL = 6;
+        public static final int GROAN = 7;
+        public static final int OVERCHARGE = 8;
+        public static final int ROAR = 9;
+        public static final int STAGGER = 10;
+        public static final int COUNT = 11;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {50, 60, 58, 52, 48, 42, 46, 80, 56, 40, 40};
+
+        private AbyssDiver() {}
+    }
+    public static final class MoonWarden {
+        public static final int SWEEP = 0;
+        public static final int ORBIT = 1;
+        public static final int WELL = 2;
+        public static final int FLIP = 3;
+        public static final int SHADE = 4;
+        public static final int RADIANCE = 5;
+        public static final int COMET = 6;
+        public static final int SUMMON = 7;
+        public static final int ECLIPSE = 8;
+        public static final int ROAR = 9;
+        public static final int STAGGER = 10;
+        public static final int COUNT = 11;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {46, 68, 62, 48, 78, 74, 58, 46, 80, 40, 40};
+
+        private MoonWarden() {}
+    }
     public static final class GlowJellyfish {
 
         public static final int COUNT = 0;

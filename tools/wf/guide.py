@@ -814,6 +814,27 @@ PAGES = [
          "puis on descend en vrille dans la météorite jusqu'au lieu de grâce et à l'arène du cratère. Derrière des "
          "barreaux scellés, la réserve interdite ; son tube pneumatique est le raccourci du retour."),
     ], []),
+    ("hollow_moon", "wonders", "minecraft:clock", ("The Hollow Moon", "La Lune creuse"), [
+        ("A clockwork moon 140 blocks across crashed onto an outer End island: a sphere of end stone, purpur and "
+         "tarnished brass plates, a third of it shattered open on a caged inner shell and three frozen orrery rings "
+         "round a glowing core. Chains moor it to the island, brass wreckage rings the crater, debris arcs drift "
+         "around it. Where: outer End islands.",
+         "Une lune mécanique de 140 blocs écrasée sur une île extérieure de l'End : une sphère de pierre de l'End, "
+         "de purpur et de plaques de laiton terni, fendue sur un tiers, qui révèle une coque en cage et trois "
+         "anneaux d'orrery figés autour d'un noyau lumineux. Des chaînes l'amarrent à l'île, des épaves de laiton "
+         "bordent le cratère, des arcs de débris flottent autour. Où : îles extérieures de l'End."),
+        ("From the astronomers' camp on a shard (waystone), a bridge enters the breach: Meridian Hall (waystone), "
+         "the gravity gardens, the gear crypt, the star-chart dome and the lens workshop. The grand stair climbs to "
+         "the upper deck; cross the rings to the gimbal station (waystone) and the grace, then the arena on the core "
+         "platform. Behind sealed bars, the core reliquary. Shortcuts: the reliquary water shaft, the bubble lift "
+         "from the crypt to the hall, the one-way ring door, the drop to the breach.",
+         "Depuis le camp des astronomes sur un éclat (pierre de passage), un pont entre par la brèche : salle du "
+         "méridien (pierre de passage), jardins de gravité, crypte des engrenages, dôme des cartes du ciel et "
+         "atelier des lentilles. Le grand escalier monte au pont supérieur ; on franchit les anneaux jusqu'à la "
+         "station du cardan (pierre) et au lieu de grâce, puis l'arène sur la plateforme du noyau. Derrière des "
+         "barreaux scellés, le reliquaire du noyau. Raccourcis : le puits d'eau du reliquaire, l'ascenseur à bulles "
+         "de la crypte vers la salle, la porte à sens unique de l'anneau, le saut vers la brèche."),
+    ], []),
     ("airship_graveyard", "wonders", "brasshaven:brass_plating", ("The Airship Graveyard",
                                                                   "Le Cimetière des dirigeables"), [
         ("A crash field 228 blocks across round a skeletal mooring mast 90 high: one airship still moored, its "
@@ -914,6 +935,46 @@ PAGES = [
          "fermentation, le pied du bolet jusqu'aux séchoirs (pierre), le pont de corde, puis le pied de l'amanite "
          "jusqu'à la chambre des lamelles (pierre) et l'arène au sommet. En option : distillerie, laboratoire, "
          "caves. L'ascenseur du chapeau, la goulotte à spores et la porte des caves ramènent en arrière."),
+    ], []),
+    ("timber_fortress", "wonders", "minecraft:spruce_log", ("The Timber Fortress", "La Forteresse du bois"), [
+        ("A steam logging stronghold on a river bend, 200 blocks across: a palisade of spruce trunks with gate "
+         "towers, a steam sawmill with a water wheel and smokestacks, a log flume on trestles from a hillside of "
+         "felled giant spruces, charcoal kilns, a stilted rail line with its locomotive, and a 70-high timber keep "
+         "with jettied floors and stave roofs, a brass beam engine on top. Where: taigas, snowy taigas, windswept "
+         "forests.",
+         "Un fort de bûcherons à vapeur dans une boucle de rivière, 200 blocs : une palissade de troncs d'épicéa "
+         "et ses tours, une scierie à vapeur avec roue à aubes et cheminées, un flottage sur tréteaux qui descend "
+         "d'une colline aux épicéas géants abattus, des fours à charbon, une voie ferrée sur pilotis et sa "
+         "locomotive, et un donjon de bois haut de 70 blocs, une machine à balancier de laiton au sommet. Où : "
+         "taïgas, taïgas enneigées, forêts venteuses."),
+        ("From the trappers' camp (waystone) through the gatehouse to the lumber yard (waystone): the sawmill, the "
+         "flume headworks, the mess hall, the foreman's lodge and the kilns; then up the keep: the armoury, the "
+         "great hall, the map room (waystone) and the arena around the beam engine on top. The flume ride, the "
+         "counterweight lift and the one-way postern lead back.",
+         "Depuis le camp des trappeurs (pierre), par la porterie, jusqu'au parc à bois (pierre) : la scierie, la "
+         "tête du flottage, le réfectoire, la loge du contremaître et les fours ; puis le donjon : l'armurerie, la "
+         "grande salle, la salle des cartes (pierre) et l'arène autour de la machine au sommet. La descente du "
+         "flottage, l'ascenseur à contrepoids et la poterne ramènent en arrière."),
+    ], []),
+    ("abyssal_station", "wonders", "minecraft:sea_lantern", ("The Abyssal Station", "La Station abyssale"), [
+        ("A research station on the deep ocean floor, 180 blocks across: brass-and-glass pressure domes (the great "
+         "dome is 40 wide) joined by glass tubes, a surface tower with a docking platform and a bathyscaphe crane, "
+         "a drilling rig over a trench, kelp farms and a whale-fall deck. Every room is a dry air pocket. Where: "
+         "deep oceans (warm, cold or temperate).",
+         "Une station de recherche au fond de l'océan profond, 180 blocs : des dômes pressurisés de laiton et de "
+         "verre (le grand dôme fait 40 de large) reliés par des tubes de verre, une tour de surface avec un quai et "
+         "une grue à bathyscaphe, une plate-forme de forage au-dessus d'une fosse, des champs de varech et le pont "
+         "d'une carcasse de baleine. Chaque salle est une poche d'air sèche. Où : océans profonds."),
+        ("From the tower camp on the surface deck (waystone) down the access shaft to the reception lock "
+         "(waystone): the great dome's concourse and its light well, hydroponics, the specimen aquarium hall, crew "
+         "quarters, the reactor, the drill control room, then down the trench drill shaft (waystone) to the arena "
+         "at the trench bottom; the specimen vault lies behind it. The bubble-column lift, the flooded maintenance "
+         "tube (conduit) and the one-way pressure hatch lead back.",
+         "Depuis le camp de la tour sur le pont de surface (pierre), par le puits d'accès jusqu'au sas d'accueil "
+         "(pierre) : le grand dôme et son puits de lumière, l'hydroponie, la halle des spécimens, les quartiers de "
+         "l'équipage, le réacteur, la salle de contrôle du forage, puis le puits de forage de la fosse (pierre) "
+         "jusqu'à l'arène au fond ; le coffre des spécimens est derrière. L'ascenseur à bulles, le tube de "
+         "maintenance noyé (conduit) et l'écoutille à sens unique ramènent en arrière."),
     ], []),
     ("mire_stilt_city", "wonders", "minecraft:mangrove_roots", ("Mire Stilt-City", "La Cité des pilotis"), [
         ("A timber town on piles over a mangrove swamp, 200 blocks across: boardwalks on three levels, rope "
@@ -1701,6 +1762,42 @@ PAGES = [
          "point d'impact, puis des fils de mycélium les y attachent trois secondes avant que les spores n'éclatent de "
          "nouveau."),
     ], []),
+    ("lumber_jarl", "wonders", "brasshaven:remembrance_lumber_jarl", ("The Lumber Jarl", "Le Jarl du bois"), [
+        ("On the crown of the Timber Fortress's keep, the railed timber platform round the brass beam engine, past the "
+         "mist of the stair house, the lord of the loggers waits (660 health, armour 13): a giant lumberjack in a horned "
+         "fur-and-iron helm, a braided red beard, plaid and chainmail over a barrel chest, a log-carrier harness on his "
+         "back and a steam chainsaw-axe in both hands.",
+         "Au sommet du donjon de la Forteresse du bois, sur la plate-forme de bois bordée de garde-corps autour de la "
+         "machine à balancier, passé la brume de la cage d'escalier, le seigneur des bûcherons attend (660 PV, armure "
+         "13) : un bûcheron géant au casque cornu de fer et de fourrure, une barbe rousse tressée, du tartan et une "
+         "cotte de mailles sur un torse en tonneau, un porte-bûches sur le dos et une hache-tronçonneuse à vapeur dans "
+         "les deux mains."),
+        ("His chainsaw sweeps a drawn arc and bites four times while he holds it: step out, don't wait. His overhead "
+         "chop splits the deck along a drawn line, his spare saw blades fly a drawn loop and come back, \"Timber!\" "
+         "drops logs on lanes marked under every player, and he kicks a log down a marked lane. Near the railing his "
+         "blows never throw you over.",
+         "Sa tronçonneuse balaie un arc tracé et mord quatre fois tant qu'il la tient : sors-en, n'attends pas. Son "
+         "coup de hache vertical fend le pont le long d'une ligne tracée, ses lames de scie de rechange suivent une "
+         "boucle tracée et reviennent, « Timber ! » fait tomber des troncs sur des couloirs marqués sous chaque joueur, "
+         "et il envoie un tronc rouler le long d'un couloir marqué. Près du garde-corps, ses coups ne te jettent "
+         "jamais par-dessus."),
+    ], ["brasshaven:remembrance_lumber_jarl", "brasshaven:jarl_chainaxe"]),
+    ("lumber_jarl_engine", "wonders", "minecraft:spruce_log", ("Jarl: The Engine Overdrives", "Jarl : la machine s'emballe"), [
+        ("At 65% he roars and quickens: he calls his crew of vindicators and bandit marksmen, throws two blades at once "
+         "and drops more logs. At 30% he slams his axe into the deck and the beam engine overdrives (jump the wave): the "
+         "flywheel throws sparks across marked wedges in a sweep you can step out of, steam bursts from marked vents in "
+         "the deck, and his chainsaw reaches further.",
+         "À 65 %, il rugit et accélère : il appelle son équipe de vindicateurs et de tireurs bandits, lance deux lames à "
+         "la fois et fait tomber plus de troncs. À 30 %, il plante sa hache dans le pont et la machine à balancier "
+         "s'emballe (saute l'onde) : le volant lance des gerbes d'étincelles sur des secteurs marqués qu'un pas de côté "
+         "suffit à éviter, de la vapeur jaillit de bouches marquées dans le pont, et sa tronçonneuse porte plus loin."),
+        ("His Remembrance, four map fragments and two diamonds forge the Steam Chainsaw-Axe of the Lumber Jarl, whose "
+         "right-click sweeps the chain in front of you, then splits the ground along your aim, throwing up every foe on "
+         "the split.",
+         "Son Souvenir, quatre fragments de carte et deux diamants forgent la Hache-tronçonneuse à vapeur du Jarl du "
+         "bois, dont le clic droit balaie la chaîne devant toi, puis fend le sol dans ta visée et projette en l'air "
+         "chaque ennemi sur la fente."),
+    ], []),
     ("thorn_gardener", "wonders", "brasshaven:remembrance_thorn_gardener", ("The Head Gardener", "Le Jardinier en chef"), [
         ("On the giant lily pad in the pool of the Sunken Arboretum's palm house, under the hanging sun-lamp, past the "
          "mist of the cornice door, the last gardener still tends the garden (650 health, armour 12): a tall brass "
@@ -1736,6 +1833,76 @@ PAGES = [
          "Son Souvenir, quatre fragments de carte et deux diamants forgent le Sécateur du Jardinier en chef, dont le "
          "clic droit referme les lames dans ta visée : chaque ennemi entre elles est taillé (davantage s'il est sous la "
          "moitié de sa vie), des épines l'entravent, et chaque coup te soigne un peu."),
+    ], []),
+    ("abyss_diver", "wonders", "brasshaven:remembrance_abyss_diver", ("The Abyssal Diver", "Le Scaphandrier des abysses"), [
+        ("At the bottom of the Abyssal Station's trench, down the drill shaft and through the mist of the compression "
+         "corridor, the station's chief diver still works the drill chamber under its brass skylight dome (660 health, "
+         "armour 13), fused with his suit: a hulking brass hard-hat with a glowing teal porthole, pressure tanks on his "
+         "back, a giant drill for a right arm and a rivet-and-harpoon gun in his left, crusted with barnacles and kelp.",
+         "Au fond de la tranchée de la Station abyssale, au bas du puits de forage et passé la brume du couloir de "
+         "compression, le chef plongeur de la station travaille encore la chambre de forage sous son dôme-verrière de "
+         "laiton (660 PV, armure 13), soudé à son scaphandre : un casque de laiton massif au hublot turquoise, des "
+         "bouteilles sous pression dans le dos, une foreuse géante pour bras droit et un pistolet à rivets et à harpon "
+         "dans la main gauche, couvert de bernacles et de varech."),
+        ("His drill thrusts down a drawn lane and grinds in a drawn arc (three bites if you stay). His rivet gun fires "
+         "three volleys along drawn lines, his harpoon hauls you toward him, and his pressure slam hits a marked ring "
+         "before a wave runs on: jump it. He never breaks or places a block: the chamber is an air pocket under the sea.",
+         "Sa foreuse fonce le long d'un couloir tracé et broie dans un arc tracé (trois morsures si tu restes). Son "
+         "pistolet tire trois salves le long de lignes tracées, son harpon te tire vers lui, et son choc de pression "
+         "frappe un cercle marqué avant qu'une onde ne coure : saute-la. Il ne casse ni ne pose jamais un bloc : la "
+         "salle est une poche d'air sous la mer."),
+    ], ["brasshaven:remembrance_abyss_diver", "brasshaven:diver_drill_lance"]),
+    ("abyss_diver_groan", "wonders", "minecraft:glow_ink_sac", ("Diver: The Hull Groans", "Scaphandrier : la coque gémit"), [
+        ("At 65% he roars and quickens: silt bursts out of his suit and blinds you briefly (a dark ring, then a cloud "
+         "to walk round), and he bangs his helmet to call his drowned crew. At 30% the hull groans (jump the wave): "
+         "pressure spikes burst on marked circles, glowing jellies drift toward you and burst a moment after you touch "
+         "them, and every eighteen seconds he overcharges his suit: faster and harder-hitting for seven seconds, but "
+         "easier to hurt.",
+         "À 65 %, il rugit et accélère : de la vase jaillit de son scaphandre et t'aveugle un instant (un cercle sombre, "
+         "puis un nuage à contourner), et il cogne son casque pour appeler son équipage noyé. À 30 %, la coque gémit "
+         "(saute l'onde) : des pics de pression éclatent sur des cercles marqués, des méduses lumineuses dérivent vers "
+         "toi et éclatent peu après que tu les touches, et toutes les dix-huit secondes il surcharge son scaphandre : "
+         "plus rapide et plus dur pendant sept secondes, mais plus vulnérable."),
+        ("His Remembrance, four map fragments and two diamonds forge the Drill-Lance of the Abyssal Diver, whose "
+         "right-click bores along your aim: every foe in the bore is hurt (more the more armour it wears), drawn in to "
+         "the lance's tip and lit by bioluminescence.",
+         "Son Souvenir, quatre fragments de carte et deux diamants forgent la Lance-foreuse du Scaphandrier des abysses, "
+         "dont le clic droit perce dans ta visée : chaque ennemi touché est blessé (d'autant plus qu'il porte d'armure), "
+         "attiré vers la pointe de la lance et illuminé de bioluminescence."),
+    ], []),
+    ("moon_warden", "wonders", "brasshaven:remembrance_moon_warden", ("The Moon Warden", "La Gardienne de la lune"), [
+        ("On the core platform of the Hollow Moon, over the void under the glowing heart of the machine, past ring 3 and "
+         "the mist, the Moon Warden still keeps the moon turning (720 health, armour 12): a levitating automaton of "
+         "porcelain and gold with a moon-phase dial for a face and astrolabe blades for hands.",
+         "Sur la plateforme du cœur de la Lune creuse, au-dessus du vide sous le cœur lumineux de la machine, passé "
+         "l'anneau 3 et la brume, la Gardienne de la lune fait encore tourner la lune (720 PV, armure 12) : un automate "
+         "de porcelaine et d'or en lévitation, un cadran des phases de la lune pour visage et des lames-astrolabes pour "
+         "mains."),
+        ("Her astrolabe blades sweep twice (the second arc drawn red first), her planets fly out along marked spirals, a "
+         "marked gravity well draws you in gently before it bursts, and marked rings flip gravity: whoever stays in "
+         "floats up and drifts back down. Watch her dial: at the new moon her shadows dash along marked lines, at the "
+         "full moon a radiant ring runs out (jump it). Her blows never throw you into the void.",
+         "Ses lames-astrolabes balaient deux fois (le second arc tracé en rouge d'abord), ses planètes filent le long de "
+         "spirales marquées, un puits de gravité marqué t'attire doucement avant d'éclater, et des cercles marqués font "
+         "basculer la gravité : qui y reste flotte puis redescend lentement. Regarde son cadran : à la nouvelle lune ses "
+         "ombres foncent le long de lignes marquées, à la pleine lune un anneau radieux court (saute-le). Ses coups ne "
+         "te jettent jamais dans le vide."),
+    ], ["brasshaven:remembrance_moon_warden", "brasshaven:moon_astroblade"]),
+    ("moon_warden_eclipse", "wonders", "minecraft:end_rod", ("Moon Warden: Eclipse", "Gardienne : éclipse"), [
+        ("At 65% she roars and quickens: she dives like a comet onto a marked ring and calls void larvae and star motes. "
+         "At 30% she eclipses the core (jump the dark ring): three gravity beams from the core turn slowly round the "
+         "platform, drawn first with arrows showing the way they will turn, so walk with the gap between them; between "
+         "sweeps, meteors fall on marked circles.",
+         "À 65 %, elle rugit et accélère : elle plonge comme une comète sur un cercle marqué et appelle larves du vide et "
+         "poussières d'astre. À 30 %, elle éclipse le cœur (saute l'anneau sombre) : trois rayons de gravité partis du "
+         "cœur tournent lentement autour de la plateforme, tracés d'abord avec des flèches qui montrent leur sens, alors "
+         "marche avec l'espace entre eux ; entre deux balayages, des météores tombent sur des cercles marqués."),
+        ("Her Remembrance, four void shards and two diamonds forge the Astrolabe Blade of the Moon Warden, whose "
+         "right-click flings three brass planets out along spiral arms that wind onto your aim, hitting and drawing in "
+         "every foe they pass, with a small gravity well where the last one rests.",
+         "Son Souvenir, quatre éclats du vide et deux diamants forgent la Lame-astrolabe de la Gardienne de la lune, dont "
+         "le clic droit lance trois planètes de laiton le long de bras en spirale qui rejoignent ta visée, frappant et "
+         "attirant chaque ennemi croisé, avec un petit puits de gravité là où s'arrête la dernière."),
     ], []),
     ("strangler_queen", "wonders", "brasshaven:remembrance_strangler_queen", ("The Strangler Fig Queen", "La Reine-figuier étrangleur"), [
         ("On the summit terrace of the Canopy Temple-City, through the mist under the broken brass sun-disc, the fig "

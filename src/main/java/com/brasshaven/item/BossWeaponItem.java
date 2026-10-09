@@ -25,7 +25,7 @@ import java.util.List;
  * Abilities only ever hurt non-player creatures.
  */
 public class BossWeaponItem extends AbilityItem {
-    public enum Ability { WAVE, BEAM, DASH, ERUPT, ROOT, CLOUD, LEAP, ARC, BLINK, HOOK, SHARDS, BREATH, RIFT, WARD, TEMPEST, TIDE, JET, PRESSURE, MIRE, PLUMB, BROADSIDE, PRISM, CAGE, SCARAB, MAGNET, TONGS, ZENITH, FUSE, DRAGON, SHRIEK, GRAPPLE, STOKE, REWIND, ANCHOR, TETHER, PRUNE }
+    public enum Ability { WAVE, BEAM, DASH, ERUPT, ROOT, CLOUD, LEAP, ARC, BLINK, HOOK, SHARDS, BREATH, RIFT, WARD, TEMPEST, TIDE, JET, PRESSURE, MIRE, PLUMB, BROADSIDE, PRISM, CAGE, SCARAB, MAGNET, TONGS, ZENITH, FUSE, DRAGON, SHRIEK, GRAPPLE, STOKE, REWIND, ANCHOR, TETHER, PRUNE, BORE, FELL, ORBIT }
 
     public static final int FIRE = 1;
     public static final int SLOW = 2;
@@ -1179,6 +1179,143 @@ public class BossWeaponItem extends AbilityItem {
                 level.sendParticles(net.minecraft.core.particles.ParticleTypes.SWEEP_ATTACK, tip.x, tip.y, tip.z, 1, 0, 0, 0, 0);
                 level.playSound(null, player, SoundEvents.SHEEP_SHEAR, SoundSource.PLAYERS, 1.2F, 0.6F);
                 level.playSound(null, player, SoundEvents.SWEET_BERRY_BUSH_PLACE, SoundSource.PLAYERS, 1.0F, 0.8F);
+            }
+            case BORE -> {
+                // the Abyssal Diver's drill-lance: the drill bores along the aim (up to `size` blocks, walls stop it, 1.0
+                // to each side); every foe in the bore takes the power plus half its armour (the pressure cracks
+                // plating, +6 at most), is drawn in toward the lance's tip 2 blocks ahead and lit by bioluminescence
+                // (Glowing 5 s)
+                Vec3 eye = player.getEyePosition();
+                BlockHitResult wall = level.clip(new ClipContext(eye, eye.add(look.scale(size)), ClipContext.Block.COLLIDER,
+                        ClipContext.Fluid.NONE, player));
+                double reach = wall.getType() == HitResult.Type.MISS ? size : Math.max(1.0, wall.getLocation().distanceTo(eye) - 0.3);
+                Vec3 tip = origin.add(flat.scale(2.0));
+                java.util.Set<LivingEntity> bored = new java.util.LinkedHashSet<>();
+                for (double d = 0.75; d <= reach; d += 0.6) {
+                    Vec3 p = eye.add(look.scale(d)).subtract(0, 0.4, 0);
+                    double a = d * 2.2;
+                    level.sendParticles(particle, p.x + Math.cos(a) * 0.5, p.y + Math.sin(a) * 0.5, p.z, 1, 0.02, 0.02, 0.02, 0.0);
+                    level.sendParticles(net.minecraft.core.particles.ParticleTypes.ELECTRIC_SPARK, p.x, p.y, p.z, 1, 0.15, 0.15, 0.15, 0.05);
+                    for (LivingEntity e : foes(level, player, new AABB(p, p).inflate(1.0, 1.4, 1.0))) {
+                        bored.add(e);
+                    }
+                }
+                for (LivingEntity e : bored) {
+                    float crack = Math.min(6.0F, e.getArmorValue() * 0.5F);
+                    hit(level, player, e, power + crack, 0.0);
+                    Vec3 in = tip.subtract(e.position()).multiply(1, 0, 1);
+                    if (in.lengthSqr() > 0.25) {
+                        Vec3 v = in.normalize().scale(Math.min(0.9, in.length() * 0.18));
+                        e.push(v.x, 0.1, v.z);
+                        e.hurtMarked = true;
+                    }
+                    e.addEffect(new MobEffectInstance(MobEffects.GLOWING, 100, 0));
+                    level.sendParticles(net.minecraft.core.particles.ParticleTypes.CRIT, e.getX(), e.getY() + 1.0, e.getZ(), 10, 0.3, 0.4, 0.3, 0.2);
+                }
+                level.playSound(null, player, SoundEvents.GRINDSTONE_USE, SoundSource.PLAYERS, 1.2F, 0.6F);
+                level.playSound(null, player, SoundEvents.TRIDENT_RIPTIDE_1.value(), SoundSource.PLAYERS, 0.8F, 1.2F);
+            }
+            case FELL -> {
+                // the Lumber Jarl's steam chainsaw-axe: the chain screams through a wide sweep in front (3.5 blocks,
+                // ±70°: every foe in it takes the power), then the axe comes down and the ground splits along the aim
+                // (up to `size` blocks, stopped by walls and drops): every foe on the split takes 70% and is thrown up;
+                // a foe caught by both is felled for 50% more on the split
+                java.util.Set<LivingEntity> swept = new java.util.HashSet<>();
+                double cos = Math.cos(Math.toRadians(70));
+                for (LivingEntity e : foes(level, player, player.getBoundingBox().inflate(3.5, 1.5, 3.5))) {
+                    Vec3 to = e.position().subtract(origin).multiply(1, 0, 1);
+                    double d = to.length();
+                    if (d <= 3.5 + e.getBbWidth() / 2 && (d < 0.8 || to.normalize().dot(flat) >= cos)) {
+                        hit(level, player, e, power, 0.3);
+                        swept.add(e);
+                    }
+                }
+                for (int a = -70; a <= 70; a += 14) {
+                    double r = Math.toRadians(a);
+                    Vec3 dir = new Vec3(flat.x * Math.cos(r) - flat.z * Math.sin(r), 0, flat.x * Math.sin(r) + flat.z * Math.cos(r));
+                    Vec3 p = origin.add(dir.scale(2.8)).add(0, 1.0, 0);
+                    level.sendParticles(net.minecraft.core.particles.ParticleTypes.CRIT, p.x, p.y, p.z, 2, 0.1, 0.1, 0.1, 0.1);
+                }
+                java.util.Set<LivingEntity> split = new java.util.HashSet<>();
+                for (double d = 1; d <= size; d += 0.75) {
+                    Vec3 p = riftGround(level, origin.add(flat.scale(d)));
+                    if (p == null) {
+                        break;
+                    }
+                    level.sendParticles(new net.minecraft.core.particles.BlockParticleOption(net.minecraft.core.particles.ParticleTypes.BLOCK,
+                            net.minecraft.world.level.block.Blocks.SPRUCE_PLANKS.defaultBlockState()), p.x, p.y + 0.2, p.z, 4, 0.2, 0.1, 0.2, 0.1);
+                    level.sendParticles(particle, p.x, p.y + 0.3, p.z, 1, 0.15, 0.2, 0.15, 0.01);
+                    for (LivingEntity e : foes(level, player, new AABB(p, p).inflate(1.0, 1.5, 1.0))) {
+                        if (split.add(e)) {
+                            hit(level, player, e, swept.contains(e) ? power * 0.7F * 1.5F : power * 0.7F, 0.1);
+                            e.push(0, 0.5, 0);
+                        }
+                    }
+                }
+                level.playSound(null, player, SoundEvents.GRINDSTONE_USE, SoundSource.PLAYERS, 1.0F, 0.5F);
+                level.playSound(null, player, SoundEvents.WOOD_BREAK, SoundSource.PLAYERS, 1.0F, 0.6F);
+                level.playSound(null, player, SoundEvents.MACE_SMASH_GROUND, SoundSource.PLAYERS, 0.8F, 0.7F);
+            }
+            case ORBIT -> {
+                // the Moon Warden's astrolabe blade: three brass planets fly out from the wielder along spiral arms
+                // (out to `size` blocks, round the aim, walls stop them); every foe a planet passes is hit for the power
+                // (once per planet) and drawn a little toward the wielder's orbit; where the arm along the aim ends a small
+                // gravity well pulls the foes within 2.5 into its centre (flag slow: Slowness)
+                java.util.Set<LivingEntity> wellFoes = new java.util.HashSet<>();
+                Vec3 wellAt = origin;
+                for (int arm = 0; arm < 3; arm++) {
+                    java.util.Set<LivingEntity> hitByArm = new java.util.HashSet<>();
+                    Vec3 last = origin;
+                    for (int k = 0; k < 40; k++) {
+                        double r = 1.2 + k * 0.3;
+                        if (r > size) {
+                            break;
+                        }
+                        int steps = (int) ((size - 1.2) / 0.3);
+                        double a = Math.toRadians(arm * 120.0 + (steps - k) * 9.0);   // each arm winds in to its bearing
+                        double c = Math.cos(a);
+                        double sn = Math.sin(a);
+                        Vec3 dir = new Vec3(flat.x * c - flat.z * sn, 0, flat.x * sn + flat.z * c);
+                        Vec3 p = origin.add(dir.scale(r)).add(0, 1.0, 0);
+                        if (!level.getBlockState(net.minecraft.core.BlockPos.containing(p)).getCollisionShape(level, net.minecraft.core.BlockPos.containing(p)).isEmpty()) {
+                            break;
+                        }
+                        last = p;
+                        if (k % 2 == 0) {
+                            level.sendParticles(particle, p.x, p.y, p.z, 1, 0.05, 0.05, 0.05, 0.0);
+                            level.sendParticles(new net.minecraft.core.particles.DustParticleOptions(0xD6A64C, 1.4F), p.x, p.y, p.z, 1,
+                                    0.05, 0.05, 0.05, 0.0);
+                        }
+                        for (LivingEntity e : foes(level, player, new AABB(p, p).inflate(1.0, 1.4, 1.0))) {
+                            if (hitByArm.add(e)) {
+                                hit(level, player, e, power, 0.0);
+                                Vec3 in = origin.subtract(e.position()).multiply(1, 0, 1);
+                                if (in.lengthSqr() > 1.0) {
+                                    in = in.normalize().scale(0.35);
+                                    e.push(in.x, 0.05, in.z);
+                                    e.hurtMarked = true;
+                                }
+                            }
+                        }
+                    }
+                    if (arm == 0) {
+                        wellAt = last;
+                    }
+                    level.sendParticles(net.minecraft.core.particles.ParticleTypes.END_ROD, last.x, last.y, last.z, 4, 0.1, 0.1, 0.1, 0.02);
+                }
+                for (LivingEntity e : foes(level, player, new AABB(wellAt, wellAt).inflate(2.5, 2.0, 2.5))) {
+                    if (e.position().distanceTo(wellAt) <= 3.0 && wellFoes.add(e)) {
+                        Vec3 in = wellAt.subtract(e.position()).multiply(1, 0, 1);
+                        if (in.lengthSqr() > 0.25) {
+                            in = in.normalize().scale(Math.min(0.6, in.length() * 0.3));
+                            e.push(in.x, 0.1, in.z);
+                            e.hurtMarked = true;
+                        }
+                    }
+                }
+                level.sendParticles(net.minecraft.core.particles.ParticleTypes.REVERSE_PORTAL, wellAt.x, wellAt.y, wellAt.z, 20, 0.8, 0.5, 0.8, 0.05);
+                level.playSound(null, player, SoundEvents.AMETHYST_BLOCK_RESONATE, SoundSource.PLAYERS, 1.2F, 1.2F);
+                level.playSound(null, player, SoundEvents.ILLUSIONER_CAST_SPELL, SoundSource.PLAYERS, 0.8F, 1.4F);
             }
             case ANCHOR -> {
                 // the Frozen Commodore's ice anchor: hurled along the aim on its chain (up to `size` blocks, walls stop

@@ -1164,6 +1164,83 @@ def gardener_shears():
 
 ARCHETYPES["gardener_shears"] = gardener_shears
 
+
+def diver_drill_lance():
+    """Drill-Lance of the Abyssal Diver: a dark wrapped grip with a brass pommel and guard, a round brass motor housing
+    banded in steel with a glowing aether gauge window, and a long steel spiral drill stepping down to a point, its
+    flute picked out in dark steel; a ribbed air hose loops from the housing down to the grip."""
+    out = _shaft(-6, 6, 1.8, "handle_dark") + _grip(-4, 4, 2.4)
+    out += [box(6.6, -7.4, 6.6, 9.4, -6, 9.4, "brass"),                    # the pommel
+            box(5.6, 6.0, 5.6, 10.4, 7.0, 10.4, "brass_dark"),              # the guard
+            box(5.0, 7.0, 5.0, 11.0, 12.0, 11.0, "brass"),                  # the motor housing
+            box(4.8, 8.6, 4.8, 11.2, 9.4, 11.2, "steel"),                   # its bands
+            box(4.8, 10.6, 4.8, 11.2, 11.2, 11.2, "steel"),
+            box(7.0, 9.6, 4.6, 9.0, 10.6, 5.0, "glow"),                     # the gauge window
+            box(11.0, 3.0, 7.4, 12.0, 9.0, 8.6, "ink"),                     # the air hose
+            box(9.4, 2.0, 7.4, 11.2, 3.0, 8.6, "ink")]
+    steps = ((12.0, 16.0, 2.6), (16.0, 20.0, 2.1), (20.0, 24.0, 1.6), (24.0, 28.0, 1.1), (28.0, 31.0, 0.6))
+    for i, (y0, y1, h) in enumerate(steps):                                 # the drill, stepping down
+        out.append(box(8 - h, y0, 8 - h, 8 + h, y1, 8 + h, "light" if i % 2 == 0 else "mid"))
+        out.append(box(8 + h - 0.1, y0 + 1.0, 7.4, 8 + h + 0.3, y1 - 0.6, 8.6, "dark"))   # the flute
+        out.append(box(7.4, y0 + 2.0, 8 - h - 0.3, 8.6, y1, 8 - h + 0.1, "dark"))
+    out.append(box(7.7, 31.0, 7.7, 8.3, 32.0, 8.3, "glow"))                 # the hot point
+    return out
+
+
+ARCHETYPES["diver_drill_lance"] = diver_drill_lance
+
+def jarl_chainaxe():
+    """Steam Chainsaw-Axe of the Lumber Jarl: a long ash haft bound in iron with two leather grips and an iron pommel; at
+    its top a little brass engine with a glowing firebox on both sides and a sooty smokestack; from the engine a long
+    steel chainsaw bar juts to one side, its toothed chain round the edges, and a bearded axe blade on the other."""
+    out = _shaft(-8, 22, 1.8, "handle") + _grip(1, 7, 2.3) + _grip(13, 17, 2.3)
+    out += [box(6.8, -9.4, 6.8, 9.2, -8, 9.2, "iron_dark")]                  # the pommel
+    for y in (-4, 9, 19):                                                   # iron bands
+        out.append(box(6.9, y, 6.9, 9.1, y + 0.8, 9.1, "iron_dark"))
+    out += [box(5.6, 22, 5.6, 10.4, 27.5, 10.4, "brass"),                   # the engine
+            box(5.4, 23, 6.6, 5.6, 26.5, 9.4, "glow"), box(10.4, 23, 6.6, 10.6, 26.5, 9.4, "glow"),   # fireboxes
+            box(5.4, 21.4, 5.4, 10.6, 22.2, 10.6, "brass_dark"),
+            box(7.2, 27.5, 8.0, 8.4, 31.0, 9.2, "iron_dark"), box(7.0, 31.0, 7.8, 8.6, 31.6, 9.4, "ink")]   # the stack
+    out += [box(10.4, 22.6, 7.4, 22.0, 27.0, 8.6, "steel"),                 # the chainsaw bar
+            box(10.4, 23.6, 7.3, 21.4, 26.0, 8.7, "light")]
+    for i in range(6):                                                      # the toothed chain round its edges
+        x = 11.0 + i * 1.9
+        out += [box(x, 27.0, 7.6, x + 1.0, 27.8, 8.4, "dark"), box(x + 0.9, 21.8, 7.6, x + 1.9, 22.6, 8.4, "dark")]
+    out += [box(22.0, 23.2, 7.6, 22.8, 26.4, 8.4, "dark")]                  # round the tip
+    out += [box(1.6, 21.0, 7.6, 5.6, 28.0, 8.4, "mid"),                     # the bearded axe blade
+            box(0.8, 19.0, 7.65, 2.2, 28.6, 8.35, "light"),                 # its ground edge
+            box(2.2, 19.6, 7.6, 4.0, 21.0, 8.4, "mid")]
+    return out
+
+
+ARCHETYPES["jarl_chainaxe"] = jarl_chainaxe
+
+def moon_astroblade():
+    """Astrolabe Blade of the Moon Warden: a purpur grip in gold rings with a round gold pommel, a gold astrolabe disc
+    for a guard (a ring with star pointers and a glowing pin), and a long pale moon-steel blade with a gold spine, star
+    notches glowing along it and a slim point."""
+    import math
+    out = _grip(-4, 5, 2.0) + [box(7.2, -6, 7.2, 8.8, -4, 8.8, "brass"), box(6.8, 5, 6.8, 9.2, 6, 9.2, "brass")]
+    cx, cy, r = 8.0, 8.5, 3.6
+    for a in range(0, 360, 30):                                           # the astrolabe ring
+        x, y = cx + r * math.sin(math.radians(a)), cy + r * math.cos(math.radians(a))
+        out.append(box(x - 0.6, y - 0.6, 7.4, x + 0.6, y + 0.6, 8.6, "brass"))
+    for a in range(0, 360, 90):                                           # its pointers
+        x, y = cx + 1.8 * math.sin(math.radians(a)), cy + 1.8 * math.cos(math.radians(a))
+        out.append(box(x - 0.3, y - 0.3, 7.6, x + 0.3, y + 0.3, 8.4, "brass_dark"))
+    out += [box(7.4, 7.9, 7.2, 8.6, 9.1, 8.8, "glow"),                    # the pin
+            box(7.0, 12.0, 7.6, 9.4, 27.0, 8.4, "light"),                 # the blade
+            box(6.6, 12.0, 7.7, 7.0, 26.0, 8.3, "brass"),                 # its gold spine
+            box(9.4, 12.0, 7.7, 9.8, 26.0, 8.3, "mid"),                   # the edge
+            box(7.6, 27.0, 7.7, 9.0, 29.5, 8.3, "light"),                 # the point
+            box(8.0, 29.5, 7.8, 8.6, 30.5, 8.2, "glow")]
+    for y in (15.0, 19.0, 23.0):                                          # star notches
+        out.append(box(8.0, y, 7.5, 8.6, y + 0.6, 8.5, "accent"))
+    return out
+
+
+ARCHETYPES["moon_astroblade"] = moon_astroblade
+
 # item id -> (archetype, material, handle, accent)
 HELD = {
     "kings_trident": ("trident_big", "warden", "bone", "sapphire"),
@@ -1212,7 +1289,10 @@ HELD = {
     "director_bonesaw": ("director_bonesaw", "iron", "dark", "aether"),
     "commodore_anchor": ("commodore_anchor", "frost", "dark", "ice"),
     "alchemist_staff": ("alchemist_staff", "ember", "dark", "emerald"),
+    "jarl_chainaxe": ("jarl_chainaxe", "iron", "wood", "ember"),
     "gardener_shears": ("gardener_shears", "iron", "dark", "ruby"),
+    "diver_drill_lance": ("diver_drill_lance", "iron", "dark", "aether"),
+    "moon_astroblade": ("moon_astroblade", "light", "purpur", "aether"),
     "cartographer_blade": ("sword", "cartographer", "wood", "emerald"),
     "telluric_hammer": ("hammer", "lithite", "wood", "emerald"),
     "storm_staff": ("staff", "storm", "dark", "sapphire"),

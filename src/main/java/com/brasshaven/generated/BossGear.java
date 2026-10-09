@@ -153,9 +153,18 @@ public final class BossGear {
     public static final RegistryObject<Item> REMEMBRANCE_SPORE_ALCHEMIST = remembrance("remembrance_spore_alchemist");
     public static final RegistryObject<Item> ALCHEMIST_STAFF = weapon("alchemist_staff", p -> p.sword(ModMaterials.LITHITE, 7.5F, -2.8F).rarity(Rarity.EPIC),
             BossWeaponItem.Ability.TETHER, 10.0F, 12.0F, 90, () -> ParticleTypes.SPORE_BLOSSOM_AIR, BossWeaponItem.POISON);
+    public static final RegistryObject<Item> REMEMBRANCE_LUMBER_JARL = remembrance("remembrance_lumber_jarl");
+    public static final RegistryObject<Item> JARL_CHAINAXE = weapon("jarl_chainaxe", p -> p.sword(ModMaterials.LITHITE, 9.0F, -3.1F).rarity(Rarity.EPIC),
+            BossWeaponItem.Ability.FELL, 11.0F, 9.0F, 80, () -> ParticleTypes.LARGE_SMOKE, 0);
     public static final RegistryObject<Item> REMEMBRANCE_THORN_GARDENER = remembrance("remembrance_thorn_gardener");
     public static final RegistryObject<Item> GARDENER_SHEARS = weapon("gardener_shears", p -> p.sword(ModMaterials.LITHITE, 8.0F, -2.6F).rarity(Rarity.EPIC),
             BossWeaponItem.Ability.PRUNE, 11.0F, 7.0F, 70, () -> ParticleTypes.HAPPY_VILLAGER, BossWeaponItem.SLOW);
+    public static final RegistryObject<Item> REMEMBRANCE_ABYSS_DIVER = remembrance("remembrance_abyss_diver");
+    public static final RegistryObject<Item> DIVER_DRILL_LANCE = weapon("diver_drill_lance", p -> p.sword(ModMaterials.LITHITE, 8.5F, -3.0F).rarity(Rarity.EPIC),
+            BossWeaponItem.Ability.BORE, 11.0F, 8.0F, 80, () -> ParticleTypes.GLOW, BossWeaponItem.SLOW);
+    public static final RegistryObject<Item> REMEMBRANCE_MOON_WARDEN = remembrance("remembrance_moon_warden");
+    public static final RegistryObject<Item> MOON_ASTROBLADE = weapon("moon_astroblade", p -> p.sword(ModMaterials.VOID, 9.0F, -2.6F).rarity(Rarity.EPIC).fireResistant(),
+            BossWeaponItem.Ability.ORBIT, 11.0F, 10.0F, 80, () -> ParticleTypes.END_ROD, BossWeaponItem.SLOW);
 
     private BossGear() {}
 

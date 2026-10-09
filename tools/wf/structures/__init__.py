@@ -33,3 +33,6 @@ from . import soul_engine  # noqa: F401
 from . import clockwork_asylum  # noqa: F401
 from . import spore_refinery  # noqa: F401
 from . import verdant_arboretum  # noqa: F401
+from . import hollow_moon  # noqa: F401
+from . import abyssal_station  # noqa: F401
+from . import timber_fortress  # noqa: F401

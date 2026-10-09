@@ -782,9 +782,41 @@
           }
         ]
       }
+    },
+    "abyssal_station": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:abyssal_station"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "timber_fortress": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:timber_fortress"
+              }
+            }
+          }
+        ]
+      }
     }
   },
-  "parent": "brasshaven:explorer/spore_refinery",
+  "parent": "brasshaven:explorer/timber_fortress",
   "rewards": {
     "experience": 300,
     "loot": [

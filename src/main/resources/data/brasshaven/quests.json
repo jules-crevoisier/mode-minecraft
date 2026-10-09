@@ -58,6 +58,8 @@
     "explorer/icebound_fleet",
     "explorer/clockwork_asylum",
     "explorer/spore_refinery",
+    "explorer/abyssal_station",
+    "explorer/timber_fortress",
     "explorer/master_cartographer",
     "explorer/boss_bell_keeper",
     "explorer/boss_archivist",
@@ -92,7 +94,9 @@
     "explorer/boss_corsair_captain",
     "explorer/boss_asylum_director",
     "explorer/boss_frost_commodore",
-    "explorer/boss_spore_alchemist"
+    "explorer/boss_spore_alchemist",
+    "explorer/boss_lumber_jarl",
+    "explorer/boss_abyss_diver"
   ],
   "depths": [
     "depths/lithite",
@@ -153,6 +157,7 @@
     "end/void_crypt",
     "end/shattered_halo",
     "end/starfall_library",
+    "end/hollow_moon",
     "end/void_shard",
     "end/void_spear",
     "end/void_armor",
@@ -160,6 +165,7 @@
     "end/boss_larva_mother",
     "end/boss_fallen_seraph",
     "end/boss_star_curator",
+    "end/boss_moon_warden",
     "end/legends_bane",
     "end/legend"
   ]

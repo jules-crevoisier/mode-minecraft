@@ -866,6 +866,35 @@ def spore_staff(a):
     a.px(14, 0, "W", "light")                                 # the cork
 
 
+@painted("chainsaw_axe")
+def chainsaw_axe(a):
+    """Steam Chainsaw-Axe of the Lumber Jarl: a long wooden haft on the diagonal from the bottom left with a leather
+    grip and iron bands, a little brass engine at the top right with a glowing firebox and a smoking stack, a steel
+    chainsaw bar jutting up-left from it with its dark toothed chain, and a bearded axe blade on the other side."""
+    a.seg("H", 1.0, 15.0, 10.0, 6.0, 0.8)                     # the haft
+    a.shade_dir("H", -0.5, 1.0)
+    a.seg("L", 2.2, 13.8, 4.4, 11.6, 0.9)                     # the grip
+    for x, y in ((5, 10), (7, 8)):
+        a.px(x, y, "X", "mid")                                # iron bands
+    a.px(0, 15, "X", "dark")                                  # the pommel
+    a.seg("I", 3.0, 1.6, 10.2, 5.4, 1.5)                      # the chainsaw bar, up-left from the engine
+    a.shade_dir("I", -0.5, -1.0)
+    for x, y in ((3, 0), (5, 1), (7, 2), (9, 3), (2, 3), (4, 4), (6, 5), (8, 6)):
+        a.px(x, y, "X", "dark")                               # the toothed chain round its edges
+    a.px(2, 1, "X", "dark")
+    a.box("B", 10, 4, 12, 7)                                  # the engine
+    a.px(10, 4, "B", "light")
+    a.px(12, 7, "B", "dark")
+    a.px(11, 6, "F", "light")                                 # the firebox
+    a.px(11, 5, "F", "mid")
+    a.px(12, 3, "X", "mid")                                   # the smokestack
+    a.px(12, 2, "X", "dark")
+    a.px(13, 1, "K", "mid")                                   # a puff of smoke
+    a.seg("I", 12.6, 6.6, 15.0, 9.4, 1.2)                     # the bearded axe blade
+    a.px(15, 10, "I", "shine")
+    a.px(14, 10, "I", "light")
+
+
 @painted("pruning_shears")
 def pruning_shears(a):
     """Pruning Shears of the Head Gardener: long loppers on the diagonal. Two red-lacquered grips with brass end caps
@@ -891,6 +920,30 @@ def pruning_shears(a):
         a.px(x, y, "A", t)                                    # the ivy
 
 
+@painted("drill_lance")
+def drill_lance(a):
+    """Drill-Lance of the Abyssal Diver: a dark grip with a brass pommel at the bottom left, a round brass motor housing
+    with a glowing aether gauge window, and a long steel spiral drill tapering to a point at the top right; a short
+    ribbed air hose loops from the housing to the grip."""
+    a.seg("W", 1.0, 14.6, 4.2, 11.4, 0.8)                     # the grip
+    a.px(0, 15, "B", "light")                                 # the pommel
+    a.px(1, 15, "B", "dark")
+    a.disc("B", 5.6, 10.0, 2.4)                               # the motor housing
+    a.shade_dir("B", -0.5, 1.0)
+    a.px(5, 10, "E", "light")                                 # its gauge window
+    a.px(6, 9, "E", "mid")
+    a.seg("I", 7.0, 8.6, 14.6, 1.2, 1.6)                      # the drill, tapering
+    a.seg("I", 10.5, 5.2, 15.0, 0.8, 0.6)
+    a.shade_dir("I", -0.5, 1.0)
+    for x, y in ((8, 7), (10, 5), (12, 3)):                   # the spiral flute
+        a.px(x, y, "I", "dark")
+        a.px(x + 1, y + 1, "I", "shine")
+    a.px(15, 0, "I", "shine")                                 # the point
+    a.px(3, 9, "X", "mid")                                    # the air hose
+    a.px(3, 10, "X", "dark")
+    a.px(2, 11, "X", "mid")
+
+
 @painted("bone_saw")
 def bone_saw(a):
     """Bone-Saw of the Asylum Director: a mahogany handle at the bottom left with a brass guard, a long steel blade
@@ -910,3 +963,23 @@ def bone_saw(a):
     a.px(7, 13, "Q", "light")
     a.px(8, 14, "E", "light")
 
+
+
+@painted("astro_blade")
+def astro_blade(a):
+    """Astrolabe Blade of the Moon Warden: a purpur grip with a gold pommel at the bottom left, a gold astrolabe ring as
+    the guard (an aether star pinned in its middle), and a long pale moon-steel blade curving slightly up to the top
+    right, a gold spine along it and a crescent notch near the point."""
+    a.seg("H", 1.0, 14.6, 4.0, 11.6, 0.8)                     # the grip
+    a.px(0, 15, "B", "light")                                 # the pommel
+    a.px(1, 15, "B", "dark")
+    a.ring("B", 5.2, 10.4, 1.4, 2.4)                          # the astrolabe ring guard
+    a.px(5, 10, "E", "light")                                 # its star
+    a.px(4, 9, "B", "light")
+    a.seg("M", 6.8, 8.8, 14.2, 1.6, 1.0)                      # the blade
+    a.shade_dir("M", -0.5, 1.0)
+    a.seg("B", 6.4, 8.2, 13.2, 1.2, 0.35)                     # the gold spine
+    a.px(14, 1, "M", "shine")                                 # the point
+    a.px(15, 0, "M", "light")
+    a.px(12, 4, "E", "light")                                 # a star notch
+    a.px(9, 7, "E", "mid")

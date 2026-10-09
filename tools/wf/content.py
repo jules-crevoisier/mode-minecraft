@@ -225,7 +225,10 @@ ENTITIES = {
     "asylum_director": ("The Asylum Director", "La Directrice de l'asile"),
     "frost_commodore": ("The Frozen Commodore", "Le Commodore gelé"),
     "spore_alchemist": ("The Spore Alchemist", "L'Alchimiste des spores"),
+    "lumber_jarl": ("The Lumber Jarl", "Le Jarl du bois"),
     "thorn_gardener": ("The Head Gardener", "Le Jardinier en chef"),
+    "abyss_diver": ("The Abyssal Diver", "Le Scaphandrier des abysses"),
+    "moon_warden": ("The Moon Warden", "La Gardienne de la lune"),
     "hot_rivet": ("Hot Rivet", "Rivet brûlant"),
     "boomerang": ("Boomerang", "Boomerang"),
 }
@@ -287,7 +290,10 @@ SPAWN_EGGS = ["ruin_walker", "map_wraith", "basalt_guard", "void_stalker", "drow
               "asylum_director",
               "frost_commodore",
               "spore_alchemist",
+              "lumber_jarl",
               "thorn_gardener",
+              "abyss_diver",
+              "moon_warden",
               ]
 
 # Misc translated messages used from Java (key suffix -> (en, fr))

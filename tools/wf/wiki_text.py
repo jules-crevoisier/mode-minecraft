@@ -552,6 +552,30 @@ STRUCTURES = {
                          "lampe-soleil ; derrière des barreaux scellés, le coffre de l'herbier. Raccourcis : la "
                          "chute par les grandes feuilles dans le lac, l'ascenseur à eau de la salle des pompes, "
                          "la porte de serre qui ne s'ouvre que de l'intérieur.",
+    "abyssal_station": "Une station de recherche de 180 blocs au fond d'un océan profond : des dômes pressurisés de "
+                       "laiton et de verre (le grand dôme fait 40 blocs de large) reliés par des tubes de verre, une "
+                       "tour d'accès qui crève la surface avec un quai et une grue à bathyscaphe, une plate-forme de "
+                       "forage au-dessus d'une fosse, des champs de varech, des projecteurs et le pont d'observation "
+                       "d'une carcasse de baleine. Chaque salle est une poche d'air scellée. On arrive par le camp de "
+                       "la tour (pierre de passage), on descend le puits d'accès jusqu'au sas d'accueil (pierre de "
+                       "passage) ; de là : le grand dôme et son puits de lumière, l'hydroponie, la halle des "
+                       "spécimens aux parois de verre, les quartiers de l'équipage, le réacteur à chaudières et la "
+                       "salle de contrôle du forage. Le puits de forage descend dans la fosse (lieu de grâce) ; "
+                       "passé la brume, l'arène au fond de la fosse ; derrière des barreaux scellés, le coffre des "
+                       "spécimens. Raccourcis : l'ascenseur à colonne de bulles, le tube de maintenance noyé (un "
+                       "conduit l'éclaire) et l'écoutille de pression qui ne s'ouvre que d'un côté.",
+    "timber_fortress": "Un fort de bûcherons à vapeur de 200 blocs dans une boucle de rivière de la taïga : une "
+                       "palissade de troncs d'épicéa et ses tours, une scierie à vapeur avec sa roue à aubes et ses "
+                       "cheminées, un flottage à bois sur tréteaux qui descend d'une colline aux arbres géants "
+                       "abattus, des fours à charbon, une voie ferrée sur pilotis et sa locomotive, et un donjon de "
+                       "bois haut de 70 blocs aux étages en encorbellement et aux toits en bardeaux, une machine à "
+                       "balancier de laiton à son sommet. On arrive par le camp des trappeurs (pierre de passage) "
+                       "et la porterie jusqu'au parc à bois (pierre de passage) ; de là : la scierie, la tête du "
+                       "flottage, le réfectoire, la loge du contremaître et les fours ; puis les étages du donjon : "
+                       "l'armurerie, la grande salle aux lustres de bois de cerf, la salle des cartes (lieu de "
+                       "grâce). Passé la brume, l'arène au sommet du donjon autour de la machine ; derrière des "
+                       "barreaux scellés, la chambre forte de la guilde. Raccourcis : la descente du flottage, "
+                       "l'ascenseur à contrepoids et la poterne qui ne s'ouvre que d'un côté.",
     "spore_refinery": "Une raffinerie d'alchimistes de 180 blocs sur une île de mycélium (ou, à défaut, dans une "
                       "vieille taïga), poussée dans et autour de trois champignons colossaux : une amanite rouge "
                       "haute de 90 blocs au chapeau large de 68, un bolet brun au chapeau plat et une petite "
@@ -579,6 +603,19 @@ STRUCTURES = {
                         "en vrille descend dans la roche jusqu'au lieu de grâce, puis à l'arène dans la chambre du "
                         "cratère. Derrière des barreaux scellés, la réserve interdite ; son tube pneumatique remonte "
                         "à la salle des cartes.",
+    "hollow_moon": "Une lune mécanique de 140 blocs écrasée sur une île extérieure de l'End : une sphère de pierre "
+                   "de l'End, de purpur et de plaques de laiton terni, dont un tiers a volé en éclats et révèle "
+                   "une coque intérieure en cage et trois anneaux d'orrery figés autour d'un noyau lumineux. Des "
+                   "chaînes l'amarrent à l'île, un cratère d'épaves de laiton l'entoure, des arcs de débris et "
+                   "des éclats flottent autour. Depuis le camp des astronomes sur un éclat (pierre de passage), "
+                   "un pont entre par la brèche dans les galeries de la coque : la salle du méridien et son "
+                   "pendule (pierre de passage), les jardins de gravité (chorus dans des jardinières de laiton), "
+                   "la crypte des engrenages, le dôme des cartes du ciel et l'atelier des lentilles. Le grand "
+                   "escalier monte au pont supérieur ; on franchit les anneaux par des passerelles jusqu'à la "
+                   "station du cardan (pierre de passage) puis au lieu de grâce ; passé la brume, l'arène sur la "
+                   "plateforme du noyau. Derrière des barreaux scellés, le reliquaire du noyau. Raccourcis : le "
+                   "puits d'eau du reliquaire jusqu'au puisard, l'ascenseur à colonne de bulles de la crypte "
+                   "vers la salle du méridien, la porte à sens unique de l'anneau et le saut vers la brèche.",
     "shattered_halo": "Un anneau colossal de purpur, de briques de pierre de l'End et d'or, large de 170 blocs et "
                       "incliné au-dessus du vide de l'End, brisé en cinq arcs qui flottent chacun à sa hauteur. On "
                       "arrive sur un îlot extérieur (pierre de passage), puis les ponts imposent l'ordre : "
@@ -805,11 +842,27 @@ MOBS = {
                        "amanite tue-mouches poussée dans son dos, des fils de mycélium qui pendent de ses manches et des "
                        "polypores sur ses épaules. Dans son dos, une cuve à spores de laiton dont les tuyaux nourrissent "
                        "le pistolet à buse de sa main gauche ; dans la droite, un long bâton-mélangeur coiffé d'une fiole.",
+    "lumber_jarl": "Champion de la Forteresse du bois : le Jarl du bois, un bûcheron seigneur de guerre géant de 4 "
+                   "blocs. Un casque cornu de fer sous un bord de fourrure, un nasal, une grande barbe rousse aux "
+                   "tresses cerclées de fer ; une chemise à carreaux rouges et noirs sous un camail de mailles et un "
+                   "col de fourrure sur un torse en tonneau, des bottes ferrées ; dans les deux mains une "
+                   "hache-tronçonneuse à vapeur (un petit moteur fumant, une barre d'acier à chaîne dentée, une lame "
+                   "barbue), et sur le dos un porte-bûches chargé de deux troncs et de lames de scie de rechange.",
     "thorn_gardener": "Champion de l'Arboretum englouti : le Jardinier en chef, un grand automate jardinier de laiton "
                       "de 3,8 blocs que le jardin a envahi. Un corps de cuivre riveté d'où la mousse et le lierre "
                       "débordent par chaque jointure, une cloche de verre pour tête où pousse une fleur lumineuse, de "
                       "très longs bras terminés en sécateurs, un arrosoir changé en canon sur le dos avec son tuyau, et "
                       "des racines qui traînent derrière ses bottes-pots de fleurs.",
+    "abyss_diver": "Champion de la Station abyssale : le Scaphandrier des abysses, le chef plongeur de la station "
+                   "soudé à son scaphandre, une masse de laiton de 3,8 blocs. Un énorme casque rond dont le hublot luit "
+                   "d'un turquoise bioluminescent, un plastron riveté lesté de plomb sur une toile rapiécée et blanchie "
+                   "de sel, deux bouteilles de cuivre dans le dos d'où serpentent les tuyaux d'air. Le bras droit est "
+                   "une foreuse géante, la main gauche tient un pistolet à rivets armé d'un harpon ; bottes de plomb, "
+                   "bernacles et varech accrochés partout.",
+    "moon_warden": "Championne de la Lune creuse : la Gardienne de la lune, un automate céleste élégant de 3,6 "
+                   "blocs qui lévite sur des propulseurs. Un corps svelte de porcelaine et d'or, un visage qui est un "
+                   "cadran des phases de la lune, un halo de petites planètes de laiton en orbite, de longs bras "
+                   "terminés en lames-astrolabes et une cape de pourpre et de ciel étoilé.",
     "frost_commodore": "Champion de la Flotte prise dans les glaces : le Commodore gelé, le chef de l'expédition, "
                        "mort mais maintenu debout par un appareil de survie en laiton couvert de givre. Une silhouette "
                        "massive de 3,8 blocs en capote doublée de fourrure croûtée de glace, une barbe gelée, une "
@@ -1410,6 +1463,30 @@ BOSS_MOVES = {
                             "la fin ; puis il expire : 9 et poison II pour qui est de ce côté. L'anneau lui-même est "
                             "toujours sûr ; sauter ne sert à rien, traverse l'anneau."),
     ],
+    "lumber_jarl": [
+        ("Balayage à la tronçonneuse", "1 à 3", "La hache armée sur l'épaule, le moteur qui monte (0,9 s, un arc orange "
+                                                 "puis rouge, ±80°, 5,5 blocs, 7 en phase 3) : la chaîne traverse "
+                                                 "l'arc pendant 0,8 s et mord quatre fois (4 chaque fois). Sors de l'arc."),
+        ("Coup de hache", "1 à 3", "La hache levée à deux mains (1,2 s) : une ligne te suit lentement puis rougit et se "
+                                   "fige. Elle s'abat devant lui (16), puis le pont se fend le long de la ligne, un bloc "
+                                   "par tick (10, soulevé) et éclate au bout (6). Phase 2 : il enchaîne parfois le "
+                                   "tronc roulant ou le balayage."),
+        ("Lame de scie", "1 à 3", "Il arrache une lame de rechange à son harnais (1 s) : sa boucle est tracée en or jusqu'à "
+                                  "toi et retour, rouge à la fin ; la lame suit la boucle et revient (9, elle peut "
+                                  "toucher à l'aller et au retour). Phase 2 : deux lames sur des boucles en miroir."),
+        ("Timber !", "1 à 3", "Il lève la hache et hurle (1 s) : un couloir de 6 × 2 sous chaque joueur et deux autres "
+                              "(trois en phase 2) près de la cible, rouges 0,5 s plus tard, puis des troncs s'y "
+                              "écrasent (11, ralenti 1,5 s). Les troncs ne restent pas."),
+        ("Tronc roulant", "1 à 3", "Il arrache un tronc à son harnais (1,3 s) : un couloir de 3 blocs tracé à travers le "
+                                   "pont te suit puis rougit ; le tronc roule (0,7 bloc par tick) : 10, soulevé et "
+                                   "poussé hors du couloir."),
+        ("Appel de l'équipe", "2 et 3", "Le manche frappé trois fois sur le pont (1 s) : deux vindicateurs et tireurs "
+                                        "bandits (un de plus tous les deux joueurs), jamais plus de trois."),
+        ("Surrégime", "3", "À 30 % : la hache levée vers la machine (2 s, invulnérable), une onde à sauter (10), il "
+                           "accélère. Puis le volant lance des étincelles : un secteur de 70° tracé 1,5 s, puis une "
+                           "gerbe le balaie d'un bord à l'autre (6, enflammé) ; des bouches de vapeur marquées en "
+                           "blanc éclatent 1,5 s plus tard (7, soulevé)."),
+    ],
     "thorn_gardener": [
         ("Coups de sécateur", "1 à 3", "Les deux sécateurs grands ouverts (0,8 s, un arc tracé en vert) : le droit se "
                                        "referme devant lui (12). Il se tourne, l'arc du gauche est tracé en rouge et se "
@@ -1439,6 +1516,60 @@ BOSS_MOVES = {
                                "cercle de lumière (rayon 3) ; pendant 2,5 s il regagne 1 % de sa vie toutes les 0,5 s, "
                                "sauf si un joueur se tient dans le cercle pour lui faire de l'ombre. Il ne frappe pas : "
                                "c'est le moment de taper."),
+    ],
+    "abyss_diver": [
+        ("Percée", "1 à 3", "La foreuse ramenée en arrière (1,1 s) : un couloir turquoise te suit puis rougit et se "
+                            "fige ; il fonce le long du couloir, foreuse en avant (14, jusqu'à 2,5 blocs au-delà). "
+                            "Sors du couloir."),
+        ("Broyage", "1 à 3", "La foreuse levée qui hurle (0,8 s, un arc turquoise puis rouge) : il la tient devant lui "
+                             "1,5 s, 5 trois fois si tu restes dans l'arc. Phase 2 : il enchaîne parfois choc ou rivets."),
+        ("Rivets", "1 à 3", "Le pistolet braqué (1 s) : trois lignes (cinq en phase 2) tracées vers toi, rouges à la "
+                            "fin ; trois salves de rivets les suivent en 1 s (5 par rivet). Un pas de côté suffit."),
+        ("Choc de pression", "1 à 3", "Les bras levés (1,2 s), un cercle de 5 blocs autour de lui, rouge à la fin : "
+                                      "il frappe le sol (12, soulevé), puis une onde court jusqu'à 11 blocs (6, saute-la)."),
+        ("Harpon", "1 à 3", "Le pistolet braqué (1 s, une ligne qui te suit puis se fige en rouge) : le harpon file le "
+                            "long de la ligne ; s'il te mord, 6 et il te tire jusqu'à 7 blocs vers lui (jamais à moins "
+                            "de 3). Phase 2 : un broyage peut suivre, tracé comme d'habitude."),
+        ("Nuage de vase", "2 et 3", "Penché sur ses vannes (0,9 s, un cercle sombre de 4,5 blocs, rouge à la fin) : la "
+                                    "vase jaillit du scaphandre (4, repoussé, aveuglé 2 s) et le nuage reste 4 s, "
+                                    "aveuglant 1,5 s qui y entre. Contourne-le."),
+        ("Appel de l'équipage", "2 et 3", "Il cogne trois fois son casque : des marins noyés et des noyés (un de plus "
+                                          "tous les deux joueurs) sortent de la brume du forage, jamais plus de trois."),
+        ("La coque gémit", "3", "À 30 % : la foreuse plantée dans le sol (2 s, invulnérable), une onde à sauter (10). "
+                                "Ensuite des pics de pression éclatent sur des cercles marqués 1,5 s (rouges à la fin : "
+                                "8, soulevé), et des méduses lumineuses dérivent vers vous : à leur contact elles "
+                                "rougissent et éclatent 0,6 s plus tard (7 dans 2 blocs). Aucune eau n'entre jamais."),
+        ("Surcharge", "3", "Toutes les 18 s environ : bras écartés, hublot ardent (1,5 s, un cercle jaune de 3,5 blocs, "
+                           "rouge à la fin), la surcharge éclate (8, repoussé) ; pendant 7 s il va 20 % plus vite et "
+                           "frappe 15 % plus fort, mais encaisse 15 % de plus."),
+    ],
+    "moon_warden": [
+        ("Balayage d'astrolabe", "1 à 3", "La lame droite ramenée en travers du corps (0,9 s, un arc tracé en argent) : "
+                                          "elle balaie devant elle (13). Elle se tourne, l'arc rougit et la lame gauche "
+                                          "balaie en retour 0,4 s plus tard (11). Aux phases de croissant, ce second coup "
+                                          "lance un croissant de lumière qui file jusqu'à 13 blocs (7)."),
+        ("Orbite", "1 à 3", "Bras écartés, l'orrery s'emballe (1,2 s) : trois spirales (cinq en phase 2) marquées en or, "
+                            "rouges à la fin ; ses planètes filent le long de chacune (9)."),
+        ("Puits de gravité", "1 à 3", "Ses lames pointées vers un point marqué loin du bord (1,4 s, un cercle violet de "
+                                      "rayon 2,5 et la portée de 7 en pointillés) : pendant 0,8 s, tout le monde est "
+                                      "attiré doucement (moins vite que la marche), puis le puits éclate (10)."),
+        ("Bascule", "1 à 3", "Elle lève ses lames (1,1 s) : des cercles sous les joueurs les suivent puis se figent en "
+                             "rouge ; la gravité bascule dedans : 7, tu flottes 1 s tout droit puis redescends en "
+                             "chute lente, là où tu étais."),
+        ("Nouvelle lune", "1 et 2", "Quand son cadran devient noir : des lignes d'ombre à travers la plateforme, une "
+                                    "par joueur, rouges à la fin ; ses ombres foncent le long de chacune l'une après "
+                                    "l'autre (9, ralenti 1 s)."),
+        ("Pleine lune", "1 et 2", "Quand son cadran est plein : elle s'élève (1,5 s), puis un anneau radieux court sur "
+                                  "la plateforme (10, saute-le) ; en phase 2, un second suit."),
+        ("Comète", "2 et 3", "Elle s'élève, lames levées (1,5 s) : un cercle sous toi te suit puis rougit ; elle plonge "
+                             "dessus (13)."),
+        ("Appel du vide", "2 et 3", "Une lame levée vers le cœur (1 s) : larves du vide et poussières d'astre (deux, une de "
+                                    "plus tous les deux joueurs), jamais plus de trois."),
+        ("Éclipse", "3", "À 30 % : elle s'élève, bras croisés (2 s, invulnérable) ; le cœur s'assombrit, l'obscurité "
+                         "tombe et un anneau sombre court (10, saute-le). Ensuite, trois rayons de gravité partent du "
+                         "cœur et tournent lentement autour de la plateforme (tracés 2 s, des flèches montrent le sens) : "
+                         "marche avec l'espace entre eux (5 au passage). Entre deux balayages, des météores tombent sur "
+                         "des cercles marqués (8)."),
     ],
     "frost_commodore": [
         ("Ancre", "1 à 3", "L'ancre ramenée par-dessus l'épaule (0,9 s, un arc tracé en givre) : un coup en arc "
@@ -1844,11 +1975,26 @@ BOSS_FACTS = {
                        "évents, le champ de mycélium et l'expiration. Ses seuls blocs sont les champignons des pousses, "
                        "retirés au bout de 6 s, à sa mort, si le combat repart ou si tout le monde s'en va ; ses coups "
                        "ne te poussent jamais vers une cage d'escalier ni vers le bord du chapeau.",
+    "lumber_jarl": "660 PV, armure 13, posture 120, barre rouge. Phase 2 à 65 % : il rugit, accélère, appelle son "
+                   "équipe, lance deux lames et fait tomber plus de troncs. Phase 3 à 30 % : la machine à balancier "
+                   "s'emballe, étincelles du volant et jets de vapeur, et sa tronçonneuse porte plus loin. Il ne pose "
+                   "aucun bloc (les troncs qui tombent et roulent disparaissent) ; ses coups ne te poussent jamais "
+                   "contre le garde-corps ni par-dessus.",
     "thorn_gardener": "650 PV, armure 12, posture 115, barre verte. Phase 2 à 65 % : il rugit, accélère, ajoute "
                       "l'appel du jardin et le pollen. Phase 3 à 30 % : la lampe solaire s'allume, ses rayons balaient "
                       "la feuille et il se nourrit de lumière. Ses seuls blocs sont les buissons d'épines, retirés au "
                       "bout de 5 s, à sa mort, si le combat repart ou si tout le monde s'en va ; ses coups ne te "
                       "poussent jamais contre le rebord ni dans l'eau.",
+    "abyss_diver": "660 PV, armure 13, posture 120, barre bleue. Phase 2 à 65 % : il rugit, accélère, ajoute le nuage "
+                   "de vase et l'appel de l'équipage, plus de rivets. Phase 3 à 30 % : la coque gémit, les pics de "
+                   "pression, les méduses lumineuses et la surcharge. Il ne pose ni ne casse aucun bloc (la salle est "
+                   "une poche d'air sous la mer) ; ses noyés disparaissent à sa mort ou si le combat repart, et ses "
+                   "coups ne te poussent jamais contre le mur, les vérins ou les tas de déblais.",
+    "moon_warden": "720 PV, armure 12, posture 120, barre violette. Phase 2 à 65 % : elle rugit, accélère, ajoute la "
+                   "comète et l'appel du vide. Phase 3 à 30 % : l'éclipse, les rayons de gravité tournants et les "
+                   "météores. Ses seuls blocs sont les lanternes du cœur, assombries pendant l'éclipse et rallumées "
+                   "à sa mort, si le combat repart ou si tout le monde s'en va ; autour du vide, ses coups ne te "
+                   "repoussent jamais vers le bord : ils t'attirent vers le centre.",
     "frost_commodore": "640 PV, armure 13, posture 120, barre blanche. Phase 2 à 65 % : il rugit, accélère, "
                        "ajoute la fusée et son équipage gelé, plus de pics et de blocs de glace. Phase 3 à 30 % : le "
                        "blizzard, les stalactites et le coup de bélier. Ses seuls blocs sont les plaques de glace "
@@ -1985,11 +2131,30 @@ LAIRS = {
                                    "corps (la rampe d'arrivée et l'escalier du coffre). Passé la brume au sommet de la "
                                    "rampe, l'Alchimiste se réveille quand tu approches du sceau."),
     ],
+    "lumber_jarl": [
+        ("Le sommet du donjon", "L'arène : la plate-forme de bois de 49 blocs au sommet du donjon, bordée d'un "
+                                "garde-corps de laiton, autour de la machine à balancier (son volant, son cylindre, ses "
+                                "colonnes), avec deux cages d'escalier, une flèche et une cheminée aux angles. Passé "
+                                "la brume de la cage d'escalier sud-ouest, le Jarl se réveille quand tu approches du "
+                                "sceau."),
+    ],
     "thorn_gardener": [
         ("La feuille de nénuphar", "L'arène : un nénuphar géant de 33 blocs de large au rebord rouge relevé, sur un "
                                    "pilier de laiton au milieu du bassin de la serre, sous la lampe solaire suspendue "
                                    "à la couronne du dôme. Passé la brume de la porte de la corniche et le pont de la "
                                    "nervure, le Jardinier se réveille quand tu approches du sceau."),
+    ],
+    "abyss_diver": [
+        ("La chambre de forage", "L'arène : au fond de la tranchée, sous le dôme-verrière de laiton, une salle ronde de "
+                                 "34 blocs, le train de tiges du derrick suspendu au-dessus du puits de forage "
+                                 "rougeoyant, quatre vérins hydrauliques et des tas de déblais contre le mur. Passé la "
+                                 "brume du couloir de compression, le Scaphandrier se réveille quand tu approches du "
+                                 "sceau."),
+    ],
+    "moon_warden": [
+        ("La plateforme du cœur", "L'arène : la plateforme du cœur de la Lune creuse (34 blocs de large, une rambarde de "
+                                  "laiton sur le vide), sous le cœur lumineux de la machine. Passé l'anneau 3 et la "
+                                  "brume, la Gardienne s'éveille quand tu approches du sceau."),
     ],
     "frost_commodore": [
         ("Le gaillard d'avant", "L'arène : le pont du gaillard du brise-glace, environ 34 blocs de large, la "
@@ -2354,6 +2519,9 @@ NEW_GROUPS = [
          "et de laiton, trois galeries en anneau et une météorite fichée dans son flanc : canyons de rayonnages, "
          "scriptorium, observatoire, et une arène dans la chambre du cratère.", "s-starfall_library",
          "struct:starfall_library"),
+        ("La Lune creuse", "Une lune mécanique écrasée sur une île de l'End, coque de laiton et de purpur "
+         "fendue sur un tiers : galeries de la coque, jardins de gravité, crypte des engrenages, anneaux d'orrery "
+         "figés, et une arène sur la plateforme du noyau lumineux.", "s-hollow_moon", "struct:hollow_moon"),
         ("La Pagode des nuages", "Une pagode à neuf toits de cerisier et de plâtre blanc sur un jardin en "
          "terrasses, étangs aux carpes et porte de lune, enlacée par le squelette de laiton d'un dragon "
          "mécanique : un étage par salle, un ascenseur à contrepoids, et une arène sur le toit ouvert.",
@@ -2374,6 +2542,14 @@ NEW_GROUPS = [
          "une île de mycélium : presses à vis, cuves de fermentation, distillerie, séchoirs sous le chapeau brun, "
          "ponts de corde, et une arène au sommet de la grande amanite.", "s-spore_refinery",
          "struct:spore_refinery"),
+        ("La Forteresse du bois", "Un fort de bûcherons à vapeur dans une boucle de rivière de la taïga : "
+         "palissade de troncs, scierie à roue à aubes, flottage sur tréteaux, fours à charbon, locomotive sur "
+         "pilotis, et une arène au sommet d'un donjon de bois haut de 70 blocs.", "s-timber_fortress",
+         "struct:timber_fortress"),
+        ("La Station abyssale", "Une station de recherche au fond de l'océan profond : dômes pressurisés de "
+         "laiton et de verre reliés par des tubes, tour d'accès et grue à bathyscaphe, plate-forme de forage "
+         "au-dessus d'une fosse, champs de varech, et une arène au fond de la fosse.", "s-abyssal_station",
+         "struct:abyssal_station"),
         ("Le Cimetière des dirigeables", "Un champ d'épaves dans la savane autour d'un mât d'amarrage haut de 90 "
          "blocs : un dirigeable encore amarré sous son enveloppe dégonflée, des épaves écrasées, le bidonville des "
          "ferrailleurs, une usine à gaz, et une arène sur le pont supérieur du dirigeable.", "s-airship_graveyard",
@@ -2535,12 +2711,31 @@ TEST_CHECKLIST = [
      "son cercle et tue les bogged ; à 30 %, saute l'onde de la floraison, évite les évents, éloigne-toi de lui contre "
      "le mycélium et traverse l'anneau doré à chaque expiration. Pour le vrai repaire : /brasshaven tp spore_refinery "
      "(le sommet de la grande amanite)."),
+    ("Le Jarl du bois", ["/brasshaven boss lumber_jarl"],
+     "Il apparaît à 6 blocs. Sors de l'arc de la tronçonneuse avant les morsures, quitte la ligne du coup de hache, "
+     "suis la boucle tracée de la lame et reste hors d'elle au retour, sors des couloirs de « Timber ! » et vérifie que "
+     "les troncs disparaissent, écarte-toi du couloir du tronc roulant ; à 65 %, tue son équipe ; à 30 %, saute l'onde, "
+     "sors des secteurs d'étincelles et des cercles de vapeur. Pour le vrai repaire : /brasshaven tp timber_fortress "
+     "(le sommet du donjon)."),
     ("Le Jardinier en chef", ["/brasshaven boss thorn_gardener"],
      "Il apparaît à 6 blocs. Recule hors des deux arcs du sécateur, sors du couloir de la fente, glisse-toi entre les "
      "lignes d'épines, sors du cercle de la liane (ou frappe pour te libérer), quitte le cône de l'arrosage et vérifie "
      "que les buissons d'épines disparaissent ; à 65 %, tue les grenouilles et araignées et sors des cercles de pollen ; "
      "à 30 %, saute l'onde, esquive les rayons et entre dans son cercle de lumière pour l'empêcher de guérir. Pour le "
      "vrai repaire : /brasshaven tp verdant_arboretum (le nénuphar sous le dôme)."),
+    ("Le Scaphandrier des abysses", ["/brasshaven boss abyss_diver"],
+     "Il apparaît à 6 blocs. Sors du couloir de la percée, recule hors de l'arc du broyage, fais un pas de côté hors des "
+     "lignes des rivets, sors du cercle du choc puis saute son onde, quitte la ligne du harpon (ou laisse-toi tirer et "
+     "vérifie que tu t'arrêtes à 3 blocs) ; à 65 %, sors du cercle de vase et contourne le nuage, tue les noyés ; à 30 %, "
+     "saute l'onde, sors des cercles de pression, éloigne-toi des méduses quand elles rougissent, et frappe-le pendant "
+     "sa surcharge. Vérifie qu'aucun bloc de la salle ne bouge. Pour le vrai repaire : /brasshaven tp abyssal_station "
+     "(la chambre de forage au fond de la tranchée)."),
+    ("La Gardienne de la lune", ["/brasshaven boss moon_warden"],
+     "Elle apparaît à 6 blocs. Recule hors des deux arcs du balayage, glisse-toi entre les spirales de l'orbite, sors du "
+     "puits de gravité en marchant, quitte les cercles de la bascule, regarde son cadran : esquive les ombres à la "
+     "nouvelle lune et saute l'anneau à la pleine lune ; à 65 %, sors du cercle de la comète et tue les larves ; à 30 %, "
+     "saute l'anneau sombre, marche avec l'espace entre les rayons de gravité, quitte les cercles des météores et "
+     "vérifie que le cœur se rallume à la fin. Pour le vrai repaire : /brasshaven tp hollow_moon (la plateforme du cœur)."),
     ("Le Commodore gelé", ["/brasshaven boss frost_commodore"],
      "Il apparaît à 6 blocs. Recule hors de l'arc de l'ancre puis du revers rouge, quitte la ligne du lancer et reste "
      "hors d'elle pendant le retour de l'ancre, glisse-toi entre les lignes de pics, sors du cône du souffle, quitte "

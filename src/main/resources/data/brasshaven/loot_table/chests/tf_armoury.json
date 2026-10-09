@@ -11,15 +11,35 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "minecraft:netherite_scrap",
-          "weight": 6,
+          "name": "minecraft:iron_axe",
+          "weight": 10,
+          "functions": [
+            {
+              "function": "minecraft:enchant_randomly"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:shield",
+          "weight": 8
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:goat_horn",
+          "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:honey_bottle",
+          "weight": 10,
           "functions": [
             {
               "function": "minecraft:set_count",
               "count": {
                 "type": "minecraft:uniform",
                 "min": 1,
-                "max": 2
+                "max": 3
               },
               "add": false
             }
@@ -27,17 +47,23 @@
         },
         {
           "type": "minecraft:item",
-          "name": "minecraft:ancient_debris",
-          "weight": 4
+          "name": "minecraft:cooked_mutton",
+          "weight": 12,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 2,
+                "max": 6
+              },
+              "add": false
+            }
+          ]
         },
         {
           "type": "minecraft:item",
-          "name": "minecraft:wither_skeleton_skull",
-          "weight": 2
-        },
-        {
-          "type": "minecraft:item",
-          "name": "minecraft:diamond",
+          "name": "minecraft:blue_ice",
           "weight": 8,
           "functions": [
             {
@@ -45,7 +71,7 @@
               "count": {
                 "type": "minecraft:uniform",
                 "min": 2,
-                "max": 4
+                "max": 6
               },
               "add": false
             }
@@ -53,15 +79,15 @@
         },
         {
           "type": "minecraft:item",
-          "name": "minecraft:gold_block",
-          "weight": 6,
+          "name": "minecraft:iron_ingot",
+          "weight": 12,
           "functions": [
             {
               "function": "minecraft:set_count",
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1,
-                "max": 2
+                "min": 3,
+                "max": 8
               },
               "add": false
             }
@@ -69,8 +95,8 @@
         },
         {
           "type": "minecraft:item",
-          "name": "minecraft:blaze_rod",
-          "weight": 10,
+          "name": "minecraft:gold_ingot",
+          "weight": 8,
           "functions": [
             {
               "function": "minecraft:set_count",
@@ -85,13 +111,44 @@
         },
         {
           "type": "minecraft:item",
-          "name": "minecraft:netherite_upgrade_smithing_template",
-          "weight": 3
+          "name": "minecraft:diamond",
+          "weight": 4,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 1,
+                "max": 2
+              },
+              "add": false
+            }
+          ]
         },
         {
           "type": "minecraft:item",
-          "name": "minecraft:rib_armor_trim_smithing_template",
-          "weight": 2
+          "name": "minecraft:chainmail_chestplate",
+          "weight": 4,
+          "functions": [
+            {
+              "function": "minecraft:enchant_randomly"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "brasshaven:frost_blade",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "brasshaven:frost_staff",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:wayfinder_armor_trim_smithing_template",
+          "weight": 1
         }
       ]
     },
@@ -537,7 +594,7 @@
       "rolls": {
         "type": "minecraft:uniform",
         "min": 1,
-        "max": 1
+        "max": 2
       },
       "bonus_rolls": 0.0,
       "entries": [
@@ -691,7 +748,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "brasshaven:ancient_ember",
+          "name": "brasshaven:map_fragment",
           "weight": 25,
           "functions": [
             {
@@ -707,19 +764,8 @@
         },
         {
           "type": "minecraft:item",
-          "name": "brasshaven:lithite_shard",
-          "weight": 8,
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "type": "minecraft:uniform",
-                "min": 1,
-                "max": 2
-              },
-              "add": false
-            }
-          ]
+          "name": "brasshaven:structure_compass",
+          "weight": 2
         }
       ]
     }

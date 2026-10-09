@@ -25,7 +25,10 @@ the end of its throw, then drags back to you, hitting, hauling and slowing every
 bit), TETHER (a spore flask along your aim shatters on the first foe or where it lands; mycelium threads tether the foes
 round the spot for 3 s, dragging back those that stray, then burst again), PRUNE (shears snap shut along your aim,
 cutting every foe between the blades, more to those under half health; thorns snare round each foe cut, each cut heals
-the wielder 1). flags: fire, slow, weak, blind, poison, lift, lifesteal.
+the wielder 1), BORE (the drill-lance bores along your aim: every foe in it is hurt, more the more armour it wears, drawn
+in to the lance's tip and lit by bioluminescence), FELL (a chainsaw sweep in front, then the ground splits along your aim, throwing up
+every foe on it; more to those caught by both), ORBIT (three brass planets fly out along spiral arms winding onto your
+aim, hitting and drawing in every foe they pass; a small gravity well where the arm on your aim ends). flags: fire, slow, weak, blind, poison, lift, lifesteal.
 """
 
 TIER_MATERIAL = {"overworld": "map_fragment", "depths": "lithite_shard", "nether": "ancient_ember", "end": "void_shard"}
@@ -361,6 +364,16 @@ BOSS_GEAR = [
      ("Remembrance of the Spore Alchemist", "Souvenir de l'Alchimiste des spores"),
      ("LITHITE", 7.5, -2.8), "TETHER", 10.0, 12.0, 90, "SPORE_BLOSSOM_AIR", "poison", ("spore_staff", "ember", "dark", "emerald"),
      ("brass", "emerald")),
+    ("lumber_jarl", "overworld", "jarl_chainaxe", ("Steam Chainsaw-Axe of the Lumber Jarl", "Hache-tronçonneuse à vapeur du Jarl du bois"),
+     ("Use: the chain screams through a wide sweep in front of you (3.5 blocks), then the axe comes down and the ground "
+      "splits along your aim (up to 9 blocks, walls and drops stop it): every foe on the split is hurt and thrown up, "
+      "and a foe caught by both the sweep and the split is felled for 50% more.",
+      "Clic droit : la chaîne hurle dans un large balayage devant toi (3,5 blocs), puis la hache s'abat et le sol se "
+      "fend dans ta visée (jusqu'à 9 blocs, les murs et les vides l'arrêtent) : chaque ennemi sur la fente est blessé "
+      "et projeté en l'air, et un ennemi pris par le balayage et la fente est abattu pour 50 % de plus."),
+     ("Remembrance of the Lumber Jarl", "Souvenir du Jarl du bois"),
+     ("LITHITE", 9.0, -3.1), "FELL", 11.0, 9.0, 80, "LARGE_SMOKE", "", ("chainsaw_axe", "iron", "wood", "ember"),
+     ("iron", "ember")),
     ("thorn_gardener", "overworld", "gardener_shears", ("Pruning Shears of the Head Gardener", "Sécateur du Jardinier en chef"),
      ("Use: the blades open and snap shut along your aim (up to 7 blocks, walls stop them): every foe between them is cut, "
       "and a foe under half health is pruned for 50% more. Thorns burst round each foe cut, snaring it and the foes "
@@ -372,6 +385,27 @@ BOSS_GEAR = [
      ("Remembrance of the Head Gardener", "Souvenir du Jardinier en chef"),
      ("LITHITE", 8.0, -2.6), "PRUNE", 11.0, 7.0, 70, "HAPPY_VILLAGER", "slow", ("pruning_shears", "iron", "dark", "emerald"),
      ("brass", "emerald")),
+    ("abyss_diver", "overworld", "diver_drill_lance", ("Drill-Lance of the Abyssal Diver", "Lance-foreuse du Scaphandrier des abysses"),
+     ("Use: the drill bores along your aim (up to 8 blocks, walls stop it): every foe in the bore is hurt, and more the "
+      "more armour it wears (the pressure cracks its plating), is drawn in toward the lance's tip and is lit by "
+      "bioluminescence for 5 s.",
+      "Clic droit : la foreuse perce dans ta visée (jusqu'à 8 blocs, les murs l'arrêtent) : chaque ennemi sur son passage "
+      "est blessé, d'autant plus qu'il porte d'armure (la pression fend son blindage), attiré vers la pointe de la lance "
+      "et illuminé de bioluminescence pendant 5 s."),
+     ("Remembrance of the Abyssal Diver", "Souvenir du Scaphandrier des abysses"),
+     ("LITHITE", 8.5, -3.0), "BORE", 11.0, 8.0, 80, "GLOW", "slow", ("drill_lance", "brass", "dark", "aether"),
+     ("brass", "aether")),
+    ("moon_warden", "end", "moon_astroblade", ("Astrolabe Blade of the Moon Warden", "Lame-astrolabe de la Gardienne de la lune"),
+     ("Use: three brass planets fly out from you along spiral arms (up to 10 blocks, walls stop them), winding round "
+      "until one of them meets your aim: every foe a planet passes is hit and drawn a little toward you, and where the "
+      "planet on your aim comes to rest a small gravity well pulls the foes round it into one spot.",
+      "Clic droit : trois planètes de laiton s'envolent de toi le long de bras en spirale (jusqu'à 10 blocs, les murs les "
+      "arrêtent) et tournent jusqu'à ce que l'une d'elles rejoigne ta visée : chaque ennemi qu'une planète croise est "
+      "frappé et un peu attiré vers toi, et là où s'arrête la planète de ta visée, un petit puits de gravité rassemble "
+      "les ennemis alentour en un seul point."),
+     ("Remembrance of the Moon Warden", "Souvenir de la Gardienne de la lune"),
+     ("VOID", 9.0, -2.6), "ORBIT", 11.0, 10.0, 80, "END_ROD", "slow", ("astro_blade", "light", "purpur", "aether"),
+     ("void", "aether")),
 ]
 
 

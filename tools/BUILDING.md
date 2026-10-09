@@ -535,6 +535,58 @@ lairs, ruins and small sites).
     cornice drops into the moat and the lake, the pump house's bubble-column lift rises to the cornice, the
     greenhouse's south iron door opens only from inside onto the shore.
 
+29. **The Abyssal Station (deep / deep cold / deep lukewarm ocean; seabed fit, OCEAN_FLOOR_WG).** A ~180-wide
+    deep-sea research station on the ocean floor, every walked room a sealed air pocket: the pressurised modules are
+    one union of volumes whose 6-connected boundary becomes the hull (glass panes between brass ribs, dark iron
+    footings), placed with `liquid_settings: ignore_waterlogging`. A great ribbed glass dome (40 wide, 28 high) in
+    the middle, smaller domes round it joined by chamfered glass tubes; a slender access tower rises out of the sea
+    to a docking deck at y 48 (camp, waystone, bathyscaphe crane, an outer stair tower down to y 12 for any sea
+    level); a lattice derrick on a four-legged rig deck straddles a black trench; two kelp farms in brass frames, a
+    whale skeleton sliding into the trench under a glass observation bubble, searchlights. Route: down the access
+    shaft's helical stair to the reception lock (hub, waystone), the great dome's concourse round its light well
+    (glowstone and sea lanterns behind glass in a pool) and the observation-floor ring, west to hydroponics, the
+    specimen aquarium hall (a glass barrel vault on the sea) and the crew quarters, east to the reactor/boiler room
+    and the whale-fall deck, north-east to the drill control room on the trench lip; the drill shaft (a glass caisson
+    in the trench) spirals 43 down to the site of grace at the trench bottom, a low corridor (mist) to the drill
+    chamber arena (34 wide) under the brass skylight dome, the drill bit hanging from it; the specimen vault behind
+    sealed bars beside it. Shortcuts: the tower's bubble-column lift from the lock to the lantern room, the vault's
+    bubble-column lift 43 up into the reactor room, the flooded maintenance tube from the whale deck to the lock
+    (fence-gate water locks, a conduit in a prismarine ring halfway), the one-way pressure hatch between the control
+    room and the great dome (its lever on the control side only).
+
+30. **The Timber Fortress (taiga / snowy taiga / windswept forest).** A ~200-wide steam logging stronghold on a
+    river bend it lays itself (a 15-wide river with a plank bridge, a yard floor of coarse dirt, gravel and planks,
+    a raised hillside to the north): a palisade of spruce trunks with seven solid wall towers and a twin-towered
+    gatehouse; the steam sawmill on the river (two saw blades, belts, a gallery) with its brick boiler house, two
+    smokestacks and a 15-wide water wheel in its pit; a flowing-water log flume on spruce trestles (138 anchors)
+    from the headworks reservoir on the hill of felled giant spruces, down across the yard to the mill; charcoal
+    kilns on a raised deck, a stilted rail line with a locomotive; and the dominant, a 70-high timber keep of five
+    jettied storeys under stave skirts, a NW stave spire, a SE smokestack to 96 and a brass beam engine (14-wide
+    flywheel, beam at 84) on the roof platform. From the trappers' camp across the river (waystone, tents, canoes)
+    through the gatehouse into the lumber yard (hub, waystone, log stacks, gantry): the sawmill and boiler house,
+    the high bridge to the flume headworks, the mess hall, the foreman's lodge, the kilns; then up the keep's stair
+    tower: the armoury, the great hall (antler chandeliers, long tables), the map room (site of grace), the boiler
+    room, the roof stair-house, mist, and the 48-wide arena platform round the beam engine (gryphon knight). The
+    guild strongroom sits in the keep's top storey behind sealed bars. Shortcuts: the flume ride from the
+    headworks down to the mill tailrace, the counterweight lift shaft from the keep top to a pool in the lift hall
+    (whose iron door opens only from inside), the sawmill's one-way postern out to the river bank.
+
+31. **The Hollow Moon (outer End islands; sky fit, lift 32).** A clockwork moon ~140 across crashed onto an outer
+    End island: a lat-long grid of end stone, purpur and tarnished brass/copper/verdigris plates with a brass belt,
+    the south-upper third shattered open (a noisy breach cone) on a second, caged inner shell and three tilted
+    static orrery rings round a central pillar, a core platform and a glowing core sphere (sea lanterns, end rods,
+    crying obsidian). Four great iron chains moor it to the island, brass wreckage rings the crater, debris arcs
+    and six rock shards drift round it. Inside, two shell decks (A at 25, B at 46) with partitions, a crypt and a
+    sump below. From the astronomers' camp on a shard (waystone, tents, telescope) a bridge enters the breach
+    landing (fallen planet, rubble); Meridian Hall (hub, waystone, pendulum, gold meridian), the gravity gardens
+    (chorus in brass planters), the escapement gallery and its wheel, the conical stair down to the gear crypt
+    (tombs, gears); the grand stair up to deck B: the lens workshop, the star-chart dome, the telescope terrace;
+    the ring door onto ring 1, ring bridges to the gimbal station (waystone), the site of grace pad, mist on the
+    arched bridge, the 34-wide arena on the core platform (gryphon knight). The core reliquary sits under the arena
+    rim behind sealed bars. Shortcuts: the reliquary trapdoor and water shaft down to the sump pool (then crypt and
+    bubble-column lift up to an iron-door booth in Meridian Hall, lever inside only), the ring door (opens one way),
+    the terrace girder drop into the escapement pool by the breach.
+
 ---
 
 ## 13. Gap analysis: arch.py, megakit.py and STYLE.md against this guide

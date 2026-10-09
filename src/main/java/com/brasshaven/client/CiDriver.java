@@ -609,7 +609,7 @@ public final class CiDriver {
 
         // the 3D held models, in the hands of a row of armour stands (third person, as other players see them)
         String[] held = {"kings_trident", "sentinel_greatsword", "dune_king_crook", "jailer_chain", "halo_glaive", "gatekeeper_key", "jarl_axe", "abbess_crozier", "architect_plumb", "pressure_lance", "hierophant_crozier", "queen_macuahuitl", "curator_astrolabe", "warden_tongs", "hierarch_sunstaff", "admiral_cutlass", "tyrant_wrench", "ascetic_staff", "caldera_halberd", "helmsman_anchor", "forbidden_grimoire",
-                "jade_fang", "rune_fist", "brass_pickaxe", "fourth_king_sceptre", "heart_lodeblade", "baron_drillpick", "abbot_dragonstaff", "corsair_harpoon", "cantor_baton", "stoker_shovel", "director_bonesaw", "commodore_anchor", "alchemist_staff", "gardener_shears",
+                "jade_fang", "rune_fist", "brass_pickaxe", "fourth_king_sceptre", "heart_lodeblade", "baron_drillpick", "abbot_dragonstaff", "corsair_harpoon", "cantor_baton", "stoker_shovel", "director_bonesaw", "commodore_anchor", "alchemist_staff", "gardener_shears", "jarl_chainaxe", "diver_drill_lance", "moon_astroblade",
                 "sluice_hook", "rivet_cannon", "bog_lantern_flail", "solar_khopesh", "boarding_axe", "jade_blowpipe"};
         step("held_items")
                 .cmd(() -> {
