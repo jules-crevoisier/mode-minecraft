@@ -1818,13 +1818,34 @@ public final class CiDriver {
         }
 
         /** Waits until no chunk section is left to compile for 20 ticks in a row (or maxTicks, without failing). */
+        private static boolean chunksArrived() {
+            Minecraft mc = Minecraft.getInstance();
+            if (mc.level == null || mc.player == null) {
+                return true;
+            }
+            int r = Math.max(2, mc.options.renderDistance().get() - 2);
+            int px = mc.player.chunkPosition().x();
+            int pz = mc.player.chunkPosition().z();
+            var source = mc.level.getChunkSource();
+            for (int dx = -r; dx <= r; dx++) {
+                for (int dz = -r; dz <= r; dz++) {
+                    if (dx * dx + dz * dz <= r * r && !source.hasChunk(px + dx, pz + dz)) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
         Step settleChunks(int maxTicks) {
             return add(new Op("chunks rendered") {
                 int quiet;
 
                 @Override
                 boolean tick() {
-                    quiet = Minecraft.getInstance().levelRenderer.hasRenderedAllSections() ? quiet + 1 : 0;
+                    // "all sections rendered" is also true while the server has not sent the chunks yet (right after
+                    // a long teleport nothing is queued): wait until the chunks around the camera have arrived too
+                    quiet = Minecraft.getInstance().levelRenderer.hasRenderedAllSections() && chunksArrived() ? quiet + 1 : 0;
                     if (age >= maxTicks) {
                         LOGGER.warn(TAG + "{}: chunks still compiling after {} ticks, going on", name, maxTicks);
                         return true;
