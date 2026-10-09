@@ -660,6 +660,7 @@ def crew_quarters(S):
     for x, z in ((-12, -6), (-6, -6), (-12, 6), (-6, 6), (-3, 0)):
         S.set(x, f + 3, z, HANG_LAMP)
     bp.spawner(-13, f, -4, MOB_DROWNED)
+    bp.spawner(-9, f, -4, "brasshaven:drowned_marine")
     # the stair up to the officers' mess (starboard), rising aft
     flight(S, -4, 9, 11, f, 6, -1)
     for x in range(-9, -3):
@@ -2114,5 +2115,5 @@ register(StructureDef(
     "dreadnought_wreck", "overworld", ["warm_ocean", "lukewarm_ocean", "deep_lukewarm_ocean", "deep_ocean"],
     [Piece("wreck", dreadnought_wreck, views=VIEWS)],
     spacing=80, separation=32, heightmap="OCEAN_FLOOR_WG", adaptation="none", processors="none", max_distance=116,
-    foundation=False, spawns=[(MOB_DROWNED, 6, 1, 2), (MOB_KNIGHT, 2, 1, 1), (MOB_WRAITH, 3, 1, 2)],
+    foundation=False, spawns=[(MOB_DROWNED, 6, 1, 2), (MOB_KNIGHT, 2, 1, 1), (MOB_WRAITH, 3, 1, 2), ("brasshaven:drowned_marine", 4, 1, 2)],
     title_fr="Épave du cuirassé Léviathan", title_en="Leviathan Dreadnought Wreck"))

@@ -738,6 +738,27 @@ PAGES = [
          "(pierre). Passé la brume, la caverne du filon ; derrière des barreaux scellés, la chambre forte et le "
          "monte-wagon, raccourci du retour."),
     ], []),
+    ("echo_cathedral", "wonders", "minecraft:bell", ("The Echo Cathedral", "La Cathédrale de l'Écho"), [
+        ("A gothic cathedral of deepslate and tarnished brass, 110 blocks wide and 165 long, in a vast cavern deep "
+         "underground (nave floor around y -43), its pipe organ rising 60 blocks into the cavern roof. Where: deep "
+         "dark and dripstone caves. The Structure Compass finds it, like the other deep wonders.",
+         "Une cathédrale gothique de deepslate et de laiton terni, large de 110 blocs et longue de 165, dans une "
+         "immense caverne (sol de la nef vers y -43) ; son orgue monte de 60 blocs jusqu'à la voûte de la "
+         "caverne. Où : abîme profond et grottes de spéléothèmes. La boussole des structures la trouve, comme les "
+         "autres merveilles souterraines."),
+        ("From the pilgrims' camp (waystone), the tunnel leads to the forecourt of stone choristers; the wicket in "
+         "the barred portal opens only from inside, so go round by the tower lodges. Nave of 7x7 columns, side "
+         "chapels, the choir loft and triforium, the bell tower with its cracked bronze bell, the choristers' "
+         "dormitory, the flooded crypt under the choir (waystone). Through the mist, the arena at the organ "
+         "console in the apse; behind sealed bars, the reliquary. The pipe-shaft lift rises from the crypt to the "
+         "crossing (waystone) as the shortcut back.",
+         "Depuis le camp des pèlerins (pierre de passage), le tunnel mène au parvis des choristes de pierre ; le "
+         "guichet du portail barré ne s'ouvre que de l'intérieur : passe par les loges des tours. Nef à colonnes "
+         "de 7x7, chapelles latérales, tribune et triforium, clocher et sa cloche de bronze fêlée, dortoir des "
+         "choristes, crypte inondée sous le chœur (pierre). Passé la brume, l'arène devant la console de l'orgue, "
+         "dans l'abside ; derrière des barreaux scellés, le reliquaire. L'ascenseur du puits d'orgue remonte de la "
+         "crypte à la croisée (pierre) : c'est le raccourci du retour."),
+    ], []),
     ("titan_forge", "wonders", "minecraft:anvil", ("Forge of the Basalt Titan", "La Forge du Titan de basalte"), [
         ("A forge 217 blocks across over a Nether lava lake, built into a kneeling basalt-and-brass titan 85 high, "
          "its hammer raised over a giant anvil. Where: basalt deltas, crimson forests.",
@@ -771,6 +792,37 @@ PAGES = [
          "aux galeries ; on traverse la galerie brisée sur des livres flottants (un bassin rattrape les chutes), "
          "puis on descend en vrille dans la météorite jusqu'au lieu de grâce et à l'arène du cratère. Derrière des "
          "barreaux scellés, la réserve interdite ; son tube pneumatique est le raccourci du retour."),
+    ], []),
+    ("airship_graveyard", "wonders", "brasshaven:brass_plating", ("The Airship Graveyard",
+                                                                  "Le Cimetière des dirigeables"), [
+        ("A crash field 228 blocks across round a skeletal mooring mast 90 high: one airship still moored, its "
+         "half-deflated envelope draped over the ribs; a gondola buried nose-first, an envelope frame like a whale "
+         "skeleton, a ship broken in two, and a scavengers' shanty town. Where: savannas and plains.",
+         "Un champ d'épaves de 228 blocs autour d'un mât d'amarrage squelettique haut de 90 blocs : un dirigeable "
+         "encore amarré, son enveloppe à demi dégonflée drapée sur les membrures ; une nacelle plantée le nez dans "
+         "la terre, une carcasse d'enveloppe comme un squelette de baleine, un navire brisé en deux et un "
+         "bidonville de ferrailleurs. Où : savanes et plaines."),
+        ("From the camp (waystone), through the whale-skeleton wreck to the scavengers' market (waystone), the "
+         "winch house at the mast's foot and the gas works. Climb the mast to the mooring ring and cross into the airship's nose: bridge, cabins, cargo "
+         "hold, engine nacelles by catwalk, then up the keel to the grace. Through the mist, the arena on the top "
+         "deck; behind sealed bars, the treasury hold. The mast's cargo lift is the shortcut back.",
+         "Depuis le camp (pierre de passage), à travers l'épave en squelette de baleine jusqu'au marché des "
+         "ferrailleurs (pierre), la salle du treuil au pied du mât et l'usine à gaz. On monte au mât jusqu'à l'anneau d'amarrage et on entre dans le nez du "
+         "dirigeable : passerelle, cabines, cale, nacelles moteurs par les coursives, puis la quille jusqu'au lieu "
+         "de grâce. Passé la brume, l'arène sur le pont supérieur ; derrière des barreaux scellés, la soute au "
+         "trésor. L'ascenseur à marchandises du mât est le raccourci du retour."),
+    ], []),
+    ("cloud_pagoda", "wonders", "minecraft:cherry_sapling", ("The Cloud Pagoda", "La Pagode des nuages"), [
+        ("A nine-roofed pagoda of cherry wood and white plaster, its brass finial 148 blocks up, on three terraced "
+         "gardens, wind-chimes on every eave and a brass dragon skeleton coiled round it. Where: cherry groves and "
+         "meadows.",
+         "Une pagode à neuf toits de cerisier et de plâtre blanc, fleuron de laiton à 148 blocs, sur trois jardins "
+         "en terrasses, des carillons à chaque avant-toit et un squelette de dragon en laiton enroulé autour. Où : "
+         "bosquets de cerisiers et prairies."),
+        ("From the camp (waystone): moon gate, koi bridge, terraces, the dragon shrine (waystone), the dojo. Inside, "
+         "a room per tier up to the arena on the open top; the vault's well drops you back to the prayer hall.",
+         "Depuis le camp (pierre) : porte de lune, pont des carpes, terrasses, sanctuaire du dragon (pierre), dojo. "
+         "Dedans, une salle par étage jusqu'à l'arène du toit ; le puits du caveau ramène à la salle de prière."),
     ], []),
     ("mire_stilt_city", "wonders", "minecraft:mangrove_roots", ("Mire Stilt-City", "La Cité des pilotis"), [
         ("A timber town on piles over a mangrove swamp, 200 blocks across: boardwalks on three levels, rope "
@@ -1261,6 +1313,45 @@ PAGES = [
          "le clic droit fait battre le cœur une fois : chaque ennemi que tu vois alentour est traîné à tes pieds, "
          "d'autant plus blessé qu'il porte d'armure, et les objets et l'expérience volent jusqu'à toi."),
     ], []),
+    ("chime_abbot", "wonders", "brasshaven:remembrance_chime_abbot", ("The Chime Abbot", "L'Abbé des carillons"), [
+        ("On the open deck under the ninth roof of the Cloud Pagoda, past the mist at the head of the last stair, the "
+         "Chime Abbot waits (560 health, armour 12): an ancient monk half turned to clockwork, floating a hand's "
+         "breadth over the boards in layered cherry-red and white robes, a brass halo of wind-chime rods behind his "
+         "head and a bronze dragon-head staff in his hand.",
+         "Sur le pont ouvert sous le neuvième toit de la Pagode des nuages, passé la brume en haut du dernier "
+         "escalier, l'Abbé des carillons attend (560 PV, armure 12) : un très vieux moine à moitié changé en "
+         "mécanique, qui flotte au-dessus des planches dans ses robes rouge cerise et blanches, un halo de laiton "
+         "à tiges de carillon derrière la tête et un bâton de bronze à tête de dragon à la main."),
+        ("His staff sweeps twice in front of him; his open palm drives a cone of wind. The chime rods fly out of his "
+         "halo and hang in a circle round him, then ring one after another: each marks its zone on the floor before "
+         "it strikes. In the petal storm a ring of petals rolls over the whole deck: stand in one of the three gaps "
+         "drawn in white or be blinded. Run away and he steps through the wind to the corner nearest you.",
+         "Son bâton balaie deux fois devant lui ; sa paume ouverte pousse un cône de vent. Les tiges de carillon "
+         "volent de son halo et pendent en cercle autour de lui, puis sonnent l'une après l'autre : chacune marque "
+         "sa zone au sol avant de frapper. Pendant la tempête de pétales, un anneau de pétales balaie tout le pont : "
+         "place-toi dans l'une des trois brèches tracées en blanc ou sois aveuglé. Fuis et il passe dans le vent "
+         "jusqu'au coin le plus proche de toi."),
+    ], ["brasshaven:remembrance_chime_abbot", "brasshaven:abbot_dragonstaff"]),
+    ("chime_abbot_dragon", "wonders", "minecraft:bell", ("Abbot: the Brass Dragon", "Abbé : le dragon d'airain"), [
+        ("At 65% he roars and grows faster: three thrusts and a spin, a drop from the sky onto a ring that followed "
+         "you, chimes that ring both ways round and over every player, a second petal ring. At 30% he awakens the "
+         "pagoda's brass dragon: its ghost circles over the deck, and every 12 s he points his staff and it breathes "
+         "down lanes drawn across the deck, one after another; the next lane turns red with the dragon's head "
+         "waiting at its end. Stand between the lanes. Near the railing his blows never push you over the edge.",
+         "À 65 %, il rugit et accélère : trois estocs et une toupie, une chute du ciel sur un cercle qui t'a suivi, "
+         "des carillons qui sonnent dans les deux sens et au-dessus de chaque joueur, un second anneau de pétales. "
+         "À 30 %, il éveille le dragon d'airain de la pagode : son fantôme tourne au-dessus du pont, et toutes les "
+         "12 s il pointe son bâton et le dragon souffle le long de couloirs tracés à travers le pont, l'un après "
+         "l'autre ; le prochain rougit, la tête du dragon attend à son bout. Reste entre les couloirs. Près de la "
+         "balustrade, ses coups ne te poussent jamais dans le vide."),
+        ("His Remembrance, four Map Fragments and two diamonds forge the Dragon Staff of the Chime Abbot, whose "
+         "right-click sends the brass dragon's spirit rushing along your aim: every foe it passes is hurt, flung "
+         "aside and blinded, and the chimes ring where it ends, slowing the foes round it.",
+         "Son Souvenir, quatre fragments de carte et deux diamants forgent le Bâton-dragon de l'Abbé des carillons, "
+         "dont le clic droit lance l'esprit du dragon d'airain dans ta visée : chaque ennemi traversé est blessé, "
+         "rejeté sur le côté et aveuglé, et les carillons sonnent là où il s'arrête, ralentissant les ennemis "
+         "autour."),
+    ], []),
     ("mine_baron", "wonders", "brasshaven:remembrance_mine_baron", ("The Mine Baron", "Le Baron de la mine"), [
         ("In the cavern round the half-dug vein of the Rust Mesa Mine-City, past the mist, the Mine Baron waits "
          "(600 health, armour 12): a huge greedy foreman in a riveted steam exo-rig, a pneumatic drill for a right "
@@ -1295,6 +1386,79 @@ PAGES = [
          "Son Souvenir, quatre fragments de carte et deux diamants forgent le Pic-foreuse du Baron de la mine, dont "
          "le clic droit lance un fagot de dynamite allumée dans ta visée : il se colle au premier ennemi ou tombe, "
          "puis saute 1,5 s plus tard, projetant et brûlant tous les ennemis autour, sans briser un bloc."),
+    ], []),
+    ("corsair_captain", "wonders", "brasshaven:remembrance_corsair_captain", ("The Corsair Captain",
+                                                                               "La Capitaine corsaire"), [
+        ("On the open top deck of the airship moored in the Airship Graveyard, past the gas cells, the grace and the "
+         "mist, the Corsair Captain waits (580 health, armour 10): a tall sky-pirate in a long teal greatcoat and a "
+         "brass-trimmed tricorn, a rotor engine on her back, a cutlass in her right hand and a harpoon gun in her left.",
+         "Sur le pont à ciel ouvert du dirigeable amarré au Cimetière des dirigeables, passé les ballonnets, le lieu de "
+         "grâce et la brume, la Capitaine corsaire attend (580 PV, armure 10) : une grande pirate du ciel en longue "
+         "redingote sarcelle et tricorne bordé de laiton, un moteur à rotor sur le dos, un sabre dans la main droite et "
+         "un fusil-harpon dans la gauche."),
+        ("Her cutlass cuts twice in front of her. Her harpoon flies down a red line that follows you: step aside or "
+         "be reeled in and cut. Her rotor gust blows you toward the rail (sprint against it); she lifts off and drops "
+         "onto a ring that follows you, then locks; she fires flares at range. The bulwark always stops you: no push "
+         "throws you overboard.",
+         "Son sabre taille deux fois devant elle. Son harpon file le long d'une ligne rouge qui te suit : écarte-toi ou "
+         "tu seras ramené et taillé. La bourrasque de son rotor te pousse vers le bastingage (sprinte contre elle) ; "
+         "elle s'envole et s'abat sur un cercle qui te suit puis se fige ; de loin, elle tire des fusées. Le bastingage "
+         "t'arrête toujours : aucune poussée ne te jette par-dessus bord."),
+    ], ["brasshaven:remembrance_corsair_captain", "brasshaven:corsair_harpoon"]),
+    ("corsair_captain_list", "wonders", "minecraft:wind_charge", ("Captain: Boarders and the List",
+                                                                 "Capitaine : abordeurs et gîte"), [
+        ("At 65% she fires a signal flare and sky raiders board (more in a larger party); she adds a rotor rush along "
+         "a drawn path and a cutlass cyclone when you hug her. At 30% the ship lists: every ten seconds or so four wind "
+         "lanes cross the deck, drawn a second and a half ahead, and blow one after another toward the rail: stand in "
+         "the gaps. Her flare-bombs fall on rings and leave fire on the deck for five seconds (temporary magma, the "
+         "planks come back).",
+         "À 65 %, elle tire une fusée de signal et des pillards du ciel montent à bord (plus nombreux en groupe) ; elle "
+         "ajoute une ruée sur le rotor le long d'un chemin tracé et un cyclone de sabre si tu restes collé. À 30 %, le "
+         "navire gîte : toutes les dix secondes environ, quatre couloirs de vent traversent le pont, tracés une seconde "
+         "et demie à l'avance, et soufflent l'un après l'autre vers le bastingage : reste dans les intervalles. Ses "
+         "bombes éclairantes tombent sur des cercles et laissent du feu sur le pont cinq secondes (du magma "
+         "temporaire, les planches reviennent)."),
+        ("Her Remembrance, four Map Fragments and two diamonds forge the Harpoon Gun of the Corsair Captain, whose "
+         "right-click fires a harpoon along your aim: it cuts the first foe it bites and hauls you to it, or hauls you "
+         "to the wall it bites, and the rotor lets you down softly.",
+         "Son Souvenir, quatre fragments de carte et deux diamants forgent le Fusil-harpon de la Capitaine corsaire, "
+         "dont le clic droit tire un harpon dans ta visée : il taille le premier ennemi qu'il mord et te hale jusqu'à "
+         "lui, ou te hisse jusqu'au mur qu'il mord, et le rotor te repose en douceur."),
+    ], []),
+    ("hollow_cantor", "wonders", "brasshaven:remembrance_hollow_cantor", ("The Hollow Cantor", "Le Chantre creux"), [
+        ("In the choir of the Echo Cathedral, past the flooded crypt, the turret stair and the mist, the choirmaster waits "
+         "at the organ console (640 health, armour 12): a gaunt figure of tarnished brass and deepslate, his ribcage an "
+         "organ chest, a fan of pipes behind an empty hood, a long baton that ends in a tuning fork.",
+         "Dans le chœur de la Cathédrale de l'Écho, passé la crypte inondée, l'escalier de la tourelle et la brume, le "
+         "maître de chœur attend devant la console de l'orgue (640 PV, armure 12) : une silhouette décharnée de laiton "
+         "terni et de deepslate, la cage thoracique en buffet d'orgue, un éventail de tuyaux derrière une capuche vide, "
+         "une longue baguette terminée par un diapason."),
+        ("His baton beats twice in front of him. When he throws his hood back, ripples run down a cone on the floor: "
+         "step out of it before he shrieks. He drives the fork into the floor (jump the ring), glides through you along a "
+         "drawn line, and makes amethyst buds grow: when the note peaks the whole floor rings, so stand in a golden ring "
+         "round a bud.",
+         "Sa baguette frappe deux fois devant lui. Quand il rejette sa capuche, des rides courent au sol dans un cône : "
+         "sors-en avant le cri. Il plante son diapason dans le sol (saute l'onde), glisse à travers toi le long d'une "
+         "ligne tracée, et fait pousser des bourgeons d'améthyste : quand la note culmine, tout le sol sonne, alors "
+         "tiens-toi dans un cercle doré autour d'un bourgeon."),
+    ], ["brasshaven:remembrance_hollow_cantor", "brasshaven:cantor_baton"]),
+    ("hollow_cantor_silence", "wonders", "minecraft:sculk_sensor", ("Cantor: Silence and the Organ",
+                                                                   "Chantre : le silence et l'orgue"), [
+        ("At 65% he calls for silence: for seven seconds, inside a ring of ash, you are slowed, deafened and your sight "
+         "darkens, while he fades to a shimmer (a hit reveals him). He calls echo choristers and sings a fugue: rings "
+         "follow you, lock in red and burst. At 30% the organ wakes: blasts rise from the floor under every player "
+         "after a ring of rising dust, and every twelve seconds rows of blasts march away from him; stand in the gaps.",
+         "À 65 %, il impose le silence : sept secondes durant, dans un cercle de cendre, tu es ralenti, assourdi et ta "
+         "vue s'assombrit, tandis qu'il s'efface en un miroitement (un coup le révèle). Il appelle des choristes de "
+         "l'écho et chante une fugue : des cercles te suivent, se figent en rouge et éclatent. À 30 %, l'orgue se "
+         "réveille : des souffles jaillissent du sol sous chaque joueur après un cercle de poussière qui monte, et "
+         "toutes les douze secondes des rangées de souffles s'éloignent de lui ; tiens-toi dans les brèches."),
+        ("His Remembrance, four Lithite Shards and two diamonds forge the Tuning-Fork Baton of the Hollow Cantor, whose "
+         "right-click looses a shriek in a cone ahead that hurts, throws back and weakens every foe in it; where it "
+         "meets a wall, its echo bursts again.",
+         "Son Souvenir, quatre éclats de lithite et deux diamants forgent la Baguette-diapason du Chantre creux, dont "
+         "le clic droit lance un cri en cône devant toi qui blesse, repousse et affaiblit chaque ennemi touché ; là où "
+         "il heurte un mur, son écho éclate à nouveau."),
     ], []),
     ("strangler_queen", "wonders", "brasshaven:remembrance_strangler_queen", ("The Strangler Fig Queen", "La Reine-figuier étrangleur"), [
         ("On the summit terrace of the Canopy Temple-City, through the mist under the broken brass sun-disc, the fig "

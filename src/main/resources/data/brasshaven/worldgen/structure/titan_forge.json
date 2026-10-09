@@ -29,6 +29,12 @@
           "weight": 3,
           "minCount": 1,
           "maxCount": 2
+        },
+        {
+          "type": "brasshaven:slag_golem",
+          "weight": 3,
+          "minCount": 1,
+          "maxCount": 1
         }
       ]
     }

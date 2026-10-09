@@ -959,6 +959,82 @@ def baron_drillpick():
 
 ARCHETYPES["baron_drillpick"] = baron_drillpick
 
+
+def abbot_dragonstaff():
+    """Dragon Staff of the Chime Abbot: a tall staff of dark lacquered wood banded in bronze, a wrapped grip and a
+    bronze foot; at its head a bronze dragon looking out to one side, a gold mane crest, horns swept back, glowing
+    eyes, and a ring of three chime rods hanging from its jaws."""
+    out = [box(7.25, -10, 7.25, 8.75, 18, 8.75, "handle"), box(6.9, -11.6, 6.9, 9.1, -10, 9.1, "dark")]
+    out += _grip(-3, 4, 2.2)
+    for y in (-7, 6, 10.5, 14.5):                                           # bronze bands
+        out.append(box(6.9, y, 6.9, 9.1, y + 0.8, 9.1, "mid"))
+    out += [box(6.6, 17.6, 6.6, 9.4, 19.4, 9.4, "dark"),                   # the collar under the head
+            box(5.4, 19.2, 6.2, 10.6, 23.8, 9.8, "mid"),                    # the skull
+            box(10.6, 19.6, 6.6, 15.0, 22.6, 9.4, "mid"),                   # the snout
+            box(14.6, 21.6, 7.0, 15.6, 22.6, 9.0, "light"),                 # the nostril ridge
+            box(10.6, 18.4, 6.8, 14.4, 19.4, 9.2, "dark"),                  # the lower jaw, open a little
+            box(11.0, 19.4, 6.8, 11.6, 20.0, 7.2, "cream"), box(11.0, 19.4, 8.8, 11.6, 20.0, 9.2, "cream"),
+            box(5.8, 23.8, 7.4, 10.2, 24.6, 8.6, "brass"),                  # the gold mane crest
+            box(9.4, 22.0, 6.0, 10.4, 23.0, 6.2, "glow"), box(9.4, 22.0, 9.8, 10.4, 23.0, 10.0, "glow")]   # eyes
+    for k in range(4):                                                      # the horns, swept back and up
+        out += [box(5.4 - k * 0.9, 23.4 + k * 0.9, 6.4, 6.4 - k * 0.9, 24.4 + k * 0.9, 7.2, "brass"),
+                box(5.4 - k * 0.9, 23.4 + k * 0.9, 8.8, 6.4 - k * 0.9, 24.4 + k * 0.9, 9.6, "brass")]
+    for k in range(3):                                                      # whiskers trailing down
+        out += [box(13.4 - k * 0.6, 19.6 - k * 1.0, 6.0, 14.0 - k * 0.6, 20.6 - k * 1.0, 6.6, "light")]
+    out += [box(11.4, 17.0, 7.6, 14.6, 17.6, 8.4, "brass")]                 # the ring of chimes in its jaws
+    for x, h in ((11.6, 3.2), (12.8, 4.0), (14.0, 3.2)):
+        out += [box(x, 17.0 - h, 7.7, x + 0.6, 17.0, 8.3, "light"), box(x, 17.0 - h, 7.65, x + 0.6, 16.4 - h, 8.35, "accent")]
+    return out
+
+
+ARCHETYPES["abbot_dragonstaff"] = abbot_dragonstaff
+
+
+def corsair_harpoon():
+    """Harpoon Gun of the Corsair Captain: a mahogany pistol grip and short stock, a long dark-iron barrel ringed in
+    brass, a copper drum magazine over the trigger, a red flare canister slung under the barrel with a glowing cap, and
+    a barbed steel harpoon standing out of the muzzle with a coil of line."""
+    out = [box(7.2, -6, 7.0, 8.8, 2, 9.0, "handle"), box(7.0, -7, 6.8, 9.0, -6, 9.2, "brass_dark")]
+    out += _grip(-5, 0, 2.2)
+    out += [box(6.6, 2, 6.6, 9.4, 4.5, 9.4, "brass_dark"),                   # the trigger block
+            box(5.6, 3.5, 5.6, 10.4, 8.5, 10.4, "accent_dark"),               # the drum magazine
+            box(5.4, 4.5, 7.4, 10.6, 7.5, 8.6, "brass")]
+    out += [box(7.0, 4.5, 7.0, 9.0, 24, 9.0, "iron_dark")]                  # the barrel
+    for y in (9.0, 14.0, 19.0, 23.0):
+        out.append(box(6.7, y, 6.7, 9.3, y + 0.9, 9.3, "brass"))
+    out += [box(7.3, 9.5, 9.0, 8.7, 17.5, 10.4, "accent"),                  # the flare canister
+            box(7.3, 17.5, 9.0, 8.7, 18.3, 10.4, "glow")]
+    out += [box(7.6, 24, 7.6, 8.4, 28.5, 8.4, "steel"),                      # the harpoon shaft
+            box(6.6, 28.5, 7.4, 9.4, 29.5, 8.6, "steel"),                    # the barbs
+            box(7.1, 29.5, 7.4, 8.9, 30.5, 8.6, "light"), box(7.6, 30.5, 7.6, 8.4, 31.5, 8.4, "light")]
+    out += [box(9.0, 12.0, 6.6, 10.2, 15.0, 9.4, "wrap")]                   # a coil of line
+    return out
+
+
+ARCHETYPES["corsair_harpoon"] = corsair_harpoon
+
+
+def cantor_baton():
+    """Tuning-Fork Baton of the Hollow Cantor: a long black-lacquered baton ringed with brass collars, a wrapped grip
+    and a little brass bell for a pommel; at its head a brass yoke holding an amethyst resonator, and two long steel
+    tines rising from it, a pale glint near their tips."""
+    out = [box(7.4, -8, 7.4, 8.6, 19, 8.6, "handle"), box(7.0, -10.5, 7.0, 9.0, -8.5, 9.0, "brass"),
+           box(7.3, -11.2, 7.3, 8.7, -10.5, 8.7, "brass_dark")]
+    out += _grip(-3, 4, 2.0)
+    for y in (6.0, 11.0, 16.0):                                             # brass collars
+        out.append(box(7.0, y, 7.0, 9.0, y + 0.7, 9.0, "brass"))
+    out += [box(4.6, 19.0, 7.2, 11.4, 20.6, 8.8, "brass"),                 # the yoke
+            box(5.0, 18.4, 7.4, 11.0, 19.0, 8.6, "brass_dark"),
+            box(7.0, 19.2, 6.6, 9.0, 21.2, 9.4, "accent"),                  # the amethyst resonator
+            box(7.4, 21.2, 7.0, 8.6, 21.6, 9.0, "accent_dark")]
+    for x in (4.6, 10.2):                                                   # the two tines
+        out += [box(x, 20.6, 7.4, x + 1.2, 31.5, 8.6, "steel"),
+                box(x, 28.5, 7.3, x + 1.2, 29.3, 8.7, "glow")]
+    return out
+
+
+ARCHETYPES["cantor_baton"] = cantor_baton
+
 # item id -> (archetype, material, handle, accent)
 HELD = {
     "kings_trident": ("trident_big", "warden", "bone", "sapphire"),
@@ -1000,6 +1076,9 @@ HELD = {
     "heart_lodeblade": ("heart_lodeblade", "copper", "dark", "ember"),
     "curator_astrolabe": ("curator_astrolabe", "void", "purpur", "amethyst"),
     "baron_drillpick": ("baron_drillpick", "gold", "dark", "ember"),
+    "abbot_dragonstaff": ("abbot_dragonstaff", "copper", "dark", "ruby"),
+    "corsair_harpoon": ("corsair_harpoon", "brass", "dark", "ember"),
+    "cantor_baton": ("cantor_baton", "brass", "dark", "amethyst"),
     "cartographer_blade": ("sword", "cartographer", "wood", "emerald"),
     "telluric_hammer": ("hammer", "lithite", "wood", "emerald"),
     "storm_staff": ("staff", "storm", "dark", "sapphire"),

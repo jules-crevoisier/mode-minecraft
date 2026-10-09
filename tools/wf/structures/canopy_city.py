@@ -528,6 +528,7 @@ def library(S):
         S.solid(x, f + 6, z, CHAIN_Y)
         S.solid(x, f + 5, z, LANT_H)
     bp.spawner(-6, f, 7, MOB_SKEL)
+    bp.spawner(-6, f, 10, "brasshaven:dart_frog_assassin")
     S.keep.discard((-6, f, 7))
     # the stair well down to the trap corridor (west side, 11 steps down to the south), railed
     flight(S, -17, 13, "north", 11, 45, 3, "east", mat="tuff_brick", fill="tuff_bricks")
@@ -2505,5 +2506,5 @@ register(StructureDef(
     "canopy_city", "overworld", ["jungle", "sparse_jungle", "bamboo_jungle"],
     [Piece("city", canopy_city, views=VIEWS)],
     spacing=80, separation=32, adaptation="none", processors="none", max_distance=128, foundation=False,
-    spawns=[(MOB_SPIDER, 5, 1, 2), (MOB_SKEL, 4, 1, 2), (MOB_ZOMBIE, 3, 1, 2)],
+    spawns=[(MOB_SPIDER, 5, 1, 2), (MOB_SKEL, 4, 1, 2), (MOB_ZOMBIE, 3, 1, 2), ("brasshaven:dart_frog_assassin", 4, 1, 2)],
     title_fr="La Cité-temple de la canopée", title_en="Canopy Temple-City"))

@@ -429,6 +429,36 @@ lairs, ruins and small sites).
     mine-boss office with its vault, the haulage level, the flooded lower gallery and the collapsed shaft, to
     the boss arena in a vast excavated cavern round a half-dug colossal gold-and-copper vein. A cart-lift is
     the shortcut back to the haulage adit; the main shaft is a drop from the hub with a ladderway up.
+21. **The Airship Graveyard (savanna / plains).** A ~200-wide crash field round a ruined mooring tower: a
+    90-high skeletal mast with a docking ring at the top, one brass dirigible still moored to it, its aft
+    envelope deflated and draped over the bare ribs, and three wrecks around it (a gondola buried nose-first, an
+    envelope frame lying like a whale skeleton that the approach road walks through, a ship broken in two). A
+    scavengers' shanty town of hull plates, gas-bag tents and propeller windmills holds the market (hub). Route:
+    the winch house and the gas works with huge gasometers, the stair up the mast to the docking ring, through
+    the moored ship's nose and keel into its gondola (bridge, cabins, saloon, cargo hold, engine nacelles on
+    catwalks), up the climbing shaft through the gas cells to the boss arena on the ship's top deck; the sealed
+    treasury hold and the gangway back to the mast crown, where the cargo-lift shaft drops to the winch house.
+22. **The Echo Cathedral (deep dark / dripstone caves).** A ~180-long gothic cathedral of deepslate and
+    tarnished brass built inside a vast cavern 100 blocks down, its flying buttresses anchored into the cave
+    walls, its twin west towers and nave roof under dripstone, and behind the apse a giant pipe organ whose
+    pipes rise 60 blocks into the cavern ceiling. Sound and silence: sculk (decoration only), bells, amethyst
+    and muffled wool. From the pilgrims' camp in a side cave, a low tunnel opens onto the forecourt (reveal);
+    the great portal is barred, so enter by the west tower, cross the nave of 7x7 columns (side chapels) and
+    climb the tower's newel stair to the choir loft; walk the triforium to the transept and out over a flying
+    buttress into the choristers' dormitory in the cave wall, down a rock stair to the flooded crypt of
+    sculk-overgrown tombs (site of grace) and up the choir turret to the boss at the organ console in the apse.
+    Optional: the bell chamber with its cracked bronze bell, the bellows loft, the cantors' library; behind the
+    organ, the sealed reliquary. A bubble lift in a brass organ pipe climbs from the crypt to the crossing; the
+    choir grille, the dormitory stair door and the portal's wicket are the other ways back.
+23. **The Cloud Pagoda (cherry grove / meadow mountains).** A ~180-wide temple complex on a terraced mountain
+    garden: a nine-tiered, 110-high pagoda of cherry wood and white plaster with brass hip ornaments and clockwork
+    wind-chimes on every eave, the brass skeleton of a clockwork dragon coiled round its lower tiers, its skull
+    enshrined on the north terrace. From the pilgrims' camp, through a moon gate and over koi ponds on zig-zag
+    bridges, stairs climb three garden terraces past stone lanterns, the tea house, the bell pavilion, the dragon
+    shrine (hub) and the monks' dojo to the pagoda door; inside, each tier is a room of its own (prayer hall,
+    scroll library, armoury of practice weapons, meditation hall with a sand garden, mechanical orrery of the
+    seasons, abbot's quarters, chime engine, last stair). The boss waits on the open top tier under the spire;
+    the counterweight lift in the central pillar drops back to the prayer hall.
 
 ---
 

@@ -25,3 +25,6 @@ from . import canopy_city  # noqa: F401
 from . import mesa_minecity  # noqa: F401
 from . import titan_forge  # noqa: F401
 from . import starfall_library  # noqa: F401
+from . import airship_graveyard  # noqa: F401
+from . import echo_cathedral  # noqa: F401
+from . import cloud_pagoda  # noqa: F401

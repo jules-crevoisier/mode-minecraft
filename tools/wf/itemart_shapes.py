@@ -698,6 +698,69 @@ def tongs(a):
     a.px(10, 6, "B", "light")
 
 
+@painted("tuning_fork")
+def tuning_fork(a):
+    """Tuning-Fork Baton of the Hollow Cantor: a black-lacquered baton ringed in brass with a leather grip, ending in a
+    brass yoke set with an amethyst resonator and two long steel tines with a pale glint."""
+    shaft(a, 8, key="H", grip=(1, 4), butt="B")
+    for i in (5, 7):
+        a.px(1 + i, 14 - i, "B", "light")
+    a.seg("M", 8.2, 4.4, 11.4, 7.6, 0.75)                     # the brass yoke across the haft
+    a.shade_dir("M", -0.6, 1.0)
+    a.seg("I", 8.6, 4.0, 12.6, 0.4, 0.5)                      # the two tines
+    a.seg("I", 11.2, 6.6, 15.0, 2.6, 0.5)
+    a.shade_dir("I", -0.5, 1.0)
+    a.px(9, 6, "A", "light")                                  # the amethyst resonator
+    a.px(10, 6, "A", "mid")
+    a.px(12, 1, "E", "light")                                 # a glint of the note on each tine
+    a.px(14, 3, "E", "mid")
+
+
+@painted("harpoon_gun")
+def harpoon_gun(a):
+    """Harpoon Gun of the Corsair Captain: a mahogany grip at the bottom left, a dark-iron barrel ringed in brass
+    running up to the top right, a copper drum over the grip, a red flare canister under the barrel and a barbed steel
+    harpoon at the muzzle."""
+    a.seg("W", 2.0, 14.0, 4.5, 11.5, 0.8)                    # the grip
+    a.seg("X", 4.0, 12.0, 12.0, 4.0, 0.85)                   # the barrel
+    a.shade_dir("X", -0.5, 1.0)
+    for x, y in ((6, 10), (9, 7), (11, 5)):                   # brass rings
+        a.px(x, y, "B", "light")
+        a.px(x + 1, y + 1, "B", "dark")
+    a.disc("C", 5.0, 11.0, 1.6)                               # the drum
+    a.px(4, 10, "C", "light")
+    a.seg("F", 7.0, 11.0, 10.0, 8.0, 0.5)                     # the flare canister
+    a.px(10, 8, "F", "shine")
+    a.seg("I", 12.0, 4.0, 14.5, 1.5, 0.45)                    # the harpoon shaft
+    a.px(14, 1, "I", "shine")
+    a.px(13, 1, "I", "light")                                 # the barbs
+    a.px(14, 2, "I", "light")
+    a.px(12, 1, "I", "mid")
+    a.px(15, 3, "I", "mid")
+
+
+@painted("dragon_staff")
+def dragon_staff(a):
+    """Dragon Staff of the Chime Abbot: a dark lacquered staff banded in bronze with a leather grip, and at its head a
+    bronze dragon looking right, a gold horn swept back, a glowing aether eye, and two chime rods hanging from its jaw."""
+    shaft(a, 8, key="H", grip=(1, 4), butt="B")
+    for i in (5, 7):
+        a.px(1 + i, 14 - i, "C", "light")
+    a.disc("M", 10.4, 4.4, 1.9)                               # the skull
+    a.seg("M", 11.0, 4.0, 14.6, 3.6, 0.85)                    # the snout
+    a.shade_dir("M", -0.6, 1.0)
+    a.seg("B", 9.4, 3.0, 7.6, 0.6, 0.45)                      # the horn, swept back
+    a.px(11, 3, "E", "light")                                 # the eye
+    a.px(14, 3, "B", "light")                                 # the nostril ridge
+    a.px(12, 5, "M", "dark")                                  # the jaw
+    a.px(13, 5, "M", "dark")
+    a.px(12, 6, "B", "light")                                 # the chimes hanging from it
+    a.px(12, 7, "B", "mid")
+    a.px(14, 6, "B", "light")
+    a.px(14, 7, "B", "mid")
+    a.px(14, 8, "V", "mid")
+
+
 @painted("drillpick")
 def drillpick(a):
     """Drill-Pick of the Mine Baron: a mahogany haft bound in leather, an iron head with a gold pick spike reaching

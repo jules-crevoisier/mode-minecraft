@@ -941,6 +941,62 @@ public final class MobAnims {
 
         private MineBaron() {}
     }
+    public static final class ChimeAbbot {
+        public static final int STAFF = 0;
+        public static final int PALM = 1;
+        public static final int CHIMERING = 2;
+        public static final int PETALS = 3;
+        public static final int STEP = 4;
+        public static final int FLURRY = 5;
+        public static final int BELLCRASH = 6;
+        public static final int AWAKEN = 7;
+        public static final int BREATH = 8;
+        public static final int ROAR = 9;
+        public static final int STAGGER = 10;
+        public static final int COUNT = 11;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {54, 40, 80, 66, 26, 62, 58, 80, 76, 40, 40};
+
+        private ChimeAbbot() {}
+    }
+    public static final class CorsairCaptain {
+        public static final int CUTLASS = 0;
+        public static final int HARPOON = 1;
+        public static final int GUST = 2;
+        public static final int DIVEBOMB = 3;
+        public static final int FLARESHOT = 4;
+        public static final int BOARDING = 5;
+        public static final int CYCLONE = 6;
+        public static final int FLAREBOMB = 7;
+        public static final int MUSTER = 8;
+        public static final int LISTING = 9;
+        public static final int ROAR = 10;
+        public static final int STAGGER = 11;
+        public static final int COUNT = 12;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {54, 48, 54, 68, 36, 46, 46, 58, 44, 70, 40, 50};
+
+        private CorsairCaptain() {}
+    }
+    public static final class HollowCantor {
+        public static final int BATON = 0;
+        public static final int SHRIEK = 1;
+        public static final int TOLL = 2;
+        public static final int CADENCE = 3;
+        public static final int RESONANCE = 4;
+        public static final int SILENCE = 5;
+        public static final int CHOIR = 6;
+        public static final int FUGUE = 7;
+        public static final int ORGAN = 8;
+        public static final int REQUIEM = 9;
+        public static final int ROAR = 10;
+        public static final int STAGGER = 11;
+        public static final int COUNT = 12;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {46, 48, 52, 42, 74, 38, 44, 74, 80, 86, 40, 40};
+
+        private HollowCantor() {}
+    }
     public static final class GlowJellyfish {
 
         public static final int COUNT = 0;
@@ -1237,5 +1293,73 @@ public final class MobAnims {
         public static final int[] TICKS = {36, 28, 26};
 
         private BoilerGunner() {}
+    }
+    public static final class SlagGolem {
+        public static final int PUNCH = 0;
+        public static final int SLAM = 1;
+        public static final int LOB = 2;
+        public static final int COUNT = 3;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {24, 34, 28};
+
+        private SlagGolem() {}
+    }
+    public static final class InkWraith {
+        public static final int CLAW = 0;
+        public static final int SPLASH = 1;
+        public static final int DIVE = 2;
+        public static final int COUNT = 3;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {18, 26, 32};
+
+        private InkWraith() {}
+    }
+    public static final class StarMoteCaller {
+        public static final int BEAM = 0;
+        public static final int CALL = 1;
+        public static final int PULSE = 2;
+        public static final int COUNT = 3;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {26, 34, 22};
+
+        private StarMoteCaller() {}
+    }
+    public static final class StarMote {
+        public static final int DART = 0;
+        public static final int COUNT = 1;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {18};
+
+        private StarMote() {}
+    }
+    public static final class SunScarab {
+        public static final int BITE = 0;
+        public static final int BURROW = 1;
+        public static final int ERUPT = 2;
+        public static final int COUNT = 3;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {18, 20, 30};
+
+        private SunScarab() {}
+    }
+    public static final class DartFrogAssassin {
+        public static final int LASH = 0;
+        public static final int LEAP = 1;
+        public static final int SLAP = 2;
+        public static final int COUNT = 3;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {22, 26, 16};
+
+        private DartFrogAssassin() {}
+    }
+    public static final class DrownedMarine {
+        public static final int SHOT = 0;
+        public static final int CHARGE = 1;
+        public static final int THRUST = 2;
+        public static final int COUNT = 3;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {32, 30, 20};
+
+        private DrownedMarine() {}
     }
 }

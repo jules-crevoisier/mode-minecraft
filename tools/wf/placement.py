@@ -123,10 +123,12 @@ FAMILIES = [
         "sun_ziggurat": 1,
         "canopy_city": 1,
         "mesa_minecity": 1,
+        "airship_graveyard": 1,
+        "cloud_pagoda": 1,
     }, avoid=[(V + "villages", 10), (V + "pillager_outposts", 6), (V + "woodland_mansions", 8)], min_spawn=32,
         note="surface wonders; at least 40 chunks between two of them, none within 512 blocks of 0,0"),
     Family("deep_wonders", "deep_wonder", 72, 28, {
-        "undercity": 1, "dwarven_city": 1, "crystal_cathedral": 1,
+        "undercity": 1, "dwarven_city": 1, "crystal_cathedral": 1, "echo_cathedral": 1,
     }, avoid=[(V + "ancient_cities", 8), (V + "trial_chambers", 4)], min_spawn=32,
         note="underground wonders"),
     Family("landmarks", "medium", 60, 24, {
@@ -243,6 +245,8 @@ FIT = {
     "sun_ziggurat": _f("land", spread=14, slope=0.9, wet=0.04),       # open desert floor: the plinth sits level
     "canopy_city": _f("land", spread=18, slope=1.2, wet=0.12),       # jungle floor: brings its own ground disc and footings
     "mesa_minecity": _f("land", spread=20, slope=1.4, wet=0.05),     # badlands floor: the butte brings its own talus and footings
+    "airship_graveyard": _f("land", spread=10, slope=0.8, wet=0.06),
+    "cloud_pagoda": _f("land", spread=24, slope=1.5, wet=0.05),     # cherry grove / meadow: the massif brings its own hill and skirt  # open, flat grassland: the field brings its own ground layer
     # ---- coast: the dock side (template +z = south) in the sea, the cape on land, shore near sea level
     "coastal_lighthouse": _f("coast", sea_side="south", wet=0.5, land=0.5, spread=8, slope=1.0),
     # the island (south) in the sea, the causeway's shore end (north) on the beach: the strand lands at sea level
@@ -264,6 +268,7 @@ FIT = {
     "undercity": _f("underground", cover=10, lift=6),
     "dwarven_city": _f("underground", cover=10, lift=2),
     "crystal_cathedral": _f("underground", cover=10, lift=6),
+    "echo_cathedral": _f("underground", cover=10, lift=2),
     # ---- Nether: open air (or the lava sea) above the deck
     "basalt_fortress": _f("cavern", open=0.3),
     "chain_bridge": _f("cavern", open=0.6),

@@ -1,0 +1,671 @@
+{
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "brasshaven:chunked_template",
+        "size": [
+          131,
+          155,
+          179
+        ],
+        "cells": [
+          {
+            "location": "brasshaven:cloud_pagoda/pagoda/x0_z0",
+            "offset": [
+              20,
+              0,
+              18
+            ],
+            "size": [
+              2,
+              4,
+              4
+            ],
+            "blocks": 16
+          },
+          {
+            "location": "brasshaven:cloud_pagoda/pagoda/x0_z1",
+            "offset": [
+              12,
+              0,
+              22
+            ],
+            "size": [
+              10,
+              20,
+              23
+            ],
+            "blocks": 1435
+          },
+          {
+            "location": "brasshaven:cloud_pagoda/pagoda/x0_z2",
+            "offset": [
+              11,
+              0,
+              45
+            ],
+            "size": [
+              11,
+              23,
+              22
+            ],
+            "blocks": 1904
+          },
+          {
+            "location": "brasshaven:cloud_pagoda/pagoda/x0_z3",
+            "offset": [
+              0,
+              0,
+              67
+            ],
+            "size": [
+              22,
+              23,
+              23
+            ],
+            "blocks": 3219
+          },
+          {
+            "location": "brasshaven:cloud_pagoda/pagoda/x0_z4",
+            "offset": [
+              0,
+              0,
+              90
+            ],
+            "size": [
+              22,
+              12,
+              22
+            ],
+            "blocks": 1846
+          },
+          {
+            "location": "brasshaven:cloud_pagoda/pagoda/x0_z5",
+            "offset": [
+              8,
+              1,
+              112
+            ],
+            "size": [
+              14,
+              7,
+              11
+            ],
+            "blocks": 665
+          },
+          {
+            "location": "brasshaven:cloud_pagoda/pagoda/x1_z0",
+            "offset": [
+              22,
+              0,
+              7
+            ],
+            "size": [
+              22,
+              21,
+              15
+            ],
+            "blocks": 2560
+          },
+          {
+            "location": "brasshaven:cloud_pagoda/pagoda/x1_z1",
+            "offset": [
+              22,
+              0,
+              22
+            ],
+            "size": [
+              22,
+              38,
+              23
+            ],
+            "blocks": 8293
+          },
+          {
+            "location": "brasshaven:cloud_pagoda/pagoda/x1_z2",
+            "offset": [
+              22,
+              3,
+              45
+            ],
+            "size": [
+              22,
+              35,
+              22
+            ],
+            "blocks": 9824
+          },
+          {
+            "location": "brasshaven:cloud_pagoda/pagoda/x1_z3",
+            "offset": [
+              22,
+              0,
+              67
+            ],
+            "size": [
+              22,
+              75,
+              23
+            ],
+            "blocks": 8978
+          },
+          {
+            "location": "brasshaven:cloud_pagoda/pagoda/x1_z4",
+            "offset": [
+              22,
+              0,
+              90
+            ],
+            "size": [
+              22,
+              31,
+              22
+            ],
+            "blocks": 5284
+          },
+          {
+            "location": "brasshaven:cloud_pagoda/pagoda/x1_z5",
+            "offset": [
+              22,
+              0,
+              112
+            ],
+            "size": [
+              22,
+              15,
+              22
+            ],
+            "blocks": 2979
+          },
+          {
+            "location": "brasshaven:cloud_pagoda/pagoda/x1_z6",
+            "offset": [
+              26,
+              1,
+              134
+            ],
+            "size": [
+              18,
+              14,
+              23
+            ],
+            "blocks": 3109
+          },
+          {
+            "location": "brasshaven:cloud_pagoda/pagoda/x1_z7",
+            "offset": [
+              26,
+              1,
+              157
+            ],
+            "size": [
+              18,
+              12,
+              22
+            ],
+            "blocks": 2838
+          },
+          {
+            "location": "brasshaven:cloud_pagoda/pagoda/x2_z0",
+            "offset": [
+              44,
+              0,
+              1
+            ],
+            "size": [
+              22,
+              30,
+              21
+            ],
+            "blocks": 4378
+          },
+          {
+            "location": "brasshaven:cloud_pagoda/pagoda/x2_z1",
+            "offset": [
+              44,
+              3,
+              22
+            ],
+            "size": [
+              22,
+              126,
+              23
+            ],
+            "blocks": 14192
+          },
+          {
+            "location": "brasshaven:cloud_pagoda/pagoda/x2_z2",
+            "offset": [
+              44,
+              3,
+              45
+            ],
+            "size": [
+              22,
+              127,
+              22
+            ],
+            "blocks": 38723
+          },
+          {
+            "location": "brasshaven:cloud_pagoda/pagoda/x2_z3",
+            "offset": [
+              44,
+              3,
+              67
+            ],
+            "size": [
+              22,
+              127,
+              23
+            ],
+            "blocks": 27744
+          },
+          {
+            "location": "brasshaven:cloud_pagoda/pagoda/x2_z4",
+            "offset": [
+              44,
+              0,
+              90
+            ],
+            "size": [
+              22,
+              31,
+              22
+            ],
+            "blocks": 7604
+          },
+          {
+            "location": "brasshaven:cloud_pagoda/pagoda/x2_z5",
+            "offset": [
+              44,
+              0,
+              112
+            ],
+            "size": [
+              22,
+              15,
+              22
+            ],
+            "blocks": 4045
+          },
+          {
+            "location": "brasshaven:cloud_pagoda/pagoda/x2_z6",
+            "offset": [
+              44,
+              0,
+              134
+            ],
+            "size": [
+              22,
+              14,
+              23
+            ],
+            "blocks": 3975
+          },
+          {
+            "location": "brasshaven:cloud_pagoda/pagoda/x2_z7",
+            "offset": [
+              44,
+              1,
+              157
+            ],
+            "size": [
+              22,
+              11,
+              22
+            ],
+            "blocks": 3484
+          },
+          {
+            "location": "brasshaven:cloud_pagoda/pagoda/x3_z0",
+            "offset": [
+              66,
+              0,
+              0
+            ],
+            "size": [
+              21,
+              30,
+              22
+            ],
+            "blocks": 4813
+          },
+          {
+            "location": "brasshaven:cloud_pagoda/pagoda/x3_z1",
+            "offset": [
+              66,
+              3,
+              22
+            ],
+            "size": [
+              21,
+              124,
+              23
+            ],
+            "blocks": 14905
+          },
+          {
+            "location": "brasshaven:cloud_pagoda/pagoda/x3_z2",
+            "offset": [
+              66,
+              3,
+              45
+            ],
+            "size": [
+              21,
+              152,
+              22
+            ],
+            "blocks": 54136
+          },
+          {
+            "location": "brasshaven:cloud_pagoda/pagoda/x3_z3",
+            "offset": [
+              66,
+              3,
+              67
+            ],
+            "size": [
+              21,
+              127,
+              23
+            ],
+            "blocks": 35630
+          },
+          {
+            "location": "brasshaven:cloud_pagoda/pagoda/x3_z4",
+            "offset": [
+              66,
+              3,
+              90
+            ],
+            "size": [
+              21,
+              31,
+              22
+            ],
+            "blocks": 8353
+          },
+          {
+            "location": "brasshaven:cloud_pagoda/pagoda/x3_z5",
+            "offset": [
+              66,
+              0,
+              112
+            ],
+            "size": [
+              21,
+              20,
+              22
+            ],
+            "blocks": 4301
+          },
+          {
+            "location": "brasshaven:cloud_pagoda/pagoda/x3_z6",
+            "offset": [
+              66,
+              0,
+              134
+            ],
+            "size": [
+              21,
+              14,
+              23
+            ],
+            "blocks": 3865
+          },
+          {
+            "location": "brasshaven:cloud_pagoda/pagoda/x3_z7",
+            "offset": [
+              66,
+              1,
+              157
+            ],
+            "size": [
+              21,
+              9,
+              22
+            ],
+            "blocks": 3241
+          },
+          {
+            "location": "brasshaven:cloud_pagoda/pagoda/x4_z0",
+            "offset": [
+              87,
+              0,
+              1
+            ],
+            "size": [
+              22,
+              30,
+              21
+            ],
+            "blocks": 3706
+          },
+          {
+            "location": "brasshaven:cloud_pagoda/pagoda/x4_z1",
+            "offset": [
+              87,
+              3,
+              22
+            ],
+            "size": [
+              22,
+              126,
+              23
+            ],
+            "blocks": 10563
+          },
+          {
+            "location": "brasshaven:cloud_pagoda/pagoda/x4_z2",
+            "offset": [
+              87,
+              3,
+              45
+            ],
+            "size": [
+              22,
+              124,
+              22
+            ],
+            "blocks": 14882
+          },
+          {
+            "location": "brasshaven:cloud_pagoda/pagoda/x4_z3",
+            "offset": [
+              87,
+              3,
+              67
+            ],
+            "size": [
+              22,
+              126,
+              23
+            ],
+            "blocks": 13757
+          },
+          {
+            "location": "brasshaven:cloud_pagoda/pagoda/x4_z4",
+            "offset": [
+              87,
+              0,
+              90
+            ],
+            "size": [
+              22,
+              25,
+              22
+            ],
+            "blocks": 6640
+          },
+          {
+            "location": "brasshaven:cloud_pagoda/pagoda/x4_z5",
+            "offset": [
+              87,
+              0,
+              112
+            ],
+            "size": [
+              22,
+              20,
+              22
+            ],
+            "blocks": 3628
+          },
+          {
+            "location": "brasshaven:cloud_pagoda/pagoda/x4_z6",
+            "offset": [
+              87,
+              0,
+              134
+            ],
+            "size": [
+              22,
+              15,
+              23
+            ],
+            "blocks": 4001
+          },
+          {
+            "location": "brasshaven:cloud_pagoda/pagoda/x4_z7",
+            "offset": [
+              87,
+              1,
+              157
+            ],
+            "size": [
+              22,
+              10,
+              22
+            ],
+            "blocks": 3409
+          },
+          {
+            "location": "brasshaven:cloud_pagoda/pagoda/x5_z0",
+            "offset": [
+              109,
+              0,
+              11
+            ],
+            "size": [
+              11,
+              13,
+              11
+            ],
+            "blocks": 559
+          },
+          {
+            "location": "brasshaven:cloud_pagoda/pagoda/x5_z1",
+            "offset": [
+              109,
+              0,
+              22
+            ],
+            "size": [
+              21,
+              21,
+              23
+            ],
+            "blocks": 3511
+          },
+          {
+            "location": "brasshaven:cloud_pagoda/pagoda/x5_z2",
+            "offset": [
+              109,
+              0,
+              45
+            ],
+            "size": [
+              22,
+              25,
+              22
+            ],
+            "blocks": 5787
+          },
+          {
+            "location": "brasshaven:cloud_pagoda/pagoda/x5_z3",
+            "offset": [
+              109,
+              0,
+              67
+            ],
+            "size": [
+              21,
+              24,
+              23
+            ],
+            "blocks": 5010
+          },
+          {
+            "location": "brasshaven:cloud_pagoda/pagoda/x5_z4",
+            "offset": [
+              109,
+              0,
+              90
+            ],
+            "size": [
+              17,
+              20,
+              22
+            ],
+            "blocks": 2499
+          },
+          {
+            "location": "brasshaven:cloud_pagoda/pagoda/x5_z5",
+            "offset": [
+              109,
+              1,
+              112
+            ],
+            "size": [
+              6,
+              7,
+              22
+            ],
+            "blocks": 718
+          },
+          {
+            "location": "brasshaven:cloud_pagoda/pagoda/x5_z6",
+            "offset": [
+              109,
+              1,
+              134
+            ],
+            "size": [
+              6,
+              7,
+              23
+            ],
+            "blocks": 966
+          },
+          {
+            "location": "brasshaven:cloud_pagoda/pagoda/x5_z7",
+            "offset": [
+              109,
+              1,
+              157
+            ],
+            "size": [
+              6,
+              7,
+              22
+            ],
+            "blocks": 924
+          }
+        ],
+        "projection": "rigid",
+        "processors": "brasshaven:none",
+        "ground_level_delta": 4,
+        "footprint": [
+          0,
+          0,
+          130,
+          178
+        ]
+      }
+    }
+  ]
+}

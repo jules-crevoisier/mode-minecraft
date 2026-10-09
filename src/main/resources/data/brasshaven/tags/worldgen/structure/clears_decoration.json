@@ -1,10 +1,12 @@
 {
   "replace": false,
   "values": [
+    "brasshaven:airship_graveyard",
     "brasshaven:bandit_camp",
     "brasshaven:caldera_ringwall",
     "brasshaven:canopy_city",
     "brasshaven:clockwork_citadel",
+    "brasshaven:cloud_pagoda",
     "brasshaven:coastal_lighthouse",
     "brasshaven:desert_oasis",
     "brasshaven:drowned_dam",

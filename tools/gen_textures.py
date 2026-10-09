@@ -130,6 +130,9 @@ EGGS = {
     "colossus_heart": ((150, 104, 58), (255, 176, 64)),
     "star_curator": ((46, 34, 84), (190, 220, 255)),
     "mine_baron": ((120, 84, 56), (255, 206, 80)),
+    "chime_abbot": ((176, 36, 50), (240, 206, 120)),
+    "corsair_captain": ((38, 74, 86), (236, 190, 84)),
+    "hollow_cantor": ((44, 46, 58), (150, 236, 230)),
 }
 
 
@@ -198,6 +201,9 @@ EMBLEMS = {
     "colossus_heart": [".#.#.", "#####", "#####", ".###.", "..#.."],    # the engine-heart
     "star_curator": ["#...#", ".###.", "##.##", ".###.", "#...#"],      # a cracked star in its orbit
     "mine_baron": ["#####", ".###.", "..#..", "..#..", ".#.#."],       # a pickaxe over a nugget
+    "chime_abbot": [".###.", "#...#", "#.#.#", "#...#", "#.#.#"],      # a halo of hanging chimes
+    "corsair_captain": ["#.#.#", ".###.", "##.##", ".###.", "#.#.#"],  # a rotor turning on its hub
+    "hollow_cantor": ["#...#", "#...#", ".###.", "..#..", "..#.."],    # a tuning fork
 }
 
 

@@ -55,6 +55,9 @@ from . import colossus_heart
 from . import fourth_king
 from . import star_curator
 from . import mine_baron
+from . import chime_abbot
+from . import corsair_captain
+from . import hollow_cantor
 # living oceans
 from . import glow_jellyfish
 from . import reef_fish
@@ -88,6 +91,14 @@ from . import abyss_crawler
 from . import rust_mite_mother
 from . import rust_mite
 from . import boiler_gunner
+# third pack of creatures of the colossal structures
+from . import slag_golem
+from . import ink_wraith
+from . import star_mote_caller
+from . import star_mote
+from . import sun_scarab
+from . import dart_frog_assassin
+from . import drowned_marine
 
 MODELS = [
     drowned_warden.build,
@@ -148,6 +159,9 @@ MODELS = [
     fourth_king.build,
     star_curator.build,
     mine_baron.build,
+    chime_abbot.build,
+    corsair_captain.build,
+    hollow_cantor.build,
     glow_jellyfish.build,
     reef_fish.build,
     manta_ray.build,
@@ -177,4 +191,11 @@ MODELS = [
     rust_mite_mother.build,
     rust_mite.build,
     boiler_gunner.build,
+    slag_golem.build,
+    ink_wraith.build,
+    star_mote_caller.build,
+    star_mote.build,
+    sun_scarab.build,
+    dart_frog_assassin.build,
+    drowned_marine.build,
 ]

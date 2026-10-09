@@ -72,8 +72,11 @@ public final class GeneratedGuide {
             new Page("glacier_hall", "wonders", "minecraft:packed_ice", 3, List.of()),
             new Page("canopy_city", "wonders", "minecraft:jungle_log", 2, List.of()),
             new Page("mesa_minecity", "wonders", "minecraft:rail", 2, List.of()),
+            new Page("echo_cathedral", "wonders", "minecraft:bell", 2, List.of()),
             new Page("titan_forge", "wonders", "minecraft:anvil", 2, List.of()),
             new Page("starfall_library", "wonders", "minecraft:chiseled_bookshelf", 2, List.of()),
+            new Page("airship_graveyard", "wonders", "brasshaven:brass_plating", 2, List.of()),
+            new Page("cloud_pagoda", "wonders", "minecraft:cherry_sapling", 2, List.of()),
             new Page("mire_stilt_city", "wonders", "minecraft:mangrove_roots", 3, List.of()),
             new Page("shattered_halo", "wonders", "minecraft:end_crystal", 3, List.of()),
             new Page("iron_helmsman", "wonders", "brasshaven:remembrance_iron_helmsman", 2, List.of("brasshaven:remembrance_iron_helmsman", "brasshaven:helmsman_anchor")),
@@ -106,8 +109,14 @@ public final class GeneratedGuide {
             new Page("fourth_king_tomb", "wonders", "minecraft:decorated_pot", 2, List.of()),
             new Page("colossus_heart", "wonders", "brasshaven:remembrance_colossus_heart", 2, List.of("brasshaven:remembrance_colossus_heart", "brasshaven:heart_lodeblade")),
             new Page("colossus_heart_burst", "wonders", "minecraft:copper_block", 2, List.of()),
+            new Page("chime_abbot", "wonders", "brasshaven:remembrance_chime_abbot", 2, List.of("brasshaven:remembrance_chime_abbot", "brasshaven:abbot_dragonstaff")),
+            new Page("chime_abbot_dragon", "wonders", "minecraft:bell", 2, List.of()),
             new Page("mine_baron", "wonders", "brasshaven:remembrance_mine_baron", 2, List.of("brasshaven:remembrance_mine_baron", "brasshaven:baron_drillpick")),
             new Page("mine_baron_greed", "wonders", "minecraft:raw_gold_block", 2, List.of()),
+            new Page("corsair_captain", "wonders", "brasshaven:remembrance_corsair_captain", 2, List.of("brasshaven:remembrance_corsair_captain", "brasshaven:corsair_harpoon")),
+            new Page("corsair_captain_list", "wonders", "minecraft:wind_charge", 2, List.of()),
+            new Page("hollow_cantor", "wonders", "brasshaven:remembrance_hollow_cantor", 2, List.of("brasshaven:remembrance_hollow_cantor", "brasshaven:cantor_baton")),
+            new Page("hollow_cantor_silence", "wonders", "minecraft:sculk_sensor", 2, List.of()),
             new Page("strangler_queen", "wonders", "brasshaven:remembrance_strangler_queen", 2, List.of("brasshaven:remembrance_strangler_queen", "brasshaven:queen_macuahuitl")),
             new Page("strangler_queen_canopy", "wonders", "minecraft:mangrove_roots", 2, List.of()),
             new Page("star_curator", "wonders", "brasshaven:remembrance_star_curator", 2, List.of("brasshaven:remembrance_star_curator", "brasshaven:curator_astrolabe")),
@@ -202,7 +211,14 @@ public final class GeneratedGuide {
             new Page("abyss_crawler", "peoples", "brasshaven:abyss_crawler_spawn_egg", 1, List.of("brasshaven:abyss_crawler_spawn_egg")),
             new Page("rust_mite_mother", "peoples", "brasshaven:rust_mite_mother_spawn_egg", 1, List.of("brasshaven:rust_mite_mother_spawn_egg")),
             new Page("rust_mite", "peoples", "brasshaven:rust_mite_spawn_egg", 1, List.of("brasshaven:rust_mite_spawn_egg")),
-            new Page("boiler_gunner", "peoples", "brasshaven:boiler_gunner_spawn_egg", 1, List.of("brasshaven:boiler_gunner_spawn_egg"))
+            new Page("boiler_gunner", "peoples", "brasshaven:boiler_gunner_spawn_egg", 1, List.of("brasshaven:boiler_gunner_spawn_egg")),
+            new Page("slag_golem", "peoples", "brasshaven:slag_golem_spawn_egg", 1, List.of("brasshaven:slag_golem_spawn_egg")),
+            new Page("ink_wraith", "peoples", "brasshaven:ink_wraith_spawn_egg", 1, List.of("brasshaven:ink_wraith_spawn_egg")),
+            new Page("star_mote_caller", "peoples", "brasshaven:star_mote_caller_spawn_egg", 1, List.of("brasshaven:star_mote_caller_spawn_egg")),
+            new Page("star_mote", "peoples", "brasshaven:star_mote_spawn_egg", 1, List.of("brasshaven:star_mote_spawn_egg")),
+            new Page("sun_scarab", "peoples", "brasshaven:sun_scarab_spawn_egg", 1, List.of("brasshaven:sun_scarab_spawn_egg")),
+            new Page("dart_frog_assassin", "peoples", "brasshaven:dart_frog_assassin_spawn_egg", 1, List.of("brasshaven:dart_frog_assassin_spawn_egg")),
+            new Page("drowned_marine", "peoples", "brasshaven:drowned_marine_spawn_egg", 1, List.of("brasshaven:drowned_marine_spawn_egg"))
     );
 
     public static final List<Tip> TIPS = List.of(

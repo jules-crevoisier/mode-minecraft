@@ -877,6 +877,7 @@ def stacks(bp):
             if math.hypot(x, z) <= 20:
                 bp.set(x, 50, z, f"purpur_pillar[axis={'x' if abs(ux) > abs(uz) else 'z'}]")
     bp.spawner(9, 16, -6, MOB_STALKER)
+    bp.spawner(13, 16, -10, "brasshaven:ink_wraith")
     # doors at feet 16 onto the plinth terrace (R1 spokes), the catwalk-40 door onto R2 (iron, opens from the ring)
     door_cut(bp, 180, 19.6, 22.6, 16)
     door_cut(bp, 270, 19.6, 22.6, 16)
@@ -951,6 +952,7 @@ def scriptorium(bp):
         bp.set(x, 58, z, "white_banner[rotation=0]")
     bp.chest(-15, 53, 4, "east", loot=LOOT + "sl_scriptorium")
     bp.spawner(-9, 53, -9, MOB_ACOLYTE)
+    bp.spawner(-5, 53, -9, "brasshaven:star_mote_caller")
     for k in range(6):
         x, z = polar(10, 30 + 60 * k)
         hang(bp, round(x), 63, round(z), 2, HANG_LAMP)
@@ -1977,5 +1979,5 @@ register(StructureDef(
     [Piece("library", starfall_library, views=VIEWS)],
     spacing=40, separation=14, adaptation="none", height=("uniform", 30, 40), processors="none", max_distance=116,
     ground=0, foundation=False,
-    spawns=[("minecraft:enderman", 10, 1, 2), (MOB_STALKER, 5, 1, 2), (MOB_ACOLYTE, 5, 1, 2)],
+    spawns=[("minecraft:enderman", 10, 1, 2), (MOB_STALKER, 5, 1, 2), (MOB_ACOLYTE, 5, 1, 2), ("brasshaven:ink_wraith", 4, 1, 2), ("brasshaven:star_mote_caller", 3, 1, 1)],
     title_fr="La Bibliothèque de la chute d'étoile", title_en="The Starfall Library"))

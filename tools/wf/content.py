@@ -218,6 +218,9 @@ ENTITIES = {
     "colossus_heart": ("The Colossus's Heart", "Le Cœur du Colosse"),
     "star_curator": ("The Star-Eater Curator", "Le Conservateur dévoreur d'étoiles"),
     "mine_baron": ("The Mine Baron", "Le Baron de la mine"),
+    "chime_abbot": ("The Chime Abbot", "L'Abbé des carillons"),
+    "corsair_captain": ("The Corsair Captain", "La Capitaine corsaire"),
+    "hollow_cantor": ("The Hollow Cantor", "Le Chantre creux"),
     "hot_rivet": ("Hot Rivet", "Rivet brûlant"),
     "boomerang": ("Boomerang", "Boomerang"),
 }
@@ -272,6 +275,9 @@ SPAWN_EGGS = ["ruin_walker", "map_wraith", "basalt_guard", "void_stalker", "drow
               "colossus_heart",
               "star_curator",
               "mine_baron",
+              "chime_abbot",
+              "corsair_captain",
+              "hollow_cantor",
               ]
 
 # Misc translated messages used from Java (key suffix -> (en, fr))

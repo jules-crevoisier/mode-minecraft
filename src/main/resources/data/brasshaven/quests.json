@@ -53,6 +53,8 @@
     "explorer/dreadnought_wreck",
     "explorer/canopy_city",
     "explorer/mesa_minecity",
+    "explorer/airship_graveyard",
+    "explorer/cloud_pagoda",
     "explorer/master_cartographer",
     "explorer/boss_bell_keeper",
     "explorer/boss_archivist",
@@ -82,7 +84,9 @@
     "explorer/boss_turbine_tyrant",
     "explorer/boss_fourth_king",
     "explorer/boss_colossus_heart",
-    "explorer/boss_mine_baron"
+    "explorer/boss_mine_baron",
+    "explorer/boss_chime_abbot",
+    "explorer/boss_corsair_captain"
   ],
   "depths": [
     "depths/lithite",
@@ -94,6 +98,7 @@
     "depths/undercity",
     "depths/dwarven_city",
     "depths/crystal_cathedral",
+    "depths/echo_cathedral",
     "depths/telluric_hammer",
     "depths/excavator_pickaxe",
     "depths/lumber_axe",
@@ -104,7 +109,8 @@
     "depths/boss_forge_king",
     "depths/boss_crystal_spider",
     "depths/boss_sculk_spawn",
-    "depths/boss_weeping_lady"
+    "depths/boss_weeping_lady",
+    "depths/boss_hollow_cantor"
   ],
   "nether": [
     "nether/enter",

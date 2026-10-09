@@ -430,6 +430,18 @@ STRUCTURES = {
                    "disque solaire de laiton brisé ; "
                    "derrière des barreaux scellés, le caveau. Une porte de fer à sens unique ouvre l'escalier de la "
                    "terrasse est et le pont du tronc est, dont l'ascenseur de laiton ramène au sol.",
+    "echo_cathedral": "Une cathédrale gothique de deepslate et de laiton terni (110 × 82 × 165 blocs) dans une "
+                      "immense caverne sous l'abîme profond et les grottes de spéléothèmes ; le sol de la nef est "
+                      "vers y −43. On arrive par le camp des pèlerins (pierre de passage) et un tunnel jusqu'au "
+                      "parvis des choristes de pierre. Le portail est barré : son guichet ne s'ouvre que de "
+                      "l'intérieur, on entre par les loges des tours. Nef de colonnes de 7 × 7, chapelles "
+                      "latérales (du Silence, des Diapasons, de l'Hymne noyé…), tribune et triforium par les "
+                      "escaliers à vis, clocher et sa cloche de bronze fêlée, soufflerie de l'orgue, dortoir des "
+                      "choristes et bibliothèque. Sous le chœur, la crypte inondée aux tombeaux envahis de sculk "
+                      "(lieu de grâce). Passé la brume, l'arène devant la console du grand orgue, dont les tuyaux "
+                      "montent de 60 blocs dans la voûte de la caverne ; derrière des barreaux scellés, le "
+                      "reliquaire. L'ascenseur du puits d'orgue ramène de la crypte à la croisée (lieu de grâce). "
+                      "Les capteurs de sculk ne sont qu'un décor : ni gardien ni hurleur.",
     "titan_forge": "Une forge colossale de 217 blocs sur un lac de lave du Nether (deltas de basalte, forêt carmin), bâtie dans et autour d'un titan de basalte et de laiton agenouillé, haut de 85 blocs, penché sur une enclume grande comme un donjon, le marteau levé. Depuis l'avant-poste des forgerons et sa pierre de passage, une chaussée de basalte et l'Arche du péage mènent au portail du socle, entre deux cascades de lave versées par des creusets dans des moules. Dans le socle : la halle de coulée et ses canaux de lave sous verre, les chambres des soufflets de cuir géants, le grand escalier jusqu'à la terrasse des creusets (pierre de passage). Dans le titan : une porte dans le genou, l'escalier en colimaçon de la cuisse, le casernement des forgerons, l'armurerie, la halle de fusion dans le dos sous les cheminées, le joug ; puis le bras gauche descend jusqu'à la salle du treuil (pierre de passage) et le pont-grue de l'avant-bras mène dans la main posée sur l'enclume. Passé la brume, l'arène sur la table de l'enclume, sous le marteau. Derrière des barreaux scellés, le caveau dans le talon de l'enclume. En option : la mine de scories et sa galerie cachée, la galerie des marteaux dans le bras levé, le nid du maître de forge dans le heaume. Pour revenir : l'ascenseur dans la colonne vertébrale du titan.",
     "mire_stilt_city": "Une ville de bois sur pilotis de 200 blocs au-dessus d'une mangrove : des passerelles sur trois "
                        "niveaux, des ponts de corde et des huttes de pêcheurs. On arrive par une chaussée depuis un "
@@ -454,6 +466,31 @@ STRUCTURES = {
                    "chevaliers et le cloître suspendu, dont le puits cache un reliquaire. Sous le rocher, la crypte "
                    "(lieu de grâce) mène à la salle des marées, l'arène du boss éclairée par la mer à travers des "
                    "grilles, puis au caveau du trésor et au tunnel qui ressort au port.",
+    "airship_graveyard": "Un champ d'épaves de 228 blocs dans la savane ou la plaine, autour d'un mât d'amarrage "
+                         "squelettique haut de 90 blocs : un dirigeable y est encore amarré, son enveloppe à demi "
+                         "dégonflée drapée sur les membrures ; autour, une nacelle plantée le nez dans la terre, la "
+                         "carcasse d'une enveloppe qu'on traverse comme un squelette de baleine, un navire brisé en "
+                         "deux et le bidonville des ferrailleurs (tôles de coque, tentes en ballonnets, hélices). "
+                         "Depuis le camp (pierre de passage), le marché des ferrailleurs (pierre de passage), la salle "
+                         "du treuil au pied du mât et l'usine à gaz et ses gazomètres ; l'escalier du mât monte à "
+                         "l'anneau d'amarrage, d'où la passerelle entre dans le nez du dirigeable. Dans la nacelle : "
+                         "la passerelle de commandement, les cabines, la cale, et les nacelles moteurs par les "
+                         "coursives ; on remonte par la quille jusqu'au lieu de grâce. Passé la brume, l'arène sur "
+                         "le pont supérieur ; derrière des barreaux scellés, la soute au trésor. L'ascenseur à "
+                         "marchandises du mât ramène à la salle du treuil.",
+    "cloud_pagoda": "Un temple de 130 × 180 blocs dans un bosquet de cerisiers ou une prairie de montagne : une "
+                    "pagode à neuf toits de cerisier, de plâtre blanc et d'ardoise bleue (le fleuron est à 148 "
+                    "blocs du sol), ornée de laiton et de carillons mécaniques, sur trois terrasses de jardin. Le "
+                    "squelette de laiton d'un dragon mécanique s'enroule autour des étages inférieurs. On arrive "
+                    "par le camp des pèlerins (pierre de passage), la porte de lune et le pont en zigzag de "
+                    "l'étang aux carpes ; sur les terrasses : le pavillon de la cloche, le sanctuaire du dragon "
+                    "(lieu de grâce) devant son crâne, le dojo des moines, la maison de thé et, cachée derrière "
+                    "les bambous, la grotte de l'ermite. Dans la pagode, un étage par salle : salle de prière, "
+                    "bibliothèque des rouleaux, armurerie d'entraînement, salle de méditation au jardin de sable "
+                    "(lieu de grâce), orrery mécanique des saisons, appartements de l'abbé, moteur des carillons "
+                    "et la dernière salle (lieu de grâce). Passé la brume, l'arène sur le toit ouvert sous la "
+                    "flèche ; derrière des barreaux scellés, le caveau, d'où le puits du contrepoids ramène à "
+                    "la salle de prière.",
     "starfall_library": "Une archive flottante de 170 blocs sur les îles extérieures de l'End : une tour-fuseau de "
                         "purpur et de laiton haute de 125 blocs, coiffée d'un dôme d'astrolabe, entourée de trois "
                         "galeries de lecture en anneau suspendues à trois hauteurs par des rayons de chaînes et de "
@@ -654,10 +691,26 @@ MOBS = {
                     "bibliothèque : une roche calcinée fendue sur un ciel étoilé, deux étoiles pour yeux, un éclat qui "
                     "flotte à côté. Cinq livres tournent autour de lui ; un bâton-astrolabe dans la main droite, la "
                     "gauche levée paume ouverte.",
+    "chime_abbot": "Champion de la Pagode des nuages : l'Abbé des carillons, un vieux moine d'environ 3 blocs à moitié "
+                   "changé en mécanique, qui flotte un peu au-dessus du sol. Des robes superposées rouge cerise et "
+                   "blanches, un kasaya bordé d'or, un grand chapelet de perles de laiton, un crâne chauve dont la "
+                   "moitié droite est une plaque de laiton à l'œil d'ambre, de longs sourcils et une barbe blanche. "
+                   "Derrière sa tête, un halo de laiton d'où pendent des tiges de carillon ; dans sa main droite un "
+                   "bâton de bronze à tête de dragon, sous ses manches des bras mécaniques.",
     "mine_baron": "Champion de la Ville minière de la Mesa rouille : le Baron de la mine, un contremaître énorme et "
                   "avide de 5,6 blocs sanglé dans un exosquelette à vapeur riveté, chaudière fumante sur le dos. Un "
                   "bras-foreuse pneumatique à droite, un pic-marteau à gauche, un casque de mineur à lanterne, un "
                   "gilet à chaîne de montre tendu sur la bedaine. Blessé, il se cuirasse de minerai d'or.",
+    "corsair_captain": "Championne du Cimetière des dirigeables : la Capitaine corsaire, une pirate du ciel de 4,8 "
+                       "blocs en longue redingote sarcelle à deux rangées de boutons de laiton, épaulettes d'or et "
+                       "basques jusqu'aux bottes. Un tricorne de cuir noir bordé de laiton, des lunettes d'aviatrice "
+                       "aux verres bleu ciel, une longue tresse rousse et une écharpe rouge au vent ; sur le dos, un "
+                       "moteur à rotor dont le mât porte une hélice à quatre pales au-dessus du chapeau. Un sabre "
+                       "d'abordage dans la main droite, un lourd fusil-harpon à barillet dans la gauche.",
+    "hollow_cantor": "Champion de la Cathédrale de l'Écho : le Chantre creux, un maître de chœur décharné de 3,5 "
+                     "blocs, de laiton terni et de deepslate. Sa cage thoracique est un buffet d'orgue où luisent "
+                     "sept petits tuyaux, un éventail de tuyaux d'orgue s'ouvre derrière sa capuche vide et sans "
+                     "visage, et il dirige d'une longue baguette terminée par un diapason. Le son contre le silence.",
     "strangler_queen": "Championne de la Cité-temple de la canopée : la Reine-figuier étrangleur, une femme immense "
                        "de 5,8 blocs tissée de racines aériennes et de jade, qui a étouffé le temple et s'est couronnée "
                        "à sa place. Une jupe de racines-contreforts qui s'étalent sur le sol, un masque de jade aux "
@@ -1026,6 +1079,39 @@ BOSS_MOVES = {
                                  "te suit puis se fige) et tire un rayon à travers le cratère (16), qui touche aussi "
                                  "les joueurs en l'air."),
     ],
+    "chime_abbot": [
+        ("Bâton-dragon", "1 à 3", "Le bâton ramené sur l'épaule (0,7 s, l'arc tracé en pétales) : un balayage, puis "
+                                  "un revers 0,6 s plus tard (12 chacun). Phase 2 : il abat le bâton sur un cercle "
+                                  "rouge devant lui à 1,8 s (16, une onde jusqu'à 6, saute-la)."),
+        ("Paume", "1 à 3", "La paume gauche ramenée à la hanche (0,9 s, le cône de vent tracé en blanc) : un souffle "
+                           "dans un cône de 9 blocs (14, repoussé). Phase 2 : une onde jusqu'à 7 en plus (7)."),
+        ("Cercle de carillons", "1 à 3", "Bras écartés, le halo brille (1 s) : huit tiges volent du halo et pendent en "
+                                         "cercle à 6,5 blocs autour de lui. Elles sonnent l'une après l'autre ; chaque "
+                                         "tige marque sa zone au sol (doré puis rouge) 0,6 s avant de frapper (11, "
+                                         "rayon 2,4). Phase 2 : elles sonnent dans les deux sens, puis une tige "
+                                         "au-dessus de chaque joueur."),
+        ("Tempête de pétales", "1 à 3", "Le bâton tournoie au-dessus de sa tête (1,1 s) ; trois brèches tracées en "
+                                        "lignes de vent blanc partent de lui. Un anneau de pétales trop haut pour être "
+                                        "sauté balaie tout le pont : hors d'une brèche, tu es aveuglé 1,5 s (2 s en "
+                                        "phase 2) et coupé (5). Phase 2 : un second anneau 0,8 s plus tard, brèches "
+                                        "tournées (tracées en rose)."),
+        ("Pas du vent", "1 à 3", "De loin (7 blocs et plus) : il se replie dans ses manches (0,6 s, une colonne de "
+                                 "pétales tourne au coin du pont le plus proche de toi), disparaît et réapparaît là, "
+                                 "puis enchaîne bâton ou paume."),
+        ("Rafale", "2 et 3", "Trois estocs du bâton le long d'une ligne rouge (0,7, 1,1 et 1,5 s, 10 chacun), il se "
+                             "tourne vers toi entre chacun, puis une toupie à 2 s (13, rayon 4,5, cercle tracé)."),
+        ("Chute de cloche", "2 et 3", "Il s'envole (1 s) pendant qu'un cercle doré te suit, le cercle se fige et "
+                                      "rougit (0,5 s), puis il s'abat dessus (17, rayon 3) et une onde roule jusqu'à "
+                                      "8 (8, saute-la)."),
+        ("Éveil du dragon", "3", "À 30 %, une fois (invulnérable 3 s) : il s'élève, le halo tournoie, puis le fantôme "
+                                 "du dragon d'airain s'arrache du bâton : une onde (11, saute-la), il accélère, le "
+                                 "dragon tourne au-dessus du pont."),
+        ("Souffle du dragon", "3", "Toutes les 12 s : il pointe le bâton (1 s) ; trois couloirs (quatre à trois "
+                                   "joueurs et plus) sont tracés à travers le pont, l'un passe par toi. Le prochain "
+                                   "rougit, la tête du dragon attend à son bout, puis le dragon le traverse en "
+                                   "soufflant (13, ralenti 2 s), couloir après couloir, toutes les 0,5 s. Reste entre "
+                                   "les couloirs ; l'axe change à chaque fois."),
+    ],
     "mine_baron": [
         ("Foreuse", "1 à 3", "La foreuse armée (0,8 s, une ligne rouge de 6,5 blocs devant lui), puis deux poussées "
                              "(9 chacune, à 0,55 s d'écart). Fais un pas de côté."),
@@ -1064,6 +1150,64 @@ BOSS_MOVES = {
         ("Coup de lanterne", "3", "Il braque sa lanterne (0,9 s, le cône tracé) : dans son faisceau, à vue, tu es "
                                   "aveuglé 3 s et ralenti (4), puis il charge le premier aveuglé. Coupe sa ligne de "
                                   "vue derrière un étai ou sors du cône."),
+    ],
+    "corsair_captain": [
+        ("Sabre", "1 à 3", "Le sabre ramené sur l'épaule (0,7 s, l'arc tracé en rouge), une taille et un revers à "
+                           "0,5 s d'écart (10 chacun). Phase 2 : un estoc fendu 0,5 s plus tard, sur 6,5 blocs (13)."),
+        ("Harpon", "1 à 3", "Le fusil braqué sur toi (0,9 s, une ligne rouge qui te suit) : le harpon file le long de "
+                            "la ligne (8), te ramène à elle et elle te taille aussitôt (9). Fais un pas de côté."),
+        ("Bourrasque", "1 à 3", "Pieds plantés, le rotor incliné (1 s, le cône tracé en blanc) : 3, puis pendant 1 s "
+                                "le vent te pousse vers le bastingage. Sprinte contre lui ou sors du cône."),
+        ("Piqué", "1 à 3", "Accroupie sous le rotor (0,8 s), elle s'envole ; un cercle te suit 0,7 s puis se fige, "
+                           "et elle s'abat dessus (16, rayon 3), suivie d'une onde (6, saute-la)."),
+        ("Fusée", "1 à 3", "Le fusil levé (0,7 s, une fine ligne orange) : une fusée éclairante file vers toi (9, "
+                           "brûlure). Phase 2 : une seconde fusée vers un autre joueur."),
+        ("Abordage", "2 et 3", "Accroupie, le sabre pointé (0,9 s, le chemin tracé sur 14 blocs) : elle fonce sur "
+                               "le rotor (12, recul). Écarte-toi du chemin."),
+        ("Cyclone", "2 et 3", "Si tu restes collé : un cercle rouge (0,8 s), puis deux tours complets du sabre "
+                              "(11 chacun, rayon 4,2). Recule."),
+        ("Abordeurs", "2", "Après le rugissement, une fusée de signal : deux pillards du ciel montent à bord (un de "
+                           "plus par deux joueurs en plus)."),
+        ("Gîte", "3", "À 30 %, une fois (invulnérable 3,5 s) : le navire gîte, elle plante son sabre dans le pont, "
+                      "une onde (12, saute-la), puis elle accélère."),
+        ("Couloirs de vent", "3", "Toutes les 10 s environ : quatre couloirs de 3 blocs traversent le pont, tracés "
+                                  "1,5 s à l'avance (blancs, puis rouges) ; ils soufflent l'un après l'autre (4, "
+                                  "poussée vers le bastingage). Reste dans les intervalles."),
+        ("Bombes éclairantes", "3", "Le fusil levé au ciel (1 s) : des cercles te suivent puis se figent, les "
+                                    "fusées retombent 0,9 s plus tard (10, rayon 2,5) et laissent 5 s de feu sur le "
+                                    "pont (2 toutes les 0,5 s). Sors des cercles et du feu."),
+    ],
+    "hollow_cantor": [
+        ("Baguette", "1 à 3", "La levée par-dessus l'épaule droite (0,7 s, l'arc tracé en lueur d'écho), le temps "
+                              "fort (13), puis un revers 0,5 s plus tard (11) après s'être tourné vers toi."),
+        ("Cri", "1 à 3", "La capuche rejetée en arrière, les tuyaux qui gonflent (1,1 s) : des rides courent au sol "
+                         "dans le cône, de plus en plus serrées, et rougissent quand il ne tourne plus. Puis le cri "
+                         "(14, repoussé, ralenti ; cône de 14 blocs, plus large et plus long en phase 2 : 16). Sors "
+                         "du cône sur le côté."),
+        ("Glas", "1 à 3", "Le diapason levé à deux mains (0,9 s, un cercle autour de lui), planté dans le sol : 15 "
+                          "dans le cercle et une onde à sauter (8). Phase 2 : une seconde onde 0,5 s plus tard."),
+        ("Cadence", "1 à 3", "De loin (6 à 20 blocs) : il se penche, la baguette pointée (0,8 s, la ligne tracée), "
+                             "puis glisse le long de la ligne (12 à qui se trouve sur son chemin)."),
+        ("Résonance", "1 à 3", "Des bourgeons d'améthyste poussent au sol, chacun dans un cercle doré, pendant qu'il "
+                               "frappe son diapason (1,2 s) ; la note enfle encore 0,8 s, le sol frémit hors des "
+                               "cercles, puis tout le sol sonne : 14 et ralenti à qui est hors d'un cercle doré "
+                               "(sauter au bon moment marche aussi). Les bourgeons éclatent ensuite et disparaissent."),
+        ("Silence", "2 et 3", "Un long doigt sur la capuche vide (1 s, le bord de la zone tracé autour de lui) : 7 s "
+                              "de silence dans un rayon de 8. Dedans, tu es ralenti, tes sons sont coupés et ta vue "
+                              "s'assombrit, et lui s'efface en un miroitement de cendre (ses yeux de lumière restent "
+                              "visibles) ; un coup le révèle une seconde."),
+        ("Chœur", "2 et 3", "Les deux bras levés vers son chœur invisible (1,1 s, une lueur d'âme monte là où ils "
+                            "vont paraître) : des choristes de l'écho, moines-sonneurs et banshees (2, plus un tous "
+                            "les deux joueurs de plus ; jamais plus de 2 + le nombre de joueurs)."),
+        ("Fugue", "2 et 3", "La baguette trace la phrase (1 s), puis trois temps à 0,6 s d'écart : à chaque fois, un "
+                            "cercle te suit 0,5 s, se fige en rouge, et éclate 0,5 s plus tard (12)."),
+        ("L'orgue", "3", "À 30 % : il s'élève, bras écartés (2 s, invulnérable), puis le grand accord : une onde à "
+                         "sauter (12), un voile d'obscurité, il accélère. Désormais des souffles de tuyau jaillissent "
+                         "du sol sous chaque joueur toutes les 6,5 s environ (un cercle et de la poussière qui monte "
+                         "1,2 s avant, rouge à la fin : 12 et projeté)."),
+        ("Requiem", "3", "Toutes les 12 s : il joue l'air comme un clavier (1 s, six rangées tracées en gris au sol, "
+                         "chacune avec une brèche), puis les rangées de souffles s'éloignent de lui l'une après "
+                         "l'autre, toutes les 0,3 s, chacune rougissant 0,7 s avant (13). Tiens-toi dans les brèches."),
     ],
     "strangler_queen": [
         ("Coup de fouet", "1 à 3", "Le fouet ramené en arrière (0,8 s, une ligne verte de 11 blocs), puis claqué "
@@ -1405,11 +1549,26 @@ BOSS_FACTS = {
                     "s'inverse, des pulsations soulèvent ceux qui ne sont pas près d'un brasier de cristal et il saute "
                     "de brasier en brasier. Il ne pose aucun bloc ; chaque lévitation finit en chute lente au-dessus "
                     "du sol.",
+    "chime_abbot": "560 PV, armure 12, posture 110, barre rose. Phase 2 à 65 % : il rugit, accélère, enchaîne, "
+                   "ajoute la rafale et la chute de cloche, et ses carillons sonnent dans les deux sens. Phase 3 à "
+                   "30 % : il éveille le dragon d'airain de la pagode, dont le fantôme souffle des couloirs à travers "
+                   "le pont. Il ne pose aucun bloc, et près de la balustrade ses coups ne te poussent jamais vers le "
+                   "vide.",
     "mine_baron": "600 PV, armure 12, posture 130, barre jaune. Phase 2 à 65 % : il rugit et se cuirasse de "
                   "minerai (un cinquième des dégâts) ; frappe les géodes d'or de son dos pour la briser. Phase 3 à "
                   "30 % : il fait sauter les étais, la caverne s'éteint, il accélère et le filon crépite. Les lampes "
                   "éteintes et les lumières de sa lanterne et des mèches sont temporaires : tout revient à la fin "
                   "du combat, à sa mort ou si tout le monde s'en va. La dynamite ne casse aucun bloc.",
+    "corsair_captain": "580 PV, armure 10, posture 115, barre blanche. Phase 2 à 65 % : elle rugit, appelle des "
+                       "pillards du ciel, ajoute l'abordage et le cyclone. Phase 3 à 30 % : le navire gîte, des "
+                       "couloirs de vent balaient le pont et ses bombes éclairantes laissent du feu. Ses poussées "
+                       "ne te jettent jamais par-dessus le bastingage. Le feu est fait de blocs de magma temporaires, "
+                       "remis en planches au bout de 5 s, à la fin du combat ou si tout le monde s'en va.",
+    "hollow_cantor": "640 PV, armure 12, posture 115, barre blanche. Phase 2 à 65 % : il rugit, accélère un peu et "
+                     "ajoute silence, chœur et fugue. Phase 3 à 30 % : l'orgue se réveille, les souffles de tuyau "
+                     "et le requiem. Les bourgeons d'améthyste de la résonance sont temporaires (ils ne lâchent rien) "
+                     "et retirés à la fin du coup, du combat, à sa mort ou si tout le monde s'en va ; les choristes "
+                     "aussi.",
     "strangler_queen": "620 PV, armure 12, posture 115, barre verte. Phase 2 à 65 % : elle rugit, accélère, ajoute "
                        "fouet tournant et collet et grimpe dans le disque solaire d'où tombent esprits-jaguars et "
                        "graines-bombes. Phase 3 à 30 % : la floraison, puis des cages de racines se referment sur les "
@@ -1462,6 +1621,18 @@ LAIRS = {
         ("La réserve interdite", "Derrière des barreaux scellés à l'ouest ; son tube pneumatique remonte à la salle "
                                  "des cartes."),
     ],
+    "chime_abbot": [
+        ("Les jardins", "Du camp des pèlerins (pierre de passage), la porte de lune et le pont des carpes mènent aux "
+                        "terrasses ; le sanctuaire du dragon est le lieu de grâce."),
+        ("La pagode", "Huit étages, une salle par étage : prière, rouleaux, armurerie, méditation (lieu de grâce), "
+                      "orrery, appartements de l'abbé, moteur des carillons, puis le dernier escalier (lieu de "
+                      "grâce)."),
+        ("Le pont du neuvième toit", "L'arène : un pont ouvert de 33 blocs de côté sous le neuvième toit, une "
+                                     "balustrade tout autour, quatre piliers aux coins. Passé la brume en haut de "
+                                     "l'escalier, l'Abbé se réveille quand tu approches du sceau au centre."),
+        ("Le caveau", "Derrière des barreaux scellés, l'escalier descend au caveau ; le puits du contrepoids ramène "
+                      "à la salle de prière."),
+    ],
     "mine_baron": [
         ("La ville", "Depuis le relais de diligence (pierre de passage), monte la grand-rue et les terrasses jusqu'à "
                      "la salle des treuils au sommet (lieu de grâce)."),
@@ -1473,6 +1644,29 @@ LAIRS = {
                                 "approches du sceau."),
         ("La chambre forte", "À l'est, derrière des barreaux scellés qui s'ouvrent à sa mort ; le monte-wagon ramène "
                              "en haut."),
+    ],
+    "corsair_captain": [
+        ("Le camp et le marché", "Depuis le camp des ferrailleurs (pierre de passage), traverse l'épave en squelette de "
+                                 "baleine jusqu'au marché (pierre), puis la salle du treuil au pied du mât."),
+        ("Le mât", "L'escalier du mât monte à l'anneau d'amarrage ; la passerelle entre dans le nez du dirigeable."),
+        ("La nacelle", "Passerelle de commandement, cabines, cale ; le puits d'escalade remonte à travers les "
+                       "ballonnets jusqu'au lieu de grâce, puis un escalier étroit jusqu'au rouf et à la brume."),
+        ("Le pont supérieur", "L'arène : le pont à ciel ouvert du dirigeable amarré (42 x 35), un bastingage de deux "
+                              "blocs tout autour, quatre manches à air pour s'abriter. La Capitaine se réveille quand "
+                              "tu approches du sceau."),
+        ("La soute au trésor", "À l'ouest, derrière des barreaux scellés ; la passerelle sur l'échine de l'enveloppe "
+                               "mène à l'ascenseur du mât, qui redescend à la salle du treuil."),
+    ],
+    "hollow_cantor": [
+        ("La cathédrale", "Depuis le camp des pèlerins (pierre de passage), le parvis, la loge de la tour, la nef et "
+                          "la croisée (lieu de grâce)."),
+        ("La descente", "Le triforium est, le pont d'arc-boutant vers le dortoir des choristes, l'escalier de roche, "
+                        "le couloir et la crypte inondée (pierre), puis l'escalier de la tourelle du chœur."),
+        ("Le chœur et l'abside", "L'arène : le sol du chœur et de l'abside (rayon 15 autour du sceau, devant la "
+                                 "console), des rides de laiton dans le sol, les tuyaux de l'orgue qui montent de 60 "
+                                 "blocs derrière. Passé la brume, le Chantre se réveille quand tu approches du sceau."),
+        ("Le reliquaire", "Derrière l'orgue, au bout du passage sous les grands tuyaux, derrière des barreaux scellés "
+                          "qui s'ouvrent à sa mort ; la grille du chœur ouvre le raccourci vers la croisée."),
     ],
     "grand_clockmaker": [
         ("Citadelle d'horlogerie", "Entre dans la grande tour-horloge. Dans le hall d'entrée, côté est, un escalier "
@@ -1816,6 +2010,10 @@ NEW_GROUPS = [
         ("La Ville minière de la Mesa rouille", "Une ville-champignon taillée dans une butte rayée des badlands : "
          "un chevalement à roue géante, des saloons sur les terrasses, une voie de wagonnets sur tréteaux, un "
          "bocard et une arène autour d'un filon d'or et de cuivre.", "s-mesa_minecity", "struct:mesa_minecity"),
+        ("La Cathédrale de l'Écho", "Une cathédrale gothique de deepslate et de laiton terni dans une immense "
+         "caverne profonde : nef de colonnes, clocher à la cloche fêlée, crypte inondée envahie de sculk, et une "
+         "arène devant un orgue dont les tuyaux montent de 60 blocs dans la voûte.", "s-echo_cathedral",
+         "struct:echo_cathedral"),
         ("La Forge du Titan de basalte", "Une forge colossale sur un lac de lave du Nether, bâtie dans un titan "
          "de basalte et de laiton agenouillé sur une enclume géante : halle de coulée, soufflets de cuir, mine de "
          "scories, et une arène sur l'enclume, sous le marteau levé.", "s-titan_forge", "struct:titan_forge"),
@@ -1823,6 +2021,14 @@ NEW_GROUPS = [
          "et de laiton, trois galeries en anneau et une météorite fichée dans son flanc : canyons de rayonnages, "
          "scriptorium, observatoire, et une arène dans la chambre du cratère.", "s-starfall_library",
          "struct:starfall_library"),
+        ("La Pagode des nuages", "Une pagode à neuf toits de cerisier et de plâtre blanc sur un jardin en "
+         "terrasses, étangs aux carpes et porte de lune, enlacée par le squelette de laiton d'un dragon "
+         "mécanique : un étage par salle, un ascenseur à contrepoids, et une arène sur le toit ouvert.",
+         "s-cloud_pagoda", "struct:cloud_pagoda"),
+        ("Le Cimetière des dirigeables", "Un champ d'épaves dans la savane autour d'un mât d'amarrage haut de 90 "
+         "blocs : un dirigeable encore amarré sous son enveloppe dégonflée, des épaves écrasées, le bidonville des "
+         "ferrailleurs, une usine à gaz, et une arène sur le pont supérieur du dirigeable.", "s-airship_graveyard",
+         "struct:airship_graveyard"),
     ]),
 ]
 
@@ -1938,12 +2144,29 @@ TEST_CHECKLIST = [
      "tempête de pages ; à 30 %, tiens-toi dans un anneau doré à chaque pulsation et vérifie que tu redescends "
      "toujours en chute lente, même s'il meurt pendant que tu flottes. Pour le vrai repaire : /brasshaven tp "
      "starfall_library (la chambre du cratère sous la tour)."),
+    ("L'Abbé des carillons", ["/brasshaven boss chime_abbot"],
+     "Il apparaît à 6 blocs (sans pont, les coins sont pris en diagonale autour de lui). Fais un pas de côté pour le "
+     "bâton, sors du cône de la paume, quitte chaque zone de carillon quand elle rougit, place-toi dans une brèche "
+     "pendant la tempête de pétales ; à 65 %, sors du cercle de la chute de cloche ; à 30 %, reste entre les couloirs "
+     "du dragon. Près de la balustrade, vérifie qu'aucun coup ne te jette dehors. Pour le vrai repaire : "
+     "/brasshaven tp cloud_pagoda (le pont sous le neuvième toit)."),
     ("Le Baron de la mine", ["/brasshaven boss mine_baron"],
      "Il apparaît à 6 blocs (sans lampes autour, le coup de grisou n'éteint rien). Pas de côté pour la foreuse, sors "
      "des cercles de dynamite quand ils rougissent, ne reste pas dans son dos ; à 65 %, frappe les géodes d'or de "
      "sa chaudière par derrière jusqu'à le faire chanceler, et casse le flot d'or quand il se recuirasse ; à 30 %, "
      "vérifie que les lampes s'éteignent puis reviennent à sa mort, et coupe le faisceau de la lanterne. Pour le "
      "vrai repaire : /brasshaven tp mesa_minecity (la caverne du filon)."),
+    ("La Capitaine corsaire", ["/brasshaven boss corsair_captain"],
+     "Elle apparaît à 6 blocs (sans bastingage, les couloirs de vent suivent l'axe nord-sud). Écarte-toi de la ligne "
+     "du harpon, sprinte contre la bourrasque, sors du cercle du piqué quand il se fige ; à 65 %, tue les pillards du "
+     "ciel ; à 30 %, reste entre les couloirs de vent et vérifie que les plaques de magma redeviennent des planches "
+     "au bout de 5 s et à sa mort. Pour le vrai repaire : /brasshaven tp airship_graveyard (le pont supérieur du "
+     "dirigeable amarré)."),
+    ("Le Chantre creux", ["/brasshaven boss hollow_cantor"],
+     "Il apparaît à 6 blocs. Sors du cône du cri sur le côté, saute l'onde du glas, mets-toi dans un cercle doré "
+     "avant que le sol sonne et vérifie que les bourgeons d'améthyste disparaissent ; à 65 %, entre dans le silence "
+     "et frappe-le pour le révéler ; à 30 %, esquive les souffles de tuyau et tiens-toi dans les brèches du requiem. "
+     "Pour le vrai repaire : /brasshaven tp echo_cathedral (le chœur et l'abside, devant l'orgue)."),
     ("La Reine-figuier étrangleur", ["/brasshaven boss strangler_queen"],
      "Elle apparaît à 6 blocs. Écarte-toi de la ligne du fouet, glisse-toi entre les lignes de racines, saute les "
      "anneaux, sors du pollen ; à 65 %, tue les esprits-jaguars pour la faire chuter et sors des cercles des "
@@ -1986,7 +2209,7 @@ TEST_CHECKLIST = [
      "message le dit). Les Îles célestes flottent vers y 170-230 : tu arrives dessus ou dessous ; en dessous, "
      "passe en /gamemode spectator pour monter."),
     ("Merveilles souterraines", ["/brasshaven locate dwarven_city", "/brasshaven locate crystal_cathedral",
-                                 "/locate structure brasshaven:dwarven_city", "/gamemode spectator"],
+                                 "/brasshaven locate echo_cathedral", "/locate structure brasshaven:dwarven_city", "/gamemode spectator"],
      "locate donne les coordonnées ; tp t'amène à la surface juste au-dessus. En spectateur, descends à travers la "
      "roche : la cité est vers y −50, le sol de la cathédrale vers y −40."),
     ("Carte du monde et mini-carte", ["/gamemode spectator", "/give @s brasshaven:wayfarer_atlas"],

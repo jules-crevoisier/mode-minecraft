@@ -1,0 +1,384 @@
+{
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "brasshaven:chunked_template",
+        "size": [
+          109,
+          82,
+          208
+        ],
+        "cells": [
+          {
+            "location": "brasshaven:echo_cathedral/cathedral/x0_z0",
+            "offset": [
+              20,
+              12,
+              17
+            ],
+            "size": [
+              7,
+              43,
+              13
+            ],
+            "blocks": 277
+          },
+          {
+            "location": "brasshaven:echo_cathedral/cathedral/x0_z1",
+            "offset": [
+              0,
+              12,
+              30
+            ],
+            "size": [
+              27,
+              46,
+              29
+            ],
+            "blocks": 5607
+          },
+          {
+            "location": "brasshaven:echo_cathedral/cathedral/x0_z2",
+            "offset": [
+              0,
+              12,
+              59
+            ],
+            "size": [
+              27,
+              48,
+              30
+            ],
+            "blocks": 9114
+          },
+          {
+            "location": "brasshaven:echo_cathedral/cathedral/x0_z3",
+            "offset": [
+              9,
+              12,
+              89
+            ],
+            "size": [
+              18,
+              38,
+              30
+            ],
+            "blocks": 4612
+          },
+          {
+            "location": "brasshaven:echo_cathedral/cathedral/x0_z4",
+            "offset": [
+              9,
+              12,
+              119
+            ],
+            "size": [
+              18,
+              55,
+              30
+            ],
+            "blocks": 4756
+          },
+          {
+            "location": "brasshaven:echo_cathedral/cathedral/x0_z5",
+            "offset": [
+              21,
+              12,
+              149
+            ],
+            "size": [
+              6,
+              52,
+              7
+            ],
+            "blocks": 1126
+          },
+          {
+            "location": "brasshaven:echo_cathedral/cathedral/x1_z0",
+            "offset": [
+              27,
+              0,
+              0
+            ],
+            "size": [
+              27,
+              82,
+              30
+            ],
+            "blocks": 26636
+          },
+          {
+            "location": "brasshaven:echo_cathedral/cathedral/x1_z1",
+            "offset": [
+              27,
+              0,
+              30
+            ],
+            "size": [
+              27,
+              80,
+              29
+            ],
+            "blocks": 44202
+          },
+          {
+            "location": "brasshaven:echo_cathedral/cathedral/x1_z2",
+            "offset": [
+              27,
+              0,
+              59
+            ],
+            "size": [
+              27,
+              63,
+              30
+            ],
+            "blocks": 31400
+          },
+          {
+            "location": "brasshaven:echo_cathedral/cathedral/x1_z3",
+            "offset": [
+              27,
+              12,
+              89
+            ],
+            "size": [
+              27,
+              51,
+              30
+            ],
+            "blocks": 30133
+          },
+          {
+            "location": "brasshaven:echo_cathedral/cathedral/x1_z4",
+            "offset": [
+              27,
+              11,
+              119
+            ],
+            "size": [
+              27,
+              59,
+              30
+            ],
+            "blocks": 34841
+          },
+          {
+            "location": "brasshaven:echo_cathedral/cathedral/x1_z5",
+            "offset": [
+              27,
+              12,
+              149
+            ],
+            "size": [
+              27,
+              58,
+              29
+            ],
+            "blocks": 17805
+          },
+          {
+            "location": "brasshaven:echo_cathedral/cathedral/x1_z6",
+            "offset": [
+              43,
+              12,
+              178
+            ],
+            "size": [
+              11,
+              13,
+              30
+            ],
+            "blocks": 2089
+          },
+          {
+            "location": "brasshaven:echo_cathedral/cathedral/x2_z0",
+            "offset": [
+              54,
+              0,
+              1
+            ],
+            "size": [
+              28,
+              82,
+              29
+            ],
+            "blocks": 24867
+          },
+          {
+            "location": "brasshaven:echo_cathedral/cathedral/x2_z1",
+            "offset": [
+              54,
+              0,
+              30
+            ],
+            "size": [
+              28,
+              80,
+              29
+            ],
+            "blocks": 43300
+          },
+          {
+            "location": "brasshaven:echo_cathedral/cathedral/x2_z2",
+            "offset": [
+              54,
+              0,
+              59
+            ],
+            "size": [
+              28,
+              62,
+              30
+            ],
+            "blocks": 32474
+          },
+          {
+            "location": "brasshaven:echo_cathedral/cathedral/x2_z3",
+            "offset": [
+              54,
+              12,
+              89
+            ],
+            "size": [
+              28,
+              50,
+              30
+            ],
+            "blocks": 31015
+          },
+          {
+            "location": "brasshaven:echo_cathedral/cathedral/x2_z4",
+            "offset": [
+              54,
+              11,
+              119
+            ],
+            "size": [
+              28,
+              59,
+              30
+            ],
+            "blocks": 36157
+          },
+          {
+            "location": "brasshaven:echo_cathedral/cathedral/x2_z5",
+            "offset": [
+              54,
+              12,
+              149
+            ],
+            "size": [
+              28,
+              58,
+              29
+            ],
+            "blocks": 17636
+          },
+          {
+            "location": "brasshaven:echo_cathedral/cathedral/x2_z6",
+            "offset": [
+              54,
+              12,
+              178
+            ],
+            "size": [
+              15,
+              14,
+              26
+            ],
+            "blocks": 3142
+          },
+          {
+            "location": "brasshaven:echo_cathedral/cathedral/x3_z0",
+            "offset": [
+              82,
+              40,
+              17
+            ],
+            "size": [
+              5,
+              8,
+              4
+            ],
+            "blocks": 56
+          },
+          {
+            "location": "brasshaven:echo_cathedral/cathedral/x3_z1",
+            "offset": [
+              82,
+              1,
+              35
+            ],
+            "size": [
+              27,
+              57,
+              24
+            ],
+            "blocks": 5012
+          },
+          {
+            "location": "brasshaven:echo_cathedral/cathedral/x3_z2",
+            "offset": [
+              82,
+              1,
+              59
+            ],
+            "size": [
+              27,
+              59,
+              30
+            ],
+            "blocks": 7882
+          },
+          {
+            "location": "brasshaven:echo_cathedral/cathedral/x3_z3",
+            "offset": [
+              82,
+              12,
+              89
+            ],
+            "size": [
+              16,
+              37,
+              30
+            ],
+            "blocks": 2490
+          },
+          {
+            "location": "brasshaven:echo_cathedral/cathedral/x3_z4",
+            "offset": [
+              82,
+              12,
+              119
+            ],
+            "size": [
+              16,
+              51,
+              30
+            ],
+            "blocks": 2924
+          },
+          {
+            "location": "brasshaven:echo_cathedral/cathedral/x3_z5",
+            "offset": [
+              82,
+              12,
+              149
+            ],
+            "size": [
+              4,
+              51,
+              5
+            ],
+            "blocks": 473
+          }
+        ],
+        "projection": "rigid",
+        "processors": "brasshaven:none"
+      }
+    }
+  ]
+}

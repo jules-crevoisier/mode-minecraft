@@ -43,6 +43,9 @@ ABILITIES = {
     "magnet": ("Lodestone pull", "Attraction magnétique", "radius"),
     "zenith": ("Gravity inversion", "Inversion de gravité", "range"),
     "fuse": ("Lit dynamite", "Dynamite allumée", "range"),
+    "dragon": ("Brass dragon's rush", "Ruée du dragon d'airain", "range"),
+    "grapple": ("Harpoon grapple", "Grappin-harpon", "range"),
+    "shriek": ("Sonic shriek", "Cri sonique", "range"),
 }
 # BossWeaponItem flags, in bit order
 ABILITY_EFFECTS = {
@@ -172,6 +175,12 @@ FLAVOR = {
                           "Il cataloguait les étoiles jusqu'à ce que l'une lui tombe dessus ; il la garde pour tête."),
     "baron_drillpick": ("He bought the mountain, then blasted it open for the gold inside; he still owes the miners.",
                         "Il a acheté la montagne, puis l'a éventrée pour l'or ; il doit encore leur paie aux mineurs."),
+    "abbot_dragonstaff": ("He rang the chimes for nine hundred years; the brass dragon still wakes when they sound.",
+                          "Il a sonné les carillons neuf cents ans ; le dragon d'airain s'éveille encore quand ils tintent."),
+    "corsair_harpoon": ("She boarded the last airship of the fleet with it and never set foot on the ground again.",
+                        "Elle a pris d'assaut le dernier dirigeable de la flotte avec lui et n'a plus jamais touché terre."),
+    "cantor_baton": ("His choir fell silent long ago; he still beats time for it, and the cathedral still answers.",
+                     "Son chœur s'est tu depuis longtemps ; il bat encore la mesure, et la cathédrale répond toujours."),
 }
 
 # armour sets: one flavour per set prefix (all four pieces)

@@ -11,6 +11,10 @@
     {
       "structure": "brasshaven:crystal_cathedral",
       "weight": 1
+    },
+    {
+      "structure": "brasshaven:echo_cathedral",
+      "weight": 1
     }
   ],
   "placement": {

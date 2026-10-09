@@ -1416,6 +1416,232 @@ Previews:
   `mine_baron_gilded.png` and `mine_baron_cracked.png`.
 - Held drill-pick: `python3 tools/art_sheet.py --kind held --only baron_drillpick`.
 
+## 28. Champion of the Echo Cathedral: The Hollow Cantor (Le Chantre creux)
+Files:
+- `tools/wf/mobs/hollow_cantor.py`: model `hollow_cantor` (no texture variants).
+- `src/main/java/com/brasshaven/entity/boss/HollowCantor.java`: the moveset.
+
+There is no lair module. The arena is the existing choir and apse: `BOSS` in `tools/wf/structures/echo_cathedral.py`
+(`organ()`, seal at (0, 8, -60), radius 15, feet 9; the choir floor runs 8 blocks south to the screen and 18 east and
+west, the organ plinth closes the north side at about 12). The Hollow Cantor replaces the borrowed Bell Keeper there;
+the Bell Keeper keeps his own lair under the Mountain Monastery (`lair_bell_keeper.py`, `BOSS_HOME` unchanged).
+
+Reward: `remembrance_hollow_cantor` forges the **Tuning-Fork Baton of the Hollow Cantor** (`cantor_baton`, LITHITE
+8 / -2.8, depths tier: four lithite shards).
+- It has a new ability shape, **SHRIEK**, in `BossWeaponItem`: a cone of sound ahead (35 degrees either side, up to 12
+  blocks, line of sight from the eye): power 11, knockback, Weakness (flag `weak`). Where the cone's axis meets a wall
+  its echo bursts: half the power to every foe within 3 blocks of that spot.
+- Held model `cantor_baton` in `wf/held3d.py`, sprite `tuning_fork` in `wf/itemart_shapes.py`.
+
+Loot (`gen_data.py`): lithite shards, emeralds, diamonds, amethyst shards, a bell, note blocks, echo shards and a 20%
+disc fragment. Quest: `depths/boss_hollow_cantor` (its chapter follows the cathedral's).
+
+**Concept.** A gaunt choirmaster, 3.5 blocks (hitbox 1.4 x 3.6), tarnished brass and deepslate:
+- a ragged slate cassock that frays away above the floor (he glides), a brass yoke on bony shoulders, a crimson stole
+  stitched with brass notes;
+- the ribcage is an organ chest: deepslate ribs bound in brass round a dark cavity where seven small pipes glow with a
+  pale echo-light;
+- a deep pointed hood with nothing inside but darkness and a ring of light like a sound hole;
+- five organ pipes fanning out above the hood (the silhouette);
+- a long conductor's baton ending in a tuning fork with an amethyst resonator (right hand); the left hand conducts.
+
+**Stats.**
+- 640 health, armour 12, toughness 4, attack 13, poise 115, speed 0.26, knockback resistance 1.0.
+- No fall damage, white bar. Phase 2 at 65% (roar, +8% speed); phase 3 at 30%, driven by the class like the Chained
+  Jailer: `organ` runs once (guard 64 ticks), then every 240 ticks x `cooldownScale()` (at least 120) `requiem`, and
+  the pipe blasts run on their own timer (every 130 ticks x `cooldownScale()`, at least 70).
+
+Scheduled moves (`organ`, `requiem`) use range 999 / weight 0 and are chained from `bossTick`.
+
+| Move | Phase | Wind-up / active / recovery | Range | What it does |
+|---|---|---|---|---|
+| baton | 1-3 | 14 / 18 / 14 | 0-6 | Arc drawn (±65°, 5): the downbeat at active 0 (13), a turn, the backswing at active 10 (11). P2: 35% chains toll (close) or shriek. |
+| shriek | 1-3 | 22 / 12 / 14 | 3-16 | Turns slowly toward the target for 14 ticks (6°/tick), ripples running down the cone, red once it locks; then the cone (±30°, 14; P2 ±40°, 17): 14 (P2 16), knockback, Slowness 1.5 s. |
+| toll | 1-3 | 18 / 20 / 14 | 0-9 | Ring r 3.5 drawn; 15 inside and a wave to 10 (8, jump). P2: a second wave at active 10 (to 12). |
+| cadence | 1-3 | 16 / 12 / 14 | 6-20 | Gap-closer: the line drawn (to 3 past the target, at most 12, inside the arena, only onto floor); he glides along it in 6 ticks: 12 within 1.6 of his path. P2: 40% chains baton. |
+| resonance | 1-3 | 24 / 34 / 16 | 0-30 | At its start 3 + (players-1) buds (max 6, 4.5 apart, one 3-5 blocks from each player) grow on the floor, each in a golden ring (r 2.2). 2 s of warning in all (the floor shivers outside the rings, red for the last 6 ticks); at active 16 everyone on the floor outside a ring takes 14 + Slowness II 2 s (airborne players are missed); the buds shatter at active 18. |
+| silence | 2-3 | 20 / 6 / 12 | 0-14 | Ring r 8 drawn, ash drifting in. A zone of hush for 7 s (8 s in phase 3) where he stood: players inside get Slowness I, Darkness and their sounds stopped (`ClientboundStopSoundPacket` every second); inside it he is invisible (his glow layer still shows) and sheds a shimmer of ash; a player's hit reveals him for 20 ticks. |
+| choir | 2-3 | 22 / 8 / 14 | 0-30 | Soul light rises over the spots (on floor, 4+ from him); bell monks and banshees in turn, `scaledCount(2)`, never more than 2 + players alive (minion tag). |
+| fugue | 2-3 | 20 / 40 / 14 | 0-30 | Three voices at active 0, 12, 24: a ring follows each player (up to 4) for 10 ticks, locks red for 10, bursts: 12 in r 2.2; `scaledCount(1)` strays each. |
+| organ | 3 (once) | 40 / 20 / 20 | scheduled | Guarded; he rises, the floor hums; a wave to 14 (12, jump), Darkness 2.5 s to every player, +12% speed (`hollow_cantor_organ`), the timers start. |
+| requiem | 3 | 20 / 50 / 16 | scheduled | Faces the target; six rows across his facing, 2.5 apart from 2 blocks out, points 1.4 apart (only on floor inside the arena), each row with a 3-point gap that wanders; rows drawn grey in the wind-up, each turns red 14 ticks before it blasts at active 8 + 6k: 13 within 1 of a point, once per row. |
+
+**Pipe blasts (phase 3).** Under each player (up to 4) plus `scaledCount(1)` strays: a ring r 1.6 with rising dust for
+24 ticks (red for the last 8), then a column of sound 7 high: 12 within 1.6 and a toss (lift capped at 0.5).
+
+**The blocks are temporary.**
+- The only placed blocks are the resonance's `large_amethyst_bud`s, only into air over a solid block (they drop
+  nothing without Silk Touch). Spots without room stay virtual (rings and particles only).
+- Each is recorded with its original state and put back only where the bud is still there: when the move ends, when it
+  is cut short (stagger), when the fight resets, when no player is within radius + 14, in `onDefeated` and `remove()`,
+  and after a reload (saved as `CantorBlocks`, restored on the first tick).
+- Choristers are discarded on death, reset or an empty arena; the silence ends with them.
+
+**Push safety.** His `strike` caps pushes at 1.2 and lifts at 0.5, and within 3 blocks of the arena's edge the outward
+part is removed.
+
+**Co-op and NG+** come from the engine (`BossDifficulty`, `BossCycles`): health, damage, poise, cooldowns (the requiem
+and pipe-blast timers use `cooldownScale()`), compressed wind-ups. Co-op also adds buds, choristers, fugue strays and
+blast strays per player.
+
+Previews:
+- `python3 tools/gen_models.py --preview --only hollow_cantor` writes `build/previews/models/hollow_cantor.png`.
+- Held baton: `python3 tools/art_sheet.py --kind held --only cantor_baton`.
+
+## 29. Champion of the Airship Graveyard: The Corsair Captain (La Capitaine corsaire)
+Files:
+- `tools/wf/mobs/corsair_captain.py`: model `corsair_captain` (90 cubes, 256x128, one texture).
+- `src/main/java/com/brasshaven/entity/boss/CorsairCaptain.java`: the moveset.
+
+There is no lair module. The arena is the moored ship's open top deck (`deck()` in
+`tools/wf/structures/airship_graveyard.py`): 42 x 35 of planking at y `DY`, a two-high iron bulwark all round (sealed bars
+at the west end, the deckhouse with the mist to the east), four copper vent cowls as low cover, seal radius 18 at the
+deck centre `AC`. `BOSS` there is `brasshaven:corsair_captain` (it replaces the borrowed Gryphon Knight, whose own home,
+quest and seal on the sky island are untouched). `BOSS_HOME` is `airship_graveyard`.
+
+Reward: `remembrance_corsair_captain` forges the **Harpoon Gun of the Corsair Captain** (`corsair_harpoon`, LITHITE
+7.5 / -2.6).
+- It has a new ability shape, **GRAPPLE**, in `BossWeaponItem`: a harpoon fired along the aim (up to 18 blocks, walls stop
+  it). The first foe it bites takes 10 (flag `slow`) and the line hauls the wielder to 1.5 blocks short of it; if it bites
+  a wall, the line hauls the wielder there. Either way Slow Falling 3 s and the fall distance is reset.
+- Held model `corsair_harpoon` in `wf/held3d.py`, sprite `harpoon_gun` in `wf/itemart_shapes.py`.
+
+Loot (`gen_data.py`): map fragments, emeralds, diamonds, firework rockets, gunpowder, phantom membranes, a spyglass, wind
+charges and an 8% enchanted golden apple. Quest: `explorer/boss_corsair_captain`.
+
+**Concept.** The sky-pirate who took the last airship of the fleet, 4.8 blocks: a tall, lean captain in a long teal
+greatcoat (two rows of brass buttons, crimson lapels, gold epaulettes, turned-back brass cuffs, tails to her boots that
+stream in the wind), buff breeches and tall black boots, a red sash and a bandolier of brass flare cartridges. A black
+tricorn edged in brass with aviator goggles (glowing sky-blue lenses) and a white plume, a long auburn braid, a red scarf.
+On her back a brass rotor engine (a gauge, a glowing vent, two copper tanks, exhausts) whose mast carries a four-blade
+rotor over the hat, always turning. Asymmetry: a basket-hilted cutlass in the right hand, a heavy harpoon gun (drum
+magazine, flare canister, a barbed harpoon in the muzzle) in the left.
+
+**Stats.**
+- 580 health, armour 10, toughness 3, attack 13, poise 115, speed 0.27, knockback resistance 1.0, step 1.25.
+- No fall damage, white bar. Hitbox 1.6 x 4.8.
+
+**Phase 2 at 65%.** The roar; 4 ticks after it ends she chains `muster`: a signal flare and `scaledCount(2)` sky raiders
+(the existing `sky_raider` mob, minion tag) appear 3 blocks over the deck at 0.55-0.9 x reach, never more than 4 alive.
+The cutlass gains its thrust, the flare shot a second flare; `boarding` and `cyclone` join.
+
+**Phase 3 at 30%, the list.** Driven by the class like the Chained Jailer: `listing` runs once (guard 74 ticks), then
+`list()`: a ring to jump (12, out to 13), +10% speed (`corsair_captain_listing`), a list side (random) and the lane timer.
+If fewer than 2 raiders are alive, `muster` follows. From then on:
+- **Wind lanes** every 74 + max(110, 200 x `cooldownScale()`) ticks (an Effect, she keeps fighting). The deck's cross axis
+  is measured once per fight (the shorter span between walls round the centre; demo spawn: the z axis). Four strips 3
+  wide run across the deck along it, 7 apart (safe gaps 4 wide, offset randomly by up to 1.5). Each is drawn 30 ticks
+  (white edges, red for the last 10, wind streaming toward the list side), then blows 14 ticks: 4 once and a shove
+  toward the rail (0.16 a tick, at most 0.8). They fire one after another, 10 ticks apart, sweeping from one end
+  (random) to the other.
+- **Flare-bombs** (`flarebomb`, chosen like any move once listed; before that `gate` redirects it).
+
+Scheduled moves (`muster`, `listing`) use range 999 / weight 0 and are chained from `bossTick`.
+
+| Move | Phase | Wind-up / active / recovery | Range | What it does |
+|---|---|---|---|---|
+| cutlass | 1-3 | 14 / 26 / 14 | 0-5.5 | Arc drawn (+-70°, 4.8): cuts at active 0 and 10 (10 each). P2+: a red line, then at active 20 a lunging thrust down a 6.5 line (13). |
+| harpoon | 1-3 | 18 / 16 / 14 | 6-20 | A red line that turns with the target; the harpoon flies down it (20, walls stop it): the first one within 1 of the line takes 8 and is reeled to 2.2 ahead of her over ticks 1-9; arc drawn ticks 8-11, then a cut at active 12 (9, +-60°, 3.8). |
+| gust | 1-3 | 20 / 20 / 14 | 0-12 | Cone drawn (+-40°, 12 deep): 3 at impact, then 20 ticks of wind: a shove away from her (0.11 a tick, at most 0.7: sprinting against it holds). |
+| divebomb | 1-3 | 16 / 34 / 18 | 5-22 | A gold ring on the target; take-off at impact (no gravity), rises 10 ticks to 8 over the ring, hovers while it follows the target (to active 14, then red, locked), plunges at 24, lands at active 30: 16 within 3 and a ring to jump (6, out to 7). |
+| flareshot | 1-3 | 14 / 10 / 12 | 6-26 | A thin orange line; a flare flies 1.4 a tick from the gun at the target's position at the shot: 9 and alight 3 s on a hit, 6 within 1.5 where it bursts on a wall. P2+: a second at active 6 at another player. |
+| boarding | 2-3 | 18 / 14 / 14 | 7-24 | Path drawn 14 ahead; a rush at 1 a tick for 12 ticks: 12 once to each creature in the way. Stops at walls, the arena edge or a drop. |
+| cyclone | 2-3 | 16 / 16 / 14 | 0-5 | Red ring r 4.2; two spins at active 0 and 8 (11 each). |
+| flarebomb | 3 | 20 / 24 / 14 | 0-30 | Rings follow every player (up to 4, plus strays to 3 and `scaledCount(1) - 1` more, at most 6) for 12 ticks, then lock red; a flare goes up every 4 ticks per ring and falls 18 ticks later: 10 within 2.5 and alight 2 s, then a fire patch. |
+| muster | 2 | 20 / 10 / 14 | scheduled | See phase 2. |
+| listing | 3 (once) | 30 / 20 / 20 | scheduled | Guarded; see phase 3. |
+
+**Fair edges.** Her `strike` override caps knockback at 1.2 and lift at 0.35 (never over the two-high bulwark), and drops
+the push where a probe 1 and 2 blocks along it finds neither a wall nor floor within 3 below. The gust and lane shoves
+use the same probe and caps. Nothing kills outright: every hit is a number in the table.
+
+**The blocks are temporary.**
+- The only placed blocks are the fire patches: `minecraft:magma_block` swapped for up to five floor blocks in a plus
+  (only full, plain blocks with air above, no block entity, never the seal). No fire block is ever placed (the deck is
+  wood and wool). Each patch also burns 2 and sets alight every 10 ticks within 1.6.
+- Every swap is recorded with its original state and goes back after 100 ticks, only where the block is still magma:
+  - when the fight resets to phase 1 (`resetForm`);
+  - when no player is within radius + 14;
+  - in `onDefeated` and `remove()`;
+  - after a reload (saved as `CorsairBlocks`, restored on the first tick).
+- Sky raiders are discarded on death, reset or an empty arena; a dive cut short (stagger, reset, reload) gives her
+  gravity back.
+
+**Co-op and NG+** come from the engine (`BossDifficulty`, `BossCycles`): health, damage (flares, lanes and patches deal
+her damage), poise, cooldowns (the lane timer uses `cooldownScale()`), compressed wind-ups, the soul wave. Raiders and
+flare-bomb rings scale with the players (`scaledCount`).
+
+Previews:
+- `python3 tools/gen_models.py --preview --only corsair_captain` writes `build/previews/models/corsair_captain.png`.
+- Held harpoon gun: `python3 tools/art_sheet.py --kind held --only corsair_harpoon`.
+
+## 30. Champion of the Cloud Pagoda: The Chime Abbot (L'Abbé des carillons)
+Files:
+- `tools/wf/mobs/chime_abbot.py`: model `chime_abbot` (142 cubes, 256x128).
+- `src/main/java/com/brasshaven/entity/boss/ChimeAbbot.java`: the moveset.
+
+There is no lair module. The arena is the pagoda's open top deck under the ninth roof: `BOSS` in
+`tools/wf/structures/cloud_pagoda.py` (`deck()`), seal at (0, 107, -20), radius 16; a 33 x 33 square deck (feet 108),
+railing on its rim, the four 3 x 3 roof posts at the corners (±12), 13 blocks of air to the coffered roof, the mist at
+the head of the stair from tier 8. The Chime Abbot replaces the borrowed Gryphon Knight there; the Gryphon Knight keeps
+its own lair and `BOSS_HOME` (`sky_island`, `lair_gryphon_knight.py`).
+
+Reward: `remembrance_chime_abbot` forges the **Dragon Staff of the Chime Abbot** (`abbot_dragonstaff`, LITHITE 7.5 / -2.6).
+- It has a new ability shape, **DRAGON**, in `BossWeaponItem`: the brass dragon's spirit rushes along the aim (up to 14
+  blocks, stopped by walls). Every foe within 1.5 of its path is hurt (power 10), flung aside out of the lane (0.8, lift
+  0.35) and blinded (flag `blind`); the chimes ring where it ends: Slowness II 3 s within 3.5.
+- Held model `abbot_dragonstaff` in `wf/held3d.py`, sprite `dragon_staff` in `wf/itemart_shapes.py`.
+
+Loot (`gen_data.py`): map fragments, emeralds, experience bottles, golden apples, diamonds, cherry saplings, pink petals,
+a bell, gold ingots, an 8% enchanted golden apple. Quest: `explorer/boss_chime_abbot`.
+
+**Concept.** An ancient monk fused with clockwork, about 3 blocks tall, floating a hand's breadth over the deck:
+- layered robes: a white under-robe, a cherry-red outer robe in flaring tiers open down the front, a gold-edged kasaya
+  over the left shoulder with a tail at the left hip, a white obi with a gold cord, a heavy mala with a bell;
+- an aged bald head, drooping white brows and a long beard; the right half of the skull is a riveted brass plate with an
+  amber lens eye;
+- behind his head a brass halo (a turning ring of 16 segments, a gear hub) with seven chime rods hanging from its lower
+  arc and bells at its sides;
+- wide white-lined sleeves with brass mechanical forearms, and a smaller pair of clockwork arms holding a prayer bell;
+- asymmetry: the right hand holds a bronze staff with a brass dragon's head (horns, whiskers, teal eyes, chimes hanging
+  from its jaws), the left hand is open for the palm strike.
+
+**Stats.**
+- 560 health, armour 12, toughness 4, attack 13, poise 110, speed 0.26, knockback resistance 1.0.
+- No fall damage, pink bar.
+- Phase 2 at 65% (roar, +10% speed, `chime_abbot_wrath`). Phase 3 at 30%, driven by the class like the Chained Jailer:
+  when he is free he chains `awaken` once (guarded 64 ticks), then every 240 ticks x `cooldownScale()` (at least 140)
+  `breath`. Range 999 / weight 0 keeps the scheduled moves out of the picker.
+
+| Move | Phase | Wind-up / active / recovery | Range | What it does |
+|---|---|---|---|---|
+| staff | 1-3 | 14 / 26 / 14 | 0-6.5 | Arc drawn in petals (±70°, 5): forehand at active 0 and backhand at 12 after a turn (12 each). P2: a red ring 3 ahead from active 15, slam at 22: 16 in r 2.5 + wave to 6 (7). P2: 30% chains flurry (close) or palm. |
+| palm | 1-3 | 18 / 6 / 16 | 0-9 | Cone drawn in white wind (±28°, 9 deep): 14 and a push of 1.1. P2: a wave to 7 (7, jump). |
+| chimering | 1-3 | 20 / 44 / 16 | 0-24 | Eight rods on a circle r 6.5 round him. P1: they ring round the circle every 4 ticks; P2: both ways from the first every 5 ticks, then a rod over every player (up to 4). Each rod's zone (r 2.4) is drawn gold, then red, for 12 ticks, then 11 and a small lift. |
+| petals | 1-3 | 22 / 30 / 14 | 0-24 | Three gaps (±24°, 120° apart) drawn as white lines; a ring of petals rolls out at 0.55 b/t over the whole deck, too tall to jump: outside a gap, 5, a nudge and Blindness 1.5 s (P2 2 s). P2: a second ring at active 16, gaps turned 60° (drawn in pink from the impact). |
+| step | 1-3 | 12 / 4 / 10 | 7-32 | A petal column at the deck corner (one of four spots on the diagonals at min(9, 0.6 x reach), found at runtime) nearest the target and not his own; he teleports there, then chains staff (target within 6.5) or palm. |
+| flurry | 2-3 | 14 / 34 / 14 | 0-7 | Thrusts down a red line (6.5, half width 1) at active 0, 8, 16 (10 each, turning up to 25° between them); ring r 4.5 drawn from active 19, spin at 26: 13. |
+| bellcrash | 2-3 | 20 / 20 / 18 | 5-24 | A gold ring r 3 follows the target through the wind-up, locks (red) for 10 ticks, then he lands on it (a standing spot found toward the centre): 17 in r 3 + wave to 8 (8, jump). |
+| awaken | 3 (once) | 40 / 20 / 20 | scheduled | Guarded 64 ticks: he rises, brass dust spiralling in; a wave to 12 (11, jump), +12% speed (`chime_abbot_dragon`), the breath timer starts (50 ticks). The dragon's ghost (particles) circles over the deck from then on. |
+| breath | 3 | 20 / 40 / 16 | scheduled | 3 lanes (4 with three players or more) across the deck, half width 1.6, at least 5.8 blocks of floor between them, one through the target, the axis alternating each time. All are drawn from the start; the next one turns red with the dragon's head waiting at its end 14 ticks before it fires. Lane i fires at active 6 + 10 i: the head crosses the deck in 8 ticks, 13 and Slowness II 2 s to whoever stands in the lane as it passes (once per lane). |
+
+**No blocks.** He places no blocks at all: rods, petals, the dragon and its breath are particles, hit checks and
+effects. Nothing to restore.
+
+**No deaths off the edge.** His `strike` caps pushes at 1.2 and lift at 0.45 (0.2 within 3 blocks of the railing).
+In the square metric, a push that points outward is removed on each axis where the target is within 3 blocks of the
+railing, and the whole push where a probe 2 blocks along it finds no floor (the stairwells). The engine's phase-2 roar
+shove is corrected the same way in `onPhaseTwo`. Teleports (step, bell-crash) only land on floor level with the seal
+with 4 blocks of headroom.
+
+**Co-op and NG+** come from the engine (`BossDifficulty`, `BossCycles`): health, damage (every hit goes through
+`strike`), poise, cooldowns (the breath timer uses `cooldownScale()`), compressed wind-ups, the soul wave. Phase 2 chime
+rods add one per player; breath lanes go from 3 to 4 with `scaledCount`.
+
+Previews:
+- `python3 tools/gen_models.py --preview --only chime_abbot` writes `build/previews/models/chime_abbot.png`.
+- Held dragon staff: `python3 tools/art_sheet.py --kind held --only abbot_dragonstaff`.
+
 ## Difficulty: co-op scaling and NG+ cycles
 
 Applied by `boss/WayfarerBoss` to **every** boss on its first server tick, whatever spawned it (boss seal,

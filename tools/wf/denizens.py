@@ -495,6 +495,143 @@ CREATURES = {
                 "le sol d'une onde de choc. Dans l'épave de la Forteresse marchante."),
         wiki="Chaudière ambulante au bras-canon : visée signalée par la fumée puis obus à éclats, jet de feu de son "
              "foyer et coup de pied qui ébranle le sol. Lente. Forteresse marchante."),
+    # ---- third pack: more creatures of the colossal structures
+    "slag_golem": dict(
+        en="Slag Golem", fr="Golem de scories", egg=((58, 56, 64), (255, 120, 24)),
+        homes=["titan_forge"],
+        loot=[("basalt", 0, 2, None), ("iron_nugget", 1, 3, None), ("magma_cream", 0, 1, None),
+              ("blaze_powder", 1, 1, 0.12)],
+        manual=("A hunched heap of basalt and cooled slag poured out of the Forge of the Basalt Titan, glowing seams "
+                "running through it and fists of still-molten slag. It is slow, but every blow leaves a puddle of "
+                "cooling slag on the floor that burns whoever stands in it for a few seconds: fight it on the move. It "
+                "drags its right fist back past its hip while the fist flares before a burning haymaker, and heaves both "
+                "fists over its head, slag dripping, before slamming the floor in front of it. From afar it claws a "
+                "gobbet of slag off its shoulder and swings it back: the spot it aims at smokes, and the gobbet splashes "
+                "there a moment later. Found in the Forge of the Basalt Titan.",
+                "Un tas voûté de basalte et de scories refroidies sorti de la Forge du Titan de basalte, parcouru de "
+                "fissures luisantes, aux poings de scories encore en fusion. Il est lent, mais chacun de ses coups laisse "
+                "au sol une flaque de scories qui refroidit et brûle quiconque s'y tient pendant quelques secondes : "
+                "combats-le en mouvement. Il ramène son poing droit derrière sa hanche pendant que le poing s'embrase "
+                "avant un crochet brûlant, et lève ses deux poings au-dessus de sa tête, ruisselants de scories, avant de "
+                "frapper le sol devant lui. De loin, il arrache un paquet de scories de son épaule et le ramène en "
+                "arrière : l'endroit visé fume, et le paquet s'y écrase un instant plus tard. Dans la Forge du Titan de "
+                "basalte."),
+        wiki="Golem de basalte aux poings de scories en fusion : crochet brûlant, double frappe au sol et paquet de "
+             "scories lancé sur un point qui fume d'abord ; chaque coup laisse une flaque brûlante. Lent. Forge du Titan "
+             "de basalte."),
+    "ink_wraith": dict(
+        en="Ink Wraith", fr="Spectre d'encre", egg=((22, 20, 34), (190, 168, 255)),
+        homes=["starfall_library"],
+        loot=[("ink_sac", 1, 2, None), ("paper", 0, 2, None), ("feather", 0, 1, None), ("book", 1, 1, 0.1)],
+        manual=("Spilt ink of the Starfall Library risen into a hooded, legless shape behind a cracked parchment mask. "
+                "It floats, and glides through bookshelves as if they were not there. An orb of ink swells between its "
+                "cupped hands before it flings a splash that blinds you: move once it stops tracking you. It draws a hand "
+                "of quill nibs back high before raking. Near the shelves it melts into one: watch the other shelves "
+                "around you, for ink bubbles out of the one it is about to slip out of, nibs first. Found in the "
+                "Starfall Library.",
+                "L'encre renversée de la Bibliothèque de la chute d'étoiles, dressée en une forme encapuchonnée sans "
+                "jambes derrière un masque de parchemin fendu. Il flotte et traverse les bibliothèques comme si elles "
+                "n'existaient pas. Une boule d'encre grossit entre ses mains en coupe avant qu'il ne lance une giclée qui "
+                "t'aveugle : bouge dès qu'il cesse de te suivre du regard. Il lève haut sa main aux becs de plume avant "
+                "de lacérer. Près des rayonnages, il se fond dans l'un d'eux : surveille les autres autour de toi, car "
+                "l'encre bouillonne hors de celui dont il va ressortir, becs en avant. Dans la Bibliothèque de la chute "
+                "d'étoiles."),
+        wiki="Spectre d'encre masqué de parchemin qui traverse les bibliothèques : giclée d'encre aveuglante, lacération "
+             "aux becs de plume, et plongée dans un rayonnage pour ressortir d'un autre près de toi (l'encre y "
+             "bouillonne d'abord). Bibliothèque de la chute d'étoiles."),
+    "star_mote_caller": dict(
+        en="Star Mote Swarm-Caller", fr="Appeleur d'astres", egg=((190, 234, 248), (142, 110, 210)),
+        homes=["starfall_library"],
+        loot=[("amethyst_shard", 0, 2, None), ("glowstone_dust", 0, 2, None), ("quartz", 0, 1, None),
+              ("ender_pearl", 1, 1, 0.08)],
+        manual=("A floating spindle of star crystal girdled with a brass astrolabe band, four little shards circling it. "
+                "It keeps its distance. Its shards swing round in front of it while a thin trace of starlight shows "
+                "where it aims; the trace thickens when the aim locks, and a short beam follows: step off the line. "
+                "Once, it flings its shards out wide and swells and flares for a second before two star motes fall out "
+                "of the dark; hit it during the flare to break the call. Come too close and it draws in tight before a "
+                "nova throws you back. Found in the Starfall Library.",
+                "Un fuseau de cristal d'étoile flottant, ceint d'une bande d'astrolabe en laiton, quatre petits éclats "
+                "tournant autour de lui. Il garde ses distances. Ses éclats pivotent devant lui pendant qu'un fin trait de "
+                "lumière stellaire montre où il vise ; le trait s'épaissit quand la visée se fige, et un court rayon "
+                "suit : sors de la ligne. Une fois, il projette ses éclats au loin, enfle et flamboie une seconde avant "
+                "que deux poussières d'astre ne tombent de l'obscurité ; frappe-le pendant l'éclat pour rompre l'appel. "
+                "Approche-toi trop et il se contracte avant qu'une nova ne te repousse. Dans la Bibliothèque de la chute "
+                "d'étoiles."),
+        wiki="Cristal d'étoile flottant : rayon court précédé d'un trait de lumière, appel unique de deux poussières "
+             "d'astre (frappe-le pendant l'éclat pour l'interrompre) et nova qui repousse. Bibliothèque de la chute "
+             "d'étoiles."),
+    "star_mote": dict(
+        en="Star Mote", fr="Poussière d'astre", egg=((240, 252, 255), (170, 230, 255)),
+        homes=["starfall_library"],
+        loot=[("glowstone_dust", 0, 1, None)],
+        manual=("A spark of starlight with a crystal body, called down by a Star Mote Swarm-Caller. Tiny, quick and "
+                "frail, it circles you, pulls back and spins up while its point flares, then darts straight at you. It "
+                "fades away after a minute. Found in the Starfall Library.",
+                "Une étincelle de lumière stellaire au corps de cristal, appelée par un Appeleur d'astres. Minuscule, "
+                "rapide et fragile, elle tourne autour de toi, recule et tournoie pendant que sa pointe flamboie, puis "
+                "fonce droit sur toi. Elle s'éteint au bout d'une minute. Dans la Bibliothèque de la chute d'étoiles."),
+        wiki="Étincelle de cristal appelée par l'Appeleur d'astres : tourne autour de toi et fonce, s'éteint au bout "
+             "d'une minute. Bibliothèque de la chute d'étoiles."),
+    "sun_scarab": dict(
+        en="Sun Scarab", fr="Scarabée solaire", egg=((40, 124, 112), (216, 172, 62)),
+        homes=["sun_ziggurat"],
+        loot=[("gold_nugget", 1, 3, None), ("lapis_lazuli", 0, 2, None), ("sand", 0, 2, None),
+              ("blaze_powder", 1, 1, 0.1)],
+        manual=("A dog-sized sacred beetle of the Sun-Engine Ziggurat, its wing-cases inlaid with gold and lapis, a sun "
+                "disc raised on its golden shield. On sand or sandstone it digs in nose first and vanishes; a furrow of "
+                "churning sand runs toward you, and when the sand boils and rumbles under your feet, step off: it bursts "
+                "out and throws you into the air. It cannot be hurt under the sand. Up close its head rears back and its "
+                "mandibles spread before it bites; in daylight under the open sky its sun disc flares and the bite sets "
+                "you on fire. Found in the Sun-Engine Ziggurat.",
+                "Un scarabée sacré de la taille d'un chien, gardien de la Ziggourat du Moteur solaire, aux élytres "
+                "incrustés d'or et de lapis, un disque solaire dressé sur son bouclier doré. Sur le sable ou le grès, il "
+                "s'enfouit tête la première et disparaît ; un sillon de sable remué file vers toi, et quand le sable "
+                "bouillonne et gronde sous tes pieds, écarte-toi : il jaillit et te projette en l'air. On ne peut pas le "
+                "blesser sous le sable. De près, il rejette la tête en arrière et écarte ses mandibules avant de mordre ; "
+                "en plein jour sous le ciel, son disque flamboie et la morsure t'enflamme. Dans la Ziggourat du Moteur "
+                "solaire."),
+        wiki="Scarabée doré au disque solaire : s'enfouit dans le sable et jaillit sous toi (le sable bouillonne "
+             "d'abord), morsure qui enflamme en plein jour. Ziggourat du Moteur solaire."),
+    "dart_frog_assassin": dict(
+        en="Canopy Dart-Frog Assassin", fr="Grenouille assassine de la canopée", egg=((36, 108, 226), (250, 196, 36)),
+        homes=["canopy_city"],
+        loot=[("slime_ball", 0, 2, None), ("bamboo", 0, 2, None), ("spider_eye", 0, 1, None),
+              ("arrow", 1, 3, 0.25)],
+        manual=("A crouching frog-man of the Canopy Temple-City, electric blue with black blotches and yellow bands, "
+                "under a mantle of stitched leaves. It takes no fall damage and leaps from platform to platform: when "
+                "you are far or on another level, it sinks into a deep crouch before jumping down beside you, and its "
+                "landing poisons. Its throat sac balloons and its head rears back before its poisoned tongue whips out "
+                "several blocks along the line it aimed at: step aside once it stops tracking you. Up close it raises a "
+                "sticky hand before slapping. Found in the Canopy Temple-City.",
+                "Un homme-grenouille accroupi de la Cité-temple de la canopée, bleu électrique taché de noir et cerclé "
+                "de jaune, sous une cape de feuilles cousues. Il ne craint pas les chutes et bondit de plateforme en "
+                "plateforme : quand tu es loin ou à un autre étage, il se ramasse dans un profond accroupissement avant "
+                "de sauter près de toi, et son atterrissage empoisonne. Son sac vocal enfle et sa tête se rejette en "
+                "arrière avant que sa langue empoisonnée ne fouette à plusieurs blocs le long de la ligne visée : "
+                "écarte-toi dès qu'il cesse de te suivre. De près, il lève une main collante avant de gifler. Dans la "
+                "Cité-temple de la canopée."),
+        wiki="Grenouille assassine bleue et jaune : bondit de plateforme en plateforme, coup de langue empoisonnée à "
+             "plusieurs blocs (le sac vocal enfle d'abord), gifle collante. Cité-temple de la canopée."),
+    "drowned_marine": dict(
+        en="Drowned Marine", fr="Fusilier noyé", egg=((36, 50, 88), (196, 190, 160)),
+        homes=["dreadnought_wreck"],
+        loot=[("rotten_flesh", 0, 2, None), ("gunpowder", 0, 2, None), ("iron_nugget", 0, 2, None),
+              ("nautilus_shell", 1, 1, 0.04)],
+        manual=("A marine of the Dreadnought Wreck still on watch: a drowned man in a rotten navy tunic and a dented "
+                "steel helmet, a rifle with a fixed bayonet in his hands. He opens with one careful shot: he shoulders "
+                "the rifle while a trail of bubbles (smoke out of the water) runs to you; the aim locks with a click and "
+                "a spark at the muzzle, and the shot cracks a moment later: step aside after the click. Then he levels "
+                "the bayonet, crouches and charges in a straight line, and up close he draws the rifle back before a "
+                "thrust. He swims and breathes under water. Found in the Dreadnought Wreck.",
+                "Un fusilier de l'Épave du cuirassé toujours de garde : un noyé en tunique de marine pourrie et casque "
+                "d'acier cabossé, un fusil baïonnette au canon dans les mains. Il ouvre par un seul tir soigné : il "
+                "épaule pendant qu'une traînée de bulles (de fumée hors de l'eau) file jusqu'à toi ; la visée se fige "
+                "avec un déclic et une étincelle à la bouche du canon, et le coup part un instant plus tard : écarte-toi "
+                "après le déclic. Puis il pointe la baïonnette, se ramasse et charge en ligne droite, et de près il "
+                "ramène son fusil avant de porter un coup d'estoc. Il nage et respire sous l'eau. Dans l'Épave du "
+                "cuirassé."),
+        wiki="Fusilier noyé : un tir visé (traînée de bulles, déclic au verrouillage) puis une charge à la baïonnette en "
+             "ligne droite, coup d'estoc de près. Nage et respire sous l'eau. Épave du cuirassé."),
 }
 
 FOLK_IDS = list(PEOPLES)
@@ -796,6 +933,8 @@ CREATURE_HEIGHT = {"bandit_marksman": 2, "sky_raider": 2, "barnacle_crab": 1, "l
                    "tide_wraith": 2, "bell_monk": 2, "void_acolyte": 2}
 CREATURE_HEIGHT.update({"sluice_drowned": 2, "turbine_automaton": 2, "bog_leech_man": 2, "abyss_crawler": 1,
                         "rust_mite_mother": 1, "rust_mite": 1, "boiler_gunner": 3})
+CREATURE_HEIGHT.update({"slag_golem": 3, "ink_wraith": 2, "star_mote_caller": 2, "star_mote": 1, "sun_scarab": 1,
+                        "dart_frog_assassin": 2, "drowned_marine": 2})
 _AIR = ("minecraft:air", "minecraft:cave_air")
 _BAD_FLOOR = ("magma_block", "campfire", "fire", "lava", "cactus", "leaves", "powder_snow", "mist_gate", "spawner",
               "boss_seal", "_bed", "chest", "barrel", "scaffolding", "_slab", "_stairs", "carpet", "_fence", "_wall")

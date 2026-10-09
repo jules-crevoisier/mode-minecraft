@@ -1698,6 +1698,7 @@ def barracks(bp):
             bp.barrel(-39, f, z, "east")
     bp.chest(-26, f, -9, "west", loot=LOOT + "tf_barracks")
     bp.spawner(-29, f, 3, MOB_GUARD)
+    bp.spawner(-27, f, 5, "brasshaven:slag_golem")
     for (x, z) in ((-38, -4), (-38, 4), (-26, 5)):
         if bp.get(x, f + 3, z) == AIR:
             hang(bp, x, f + 3, z, HANG_LANT, drop=1) if bp.get(x, f + 5, z) not in (None, AIR) else None
@@ -2183,6 +2184,38 @@ def anvil_details(bp):
         bp.set(x, 17, z, "hopper[enabled=true,facing=down]")    # the bucket
 
 
+# ------------------------------------------------------------------ the open space the forge needs
+ARENA_DOME = (27.0, 40.0, 23.0)     # semi-axes (x, y, z) of the air dome over the anvil face, from (AC, AF)
+TERRACE_TOP = 27                    # last air layer over the plinth top (feet 18): the open terraces
+GAP = (1, 25, -40, 30)              # x0, x1, z0, z1 of the gap between the plinth and the anvil (crucible, crane)
+
+
+def open_space():
+    """Grid mask of the volumes that must stay open whatever the Nether puts there: the dome over the anvil face
+    (the arena under the hammer, the hammer's face, the hand), the air over the plinth's terraces (the crucible
+    terrace, the hub, the north terrace) and the gap between the plinth and the anvil at terrace height (the
+    crucible's fall, the crane, the bridge back from the vault). The rest of the site stays structure void (the
+    lava lake: the terrain the cavern FIT found open). About 100k air entries."""
+    X = np.arange(GX0, GX1 + 1)[:, None, None]
+    Y = np.arange(GY0, GY1 + 1)[None, :, None]
+    Z = np.arange(GZ0, GZ1 + 1)[None, None, :]
+    rx, ry, rz = ARENA_DOME
+    dome = (((X - AC[0]) / rx) ** 2 + ((Y - AF) / ry) ** 2 + ((Z - AC[1]) / rz) ** 2 <= 1.0) & (Y >= AF)
+    terrace = plinth_mask2d()[:, None, :] & (Y > PTOP) & (Y <= TERRACE_TOP)
+    gx0, gx1, gz0, gz1 = GAP
+    gap = (X >= gx0) & (X <= gx1) & (Z >= gz0) & (Z <= gz1) & (Y > PTOP) & (Y < AF)
+    return dome | terrace | gap
+
+
+def carve_open(bp):
+    """Explicit air in the open volumes where nothing is built (the last step: only unset cells), so the natural
+    netherrack of the place cannot fill the arena or the terraces."""
+    for ix, iy, iz in np.argwhere(open_space()).tolist():
+        x, y, z = ix + GX0, iy + GY0, iz + GZ0
+        if bp.get(x, y, z) is None:
+            bp.set(x, y, z, AIR)
+
+
 # ------------------------------------------------------------------ the whole site
 def titan_forge(bp):
     lake(bp)
@@ -2219,17 +2252,18 @@ def titan_forge(bp):
     vault(bp)
     titan_details(bp)
     anvil_details(bp)
+    carve_open(bp)
 
 
 # camera spots for the CI focus run: (name, feet, look at), blueprint coordinates (x, y, z)
 VIEWS = [
     ("casting_hall", (-64, LOW, 23), (-52, 20, 4)),
     ("bellows", (-56, LOW, -9), (-62, LOW + 4, -28)),
-    ("crucible_terrace", (-6, HUB, 2), (2, 60, 2)),
+    ("crucible_terrace", (-6, HUB, 2), (0, HUB + 6, -30)),     # the east crucible, its fall into the gap
     ("barracks", (-26, BAR, -6), (-38, BAR + 2, 4)),
     ("smelting_hall", (-15, SME, 0), (-28, SME + 3, -6)),
     ("crane_bridge", (13, ELB - 2, -24), (24, AF + 2, -19)),
-    ("arena", (36, AF, -6), (50, 70, 0)),
+    ("arena", (32, AF, 8), (50, 66, -4)),         # the face under the hammer, the hand on the left
 ]
 
 register(StructureDef(
@@ -2237,5 +2271,5 @@ register(StructureDef(
     [Piece("forge", titan_forge, views=VIEWS)],
     spacing=36, separation=12, adaptation="none", height=("absolute", 30), processors="none", max_distance=116,
     ground=AF - 1, foundation=False,
-    spawns=[(MOB_GUARD, 8, 1, 2), (MOB_WSKEL, 5, 1, 2), (MOB_CUBE, 4, 1, 2), (MOB_HOUND, 3, 1, 2)],
+    spawns=[(MOB_GUARD, 8, 1, 2), (MOB_WSKEL, 5, 1, 2), (MOB_CUBE, 4, 1, 2), (MOB_HOUND, 3, 1, 2), ("brasshaven:slag_golem", 3, 1, 1)],
     title_fr="La Forge du Titan de basalte", title_en="Forge of the Basalt Titan"))

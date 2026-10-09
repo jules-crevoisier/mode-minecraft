@@ -1027,6 +1027,7 @@ def lower_halls(bp):
     for (x, z) in ((-13, -4), (13, 4), (-4, 13), (4, -13), (-13, 13), (13, -13)):
         hang(bp, x, 9, z, SOUL_H)
     bp.spawner(-15, 1, -5, MOB_HUSK)
+    bp.spawner(-13, 1, -2, "brasshaven:sun_scarab")
     bp.spawner(14, 1, 9, MOB_HUSK)
     bp.chest(-21, 1, -21, "south", loot=LOOT + "sz_sand")
     pot(bp, -21, 1, -19, cracked=True)
@@ -2100,5 +2101,5 @@ register(StructureDef(
     "sun_ziggurat", "overworld", ["desert"],
     [Piece("ziggurat", sun_ziggurat, views=VIEWS)],
     spacing=80, separation=32, adaptation="none", processors="none", max_distance=128, foundation=False,
-    spawns=[(MOB_HUSK, 8, 1, 2), (MOB_CRAWLER, 3, 1, 1)],
+    spawns=[(MOB_HUSK, 8, 1, 2), (MOB_CRAWLER, 3, 1, 1), ("brasshaven:sun_scarab", 5, 1, 2)],
     title_fr="La Ziggourat du Moteur solaire", title_en="Sun-Engine Ziggurat"))

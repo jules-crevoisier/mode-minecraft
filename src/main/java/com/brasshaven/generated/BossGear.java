@@ -132,6 +132,15 @@ public final class BossGear {
     public static final RegistryObject<Item> REMEMBRANCE_MINE_BARON = remembrance("remembrance_mine_baron");
     public static final RegistryObject<Item> BARON_DRILLPICK = weapon("baron_drillpick", p -> p.sword(ModMaterials.LITHITE, 8.5F, -3.0F).rarity(Rarity.EPIC),
             BossWeaponItem.Ability.FUSE, 12.0F, 14.0F, 100, () -> ParticleTypes.FLAME, BossWeaponItem.FIRE);
+    public static final RegistryObject<Item> REMEMBRANCE_CHIME_ABBOT = remembrance("remembrance_chime_abbot");
+    public static final RegistryObject<Item> ABBOT_DRAGONSTAFF = weapon("abbot_dragonstaff", p -> p.sword(ModMaterials.LITHITE, 7.5F, -2.6F).rarity(Rarity.EPIC),
+            BossWeaponItem.Ability.DRAGON, 10.0F, 14.0F, 90, () -> ParticleTypes.CHERRY_LEAVES, BossWeaponItem.BLIND);
+    public static final RegistryObject<Item> REMEMBRANCE_CORSAIR_CAPTAIN = remembrance("remembrance_corsair_captain");
+    public static final RegistryObject<Item> CORSAIR_HARPOON = weapon("corsair_harpoon", p -> p.sword(ModMaterials.LITHITE, 7.5F, -2.6F).rarity(Rarity.EPIC),
+            BossWeaponItem.Ability.GRAPPLE, 10.0F, 18.0F, 80, () -> ParticleTypes.CLOUD, BossWeaponItem.SLOW);
+    public static final RegistryObject<Item> REMEMBRANCE_HOLLOW_CANTOR = remembrance("remembrance_hollow_cantor");
+    public static final RegistryObject<Item> CANTOR_BATON = weapon("cantor_baton", p -> p.sword(ModMaterials.LITHITE, 8.0F, -2.8F).rarity(Rarity.EPIC),
+            BossWeaponItem.Ability.SHRIEK, 11.0F, 12.0F, 90, () -> ParticleTypes.NOTE, BossWeaponItem.WEAK);
 
     private BossGear() {}
 

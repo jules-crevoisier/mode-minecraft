@@ -15,7 +15,10 @@ whips the foes beside it), SCARAB (a scarab along your aim that bursts into a sw
 foe), TONGS (seize the nearest foe ahead and hurl it along your aim, bowling through the foes in its
 way), ZENITH (gravity inverted at the aimed spot: foes near it are drawn in and hurled
 up), FUSE (a bundle of lit dynamite flung along your aim: it sticks to the first foe or
-lands, and blows 1.5 s later, hurling the foes round it). flags: fire, slow, weak, blind, poison, lift, lifesteal.
+lands, and blows 1.5 s later, hurling the foes round it), SHRIEK (a cone of sound ahead, stopped by walls, whose echo bursts
+where it meets one), GRAPPLE (a harpoon along your aim reels the wielder to the first foe or wall it
+bites, a cut on arrival, Slow Falling), DRAGON (the brass dragon's spirit
+rushes along your aim, flinging aside and blinding every foe it passes). flags: fire, slow, weak, blind, poison, lift, lifesteal.
 """
 
 TIER_MATERIAL = {"overworld": "map_fragment", "depths": "lithite_shard", "nether": "ancient_ember", "end": "void_shard"}
@@ -276,6 +279,37 @@ BOSS_GEAR = [
      ("Remembrance of the Mine Baron", "Souvenir du Baron de la mine"),
      ("LITHITE", 8.5, -3.0), "FUSE", 12.0, 14.0, 100, "FLAME", "fire", ("drillpick", "gold", "dark", "ember"),
      ("gold", "ember")),
+    ("chime_abbot", "overworld", "abbot_dragonstaff", ("Dragon Staff of the Chime Abbot", "Bâton-dragon de l'Abbé des carillons"),
+     ("Use: strike the staff and the brass dragon's spirit rushes along your aim (up to 14 blocks, stopped by walls); "
+      "every foe it passes is hurt, flung aside out of its lane and blinded by petals, and the chimes in its jaws ring "
+      "where it ends, slowing every foe within 3 blocks.",
+      "Clic droit : frappe le bâton et l'esprit du dragon d'airain fond dans ta visée (jusqu'à 14 blocs, arrêté par "
+      "les murs) ; chaque ennemi traversé est blessé, rejeté hors de son couloir et aveuglé par les pétales, et les "
+      "carillons de sa gueule sonnent là où il s'arrête, ralentissant les ennemis à 3 blocs."),
+     ("Remembrance of the Chime Abbot", "Souvenir de l'Abbé des carillons"),
+     ("LITHITE", 7.5, -2.6), "DRAGON", 10.0, 14.0, 90, "CHERRY_LEAVES", "blind", ("dragon_staff", "copper", "dark", "ruby"),
+     ("copper", "ruby")),
+    ("corsair_captain", "overworld", "corsair_harpoon", ("Harpoon Gun of the Corsair Captain",
+                                                        "Fusil-harpon de la Capitaine corsaire"),
+     ("Use: fire a harpoon along your aim (up to 18 blocks). If it bites a foe, the line reels you to it and you cut "
+      "it as you land (it is hurt and slowed); if it bites a wall, it hauls you there. The rotor always lets you down "
+      "softly (Slow Falling 3 s).",
+      "Clic droit : tire un harpon dans ta visée (jusqu'à 18 blocs). S'il mord un ennemi, la ligne te hale jusqu'à "
+      "lui et tu le tailles en arrivant (blessé et ralenti) ; s'il mord un mur, elle t'y hisse. Le rotor te repose "
+      "toujours en douceur (chute lente 3 s)."),
+     ("Remembrance of the Corsair Captain", "Souvenir de la Capitaine corsaire"),
+     ("LITHITE", 7.5, -2.6), "GRAPPLE", 10.0, 18.0, 80, "CLOUD", "slow", ("harpoon_gun", "brass", "dark", "ember"),
+     ("brass", "aether")),
+    ("hollow_cantor", "depths", "cantor_baton", ("Tuning-Fork Baton of the Hollow Cantor", "Baguette-diapason du Chantre creux"),
+     ("Use: strike the fork and loose a shriek in a cone ahead (up to 12 blocks, walls stop it); every foe in it is hurt, "
+      "thrown back and weakened, and where the shriek meets a wall its echo bursts for half the damage on the foes "
+      "within 3 blocks of it.",
+      "Clic droit : frappe le diapason et lance un cri dans un cône devant toi (jusqu'à 12 blocs, les murs l'arrêtent) ; "
+      "chaque ennemi touché est blessé, repoussé et affaibli, et là où le cri heurte un mur, son écho éclate pour "
+      "moitié sur les ennemis à 3 blocs."),
+     ("Remembrance of the Hollow Cantor", "Souvenir du Chantre creux"),
+     ("LITHITE", 8.0, -2.8), "SHRIEK", 11.0, 12.0, 90, "NOTE", "weak", ("tuning_fork", "brass", "dark", "amethyst"),
+     ("brass", "amethyst")),
 ]
 
 

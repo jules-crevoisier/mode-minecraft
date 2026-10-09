@@ -87,6 +87,14 @@
     {
       "structure": "brasshaven:mesa_minecity",
       "weight": 1
+    },
+    {
+      "structure": "brasshaven:airship_graveyard",
+      "weight": 1
+    },
+    {
+      "structure": "brasshaven:cloud_pagoda",
+      "weight": 1
     }
   ],
   "placement": {

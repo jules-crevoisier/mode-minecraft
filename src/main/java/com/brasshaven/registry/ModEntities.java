@@ -278,6 +278,15 @@ public final class ModEntities {
     public static final RegistryObject<EntityType<com.brasshaven.entity.boss.MineBaron>> MINE_BARON = ENTITIES.register("mine_baron",
             () -> EntityType.Builder.<com.brasshaven.entity.boss.MineBaron>of(com.brasshaven.entity.boss.MineBaron::new, MobCategory.MONSTER)
                     .sized(com.brasshaven.entity.boss.MineBaron.WIDTH, com.brasshaven.entity.boss.MineBaron.HEIGHT).clientTrackingRange(10).build(ENTITIES.key("mine_baron")));
+    public static final RegistryObject<EntityType<com.brasshaven.entity.boss.ChimeAbbot>> CHIME_ABBOT = ENTITIES.register("chime_abbot",
+            () -> EntityType.Builder.<com.brasshaven.entity.boss.ChimeAbbot>of(com.brasshaven.entity.boss.ChimeAbbot::new, MobCategory.MONSTER)
+                    .sized(com.brasshaven.entity.boss.ChimeAbbot.WIDTH, com.brasshaven.entity.boss.ChimeAbbot.HEIGHT).clientTrackingRange(10).build(ENTITIES.key("chime_abbot")));
+    public static final RegistryObject<EntityType<com.brasshaven.entity.boss.CorsairCaptain>> CORSAIR_CAPTAIN = ENTITIES.register("corsair_captain",
+            () -> EntityType.Builder.<com.brasshaven.entity.boss.CorsairCaptain>of(com.brasshaven.entity.boss.CorsairCaptain::new, MobCategory.MONSTER)
+                    .sized(com.brasshaven.entity.boss.CorsairCaptain.WIDTH, com.brasshaven.entity.boss.CorsairCaptain.HEIGHT).clientTrackingRange(10).build(ENTITIES.key("corsair_captain")));
+    public static final RegistryObject<EntityType<com.brasshaven.entity.boss.HollowCantor>> HOLLOW_CANTOR = ENTITIES.register("hollow_cantor",
+            () -> EntityType.Builder.<com.brasshaven.entity.boss.HollowCantor>of(com.brasshaven.entity.boss.HollowCantor::new, MobCategory.MONSTER)
+                    .sized(com.brasshaven.entity.boss.HollowCantor.WIDTH, com.brasshaven.entity.boss.HollowCantor.HEIGHT).clientTrackingRange(10).build(ENTITIES.key("hollow_cantor")));
     public static final RegistryObject<EntityType<ColossusHeart>> COLOSSUS_HEART = ENTITIES.register("colossus_heart",
             () -> EntityType.Builder.<ColossusHeart>of(ColossusHeart::new, MobCategory.MONSTER)
                     .sized(ColossusHeart.WIDTH, ColossusHeart.HEIGHT).clientTrackingRange(10).build(ENTITIES.key("colossus_heart")));
@@ -383,10 +392,32 @@ public final class ModEntities {
     public static final RegistryObject<EntityType<com.brasshaven.entity.mob.BoilerGunner>> BOILER_GUNNER = ENTITIES.register("boiler_gunner",
             () -> EntityType.Builder.<com.brasshaven.entity.mob.BoilerGunner>of(com.brasshaven.entity.mob.BoilerGunner::new, MobCategory.MONSTER)
                     .sized(com.brasshaven.entity.mob.BoilerGunner.WIDTH, com.brasshaven.entity.mob.BoilerGunner.HEIGHT).clientTrackingRange(10).build(ENTITIES.key("boiler_gunner")));
+    // third pack: more creatures of the colossal structures (tools/wf/denizens.py)
+    public static final RegistryObject<EntityType<com.brasshaven.entity.mob.SlagGolem>> SLAG_GOLEM = ENTITIES.register("slag_golem",
+            () -> EntityType.Builder.<com.brasshaven.entity.mob.SlagGolem>of(com.brasshaven.entity.mob.SlagGolem::new, MobCategory.MONSTER)
+                    .sized(com.brasshaven.entity.mob.SlagGolem.WIDTH, com.brasshaven.entity.mob.SlagGolem.HEIGHT).clientTrackingRange(8).build(ENTITIES.key("slag_golem")));
+    public static final RegistryObject<EntityType<com.brasshaven.entity.mob.InkWraith>> INK_WRAITH = ENTITIES.register("ink_wraith",
+            () -> EntityType.Builder.<com.brasshaven.entity.mob.InkWraith>of(com.brasshaven.entity.mob.InkWraith::new, MobCategory.MONSTER)
+                    .sized(com.brasshaven.entity.mob.InkWraith.WIDTH, com.brasshaven.entity.mob.InkWraith.HEIGHT).clientTrackingRange(8).build(ENTITIES.key("ink_wraith")));
+    public static final RegistryObject<EntityType<com.brasshaven.entity.mob.StarMoteCaller>> STAR_MOTE_CALLER = ENTITIES.register("star_mote_caller",
+            () -> EntityType.Builder.<com.brasshaven.entity.mob.StarMoteCaller>of(com.brasshaven.entity.mob.StarMoteCaller::new, MobCategory.MONSTER)
+                    .sized(com.brasshaven.entity.mob.StarMoteCaller.WIDTH, com.brasshaven.entity.mob.StarMoteCaller.HEIGHT).clientTrackingRange(8).build(ENTITIES.key("star_mote_caller")));
+    public static final RegistryObject<EntityType<com.brasshaven.entity.mob.StarMote>> STAR_MOTE = ENTITIES.register("star_mote",
+            () -> EntityType.Builder.<com.brasshaven.entity.mob.StarMote>of(com.brasshaven.entity.mob.StarMote::new, MobCategory.MONSTER)
+                    .sized(com.brasshaven.entity.mob.StarMote.WIDTH, com.brasshaven.entity.mob.StarMote.HEIGHT).clientTrackingRange(8).build(ENTITIES.key("star_mote")));
+    public static final RegistryObject<EntityType<com.brasshaven.entity.mob.SunScarab>> SUN_SCARAB = ENTITIES.register("sun_scarab",
+            () -> EntityType.Builder.<com.brasshaven.entity.mob.SunScarab>of(com.brasshaven.entity.mob.SunScarab::new, MobCategory.MONSTER)
+                    .sized(com.brasshaven.entity.mob.SunScarab.WIDTH, com.brasshaven.entity.mob.SunScarab.HEIGHT).clientTrackingRange(8).build(ENTITIES.key("sun_scarab")));
+    public static final RegistryObject<EntityType<com.brasshaven.entity.mob.DartFrogAssassin>> DART_FROG_ASSASSIN = ENTITIES.register("dart_frog_assassin",
+            () -> EntityType.Builder.<com.brasshaven.entity.mob.DartFrogAssassin>of(com.brasshaven.entity.mob.DartFrogAssassin::new, MobCategory.MONSTER)
+                    .sized(com.brasshaven.entity.mob.DartFrogAssassin.WIDTH, com.brasshaven.entity.mob.DartFrogAssassin.HEIGHT).clientTrackingRange(8).build(ENTITIES.key("dart_frog_assassin")));
+    public static final RegistryObject<EntityType<com.brasshaven.entity.mob.DrownedMarine>> DROWNED_MARINE = ENTITIES.register("drowned_marine",
+            () -> EntityType.Builder.<com.brasshaven.entity.mob.DrownedMarine>of(com.brasshaven.entity.mob.DrownedMarine::new, MobCategory.MONSTER)
+                    .sized(com.brasshaven.entity.mob.DrownedMarine.WIDTH, com.brasshaven.entity.mob.DrownedMarine.HEIGHT).clientTrackingRange(10).build(ENTITIES.key("drowned_marine")));
 
     /** Every boss with an Elden Ring style fight (demo command, quests). */
     public static List<RegistryObject<? extends EntityType<? extends com.brasshaven.boss.WayfarerBoss>>> bosses() {
-        return List.of(DROWNED_WARDEN, VOID_WARDEN, GRAVE_KNIGHT, BONE_MATRIARCH, WEEPING_LADY, LARVA_MOTHER, BELL_KEEPER, ARCHIVIST, SAND_PHARAOH, JADE_JAGUAR, ROOT_MOTHER, SWAMP_CRONE, GRYPHON_KNIGHT, RUNE_COLOSSUS, FORGE_KING, CRYSTAL_SPIDER, SCULK_SPAWN, ASH_LORD, PIGLIN_KING, SOUL_REAPER, GRAND_CLOCKMAKER, IRON_HELMSMAN, BRONZE_SENTINEL, DUNE_KING, FALLEN_SERAPH, CHAINED_JAILER, CALDERA_CASTELLAN, FROST_JARL, OATHBOUND_GATEKEEPER, STORM_ASCETIC, TIDE_ABBESS, LOCK_MASTER, BOG_HIEROPHANT, SOLAR_HIERARCH, DROWNED_ADMIRAL, TURBINE_TYRANT, ABYSSAL_ARCHITECT, STRANGLER_QUEEN, FOURTH_KING, COLOSSUS_HEART, ANVIL_WARDEN, STAR_CURATOR, MINE_BARON);
+        return List.of(DROWNED_WARDEN, VOID_WARDEN, GRAVE_KNIGHT, BONE_MATRIARCH, WEEPING_LADY, LARVA_MOTHER, BELL_KEEPER, ARCHIVIST, SAND_PHARAOH, JADE_JAGUAR, ROOT_MOTHER, SWAMP_CRONE, GRYPHON_KNIGHT, RUNE_COLOSSUS, FORGE_KING, CRYSTAL_SPIDER, SCULK_SPAWN, ASH_LORD, PIGLIN_KING, SOUL_REAPER, GRAND_CLOCKMAKER, IRON_HELMSMAN, BRONZE_SENTINEL, DUNE_KING, FALLEN_SERAPH, CHAINED_JAILER, CALDERA_CASTELLAN, FROST_JARL, OATHBOUND_GATEKEEPER, STORM_ASCETIC, TIDE_ABBESS, LOCK_MASTER, BOG_HIEROPHANT, SOLAR_HIERARCH, DROWNED_ADMIRAL, TURBINE_TYRANT, ABYSSAL_ARCHITECT, STRANGLER_QUEEN, FOURTH_KING, COLOSSUS_HEART, ANVIL_WARDEN, STAR_CURATOR, MINE_BARON, CHIME_ABBOT, CORSAIR_CAPTAIN, HOLLOW_CANTOR);
     }
 
     public static void registerAttributes(EntityAttributeCreationEvent event) {
@@ -448,6 +479,9 @@ public final class ModEntities {
         event.put(ANVIL_WARDEN.get(), AnvilWarden.attributes().build());
         event.put(COLOSSUS_HEART.get(), ColossusHeart.attributes().build());
         event.put(MINE_BARON.get(), com.brasshaven.entity.boss.MineBaron.attributes().build());
+        event.put(CHIME_ABBOT.get(), com.brasshaven.entity.boss.ChimeAbbot.attributes().build());
+        event.put(CORSAIR_CAPTAIN.get(), com.brasshaven.entity.boss.CorsairCaptain.attributes().build());
+        event.put(HOLLOW_CANTOR.get(), com.brasshaven.entity.boss.HollowCantor.attributes().build());
         event.put(SOLAR_HIERARCH.get(), SolarHierarch.attributes().build());
         event.put(GLOW_JELLYFISH.get(), GlowJellyfish.attributes().build());
         event.put(REEF_FISH.get(), ReefFish.attributes().build());
@@ -477,6 +511,13 @@ public final class ModEntities {
         event.put(RUST_MITE_MOTHER.get(), com.brasshaven.entity.mob.RustMiteMother.attributes().build());
         event.put(RUST_MITE.get(), com.brasshaven.entity.mob.RustMite.attributes().build());
         event.put(BOILER_GUNNER.get(), com.brasshaven.entity.mob.BoilerGunner.attributes().build());
+        event.put(SLAG_GOLEM.get(), com.brasshaven.entity.mob.SlagGolem.attributes().build());
+        event.put(INK_WRAITH.get(), com.brasshaven.entity.mob.InkWraith.attributes().build());
+        event.put(STAR_MOTE_CALLER.get(), com.brasshaven.entity.mob.StarMoteCaller.attributes().build());
+        event.put(STAR_MOTE.get(), com.brasshaven.entity.mob.StarMote.attributes().build());
+        event.put(SUN_SCARAB.get(), com.brasshaven.entity.mob.SunScarab.attributes().build());
+        event.put(DART_FROG_ASSASSIN.get(), com.brasshaven.entity.mob.DartFrogAssassin.attributes().build());
+        event.put(DROWNED_MARINE.get(), com.brasshaven.entity.mob.DrownedMarine.attributes().build());
     }
 
     /** Natural/structure spawning rules: on the ground, in the dark, like vanilla monsters. */
@@ -489,6 +530,10 @@ public final class ModEntities {
         }
         for (EntityType<? extends Monster> type : List.of(SLUICE_DROWNED.get(), TURBINE_AUTOMATON.get(), BOG_LEECH_MAN.get(),
                 ABYSS_CRAWLER.get(), RUST_MITE_MOTHER.get(), RUST_MITE.get(), BOILER_GUNNER.get())) {
+            register(event, type);
+        }
+        for (EntityType<? extends Monster> type : List.of(SLAG_GOLEM.get(), INK_WRAITH.get(), STAR_MOTE_CALLER.get(), STAR_MOTE.get(),
+                SUN_SCARAB.get(), DART_FROG_ASSASSIN.get(), DROWNED_MARINE.get())) {
             register(event, type);
         }
         // the Barnacle Crab spawns under water (the sunken structures' spawn lists)
@@ -514,6 +559,10 @@ public final class ModEntities {
         }
         for (EntityType<?> type : List.of(SLUICE_DROWNED.get(), TURBINE_AUTOMATON.get(), BOG_LEECH_MAN.get(), ABYSS_CRAWLER.get(),
                 RUST_MITE_MOTHER.get(), RUST_MITE.get(), BOILER_GUNNER.get())) {
+            capped(event, type);
+        }
+        for (EntityType<?> type : List.of(SLAG_GOLEM.get(), INK_WRAITH.get(), STAR_MOTE_CALLER.get(), STAR_MOTE.get(),
+                SUN_SCARAB.get(), DART_FROG_ASSASSIN.get(), DROWNED_MARINE.get())) {
             capped(event, type);
         }
     }
