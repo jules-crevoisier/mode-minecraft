@@ -586,6 +586,53 @@ lairs, ruins and small sites).
     rim behind sealed bars. Shortcuts: the reliquary trapdoor and water shaft down to the sump pool (then crypt and
     bubble-column lift up to an iron-door booth in Meridian Hall, lever inside only), the ring door (opens one way),
     the terrace girder drop into the escapement pool by the breach.
+32. **The Crimson Colosseum (crimson forest / nether wastes; cavern fit, absolute y 21).** A piglin arena-city
+    181 x 186: an oval colosseum (inner ellipse 22 x 17, wall at u 44..47 to y 50) of blackstone, polished
+    blackstone, nether bricks and gilded blackstone, 36 bays in three arcade storeys with half-columns, cornices,
+    arch niches holding gold-trimmed piglin champion statues and banners, an attic with velarium masts; a royal
+    box with a hip roof under the north champion tower (a golden piglin idol, top ~y 89), spiked gate towers,
+    crimson fungus overgrowing the NW stands, a lava moat (u 51..58) crossed by a chain bridge on pylons. Every
+    open volume is explicit air (Nether pattern). Route: the exiled gladiators' camp (waystone) -> chain bridge ->
+    champions' gate -> betting hall (hub, waystone, gold counters, hay) -> barracks (bunks, stair), armoury forge,
+    and the hypogeum under the arena (cage gallery with iron-door cells, muster hall, hoglin pens, beast-lift
+    hall with galleries) -> grand stair into the ambulatory -> royal box (site of grace) -> mist on the royal
+    stair -> the 44 x 34 sand arena (gryphon knight). The champion's purse vault sits under the royal box behind
+    sealed bars. Shortcuts: the beast lift up from the hypogeum, the forge's one-way iron portcullis (lever on
+    one side only), the drop from the stands into the hub hay.
+33. **The Clockwork Carnival (flower forest / birch forest / old-growth birch forest).** An abandoned steam
+    carnival ~209 x 219 on a meadow disc it lays itself (flowers, wildflowers, leaf litter, birch groves, gravel
+    lanes): a static 70-high brass ferris wheel (radius 30, twin rims, 16 gondolas, A-frames, axle platform) driven
+    by a chain from the brick engine house (boiler, flywheel, 44-high smokestack); a 68-wide red-and-white striped
+    big top (concave roof to a cupola at 39, king poles, scalloped valance) over a 36-wide sawdust ring, six tiers
+    of benches, aisles and a gallery; a carousel of copper/verdigris automaton horses under a verdigris dome; a
+    walkable 5-wide rollercoaster on birch trestle bents looping round the site (lift hill to a summit at 31, a
+    first drop, a long low run); the hall of mirrors (an 8 x 5 DFS maze of glass and tinted glass); the funhouse
+    entered through the mouth of a giant clown automaton's face (barrel of fun, tilting room, laughing heads,
+    dressing room, automaton workshop, haunted attic); eight game stalls, the steam calliope wagon, ticket booths,
+    strings of lanterns on chain knots. Route: the performers' camp (waystone, caravans) -> the ticket gate (onion
+    domes, booths) -> the midway avenue -> the plaza (hub, waystone, maypole, calliope) -> carousel, mirrors,
+    funhouse, stalls, the ringmaster's caravan, the engine house -> climb the coaster lift hill to the summit
+    (winch house) or the wheel's ladder spine to the axle platform and the high catwalk -> the brake platform
+    (site of grace, waystone) -> mist in the canvas gangway -> the gallery and aisles down into the circus ring
+    (gryphon knight). The ringmaster's strongbox wagon sits backstage behind sealed bars at the performers' gate.
+    Shortcuts: the helter-skelter slide from the summit down to a pool, the wheel's bubble-column maintenance lift,
+    the funhouse's one-way exit door (and the big top's front and back doors, opening only from inside).
+34. **The Storm Spire (stony / jagged peaks, windswept hills; land fit).** A lightning-harvesting complex ~150
+    across on a summit massif (terraced plateau at feet 25, bastion terrace at 15, north ridge to ~50, spur
+    pinnacles), every terrace walled with crenellated parapets. A 110-high copper-and-iron tesla spire: a stepped
+    plinth, a dark-iron shaft banded with copper, four stacked coil rings with galleries (insulator gallery, condenser
+    ring, spark-gap gallery, resonance chamber) and the switchboard ring of grace (waystone), a bowl vault and an open crown platform under six corona
+    legs, a corona ring at 128 and a needle of lightning rods and end rods to 140. Six lattice collector masts on the
+    spurs hang sagging iron-chain cables to the spire. Route: the mountaineers' camp (waystone, tents) -> the
+    funicular (rails on a stepped bed, parked cable car, stations) or the switchbacks -> the gate bastion (drum
+    towers, wicket gate, guard room, armoury) -> the dynamo court (hub, waystone, transformer kiosks, pond) -> the
+    capacitor hall of Leyden jars (glass, copper, sea lanterns, busbars; roof walk and bridge into ring 1), the
+    dynamo house (three giant generators, control gallery), the coil workshop, the engineers' barracks on the ridge
+    terrace, the battery vaults under the court, the weather observatory on its pinnacle (dome, anemometers, wind
+    vane) -> the helix stair up the spire's core, ring after ring -> the switchboard ring (site of grace) -> the
+    turret's spiral stair -> mist -> the ~33-wide railed crown arena (gryphon knight). The charged vault sits in the bowl under the arena behind
+    sealed bars. Shortcuts: the bubble-column lift in the core (lobby iron door, lever inside), the water slide
+    from the observatory pinnacle into the court pond, the bastion's one-way postern (lever inside only).
 
 ---
 

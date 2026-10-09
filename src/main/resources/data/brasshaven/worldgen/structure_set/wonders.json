@@ -115,6 +115,14 @@
     {
       "structure": "brasshaven:abyssal_station",
       "weight": 1
+    },
+    {
+      "structure": "brasshaven:storm_spire",
+      "weight": 1
+    },
+    {
+      "structure": "brasshaven:clockwork_carnival",
+      "weight": 1
     }
   ],
   "placement": {

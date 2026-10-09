@@ -1,0 +1,615 @@
+{
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "brasshaven:chunked_template",
+        "size": [
+          169,
+          155,
+          195
+        ],
+        "cells": [
+          {
+            "location": "brasshaven:storm_spire/spire/x0_z0",
+            "offset": [
+              0,
+              2,
+              0
+            ],
+            "size": [
+              28,
+              47,
+              27
+            ],
+            "blocks": 5651
+          },
+          {
+            "location": "brasshaven:storm_spire/spire/x0_z1",
+            "offset": [
+              0,
+              2,
+              27
+            ],
+            "size": [
+              28,
+              88,
+              29
+            ],
+            "blocks": 6713
+          },
+          {
+            "location": "brasshaven:storm_spire/spire/x0_z2",
+            "offset": [
+              0,
+              2,
+              56
+            ],
+            "size": [
+              28,
+              64,
+              28
+            ],
+            "blocks": 8376
+          },
+          {
+            "location": "brasshaven:storm_spire/spire/x0_z3",
+            "offset": [
+              0,
+              2,
+              84
+            ],
+            "size": [
+              28,
+              64,
+              27
+            ],
+            "blocks": 7272
+          },
+          {
+            "location": "brasshaven:storm_spire/spire/x0_z4",
+            "offset": [
+              0,
+              2,
+              111
+            ],
+            "size": [
+              28,
+              36,
+              28
+            ],
+            "blocks": 5696
+          },
+          {
+            "location": "brasshaven:storm_spire/spire/x0_z5",
+            "offset": [
+              0,
+              2,
+              139
+            ],
+            "size": [
+              28,
+              24,
+              28
+            ],
+            "blocks": 5528
+          },
+          {
+            "location": "brasshaven:storm_spire/spire/x0_z6",
+            "offset": [
+              9,
+              2,
+              167
+            ],
+            "size": [
+              19,
+              16,
+              5
+            ],
+            "blocks": 607
+          },
+          {
+            "location": "brasshaven:storm_spire/spire/x1_z0",
+            "offset": [
+              28,
+              2,
+              0
+            ],
+            "size": [
+              28,
+              61,
+              27
+            ],
+            "blocks": 6369
+          },
+          {
+            "location": "brasshaven:storm_spire/spire/x1_z1",
+            "offset": [
+              28,
+              30,
+              27
+            ],
+            "size": [
+              28,
+              50,
+              29
+            ],
+            "blocks": 10157
+          },
+          {
+            "location": "brasshaven:storm_spire/spire/x1_z2",
+            "offset": [
+              28,
+              32,
+              56
+            ],
+            "size": [
+              28,
+              42,
+              28
+            ],
+            "blocks": 15022
+          },
+          {
+            "location": "brasshaven:storm_spire/spire/x1_z3",
+            "offset": [
+              28,
+              32,
+              84
+            ],
+            "size": [
+              28,
+              50,
+              27
+            ],
+            "blocks": 10076
+          },
+          {
+            "location": "brasshaven:storm_spire/spire/x1_z4",
+            "offset": [
+              28,
+              17,
+              111
+            ],
+            "size": [
+              28,
+              25,
+              28
+            ],
+            "blocks": 5491
+          },
+          {
+            "location": "brasshaven:storm_spire/spire/x1_z5",
+            "offset": [
+              28,
+              11,
+              139
+            ],
+            "size": [
+              28,
+              21,
+              28
+            ],
+            "blocks": 5637
+          },
+          {
+            "location": "brasshaven:storm_spire/spire/x1_z6",
+            "offset": [
+              28,
+              2,
+              167
+            ],
+            "size": [
+              28,
+              24,
+              28
+            ],
+            "blocks": 4065
+          },
+          {
+            "location": "brasshaven:storm_spire/spire/x2_z0",
+            "offset": [
+              56,
+              2,
+              0
+            ],
+            "size": [
+              28,
+              99,
+              27
+            ],
+            "blocks": 6523
+          },
+          {
+            "location": "brasshaven:storm_spire/spire/x2_z1",
+            "offset": [
+              56,
+              0,
+              27
+            ],
+            "size": [
+              28,
+              67,
+              29
+            ],
+            "blocks": 13639
+          },
+          {
+            "location": "brasshaven:storm_spire/spire/x2_z2",
+            "offset": [
+              56,
+              34,
+              56
+            ],
+            "size": [
+              28,
+              115,
+              28
+            ],
+            "blocks": 23857
+          },
+          {
+            "location": "brasshaven:storm_spire/spire/x2_z3",
+            "offset": [
+              56,
+              24,
+              84
+            ],
+            "size": [
+              28,
+              121,
+              27
+            ],
+            "blocks": 18054
+          },
+          {
+            "location": "brasshaven:storm_spire/spire/x2_z4",
+            "offset": [
+              56,
+              24,
+              111
+            ],
+            "size": [
+              28,
+              62,
+              28
+            ],
+            "blocks": 15538
+          },
+          {
+            "location": "brasshaven:storm_spire/spire/x2_z5",
+            "offset": [
+              56,
+              13,
+              139
+            ],
+            "size": [
+              28,
+              47,
+              28
+            ],
+            "blocks": 6553
+          },
+          {
+            "location": "brasshaven:storm_spire/spire/x2_z6",
+            "offset": [
+              56,
+              6,
+              167
+            ],
+            "size": [
+              28,
+              19,
+              28
+            ],
+            "blocks": 5406
+          },
+          {
+            "location": "brasshaven:storm_spire/spire/x3_z0",
+            "offset": [
+              84,
+              2,
+              0
+            ],
+            "size": [
+              29,
+              100,
+              27
+            ],
+            "blocks": 6812
+          },
+          {
+            "location": "brasshaven:storm_spire/spire/x3_z1",
+            "offset": [
+              84,
+              0,
+              27
+            ],
+            "size": [
+              29,
+              94,
+              29
+            ],
+            "blocks": 9681
+          },
+          {
+            "location": "brasshaven:storm_spire/spire/x3_z2",
+            "offset": [
+              84,
+              34,
+              56
+            ],
+            "size": [
+              29,
+              121,
+              28
+            ],
+            "blocks": 25428
+          },
+          {
+            "location": "brasshaven:storm_spire/spire/x3_z3",
+            "offset": [
+              84,
+              24,
+              84
+            ],
+            "size": [
+              29,
+              122,
+              27
+            ],
+            "blocks": 15628
+          },
+          {
+            "location": "brasshaven:storm_spire/spire/x3_z4",
+            "offset": [
+              84,
+              24,
+              111
+            ],
+            "size": [
+              29,
+              63,
+              28
+            ],
+            "blocks": 16059
+          },
+          {
+            "location": "brasshaven:storm_spire/spire/x3_z5",
+            "offset": [
+              84,
+              12,
+              139
+            ],
+            "size": [
+              29,
+              48,
+              28
+            ],
+            "blocks": 6720
+          },
+          {
+            "location": "brasshaven:storm_spire/spire/x3_z6",
+            "offset": [
+              84,
+              6,
+              167
+            ],
+            "size": [
+              29,
+              19,
+              28
+            ],
+            "blocks": 5723
+          },
+          {
+            "location": "brasshaven:storm_spire/spire/x4_z0",
+            "offset": [
+              113,
+              0,
+              0
+            ],
+            "size": [
+              28,
+              62,
+              27
+            ],
+            "blocks": 6874
+          },
+          {
+            "location": "brasshaven:storm_spire/spire/x4_z1",
+            "offset": [
+              113,
+              0,
+              27
+            ],
+            "size": [
+              28,
+              82,
+              29
+            ],
+            "blocks": 16878
+          },
+          {
+            "location": "brasshaven:storm_spire/spire/x4_z2",
+            "offset": [
+              113,
+              34,
+              56
+            ],
+            "size": [
+              28,
+              44,
+              28
+            ],
+            "blocks": 19213
+          },
+          {
+            "location": "brasshaven:storm_spire/spire/x4_z3",
+            "offset": [
+              113,
+              32,
+              84
+            ],
+            "size": [
+              28,
+              51,
+              27
+            ],
+            "blocks": 11631
+          },
+          {
+            "location": "brasshaven:storm_spire/spire/x4_z4",
+            "offset": [
+              113,
+              16,
+              111
+            ],
+            "size": [
+              28,
+              25,
+              28
+            ],
+            "blocks": 5491
+          },
+          {
+            "location": "brasshaven:storm_spire/spire/x4_z5",
+            "offset": [
+              113,
+              11,
+              139
+            ],
+            "size": [
+              28,
+              25,
+              28
+            ],
+            "blocks": 5625
+          },
+          {
+            "location": "brasshaven:storm_spire/spire/x4_z6",
+            "offset": [
+              113,
+              2,
+              167
+            ],
+            "size": [
+              28,
+              23,
+              28
+            ],
+            "blocks": 4208
+          },
+          {
+            "location": "brasshaven:storm_spire/spire/x5_z0",
+            "offset": [
+              141,
+              2,
+              0
+            ],
+            "size": [
+              28,
+              45,
+              27
+            ],
+            "blocks": 5499
+          },
+          {
+            "location": "brasshaven:storm_spire/spire/x5_z1",
+            "offset": [
+              141,
+              2,
+              27
+            ],
+            "size": [
+              28,
+              84,
+              29
+            ],
+            "blocks": 6270
+          },
+          {
+            "location": "brasshaven:storm_spire/spire/x5_z2",
+            "offset": [
+              141,
+              2,
+              56
+            ],
+            "size": [
+              28,
+              82,
+              28
+            ],
+            "blocks": 8510
+          },
+          {
+            "location": "brasshaven:storm_spire/spire/x5_z3",
+            "offset": [
+              141,
+              2,
+              84
+            ],
+            "size": [
+              28,
+              61,
+              27
+            ],
+            "blocks": 7058
+          },
+          {
+            "location": "brasshaven:storm_spire/spire/x5_z4",
+            "offset": [
+              141,
+              2,
+              111
+            ],
+            "size": [
+              28,
+              37,
+              28
+            ],
+            "blocks": 5697
+          },
+          {
+            "location": "brasshaven:storm_spire/spire/x5_z5",
+            "offset": [
+              141,
+              2,
+              139
+            ],
+            "size": [
+              28,
+              22,
+              28
+            ],
+            "blocks": 5527
+          },
+          {
+            "location": "brasshaven:storm_spire/spire/x5_z6",
+            "offset": [
+              141,
+              2,
+              167
+            ],
+            "size": [
+              19,
+              16,
+              5
+            ],
+            "blocks": 606
+          }
+        ],
+        "projection": "rigid",
+        "processors": "brasshaven:none",
+        "ground_level_delta": 15,
+        "footprint": [
+          0,
+          0,
+          168,
+          194
+        ]
+      }
+    }
+  ]
+}

@@ -796,6 +796,22 @@ PAGES = [
          "barreaux scellés, le reliquaire des âmes. En option : la galerie des pistons et l'ossuaire sous le moteur. "
          "Raccourcis : l'ascenseur à piston, la goulotte d'os, la porte à sens unique de la fournaise."),
     ], []),
+    ("crimson_colosseum", "wonders", "minecraft:gilded_blackstone", ("The Crimson Colosseum",
+                                                                      "Le Colisée cramoisi"), [
+        ("A piglin arena-city 181 by 186 blocks: a three-tiered oval colosseum of blackstone, nether bricks and "
+         "gold, gilded champion statues, a royal box under a golden champion, a lava moat and a chain bridge. "
+         "Where: crimson forests, nether wastes.",
+         "Une cité-arène piglin de 181 sur 186 blocs : un colisée ovale à trois rangs d'arcades, de pierre noire, "
+         "de briques du Nether et d'or, des champions dorés, une tribune royale, des douves de lave et un pont de "
+         "chaînes. Où : forêts cramoisies, déserts du Nether."),
+        ("From the exiles' camp (waystone), over the chain bridge to the betting hall (waystone): barracks, forge, "
+         "and the hypogeum's cages, hoglin pens and lifts. The grand stair climbs to the royal box (grace); past "
+         "the mist, the sand arena. Shortcuts: the beast lift, the forge's one-way door, the drop from the stands.",
+         "Du camp des exilés (pierre), par le pont de chaînes, à la salle des paris (pierre) : caserne, forge, et "
+         "l'hypogée, ses cages, enclos à hoglins et monte-charges. Le grand escalier monte à la tribune royale "
+         "(grâce) ; passé la brume, l'arène de sable. Raccourcis : le monte-charge, la porte à sens unique de la "
+         "forge, le saut des gradins."),
+    ], []),
     ("starfall_library", "wonders", "minecraft:chiseled_bookshelf", ("The Starfall Library",
                                                                       "La Bibliothèque de la chute d'étoile"), [
         ("A floating archive 170 blocks across among the outer End islands: a purpur-and-brass spindle tower 125 "
@@ -834,6 +850,22 @@ PAGES = [
          "station du cardan (pierre) et au lieu de grâce, puis l'arène sur la plateforme du noyau. Derrière des "
          "barreaux scellés, le reliquaire du noyau. Raccourcis : le puits d'eau du reliquaire, l'ascenseur à bulles "
          "de la crypte vers la salle, la porte à sens unique de l'anneau, le saut vers la brèche."),
+    ], []),
+    ("storm_spire", "wonders", "minecraft:lightning_rod", ("The Storm Spire", "La Flèche des tempêtes"), [
+        ("A lightning-harvesting complex 150 blocks across on a summit: a copper-and-iron tesla spire 110 high with "
+         "stacked coil rings and a crackling crown, linked by chain cables to six collector masts, everything carved "
+         "into the crags. Where: stony and jagged peaks, windswept hills.",
+         "Un complexe de 150 blocs qui capte la foudre sur un sommet : une flèche Tesla de cuivre et de fer haute de "
+         "110 blocs aux anneaux de bobines, reliée par des câbles de chaînes à six mâts, le tout taillé dans les "
+         "crêtes. Où : pics rocheux et déchiquetés, collines venteuses."),
+        ("From the camp (waystone), take the funicular or the switchbacks to the gate bastion and the dynamo court "
+         "(waystone): capacitor hall, dynamo house, coil workshop, observatory, barracks, battery vaults. Climb the "
+         "spire's helix to the grace and the crown arena. Behind sealed bars, the charged vault. Shortcuts: the "
+         "bubble lift, the water slide, the one-way postern.",
+         "Depuis le camp (pierre de passage), le funiculaire ou les lacets mènent au bastion et à la cour des "
+         "dynamos (pierre) : halle des condensateurs, dynamos, atelier, observatoire, caserne, caves des "
+         "batteries. L'hélice de la flèche monte au lieu de grâce et à l'arène de la couronne. Derrière des barreaux "
+         "scellés, le caveau chargé. Raccourcis : ascenseur à bulles, glissade d'eau, poterne à sens unique."),
     ], []),
     ("airship_graveyard", "wonders", "brasshaven:brass_plating", ("The Airship Graveyard",
                                                                   "Le Cimetière des dirigeables"), [
@@ -955,6 +987,29 @@ PAGES = [
          "tête du flottage, le réfectoire, la loge du contremaître et les fours ; puis le donjon : l'armurerie, la "
          "grande salle, la salle des cartes (pierre) et l'arène autour de la machine au sommet. La descente du "
          "flottage, l'ascenseur à contrepoids et la poterne ramènent en arrière."),
+    ], []),
+    ("clockwork_carnival", "wonders", "minecraft:bell", ("The Clockwork Carnival", "La Fête foraine mécanique"), [
+        ("An abandoned steam carnival, 200 blocks across, overgrown with flowers and birches: a 70-high brass ferris "
+         "wheel with sixteen gondolas, a red-and-white striped big top, a carousel of brass automaton horses under a "
+         "verdigris dome, a rollercoaster on birch trestles looping round the site, a hall of mirrors, a haunted "
+         "funhouse entered through a giant clown automaton's mouth, game stalls, a steam calliope and strings of "
+         "lanterns. Where: flower forests, birch forests, old-growth birch forests.",
+         "Une fête foraine à vapeur abandonnée, 200 blocs, envahie de fleurs et de bouleaux : une grande roue de "
+         "laiton haute de 70 blocs et ses seize nacelles, un chapiteau rayé rouge et blanc, un carrousel de "
+         "chevaux automates sous un dôme vert-de-gris, des montagnes russes sur tréteaux de bouleau autour du "
+         "site, un palais des glaces, une maison hantée qui s'ouvre par la bouche d'un clown automate géant, des "
+         "stands de jeux, un orgue à vapeur et des guirlandes de lanternes. Où : forêts de fleurs, forêts de "
+         "bouleaux, vieilles forêts de bouleaux."),
+        ("From the performers' camp (waystone) through the ticket gate to the midway plaza (waystone): the "
+         "carousel, the hall of mirrors, the funhouse, the stalls, the ringmaster's caravan and the engine house; "
+         "then up the coaster track or the wheel's ladders to the brake platform (waystone) and the arena in the "
+         "big top's ring. The helter-skelter slide, the wheel's maintenance lift and the funhouse's one-way exit "
+         "lead back.",
+         "Depuis le camp des forains (pierre), par la porte des billets, jusqu'à la place du manège (pierre) : le "
+         "carrousel, le palais des glaces, la maison hantée, les stands, la roulotte de M. Loyal et la salle des "
+         "machines ; puis par la voie des montagnes russes ou les échelles de la roue jusqu'au quai de freinage "
+         "(pierre) et l'arène dans la piste du chapiteau. Le toboggan en hélice, l'ascenseur de la roue et la "
+         "sortie à sens unique de la maison hantée ramènent en arrière."),
     ], []),
     ("abyssal_station", "wonders", "minecraft:sea_lantern", ("The Abyssal Station", "La Station abyssale"), [
         ("A research station on the deep ocean floor, 180 blocks across: brass-and-glass pressure domes (the great "
@@ -1870,6 +1925,39 @@ PAGES = [
          "dont le clic droit perce dans ta visée : chaque ennemi touché est blessé (d'autant plus qu'il porte d'armure), "
          "attiré vers la pointe de la lance et illuminé de bioluminescence."),
     ], []),
+    ("gilded_champion", "wonders", "brasshaven:remembrance_gilded_champion", ("The Gilded Champion", "Le Champion doré"), [
+        ("On the sand of the Crimson Colosseum, down the royal stair and through the mist, the undefeated piglin "
+         "gladiator still fights for an emperor long gone (700 health, armour 14): a massive brute in ornate gilded "
+         "plate and a crested helmet, a huge gold-and-netherite gladius in one hand and a round shield with a hoglin "
+         "skull boss in the other.",
+         "Sur le sable du Colisée cramoisi, au bas de l'escalier royal et passé la brume, le gladiateur piglin invaincu "
+         "se bat encore pour un empereur disparu (700 PV, armure 14) : une brute massive en armure dorée ouvragée et "
+         "casque à cimier, un glaive géant d'or et de netherite dans une main, un bouclier rond à crâne de hoglin dans "
+         "l'autre."),
+        ("His gladius cuts twice along drawn arcs, his shield bashes, and when he raises it blows from the front glance "
+         "off (and earn a riposte): strike him from the flank. He charges down a drawn lane, throws a gold net on a marked "
+         "ring that slows you, and taunts the stands: the crowd hurls gold debris onto marked circles.",
+         "Son glaive frappe deux fois le long d'arcs tracés, son bouclier cogne, et quand il le lève les coups de face "
+         "ricochent (et lui valent une riposte) : frappe-le de flanc. Il charge le long d'un couloir tracé, lance un "
+         "filet d'or sur un cercle marqué qui te ralentit, et nargue les gradins : la foule jette des débris d'or sur "
+         "des cercles marqués."),
+    ], ["brasshaven:remembrance_gilded_champion", "brasshaven:champion_gladius"]),
+    ("gilded_champion_favour", "wonders", "minecraft:gold_block", ("Champion: The Emperor's Favour", "Champion : la faveur de l'empereur"), [
+        ("At 65% he roars and quickens: his combo ends in a thrust, two nets fly, burning fire charges come with the "
+         "debris and piglin brutes and hoglins climb through the grates of the beast lifts. At 30% he kneels to the "
+         "royal box (jump the golden wave): his gold blazes, he casts his shield aside for a second gladius, and lava "
+         "jets erupt from the grates along marked lines.",
+         "À 65 %, il rugit et accélère : son enchaînement finit par un estoc, deux filets volent, des boules de feu "
+         "accompagnent les débris et des brutes piglins et des hoglins montent par les grilles des monte-charges. À 30 %, "
+         "il s'agenouille vers la loge (saute l'onde dorée) : son or flamboie, il jette son bouclier pour un second "
+         "glaive, et des jets de lave jaillissent des grilles le long de lignes marquées."),
+        ("His Remembrance, four ancient embers and two diamonds forge the Gilded Gladius of the Champion, whose "
+         "right-click thrusts along your aim, finishing foes under 30% health for more, and the crowd's roar gives you "
+         "absorption for every foe struck.",
+         "Son Souvenir, quatre braises anciennes et deux diamants forgent le Glaive doré du Champion, dont le clic droit "
+         "porte un estoc dans ta visée, achevant pour plus de dégâts les ennemis sous 30 % de leur vie, et le rugissement "
+         "de la foule te donne de l'absorption pour chaque ennemi frappé."),
+    ], []),
     ("moon_warden", "wonders", "brasshaven:remembrance_moon_warden", ("The Moon Warden", "La Gardienne de la lune"), [
         ("On the core platform of the Hollow Moon, over the void under the glowing heart of the machine, past ring 3 and "
          "the mist, the Moon Warden still keeps the moon turning (720 health, armour 12): a levitating automaton of "
@@ -1903,6 +1991,75 @@ PAGES = [
          "Son Souvenir, quatre éclats du vide et deux diamants forgent la Lame-astrolabe de la Gardienne de la lune, dont "
          "le clic droit lance trois planètes de laiton le long de bras en spirale qui rejoignent ta visée, frappant et "
          "attirant chaque ennemi croisé, avec un petit puits de gravité là où s'arrête la dernière."),
+    ], []),
+    ("ringmaster", "wonders", "brasshaven:remembrance_ringmaster", ("The Clockwork Ringmaster", "Le Monsieur Loyal mécanique"), [
+        ("In the ring of the Clockwork Carnival's big top, past the brake platform and the mist of the canvas gangway, "
+         "the Clockwork Ringmaster still runs the show for empty benches (640 health, armour 11): a tall brass showman "
+         "in a scarlet tailcoat and a towering top hat, a grinning brass face behind an amber monocle, a wind-up key "
+         "turning in his back, a telescoping cane in one hand and a juggling bomb in the other.",
+         "Dans la piste du chapiteau de la Fête foraine mécanique, passé le quai de freinage et la brume de la "
+         "passerelle de toile, le Monsieur Loyal mécanique mène encore le spectacle devant des gradins vides (640 PV, "
+         "armure 11) : un grand bonimenteur de laiton en queue-de-pie écarlate et haut-de-forme démesuré, un visage de "
+         "laiton hilare derrière un monocle d'ambre, une clé de remontage qui tourne dans son dos, une canne télescopique "
+         "dans une main et une bombe de jonglage dans l'autre."),
+        ("His cane whips round his front (a gold arc) and cracks straight down a red line; his juggling bombs land on "
+         "marked circles one after another; his top hat sails out along a marked line and back again; he lunges across "
+         "the ring down a marked lane. Every blow is drawn on the sawdust before it lands.",
+         "Sa canne fouette devant lui (un arc doré) puis claque droit le long d'une ligne rouge ; ses bombes de jonglage "
+         "tombent l'une après l'autre sur des cercles marqués ; son haut-de-forme file le long d'une ligne marquée et "
+         "revient ; il se fend à travers la piste le long d'un couloir marqué. Chaque coup est tracé dans la sciure "
+         "avant de tomber."),
+    ], ["brasshaven:remembrance_ringmaster", "brasshaven:ringmaster_cane"]),
+    ("ringmaster_finale", "wonders", "minecraft:firework_rocket", ("Ringmaster: Grand Finale", "Monsieur Loyal : grand final"), [
+        ("At 65% he roars and quickens: he calls his performers (clockwork spiders and rust mites) and sets a carousel "
+         "of fire posts turning round the ring: stay inside or outside their circle. At 30% the Grand Finale begins "
+         "(jump the confetti ring): a spotlight from the great chandelier hunts one player after another, slower than "
+         "walking, and blasts where it stops; confetti charges burst on marked circles.",
+         "À 65 %, il rugit et accélère : il appelle ses artistes (araignées mécaniques et mites de rouille) et fait "
+         "tourner un carrousel de poteaux de feu autour de la piste : reste dedans ou dehors. À 30 %, le grand final "
+         "commence (saute l'anneau de confettis) : un projecteur parti du grand lustre traque un joueur après l'autre, "
+         "moins vite que la marche, et éclate là où il s'arrête ; des charges de confettis explosent sur des cercles "
+         "marqués."),
+        ("His Remembrance, four map fragments and two diamonds forge the Showman's Cane of the Clockwork Ringmaster, "
+         "whose right-click lobs three brass juggling bombs along your aim, each bursting in confetti where it lands.",
+         "Son Souvenir, quatre fragments de carte et deux diamants forgent la Canne de scène du Monsieur Loyal "
+         "mécanique, dont le clic droit lance trois bombes de jonglage en laiton dans ta visée, chacune éclatant en "
+         "confettis là où elle tombe."),
+    ], []),
+    ("tesla_archon", "wonders", "brasshaven:remembrance_tesla_archon", ("The Tesla Archon", "L'Archonte Tesla"), [
+        ("On the open crown platform at the top of the Storm Spire, past the grace and the mist, among the lightning rods "
+         "under the corona, the Tesla Archon still runs his experiment (700 health, armour 12): a mad electrical engineer "
+         "fused with his own copper coil suit, a tesla coil towering on his back, a coil gauntlet and a coil-staff.",
+         "Sur la plateforme ouverte de la couronne, au sommet de la Flèche des tempêtes, passé le lieu de grâce et la "
+         "brume, parmi les paratonnerres sous la corolle, l'Archonte Tesla poursuit son expérience (700 PV, armure 12) : "
+         "un ingénieur électricien fou soudé à sa propre armure de cuivre à bobines, une bobine Tesla dressée dans le dos, "
+         "un gantelet à bobine et un bâton-bobine."),
+        ("His arc punch jumps on to the nearest other player: when the crackling line reaches you, step away from your "
+         "friend. Balls of lightning drift after you slower than you walk and burst on a circle that turns red; the coil "
+         "slam's circle is drawn before it lands (jump the ring of sparks after it), and the arc line locks red before it "
+         "fires. His blows never throw you off the crown.",
+         "Son coup de poing électrique saute sur le joueur le plus proche : quand la ligne crépitante t'atteint, éloigne-"
+         "toi de ton ami. Des boules de foudre dérivent vers toi moins vite que tu ne marches et éclatent sur un cercle qui "
+         "rougit ; le cercle du coup de bobine est tracé avant qu'il frappe (saute l'anneau d'étincelles qui suit), et la "
+         "ligne d'arc se fige en rouge avant de partir. Ses coups ne te jettent jamais de la couronne."),
+    ], ["brasshaven:remembrance_tesla_archon", "brasshaven:tesla_coilstaff"]),
+    ("tesla_archon_overload", "wonders", "minecraft:lightning_rod", ("Tesla Archon: Overload", "Archonte : surcharge"), [
+        ("At 65% he cackles and charges the corona: lightning falls one bolt after another on circles marked across the "
+         "platform, so leave yours before it turns red; his core turns into a magnet that draws you in (walk away from him "
+         "before he claps it shut). At 30% he overloads (jump the ring), then floats over the middle of the crown while "
+         "arc beams at ankle height turn round under him: gold marks show the way they turn, so jump each beam as it "
+         "comes.",
+         "À 65 %, il ricane et charge la corolle : la foudre tombe éclair après éclair sur des cercles marqués sur la "
+         "plateforme, alors quitte le tien avant qu'il rougisse ; son cœur devient un aimant qui t'attire (éloigne-toi "
+         "de lui avant qu'il referme les bras). À 30 %, il entre en surcharge (saute l'anneau), puis flotte au-dessus du "
+         "milieu de la couronne pendant que des rayons d'arc à hauteur de cheville tournent sous lui : des marques dorées "
+         "montrent leur sens, alors saute chaque rayon quand il arrive."),
+        ("His Remembrance, four map fragments and two diamonds forge the Coil-Staff of the Tesla Archon, whose "
+         "right-click sends a bolt along your aim to the first foe, calls a harmless lightning strike on it and jumps on "
+         "to up to three more foes nearby, slowing them.",
+         "Son Souvenir, quatre fragments de carte et deux diamants forgent le Bâton-bobine de l'Archonte Tesla, dont le "
+         "clic droit envoie un éclair dans ta visée jusqu'au premier ennemi, fait tomber sur lui une foudre inoffensive et "
+         "saute sur jusqu'à trois autres ennemis proches, qu'il ralentit."),
     ], []),
     ("strangler_queen", "wonders", "brasshaven:remembrance_strangler_queen", ("The Strangler Fig Queen", "La Reine-figuier étrangleur"), [
         ("On the summit terrace of the Canopy Temple-City, through the mist under the broken brass sun-disc, the fig "

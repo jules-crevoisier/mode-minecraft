@@ -130,6 +130,8 @@ FAMILIES = [
         "spore_refinery": 1,
         "timber_fortress": 1,
         "abyssal_station": 1,     # deep oceans only (shares the sea with the dreadnought wreck)
+        "storm_spire": 1,
+        "clockwork_carnival": 1,
     }, avoid=[(V + "villages", 10), (V + "pillager_outposts", 6), (V + "woodland_mansions", 8)], min_spawn=32,
         note="surface wonders; at least 40 chunks between two of them, none within 512 blocks of 0,0"),
     Family("deep_wonders", "deep_wonder", 72, 28, {
@@ -170,6 +172,7 @@ FAMILIES = [
         "chained_bastion": 1,
         "titan_forge": 1,
         "soul_engine": 1,
+        "crimson_colosseum": 1,
     }, avoid=[(V + "nether_complexes", 4)]),
     Family("nether_small", "nether", 30, 10, {
         "chain_bridge": 2, "soul_tower": 2,
@@ -262,6 +265,10 @@ FIT = {
     "timber_fortress": _f("land", spread=10, slope=1.0, wet=0.12),  # taiga river bend: lays its own yard, hill and river
     # deep sea floor (22+ deep, flat): the domes sit on their own footings; the tower's deck clears the surface
     "abyssal_station": _f("seabed", wet=0.95, depth=22, spread=8, slope=0.7, drop=4),
+    # mountain summits: brings its own crag massif, terraces and camp flat (rim 12 deep under the ground layer)
+    "storm_spire": _f("land", spread=28, slope=1.6, wet=0.05),
+    # flower / birch forest floor: lays its own meadow disc (6 deep at the rim), the coaster bents stand on it
+    "clockwork_carnival": _f("land", spread=10, slope=1.0, wet=0.1),
     # ---- coast: the dock side (template +z = south) in the sea, the cape on land, shore near sea level
     "coastal_lighthouse": _f("coast", sea_side="south", wet=0.5, land=0.5, spread=8, slope=1.0),
     # the island (south) in the sea, the causeway's shore end (north) on the beach: the strand lands at sea level
@@ -295,6 +302,7 @@ FIT = {
     "chained_bastion": _f("cavern", open=0.4),   # hangs in a big cavern: open air at the floor of the bastion
     "titan_forge": _f("cavern", open=0.35),      # needs a big cavern: open air over the anvil face
     "soul_engine": _f("cavern", open=0.35),      # stands on a soul sand valley floor: open air over its apron
+    "crimson_colosseum": _f("cavern", open=0.35),  # stands on a crimson forest floor: open air over its moat and bowl
     # ---- End: monuments floating over the void beside the outer islands; they rise above an island in the way
     "void_observatory": _f("sky", clearance=4, lift=32),
     "chorus_garden": _f("sky", clearance=4, lift=32),

@@ -814,9 +814,41 @@
           }
         ]
       }
+    },
+    "storm_spire": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:storm_spire"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "clockwork_carnival": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:clockwork_carnival"
+              }
+            }
+          }
+        ]
+      }
     }
   },
-  "parent": "brasshaven:explorer/timber_fortress",
+  "parent": "brasshaven:explorer/clockwork_carnival",
   "rewards": {
     "experience": 300,
     "loot": [

@@ -156,6 +156,7 @@ STRUCTURE_KIND = {
     "mesa_minecity": "mine",
     "titan_forge": "workshop",
     "soul_engine": "workshop",
+    "crimson_colosseum": "nether",
     "airship_graveyard": "workshop",
     "echo_cathedral": "library",
     "starfall_library": "library",
@@ -167,6 +168,8 @@ STRUCTURE_KIND = {
     "timber_fortress": "workshop",
     "verdant_arboretum": "sylvan",
     "abyssal_station": "harbour",
+    "storm_spire": "workshop",
+    "clockwork_carnival": "food",
     "tesla_observatory": "clockwork", "crystal_cathedral": "library", "sunken_submarine": "harbour",
     "diving_bell": "harbour", "coral_shrine": "harbour", "shipwreck_debris": "harbour",
     # vanilla villages and outposts extended by wf/village.py, the sea-floor props of wf/ocean.py

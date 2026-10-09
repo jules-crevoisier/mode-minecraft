@@ -1,0 +1,713 @@
+{
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "brasshaven:chunked_template",
+        "size": [
+          209,
+          74,
+          219
+        ],
+        "cells": [
+          {
+            "location": "brasshaven:clockwork_carnival/carnival/x0_z0",
+            "offset": [
+              8,
+              0,
+              8
+            ],
+            "size": [
+              22,
+              20,
+              23
+            ],
+            "blocks": 1915
+          },
+          {
+            "location": "brasshaven:clockwork_carnival/carnival/x0_z1",
+            "offset": [
+              1,
+              0,
+              31
+            ],
+            "size": [
+              29,
+              20,
+              32
+            ],
+            "blocks": 4623
+          },
+          {
+            "location": "brasshaven:clockwork_carnival/carnival/x0_z2",
+            "offset": [
+              1,
+              0,
+              63
+            ],
+            "size": [
+              29,
+              51,
+              31
+            ],
+            "blocks": 8250
+          },
+          {
+            "location": "brasshaven:clockwork_carnival/carnival/x0_z3",
+            "offset": [
+              0,
+              0,
+              94
+            ],
+            "size": [
+              30,
+              74,
+              31
+            ],
+            "blocks": 5242
+          },
+          {
+            "location": "brasshaven:clockwork_carnival/carnival/x0_z4",
+            "offset": [
+              1,
+              0,
+              125
+            ],
+            "size": [
+              29,
+              20,
+              31
+            ],
+            "blocks": 4437
+          },
+          {
+            "location": "brasshaven:clockwork_carnival/carnival/x0_z5",
+            "offset": [
+              3,
+              0,
+              156
+            ],
+            "size": [
+              27,
+              20,
+              32
+            ],
+            "blocks": 3639
+          },
+          {
+            "location": "brasshaven:clockwork_carnival/carnival/x0_z6",
+            "offset": [
+              17,
+              0,
+              188
+            ],
+            "size": [
+              13,
+              18,
+              9
+            ],
+            "blocks": 391
+          },
+          {
+            "location": "brasshaven:clockwork_carnival/carnival/x1_z0",
+            "offset": [
+              30,
+              0,
+              1
+            ],
+            "size": [
+              30,
+              31,
+              30
+            ],
+            "blocks": 4776
+          },
+          {
+            "location": "brasshaven:clockwork_carnival/carnival/x1_z1",
+            "offset": [
+              30,
+              4,
+              31
+            ],
+            "size": [
+              30,
+              27,
+              32
+            ],
+            "blocks": 5674
+          },
+          {
+            "location": "brasshaven:clockwork_carnival/carnival/x1_z2",
+            "offset": [
+              30,
+              4,
+              63
+            ],
+            "size": [
+              30,
+              43,
+              31
+            ],
+            "blocks": 9306
+          },
+          {
+            "location": "brasshaven:clockwork_carnival/carnival/x1_z3",
+            "offset": [
+              30,
+              4,
+              94
+            ],
+            "size": [
+              30,
+              70,
+              31
+            ],
+            "blocks": 6757
+          },
+          {
+            "location": "brasshaven:clockwork_carnival/carnival/x1_z4",
+            "offset": [
+              30,
+              4,
+              125
+            ],
+            "size": [
+              30,
+              30,
+              31
+            ],
+            "blocks": 10346
+          },
+          {
+            "location": "brasshaven:clockwork_carnival/carnival/x1_z5",
+            "offset": [
+              30,
+              4,
+              156
+            ],
+            "size": [
+              30,
+              16,
+              32
+            ],
+            "blocks": 4482
+          },
+          {
+            "location": "brasshaven:clockwork_carnival/carnival/x1_z6",
+            "offset": [
+              30,
+              0,
+              188
+            ],
+            "size": [
+              30,
+              20,
+              16
+            ],
+            "blocks": 2379
+          },
+          {
+            "location": "brasshaven:clockwork_carnival/carnival/x2_z0",
+            "offset": [
+              60,
+              0,
+              1
+            ],
+            "size": [
+              30,
+              31,
+              30
+            ],
+            "blocks": 5879
+          },
+          {
+            "location": "brasshaven:clockwork_carnival/carnival/x2_z1",
+            "offset": [
+              60,
+              4,
+              31
+            ],
+            "size": [
+              30,
+              31,
+              32
+            ],
+            "blocks": 16010
+          },
+          {
+            "location": "brasshaven:clockwork_carnival/carnival/x2_z2",
+            "offset": [
+              60,
+              4,
+              63
+            ],
+            "size": [
+              30,
+              42,
+              31
+            ],
+            "blocks": 10916
+          },
+          {
+            "location": "brasshaven:clockwork_carnival/carnival/x2_z3",
+            "offset": [
+              60,
+              2,
+              94
+            ],
+            "size": [
+              30,
+              58,
+              31
+            ],
+            "blocks": 8727
+          },
+          {
+            "location": "brasshaven:clockwork_carnival/carnival/x2_z4",
+            "offset": [
+              60,
+              4,
+              125
+            ],
+            "size": [
+              30,
+              35,
+              31
+            ],
+            "blocks": 8069
+          },
+          {
+            "location": "brasshaven:clockwork_carnival/carnival/x2_z5",
+            "offset": [
+              60,
+              4,
+              156
+            ],
+            "size": [
+              30,
+              14,
+              32
+            ],
+            "blocks": 4900
+          },
+          {
+            "location": "brasshaven:clockwork_carnival/carnival/x2_z6",
+            "offset": [
+              60,
+              0,
+              188
+            ],
+            "size": [
+              30,
+              34,
+              16
+            ],
+            "blocks": 3171
+          },
+          {
+            "location": "brasshaven:clockwork_carnival/carnival/x3_z0",
+            "offset": [
+              90,
+              0,
+              0
+            ],
+            "size": [
+              29,
+              35,
+              31
+            ],
+            "blocks": 10338
+          },
+          {
+            "location": "brasshaven:clockwork_carnival/carnival/x3_z1",
+            "offset": [
+              90,
+              4,
+              31
+            ],
+            "size": [
+              29,
+              54,
+              32
+            ],
+            "blocks": 30101
+          },
+          {
+            "location": "brasshaven:clockwork_carnival/carnival/x3_z2",
+            "offset": [
+              90,
+              4,
+              63
+            ],
+            "size": [
+              29,
+              38,
+              31
+            ],
+            "blocks": 19859
+          },
+          {
+            "location": "brasshaven:clockwork_carnival/carnival/x3_z3",
+            "offset": [
+              90,
+              2,
+              94
+            ],
+            "size": [
+              29,
+              46,
+              31
+            ],
+            "blocks": 5635
+          },
+          {
+            "location": "brasshaven:clockwork_carnival/carnival/x3_z4",
+            "offset": [
+              90,
+              4,
+              125
+            ],
+            "size": [
+              29,
+              14,
+              31
+            ],
+            "blocks": 5109
+          },
+          {
+            "location": "brasshaven:clockwork_carnival/carnival/x3_z5",
+            "offset": [
+              90,
+              4,
+              156
+            ],
+            "size": [
+              29,
+              15,
+              32
+            ],
+            "blocks": 5914
+          },
+          {
+            "location": "brasshaven:clockwork_carnival/carnival/x3_z6",
+            "offset": [
+              90,
+              0,
+              188
+            ],
+            "size": [
+              29,
+              28,
+              31
+            ],
+            "blocks": 6086
+          },
+          {
+            "location": "brasshaven:clockwork_carnival/carnival/x4_z0",
+            "offset": [
+              119,
+              0,
+              1
+            ],
+            "size": [
+              30,
+              28,
+              30
+            ],
+            "blocks": 5899
+          },
+          {
+            "location": "brasshaven:clockwork_carnival/carnival/x4_z1",
+            "offset": [
+              119,
+              4,
+              31
+            ],
+            "size": [
+              30,
+              31,
+              32
+            ],
+            "blocks": 15520
+          },
+          {
+            "location": "brasshaven:clockwork_carnival/carnival/x4_z2",
+            "offset": [
+              119,
+              4,
+              63
+            ],
+            "size": [
+              30,
+              29,
+              31
+            ],
+            "blocks": 10134
+          },
+          {
+            "location": "brasshaven:clockwork_carnival/carnival/x4_z3",
+            "offset": [
+              119,
+              4,
+              94
+            ],
+            "size": [
+              30,
+              24,
+              31
+            ],
+            "blocks": 10658
+          },
+          {
+            "location": "brasshaven:clockwork_carnival/carnival/x4_z4",
+            "offset": [
+              119,
+              4,
+              125
+            ],
+            "size": [
+              30,
+              22,
+              31
+            ],
+            "blocks": 7630
+          },
+          {
+            "location": "brasshaven:clockwork_carnival/carnival/x4_z5",
+            "offset": [
+              119,
+              4,
+              156
+            ],
+            "size": [
+              30,
+              16,
+              32
+            ],
+            "blocks": 5264
+          },
+          {
+            "location": "brasshaven:clockwork_carnival/carnival/x4_z6",
+            "offset": [
+              119,
+              0,
+              188
+            ],
+            "size": [
+              30,
+              34,
+              31
+            ],
+            "blocks": 5823
+          },
+          {
+            "location": "brasshaven:clockwork_carnival/carnival/x5_z0",
+            "offset": [
+              149,
+              0,
+              1
+            ],
+            "size": [
+              30,
+              27,
+              30
+            ],
+            "blocks": 5008
+          },
+          {
+            "location": "brasshaven:clockwork_carnival/carnival/x5_z1",
+            "offset": [
+              149,
+              4,
+              31
+            ],
+            "size": [
+              30,
+              25,
+              32
+            ],
+            "blocks": 5361
+          },
+          {
+            "location": "brasshaven:clockwork_carnival/carnival/x5_z2",
+            "offset": [
+              149,
+              4,
+              63
+            ],
+            "size": [
+              30,
+              25,
+              31
+            ],
+            "blocks": 5269
+          },
+          {
+            "location": "brasshaven:clockwork_carnival/carnival/x5_z3",
+            "offset": [
+              149,
+              4,
+              94
+            ],
+            "size": [
+              30,
+              21,
+              31
+            ],
+            "blocks": 5505
+          },
+          {
+            "location": "brasshaven:clockwork_carnival/carnival/x5_z4",
+            "offset": [
+              149,
+              4,
+              125
+            ],
+            "size": [
+              30,
+              18,
+              31
+            ],
+            "blocks": 5015
+          },
+          {
+            "location": "brasshaven:clockwork_carnival/carnival/x5_z5",
+            "offset": [
+              149,
+              4,
+              156
+            ],
+            "size": [
+              30,
+              15,
+              32
+            ],
+            "blocks": 4932
+          },
+          {
+            "location": "brasshaven:clockwork_carnival/carnival/x5_z6",
+            "offset": [
+              149,
+              0,
+              188
+            ],
+            "size": [
+              30,
+              18,
+              31
+            ],
+            "blocks": 5185
+          },
+          {
+            "location": "brasshaven:clockwork_carnival/carnival/x6_z0",
+            "offset": [
+              179,
+              0,
+              8
+            ],
+            "size": [
+              22,
+              19,
+              23
+            ],
+            "blocks": 1678
+          },
+          {
+            "location": "brasshaven:clockwork_carnival/carnival/x6_z1",
+            "offset": [
+              179,
+              0,
+              31
+            ],
+            "size": [
+              29,
+              20,
+              32
+            ],
+            "blocks": 4374
+          },
+          {
+            "location": "brasshaven:clockwork_carnival/carnival/x6_z2",
+            "offset": [
+              179,
+              0,
+              63
+            ],
+            "size": [
+              29,
+              19,
+              31
+            ],
+            "blocks": 4470
+          },
+          {
+            "location": "brasshaven:clockwork_carnival/carnival/x6_z3",
+            "offset": [
+              179,
+              0,
+              94
+            ],
+            "size": [
+              30,
+              20,
+              31
+            ],
+            "blocks": 4558
+          },
+          {
+            "location": "brasshaven:clockwork_carnival/carnival/x6_z4",
+            "offset": [
+              179,
+              0,
+              125
+            ],
+            "size": [
+              29,
+              20,
+              31
+            ],
+            "blocks": 4408
+          },
+          {
+            "location": "brasshaven:clockwork_carnival/carnival/x6_z5",
+            "offset": [
+              179,
+              0,
+              156
+            ],
+            "size": [
+              27,
+              20,
+              32
+            ],
+            "blocks": 3886
+          },
+          {
+            "location": "brasshaven:clockwork_carnival/carnival/x6_z6",
+            "offset": [
+              179,
+              0,
+              188
+            ],
+            "size": [
+              14,
+              20,
+              31
+            ],
+            "blocks": 2201
+          }
+        ],
+        "projection": "rigid",
+        "processors": "brasshaven:none",
+        "ground_level_delta": 7,
+        "footprint": [
+          0,
+          0,
+          208,
+          218
+        ]
+      }
+    }
+  ]
+}

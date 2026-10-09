@@ -60,6 +60,8 @@
     "explorer/spore_refinery",
     "explorer/abyssal_station",
     "explorer/timber_fortress",
+    "explorer/storm_spire",
+    "explorer/clockwork_carnival",
     "explorer/master_cartographer",
     "explorer/boss_bell_keeper",
     "explorer/boss_archivist",
@@ -96,7 +98,9 @@
     "explorer/boss_frost_commodore",
     "explorer/boss_spore_alchemist",
     "explorer/boss_lumber_jarl",
-    "explorer/boss_abyss_diver"
+    "explorer/boss_abyss_diver",
+    "explorer/boss_ringmaster",
+    "explorer/boss_tesla_archon"
   ],
   "depths": [
     "depths/lithite",
@@ -135,6 +139,7 @@
     "nether/chained_bastion",
     "nether/titan_forge",
     "nether/soul_engine",
+    "nether/crimson_colosseum",
     "nether/ancient_ember",
     "nether/ember_scythe",
     "nether/storm_staff",
@@ -145,7 +150,8 @@
     "nether/boss_soul_reaper",
     "nether/boss_chained_jailer",
     "nether/boss_anvil_warden",
-    "nether/boss_soul_stoker"
+    "nether/boss_soul_stoker",
+    "nether/boss_gilded_champion"
   ],
   "end": [
     "end/enter",

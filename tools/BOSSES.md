@@ -2303,6 +2303,255 @@ Previews:
   sheet per dial variant).
 - Held blade: `python3 tools/art_sheet.py --kind held --only moon_astroblade`.
 
+## 39. Champion of the Crimson Colosseum: The Gilded Champion (Le Champion doré)
+Files:
+- `tools/wf/mobs/gilded_champion.py`: model `gilded_champion` (114 cubes, 256x256, two texture variants: `plain` and
+  `gilded`).
+- `src/main/java/com/brasshaven/entity/boss/GildedChampion.java`: the moveset.
+
+There is no lair module. The arena is the sand floor of the colosseum (`tools/wf/structures/crimson_colosseum.py`,
+`arena()`, the seal at the centre at y 5, radius 20): an oval of sand and red sand 44 x 34 (semi-axes 22 x 17) ringed by
+the podium wall (its walk at feet 15) and the stands, a gilded ring (11 x 8.5) round the centre, the four 3 x 3 iron
+trapdoors of the beast lifts at (+-14, 0) and (0, +-9), the Gate of Life to the south. `BOSS` there is
+`brasshaven:gilded_champion` (it replaces the borrowed Gryphon Knight, whose own home, quest and seal on the sky island
+are untouched). `BOSS_HOME` is `crimson_colosseum`. The class finds the **grates** at runtime (clusters of at least 4
+iron trapdoors in the floor layer within the arena radius; without two of them, four points 9/7 from the centre). "Open
+sand" means floor within 0.6 of the seal's level with two blocks of air over it, inside the arena radius: the podium
+wall, the stands and the gate passages are never open sand.
+
+Reward: `remembrance_gilded_champion` forges the **Gilded Gladius of the Champion** (`champion_gladius`, EMBER
+9.0 / -2.4).
+- It has a new ability shape, **TRIUMPH**, in `BossWeaponItem`: a gladiator's thrust along the aim (up to 7 blocks,
+  walls stop it, 1.0 to each side): every foe in it takes the power and a push; a foe under 30% health takes the
+  finishing blow for 50% more. The crowd roars for every foe struck: Absorption for 10 s (I, II or III for 1, 2, 3+
+  foes). Cooldown 70. Instant, no ticker.
+- Held model `champion_gladius` in `wf/held3d.py`, sprite `gladius` in `wf/itemart_shapes.py`.
+
+Loot (`gen_data.py`): ancient embers, emeralds, experience bottles, golden apples, diamonds, gold blocks, gilded
+blackstone, netherite scrap, a golden sword, iron chains, a 12% enchanted golden apple. Quest:
+`nether/boss_gilded_champion`.
+
+**Concept.** The undefeated piglin gladiator, 4 blocks (hitbox 1.8 x 4.0):
+- a crested gladiator's helmet of gold (bowl, brim, cheek guards, brow plate, a tall crimson horsehair crest front to
+  back and its tail down the nape) over a piglin head: flat snout, heavy jaw, floppy ears (`ear_?`) hanging out under
+  the cheek guards, two tusks capped in gold;
+- a gilded muscle cuirass over a crimson tunic, a gorget, layered pauldrons with crimson tufts, belly lames, a gold
+  manica down the sword arm, a gold arm ring and leather bracer on the shield arm, gilded greaves and knee cops,
+  netherite sabatons with gold toes;
+- a skirt of crimson pteruges tipped in gold under a studded gold belt, chains of trophies (`trophies`: two little
+  skulls, gold coins, a looted helmet);
+- a crimson cape (`cape`, `cape_lo`);
+- the gladius (`gladius`): crimson-wrapped grip, gold pommel and guard, a netherite blade edged in gold; the round
+  shield (`shield`, a disc r 10 of crimson and gold rays in a gold rim) with a hoglin skull boss.
+- Texture variants (`modelVariant()` = synched `DATA_GILDED`): `plain`; `gilded` (phase 3): brighter gold with a
+  glowing layer on the plate's edges, ember eyes, the shield's cubes painted empty (cast aside) and the second gladius
+  (`gladius2`, in the left hand, painted empty in `plain`) shown.
+
+**Stats.**
+- 700 health, armour 14, toughness 5, attack 15, poise 130, speed 0.26, knockback resistance 1.0, step 1.5.
+- No fall damage, yellow bar.
+- Phase 2 at 65% (roar, +10% speed, `gilded_champion_wrath`). Phase 3 at 30%, driven by the class like the Chained
+  Jailer: when he is free he chains `favour` once (guarded 64 ticks); the lava jets then run from the class. Range
+  999 / weight 0 keeps the scheduled moves (`riposte`, `favour`) out of the picker. Once gilded, `bash` and `block`
+  turn into `combo` when picked.
+
+| Move | Phase | Wind-up / active / recovery | Range | What it does |
+|---|---|---|---|---|
+| combo | 1-3 | 16 / 18 / 14 | 0-6.5 | Arc drawn gold (+-75 deg, 5): forehand cut at impact, 12, push 0.4. At active 1 he turns up to 20 deg, the arc drawn red (active 1-7); backhand at active 8: 11. P2: a line (6, half width 1) drawn red active 9-15, thrust at active 16: 13, push 0.6 along it. Gilded: instead an arc (+-80, 5.5) drawn red, both blades crossing at active 16: 13. P2 (not gilded): 25% chains bash within 5. |
+| bash | 1-3 | 14 / 8 / 16 | 0-4.5 | Arc (+-50, 4) drawn gold, red from wind-up 8. Impact: 9, push 0.9, lift 0.2, Slowness II 1 s. |
+| block | 1-3 | 12 / 40 / 12 | 0-10 | Cooldown 220. A wall of motes (+-70 at 1.6) in front of him from the start. Active 40: he turns 2.5 deg/tick toward the target; a blow whose source lies within +-70 deg of his facing is turned aside (no damage, a clang, a small push back to a melee attacker within 5); flank and back blows hurt 30% more. If at least one blow was turned aside, he chains riposte. |
+| riposte | 1-3 (after a block) | 10 / 6 / 14 | scheduled | Faces the target; a line (6, half width 1.1) drawn red the whole wind-up. Impact: he steps 1.2 forward, 13 and a push 0.6 along the line. |
+| charge | 1-3 | 24 / 16 / 14 | 6-24 | A lane (half width 1.2) over open sand up to 20, drawn gold; he turns 3 deg/tick until wind-up 16, then red. Active: he runs it at lane / 12 a tick (0.6-1.6), stopping 1 short of its end: 14, lift 0.35 and a push 0.8 out of the lane's side (once each). |
+| net | 1-3 | 20 / 10 / 16 | 4-20 | A ring r 2.6 on the target follows until wind-up 12, then red. Impact: the net flies 6 ticks, lands: 4 and Slowness III 3 s in the ring; it lies there 60 ticks more (a gold grid; Slowness II 0.6 s every 10 ticks to whoever stands in it). P2: a second net on another player (or 6 from the first). |
+| crowd | 1-3 | 22 / 30 / 16 | 0-30 | Cooldown 260. Circles r 2 under each player (up to 4) plus `scaledCount(2)` (P2 3, gilded +1) open sand 3.5-9.5 from the target, 3.5 apart, drawn gold (orange for fire charges). At impact each is red while its debris arcs in from the stands behind it, landing 8 + 4i ticks later: 8 and lift 0.3; P2 every second one is a fire charge: 7, lift 0.2, fire 3 s. |
+| gates | 2-3 | 20 / 10 / 16 | 0-30 | Cooldown 700. The grates marked gold. Piglin brutes and hoglins alternately (immune to zombification), `scaledCount(2)`, at most 3 alive, at the grates farthest from the target; tagged minions, discarded on death, reset and after a reload. |
+| favour | 3 (once) | 40 / 20 / 20 | scheduled | Guarded 64 ticks; gold rings converge, the crowd roars. Impact: a gold ring runs out to 14 (10, jump it: it hits only who stands within 0.6 of the floor), +12% speed (`gilded_champion_favour`), variant `gilded`, the lava jets start (the first 60 ticks later). |
+
+**The emperor's favour (phase 3).** Gold motes and small flames stream off him; the grates smoke. Every 120 ticks x
+`cooldownScale()` (at least 70) `min(4, scaledCount(1) + 1)` grates (the nearest to the target, then random ones) fire a
+lava jet toward the target: a ring r 1.8 on the grate and a line (half width 1.0, up to 16 over open sand) drawn orange
+for 30 ticks (red the last 10), then flame and lava particles erupt along it from the grate out, 2 blocks a tick: 7,
+lift 0.3 and fire 3 s, once per jet. They wait while `favour` runs or he is guarded. No lava block is ever placed.
+
+**Temporary blocks.** None: he places and breaks no block (the debris, the nets and the lava jets are particles). His
+beasts are discarded on death and reset, and tagged piglin/hoglin minions he no longer tracks are discarded on the
+first tick after a reload.
+
+**Fair edges.** His `strike` caps pushes at 1.0 and lift at 0.45. A push is dropped entirely when a probe 1.5 or 3
+blocks along it finds no open sand (the podium wall, a gate passage), and then the lift is capped at 0.2; the charge's
+side push, the block's push back and the phase-2 roar shove are corrected the same way. Lanes, lines, rings and
+circles only use open sand. The block is shown before it starts and the riposte only follows a blow he turned aside.
+
+**Co-op and NG+** come from the engine (`BossDifficulty`, `BossCycles`): health, damage (every hit goes through
+`strike`/`shove`), poise, cooldowns (the jet timer uses `cooldownScale()`), compressed wind-ups. Beasts, debris circles
+and jets scale with `scaledCount`; debris lands under every player (up to 4).
+
+Previews:
+- `python3 tools/gen_models.py --preview --only gilded_champion` writes `build/previews/models/gilded_champion.png` (and
+  `gilded_champion_gilded.png`).
+- Held gladius: `python3 tools/art_sheet.py --kind held --only champion_gladius`.
+
+## 40. Champion of the Clockwork Carnival: The Clockwork Ringmaster (Le Monsieur Loyal mécanique)
+Files:
+- `tools/wf/mobs/ringmaster.py`: model `ringmaster` (53 cubes, 128x128).
+- `src/main/java/com/brasshaven/entity/boss/Ringmaster.java`: the moveset.
+
+There is no lair module. The arena is the circus ring of the big top (`tools/wf/structures/clockwork_carnival.py`,
+`big_top()`, the seal at the tent's centre (0, 0, -56), radius 22): a sawdust ring of radius 17.5 (36 wide, feet 1) with
+a star of froglights in it, a red-and-white curb to 19 with the four king poles in it (±13, ±13), six tiers of benches
+rising round it, the front tunnel (south, mist) and the performers' gate (north, sealed bars), the east and west aisles
+up to the gallery, 25+ blocks of air to the chandeliers (the great one at 24 over the centre). `BOSS` there is
+`brasshaven:ringmaster` (it replaces the borrowed Gryphon Knight, whose own home, quest and seal on the sky island are
+untouched). `BOSS_HOME` is `clockwork_carnival`. "Open ring" in the class means floor within 0.6 of the seal's level
+(1.6 if the floor round the seal is rough: a command spawn) with two blocks of air over it, within 17.5 of the centre
+(`ringR()`): the curb's poles, the benches and the tunnel mouths are never open ring.
+
+Reward: `remembrance_ringmaster` forges the **Showman's Cane of the Clockwork Ringmaster** (`ringmaster_cane`, LITHITE
+8.0 / -2.4).
+- It has a new ability shape, **JUGGLE**, in `BossWeaponItem`: three brass juggling bombs lobbed in arcs along the aim,
+  landing at 40%, 70% and 100% of the throw (up to 12 blocks over the ground, cut short by walls and drops, like the
+  RIFT footing). Each bursts in confetti (particle FIREWORK): the power to every foe within 2.5 and a small toss up; a
+  foe caught by more than one burst takes 25% more from each burst after the first. Cooldown 80. Instant, no ticker.
+- Held model `ringmaster_cane` in `wf/held3d.py`, sprite `ringmaster_cane` in `wf/itemart_shapes.py`.
+
+Loot (`gen_data.py`): map fragments, emeralds, experience bottles, golden apples, diamonds, firework rockets, a cake,
+gold ingots, lanterns, a bell, an 8% enchanted golden apple. Quest: `explorer/boss_ringmaster`.
+
+**Concept.** A tall, thin brass showman of the abandoned steam carnival, 3.6 blocks (hitbox 1.2 x 3.6) plus his hat:
+- a towering black silk top hat with a red band, a brass buckle, a cog on its side and a steam whistle on the crown
+  (steam puffs from it in game), lifted and thrown in his moves (`hat`);
+- a grinning lacquered brass face: arched brows, rosy cheeks, a wide white grin, a curled handlebar moustache, an amber
+  monocle on a chain (glow layer, with his left eye);
+- a high collar, a black bow tie over a white shirt front, a gold brocade waistcoat with brass buttons, a watch chain
+  and fob; a scarlet tailcoat piped in gold with lapels and long swallow tails (`tails`), brass cog epaulettes fringed in
+  gold; a wind-up key turning in his back (`key`, idle loop);
+- long legs in black-and-grey striped trousers, white spats over black boots;
+- asymmetry: the right white-gloved hand holds a black telescoping cane with a gold knob and brass ferrule (scaled to
+  1.9x in the cane whip), the left a brass juggling bomb with a lit fuse (glow), tossed in the idle loop.
+
+**Stats.**
+- 640 health, armour 11, toughness 4, attack 14, poise 115, speed 0.28, knockback resistance 1.0, step 1.5.
+- No fall damage, red bar.
+- Phase 2 at 65% (roar, +10% speed, `ringmaster_wrath`). Phase 3 at 30%, driven by the class like the Chained
+  Jailer: when he is free he chains `finale` once (guarded 64 ticks). Range 999 / weight 0 keeps it out of the picker.
+
+| Move | Phase | Wind-up / active / recovery | Range | What it does |
+|---|---|---|---|---|
+| cane | 1-3 | 14 / 16 / 14 | 0-6.5 | Arc drawn gold (±75°, 5.5; red from wind-up 9) as the cane telescopes out. Impact: whip sweep, 12, push 0.6. Active 1 he turns up to 20°, a red line (7, half width 0.9) is drawn active 1-7; active 8 the crack: 10, lift 0.25. P2: 30% chains flourish (target past 6) or juggle. |
+| juggle | 1-3 | 20 / 20 / 14 | 4-22 | `scaledCount(3)` bombs (+2 in P2, at most 6): circles r 2.2 on the target, the other players, then 3-7 round the target, 3.5 apart, on open ring, drawn gold from the start. At impact one bomb leaves every 5 ticks and flies 16 (its circle red for the last 10): 9, push 0.3, lift 0.3. |
+| hat | 1-3 | 18 / 30 / 14 | 3-18 | A line (half width 1.2) along his facing over open ring to the target + 2 (at most 12), drawn white, red from wind-up 12. At impact the hat sails out at 0.8 a tick and back: 8 and Slowness I 1 s, once per pass. |
+| flourish | 1-3 | 16 / 8 / 16 | 6-16 | A lane (half width 1.2) over open ring with 4 blocks of headroom to the target + 2 (at most 12), drawn gold while he turns 4°/tick until wind-up 10, then red. Active 0-5 he lunges down it (`move`, collisions kept): 13, push 0.7, lift 0.2 to whoever is within 1.6 of him (once). |
+| performers | 2-3 | 20 / 10 / 16 | 0-30 | Cooldown 600. Clockwork spiders and rust mites alternately, `scaledCount(2)`, at most 3 alive, on open ring 3.5 from him; tagged minions, discarded on death, removal and reset. |
+| carousel | 2-3 | 24 / 80 / 16 | 0-30 | Cooldown 420. Six fire posts (eight in phase 3) on a circle of 12 (at most ringR - 3) round the ring's centre, drawn as gold rings r 1.5 with arrows the way they will turn (red from wind-up 16; the direction alternates). Active: they turn at 1.2°/tick (0.25 blocks a tick): 6, fire 2 s, lift 0.1 within 1.5 of a post, at most every 15 ticks. Inside r 10.5 and outside r 13.5 are safe. |
+| finale | 3 (once) | 40 / 20 / 20 | scheduled | Guarded 64 ticks; confetti rings converge on him, the hat rises on steam. Impact: a confetti ring runs to the ring's edge (10, lift 0.3, jump it: it hits only who stands within 0.6 of the floor), +12% speed (`ringmaster_finale`), the hazards start (spotlight 40 ticks later, confetti 60). |
+
+**The Grand Finale (phase 3).** Confetti drifts down over the ring.
+- *Spotlight*: every 240 ticks x `cooldownScale()` (at least 140, counted from the end of the last one) a spotlight
+  picks the next player in turn and starts 7 blocks from them toward the centre (or at the centre): a white circle
+  (r 2) under a beam of particles from the great chandelier (23 over the centre). For 100 ticks it follows its player at
+  0.17 blocks a tick (slower than walking) over open ring within ringR - 1; from tick 20, every 20 ticks it flashes:
+  4 and Glowing 2 s to whoever stands in it. Then it holds for 20 ticks drawn red and blasts: 9 and lift 0.3. If its
+  player leaves or dies it holds and blasts where it is.
+- *Confetti charges*: every 100 ticks x `cooldownScale()` (at least 60), `min(5, scaledCount(2) + 1)` circles (r 2): one
+  under the target, the rest 3-9 from it, 3.5 apart, on open ring. Drawn 30 ticks (red the last 10, sparks rising, a
+  fuse hiss at 20), then 7 and lift 0.3.
+- Both wait while `finale` runs or he is guarded; the posts of the carousel become eight.
+
+**Temporary blocks.** The only blocks he places are the spotlight's light blocks (`minecraft:light`, level 15): one at
+a time, in the air cell over the spot (only where it is air), moved with the beam (the old one put back, only where
+it is still a light block). They go back when the spotlight ends, when the fight resets (phase back to 1), the arena
+empties, he dies or is removed, and on the first tick after a reload (saved in `RingmasterLights`). His performers are
+discarded on death, removal and reset.
+
+**Fair edges.** The ring is walled by the curb and the benches (no drop). His `strike` caps pushes at 1.0 and lift at
+0.45; a push is dropped when a probe 1.5 blocks along it finds no open ring (a king pole, the benches, a tunnel), and
+then the lift is capped at 0.2. Bombs, the hat's line, the lane, the posts, the spotlight and the charges only use open
+ring. Every hit is drawn on the floor first; the largest single hit is 13 (the flourish).
+
+**Co-op and NG+** come from the engine (`BossDifficulty`, `BossCycles`): health, damage (every hit goes through
+`strike`), poise, cooldowns (the spotlight and confetti timers use `cooldownScale()`), compressed wind-ups. Bombs,
+performers and confetti charges scale with `scaledCount`; bombs land on every player too; the spotlight takes the
+players in turn.
+
+Previews:
+- `python3 tools/gen_models.py --preview --only ringmaster` writes `build/previews/models/ringmaster.png`.
+- Held cane: `python3 tools/art_sheet.py --kind held --only ringmaster_cane`.
+
+## 41. Champion of the Storm Spire: The Tesla Archon (L'Archonte Tesla)
+Files:
+- `tools/wf/mobs/tesla_archon.py`: model `tesla_archon` (98 cubes, 256x128).
+- `src/main/java/com/brasshaven/entity/boss/TeslaArchon.java`: the moveset.
+
+There is no lair module. The arena is the open crown platform on top of the 110-high spire: `BOSS` in
+`tools/wf/structures/storm_spire.py` (`arena()`), seal at (0, 110, -8), radius 15; a disc of radius 16.4 (feet 111),
+a brass railing on its rim with copper posts and lightning rods every 7th cell, open only at the grace turret's door
+(south), the vault hatch (sealed bars) 6 north of the centre, the corona ring of rods and end rods 17-20 overhead on
+six legs. The Tesla Archon replaces the borrowed Gryphon Knight there; the Gryphon Knight keeps its own lair and
+`BOSS_HOME` (`sky_island`). `BOSS_HOME` is `storm_spire`. "Open platform" in the class means floor within 0.6 of the
+seal's level (1.6 if the floor round the seal is rough: a command spawn) with two blocks of air over it, inside the
+arena radius.
+
+Reward: `remembrance_tesla_archon` forges the **Coil-Staff of the Tesla Archon** (`tesla_coilstaff`, LITHITE 8 / -2.8).
+- It has a new ability shape, **TESLA**, in `BossWeaponItem`: a bolt runs along the aim (up to 14 blocks, walls stop
+  it) to the first foe within 1 of its path; a visual-only lightning bolt falls on that foe (no fire, no block touched);
+  then the arc jumps on to up to 3 more foes, each the nearest within 5 of the last, every jump for 80% of the one
+  before (power 10, knockback 0.2, flag `slow`). Cooldown 80. Instant, no ticker.
+- Held model `tesla_coilstaff` in `wf/held3d.py`, sprite `coil_staff` in `wf/itemart_shapes.py`.
+
+Loot (`gen_data.py`): map fragments, emeralds, experience bottles, golden apples, diamonds, copper blocks, lightning
+rods, redstone, glowstone dust, end rods, an 8% enchanted golden apple. Quest: `explorer/boss_tesla_archon`.
+
+**Concept.** A mad electrical engineer who climbed into his own coil suit and never came out, 3.4 blocks (hitbox
+1.4 x 3.4):
+- a riveted copper cuirass with a glowing aether coil-core in the chest, a gauge, a small chest coil, a brass gorget;
+  the scorched tails of a white lab coat behind; copper greaves in brass bands, iron boots on rubber soles;
+- a pale gaunt head with a manic grin, a bushy grey moustache, brass goggles with glowing lenses and wild white hair
+  standing up from the static (`hair`, scaled up when he charges);
+- a tesla coil on his back (`pack`, `coil`): an iron frame, two capacitor jars, a fat copper winding on an insulator
+  foot, a brass toroid (`torus`, turning in the idle loop, spun and scaled up in the big moves) with a spark ball;
+  two small coils on the shoulders (`pcoil_?`);
+- asymmetry: the RIGHT arm is a massive copper gauntlet, the forearm wound with coil, three glowing electrode prongs on
+  the knuckles and a black cable into it; the LEFT hand holds the coil-staff (iron shaft, copper winding, insulator
+  discs, brass prongs round a glowing orb).
+
+**Stats.**
+- 700 health, armour 12, toughness 5, attack 14, poise 120, speed 0.27, knockback resistance 1.0, step 1.5.
+- No fall damage, blue bar.
+- Phase 2 at 65% (roar, +10% speed, `tesla_archon_wrath`). Phase 3 at 30%, driven by the class like the Chained
+  Jailer: when he is free he chains `overload` once (guarded 64 ticks), then every 260 ticks x `cooldownScale()` (at
+  least 160, the first 60 after the overload) `arcsweep`. Range 999 / weight 0 keeps the scheduled moves out of the
+  picker.
+
+| Move | Phase | Wind-up / active / recovery | Range | What it does |
+|---|---|---|---|---|
+| arcpunch | 1-3 | 14 / 10 / 14 | 0-5.5 | Arc drawn blue (±50°, 4.5): 12, push 0.6. The nearest struck becomes the chain's head; the arc picks the nearest other victim within 6 (P2: a second jump from that one). Active 0-7: a crackling line between them and a ring (r 1, red from 4) under the next; jump i fires at active 7 + i: 7 (P2 9), no push, only if the next is still within 6 (step away). P2: 25% chains magnet (close) or arcline. |
+| orb | 1-3 | 20 / 6 / 14 | 4-24 | One orb (P2 two, ±25°) leaves at chest height, drifting 0.13 a tick toward the target (turning up to 4° a tick), turned back inside radius - 1; its circle (r 2.2) drawn under it. Within 1.8 of a victim (or after 140 ticks) it stops, the circle is red for 12 ticks, then it bursts: 9 in r 2.2, lift 0.2. |
+| coilslam | 1-3 | 22 / 8 / 16 | 0-7 | Circle r 3.5 round him (red from wind-up 14). Impact: 14 in r 3.5 (push 0.8, lift 0.3) and a wave to 8 (P2 11): 7, jump it. |
+| arcline | 1-3 | 24 / 12 / 14 | 3-20 | A line 18 long (half width 1.2); he turns 6°/tick toward the target until wind-up 14, then it locks red. Impact: 13, push 0.3. P2: two side lines at ±30° drawn red from the lock, discharging at active 6: 10. |
+| corona | 2-3 | 30 / 40 / 16 | 0-30 | Circles (r 2) where the target and up to 2 other players stand (fixed, inside radius - 2), the rest random open platform, 3.5 apart, `min(7, 3 + scaledCount(1))` in all; gold from the start, the corona ring overhead charging (sparks running round it, sparks rising from his coil). Circle k strikes at active 4 + 6 k (red the last 10 ticks): a visual-only lightning bolt and 10 in r 2, lift 0.25, no push. |
+| magnet | 2-3 | 20 / 36 / 16 | 0-14 | Copper rings close on him in the wind-up. Active 0-27: everyone within 12 (not within 1.5) gets +0.04 a tick toward him, horizontal speed capped at 0.28 (they can walk out); circle r 3.5 round him, red from active 16. Active 28: 12 in r 3.5, lift 0.3, no push. |
+| overload | 3 (once) | 40 / 20 / 20 | scheduled | Guarded 64 ticks: arcs spiral in, rings grow round him. Impact: a wave to 12 (10, jump it), +10% speed (`tesla_archon_overload`), a visual bolt on him, the sweep timer at 60. Sparks crackle off him from then on. |
+| arcsweep | 3 | 30 / 120 / 20 | scheduled | No gravity; during the wind-up he floats (smoothstep) to 2.5 over the centre and holds there through the active frames. `min(4, 2 + scaledCount(1))` beams, evenly spread from a random bearing, radial from 1 out to the radius at ankle height, drawn from the start (red from wind-up 20, gold marks beside them on the side they will turn to); the direction alternates every sweep. Active 0-119 they turn at 3° a tick (0.26 blocks a tick at r 5, 0.8 at the rim): 7 and lift 0.25, at most every 10 ticks, to whoever is within 0.6 (+ half width) of a beam with feet within 0.6 of the floor: jump them. Gravity back at active 119 (he drops in the recovery). |
+
+**No blocks.** He places and breaks no blocks. The lightning is visual only (`setVisualOnly`, no fire, no vanilla
+damage) and always lands on floor spots, never on a rod; orbs, beams, the corona and the chain are particles and hit
+checks. Nothing to restore. His gravity comes back whenever no arc sweep runs (`bossTick`: a stagger, a reset, a
+reload), on death and on reload.
+
+**No deaths off the crown.** His `strike` caps pushes at 0.8 and lift at 0.4. A push is kept only when open platform
+lies 1.5 and 3 blocks along it within radius - 1.5 of the centre; otherwise it becomes a push toward the centre (at
+most 0.5) and the lift is capped at 0.2. The corona, magnet, beams, orbs and chain push nothing; the engine's phase-2
+roar shove is cut to 30% and corrected the same way. The magnet's pull draws toward him, never outward.
+
+**Co-op and NG+** come from the engine (`BossDifficulty`, `BossCycles`): health, damage (every hit goes through
+`strike`), poise, cooldowns (the sweep timer uses `cooldownScale()`), compressed wind-ups. Corona circles and sweep
+beams scale with `scaledCount`; the corona marks every player (up to 3); the arc punch's chain only exists with a
+second fighter.
+
+Previews:
+- `python3 tools/gen_models.py --preview --only tesla_archon` writes `build/previews/models/tesla_archon.png`.
+- Held coil-staff: `python3 tools/art_sheet.py --kind held --only tesla_coilstaff`.
+
 ## Difficulty: co-op scaling and NG+ cycles
 
 Applied by `boss/WayfarerBoss` to **every** boss on its first server tick, whatever spawned it (boss seal,

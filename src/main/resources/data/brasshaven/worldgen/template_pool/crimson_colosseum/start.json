@@ -1,0 +1,524 @@
+{
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "brasshaven:chunked_template",
+        "size": [
+          181,
+          98,
+          186
+        ],
+        "cells": [
+          {
+            "location": "brasshaven:crimson_colosseum/colosseum/x0_z0",
+            "offset": [
+              17,
+              14,
+              20
+            ],
+            "size": [
+              13,
+              3,
+              11
+            ],
+            "blocks": 252
+          },
+          {
+            "location": "brasshaven:crimson_colosseum/colosseum/x0_z1",
+            "offset": [
+              1,
+              10,
+              31
+            ],
+            "size": [
+              29,
+              52,
+              31
+            ],
+            "blocks": 5069
+          },
+          {
+            "location": "brasshaven:crimson_colosseum/colosseum/x0_z2",
+            "offset": [
+              0,
+              10,
+              62
+            ],
+            "size": [
+              30,
+              58,
+              31
+            ],
+            "blocks": 12500
+          },
+          {
+            "location": "brasshaven:crimson_colosseum/colosseum/x0_z3",
+            "offset": [
+              0,
+              10,
+              93
+            ],
+            "size": [
+              30,
+              58,
+              31
+            ],
+            "blocks": 9526
+          },
+          {
+            "location": "brasshaven:crimson_colosseum/colosseum/x0_z4",
+            "offset": [
+              8,
+              10,
+              124
+            ],
+            "size": [
+              22,
+              26,
+              31
+            ],
+            "blocks": 1931
+          },
+          {
+            "location": "brasshaven:crimson_colosseum/colosseum/x0_z5",
+            "offset": [
+              12,
+              11,
+              155
+            ],
+            "size": [
+              18,
+              22,
+              27
+            ],
+            "blocks": 2995
+          },
+          {
+            "location": "brasshaven:crimson_colosseum/colosseum/x1_z0",
+            "offset": [
+              30,
+              10,
+              2
+            ],
+            "size": [
+              30,
+              52,
+              29
+            ],
+            "blocks": 5388
+          },
+          {
+            "location": "brasshaven:crimson_colosseum/colosseum/x1_z1",
+            "offset": [
+              30,
+              10,
+              31
+            ],
+            "size": [
+              30,
+              58,
+              31
+            ],
+            "blocks": 14080
+          },
+          {
+            "location": "brasshaven:crimson_colosseum/colosseum/x1_z2",
+            "offset": [
+              30,
+              0,
+              62
+            ],
+            "size": [
+              30,
+              54,
+              31
+            ],
+            "blocks": 13129
+          },
+          {
+            "location": "brasshaven:crimson_colosseum/colosseum/x1_z3",
+            "offset": [
+              30,
+              0,
+              93
+            ],
+            "size": [
+              30,
+              68,
+              31
+            ],
+            "blocks": 15534
+          },
+          {
+            "location": "brasshaven:crimson_colosseum/colosseum/x1_z4",
+            "offset": [
+              30,
+              10,
+              124
+            ],
+            "size": [
+              30,
+              58,
+              31
+            ],
+            "blocks": 11786
+          },
+          {
+            "location": "brasshaven:crimson_colosseum/colosseum/x1_z5",
+            "offset": [
+              30,
+              11,
+              155
+            ],
+            "size": [
+              30,
+              24,
+              31
+            ],
+            "blocks": 3412
+          },
+          {
+            "location": "brasshaven:crimson_colosseum/colosseum/x2_z0",
+            "offset": [
+              60,
+              9,
+              0
+            ],
+            "size": [
+              30,
+              89,
+              31
+            ],
+            "blocks": 11992
+          },
+          {
+            "location": "brasshaven:crimson_colosseum/colosseum/x2_z1",
+            "offset": [
+              60,
+              12,
+              31
+            ],
+            "size": [
+              30,
+              46,
+              31
+            ],
+            "blocks": 11445
+          },
+          {
+            "location": "brasshaven:crimson_colosseum/colosseum/x2_z2",
+            "offset": [
+              60,
+              0,
+              62
+            ],
+            "size": [
+              30,
+              46,
+              31
+            ],
+            "blocks": 29536
+          },
+          {
+            "location": "brasshaven:crimson_colosseum/colosseum/x2_z3",
+            "offset": [
+              60,
+              0,
+              93
+            ],
+            "size": [
+              30,
+              46,
+              31
+            ],
+            "blocks": 18204
+          },
+          {
+            "location": "brasshaven:crimson_colosseum/colosseum/x2_z4",
+            "offset": [
+              60,
+              10,
+              124
+            ],
+            "size": [
+              30,
+              59,
+              31
+            ],
+            "blocks": 17250
+          },
+          {
+            "location": "brasshaven:crimson_colosseum/colosseum/x2_z5",
+            "offset": [
+              60,
+              10,
+              155
+            ],
+            "size": [
+              30,
+              63,
+              30
+            ],
+            "blocks": 6507
+          },
+          {
+            "location": "brasshaven:crimson_colosseum/colosseum/x3_z0",
+            "offset": [
+              90,
+              9,
+              0
+            ],
+            "size": [
+              31,
+              89,
+              31
+            ],
+            "blocks": 13219
+          },
+          {
+            "location": "brasshaven:crimson_colosseum/colosseum/x3_z1",
+            "offset": [
+              90,
+              14,
+              31
+            ],
+            "size": [
+              31,
+              45,
+              31
+            ],
+            "blocks": 12026
+          },
+          {
+            "location": "brasshaven:crimson_colosseum/colosseum/x3_z2",
+            "offset": [
+              90,
+              0,
+              62
+            ],
+            "size": [
+              31,
+              46,
+              31
+            ],
+            "blocks": 30553
+          },
+          {
+            "location": "brasshaven:crimson_colosseum/colosseum/x3_z3",
+            "offset": [
+              90,
+              0,
+              93
+            ],
+            "size": [
+              31,
+              46,
+              31
+            ],
+            "blocks": 18983
+          },
+          {
+            "location": "brasshaven:crimson_colosseum/colosseum/x3_z4",
+            "offset": [
+              90,
+              10,
+              124
+            ],
+            "size": [
+              31,
+              59,
+              31
+            ],
+            "blocks": 17929
+          },
+          {
+            "location": "brasshaven:crimson_colosseum/colosseum/x3_z5",
+            "offset": [
+              90,
+              10,
+              155
+            ],
+            "size": [
+              31,
+              63,
+              29
+            ],
+            "blocks": 6133
+          },
+          {
+            "location": "brasshaven:crimson_colosseum/colosseum/x4_z0",
+            "offset": [
+              121,
+              10,
+              0
+            ],
+            "size": [
+              30,
+              52,
+              31
+            ],
+            "blocks": 5572
+          },
+          {
+            "location": "brasshaven:crimson_colosseum/colosseum/x4_z1",
+            "offset": [
+              121,
+              10,
+              31
+            ],
+            "size": [
+              30,
+              58,
+              31
+            ],
+            "blocks": 15499
+          },
+          {
+            "location": "brasshaven:crimson_colosseum/colosseum/x4_z2",
+            "offset": [
+              121,
+              0,
+              62
+            ],
+            "size": [
+              30,
+              54,
+              31
+            ],
+            "blocks": 22319
+          },
+          {
+            "location": "brasshaven:crimson_colosseum/colosseum/x4_z3",
+            "offset": [
+              121,
+              0,
+              93
+            ],
+            "size": [
+              30,
+              68,
+              31
+            ],
+            "blocks": 19333
+          },
+          {
+            "location": "brasshaven:crimson_colosseum/colosseum/x4_z4",
+            "offset": [
+              121,
+              10,
+              124
+            ],
+            "size": [
+              30,
+              58,
+              31
+            ],
+            "blocks": 11851
+          },
+          {
+            "location": "brasshaven:crimson_colosseum/colosseum/x4_z5",
+            "offset": [
+              121,
+              11,
+              155
+            ],
+            "size": [
+              23,
+              23,
+              21
+            ],
+            "blocks": 860
+          },
+          {
+            "location": "brasshaven:crimson_colosseum/colosseum/x5_z0",
+            "offset": [
+              151,
+              14,
+              17
+            ],
+            "size": [
+              10,
+              3,
+              14
+            ],
+            "blocks": 243
+          },
+          {
+            "location": "brasshaven:crimson_colosseum/colosseum/x5_z1",
+            "offset": [
+              151,
+              10,
+              31
+            ],
+            "size": [
+              29,
+              58,
+              31
+            ],
+            "blocks": 5665
+          },
+          {
+            "location": "brasshaven:crimson_colosseum/colosseum/x5_z2",
+            "offset": [
+              151,
+              0,
+              62
+            ],
+            "size": [
+              30,
+              69,
+              31
+            ],
+            "blocks": 17992
+          },
+          {
+            "location": "brasshaven:crimson_colosseum/colosseum/x5_z3",
+            "offset": [
+              151,
+              0,
+              93
+            ],
+            "size": [
+              30,
+              69,
+              31
+            ],
+            "blocks": 12245
+          },
+          {
+            "location": "brasshaven:crimson_colosseum/colosseum/x5_z4",
+            "offset": [
+              151,
+              10,
+              124
+            ],
+            "size": [
+              20,
+              25,
+              31
+            ],
+            "blocks": 1856
+          },
+          {
+            "location": "brasshaven:crimson_colosseum/colosseum/x5_z5",
+            "offset": [
+              159,
+              26,
+              155
+            ],
+            "size": [
+              5,
+              7,
+              1
+            ],
+            "blocks": 23
+          }
+        ],
+        "projection": "rigid",
+        "processors": "brasshaven:none"
+      }
+    }
+  ]
+}

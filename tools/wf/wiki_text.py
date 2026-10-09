@@ -461,6 +461,20 @@ STRUCTURES = {
                    "voûtes d'os, la fosse aux charniers et son trône d'os, la crypte des bâtisseurs, dont l'escalier "
                    "remonte dans la galerie. Pour revenir : l'ascenseur à piston du lieu de grâce, la goulotte d'os "
                    "du reliquaire et la porte de la fournaise, qui ne s'ouvre que d'un côté.",
+    "crimson_colosseum": "Une cité-arène piglin de 181 × 186 blocs dans une forêt cramoisie du Nether : un colisée "
+                         "ovale de pierre noire, de briques du Nether et d'or sur trois rangs d'arcades, des statues "
+                         "de champions dorées, des bannières, une tribune royale coiffée d'une tour où trône un "
+                         "champion d'or, des champignons cramoisis qui dévorent les gradins, et des douves de lave "
+                         "franchies par un pont de chaînes. On part du camp des gladiateurs exilés (pierre de passage), "
+                         "on franchit le pont de chaînes et la porte des champions jusqu'à la salle des paris (pierre "
+                         "de passage), ses comptoirs couverts d'or. De là : la caserne des gladiateurs, la forge "
+                         "d'armes des champions, et sous l'arène l'hypogée : la galerie des cages, la salle de "
+                         "rassemblement, les enclos à hoglins et la salle des monte-charges. Le grand escalier monte "
+                         "dans le déambulatoire des gradins jusqu'à la tribune royale (lieu de grâce). Passé la brume, "
+                         "l'escalier royal descend sur le sable de l'arène, un ovale d'une quarantaine de blocs. Sous "
+                         "la tribune, derrière des barreaux scellés, le trésor du champion. Pour revenir : le "
+                         "monte-charge des fauves depuis l'hypogée, la herse de la forge qui ne s'ouvre que d'un côté, "
+                         "et le saut des gradins dans le foin de la salle des paris.",
     "mire_stilt_city": "Une ville de bois sur pilotis de 200 blocs au-dessus d'une mangrove : des passerelles sur trois "
                        "niveaux, des ponts de corde et des huttes de pêcheurs. On arrive par une chaussée depuis un "
                        "îlot (pierre de passage), on franchit la palissade et ses deux tours de garde (brisée à "
@@ -576,6 +590,21 @@ STRUCTURES = {
                        "grâce). Passé la brume, l'arène au sommet du donjon autour de la machine ; derrière des "
                        "barreaux scellés, la chambre forte de la guilde. Raccourcis : la descente du flottage, "
                        "l'ascenseur à contrepoids et la poterne qui ne s'ouvre que d'un côté.",
+    "clockwork_carnival": "Une fête foraine à vapeur abandonnée, large de 200 blocs, dans une forêt de fleurs ou "
+                          "de bouleaux envahie de fleurs sauvages : une grande roue de laiton haute de 70 blocs et "
+                          "ses seize nacelles, un chapiteau rayé rouge et blanc, un carrousel de chevaux automates "
+                          "sous un dôme vert-de-gris, des montagnes russes sur tréteaux de bouleau qui font le tour "
+                          "du site, un palais des glaces, une maison hantée qui s'ouvre par la bouche d'un clown "
+                          "automate géant, des stands de jeux, l'orgue de Barbarie à vapeur et des guirlandes de "
+                          "lanternes. On arrive par le camp des forains (pierre de passage) et la porte des billets "
+                          "jusqu'à la place du manège (pierre de passage) ; de là : le carrousel, le palais des "
+                          "glaces, la maison hantée, les stands, la roulotte de M. Loyal et la salle des machines "
+                          "qui entraîne la roue. On grimpe ensuite par la voie des montagnes russes ou par les "
+                          "échelles de la roue jusqu'au quai de freinage (lieu de grâce) ; passé la brume, l'arène "
+                          "dans la piste du chapiteau, entourée de gradins. Derrière des barreaux scellés, la "
+                          "roulotte-coffre de M. Loyal. Raccourcis : le toboggan en hélice depuis le sommet des "
+                          "montagnes russes, l'ascenseur de maintenance de la roue et la porte de sortie de la "
+                          "maison hantée qui ne s'ouvre que d'un côté.",
     "spore_refinery": "Une raffinerie d'alchimistes de 180 blocs sur une île de mycélium (ou, à défaut, dans une "
                       "vieille taïga), poussée dans et autour de trois champignons colossaux : une amanite rouge "
                       "haute de 90 blocs au chapeau large de 68, un bolet brun au chapeau plat et une petite "
@@ -616,6 +645,19 @@ STRUCTURES = {
                    "plateforme du noyau. Derrière des barreaux scellés, le reliquaire du noyau. Raccourcis : le "
                    "puits d'eau du reliquaire jusqu'au puisard, l'ascenseur à colonne de bulles de la crypte "
                    "vers la salle du méridien, la porte à sens unique de l'anneau et le saut vers la brèche.",
+    "storm_spire": "Un complexe de 150 blocs qui capte la foudre au sommet d'une montagne : une flèche Tesla de "
+                   "cuivre et de fer haute de 110 blocs, ceinte d'anneaux de bobines empilés et couronnée d'une "
+                   "corolle crépitante de paratonnerres et de tiges de l'End, reliée par des câbles de chaînes à "
+                   "six mâts collecteurs plantés sur les éperons. Tout est taillé dans les crêtes, avec remparts "
+                   "et escaliers en lacets. Depuis le camp des alpinistes (pierre de passage), le funiculaire ou "
+                   "les lacets montent au bastion de la porte, puis à la cour des dynamos (pierre de passage) : la "
+                   "halle des condensateurs et ses bouteilles de Leyde de verre et de cuivre, la maison des dynamos "
+                   "et ses génératrices géantes, l'atelier des bobines, l'observatoire météo et ses anémomètres "
+                   "sur son piton, la caserne des ingénieurs et les caves des batteries sous la cour. On grimpe "
+                   "ensuite dans la flèche, d'anneau en anneau, par l'escalier en hélice jusqu'au lieu de grâce, "
+                   "puis à l'arène sur la plateforme ouverte de la couronne. Derrière des barreaux scellés, le "
+                   "caveau chargé. Raccourcis : l'ascenseur à colonne de bulles de la flèche, la glissade d'eau "
+                   "du piton de l'observatoire jusqu'au bassin de la cour, et la poterne à sens unique du bastion.",
     "shattered_halo": "Un anneau colossal de purpur, de briques de pierre de l'End et d'or, large de 170 blocs et "
                       "incliné au-dessus du vide de l'End, brisé en cinq arcs qui flottent chacun à sa hauteur. On "
                       "arrive sur un îlot extérieur (pierre de passage), puis les ponts imposent l'ordre : "
@@ -859,6 +901,23 @@ MOBS = {
                    "de sel, deux bouteilles de cuivre dans le dos d'où serpentent les tuyaux d'air. Le bras droit est "
                    "une foreuse géante, la main gauche tient un pistolet à rivets armé d'un harpon ; bottes de plomb, "
                    "bernacles et varech accrochés partout.",
+    "gilded_champion": "Champion du Colisée cramoisi : le Champion doré, le gladiateur piglin invaincu, une brute "
+                       "massive de 4 blocs en armure de plaques dorées ouvragée. Un casque de gladiateur à cimier de "
+                       "crin cramoisi, des défenses coiffées d'or, une cape cramoisie, des chaînes de trophées à la "
+                       "ceinture ; dans la main droite un glaive géant d'or et de netherite, au bras gauche un bouclier "
+                       "rond doré dont l'umbo est un crâne de hoglin.",
+    "ringmaster": "Champion de la Fête foraine mécanique : le Monsieur Loyal mécanique, un grand bonimenteur de "
+                  "laiton de 3,6 blocs. Un haut-de-forme de soie noire à ruban rouge et sifflet à vapeur, un visage "
+                  "de laiton laqué hilare, une moustache en guidon et un monocle d'ambre, une queue-de-pie écarlate "
+                  "passepoilée d'or sur un gilet de brocart, des épaulettes en engrenage, un pantalon rayé et des "
+                  "guêtres blanches ; une clé de remontage tourne dans son dos. Une canne télescopique dans la main "
+                  "droite, une bombe de jonglage dans la gauche.",
+    "tesla_archon": "Champion de la Flèche des tempêtes : l'Archonte Tesla, un ingénieur électricien fou de 3,4 blocs "
+                    "soudé à sa propre armure de cuivre à bobines. Une cuirasse de cuivre au cœur de bobine bleu "
+                    "lumineux, une grande bobine Tesla dans le dos coiffée d'un tore de laiton qui crépite, deux petites "
+                    "bobines sur les épaules, des lunettes de laiton aux verres lumineux et une tignasse blanche dressée "
+                    "par l'électricité statique ; un énorme gantelet de cuivre à électrodes au bras droit et un bâton-"
+                    "bobine dans la main gauche.",
     "moon_warden": "Championne de la Lune creuse : la Gardienne de la lune, un automate céleste élégant de 3,6 "
                    "blocs qui lévite sur des propulseurs. Un corps svelte de porcelaine et d'or, un visage qui est un "
                    "cadran des phases de la lune, un halo de petites planètes de laiton en orbite, de longs bras "
@@ -1543,6 +1602,85 @@ BOSS_MOVES = {
                            "rouge à la fin), la surcharge éclate (8, repoussé) ; pendant 7 s il va 20 % plus vite et "
                            "frappe 15 % plus fort, mais encaisse 15 % de plus."),
     ],
+    "gilded_champion": [
+        ("Enchaînement au glaive", "1 à 3", "Le glaive ramené par-dessus l'épaule (0,8 s, un arc tracé en or) : un coup "
+                                            "droit (12), il se tourne un peu, l'arc rougit et le revers suit 0,4 s plus "
+                                            "tard (11). En phase 2, une ligne rouge puis un coup d'estoc (13) ; doré, "
+                                            "un double coup croisé des deux glaives (13)."),
+        ("Coup de bouclier", "1 à 3", "Le bouclier ramené à gauche (0,7 s, un arc court, rouge à la fin), projeté en "
+                                      "avant : 9, repoussé et ralenti 1 s."),
+        ("Garde", "1 à 3", "Il lève le bouclier devant lui (0,6 s, un mur de paillettes d'or) et le tient 2 s en se "
+                           "tournant lentement : les coups de face ricochent, ceux de flanc ou de dos font 30 % de plus. "
+                           "Un coup paré lui vaut une riposte : une ligne rouge 0,5 s, puis l'estoc (13)."),
+        ("Charge", "1 à 3", "Il baisse la tête derrière le bouclier et gratte le sable (1,2 s) : un couloir de 2,4 blocs "
+                            "tracé sur le sable te suit lentement puis rougit ; il charge le long du couloir (14, "
+                            "projeté hors du couloir)."),
+        ("Filet d'or", "1 à 3", "Il fait tournoyer un filet lesté (1 s) : un cercle sous toi te suit puis se fige en "
+                                "rouge ; le filet tombe (4, ralenti III 3 s) et reste 3 s au sol (ralenti tant que tu y "
+                                "es). Deux filets en phase 2."),
+        ("La foule rugit", "1 à 3", "Il nargue les gradins (1,1 s) : des cercles jaunes sous chaque joueur et autour de "
+                                    "sa cible ; la foule lance des débris d'or l'un après l'autre (8). En phase 2, "
+                                    "certains sont des boules de feu (7, en feu 3 s), marqués en orange."),
+        ("Les portes", "2 et 3", "Il frappe trois fois son bouclier : brutes piglins et hoglins montent par les grilles "
+                                 "des monte-charges (2, plus en coopération, 3 à la fois au plus)."),
+        ("La faveur de l'empereur", "3 (une fois)", "À 30 %, il s'agenouille vers la loge (2 s, invulnérable), puis "
+                                                   "frappe le sable : une onde jusqu'à 14 blocs (10, saute-la). Rage "
+                                                   "dorée : son or luit, il jette son bouclier pour un second glaive, "
+                                                   "et des jets de lave jaillissent des grilles le long de lignes "
+                                                   "marquées (7, en feu 3 s)."),
+    ],
+    "ringmaster": [
+        ("Coup de canne", "1 à 3", "La canne s'allonge, armée sur l'épaule (0,7 s, un arc doré qui rougit) : elle "
+                                   "fouette devant lui (12). Il se tourne, une ligne rouge se trace et la canne claque "
+                                   "droit devant 0,4 s plus tard (10)."),
+        ("Jonglage", "1 à 3", "Il jongle (1 s) : des cercles dorés marquent où tomberont ses bombes (trois, plus en "
+                              "coopération et en phase 2) ; il les lance une à une, chaque cercle rougit avant "
+                              "l'éclat (9)."),
+        ("Haut-de-forme", "1 à 3", "Il ôte son chapeau (0,9 s, une ligne blanche qui rougit) : le chapeau file le long "
+                                   "de la ligne puis revient (8 à chaque passage, ralenti 1 s)."),
+        ("Botte", "1 à 3", "Accroupi, canne pointée (0,8 s, un couloir doré qui rougit) : il se fend le long du "
+                           "couloir (13)."),
+        ("Les artistes", "2 et 3", "Il salue, chapeau bas (1 s) : araignées mécaniques et mites de rouille (deux, une "
+                                   "de plus tous les deux joueurs), jamais plus de trois."),
+        ("Carrousel de feu", "2 et 3", "Bras écartés (1,2 s) : six poteaux de feu sur un cercle de 12 blocs autour du "
+                                       "centre de la piste, des flèches montrent leur sens ; ils tournent 4 s, moins vite "
+                                       "que la marche (6 et du feu). Reste à l'intérieur ou à l'extérieur du cercle."),
+        ("Grand final", "3", "À 30 % : bras levés (2 s, invulnérable), puis un anneau de confettis court sur la piste "
+                             "(10, saute-le) ; le projecteur et les charges de confettis commencent."),
+        ("Projecteur", "3", "Un projecteur parti du grand lustre suit un joueur moins vite que la marche (4 et "
+                            "surbrillance toutes les secondes dans son cercle), s'arrête, rougit et éclate (9)."),
+        ("Confettis", "3", "Des cercles sous toi et autour (trois, plus en coopération) : 1,5 s pour sortir, puis "
+                           "l'éclat (7)."),
+    ],
+    "tesla_archon": [
+        ("Coup de poing électrique", "1 à 3", "Le gantelet armé en arrière, des étincelles sur la bobine (0,7 s, un arc "
+                                              "tracé en bleu) : un direct (12). L'arc file ensuite vers le joueur le plus "
+                                              "proche à 6 blocs (une ligne crépitante et un cercle sous lui pendant 0,4 s) "
+                                              "puis saute (7) sauf s'il s'est éloigné ; en phase 2, 9 et un second saut."),
+        ("Boule de foudre", "1 à 3", "Les mains en coupe devant le cœur (1 s) : une boule (deux en phase 2) dérive vers "
+                                     "toi moins vite que tu ne marches, son cercle tracé dessous ; près de toi (ou au bout "
+                                     "de 7 s) elle s'arrête, le cercle rougit 0,6 s et elle éclate (9)."),
+        ("Coup de bobine", "1 à 3", "Les deux bras levés (1,1 s, un cercle de 3,5 blocs autour de lui, rouge à la fin), "
+                                    "les poings frappent le sol (14), puis un anneau d'étincelles court jusqu'à 8 blocs "
+                                    "(11 en phase 2) : 7, saute-le."),
+        ("Ligne d'arc", "1 à 3", "Le bâton pointé sur toi : une ligne de 18 blocs qui te suit jusqu'à 0,7 s puis se fige "
+                                 "en rouge 0,5 s ; la décharge part le long de la ligne (13). En phase 2, deux lignes de "
+                                 "côté à 30°, rouges dès le blocage, partent 0,3 s plus tard (10)."),
+        ("Corolle", "2 et 3", "Bâton et gantelet levés vers le ciel, la corolle se charge (1,5 s) : des cercles marqués en "
+                              "or sur la plateforme (un là où se tient chaque joueur) ; la foudre y tombe l'un après "
+                              "l'autre, 0,3 s d'écart, chaque cercle rouge à la fin (10). Foudre pour l'œil seulement : "
+                              "rien ne brûle."),
+        ("Aimant", "2 et 3", "Bras écartés, le cœur flamboie (1 s) : pendant 1,4 s tout le monde à 12 blocs est attiré "
+                             "vers lui, moins vite que la marche ; un cercle de 3,5 blocs autour de lui rougit à 0,8 s, "
+                             "puis il referme les bras (12)."),
+        ("Surcharge", "3 (une fois)", "À 30 %, il s'élève, toutes ses bobines flamboient (2 s, invulnérable), puis la "
+                                      "surcharge éclate : un anneau jusqu'à 12 blocs (10, saute-le) ; il va 10 % plus "
+                                      "vite."),
+        ("Balayage d'arcs", "3", "Toutes les 13 s environ : il flotte jusqu'au milieu de la couronne (1,5 s, les rayons "
+                                 "tracés au sol, rouges à la fin, des marques dorées montrent leur sens) et y reste 6 s "
+                                 "pendant que 3 rayons (4 à trois joueurs ou plus) tournent sous lui à hauteur de cheville "
+                                 "(7 à qui a les pieds au sol quand un rayon passe) : saute-les."),
+    ],
     "moon_warden": [
         ("Balayage d'astrolabe", "1 à 3", "La lame droite ramenée en travers du corps (0,9 s, un arc tracé en argent) : "
                                           "elle balaie devant elle (13). Elle se tourne, l'arc rougit et la lame gauche "
@@ -1990,6 +2128,22 @@ BOSS_FACTS = {
                    "pression, les méduses lumineuses et la surcharge. Il ne pose ni ne casse aucun bloc (la salle est "
                    "une poche d'air sous la mer) ; ses noyés disparaissent à sa mort ou si le combat repart, et ses "
                    "coups ne te poussent jamais contre le mur, les vérins ou les tas de déblais.",
+    "gilded_champion": "700 PV, armure 14, posture 130, barre jaune. Sa garde pare les coups de face : frappe-le de "
+                       "flanc. Phase 2 à 65 % : il rugit, accélère, finit ses enchaînements par un estoc, lance deux "
+                       "filets, la foule jette des boules de feu et il appelle brutes et hoglins par les grilles. Phase "
+                       "3 à 30 % : la faveur de l'empereur, le second glaive et les jets de lave des grilles (des "
+                       "particules et du feu, aucun bloc de lave). Il ne pose ni ne casse aucun bloc, ses bêtes "
+                       "disparaissent à sa mort ou si le combat repart, et ses coups ne te poussent jamais contre le "
+                       "mur du podium.",
+    "ringmaster": "640 PV, armure 11, posture 115, barre rouge. Phase 2 à 65 % : il rugit, accélère, appelle ses "
+                  "artistes et lance le carrousel de feu. Phase 3 à 30 % : le grand final, le projecteur et les "
+                  "charges de confettis. Ses seuls blocs sont les lumières invisibles du projecteur, retirées quand "
+                  "il s'éteint, à sa mort, si le combat repart ou si tout le monde s'en va ; ses artistes "
+                  "disparaissent à sa mort ou si le combat repart.",
+    "tesla_archon": "700 PV, armure 12, posture 120, barre bleue. Phase 2 à 65 % : il ricane, accélère, ajoute la "
+                    "corolle et l'aimant, deux boules de foudre, les lignes de côté et un second saut de l'arc. Phase 3 "
+                    "à 30 % : la surcharge puis le balayage d'arcs. Il ne pose ni ne casse aucun bloc (sa foudre n'est "
+                    "que de la lumière, rien ne brûle) et ses coups ne te poussent jamais vers le bord de la couronne.",
     "moon_warden": "720 PV, armure 12, posture 120, barre violette. Phase 2 à 65 % : elle rugit, accélère, ajoute la "
                    "comète et l'appel du vide. Phase 3 à 30 % : l'éclipse, les rayons de gravité tournants et les "
                    "météores. Ses seuls blocs sont les lanternes du cœur, assombries pendant l'éclipse et rallumées "
@@ -2124,6 +2278,13 @@ LAIRS = {
         ("Le bureau de la directrice", "Dans l'oriel nord, derrière des barreaux scellés ; son puits privé "
                                        "redescend vers la salle de remontage du bas."),
     ],
+    "tesla_archon": [
+        ("La plateforme de la couronne", "L'arène : le disque ouvert de 33 blocs au sommet de la flèche, à 110 blocs du "
+                                         "sol, bordé d'un garde-corps de laiton et de paratonnerres sur des piliers de "
+                                         "cuivre, sous la corolle de paratonnerres et de tiges de l'End portée par six "
+                                         "pieds. Passé la brume de la tourelle du lieu de grâce, l'Archonte se réveille "
+                                         "quand tu approches du sceau au centre."),
+    ],
     "spore_alchemist": [
         ("Le sommet de l'amanite", "L'arène : le dessus plat du chapeau de la grande amanite, environ 42 blocs de "
                                    "large, ciel ouvert, une clôture de laiton et des lampes-champignons tout autour, "
@@ -2150,6 +2311,17 @@ LAIRS = {
                                  "rougeoyant, quatre vérins hydrauliques et des tas de déblais contre le mur. Passé la "
                                  "brume du couloir de compression, le Scaphandrier se réveille quand tu approches du "
                                  "sceau."),
+    ],
+    "gilded_champion": [
+        ("Le sable de l'arène", "L'arène : l'ovale de sable du Colisée cramoisi (44 × 34 blocs), ceint du mur du podium "
+                                "et des gradins, avec les quatre grilles des monte-charges et l'anneau doré. Par l'escalier "
+                                "royal et la brume, le Champion se réveille quand tu approches du sceau."),
+    ],
+    "ringmaster": [
+        ("La piste du chapiteau", "L'arène : la piste de sciure du grand chapiteau (36 blocs de large, une bordure rouge "
+                                  "et blanche, six rangs de gradins tout autour, plus de 25 blocs de hauteur sous les "
+                                  "lustres). Passé le quai de freinage et la brume de la passerelle, descends l'allée : "
+                                  "Monsieur Loyal s'éveille quand tu approches du sceau."),
     ],
     "moon_warden": [
         ("La plateforme du cœur", "L'arène : la plateforme du cœur de la Lune creuse (34 blocs de large, une rambarde de "
@@ -2515,6 +2687,10 @@ NEW_GROUPS = [
          "sable des âmes du Nether, nourrie par des convoyeurs d'os, six pistons colossaux sur son carter : salle "
          "des pressions, fournaise des âmes, ossuaire de voûtes d'os, et une arène sur le pont du vilebrequin.",
          "s-soul_engine", "struct:soul_engine"),
+        ("Le Colisée cramoisi", "Une cité-arène piglin de pierre noire, de briques du Nether et d'or dans une "
+         "forêt cramoisie, ceinte de douves de lave : salle des paris, caserne, forge des champions, hypogée de "
+         "cages et d'enclos à hoglins, et une arène de sable sous la tribune royale.",
+         "s-crimson_colosseum", "struct:crimson_colosseum"),
         ("La Bibliothèque de la chute d'étoile", "Une archive flottante de l'End autour d'une tour-fuseau de purpur "
          "et de laiton, trois galeries en anneau et une météorite fichée dans son flanc : canyons de rayonnages, "
          "scriptorium, observatoire, et une arène dans la chambre du cratère.", "s-starfall_library",
@@ -2522,6 +2698,10 @@ NEW_GROUPS = [
         ("La Lune creuse", "Une lune mécanique écrasée sur une île de l'End, coque de laiton et de purpur "
          "fendue sur un tiers : galeries de la coque, jardins de gravité, crypte des engrenages, anneaux d'orrery "
          "figés, et une arène sur la plateforme du noyau lumineux.", "s-hollow_moon", "struct:hollow_moon"),
+        ("La Flèche des tempêtes", "Un complexe qui capte la foudre au sommet d'une montagne : une flèche Tesla "
+         "de cuivre et de fer haute de 110 blocs aux anneaux de bobines, six mâts reliés par des câbles de chaînes, "
+         "halle des bouteilles de Leyde, maison des dynamos, observatoire météo, funiculaire, et une arène sur la "
+         "couronne crépitante.", "s-storm_spire", "struct:storm_spire"),
         ("La Pagode des nuages", "Une pagode à neuf toits de cerisier et de plâtre blanc sur un jardin en "
          "terrasses, étangs aux carpes et porte de lune, enlacée par le squelette de laiton d'un dragon "
          "mécanique : un étage par salle, un ascenseur à contrepoids, et une arène sur le toit ouvert.",
@@ -2546,6 +2726,10 @@ NEW_GROUPS = [
          "palissade de troncs, scierie à roue à aubes, flottage sur tréteaux, fours à charbon, locomotive sur "
          "pilotis, et une arène au sommet d'un donjon de bois haut de 70 blocs.", "s-timber_fortress",
          "struct:timber_fortress"),
+        ("La Fête foraine mécanique", "Une fête foraine à vapeur abandonnée dans une forêt de fleurs : une "
+         "grande roue de laiton haute de 70 blocs, un carrousel de chevaux automates, des montagnes russes sur "
+         "tréteaux, un palais des glaces, une maison hantée à tête de clown, et une arène dans la piste du "
+         "chapiteau.", "s-clockwork_carnival", "struct:clockwork_carnival"),
         ("La Station abyssale", "Une station de recherche au fond de l'océan profond : dômes pressurisés de "
          "laiton et de verre reliés par des tubes, tour d'accès et grue à bathyscaphe, plate-forme de forage "
          "au-dessus d'une fosse, champs de varech, et une arène au fond de la fosse.", "s-abyssal_station",
@@ -2730,6 +2914,26 @@ TEST_CHECKLIST = [
      "saute l'onde, sors des cercles de pression, éloigne-toi des méduses quand elles rougissent, et frappe-le pendant "
      "sa surcharge. Vérifie qu'aucun bloc de la salle ne bouge. Pour le vrai repaire : /brasshaven tp abyssal_station "
      "(la chambre de forage au fond de la tranchée)."),
+    ("Le Champion doré", ["/brasshaven boss gilded_champion"],
+     "Il apparaît à 6 blocs. Recule hors des deux arcs de l'enchaînement, sors de l'arc du bouclier, frappe-le de flanc "
+     "quand il lève sa garde (un coup de face ricoche et déclenche la riposte), écarte-toi du couloir de la charge, "
+     "sors du cercle du filet, quitte les cercles des débris ; à 65 %, tue les brutes et hoglins des grilles ; à 30 %, "
+     "saute l'onde dorée, vérifie qu'il change de texture (second glaive, plus de bouclier) et esquive les lignes des jets "
+     "de lave ; vérifie qu'aucun bloc de lave n'apparaît. Pour le vrai repaire : /brasshaven tp crimson_colosseum "
+     "(le sable de l'arène)."),
+    ("Le Monsieur Loyal mécanique", ["/brasshaven boss ringmaster"],
+     "Il apparaît à 6 blocs. Recule hors de l'arc de la canne puis de la ligne rouge, sors des cercles des bombes, "
+     "écarte-toi de la ligne du chapeau à l'aller comme au retour, quitte le couloir de la botte ; à 65 %, tue ses "
+     "artistes et reste dedans ou dehors du carrousel de feu ; à 30 %, saute l'anneau de confettis, marche hors du "
+     "projecteur et vérifie que sa lumière s'éteint derrière lui, sors des cercles de confettis. Pour le vrai repaire : "
+     "/brasshaven tp clockwork_carnival (la piste du chapiteau)."),
+    ("L'Archonte Tesla", ["/brasshaven boss tesla_archon"],
+     "Il apparaît à 6 blocs. Recule hors de l'arc du coup de poing et, à deux, éloigne-toi de ton ami quand la ligne "
+     "crépitante te relie à lui ; laisse la boule de foudre s'arrêter puis sors de son cercle rouge ; sors du cercle du "
+     "coup de bobine et saute l'anneau ; quitte la ligne d'arc avant qu'elle rougisse ; à 65 %, sors des cercles de la "
+     "corolle (vérifie que rien ne prend feu) et éloigne-toi de l'aimant ; à 30 %, saute l'anneau de la surcharge puis "
+     "chaque rayon du balayage, et vérifie qu'il redescend au sol ensuite. Pour le vrai repaire : /brasshaven tp "
+     "storm_spire (la plateforme de la couronne, en haut de la flèche)."),
     ("La Gardienne de la lune", ["/brasshaven boss moon_warden"],
      "Elle apparaît à 6 blocs. Recule hors des deux arcs du balayage, glisse-toi entre les spirales de l'orbite, sors du "
      "puits de gravité en marchant, quitte les cercles de la bascule, regarde son cadran : esquive les ombres à la "

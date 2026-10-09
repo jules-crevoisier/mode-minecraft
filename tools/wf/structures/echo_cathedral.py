@@ -2233,12 +2233,156 @@ def lighting(S):
     for x in (44, 50):
         if bp.get(x, GAL + 6, -31) == AIR:
             bp.set(x, GAL + 6, -31, CHAIN)                       # the old lamps' chains reach the rock
+    crypt_rites(S)
+    arena_lights(S)
     # the bell chamber: a soul lantern hangs from the clapper inside the cracked bell, lanterns from the beam
     bp.set(-16, 34, 46, SOUL_H)
     for x in (-21, -11):
         if bp.get(x, 41, 46) == AIR and bp.get(x, 42, 46) not in (None, AIR):
             bp.set(x, 41, 46, CHAIN)
             bp.set(x, 40, 46, LANT_H)
+
+
+SKULL = "skeleton_skull[rotation=%d]"
+BONE = "bone_block[axis=%s]"
+
+
+def _is_water(b):
+    return b in ("minecraft:water", WATER) or (b or "").startswith("minecraft:water")
+
+
+def crypt_rites(S):
+    """The flooded crypt kept by the cantors: a lamp on a chain from the crown of every groin vault (a bone
+    chandelier with soul lanterns over the tombs), ossuary niches in the walls stacked with bones and skulls and lit
+    by candles, soul lanterns on posts along the causeways, sculk catalysts and candles on the tomb islands, the
+    altar of the drowned at the north end of the causeway; in the annex, lamps over the lift and the corridor door."""
+    bp = S.bp
+    tombs = ((-9, -55), (9, -57), (-12, -63), (12, -65), (-7, -71), (7, -71), (-13, -58), (5, -63), (-5, -63))
+    # the vaults: bay centres sit halfway between the column lines (x = 6k, z = AZ - 4 + 8k + 4)
+    for bx in (-12, -6, 0, 6, 12):
+        for bz in (AZ + 8, AZ, AZ - 8, AZ - 16):
+            x, z = bx + (1 if bx == 0 else 0), bz
+            if not in_chevet(x, z, -2.0) or crypt_column(x, z) or bp.get(x, KF, z) != AIR or \
+                    bp.get(x, -6, z) != AIR:
+                continue                                            # a soul lantern already hangs here
+            near_tomb = any(abs(x - tx) <= 3 and abs(z - tz) <= 3 for (tx, tz) in tombs)
+            if near_tomb and bp.get(x, -6, z) == AIR and hang(S, x, -6, z, BONE % "y", top=6):
+                for dx, dz in ((1, 0), (-1, 0)):
+                    if bp.get(x + dx, -7, z + dz) == AIR:
+                        bp.set(x + dx, -6, z + dz, BRK_W)
+                        bp.set(x + dx, -7, z + dz, SOUL_H)
+                bp.set(x, -7, z, LANT_H)
+            else:
+                hang(S, x, -7, z, LANT_H, top=6)
+    # lamps on the ribs where the old soul lanterns leave the water dark (by the apse wall and the turret side)
+    for (x, z) in ((12, -63), (-12, -68), (-6, -76), (6, -76), (-12, -76), (12, -72), (-6, -64), (0, -72),
+                   (-15, -54), (15, -59), (-4, -69), (-16, -65), (-9, -60), (9, -67), (-17, -60)):
+        if in_chevet(x, z, -0.5) and not crypt_column(x, z) and bp.get(x, -7, z) == AIR:
+            hang(S, x, -7, z, LANT_H, top=6)
+    # ossuary niches in the crypt walls: a recess two high, bones below, a skull or candles above
+    done = set()
+    for b in range(-180, 181, 12):
+        t = math.radians(b)
+        for r in range(10, 26):
+            x = int(round(math.sin(t) * r))
+            z = int(round(AZ - math.cos(t) * r)) if b > -90 and b < 90 else None
+            if z is None:                                           # the choir's straight side walls
+                x = int(math.copysign(r, math.sin(t))) if abs(math.sin(t)) > 0.3 else 0
+                z = int(round(-52 - (abs(b) - 90) / 90.0 * 8))
+            if z > -53 or (x, z) in done:
+                break
+            if not in_chevet(x, z, -0.5) and bp.get(x, KF, z) not in (None, AIR, WATER) and \
+                    bp.get(x, KF - 1, z) not in (None, AIR) and "deepslate" in (bp.get(x, KF, z) or ""):
+                # the niche opens toward the pool: the cell nearer the apse centre must be water or a floor
+                ux, uz = (0 if abs(x) < 1 else -int(math.copysign(1, x))), (1 if z < AZ else -1 if z > AZ else 0)
+                ox, oz = (ux, 0) if abs(x) > abs(z - AZ) * 0.6 else (0, uz)
+                inner = bp.get(x + ox, KF, z + oz)
+                if inner != AIR and not _is_water(bp.get(x + ox, KF - 1, z + oz)):
+                    break
+                done.add((x, z))
+                axis = "x" if ox else "z"
+                bp.set(x, KF, z, BONE % axis)
+                h = hash01(x, z, 181)
+                if h < 0.4:
+                    rot = {(1, 0): 4, (-1, 0): 12, (0, 1): 0, (0, -1): 8}[(ox, oz)]
+                    bp.set(x, KF + 1, z, SKULL % rot)
+                elif h < 0.8:
+                    bp.set(x, KF + 1, z, CANDLES % (3 + int(h * 10) % 2))
+                else:
+                    bp.set(x, KF + 1, z, SOUL)
+                bp.set(x, KF + 2, z, CHI)
+                break
+    # soul lanterns on wall posts along the causeways
+    for (x, z) in ((-2, -58), (2, -64), (-2, -70), (2, -75), (4, -51), (10, -51), (16, -55)):
+        if bp.get(x, KF, z) == AIR and bp.get(x, KF - 1, z) not in (None, AIR, WATER) and \
+                not _is_water(bp.get(x, KF - 1, z)):
+            bp.set(x, KF, z, POL_W)
+            bp.set(x, KF + 1, z, SOUL)
+        elif _is_water(bp.get(x, KF - 1, z)):
+            bp.set(x, KF - 1, z, TIL)                               # a stepping stone under the post
+            bp.set(x, KF, z, POL_W)
+            bp.set(x, KF + 1, z, SOUL)
+    # the tombs: a sculk catalyst at the foot of every other one, candles at the head of the rest
+    for i, (tx, tz) in enumerate(tombs):
+        x, z = tx + 1, tz + 1
+        if crypt_column(x, z) or not in_chevet(x, z, -1.0):
+            continue
+        if bp.get(x, -9, z) == AIR and bp.get(x, -10, z) not in (None, AIR) and not _is_water(bp.get(x, -10, z)):
+            bp.set(x, -9, z, "sculk_catalyst[bloom=false]" if i % 2 == 0 else CANDLES % 4)
+        x, z = tx - 2, tz + 1
+        if bp.get(x, -10, z) not in (None, AIR) and not _is_water(bp.get(x, -10, z)) and bp.get(x, -9, z) == AIR \
+                and not crypt_column(x, z):
+            bp.set(x, -9, z, CANDLES % 3)
+    # the altar of the drowned across the north end of the causeway: a chiselled table under candles, soul
+    # lanterns at its ends, a lectern for the office of the dead
+    az = -78
+    for x in (-1, 0, 1):
+        bp.set(x, KF - 1, az, POL)
+        bp.set(x, KF, az, CHI if x == 0 else stair(POL_ST, "east" if x < 0 else "west", "top"))
+        bp.set(x, KF + 1, az, CANDLES % (4 if x == 0 else 3))
+    bp.set(0, KF, az + 1, stair(BRK_ST, "north"))
+    for x in (-2, 2):
+        if bp.get(x, KF, az) == AIR:
+            bp.set(x, KF - 1, az, POL)
+            bp.set(x, KF, az, POL_W)
+            bp.set(x, KF + 1, az, SOUL)
+    if bp.get(0, KF + 2, az - 1) not in (None, AIR):
+        bp.set(0, KF + 2, az, CHAIN) if bp.get(0, KF + 3, az) not in (None, AIR) else None
+    # the annex: a lantern over the lift's door and one over the corridor door
+    for (x, z) in ((-2, -35), (5, -36), (0, -42), (-3, -48)):
+        hang(S, x, KF + 3, z, LANT_H, top=0)
+
+
+def arena_lights(S):
+    """The choir and the apse: candle clusters round the boss seal, candelabra (soul lanterns and lanterns on dark
+    iron posts) on the ring between the brass ripples, candles and lanterns along the organ plinth between the
+    feet of the pipes."""
+    bp = S.bp
+    for k in range(8):
+        a = math.radians(22.5 + 45 * k)
+        x, z = int(round(math.sin(a) * 3.4)), int(round(AZ - math.cos(a) * 3.4))
+        if bp.get(x, CHF, z) == AIR and bp.get(x, CHF - 1, z) not in (None, AIR):
+            bp.set(x, CHF, z, CANDLES % 4)
+    for k in range(10):
+        b = 18 + 36 * k
+        a = math.radians(b)
+        x, z = int(round(math.sin(a) * 8.6)), int(round(AZ - math.cos(a) * 8.6))
+        if not in_chevet(x, z) or bp.get(x, CHF, z) != AIR or bp.get(x, CHF + 1, z) != AIR:
+            continue
+        bp.set(x, CHF, z, IRON_WALL)
+        bp.set(x, CHF + 1, z, SOUL if k % 2 else LANT)
+    for (x, z) in ((-12, -53), (12, -53), (-6, -53), (6, -53), (-14, -66), (14, -66)):
+        if bp.get(x, CHF, z) == AIR and bp.get(x, CHF + 1, z) == AIR and bp.get(x, CHF - 1, z) not in (None, AIR):
+            bp.set(x, CHF, z, IRON_WALL)
+            bp.set(x, CHF + 1, z, LANT)
+    # the organ plinth (feet 13): a lamp at every other gap between the flue pipes, nearer the great pipes
+    for b in range(-87, 88, 12):
+        t = math.radians(b)
+        for r in (14.6, 16.6):
+            x, z = int(round(math.sin(t) * r)), int(round(AZ - math.cos(t) * r))
+            if bp.get(x, 13, z) == AIR and bp.get(x, 14, z) == AIR and bp.get(x, 12, z) not in (None, AIR):
+                bp.set(x, 13, z, LANT if (b // 12) % 2 else CANDLES % 4)
+                break
 
 
 def yards(S):

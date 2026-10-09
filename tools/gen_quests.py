@@ -132,6 +132,7 @@ STRUCTURE_ICONS = {
     "mesa_minecity": "rail",
     "titan_forge": "anvil",
     "soul_engine": "bone_block",
+    "crimson_colosseum": "gilded_blackstone",
     "airship_graveyard": "brasshaven:brass_plating",
     "echo_cathedral": "bell",
     "starfall_library": "chiseled_bookshelf",
@@ -143,6 +144,8 @@ STRUCTURE_ICONS = {
     "timber_fortress": "spruce_log",
     "verdant_arboretum": "big_dripleaf",
     "abyssal_station": "sea_lantern",
+    "storm_spire": "lightning_rod",
+    "clockwork_carnival": "bell",
 }
 # where each boss lives (its quest follows the discovery of that structure)
 BOSS_HOME = {
@@ -187,6 +190,9 @@ BOSS_HOME = {
     "thorn_gardener": "verdant_arboretum",
     "abyss_diver": "abyssal_station",
     "moon_warden": "hollow_moon",
+    "ringmaster": "clockwork_carnival",
+    "gilded_champion": "crimson_colosseum",
+    "tesla_archon": "storm_spire",
 }
 CHAPTER = {}
 for s in defs.STRUCTURES:

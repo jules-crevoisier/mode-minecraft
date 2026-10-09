@@ -384,6 +384,18 @@ def entity_loot():
                         entry("golden_apple", 1, 2), entry("diamond", 2, 4), entry("end_rod", 4, 8),
                         entry("amethyst_shard", 8, 16), entry("chorus_fruit", 6, 12), entry("ender_pearl", 3, 6),
                         entry("clock", 1, 1), entry("enchanted_golden_apple", chance=0.15)],
+        "ringmaster": [entry("map_fragment", 6, 10), entry("emerald", 5, 9), entry("experience_bottle", 4, 7),
+                       entry("golden_apple", 1, 2), entry("diamond", 2, 4), entry("firework_rocket", 6, 12),
+                       entry("cake", 1, 1), entry("gold_ingot", 4, 8), entry("lantern", 2, 4), entry("bell", 1, 1),
+                       entry("enchanted_golden_apple", chance=0.08)],
+        "gilded_champion": [entry("ancient_ember", 6, 10), entry("emerald", 5, 9), entry("experience_bottle", 5, 8),
+                            entry("golden_apple", 2, 3), entry("diamond", 2, 4), entry("gold_block", 2, 4),
+                            entry("gilded_blackstone", 4, 8), entry("netherite_scrap", 1, 2), entry("golden_sword", 1, 1),
+                            entry("iron_chain", 4, 8), entry("enchanted_golden_apple", chance=0.12)],
+        "tesla_archon": [entry("map_fragment", 6, 10), entry("emerald", 5, 9), entry("experience_bottle", 4, 7),
+                         entry("golden_apple", 1, 2), entry("diamond", 2, 4), entry("copper_block", 3, 6),
+                         entry("lightning_rod", 2, 4), entry("redstone", 12, 24), entry("glowstone_dust", 6, 12),
+                         entry("end_rod", 2, 4), entry("enchanted_golden_apple", chance=0.08)],
     }
     from wf.bossgear import BOSS_GEAR, remembrance_id
     for row in BOSS_GEAR:  # every great boss always drops its remembrance

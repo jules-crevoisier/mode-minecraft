@@ -1241,6 +1241,64 @@ def moon_astroblade():
 
 ARCHETYPES["moon_astroblade"] = moon_astroblade
 
+
+def ringmaster_cane():
+    """Showman's Cane of the Clockwork Ringmaster: a long black lacquered cane with brass bands, a gold ferrule at the
+    foot, and a round gold knob on top set with a ruby, a little brass collar under it."""
+    out = _shaft(-8, 25, 1.4, "handle") + _grip(4, 10, 1.8)
+    for y in (-2.0, 14.0, 20.0):                                          # brass bands
+        out.append(box(7.1, y, 7.1, 8.9, y + 0.8, 8.9, "brass"))
+    out += [box(7.2, -10, 7.2, 8.8, -8, 8.8, "light"),                    # the gold ferrule
+            box(6.9, 25, 6.9, 9.1, 26, 9.1, "brass_dark"),               # the collar
+            box(6.4, 26, 6.4, 9.6, 29, 9.6, "light"),                    # the knob
+            box(6.8, 29, 6.8, 9.2, 29.8, 9.2, "mid"),
+            box(7.5, 27, 6.1, 8.5, 28, 6.4, "accent")]                   # the ruby
+    return out
+
+
+ARCHETYPES["ringmaster_cane"] = ringmaster_cane
+
+
+def champion_gladius():
+    """Gilded Gladius of the Champion: a crimson-wrapped grip with a round gold pommel, a broad gold guard with a ruby,
+    and a wide netherite blade edged in gold with a bright fuller, tapering to a leaf point."""
+    out = _grip(-4, 5, 2.2) + [box(6.85, -2, 6.85, 9.15, -1.2, 9.15, "accent_dark"), box(6.85, 2, 6.85, 9.15, 2.8, 9.15, "accent_dark"),
+                               box(6.8, -7, 6.8, 9.2, -4.6, 9.2, "brass"),          # the pommel
+                               box(3.6, 5, 6.6, 12.4, 6.6, 9.4, "brass"),               # the guard
+                               box(7.3, 5.2, 6.3, 8.7, 6.4, 6.6, "accent"),           # its ruby
+                               box(6.6, 6.6, 7.2, 9.4, 8.0, 8.8, "dark")]             # the ricasso collar
+    out += [box(6.0, 8.0, 7.4, 10.0, 26.0, 8.6, "iron_dark"),                       # the netherite blade
+            box(5.4, 8.6, 7.6, 6.0, 25.0, 8.4, "brass"), box(10.0, 8.6, 7.6, 10.6, 25.0, 8.4, "brass"),   # gold edges
+            box(7.7, 9.0, 7.3, 8.3, 24.0, 8.7, "steel"),                            # the fuller
+            box(6.6, 26.0, 7.5, 9.4, 28.5, 8.5, "brass"),                           # the leaf point
+            box(7.4, 28.5, 7.6, 8.6, 30.0, 8.4, "brass")]
+    return out
+
+
+ARCHETYPES["champion_gladius"] = champion_gladius
+
+
+def tesla_coilstaff():
+    """Coil-Staff of the Tesla Archon: a dark iron shaft with a wrapped grip and an iron foot; up top a fat copper
+    winding between white insulator discs, a brass collar, four brass prongs cradling a glowing ball of lightning."""
+    out = [box(7.25, -10, 7.25, 8.75, 20, 8.75, "iron_dark"), box(6.9, -11.6, 6.9, 9.1, -10, 9.1, "dark")]
+    out += _grip(-3, 4, 2.2)
+    out += [box(6.4, 9, 6.4, 9.6, 18, 9.6, "mid")]                           # the copper winding
+    for y in (9.6, 11.4, 13.2, 15.0, 16.8):                                 # its turns
+        out.append(box(6.3, y, 6.3, 9.7, y + 0.5, 9.7, "light"))
+    for y in (7.6, 18.4):                                                   # insulator discs
+        out.append(box(5.6, y, 5.6, 10.4, y + 0.9, 10.4, "cream"))
+    out += [box(6.8, 20, 6.8, 9.2, 21.2, 9.2, "brass")]                     # the collar
+    for x, z in ((6.0, 7.6), (9.2, 7.6), (7.6, 6.0), (7.6, 9.2)):           # the prongs
+        out.append(box(x, 21.2, z, x + 0.8, 23.0, z + 0.8, "brass"))
+    out += [box(5.9, 21.8, 5.9, 10.1, 26.0, 10.1, "accent"),                # the ball of lightning
+            box(6.6, 22.5, 5.6, 9.4, 25.3, 10.4, "glow"), box(5.6, 22.5, 6.6, 10.4, 25.3, 9.4, "glow"),
+            box(7.6, 26.0, 7.6, 8.4, 27.4, 8.4, "glow")]                    # a spark off its crown
+    return out
+
+
+ARCHETYPES["tesla_coilstaff"] = tesla_coilstaff
+
 # item id -> (archetype, material, handle, accent)
 HELD = {
     "kings_trident": ("trident_big", "warden", "bone", "sapphire"),
@@ -1293,6 +1351,9 @@ HELD = {
     "gardener_shears": ("gardener_shears", "iron", "dark", "ruby"),
     "diver_drill_lance": ("diver_drill_lance", "iron", "dark", "aether"),
     "moon_astroblade": ("moon_astroblade", "light", "purpur", "aether"),
+    "ringmaster_cane": ("ringmaster_cane", "gold", "dark", "ruby"),
+    "champion_gladius": ("champion_gladius", "gold", "dark", "ruby"),
+    "tesla_coilstaff": ("tesla_coilstaff", "copper", "dark", "aether"),
     "cartographer_blade": ("sword", "cartographer", "wood", "emerald"),
     "telluric_hammer": ("hammer", "lithite", "wood", "emerald"),
     "storm_staff": ("staff", "storm", "dark", "sapphire"),

@@ -229,6 +229,9 @@ ENTITIES = {
     "thorn_gardener": ("The Head Gardener", "Le Jardinier en chef"),
     "abyss_diver": ("The Abyssal Diver", "Le Scaphandrier des abysses"),
     "moon_warden": ("The Moon Warden", "La Gardienne de la lune"),
+    "ringmaster": ("The Clockwork Ringmaster", "Le Monsieur Loyal mécanique"),
+    "gilded_champion": ("The Gilded Champion", "Le Champion doré"),
+    "tesla_archon": ("The Tesla Archon", "L'Archonte Tesla"),
     "hot_rivet": ("Hot Rivet", "Rivet brûlant"),
     "boomerang": ("Boomerang", "Boomerang"),
 }
@@ -294,6 +297,9 @@ SPAWN_EGGS = ["ruin_walker", "map_wraith", "basalt_guard", "void_stalker", "drow
               "thorn_gardener",
               "abyss_diver",
               "moon_warden",
+              "ringmaster",
+              "gilded_champion",
+              "tesla_archon",
               ]
 
 # Misc translated messages used from Java (key suffix -> (en, fr))

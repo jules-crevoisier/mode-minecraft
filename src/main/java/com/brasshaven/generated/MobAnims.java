@@ -1139,6 +1139,57 @@ public final class MobAnims {
 
         private MoonWarden() {}
     }
+    public static final class Ringmaster {
+        public static final int CANE = 0;
+        public static final int JUGGLE = 1;
+        public static final int HAT = 2;
+        public static final int FLOURISH = 3;
+        public static final int CAROUSEL = 4;
+        public static final int PERFORMERS = 5;
+        public static final int FINALE = 6;
+        public static final int ROAR = 7;
+        public static final int STAGGER = 8;
+        public static final int COUNT = 9;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {44, 54, 62, 40, 120, 46, 80, 40, 40};
+
+        private Ringmaster() {}
+    }
+    public static final class GildedChampion {
+        public static final int COMBO = 0;
+        public static final int BASH = 1;
+        public static final int BLOCK = 2;
+        public static final int RIPOSTE = 3;
+        public static final int CHARGE = 4;
+        public static final int NET = 5;
+        public static final int CROWD = 6;
+        public static final int GATES = 7;
+        public static final int FAVOUR = 8;
+        public static final int ROAR = 9;
+        public static final int STAGGER = 10;
+        public static final int COUNT = 11;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {48, 38, 64, 30, 54, 46, 68, 46, 80, 40, 40};
+
+        private GildedChampion() {}
+    }
+    public static final class TeslaArchon {
+        public static final int ARCPUNCH = 0;
+        public static final int ORB = 1;
+        public static final int COILSLAM = 2;
+        public static final int ARCLINE = 3;
+        public static final int CORONA = 4;
+        public static final int MAGNET = 5;
+        public static final int OVERLOAD = 6;
+        public static final int ARCSWEEP = 7;
+        public static final int ROAR = 8;
+        public static final int STAGGER = 9;
+        public static final int COUNT = 10;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {38, 40, 46, 50, 86, 72, 80, 170, 40, 40};
+
+        private TeslaArchon() {}
+    }
     public static final class GlowJellyfish {
 
         public static final int COUNT = 0;

@@ -54,6 +54,9 @@ ABILITIES = {
     "prune": ("Pruning snip", "Coup de sécateur", "range"),
     "bore": ("Pressure bore", "Forage sous pression", "range"),
     "orbit": ("Orrery orbit", "Orbite de l'orrery", "range"),
+    "tesla": ("Chain lightning", "Éclair en chaîne", "range"),
+    "triumph": ("Gladiator's triumph", "Triomphe du gladiateur", "range"),
+    "juggle": ("Juggling bombs", "Bombes de jonglage", "range"),
 }
 # BossWeaponItem flags, in bit order
 ABILITY_EFFECTS = {
@@ -201,6 +204,12 @@ FLAVOR = {
                         "Personne n'est revenu à la serre ; il a continué de tailler, et le jardin a continué de pousser en lui."),
     "moon_astroblade": ("She kept the moon turning long after the last astronomer left; she never asked who it was for.",
                         "Elle a fait tourner la lune longtemps après le départ du dernier astronome, sans jamais demander pour qui."),
+    "ringmaster_cane": ("The crowd left the big top long ago; he still bows to the empty benches every night.",
+                        "Le public a quitté le chapiteau depuis longtemps ; il salue encore chaque soir les gradins vides."),
+    "champion_gladius": ("He never lost a fight on the sand; the emperor he fought for lost everything else.",
+                         "Il n'a jamais perdu un combat sur le sable ; l'empereur pour qui il se battait a perdu tout le reste."),
+    "tesla_coilstaff": ("He promised the valley free light from the sky; he never said what it would cost, or who would pay.",
+                        "Il avait promis à la vallée la lumière gratuite du ciel ; il n'a jamais dit ce qu'elle coûterait, ni qui paierait."),
     "diver_drill_lance": ("He went down to drill the last metre himself; the suit came back up without him, and it is still drilling.",
                           "Il est descendu forer lui-même le dernier mètre ; le scaphandre est remonté sans lui, et il fore toujours."),
     "alchemist_staff": ("He stirred the vats until the spores stirred him back.",

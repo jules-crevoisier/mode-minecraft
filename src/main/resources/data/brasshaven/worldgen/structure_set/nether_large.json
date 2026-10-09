@@ -27,6 +27,10 @@
     {
       "structure": "brasshaven:soul_engine",
       "weight": 1
+    },
+    {
+      "structure": "brasshaven:crimson_colosseum",
+      "weight": 1
     }
   ],
   "placement": {

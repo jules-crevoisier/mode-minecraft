@@ -165,6 +165,15 @@ public final class BossGear {
     public static final RegistryObject<Item> REMEMBRANCE_MOON_WARDEN = remembrance("remembrance_moon_warden");
     public static final RegistryObject<Item> MOON_ASTROBLADE = weapon("moon_astroblade", p -> p.sword(ModMaterials.VOID, 9.0F, -2.6F).rarity(Rarity.EPIC).fireResistant(),
             BossWeaponItem.Ability.ORBIT, 11.0F, 10.0F, 80, () -> ParticleTypes.END_ROD, BossWeaponItem.SLOW);
+    public static final RegistryObject<Item> REMEMBRANCE_RINGMASTER = remembrance("remembrance_ringmaster");
+    public static final RegistryObject<Item> RINGMASTER_CANE = weapon("ringmaster_cane", p -> p.sword(ModMaterials.LITHITE, 8.0F, -2.4F).rarity(Rarity.EPIC),
+            BossWeaponItem.Ability.JUGGLE, 10.0F, 12.0F, 80, () -> ParticleTypes.FIREWORK, 0);
+    public static final RegistryObject<Item> REMEMBRANCE_GILDED_CHAMPION = remembrance("remembrance_gilded_champion");
+    public static final RegistryObject<Item> CHAMPION_GLADIUS = weapon("champion_gladius", p -> p.sword(ModMaterials.EMBER, 9.0F, -2.4F).rarity(Rarity.EPIC).fireResistant(),
+            BossWeaponItem.Ability.TRIUMPH, 11.0F, 7.0F, 70, () -> ParticleTypes.WAX_ON, 0);
+    public static final RegistryObject<Item> REMEMBRANCE_TESLA_ARCHON = remembrance("remembrance_tesla_archon");
+    public static final RegistryObject<Item> TESLA_COILSTAFF = weapon("tesla_coilstaff", p -> p.sword(ModMaterials.LITHITE, 8.0F, -2.8F).rarity(Rarity.EPIC),
+            BossWeaponItem.Ability.TESLA, 10.0F, 14.0F, 80, () -> ParticleTypes.ELECTRIC_SPARK, BossWeaponItem.SLOW);
 
     private BossGear() {}
 

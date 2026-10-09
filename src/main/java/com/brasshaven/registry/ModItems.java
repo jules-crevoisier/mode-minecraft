@@ -220,6 +220,9 @@ public final class ModItems {
     public static final RegistryObject<Item> LUMBER_JARL_SPAWN_EGG = egg("lumber_jarl_spawn_egg", ModEntities.LUMBER_JARL);
     public static final RegistryObject<Item> ABYSS_DIVER_SPAWN_EGG = egg("abyss_diver_spawn_egg", ModEntities.ABYSS_DIVER);
     public static final RegistryObject<Item> MOON_WARDEN_SPAWN_EGG = egg("moon_warden_spawn_egg", ModEntities.MOON_WARDEN);
+    public static final RegistryObject<Item> RINGMASTER_SPAWN_EGG = egg("ringmaster_spawn_egg", ModEntities.RINGMASTER);
+    public static final RegistryObject<Item> GILDED_CHAMPION_SPAWN_EGG = egg("gilded_champion_spawn_egg", ModEntities.GILDED_CHAMPION);
+    public static final RegistryObject<Item> TESLA_ARCHON_SPAWN_EGG = egg("tesla_archon_spawn_egg", ModEntities.TESLA_ARCHON);
     public static final RegistryObject<Item> SOLAR_HIERARCH_SPAWN_EGG = egg("solar_hierarch_spawn_egg", ModEntities.SOLAR_HIERARCH);
     // peoples and creatures of the places (tools/wf/denizens.py)
     public static final RegistryObject<Item> DWARF_SPAWN_EGG = egg("dwarf_spawn_egg", ModEntities.DWARF);

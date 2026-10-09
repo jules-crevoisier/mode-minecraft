@@ -25,7 +25,7 @@ import java.util.List;
  * Abilities only ever hurt non-player creatures.
  */
 public class BossWeaponItem extends AbilityItem {
-    public enum Ability { WAVE, BEAM, DASH, ERUPT, ROOT, CLOUD, LEAP, ARC, BLINK, HOOK, SHARDS, BREATH, RIFT, WARD, TEMPEST, TIDE, JET, PRESSURE, MIRE, PLUMB, BROADSIDE, PRISM, CAGE, SCARAB, MAGNET, TONGS, ZENITH, FUSE, DRAGON, SHRIEK, GRAPPLE, STOKE, REWIND, ANCHOR, TETHER, PRUNE, BORE, FELL, ORBIT }
+    public enum Ability { WAVE, BEAM, DASH, ERUPT, ROOT, CLOUD, LEAP, ARC, BLINK, HOOK, SHARDS, BREATH, RIFT, WARD, TEMPEST, TIDE, JET, PRESSURE, MIRE, PLUMB, BROADSIDE, PRISM, CAGE, SCARAB, MAGNET, TONGS, ZENITH, FUSE, DRAGON, SHRIEK, GRAPPLE, STOKE, REWIND, ANCHOR, TETHER, PRUNE, BORE, FELL, ORBIT, JUGGLE, TRIUMPH, TESLA }
 
     public static final int FIRE = 1;
     public static final int SLOW = 2;
@@ -1256,6 +1256,92 @@ public class BossWeaponItem extends AbilityItem {
                 level.playSound(null, player, SoundEvents.WOOD_BREAK, SoundSource.PLAYERS, 1.0F, 0.6F);
                 level.playSound(null, player, SoundEvents.MACE_SMASH_GROUND, SoundSource.PLAYERS, 0.8F, 0.7F);
             }
+            case TRIUMPH -> {
+                // the Gilded Champion's gladius: a gladiator's thrust along the aim (up to `size` blocks, walls stop it,
+                // 1.0 to each side); every foe in it is hurt and driven back, a foe under 30% health takes the finishing
+                // blow for 50% more; the crowd roars for every foe struck: the wielder gains absorption (2, 4 or 6 hearts)
+                // for 10 s
+                Vec3 eye = player.getEyePosition();
+                BlockHitResult wall = level.clip(new ClipContext(eye, eye.add(look.scale(size)), ClipContext.Block.COLLIDER,
+                        ClipContext.Fluid.NONE, player));
+                double reach = wall.getType() == HitResult.Type.MISS ? size : Math.max(1.0, wall.getLocation().distanceTo(eye) - 0.3);
+                java.util.Set<LivingEntity> struck = new java.util.LinkedHashSet<>();
+                for (double d = 0.75; d <= reach; d += 0.6) {
+                    Vec3 p = eye.add(look.scale(d)).subtract(0, 0.4, 0);
+                    level.sendParticles(particle, p.x, p.y, p.z, 1, 0.05, 0.05, 0.05, 0.0);
+                    level.sendParticles(new net.minecraft.core.particles.DustParticleOptions(0xFFD24A, 1.2F), p.x, p.y, p.z, 1,
+                            0.1, 0.1, 0.1, 0.0);
+                    for (LivingEntity e : foes(level, player, new AABB(p, p).inflate(1.0, 1.4, 1.0))) {
+                        struck.add(e);
+                    }
+                }
+                for (LivingEntity e : struck) {
+                    boolean finish = e.getHealth() < e.getMaxHealth() * 0.3F;
+                    hit(level, player, e, finish ? power * 1.5F : power, 0.6);
+                    level.sendParticles(net.minecraft.core.particles.ParticleTypes.CRIT, e.getX(), e.getY() + 1.0, e.getZ(), 10, 0.3, 0.4, 0.3, 0.2);
+                    if (finish) {
+                        level.sendParticles(net.minecraft.core.particles.ParticleTypes.WAX_ON, e.getX(), e.getY() + 1.2, e.getZ(), 12, 0.4, 0.5, 0.4, 0.1);
+                    }
+                }
+                if (!struck.isEmpty()) {
+                    player.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 200, Math.min(2, struck.size() - 1)));
+                    level.playSound(null, player, SoundEvents.PIGLIN_CELEBRATE, SoundSource.PLAYERS, 1.2F, 1.0F);
+                }
+                level.playSound(null, player, SoundEvents.TRIDENT_THROW.value(), SoundSource.PLAYERS, 1.0F, 0.7F);
+                level.playSound(null, player, SoundEvents.ARMOR_EQUIP_GOLD.value(), SoundSource.PLAYERS, 0.8F, 1.0F);
+            }
+            case JUGGLE -> {
+                // the Clockwork Ringmaster's cane: three brass juggling bombs lobbed in arcs along the aim, landing at
+                // 40%, 70% and 100% of the throw (up to `size` blocks over the ground, cut short by walls and drops);
+                // each bursts in confetti, hitting every foe within 2.5 for the power and tossing it up a little; a foe
+                // caught by more than one burst takes 25% more from each burst after the first
+                double reach = 0;
+                Vec3 lastGround = null;
+                for (double d = 1.0; d <= size; d += 0.5) {
+                    Vec3 g = riftGround(level, origin.add(flat.scale(d)));
+                    if (g == null) {
+                        break;
+                    }
+                    reach = d;
+                    lastGround = g;
+                }
+                if (lastGround == null) {
+                    reach = 1.0;
+                }
+                java.util.Map<LivingEntity, Integer> caught = new java.util.HashMap<>();
+                int[] colours = {0xE8323C, 0xF2C641, 0x4FA8E8, 0x6CD06C, 0xE070D0};
+                double[] at = {0.4, 0.7, 1.0};
+                for (int b = 0; b < 3; b++) {
+                    Vec3 flatAt = origin.add(flat.scale(Math.max(1.0, reach * at[b])));
+                    Vec3 land = riftGround(level, flatAt);
+                    if (land == null) {
+                        land = new Vec3(flatAt.x, origin.y, flatAt.z);
+                    }
+                    Vec3 from = player.getEyePosition();
+                    for (int k = 1; k < 10; k++) {                       // the arc of the throw
+                        double t = k / 10.0;
+                        Vec3 p = from.lerp(land, t).add(0, Math.sin(t * Math.PI) * (1.5 + b), 0);
+                        level.sendParticles(new net.minecraft.core.particles.DustParticleOptions(0xD6A64C, 1.2F), p.x, p.y, p.z, 1,
+                                0.02, 0.02, 0.02, 0.0);
+                    }
+                    level.sendParticles(particle, land.x, land.y + 0.5, land.z, 16, 0.6, 0.4, 0.6, 0.08);
+                    level.sendParticles(net.minecraft.core.particles.ParticleTypes.EXPLOSION, land.x, land.y + 0.5, land.z, 1, 0, 0, 0, 0);
+                    for (int c = 0; c < colours.length; c++) {          // confetti
+                        level.sendParticles(new net.minecraft.core.particles.DustParticleOptions(colours[c], 1.0F), land.x, land.y + 0.8,
+                                land.z, 5, 1.0, 0.6, 1.0, 0.0);
+                    }
+                    for (LivingEntity e : foes(level, player, new AABB(land, land).inflate(2.5, 2.0, 2.5))) {
+                        if (e.position().multiply(1, 0, 1).distanceTo(land.multiply(1, 0, 1)) <= 2.5 + e.getBbWidth() / 2) {
+                            int n = caught.merge(e, 1, Integer::sum);
+                            hit(level, player, e, n > 1 ? power * 1.25F : power, 0.2);
+                            e.push(0, 0.25, 0);
+                        }
+                    }
+                }
+                level.playSound(null, player, SoundEvents.FIREWORK_ROCKET_LAUNCH, SoundSource.PLAYERS, 1.0F, 1.2F);
+                level.playSound(null, player, SoundEvents.FIREWORK_ROCKET_BLAST, SoundSource.PLAYERS, 1.0F, 1.0F);
+                level.playSound(null, player, SoundEvents.FIREWORK_ROCKET_TWINKLE, SoundSource.PLAYERS, 0.8F, 1.1F);
+            }
             case ORBIT -> {
                 // the Moon Warden's astrolabe blade: three brass planets fly out from the wielder along spiral arms
                 // (out to `size` blocks, round the aim, walls stop them); every foe a planet passes is hit for the power
@@ -1367,6 +1453,66 @@ public class BossWeaponItem extends AbilityItem {
                 level.playSound(null, player, SoundEvents.ENDER_DRAGON_SHOOT, SoundSource.PLAYERS, 0.8F, 1.3F);
                 level.playSound(null, end.x, end.y, end.z, SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.PLAYERS, 1.5F, 1.2F);
                 level.playSound(null, end.x, end.y, end.z, SoundEvents.BELL_BLOCK, SoundSource.PLAYERS, 0.8F, 1.4F);
+            }
+            case TESLA -> {
+                // the Tesla Archon's coil-staff: a bolt leaps along the aim (up to `size` blocks, walls stop it) to the
+                // first foe it meets, a visual-only lightning bolt falls on it (nothing burns), then the arc jumps on to
+                // up to 3 more foes, each the nearest within 5 blocks of the last, every jump for 80% of the one before
+                // (flag slow)
+                Vec3 eye = player.getEyePosition();
+                BlockHitResult aim = level.clip(new ClipContext(eye, eye.add(look.scale(size)), ClipContext.Block.COLLIDER,
+                        ClipContext.Fluid.NONE, player));
+                double reach = aim.getType() == HitResult.Type.MISS ? size : Math.max(1.0, aim.getLocation().distanceTo(eye) - 0.3);
+                net.minecraft.core.particles.DustParticleOptions arc = new net.minecraft.core.particles.DustParticleOptions(0x82DCFF, 1.2F);
+                LivingEntity first = null;
+                Vec3 end = eye.add(look.scale(reach));
+                for (double d = 0.75; d <= reach && first == null; d += 0.6) {
+                    Vec3 p = eye.add(look.scale(d)).subtract(0, 0.3, 0);
+                    end = p;
+                    level.sendParticles(arc, p.x, p.y, p.z, 1, 0.08, 0.08, 0.08, 0.0);
+                    for (LivingEntity e : foes(level, player, new AABB(p, p).inflate(1.0, 1.2, 1.0))) {
+                        first = e;
+                        break;
+                    }
+                }
+                if (first == null) {
+                    level.sendParticles(particle, end.x, end.y, end.z, 12, 0.3, 0.3, 0.3, 0.2);
+                } else {
+                    var bolt = net.minecraft.world.entity.EntityTypes.LIGHTNING_BOLT.create(level,
+                            net.minecraft.world.entity.EntitySpawnReason.TRIGGERED);
+                    if (bolt != null) {
+                        bolt.snapTo(first.getX(), first.getY(), first.getZ());
+                        bolt.setVisualOnly(true);
+                        level.addFreshEntity(bolt);
+                    }
+                    java.util.List<LivingEntity> struck = new java.util.ArrayList<>();
+                    LivingEntity cur = first;
+                    float dmg = power;
+                    while (cur != null && struck.size() < 4) {
+                        Vec3 from = struck.isEmpty() ? end : struck.get(struck.size() - 1).position().add(0, 1.0, 0);
+                        Vec3 to = cur.position().add(0, 1.0, 0);
+                        for (int i = 0; i <= 8; i++) {
+                            Vec3 p = from.lerp(to, i / 8.0);
+                            level.sendParticles(particle, p.x, p.y, p.z, 1, 0.1, 0.1, 0.1, 0.02);
+                            level.sendParticles(arc, p.x, p.y, p.z, 1, 0.05, 0.05, 0.05, 0.0);
+                        }
+                        hit(level, player, cur, dmg, 0.2);
+                        struck.add(cur);
+                        dmg *= 0.8F;
+                        LivingEntity next = null;
+                        double best = 5.0;
+                        for (LivingEntity e : foes(level, player, cur.getBoundingBox().inflate(5.0, 3.0, 5.0))) {
+                            double dd = e.distanceTo(cur);
+                            if (!struck.contains(e) && dd <= best) {
+                                best = dd;
+                                next = e;
+                            }
+                        }
+                        cur = next;
+                    }
+                }
+                level.playSound(null, player, SoundEvents.TRIDENT_THUNDER.value(), SoundSource.PLAYERS, 0.6F, 1.8F);
+                level.playSound(null, player, SoundEvents.BEACON_POWER_SELECT, SoundSource.PLAYERS, 0.8F, 1.6F);
             }
             case RIFT -> {
                 // the Castellan of the Caldera's halberd: driven into the ground, it opens a molten rift that runs

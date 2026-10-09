@@ -66,6 +66,9 @@ from . import thorn_gardener
 from . import lumber_jarl
 from . import abyss_diver
 from . import moon_warden
+from . import ringmaster
+from . import gilded_champion
+from . import tesla_archon
 # living oceans
 from . import glow_jellyfish
 from . import reef_fish
@@ -178,6 +181,9 @@ MODELS = [
     lumber_jarl.build,
     abyss_diver.build,
     moon_warden.build,
+    ringmaster.build,
+    gilded_champion.build,
+    tesla_archon.build,
     glow_jellyfish.build,
     reef_fish.build,
     manta_ray.build,

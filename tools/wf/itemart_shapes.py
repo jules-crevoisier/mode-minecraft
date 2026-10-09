@@ -983,3 +983,59 @@ def astro_blade(a):
     a.px(15, 0, "M", "light")
     a.px(12, 4, "E", "light")                                 # a star notch
     a.px(9, 7, "E", "mid")
+
+
+@painted("ringmaster_cane")
+def ringmaster_cane(a):
+    """Showman's Cane of the Clockwork Ringmaster: a black lacquered cane from a gold ferrule at the bottom left to a
+    round gold knob with a ruby at the top right, two brass bands along it."""
+    a.seg("K", 1.0, 15.0, 11.6, 4.4, 1.0)                     # the cane
+    a.px(0, 15, "M", "light")                                 # the ferrule
+    a.px(1, 14, "M", "dark")
+    for i in (4, 8):                                          # brass bands
+        a.px(1 + i, 14 - i, "B", "light")
+    a.disc("M", 12.8, 3.2, 2.2)                               # the knob
+    a.shade_dir("M", -0.6, 1.0)
+    a.px(12, 2, "M", "shine")
+    a.px(13, 3, "A", "light")                                 # the ruby
+    a.px(13, 4, "A", "dark")
+
+
+@painted("gladius")
+def gladius(a):
+    """Gilded Gladius of the Champion: a crimson-wrapped grip and a round gold pommel at the bottom left, a broad gold
+    guard with a ruby, and a wide dark netherite blade edged in gold running to a leaf point at the top right."""
+    a.seg("L", 1.2, 14.4, 4.0, 11.6, 0.8)                     # the grip
+    a.disc("B", 1.0, 14.8, 1.0)                               # the pommel
+    a.seg("B", 3.0, 9.6, 6.4, 13.0, 0.7)                      # the guard
+    a.px(5, 11, "A", "light")                                 # its ruby
+    a.seg("B", 5.6, 10.4, 13.6, 2.4, 1.7)                     # the gold-edged blade
+    a.seg("X", 5.8, 10.2, 12.8, 3.2, 0.8)                     # its netherite core
+    a.shade_dir("B", -0.5, 1.0)
+    a.px(14, 1, "B", "light")                                 # the leaf point
+    a.px(15, 0, "B", "shine")
+    a.px(9, 7, "I", "light")                                  # the fuller
+    a.px(11, 5, "I", "light")
+
+
+@painted("coil_staff")
+def coil_staff(a):
+    """Coil-Staff of the Tesla Archon: a dark iron shaft from the bottom left, a copper winding in bright turns between
+    two cream insulator discs, brass prongs and a glowing aether ball of lightning at the top right."""
+    a.seg("X", 0.8, 15.0, 9.0, 6.8, 0.8)                      # the shaft
+    a.seg("C", 5.4, 10.4, 9.4, 6.4, 1.4)                      # the copper winding
+    a.shade_dir("C", -0.5, 1.0)
+    for x, y in ((6, 10), (7, 9), (8, 8)):                    # its turns
+        a.px(x, y, "C", "shine")
+    a.px(4, 11, "Q", "light")                                 # insulator discs
+    a.px(5, 12, "Q", "mid")
+    a.px(10, 5, "Q", "light")
+    a.px(9, 6, "Q", "mid")
+    a.px(11, 6, "B", "light")                                 # the prongs
+    a.px(10, 4, "B", "light")
+    a.px(13, 5, "B", "dark")
+    a.px(11, 2, "B", "dark")
+    a.disc("E", 12.4, 3.6, 1.8)                               # the ball of lightning
+    a.px(12, 3, "E", "shine")
+    a.px(14, 1, "Y", "light")                                 # a spark
+    a.px(15, 3, "Y", "mid")

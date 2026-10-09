@@ -28,7 +28,10 @@ cutting every foe between the blades, more to those under half health; thorns sn
 the wielder 1), BORE (the drill-lance bores along your aim: every foe in it is hurt, more the more armour it wears, drawn
 in to the lance's tip and lit by bioluminescence), FELL (a chainsaw sweep in front, then the ground splits along your aim, throwing up
 every foe on it; more to those caught by both), ORBIT (three brass planets fly out along spiral arms winding onto your
-aim, hitting and drawing in every foe they pass; a small gravity well where the arm on your aim ends). flags: fire, slow, weak, blind, poison, lift, lifesteal.
+aim, hitting and drawing in every foe they pass; a small gravity well where the arm on your aim ends), JUGGLE (three brass juggling bombs
+lobbed in arcs along your aim burst in confetti where they land; a foe caught by more of them is hurt more), TRIUMPH (a gladiator's thrust
+along your aim, more to foes under 30% health; absorption for every foe struck). TESLA (a bolt along your aim to the first foe, a visual
+lightning strike on it, then the arc jumps on to up to 3 more foes nearby, each for 80% of the last). flags: fire, slow, weak, blind, poison, lift, lifesteal.
 """
 
 TIER_MATERIAL = {"overworld": "map_fragment", "depths": "lithite_shard", "nether": "ancient_ember", "end": "void_shard"}
@@ -406,6 +409,39 @@ BOSS_GEAR = [
      ("Remembrance of the Moon Warden", "Souvenir de la Gardienne de la lune"),
      ("VOID", 9.0, -2.6), "ORBIT", 11.0, 10.0, 80, "END_ROD", "slow", ("astro_blade", "light", "purpur", "aether"),
      ("void", "aether")),
+    ("ringmaster", "overworld", "ringmaster_cane", ("Showman's Cane of the Clockwork Ringmaster", "Canne de scène du Monsieur Loyal mécanique"),
+     ("Use: you lob three brass juggling bombs in arcs along your aim (up to 12 blocks; walls and drops cut the throw "
+      "short). Each bursts in confetti where it lands, hitting every foe within 2.5 blocks and tossing it up a little; "
+      "a foe caught by two or three bursts takes 25% more from each burst after the first.",
+      "Clic droit : tu lances en cloche trois bombes de jonglage en laiton dans ta visée (jusqu'à 12 blocs ; les murs et "
+      "les vides raccourcissent le lancer). Chacune éclate en confettis là où elle tombe et frappe chaque ennemi à moins "
+      "de 2,5 blocs en le soulevant un peu ; un ennemi pris dans deux ou trois éclats prend 25 % de plus à chaque éclat "
+      "après le premier."),
+     ("Remembrance of the Clockwork Ringmaster", "Souvenir du Monsieur Loyal mécanique"),
+     ("LITHITE", 8.0, -2.4), "JUGGLE", 10.0, 12.0, 80, "FIREWORK", "", ("ringmaster_cane", "gold", "dark", "ruby"),
+     ("brass", "ruby")),
+    ("gilded_champion", "nether", "champion_gladius", ("Gilded Gladius of the Champion", "Glaive doré du Champion"),
+     ("Use: a gladiator's thrust along your aim (up to 7 blocks, walls stop it): every foe in it is hurt and driven back, "
+      "and a foe under 30% health takes the finishing blow for 50% more. The crowd roars for every foe you strike: you "
+      "gain 2 hearts of absorption for 10 s, 4 for two foes, 6 for three or more.",
+      "Clic droit : un coup d'estoc de gladiateur dans ta visée (jusqu'à 7 blocs, les murs l'arrêtent) : chaque ennemi "
+      "touché est blessé et repoussé, et un ennemi sous 30 % de sa vie reçoit le coup de grâce pour 50 % de plus. La "
+      "foule rugit pour chaque ennemi frappé : tu gagnes 2 cœurs d'absorption pendant 10 s, 4 pour deux ennemis, 6 pour "
+      "trois ou plus."),
+     ("Remembrance of the Gilded Champion", "Souvenir du Champion doré"),
+     ("EMBER", 9.0, -2.4), "TRIUMPH", 11.0, 7.0, 70, "WAX_ON", "", ("gladius", "gold", "dark", "ruby"),
+     ("gold", "ruby")),
+    ("tesla_archon", "overworld", "tesla_coilstaff", ("Coil-Staff of the Tesla Archon", "Bâton-bobine de l'Archonte Tesla"),
+     ("Use: a bolt leaps from the staff along your aim (up to 14 blocks, walls stop it) to the first foe it meets and a "
+      "lightning strike falls on it (only light: nothing burns); then the arc jumps on to up to 3 more foes, each the "
+      "nearest within 5 blocks of the last, every jump for 80% of the one before, slowing every foe it touches.",
+      "Clic droit : un éclair jaillit du bâton dans ta visée (jusqu'à 14 blocs, les murs l'arrêtent) jusqu'au premier "
+      "ennemi rencontré, et la foudre tombe sur lui (rien que de la lumière : rien ne brûle) ; puis l'arc saute sur "
+      "jusqu'à 3 autres ennemis, chacun le plus proche à 5 blocs du précédent, chaque saut pour 80 % du précédent, et "
+      "ralentit chaque ennemi touché."),
+     ("Remembrance of the Tesla Archon", "Souvenir de l'Archonte Tesla"),
+     ("LITHITE", 8.0, -2.8), "TESLA", 10.0, 14.0, 80, "ELECTRIC_SPARK", "slow", ("coil_staff", "copper", "dark", "aether"),
+     ("copper", "aether")),
 ]
 
 

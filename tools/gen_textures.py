@@ -141,6 +141,9 @@ EGGS = {
     "thorn_gardener": ((176, 112, 58), (236, 86, 170)),
     "abyss_diver": ((190, 150, 70), (80, 255, 214)),
     "moon_warden": ((236, 232, 226), (176, 206, 255)),
+    "ringmaster": ((176, 30, 36), (226, 182, 72)),
+    "gilded_champion": ((226, 178, 66), (156, 26, 36)),
+    "tesla_archon": ((186, 112, 58), (130, 220, 255)),
 }
 
 
@@ -220,6 +223,9 @@ EMBLEMS = {
     "thorn_gardener": ["#...#", ".#.#.", "..#..", ".#.#.", "##.##"],   # open pruning shears
     "abyss_diver": [".###.", "#...#", "#.#.#", "#...#", ".###."],      # a diving helmet's porthole
     "moon_warden": [".##..", "#....", "#....", "#....", ".##.."],      # a crescent moon
+    "ringmaster": [".###.", ".###.", ".#.#.", "#####", "....."],       # a top hat
+    "gilded_champion": ["..#..", ".###.", "#####", ".###.", "..#.."],  # a round shield with its boss
+    "tesla_archon": ["..#..", ".##..", "..##.", ".##..", "..#.."],     # a zigzag bolt
 }
 
 

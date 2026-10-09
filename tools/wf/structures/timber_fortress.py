@@ -38,9 +38,11 @@ Height budget: the smokestack tops out 96 above the ground layer (taigas lie low
 import math
 
 from ..arch import stair
+from ..blueprint import is_solid
 from ..defs import Piece, StructureDef, register
 from ..megakit import (BRASS, CHANDELIER, COPPER, EDISON, GAUGE, GEAR, HANG_LAMP, IRON, MAHOGANY, PIPES, TABLE,
                        TREAD, VERD, W, fbm, hash01, hash3, vnoise)
+from ..nbt import Float
 from ..parts import LOOT, MOD
 from .cloud_pagoda import Ctx, candle, carpet, hang, slab
 
@@ -172,6 +174,198 @@ def fp(C, x, y, z, spec):
         return False
     C.set(x, y, z, spec)
     return True
+
+
+def hollow(C, x, y, z):
+    """Room air: cleared but NOT reserved (furniture may go there later); ``C.clear`` reserves walkway air."""
+    C.bp.set(x, y, z, AIR)
+    C.keep.discard((x, y, z))
+
+
+def reserve(C, x0, z0, x1, z1, y, h=3):
+    """Keep an aisle free: the air cells of the box (feet y .. y + h - 1) are reserved against furniture."""
+    for x in range(min(x0, x1), max(x0, x1) + 1):
+        for z in range(min(z0, z1), max(z0, z1) + 1):
+            for yy in range(y, y + h):
+                if C.free(x, yy, z):
+                    C.keep.add((x, yy, z))
+
+
+# ------------------------------------------------------------------ furnishing and lighting helpers
+def stand(C, x, y, z, facing, **gear):
+    """An armour stand (arms shown) wearing / holding ``gear`` (slot=item id: head, chest, legs, feet, mainhand,
+    offhand), turned to face ``facing``."""
+    if not (C.free(x, y, z) and C.free(x, y + 1, z)) or (x, y, z) in C.keep or not backed(C, x, y - 1, z):
+        return
+    yaw = {"south": 0.0, "west": 90.0, "north": 180.0, "east": -90.0}[facing]
+    eq = {slot: {"id": "minecraft:" + item, "count": 1} for slot, item in gear.items()}
+    C.set(x, y, z, "dark_oak_pressure_plate[powered=false]")
+    C.bp.entity(x, y, z, {"id": "minecraft:armor_stand", "Rotation": [Float(yaw), Float(0.0)], "ShowArms": True,
+                          "equipment": eq})
+    C.keep.add((x, y, z))       # nothing else in its cell (a lamp may still hang above it)
+
+
+def backed(C, x, y, z):
+    """A full block a banner or a bracket can hang on (not a pane, not a fence)."""
+    b = C.get(x, y, z)
+    return b is not None and b != AIR and is_solid(b)
+
+
+def wall_lamp(C, x, y, z, wall):
+    """A lantern hung under a dark-oak fence bracket at (x, y + 1, z) against the wall on the ``wall`` side (the
+    lantern at y, kept out of the walkway by hanging at least 3 above the floor)."""
+    dx, dz = DV[wall]
+    if not backed(C, x + dx, y + 1, z + dz) or not C.free(x, y, z) or not C.free(x, y + 1, z):
+        return False
+    C.set(x, y + 1, z, DO_FENCE)
+    C.set(x, y, z, LANT_H)
+    return True
+
+
+def table_candles(C, x, y, z, n=4, color=""):
+    if C.free(x, y, z):
+        candle(C, x, y, z, n, color)
+
+
+_LIGHT_PASS = ("air", "water", "glass", "leaves", "spawner", "lantern", "candle", "chain", "chandelier", "lamp",
+               "railing", "pipe", "rail", "carpet", "banner", "torch", "campfire")
+
+
+def _clear_for_light(spec):
+    if spec is None:
+        return True
+    s = spec.split(":")[1]
+    if any(t in s for t in _LIGHT_PASS) and not s.endswith("_block") and s != "glass":
+        return True
+    if s == "glass":
+        return True
+    return not is_solid(spec)
+
+
+def _emits(name, props):
+    s = name.split(":")[1]
+    if "candle" in s and "cake" not in s:
+        return 3 * int(props.get("candles", 1)) if props.get("lit") == "true" else 0
+    if s in ("furnace", "smoker", "blast_furnace"):
+        return 13 if props.get("lit") == "true" else 0
+    if s.endswith("campfire"):
+        return (10 if s.startswith("soul") else 15) if props.get("lit") == "true" else 0
+    if s.startswith("soul_"):
+        return 10 if ("lantern" in s or "torch" in s) else 0
+    if s in ("lantern", "torch", "wall_torch", "glowstone", "sea_lantern", "shroomlight", "jack_o_lantern", "lava",
+             "fire", "beacon", "end_rod") or s.endswith("froglight"):
+        return 14 if "torch" in s or s == "end_rod" else 15
+    if name.startswith("brasshaven:") and ("lamp" in s or "lantern" in s or "chandelier" in s):
+        return 15
+    return 0
+
+
+def light_field(C, box, pad=15):
+    """Block light over ``box`` (x0, y0, z0, x1, y1, z1) grown by ``pad``: {pos: level} (MC rules: -1 per step,
+    opaque blocks stop it)."""
+    x0, y0, z0, x1, y1, z1 = box
+    lo = (x0 - pad, y0 - pad, z0 - pad)
+    hi = (x1 + pad, y1 + pad, z1 + pad)
+    B = C.bp.blocks
+    L = {}
+    q = []
+    for x in range(lo[0], hi[0] + 1):
+        for z in range(lo[2], hi[2] + 1):
+            for y in range(lo[1], hi[1] + 1):
+                b = B.get((x, y, z))
+                if b:
+                    e = _emits(b[0], b[1])
+                    if e:
+                        L[(x, y, z)] = e
+                        q.append((x, y, z))
+    _spread(C, L, q, lo, hi)
+    return L, lo, hi
+
+
+def _spread(C, L, q, lo, hi):
+    B = C.bp.blocks
+    while q:
+        nq = []
+        for p in q:
+            lv = L[p] - 1
+            if lv <= 0:
+                continue
+            x, y, z = p
+            for n in ((x + 1, y, z), (x - 1, y, z), (x, y + 1, z), (x, y - 1, z), (x, y, z + 1), (x, y, z - 1)):
+                if not (lo[0] <= n[0] <= hi[0] and lo[1] <= n[1] <= hi[1] and lo[2] <= n[2] <= hi[2]):
+                    continue
+                if L.get(n, 0) >= lv:
+                    continue
+                b = B.get(n)
+                if b is not None and not _clear_for_light(b[0]):
+                    continue
+                L[n] = lv
+                nq.append(n)
+        q = nq
+
+
+def floor_cells(C, box):
+    """Standing spots of ``box`` (feet y0 .. y1): two free cells over a solid block."""
+    x0, y0, z0, x1, y1, z1 = box
+    out = []
+    for x in range(x0, x1 + 1):
+        for z in range(z0, z1 + 1):
+            for y in range(y0, y1 + 1):
+                below = C.get(x, y - 1, z)
+                if C.free(x, y, z) and C.free(x, y + 1, z) and below is not None and below != AIR and is_solid(below):
+                    out.append((x, y, z))
+    return out
+
+
+def light_fill(C, box, drop=3, target=8, cover=0.92, max_lamps=30, lamp=LANT_H, reach=16, lattice=True):
+    """Hang lanterns on iron chains ``drop`` blocks over the floor of ``box`` until ``cover`` of its standing spots
+    get block light >= ``target``: each lantern goes over the spot that lights the most dark ones (chained up to the
+    first solid block above, within ``reach``), on a 3-block grid while one is left there (rows read as designed).
+    Returns (lit share, lanterns hung)."""
+    L, lo, hi = light_field(C, box)
+    F = floor_cells(C, box)
+    if not F:
+        return 1.0, 0
+    hung = 0
+    tried = set()
+    while True:
+        dark = [p for p in F if L.get(p, 0) < target]
+        if len(dark) <= (1 - cover) * len(F) or hung >= max_lamps:
+            break
+        r = 15 - drop - target          # horizontal reach of a lamp hung ``drop`` over the floor
+        dset = {(a, c): b for (a, b, c) in dark}
+        ring = [(a, c) for a in range(-r, r + 1) for c in range(-r, r + 1) if abs(a) + abs(c) <= r]
+        best = None
+        for (x, y, z) in dark:
+            if (x, z) in tried or (lattice and ((x - box[0]) % 3 or (z - box[2]) % 3)):
+                continue
+            ly = y + drop
+            if (x, ly, z) in C.keep or not all(C.free(x, yy, z) for yy in range(y, ly + 1)):
+                continue
+            top = ly + 1
+            while top < ly + reach and C.free(x, top, z):
+                top += 1
+            if not C.solid(x, top, z) or any((x, yy, z) in C.keep for yy in range(ly, top)):
+                continue
+            gain = sum(1 for (a, c) in ring if dset.get((x + a, z + c), -99) == y)
+            key = (gain, -abs(x) - abs(z), x, z)
+            if best is None or key > best[0]:
+                best = (key, x, ly, z, top)
+        if best is None:
+            if lattice:
+                lattice = False         # nothing left on the 3-block grid: any spot will do
+                continue
+            break
+        _, x, ly, z, top = best
+        tried.add((x, z))
+        for yy in range(ly + 1, top):
+            C.set(x, yy, z, CHAIN)
+        C.set(x, ly, z, lamp)
+        hung += 1
+        L[(x, ly, z)] = 15
+        _spread(C, L, [(x, ly, z)], lo, hi)
+    lit = sum(1 for p in F if L.get(p, 0) >= target) / len(F)
+    return lit, hung
 
 
 def spawner(C, x, y, z, mob):
@@ -1171,7 +1365,7 @@ def sawmill(C):
                         spec = SP
                     C.set(x, y, z, spec)
                 else:
-                    C.clear(x, y, z)
+                    hollow(C, x, y, z)
     # roof (ridge along x) with a monitor of glass at the ridge
     ridge = gable(C, x0, z0, x1, z1, H, "x", over=2, gable_spec=SP)
     for x in range(x0 + 3, x1 - 2):
@@ -1188,8 +1382,9 @@ def sawmill(C):
             ring = min(x - x0, x1 - x, z - z0, z1 - z)
             if ring <= 3:
                 C.set(x, G, z, SP)
-                for y in range(G + 1, G + 5):
+                for y in range(G + 1, G + 4):
                     C.clear(x, y, z)
+                hollow(C, x, G + 4, z)
                 if ring == 3:
                     if (x + z) % 5 == 0:
                         for y in range(1, G):
@@ -1241,14 +1436,50 @@ def sawmill(C):
     C.set(x0 + 2, 6, -25, GEAR)
     for y in (7, 8):
         C.set(x0 + 2, y, -25, STR)
-    # lumber piles, sawdust, the planer, the sharpening bench
+    # aisles: the main doors -> the stair to the gallery and across the log line to the boiler house
+    reserve(C, -64, -24, -60, -11, 1)
+    reserve(C, -73, -13, -60, -11, 1)
+    reserve(C, -60, -39, -60, -24, 1)
+    reserve(C, -64, -39, -60, -27, 1)
+    # the log carriage on the infeed: a plated bogie on the rail, the log dogged down with iron clamps
+    for x in range(-77, -71):
+        C.set(x, 1, -25, TREAD)
+    for x in (-76, -73):
+        for z in (-26, -24):
+            C.set(x, 2, z, "iron_bars")
+    C.set(-77, 2, -25, IRON)
+    C.set(-77, 3, -25, "lever[face=floor,facing=east,powered=false]")
+    # guard rails round the blades (brass railings on the rollers' outer side), the yellow-striped walk lines
+    for (sx, d) in ((-66, 5), (-54, 5)):
+        for x in range(sx - d, sx + d + 1):
+            for z, fc in ((-27, "north"), (-23, "south")):
+                if C.free(x, 1, z) and (x, 1, z) not in C.keep:
+                    railing(C, x, 1, z, fc)
+    for x in range(x0 + 1, x1):
+        for z in (-28, -22):
+            if C.free(x, 1, z) and (x, 1, z) not in C.keep:
+                C.set(x, 1, z, "yellow_carpet" if x % 2 else "black_carpet")
+    # lumber piles, sawdust heaps by the blades, the planer, the sharpening bench
     for (px, pz) in ((-66, -16), (-56, -16), (-56, -35), (-70, -35)):
         for x in range(px, px + 5):
             for z in range(pz, pz + 3):
                 for y in range(1, 2 + int(hash01(x, z, 603) * 2)):
                     C.set(x, y, z, SP_SL + "[type=bottom,waterlogged=false]" if y == 3 else SP)
-    for (sx, sz) in ((-60, -27), (-64, -22), (-52, -22)):
-        C.set(sx, 1, sz, "brown_concrete_powder")
+    for (cx, cz) in ((-66, -30), (-54, -30), (-69, -20), (-51, -20)):
+        for dx in range(-2, 3):
+            for dz in range(-1, 2):
+                x, z = cx + dx, cz + dz
+                if not C.free(x, 1, z) or (x, 1, z) in C.keep:
+                    continue
+                r = abs(dx) + abs(dz)
+                if r <= 1:
+                    C.set(x, 1, z, "brown_concrete_powder")
+                    if r == 0:
+                        C.set(x, 2, z, "smooth_sandstone_slab[type=bottom,waterlogged=false]")
+                elif r <= 2:
+                    C.set(x, 1, z, "smooth_sandstone_slab[type=bottom,waterlogged=false]")
+                else:
+                    C.set(x, 1, z, "brown_carpet")
     for x in (-52, -51):
         fp(C, x, 1, -31, IRON)
         fp(C, x, 2, -31, TREAD)
@@ -1257,12 +1488,26 @@ def sawmill(C):
     fp(C, -50, 1, -33, "smithing_table")
     for z in (-38, -37):
         fp(C, -76, 1, z, "barrel[facing=up,open=false]")
+    # the saw doctor's bench: spare blades (iron trapdoors) on the wall, files, a lamp
+    for z in range(-34, -29):
+        fp(C, -47, 1, z, SP_SL + "[type=top,waterlogged=false]")
+        fp(C, -47, 2, z, "iron_trapdoor[facing=west,half=top,open=true,powered=false,waterlogged=false]" if z % 2
+           else "air")
+    fp(C, -47, 2, -32, LANT)
     chest(C, -76, 1, -36, "east", "tf_sawmill")
     chest(C, -48, G + 1, -12, "north", "tf_sawmill")
     spawner(C, -52, 1, -36, MOB_VINDI)
     spawner(C, -64, 1, -20, MOB_MITE)
-    for (lx, lz) in ((-66, -32), (-54, -32), (-66, -18), (-54, -18), (-60, -25)):
-        hang(C, lx, 13, lz, LANT_H, reach=4)
+    # lanterns on brackets on the wall posts, for the floor (y 4) and the gallery (y 13)
+    for u in range(5, 31, 5):
+        for (x, z, wall) in ((x0 + 1, z0 + u, "west"), (x1 - 1, z0 + u, "east"), (x0 + u, z0 + 1, "north"),
+                             (x0 + u, z1 - 1, "south")):
+            if z0 < z < z1 and x0 < x < x1:
+                wall_lamp(C, x, 4, z, wall)
+                wall_lamp(C, x, G + 4, z, wall)
+    # lamps low on chains from the tie beams, over the saws' working ends
+    for (lx, lz) in ((-68, -31), (-58, -31), (-68, -19), (-58, -19), (-53, -27), (-73, -27)):
+        hang(C, lx, 4, lz, LANT_H, reach=14)
     # doors: the main doors south (into the yard), the gallery door east (onto the trestle), the boiler house north
     for x in range(-64, -59):
         for y in range(1, 6):
@@ -1293,7 +1538,7 @@ def boiler_house(C):
                 if edge:
                     C.set(x, y, z, BRICK if hash3(x, y, z, 611) < 0.8 else SMK)
                 else:
-                    C.clear(x, y, z)
+                    hollow(C, x, y, z)
             C.set(x, 9, z, BRICK if edge else SP)
     gable(C, x0, z0, x1, z1 - 1, 10, "x", over=1, gable_spec=BRICK, inner=SP)
     # the boiler: a horizontal copper drum along x
@@ -1655,7 +1900,7 @@ def mess_hall(C):
                         spec = AMBER
                     C.set(x, y, z, spec)
                 else:
-                    C.clear(x, y, z)
+                    hollow(C, x, y, z)
     for x in range(x0 + 1, x1):
         if (x - x0) % 4 == 0:
             for z in range(z0 + 1, z1):
@@ -1668,6 +1913,10 @@ def mess_hall(C):
     for z in (-62, -61, -60):
         for y in (1, 2, 3):
             C.clear(x1, y, z)
+    # aisles: the south door along the hall, the east door down the east end, the kitchen's edge
+    reserve(C, x0 + 2, z1 - 2, x1 - 1, z1 - 1, 1)
+    reserve(C, x1 - 2, z0 + 1, x1 - 1, z1 - 1, 1)
+    reserve(C, -64, z0 + 2, -63, z1 - 1, 1)
     # kitchen (west end): ranges, smokers, kettle, counters
     for z in range(z0 + 1, z1):
         if z % 2:
@@ -1685,14 +1934,18 @@ def mess_hall(C):
     for (hx, hz) in ((x0 + 3, z0 + 3), (x0 + 5, z0 + 3), (x0 + 3, z1 - 3)):
         for y in (H - 1, H - 2):
             C.set(hx, y, hz, CHAIN if y == H - 1 else "brown_terracotta")
-    # three long tables with benches
+    # three long tables with benches, bread, cake and candles
     for tz in (-66, -61, -56):
         for x in range(x0 + 10, x1 - 2):
             fp(C, x, 1, tz, DO_SL + "[type=top,waterlogged=false]")
             fp(C, x, 1, tz - 1, stair(SP_ST, "north")) if x % 4 else None
             fp(C, x, 1, tz + 1, stair(SP_ST, "south")) if x % 4 else None
             if x % 3 == 0:
-                candle(C, x, 2, tz, 2)
+                candle(C, x, 2, tz, 3)
+            elif x % 7 == 1:
+                C.set(x, 2, tz, "cake[bites=2]")
+            elif x % 5 == 2:
+                C.set(x, 2, tz, "flower_pot")
     # hearth on the north wall
     hx = -52
     for x in range(hx - 2, hx + 3):
@@ -1700,13 +1953,33 @@ def mess_hall(C):
             C.set(x, y, z0, COB if hash3(x, y, z0, 701) < 0.6 else SB)
         C.set(x, 1, z0 - 1, COB)
     C.set(hx, 1, z0 + 1, "campfire[facing=south,lit=true,signal_fire=false,waterlogged=false]")
+    for dx in (-1, 1):
+        C.set(hx + dx, 1, z0 + 1, SB)
+        C.set(hx + dx, 2, z0 + 1, LANT)
     for y in range(1, H + 8):
         C.set(hx, y, z0 - 1, COB if y > 1 else COB)
     for y in range(H + 1, H + 9):
         for dx in (-1, 0, 1):
             C.set(hx + dx, y, z0 - 1, COB)
-    for (lx, lz) in ((-64, -61), (-56, -61), (-48, -61), (-68, -61)):
-        hang(C, lx, H - 2, lz, LANT_H, reach=3)
+    # the pantry: casks and crates stacked in the north-east corner and along the south wall of the kitchen
+    for (bx, bz, hgt) in ((-46, -69, 2), (-47, -69, 1), (-46, -68, 1), (-70, -53, 1), (-69, -53, 2),
+                          (-68, -53, 1), (-67, -53, 2)):
+        for y in range(1, hgt + 1):
+            fp(C, bx, y, bz, "barrel[facing=up,open=false]" if (bx + y) % 2 else "barrel[facing=south,open=false]")
+    for (x, z) in ((-66, -53), (-46, -67)):
+        fp(C, x, 1, z, "hay_block[axis=y]")
+    fp(C, -66, 2, -53, LANT)
+    fp(C, -65, 1, -67, "water_cauldron[level=3]")
+    fp(C, -65, 1, -55, "composter[level=4]")
+    for x in range(x0 + 2, x0 + 7):
+        if C.solid(x, 1, z0 + 1):
+            fp(C, x, 2, z0 + 1, LANT if x % 3 == 0 else ("flower_pot" if x % 3 == 1 else "air"))
+    # lamps: low over the tables (from the tie beams), over the counters, by the doors
+    for lx in (-60, -56, -52, -48):
+        for lz in (-66, -61, -56):
+            hang(C, lx, 4, lz, LANT_H, reach=5)
+    for (lx, lz) in ((-68, -65), (-68, -57)):
+        hang(C, lx, 5, lz, LANT_H, reach=4)
     chest(C, x0 + 1, 1, z1 - 1, "east", "tf_mess")
     chest(C, x1 - 1, 1, z0 + 1, "west", "tf_mess")
     spawner(C, -50, 1, -64, MOB_VINDI)
@@ -1736,7 +2009,7 @@ def lodge(C):
                 elif y == F1:
                     C.set(x, y, z, SP if (x - x0) % 4 else DLOGZ)
                 else:
-                    C.clear(x, y, z)
+                    hollow(C, x, y, z)
     gable(C, x0, z0, x1, z1, 12, "x", over=2, gable_spec=SP, inner=None)
     # interior partition at x 52 (office west | parlour east) with a doorway
     for z in range(z0 + 1, z1):
@@ -1764,40 +2037,121 @@ def lodge(C):
             C.set(x1 + 1, y, z, COB if hash3(x1 + 1, y, z, 711) < 0.6 else SB)
     C.set(x1, 1, 11, "campfire[facing=west,lit=true,signal_fire=false,waterlogged=false]")
     C.set(x1, 2, 11, COB)
-    # office: the foreman's desk, the ledger, the map board, the safe
-    fp(C, 46, 1, 4, TABLE)
-    fp(C, 47, 1, 4, TABLE)
+    # aisles: porch door -> office -> parlour -> the stair foot; the stair's arrival upstairs
+    reserve(C, x0 + 1, 10, 53, 12, 1)
+    reserve(C, 53, 12, 57, z1 - 1, 1)
+    reserve(C, 53, 12, 57, 14, F1 + 1)
+    # office: the foreman's desk (ledgers, inkwell candle, the day book on a lectern), the map board, ledger
+    # shelves, the dark-iron safe round the strong chest, a coat stand
+    for x in (45, 46, 47):
+        fp(C, x, 1, 4, TABLE)
     fp(C, 46, 1, 5, f"{W}mahogany_chair[facing=north]")
+    fp(C, 45, 2, 4, "candle[candles=3,lit=true,waterlogged=false]")
+    fp(C, 47, 2, 4, "chiseled_bookshelf[facing=south]")
     fp(C, 44, 1, 2, "lectern[facing=east,has_book=false,powered=false]")
     fp(C, 49, 1, 1, "cartography_table")
+    fp(C, 50, 1, 1, "loom[facing=south]")
+    for x in range(44, 49):
+        fp(C, x, 1, 1, "chiseled_bookshelf[facing=south]" if x % 2 else "bookshelf")
+        fp(C, x, 2, 1, "bookshelf" if x % 2 else "chiseled_bookshelf[facing=south]")
     for z in range(z0 + 1, z0 + 6):
         fp(C, 51, 1, z, "bookshelf")
-        fp(C, 51, 2, z, "bookshelf")
+        fp(C, 51, 2, z, "chiseled_bookshelf[facing=west]" if z % 2 else "bookshelf")
     chest(C, 43, 1, 20, "east", "tf_lodge")
-    hang(C, 47, 5, 6, HANG_LAMP, reach=2)
-    hang(C, 47, 5, 16, HANG_LAMP, reach=2)
-    # parlour: armchairs, the hearth, antler trophies on the walls
-    for (ax, az, f) in ((58, 9, "east"), (58, 13, "east")):
-        fp(C, ax, 1, az, f"{W}mahogany_chair[facing={f}]")
-    for z in range(z0 + 2, z1 - 1, 4):
-        C.set(x1 - 1, 4, z, SP_FENCE)
-        C.set(x1 - 1, 5, z, "bone_block[axis=y]")
-    carpet(C, 57, 1, 11, "red")
-    carpet(C, 56, 1, 11, "red")
-    hang(C, 57, 5, 11, LANT_H, reach=2)
+    for (y, z) in ((1, 19), (1, 21), (2, 19), (2, 21), (3, 19), (3, 20), (3, 21)):
+        C.set(43, y, z, IRON)
+    C.set(43, 2, 20, "iron_trapdoor[facing=east,half=top,open=false,powered=false,waterlogged=false]")
+    C.set(44, 2, 19, GAUGE)
+    stand(C, 43, 1, 8, "east", head="leather_helmet", chest="leather_chestplate")
+    for (x, z) in ((44, 15), (45, 15)):
+        fp(C, x, 1, z, f"{W}mahogany_chair[facing=south]")
+    fp(C, 44, 1, 16, TABLE)
+    fp(C, 45, 1, 16, TABLE)
+    fp(C, 44, 2, 16, LANT)
+    fp(C, 51, 1, 18, "barrel[facing=up,open=false]")
+    fp(C, 51, 1, 19, "barrel[facing=up,open=false]")
+    fp(C, 51, 2, 19, "barrel[facing=up,open=false]")
+    hang(C, 47, 4, 6, HANG_LAMP, reach=2)
+    hang(C, 47, 4, 16, HANG_LAMP, reach=2)
+    # parlour: the fireplace with its mantel, armchairs, the bear rug, antler trophies round the walls, the rifle
+    # rack
+    C.set(x1, 1, 11, "campfire[facing=west,lit=true,signal_fire=false,waterlogged=false]")
+    C.set(x1, 2, 11, COB)
+    for z in (10, 12):
+        for y in (1, 2):
+            C.set(x1 - 1, y, z, SB)
+    for z in (10, 11, 12):
+        C.set(x1 - 1, 3, z, stair(SB_ST, "west", "top"))
+    for z in (10, 12):
+        candle(C, x1 - 1, 4, z, 3)
+    for (ax, az, fc) in ((58, 9, "east"), (58, 13, "east")):
+        fp(C, ax, 1, az, f"{W}mahogany_chair[facing={fc}]")
+    for x in (59, 60):
+        for z in (10, 11, 12):
+            C.set(x, 1, z, "brown_carpet")
+    for z in (8, 14):
+        fp(C, 58, 1, z, TABLE)
+        fp(C, 58, 2, z, LANT)
+
+    def antlers(x, y, z, axis_x):
+        """A stag's antlers on a wall: a bone skull, two branching dark-oak tines."""
+        C.set(x, y, z, "bone_block[axis=y]")
+        for d in (-1, 1):
+            X, Z = (x + d, z) if axis_x else (x, z + d)
+            C.set(X, y + 1, Z, SP_FENCE)
+            X2, Z2 = (x + 2 * d, z) if axis_x else (x, z + 2 * d)
+            C.set(X2, y + 2, Z2, SP_FENCE)
+            C.set(X, y + 2, Z, SP_FENCE)
+
+    for z in (3, 18):
+        antlers(x1 - 1, 3, z, False)
+    antlers(57, 3, z0 + 1, True)
+    for x in range(58, 62):
+        fp(C, x, 1, z1 - 1, DO_FENCE if x % 2 else "barrel[facing=up,open=false]")
+        fp(C, x, 2, z1 - 1, "iron_trapdoor[facing=north,half=top,open=true,powered=false,waterlogged=false]"
+           if x % 2 == 0 else DO_FENCE)
+    wall_lamp(C, 60, 4, 1, "north")
+    wall_lamp(C, 60, 4, z1 - 1, "south")
+    hang(C, 57, 4, 11, LANT_H, reach=2)
     spawner(C, 58, 1, 3, MOB_MARKS)
     # the stair to the upper floor (north-going along the east part, rows x 54 .. 56)
     rows = stair_run(C, [(54, 20), (55, 20), (56, 20)], "north", F1, 0, head=4)
     well_rail(C, rows, F1, (0, -1))
-    # upstairs: the bedroom, the wardrobe, the strong chest
-    C.bp.bed(44, F1 + 1, 2, "south", "red")
-    fp(C, 46, F1 + 1, 1, "barrel[facing=up,open=false]")
-    chest(C, 61, F1 + 1, 2, "west", "tf_lodge")
-    fp(C, 61, F1 + 1, 6, TABLE)
-    fp(C, 48, F1 + 1, 20, "bookshelf")
-    fp(C, 49, F1 + 1, 20, "bookshelf")
-    for (lx, lz) in ((47, 8), (57, 8), (47, 16)):
-        hang(C, lx, 11, lz, LANT_H, reach=3)
+    # upstairs: the bedroom (bed, nightstand, wardrobe, rug, a second fireplace on the chimney), the foreman's
+    # writing desk and the strong chest
+    u = F1 + 1
+    C.bp.bed(44, u, 2, "north", "red")
+    fp(C, 45, u, 1, "barrel[facing=up,open=false]")
+    fp(C, 45, u + 1, 1, "candle[candles=2,lit=true,waterlogged=false]")
+    for x in (46, 47):
+        fp(C, x, u, 1, "barrel[facing=south,open=false]")
+        fp(C, x, u + 1, 1, "barrel[facing=south,open=false]")
+    for x in range(44, 48):
+        for z in range(4, 7):
+            if C.free(x, u, z):
+                C.set(x, u, z, "red_carpet" if (x + z) % 2 else "white_carpet")
+    C.set(x1, u, 11, "campfire[facing=west,lit=true,signal_fire=false,waterlogged=false]")
+    C.set(x1, u + 1, 11, COB)
+    for z in (10, 12):
+        C.set(x1 - 1, u, z, SB)
+        C.set(x1 - 1, u + 1, z, SB)
+    for z in (10, 11, 12):
+        C.set(x1 - 1, u + 2, z, stair(SB_ST, "west", "top"))
+    antlers(x1 - 1, u + 3, 7, False)
+    chest(C, 61, u, 2, "west", "tf_lodge")
+    for (x, z) in ((60, 2), (61, 3)):
+        C.set(x, u, z, IRON)
+    fp(C, 61, u, 6, TABLE)
+    fp(C, 61, u, 5, TABLE)
+    fp(C, 60, u, 6, f"{W}mahogany_chair[facing=east]")
+    fp(C, 61, u + 1, 6, "candle[candles=3,lit=true,waterlogged=false]")
+    for x in range(44, 51):
+        fp(C, x, u, 20, "bookshelf" if x % 3 else "chiseled_bookshelf[facing=north]")
+        fp(C, x, u + 1, 20, "bookshelf")
+    fp(C, 47, u, 18, f"{W}mahogany_chair[facing=south]")
+    for (x, z, wall) in ((48, 1, "north"), (56, 1, "north"), (48, z1 - 1, "south"), (x0 + 1, 6, "west"),
+                         (x0 + 1, 16, "west")):
+        wall_lamp(C, x, u + 3, z, wall)
 
 
 # ------------------------------------------------------------------ the lumber yard (hub)
@@ -2161,7 +2515,7 @@ def storey(C, k):
                         spec = GLASS if k != 2 else AMBER
                     C.set(x, y, z, spec)
                 elif y <= top:
-                    C.clear(x, y, z)
+                    hollow(C, x, y, z)
                 else:
                     C.set(x, y, z, (DLOGX if abs(v) <= h else DLOGZ) if u % 4 == 0 else SP)
     # brass bands on the posts at the sill and the top plate
@@ -2206,7 +2560,7 @@ def plinth(C):
                     C.set(x, y, z, spec)
             else:
                 for y in range(1, clear + 1):
-                    C.clear(x, y, z)
+                    hollow(C, x, y, z)
             if m <= 14:
                 C.set(x, clear + 1, z, DLOGZ if u % 4 == 0 else (SB if m >= 13 else SP))
     # quoins of dressed stone on the corners
@@ -2290,9 +2644,10 @@ def keep_stairs(C):
 
 
 def lift_hall(C):
-    """Storey 0: the lift hall in the plinth: the pool under the drop well, the winch drum, guards' benches; the
-    iron door south opens only from inside onto the yard."""
+    """Storey 0: the lift hall in the plinth: the pool under the drop well, the winch drum, the guard post (table,
+    chairs, a weapon rack, crates); the iron door south opens only from inside onto the yard."""
     fy, h, clear = FLOORS[0]
+    f = fy + 1
     x, z = K(0, 14)
     oneway_door(C, x, 1, z, "north", wall=PAND)
     for y in (1, 2, 3):
@@ -2300,6 +2655,11 @@ def lift_hall(C):
         C.set(x + 2, y, z, PAND)
     C.set(x, 4, z, GILD)
     C.set(x, 4, z + 1, stair(SB_ST, "north", "top"))
+    # aisles: door -> stair foot, door -> pool
+    for (u0, v0, u1, v1) in ((-12, 11, 1, 12), (-1, -9, 1, 12), (-1, -9, 8, -8)):
+        X0, Z0 = K(u0, v0)
+        X1, Z1 = K(u1, v1)
+        reserve(C, X0, Z0, X1, Z1, f)
     # winch drum beside the pool
     for u in range(3, 8):
         X, Z = K(u, -11)
@@ -2307,27 +2667,65 @@ def lift_hall(C):
         fp(C, X, 1, Z, DLOG if u in (3, 7) else "minecraft:air")
     X, Z = K(5, -11)
     fp(C, X, 3, Z, GEAR)
+    X, Z = K(5, -12)
+    for y in range(4, clear + 1):
+        C.set(X, y, Z, CHAIN)
+    # the guard post: a table, chairs, a lamp and cards
     for (u, v) in ((-6, -10), (-4, -10)):
         X, Z = K(u, v)
         fp(C, X, 1, Z, TABLE)
     X, Z = K(-5, -9)
     fp(C, X, 1, Z, f"{W}mahogany_chair[facing=north]")
-    for (u, v) in ((-11, -11), (-11, -10), (-10, -11)):
+    X, Z = K(-7, -10)
+    fp(C, X, 1, Z, f"{W}mahogany_chair[facing=east]")
+    X, Z = K(-4, -10)
+    C.set(X, 2, Z, LANT)
+    X, Z = K(-6, -10)
+    table_candles(C, X, 2, Z, 2)
+    for (u, v) in ((-11, -11), (-11, -10), (-10, -11), (-11, -9)):
         X, Z = K(u, v)
         barrel(C, X, 1, Z)
+    X, Z = K(-11, -11)
+    fp(C, X, 2, Z, "barrel[facing=up,open=false]")
     X, Z = K(-6, -11)
     chest(C, X, 1, Z, "south", "tf_armoury")
-    for (u, v) in ((-4, 4), (4, 4), (4, -4), (-4, -4), (8, 8)):
+    # weapon rack on the south wall east of the door
+    for u in range(3, 11):
+        X, Z = K(u, 12)
+        if u % 3 == 0:
+            for y in (1, 2):
+                fp(C, X, y, Z, DO_FENCE)
+            fp(C, X, 3, Z, DO_SL + "[type=bottom,waterlogged=false]")
+        else:
+            fp(C, X, 1, Z, "lightning_rod[facing=up,powered=false,waterlogged=false]")
+            fp(C, X, 2, Z, "iron_trapdoor[facing=north,half=top,open=true,powered=false,waterlogged=false]")
+    # crates and sacks round the winch, the guards' bench on the east wall
+    for (u, v, spec) in ((2, -12, "barrel[facing=north,open=false]"), (8, -7, "barrel[facing=up,open=false]"),
+                         (7, -7, "hay_block[axis=x]"), (3, -9, "barrel[facing=up,open=false]")):
         X, Z = K(u, v)
-        hang(C, X, clear - 2, Z, LANT_H, reach=4)
+        fp(C, X, 1, Z, spec)
+    for v in range(-3, 4):
+        X, Z = K(11, v)
+        fp(C, X, 1, Z, stair(SP_ST, "east")) if v % 3 else None
     for v in range(-6, 8, 3):
-        X, Z = K(-12, v) if v < -7 else K(12, v)
+        X, Z = K(12, v)
         fp(C, X, 1, Z, "barrel[facing=up,open=false]")
+    # lights: lanterns low on chains from the beams, brackets on the walls
+    for (u, v) in ((-4, 4), (4, 4), (4, -4), (-4, -4), (8, 8), (0, -6)):
+        X, Z = K(u, v)
+        hang(C, X, f + 3, Z, LANT_H, reach=14)
+    for u in (-6, 0, 6):
+        X, Z = K(u, -12)
+        wall_lamp(C, X, f + 3, Z, "north")
+    for v in (-8, 0, 8):
+        X, Z = K(12, v)
+        wall_lamp(C, X, f + 3, Z, "east")
 
 
 def armoury(C):
-    """Storey 1: the armoury: weapon racks on the north wall, anvils and grindstones, practice dummies, the bridge
-    door north; two knights' spawners."""
+    """Storey 1: the armoury: weapon racks on the north and west walls, armour stands with axes and swords on the
+    east wall, the smithy corner (anvils, grindstones, the blast furnace), practice dummies, the bridge door north;
+    two knights' spawners."""
     fy = FLOORS[1][0]
     f = fy + 1
     # the bridge door (north wall)
@@ -2336,6 +2734,11 @@ def armoury(C):
         for y in range(f, f + 4):
             C.clear(x, y, z)
         C.set(x, f + 4, z, GILD if u == -8 else DLOGX)
+    # aisles: bridge door -> stair up (south-west) and the stair down's arrival
+    for (u0, v0, u1, v1) in ((-9, -14, -7, 13), (-12, -8, -7, -7), (-9, -2, 12, -1)):
+        X0, Z0 = K(u0, v0)
+        X1, Z1 = K(u1, v1)
+        reserve(C, X0, Z0, X1, Z1, f)
     # racks: dark oak frames with chains and trapdoor shields on the north wall
     for u in range(-4, 7):
         x, z = K(u, -14)
@@ -2346,17 +2749,88 @@ def armoury(C):
         else:
             fp(C, x, f, z, "barrel[facing=up,open=false]" if u % 3 == 1 else "chiseled_bookshelf[facing=south]")
             fp(C, x, f + 1, z, f"dark_oak_trapdoor[facing=south,half=bottom,open=true,powered=false,waterlogged=false]")
+    # halberd racks on the west wall (rods with iron heads between posts)
+    for v in range(2, 12):
+        x, z = K(-14, v)
+        if v % 3 == 2:
+            for y in (f, f + 1, f + 2):
+                fp(C, x, y, z, DO_FENCE)
+        else:
+            fp(C, x, f, z, "lightning_rod[facing=up,powered=false,waterlogged=false]")
+            fp(C, x, f + 1, z, "lightning_rod[facing=up,powered=false,waterlogged=false]")
+            fp(C, x, f + 2, z, "iron_trapdoor[facing=east,half=top,open=true,powered=false,waterlogged=false]")
+    # the smithy corner
     for (u, v, spec) in ((-2, -6, "anvil[facing=east]"), (2, -6, "grindstone[face=floor,facing=north]"),
-                         (5, -6, "smithing_table"), (-5, -2, "blast_furnace[facing=east,lit=true]"),
-                         (6, 1, "anvil[facing=north]"), (13, 8, "fletching_table")):
+                         (5, -6, "smithing_table"), (-5, -4, "blast_furnace[facing=east,lit=true]"),
+                         (-5, -5, "blast_furnace[facing=east,lit=true]"), (6, 1, "anvil[facing=north]"),
+                         (3, -6, "grindstone[face=floor,facing=north]"), (13, 8, "fletching_table")):
         x, z = K(u, v)
         fp(C, x, f, z, spec)
+    x, z = K(-5, -6)
+    fp(C, x, f, z, "water_cauldron[level=3]")
+    for u in (-1, 0, 1):
+        x, z = K(u, -6)
+        fp(C, x, f, z, SP_SL + "[type=top,waterlogged=false]")
+    x, z = K(0, -6)
+    fp(C, x, f + 1, z, LANT)
     # practice dummies: fence, hay body, carved-pumpkin head
     for u in (-2, 1, 4):
         x, z = K(u, 4)
         fp(C, x, f, z, SP_FENCE)
         fp(C, x, f + 1, z, "hay_block[axis=y]")
         fp(C, x, f + 2, z, "carved_pumpkin[facing=south]")
+    # the weapons bench (south) and the axe stands
+    for u in range(0, 6):
+        x, z = K(u, 10)
+        fp(C, x, f, z, DO_SL + "[type=top,waterlogged=false]" if u not in (0, 5) else DO)
+    x, z = K(2, 10)
+    fp(C, x, f + 1, z, "grindstone[face=floor,facing=south]")
+    x, z = K(4, 10)
+    table_candles(C, x, f + 1, z, 3)
+    for (v, gear) in ((-7, dict(head="iron_helmet", chest="iron_chestplate", legs="iron_leggings", feet="iron_boots",
+                                mainhand="iron_axe", offhand="shield")),
+                      (-1, dict(head="chainmail_helmet", chest="chainmail_chestplate", legs="chainmail_leggings",
+                                mainhand="iron_sword")),
+                      (1, dict(chest="leather_chestplate", legs="leather_leggings", feet="leather_boots",
+                               mainhand="crossbow")),
+                      (6, dict(head="iron_helmet", chest="iron_chestplate", mainhand="iron_axe", offhand="iron_axe")),
+                      (11, dict(head="golden_helmet", chest="chainmail_chestplate", mainhand="stone_axe"))):
+        x, z = K(13, v)
+        stand(C, x, f, z, "west", **gear)
+    for (u, gear) in ((4, dict(mainhand="iron_axe")), (7, dict(head="leather_helmet", mainhand="wooden_axe"))):
+        x, z = K(u, 12)
+        stand(C, x, f, z, "north", **gear)
+    # spear and shield racks on the south wall, the archery butts by the bridge door, arrow casks
+    for u in range(5, 14):
+        x, z = K(u, 14)
+        if u % 3 == 2:
+            for y in (f, f + 1, f + 2):
+                fp(C, x, y, z, DO_FENCE)
+        else:
+            fp(C, x, f, z, "lightning_rod[facing=up,powered=false,waterlogged=false]")
+            fp(C, x, f + 1, z, "iron_trapdoor[facing=north,half=top,open=true,powered=false,waterlogged=false]"
+               if u % 3 == 0 else "lightning_rod[facing=up,powered=false,waterlogged=false]")
+            fp(C, x, f + 2, z, "dark_oak_trapdoor[facing=north,half=top,open=true,powered=false,waterlogged=false]"
+               if u % 3 == 1 else "air")
+    for (u, v) in ((-13, -14), (-12, -14), (-11, -14)):
+        x, z = K(u, v)
+        fp(C, x, f, z, "hay_block[axis=y]")
+        fp(C, x, f + 1, z, "target[power=0]")
+        fp(C, x, f + 2, z, "hay_block[axis=x]") if u == -12 else None
+    for (u, v) in ((12, 9), (12, 7), (11, 9)):
+        x, z = K(u, v)
+        fp(C, x, f, z, "barrel[facing=up,open=false]")
+    # the officers' table: maps of the patrols, a lamp, a helmet on a stand
+    for u in range(8, 12):
+        x, z = K(u, -6)
+        fp(C, x, f, z, TABLE)
+    x, z = K(9, -6)
+    fp(C, x, f + 1, z, LANT)
+    x, z = K(11, -6)
+    table_candles(C, x, f + 1, z, 2)
+    for u in (8, 10):
+        x, z = K(u, -5)
+        fp(C, x, f, z, f"{W}mahogany_chair[facing=north]")
     for v in (-4, 4):
         x, z = K(13, v)
         chest(C, x, f, z, "west", "tf_armoury")
@@ -2364,20 +2838,32 @@ def armoury(C):
         x, z = K(u, v)
         spawner(C, x, f, z, MOB_KNIGHT)
     for v in range(-12, 13, 6):
-        for u in (-13,):
-            x, z = K(u, v)
-            if C.free(x, f + 3, z):
-                C.set(x, f + 3, z, "red_wall_banner[facing=east]") if C.solid(x - 1, f + 3, z) else None
-    for (u, v) in ((-6, -8), (6, -8), (-6, 6), (2, -1), (10, 4)):
+        x, z = K(-13, v)
+        if C.free(x, f + 3, z):
+            C.set(x, f + 3, z, "red_wall_banner[facing=east]") if backed(C, x - 1, f + 3, z) else None
+    # lights: lanterns low on chains, brackets on the walls
+    for (u, v) in ((-4, -9), (4, -9), (-4, 7), (4, 7), (2, -2), (10, 4)):
         x, z = K(u, v)
-        hang(C, x, f + 5, z, LANT_H, reach=4)
+        hang(C, x, f + 3, z, LANT_H, reach=8)
+    for u in (-12, 10):
+        x, z = K(u, -14)
+        wall_lamp(C, x, f + 3, z, "north")
+    for u in (-11, 11):
+        x, z = K(u, 14)
+        wall_lamp(C, x, f + 3, z, "south")
 
 
 def great_hall(C):
-    """Storey 2: the great hall, 33 wide and 18 high: two long tables with benches, the guild-master's dais and
-    throne north, a stone hearth on the west wall, four antler chandeliers, the grand stair on the east wall."""
+    """Storey 2: the great hall, 33 wide and 18 high: two long tables with benches under four antler chandeliers,
+    the guild-master's dais and throne north under banners, a stone hearth on the west wall with antlers, ale casks
+    and a carpet runner down the middle, the grand stair on the east wall."""
     fy = FLOORS[2][0]
     f = fy + 1
+    # aisles: the stair from the armoury (arrives east, v 11..13) -> the grand stair foot (east wall), the runner
+    for (u0, v0, u1, v1) in ((4, 10, 16, 15), (-2, -11, 2, 15)):
+        X0, Z0 = K(u0, v0)
+        X1, Z1 = K(u1, v1)
+        reserve(C, X0, Z0, X1, Z1, f)
     # dais
     for u in range(-7, 8):
         for v in range(-16, -12):
@@ -2398,9 +2884,21 @@ def great_hall(C):
     for du in (-4, 4):
         X, Z = K(du, -15)
         chest(C, X, f + 1, Z, "south", "tf_hall")
+    for du in (-6, 6):
+        X, Z = K(du, -15)
+        C.set(X, f + 1, Z, DO_FENCE)
+        C.set(X, f + 2, Z, LANT)
     for u in range(-6, 7, 3):
         X, Z = K(u, -16)
-        C.set(X, f + 4, Z, "red_wall_banner[facing=south]") if C.solid(X, f + 4, Z - 1) else None
+        if C.free(X, f + 2, Z) and backed(C, X, f + 2, Z - 1):
+            C.set(X, f + 2, Z, "red_wall_banner[facing=south]")
+    # the carpet runner from the stair to the dais
+    for v in range(-11, 10):
+        for u in (-1, 0, 1):
+            x, z = K(u, v)
+            if C.free(x, f, z):
+                C.set(x, f, z, "red_carpet" if u == 0 else "yellow_carpet")
+                C.keep.discard((x, f, z))
     # two long tables and benches
     for tu in (-8, 4):
         for v in range(-8, 9):
@@ -2408,19 +2906,27 @@ def great_hall(C):
                 x, z = K(tu + du, v)
                 fp(C, x, f, z, DO_SL + "[type=top,waterlogged=false]")
                 if v % 4 == 0 and du == 0:
-                    candle(C, x, f + 1, z, 3)
+                    candle(C, x, f + 1, z, 4)
+                elif v % 4 == 2 and du == 1:
+                    C.set(x, f + 1, z, "brown_candle[candles=3,lit=true,waterlogged=false]")
             x, z = K(tu - 1, v)
             fp(C, x, f, z, stair(SP_ST, "west")) if v % 5 else None
             x, z = K(tu + 2, v)
             fp(C, x, f, z, stair(SP_ST, "east")) if v % 5 else None
-    # hearth on the west wall
+        for v in (-9, 9):
+            x, z = K(tu, v)
+            fp(C, x, f, z, f"{W}mahogany_chair[facing={'south' if v < 0 else 'north'}]")
+    # hearth on the west wall: a stone chimney breast, a deep fire, the mantel with antlers and candles
     for v in range(-3, 4):
         for y in range(f, f + 7):
             x, z = K(-16, v)
             C.set(x, y, z, COB if hash3(x, y, z, 811) < 0.5 else SB)
         x, z = K(-15, v)
         if abs(v) <= 1:
-            C.set(x, f, z, "campfire[facing=east,lit=true,signal_fire=false,waterlogged=false]" if v == 0 else COB)
+            C.set(x, f, z, "campfire[facing=east,lit=true,signal_fire=false,waterlogged=false]" if v == 0 else
+                  "campfire[facing=east,lit=true,signal_fire=false,waterlogged=false]")
+            C.set(x, f + 1, z, AIR)
+            C.set(x, f + 2, z, AIR)
             C.set(x, f + 3, z, SB)
         else:
             for y in range(f, f + 4):
@@ -2428,17 +2934,62 @@ def great_hall(C):
     for v in range(-3, 4):
         x, z = K(-15, v)
         C.set(x, f + 4, z, stair(SB_ST, "east", "top"))
+        if v in (-3, 3):
+            candle(C, x, f + 5, z, 4)
+    for y in range(f + 7, FLOORS[2][0] + FLOORS[2][2] + 1):
+        for v in (-1, 0, 1):
+            x, z = K(-16, v)
+            C.set(x, y, z, SB if hash3(x, y, z, 812) < 0.7 else COB)
+    # antler trophy over the mantel
+    x, z = K(-15, 0)
+    C.set(x, f + 6, z, "bone_block[axis=y]")
+    for dv in (-1, 1):
+        X, Z = K(-15, dv)
+        C.set(X, f + 6, Z, SP_FENCE)
+        X, Z = K(-15, 2 * dv)
+        C.set(X, f + 7, Z, SP_FENCE)
+        X, Z = K(-15, dv)
+        C.set(X, f + 7, Z, SP_FENCE)
     for v in (-4, 4):
         x, z = K(-15, v)
         C.set(x, f + 6, z, "bone_block[axis=y]")
         C.set(x, f + 7, z, SP_FENCE)
-    # chandeliers
-    for (u, v) in ((-6, -6), (6, -6), (-6, 6), (6, 6)):
+    # fireside chairs and a bear rug
+    for (u, v, fc) in ((-12, -2, "west"), (-12, 2, "west")):
         x, z = K(u, v)
-        antler_chandelier(C, x, f + 10, z, reach=10)
-    for (u, v) in ((0, 0), (10, 10), (-12, 12), (12, -14)):
+        fp(C, x, f, z, f"{W}mahogany_chair[facing={fc}]")
+    for u in range(-14, -12):
+        for v in (-1, 0, 1):
+            x, z = K(u, v)
+            if C.free(x, f, z):
+                C.set(x, f, z, "brown_carpet")
+    # ale casks along the south wall and the east wall
+    for u in range(-14, -6):
+        x, z = K(u, 16)
+        fp(C, x, f, z, "barrel[facing=north,open=false]")
+        if u % 2 == 0:
+            fp(C, x, f + 1, z, "barrel[facing=north,open=false]")
+    for v in range(-10, -2):
+        x, z = K(16, v)
+        fp(C, x, f, z, "barrel[facing=west,open=false]")
+    x, z = K(-10, 15)
+    fp(C, x, f, z, SP_SL + "[type=top,waterlogged=false]")
+    fp(C, x, f + 1, z, LANT)
+    # banners round the walls under the windows
+    for w in range(-14, 15, 4):
+        for (u, v, fc) in ((16, w, "west"), (w, 16, "north")):
+            x, z = K(u, v)
+            dx, dz = DV[OPP[fc]]
+            if C.free(x, f + 2, z) and backed(C, x + dx, f + 2, z + dz):
+                C.set(x, f + 2, z, f"{'red' if w % 8 else 'yellow'}_wall_banner[facing={fc}]")
+    # chandeliers low over the tables (arms 5 over the floor), lanterns on brackets along the walls
+    for (u, v) in ((-7, -5), (-7, 5), (5, -5), (5, 5)):
         x, z = K(u, v)
-        hang(C, x, f + 12, z, LANT_H, reach=8)
+        antler_chandelier(C, x, f + 5, z, reach=16)
+    for (u, v, wall) in ((-16, -9, "west"), (-16, 9, "west"), (16, 0, "east"), (16, 9, "east"), (-9, -16, "north"),
+                         (9, -16, "north"), (-6, 16, "south"), (6, 16, "south")):
+        x, z = K(u, v)
+        wall_lamp(C, x, f + 3, z, wall)
     x, z = K(-12, 10)
     spawner(C, x, f, z, MOB_VINDI)
     x, z = K(-12, -11)
@@ -2446,52 +2997,125 @@ def great_hall(C):
 
 
 def map_room(C):
-    """Storey 3: the map room: the great map table (the valley in carpets), cartography tables, lecterns, chart
-    shelves, a brass globe; the waystone (site of grace) by the stair up."""
+    """Storey 3: the map room: the great map table (the valley in carpets with a model of the fortress on it),
+    chart desks and cartography tables under charts on the walls, three globes, lodestone compasses and a brass
+    orrery, lecterns, chart shelves, a telescope at the window; the waystone (site of grace) by the stair up."""
     fy = FLOORS[3][0]
     f = fy + 1
-    for u in range(-5, 6):
-        for v in range(-3, 4):
+    # aisles: the grand stair's arrival (north-east) -> round the drop well -> the stair up (west)
+    for (u0, v0, u1, v1) in ((13, -14, 15, -10), (-17, -15, 15, -14), (-17, -14, -14, -9), (-14, -9, 15, -8)):
+        X0, Z0 = K(u0, v0)
+        X1, Z1 = K(u1, v1)
+        reserve(C, X0, Z0, X1, Z1, f)
+    # the great map table: 15 x 9, cartography tables round the rim, the valley in carpets
+    for u in range(-7, 8):
+        for v in range(-4, 5):
             x, z = K(u, v)
-            edge = abs(u) == 5 or abs(v) == 3
+            edge = abs(u) == 7 or abs(v) == 4
             fp(C, x, f, z, "cartography_table" if edge and (u + v) % 2 == 0 else (DO if edge else TABLE))
             if not edge:
-                col = "green" if vnoise(u, v, 3.0, 821) > 0.5 else ("blue" if abs(v) <= 0 and u < 2 else "white")
+                n = vnoise(u, v, 3.0, 821)
+                col = "blue" if abs(v - round(math.sin(u * 0.5) * 1.5)) == 0 else (
+                    "green" if n > 0.55 else ("lime" if n > 0.4 else "white"))
                 carpet(C, x, f + 1, z, col)
-    for (u, v) in ((-2, 0), (2, -1)):
-        x, z = K(u, v)
-        C.set(x, f + 1, z, "brown_carpet")
-    x, z = K(0, 1)
+    # the model fortress at the table's middle: palisade ring, keep tiers, a smokestack pin
+    for (du, dv) in ((a, b) for a in range(-3, 4) for b in range(-2, 3) if max(abs(a), abs(b) * 1.5) >= 2.9):
+        x, z = K(du, dv)
+        C.set(x, f + 1, z, "spruce_fence")
+    for du in (-1, 0, 1):
+        for dv in (-1, 0, 1):
+            x, z = K(du, dv)
+            C.set(x, f + 1, z, DO)
+            C.set(x, f + 2, z, SH_SL + "[type=bottom,waterlogged=false]")
+    x, z = K(0, 0)
+    C.set(x, f + 2, z, SP)
+    C.set(x, f + 3, z, SH_SL + "[type=bottom,waterlogged=false]")
+    x, z = K(1, 1)
+    C.set(x, f + 2, z, "end_rod[facing=up]")
+    for (du, dv, spec) in ((-5, -2, "lodestone"), (5, 2, "flower_pot"), (-5, 2, "candle[candles=4,lit=true,"
+                                                                         "waterlogged=false]"),
+                           (5, -2, "candle[candles=4,lit=true,waterlogged=false]"), (-4, 0, LANT), (4, 0, LANT)):
+        x, z = K(du, dv)
+        C.set(x, f + 1, z, spec)
+    # chart shelves along the north wall, charts (banners) over them
     for u in range(-12, 7):
-        for v in (-17,):
-            x, z = K(u, v)
-            fp(C, x, f, z, "bookshelf")
-            fp(C, x, f + 1, z, "chiseled_bookshelf[facing=south]" if u % 3 == 0 else "bookshelf")
-            fp(C, x, f + 2, z, "bookshelf")
-    for (u, v, fc) in ((-8, 0, "east"), (8, 0, "west"), (0, 8, "north")):
+        x, z = K(u, -17)
+        fp(C, x, f, z, "bookshelf")
+        fp(C, x, f + 1, z, "chiseled_bookshelf[facing=south]" if u % 3 == 0 else "bookshelf")
+        fp(C, x, f + 2, z, "bookshelf")
+    # chart desks on the east and south walls: desk, chair, candles, an open chart (a white banner over it)
+    for (u, v, wall) in ((17, 4, "east"), (17, 8, "east"), (17, 12, "east"), (-6, 17, "south"), (0, 17, "south"),
+                         (6, 17, "south"), (-17, 4, "west"), (-17, 10, "west")):
+        x, z = K(u, v)
+        dx, dz = DV[wall]
+        fp(C, x, f, z, "cartography_table" if (u + v) % 3 == 0 else TABLE)
+        if (u + v) % 2:
+            table_candles(C, x, f + 1, z, 3)
+        else:
+            fp(C, x, f + 1, z, "daylight_detector[inverted=false,power=0]")
+        cx, cz = x - dx, z - dz
+        fp(C, cx, f, cz, f"{W}mahogany_chair[facing={wall}]")
+        if C.free(x, f + 3, z) and backed(C, x + dx, f + 3, z + dz):
+            col = ("white", "light_blue", "brown", "lime")[(u * 3 + v) % 4]
+            C.set(x, f + 3, z, f"{col}_wall_banner[facing={OPP[wall]}]")
+    # lecterns round the table, the stair-side reading desk
+    for (u, v, fc) in ((-10, 0, "east"), (10, 0, "west"), (0, 7, "north"), (0, -7, "south")):
         x, z = K(u, v)
         fp(C, x, f, z, f"lectern[facing={fc},has_book=false,powered=false]")
-    # the brass globe on a stand
-    gx, gz = K(8, 9)
-    fp(C, gx, f, gz, DO_FENCE)
-    for (dx, dy, dz) in ((0, 1, 0), (1, 2, 0), (-1, 2, 0), (0, 2, 1), (0, 2, -1), (0, 3, 0)):
-        fp(C, gx + dx, f + dy, gz + dz, BRASS if dy != 2 or dx or dz else VERD)
-    fp(C, gx, f + 2, gz, VERD)
+    # globes: the brass globe, a verdigris globe and a lapis desk globe; a brass orrery (the planets on rods)
+    for (gu, gv, ring, core) in ((10, 10, BRASS, VERD), (-10, 10, COPPER, "lapis_block")):
+        gx, gz = K(gu, gv)
+        fp(C, gx, f, gz, DO)
+        fp(C, gx, f + 1, gz, DO_FENCE)
+        for (dx, dy, dz) in ((0, 2, 0), (1, 3, 0), (-1, 3, 0), (0, 3, 1), (0, 3, -1), (0, 4, 0)):
+            fp(C, gx + dx, f + dy, gz + dz, ring)
+        fp(C, gx, f + 3, gz, core)
+    x, z = K(12, -4)
+    fp(C, x, f, z, TABLE)
+    fp(C, x, f + 1, z, "light_blue_stained_glass")
+    ox, oz = K(-10, -4)
+    fp(C, ox, f, oz, BRASS)
+    fp(C, ox, f + 1, oz, DO_FENCE)
+    fp(C, ox, f + 2, oz, "end_rod[facing=up]")
+    fp(C, ox, f + 3, oz, GILD)
+    for (dx, dz, spec) in ((1, 0, "end_rod[facing=east]"), (-1, 0, "end_rod[facing=west]"),
+                           (0, 1, "end_rod[facing=south]"), (0, -1, "end_rod[facing=north]")):
+        fp(C, ox + dx, f + 3, oz + dz, spec)
+    # the telescope at the south-west window: a tripod and a copper rod
+    tx, tz = K(-14, 14)
+    fp(C, tx, f, tz, SP_FENCE)
+    fp(C, tx, f + 1, tz, BRASS)
+    fp(C, tx - 1, f + 1, tz + 1, "lightning_rod[facing=south,powered=false,waterlogged=false]")
     for v in (-4, 4):
         x, z = K(16, v)
         chest(C, x, f, z, "west", "tf_maproom")
     x, z = K(-12, -11)
     waystone(C, x, f, z)
-    for (u, v) in ((-8, -8), (8, -6), (-8, 8), (8, 12), (0, 0), (-12, -11)):
+    # lights: the chandelier over the table, lanterns low on chains, brackets
+    x, z = K(0, 0)
+    hang(C, x, f + 5, z, CHANDELIER, reach=4)
+    for (u, v) in ((-5, -3), (5, -3), (-5, 3), (5, 3), (-12, -11), (12, -4)):
         x, z = K(u, v)
-        hang(C, x, f + 6, z, LANT_H if (u, v) != (0, 0) else CHANDELIER, reach=3)
+        hang(C, x, f + 3, z, LANT_H, reach=6)
+    for u in (-13, -6, 0, 6, 13):
+        for v in (-11, 6, 12):
+            x, z = K(u, v)
+            if C.free(x, f + 3, z) and C.free(x, f + 2, z):
+                hang(C, x, f + 3, z, LANT_H, reach=6)
+    for u in (-13, 13):
+        for v in (-5, 1):
+            x, z = K(u, v)
+            if C.free(x, f + 3, z) and C.free(x, f + 2, z):
+                hang(C, x, f + 3, z, LANT_H, reach=6)
 
 
 def boiler_room(C):
-    """Storey 4: the boiler room under the crown: two fire-tube boilers feeding the beam engine above, coal bins;
-    the strongroom walled off in the north-east."""
+    """Storey 4: the boiler room under the crown: two fire-tube boilers (fire doors, gauges, valve wheels, safety
+    valves) feeding the beam engine above, steam mains under the ceiling, coal heaps and bunkers with shovels, the
+    stokers' bench, the water tank; the strongroom walled off in the north-east."""
     fy = FLOORS[4][0]
     f = fy + 1
+    top = fy + FLOORS[4][2]
     # strongroom walls (u 7, v 3)
     for y in range(f, f + 7):
         for v in range(-19, 4):
@@ -2500,6 +3124,11 @@ def boiler_room(C):
         for u in range(7, 20):
             x, z = K(u, 3)
             C.set(x, y, z, DIB)
+    # aisles: stair up from the map room (arrives v -2) -> the stair to the crown (v 6), and the middle walk
+    for (u0, v0, u1, v1) in ((-19, -2, -15, 5), (-15, -3, 6, -1)):
+        X0, Z0 = K(u0, v0)
+        X1, Z1 = K(u1, v1)
+        reserve(C, X0, Z0, X1, Z1, f)
     # boilers along u
     for bv in (-12, 11):
         for u in range(-12, 3):
@@ -2516,17 +3145,76 @@ def boiler_room(C):
         for y in range(f + 3, PLAT):
             x, z = K(-2, bv)
             C.set(x, y, z, f"{W}copper_pipe[axis=y]")
+        side = 1 if bv < 0 else -1          # the side of the boiler facing the room's middle
+        for u in (-10, -6, 1):
+            x, z = K(u, bv + 2 * side)
+            fp(C, x, f, z, "furnace[facing=%s,lit=true]" % ("south" if side > 0 else "north"))
+        for u in (-8, -4, 0):
+            x, z = K(u, bv + side)
+            C.set(x, f + 1, z, GAUGE)
         x, z = K(-4, bv)
         C.set(x, f + 3, z, GAUGE)
+        for u in (-11, -7, -3, 1):
+            x, z = K(u, bv)
+            C.set(x, f + 3, z, f"{W}copper_pipe[axis=y]")
+            C.set(x, f + 4, z, "lightning_rod[facing=up,powered=false,waterlogged=false]")
+        # steam main under the ceiling along u, down to the engine pipe
+        for u in range(-13, 4):
+            x, z = K(u, bv + side)
+            if C.free(x, top, z):
+                C.set(x, top, z, f"{W}copper_pipe[axis=x]")
+        # coal bunker behind each boiler: a stone-brick bin heaped with coal, a shovel (a lightning rod handle)
+        for u in range(-9, -2):
+            for dv in (2, 3):
+                x, z = K(u, bv - dv * side)
+                edge = u in (-9, -3) or dv == 3
+                if edge:
+                    fp(C, x, f, z, SB_WALL if dv == 2 else SB)
+                else:
+                    fp(C, x, f, z, "coal_block")
+                    if hash3(x, f, z, 841) < 0.5:
+                        fp(C, x, f + 1, z, "coal_block")
     for u in range(-1, 4):
         x, z = K(u, 0)
         fp(C, x, f, z, "coal_block")
         fp(C, x, f + 1, z, "coal_block") if u % 2 else None
+    # coal heaps on the floor round the middle bin, black carpet dust
+    for (u, v) in ((-1, 1), (0, 1), (1, 1), (2, 1), (3, 1), (-2, 0), (4, 0)):
+        x, z = K(u, v)
+        if C.free(x, f, z) and (x, f, z) not in C.keep:
+            C.set(x, f, z, "black_carpet")
+    x, z = K(4, 1)
+    fp(C, x, f, z, "lightning_rod[facing=up,powered=false,waterlogged=false]")
+    # the water tank (cauldrons in a copper frame) and the stokers' bench by the south wall
+    for u in range(-6, -1):
+        x, z = K(u, 18)
+        fp(C, x, f, z, "water_cauldron[level=3]" if u % 2 else COPPER)
+        fp(C, x, f + 1, z, f"{W}copper_pipe[axis=x]" if u % 2 else COPPER)
+    for u in range(1, 6):
+        x, z = K(u, 18)
+        fp(C, x, f, z, stair(SP_ST, "south"))
+    x, z = K(0, 18)
+    fp(C, x, f, z, "barrel[facing=up,open=false]")
+    fp(C, x, f + 1, z, LANT)
+    x, z = K(6, 18)
+    fp(C, x, f, z, TABLE)
+    table_candles(C, x, f + 1, z, 3)
+    # the engineer's corner: a workbench with gauges and the valve board on the east part
+    for v in range(6, 14):
+        x, z = K(19, v)
+        fp(C, x, f, z, "smithing_table" if v == 8 else (SP_SL + "[type=top,waterlogged=false]" if v % 2 else IRON))
+        fp(C, x, f + 2, z, GAUGE if v % 3 == 0 else GEAR)
     x, z = K(-6, 0)
     spawner(C, x, f, z, MOB_AUTO)
-    for (u, v) in ((-8, -6), (-8, 6), (2, 8), (2, -6), (12, 12)):
+    for u in (-16, -10, -4, 2):
+        for v in (-17, -7, 0, 7, 16):
+            x, z = K(u, v)
+            if C.free(x, f + 3, z) and C.free(x, f + 2, z):
+                hang(C, x, f + 3, z, LANT_H, reach=5)
+    for (u, v) in ((10, 7), (16, 7), (10, 13), (16, 13), (13, 18), (-16, 12), (-16, -12)):
         x, z = K(u, v)
-        hang(C, x, f + 5, z, LANT_H, reach=3)
+        if C.free(x, f + 3, z) and C.free(x, f + 2, z):
+            hang(C, x, f + 3, z, LANT_H, reach=5)
 
 
 def strongroom(C):
@@ -2866,6 +3554,29 @@ def hillside(C):
             break
 
 
+# ------------------------------------------------------------------ lighting
+# rooms (feet box x0, y0, z0, x1, y1, z1) lit to block light >= 8 by lanterns hung on chains over the dark spots
+LIT_ROOMS = {
+    "lift_hall": (-12, 1, -60, 12, 1, -36),
+    "armoury": (-14, 16, -62, 14, 16, -34),
+    "great_hall": (-16, 26, -64, 16, 27, -32),
+    "map_room": (-17, 46, -65, 17, 46, -31),
+    "boiler_room": (-19, 56, -67, 19, 56, -29),
+    "sawmill": (-77, 1, -39, -47, 1, -11),
+    "sawmill_gallery": (-77, 10, -39, -47, 10, -11),
+    "boiler_house": (-69, 1, -45, -56, 1, -41),
+    "mess_hall": (-71, 1, -69, -45, 1, -53),
+    "lodge": (43, 1, 1, 61, 1, 21),
+    "lodge_upstairs": (43, 7, 1, 61, 7, 21),
+}
+LIGHT_REPORT = {}
+
+
+def light_rooms(C):
+    for name, box in LIT_ROOMS.items():
+        LIGHT_REPORT[name] = light_fill(C, box)
+
+
 # ------------------------------------------------------------------ the builder
 def timber_fortress(bp):
     C = Ctx(bp)
@@ -2895,6 +3606,7 @@ def timber_fortress(bp):
     camp(C)
     approach_trees(C)
     hillside(C)
+    light_rooms(C)
 
 
 VIEWS = [
