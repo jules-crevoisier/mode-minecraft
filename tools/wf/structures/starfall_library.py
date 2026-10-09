@@ -40,6 +40,7 @@ from ..defs import Piece, StructureDef, register
 from ..megakit import (BRASS, BRASS_SLAB, BRASS_STAIRS, CHANDELIER, COPPER, GAUGE, GEAR, HANG_LAMP, PIPES, TABLE,
                        TREAD, TREAD_SLAB, W, hash01, hash3, out_facing, vnoise)
 from ..parts import LOOT, MOB, MOD
+from .lightkit import light_fill
 from .end import (ESB, ESB_SL, ESB_ST, ESB_WA, FROG, OUTER_END, PUR, PUR_P, PUR_SL, PUR_ST, ROD_DOWN, ROD_UP, STAR,
                   VB, VB_SL, VB_ST, VB_WA, brazier, build_rock, disk_pts, face_in, hang_star, ring3d, rock_lobe,
                   tube)
@@ -169,6 +170,16 @@ def hang(bp, x, y_ceiling, z, n, lamp):
     bp.set(x, y_ceiling - n - 1, z, lamp)
 
 
+def drop_lamp(bp, x, y_ceiling, z, y_lamp, lamp):
+    """A lamp at y_lamp on a chain from the ceiling block at y_ceiling, only where the whole drop is clear."""
+    if empty(bp, x, y_ceiling, z) or not all(empty(bp, x, y, z) for y in range(y_lamp - 2, y_ceiling)):
+        return False
+    if y_lamp + 1 <= y_ceiling - 1:
+        bp.chain(x, y_lamp + 1, z, y_ceiling - 1)
+    bp.set(x, y_lamp, z, lamp)
+    return True
+
+
 def line3(bp, p0, p1, kind):
     """A 3D line of chains (kind 'chain') or end rods ('rod'), oriented along its dominant axis."""
     (x0, y0, z0), (x1, y1, z1) = p0, p1
@@ -271,7 +282,8 @@ def walkway(bp, pts, width=3, style="stone", rise=0.0, rails=True):
         y = surface(bp, X, Z, s, full, half, under=under)
         for c in range(1, 4):
             bp.set(X, y + c, Z, "air")
-        if style != "rock" and bp.get(X, y - 1, Z) in (None, AIR):
+        if style != "rock" and bp.get(X, y - 1, Z) in (None, AIR) and empty(bp, X, y - 2, Z) \
+                and empty(bp, X, y - 3, Z):
             bp.set(X, y - 1, Z, slab(VB_SL if style == "stone" else BRASS_SLAB, "top"))
     if rails and style != "rock":
         k = 0
@@ -295,7 +307,8 @@ def walkway(bp, pts, width=3, style="stone", rise=0.0, rails=True):
                     bp.set(X, top + 1, Z, LANT)
             else:
                 bp.set(X, top - 1, Z, VB)
-                bp.set(X, top - 2, Z, slab(VB_SL, "top"))
+                if all(empty(bp, X, top - k, Z) for k in (2, 3, 4)):   # no corbel just over a roof
+                    bp.set(X, top - 2, Z, slab(VB_SL, "top"))
                 if k % 7 == 0:
                     bp.set(X, top, Z, PUR_P)
                     bp.set(X, top + 1, Z, ROD_UP)
@@ -393,7 +406,7 @@ def tower_shell(bp):
               80: VB}
     for y in range(-1, 93):
         ro = r_out(y)
-        ri = ro - 2
+        ri = ro - 2 if y > 2 else ro - 3     # the battered foot is one block thicker (no ledge inside)
         for x in range(-ro - 1, ro + 2):
             for z in range(-ro - 1, ro + 2):
                 d = math.hypot(x, z)
@@ -759,7 +772,10 @@ def map_room(bp):
     bp.set(0, 13, 0, CHANDELIER)
     for k in range(8):
         x, z = polar(12, 22.5 + 45 * k)
-        hang_star(bp, round(x), 13, round(z), 3, light=FROG if k % 2 else STAR)
+        drop_lamp(bp, round(x), 14, round(z), 5, FROG if k % 2 else STAR)
+    for k in range(16):
+        x, z = polar(19.5, 11.25 + 22.5 * k)
+        drop_lamp(bp, round(x), 14, round(z), 5, HANG_LAMP)
     bp.spawner(-12, 1, 6, MOB_ACOLYTE)
 
 
@@ -955,7 +971,13 @@ def scriptorium(bp):
     bp.spawner(-5, 53, -9, "brasshaven:star_mote_caller")
     for k in range(6):
         x, z = polar(10, 30 + 60 * k)
-        hang(bp, round(x), 63, round(z), 2, HANG_LAMP)
+        drop_lamp(bp, round(x), 63, round(z), 57, HANG_LAMP)
+    for k in range(8):
+        x, z = polar(14.5, 22.5 + 45 * k)
+        drop_lamp(bp, round(x), 63, round(z), 57, HANG_LAMP)
+    for k in range(4):
+        x, z = polar(4.5, 45 + 90 * k)
+        drop_lamp(bp, round(x), 63, round(z), 57, HANG_LAMP)
     # railing round the stair well arriving from the stacks (340..372 deg)
     for x in range(-21, 22):
         for z in range(-21, 22):
@@ -994,14 +1016,14 @@ def terrace_and_hall(bp):
     # the armillary sphere: three gilded rings round a starlight core on a brass column
     for y in range(65, 69):
         bp.set(0, y, 0, BRASS if y < 68 else GEAR)
-    c = (0, 72, 0)
-    ring3d(bp, c, 4.5, (1, 0, 0), (0, 0, 1), GOLD)
-    ring3d(bp, c, 4.5, (1, 0, 0), (0, math.sin(math.radians(60)), math.cos(math.radians(60))), BRASS)
-    ring3d(bp, c, 4.5, (0, 0, 1), (math.cos(math.radians(-50)), math.sin(math.radians(-50)), 0), GOLD)
-    bp.set(0, 72, 0, STAR)
-    for y in range(69, 72):
+    c = (0, 71, 0)
+    ring3d(bp, c, 3.6, (1, 0, 0), (0, 0, 1), GOLD)
+    ring3d(bp, c, 3.6, (1, 0, 0), (0, math.sin(math.radians(60)), math.cos(math.radians(60))), BRASS)
+    ring3d(bp, c, 3.6, (0, 0, 1), (math.cos(math.radians(-50)), math.sin(math.radians(-50)), 0), GOLD)
+    bp.set(0, 71, 0, STAR)
+    for y in range(69, 71):
         bp.set(0, y, 0, "iron_chain[axis=y,waterlogged=false]")
-    for y in range(73, 78):
+    for y in range(72, 78):
         bp.set(0, y, 0, "iron_chain[axis=y,waterlogged=false]")
     # catalogue cabinets (chiseled shelves) in short arcs, lecterns
     for k in range(6):
@@ -1016,7 +1038,10 @@ def terrace_and_hall(bp):
     bp.chest(6, 65, 7, "north", loot=LOOT + "sl_index")
     for k in range(6):
         x, z = polar(10, 60 * k)
-        hang(bp, round(x), 78, round(z), 2, HANG_LAMP)
+        drop_lamp(bp, round(x), 78, round(z), 69, HANG_LAMP)
+    for k in range(12):
+        x, z = polar(13.6, 15 + 30 * k)
+        drop_lamp(bp, round(x), 78, round(z), 69, CHANDELIER if k % 3 == 0 else HANG_LAMP)
 
 
 def observatory(bp):
@@ -1233,17 +1258,17 @@ def gatehouse(bp):
     for x in range(X0, X1 + 1):
         for z in range(Z0, Z1 + 1):
             wall = x in (X0, X1) or z in (Z0, Z1)
-            for y in range(F - 4, F + 10):
+            for y in range(F - 4, F + 11):
                 if y < F:
                     bp.set(x, y, z, VB if y > F - 4 else KEEL.pick(x, y, z))
                 elif wall:
                     bp.set(x, y, z, PUR_P if (x in (X0, X1) and z in (Z0, Z1)) else
-                           (GOLD if y == F + 9 else BODY.pick(x, y, z)))
+                           (GOLD if y == F + 10 else BODY.pick(x, y, z)))
                 else:
                     bp.set(x, y, z, "air")
             bp.set(x, F - 1, z, PUR if (x + z) % 2 else ESB)
-    bp.pyramid_roof(X0, Z0, X1, Z1, F + 10, PUR_ST, overhang=1, cap=GOLD)
-    bp.set((X0 + X1) // 2, F + 16, (Z0 + Z1) // 2, ROD_UP)
+    bp.pyramid_roof(X0, Z0, X1, Z1, F + 11, PUR_ST, overhang=1, cap=GOLD)
+    bp.set((X0 + X1) // 2, F + 17, (Z0 + Z1) // 2, ROD_UP)
     # openings: along the ring (the ring passes north-east / south-west through it) and the south door
     for x in range(X0, X1 + 1):
         for z in range(Z0, Z1 + 1):
@@ -1256,7 +1281,7 @@ def gatehouse(bp):
             bp.set(x, y, Z1, "air")
     bp.set(-22, F + 4, Z1 + 1, STAR)
     bp.set(-18, F + 4, Z1 + 1, STAR)
-    hang(bp, -20, F + 9, 54, 2, CHANDELIER)
+    hang(bp, -20, F + 10, 54, 3, CHANDELIER)
     bp.spawner(-23, F, 51, "minecraft:enderman")
 
 
@@ -1281,8 +1306,10 @@ def stays(bp):
             x0, z0 = polar(rt, a)
             x1, z1 = polar(R - hw - 1, a)
             line3(bp, (x0, yt, z0), (x1, F + GH + 1, z1), "chain")
-            xs, zs = polar(rs, a)
-            line3(bp, (xs, F - 3, zs), (x1, F - 3, z1), "rod")
+            off = {R1: 7.5, R2: -7.5, R3: 15.0}[R]   # each ring's struts on their own bearing
+            xs, zs = polar(rs, a + off)
+            xe, ze = polar(R - hw - 1, a + off)
+            line3(bp, (xs, F - 3, zs), (xe, F - 3, ze), "rod")
             bp.set(round(x0), yt, round(z0), GOLD)
 
 
@@ -1397,6 +1424,15 @@ def meteorite(bp):
                     pass
                 spec = CRUST.pick(x, y, z) if e > 0.86 else CORE.pick(x, y, z)
                 bp.set(x, y, z, spec)
+    # it rests on the plaza: the low hollow under its belly (2-3 high, a crawl space) is packed with crust
+    for x in range(cx - 19, cx + 20):
+        for z in range(cz - 19, cz + 20):
+            low = next((y for y in range(cy - 17, 9) if m_surface_r(x, y, z) <= 1.0), None)
+            if low is None or low <= 1:
+                continue
+            for y in range(1, low):
+                if empty(bp, x, y, z):
+                    bp.set(x, y, z, CRUST.pick(x, y, z))
     # glowing veins on the crust
     for x in range(cx - 19, cx + 20):
         for z in range(cz - 19, cz + 20):
@@ -1530,13 +1566,14 @@ def fissure(bp):
     pts = [(ex, s1, ez), (ex + (gxx + 4 - ex) * 0.5, s1 - 1.5, ez + (gzz - 4 - ez) * 0.5), (gxx + 3.0, F_GRACE * 1.0,
                                                                                          gzz - 3.0)]
     out = walkway(bp, pts, width=3, style="rock", rails=False)
+    screw = {(x, z) for (x, z, s, phi) in cells if s < 3}       # the corkscrew's last lap: its walls stay open
     for (x, z), s in out.items():
         y = math.floor(s)
         for c in range(0, 4):
             bp.set(x, y + c, z, "air")
         for dx in (-1, 0, 1):
             for dz in (-1, 0, 1):
-                if (x + dx, z + dz) not in out:
+                if (x + dx, z + dz) not in out and (x + dx, z + dz) not in screw:
                     for c in range(-1, 5):
                         if empty(bp, x + dx, y + c, z + dz) and y + c < 0:
                             bp.set(x + dx, y + c, z + dz, CRATER.pick(x + dx, y + c, z + dz))
@@ -1600,11 +1637,17 @@ def book_platforms(bp):
             bp.set(X, y + c, Z, "air")
         if empty(bp, X, y - 1, Z):
             bp.set(X, y - 1, Z, SHELF)
+        # a book lying just over the meteorite's back rests on it (no two-high gap under its cover)
+        rest = next((yy for yy in range(y - 2, y - 5, -1) if not empty(bp, X, yy, Z)), None)
+        if rest is not None:
+            for yy in range(rest + 1, y - 1):
+                bp.set(X, yy, Z, SHELF)
+            continue
         if abs(u) < 0.6 and abs(v) < 0.6:
             bp.chain(X, y - 4, Z, y - 2)
             bp.set(X, y - 5, Z, STAR if i % 2 else FROG)
     # the catch basin: water two deep, ten below the books, under every book cell not above the meteorite
-    yb = 27
+    yb = 29
     basin = set()
     for (X, Z), (s, i, u, v) in cells.items():
         for dx in range(-2, 3):
@@ -1692,8 +1735,8 @@ def grace_room(bp):
         d = math.hypot(x - gx, z - gz)
         bp.set(x, f - 1, z, GOLD if d < 1.5 else (PUR if 3.5 < d <= 4.4 else ESB))
     bp.set(gx, f, gz + 2, MOD["waystone"])
-    brazier(bp, gx - 3, f, gz + 3, h=1)
-    brazier(bp, gx + 4, f, gz + 1, h=1)
+    brazier(bp, gx - 3, f, gz + 3, h=2)
+    brazier(bp, gx + 4, f, gz + 1, h=2)
     hang_star(bp, gx, f + 6, gz - 1, 2)
     bp.set(gx - 4, f, gz - 2, SHELF)
     bp.set(gx - 4, f + 1, gz - 2, LANT)
@@ -1960,6 +2003,17 @@ def starfall_library(bp):
     bp.mist(gx - 1, F_ARENA, 17, gx + 1, F_ARENA + 3, 17)
     vault(bp)
     lift(bp)
+    # the rooms' own lamps first, then a starlight fill wherever a reachable floor stays under light 8
+    # the north walkway ramp passes just over the purpur roof: close the 1.5-high wedge under its edge
+    for X in range(-7, 2):
+        for Z in range(-43, -37):
+            for Y in (48, 49):
+                b = bp.get(X, Y, Z)
+                below = bp.get(X, Y - 1, Z) if Y == 48 else bp.get(X, 47, Z)
+                if (b is None or b == AIR) and below and "purpur" in below and any(
+                        (bp.get(X, Y + k, Z) or AIR) != AIR for k in (1, 2)):
+                    bp.set(X, Y, Z, VB)
+    light_fill(bp, ceil=STAR, hang=FROG, floor=STAR)
 
 
 # camera spots for the CI focus run: (name, feet (x, y, z), look at (x, y, z)), blueprint coordinates

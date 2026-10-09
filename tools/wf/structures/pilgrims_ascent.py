@@ -40,6 +40,7 @@ from ..arch import boulder, spruce, stair
 from ..defs import Piece, StructureDef, register
 from ..megakit import hash01, hash3
 from ..parts import LOOT, MOD
+from .walking_fortress import light_fill
 
 # the summit's own guardian: the Storm Ascetic (entity/boss/StormAscetic.java, tools/BOSSES.md)
 BOSS = "brasshaven:storm_ascetic"
@@ -1377,6 +1378,20 @@ def pilgrims_ascent(bp):
     summit(bp)
     plunge_pool(bp)
     plants(bp, P)
+    fixups(bp)
+    # quality pass: the carved galleries, caves, cells and halls lit to 8+ (paper-lantern style: lanterns on chains,
+    # warm lamps set in the rock where the ceiling is low)
+    light_fill(bp, ground=0, lamp="ochre_froglight[axis=y]", hang=LANT_H, chain="iron_chain[axis=y,waterlogged=false]",
+               where=lambda x, y, z: not (36 <= x <= 40 and 43 <= y <= 51 and 21 <= z <= 30)
+               and not (x == -46 and 27 <= y <= 29 and 24 <= z <= 27))     # two rock pockets off the route
+
+
+def fixups(bp):
+    """Quality pass: a 2-high slot under a rock lip on the upper flank (leg 6) is filled solid."""
+    for z in range(-26, -22):
+        if bp.get(-28, 118, z) == "minecraft:diorite":
+            for y in (115, 116, 117):
+                bp.set(-28, y, z, "diorite" if y > 115 else "stone")
 
 
 def _view_on(leg, side_seg, u, d=0, up=1.7):

@@ -37,7 +37,7 @@
               18,
               16
             ],
-            "blocks": 2083
+            "blocks": 2085
           },
           {
             "location": "brasshaven:starfall_library/library/x0_z3",
@@ -51,7 +51,7 @@
               20,
               15
             ],
-            "blocks": 2103
+            "blocks": 2099
           },
           {
             "location": "brasshaven:starfall_library/library/x0_z4",
@@ -65,7 +65,7 @@
               18,
               15
             ],
-            "blocks": 2174
+            "blocks": 2180
           },
           {
             "location": "brasshaven:starfall_library/library/x0_z5",
@@ -79,7 +79,7 @@
               20,
               15
             ],
-            "blocks": 2179
+            "blocks": 2175
           },
           {
             "location": "brasshaven:starfall_library/library/x0_z6",
@@ -121,7 +121,7 @@
               41,
               15
             ],
-            "blocks": 2709
+            "blocks": 2707
           },
           {
             "location": "brasshaven:starfall_library/library/x1_z2",
@@ -135,7 +135,7 @@
               83,
               16
             ],
-            "blocks": 2690
+            "blocks": 2695
           },
           {
             "location": "brasshaven:starfall_library/library/x1_z3",
@@ -149,7 +149,7 @@
               88,
               15
             ],
-            "blocks": 1527
+            "blocks": 1522
           },
           {
             "location": "brasshaven:starfall_library/library/x1_z4",
@@ -163,7 +163,7 @@
               89,
               15
             ],
-            "blocks": 2617
+            "blocks": 2618
           },
           {
             "location": "brasshaven:starfall_library/library/x1_z5",
@@ -177,7 +177,7 @@
               92,
               15
             ],
-            "blocks": 2285
+            "blocks": 2290
           },
           {
             "location": "brasshaven:starfall_library/library/x1_z6",
@@ -191,7 +191,7 @@
               47,
               15
             ],
-            "blocks": 2854
+            "blocks": 2856
           },
           {
             "location": "brasshaven:starfall_library/library/x1_z7",
@@ -233,7 +233,7 @@
               83,
               15
             ],
-            "blocks": 2767
+            "blocks": 2776
           },
           {
             "location": "brasshaven:starfall_library/library/x2_z2",
@@ -247,7 +247,7 @@
               105,
               16
             ],
-            "blocks": 6530
+            "blocks": 6528
           },
           {
             "location": "brasshaven:starfall_library/library/x2_z3",
@@ -275,7 +275,7 @@
               125,
               15
             ],
-            "blocks": 13913
+            "blocks": 13905
           },
           {
             "location": "brasshaven:starfall_library/library/x2_z5",
@@ -289,7 +289,7 @@
               106,
               15
             ],
-            "blocks": 9334
+            "blocks": 9337
           },
           {
             "location": "brasshaven:starfall_library/library/x2_z6",
@@ -303,7 +303,7 @@
               102,
               15
             ],
-            "blocks": 5533
+            "blocks": 5535
           },
           {
             "location": "brasshaven:starfall_library/library/x2_z7",
@@ -314,10 +314,10 @@
             ],
             "size": [
               16,
-              51,
+              52,
               15
             ],
-            "blocks": 4078
+            "blocks": 4158
           },
           {
             "location": "brasshaven:starfall_library/library/x2_z8",
@@ -328,10 +328,10 @@
             ],
             "size": [
               10,
-              22,
+              23,
               16
             ],
-            "blocks": 656
+            "blocks": 674
           },
           {
             "location": "brasshaven:starfall_library/library/x2_z9",
@@ -345,7 +345,7 @@
               22,
               15
             ],
-            "blocks": 418
+            "blocks": 416
           },
           {
             "location": "brasshaven:starfall_library/library/x2_z10",
@@ -373,7 +373,7 @@
               41,
               15
             ],
-            "blocks": 2589
+            "blocks": 2591
           },
           {
             "location": "brasshaven:starfall_library/library/x3_z1",
@@ -387,7 +387,7 @@
               88,
               15
             ],
-            "blocks": 4225
+            "blocks": 4237
           },
           {
             "location": "brasshaven:starfall_library/library/x3_z2",
@@ -401,7 +401,7 @@
               117,
               16
             ],
-            "blocks": 11297
+            "blocks": 11303
           },
           {
             "location": "brasshaven:starfall_library/library/x3_z3",
@@ -443,7 +443,7 @@
               138,
               15
             ],
-            "blocks": 19659
+            "blocks": 19662
           },
           {
             "location": "brasshaven:starfall_library/library/x3_z6",
@@ -457,7 +457,7 @@
               107,
               15
             ],
-            "blocks": 9969
+            "blocks": 9970
           },
           {
             "location": "brasshaven:starfall_library/library/x3_z7",
@@ -471,7 +471,7 @@
               53,
               15
             ],
-            "blocks": 4878
+            "blocks": 4865
           },
           {
             "location": "brasshaven:starfall_library/library/x3_z8",
@@ -482,7 +482,7 @@
             ],
             "size": [
               16,
-              39,
+              40,
               16
             ],
             "blocks": 1592
@@ -499,7 +499,7 @@
               14,
               15
             ],
-            "blocks": 368
+            "blocks": 367
           },
           {
             "location": "brasshaven:starfall_library/library/x3_z10",
@@ -527,7 +527,7 @@
               41,
               15
             ],
-            "blocks": 2391
+            "blocks": 2388
           },
           {
             "location": "brasshaven:starfall_library/library/x4_z1",
@@ -541,7 +541,7 @@
               86,
               15
             ],
-            "blocks": 3316
+            "blocks": 3305
           },
           {
             "location": "brasshaven:starfall_library/library/x4_z2",
@@ -555,7 +555,7 @@
               117,
               16
             ],
-            "blocks": 10146
+            "blocks": 10150
           },
           {
             "location": "brasshaven:starfall_library/library/x4_z3",
@@ -597,7 +597,7 @@
               138,
               15
             ],
-            "blocks": 19205
+            "blocks": 19296
           },
           {
             "location": "brasshaven:starfall_library/library/x4_z6",
@@ -611,7 +611,7 @@
               109,
               15
             ],
-            "blocks": 10397
+            "blocks": 10456
           },
           {
             "location": "brasshaven:starfall_library/library/x4_z7",
@@ -625,7 +625,7 @@
               53,
               15
             ],
-            "blocks": 4542
+            "blocks": 4544
           },
           {
             "location": "brasshaven:starfall_library/library/x4_z8",
@@ -653,7 +653,7 @@
               18,
               13
             ],
-            "blocks": 2099
+            "blocks": 2100
           },
           {
             "location": "brasshaven:starfall_library/library/x5_z1",
@@ -667,7 +667,7 @@
               84,
               15
             ],
-            "blocks": 2845
+            "blocks": 2858
           },
           {
             "location": "brasshaven:starfall_library/library/x5_z2",
@@ -681,7 +681,7 @@
               106,
               16
             ],
-            "blocks": 6038
+            "blocks": 6036
           },
           {
             "location": "brasshaven:starfall_library/library/x5_z3",
@@ -695,7 +695,7 @@
               130,
               15
             ],
-            "blocks": 12103
+            "blocks": 12102
           },
           {
             "location": "brasshaven:starfall_library/library/x5_z4",
@@ -709,7 +709,7 @@
               135,
               15
             ],
-            "blocks": 16081
+            "blocks": 16110
           },
           {
             "location": "brasshaven:starfall_library/library/x5_z5",
@@ -723,7 +723,7 @@
               120,
               15
             ],
-            "blocks": 16630
+            "blocks": 17004
           },
           {
             "location": "brasshaven:starfall_library/library/x5_z6",
@@ -737,7 +737,7 @@
               112,
               15
             ],
-            "blocks": 9952
+            "blocks": 10352
           },
           {
             "location": "brasshaven:starfall_library/library/x5_z7",
@@ -793,7 +793,7 @@
               41,
               15
             ],
-            "blocks": 2718
+            "blocks": 2714
           },
           {
             "location": "brasshaven:starfall_library/library/x6_z2",
@@ -807,7 +807,7 @@
               86,
               16
             ],
-            "blocks": 2837
+            "blocks": 2849
           },
           {
             "location": "brasshaven:starfall_library/library/x6_z3",
@@ -821,7 +821,7 @@
               95,
               15
             ],
-            "blocks": 4109
+            "blocks": 4093
           },
           {
             "location": "brasshaven:starfall_library/library/x6_z4",
@@ -835,7 +835,7 @@
               100,
               15
             ],
-            "blocks": 6842
+            "blocks": 6824
           },
           {
             "location": "brasshaven:starfall_library/library/x6_z5",
@@ -849,7 +849,7 @@
               100,
               15
             ],
-            "blocks": 8474
+            "blocks": 8681
           },
           {
             "location": "brasshaven:starfall_library/library/x6_z6",
@@ -863,7 +863,7 @@
               55,
               15
             ],
-            "blocks": 5558
+            "blocks": 5597
           },
           {
             "location": "brasshaven:starfall_library/library/x6_z7",
@@ -919,7 +919,7 @@
               35,
               15
             ],
-            "blocks": 2707
+            "blocks": 2708
           },
           {
             "location": "brasshaven:starfall_library/library/x7_z4",
@@ -944,10 +944,10 @@
             ],
             "size": [
               15,
-              47,
+              48,
               15
             ],
-            "blocks": 3297
+            "blocks": 3296
           },
           {
             "location": "brasshaven:starfall_library/library/x7_z6",

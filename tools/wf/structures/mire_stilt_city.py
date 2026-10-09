@@ -44,6 +44,7 @@ from ..blueprint import with_props
 from ..defs import Piece, StructureDef, register
 from ..megakit import fbm, hash01, hash3
 from ..parts import LOOT, MOD
+from .lightkit import light_fill
 
 # the Bog Hierophant holds court in the witch-queen's hall (entity/boss/BogHierophant.java, tools/BOSSES.md)
 BOSS = "brasshaven:bog_hierophant"
@@ -1743,6 +1744,9 @@ def mire_stilt_city(bp):
     bp.mist(-1, HALL_F, -56, 1, HALL_F + 3, -56)
     trees(S)
     bog_after(S)
+    # the dark houses and the undercroft: lanterns on chains, verdant froglights in low ceilings and floors
+    light_fill(bp, ceil="verdant_froglight[axis=y]", hang=LANT_H, floor="verdant_froglight[axis=y]",
+               unset_solid_below=0)
     S.bp._mire_warn = S.warn
 
 

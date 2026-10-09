@@ -4,7 +4,6 @@
     {
       "id": "minecraft:desert",
       "required": false
-    },
-    "brasshaven:pale_dunes"
+    }
   ]
 }

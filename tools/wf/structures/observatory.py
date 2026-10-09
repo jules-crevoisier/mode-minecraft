@@ -21,6 +21,7 @@ from ..megakit import (AETHER, BRASS, BRASS_SLAB, BRASS_STAIRS, CHANDELIER, COPP
                        PIPES, TABLE, TREAD, VERD, W, chain, fbm, hang_lamp, hash01, hash3, is_air, lantern_post,
                        out_facing, railing, ring_railing, vnoise)
 from ..parts import LOOT
+from .walking_fortress import light_fill
 
 CREAM, CREAM2, CREAM_TRIM = "calcite", "polished_diorite", "smooth_quartz"
 DARK, DARK2 = "polished_deepslate", "deepslate_tiles"
@@ -439,6 +440,20 @@ def observatory_inside(bp, cx, cz, r, h):
     bp.chest(cx - 4, h + 1, cz + 7, "north", loot=LOOT + "observatory_vault")
     bp.set(cx - 5, h + 1, cz + 7, "cartography_table")
     bp.set(cx - 3, h + 1, cz + 7, W + "compacting_crate[facing=north]")
+    # light rings: Edison lamps on chains three over each floor, lamp posts round the observing floor
+    def clear(x, y, z):
+        return math.hypot(x - sx, z - sz) > 3.5 and bp.get(x, y, z) in (None, "minecraft:air")
+    for (ring, n, y_lamp, top) in ((8, 10, 4, 8), (4, 5, 4, 8), (8, 10, lab_y + 3, h), (4, 5, lab_y + 3, h)):
+        for k in range(n):
+            a = 2 * math.pi * (k + 0.5) / n
+            x, z = cx + round(math.cos(a) * ring), cz + round(math.sin(a) * ring)
+            if all(clear(x, y, z) for y in range(y_lamp, top)):
+                hang_lamp(bp, x, y_lamp, z, length=top - y_lamp - 1)
+    for k in range(8):
+        a = 2 * math.pi * (k + 0.5) / 8
+        x, z = cx + round(math.cos(a) * (r - 2)), cz + round(math.sin(a) * (r - 2))
+        if all(clear(x, y, z) for y in range(h + 1, h + 5)):
+            lantern_post(bp, x, h + 1, z, h=3, top=EDISON, post=IRON_WALL, base=BRASS)
 
 
 # ------------------------------------------------------------------ the Tesla Tower
@@ -689,7 +704,7 @@ def orrery(bp):
         (("red_terracotta", "orange_terracotta"), 8, 290, 8, 1),
         (("orange_wool", "white_wool", "brown_wool"), 8, 60, 3, 2),
         (("yellow_wool", "white_wool"), 9, 160, 9, 1),
-        (("light_blue_concrete",), 9, 250, 4, 1),
+        (("light_blue_concrete",), 9, 250, 5, 1),
     ]
     for idx, (mats, orbit, ang, y, size) in enumerate(planets):
         a = math.radians(ang)
@@ -850,8 +865,24 @@ def library(bp):
     mini_coil(bp, (x0 + x1) // 2, yy, (z0 + z1) // 2)
     bp.chest(x0 + 1, yy, z1 - 1, "east", loot=LOOT + "observatory_lab")
     bp.set(x0 + 1, yy, z0 + 1, "enchanting_table")
-    for x in range(x0 + 3, x1 - 1, 6):
-        hang_lamp(bp, x, h2 - 2, (z0 + z1) // 2 + 3, length=1)
+    # the upper floor is open to the roof: lamps hang on long chains from the rafters, 3 over the floor
+    for x in range(x0 + 2, x1, 4):
+        for z in (z0 + 3, (z0 + z1) // 2, z1 - 3):
+            if abs(x - (x0 + x1) // 2) <= 1 and z == (z0 + z1) // 2:
+                continue                                    # the tesla model
+            hang_to_roof(bp, x, yy + 3, z, CHANDELIER if z == (z0 + z1) // 2 else HANG_LAMP)
+
+
+def hang_to_roof(bp, x, y, z, lamp=HANG_LAMP):
+    """A lamp at y on a chain climbing to the first solid block above (a rafter, a roof)."""
+    top = y + 1
+    while bp.get(x, top, z) in (None, "minecraft:air") and top < y + 24:
+        top += 1
+    if bp.get(x, top, z) in (None, "minecraft:air") or bp.get(x, y, z) not in (None, "minecraft:air"):
+        return
+    for yy in range(y + 1, top):
+        bp.set(x, yy, z, "iron_chain[axis=y,waterlogged=false]")
+    bp.set(x, y, z, lamp)
 
 
 def walks(bp):
@@ -965,8 +996,9 @@ def greenhouse(bp):
     bp.set(fx, 1, mz, "water_cauldron[level=3]")
     bp.set(fx, 1, mz - 1, "air")
     bp.set(fx, 1, mz + 1, "air")
-    for x in (x0 + 4, x1 - 4):
-        hang_lamp(bp, x, h - 1, mz, length=0)
+    for x in range(x0 + 4, x1 - 1, 4):
+        for z in (z0 + 2, mz, z1 - 2):
+            hang_to_roof(bp, x, 4, z)
     # doors on both gable ends
     for x in (x0, x1):
         for y in (1, 2, 3):
@@ -1037,11 +1069,11 @@ def condenser(bp):
                     band = abs(y - cy) == 0
                     bp.set(x, y, z, BRASS if band else "light_blue_stained_glass")
                 elif d <= r - 0.6:
-                    bp.set(x, y, z, "air")
+                    bp.set(x, y, z, "light_blue_stained_glass")     # a solid aether glow, no sealed void inside
     for y in range(cy - r + 1, cy + 3):
         bp.set(cx, y, cz, AETHER if y != cy else "sea_lantern")
-    for (dx, dz, f) in ((1, 0, "east"), (-1, 0, "west"), (0, 1, "south"), (0, -1, "north")):
-        bp.set(cx + dx, cy + 1, cz + dz, "end_rod[facing=%s]" % f)
+    for (dx, dz) in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+        bp.set(cx + dx, cy + 1, cz + dz, "sea_lantern")
     bp.set(cx, cy + r + 1, cz, BRASS)
     bp.set(cx, cy + r + 2, cz, ROD)
     # pipe to the generator hall
@@ -1097,6 +1129,19 @@ def campus(bp):
     INT.decorate(bp, "library", seed=1, region=lib)
     INT.populate(bp, [("cartographer", 3), "toolsmith", "cleric"], seed=2)
     INT.decorate(bp, "steampunk", seed=2)
+    # wall shelves the decorator hangs at head height (3 over the floor) move one block up, out of the walkway
+    for (x, y, z), v in list(bp.blocks.items()):
+        if not v[0].endswith(":wall_shelf"):
+            continue
+        f = (v[1] or {}).get("facing", "north")
+        bx, bz = {"north": (0, 1), "south": (0, -1), "east": (-1, 0), "west": (1, 0)}[f]
+        below = [bp.get(x, y - k, z) for k in (1, 2)]
+        if all(b == "minecraft:air" for b in below) and bp.get(x, y + 1, z) == "minecraft:air" and \
+                bp.get(x + bx, y + 1, z + bz) not in (None, "minecraft:air"):
+            bp.blocks[(x, y + 1, z)] = v
+            bp.set(x, y, z, "air")
+    # fallback for the floors the hand-placed lamps miss
+    light_fill(bp, ground=0, lamp=EDISON, hang=HANG_LAMP, chain="iron_chain[axis=y,waterlogged=false]")
 
 
 register(StructureDef(

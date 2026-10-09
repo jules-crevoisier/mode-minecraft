@@ -23,7 +23,7 @@
               48,
               26
             ],
-            "blocks": 11061
+            "blocks": 11304
           },
           {
             "location": "brasshaven:crystal_cathedral/cathedral/x0_z1",
@@ -37,7 +37,7 @@
               58,
               29
             ],
-            "blocks": 32977
+            "blocks": 33297
           },
           {
             "location": "brasshaven:crystal_cathedral/cathedral/x0_z2",
@@ -51,7 +51,7 @@
               57,
               30
             ],
-            "blocks": 34233
+            "blocks": 34417
           },
           {
             "location": "brasshaven:crystal_cathedral/cathedral/x0_z3",
@@ -65,7 +65,7 @@
               49,
               26
             ],
-            "blocks": 11103
+            "blocks": 11136
           },
           {
             "location": "brasshaven:crystal_cathedral/cathedral/x1_z0",
@@ -79,7 +79,7 @@
               61,
               29
             ],
-            "blocks": 33143
+            "blocks": 33205
           },
           {
             "location": "brasshaven:crystal_cathedral/cathedral/x1_z1",
@@ -121,7 +121,7 @@
               52,
               29
             ],
-            "blocks": 31775
+            "blocks": 31922
           },
           {
             "location": "brasshaven:crystal_cathedral/cathedral/x2_z0",
@@ -135,7 +135,7 @@
               48,
               26
             ],
-            "blocks": 11061
+            "blocks": 11190
           },
           {
             "location": "brasshaven:crystal_cathedral/cathedral/x2_z1",
@@ -149,7 +149,7 @@
               57,
               29
             ],
-            "blocks": 32959
+            "blocks": 33244
           },
           {
             "location": "brasshaven:crystal_cathedral/cathedral/x2_z2",
@@ -163,7 +163,7 @@
               58,
               30
             ],
-            "blocks": 34252
+            "blocks": 34456
           },
           {
             "location": "brasshaven:crystal_cathedral/cathedral/x2_z3",
@@ -177,7 +177,7 @@
               48,
               26
             ],
-            "blocks": 11064
+            "blocks": 11164
           }
         ],
         "projection": "rigid",

@@ -37,6 +37,7 @@ from ..arch import stair
 from ..defs import Piece, StructureDef, register
 from ..megakit import hash01, hash3
 from ..parts import LOOT, MOD
+from .walking_fortress import light_fill
 
 # the necropolis' own king: the Fourth King, the seated king whose face was chiselled off the façade, risen
 BOSS = "brasshaven:fourth_king"
@@ -599,6 +600,16 @@ def king_cells(scale=1.0):
     cells[(0, 48, 4)] = GOLD
     for v in (1, 2, 3):
         cells[(3, 41 + v, 1)] = SRS                                 # the deshret's back spike
+    # the shoulders run up under the nemes wings and the crown's back rises into the cornice: no ledge pocket is
+    # left on the statue where a player could get stuck under an overhang
+    for u in range(-6, 7):
+        for y in (29, 30):
+            for v in range(1, 8):
+                cells.setdefault((u, y, v), SMS)
+    for u in range(-4, 5):
+        for y in (41, 42, 43):
+            for v in (1, 2):
+                cells.setdefault((u, y, v), SRS)
     return cells
 
 
@@ -1300,7 +1311,7 @@ def vault(bp, C):
     pot(bp, -6, F3, -11)
     pot(bp, 6, F3, -11)
     lamp(bp, 0, F3 + 4, -11, chain=1)
-    torch(bp, -12, F3 + 2, -10, "south")
+    torch(bp, -12, F3 + 2, -10, "north")
 
 
 def well(bp):
@@ -1529,6 +1540,41 @@ def camp(bp):
     bp.barrel(32, 2, 86, "up")
 
 
+# ------------------------------------------------------------------ quality pass: fixtures
+def furnish_tombs(bp):
+    """Hand-placed light and furniture where the first pass left long bare runs: lantern posts round the arena wall
+    (the hung lamps sat 17 over the floor), offering tables and statuettes down the Gallery of Crowns, braziers on
+    the hall's dais, lamps on the stair landings."""
+    def free(x, y, z):
+        return bp.get(x, y, z) == "minecraft:air" and bp.get(x, y - 1, z) not in (None, "minecraft:air")
+
+    ax, az = ARENA
+    for k in range(12):
+        a = k * math.pi / 6
+        x, z = ax + round(math.cos(a) * 14.2), az + round(math.sin(a) * 14.2)
+        if abs(x) <= 2 or not free(x, F3, z):
+            continue
+        bp.set(x, F3, z, CRS)
+        bp.set(x, F3 + 1, z, "sandstone_wall")
+        bp.set(x, F3 + 2, z, "lantern[hanging=false,waterlogged=false]")
+    # Gallery of Crowns: offering tables with candles and canopic pots between the windows
+    for x in range(-34, 35, 6):
+        if abs(x) in (0, 24) or not free(x, FC, -13):
+            continue
+        bp.set(x, FC, -13, "cut_red_sandstone_slab[type=top,waterlogged=false]")
+        if bp.get(x, FC + 1, -13) == "minecraft:air":
+            candles(bp, x, FC + 1, -13, 3)
+        if free(x + 1, FC, -13):
+            pot(bp, x + 1, FC, -13, "south")
+    # the stair landings of the east climb and the west descent
+    for (x, y, z) in ((22, F0 + 12, -33), (26, F0 + 24, -18), (17, F0, -18), (-19, F0, -30), (20, F2 - 8, -74),
+                      (19, F3, -62), (-35, FC + 16, -33)):
+        if free(x, y, z):
+            bp.set(x, y, z, "sandstone_wall")
+            if bp.get(x, y + 1, z) == "minecraft:air":
+                bp.set(x, y + 1, z, "lantern[hanging=false,waterlogged=false]")
+
+
 # ------------------------------------------------------------------ the whole site
 def rock_necropolis(bp):
     solid = massif(bp)
@@ -1553,6 +1599,11 @@ def rock_necropolis(bp):
     side_tomb(bp)
     canyon(bp)
     camp(bp)
+    # quality pass: every carved floor lit to 8+ (themed fixtures first, then lanterns on chains / star lamps set in
+    # the ceilings for the leftovers)
+    furnish_tombs(bp)
+    light_fill(bp, ground=0, lamp=STAR, hang="lantern[hanging=true,waterlogged=false]",
+               chain="iron_chain[axis=y,waterlogged=false]")
 
 
 # interior shots for the CI focus run: (name, feet, look at)

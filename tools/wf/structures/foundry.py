@@ -19,6 +19,9 @@ from ..megakit import (BARS, BRASS, BRASS_SLAB, BRASS_STAIRS, CHANDELIER, COPPER
                        TABLE, TREAD, TREAD_SLAB, AETHER, W, catwalk, chain, chimney, fbm, hang_lamp, hash01, hash3,
                        is_air, lattice_tower, lantern_post, out_facing, railing, ring_railing, smoke, vnoise)
 from ..parts import LOOT
+from .lightkit import light_fill
+
+LIGHT_REPORT = {}
 
 # volcano
 VX, VZ, VR, VH = 0, -38, 35, 78
@@ -222,9 +225,10 @@ def nave(bp):
             bp.set(x, 11, z, BRASS)
             for y in range(12, nave_top(x) + 1):
                 bp.set(x, y, z, IRON)
-            hang_lamp(bp, x + (2 if x > 0 else -2), 9, z, length=nave_top(x + (2 if x > 0 else -2)) - 10)
+            # lamps hung low enough (5 over the floor) to light the forge floor under the 9-17 high vault
+            hang_lamp(bp, x + (2 if x > 0 else -2), 6, z, length=nave_top(x + (2 if x > 0 else -2)) - 6)
         # lamp over the channel
-        hang_lamp(bp, 0, 12, z, length=NAVE_TOP - 12)
+        hang_lamp(bp, 0, 7, z, length=NAVE_TOP - 7)
     # forge bays along the walls
     for i, z in enumerate(range(NAVE_Z0 - 6, NAVE_Z1 + 2, -6)):
         for side in (-1, 1):
@@ -381,12 +385,13 @@ def steam_hammer(bp, cx, cz):
         for dx in (-1, 0, 1):
             bp.set(cx + dx, y, cz, PIPES if dx == 0 else COPPER)
     bp.set(cx, 9, cz, GAUGE)
-    for y in (6, 7, 8):
+    # the head rides high (3 blocks over the bed plate): no head-bumping slot under it
+    for y in (7, 8):
         bp.set(cx, y, cz, "iron_chain[axis=y,waterlogged=false]" if y != 8 else IRON)
     for dx in (-1, 0, 1):
         for dz in (-1, 0, 1):
-            bp.set(cx + dx, 5, cz + dz, "iron_block")
-            bp.set(cx + dx, 4, cz + dz, IRON if (dx or dz) else "iron_block")
+            bp.set(cx + dx, 6, cz + dz, "iron_block")
+            bp.set(cx + dx, 5, cz + dz, IRON if (dx or dz) else "iron_block")
             bp.set(cx + dx, 1, cz + dz, "polished_blackstone")
     bp.set(cx, 2, cz, "anvil[facing=east]")
     bp.set(cx, 1, cz, "iron_block")
@@ -439,6 +444,12 @@ def heart(bp):
                 bp.set(x, 15, z, GEAR if (x + z) % 2 else BRASS)
     for y in range(13, 17):
         bp.set(0, y, cz, AETHER if y == 13 else IRON)
+    # Edison lamp standards round the well, between the geothermal columns
+    for k in range(8):
+        a = math.radians(k * 45 + 22.5)
+        x, z = round(math.cos(a) * 6.3), cz + round(math.sin(a) * 6.3)
+        if bp.get(x, 1, z) in (None, "minecraft:air") and z < cz + 5:
+            lantern_post(bp, x, 0, z, h=3)
     # the vault on its dais at the back, gauges on the wall
     bp.set(0, 1, cz - 6, BRASS)
     bp.chest(0, 2, cz - 6, "south", loot=LOOT + "foundry_vault")
@@ -562,6 +573,14 @@ def crane(bp):
     chain(bp, 8, 14, POOL_Z, CRANE_Y + 1)
     bp.set(8, 13, POOL_Z, IRON)
     bp.set(8, 12, POOL_Z, W + "copper_pipe[axis=y]")
+    # the bridge deck stands 1.5 over the runway: slab ramps up onto it from both runways, on both sides
+    for x in (-14, 14):
+        for dx in (-1, 0, 1):
+            for z, z2 in ((POOL_Z - 3, POOL_Z - 2), (POOL_Z + 3, POOL_Z + 2)):
+                bp.set(x + dx, CRANE_Y + 1, z, IRON_SLAB + "[type=top,waterlogged=false]")
+                if bp.get(x + dx, CRANE_Y + 2, z2) in (None, "minecraft:air"):
+                    bp.set(x + dx, CRANE_Y + 1, z2, IRON_SLAB + "[type=top,waterlogged=false]")
+                    bp.set(x + dx, CRANE_Y + 2, z2, IRON_SLAB + "[type=bottom,waterlogged=false]")
     # walkway between the legs and the bridge: platforms on top of each leg
     for (x, z) in legs:
         for dx in range(-2, 3):
@@ -830,6 +849,9 @@ def hall_inside(bp, s):
         z = HZ0 + 3 + i
         for u in (hi - 3, hi - 2):
             bp.set(X(u), i + 1, z, stair(TREAD_STAIRS_N, "north"))
+            if i <= 2:              # the low end is closed underneath (no 2-high slot under the flight)
+                for y in range(1, i + 1):
+                    bp.set(X(u), y, z, PB)
             for y in range(i + 2, i + 5):
                 if y < CAT_Y or z > HZ0 + 2 + CAT_Y:
                     bp.set(X(u), y, z, "air")
@@ -843,8 +865,12 @@ def hall_inside(bp, s):
             continue
         bp.set(X(u), 1, z, "blast_furnace[facing=%s,lit=true]" % f_in if k in (1, 3) else "furnace[facing=%s,lit=true]" % f_in)
         bp.set(X(u), 2, z, "blast_furnace[facing=%s,lit=%s]" % (f_in, "true" if k == 2 else "false") if k != 4 else GAUGE)
-        bp.set(X(u), 3, z, SMOKE)
+        # chimney breast up to the mezzanine on a corbelled hood (no ledge to stand on under the mezzanine)
+        for y in range(3, CAT_Y):
+            bp.set(X(u), y, z, SMOKE)
         bp.set(X(u - 1), 4, z, stair(SMOKE_STAIRS, f_in, "top"))
+        for y in range(5, CAT_Y):
+            bp.set(X(u - 1), y, z, SMOKE)
         bp.set(X(u - 2), 1, z, "lava_cauldron" if k in (2, 3) else "cauldron")
     # casting line down the middle: rails on tread plate, with moulds and ingot stacks
     mid = (lo + hi) // 2
@@ -857,14 +883,15 @@ def hall_inside(bp, s):
             bp.set(X(mid + du), 1, z + 1, W + "compacting_crate[facing=north]" if du < 0 else "cauldron")
         bp.set(X(mid - 2), 2, z, "iron_trapdoor[facing=north,half=bottom,open=false,powered=false,waterlogged=false]")
     # overhead crane: runway beams on the pilasters and a bridge with a hook
+    # (at the tie-beam level, so the mezzanines under them keep 4 blocks of headroom)
     for z in range(HZ0 + 1, HZ1):
         for u in (lo + 1, hi - 1):
-            bp.set(X(u), HWALL - 1, z, IRON)
+            bp.set(X(u), HWALL, z, IRON)
     cz = HZ0 + 20
     for u in range(lo + 1, hi):
-        bp.set(X(u), HWALL - 1, cz, BRASS if u in (lo + 1, hi - 1) else IRON)
-        bp.set(X(u), HWALL - 1, cz + 1, IRON)
-    chain(bp, X(mid), 6, cz, HWALL - 2)
+        bp.set(X(u), HWALL, cz, BRASS if u in (lo + 1, hi - 1) else IRON)
+        bp.set(X(u), HWALL, cz + 1, IRON)
+    chain(bp, X(mid), 6, cz, HWALL - 1)
     bp.set(X(mid), 5, cz, IRON)
     bp.set(X(mid), 4, cz, "iron_block")
     # lamps along the roof beams
@@ -955,7 +982,8 @@ def ore_yard(bp):
     piles = [(-14, 33, ("coal_block", "blackstone", "coal_ore")), (14, 33, ("raw_iron_block", "iron_ore", "raw_iron_block")),
              (-20, 45, ("raw_copper_block", "copper_ore", "raw_copper_block")),
              (20, 45, (W + "raw_zinc_block", W + "zinc_ore", W + "raw_zinc_block")),
-             (-40, 24, ("coal_block", "coal_ore", "blackstone")), (40, 40, ("raw_gold_block", "gold_ore", "raw_iron_block"))]
+             # the coal heap sits between the west chimneys, outside the hall
+             (-47, 14, ("coal_block", "coal_ore", "blackstone")), (40, 40, ("raw_gold_block", "gold_ore", "raw_iron_block"))]
     for (px, pz, mats) in piles:
         for x in range(px - 4, px + 5):
             for z in range(pz - 4, pz + 5):
@@ -1005,6 +1033,41 @@ def gate(bp):
         bp.set(x, 11, zg, BRASS)
 
 
+def chimney_base(bp, cx, cz):
+    """A stepped plinth round each chimney foot (the ledge under the crown can be walked round, not a dead slot) and
+    a stoker's door on the south side into the flue, where the hearth fire burns at the bottom of the 50-high shaft."""
+    for x in range(cx - 7, cx + 8):
+        for z in range(cz - 7, cz + 8):
+            d = math.hypot(x - cx, z - cz)
+            if abs(x - cx) <= 1 and z > cz:
+                continue                       # the approach to the stoker's door
+            f = out_facing(cx - x, cz - z)     # stairs climb towards the chimney
+            if 4.35 < d <= 5.4:
+                if bp.get(x, 1, z) in (None, "minecraft:air") and bp.get(x, 2, z) in (None, "minecraft:air"):
+                    bp.set(x, 1, z, PB)
+                    bp.set(x, 2, z, stair(PBS, f))
+            elif 5.4 < d <= 6.4:
+                if bp.get(x, 1, z) in (None, "minecraft:air"):
+                    bp.set(x, 1, z, stair(PBS, f))
+    # the stoker's door, with an iron lintel, and the hearth inside on a paved floor
+    for y in (1, 2):
+        bp.set(cx, y, cz + 4, "air")
+        bp.set(cx, y, cz + 3, "air")
+    for dx in (-1, 0, 1):
+        bp.set(cx + dx, 3, cz + 4, IRON)
+    for x in range(cx - 3, cx + 4):
+        for z in range(cz - 3, cz + 4):
+            if math.hypot(x - cx, z - cz) <= 3.1:
+                bp.set(x, 0, z, PB if (x + z) % 2 else "polished_blackstone")
+    bp.set(cx, 0, cz, "hay_block[axis=y]")
+    bp.set(cx, 1, cz, "campfire[facing=south,lit=true,signal_fire=true,waterlogged=false]")
+    bp.set(cx - 2, 1, cz - 1, "cauldron")
+    bp.set(cx + 2, 1, cz - 1, "coal_block")
+    bp.set(cx + 2, 2, cz - 1, "coal_block")
+    bp.set(cx - 1, 1, cz - 2, W + "copper_pipe[axis=y]")
+    bp.barrel(cx + 1, 1, cz - 2, "up")
+
+
 def lights(bp):
     for (x, z) in ((-18, 0), (18, 0), (-18, 30), (18, 30), (-6, 30), (6, 30), (-34, 44), (34, 44)):
         if is_air(bp, x, 1, z):
@@ -1026,6 +1089,7 @@ def foundry(bp):
         for y in range(2, 4):
             for k in range(1, 3):
                 bp.set(x + (k + 3) * (1 if x < 0 else -1), y, z, W + "copper_pipe[axis=x]")
+        chimney_base(bp, x, z)
     ore_yard(bp)
     gate(bp)
     lights(bp)
@@ -1037,6 +1101,10 @@ def foundry(bp):
                      vtype="savanna", seed=s + 2)
         INT.decorate(bp, dict(INT.THEMES["forge"], ceiling="edison"), seed=s + 2, region=hall_r)
     INT.decorate(bp, "steampunk", seed=5, density=0.3)
+    # leftovers under light 8 (the nave aisles between the forge bays, the Heart's rim): an Edison lamp set into the
+    # ceiling or the floor, or hung on a chain
+    LIGHT_REPORT["foundry"] = light_fill(bp, ceil=EDISON, hang=HANG_LAMP, floor=EDISON, unset_solid_below=0,
+                                         box=(-NAVE_X, 0, HEART_Z - HEART_R - 1, NAVE_X, NAVE_TOP, NAVE_Z0))
 
 
 register(StructureDef(

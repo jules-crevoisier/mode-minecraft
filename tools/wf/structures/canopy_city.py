@@ -46,6 +46,8 @@ from ..arch import Palette, stair
 from ..defs import Piece, StructureDef, register
 from ..megakit import BRASS, BRASS_STAIRS, COPPER, GAUGE, GEAR, IRON, PIPES, VERD, W, fbm, hash01, hash3, vnoise
 from ..parts import LOOT, MOD
+from ..blueprint import is_solid
+from .lightkit import light_fill
 
 # the temple-city's own boss: the Strangler Fig Queen holds the summit terrace and climbs into the sun-disc
 # (StranglerQueen.java finds the disc by its froglight eyes, so keep VERDANT_FROGLIGHT in the disc face)
@@ -574,6 +576,11 @@ def grace_room(S):
         S.solid(x, f + 6, -12, LANT_H)
     # the narrow stair to the summit (3 wide, along the north wall, 11 up to the east)
     flight(S, 2, -17, "east", 11, f, 3, "south", mat="tuff_brick", fill="tuff_bricks", head=4)
+    for k in range(1, 12):                  # a solid base under the flight (no 2-high crawl under its treads)
+        for z in range(-17, -14):
+            for y in range(f, f + k - 1):
+                if empty(S.get(1 + k, y, z)):
+                    S.solid(1 + k, y, z, "tuff_bricks" if (k + y) % 4 else "chiseled_tuff_bricks")
     for x in range(13, 16):
         for z in range(-17, -14):
             S.solid(x, SUMMIT, z, "polished_tuff")
@@ -1120,6 +1127,17 @@ def sun_disc(S):
                     if along > 0 and perp <= 0.75:
                         S.solid(x, y, -17, IRON)
                         S.solid(x, y, -16, "iron_bars" if r > 5 else IRON)
+                # an iron grille fills the disc between the spokes (no climbable pocket in the ring)
+                for z in (-17, -16):
+                    if empty(S.get(x, y, z)):
+                        S.solid(x, y, z, "iron_bars")
+    # under the ring, between the pylons: the same grille down to the dais (no pocket under the disc)
+    for x in range(-10, 11):
+        for z in (-17, -16):
+            for y in range(SF + 5, cy):
+                if not empty(S.get(x, y, z)):
+                    break
+                S.solid(x, y, z, "iron_bars")
     # pylons
     for sx in (-1, 1):
         x = sx * 11
@@ -2487,7 +2505,56 @@ def canopy_city(bp):
     camp(S)
     rails(S)
     jungle(S)
+    tidy(S)
     core_fill(S)
+    raise_pockets(S)
+    light_fill(bp, ceil="ochre_froglight[axis=y]", hang=LANT_H, floor="ochre_froglight[axis=y]",
+               unset_solid_below=0)
+
+
+def tidy(S):
+    """Last touch on what the growth passes leave: vine curtains that stop just over a floor (a 2-block step onto a
+    climbable) are trimmed to hang out of reach."""
+    bp = S.bp
+    B = bp.blocks
+
+    def soft(b):                            # air or a plant one walks through
+        return empty(b) or (not is_solid(b) and any(k in b for k in ("fern", "grass", "carpet", "flower", "bush",
+                                                                        "sapling", "dead")))
+    # vine curtains out of reach
+    for (x, y, z), v in list(B.items()):
+        if v[0] != "minecraft:vine" or not soft(bp.get(x, y - 1, z)) or bp.get(x, y - 1, z) == v[0]:
+            continue
+        k = 1
+        while k <= 3 and soft(bp.get(x, y - k, z)):
+            k += 1
+        below = bp.get(x, y - k, z)
+        if 2 <= k <= 4 and below is not None and is_solid(below):
+            # the curtain ends 1-3 blocks over a floor: trim it so it hangs out of reach (4 clear)
+            top = y
+            while bp.get(x, top + 1, z) == "minecraft:vine":
+                top += 1
+            for j in range(0, 5 - k):
+                if y + j <= top and y + j < top:
+                    bp.set(x, y + j, z, AIR)
+
+
+def raise_pockets(S):
+    """The few 2-high pockets under an overhang inside the halls (after the core fill, so the masonry over them is
+    known): the block over them is lifted where solid masonry stands above it."""
+    bp = S.bp
+    for (cx, cy, cz) in ((5, 46, 12), (8, 1, -4), (-43, 55, -62), (17, 46, -1), (-41, 4, -18), (42, 1, -22)):
+        for x in range(cx - 4, cx + 5):
+            for z in range(cz - 4, cz + 5):
+                y = cy
+                if not (empty(bp.get(x, y, z)) and empty(bp.get(x, y + 1, z))):
+                    continue
+                c, a = bp.get(x, y + 2, z), bp.get(x, y + 3, z)
+                if c is None or empty(c) or not is_solid(c) or c.endswith(("_stairs", "_slab")) or "door" in c:
+                    continue
+                if a is None or empty(a) or not (is_solid(a) or a.endswith("_slab")):
+                    continue
+                bp.set(x, y + 2, z, AIR)
 
 
 # camera spots for the CI focus run: (name, feet, look at), blueprint coordinates

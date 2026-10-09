@@ -20,6 +20,9 @@ from .. import interior as INT
 from ..arch import Palette, stair, slab
 from ..defs import Piece, StructureDef, register
 from ..parts import LOOT
+from .lightkit import light_fill
+
+LIGHT_REPORT = {}
 
 W = "brasshaven:"
 BRASS, COPPER, VERD, IRON = W + "brass_plating", W + "copper_plating", W + "verdigris_plating", W + "dark_iron_plating"
@@ -118,6 +121,12 @@ def mansard(bp):
                     bp.set(x, y, z, stair(ROOF_ST, f))
                 else:
                     bp.set(x, y, z, ROOF)
+    # a mahogany knee wall closes the attic's 2-high strip under the lowest roof slope
+    for x in range(X0 + 1, X1):
+        for z in range(Z0 + 1, Z1):
+            if x in (X0 + 1, X1 - 1) or z in (Z0 + 1, Z1 - 1):
+                for y in (TOP + 1, TOP + 2):
+                    bp.set(x, y, z, MAHOG)
     yt = TOP + 7
     i = 3
     for x in range(X0 + i, X1 - i + 1):
@@ -146,7 +155,8 @@ def mansard(bp):
             for dz in range(1, 3):
                 for du in (-1, 0, 1):
                     for y in range(TOP + 1, TOP + 5):
-                        if bp.get(x + du, y, z - oz * dz) in (None, "minecraft:air"):
+                        b = bp.get(x + du, y, z - oz * dz)
+                        if b in (None, "minecraft:air", MAHOG):      # through the knee wall into the dormer
                             bp.set(x + du, y, z - oz * dz, MAHOG if abs(du) == 1 else "air")
 
 
@@ -358,13 +368,14 @@ def interiors(bp):
                     bp.set(x, y, z, "air")
         bp.set(x, F0 + 2 + i, Z0 + 3, f"{W}brass_railing[facing=south]")
     bp.set(-1, F1 - 1, 3, W + "brass_chandelier")
+    bp.set(-1, F1 - 1, -4, W + "brass_chandelier")
     bp.set(-1, F0 + 1, 5, "red_carpet")
     for x in (-3, 1):
         bp.set(x, F0 + 1, 7, "potted_fern")
     bp.set(-4, F0 + 1, 5, "brasshaven:mahogany_table")
     # the study: desk, bookshelves, globe, the carpet hiding the trapdoor
     for z in range(Z0 + 1, Z1):
-        for y in range(F0 + 1, F0 + 4):
+        for y in range(F0 + 1, F1):                       # floor to ceiling: no 2-high ledge on top
             if z not in (0, 2):                           # z 0: the workshop door
                 bp.set(X0 + 1, y, z, "bookshelf" if (z + y) % 5 else "chiseled_bookshelf[facing=east]")
     bp.set(-9, F0 + 1, 4, W + "mahogany_table")
@@ -375,6 +386,7 @@ def interiors(bp):
     bp.set(-7, F0 + 1, 7, "lectern[facing=north,has_book=false,powered=false]")
     bp.chest(-7, F0 + 1, Z0 + 1, "south", loot=LOOT + "inventor_manor")
     bp.set(-10, F1 - 1, 1, W + "hanging_edison_lamp")
+    bp.set(-10, F1 - 1, 6, W + "hanging_edison_lamp")
     tx, tz = -10, -5
     bp.set(tx, F0, tz, "dark_oak_trapdoor[facing=south,half=top,open=false,powered=false,waterlogged=false]")
     bp.set(tx, F0 + 1, tz, "red_carpet")
@@ -402,7 +414,8 @@ def interiors(bp):
     for x in range(X0 + 1, -6):
         for y in range(F1 + 1, F1 + 4):
             bp.set(x, y, Z0 + 1, "bookshelf")
-            bp.set(x, y, Z1 - 1, "bookshelf" if x % 3 else "chiseled_bookshelf[facing=north]")
+            if abs(x + 9) > 1:          # the bay window stays open to the library (a reading nook)
+                bp.set(x, y, Z1 - 1, "bookshelf" if x % 3 else "chiseled_bookshelf[facing=north]")
     bp.set(-10, F1 + 1, 2, "enchanting_table")
     bp.set(-9, F1 + 1, 0, W + "mahogany_chair[facing=west]")
     bp.chest(-12, F1 + 1, 2, "east", loot=LOOT + "inventor_manor")
@@ -420,6 +433,7 @@ def interiors(bp):
         bp.set(x, F1 + 1, 5, W + "mahogany_chair[facing=" + ("east" if x < 0 else "west") + "]")
     bp.set(-1, F1 + 1, 6, "red_carpet")
     bp.set(-1, TOP - 1, 4, W + "brass_chandelier")
+    bp.set(-1, TOP - 1, -3, W + "brass_chandelier")
     # attic: storeroom with crates and a ladder to the observatory
     for x in range(-11, -6):
         bp.set(x, TOP + 1, 0, W + "compacting_crate[facing=south]" if x % 2 else "barrel[facing=up,open=false]")
@@ -584,8 +598,12 @@ def workshop(bp):
     bp.chest(x1 - 1, 2, z0 + 2, "west", loot=LOOT + "inventor_manor")
     bp.set(x0 + 1, 2, z1 - 1, "blast_furnace[facing=east,lit=false]")
     bp.set(x0 + 1, 2, z1 - 2, "grindstone[face=floor,facing=east]")
+    # the boiler-pipe manifold along the west wall: risers and gauges, solid from the floor to the pipe run
     for z in range(z0 + 1, z1):
         bp.set(x0 + 1, 4, z, PIPES if z % 2 else GAUGE)
+        for y in (2, 3):
+            if bp.get(x0 + 1, y, z) in (None, "minecraft:air"):
+                bp.set(x0 + 1, y, z, PIPES if z % 2 else (IRON if y == 2 else GAUGE))
 
 
 def laboratory(bp):
@@ -754,6 +772,11 @@ def manor(bp):
         bp.door(X1 - 3, y, Z1 - 2, "west", "dark_oak")
     for y in (F0 + 1, F1 + 1):
         bp.door(X0 + 2, y, Z0 + 2, "east", "dark_oak")
+    # an Edison lamp hung under every turret floor
+    for (cx, cz, ys) in ((X1, Z1, (F1 - 1, TOP - 1, TOP + 4)), (X0, Z0, (F1 - 1, TOP - 1))):
+        for y in ys:
+            if bp.get(cx, y, cz) in (None, "minecraft:air"):
+                bp.set(cx, y, cz, W + "hanging_edison_lamp")
     # and a ladder up to the room under each cone
     for y in range(TOP + 1, TOP + 6):
         bp.set(X1, y, Z1 + 3, "ladder[facing=north,waterlogged=false]")
@@ -790,11 +813,21 @@ def household(bp):
     INT.populate(bp, [("cleric", 3)], region=lab, seed=2)
     INT.populate(bp, [("librarian", 3), "butcher", "cartographer", "farmer"], region=house, seed=3,
                  bell=None, guard=("brass", (X1 + 6, 1, 0)), rooms=_open_rooms(bp, house))
-    INT.decorate(bp, "workshop", seed=1, region=ws)
+    # (the strip under the west wall's pipe run stays clear: a crate there is a step up onto the pipes)
+    ws_rooms = INT.find_rooms(bp, ws)
+    for r in ws_rooms:
+        r.free = {(x, z) for (x, z) in r.free if x != X0 - 14}
+    INT.decorate(bp, "workshop", seed=1, region=ws, rooms=ws_rooms)
     INT.decorate(bp, "lab", seed=2, region=lab)
     INT.decorate(bp, "steampunk", seed=3, region=house, rooms=_open_rooms(bp, house))
     INT.decorate(bp, "steampunk", seed=4, rooms=_open_rooms(bp, None))
     INT.yard(bp, (X0 - 20, Z0 - 20, X1 + 20, Z1 + 25), 1, "garden", count=6, seed=1)
+    # leftovers under light 8 (the long hall, the attic, the lab's far corners): an Edison lamp hung on a chain, or
+    # set into a low ceiling; only inside the house, the workshop and the lab
+    roof = {p for p in bp.blocks if p[1] >= TOP + 5}     # (the mansard's sealed voids above the attic stay dark)
+    for box in ((X0, -9, Z0, X1, TOP + 5, Z1), (X0 - 15, 1, -6, X0 - 2, 8, 6)):
+        LIGHT_REPORT[box] = light_fill(bp, ceil=EDISON, hang=W + "hanging_edison_lamp", floor=EDISON,
+                                       unset_solid_below=0, box=box, protect=roof)
 
 
 register(StructureDef(

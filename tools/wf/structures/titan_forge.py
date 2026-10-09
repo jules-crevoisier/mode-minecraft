@@ -46,6 +46,8 @@ from ..megakit import (BRASS, BRASS_SLAB, BRASS_STAIRS, COPPER, EDISON, GAUGE, G
                        hash3, vnoise)
 from ..parts import LOOT, MOB, MOD
 from .caldera_ringwall import newel
+from .lightkit import light_fill
+from ..blueprint import is_solid
 from .nether import CHIS, GBS, GILD, LAMP, PB, PBB, PBBS, PBBSL, PBBW, brazier, chandelier
 
 # the forge's own warden: the Anvil Warden (mobs/anvil_warden.py, entity/boss/AnvilWarden.java, tools/BOSSES.md)
@@ -1174,10 +1176,13 @@ def bellows(bp):
         # the nozzle and the pipe into the wall
         xc = (x0 + x1) // 2
         for z in range(-11, -7):
-            bp.set(xc, f + 2, z, BRASS if z < -9 else PIPES)
-            bp.set(xc + 1, f + 2, z, BRASS if z < -9 else PIPES)
+            bp.set(xc, f + 3, z, BRASS if z < -9 else PIPES)
+            bp.set(xc + 1, f + 3, z, BRASS if z < -9 else PIPES)
         for z in (-8, -7, -6, -5, -4):
-            bp.set(xc, f + 2, z, PIPES)
+            bp.set(xc, f + 3, z, PIPES)
+        bp.set(xc, f + 2, -12, IRON)          # the nozzle's prop on the floor
+        bp.set(xc, f + 1, -12, IRON)
+        bp.set(xc, f, -12, IRON)
         # the yoke: a beam from the bellows' lid up to the lever, chains
         for y in range(f + 8, 15):
             bp.set(xc, y, -26, CHAIN)
@@ -1583,18 +1588,27 @@ def plinth_buildings(bp):
             for yy in range(y + 1, y + 8):
                 if math.hypot(z - 32, yy - (y + 4)) <= 2.6:
                     bp.set(x, yy, z, COPPER if x not in (-39, -32) else BRASS)
-        bp.set(x, y + 1, 29, IRON) if x % 3 == 0 else None
+        for z in range(29, 36):                 # the saddle: iron right up to the shell, no crawl slot
+            for yy in range(y + 1, y + 4):
+                if bp.get(x, yy, z) in (None, AIR) and any(
+                        (bp.get(x, yy + k, z) or AIR) != AIR for k in (1, 2)):
+                    bp.set(x, yy, z, IRON if x % 3 else BRASS)
     for yy in range(y + 1, y + 6):
         bp.set(-30, yy, 32, IRON)
         bp.set(-29, yy, 32, IRON)
     for x in range(-31, -26):
         bp.set(x, y + 8, 32, IRON if x % 2 else BRASS)
     bp.set(-28, y + 6, 32, GAUGE)
-    bp.set(-38, y + 1, 36, "furnace[facing=north,lit=true]")
+    bp.set(-34, y + 1, 36, "furnace[facing=north,lit=true]")
     bp.set(-36, y + 1, 36, "furnace[facing=north,lit=true]")
     hang(bp, -33, y + 12, 30, HANG_LANT, drop=2)
     hang(bp, -33, y + 12, 34, HANG_LANT, drop=2)
     # the boiler's chimney
+    for yy in range(y + 1, y + 8):
+        for x in range(-39, -36):
+            for z in range(34, 37):
+                if bp.get(x, yy, z) in (None, AIR):
+                    bp.set(x, yy, z, SMOKE)
     for yy in range(y + 8, y + 26):
         for x in range(-39, -36):
             for z in range(34, 37):
@@ -1605,7 +1619,7 @@ def plinth_buildings(bp):
     bp.set(-38, y + 8, 35, "hay_block[axis=y]")
     bp.set(-38, y + 9, 35, "campfire[facing=north,lit=true,signal_fire=true,waterlogged=false]")
     # the flywheel: a vertical ring (plane x-y) east of the house, its axle through the wall
-    fx, fy, fz = -17, y + 10, 32
+    fx, fy, fz = -17, y + 12, 32
     R = 8
     for x in range(fx - R - 1, fx + R + 2):
         for yy in range(fy - R - 1, fy + R + 2):
@@ -1884,6 +1898,11 @@ def right_arm(bp):
     path = right_arm_path()
     floor_box(bp, 3, 9, 21, 30, 74, PATH)
     floor_box(bp, 18, 23, 10, 14, 77, DECK)
+    for x in range(17, 24):                  # the hammer room: a clean 3-high vault, not a 2-high crawl
+        for z in range(10, 15):
+            if x >= 18 or z == 14:
+                for y in range(78, 81):
+                    bp.set(x, y, z, AIR)
     prev = None
     for i, (x, zc, f) in enumerate(path):
         nxt = path[i + 1] if i + 1 < len(path) else None
@@ -2216,13 +2235,57 @@ def carve_open(bp):
             bp.set(x, y, z, AIR)
 
 
+def seal_wedges(bp, full):
+    """Close the shallow 2-high wedges where the titan's sloped masses come down over a floor (a crawl slot under
+    a belly or a sloped wall, flagged as a low ceiling): a floor cell whose ceiling is a mass block 2 up, low on one
+    side and open on the other, is filled with the mass's block. Doors and corridors (low on both sides or open on
+    both) stay."""
+    def blocked(x, y, z):
+        b = bp.get(x, y, z)
+        return b is not None and b != AIR and is_solid(b)
+
+    def clear(x, y, z):
+        n = 0
+        while n < 4 and not blocked(x, y + n, z):
+            n += 1
+        return n
+
+    def in_full(x, y, z):
+        ix, iy, iz = x - GX0, y - GY0, z - GZ0
+        return 0 <= ix < SHAPE[0] and 0 <= iy < SHAPE[1] and 0 <= iz < SHAPE[2] and bool(full[ix, iy, iz])
+
+    for _ in range(4):
+        todo = []
+        cand = set()
+        for (x, y, z), v in bp.blocks.items():
+            if in_full(x, y, z) and is_solid(v[0]) and v[0] != AIR:
+                cand.add((x, y - 2, z))
+        for (x, y, z) in cand:
+            v = bp.blocks.get((x, y, z))
+            if v is not None and v[0] != AIR:
+                continue
+            if not blocked(x, y - 1, z) or blocked(x, y + 1, z):
+                continue
+            for (dx, dz) in ((1, 0), (0, 1)):
+                a, b = clear(x - dx, y, z - dz), clear(x + dx, y, z + dz)
+                if (a <= 1 and b >= 2) or (b <= 1 and a >= 2):
+                    todo.append((x, y, z))
+                    break
+        if not todo:
+            break
+        for (x, y, z) in todo:
+            src = bp.blocks[(x, y + 2, z)]
+            bp.blocks[(x, y, z)] = src
+            bp.blocks[(x, y + 1, z)] = src
+
+
 # ------------------------------------------------------------------ the whole site
 def titan_forge(bp):
     lake(bp)
     shore(bp)
     lab, body = build_masses()
     air, cut = rooms(lab, body)
-    write_masses(bp, lab, air, cut)
+    full = write_masses(bp, lab, air, cut)
     causeway(bp)
     toll_arch(bp)
     outpost(bp)
@@ -2252,7 +2315,9 @@ def titan_forge(bp):
     vault(bp)
     titan_details(bp)
     anvil_details(bp)
+    seal_wedges(bp, full)
     carve_open(bp)
+    light_fill(bp, ceil=EDISON, hang=HANG_LANT, floor=EDISON, unset_solid_below=None)
 
 
 # camera spots for the CI focus run: (name, feet, look at), blueprint coordinates (x, y, z)

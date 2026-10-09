@@ -23,7 +23,7 @@
               22,
               14
             ],
-            "blocks": 803
+            "blocks": 814
           },
           {
             "location": "brasshaven:geothermal_foundry/foundry/x0_z1",
@@ -37,7 +37,7 @@
               24,
               27
             ],
-            "blocks": 4919
+            "blocks": 4917
           },
           {
             "location": "brasshaven:geothermal_foundry/foundry/x0_z2",
@@ -51,7 +51,7 @@
               65,
               26
             ],
-            "blocks": 11624
+            "blocks": 11665
           },
           {
             "location": "brasshaven:geothermal_foundry/foundry/x0_z3",
@@ -65,7 +65,7 @@
               65,
               27
             ],
-            "blocks": 15898
+            "blocks": 16206
           },
           {
             "location": "brasshaven:geothermal_foundry/foundry/x0_z4",
@@ -79,7 +79,7 @@
               59,
               20
             ],
-            "blocks": 4337
+            "blocks": 4367
           },
           {
             "location": "brasshaven:geothermal_foundry/foundry/x1_z0",
@@ -93,7 +93,7 @@
               56,
               26
             ],
-            "blocks": 13391
+            "blocks": 13388
           },
           {
             "location": "brasshaven:geothermal_foundry/foundry/x1_z1",
@@ -135,7 +135,7 @@
               41,
               27
             ],
-            "blocks": 14426
+            "blocks": 14440
           },
           {
             "location": "brasshaven:geothermal_foundry/foundry/x1_z4",
@@ -149,7 +149,7 @@
               32,
               26
             ],
-            "blocks": 10498
+            "blocks": 10497
           },
           {
             "location": "brasshaven:geothermal_foundry/foundry/x2_z0",
@@ -163,7 +163,7 @@
               55,
               26
             ],
-            "blocks": 14957
+            "blocks": 14966
           },
           {
             "location": "brasshaven:geothermal_foundry/foundry/x2_z1",
@@ -205,7 +205,7 @@
               41,
               27
             ],
-            "blocks": 14460
+            "blocks": 14456
           },
           {
             "location": "brasshaven:geothermal_foundry/foundry/x2_z4",
@@ -219,7 +219,7 @@
               32,
               26
             ],
-            "blocks": 10588
+            "blocks": 10596
           },
           {
             "location": "brasshaven:geothermal_foundry/foundry/x3_z0",
@@ -233,7 +233,7 @@
               21,
               17
             ],
-            "blocks": 1009
+            "blocks": 1008
           },
           {
             "location": "brasshaven:geothermal_foundry/foundry/x3_z1",
@@ -243,11 +243,11 @@
               26
             ],
             "size": [
-              17,
+              16,
               25,
               27
             ],
-            "blocks": 4751
+            "blocks": 4732
           },
           {
             "location": "brasshaven:geothermal_foundry/foundry/x3_z2",
@@ -261,7 +261,7 @@
               65,
               26
             ],
-            "blocks": 11917
+            "blocks": 11965
           },
           {
             "location": "brasshaven:geothermal_foundry/foundry/x3_z3",
@@ -275,7 +275,7 @@
               65,
               27
             ],
-            "blocks": 15587
+            "blocks": 15874
           },
           {
             "location": "brasshaven:geothermal_foundry/foundry/x3_z4",
@@ -289,16 +289,16 @@
               59,
               19
             ],
-            "blocks": 4256
+            "blocks": 4281
           }
         ],
         "projection": "rigid",
         "processors": "brasshaven:none",
         "ground_level_delta": 13,
         "footprint": [
+          2,
           4,
-          4,
-          104,
+          106,
           127
         ]
       }

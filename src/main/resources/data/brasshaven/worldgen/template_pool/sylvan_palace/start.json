@@ -8,7 +8,7 @@
         "size": [
           77,
           97,
-          75
+          76
         ],
         "cells": [
           {
@@ -21,90 +21,90 @@
             "size": [
               26,
               79,
-              24
+              25
             ],
-            "blocks": 3875
+            "blocks": 4170
           },
           {
             "location": "brasshaven:sylvan_palace/palace/x0_z1",
             "offset": [
               12,
               0,
-              24
+              25
             ],
             "size": [
               14,
               85,
               26
             ],
-            "blocks": 3619
+            "blocks": 4109
           },
           {
             "location": "brasshaven:sylvan_palace/palace/x0_z2",
             "offset": [
-              14,
+              13,
               0,
-              50
+              51
             ],
             "size": [
-              12,
+              13,
               55,
               24
             ],
-            "blocks": 3450
+            "blocks": 3506
           },
           {
             "location": "brasshaven:sylvan_palace/palace/x1_z0",
             "offset": [
               26,
               0,
-              8
+              9
             ],
             "size": [
               25,
               85,
               16
             ],
-            "blocks": 3653
+            "blocks": 4054
           },
           {
             "location": "brasshaven:sylvan_palace/palace/x1_z1",
             "offset": [
               26,
               0,
-              24
+              25
             ],
             "size": [
               25,
               97,
               26
             ],
-            "blocks": 20927
+            "blocks": 23592
           },
           {
             "location": "brasshaven:sylvan_palace/palace/x1_z2",
             "offset": [
               26,
               0,
-              50
+              51
             ],
             "size": [
               25,
               71,
               25
             ],
-            "blocks": 4765
+            "blocks": 4802
           },
           {
             "location": "brasshaven:sylvan_palace/palace/x2_z0",
             "offset": [
               51,
               0,
-              19
+              20
             ],
             "size": [
               6,
-              52,
+              48,
               5
             ],
             "blocks": 112
@@ -114,28 +114,28 @@
             "offset": [
               51,
               0,
-              24
+              25
             ],
             "size": [
               26,
               71,
               26
             ],
-            "blocks": 3642
+            "blocks": 3819
           },
           {
             "location": "brasshaven:sylvan_palace/palace/x2_z2",
             "offset": [
               51,
               7,
-              50
+              51
             ],
             "size": [
-              23,
+              24,
               38,
               12
             ],
-            "blocks": 46
+            "blocks": 62
           }
         ],
         "projection": "rigid",
@@ -143,9 +143,9 @@
         "ground_level_delta": 13,
         "footprint": [
           1,
-          1,
+          0,
           76,
-          73
+          74
         ]
       }
     }

@@ -40,12 +40,14 @@ def cavern(bp):
     # lake: below y 0 the bowl is water (with a lime glow from sea pickles)
     for x in range(-RX, RX + 1):
         for z in range(-RZ, RZ + 1):
-            for y in range(FLOOR, 0):
-                if bp.get(x, y, z) is not None and bp.get(x, y, z) == "minecraft:air":
+            bed = None
+            for y in range(FLOOR - 3, 0):                 # the water fills the bowl right down to its bed
+                if bp.get(x, y, z) == "minecraft:air":
                     bp.set(x, y, z, "water[level=0]")
-            if bp.get(x, FLOOR - 1, z) is not None and bp.get(x, FLOOR - 1, z) != "minecraft:air":
+                    bed = y if bed is None else bed
+            if bed is not None and bp.get(x, bed - 1, z) not in (None, "minecraft:air", "minecraft:water"):
                 if (x * 3 + z * 5) % 17 == 0:
-                    bp.set(x, FLOOR, z, "sea_pickle[pickles=4,waterlogged=true]")
+                    bp.set(x, bed, z, "sea_pickle[pickles=4,waterlogged=true]")
     # shore ring: a mud and gravel beach where the bowl meets the walls
     for x in range(-RX, RX + 1):
         for z in range(-RZ, RZ + 1):
@@ -85,8 +87,9 @@ def pillar(bp):
         bp.set(0, ly, -PILLAR_R - 1, TREAD)
         bp.set(0, ly + 1, -PILLAR_R - 1, "ladder[facing=north,waterlogged=false]")
         for (x, z) in ((PILLAR_R + 2, 0), (-PILLAR_R - 2, 0), (0, PILLAR_R + 2)):
-            bp.set(x, ly + 4, z, IRON)
-            bp.set(x, ly + 3, z, W + "hanging_edison_lamp")
+            bp.set(x, ly + 1, z, W + "smokestack_brick_wall")     # lamp standards on the platform ring
+            bp.set(x, ly + 2, z, W + "smokestack_brick_wall")
+            bp.set(x, ly + 3, z, EDISON)
     # brace arches from the pillar to the ceiling
     for ang in range(0, 360, 45):
         a = math.radians(ang)
@@ -94,6 +97,8 @@ def pillar(bp):
             x, z = round(math.cos(a) * i), round(math.sin(a) * i)
             # kept above head height over the top catwalks and houses: they run under the ceiling until they meet it
             y = max(top - 1 - int((i - PILLAR_R) * 0.25), LEVELS[-1] + 3)
+            if PILLAR_R < i <= PILLAR_R + 4:
+                continue                                  # clear headroom over the top platform
             if i > PILLAR_R + 1 and bp.get(x, y, z) != "minecraft:air":
                 break
             bp.set(x, y, z, IRON)
@@ -132,6 +137,9 @@ def shack(bp, cx, y, cz, ang, seed):
                 else:
                     bp.set(x, yy, z, "air")
             bp.set(x, y + h + 1, z, W + "dark_iron_plating_slab[type=bottom,waterlogged=false]")
+            for yy in range(y + h + 2, y + h + 5):           # a niche in the rock over the roof
+                if bp.get(x, yy, z) in (None, "minecraft:stone", "minecraft:deepslate", "minecraft:tuff"):
+                    bp.set(x, yy, z, "air")
     # stilts down to the shore or the wall
     for (x, z) in ((cx - w, cz - d), (cx + w, cz - d), (cx - w, cz + d), (cx + w, cz + d)):
         yy = y - 1
@@ -170,6 +178,14 @@ def catwalk(bp, p0, p1, y):
                 bp.set(x + ox, y, z + oz, TREAD)
         if i % 6 == 3:
             bp.set(x, y - 1, z, W + "dark_iron_plating_slab[type=top,waterlogged=false]")
+        if i % 6 == 0 and 0 < i < n - 1:                   # a lamp post on a side bracket every six steps
+            sx_, sz_ = (x - 1, z) if abs(z1 - z0) >= abs(x1 - x0) else (x, z - 1)
+            col = [bp.get(sx_, yy, sz_) for yy in range(y, y + 4)]
+            if all(c in (None, "minecraft:air") for c in col):
+                bp.set(sx_, y, sz_, TREAD)
+                bp.set(sx_, y + 1, sz_, W + "smokestack_brick_wall")
+                bp.set(sx_, y + 2, sz_, W + "smokestack_brick_wall")
+                bp.set(sx_, y + 3, sz_, EDISON)
         prev = (x, z)
     return prev
 
@@ -184,15 +200,43 @@ def pipes(bp):
                 bp.set(x, y, z, W + "copper_pipe[axis=y]")
                 if y % 9 == 0:
                     bp.set(x, y, z, GEAR)
+                for t in (1, 2, 3):                       # bedded in the rock: its shifts up the curved wall are no stair
+                    bx, bz = _ring_point(a, y, 2 - t)
+                    if bp.get(bx, y, bz) == "minecraft:air":
+                        bp.set(bx, y, bz, "tuff")
 
 
 def lights(bp):
     for ang in range(0, 360, 20):
         a = math.radians(ang)
-        x, z = _ring_point(a, RY - 6, 3)
-        bp.set(x, RY - 6, z, GREEN)
-    for (x, z) in ((10, 10), (-12, 8), (8, -14), (-9, -11), (16, -3), (-17, 2)):
+        for ins in range(-2, 7):                          # set into the rock face, not floating off it
+            x, z = _ring_point(a, RY - 6, ins)
+            if bp.get(x, RY - 6, z) == "minecraft:air":
+                px, pz = _ring_point(a, RY - 6, ins - 1)
+                if bp.get(px, RY - 6, pz) not in (None, "minecraft:air"):
+                    bp.set(px, RY - 6, pz, GREEN)
+                break
+    for ang in range(5, 360, 15):                         # lamp posts round the mud beach
+        a = math.radians(ang)
+        x, z = round(math.cos(a) * RX * 0.92), round(math.sin(a) * RZ * 0.92)
+        if bp.get(x, 0, z) in ("minecraft:mud", "minecraft:gravel") and all(
+                bp.get(x, y, z) in (None, "minecraft:air") for y in (1, 2, 3)):
+            bp.set(x, 1, z, W + "smokestack_brick_wall")
+            bp.set(x, 2, z, W + "smokestack_brick_wall")
+            bp.set(x, 3, z, EDISON if ang % 30 == 5 else GREEN)
+    for i, (x, z) in enumerate(((10, 10), (-12, 8), (8, -14), (-9, -11), (16, -3), (-17, 2))):
+        ex, ez = (2, 1) if i % 2 else (1, 2)              # a rusted pontoon round each lake lamp
+        for px in range(x - ex, x + ex + 1):
+            for pz in range(z - ez, z + ez + 1):
+                if bp.get(px, 0, pz) in ("minecraft:air", "minecraft:water"):
+                    edge = abs(px - x) == ex and abs(pz - z) == ez
+                    bp.set(px, 0, pz, W + ("copper_plating_slab" if edge else "dark_iron_plating_slab")
+                           + "[type=bottom,waterlogged=true]")
         bp.set(x, 0, z, W + "dark_iron_plating_slab[type=bottom,waterlogged=true]")
+        yy = -1                                           # moored on a post down to the lake bed
+        while yy > FLOOR - 4 and bp.get(x, yy, z) in ("minecraft:water", "minecraft:air", None):
+            bp.set(x, yy, z, W + "dark_iron_plating_wall[waterlogged=true]")
+            yy -= 1
         bp.set(x, 1, z, W + "smokestack_brick_wall")
         bp.set(x, 2, z, GREEN)
 

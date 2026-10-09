@@ -109,8 +109,9 @@ def stalactite(bp, cx, cz, length, r, kind="amethyst"):
     """Crystal spire hanging from the cavern roof: wide at the root, a glowing core, a cluster at the tip."""
     top = int(ceil_y(cx, cz)) + 1
     bottom = top - length
-    for y in range(bottom, top + 1):
-        t = (y - bottom) / max(1, length)          # 0 at the tip, 1 at the root
+    hi = max(int(ceil_y(cx + dx, cz + dz)) + 1 for dx in range(-r - 1, r + 2) for dz in range(-r - 1, r + 2))
+    for y in range(bottom, max(top, hi) + 1):
+        t = min(1.0, (y - bottom) / max(1, length))   # 0 at the tip, 1 at the root (and up into the shell)
         rr = r * t ** 0.8
         ri = int(math.ceil(rr)) + 1
         for x in range(cx - ri, cx + ri + 1):
@@ -154,6 +155,10 @@ def crystal(bp, cx, cz, h, r, lean=(0.0, 0.0), kind="amethyst", y0=1):
                 else:
                     spec = (SEA if k % 5 == 2 else QZ) if core else ("white_stained_glass" if facet else CAL)
                 bp.set(x, y, z, spec)
+                if k <= 2:                                 # a lean leaves no crawl space under its foot
+                    for yy in range(y0, y):
+                        if bp.get(x, yy, z) in (None, "minecraft:air"):
+                            bp.set(x, yy, z, AME if kind == "amethyst" else CAL)
     tx, tz = round(cx + lean[0] * (h - 1)), round(cz + lean[1] * (h - 1))
     bp.set(tx, y0 + h, tz, AME if kind == "amethyst" else QZ)
     bp.set(tx, y0 + h + 1, tz, cluster("up"))
@@ -301,7 +306,7 @@ def nave(bp):
                 edge = y == yr
                 if edge or abs(x) == NW + 1:
                     if (z - Z_APSE - 2) % 6 == 0:
-                        spec = QZB
+                        spec = FROG if edge and abs(x) in (2, 6) else QZB
                     else:
                         spec = AME if edge else CAL
                     bp.set(x, y, z, spec)
@@ -309,7 +314,8 @@ def nave(bp):
     # eaves cornice
     for z in range(Z_APSE, Z_FRONT + 2):
         for side in (-1, 1):
-            bp.set(side * (NW + 2), ROOF_BASE, z, stair(QZ_ST, "west" if side > 0 else "east", "top"))
+            bp.set(side * (NW + 2), ROOF_BASE, z, FROG if (z - Z_APSE - 2) % 6 == 3 else
+                   stair(QZ_ST, "west" if side > 0 else "east", "top"))
 
 
 def window_glass(z, y):
@@ -339,7 +345,9 @@ def aisles(bp):
             # lean-to roof from the aisle wall up to the clerestory
             for i, x in enumerate(range(xo + side, side * NW, -side)):
                 yr = AISLE_H + 1 + i // 2 + (1 if i % 2 else 0) - 1
-                bp.set(x, yr, z, AME if (z - Z_APSE - 2) % 6 else QZB)
+                for y in range(AISLE_H + 1, yr):
+                    bp.set(x, y, z, CAL)
+                bp.set(x, yr, z, AME if (z - Z_APSE - 2) % 6 else (FROG if i in (1, 5) else QZB))
                 if i % 2 == 0:
                     bp.set(x, yr + 1, z, stair(QZ_ST, "east" if side > 0 else "west") if (z - Z_APSE - 2) % 6 else QZB)
             # lancet head: pointed tip above the window
@@ -424,7 +432,8 @@ def transept(bp):
             yr = ROOF_BASE + int((5.5 - abs(z - mz)) * 1.6)
             for y in range(ROOF_BASE, yr + 1):
                 if y == yr or z in (TZ0 - 1, TZ1 + 1):
-                    bp.set(x, y, z, QZB if abs(x) % 4 == 0 else AME)
+                    glow = y == yr and abs(x) % 4 == 0 and abs(z - mz) in (1.5, 3.5)
+                    bp.set(x, y, z, FROG if glow else (QZB if abs(x) % 4 == 0 else AME))
         bp.set(x, ROOF_BASE + int(5.5 * 1.6) + 1, int(mz), QZ_SL + "[type=bottom,waterlogged=false]")
     # gable ends with rose windows
     for side in (-1, 1):
@@ -468,6 +477,7 @@ def crossing_tower(bp):
     for sx in (-1, 1):
         for sz in (-1, 1):
             pinnacle(bp, sx * r, top + 1, cz + sz * r)
+            bp.lantern(sx * (r - 2), base + 1, cz + sz * (r - 2))     # lamps in the lantern tower
     # the octagonal spire, faceted in amethyst with quartz ribs
     h = 12
     for k in range(h):
@@ -635,6 +645,8 @@ def tower(bp, cx, cz):
                 if rr - 1.0 < octd <= rr + 0.3:
                     rib = dx == 0 or dz == 0 or dx == dz
                     bp.set(x, y, z, QZB if rib else AME)
+                elif octd <= rr - 1.0:
+                    bp.set(x, y, z, CAL)               # a solid spire: no sealed void inside
     bp.set(cx, top + h + 1, cz, AME)
     bp.set(cx, top + h + 2, cz, cluster("up"))
     # bell in the belfry
@@ -643,6 +655,11 @@ def tower(bp, cx, cz):
             bp.set(x, 20, z, CAL)
             bp.set(x, 28, z, CAL)
     bp.set(cx, 26, cz, "bell[attachment=ceiling,facing=north,powered=false]")
+    bp.lantern(cx, 19, cz, hanging=True)          # a lamp in each storey of the tower
+    bp.chain(cx, 13, cz, 15)
+    bp.lantern(cx, 12, cz, hanging=True)
+    for (dx, dz) in ((-2, -2), (2, 2)):
+        bp.lantern(cx + dx, 21, cz + dz)
     bp.set(cx, 27, cz, QZB)
     # a door from the aisle and a ladder along the outer wall up through the middle storey to the belfry
     s = 1 if cx > 0 else -1
@@ -714,8 +731,14 @@ def apse(bp):
         bp.set(x, 3, cz - 2, "candle[candles=4,lit=true,waterlogged=false]")
     # the Heart-Crystal behind the altar
     crystal(bp, 0, cz - 4, 13, 2.2, kind="amethyst", y0=3)
+    for x in range(-4, 5):                        # its plinth: no crawl space under the overhanging prism
+        for z in range(cz - 8, cz):
+            if bp.get(x, 3, z) not in (None, "minecraft:air"):
+                for y in (1, 2):
+                    if bp.get(x, y, z) in (None, "minecraft:air"):
+                        bp.set(x, y, z, QZB if y == 2 else SQZ)
     for (dx, dz) in ((-3, -3), (3, -3), (-2, -5), (2, -5)):
-        crystal(bp, dx, cz + dz, 5, 1.0, lean=(dx * 0.08, 0), kind="quartz", y0=3)
+        crystal(bp, dx, cz + dz, 5, 1.0, lean=(dx * 0.08, 0), kind="quartz", y0=2)
 
 
 def interior(bp):
@@ -730,6 +753,15 @@ def interior(bp):
         for x in (-11, 11):
             if not (TZ0 <= z <= TZ1):
                 bp.set(x, 0, z, SEA)
+    # glowing floor tiles down the nave and across the transept arms (like the aisles' sea lanterns)
+    for z in range(-18, Z_FRONT - 1, 4):
+        for x in (-4, 4):
+            bp.set(x, 0, z, SEA)
+    for x in (-3, 3):
+        bp.set(x, 0, Z_FRONT - 1, SEA)
+    for z in (TZ0 + 3, TZ1 - 3):
+        for x in (-20, -16, -12, 12, 16, 20):
+            bp.set(x, 0, z, SEA)
     # crystal chandeliers hanging from the vault on chains
     for z in (-2, 10, 20):
         top = vault_top(0)
@@ -806,9 +838,11 @@ def crypt(bp):
             bp.set(x, y0, z - 1, DS)
     # soul lanterns hanging from the vault
     for x in range(x0 + 2, x1, 4):
-        for z in range(z0 + 2, z1, 8):
-            bp.set(x, -3, z, "soul_lantern[hanging=true,waterlogged=false]")
+        for z in range(z0 + 2, z1, 4):
+            soul = (x + z) % 8 == 0
             bp.set(x, -2, z, DS)
+            bp.set(x, -3, z, "iron_chain[axis=y,waterlogged=false]")
+            bp.set(x, -4, z, ("soul_lantern" if soul else "lantern") + "[hanging=true,waterlogged=false]")
     # the reliquary behind iron bars at the east end
     for x in range(-3, 4):
         bp.set(x, y0 + 1, z0 + 4, "iron_bars" if abs(x) < 3 else DS)
@@ -870,6 +904,44 @@ def processional(bp):
                     bp.set(x, 4, z, cluster("up"))
 
 
+def geode_lamps(bp):
+    """Crystal lamps (a chiselled quartz base, a glowing pearl, a crystal on top) on a 6-block grid over the geode
+    floor, clear of the cathedral, its buttresses and the processional way."""
+    air = (None, "minecraft:air")
+    for x in range(-RX + 3, RX - 2, 6):
+        for z in range(-RZ + 3, RZ - 2, 6):
+            if ceil_y(x, z) < 9 or abs(x) <= 4 and z > Z_FRONT:
+                continue
+            if any(in_plan(x + dx, z + dz) for dx in range(-4, 5, 2) for dz in range(-4, 5, 2)):
+                continue
+            f = bp.get(x, 0, z)
+            if f in air or "water" in f:
+                continue
+            if any(bp.get(x + dx, y, z + dz) not in air for dx in (-1, 0, 1) for dz in (-1, 0, 1) for y in (1, 2, 3)):
+                continue
+            crystal_lamp(bp, x, z)
+    # round the church: between the buttresses, by the transept doors, round the apse
+    pts = [(s * xx, b + 3) for s in (-1, 1) for xx in (16, 21) for b in BAYS if b + 3 < Z_FRONT - 8]
+    pts += [(s * 26, (TZ0 + TZ1) // 2 + dz) for s in (-1, 1) for dz in (-4, 4)]
+    pts += [(round(math.cos(math.radians(a)) * rr), Z_APSE + round(math.sin(math.radians(a)) * rr))
+            for a in (-165, -135, -105, -75, -45, -15) for rr in (11, 15)]
+    for (x, z) in pts:
+        crystal_lamp(bp, x, z, need=0)
+
+
+def crystal_lamp(bp, x, z, need=1):
+    air = (None, "minecraft:air")
+    f = bp.get(x, 0, z)
+    if f in air or "water" in f:
+        return
+    if any(bp.get(x + dx, y, z + dz) not in air for dx in range(-need, need + 1) for dz in range(-need, need + 1)
+           for y in (1, 2, 3)):
+        return
+    bp.set(x, 1, z, CHQ)
+    bp.set(x, 2, z, FROG)
+    bp.set(x, 3, z, cluster("up"))
+
+
 def cathedral(bp):
     cavern(bp)
     floors(bp)
@@ -883,11 +955,15 @@ def cathedral(bp):
     crypt(bp)
     geode_crystals(bp)
     processional(bp)
+    geode_lamps(bp)
     # two clerics keep the candles lit; chapels and sacristies get their furniture
     # (not in the closed rooms under the towers' spires)
     def rooms():
-        return [r for r in INT.find_rooms(bp, void_solid=True)
-                if not (r.y > 28 and abs((r.box[0] + r.box[2]) / 2) > 8 and r.box[3] > Z_FRONT - 12)]
+        out = [r for r in INT.find_rooms(bp, void_solid=True)
+               if not (r.y > 28 and abs((r.box[0] + r.box[2]) / 2) > 8 and r.box[3] > Z_FRONT - 12)]
+        for r in out:                             # furniture inside the church and the crypt, not out in the geode
+            r.free = {c for c in r.free if r.y < 0 or in_plan(*c)}
+        return out
     INT.populate(bp, [("cleric", 4), ("cleric", 2)], seed=1, void_solid=True, beds=True, rooms=rooms())
     INT.decorate(bp, dict(INT.THEMES["chapel"], ceiling=None), seed=1, void_solid=True, density=0.25, rugs=False,
                  centre=False, rooms=rooms())

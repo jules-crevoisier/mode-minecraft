@@ -28,6 +28,7 @@ from ..arch import big_oak, birch, bush, oak, spruce, stair
 from ..defs import Piece, StructureDef, register
 from ..megakit import fbm, hash01, hash3
 from ..parts import LOOT, MOB, MOD
+from .walking_fortress import light_fill
 
 # the colossus' own heart wakes in the helmet (entity/boss/ColossusHeart.java); its old champion, the Bronze
 # Sentinel, now stands guard in the rib hall on the way up
@@ -904,6 +905,14 @@ def hall(bp, B):
         rail(bp, x, ARENA_F, -3)
         rail(bp, x, ARENA_F, 3)
     climb(bp, B, list(reversed(GRAND_STAIR)), "west", "x", GRAND_Z)
+    # the sliver between the head-end wall and the first rib, north of the dais, is walled up (a player who
+    # dropped into it from the grand stair could not climb out)
+    for x in (-36, -35):
+        for z in range(-7, -3):
+            for y in range(HALL_F, ARENA_F):
+                if bp.get(x, y, z) == "minecraft:air":
+                    bp.set(x, y, z, "stone_bricks" if (x + y + z) % 5 else "chiseled_stone_bricks")
+                    B.carve.discard((x, y, z))
     bp.set(-36, ARENA_F, -2, MOD["waystone"])
     hang(bp, B, -34, ARENA_F + 3, 0)
     # lanterns on chains from the ribs, candles at the rib feet
@@ -1261,6 +1270,11 @@ def fallen_colossus(bp):
     rubble_field(bp, B, berm)
     trees(bp, berm)
     camp(bp, berm)
+    # quality pass: the tunnels, chambers and the helmet lit to 8+ (lanterns on chains where the vault allows,
+    # waxed copper bulbs set in the masonry elsewhere)
+    light_fill(bp, ground=0, lamp="waxed_copper_bulb[lit=true,powered=false]",
+               hang="lantern[hanging=true,waterlogged=false]", chain="iron_chain[axis=y,waterlogged=false]",
+               where=lambda x, y, z: (x, y, z) in B.carve or (x, y - 1, z) in B.carve or y > 1)
 
 
 # interior shots for the CI focus run: (name, feet, look at)

@@ -24,7 +24,6 @@
     {
       "id": "minecraft:plains",
       "required": false
-    },
-    "brasshaven:pale_dunes"
+    }
   ]
 }

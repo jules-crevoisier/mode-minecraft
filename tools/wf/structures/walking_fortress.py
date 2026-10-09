@@ -21,7 +21,7 @@ import math
 from .. import interior as INT
 from ..arch import stair, stair_run
 from ..defs import Piece, StructureDef, register
-from ..megakit import (BARS, BRASS, BRASS_SLAB, BRASS_STAIRS, COPPER, EDISON, GAUGE, GEAR, HANG_LAMP, IRON, TABLE,
+from ..megakit import (BARS, BRASS, BRASS_SLAB, BRASS_STAIRS, CHANDELIER, COPPER, EDISON, GAUGE, GEAR, HANG_LAMP, IRON, TABLE,
                        IRON_SLAB, IRON_STAIRS, IRON_WALL, MAHOGANY, MAHOGANY_STAIRS, PIPES, SMOKE, TREAD, TREAD_SLAB, VERD, W,
                        chimney, fbm, hash01, hash3, is_air, lantern_post, railing, smoke)
 from ..parts import LOOT, MOD
@@ -172,8 +172,10 @@ def ball(bp, c, r, inner=None, spec=plate, keep=outside_hull):
                     bp.set(x, y, z, spec(x, y, z) if callable(spec) else spec)
 
 
-def gear_disc(bp, cx, cy, cz, r, axis):
-    """A big cog on the outer face of a joint: a ring of gear panels with teeth, a brass hub."""
+def gear_disc(bp, cx, cy, cz, r, axis, axle=0):
+    """A big cog on the outer face of a joint: a ring of gear panels with teeth, a brass hub. `axle` > 0 backs every
+    cell of the cog with plating towards the joint (up to `axle` blocks of open air), so no ledge or slot is left
+    between the cog and the ball behind it."""
     for u in range(-r - 1, r + 2):
         for v in range(-r - 1, r + 2):
             d = math.hypot(u, v)
@@ -185,10 +187,19 @@ def gear_disc(bp, cx, cy, cz, r, axis):
                 spec = GEAR
             elif abs(u) <= 0.5 or abs(v) <= 0.5:
                 spec = IRON
+            elif axle and d <= r - 1.5:
+                spec = IRON_BRICKS                   # a solid web between the spokes
             else:
                 continue
             p = (cx, cy + v, cz + u) if axis == "x" else (cx + u, cy + v, cz)
             bp.set(*p, spec)
+            if axle and axis == "x" and d <= r + 0.4:
+                step = -1 if cx > 0 else 1
+                for k in range(1, axle + 1):
+                    q = (cx + step * k, cy + v, cz + u)
+                    if bp.get(*q) is not None:
+                        break
+                    bp.set(*q, IRON)
 
 
 # ------------------------------------------------------------------ hull
@@ -257,6 +268,26 @@ def hull(bp):
                 x = s * int(w)
                 if bp.get(x, y, z) not in (None, "minecraft:air"):
                     bp.set(x, y, z, BRASS)
+    # the stepped bow and stern: fill each concave corner of the outer skin (a row narrower than its neighbour), so
+    # the curve reads as a smooth plated flank and no 1-wide slot is left under the cornice
+    for _ in range(4):
+        filled = 0
+        for y in range(KEEL, DECK):
+            for z in range(HULL_Z0, HULL_Z1 + 1):
+                w = int(hull_w(y, z))
+                if w <= 0:
+                    continue
+                for s in (-1, 1):
+                    for x in range(s * (w + 1), s * (w + 5), s):
+                        if bp.get(x, y, z) is not None:
+                            continue
+                        if bp.get(x - s, y, z) is not None and any(
+                                bp.get(x, y, z + dz) not in (None, "minecraft:air") for dz in (-1, 1)):
+                            bp.set(x, y, z, plate(x, y, z))
+                            filled += 1
+                        break
+        if not filled:
+            break
     # railing around the top deck
     for z in range(HULL_Z0, HULL_Z1 + 1):
         w = hull_w(DECK - 1, z)
@@ -281,7 +312,11 @@ def portholes(bp):
                     for dz in range(2):
                         for k in range(3):
                             x = s * (int(w) - k)
-                            bp.set(x, y0 + dy, z + dz, "glass_pane" if k == 0 else "air")
+                            if k and dy == 0:
+                                # a brass sill fills the lower half of the reveal (no 2-high cubby to stand in)
+                                bp.set(x, y0, z + dz, stair(BRASS_STAIRS, "east" if s > 0 else "west", "top"))
+                            else:
+                                bp.set(x, y0 + dy, z + dz, "glass_pane" if k == 0 else "air")
                 for dz in (-1, 2):
                     bp.set(s * int(w), y0 - 1 + 1, z + dz, BRASS)
 
@@ -462,8 +497,8 @@ def walk_leg(bp, s, z, front):
     # knee chamber and hip joint: hollow balls
     ball(bp, knee, KNEE_R, inner=KNEE_R - 1.6)
     ball(bp, hip, HIP_R, inner=HIP_R - 1.8)
-    gear_disc(bp, kx + s * (KNEE_R + 1), KNEE_Y, z, 6, "x")
-    gear_disc(bp, s * (HIP_X + HIP_R + 1), HIP_Y, z, 5, "x")
+    gear_disc(bp, kx + s * (KNEE_R + 1), KNEE_Y, z, 6, "x", axle=3)
+    gear_disc(bp, s * (HIP_X + HIP_R + 1), HIP_Y, z, 5, "x", axle=3)
     # the shin, carved through the bottom of the knee ball, with the spiral stair up to the knee floor
     # (its last slab on the middle of the outer face: the climb's last turn stays on the outer half, the floor covers
     # the inner half of the stairwell, where the thigh stair starts)
@@ -479,7 +514,28 @@ def walk_leg(bp, s, z, front):
                     bp.set(x, y, zz, IRON)
             if d <= 7.2 and (sq > 3 or s * (x - kx) <= -1):
                 bp.set(x, KNEE_FLOOR - 1, zz, TREAD)
+    # a plated bench round the rim of the knee chamber, where the dome comes down low
+    for x in range(kx - 8, kx + 9):
+        for zz in range(z - 8, z + 9):
+            d = math.hypot(x - kx, zz - z)
+            if 6.3 < d <= 7.2 and bp.get(x, KNEE_FLOOR, zz) == "minecraft:air" \
+                    and bp.get(x, KNEE_FLOOR - 1, zz) == TREAD:
+                for y in range(KNEE_FLOOR, KNEE_FLOOR + 5):
+                    if bp.get(x, y, zz) != "minecraft:air":
+                        break
+                    bp.set(x, y, zz, IRON_BRICKS if y == KNEE_FLOOR else plate(x, y, zz))
     thigh_stair(bp, s, z)
+    # the hip ball below the hold floor is solid beside the stair, and floored at the hold level (no low pockets
+    # under the hull plating)
+    hx = s * HIP_X
+    for x in range(hx - HIP_R, hx + HIP_R + 1):
+        for zz in range(z - HIP_R, z + HIP_R + 1):
+            if abs(zz - z) <= 1 and abs(x) >= HIP_X:
+                continue                             # the stair's own corridor, outside the hull
+            for y in range(HIP_Y - HIP_R, HOLD):
+                if math.sqrt((x - hx) ** 2 + (y - HIP_Y) ** 2 + (zz - z) ** 2) < HIP_R - 1.5 \
+                        and bp.get(x, y, zz) == "minecraft:air":
+                    bp.set(x, y, zz, TREAD if y == HOLD - 1 else IRON)
     foot_breach(bp, kx, z, 0, "west" if s > 0 else "east")     # towards the crater centre, under the hull
     # knee chamber dressing: gauges and pipes on the wall, a spawner of clockwork spiders
     for dz in (-5, 5):
@@ -496,8 +552,8 @@ def dead_leg(bp, s, z, knee, ankle, foot_c):
     tube(bp, ankle, knee, SHIN_R - 0.5, bands=12)
     ball(bp, knee, KNEE_R)
     ball(bp, hip, HIP_R)
-    gear_disc(bp, knee[0] + s * (KNEE_R + 1), knee[1], knee[2], 6, "x")
-    gear_disc(bp, s * (HIP_X + HIP_R + 1), HIP_Y, z, 5, "x")
+    gear_disc(bp, knee[0] + s * (KNEE_R + 1), knee[1], knee[2], 6, "x", axle=3)
+    gear_disc(bp, s * (HIP_X + HIP_R + 1), HIP_Y, z, 5, "x", axle=3)
     for dz in (-THIGH_R - 1, THIGH_R + 1):
         tube(bp, (knee[0] - s * 2, knee[1] + 4, knee[2] + dz), (s * (HIP_X + 4), HIP_Y + 2, z + dz), 1.2, spec=COPPER)
     fx, fy, fz = foot_c
@@ -506,6 +562,19 @@ def dead_leg(bp, s, z, knee, ankle, foot_c):
 
 
 # ------------------------------------------------------------------ decks
+def solid_stair(bp, x, y, z, direction, length, width, spec):
+    """arch.stair_run, with the space under the flight filled down to the deck it starts from (stair_run's fill keeps
+    the explicit air of the decks, which left a low tunnel under every flight)."""
+    stair_run(bp, x, y, z, direction, length, width, spec, fill=IRON, clear=4)
+    dx, dz = {"north": (0, -1), "south": (0, 1), "east": (1, 0), "west": (-1, 0)}[direction]
+    px, pz = -dz, dx
+    for i in range(length):
+        for w in range(width):
+            sx, sz = x + dx * i + px * w, z + dz * i + pz * w
+            for yy in range(y, y + i):
+                bp.set(sx, yy, sz, IRON)
+
+
 def hold(bp):
     """Cargo hold: crates, the keel beams, a stair up to the engine room at the back."""
     # keel pillars
@@ -536,7 +605,7 @@ def hold(bp):
         bp.set(14, ENGINE - 2, z + 4, HANG_LAMP)
     bp.spawner(0, HOLD, -4, W + "clockwork_spider")
     # stair up to the engine room, on the centre line at the back, climbing north
-    stair_run(bp, -1, HOLD, 24, "north", ENGINE - HOLD, 3, IRON_STAIRS, fill=IRON, clear=4)
+    solid_stair(bp, -1, HOLD, 24, "north", ENGINE - HOLD, 3, IRON_STAIRS)
 
 
 def engine_room(bp):
@@ -562,10 +631,16 @@ def engine_room(bp):
         for y in range(ENGINE + 8, GUN - 1):
             bp.set(x, y, 10, PIPES)
     # flywheels on both sides
+    # (each on a solid bearing pedestal down to the floor: no low slot under the rim)
     for s in (-1, 1):
         gear_disc(bp, s * 11, ENGINE + 5, -2, 4, "x")
         for x in range(s * 6, s * 11, s):
             bp.set(x, ENGINE + 5, -2, IRON)
+        for z in range(-8, 5):
+            col = [y for y in range(ENGINE, ENGINE + 11) if bp.get(s * 11, y, z) not in (None, "minecraft:air")]
+            if col:
+                for y in range(ENGINE, col[0]):
+                    bp.set(s * 11, y, z, IRON_BRICKS if y == ENGINE else IRON)
     # catwalk ring at mid height, around the boiler (feet ENGINE + 6)
     cy = ENGINE + 5
     for z in range(-18, 16):
@@ -592,7 +667,7 @@ def engine_room(bp):
     bp.spawner(-14, ENGINE, -10, W + "steam_drone")
     bp.spawner(12, ENGINE, -4, W + "boiler_gunner")
     # stair up to the gun deck, along the east wall, climbing north
-    stair_run(bp, 11, ENGINE, 14, "north", GUN - ENGINE, 3, IRON_STAIRS, fill=IRON, clear=4)
+    solid_stair(bp, 11, ENGINE, 14, "north", GUN - ENGINE, 3, IRON_STAIRS)
 
 
 def cannon(bp, x, y, z, s, length=7):
@@ -640,7 +715,7 @@ def gun_deck(bp):
     bp.spawner(0, GUN, -6, W + "steam_drone")
     bp.spawner(-6, GUN, 8, W + "boiler_gunner")
     # stair up to the top deck, centre line, climbing south, arriving behind the arena
-    stair_run(bp, 1, GUN, 14, "south", DECK - GUN, 3, IRON_STAIRS, fill=IRON, clear=4)   # x = 1..-1
+    solid_stair(bp, 1, GUN, 14, "south", DECK - GUN, 3, IRON_STAIRS)   # x = 1..-1
 
 
 # ------------------------------------------------------------------ top deck
@@ -792,6 +867,12 @@ def arena(bp):
 def stacks(bp):
     for x in (-9, 9):
         top = chimney(bp, x, 27, DECK, 40, r=4, bands=(8,))
+        # the flue is packed with soot below the fires of the crown (no sealed shaft inside the stack)
+        for y in range(DECK, top - 4):
+            for xx in range(x - 4, x + 5):
+                for zz in range(23, 32):
+                    if bp.get(xx, y, zz) == "minecraft:air" and math.hypot(xx - x, zz - 27) < 4.5:
+                        bp.set(xx, y, zz, SOOT)
         # soot on the crown courses
         for y in range(top - 9, top - 2):
             for xx in range(x - 6, x + 7):
@@ -911,6 +992,122 @@ def dressing(bp):
                 bp.set(x, y, zc + 4, PIPES)
 
 
+def _put(bp, x, y, z, spec):
+    """Furniture only goes into free air standing on something."""
+    if bp.get(x, y, z) == "minecraft:air" and bp.get(x, y - 1, z) not in (None, "minecraft:air"):
+        bp.set(x, y, z, spec)
+        return True
+    return False
+
+
+def fit_out(bp):
+    """Quality pass: the engine room and the gun deck were big bare floors round their centrepieces. Engine room:
+    coal bunkers, feed pumps, a fitters' bench and pipe runs; gun deck: shot lockers, powder kegs, a mess table,
+    the armoury racks and more bunks; hold: more cargo and slung nets. Brass chandeliers over the open floors."""
+    # --- engine room (feet ENGINE)
+    y = ENGINE
+    for s in (-1, 1):
+        # coal bunkers along both flanks, low iron kerbs in front
+        for z in range(-12, 11):
+            if z in (-2, -1, 0):
+                continue
+            for x in (s * 17, s * 18):
+                _put(bp, x, y, z, "coal_block")
+                if hash01(x, z, 31) < 0.6:
+                    _put(bp, x, y + 1, z, "coal_block")
+            _put(bp, s * 16, y, z, IRON_SLAB)
+        # feed pumps: piston columns with a gauge head, fore and aft
+        for z in (-24, 20):
+            for dx in (0, 2):
+                x = s * (14 + dx)
+                if _put(bp, x, y, z, IRON):
+                    _put(bp, x, y + 1, z, "piston[extended=false,facing=up]")
+                    _put(bp, x, y + 2, z, GAUGE if dx == 0 else PIPES)
+            _put(bp, s * 15, y, z, BRASS)
+            _put(bp, s * 15, y + 1, z, W + "copper_pipe[axis=y]")
+        # pipe runs up the flanks every 6 blocks
+        for z in range(-30, 26, 6):
+            for yy in range(y, GUN - 1):
+                if bp.get(s * 19, yy, z) == "minecraft:air":
+                    bp.set(s * 19, yy, z, W + "copper_pipe[axis=y]")
+    # the fitters' bench at the bow end of the engine room
+    for x in range(-6, 7):
+        if x in (-1, 0, 1):
+            continue
+        _put(bp, x, y, -28, TABLE if x % 3 else "smithing_table")
+        _put(bp, x, y, -30, "anvil[facing=east]" if x in (-5, 5) else ("grindstone[face=floor,facing=east]"
+                                                                         if x in (-3, 3) else IRON))
+    _put(bp, -7, y, -28, "crafting_table")
+    _put(bp, 7, y, -28, "blast_furnace[facing=south,lit=true]")
+    for (x, z) in ((-14, -14), (14, 10), (-14, 14)):
+        _put(bp, x, y, z, "barrel[facing=up,open=false]")
+        _put(bp, x, y + 1, z, "barrel[facing=up,open=false]")
+    # --- gun deck (feet GUN)
+    y = GUN
+    # mess table with benches amidships (west of the stair down)
+    for z in range(15, 23):
+        _put(bp, -9, y, z, TABLE)
+        _put(bp, -11, y, z, stair(MAHOGANY_STAIRS, "east"))
+        _put(bp, -7, y, z, stair(MAHOGANY_STAIRS, "west"))
+    for z in (16, 21):
+        bp.set(-9, y + 1, z, "lantern[hanging=false]") if bp.get(-9, y + 1, z) == "minecraft:air" else None
+    # the galley stove and its stores on the east side
+    for z in range(15, 23):
+        _put(bp, 9, y, z, ("smoker[facing=west,lit=true]" if z in (17, 20) else
+                           ("barrel[facing=up,open=false]" if z % 2 else "cauldron")))
+    # more bunks at the stern, lockers between them
+    for x in (-16, -4, 4, 16):
+        if bp.get(x, y, 27) == "minecraft:air" and bp.get(x, y, 26) == "minecraft:air":
+            bp.bed(x, y, 27, "north", color="gray")
+    for x in (-14, -10, -6, 6, 10, 14):
+        _put(bp, x, y, 28, "barrel[facing=north,open=false]")
+    # armoury racks across the bow bulkhead
+    for x in range(-9, 10):
+        if abs(x) <= 1:
+            continue
+        _put(bp, x, y, -32, IRON_WALL if x % 2 else "grindstone[face=floor,facing=south]")
+        if x % 2:
+            _put(bp, x, y + 1, -32, "lightning_rod[facing=up]")
+    for x in (-7, 7):
+        _put(bp, x, y, -30, "anvil[facing=east]")
+    # shot lockers between the guns: pyramids of iron shot on plank pallets
+    for z in range(-16, 21, 8):
+        for s in (-1, 1):
+            w = int(hull_w(y + 1, z))
+            x = s * (w - 6)
+            _put(bp, x, y, z + 4, "spruce_slab[type=bottom]")
+            _put(bp, x, y, z - 4, W + "dark_iron_bricks")
+    # powder kegs racked in rows down both sides of the runner, a shot hoist frame amidships
+    for z in range(-22, 11, 6):
+        for x in (-8, 8):
+            for dz in (0, 1):
+                _put(bp, x, y, z + dz, "barrel[facing=east,open=false]")
+                if dz == 0:
+                    _put(bp, x, y + 1, z + dz, "barrel[facing=up,open=false]")
+    for (x, z) in ((-3, -11), (3, -11), (-3, -7), (3, -7)):
+        for yy in range(y, DECK - 1):
+            if bp.get(x, yy, z) == "minecraft:air":
+                bp.set(x, yy, z, IRON_WALL if yy < DECK - 2 else IRON)
+    for x in (-2, -1, 0, 1, 2):
+        for z in (-11, -7):
+            if bp.get(x, DECK - 2, z) == "minecraft:air":
+                bp.set(x, DECK - 2, z, IRON_SLAB + "[type=top]")
+    bp.set(0, DECK - 3, -9, "iron_chain[axis=y]") if bp.get(0, DECK - 3, -9) == "minecraft:air" else None
+    # --- hold (feet HOLD): sacks and crates in the open bays, chains slung from the beams
+    y = HOLD
+    for (x, z) in ((-12, -26), (12, -26), (-12, 24), (12, 26), (-17, 0), (17, -4), (-4, -28), (4, 20)):
+        for dx, dz in ((0, 0), (1, 0), (0, 1)):
+            _put(bp, x + dx, y, z + dz, "spruce_planks" if (dx + dz) else "barrel[facing=up,open=false]")
+        _put(bp, x, y + 1, z, "brown_wool")
+    # brass chandeliers over the open floors of each deck
+    for (yc, pts) in ((ENGINE - 2, ((-4, -26), (4, 20), (-14, 4), (14, -12))),
+                      (GUN - 2, ((-14, -24), (14, -24), (-14, 20), (14, 18), (0, -24), (0, 22))),
+                      (DECK - 2, ((-10, -10), (10, -10), (-10, 6), (10, 6), (0, -30), (-12, 22), (12, 22)))):
+        for (x, z) in pts:
+            if bp.get(x, yc, z) == "minecraft:air" and bp.get(x, yc + 1, z) not in (None, "minecraft:air"):
+                bp.set(x, yc, z, CHANDELIER)
+
+
 def walking_fortress(bp):
     crater(bp)
     hull(bp)
@@ -930,9 +1127,210 @@ def walking_fortress(bp):
     bridge_tower(bp)
     arena(bp)
     dressing(bp)
+    fit_out(bp)
     fallen_stack(bp)
     rubble(bp)
     scavenger_camp(bp)
+    # fallback lighting for the floors the fixtures miss (hull decks, legs, bridge)
+    light_fill(bp, ground=0, where=lambda x, y, z: y >= 2)
+
+
+# ------------------------------------------------------------------ light fallback (shared by the quality pass)
+LIGHT_EMIT = {"lantern": 15, "soul_lantern": 10, "campfire": 15, "soul_campfire": 10, "sea_lantern": 15,
+              "glowstone": 15, "edison_lamp": 15, "hanging_edison_lamp": 15, "brass_chandelier": 15, "end_rod": 14,
+              "torch": 14, "wall_torch": 14, "soul_torch": 10, "soul_wall_torch": 10, "copper_bulb": 15,
+              "waxed_copper_bulb": 15, "shroomlight": 15, "jack_o_lantern": 15, "lava": 15, "fire": 15,
+              "soul_fire": 10, "ochre_froglight": 15, "verdant_froglight": 15, "pearlescent_froglight": 15,
+              "lantern_post": 15, "crying_obsidian": 10, "beacon": 15, "conduit": 15, "magma_block": 3}
+NO_LAMP = ("chest", "barrel", "spawner", "door", "lamp", "bulb", "glass", "waystone", "seal", "bars", "sign", "bed",
+           "water", "ladder", "stairs", "slab", "lantern", "rod", "vault", "table", "shelf", "lectern", "gauge",
+           "valve", "gear", "pipe", "furnace", "anvil", "redstone", "mist", "jigsaw", "leaves", "carpet", "wall",
+           "fence", "chain", "trapdoor", "candle", "lava", "fire")
+
+
+def _emit(name, props):
+    sh = name.split(":")[1]
+    props = props or {}
+    if sh.endswith("candle"):
+        return 3 * int(props.get("candles", 1)) if props.get("lit") == "true" else 0
+    if sh in ("campfire", "soul_campfire") and props.get("lit") == "false":
+        return 0
+    if sh in ("furnace", "blast_furnace", "smoker"):
+        return 13 if props.get("lit") == "true" else 0
+    if "bulb" in sh and props.get("lit") != "true":
+        return 0
+    return LIGHT_EMIT.get(sh, 0)
+
+
+def _walk_reach(SH, opaque, passable, floorish, climb):
+    """Rough walk flood (a 2-high player: steps up 1, drops up to 3, climbs ladders, opens doors) from the standing
+    spots on the rim of the blueprint's box: which cells a player can actually stand in."""
+    import numpy as np
+    walk = ~opaque | passable
+    floor = (opaque & ~passable) | floorish
+    st = np.zeros(SH, bool)
+    st[:, 1:-1, :] = walk[:, 1:-1, :] & walk[:, 2:, :] & floor[:, :-2, :] & ~floorish[:, 1:-1, :]
+    node = st | climb
+    nodes = set(map(tuple, np.argwhere(node).tolist()))
+    seeds = [p for p in nodes if p[0] < 3 or p[2] < 3 or p[0] >= SH[0] - 3 or p[2] >= SH[2] - 3]
+    seen = set(seeds)
+    q = list(seeds)
+    while q:
+        nq = []
+        for (i, j, k) in q:
+            cand = []
+            for di, dk in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                for dy in (0, 1, -1, -2, -3):
+                    cand.append((i + di, j + dy, k + dk))
+            cand += [(i, j + 1, k), (i, j - 1, k)] if climb[i, j, k] or (j + 1 < SH[1] and climb[i, j + 1, k]) \
+                else [(i, j - 1, k)]
+            for c in cand:
+                if c in nodes and c not in seen:
+                    if c[1] == j + 1 and not climb[i, j, k] and not (j + 2 < SH[1] and walk[i, j + 2, k]):
+                        continue                              # no headroom to step up
+                    seen.add(c)
+                    nq.append(c)
+        q = nq
+    reach = np.zeros(SH, bool)
+    if seen:
+        idx = np.array(list(seen))
+        reach[idx[:, 0], idx[:, 1], idx[:, 2]] = True
+    return reach
+
+
+def light_fill(bp, ground=0, cover=14, where=None, lamp=None, hang=None, chain="iron_chain[axis=y]", lattice=5,
+               min_light=8, sky_seed=True):
+    """Fallback lighting for the floors the hand-placed fixtures miss: floods block light from every lamp of the
+    blueprint; each covered standing spot (a ceiling within `cover`) still under `min_light` gets, in this order,
+    a lamp set flush in a low ceiling (ceiling <= 5 over the feet, a thick ceiling), a lamp hung on a chain 4 over
+    the feet (ceilings up to 12), else a lamp set in the floor. Only spots a player can walk to from the rim of the
+    box count (sealed voids and pockets stay dark); feet cells left unset (open air, a hollow core) are skipped.
+    `where(x, y, z)` limits the pass. Returns the number of lamps added."""
+    import numpy as np
+    from ..blueprint import is_solid
+    lamp = lamp or EDISON
+    hang = hang or HANG_LAMP
+    blocks = bp.blocks
+    xs = [p[0] for p in blocks]
+    ys = [p[1] for p in blocks]
+    zs = [p[2] for p in blocks]
+    X0, Y0, Z0 = min(xs) - 2, min(ys) - 2, min(zs) - 2
+    SH = (max(xs) - X0 + 3, max(ys) - Y0 + 3, max(zs) - Z0 + 3)
+    opaque = np.zeros(SH, bool)
+    known = np.zeros(SH, bool)
+    L = np.zeros(SH, np.int8)
+    passable = np.zeros(SH, bool)          # stops light, but a player walks through (doors, bars, mist)
+    floorish = np.zeros(SH, bool)          # a top to stand on that does not block light (slabs, stairs, glass)
+    climb = np.zeros(SH, bool)             # ladders, vines, scaffolding
+    torches = []
+    for (x, y, z), v in blocks.items():
+        n = v[0]
+        sh = n.split(":")[1]
+        i = (x - X0, y - Y0, z - Z0)
+        known[i] = True
+        if sh.endswith(("_slab", "_stairs")) or "glass" in sh or sh.endswith("trapdoor"):
+            floorish[i] = True
+        elif sh in ("ladder", "vine", "scaffolding") or sh.endswith("_vines"):
+            climb[i] = True
+        e = _emit(n, v[1])
+        if e and sh.endswith("wall_torch"):
+            torches.append((i, (v[1] or {}).get("facing", "north"), e))
+        elif e:
+            L[i] = e
+        elif is_solid(n) and sh not in ("air", "cave_air", "water") and not sh.endswith(("_slab", "_stairs")) \
+                and "glass" not in sh:
+            opaque[i] = True
+            if any(k in sh for k in ("door", "bars", "mist", "gate", "leaves")):
+                passable[i] = True
+    # a wall torch only counts when its wall is there (wf/support.py drops the others)
+    for (i, f, e) in torches:
+        dx, dz = {"north": (0, 1), "south": (0, -1), "east": (-1, 0), "west": (1, 0)}.get(f, (0, 0))
+        if opaque[i[0] + dx, i[1], i[2] + dz]:
+            L[i] = e
+    # unset cells under the ground are terrain
+    gy = ground - Y0
+    if gy >= 0:
+        opaque[:, :gy + 1, :] |= ~known[:, :gy + 1, :]
+    for lvl in range(15, 1, -1):
+        m = (L == lvl)
+        if not m.any():
+            continue
+        for ax in range(3):
+            for d in (1, -1):
+                upd = np.roll(m, d, axis=ax) & ~opaque & (L < lvl - 1)
+                L[upd] = lvl - 1
+
+    def spread(p, lvl):
+        i0 = (p[0] - X0, p[1] - Y0, p[2] - Z0)
+        L[i0] = max(L[i0], lvl)
+        q = [(i0, lvl)]
+        while q:
+            nq = []
+            for (i, lv) in q:
+                for ax in range(3):
+                    for d in (1, -1):
+                        j = list(i)
+                        j[ax] += d
+                        j = tuple(j)
+                        if not (0 <= j[ax] < SH[ax]) or opaque[j] or L[j] >= lv - 1:
+                            continue
+                        L[j] = lv - 1
+                        if lv - 1 > 1:
+                            nq.append((j, lv - 1))
+            q = nq
+
+    air = ~opaque
+    stand = np.zeros(SH, bool)
+    stand[:, 1:-1, :] = air[:, 1:-1, :] & opaque[:, :-2, :] & air[:, 2:, :] & known[:, :-2, :]
+    cov = np.zeros(SH, bool)
+    for k in range(2, cover + 2):
+        cov[:, :-k, :] |= opaque[:, k:, :]
+    if sky_seed:
+        reach = _walk_reach(SH, opaque, passable, floorish, climb)
+    else:
+        reach = ~opaque
+    cells = np.argwhere(stand & cov & (L < min_light) & reach & known)
+    pts = [(int(a) + X0, int(b) + Y0, int(c) + Z0) for a, b, c in cells]
+    if where is not None:
+        pts = [p for p in pts if where(*p)]
+    pts.sort(key=lambda p: (0 if (p[0] % lattice == 0 and p[2] % lattice == 0) else 1, p[1], p[0], p[2]))
+
+    def free(p):
+        b = bp.get(*p)
+        return b is None or b.endswith((":air", ":cave_air"))
+
+    def swappable(p):
+        b = bp.get(*p)
+        i = (p[0] - X0, p[1] - Y0, p[2] - Z0)
+        return bool(b) and opaque[i] and not any(k in b for k in NO_LAMP)
+
+    added = 0
+    for (x, f, z) in pts:
+        if L[x - X0, f - Y0, z - Z0] >= min_light:
+            continue
+        cy = f + 2
+        while cy < f + cover + 2 and not opaque[x - X0, cy - Y0, z - Z0]:
+            cy += 1
+        h = cy - f
+        at = None
+        if h <= 5 and swappable((x, cy, z)) and opaque[x - X0, cy + 1 - Y0, z - Z0]:
+            at = (x, cy, z)
+            bp.set(*at, lamp)
+        elif 5 <= h <= 12 and all(free((x, y, z)) for y in range(f + 2, cy)):
+            ly = f + 4
+            for y in range(ly + 1, cy):
+                bp.set(x, y, z, chain)
+            at = (x, ly, z)
+            bp.set(*at, hang)
+        elif swappable((x, f - 1, z)):
+            at = (x, f - 1, z)
+            bp.set(*at, lamp)
+        if at is None:
+            continue
+        opaque[at[0] - X0, at[1] - Y0, at[2] - Z0] = False
+        spread(at, 15)
+        added += 1
+    return added
 
 
 # interior shots for the CI focus run: (name, feet, look at)

@@ -51,6 +51,7 @@ from ..defs import Piece, StructureDef, register
 from ..megakit import (BRASS, BRASS_STAIRS, CHANDELIER, COPPER, EDISON, GAUGE, GEAR, IRON, IRON_SLAB, IRON_STAIRS,
                        IRON_WALL, MAHOGANY, MAHOGANY_STAIRS, TABLE, VERD, W, hash01, hash3, is_air)
 from ..parts import LOOT, MOD
+from .lightkit import light_fill
 
 # the ziggurat's own guardian: the Solar Hierarch keeps the lens chamber (SolarHierarch.java)
 BOSS = "brasshaven:solar_hierarch"
@@ -1203,8 +1204,8 @@ def engine_hall(bp):
                         if d > 2.4 and y == cy + 3 and x % 4 == 1:
                             spec = GAUGE
                         bp.set(x, y, z, spec)
-                    elif y < 1:
-                        pass
+                    elif y >= 1:
+                        bp.set(x, y, z, COPPER)          # the boiler is a solid drum (no sealed void in it)
     for x in range(30, 41, 3):
         for y in range(1, cy - 2):
             bp.set(x, y, cz - 2, IRON)
@@ -1732,6 +1733,36 @@ def annex(bp):
     room(bp, -15, FL, 10, -13, FL + 3, 12, wall=inner, floor=pave)
     carve(bp, -16, FL, 10, -15, FL + 3, 12)
     hang(bp, -17, FL + 3, 12, LANT_H)
+    # the lens-keepers' loft over the newel (was a sealed void): a floor, a ladder up from the vestibule, the bench
+    for x in range(x0 + 1, x1):
+        for z in range(z0 + 1, z1):
+            for y in range(FL, FL + 4):
+                if bp.get(x, y, z) is None:
+                    bp.set(x, y, z, inner(x, y, z))
+            if bp.get(x, FL + 4, z) is None:
+                bp.set(x, FL + 4, z, pave(x, z))
+            for y in range(FL + 5, top - 1):
+                if bp.get(x, y, z) is None:
+                    bp.set(x, y, z, AIR)
+    for y in range(FL, FL + 5):
+        bp.set(-17, y, 14, "ladder[facing=north,waterlogged=false]")
+    lf = FL + 5
+    for x in range(-23, -13, 3):                      # lens-grinding benches along the north wall
+        bp.table(x, lf, 24)
+    for x in (-22, -19, -16):
+        bp.set(x, lf, 23, stair(SMO_ST, "south"))
+    for (x, z) in ((-24, 10), (-24, 11), (-23, 10)):
+        bp.barrel(x, lf, z, "up")
+    bp.set(-24, lf, 17, "lectern[facing=east,has_book=false,powered=false]")
+    bp.set(-24, lf, 19, "cartography_table")
+    bp.set(-24, lf, 21, "smithing_table")
+    for z in (16, 18, 20):                           # spare lenses: glass on brass stands
+        bp.set(-13, lf, z, BRASS)
+        bp.set(-13, lf + 1, z, "light_blue_stained_glass")
+    for (x, z) in ((-21, 17), (-15, 21)):            # crated lens blanks
+        bp.set(x, lf, z, BRASS)
+        bp.set(x, lf + 1, z, "light_blue_stained_glass")
+    hang(bp, -18, top - 1, 17, CHANDELIER, reach=4)
 
 
 def calibration(bp):
@@ -2085,6 +2116,8 @@ def sun_ziggurat(bp):
     seal(bp)
     footings(bp)
     core_fill(bp)
+    # the dark halls: lanterns on chains under the high ceilings, glowstone set in the low ones and in floors
+    light_fill(bp, ceil="glowstone", hang=LANT_H, floor="ochre_froglight[axis=y]", unset_solid_below=0)
 
 
 VIEWS = [

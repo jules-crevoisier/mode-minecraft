@@ -8,7 +8,6 @@
     {
       "id": "#minecraft:is_badlands",
       "required": false
-    },
-    "brasshaven:pale_dunes"
+    }
   ]
 }

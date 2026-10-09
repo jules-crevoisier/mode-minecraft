@@ -20,6 +20,7 @@ from .. import interior as INT
 from ..arch import Palette, stair, slab
 from ..defs import Piece, StructureDef, register
 from ..parts import LOOT
+from .walking_fortress import light_fill
 
 W = "brasshaven:"
 ROCK = Palette({"stone": 6, "andesite": 2, "tuff": 1, "granite": 1}, seed=3, scale=3.0)
@@ -181,7 +182,7 @@ def shrine(bp):
         bp.set(cx + dx, y0 + 2, cz - 2, "quartz_slab[type=bottom,waterlogged=false]")
     bp.set(cx, y0 + 2, cz - 2, W + "aether_block")
     bp.chest(cx, y0 + 1, cz - 3, "south", loot=LOOT + "sky_isles_shrine")
-    for (dx, dz) in ((-2, -1), (2, -1)):
+    for (dx, dz) in ((-2, -1), (2, -1), (0, -5), (0, 5), (5, 2), (-5, -2)):
         bp.set(cx + dx, y0 + 1, cz + dz, "quartz_pillar[axis=y]")
         bp.set(cx + dx, y0 + 2, cz + dz, "lantern[hanging=false,waterlogged=false]")
     # moss and vines on the old stone
@@ -343,6 +344,10 @@ def pool_isle(bp):
     bp.set(tx + 2, base + 2, tz, "air")
     for y in (base + 6, base + 10):
         bp.set(tx - 2, y, tz, "glass_pane")
+    # copper bulbs set in the shaft wall opposite the ladder, a lantern at its foot
+    for y in range(base + 3, ytop - 1, 5):
+        bp.set(tx, y, tz - 2, "waxed_copper_bulb[lit=true,powered=false]")
+    bp.set(tx - 1, base + 1, tz - 1, "lantern[hanging=false,waterlogged=false]")
     for x in range(tx - 2, tx + 3):
         for z in range(tz - 2, tz + 3):
             if math.hypot(x - tx, z - tz) <= 2.4:
@@ -405,6 +410,9 @@ def bell_isle(bp):
     bp.pyramid_roof(x0 - 2, z0 - 2, x0 + 2, z0 + 2, y + 4, "spruce_stairs", overhang=1)
     bp.set(x0, y + 3, z0, "bell[attachment=ceiling,facing=north,powered=false]")
     bp.set(x0, y + 4, z0, "spruce_planks")
+    for (dx, dz) in ((-1, -1), (1, 1)):
+        bp.set(x0 + dx, y + 4, z0 + dz, "spruce_planks")
+        bp.set(x0 + dx, y + 3, z0 + dz, "lantern[hanging=true,waterlogged=false]")
     bp.barrel(x0 + 1, y, z0 + 1, "up", loot=LOOT + "sky_isles")
 
 
@@ -435,6 +443,8 @@ def watchtower(bp):
         bp.set(tx - 2, y, tz, "ladder[facing=east,waterlogged=false]")
     bp.set(tx - 3, y0 + 6, tz, "stone_bricks")
     bp.spawner(tx, y0 + 1, tz, "brasshaven:gargoyle")
+    for (dx, dz) in ((1, -1), (-1, 1), (1, 1), (-1, -1)):
+        bp.set(tx + dx, y0 + 1, tz + dz, "soul_lantern[hanging=false,waterlogged=false]")
     bp.chest(tx + 1, y0 + 7, tz + 1, "west", loot=LOOT + "sky_isles")
     arch.vines_on(bp, ((tx - 4, y0, tz - 4), (tx + 4, y0 + 12, tz + 4)), chance=0.1, seed=7, max_len=5)
 
@@ -511,6 +521,9 @@ def sky_isles(bp):
         arch.vines_on(bp, ((cx - R - 2, top - depth, cz - R - 2), (cx + R + 2, top, cz + R + 2)), chance=0.025,
                       seed=len(name) + cx, max_len=6)
     INT.decorate(bp, dict(INT.THEMES["ruin"], loot_barrels=0), seed=1, density=0.3)
+    # fallback for the built floors the fixtures miss (open sky and tree shade stay natural)
+    light_fill(bp, ground=-100, lamp="lantern[hanging=false,waterlogged=false]",
+               hang="lantern[hanging=true,waterlogged=false]", chain="iron_chain[axis=y,waterlogged=false]")
 
 
 register(StructureDef(

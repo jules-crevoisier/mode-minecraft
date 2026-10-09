@@ -18,6 +18,7 @@ from ..blueprint import with_props
 from ..defs import Piece, StructureDef, register
 from ..parts import LOOT
 from . import lair_grand_clockmaker
+from .walking_fortress import light_fill
 
 W = "brasshaven:"
 BRASS, COPPER, VERD, IRON = W + "brass_plating", W + "copper_plating", W + "verdigris_plating", W + "dark_iron_plating"
@@ -147,6 +148,15 @@ def hall(bp, face):
                 bp.set(x, y, z, "air")
         x, z = _local(face, a, 0)
         bp.set(x, 4, z, GEAR)
+        # Edison lamps flanking each doorway (they light the porch and the hall end)
+        for b in (-2, 2):
+            x, z = _local(face, a, b)
+            bp.set(x, 3, z, EDISON)
+    # an Edison lamp set in every side pilaster, under the window line
+    for a in range(a0 + 4, a1, 4):
+        for b in (-half, half):
+            x, z = _local(face, a, b)
+            bp.set(x, 3, z, EDISON)
     # interior: two rows of machines and benches, crates, lamps
     machines = [W + "auto_harvester", W + "block_breaker", W + "block_placer", W + "redstone_timer",
                 W + "vacuum_hopper", W + "sprinkler", W + "entity_detector", W + "wireless_receiver"]
@@ -311,7 +321,7 @@ def spire(bp, cx, cz, y0, r, h):
                 if max(abs(x - cx), abs(z - cz)) == ri:
                     bp.set(x, y, z, OXI if ri else BRASS)
                 elif max(abs(x - cx), abs(z - cz)) < ri:
-                    bp.set(x, y, z, "air" if i else OXI)
+                    bp.set(x, y, z, IRON if i else OXI)     # solid core: no sealed void under the spire
     bp.set(cx, y0 + h, cz, BRASS)
     bp.set(cx, y0 + h + 1, cz, "lightning_rod[facing=up,powered=false,waterlogged=false]")
 
@@ -400,6 +410,16 @@ def interiors(bp):
                 bp.set(x, 41, z, GEAR)
     bp.chest(0, 41, -5, "south", loot=LOOT + "clockwork_vault")
     bp.set(5, 47, 5, W + "brass_chandelier")
+    # every floor lit as a whole: chandeliers on the diagonals, Edison lamps on the axes, hung on chains to
+    # 4 blocks over the floor (the ring between the stairwell and the walls is 4 wide)
+    CHAIN = "iron_chain[axis=y,waterlogged=false]"
+    for fy, ceil in list(zip(FLOORS, FLOORS[1:] + [BELFRY])) + [(BELFRY, ROOF)]:
+        for (x, z) in ((4, 4), (-4, 4), (4, -4), (-4, -4), (5, 0), (-5, 0), (0, 5), (0, -5)):
+            if bp.get(x, fy + 5, z) not in (None, "minecraft:air"):
+                continue
+            for y in range(fy + 6, ceil):
+                bp.set(x, y, z, CHAIN)
+            bp.set(x, fy + 5, z, W + ("brass_chandelier" if x and z else "hanging_edison_lamp"))
 
 
 def gardens(bp):
@@ -466,6 +486,9 @@ def citadel():
         INT.decorate(bp, "steampunk", seed=9, region=tower_r)
         INT.decorate(bp, dict(INT.THEMES["workshop"], ceiling="edison"), seed=10, region=((-60, -60, -60), (60, 0, 60)),
                      density=0.2)
+        # fallback for the Gearworks and the Clock Vault corners the lair's own lamps miss
+        light_fill(bp, ground=0, lamp=EDISON, hang=W + "hanging_edison_lamp",
+                   chain="iron_chain[axis=y,waterlogged=false]", where=lambda x, y, z: y < 0)
     return build
 
 

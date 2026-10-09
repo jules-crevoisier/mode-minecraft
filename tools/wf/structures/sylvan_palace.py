@@ -18,6 +18,9 @@ from .. import interior as INT
 from ..arch import Palette, stair, slab
 from ..defs import Piece, StructureDef, register
 from ..parts import LOOT
+from .lightkit import light_fill
+
+LIGHT_REPORT = {}
 
 def LV(name):
     return f"{name}[distance=1,persistent=true,waterlogged=false]"
@@ -93,6 +96,39 @@ def roots(bp):
                         bp.set(ex + dx, 1, ez + dz, "fern" if _hash(dx, 2, dz) < 0.5 else "moss_carpet")
 
 
+def root_feet(bp):
+    """Where a root arch hangs 2-3 blocks over the ground it would make a head-bumping tunnel: the root flares
+    down into the soil there instead (buttress feet)."""
+    for x in range(-22, 23):
+        for z in range(-22, 23):
+            if math.hypot(x, z) < 5.6:
+                continue
+            for yb in (2, 3):
+                b = bp.get(x, yb, z)
+                if b and b.endswith("_wood") and all(bp.get(x, y, z) is None for y in range(1, yb)):
+                    for y in range(1, yb):
+                        bp.set(x, y, z, BARK.pick(x, y, z))
+                    break
+
+
+def fill_leaf_gaps(bp, box, maxgap=8):
+    """Close the covered air gaps left between stacked leaf tiers (and under a deck resting on leaves): nobody can
+    walk into them, and from outside they only read as dark slots, so the crown is filled solid there."""
+    (x0, y0, z0), (x1, y1, z1) = box
+    for x in range(x0, x1 + 1):
+        for z in range(z0, z1 + 1):
+            below = None
+            for y in range(y0, y1 + 1):
+                b = bp.get(x, y, z)
+                if b is None:
+                    continue
+                if below is not None and 1 < y - below <= maxgap + 1 and b != "minecraft:air":
+                    for yy in range(below + 1, y):
+                        if bp.get(x, yy, z) is None:
+                            bp.set(x, yy, z, LEAF.pick(x, yy, z))
+                below = y if "leaves" in b else None
+
+
 def canopy(bp):
     """A crown of four stacked leaf tiers (like a mallorn), lumpy and drooping at the edges."""
     tiers = ((56, 22, 3.5), (64, 16, 3.5), (71, 10, 3.0))
@@ -150,10 +186,15 @@ def canopy(bp):
                 bp.set(x, top - i, z, "cave_vines_plant[berries=true]" if i < n else "cave_vines[age=25,berries=true]")
 
 
+# pavilions on the terrace lobes (deck y, angle, distance, radius, kind), doors facing the trunk; the music pavilion
+# sits at its lobe's centre so a 2-wide walk is left between its glass and the railing
+PODS = ((14, 330, 10, 4, "guest"), (30, 200, 11, 4, "banquet"), (30, 330, 14, 4, "music"),
+        (46, 140, 9, 3, "queen"), (46, 250, 9, 3, "library"))
+
 TERRACES = {
     # deck y: (core radius, [(angle, distance, lobe radius)])
     14: (9, [(16, 10, 5), (110, 10, 5), (223, 10, 5), (330, 10, 6), (60, 8, 4)]),
-    30: (10, [(200, 11, 6), (330, 14, 6), (90, 12, 5)]),
+    30: (10, [(200, 11, 6), (330, 14, 7), (90, 12, 5)]),
     46: (8, [(140, 9, 5), (250, 9, 5), (20, 9, 4)]),
 }
 
@@ -185,7 +226,8 @@ def terrace(bp, L):
     # railing with white posts and lanterns
     # the top deck stands over the lower pavilions' domes: a white curb under its railing keeps anyone from
     # stepping over the fence onto them
-    curb = 1 if L == LEVELS[2] else 0
+    # (the other decks too: without it the fence tops are a 1.5 step from the deck, a walkway nobody should take)
+    curb = 1
     for (x, z) in sorted(rim):
         if bp.get(x, L + 1, z) is None:
             post = (x * 7 + z * 3) % 9 == 0
@@ -207,7 +249,8 @@ def terrace(bp, L):
             rad = r0 + (dist - r0) * t
             x, z = round(math.cos(a) * rad), round(math.sin(a) * rad)
             y = round(L - 8 + 7 * math.sqrt(t))
-            for yy in (y, y - 1) if t < 0.4 else (y,):
+            # near the deck the bracket merges into it (no 1-2 block slot to stand in under the planks)
+            for yy in (y, y - 1) if t < 0.4 else (range(y, L) if y >= L - 3 else (y,)):
                 if bp.get(x, yy, z) is None:
                     bp.set(x, yy, z, BARK.pick(x, yy, z))
         if r:
@@ -218,6 +261,15 @@ def terrace(bp, L):
 
 def planter(bp, x, y, z):
     """A white planter with a flowering azalea and a lantern."""
+    # never against the railing (its rim would be a step up onto the fence): slide it towards the trunk
+    for _ in range(4):
+        near_rail = any(("fence" in (bp.get(x + dx, yy, z + dz) or "") or "pillar" in (bp.get(x + dx, yy, z + dz) or ""))
+                        for dx in range(-2, 3) for dz in range(-2, 3) for yy in (y + 1, y + 2)
+                        if abs(dx) == 2 or abs(dz) == 2)
+        if not near_rail:
+            break
+        x -= (x > 0) - (x < 0)
+        z -= (z > 0) - (z < 0)
     for dx in (-1, 0, 1):
         for dz in (-1, 0, 1):
             bp.set(x + dx, y + 1, z + dz, "quartz_bricks" if (dx or dz) else "moss_block")
@@ -225,6 +277,8 @@ def planter(bp, x, y, z):
     for dx in (-1, 1):
         bp.set(x + dx, y + 2, z, "moss_carpet")
         bp.set(x, y + 2, z + dx, "moss_carpet")
+    for (dx, dz) in ((1, 1), (-1, -1)):
+        bp.set(x + dx, y + 2, z + dz, "lantern[hanging=false,waterlogged=false]")
 
 
 
@@ -251,17 +305,25 @@ def spiral_stair(bp):
             bp.set(x, y, z, stair("birch_stairs", f))
             if bp.get(x, y - 1, z) is None:
                 bp.set(x, y - 1, z, PLANK)
+            # the first steps above a deck: closed underneath (a stringer wall), so nobody walks under a 2-high step
+            for L in LEVELS:
+                if 2 <= y - L <= 4 and bp.get(x, L, z) not in (None, "minecraft:air"):
+                    for yy in range(L + 1, y):
+                        if bp.get(x, yy, z) is None:
+                            bp.set(x, yy, z, PLANK)
             for yy in range(y + 1, y + 4):
                 b = bp.get(x, yy, z)
                 if b is None or "leaves" in b or "planks" in b or "stripped_birch" in b or "quartz" in b \
                         or "calcite" in b or "fence" in b or "lantern" in b or "glass" in b or b.endswith("_wood"):
                     bp.set(x, yy, z, "air")
         ox, oz = round(math.cos(ang) * (STAIR_R[1] + 1)), round(math.sin(ang) * (STAIR_R[1] + 1))
-        if bp.get(ox, y + 1, oz) in (None, "minecraft:air"):
+        if bp.get(ox, y + 1, oz) in (None, "minecraft:air") and bp.get(ox, y + 2, oz) in (None, "minecraft:air"):
+            # a white parapet under the balustrade: the rail top stays out of a stepping reach from the treads
             bp.set(ox, y, oz, WHITE.pick(ox, y, oz))
-            bp.set(ox, y + 1, oz, FENCE if y % 8 else PILLAR)
+            bp.set(ox, y + 1, oz, WHITE.pick(ox, y + 1, oz))
+            bp.set(ox, y + 2, oz, FENCE if y % 8 else PILLAR)
             if y % 8 == 0:
-                bp.set(ox, y + 2, oz, "lantern[hanging=false,waterlogged=false]")
+                bp.set(ox, y + 3, oz, "lantern[hanging=false,waterlogged=false]")
     # where the stair turns, a step can face the next step's outer rail post (or a root): that cell becomes a
     # landing level with the top of the step
     steps = {(x, y, z) for (y, cells, f, ang) in path for (x, z) in cells}
@@ -287,7 +349,7 @@ def spiral_stair(bp):
                     for yy in (L + 1, L + 2, L + 3):
                         b = bp.get(x, yy, z)
                         if b and ("fence" in b or "lantern" in b or "pillar" in b
-                                  or (L == LEVELS[2] and yy == L + 1 and ("calcite" in b or "quartz" in b))):
+                                  or (yy == L + 1 and ("calcite" in b or "quartz" in b))):
                             bp.set(x, yy, z, "air")
     # root gate at the foot of the stair
     gx = 0
@@ -366,8 +428,8 @@ def pod(bp, cx, y, cz, r, door, kind, seed=0):
     ytop = dy0 + 1 + round((R + 0.2) / 1.1)
     bp.set(cx, ytop, cz, GOLD)
     bp.set(cx, ytop + 1, cz, "end_rod[facing=up]")
-    bp.chain(cx, ytop - 2, cz, ytop - 1)
-    bp.lantern(cx, ytop - 3, cz, hanging=True)
+    bp.chain(cx, y + h, cz, ytop - 1)
+    bp.lantern(cx, y + h - 1, cz, hanging=True)
     # furniture
     if kind == "guest":
         bp.bed(cx - 1, y + 1, cz - r + 1, "south", "white")
@@ -497,11 +559,31 @@ def moon_lantern(bp):
 def small_tree(bp, cx, cz, deck):
     h = deck + 12
     for y in range(-1, h + 1):
-        r = 2.4 if y < deck + 4 else 1.5
-        for x in range(cx - 3, cx + 4):
-            for z in range(cz - 3, cz + 4):
-                if math.hypot(x - cx, z - cz) <= r:
-                    bp.set(x, y, z, BARK.pick(x, y, z))
+        # flared foot, a straight bole, a thinner crown stem
+        r = 3.3 if y < 2 else 2.9 if y < 4 else 2.4 if y < deck + 4 else 1.5
+        for x in range(cx - 4, cx + 5):
+            for z in range(cz - 4, cz + 5):
+                d = math.hypot(x - cx, z - cz)
+                if d <= r:
+                    a = math.degrees(math.atan2(z - cz, x - cx)) % 360
+                    ridge = d > r - 1 and int(a / 30) % 2 == 0 and _hash(x, y // 3, z, 7) < 0.4
+                    bp.set(x, y, z, "pale_oak_wood[axis=y]" if ridge else BARK.pick(x, y, z))
+    # two branch stubs half way up, each ending in a leaf tuft with a glowing fruit
+    for k in range(2):
+        a = math.radians(cx * 7 + cz * 3 + k * 170)
+        y0 = deck // 2 + k * 3
+        for i in range(2, 7):
+            x, z = cx + round(math.cos(a) * i), cz + round(math.sin(a) * i)
+            y = y0 + i // 2
+            axis = "x" if abs(math.cos(a)) > abs(math.sin(a)) else "z"
+            bp.set(x, y, z, f"birch_log[axis={axis}]")
+        tx, tz, ty = cx + round(math.cos(a) * 7), cz + round(math.sin(a) * 7), y0 + 3
+        for dx in range(-2, 3):
+            for dz in range(-2, 3):
+                for dy in range(-1, 3):
+                    if dx * dx + dz * dz + (dy * 1.4) ** 2 <= 5.5 and bp.get(tx + dx, ty + dy, tz + dz) is None:
+                        bp.set(tx + dx, ty + dy, tz + dz, LEAF.pick(tx + dx, ty + dy, tz + dz))
+        bp.set(tx, ty, tz, "shroomlight")
     for k in range(4):                        # little roots
         a = math.radians(k * 90 + 45)
         for i in range(3, 6):
@@ -587,6 +669,22 @@ def satellites(bp):
         a = (round(ux * 14), L1, round(uz * 14))
         b = (sx - round(ux * 7), deck, sz - round(uz * 7))
         bridge(bp, a, b)
+        # a pair of lantern posts on the deck framing the way from the bridge to the trunk
+        for w in (-3, 3):
+            px, pz = a[0] - round(ux * 4 + uz * w), a[2] - round(uz * 4 - ux * w)
+            if bp.get(px, L1, pz) not in (None, "minecraft:air") and \
+                    all(bp.get(px, yy, pz) in (None, "minecraft:air") for yy in range(L1 + 1, L1 + 4)):
+                bp.set(px, L1 + 1, pz, PILLAR)
+                bp.set(px, L1 + 2, pz, PILLAR)
+                bp.set(px, L1 + 3, pz, "lantern[hanging=false,waterlogged=false]")
+        # and lantern posts on the moss round the foot of the tree house's trunk, in the shade of its deck
+        for k in range(4):
+            ang = math.radians(k * 90)
+            px, pz = sx + round(math.cos(ang) * 4.5), sz + round(math.sin(ang) * 4.5)
+            if all(bp.get(px, yy, pz) in (None, "minecraft:air") for yy in range(1, 5)):
+                bp.set(px, 1, pz, "birch_fence")
+                bp.set(px, 2, pz, "birch_fence")
+                bp.set(px, 3, pz, "lantern[hanging=false,waterlogged=false]")
         for (x, y, z) in (a, b):
             for w in (-2, 2):
                 xx, zz = x + round(-uz * w), z + round(ux * w)
@@ -651,7 +749,7 @@ def moon_pool(bp):
         if bp.get(cx, y, cz) is None:
             bp.set(cx, y, cz, "air")
     bp.set(cx, 3, cz, GOLD)
-    bp.set(cx - 2, 6, cz, "pearlescent_froglight[axis=y]")
+    bp.set(cx - 3, 6, cz, "pearlescent_froglight[axis=y]")   # on the crescent's back, not inside its hollow
     # lantern posts and a path from the root gate
     for z in range(10, cz - r):
         for x in (-1, 0, 1):
@@ -664,15 +762,30 @@ def moon_pool(bp):
         bp.set(x, 3, z, "lantern[hanging=false,waterlogged=false]")
 
 
+def root_lanterns(bp):
+    """Lantern posts on the moss between the buttress roots, under the first terrace."""
+    for k in range(8):
+        for rad in (8.5, 12.5):
+            a = math.radians(k * 45 + (0 if rad < 10 else 8))
+            x, z = round(math.cos(a) * rad), round(math.sin(a) * rad)
+            if all(bp.get(x, y, z) in (None, "minecraft:air") for y in range(1, 5)) and \
+                    all(bp.get(x + dx, 1, z + dz) in (None, "minecraft:air") for dx, dz in ((1, 0), (-1, 0), (0, 1), (0, -1))):
+                if bp.get(x, 0, z) is None:
+                    bp.set(x, 0, z, "moss_block")
+                bp.set(x, 1, z, "birch_fence")
+                bp.set(x, 2, z, "birch_fence")
+                bp.set(x, 3, z, "lantern[hanging=false,waterlogged=false]")
+
+
 def sylvan_palace(bp):
     trunk(bp)
     roots(bp)
+    root_feet(bp)
     canopy(bp)
     for L in LEVELS:
         terrace(bp, L)
     # pavilions on the terrace lobes, doors facing the trunk
-    for (L, a, d, r, kind) in ((14, 330, 10, 4, "guest"), (30, 200, 11, 4, "banquet"), (30, 330, 15, 4, "music"),
-                               (46, 140, 9, 3, "queen"), (46, 250, 9, 3, "library")):
+    for (L, a, d, r, kind) in PODS:
         x, z = _lobe_xy(a, d)
         pod(bp, x, L, z, r, a + 180, kind)
     for (L, a, d) in ((14, 60, 8), (30, 90, 13), (30, 70, 9), (30, 110, 9), (46, 20, 10)):
@@ -684,15 +797,19 @@ def sylvan_palace(bp):
     satellites(bp)
     moon_lantern(bp)
     moon_pool(bp)
+    root_lanterns(bp)
+    fill_leaf_gaps(bp, ((-30, 50, -30), (30, 84, 30)))
+    for (sx, sz, deck, _) in SATELLITES:
+        fill_leaf_gaps(bp, ((sx - 12, deck + 6, sz - 12), (sx + 12, deck + 24, sz + 12)))
     # the sylvan court (wf/denizens.py) lives in the pavilions and the heartwood halls: a bed and a job block each;
     # wardens with longbows keep the stair and the moon pool
     court = {"guest": ["woodwright"], "banquet": ["gardener"], "music": ["woodwright"],
              "queen": ["herbalist"], "library": ["herbalist"]}
-    for i, (L, a, d, r, kind) in enumerate(((14, 330, 10, 4, "guest"), (30, 200, 11, 4, "banquet"),
-                                            (30, 330, 15, 4, "music"), (46, 140, 9, 3, "queen"),
-                                            (46, 250, 9, 3, "library"))):
+    for i, (L, a, d, r, kind) in enumerate(PODS):
         x, z = _lobe_xy(a, d)
-        INT.populate(bp, court[kind], region=((x - r, L + 1, z - r), (x + r, L + 1, z + r)), vtype="plains",
+        # inside the pavilion only: a job block out on the deck by the railing is a step over the fence
+        INT.populate(bp, court[kind], region=((x - r + 1, L + 1, z - r + 1), (x + r - 1, L + 1, z + r - 1)),
+                     vtype="plains",
                      seed=i, bed_colour="white", folk="sylvan")
     for i, (L, people) in enumerate(((LEVELS[0], ["gardener"]), (LEVELS[1], ["herbalist"]))):
         INT.populate(bp, people, region=((-4, L + 1, -4), (4, L + 1, 4)), vtype="plains", seed=10 + i,
@@ -707,6 +824,9 @@ def sylvan_palace(bp):
                           shelf_items=["wheat_seeds", "pumpkin_seeds", "book", "honey_bottle", "glow_berries",
                                        "sweet_berries", "oak_sapling"],
                           banners=["green", "lime", "white"]), seed=1, rooms=_off_the_rail(bp))
+    # leftovers still under light 8 (deck corners in the shade of the terrace above, the root hollows): a shroomlight
+    # set into the planks or the ceiling, or a lantern on a chain in the pavilions
+    LIGHT_REPORT["palace"] = light_fill(bp, ceil="shroomlight", floor="shroomlight", unset_solid_below=0)
 
 
 def _off_the_rail(bp):

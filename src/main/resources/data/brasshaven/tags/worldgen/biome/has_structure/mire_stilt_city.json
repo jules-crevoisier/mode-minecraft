@@ -8,7 +8,6 @@
     {
       "id": "minecraft:mangrove_swamp",
       "required": false
-    },
-    "brasshaven:crimson_mire"
+    }
   ]
 }

@@ -44,11 +44,12 @@ import functools
 import math
 
 from ..arch import slab, stair
-from ..blueprint import with_props
+from ..blueprint import is_solid, with_props
 from ..defs import Piece, StructureDef, register
 from ..megakit import fbm, hash01, hash3
 from ..parts import LOOT, MOD
 from .chained_bastion import giant_chain
+from .lightkit import light_fill
 
 # the spire's own builder: the Abyssal Architect hangs from chains under the point and drops onto the island
 # (entity/boss/AbyssalArchitect.java, tools/BOSSES.md); his phase 3 crumbles the island floor (temporarily)
@@ -1142,11 +1143,25 @@ def unmaking(S):
         w = 2 if hash01(k, 4, 91) < 0.5 else 1
         cells = [(cx + dx, y + dy, cz + dz) for dx in range(-w, w + 1) for dz in range(-1, 2) for dy in (0, 1)]
         cells += [(cx, y + 2, cz), (cx, y - 1, cz)]
-        if any((x + dx, yy, z + dz) in S.walk for (x, _, z) in cells for dx in (-1, 0, 1) for dz in (-1, 0, 1)
-               for yy in range(y - 6, y + 4)):
+        # out of reach of every walk (no drop onto a fragment one cannot climb back from)
+        if any((x + dx, yy, z + dz) in S.walk for (x, _, z) in cells for dx in (-2, -1, 0, 1, 2)
+               for dz in (-2, -1, 0, 1, 2) for yy in range(y - 6, y + 26)):
             continue
         if any(bp.get(*c) not in ("minecraft:air", None) for c in cells):
             continue
+        # each fragment hangs on a chain from the masonry above (nothing floats loose)
+        top = None
+        for yy in range(y + 3, y + 70):
+            bb = bp.get(cx, yy, cz)
+            if (cx, yy, cz) in S.walk:
+                break
+            if bb not in ("minecraft:air", None):
+                top = yy if is_solid(bb) else None
+                break
+        if top is None:
+            continue
+        for yy in range(y + 3, top):
+            bp.set(cx, yy, cz, "iron_chain[axis=y,waterlogged=false]")
         for c in cells:
             hc = hash3(*c, 93)
             bp.set(*c, masonry(*c) if hc < 0.75 else ("crying_obsidian" if hc < 0.87 else "amethyst_block"))
@@ -1297,9 +1312,16 @@ def quarry_stair(S):
                 bp.set(x, y, z, AIR)
     for z in range(-37, -30):
         for x in range(13, 16):
+            # over the flight's sloped ceiling the kiosk is solid masonry (no sealed pocket above the stair)
+            ceil = None
+            for y in range(0, 5):
+                if bp.get(x, y, z) not in (None, "minecraft:air"):
+                    ceil = y
             for y in range(1, 5):
                 if bp.get(x, y, z) is None:
-                    bp.set(x, y, z, AIR)
+                    above = z <= -33 and ceil is not None and y > ceil and all(
+                        bp.get(x, yy, z) not in ("minecraft:air",) for yy in range(ceil, y))
+                    bp.set(x, y, z, "stone_bricks" if above else AIR)
     bp.set(12, 6, -38, "stone_brick_wall")
     bp.set(16, 6, -38, "stone_brick_wall")
     bp.set(14, 6, -27, LANT)
@@ -1689,6 +1711,39 @@ def footings(S, depth=4):
             bp.set(x, -d, z, "dirt" if soil and d <= 2 else "stone")
 
 
+def seal_voids(bp, limit=60):
+    """Fill the small sealed air pockets left in the shaft wall and the kiosk (slivers between the carved shaft and
+    the masonry, closed on every side by solid blocks: nobody can enter them) with the masonry around them."""
+    B = bp.blocks
+    AIRN = "minecraft:air"
+    seen = set()
+    for p0, v0 in list(B.items()):
+        if v0[0] != AIRN or p0 in seen:
+            continue
+        comp, stack, ok, wall = [p0], [p0], True, None
+        seen.add(p0)
+        while stack:
+            x, y, z = stack.pop()
+            for q in ((x + 1, y, z), (x - 1, y, z), (x, y + 1, z), (x, y - 1, z), (x, y, z + 1), (x, y, z - 1)):
+                v = B.get(q)
+                if v is None:
+                    if q[1] > 0:
+                        ok = False          # open to the sky
+                    continue
+                if v[0] == AIRN:
+                    if q not in seen:
+                        seen.add(q)
+                        comp.append(q)
+                        stack.append(q)
+                elif not is_solid(v[0]) or "glass" in v[0] or v[0].endswith(("_slab", "_stairs")):
+                    ok = False              # a fixture, a pane, a step: a real space
+                elif wall is None:
+                    wall = v[0]
+        if ok and len(comp) <= limit:
+            for q in comp:
+                bp.set(*q, wall or "deepslate_bricks")
+
+
 def inverted_spire(bp):
     S = Site(bp)
     hole(S)
@@ -1714,6 +1769,10 @@ def inverted_spire(bp):
     approach(S)
     lids(S)
     footings(S)
+    seal_voids(bp)
+    # leftover dark floors: lanterns on chains under the vaults, pale froglights set in low ceilings and floors
+    light_fill(bp, ceil="pearlescent_froglight[axis=y]", hang=LANT_H, floor="pearlescent_froglight[axis=y]",
+               unset_solid_below=0)
 
 
 def xyz(b, r, y):

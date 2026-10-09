@@ -94,7 +94,8 @@ def tower(bp):
         bp.set(x, 1, z, W + "compacting_crate[facing=north]")
     bp.barrel(-5, 1, 4, "up", loot=LOOT + "sky_harbour")
     bp.chest(4, DECK + 1, -4, "south", loot=LOOT + "sky_harbour")
-    for (x, z) in ((-6, 6), (6, -6)):
+    for (x, z) in ((-6, 6), (6, -6), (SHIP_X - 3, -12), (SHIP_X + 3, -6), (SHIP_X - 3, 0),
+                   (SHIP_X + 3, 6), (SHIP_X - 3, 12), (SHIP_X + 3, 15), (SHIP_X + 3, -16)):
         bp.set(x, 1, z, IRON)
         bp.set(x, 2, z, W + "smokestack_brick_wall")
         bp.set(x, 3, z, EDISON)
@@ -136,6 +137,15 @@ def hull(bp):
         for x in range(SHIP_X - 6, SHIP_X + 7):
             if bp.get(x, DECK - 5, z) == "minecraft:air":
                 bp.set(x, DECK - 5, z, "spruce_planks")
+    for z in range(-HALF_LEN, HALF_LEN + 1):         # the bilge under the hold is ballast, not a sealed void
+        for x in range(SHIP_X - 6, SHIP_X + 7):
+            for y in range(DECK - 8, DECK - 5):
+                if bp.get(x, y, z) == "minecraft:air":
+                    bp.set(x, y, z, "spruce_planks" if y == DECK - 6 else MAHOGANY)
+    for z in range(-12, 13, 4):                       # lamps hung under the deck beams down the hold
+        for x in ((SHIP_X - 2,) if z % 8 else (SHIP_X + 2,)):
+            if bp.get(x, DECK - 1, z) == "minecraft:air" and (x, z) != (SHIP_X, -10):
+                bp.set(x, DECK - 1, z, W + "hanging_edison_lamp")
     bp.chest(SHIP_X - 2, DECK - 4, 6, "east", loot=LOOT + "sky_harbour")
     bp.set(SHIP_X + 2, DECK - 4, 6, W + "compacting_crate[facing=west]")
     bp.set(SHIP_X, DECK - 1, 0, W + "hanging_edison_lamp")
@@ -200,9 +210,11 @@ def engines(bp):
                 bp.set(ex, y, z, COPPER if abs(z) < 3 else BRASS)
         for x in range(SHIP_X + side * 5, ex, side):
             bp.set(x, DECK - 1, 0, W + "copper_pipe[axis=x]")
+        bp.set(ex, DECK - 1, 4, BRASS)                # the flywheel's axle out of the engine, then the wheel
+        bp.set(ex, DECK - 1, 5, BRASS)
         for d in range(1, 3):
-            for dz, dy in ((0, d), (0, -d), (d, 0), (-d, 0)):
-                bp.set(ex, DECK - 1 + dy, 4 + 1 + max(0, dz), GEAR if dz == 0 else GEAR)
+            for dz, dy in ((0, d), (0, -d), (d, 0)):
+                bp.set(ex, DECK - 1 + dy, 5 + dz, GEAR)
         for y in range(DECK, DECK + 3):
             bp.set(ex, y, -1, SMOKE)
         bp.set(ex, DECK + 2, -1, "hay_block[axis=y]")
@@ -222,12 +234,24 @@ def envelope(bp):
                         stripe = z % 6 in (0, 1)
                         bp.set(x, y, z, BRASS if band else ("red_wool" if stripe and y > cy - 3 else "white_wool"))
                     else:
-                        bp.set(x, y, z, "air")
+                        bp.set(x, y, z, "white_wool")    # packed gas cells: no sealed hollow
     # tail fins
-    for d in range(1, 6):
-        bp.set(SHIP_X, cy + ry - 2 + d // 2, rz - 1 + d, "red_wool")
-        bp.set(SHIP_X - 2 - d // 2, cy, rz - 1 + d, "white_wool")
-        bp.set(SHIP_X + 2 + d // 2, cy, rz - 1 + d, "white_wool")
+    for d in range(1, 6):                             # solid plates growing out of the tail cone
+        z = rz - 1 + d
+        for y in range(cy, cy + 3 + d // 2):
+            bp.set(SHIP_X, y, z, "red_wool")
+        for k in range(1, 3 + d // 2):
+            bp.set(SHIP_X - k, cy, z, "white_wool")
+            bp.set(SHIP_X + k, cy, z, "white_wool")
+    # lamps hung from the gas bag over the open deck
+    for (x, z) in ((SHIP_X - 2, -11), (SHIP_X + 2, -11), (SHIP_X - 2, 9), (SHIP_X + 2, 9), (SHIP_X, 13),
+                   (SHIP_X - 4, -4), (SHIP_X + 4, -4), (SHIP_X - 4, 4), (SHIP_X + 4, 4)):
+        top = DECK + 4
+        while top < cy and bp.get(x, top, z) in (None, "minecraft:air"):
+            top += 1
+        if top < cy:
+            bp.chain(x, DECK + 4, z, top - 1)
+            bp.set(x, DECK + 3, z, W + "hanging_edison_lamp")
     # chains from the envelope down to the deck rails
     bottom = cy - ry
     for z in (-10, 0, 10):

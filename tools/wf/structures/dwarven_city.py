@@ -151,7 +151,7 @@ def statue(bp, cx, by, cz, weapon):
             for v in range(-1, 2):
                 put(u, y, v, "tuff_bricks")
     for y in range(4, 8):                       # mail skirt, flared
-        r = 4 if y < 6 else 3
+        r = 4                                   # straight to the belt: no ledge under it
         for u in range(-r, r + 1):
             for v in range(-2, 3):
                 put(u, y, v, "chiseled_tuff" if v == 2 and (u + y) % 2 else "polished_tuff")
@@ -200,7 +200,7 @@ def statue(bp, cx, by, cz, weapon):
         put(side * 4, 21, 0, "bone_block[axis=y]")
         put(side * 4, 22, -1, "bone_block[axis=y]")
     for y in range(4, 16):                      # beard: wide under the face, tapering into two braids
-        w = 2 if y >= 9 else (1 if y >= 6 else 0)
+        w = 2 if y >= 6 else 0
         for u in range(-w, w + 1):
             put(u, y, 3, "calcite")
         if y in (14, 15):                       # moustache
@@ -310,6 +310,9 @@ def gate(bp):
         for x in range(-w, w + 1):
             if in_cavern(x, y, 0):
                 bp.set(x, y, 0, TILE if abs(x) == w else POL)
+    for side in (-1, 1):                         # two lamps hung in the portal arch
+        bp.chain(side * 2, 8, -1, 15)
+        bp.lantern(side * 2, 7, -1, hanging=True)
     for x in range(-2, 3):                       # mithril rune lozenge above the door
         for y in range(17, 21):
             d = abs(x) + abs(y - 18.5)
@@ -331,6 +334,11 @@ def gate(bp):
         for d in ((1, 0), (-1, 0), (0, 1), (0, -1)):
             bp.set(x + d[0], TER + 1, 6 + d[1], stair(BRK_ST, {(1, 0): "west", (-1, 0): "east", (0, 1): "north",
                                                                (0, -1): "south"}[d]))
+    for side in (-1, 1):                         # lamp standards flanking the portal approach
+        for z in (4, 8):
+            bp.set(side * 5, TER + 1, z, CHIS)
+            bp.set(side * 5, TER + 2, z, POL_WALL)
+            bp.lantern(side * 5, TER + 3, z)
     statue(bp, -17, TER + 4, 3, "axe")
     statue(bp, 17, TER + 4, 3, "hammer")
     for side in (-1, 1):                         # pedestals
@@ -391,6 +399,10 @@ def great_hall(bp):
                     bp.set(px + dx, 14, z + dz, GILD)
             bp.set(px, 15, z - 2, MITH)
             bp.set(px, 15, z + 2, MITH)
+            for ax in (9, 10):                  # corbels: the capital and beam rise into the vault springing
+                for dz in range(-2, 3):
+                    for y in (17, 18):
+                        bp.set(side * ax, y, z + dz, CHIS if y == 17 and dz == 0 else MASON.pick(ax, y, z + dz))
             # banners on the nave side
             bp.set(px - side * 2, 11, z, f"red_wall_banner[facing={'east' if side < 0 else 'west'}]")
             # beams to the side wall
@@ -416,9 +428,18 @@ def great_hall(bp):
             ancestor(bp, ax, TER + 1, z, "west" if side > 0 else "east")
     # chandeliers down the nave
     for z in (-7, -13, -19, -25):
-        bp.chain(0, 17, z, 21)
-        bp.set(0, 16, z, W + "brass_chandelier")
-    for z in (-4, -16, -28):
+        bp.chain(0, 10, z, 22)
+        bp.set(0, 9, z, W + "brass_chandelier")
+        for side in (-1, 1):                    # a lamp on a bracket on the aisle face of each pillar
+            bx = side * 9
+            bp.set(bx, 9, z, CHIS)
+            bp.lantern(bx, 8, z, hanging=True)
+    bp.chain(0, 8, -4, 22)                      # a great lamp on a long chain over the entrance
+    bp.set(0, 7, -4, W + "brass_chandelier")
+    for side in (-1, 1):
+        bp.chain(side * 8, 7, -3, 18)
+        bp.lantern(side * 8, 6, -3, hanging=True)
+    for z in (-10, -16, -22, -28):
         for side in (-1, 1):
             bp.set(side * 4, TER + 1, z, POL_WALL)
             bp.set(side * 4, TER + 2, z, POL_WALL)
@@ -442,6 +463,9 @@ def throne_steps(bp):
             bp.set(x, y, HALL_Z1, BRK)
     for x in range(-4, 5):
         bp.set(x, THRONE_Y + 9, HALL_Z1 + 1, GILD if abs(x) < 4 else CHIS)
+    for x in range(-5, 6):
+        for y in range(THRONE_Y + 10, 17):
+            bp.set(x, y, HALL_Z1 + 1, CHIS if x == 0 else MASON.pick(x, y, HALL_Z1 + 1))
     for side in (-1, 1):
         for y in range(TER + 1, THRONE_Y + 10):
             bp.set(side * 4, y, HALL_Z1 + 1, TILE if y % 3 else GILD)
@@ -505,6 +529,9 @@ def throne_room(bp):
         for z in range(cz - r, cz + r + 1):
             if octo(x, z, r) and not octo(x, z, r - 1):
                 bp.set(x, fy + 11, z, GILD)
+                dome = fy + 12 + 6 * (1 - (max(abs(x), abs(z - cz)) / (r + 1)) ** 2)
+                for y in range(fy + 12, int(dome) + 1):     # the dome springs from the cornice: no ledge
+                    bp.set(x, y, z, DARK.pick(x, y, z))
                 bp.set(x, fy + 1, z, POL)
     # the doorway on the south side
     for x in range(-3, 4):
@@ -547,7 +574,7 @@ def throne_room(bp):
     # chandelier under the dome
     bp.chain(0, fy + 14, cz, fy + 17)
     bp.set(0, fy + 13, cz, W + "brass_chandelier")
-    for (x, z) in ((-6, cz), (6, cz)):
+    for (x, z) in ((-6, cz), (6, cz), (-4, cz + 7), (4, cz + 7), (-6, cz + 4), (6, cz + 4)):
         bp.set(x, fy + 1, z, POL_WALL)
         bp.lantern(x, fy + 2, z)
     bp.spawner(-3, fy + 1, cz + 3, "brasshaven:skeleton_knight")
@@ -603,7 +630,7 @@ def vault(bp):
         for z in (cz - 3, cz - 2, cz - 1):
             if (x, z) not in ((0, cz - 2), (0, cz - 1)):
                 bp.set(x, y0 + 1, z, "iron_bars")
-    for (x, z) in ((-5, cz), (5, cz)):
+    for (x, z) in ((-5, cz), (5, cz), (-3, cz - 6), (3, cz - 6), (-3, cz + 3), (3, cz + 3), (0, cz - 5)):
         bp.set(x, y0 + 5, z, BLACK_BR)
         bp.lantern(x, y0 + 4, z, hanging=True)
     bp.spawner(0, y0 + 1, cz + 3, "brasshaven:skeleton_knight")
@@ -741,6 +768,29 @@ def railway(bp):
     bp.set(rx, 7, Z1 + 1, CHIS)
 
 
+BLDGS = ((-31, -13, 2, 16), (-31, -13, 23, 36), (13, 31, 2, 16), (13, 31, 23, 36))   # footprints + eaves
+
+
+def street_lamps(bp):
+    """Lantern bollards on a 6-block grid over the open cavern floor (not on the avenue, rails, river or hearth, not
+    in front of the halls' arcades, never where they would narrow a passage)."""
+    air = (None, "minecraft:air")
+    for x in range(-HX + 3, HX - 1, 6):
+        for z in range(Z0 + 3, Z1, 6):
+            if abs(x) <= 6 and z >= 13 or 6 <= x <= 12 and z >= 12 or 17 <= z <= 24 or math.hypot(x, z - 20) < 11:
+                continue
+            if any(a - 2 <= x <= b + 2 and c - 1 <= z <= d + 1 for (a, b, c, d) in BLDGS):
+                continue
+            if abs(x) >= 30 and z >= Z1 - 8 or abs(x) <= 24 and z <= 13:
+                continue                          # terrace stairs, the gate terrace
+            if bp.get(x, 0, z) in air or "lava" in (bp.get(x, 0, z) or ""):
+                continue
+            if any(bp.get(x + dx, y, z + dz) not in air for dx in (-1, 0, 1) for dz in (-1, 0, 1) for y in (1, 2, 3)):
+                continue
+            bp.set(x, 1, z, CHIS)
+            bp.lantern(x, 2, z)
+
+
 def building(bp, x0, x1, z0, z1, h, front_x, *, seed=0):
     """A dwarven hall: masonry walls with pilasters, a stepped crenellated roof, an arcaded front facing the
     avenue (at x = front_x), lanterns inside. Returns the interior box."""
@@ -765,11 +815,39 @@ def building(bp, x0, x1, z0, z1, h, front_x, *, seed=0):
             bp.set(x, h, z, GILD)
     top = bp.pyramid_roof(xs, z0, xe, z1, h + 2, "waxed_cut_copper_stairs", overhang=1,
                           cap="waxed_cut_copper_slab[type=bottom,waterlogged=false]")
+    for x in range(xs, xe + 1):                 # a solid core under the copper (no sealed attic void)
+        for z in range(z0, z1 + 1):
+            for y in range(h + 2, top + 1):
+                if bp.get(x, y, z) not in (None, "minecraft:air"):
+                    break
+                bp.set(x, y, z, MASON.pick(x, y, z))
     for x in range(xs - 1, xe + 2):
         for z in range(z0 - 1, z1 + 2):
             if x in (xs - 1, xe + 1) or z in (z0 - 1, z1 + 1):
                 bp.set(x, h + 1, z, stair(TILE_ST, _away(x - (xs + xe) / 2, 0) if x in (xs - 1, xe + 1)
                                           else _away(0, z - (z0 + z1) / 2), "top"))
+    for (wx, wz, ox, oz) in ([(x, z0, 0, -1) for x in range(xs + 3, xe - 1, 5)] +
+                             [(x, z1, 0, 1) for x in range(xs + 3, xe - 1, 5)] +
+                             [(xs if front_x == xe else xe, z, -1 if front_x == xe else 1, 0)
+                              for z in range(z0 + 3, z1 - 1, 4)]):
+        ox_, oz_ = wx + ox, wz + oz               # a bracket lamp on the outer face of the wall
+        g = max([y for y in range(0, 4) if bp.get(ox_, y, oz_) not in (None, "minecraft:air")] or [0])
+        if all(bp.get(ox_, y, oz_) in (None, "minecraft:air") for y in range(g + 1, g + 5)):
+            bp.set(ox_, g + 4, oz_, CHIS)
+            bp.lantern(ox_, g + 3, oz_, hanging=True)
+    for i in (2, 5):                              # gilded lamp finials set into two steps of the copper roof
+        lo_x, hi_x, lo_z, hi_z, ry = xs - 1 + i, xe + 1 - i, z0 - 1 + i, z1 + 1 - i, h + 2 + i
+        if hi_x - lo_x < 4 or hi_z - lo_z < 4:
+            continue
+        pts = [(x, lo_z) for x in range(lo_x + 2, hi_x - 1, 4)] + [(x, hi_z) for x in range(lo_x + 2, hi_x - 1, 4)]
+        pts += [(lo_x, z) for z in range(lo_z + 2, hi_z - 1, 4)] + [(hi_x, z) for z in range(lo_z + 2, hi_z - 1, 4)]
+        for (x, z) in pts:
+            bp.set(x, ry, z, GILD)
+            bp.lantern(x, ry + 1, z)
+    back = xs - 1 if front_x == xe else xe + 1   # the back eave would sit on the terrace rail: none there
+    for z in range(z0 - 1, z1 + 2):
+        for y in range(h + 1, top + 1):
+            bp.set(back, y, z, "air")
     bp.set((xs + xe) // 2, top, (z0 + z1) // 2, GILD)
     bp.set((xs + xe) // 2, top + 1, (z0 + z1) // 2, "lightning_rod[facing=up,powered=false,waterlogged=false]")
     # arcaded front: three stepped arches
@@ -792,6 +870,9 @@ def building(bp, x0, x1, z0, z1, h, front_x, *, seed=0):
     for z in range(z0 + 2, z1 - 1, 4):
         bp.set((xs + xe) // 2, h, z, POL)
         bp.lantern((xs + xe) // 2, h - 1, z, hanging=True)
+        for lx in (xs + 3, xe - 3):             # side rows on chains, low over the work floor
+            bp.chain(lx, h - 2, z, h)
+            bp.lantern(lx, h - 3, z, hanging=True)
     return xs + 1, xe - 1, z0 + 1, z1 - 1
 
 
@@ -949,6 +1030,9 @@ def terraces(bp):
             for ax in (32, 33, 34):
                 bp.set(sx * ax, L + 1, za - 1, BRK_WALL)
                 bp.set(sx * ax, L, za - 1, POL)
+        for z in range(4, Z1 - 7, 4):             # lamps under the first walkway, over the street by the wall
+            bp.chain(sx * 33, 5, z + 2, LEVELS[0] - 1)
+            bp.lantern(sx * 33, 4, z + 2, hanging=True)
         # stairwells carved in the rock between the levels
         stairwell(bp, sx, LEVELS[0], 2, +1)                 # north end, rising south
         stairwell(bp, sx, LEVELS[1], Z1 - 7, -1)            # south end, rising north
@@ -1025,6 +1109,9 @@ def house(bp, sx, L, zc):
     for dz in (-1, 0, 1):
         bp.set(sx * ax0, L + 4, zc + dz, GILD if dz == 0 else TILE)
         bp.set(sx * (ax0 - 1), L + 4, zc + dz, stair(TILE_ST, "east" if sx < 0 else "west", "top"))
+        for y in range(L + 5, L + 8):           # rough rock jutting just above the hood
+            if bp.get(sx * (ax0 - 1), y, zc + dz) not in (None, "minecraft:air"):
+                bp.set(sx * (ax0 - 1), y, zc + dz, "air")
     for dz in (-2, 2):
         bp.set(sx * (ax0 - 1), L + 3, zc + dz, f"{'red' if (zc + L) % 2 else 'orange'}_wall_banner[facing={f}]")
     for dz in (-3, 3):
@@ -1066,6 +1153,7 @@ def dwarven_city(bp):
     tavern(bp)
     gem_hall(bp)
     terraces(bp)
+    street_lamps(bp)
     ceiling_details(bp)
     citizens(bp)
 

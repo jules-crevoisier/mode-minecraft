@@ -43,6 +43,7 @@ from ..megakit import (AIR, BARS, BRASS, BRASS_SLAB, BRASS_STAIRS, CHANDELIER, C
                        IRON, IRON_SLAB, IRON_STAIRS, IRON_WALL, LEATHER, MAHOGANY, MAHOGANY_SLAB, MAHOGANY_STAIRS, PIPES,
                        SMOKE, TABLE, TREAD, TREAD_SLAB, VERD, W, fbm, hash01, hash3)
 from ..parts import LOOT, MOD
+from .lightkit import light_fill
 
 # the wreck's own boss: the Drowned Admiral holds the boiler hall (moveset in entity/boss/DrownedAdmiral.java: his
 # steam lanes vent from the four boilers' fireboxes, his scuttle floods the hall knee-deep for a while)
@@ -2054,6 +2055,40 @@ def bed_bow(S):
 
 
 # ------------------------------------------------------------------ final passes
+def seal_bilges(S, limit=120):
+    """Small pockets of water or air shut in between hull plates (bilges no hatch reaches) are plated over: nobody
+    can get in and they read as broken rooms."""
+    bp = S.bp
+    B = bp.blocks
+    FLUID = ("minecraft:water", AIR)
+    seen = set()
+    for p0, v0 in list(B.items()):
+        if v0[0] not in FLUID or p0 in seen:
+            continue
+        comp, stack, ok, wall = [p0], [p0], True, None
+        seen.add(p0)
+        while stack:
+            x, y, z = stack.pop()
+            for q in ((x + 1, y, z), (x - 1, y, z), (x, y + 1, z), (x, y - 1, z), (x, y, z + 1), (x, y, z - 1)):
+                v = B.get(q)
+                if v is None:
+                    ok = False                       # the open sea
+                    continue
+                if v[0] in FLUID:
+                    if q not in seen:
+                        seen.add(q)
+                        comp.append(q)
+                        stack.append(q)
+                elif not is_solid(v[0]) or "glass" in v[0] or v[0].endswith(("_slab", "_stairs")):
+                    ok = False
+                elif wall is None and "sand" not in v[0]:
+                    wall = v[0]
+        if ok and len(comp) <= limit:
+            for q in comp:
+                bp.set(*q, wall or "brasshaven:dark_iron_plating")
+                S.inner.discard(q)
+
+
 def drop_outside_air(S):
     """Air written outside the hull and the superstructures would dig a dry hole in the sea: drop it."""
     for p, b in list(S.bp.blocks.items()):
@@ -2096,7 +2131,10 @@ def dreadnought_wreck(bp):
     bed_bow(S)
     gap(S)
     breach(S)
+    seal_bilges(S)
     drop_outside_air(S)
+    # the dark decks: lanterns on chains under the deckheads, sea lanterns set in low deckheads and in floors
+    light_fill(bp, ceil="sea_lantern", hang="lantern[hanging=true,waterlogged=false]", floor="sea_lantern")
 
 
 # camera spots for the CI focus run: (name, feet, look at)

@@ -21,23 +21,23 @@
             "size": [
               24,
               41,
-              24
+              23
             ],
-            "blocks": 9365
+            "blocks": 8926
           },
           {
             "location": "brasshaven:inventor_manor/manor/x0_z1",
             "offset": [
               0,
               0,
-              24
+              23
             ],
             "size": [
               24,
               32,
-              23
+              24
             ],
-            "blocks": 5969
+            "blocks": 6408
           },
           {
             "location": "brasshaven:inventor_manor/manor/x1_z0",
@@ -49,23 +49,23 @@
             "size": [
               23,
               43,
-              24
+              23
             ],
-            "blocks": 13570
+            "blocks": 12820
           },
           {
             "location": "brasshaven:inventor_manor/manor/x1_z1",
             "offset": [
               24,
               0,
-              24
+              23
             ],
             "size": [
               23,
               42,
-              23
+              24
             ],
-            "blocks": 7789
+            "blocks": 8540
           },
           {
             "location": "brasshaven:inventor_manor/manor/x2_z0",
@@ -76,24 +76,24 @@
             ],
             "size": [
               24,
-              38,
-              24
+              36,
+              23
             ],
-            "blocks": 8311
+            "blocks": 7933
           },
           {
             "location": "brasshaven:inventor_manor/manor/x2_z1",
             "offset": [
               47,
               0,
-              24
+              23
             ],
             "size": [
               24,
               46,
-              23
+              24
             ],
-            "blocks": 6567
+            "blocks": 6945
           }
         ],
         "projection": "rigid",
