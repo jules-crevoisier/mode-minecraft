@@ -162,6 +162,7 @@ STRUCTURE_KIND = {
     "starfall_library": "library",
     "hollow_moon": "clockwork",
     "cloud_pagoda": "food",
+    "brass_caravanserai": "food",
     "icebound_fleet": "harbour",
     "clockwork_asylum": "clockwork",
     "spore_refinery": "food",
@@ -170,6 +171,8 @@ STRUCTURE_KIND = {
     "abyssal_station": "harbour",
     "storm_spire": "workshop",
     "clockwork_carnival": "food",
+    "leviathan_lighthouse": "harbour",
+    "mycelium_monastery": "food",
     "tesla_observatory": "clockwork", "crystal_cathedral": "library", "sunken_submarine": "harbour",
     "diving_bell": "harbour", "coral_shrine": "harbour", "shipwreck_debris": "harbour",
     # vanilla villages and outposts extended by wf/village.py, the sea-floor props of wf/ocean.py

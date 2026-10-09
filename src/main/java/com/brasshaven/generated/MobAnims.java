@@ -1190,6 +1190,57 @@ public final class MobAnims {
 
         private TeslaArchon() {}
     }
+    public static final class DrownedKeeper {
+        public static final int THRUST = 0;
+        public static final int THROW = 1;
+        public static final int WHIRL = 2;
+        public static final int SWEEP = 3;
+        public static final int SURGE = 4;
+        public static final int CALL = 5;
+        public static final int OVERLOAD = 6;
+        public static final int SLAM = 7;
+        public static final int ROAR = 8;
+        public static final int STAGGER = 9;
+        public static final int COUNT = 10;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {34, 52, 48, 80, 78, 46, 80, 50, 40, 40};
+
+        private DrownedKeeper() {}
+    }
+    public static final class MerchantPrince {
+        public static final int SLASH = 0;
+        public static final int COINS = 1;
+        public static final int BID = 2;
+        public static final int CHARGE = 3;
+        public static final int HIRE = 4;
+        public static final int SANDSTORM = 5;
+        public static final int AUCTION = 6;
+        public static final int DASH = 7;
+        public static final int ROAR = 8;
+        public static final int STAGGER = 9;
+        public static final int COUNT = 10;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {42, 48, 70, 40, 46, 46, 80, 76, 40, 40};
+
+        private MerchantPrince() {}
+    }
+    public static final class MyceliumAbbot {
+        public static final int CROZIER = 0;
+        public static final int CENSER = 1;
+        public static final int TENDRILS = 2;
+        public static final int CROOK = 3;
+        public static final int PODS = 4;
+        public static final int MONKS = 5;
+        public static final int COMMUNION = 6;
+        public static final int BURROW = 7;
+        public static final int ROAR = 8;
+        public static final int STAGGER = 9;
+        public static final int COUNT = 10;
+        /** Length of each action in ticks. */
+        public static final int[] TICKS = {44, 48, 50, 40, 46, 46, 80, 76, 40, 40};
+
+        private MyceliumAbbot() {}
+    }
     public static final class GlowJellyfish {
 
         public static final int COUNT = 0;

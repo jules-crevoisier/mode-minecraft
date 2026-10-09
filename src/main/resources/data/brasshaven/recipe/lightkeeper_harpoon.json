@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    " M ",
+    "MRM",
+    "DMD"
+  ],
+  "key": {
+    "M": "brasshaven:map_fragment",
+    "R": "brasshaven:remembrance_drowned_keeper",
+    "D": "minecraft:diamond"
+  },
+  "result": {
+    "id": "brasshaven:lightkeeper_harpoon",
+    "count": 1
+  }
+}

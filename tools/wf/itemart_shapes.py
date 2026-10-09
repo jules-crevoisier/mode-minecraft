@@ -1039,3 +1039,74 @@ def coil_staff(a):
     a.px(12, 3, "E", "shine")
     a.px(14, 1, "Y", "light")                                 # a spark
     a.px(15, 3, "Y", "mid")
+
+
+@painted("lightkeeper_harpoon")
+def lightkeeper_harpoon(a):
+    """Lightkeeper's Harpoon: a weathered ash shaft from an iron butt at the bottom left, a chain wound round it, a
+    brass collar with a little amber storm lantern hung from it, and a barbed iron head at the top right."""
+    a.seg("T", 1.0, 15.0, 10.4, 5.6, 0.8)                     # the shaft
+    a.px(0, 15, "X", "mid")                                   # the butt cap
+    a.px(1, 14, "X", "dark")
+    for x, y in ((7, 9), (8, 8)):                             # the chain wound round
+        a.px(x, y, "I", "light")
+        a.px(x + 1, y + 1, "I", "dark")
+    a.px(10, 5, "B", "light")                                 # the collar
+    a.px(11, 6, "B", "dark")
+    a.seg("I", 10.6, 5.0, 13.6, 2.0, 0.55)                    # the shank
+    a.seg("I", 12.6, 3.0, 15.0, 0.6, 0.9)                     # the head
+    a.shade_dir("I", -0.5, 1.0)
+    a.px(15, 0, "I", "shine")
+    a.px(12, 1, "I", "light")                                 # the barbs
+    a.px(14, 3, "I", "mid")
+    a.px(11, 8, "B", "dark")                                  # the lantern hung from the collar
+    a.px(12, 8, "B", "mid")
+    a.px(11, 9, "R", "light")
+    a.px(12, 9, "R", "shine")
+    a.px(11, 10, "B", "dark")
+    a.px(12, 10, "B", "dark")
+
+
+@painted("prince_scimitar")
+def prince_scimitar(a):
+    """The Merchant Prince's Scimitar: a gold-wrapped grip with a jewelled pommel at the bottom left, a brass crossguard
+    with down-turned quillons, and a steel blade widening toward its tip as it sweeps up in a deep curve (the back
+    concave, the edge bellied), a gold inlay along the back and a sapphire set in the guard."""
+    a.seg("L", 1.2, 14.6, 3.6, 12.2, 0.8)                     # the grip
+    a.px(2, 13, "B", "light")                                 # its gold wire
+    a.disc("A", 0.8, 15.2, 0.9)                               # the jewelled pommel
+    a.seg("B", 2.4, 9.8, 6.2, 13.6, 0.75)                     # the crossguard
+    a.px(2, 9, "B", "dark")                                   # the down-turned quillons
+    a.px(6, 14, "B", "dark")
+    a.px(4, 11, "A", "light")                                 # the sapphire in the guard
+    for k in range(12):                                       # the blade, sweeping up in a deep curve, widening
+        t = k / 11
+        x0 = 5.0 + t * 9.2 - math.sin(t * math.pi) * 0.4
+        y0 = 11.0 - t * 6.6 - t * t * 3.6 + math.sin(t * math.pi) * 1.4
+        a.disc("M", x0, y0, 0.9 + t * 0.9)
+    a.seg("M", 13.6, 1.6, 15.2, 0.4, 0.6)                     # the point
+    a.shade_dir("M", -0.6, 1.0)
+    for x, y in ((6, 9), (8, 7), (10, 5), (12, 3)):           # the gold inlay along the back
+        a.px(x - 1, y - 1, "B", "light")
+    a.px(15, 0, "M", "shine")
+
+
+@painted("abbot_crozier")
+def abbot_crozier(a):
+    """The Abbot's Crozier: a dark wooden staff from a brass ferrule at the bottom left, brass bands, a brass knop, the
+    crook curling over at the top, white mycelium threads off its tip and a glowing cyan mushroom on its crown."""
+    a.seg("H", 1.0, 15.0, 9.4, 6.6, 0.8)                      # the staff
+    a.px(0, 15, "B", "dark")                                  # the ferrule
+    for x, y in ((4, 11), (7, 8)):                            # brass bands
+        a.px(x, y, "B", "light")
+        a.px(x + 1, y + 1, "B", "dark")
+    a.px(9, 6, "B", "light")                                  # the knop
+    a.px(10, 6, "B", "mid")
+    a.px(9, 7, "B", "dark")
+    a.line("H", [(10, 5), (11, 4), (12, 4), (13, 5), (13, 6), (12, 7)])   # the crook
+    a.px(12, 8, "Q", "light")                                 # mycelium threads off its tip
+    a.px(12, 9, "Q", "mid")
+    a.px(11, 3, "Q", "light")                                 # the mushroom's stalk
+    a.disc("E", 11.6, 1.6, 1.6)                               # the glowing cap
+    a.px(11, 1, "E", "shine")
+    a.px(13, 2, "E", "dark")

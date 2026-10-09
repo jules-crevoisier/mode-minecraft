@@ -1,0 +1,37 @@
+{
+  "display": {
+    "icon": {
+      "id": "brasshaven:prince_scimitar"
+    },
+    "title": {
+      "translate": "advancements.brasshaven.explorer.boss_merchant_prince.title"
+    },
+    "description": {
+      "translate": "advancements.brasshaven.explorer.boss_merchant_prince.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "kill": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "entity_type": "brasshaven:merchant_prince"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "parent": "brasshaven:explorer/brass_caravanserai",
+  "rewards": {
+    "experience": 500
+  }
+}

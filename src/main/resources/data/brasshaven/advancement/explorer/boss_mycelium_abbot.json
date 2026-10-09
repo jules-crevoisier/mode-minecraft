@@ -1,0 +1,37 @@
+{
+  "display": {
+    "icon": {
+      "id": "brasshaven:abbot_crozier"
+    },
+    "title": {
+      "translate": "advancements.brasshaven.explorer.boss_mycelium_abbot.title"
+    },
+    "description": {
+      "translate": "advancements.brasshaven.explorer.boss_mycelium_abbot.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "kill": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "entity_type": "brasshaven:mycelium_abbot"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "parent": "brasshaven:explorer/mycelium_monastery",
+  "rewards": {
+    "experience": 500
+  }
+}

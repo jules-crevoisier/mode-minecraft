@@ -31,7 +31,12 @@ every foe on it; more to those caught by both), ORBIT (three brass planets fly o
 aim, hitting and drawing in every foe they pass; a small gravity well where the arm on your aim ends), JUGGLE (three brass juggling bombs
 lobbed in arcs along your aim burst in confetti where they land; a foe caught by more of them is hurt more), TRIUMPH (a gladiator's thrust
 along your aim, more to foes under 30% health; absorption for every foe struck). TESLA (a bolt along your aim to the first foe, a visual
-lightning strike on it, then the arc jumps on to up to 3 more foes nearby, each for 80% of the last). flags: fire, slow, weak, blind, poison, lift, lifesteal.
+lightning strike on it, then the arc jumps on to up to 3 more foes nearby, each for 80% of the last), LANTERN (a harpoon
+on its chain along your aim bites the first foe and hauls it toward you; the lantern flares where it bit, hurting the foes
+round it for half and blinding and lighting up all of them), CRESCENT (a gilded crescent along your aim cuts every
+foe near its path; the struck foe with the most health left takes a gold-bar slam for half the power), MYCELIUM (three
+mycelium tendrils race along the ground in a fan round your aim, hurting and rooting every foe they touch; 1 health back
+per foe rooted). flags: fire, slow, weak, blind, poison, lift, lifesteal.
 """
 
 TIER_MATERIAL = {"overworld": "map_fragment", "depths": "lithite_shard", "nether": "ancient_ember", "end": "void_shard"}
@@ -442,6 +447,37 @@ BOSS_GEAR = [
      ("Remembrance of the Tesla Archon", "Souvenir de l'Archonte Tesla"),
      ("LITHITE", 8.0, -2.8), "TESLA", 10.0, 14.0, 80, "ELECTRIC_SPARK", "slow", ("coil_staff", "copper", "dark", "aether"),
      ("copper", "aether")),
+    ("drowned_keeper", "overworld", "lightkeeper_harpoon", ("Lightkeeper's Harpoon", "Harpon du Gardien du phare"),
+     ("Use: you hurl the harpoon along your aim on its chain (up to 14 blocks, walls stop it). It bites the first foe it "
+      "meets and hauls it back toward you; where it bit, the keeper's lantern flares: every other foe within 4 blocks "
+      "takes half as much, and all of them are blinded and lit up for 5 s.",
+      "Clic droit : tu lances le harpon au bout de sa chaîne dans ta visée (jusqu'à 14 blocs, les murs l'arrêtent). Il "
+      "mord le premier ennemi rencontré et le ramène vers toi ; là où il a mordu, la lanterne du gardien flamboie : "
+      "chaque autre ennemi à moins de 4 blocs prend moitié moins, et tous sont aveuglés et mis en surbrillance 5 s."),
+     ("Remembrance of the Drowned Lightkeeper", "Souvenir du Gardien noyé du phare"),
+     ("LITHITE", 8.5, -2.8), "LANTERN", 10.0, 14.0, 80, "END_ROD", "blind", ("lightkeeper_harpoon", "iron", "wood", "gold"),
+     ("brass", "aether")),
+    ("merchant_prince", "overworld", "prince_scimitar", ("The Merchant Prince's Scimitar", "Cimeterre du Prince marchand"),
+     ("Use: a gilded crescent flies from the blade along your aim (up to 12 blocks, walls stop it), cutting every foe "
+      "within 1.8 blocks of its path. Then the prince's appraisal: the foe it cut with the most health left is priced, "
+      "and a gold bar slams down on it for half as much again. Foes cut are weakened.",
+      "Clic droit : un croissant doré s'envole de la lame dans ta visée (jusqu'à 12 blocs, les murs l'arrêtent) et "
+      "tranche chaque ennemi à moins de 1,8 bloc de sa course. Puis l'estimation du prince : l'ennemi tranché qui a le "
+      "plus de vie est mis à prix, et un lingot d'or s'abat sur lui pour la moitié en plus. Les ennemis tranchés sont "
+      "affaiblis."),
+     ("Remembrance of the Brass Merchant Prince", "Souvenir du Prince marchand de laiton"),
+     ("LITHITE", 8.5, -2.4), "CRESCENT", 10.0, 12.0, 80, "WAX_ON", "weak", ("prince_scimitar", "iron", "dark", "sapphire"),
+     ("brass", "sapphire")),
+    ("mycelium_abbot", "overworld", "abbot_crozier", ("The Abbot's Crozier", "La Crosse de l'Abbé"),
+     ("Use: you plant the crozier and three mycelium tendrils race out along the ground in a fan round your aim (up to 9 "
+      "blocks, walls stop each). Every foe a tendril touches is hurt, poisoned and rooted in place for 2 s, and the "
+      "network feeds you: 1 health back for every foe rooted, up to 4.",
+      "Clic droit : tu plantes la crosse et trois filaments de mycélium filent au sol en éventail dans ta visée (jusqu'à "
+      "9 blocs, les murs arrêtent chacun). Chaque ennemi qu'un filament touche est blessé, empoisonné et enraciné sur "
+      "place 2 s, et le réseau te nourrit : 1 point de vie rendu par ennemi enraciné, 4 au plus."),
+     ("Remembrance of the Mycelium Abbot", "Souvenir de l'Abbé du Mycélium"),
+     ("LITHITE", 8.0, -2.8), "MYCELIUM", 9.0, 9.0, 80, "SPORE_BLOSSOM_AIR", "poison", ("abbot_crozier", "brass", "dark", "aether"),
+     ("brass", "aether")),
 ]
 
 

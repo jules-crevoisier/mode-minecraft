@@ -55,6 +55,7 @@
     "explorer/mesa_minecity",
     "explorer/airship_graveyard",
     "explorer/cloud_pagoda",
+    "explorer/brass_caravanserai",
     "explorer/icebound_fleet",
     "explorer/clockwork_asylum",
     "explorer/spore_refinery",
@@ -62,6 +63,8 @@
     "explorer/timber_fortress",
     "explorer/storm_spire",
     "explorer/clockwork_carnival",
+    "explorer/leviathan_lighthouse",
+    "explorer/mycelium_monastery",
     "explorer/master_cartographer",
     "explorer/boss_bell_keeper",
     "explorer/boss_archivist",
@@ -100,7 +103,10 @@
     "explorer/boss_lumber_jarl",
     "explorer/boss_abyss_diver",
     "explorer/boss_ringmaster",
-    "explorer/boss_tesla_archon"
+    "explorer/boss_tesla_archon",
+    "explorer/boss_drowned_keeper",
+    "explorer/boss_merchant_prince",
+    "explorer/boss_mycelium_abbot"
   ],
   "depths": [
     "depths/lithite",

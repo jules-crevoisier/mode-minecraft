@@ -2552,6 +2552,257 @@ Previews:
 - `python3 tools/gen_models.py --preview --only tesla_archon` writes `build/previews/models/tesla_archon.png`.
 - Held coil-staff: `python3 tools/art_sheet.py --kind held --only tesla_coilstaff`.
 
+## 42. Champion of the Leviathan Lighthouse: The Drowned Lightkeeper (Le Gardien noyé du phare)
+Files:
+- `tools/wf/mobs/drowned_keeper.py`: model `drowned_keeper` (53 cubes, 128x128).
+- `src/main/java/com/brasshaven/entity/boss/DrownedKeeper.java`: the moveset.
+
+There is no lair module. The arena is the lantern room at the top of the tower (`tools/wf/structures/
+leviathan_lighthouse.py`, `arena()`, seal at (0, 113, 6), radius 16): a deck of radius 16.5 (feet 114) inside the
+glazing (16.5-17.5, brass astragals), about 14 blocks of air up to the cupola's spring and the great lamp hung ~17 over
+the centre; two glazed doorways (north and south) open onto the lamp gallery outside (to 20.5, a railing on its rim);
+the hatch house (the mist) on the north rim, the sealed bars of the hoard in the deck. `BOSS` there is
+`brasshaven:drowned_keeper` (it replaces the borrowed Gryphon Knight, whose own home, quest and seal on the sky island
+are untouched). `BOSS_HOME` is `leviathan_lighthouse`. "Open deck" in the class means floor within 0.6 of the seal's
+level (1.6 if the floor round the seal is rough: a command spawn) with two blocks of air over it, within 16 of the
+centre (`roomR()`): the glazing, the hatch house and the gallery are never open deck.
+
+Reward: `remembrance_drowned_keeper` forges the **Lightkeeper's Harpoon** (`lightkeeper_harpoon`, LITHITE 8.5 / -2.8).
+- It has a new ability shape, **LANTERN**, in `BossWeaponItem`: the harpoon hurled along the aim on its chain (up to
+  14 blocks, walls stop it) bites the first foe for the power (10) and hauls it back toward the wielder; where it bit
+  the lantern flares (particle END_ROD): every other foe within 4 takes half the power, and all of them get Blindness
+  3 s and Glowing 5 s (flag `blind`). Cooldown 80. Instant, no ticker.
+- Held model `lightkeeper_harpoon` in `wf/held3d.py`, sprite `lightkeeper_harpoon` in `wf/itemart_shapes.py`.
+
+Loot (`gen_data.py`): map fragments, emeralds, experience bottles, golden apples, diamonds, prismarine crystals, sea
+lanterns, nautilus shells, iron chains, lanterns, a 10% heart of the sea, an 8% enchanted golden apple. Quest:
+`explorer/boss_drowned_keeper`.
+
+**Concept.** The old keeper of the light, drowned in a storm and brought back fused with the great clockwork lens,
+3.4 blocks (hitbox 1.3 x 3.4):
+- a long faded-mustard oilskin coat streaked with weed, a shoulder cape and a turned-up collar, the front skirts and
+  the back panel swinging (`skirt_f`, `skirt_b`), kelp hanging from the hem and the sleeves; oilskin trousers into
+  barnacled rubber sea boots;
+- the coat hangs open on a ribcage of barnacled bone, and in it, for a heart, a brass storm lantern burning amber
+  (`heart`, glow layer, pulsing in the idle loop, flaring in the big moves);
+- a drowned grey-green face with deep sockets and pale glowing eyes (glow), a long white beard threaded with kelp, a
+  sou'wester with its long back flap;
+- the great Fresnel lens on his back (`lens`): a brass-ringed disc of concentric glass prisms (glow) on a clockwork
+  drive, rising behind his head like a halo and turning in the idle loop; it tears up off his back in the overload;
+- asymmetry: the right hand holds a long whaling harpoon (ash shaft, a chain wound on, a barbed iron head), the left a
+  whale's curved jawbone worn as a club (`jaw`).
+
+**Stats.**
+- 680 health, armour 12, toughness 4, attack 14, poise 120, speed 0.27, knockback resistance 1.0, step 1.5.
+- No fall damage, yellow bar.
+- Phase 2 at 65% (roar, +10% speed, `drowned_keeper_wrath`; the engine's roar shove is cut to 30% and dropped where it
+  would leave open deck). Phase 3 at 30%, driven by the class like the Chained Jailer: when he is free he chains
+  `overload` once (guarded 64 ticks), then `slam` every 160 ticks x `cooldownScale()` (at least 100, the first 80 after
+  the overload, never while a flash is being warned). Range 999 / weight 0 keeps the scheduled moves out of the picker.
+
+| Move | Phase | Wind-up / active / recovery | Range | What it does |
+|---|---|---|---|---|
+| thrust | 1-3 | 14 / 6 / 14 | 0-6.5 | He turns 8°/tick until wind-up 9; a line ahead (6, half width 1.0) drawn gold, red from 9. Impact: 12, push 0.5 along the line. P2: 30% chains throw (target past 6) or whirl. |
+| throw | 1-3 | 18 / 20 / 14 | 5-16 | A line (half width 1.0) along his facing over open deck to the glazing (at most 16), drawn white while he turns 5°/tick until wind-up 12, then red. Impact: the harpoon runs down it at 1.2 blocks a tick, its chain drawn to his hand; the first player within reach takes 9 and Slowness I 1 s and is hauled in at 0.6 a tick (at most 14 ticks) until 2.5 from him. |
+| whirl | 1-3 | 18 / 16 / 14 | 0-7 | A ring r 6.5 round him drawn gold (red from wind-up 12), the inner circle r 2 white. Active 0-15 the harpoon turns once round him on its chain (22.5°/tick): 10, push 0.6, once, to whoever stands between r 2 and 6.5 within ±15° of it. |
+| sweep | 1-3 | 24 / 40 / 16 | 0-30 | Cooldown 200. The half of the room centred on the target is drawn: its edge (a line through the centre), arcs at r 5, 10 and the rim, arrows the way the beam will turn (direction random), gold, red from wind-up 16. Active: the lamp's beam (particles from the lamp to the deck) turns through it at 4.5°/tick: 8 and Blindness 1.5 s, once, to each player it crosses (hit by angle progress, so it cannot skip anyone). The other half and the circle r 1.5 under the lamp are safe. |
+| surge | 2-3 | 22 / 40 / 16 | 0-30 | Cooldown 320. The edge of the room opposite the target (a chord) drawn sea blue with foam arrows toward the target, red from wind-up 14. Impact: three waves 14 ticks apart roll across the room at 0.7 a tick: 8, push 0.4 along, lift 0.3, once per wave, to whoever stands within 0.8 of the front with feet within 0.6 of the floor (jump them). |
+| call | 2-3 | 20 / 10 / 16 | 0-30 | Cooldown 600. Drowned marines and tide wraiths alternately, `scaledCount(2)`, at most 3 alive, on open deck 3.5 from him; tagged minions, discarded on death, removal and reset. |
+| overload | 3 (once) | 40 / 20 / 20 | scheduled | Guarded 64 ticks: rings of light converge on him, the lens blazes over his head. Impact: a ring of light runs out to the rim (10, lift 0.3, jump it), +8% speed (`drowned_keeper_overload`), the Lamp Overload starts (first flash 60 ticks later). |
+| slam | 3 | 22 / 10 / 18 | scheduled | A circle r 3.5, 3.5 ahead of him on open deck, drawn gold while he turns 4°/tick until wind-up 12, red from 14, with a white ring r 9 for the shockwave. Impact: 15, push 0.6, lift 0.4 inside, then a ring runs out to 9 (6, lift 0.3, jump it). |
+
+**The Lamp Overload (phase 3).** Every 40 ticks everyone near the room gets Darkness 3.5 s (no particles). The lamp
+shines in three lit sectors of 60° with 60° of shadow between them, turning all the time at 0.8°/tick (0.2 blocks a
+tick at 14 from the centre, slower further in; the direction flips after every flash); the circle r 2 under the lamp
+is always lit. Their edges are drawn faintly (every 6 ticks). Every 150 ticks x `cooldownScale()` (at least 100) a
+flash is warned for 30 ticks: edges drawn densely gold with light across the sectors, red for the last 10 (a chime at
+20); then the lamp flashes: 9 and Blindness 1.5 s to every player in the light. The timer waits while the overload
+runs or he is guarded.
+
+**No blocks.** He places and breaks no blocks; the beam, the waves, the sectors and the chain are particles and hit
+checks. Nothing to restore. His crew is discarded on death, removal and reset.
+
+**Fair edges.** The deck is walled by the glazing; the doorways lead to the gallery and its rail. His `strike` caps
+pushes at 1.0 and lift at 0.45; a push is dropped when a probe 1.5 blocks along it finds no open deck (the glass, the
+hatch house, the gallery), and then the lift is capped at 0.2. The haul pulls toward him (always inside). Every hit is
+drawn first; the largest single hit is 15 (the slam). Blindness lasts at most 1.5 s from his moves.
+
+**Co-op and NG+** come from the engine (`BossDifficulty`, `BossCycles`): health, damage (every hit goes through
+`strike`), poise, cooldowns (the flash and slam timers use `cooldownScale()`), compressed wind-ups. His crew scales
+with `scaledCount`; the sweep, waves and flashes reach every player.
+
+Previews:
+- `python3 tools/gen_models.py --preview --only drowned_keeper` writes `build/previews/models/drowned_keeper.png`.
+- Held harpoon: `python3 tools/art_sheet.py --kind held --only lightkeeper_harpoon`.
+
+## 43. Champion of the Brass Caravanserai: The Brass Merchant Prince (Le Prince marchand de laiton)
+Files:
+- `tools/wf/mobs/merchant_prince.py`: model `merchant_prince` (85 cubes, 256x128).
+- `src/main/java/com/brasshaven/entity/boss/MerchantPrince.java`: the moveset.
+
+There is no lair module. The arena is the sunken auction pit under the great dome (`tools/wf/structures/
+brass_caravanserai.py`, `pit()`, seal at (0, -9, -16), radius 15): a flat floor of radius 17.5 (feet -8) of brass,
+azure and polished stone, two tiers of bidders' steps (17.5-19 at +1, 19-20.5 at +2), the pit wall to 22.6 with iron
+grilles on its rim, the north aisle (the mist, the auctioneer's lectern and the bell podium beside it) and the south
+aisle to the treasury's sealed bars, 80 blocks of headroom; the dome's eight piers stand at radius 24 on 22.5° + 45° k.
+`BOSS` there is `brasshaven:merchant_prince` (it replaces the borrowed Gryphon Knight, whose own home, quest and seal
+on the sky island are untouched). `BOSS_HOME` is `brass_caravanserai`. "Open floor" in the class means floor within 0.6
+of the seal's level (1.6 if the floor round the seal is rough: a command spawn) with two blocks of air over it, within
+`pitR()` (seal radius + 2, between 14 and 17: 17 here) of the centre: the steps, the aisles and the podium never are.
+
+Reward: `remembrance_merchant_prince` forges **The Merchant Prince's Scimitar** (`prince_scimitar`, LITHITE 8.5 / -2.4).
+- It has a new ability shape, **CRESCENT**, in `BossWeaponItem`: a gilded crescent flies along the flat aim (up to 12
+  blocks, walls stop it), hitting every foe within 1.8 of its path once for the power (10, knockback 0.4); then the
+  appraisal: the struck foe with the most health left takes a gold-bar slam for half the power. Flag `weak`, particle
+  WAX_ON, cooldown 80. Instant, no ticker.
+- Held model `prince_scimitar` in `wf/held3d.py`, sprite `prince_scimitar` in `wf/itemart_shapes.py`.
+
+Loot (`gen_data.py`): map fragments, emeralds, experience bottles, golden apples, diamonds, gold ingots, gold blocks,
+raw gold, golden horse armour, orange carpets, an 8% enchanted golden apple. Quest: `explorer/boss_merchant_prince`.
+
+**Concept.** The decadent prince who bought the city, carried on his own clockwork palanquin, 3.6 blocks (hitbox
+1.6 x 3.6) plus the plume:
+- the palanquin (`car`): a brass-bound mahogany coffer heaped with gold coins, a crimson cushion with a gold fringe,
+  gilded finials with rubies at its corners, a lens lock plate; it scuttles on four splayed brass legs (`thigh_*`,
+  `shin_*`: cog hip joints, rod shins, iron feet);
+- the prince sits cross-legged on the cushion: azure silks plated with rows of brass scales, a crimson sash round a
+  full belly, a jewelled collar (ruby, sapphire, emerald), brass pauldrons, gold slippers;
+- a heavy-browed face with kohl-dark eyes glinting gold (glow), a hooked nose, a curled moustache, an oiled black
+  beard trimmed to a point with a gold bead, gold earrings; a towering cream turban wound with gold bands, a great ruby
+  in a gold setting (glow) and a white plume;
+- asymmetry: a broad steel scimitar with a gold back, a sapphire pommel and a gold crossguard in the right hand;
+  jewelled rings on the left hand; behind him a great brass mechanical arm on a mast from the coffer (`mast`,
+  `mech_up` with a piston, `mech_fore`, `claw`), its three-fingered claw clutching a gold bar over his left shoulder
+  (turned slowly in the idle loop).
+
+**Stats.**
+- 660 health, armour 11, toughness 4, attack 14, poise 115, speed 0.27, knockback resistance 1.0, step 1.5.
+- No fall damage, yellow bar.
+- Phase 2 at 65% (roar, +10% speed, `merchant_prince_wrath`). Phase 3 at 30%, driven by the class like the Chained
+  Jailer: when he is free he chains `auction` once (guarded 64 ticks); `dash` is chained from `bossTick` too. Range
+  999 / weight 0 keeps both out of the picker.
+
+| Move | Phase | Wind-up / active / recovery | Range | What it does |
+|---|---|---|---|---|
+| slash | 1-3 | 14 / 12 / 16 | 0-6.5 | Arc drawn gold (±70°, 5.5; red from wind-up 9). Impact: sweep, 12, push 0.6. Active 0 he turns up to 20°, a red line (13, half width 1.2) is drawn active 0-5; active 6 a gold crescent flies down it at 0.9 a tick: 8, lift 0.25, once each. P2: 30% chains charge (target past 6) or coins. |
+| coins | 1-3 | 18 / 16 / 14 | 3-18 | Seven lanes (±40°, 14 long) fanned on his facing at the start, drawn gold, red from wind-up 12. Active 0, 5, 10 a fan of coins (one per lane, 0.8 a tick, stopped by walls): 5 to the first one each meets. P2: a fourth fan at active 15 down the six lanes between, drawn white beforehand. |
+| bid | 1-3 | 16 / 40 / 14 | 3-24 | `min(3, scaledCount(1))` marks: the target, then other players. A circle (r 2.5) on each, white in the wind-up; active 0-27 it follows its player at 0.16 a tick over open floor (gold, a coin column climbing, a pling rising in pitch); 28-38 it holds red (the bar falls from 32); 39 the gold bar: 14, lift 0.35. |
+| charge | 1-3 | 16 / 8 / 16 | 6-16 | A lane (half width 1.3) over open floor with 4 blocks of headroom to the target + 2 (at most 12), drawn gold while he turns 4°/tick until wind-up 10, then red. Active 0-5 he runs down it (`move`, collisions kept): 13, push 0.7, lift 0.2 to whoever is within 1.6 (once). |
+| hire | 2-3 | 20 / 10 / 16 | 0-30 | Cooldown 600. Bandit marksmen, `scaledCount(2)`, at most 3 alive, on open floor 5-9 from him; tagged minions, discarded on death, removal and reset. |
+| sandstorm | 2-3 | 24 / 6 / 16 | 0-30 | Cooldown 460. The eye (r 2) on the target's spot (open floor within pitR - 3) drawn sand, red from wind-up 16, the reach (r 7) dotted. Impact: a vortex lives 140 ticks, drifting after the nearest player at 0.06 a tick; every 4 ticks a push of 0.04 in and 0.06 round to whoever is within 7 (dropped where open floor does not lie 1.5 along it; walking beats it); every 20 ticks in the eye: 3 and Slowness I 1 s. Ends if the fight resets. |
+| auction | 3 (once) | 40 / 20 / 20 | scheduled | Guarded 64 ticks; rings of gold and azure converge on him, the arm beats the coffer like a gavel. Impact: a gold ring runs to the pit's edge (10, lift 0.3, jump it: it hits only who stands within 0.6 of the floor), +12% speed (`merchant_prince_auction`), the hazards start (sectors 40 ticks later, dash 120). |
+| dash | 3 | 16 / 46 / 14 | scheduled | Every 260 ticks x `cooldownScale()` (at least 160) when he is free. A lane (half width 1.3) over open floor to the foot of one of the eight piers (r 15 at 22.5° + 45° k; not the last one, at least 6 away, the one passing nearest the target), drawn gold, red from wind-up 10. Active 0-5, 20-25, 40-45 he runs down a lane (11, push 0.7, lift 0.2, once per dash); 6-19 and 26-39 the next lane is drawn (red from 14 / 34). |
+
+**The Final Auction (phase 3).** Gold dust drifts down over the pit.
+- *Gilded sectors*: every 180 ticks x `cooldownScale()` (at least 110, counted from the last blast) the pit is cut
+  into eight 45° sectors (offset 0 or 22.5° at random); `min(4, scaledCount(2) + 1)` are chosen: the target's first,
+  then others, not side by side when it can be helped. Ticks 0-19 their edges are drawn gold; at 20 their floor is
+  gold-plated (temporary gold blocks) and glitters, the edges red from 40 (a fuse hiss); at 50 they detonate: 9 and
+  lift 0.4 to whoever stands in a plated sector (outside r 1 of the centre), and the floor goes back.
+- *Pier dash*: see `dash` above.
+- Both wait while `auction` runs or he is guarded.
+
+**Temporary blocks.** The only blocks he places are the gold blocks of the plated sectors: only on the floor layer
+under the seal's level, between r 1.5 and `pitR()`, only over full plain blocks (no block entity; the seal itself is
+never touched) with air above. They go back right after the blast, when the fight resets (phase back to 1), the arena
+empties, he dies or is removed, and on the first tick after a reload (saved in `MerchantPrinceGold`). A block goes back
+where it is still gold or was mined out during the fight. His mercenaries are discarded on death, removal and reset.
+
+**Fair edges.** The pit is walled by the steps and the pit wall (no drop). His `strike` caps pushes at 1.0 and lift
+at 0.45; a push is dropped when a probe 1.5 blocks along it finds no open floor (the steps, an aisle, the podium), and
+then the lift is capped at 0.2; the vortex's drag is checked the same way. Bids, lanes, the vortex and the sectors only
+use open floor. Every hit is drawn on the floor first; the largest single hit is 14 (the bid's bar).
+
+**Co-op and NG+** come from the engine (`BossDifficulty`, `BossCycles`): health, damage (every hit goes through
+`strike`), poise, cooldowns (the sector and dash timers use `cooldownScale()`), compressed wind-ups. Bids, mercenaries
+and sectors scale with `scaledCount`; the vortex follows the nearest player.
+
+Previews:
+- `python3 tools/gen_models.py --preview --only merchant_prince` writes `build/previews/models/merchant_prince.png`.
+- Held scimitar: `python3 tools/art_sheet.py --kind held --only prince_scimitar`.
+
+## 44. Champion of the Mycelium Monastery: The Mycelium Abbot (L'Abbé du Mycélium)
+Files:
+- `tools/wf/mobs/mycelium_abbot.py`: model `mycelium_abbot` (87 cubes, 256x128).
+- `src/main/java/com/brasshaven/entity/boss/MyceliumAbbot.java`: the moveset.
+
+There is no lair module. The arena is the round hall under the cap's dome (`tools/wf/structures/mycelium_monastery.py`,
+`cap_and_arena()`, seal at (0, 84, -28), radius 16): a flat floor of radius 22 (feet 85) of brass, parquet, stem and
+mycelium round a gilded centre, a shroomlight ring at 11, braziers at 20.8, the brass ring wall to 24.5, six pore
+windows, a gill-ribbed vault with the glass oculus at its crown. `BOSS` there is `brasshaven:mycelium_abbot` (it
+replaces the borrowed Gryphon Knight, whose own home, quest and seal on the sky island are untouched). `BOSS_HOME` is
+`mycelium_monastery`. "Open floor" in the class means floor within 0.6 of the seal's level (1.6 if the floor round the
+seal is rough: a command spawn) with two blocks of air over it, within `floorR()` (seal radius + 3, between 12 and 19:
+19 here) of the centre: the braziers and the ring wall never are. Distinct from the Spore Alchemist (red agaric,
+green flasks, bogged): brown cap, violet spores and cyan bioluminescence, censer clouds, rooting tendrils, bell monks.
+
+Reward: `remembrance_mycelium_abbot` forges **The Abbot's Crozier** (`abbot_crozier`, LITHITE 8 / -2.8).
+- It has a new ability shape, **MYCELIUM**, in `BossWeaponItem`: three mycelium tendrils race along the ground in a
+  fan round the flat aim (±20°, up to 9 blocks, walls stop each); every foe a tendril touches is hit once for the power
+  (9, no knockback) and rooted (Slowness IV 2 s); the wielder heals 1 per foe rooted (at most 4). Flag `poison`,
+  particle SPORE_BLOSSOM_AIR, cooldown 80. Instant, no ticker.
+- Held model `abbot_crozier` in `wf/held3d.py`, sprite `abbot_crozier` in `wf/itemart_shapes.py`.
+
+Loot (`gen_data.py`): map fragments, emeralds, experience bottles, golden apples, diamonds, mycelium, shroomlights,
+brown and red mushrooms, spore blossoms, iron chains, an 8% enchanted golden apple. Quest: `explorer/boss_mycelium_abbot`.
+
+**Concept.** A steam monk grown into the fungal network, 3.4 blocks (hitbox 1.4 x 3.4) plus the crozier:
+- an umber habit (weave and folds) with a brass-trimmed band, its skirt eaten into mycelium at the hem, threads to the
+  floor and a `trail` of felt tendrils behind him; a hempen rope belt with tails, a dark scapular with a brass sigil;
+- a capelet of violet-white mycelium felt, three little glowing cyan mushrooms sprouting from it; brass censer chains
+  crossed over the chest (`sash`) with a clasp; on his back a brass reliquary-boiler with a cyan lens and a chimney
+  (white steam in the ambience);
+- a gaunt grey-green face, glowing cyan eyes (glow), a mycelium beard with caught spores (glow), a felted cowl; the
+  hood grown into a broad brown mushroom cap (`cap`, 18 wide, stepped dome, cream specks) whose gills glow cyan at the
+  rim (glow);
+- asymmetry: the crozier in the right hand (dark wood, brass bands and knop, the `crook` curling forward with a thread
+  off its tip, a glowing cyan mushroom on its crown); the brass censer on its `chain` from the left hand, spore-light in
+  its vents (turned in the idle loop).
+
+**Stats.**
+- 650 health, armour 10, toughness 4, attack 13, poise 110, speed 0.25, knockback resistance 1.0, step 1.25.
+- No fall damage, purple bar.
+- Phase 2 at 65% (roar, +10% speed, `mycelium_abbot_wrath`). Phase 3 at 30%, driven by the class like the Chained
+  Jailer: when he is free he chains `communion` once (guarded 64 ticks); `burrow` is chained from `bossTick` too. Range
+  999 / weight 0 keeps both out of the picker.
+
+| Move | Phase | Wind-up / active / recovery | Range | What it does |
+|---|---|---|---|---|
+| crozier | 1-3 | 14 / 14 / 16 | 0-6.5 | Arc drawn in spores (±70°, 5.5; red from wind-up 9). Impact: sweep, 12, push 0.6. Active 0 he turns up to 20°; a red line (7.5, half width 1.2) is drawn active 0-9; active 10 the overhead slam down it: 13, lift 0.35. P2: 30% chains crook (target past 5) or censer. |
+| censer | 1-3 | 18 / 16 / 14 | 0-9 | An arc (±60°, 7.5) on his facing at the start, drawn in spores, red from wind-up 12. Active 0-14 every 2 ticks the censer sweeps across (+60° to -60°) and leaves spore clouds (r 1.7) on open floor at 2.5 and 5 along the swing; each hangs 40 ticks (P2 60): every 10 ticks inside, 2, Nausea 3 s, Poison I 2.5 s. |
+| tendrils | 1-3 | 26 / 10 / 14 | 0-24 | A circle (r 2) on open floor under each player at the start (at most 4), plus 2 near them in P2 (3 apart), drawn in spores, red from wind-up 16. Impact: 10, lift 0.3 and Slowness IV 1.5 s (rooted) to whoever stands in one. |
+| crook | 1-3 | 16 / 8 / 16 | 3.5-10 | A line (9, half width 1) drawn in spores while he turns 4°/tick until wind-up 10, then red. Impact: 7, lift 0.1, and a pull toward him of 0.18 per block beyond 2 (at most 1.0; dropped where open floor does not lie 1.5 along it). |
+| pods | 2-3 | 20 / 10 / 16 | 0-30 | Cooldown 360. `min(4, scaledCount(2) + 1)` spots on open floor 4-9 from a player, never within 2.5 of one, 3 apart: a cyan circle (r 1) and the burst's reach (r 3.5) dotted. Impact: a red mushroom block in each air cell (nobody in it). Each pod: its reach drawn every 10 ticks (every 4, red, the last 30) with a swelling hiss; at 100 ticks it bursts (8, push 0.4, lift 0.3, Poison I 3 s within 3.5) and goes. Broken earlier, it fizzles. |
+| monks | 2-3 | 20 / 10 / 16 | 0-30 | Cooldown 600. Bell monks, `scaledCount(2)`, at most 3 alive, on open floor 5-9 from him; tagged minions, discarded on death, removal and reset. |
+| communion | 3 (once) | 40 / 20 / 20 | scheduled | Guarded 64 ticks; rings of spores and cyan close in on him. Impact: a ring of mushrooms blooms out to the floor's edge (10, lift 0.3, jump it: it hits only who stands within 0.6 of the floor), +12% speed (`mycelium_abbot_communion`), the hazards start (fairy rings 60 ticks later, burrow 100). |
+| burrow | 3 | 20 / 40 / 16 | scheduled | Every 240 ticks x `cooldownScale()` (at least 150) when he is free and no fairy ring runs. Guarded from the start; he sinks (wind-up), hidden (invisible, untouchable) from wind-up 19. A ring (r 2.5) on open floor at the target's spot hunts it at 0.18 a tick active 0-19 (spores), holds red 20-29; active 30 he bursts up in it: 14, push 0.8, lift 0.5, and a mushroom ring blooms from there (to 9, 0.45 a tick, 7, jump it); active 38 a second one. Never stays hidden outside the move. |
+
+**Communion (phase 3).** Spore blossoms drift down from the dome.
+- *Fairy rings*: every 220 ticks x `cooldownScale()` (at least 120, counted from the last ring) a ring gathers at the
+  arena's centre for 30 ticks (cyan, red the last 10), then three mushroom rings bloom out to the floor's edge 12 ticks
+  apart (0.4 a tick, 7 each, jump them). They wait while `communion` or `burrow` runs or he is guarded.
+- *Burrow*: see above.
+
+**Temporary blocks.** The only blocks he places are the pods: red mushroom blocks, only in air cells on open floor
+with nobody in them (the floor itself is never touched). A pod goes when it bursts, when a player breaks it, when the
+fight resets (phase back to 1), the arena empties, he dies or is removed, and on the first tick after a reload (saved in
+`MyceliumAbbotPods`). A cell is cleared only where it is still a red mushroom block. His monks are discarded on death,
+removal and reset.
+
+**Fair edges.** The floor is walled by the ring wall (no drop). His `strike` caps pushes at 1.0 and lift at 0.5; a
+push is dropped when a probe 1.5 blocks along it finds no open floor, and then the lift is capped at 0.2; the crook's
+pull is checked the same way. Marks, clouds, pods and the hunting ring only use open floor. Every hit is drawn on the
+floor first; the largest single hit is 14 (the burrow's emergence). Nausea lasts 3 s at most and is refreshed only
+while standing in a cloud.
+
+**Co-op and NG+** come from the engine (`BossDifficulty`, `BossCycles`): health, damage (every hit goes through
+`strike`), poise, cooldowns (the burrow and fairy-ring timers use `cooldownScale()`), compressed wind-ups. Pods and monks
+scale with `scaledCount`; tendrils mark every player.
+
+Previews:
+- `python3 tools/gen_models.py --preview --only mycelium_abbot` writes `build/previews/models/mycelium_abbot.png`.
+- Held crozier: `python3 tools/art_sheet.py --kind held --only abbot_crozier`.
+
 ## Difficulty: co-op scaling and NG+ cycles
 
 Applied by `boss/WayfarerBoss` to **every** boss on its first server tick, whatever spawned it (boss seal,

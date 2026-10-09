@@ -28,6 +28,7 @@ from . import starfall_library  # noqa: F401
 from . import airship_graveyard  # noqa: F401
 from . import echo_cathedral  # noqa: F401
 from . import cloud_pagoda  # noqa: F401
+from . import brass_caravanserai  # noqa: F401
 from . import icebound_fleet  # noqa: F401
 from . import soul_engine  # noqa: F401
 from . import clockwork_asylum  # noqa: F401
@@ -39,3 +40,5 @@ from . import timber_fortress  # noqa: F401
 from . import crimson_colosseum  # noqa: F401
 from . import storm_spire  # noqa: F401
 from . import clockwork_carnival  # noqa: F401
+from . import leviathan_lighthouse  # noqa: F401
+from . import mycelium_monastery  # noqa: F401

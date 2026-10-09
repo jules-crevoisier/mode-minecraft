@@ -1299,6 +1299,91 @@ def tesla_coilstaff():
 
 ARCHETYPES["tesla_coilstaff"] = tesla_coilstaff
 
+
+def lightkeeper_harpoon():
+    """Lightkeeper's Harpoon: a long weathered ash shaft with a tarred grip and an iron butt cap, a chain wound round
+    it below the head, a brass collar, a long iron shank and a barbed toggle head; a little storm lantern hung on the
+    collar, glowing amber."""
+    out = _shaft(-10, 22, 1.4, "handle") + _grip(2, 8, 1.9)
+    out += [box(7.1, -11.4, 7.1, 8.9, -10, 8.9, "iron_dark")]                 # the butt cap
+    for y in (12.0, 13.6, 15.2, 16.8):                                      # the chain wound round
+        out.append(box(6.9, y, 6.9, 9.1, y + 0.8, 9.1, "steel"))
+    out += [box(6.8, 22, 6.8, 9.2, 23.2, 9.2, "brass"),                     # the collar
+            box(7.5, 23.2, 7.5, 8.5, 28.5, 8.5, "steel"),                   # the shank
+            box(6.8, 28.5, 7.4, 9.2, 30.5, 8.6, "light"),                   # the head
+            box(7.3, 30.5, 7.6, 8.7, 32.0, 8.4, "light"),
+            box(5.6, 26.6, 7.6, 6.8, 29.0, 8.4, "mid"),                     # the barbs
+            box(9.2, 26.6, 7.6, 10.4, 29.0, 8.4, "mid")]
+    out += [box(10.5, 19.8, 7.8, 10.9, 22.0, 8.2, "iron_dark"),              # the lantern's hook
+            box(9.0, 19.0, 6.6, 12.4, 19.8, 9.4, "brass_dark"),             # the lantern: cap,
+            box(9.2, 15.4, 6.8, 12.2, 19.0, 9.2, "glow"),                   # amber glass,
+            box(9.0, 14.6, 6.6, 12.4, 15.4, 9.4, "brass_dark"),             # base
+            box(10.5, 15.4, 6.5, 10.9, 19.0, 9.5, "brass")]                 # and a brass bar
+    return out
+
+
+ARCHETYPES["lightkeeper_harpoon"] = lightkeeper_harpoon
+
+
+def prince_scimitar():
+    """The Merchant Prince's Scimitar: a gold-wired grip with a round sapphire pommel, a brass crossguard with
+    down-turned quillons and a jewel at its heart, and a steel blade that widens as it sweeps back in a deep curve to
+    a sharp point, a gold inlay along its back."""
+    out = _grip(-4, 4, 2.0) + [box(6.9, -6.4, 6.9, 9.1, -4, 9.1, "accent"),            # the pommel
+                               box(7.4, -7.2, 7.4, 8.6, -6.4, 8.6, "brass"),
+                               box(7.0, -2, 7.0, 9.0, -1.2, 9.0, "brass"),            # the gold wire
+                               box(7.0, 1, 7.0, 9.0, 1.8, 9.0, "brass"),
+                               box(3.4, 4, 6.8, 12.6, 5.6, 9.2, "brass"),             # the crossguard
+                               box(3.4, 2.4, 6.9, 4.6, 4, 9.1, "brass_dark"),         # its quillons
+                               box(11.4, 2.4, 6.9, 12.6, 4, 9.1, "brass_dark"),
+                               box(7.3, 4.2, 6.5, 8.7, 5.4, 6.8, "accent")]           # the jewel
+    # the blade: segments climbing and leaning back (+x is the back of the curve), growing wider toward the tip
+    segs = [(5.6, 8.6, 0.0), (8.6, 11.6, 0.4), (11.6, 14.6, 1.0), (14.6, 17.4, 1.8), (17.4, 20.0, 2.8),
+            (20.0, 22.4, 4.0), (22.4, 24.4, 5.4)]
+    for i, (y0, y1, off) in enumerate(segs):
+        w = 2.0 + i * 0.4
+        out.append(box(8.0 - w + off, y0, 7.45, 8.6 + off, y1, 8.55, "steel"))
+        out.append(box(8.0 - w + off - 0.4, y0, 7.6, 8.0 - w + off, y1, 8.4, "light"))  # the bright edge
+        out.append(box(8.6 + off, y0, 7.55, 9.3 + off, y1, 8.45, "brass"))              # the gold back
+    out += [box(11.0, 24.4, 7.5, 14.2, 25.6, 8.5, "steel"),                          # the point
+            box(12.6, 25.6, 7.6, 14.2, 26.6, 8.4, "steel"),
+            box(13.4, 26.6, 7.6, 14.4, 27.6, 8.4, "light")]
+    return out
+
+
+ARCHETYPES["prince_scimitar"] = prince_scimitar
+
+
+def abbot_crozier():
+    """The Abbot's Crozier: a long dark staff banded in brass with a brass ferrule, a wrapped grip and a brass knop; the
+    crook curls over forward with white mycelium threads hanging from it, and on its crown a glowing cyan mushroom (a
+    cream stalk, a broad glowing cap) grows out of the wood."""
+    import math
+    out = _shaft(-10, 20, 1.6, "handle") + _grip(2, 8, 2.2)
+    out += [box(6.9, -11.4, 6.9, 9.1, -10, 9.1, "brass_dark")]                 # the ferrule
+    for y in (-5.0, 10.0, 15.0):                                            # brass bands
+        out.append(box(6.8, y, 6.8, 9.2, y + 0.8, 9.2, "brass"))
+    out += [box(6.5, 19.5, 6.5, 9.5, 21.7, 9.5, "brass"),                    # the knop
+            box(6.8, 21.7, 6.8, 9.2, 22.3, 9.2, "brass_dark")]
+    cx, cy, r = 4.4, 24.6, 3.6                                             # the crook curls over toward -x
+    for k in range(9):
+        a = math.radians(-20 + 25 * k)
+        x, y = cx + r * math.cos(a), cy + r * math.sin(a)
+        h = 0.85
+        out.append(box(x - h, y - h, 8 - h, x + h, y + h, 8 + h, "handle" if k % 2 else "handle_dark"))
+    tip = cx - r * math.cos(math.radians(20))
+    out += [box(tip - 0.25, 19.0, 7.75, tip + 0.25, 22.2, 8.25, "cream"),         # mycelium threads off the tip
+            box(tip + 0.8, 20.2, 7.75, tip + 1.2, 22.2, 8.25, "cream")]
+    out += [box(3.8, 28.2, 7.4, 5.0, 29.6, 8.6, "cream"),                        # the glowing mushroom: stalk,
+            box(1.0, 29.6, 5.0, 7.8, 31.0, 11.0, "accent_dark"),                  # cap,
+            box(2.0, 31.0, 6.0, 6.8, 31.8, 10.0, "accent_dark"),
+            box(3.2, 31.8, 7.2, 5.6, 32.0, 8.8, "accent"),
+            box(1.2, 29.2, 5.2, 7.6, 29.6, 10.8, "glow")]                         # glowing gills
+    return out
+
+
+ARCHETYPES["abbot_crozier"] = abbot_crozier
+
 # item id -> (archetype, material, handle, accent)
 HELD = {
     "kings_trident": ("trident_big", "warden", "bone", "sapphire"),
@@ -1354,6 +1439,9 @@ HELD = {
     "ringmaster_cane": ("ringmaster_cane", "gold", "dark", "ruby"),
     "champion_gladius": ("champion_gladius", "gold", "dark", "ruby"),
     "tesla_coilstaff": ("tesla_coilstaff", "copper", "dark", "aether"),
+    "lightkeeper_harpoon": ("lightkeeper_harpoon", "iron", "wood", "gold"),
+    "prince_scimitar": ("prince_scimitar", "iron", "dark", "sapphire"),
+    "abbot_crozier": ("abbot_crozier", "brass", "dark", "aether"),
     "cartographer_blade": ("sword", "cartographer", "wood", "emerald"),
     "telluric_hammer": ("hammer", "lithite", "wood", "emerald"),
     "storm_staff": ("staff", "storm", "dark", "sapphire"),

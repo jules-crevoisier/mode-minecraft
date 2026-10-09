@@ -1167,6 +1167,22 @@
         ]
       }
     },
+    "brass_caravanserai": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:brass_caravanserai"
+              }
+            }
+          }
+        ]
+      }
+    },
     "icebound_fleet": {
       "trigger": "minecraft:location",
       "conditions": {
@@ -1337,6 +1353,38 @@
             "predicate": {
               "location": {
                 "structures": "brasshaven:clockwork_carnival"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "leviathan_lighthouse": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:leviathan_lighthouse"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "mycelium_monastery": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:mycelium_monastery"
               }
             }
           }

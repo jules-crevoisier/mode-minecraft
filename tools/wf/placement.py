@@ -125,6 +125,7 @@ FAMILIES = [
         "mesa_minecity": 1,
         "airship_graveyard": 1,
         "cloud_pagoda": 1,
+        "brass_caravanserai": 1,
         "icebound_fleet": 1,
         "clockwork_asylum": 1,
         "spore_refinery": 1,
@@ -132,6 +133,8 @@ FAMILIES = [
         "abyssal_station": 1,     # deep oceans only (shares the sea with the dreadnought wreck)
         "storm_spire": 1,
         "clockwork_carnival": 1,
+        "leviathan_lighthouse": 1,  # rocky shores: brings its own headland, harbour cove and spit
+        "mycelium_monastery": 1,  # mushroom islands / dark forest: brings its own cliff-girt plateau and camp flat
     }, avoid=[(V + "villages", 10), (V + "pillager_outposts", 6), (V + "woodland_mansions", 8)], min_spawn=32,
         note="surface wonders; at least 40 chunks between two of them, none within 512 blocks of 0,0"),
     Family("deep_wonders", "deep_wonder", 72, 28, {
@@ -257,6 +260,8 @@ FIT = {
     "canopy_city": _f("land", spread=18, slope=1.2, wet=0.12),       # jungle floor: brings its own ground disc and footings
     "mesa_minecity": _f("land", spread=20, slope=1.4, wet=0.05),     # badlands floor: the butte brings its own talus and footings
     "airship_graveyard": _f("land", spread=10, slope=0.8, wet=0.06),
+    # desert / savanna floor: lays its own city floor, rim six deep, and the camp and road outside the walls
+    "brass_caravanserai": _f("land", spread=10, slope=0.7, wet=0.06),
     "cloud_pagoda": _f("land", spread=24, slope=1.5, wet=0.05),     # cherry grove / meadow: the massif brings its own hill and skirt  # open, flat grassland: the field brings its own ground layer
     # pack ice on flat snow or a frozen sea's edge: the water surface counts as ground, the ice field comes with it
     "icebound_fleet": _f("wetland", spread=5, slope=0.9, wet=0.95, min_wet=0.0, drop=2),
@@ -269,6 +274,10 @@ FIT = {
     "storm_spire": _f("land", spread=28, slope=1.6, wet=0.05),
     # flower / birch forest floor: lays its own meadow disc (6 deep at the rim), the coaster bents stand on it
     "clockwork_carnival": _f("land", spread=10, slope=1.0, wet=0.1),
+    # stony shore / beach: the harbour cove and the whale's tail (template +z = south) in the sea, the headland on land
+    "leviathan_lighthouse": _f("coast", sea_side="south", wet=0.5, land=0.5, spread=10, slope=1.2),
+    # mushroom fields / dark forest: brings its own plateau massif, gate terrace, ridge and camp flat (rim 12 deep)
+    "mycelium_monastery": _f("land", spread=14, slope=1.2, wet=0.2),
     # ---- coast: the dock side (template +z = south) in the sea, the cape on land, shore near sea level
     "coastal_lighthouse": _f("coast", sea_side="south", wet=0.5, land=0.5, spread=8, slope=1.0),
     # the island (south) in the sea, the causeway's shore end (north) on the beach: the strand lands at sea level

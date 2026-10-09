@@ -25,7 +25,7 @@ import java.util.List;
  * Abilities only ever hurt non-player creatures.
  */
 public class BossWeaponItem extends AbilityItem {
-    public enum Ability { WAVE, BEAM, DASH, ERUPT, ROOT, CLOUD, LEAP, ARC, BLINK, HOOK, SHARDS, BREATH, RIFT, WARD, TEMPEST, TIDE, JET, PRESSURE, MIRE, PLUMB, BROADSIDE, PRISM, CAGE, SCARAB, MAGNET, TONGS, ZENITH, FUSE, DRAGON, SHRIEK, GRAPPLE, STOKE, REWIND, ANCHOR, TETHER, PRUNE, BORE, FELL, ORBIT, JUGGLE, TRIUMPH, TESLA }
+    public enum Ability { WAVE, BEAM, DASH, ERUPT, ROOT, CLOUD, LEAP, ARC, BLINK, HOOK, SHARDS, BREATH, RIFT, WARD, TEMPEST, TIDE, JET, PRESSURE, MIRE, PLUMB, BROADSIDE, PRISM, CAGE, SCARAB, MAGNET, TONGS, ZENITH, FUSE, DRAGON, SHRIEK, GRAPPLE, STOKE, REWIND, ANCHOR, TETHER, PRUNE, BORE, FELL, ORBIT, JUGGLE, TRIUMPH, TESLA, LANTERN, CRESCENT, MYCELIUM }
 
     public static final int FIRE = 1;
     public static final int SLOW = 2;
@@ -1513,6 +1513,133 @@ public class BossWeaponItem extends AbilityItem {
                 }
                 level.playSound(null, player, SoundEvents.TRIDENT_THUNDER.value(), SoundSource.PLAYERS, 0.6F, 1.8F);
                 level.playSound(null, player, SoundEvents.BEACON_POWER_SELECT, SoundSource.PLAYERS, 0.8F, 1.6F);
+            }
+            case LANTERN -> {
+                // the Drowned Lightkeeper's harpoon: hurled along the aim on its chain (up to `size` blocks, walls stop
+                // it), it bites the first foe it meets for the power and hauls it back toward the wielder; where it bit,
+                // the keeper's lantern flares: every other foe within 4 takes half the power, and all of them are
+                // blinded and lit up (Glowing 5 s)
+                Vec3 eye = player.getEyePosition();
+                BlockHitResult aim = level.clip(new ClipContext(eye, eye.add(look.scale(size)), ClipContext.Block.COLLIDER,
+                        ClipContext.Fluid.NONE, player));
+                double reach = aim.getType() == HitResult.Type.MISS ? size : Math.max(1.0, aim.getLocation().distanceTo(eye) - 0.3);
+                net.minecraft.core.particles.DustParticleOptions chainDust = new net.minecraft.core.particles.DustParticleOptions(0x9AA0A8, 1.0F);
+                LivingEntity bitten = null;
+                Vec3 end = eye.add(look.scale(reach));
+                for (double d = 0.75; d <= reach && bitten == null; d += 0.5) {
+                    Vec3 p = eye.add(look.scale(d)).subtract(0, 0.3, 0);
+                    end = p;
+                    level.sendParticles(chainDust, p.x, p.y, p.z, 1, 0.02, 0.02, 0.02, 0.0);
+                    for (LivingEntity e : foes(level, player, new AABB(p, p).inflate(0.9, 1.2, 0.9))) {
+                        bitten = e;
+                        break;
+                    }
+                }
+                level.sendParticles(net.minecraft.core.particles.ParticleTypes.CRIT, end.x, end.y, end.z, 8, 0.2, 0.2, 0.2, 0.1);
+                net.minecraft.core.particles.DustParticleOptions flare = new net.minecraft.core.particles.DustParticleOptions(0xFFC45C, 1.4F);
+                level.sendParticles(flare, end.x, end.y, end.z, 24, 1.6, 0.8, 1.6, 0.0);
+                level.sendParticles(particle, end.x, end.y, end.z, 16, 1.2, 0.6, 1.2, 0.05);
+                if (bitten != null) {
+                    hit(level, player, bitten, power, 0.0);
+                    Vec3 haul = player.position().subtract(bitten.position()).multiply(1, 0, 1);
+                    if (haul.lengthSqr() > 1.0E-4) {
+                        haul = haul.normalize().scale(Math.min(1.6, haul.length() * 0.18));
+                        bitten.setDeltaMovement(haul.x, 0.3, haul.z);
+                        bitten.hurtMarked = true;
+                    }
+                    bitten.addEffect(new MobEffectInstance(MobEffects.GLOWING, 100, 0));
+                    bitten.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 60, 0));
+                }
+                for (LivingEntity e : foes(level, player, new AABB(end, end).inflate(4.0, 2.5, 4.0))) {
+                    if (e != bitten && e.position().distanceTo(end) <= 4.0 + e.getBbWidth() / 2) {
+                        hit(level, player, e, power * 0.5F, 0.2);
+                        e.addEffect(new MobEffectInstance(MobEffects.GLOWING, 100, 0));
+                        e.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 60, 0));
+                    }
+                }
+                level.playSound(null, player, SoundEvents.TRIDENT_THROW.value(), SoundSource.PLAYERS, 1.0F, 0.8F);
+                level.playSound(null, player, SoundEvents.CHAIN_PLACE, SoundSource.PLAYERS, 1.0F, 0.8F);
+                level.playSound(null, player, SoundEvents.BEACON_POWER_SELECT, SoundSource.PLAYERS, 0.6F, 1.8F);
+            }
+            case CRESCENT -> {
+                // the Brass Merchant Prince's scimitar: a gilded crescent flies out along the aim (up to `size` blocks,
+                // walls stop it), cutting every foe within 1.8 of its path once for the power; then the prince's
+                // appraisal: the struck foe with the most health left is marked with a price and, a heartbeat later in
+                // the same swing, a gold bar slams down on it for half the power (flag weak)
+                Vec3 eye = player.getEyePosition();
+                BlockHitResult aim = level.clip(new ClipContext(eye, eye.add(flat.scale(size)), ClipContext.Block.COLLIDER,
+                        ClipContext.Fluid.NONE, player));
+                double reach = aim.getType() == HitResult.Type.MISS ? size : Math.max(1.0, aim.getLocation().distanceTo(eye) - 0.3);
+                net.minecraft.core.particles.DustParticleOptions gold = new net.minecraft.core.particles.DustParticleOptions(0xFFD24A, 1.3F);
+                java.util.Set<LivingEntity> cut = new java.util.LinkedHashSet<>();
+                Vec3 side = new Vec3(-flat.z, 0, flat.x);
+                for (double d = 1.0; d <= reach; d += 0.6) {
+                    Vec3 p = origin.add(flat.scale(d)).add(0, 1.0, 0);
+                    double w = 1.2 + d * 0.05;
+                    for (int k = -3; k <= 3; k++) {                      // the crescent, its horns trailing behind
+                        double f = k / 3.0;
+                        Vec3 q = p.add(side.scale(f * w)).subtract(flat.scale(f * f * 0.8));
+                        level.sendParticles(gold, q.x, q.y, q.z, 1, 0.02, 0.02, 0.02, 0.0);
+                    }
+                    for (LivingEntity e : foes(level, player, new AABB(p, p).inflate(1.8, 1.5, 1.8))) {
+                        if (e.position().multiply(1, 0, 1).distanceTo(p.multiply(1, 0, 1)) <= 1.8 + e.getBbWidth() / 2 && cut.add(e)) {
+                            hit(level, player, e, power, 0.4);
+                        }
+                    }
+                }
+                LivingEntity richest = null;
+                for (LivingEntity e : cut) {
+                    if (e.isAlive() && (richest == null || e.getHealth() > richest.getHealth())) {
+                        richest = e;
+                    }
+                }
+                if (richest != null) {
+                    Vec3 at = richest.position();
+                    for (int k = 0; k < 8; k++) {                        // the bar falling
+                        level.sendParticles(gold, at.x, at.y + 4.0 - k * 0.45, at.z, 2, 0.15, 0.05, 0.15, 0.0);
+                    }
+                    level.sendParticles(particle, at.x, at.y + 0.3, at.z, 14, 0.6, 0.2, 0.6, 0.05);
+                    hit(level, player, richest, power * 0.5F, 0.0);
+                    level.playSound(null, at.x, at.y, at.z, SoundEvents.ANVIL_LAND, SoundSource.PLAYERS, 0.7F, 1.4F);
+                }
+                level.playSound(null, player, SoundEvents.PLAYER_ATTACK_SWEEP, SoundSource.PLAYERS, 1.0F, 0.9F);
+                level.playSound(null, player, SoundEvents.ARMOR_EQUIP_GOLD.value(), SoundSource.PLAYERS, 0.8F, 1.3F);
+            }
+            case MYCELIUM -> {
+                // the Mycelium Abbot's crozier: planted, it sends three mycelium tendrils racing along the ground in a fan
+                // round the flat aim (±20°, up to `size` blocks, walls stop each); every foe a tendril touches is hurt
+                // once and rooted (Slowness IV 2 s), and the network feeds the wielder 1 health per foe rooted (up to 4)
+                net.minecraft.core.particles.DustParticleOptions threadDust = new net.minecraft.core.particles.DustParticleOptions(0xE6DEEA, 1.1F);
+                net.minecraft.core.particles.DustParticleOptions glowDust = new net.minecraft.core.particles.DustParticleOptions(0x64E8D8, 1.3F);
+                java.util.Set<LivingEntity> rooted = new java.util.LinkedHashSet<>();
+                Vec3 low = origin.add(0, 0.5, 0);
+                for (int k = -1; k <= 1; k++) {
+                    double r = Math.toRadians(20.0 * k);
+                    Vec3 dir = new Vec3(flat.x * Math.cos(r) - flat.z * Math.sin(r), 0, flat.x * Math.sin(r) + flat.z * Math.cos(r));
+                    BlockHitResult wall = level.clip(new ClipContext(low, low.add(dir.scale(size)), ClipContext.Block.COLLIDER,
+                            ClipContext.Fluid.NONE, player));
+                    double reach = wall.getType() == HitResult.Type.MISS ? size : Math.max(1.0, wall.getLocation().distanceTo(low) - 0.3);
+                    for (double d = 1.0; d <= reach; d += 0.7) {
+                        Vec3 p = origin.add(dir.scale(d));
+                        level.sendParticles(threadDust, p.x, p.y + 0.1, p.z, 1, 0.08, 0.02, 0.08, 0.0);
+                        level.sendParticles(particle, p.x, p.y + 0.2, p.z, 1, 0.15, 0.05, 0.15, 0.0);
+                        for (LivingEntity e : foes(level, player, new AABB(p, p).inflate(1.0, 1.5, 1.0))) {
+                            if (rooted.add(e)) {
+                                hit(level, player, e, power, 0.0);
+                                e.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 40, 3));
+                                level.sendParticles(glowDust, e.getX(), e.getY() + 0.4, e.getZ(), 12, 0.4, 0.3, 0.4, 0.0);
+                                level.sendParticles(net.minecraft.core.particles.ParticleTypes.MYCELIUM, e.getX(), e.getY() + 0.2,
+                                        e.getZ(), 10, 0.5, 0.1, 0.5, 0.05);
+                            }
+                        }
+                    }
+                }
+                if (!rooted.isEmpty()) {
+                    player.heal(Math.min(4, rooted.size()));
+                    level.sendParticles(glowDust, player.getX(), player.getY() + 1.0, player.getZ(), 8, 0.3, 0.5, 0.3, 0.0);
+                }
+                level.playSound(null, player, SoundEvents.MANGROVE_ROOTS_BREAK, SoundSource.PLAYERS, 1.0F, 0.6F);
+                level.playSound(null, player, SoundEvents.ROOTED_DIRT_BREAK, SoundSource.PLAYERS, 1.0F, 0.8F);
             }
             case RIFT -> {
                 // the Castellan of the Caldera's halberd: driven into the ground, it opens a molten rift that runs

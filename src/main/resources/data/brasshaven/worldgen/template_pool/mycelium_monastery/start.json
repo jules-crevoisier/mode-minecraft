@@ -1,0 +1,601 @@
+{
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "brasshaven:chunked_template",
+        "size": [
+          182,
+          136,
+          218
+        ],
+        "cells": [
+          {
+            "location": "brasshaven:mycelium_monastery/monastery/x0_z0",
+            "offset": [
+              11,
+              0,
+              12
+            ],
+            "size": [
+              19,
+              23,
+              19
+            ],
+            "blocks": 842
+          },
+          {
+            "location": "brasshaven:mycelium_monastery/monastery/x0_z1",
+            "offset": [
+              2,
+              0,
+              31
+            ],
+            "size": [
+              28,
+              42,
+              31
+            ],
+            "blocks": 4028
+          },
+          {
+            "location": "brasshaven:mycelium_monastery/monastery/x0_z2",
+            "offset": [
+              0,
+              0,
+              62
+            ],
+            "size": [
+              30,
+              61,
+              31
+            ],
+            "blocks": 5350
+          },
+          {
+            "location": "brasshaven:mycelium_monastery/monastery/x0_z3",
+            "offset": [
+              1,
+              0,
+              93
+            ],
+            "size": [
+              29,
+              61,
+              32
+            ],
+            "blocks": 5342
+          },
+          {
+            "location": "brasshaven:mycelium_monastery/monastery/x0_z4",
+            "offset": [
+              5,
+              0,
+              125
+            ],
+            "size": [
+              25,
+              41,
+              31
+            ],
+            "blocks": 2384
+          },
+          {
+            "location": "brasshaven:mycelium_monastery/monastery/x0_z5",
+            "offset": [
+              16,
+              0,
+              156
+            ],
+            "size": [
+              14,
+              7,
+              21
+            ],
+            "blocks": 816
+          },
+          {
+            "location": "brasshaven:mycelium_monastery/monastery/x1_z0",
+            "offset": [
+              30,
+              0,
+              2
+            ],
+            "size": [
+              31,
+              44,
+              29
+            ],
+            "blocks": 4076
+          },
+          {
+            "location": "brasshaven:mycelium_monastery/monastery/x1_z1",
+            "offset": [
+              30,
+              14,
+              31
+            ],
+            "size": [
+              31,
+              94,
+              31
+            ],
+            "blocks": 15775
+          },
+          {
+            "location": "brasshaven:mycelium_monastery/monastery/x1_z2",
+            "offset": [
+              30,
+              14,
+              62
+            ],
+            "size": [
+              31,
+              95,
+              31
+            ],
+            "blocks": 15988
+          },
+          {
+            "location": "brasshaven:mycelium_monastery/monastery/x1_z3",
+            "offset": [
+              30,
+              15,
+              93
+            ],
+            "size": [
+              31,
+              47,
+              32
+            ],
+            "blocks": 17155
+          },
+          {
+            "location": "brasshaven:mycelium_monastery/monastery/x1_z4",
+            "offset": [
+              30,
+              2,
+              125
+            ],
+            "size": [
+              31,
+              47,
+              31
+            ],
+            "blocks": 7530
+          },
+          {
+            "location": "brasshaven:mycelium_monastery/monastery/x1_z5",
+            "offset": [
+              30,
+              0,
+              156
+            ],
+            "size": [
+              31,
+              28,
+              31
+            ],
+            "blocks": 3964
+          },
+          {
+            "location": "brasshaven:mycelium_monastery/monastery/x1_z6",
+            "offset": [
+              45,
+              4,
+              187
+            ],
+            "size": [
+              16,
+              24,
+              24
+            ],
+            "blocks": 2022
+          },
+          {
+            "location": "brasshaven:mycelium_monastery/monastery/x2_z0",
+            "offset": [
+              61,
+              0,
+              0
+            ],
+            "size": [
+              30,
+              45,
+              31
+            ],
+            "blocks": 5327
+          },
+          {
+            "location": "brasshaven:mycelium_monastery/monastery/x2_z1",
+            "offset": [
+              61,
+              13,
+              31
+            ],
+            "size": [
+              30,
+              120,
+              31
+            ],
+            "blocks": 32625
+          },
+          {
+            "location": "brasshaven:mycelium_monastery/monastery/x2_z2",
+            "offset": [
+              61,
+              14,
+              62
+            ],
+            "size": [
+              30,
+              122,
+              31
+            ],
+            "blocks": 54245
+          },
+          {
+            "location": "brasshaven:mycelium_monastery/monastery/x2_z3",
+            "offset": [
+              61,
+              15,
+              93
+            ],
+            "size": [
+              30,
+              99,
+              32
+            ],
+            "blocks": 16334
+          },
+          {
+            "location": "brasshaven:mycelium_monastery/monastery/x2_z4",
+            "offset": [
+              61,
+              14,
+              125
+            ],
+            "size": [
+              30,
+              35,
+              31
+            ],
+            "blocks": 12508
+          },
+          {
+            "location": "brasshaven:mycelium_monastery/monastery/x2_z5",
+            "offset": [
+              61,
+              8,
+              156
+            ],
+            "size": [
+              30,
+              41,
+              31
+            ],
+            "blocks": 6202
+          },
+          {
+            "location": "brasshaven:mycelium_monastery/monastery/x2_z6",
+            "offset": [
+              61,
+              4,
+              187
+            ],
+            "size": [
+              30,
+              25,
+              30
+            ],
+            "blocks": 5035
+          },
+          {
+            "location": "brasshaven:mycelium_monastery/monastery/x3_z0",
+            "offset": [
+              91,
+              0,
+              0
+            ],
+            "size": [
+              30,
+              44,
+              31
+            ],
+            "blocks": 5167
+          },
+          {
+            "location": "brasshaven:mycelium_monastery/monastery/x3_z1",
+            "offset": [
+              91,
+              14,
+              31
+            ],
+            "size": [
+              30,
+              119,
+              31
+            ],
+            "blocks": 29008
+          },
+          {
+            "location": "brasshaven:mycelium_monastery/monastery/x3_z2",
+            "offset": [
+              91,
+              14,
+              62
+            ],
+            "size": [
+              30,
+              119,
+              31
+            ],
+            "blocks": 50340
+          },
+          {
+            "location": "brasshaven:mycelium_monastery/monastery/x3_z3",
+            "offset": [
+              91,
+              24,
+              93
+            ],
+            "size": [
+              30,
+              90,
+              32
+            ],
+            "blocks": 18587
+          },
+          {
+            "location": "brasshaven:mycelium_monastery/monastery/x3_z4",
+            "offset": [
+              91,
+              14,
+              125
+            ],
+            "size": [
+              30,
+              36,
+              31
+            ],
+            "blocks": 13272
+          },
+          {
+            "location": "brasshaven:mycelium_monastery/monastery/x3_z5",
+            "offset": [
+              91,
+              8,
+              156
+            ],
+            "size": [
+              30,
+              41,
+              31
+            ],
+            "blocks": 7007
+          },
+          {
+            "location": "brasshaven:mycelium_monastery/monastery/x3_z6",
+            "offset": [
+              91,
+              4,
+              187
+            ],
+            "size": [
+              30,
+              24,
+              31
+            ],
+            "blocks": 5619
+          },
+          {
+            "location": "brasshaven:mycelium_monastery/monastery/x4_z0",
+            "offset": [
+              121,
+              0,
+              3
+            ],
+            "size": [
+              31,
+              44,
+              28
+            ],
+            "blocks": 4058
+          },
+          {
+            "location": "brasshaven:mycelium_monastery/monastery/x4_z1",
+            "offset": [
+              121,
+              18,
+              31
+            ],
+            "size": [
+              31,
+              88,
+              31
+            ],
+            "blocks": 7730
+          },
+          {
+            "location": "brasshaven:mycelium_monastery/monastery/x4_z2",
+            "offset": [
+              121,
+              24,
+              62
+            ],
+            "size": [
+              31,
+              83,
+              31
+            ],
+            "blocks": 10819
+          },
+          {
+            "location": "brasshaven:mycelium_monastery/monastery/x4_z3",
+            "offset": [
+              121,
+              24,
+              93
+            ],
+            "size": [
+              31,
+              49,
+              32
+            ],
+            "blocks": 23112
+          },
+          {
+            "location": "brasshaven:mycelium_monastery/monastery/x4_z4",
+            "offset": [
+              121,
+              2,
+              125
+            ],
+            "size": [
+              31,
+              49,
+              31
+            ],
+            "blocks": 9827
+          },
+          {
+            "location": "brasshaven:mycelium_monastery/monastery/x4_z5",
+            "offset": [
+              121,
+              0,
+              156
+            ],
+            "size": [
+              31,
+              29,
+              31
+            ],
+            "blocks": 4863
+          },
+          {
+            "location": "brasshaven:mycelium_monastery/monastery/x4_z6",
+            "offset": [
+              121,
+              4,
+              187
+            ],
+            "size": [
+              31,
+              22,
+              30
+            ],
+            "blocks": 5215
+          },
+          {
+            "location": "brasshaven:mycelium_monastery/monastery/x5_z0",
+            "offset": [
+              152,
+              0,
+              14
+            ],
+            "size": [
+              18,
+              21,
+              17
+            ],
+            "blocks": 750
+          },
+          {
+            "location": "brasshaven:mycelium_monastery/monastery/x5_z1",
+            "offset": [
+              152,
+              0,
+              31
+            ],
+            "size": [
+              28,
+              31,
+              31
+            ],
+            "blocks": 3799
+          },
+          {
+            "location": "brasshaven:mycelium_monastery/monastery/x5_z2",
+            "offset": [
+              152,
+              0,
+              62
+            ],
+            "size": [
+              30,
+              71,
+              31
+            ],
+            "blocks": 5349
+          },
+          {
+            "location": "brasshaven:mycelium_monastery/monastery/x5_z3",
+            "offset": [
+              152,
+              0,
+              93
+            ],
+            "size": [
+              29,
+              72,
+              32
+            ],
+            "blocks": 6477
+          },
+          {
+            "location": "brasshaven:mycelium_monastery/monastery/x5_z4",
+            "offset": [
+              152,
+              0,
+              125
+            ],
+            "size": [
+              22,
+              41,
+              31
+            ],
+            "blocks": 2289
+          },
+          {
+            "location": "brasshaven:mycelium_monastery/monastery/x5_z5",
+            "offset": [
+              152,
+              0,
+              156
+            ],
+            "size": [
+              20,
+              24,
+              31
+            ],
+            "blocks": 1341
+          },
+          {
+            "location": "brasshaven:mycelium_monastery/monastery/x5_z6",
+            "offset": [
+              152,
+              4,
+              187
+            ],
+            "size": [
+              26,
+              23,
+              28
+            ],
+            "blocks": 3951
+          }
+        ],
+        "projection": "rigid",
+        "processors": "brasshaven:none",
+        "ground_level_delta": 13,
+        "footprint": [
+          7,
+          7,
+          177,
+          217
+        ]
+      }
+    }
+  ]
+}

@@ -232,6 +232,9 @@ ENTITIES = {
     "ringmaster": ("The Clockwork Ringmaster", "Le Monsieur Loyal mécanique"),
     "gilded_champion": ("The Gilded Champion", "Le Champion doré"),
     "tesla_archon": ("The Tesla Archon", "L'Archonte Tesla"),
+    "drowned_keeper": ("The Drowned Lightkeeper", "Le Gardien noyé du phare"),
+    "merchant_prince": ("The Brass Merchant Prince", "Le Prince marchand de laiton"),
+    "mycelium_abbot": ("The Mycelium Abbot", "L'Abbé du Mycélium"),
     "hot_rivet": ("Hot Rivet", "Rivet brûlant"),
     "boomerang": ("Boomerang", "Boomerang"),
 }
@@ -300,6 +303,9 @@ SPAWN_EGGS = ["ruin_walker", "map_wraith", "basalt_guard", "void_stalker", "drow
               "ringmaster",
               "gilded_champion",
               "tesla_archon",
+              "drowned_keeper",
+              "merchant_prince",
+              "mycelium_abbot",
               ]
 
 # Misc translated messages used from Java (key suffix -> (en, fr))

@@ -510,6 +510,24 @@ STRUCTURES = {
                          "coursives ; on remonte par la quille jusqu'au lieu de grâce. Passé la brume, l'arène sur "
                          "le pont supérieur ; derrière des barreaux scellés, la soute au trésor. L'ascenseur à "
                          "marchandises du mât ramène à la salle du treuil.",
+    "brass_caravanserai": "Une cité marchande fortifiée de 230 blocs sur une route caravanière, dans le désert ou la "
+                          "savane : remparts de briques dorées et tours rondes coiffées de coupoles d'azur, quatre "
+                          "minarets-cheminées qui fument, et la grande coupole ogivale du bazar, tuiles d'azur et "
+                          "côtes de laiton, dont le fleuron culmine à 90 blocs. Devant les murs, une chenillette "
+                          "géante en laiton garée cache la porte, une autre s'est encastrée dans le rempart et "
+                          "ouvre une brèche. Depuis le camp des caravaniers (pierre de passage), la porte à "
+                          "l'horloge de laiton, le tunnel du péage et la cour des caravanes (pierre de passage) ; "
+                          "les écuries des chameaux et le garage des chenillettes, le souk couvert (trois ruelles "
+                          "voûtées, un carrefour à coupole, l'entrepôt des épices, la cour des teinturiers et sa "
+                          "tour vers le chemin de ronde), puis le grand bazar et son déambulatoire d'étals. Par "
+                          "les escaliers d'angle on monte sur les toits, à la galerie du tambour, puis au pont du "
+                          "prince qui mène au palais : bibliothèque, observatoire, salle du divan (pierre de "
+                          "passage dans le jardin), hammam, appartements. Du jardin des quatre fleuves, le puits "
+                          "descend à la citerne, d'où le conduit mène à la salle des lots sous le bazar (lieu de "
+                          "grâce). Passé la brume, l'arène dans la fosse aux enchères sous la coupole ; derrière "
+                          "des barreaux scellés, le trésor du prince, dont l'échelle remonte au comptoir du "
+                          "changeur. La porte du jardin, l'escalier des porteurs et la porte nord de la cour "
+                          "ramènent en arrière.",
     "cloud_pagoda": "Un temple de 130 × 180 blocs dans un bosquet de cerisiers ou une prairie de montagne : une "
                     "pagode à neuf toits de cerisier, de plâtre blanc et d'ardoise bleue (le fleuron est à 148 "
                     "blocs du sol), ornée de laiton et de carillons mécaniques, sur trois terrasses de jardin. Le "
@@ -658,6 +676,48 @@ STRUCTURES = {
                    "puis à l'arène sur la plateforme ouverte de la couronne. Derrière des barreaux scellés, le "
                    "caveau chargé. Raccourcis : l'ascenseur à colonne de bulles de la flèche, la glissade d'eau "
                    "du piton de l'observatoire jusqu'au bassin de la cour, et la poterne à sens unique du bastion.",
+    "leviathan_lighthouse": "Un phare-forteresse de 200 blocs battu par les tempêtes sur un promontoire rocheux "
+                            "du littoral : une tour de maçonnerie blanche ceinte d'une bande rouge sang, haute de "
+                            "120 blocs, sa lanterne de laiton et de verre sous une coupole vert-de-gris. Dans "
+                            "l'anse, le squelette d'un léviathan échoué : son crâne sur les galets, ses côtes en "
+                            "voûte au-dessus d'un quai couvert où mouillent des baleinières. Depuis le camp des "
+                            "glaneurs de grève (pierre de passage), le sentier longe les falaises, passe une "
+                            "gorge et une arche de roche avant de découvrir le phare, puis descend au quai de la "
+                            "station "
+                            "baleinière (pierre de passage) : la fonderie de graisse et ses trois fourneaux à "
+                            "chaudrons, la cantine, la tonnellerie, la batterie de canons harponneurs, la grue de "
+                            "dépeçage et le hangar à bateaux. L'escalier des marées descend aux grottes marines sous "
+                            "le promontoire (la grotte des marées, le trou des contrebandiers, la salle inondée "
+                            "autour de sa mare), puis un escalier taillé dans le roc remonte à la citerne et dans le "
+                            "phare : salle basse, salle des cartes, salle des registres, salle de la corne de brume, "
+                            "salle des rouages, salle de veille et son balcon, jusqu'à la salle de la lentille "
+                            "géante sur sa plaque tournante (lieu de grâce). Passé la brume, l'arène dans la "
+                            "lanterne et sur sa galerie. Derrière des barreaux scellés, le trésor du gardien dans "
+                            "l'encorbellement. Raccourcis : le puits de chute vers le bassin de la salle basse, la "
+                            "porte de fer du vestibule et celle de la tour d'escalier, qui ne s'ouvrent que d'un côté. "
+                            "La maison du gardien se dresse au pied de la tour.",
+    "mycelium_monastery": "Une abbaye de moines à vapeur greffée sur des champignons géants, au sommet d'un plateau "
+                          "de roche ceint de falaises et couronné de mycélium : une amanite tue-mouches colossale, "
+                          "son pied blanc et bulbeux large de 48 blocs, son chapeau rouge moucheté de blanc large "
+                          "de 69 blocs, percé de deux cheminées de laiton fumantes et d'une coupole de verre. "
+                          "Depuis le camp des pèlerins (pierre de passage), le chemin longe le bois de champignons, "
+                          "s'enfonce dans une gorge et passe sous une arche de roche avant de découvrir l'amanite "
+                          "au-dessus de la falaise, puis monte par le guichet du châtelet et un escalier taillé dans "
+                          "la falaise jusqu'au cloître et à son jardin de méditation (pierre de passage) : jardin de "
+                          "sable, pelouse de mousse, bassin aux carpes et fontaine mycélienne. Autour : la distillerie "
+                          "de spores et ses alambics de cuivre, la tour rouge et son clocher, les cellules des moines "
+                          "et le réfectoire, la tour brune du père abbé, la bibliothèque dans une vesse-de-loup "
+                          "géante, le narthex sous la rosace. L'escalier de la crypte descend aux catacombes des "
+                          "racines (galerie funéraire, crypte des moines, ossuaire), à la grotte luisante de "
+                          "champilampes et de lichen, et au cœur des racines sous le temple, d'où l'on remonte dans "
+                          "la nef (pierre de passage). Les rampes en hélice du pied gravissent la salle capitulaire, "
+                          "le sporarium et la galerie des lamelles (lieu de grâce) et son balcon en anneau ; des "
+                          "ponts de corde relient le pied aux tours et à la bibliothèque. Passé la brume de la "
+                          "tourelle, l'arène sous la voûte du chapeau. Derrière des barreaux scellés, le reliquaire "
+                          "des spores dans le cœur du chapeau. Raccourcis : le puits de chute vers le bassin de la "
+                          "cage de l'ascenseur (sa porte de fer ne s'ouvre que de l'intérieur), l'ascenseur à "
+                          "colonne de bulles jusqu'à la galerie des lamelles, et la porte de fer du narthex qui ne "
+                          "s'ouvre que depuis la nef.",
     "shattered_halo": "Un anneau colossal de purpur, de briques de pierre de l'End et d'or, large de 170 blocs et "
                       "incliné au-dessus du vide de l'End, brisé en cinq arcs qui flottent chacun à sa hauteur. On "
                       "arrive sur un îlot extérieur (pierre de passage), puis les ponts imposent l'ordre : "
@@ -918,6 +978,26 @@ MOBS = {
                     "bobines sur les épaules, des lunettes de laiton aux verres lumineux et une tignasse blanche dressée "
                     "par l'électricité statique ; un énorme gantelet de cuivre à électrodes au bras droit et un bâton-"
                     "bobine dans la main gauche.",
+    "drowned_keeper": "Champion du Phare du Léviathan : le Gardien noyé du phare, le vieux gardien de la lumière (3,4 "
+                      "blocs), noyé dans une tempête et revenu soudé à la grande lentille à rouages, qui tourne dans "
+                      "son dos comme un halo. Un ciré moutarde délavé ouvert sur une cage thoracique couverte de "
+                      "bernacles, une lanterne de tempête qui brûle à la place du cœur, un suroît, une barbe blanche "
+                      "où pend le varech, des yeux pâles et lumineux ; un harpon baleinier au bout d'une chaîne dans la "
+                      "main droite, la mâchoire d'une baleine en guise de massue dans la gauche.",
+    "merchant_prince": "Champion du Caravansérail de laiton : le Prince marchand de laiton, un prince décadent (3,6 "
+                       "blocs) qui a acheté la cité. Des soieries d'azur cuirassées d'écailles de laiton, une ceinture "
+                       "cramoisie, un collier de joyaux, une barbe noire huilée taillée en pointe et un haut turban "
+                       "crème cerclé d'or, un gros rubis et une plume blanche ; assis en tailleur sur un palanquin "
+                       "mécanique, un coffre d'acajou plein d'or qui trottine sur quatre pattes de laiton. Un cimeterre "
+                       "dans la main droite, des bagues à la gauche, et derrière lui un grand bras mécanique de laiton "
+                       "qui tient un lingot d'or.",
+    "mycelium_abbot": "Champion du Monastère du Mycélium : l'Abbé du Mycélium, un moine à vapeur (3,4 blocs) qui a tant "
+                      "prié dans le noir des spores que le réseau fongique l'a pris. Une robe brune rongée de mycélium "
+                      "qui traîne au sol en filaments, une ceinture de corde, une pèlerine de feutre blanc où poussent "
+                      "de petits champignons luisants ; son capuchon est devenu un large chapeau de champignon brun aux "
+                      "lamelles phosphorescentes. Un visage gris aux yeux cyan, une barbe de mycélium, une petite "
+                      "chaudière-reliquaire de laiton dans le dos. Dans la main droite une crosse couronnée d'un "
+                      "champignon luisant, dans la gauche un encensoir de laiton au bout de sa chaîne.",
     "moon_warden": "Championne de la Lune creuse : la Gardienne de la lune, un automate céleste élégant de 3,6 "
                    "blocs qui lévite sur des propulseurs. Un corps svelte de porcelaine et d'or, un visage qui est un "
                    "cadran des phases de la lune, un halo de petites planètes de laiton en orbite, de longs bras "
@@ -1681,6 +1761,90 @@ BOSS_MOVES = {
                                  "pendant que 3 rayons (4 à trois joueurs ou plus) tournent sous lui à hauteur de cheville "
                                  "(7 à qui a les pieds au sol quand un rayon passe) : saute-les."),
     ],
+    "drowned_keeper": [
+        ("Estoc", "1 à 3", "Le harpon ramené à la hanche (0,7 s, une ligne de 6 blocs tracée en or, rouge quand il cesse "
+                           "de tourner) : il le plante tout droit (12)."),
+        ("Lancer de harpon", "1 à 3", "Le harpon levé à l'épaule (0,9 s) : une ligne vers toi, blanche tant qu'il te suit, "
+                                      "rouge 0,3 s avant ; le harpon file dessus (9) et le premier joueur touché est "
+                                      "ramené au bout de la chaîne jusqu'à lui (ralenti 1 s)."),
+        ("Moulinet", "1 à 3", "Le harpon balancé bas sur sa chaîne (0,9 s, un anneau de 6,5 blocs autour de lui, rouge à "
+                              "la fin, le cercle intérieur de 2 blocs tracé en blanc) : il fait un tour complet (10) ; "
+                              "tout contre lui, tu ne risques rien."),
+        ("Balayage de la lentille", "1 à 3", "Le bras levé vers la grande lampe (1,2 s) : la moitié de la salle que le "
+                                             "faisceau va parcourir est tracée (son bord en ligne droite par le centre, "
+                                             "des arcs, des flèches pour le sens), rouge à la fin ; le faisceau la "
+                                             "balaie en 2 s (8 et aveuglement 1,5 s). L'autre moitié est sûre."),
+        ("Lame de tempête", "2 et 3", "Harpon et mâchoire levés (1,1 s, le bord de la salle derrière lui tracé en bleu, "
+                                      "des flèches vers toi) : trois vagues traversent le pont l'une après l'autre "
+                                      "(8 et une poussée) ; saute chacune."),
+        ("Équipage noyé", "2 et 3", "Il agite la lumière de son cœur comme un fanal (1 s) : des fusiliers noyés et des "
+                                    "spectres des marées montent à bord (trois au plus à la fois)."),
+        ("Surcharge de la lampe", "3 (une fois)", "À 30 %, la lentille s'arrache de son dos et flamboie au-dessus de lui "
+                                                  "(2 s, invulnérable), puis un anneau de lumière court sur le pont "
+                                                  "(10, saute-le) ; il va 8 % plus vite."),
+        ("Secteurs de lumière", "3", "La salle plonge dans l'obscurité ; la lampe éclaire trois secteurs qui tournent "
+                                     "lentement, avec de l'ombre entre eux. Environ toutes les 7,5 s, leurs bords "
+                                     "s'illuminent 1,5 s (rouges à la fin) puis la lampe éclate (9 et aveuglement 1,5 s "
+                                     "à qui est dans la lumière) : reste dans l'ombre qui tourne."),
+        ("Coup de mâchoire", "3", "La mâchoire de baleine levée à deux mains (1,1 s, un cercle de 3,5 blocs devant lui) : "
+                                  "elle s'abat (15), puis un anneau court jusqu'à 9 blocs (6, saute-le)."),
+    ],
+    "merchant_prince": [
+        ("Coup de cimeterre", "1 à 3", "Le cimeterre ramené par-dessus l'épaule (0,7 s, un arc tracé en or, rouge à la "
+                                       "fin) : il balaie devant lui (12). Il se tourne, une ligne rouge s'allume et un "
+                                       "croissant d'or file dessus 0,3 s plus tard (8)."),
+        ("Pluie de pièces", "1 à 3", "Le bras de laiton recule chargé d'or (0,9 s) : sept couloirs en éventail devant lui, "
+                                     "tracés en or puis en rouge. Trois volées de pièces les parcourent, une toutes les "
+                                     "0,25 s (5 par pièce) : reste entre les couloirs. En phase 2, une quatrième volée "
+                                     "passe entre eux (couloirs tracés en blanc)."),
+        ("Mise à prix", "1 à 3", "Il lève un doigt orné de bagues (0,8 s) : ta tête est mise à prix (une par joueur en "
+                                 "coopération, trois au plus). Un cercle d'or te suit moins vite que tu ne marches "
+                                 "pendant que le prix monte, s'arrête, rougit, et 0,55 s plus tard un lingot d'or s'abat "
+                                 "dessus (14)."),
+        ("Charge du palanquin", "1 à 3", "Le palanquin s'accroupit (0,8 s, un couloir tracé vers toi, rouge à la fin) "
+                                         "puis fonce dessus (13 et une poussée)."),
+        ("Mercenaires", "2 et 3", "Il lance une bourse en l'air (1 s) : des tireurs bandits sautent dans la fosse (trois "
+                                  "au plus à la fois)."),
+        ("Tempête de sable", "2 et 3", "Le cimeterre tournoie au-dessus de sa tête (1,2 s, un cercle sablé là où tu es, sa "
+                                       "portée de 7 blocs en pointillé) : un tourbillon s'y lève 7 s, te suit lentement "
+                                       "et entraîne qui est à moins de 7 blocs en rond vers son œil (3 et ralentissement "
+                                       "chaque seconde dans l'œil). On en sort en marchant."),
+        ("Vente finale", "3 (une fois)", "À 30 %, il se dresse sur son palanquin et frappe le coffre comme un marteau "
+                                         "d'enchères (2 s, invulnérable), puis un anneau d'or court sur la fosse (10, "
+                                         "saute-le) ; il va 12 % plus vite."),
+        ("Secteurs dorés", "3", "Environ toutes les 9 s : des secteurs de la fosse (trois, quatre en coopération) sont "
+                                "tracés 1 s, puis plaqués d'or 1,5 s (bords rouges à la fin) et explosent (9) : passe "
+                                "dans un secteur non marqué. Le sol revient après l'explosion."),
+        ("Ruée entre les piliers", "3", "Environ toutes les 13 s : un couloir vers le pied d'un des piliers de la coupole "
+                                        "est tracé (0,8 s, rouge à la fin), il fonce dessus (11 et une poussée), puis "
+                                        "un deuxième et un troisième couloir, chacun tracé 0,7 s."),
+    ],
+    "mycelium_abbot": [
+        ("Coup de crosse", "1 à 3", "La crosse ramenée par-dessus l'épaule (0,7 s, un arc tracé en spores, rouge à la "
+                                    "fin) : il balaie devant lui (12). Il se tourne, une ligne rouge s'allume et 0,5 s "
+                                    "plus tard il abat la crosse dessus (13)."),
+        ("Encensoir", "1 à 3", "L'encensoir ramené en arrière (0,9 s, un arc de 7,5 blocs tracé devant lui, rouge à la "
+                               "fin) : il le balance d'un côté à l'autre et laisse une traînée de nuages de spores "
+                               "(2 s, 3 s en phase 2) : 2 toutes les demi-secondes, nausée et poison, brièvement."),
+        ("Filaments", "1 à 3", "Il lève la crosse en psalmodiant (1,3 s) : un cercle se dessine sous chaque joueur (deux "
+                               "de plus en phase 2), rouge à la fin ; des filaments en jaillissent (10) et enracinent "
+                               "qui y reste (lenteur IV 1,5 s). Sors du cercle."),
+        ("Crochet", "1 à 3", "La crosse pointée vers toi (0,8 s, une ligne tracée, rouge à la fin) : le crochet claque "
+                             "dessus (7) et te ramène vers lui."),
+        ("Cosses", "2 et 3", "Il sème des spores à genoux (1 s, des emplacements marqués) : une cosse (un bloc de "
+                             "champignon rouge) pousse sur chacun et éclate au bout de 5 s (8 et poison à moins de 3,5 "
+                             "blocs), sauf si tu la casses avant."),
+        ("Frères moines", "2 et 3", "Il fait sonner l'encensoir au-dessus de sa tête (1 s) : des moines-sonneurs "
+                                    "accourent (trois au plus à la fois)."),
+        ("Communion", "3 (une fois)", "À 30 %, il s'agenouille, bras ouverts (2 s, invulnérable), puis un anneau de "
+                                      "champignons fleurit sur le sol (10, saute-le) ; il va 12 % plus vite."),
+        ("Sous le réseau", "3", "Environ toutes les 12 s : il s'enfonce dans le sol, un cercle te poursuit moins vite que "
+                                "tu ne marches, s'arrête et rougit, puis il jaillit dedans (14) et deux anneaux de "
+                                "champignons en partent (7 chacun, saute-les)."),
+        ("Ronds de sorcière", "3", "Environ toutes les 11 s : un cercle se resserre au centre de l'arène (1,5 s, rouge à "
+                                   "la fin), puis trois anneaux de champignons fleurissent vers le bord (7 chacun, "
+                                   "saute-les)."),
+    ],
     "moon_warden": [
         ("Balayage d'astrolabe", "1 à 3", "La lame droite ramenée en travers du corps (0,9 s, un arc tracé en argent) : "
                                           "elle balaie devant elle (13). Elle se tourne, l'arc rougit et la lame gauche "
@@ -2144,6 +2308,18 @@ BOSS_FACTS = {
                     "corolle et l'aimant, deux boules de foudre, les lignes de côté et un second saut de l'arc. Phase 3 "
                     "à 30 % : la surcharge puis le balayage d'arcs. Il ne pose ni ne casse aucun bloc (sa foudre n'est "
                     "que de la lumière, rien ne brûle) et ses coups ne te poussent jamais vers le bord de la couronne.",
+    "drowned_keeper": "680 PV, armure 12, posture 120, barre jaune. Phase 2 à 65 % : il rugit, accélère, ajoute la "
+                      "lame de tempête et son équipage noyé. Phase 3 à 30 % : la surcharge de la lampe (obscurité, "
+                      "secteurs de lumière tournants) et le coup de mâchoire. Il ne pose ni ne casse aucun bloc, et ses "
+                      "coups ne te poussent jamais contre la verrière ni par-dessus la rambarde de la galerie.",
+    "merchant_prince": "660 PV, armure 11, posture 115, barre jaune. Phase 2 à 65 % : il rugit, accélère, engage des "
+                       "mercenaires et lève la tempête de sable. Phase 3 à 30 % : la vente finale, les secteurs dorés "
+                       "et la ruée entre les piliers. Ses seuls blocs sont l'or des secteurs, remis comme avant juste "
+                       "après chaque explosion, et ses coups ne te jettent jamais sur les gradins.",
+    "mycelium_abbot": "650 PV, armure 10, posture 110, barre violette. Phase 2 à 65 % : il rugit, accélère, plante "
+                      "des cosses et appelle ses frères moines. Phase 3 à 30 % : la communion, ses passages sous le sol "
+                      "et les ronds de sorcière. Ses seuls blocs sont les cosses, qui disparaissent quand elles "
+                      "éclatent, si le combat repart, si tout le monde s'en va ou à sa mort.",
     "moon_warden": "720 PV, armure 12, posture 120, barre violette. Phase 2 à 65 % : elle rugit, accélère, ajoute la "
                    "comète et l'appel du vide. Phase 3 à 30 % : l'éclipse, les rayons de gravité tournants et les "
                    "météores. Ses seuls blocs sont les lanternes du cœur, assombries pendant l'éclipse et rallumées "
@@ -2284,6 +2460,26 @@ LAIRS = {
                                          "cuivre, sous la corolle de paratonnerres et de tiges de l'End portée par six "
                                          "pieds. Passé la brume de la tourelle du lieu de grâce, l'Archonte se réveille "
                                          "quand tu approches du sceau au centre."),
+    ],
+    "drowned_keeper": [
+        ("La chambre de la lanterne", "L'arène : la salle vitrée de 33 blocs au sommet du phare, environ 14 blocs sous "
+                                      "la coupole et sa grande lampe, ouverte par deux portes vitrées sur la galerie "
+                                      "extérieure. Passé la brume de la maison de la trappe, le Gardien se réveille "
+                                      "quand tu approches du sceau au centre."),
+    ],
+    "merchant_prince": [
+        ("La fosse aux enchères", "L'arène : la fosse ronde de 35 blocs sous la grande coupole du bazar, un sol de laiton, "
+                                  "d'azur et de pierre polie dessinant la rose des routes caravanières, deux gradins "
+                                  "d'enchérisseurs tout autour et une grille de fer sur le rebord. Par l'escalier des "
+                                  "commissaires-priseurs et la brume, le Prince se réveille quand tu approches du sceau "
+                                  "au centre ; derrière des barreaux scellés au sud, son trésor."),
+    ],
+    "mycelium_abbot": [
+        ("L'arène du chapeau", "L'arène : la salle ronde de 44 blocs sous la voûte du chapeau de l'amanite, nervurée "
+                               "comme des lamelles, un oculus de verre en son sommet et six fenêtres-pores ; un sol de "
+                               "laiton, de parquet et de mycélium autour d'un cercle doré. Par l'escalier de la tourelle "
+                               "et la brume, l'Abbé se réveille quand tu approches du sceau au centre ; sous le sol, "
+                               "derrière des barreaux scellés, le reliquaire des spores."),
     ],
     "spore_alchemist": [
         ("Le sommet de l'amanite", "L'arène : le dessus plat du chapeau de la grande amanite, environ 42 blocs de "
@@ -2702,10 +2898,25 @@ NEW_GROUPS = [
          "de cuivre et de fer haute de 110 blocs aux anneaux de bobines, six mâts reliés par des câbles de chaînes, "
          "halle des bouteilles de Leyde, maison des dynamos, observatoire météo, funiculaire, et une arène sur la "
          "couronne crépitante.", "s-storm_spire", "struct:storm_spire"),
+        ("Le Phare du Léviathan", "Un phare-forteresse sur un promontoire battu par les tempêtes : une tour "
+         "blanche et rouge haute de 120 blocs, le squelette d'un léviathan échoué dont les côtes couvrent le quai, "
+         "une station baleinière avec fonderie de graisse, canons harponneurs et hangar à bateaux, des grottes "
+         "marines, une lentille géante à rouages, et une arène dans la lanterne.", "s-leviathan_lighthouse",
+         "struct:leviathan_lighthouse"),
+        ("Le Monastère du Mycélium", "Une abbaye de moines à vapeur greffée sur des champignons géants : une "
+         "amanite tue-mouches colossale au chapeau rouge large de 69 blocs, des tours de champignon reliées par des "
+         "ponts de corde, une distillerie de spores aux alambics de cuivre, un cloître et son jardin de méditation, "
+         "une bibliothèque dans une vesse-de-loup, des catacombes de racines, une grotte luisante, et une arène "
+         "sous la voûte du chapeau.", "s-mycelium_monastery", "struct:mycelium_monastery"),
         ("La Pagode des nuages", "Une pagode à neuf toits de cerisier et de plâtre blanc sur un jardin en "
          "terrasses, étangs aux carpes et porte de lune, enlacée par le squelette de laiton d'un dragon "
          "mécanique : un étage par salle, un ascenseur à contrepoids, et une arène sur le toit ouvert.",
          "s-cloud_pagoda", "struct:cloud_pagoda"),
+        ("Le Caravansérail de laiton", "Une cité marchande fortifiée sur une route caravanière : la grande "
+         "coupole d'azur du bazar et sa fosse aux enchères, un souk couvert, des minarets-cheminées, des écuries de "
+         "chameaux et de chenillettes, le palais du prince et son jardin à fontaine, une citerne à colonnes, et des "
+         "chenillettes géantes en laiton garées ou échouées devant les murs.", "s-brass_caravanserai",
+         "struct:brass_caravanserai"),
         ("La Flotte prise dans les glaces", "Un brise-glace colossal à roues à aubes figé dans la banquise, "
          "gîtant, ses cheminées de cuivre penchées, avec deux navires ravitailleurs, un derrick de forage en laiton "
          "et une baleine prise dans la glace : salle des chaudières, carrés, cabine du capitaine, et une arène sur "
@@ -2934,6 +3145,27 @@ TEST_CHECKLIST = [
      "corolle (vérifie que rien ne prend feu) et éloigne-toi de l'aimant ; à 30 %, saute l'anneau de la surcharge puis "
      "chaque rayon du balayage, et vérifie qu'il redescend au sol ensuite. Pour le vrai repaire : /brasshaven tp "
      "storm_spire (la plateforme de la couronne, en haut de la flèche)."),
+    ("Le Gardien noyé du phare", ["/brasshaven boss drowned_keeper"],
+     "Il apparaît à 6 blocs. Sors de la ligne de l'estoc, quitte la ligne du lancer avant qu'elle rougisse (sinon la "
+     "chaîne te ramène à lui), colle-toi à lui ou sors de l'anneau du moulinet, va dans la moitié non marquée pour le "
+     "balayage de la lentille ; à 65 %, saute les trois vagues et tue l'équipage noyé ; à 30 %, saute l'anneau de "
+     "lumière, reste dans l'ombre entre les secteurs quand ils éclatent, sors du cercle du coup de mâchoire et saute "
+     "son anneau. Pour le vrai repaire : /brasshaven tp leviathan_lighthouse (la chambre de la lanterne, en haut du "
+     "phare)."),
+    ("Le Prince marchand de laiton", ["/brasshaven boss merchant_prince"],
+     "Il apparaît à 6 blocs. Recule hors de l'arc du cimeterre puis quitte la ligne rouge du croissant ; place-toi entre "
+     "les couloirs de la pluie de pièces ; marche hors du cercle de la mise à prix avant que le lingot tombe ; sors du "
+     "couloir de la charge ; à 65 %, tue les mercenaires et sors du tourbillon de sable en marchant ; à 30 %, saute "
+     "l'anneau d'or, passe dans un secteur non marqué avant l'explosion (et vérifie que le sol revient comme avant), "
+     "esquive les trois ruées entre les piliers. Pour le vrai repaire : /brasshaven tp brass_caravanserai (la fosse aux "
+     "enchères, sous la coupole du bazar)."),
+    ("L'Abbé du Mycélium", ["/brasshaven boss mycelium_abbot"],
+     "Il apparaît à 6 blocs. Recule hors de l'arc de la crosse puis quitte la ligne rouge ; sors de l'arc de l'encensoir "
+     "et des nuages de spores ; sors du cercle des filaments avant qu'il rougisse ; quitte la ligne du crochet ; à 65 %, "
+     "casse une cosse avant qu'elle éclate (et laisse-en une éclater) puis tue les moines ; à 30 %, saute l'anneau de "
+     "la communion, sors du cercle qui te poursuit quand il s'enfonce, saute les anneaux de champignons, et vérifie "
+     "qu'aucune cosse ne reste à la fin. Pour le vrai repaire : /brasshaven tp mycelium_monastery (l'arène sous la "
+     "voûte du chapeau)."),
     ("La Gardienne de la lune", ["/brasshaven boss moon_warden"],
      "Elle apparaît à 6 blocs. Recule hors des deux arcs du balayage, glisse-toi entre les spirales de l'orbite, sors du "
      "puits de gravité en marchant, quitte les cercles de la bascule, regarde son cadran : esquive les ombres à la "

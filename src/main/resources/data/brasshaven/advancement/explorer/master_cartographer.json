@@ -735,6 +735,22 @@
         ]
       }
     },
+    "brass_caravanserai": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:brass_caravanserai"
+              }
+            }
+          }
+        ]
+      }
+    },
     "icebound_fleet": {
       "trigger": "minecraft:location",
       "conditions": {
@@ -846,9 +862,41 @@
           }
         ]
       }
+    },
+    "leviathan_lighthouse": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:leviathan_lighthouse"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "mycelium_monastery": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "brasshaven:mycelium_monastery"
+              }
+            }
+          }
+        ]
+      }
     }
   },
-  "parent": "brasshaven:explorer/clockwork_carnival",
+  "parent": "brasshaven:explorer/mycelium_monastery",
   "rewards": {
     "experience": 300,
     "loot": [

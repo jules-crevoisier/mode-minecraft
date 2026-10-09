@@ -396,6 +396,20 @@ def entity_loot():
                          entry("golden_apple", 1, 2), entry("diamond", 2, 4), entry("copper_block", 3, 6),
                          entry("lightning_rod", 2, 4), entry("redstone", 12, 24), entry("glowstone_dust", 6, 12),
                          entry("end_rod", 2, 4), entry("enchanted_golden_apple", chance=0.08)],
+        "drowned_keeper": [entry("map_fragment", 6, 10), entry("emerald", 5, 9), entry("experience_bottle", 4, 7),
+                           entry("golden_apple", 1, 2), entry("diamond", 2, 4), entry("prismarine_crystals", 8, 16),
+                           entry("sea_lantern", 2, 4), entry("nautilus_shell", 1, 3), entry("iron_chain", 4, 8),
+                           entry("lantern", 2, 4), entry("heart_of_the_sea", chance=0.1),
+                           entry("enchanted_golden_apple", chance=0.08)],
+        "merchant_prince": [entry("map_fragment", 6, 10), entry("emerald", 8, 14), entry("experience_bottle", 4, 7),
+                            entry("golden_apple", 1, 2), entry("diamond", 2, 4), entry("gold_ingot", 8, 16),
+                            entry("gold_block", 1, 3), entry("raw_gold", 6, 12), entry("golden_horse_armor", 1, 1),
+                            entry("orange_carpet", 4, 8), entry("enchanted_golden_apple", chance=0.08)],
+        "mycelium_abbot": [entry("map_fragment", 6, 10), entry("emerald", 5, 9), entry("experience_bottle", 4, 7),
+                           entry("golden_apple", 1, 2), entry("diamond", 2, 4), entry("mycelium", 4, 8),
+                           entry("shroomlight", 3, 6), entry("brown_mushroom", 4, 8), entry("red_mushroom", 4, 8),
+                           entry("spore_blossom", 1, 2), entry("iron_chain", 2, 4),
+                           entry("enchanted_golden_apple", chance=0.08)],
     }
     from wf.bossgear import BOSS_GEAR, remembrance_id
     for row in BOSS_GEAR:  # every great boss always drops its remembrance

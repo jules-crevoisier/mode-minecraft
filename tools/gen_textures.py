@@ -144,6 +144,9 @@ EGGS = {
     "ringmaster": ((176, 30, 36), (226, 182, 72)),
     "gilded_champion": ((226, 178, 66), (156, 26, 36)),
     "tesla_archon": ((186, 112, 58), (130, 220, 255)),
+    "drowned_keeper": ((196, 158, 54), (64, 96, 58)),
+    "merchant_prince": ((214, 168, 62), (58, 96, 196)),
+    "mycelium_abbot": ((146, 96, 60), (100, 232, 216)),
 }
 
 
@@ -226,6 +229,9 @@ EMBLEMS = {
     "ringmaster": [".###.", ".###.", ".#.#.", "#####", "....."],       # a top hat
     "gilded_champion": ["..#..", ".###.", "#####", ".###.", "..#.."],  # a round shield with its boss
     "tesla_archon": ["..#..", ".##..", "..##.", ".##..", "..#.."],     # a zigzag bolt
+    "drowned_keeper": ["..#..", ".###.", "#.#.#", "..#..", ".###."],   # a harpoon head
+    "merchant_prince": [".###.", "#####", "#.#.#", ".###.", "..#.."],  # a jewelled turban
+    "mycelium_abbot": [".###.", "#####", "..#..", "..##.", "..#.."],   # a mushroom cap on a crook
 }
 
 

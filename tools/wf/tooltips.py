@@ -55,8 +55,11 @@ ABILITIES = {
     "bore": ("Pressure bore", "Forage sous pression", "range"),
     "orbit": ("Orrery orbit", "Orbite de l'orrery", "range"),
     "tesla": ("Chain lightning", "Éclair en chaîne", "range"),
+    "lantern": ("Harpoon and lantern flare", "Harpon et éclat de lanterne", "range"),
     "triumph": ("Gladiator's triumph", "Triomphe du gladiateur", "range"),
     "juggle": ("Juggling bombs", "Bombes de jonglage", "range"),
+    "crescent": ("Gilded crescent and appraisal", "Croissant doré et estimation", "range"),
+    "mycelium": ("Mycelium tendrils", "Filaments de mycélium", "range"),
 }
 # BossWeaponItem flags, in bit order
 ABILITY_EFFECTS = {
@@ -208,6 +211,12 @@ FLAVOR = {
                         "Le public a quitté le chapiteau depuis longtemps ; il salue encore chaque soir les gradins vides."),
     "champion_gladius": ("He never lost a fight on the sand; the emperor he fought for lost everything else.",
                          "Il n'a jamais perdu un combat sur le sable ; l'empereur pour qui il se battait a perdu tout le reste."),
+    "lightkeeper_harpoon": ("He kept the light burning through the storm that drowned him; it has not gone out since.",
+                            "Il a gardé la lumière allumée pendant la tempête qui l'a noyé ; elle ne s'est jamais éteinte depuis."),
+    "abbot_crozier": ("He prayed in the spore-dark until the network answered; now it prays through him.",
+                      "Il a prié dans le noir des spores jusqu'à ce que le réseau réponde ; désormais, c'est le réseau qui prie à travers lui."),
+    "prince_scimitar": ("He bought the caravan roads, the city and the dome; he never found a price for staying alive.",
+                        "Il a acheté les routes des caravanes, la cité et le dôme ; il n'a jamais trouvé le prix pour rester en vie."),
     "tesla_coilstaff": ("He promised the valley free light from the sky; he never said what it would cost, or who would pay.",
                         "Il avait promis à la vallée la lumière gratuite du ciel ; il n'a jamais dit ce qu'elle coûterait, ni qui paierait."),
     "diver_drill_lance": ("He went down to drill the last metre himself; the suit came back up without him, and it is still drilling.",

@@ -97,6 +97,10 @@
       "weight": 1
     },
     {
+      "structure": "brasshaven:brass_caravanserai",
+      "weight": 1
+    },
+    {
       "structure": "brasshaven:icebound_fleet",
       "weight": 1
     },
@@ -122,6 +126,14 @@
     },
     {
       "structure": "brasshaven:clockwork_carnival",
+      "weight": 1
+    },
+    {
+      "structure": "brasshaven:leviathan_lighthouse",
+      "weight": 1
+    },
+    {
+      "structure": "brasshaven:mycelium_monastery",
       "weight": 1
     }
   ],

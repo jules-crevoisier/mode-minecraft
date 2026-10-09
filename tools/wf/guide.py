@@ -867,6 +867,47 @@ PAGES = [
          "batteries. L'hélice de la flèche monte au lieu de grâce et à l'arène de la couronne. Derrière des barreaux "
          "scellés, le caveau chargé. Raccourcis : ascenseur à bulles, glissade d'eau, poterne à sens unique."),
     ], []),
+    ("leviathan_lighthouse", "wonders", "minecraft:bone_block", ("The Leviathan Lighthouse",
+                                                               "Le Phare du Léviathan"), [
+        ("A storm-lashed lighthouse fortress 200 blocks across on a rocky headland: a white tower wound with an "
+         "oxblood band, 120 high, under a brass-and-glass lantern and a verdigris cupola; in the cove a beached "
+         "leviathan's skeleton, its ribs vaulting a covered dock, and a whaling station on the quay. Where: stony "
+         "shores and beaches.",
+         "Un phare-forteresse de 200 blocs battu par les tempêtes sur un promontoire : une tour blanche ceinte "
+         "d'une bande rouge sang, haute de 120 blocs, sous une lanterne de laiton et de verre et une coupole "
+         "vert-de-gris ; dans l'anse, le squelette d'un léviathan échoué dont les côtes couvrent un quai, et une "
+         "station baleinière. Où : côtes rocheuses et plages."),
+        ("From the beachcombers' camp (waystone), follow the cliff path through the gorge and the rock arch down to the "
+         "whaling quay (waystone): rendering house, mess hall, cooperage, harpoon battery, boathouse, the skull and "
+         "the ribcage dock. The tide stair leads to the sea caves; the rock stair climbs to the cistern and into the "
+         "tower, storey by storey, to the clockwork lens room (grace). Through the mist, the arena in the lantern. "
+         "Behind sealed bars, the keeper's hoard. Shortcuts: the drop well, two one-way iron doors.",
+         "Depuis le camp des glaneurs de grève (pierre de passage), le sentier des falaises passe la gorge et l'arche "
+         "jusqu'au quai baleinier (pierre) : fonderie de graisse, cantine, tonnellerie, canons harponneurs, hangar "
+         "à bateaux, le crâne et le quai sous les côtes. L'escalier des marées mène aux grottes marines ; "
+         "l'escalier du roc remonte à la citerne puis dans la tour, étage par étage, jusqu'à la salle de la "
+         "lentille (lieu de grâce). Passé la brume, l'arène dans la lanterne. Derrière des barreaux scellés, le "
+         "trésor du gardien. Raccourcis : le puits de chute, deux portes de fer à sens unique."),
+    ], []),
+    ("mycelium_monastery", "wonders", "minecraft:red_mushroom_block", ("The Mycelium Monastery",
+                                                                       "Le Monastère du Mycélium"), [
+        ("An abbey of steam monks grafted onto giant fungi on a cliff-girt mycelium plateau: a colossal fly agaric "
+         "69 wide, two smoking brass chimneys and a glass cupola in its cap; mushroom towers and a puffball library tied "
+         "to its stem by rope bridges. Where: mushroom fields and dark forests.",
+         "Une abbaye de moines à vapeur greffée sur des champignons géants, sur un plateau de mycélium : une amanite "
+         "colossale large de 69 blocs, deux cheminées de laiton et une coupole de verre dans son chapeau ; des tours "
+         "de champignon et une bibliothèque reliées au pied par des ponts de corde. Où : champs de champignons et "
+         "forêts sombres."),
+        ("From the pilgrims' camp (waystone) up the cliff stair to the cloister (waystone), its distillery, towers and "
+         "library. The crypt stair leads down to the root catacombs and the glowing grotto, then up into the nave "
+         "(waystone); ramps climb the stem to the gill gallery (grace). Through the mist, the arena under the cap; "
+         "behind sealed bars, the spore reliquary. Shortcuts: the drop well, the bubble lift, the narthex door.",
+         "Du camp des pèlerins (pierre) par l'escalier de la falaise jusqu'au cloître (pierre), sa distillerie, ses "
+         "tours et sa bibliothèque. L'escalier de la crypte descend aux catacombes et à la grotte luisante, puis "
+         "remonte dans la nef (pierre) ; des rampes gravissent le pied jusqu'à la galerie des lamelles (grâce). Passé "
+         "la brume, l'arène sous le chapeau ; derrière des barreaux, le reliquaire. Raccourcis : le puits de chute, "
+         "l'ascenseur à bulles, la porte du narthex."),
+    ], []),
     ("airship_graveyard", "wonders", "brasshaven:brass_plating", ("The Airship Graveyard",
                                                                   "Le Cimetière des dirigeables"), [
         ("A crash field 228 blocks across round a skeletal mooring mast 90 high: one airship still moored, its "
@@ -885,6 +926,26 @@ PAGES = [
          "dirigeable : passerelle, cabines, cale, nacelles moteurs par les coursives, puis la quille jusqu'au lieu "
          "de grâce. Passé la brume, l'arène sur le pont supérieur ; derrière des barreaux scellés, la soute au "
          "trésor. L'ascenseur à marchandises du mât est le raccourci du retour."),
+    ], []),
+    ("brass_caravanserai", "wonders", "minecraft:chiseled_sandstone", ("The Brass Caravanserai",
+                                                                        "Le Caravansérail de laiton"), [
+        ("A walled trading city 230 blocks across on a caravan route: sand-gold walls and drum towers under azure "
+         "domes, four smoking minaret chimneys and the ribbed azure-and-brass dome of the great bazaar, 90 blocks "
+         "up; giant brass sand-crawlers parked and wrecked outside the walls. Where: deserts and savannas.",
+         "Une cité marchande fortifiée de 230 blocs sur une route caravanière : remparts dorés et tours rondes sous "
+         "des coupoles d'azur, quatre minarets-cheminées qui fument et la coupole côtelée d'azur et de laiton du "
+         "grand bazar, à 90 blocs ; des chenillettes géantes en laiton garées ou échouées devant les murs. Où : "
+         "déserts et savanes."),
+        ("From the caravan camp (waystone) through the clock gate to the caravan court (waystone); the stables, the "
+         "covered souk and the bazaar; up its corner stairs to the roofs and over the Prince's Bridge into the "
+         "palace (garden waystone), down the well to the cistern and the lot hall (site of grace), then the arena "
+         "in the auction pit under the dome. The treasury ladder, the porters' stair, the garden gate and the "
+         "court's north gate lead back.",
+         "Du camp des caravaniers (pierre) par la porte à l'horloge jusqu'à la cour des caravanes (pierre) ; les "
+         "écuries, le souk couvert et le bazar ; par ses escaliers d'angle sur les toits et par le pont du prince "
+         "au palais (pierre dans le jardin), le puits vers la citerne et la salle des lots (lieu de grâce), puis "
+         "l'arène dans la fosse aux enchères sous la coupole. L'échelle du trésor, l'escalier des porteurs, la "
+         "porte du jardin et la porte nord de la cour ramènent en arrière."),
     ], []),
     ("cloud_pagoda", "wonders", "minecraft:cherry_sapling", ("The Cloud Pagoda", "La Pagode des nuages"), [
         ("A nine-roofed pagoda of cherry wood and white plaster, its brass finial 148 blocks up, on three terraced "
@@ -2060,6 +2121,118 @@ PAGES = [
          "Son Souvenir, quatre fragments de carte et deux diamants forgent le Bâton-bobine de l'Archonte Tesla, dont le "
          "clic droit envoie un éclair dans ta visée jusqu'au premier ennemi, fait tomber sur lui une foudre inoffensive et "
          "saute sur jusqu'à trois autres ennemis proches, qu'il ralentit."),
+    ], []),
+    ("drowned_keeper", "wonders", "brasshaven:remembrance_drowned_keeper", ("The Drowned Lightkeeper", "Le Gardien noyé du phare"), [
+        ("In the lantern room at the top of the Leviathan Lighthouse, past the grace and the mist of the hatch house, under "
+         "the great lamp, the old keeper still tends the light (680 health, armour 12): drowned in a storm and brought back "
+         "fused with the great clockwork lens, which turns on his back like a halo. An oilskin coat open on a barnacled "
+         "ribcage with a storm lantern for a heart, a whaling harpoon on a chain and a whale's jawbone for a club.",
+         "Dans la chambre de la lanterne, au sommet du Phare du Léviathan, passé le lieu de grâce et la brume de la maison "
+         "de la trappe, sous la grande lampe, le vieux gardien veille encore sur la lumière (680 PV, armure 12) : noyé dans "
+         "une tempête et revenu soudé à la grande lentille à rouages, qui tourne dans son dos comme un halo. Un ciré ouvert "
+         "sur une cage thoracique couverte de bernacles, une lanterne de tempête pour cœur, un harpon baleinier au bout "
+         "d'une chaîne et une mâchoire de baleine pour massue."),
+        ("His thrust and his harpoon throw run down lines drawn on the deck: leave the throw's line before it turns red, "
+         "or the chain hauls you in to him. His whirl sweeps a ring round him (hug him or stand outside it). When he raises "
+         "his arm to the lamp, half of the room is marked: the beam sweeps through it and blinds whoever it crosses, so "
+         "cross into the other half. His blows never throw you against the glass or over the gallery's rail.",
+         "Son estoc et son lancer de harpon suivent des lignes tracées sur le pont : quitte la ligne du lancer avant "
+         "qu'elle rougisse, sinon la chaîne te ramène à lui. Son moulinet balaie un anneau autour de lui (colle-toi à lui "
+         "ou reste dehors). Quand il lève le bras vers la lampe, la moitié de la salle est marquée : le faisceau la balaie "
+         "et aveugle qui il croise, alors passe dans l'autre moitié. Ses coups ne te jettent jamais contre la verrière ni "
+         "par-dessus la rambarde de la galerie."),
+    ], ["brasshaven:remembrance_drowned_keeper", "brasshaven:lightkeeper_harpoon"]),
+    ("drowned_keeper_overload", "wonders", "minecraft:sea_lantern", ("Lightkeeper: Lamp Overload", "Gardien : surcharge de la lampe"), [
+        ("At 65% he roars and calls the storm: three waves roll across the deck one after another from the marked edge, "
+         "so jump each one; his drowned crew (drowned marines and tide wraiths) climbs in. At 30% the lens tears free and "
+         "the lamp overloads (jump the ring of light): the room goes dark and the lamp shines in three slowly turning "
+         "sectors. When their edges flare, the lamp is about to flash: stand in the shadow between them. He also brings "
+         "the whale's jawbone down on a marked circle, then a ring runs out from it.",
+         "À 65 %, il rugit et appelle la tempête : trois vagues traversent le pont l'une après l'autre depuis le bord "
+         "marqué, alors saute chacune ; son équipage noyé (fusiliers noyés et spectres des marées) monte à bord. À 30 %, "
+         "la lentille s'arrache et la lampe entre en surcharge (saute l'anneau de lumière) : la salle plonge dans le noir "
+         "et la lampe éclaire trois secteurs qui tournent lentement. Quand leurs bords s'illuminent, la lampe va éclater : "
+         "reste dans l'ombre entre eux. Il abat aussi la mâchoire de baleine sur un cercle marqué, puis un anneau en part."),
+        ("His Remembrance, four map fragments and two diamonds forge the Lightkeeper's Harpoon, whose right-click hurls "
+         "the harpoon on its chain along your aim: it bites the first foe and hauls it back to you, and the keeper's "
+         "lantern flares where it bit, blinding and lighting up the foes round it.",
+         "Son Souvenir, quatre fragments de carte et deux diamants forgent le Harpon du Gardien du phare, dont le clic "
+         "droit lance le harpon au bout de sa chaîne dans ta visée : il mord le premier ennemi et le ramène vers toi, et "
+         "la lanterne du gardien flamboie là où il a mordu, aveuglant et mettant en surbrillance les ennemis alentour."),
+    ], []),
+    ("merchant_prince", "wonders", "brasshaven:remembrance_merchant_prince", ("The Brass Merchant Prince", "Le Prince marchand de laiton"), [
+        ("In the sunken auction pit under the great dome of the Brass Caravanserai, past the lot hall's grace and the mist "
+         "of the auctioneers' stair, the prince who bought the city still holds his auction (660 health, armour 11): a "
+         "plump prince in azure silks plated with brass scales and a jewelled turban, sitting cross-legged on a clockwork "
+         "palanquin that scuttles on four brass legs. He swings a broad scimitar; a great brass arm behind him throws his "
+         "gold for him.",
+         "Dans la fosse aux enchères, sous la coupole du Caravansérail de laiton, passé la brume, le prince qui a acheté "
+         "la cité tient toujours sa vente (660 PV, armure 11) : soieries d'azur, écailles de laiton, turban à joyau, assis "
+         "sur un palanquin mécanique à quatre pattes. Un cimeterre en main ; un bras de laiton lance son or."),
+        ("His slash sweeps a marked arc, then a gold crescent flies down a red line. When the brass arm swings back, "
+         "lanes fan out ahead of him: the coins fly down them, so stand between the lanes. When he raises a finger, a "
+         "price is set on you: a gold circle follows you, slower than you walk, while the price climbs; it stops, turns "
+         "red and a gold bar slams down on it, so walk out. His palanquin also charges down a marked lane. His blows "
+         "never throw you onto the bidders' steps.",
+         "Son cimeterre balaie un arc marqué, puis un croissant d'or file sur une ligne rouge. Quand le bras recule, des "
+         "couloirs s'ouvrent en éventail : les pièces y volent, place-toi entre eux. Quand il lève le doigt, ta tête est "
+         "mise à prix : un cercle d'or te suit lentement, s'arrête, rougit, et un lingot s'abat dessus : sors-en. Son "
+         "palanquin charge aussi sur un couloir marqué. Ses coups ne te jettent jamais sur les gradins."),
+    ], ["brasshaven:remembrance_merchant_prince", "brasshaven:prince_scimitar"]),
+    ("merchant_prince_auction", "wonders", "minecraft:gold_block", ("Merchant Prince: Final Auction", "Prince marchand : vente finale"), [
+        ("At 65% he roars and pays for help: bandit marksmen leap into the pit (three at most), and he raises a sandstorm "
+         "where you stand: a vortex that drifts after you and drags you slowly round and in, hurting in its eye, so walk "
+         "out of its reach. At 30% the gavel falls on the Final Auction (jump the ring of gold): sectors of the pit's "
+         "floor are outlined, then gold-plated, and they detonate when their edges turn red, so step into an unmarked "
+         "sector; and he dashes between the dome's piers down marked lanes, three dashes in a row. The floor comes back "
+         "after each blast.",
+         "À 65 %, il rugit et paie des renforts : des tireurs bandits sautent dans la fosse (trois au plus), et il lève une "
+         "tempête de sable là où tu te tiens : un tourbillon qui te suit lentement et t'entraîne en rond vers son œil, qui "
+         "blesse, alors sors de sa portée en marchant. À 30 %, le marteau tombe sur la vente finale (saute l'anneau d'or) : "
+         "des secteurs du sol de la fosse sont tracés, puis plaqués d'or, et ils explosent quand leurs bords rougissent, "
+         "alors passe dans un secteur non marqué ; et il fonce entre les piliers de la coupole le long de couloirs marqués, "
+         "trois fois de suite. Le sol revient après chaque explosion."),
+        ("His Remembrance, four map fragments and two diamonds forge the Merchant Prince's Scimitar, whose right-click "
+         "sends a gilded crescent along your aim, cutting and weakening every foe near its path, then slams a gold bar on "
+         "the healthiest foe it cut.",
+         "Son Souvenir, quatre fragments de carte et deux diamants forgent le Cimeterre du Prince marchand, dont le clic "
+         "droit lance un croissant doré dans ta visée, qui tranche et affaiblit chaque ennemi proche de sa course, puis "
+         "abat un lingot d'or sur l'ennemi tranché le plus vaillant."),
+    ], []),
+    ("mycelium_abbot", "wonders", "brasshaven:remembrance_mycelium_abbot", ("The Mycelium Abbot", "L'Abbé du Mycélium"), [
+        ("In the arena under the cap's vault of the Mycelium Monastery, past the gill gallery's grace and the turret's "
+         "mist, the abbot who prayed until the fungal network took him in still keeps his vigil (650 health, armour 10): "
+         "a steam monk in a habit eaten into mycelium, his hood grown into a broad brown mushroom cap with glowing gills. "
+         "He carries a crozier crowned with a glowing mushroom and swings a brass censer.",
+         "Dans l'arène sous la voûte du chapeau du Monastère du Mycélium, passé la brume, l'abbé que le réseau fongique "
+         "a pris veille toujours (650 PV, armure 10) : robe rongée de mycélium, capuchon devenu chapeau de champignon "
+         "aux lamelles luisantes, une crosse couronnée d'un champignon et un encensoir de laiton."),
+        ("His crozier sweeps a marked arc, then slams down a red line. When the censer swings back, an arc is drawn "
+         "ahead: it leaves a trail of spore clouds that bring nausea and poison, so step out of them. When he raises "
+         "the crozier and chants, circles appear under you: tendrils erupt and root whoever stays. His crook snaps down "
+         "a marked line and hauls you toward him.",
+         "Sa crosse balaie un arc marqué, puis s'abat sur une ligne rouge. Quand l'encensoir recule, un arc se dessine "
+         "devant lui : il y laisse des nuages de spores (nausée, poison), sors-en. Quand il lève la crosse, des cercles "
+         "s'ouvrent sous toi : des filaments en jaillissent et enracinent qui reste. Son crochet claque sur une ligne "
+         "marquée et te ramène vers lui."),
+    ], ["brasshaven:remembrance_mycelium_abbot", "brasshaven:abbot_crozier"]),
+    ("mycelium_abbot_communion", "wonders", "minecraft:red_mushroom_block", ("Mycelium Abbot: Communion", "Abbé : communion"), [
+        ("At 65% he roars and kneels to sow: pods (red mushroom blocks) sprout on marked spots and burst after 5 s, so "
+         "break them first or keep away; and he rings the censer to call bell monks (three at most). At 30% the network "
+         "answers his Communion (jump the ring of mushrooms): he sinks into the floor and a ring hunts you, slower than "
+         "you walk, then turns red and he bursts up in it; and fairy rings bloom out from the arena's centre in waves, "
+         "so jump each one.",
+         "À 65 %, il rugit et sème à genoux : des cosses (des blocs de champignon rouge) poussent sur des emplacements "
+         "marqués et éclatent au bout de 5 s, casse-les avant ou éloigne-toi ; et il fait sonner l'encensoir pour "
+         "appeler des moines-sonneurs (trois au plus). À 30 %, le réseau répond à sa communion (saute l'anneau de "
+         "champignons) : il s'enfonce dans le sol et un cercle te poursuit, moins vite que tu ne marches, puis rougit et "
+         "il jaillit dedans ; et des ronds de sorcière fleurissent du centre en vagues, saute chacun."),
+        ("His Remembrance, four map fragments and two diamonds forge the Abbot's Crozier, whose right-click sends three "
+         "mycelium tendrils racing along the ground round your aim: they hurt, poison and root every foe they touch, and "
+         "the network gives you back a little health for each.",
+         "Son Souvenir, quatre fragments de carte et deux diamants forgent la Crosse de l'Abbé, dont le clic droit lance "
+         "trois filaments de mycélium au sol dans ta visée : ils blessent, empoisonnent et enracinent chaque ennemi "
+         "touché, et le réseau te rend un peu de vie pour chacun."),
     ], []),
     ("strangler_queen", "wonders", "brasshaven:remembrance_strangler_queen", ("The Strangler Fig Queen", "La Reine-figuier étrangleur"), [
         ("On the summit terrace of the Canopy Temple-City, through the mist under the broken brass sun-disc, the fig "

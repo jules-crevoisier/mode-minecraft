@@ -633,6 +633,78 @@ lairs, ruins and small sites).
     turret's spiral stair -> mist -> the ~33-wide railed crown arena (gryphon knight). The charged vault sits in the bowl under the arena behind
     sealed bars. Shortcuts: the bubble-column lift in the core (lobby iron door, lever inside), the water slide
     from the observatory pinnacle into the court pond, the bastion's one-way postern (lever inside only).
+35. **The Leviathan Lighthouse (stony shore / beach / snowy beach; coast fit, sea to the south).** A storm-lashed
+    lighthouse fortress ~200 x 180 on a cliff-bound headland it brings itself (plateau at feet 27, a ridge and crag
+    to ~42 with the stump of an old light, a shoulder ledge at 15, the whaling quay at 11 in the cove, a shingle spit
+    at sea level). A 120-high masonry lighthouse (granite-and-tuff plinth r 18.5, white calcite body wound with an
+    oxblood spiral band, brass string courses at the storeys) flares through dark-iron corbels to a railed lamp
+    gallery (r 20.5), a 33-wide glass lantern room with diagonal brass astragals and a ribbed verdigris cupola with
+    a ventilator ball and vane at ~150. In the cove a beached leviathan: its skull on the shingle (a bony hall entered
+    through the jaws), seven rib pairs vaulting a covered ribcage dock (jetties, moored whaleboats, swim-up ladders),
+    a spine catwalk to the tail cache. Route: the beachcombers' camp (waystone) north of the ridge -> the path along
+    the cliff foot -> the gorge through the crag (compression) -> the rock arch framing the lighthouse and the harbour
+    (reveal) -> the shoulder ledge and ramp -> the whaling quay (hub, waystone): rendering house (three try-works
+    with copper pots, stirring deck, smokestacks), flensers' mess, cooperage, harpoon-cannon battery, flensing crane,
+    boathouse (sail loft, slips) -> the tide stair down the cliff foot -> the sea caves (tide grotto, optional
+    smugglers' hole, the flooded hall round its sea pool with a wreck's ribs) -> the rock stair (spiral in a shaft)
+    -> the cistern -> the tower: base hall, chart room, log room, fog-horn engine room, clockwork room, watch room
+    (balcony), each climbed by a wall spiral -> the clockwork lens room with the giant twisted Fresnel lens on its
+    geared turntable (site of grace, waystone) -> the enclosed corbel stair (compression) -> hatch house, mist -> the
+    lantern-room arena under the great hung lamp, open onto the gallery (gryphon knight). The keeper's hoard sits in
+    the corbel under the arena behind sealed bars. Optional: the keeper's cottage and the plateau yard (signal mast,
+    fog bell, oil house). Shortcuts: the hoard's drop well down the tower wall into the base hall's pool lobby (iron
+    door, lever inside only), the cliff stair tower from the plateau to the quay (iron door, lever inside only).
+36. **The Brass Caravanserai (desert / savanna / savanna plateau; land fit, slope 0.7).** A walled trading city
+    ~230 across on a caravan route, laying its own city floor (rim six deep) with the camp and road outside. A
+    14-sided curtain wall of guild bricks (walk at feet 15, crenels, inner parapet lanterns) with drum towers, the
+    vertex towers under little azure domes. Dominant: the great bazaar, a 65-wide base with four tiled iwans, eight
+    piers carrying a windowed drum and a pointed dome (base radius 25, azure tiles, sixteen brass ribs, lantern and
+    finial at ~90), flanked by four minaret chimneys (balconies at 30 and 44, smoking brass caps, copper pipes); the
+    palace's smaller Divan dome and twin onion-capped towers behind. Outside: a giant brass sand-crawler parked across
+    the road hides the gate (its hold, bunks and wheelhouse are explorable), a second one rammed into the south-west
+    wall, holed and half full of sand, its deck climbing to the breach (side route). Route: the caravan camp
+    (waystone, tents, fire) -> the road round the crawler's nose -> the pishtaq with its brass clock gear framing the
+    dome (reveal) -> the toll tunnel (compression) -> the caravan court (hub, waystone, two storeys of furnished
+    arcade rooms, fountain kiosk, palms) -> branches: the camel stables and crawler garage (west), the covered souk
+    (east: three vaulted alleys of ~50 shops, the domed crossroads with its water clock, the spice warehouse, the
+    dyers' yard and its newel tower onto the wall walk) -> the bazaar's ambulatory of stalls round the sunken auction
+    pit (seen through grilles) -> the corner newel stairs to the roof terrace and the gallery inside the drum (vista)
+    -> the Prince's Bridge on arches over the garden -> the palace roof, library and observatory, the Divan's gallery
+    and imperial stair, the hall (throne under a brass clock), the Garden of Four Rivers (waystone, fountain, cloisters)
+    -> the well-head stair down to the hypostyle cistern -> the conduit to the lot hall under the bazaar (site of
+    grace, waystone) -> the auctioneers' stair, mist -> the 35-wide auction pit under the dome (two bidders' tiers,
+    sea-lantern mandala, 80 blocks of headroom; gryphon knight placeholder). The prince's treasury sits behind sealed
+    bars in the pit's south wall. Optional: the hammam, apartments and salon loggia, counting house, kitchen, the
+    climbable minaret (balcony chest), the houses of every quarter (furnished, wind-catchers), the crawlers. Shortcuts:
+    the treasury ladder up to the money-changer's booth (iron door, lever inside), the porters' stair from the
+    cistern ring to the ambulatory (iron door, lever on the stair side), the garden gate to the bazaar street (lever
+    on the garden side), the court's north gate (lever on the bazaar side).
+37. **The Mycelium Monastery (mushroom fields / dark forest; land fit, slope 1.2).** An abbey of steam monks grafted
+    onto giant fungi, ~225 x 220, on a cliff-girt plateau it brings itself (top at feet 17, a gate terrace at feet 7
+    under the south cliff, a crescent rock ridge hiding the terrace, the camp flat at ground level, rim 12 deep).
+    Dominant: one colossal fly agaric (unlike concept 27's three mushrooms, a single temple): a bulbous white stem
+    48 wide at the volva narrowing to 31 and flaring under the cap, wound with copper pipes and brass bands, amber
+    lancets on every storey, a ring balcony (the annulus) under the gills; a domed red cap 69 wide (white warts, brown
+    gills with stem fins and shroomlight rings, a white veil fringe) pierced by two smoking brass chimneys and a glass
+    cupola at ~124. Round it a red-capped tower, a flat brown-capped tower and a white puffball library, tied to the
+    stem by sagging rope bridges. Route: the pilgrims' camp (waystone) -> the path past the mushroom wood -> the gorge
+    through the ridge (compression) -> the rock arch (reveal: the agaric over the cliff) -> the gatehouse between two
+    capped turrets, its wicket, vaulted passage and cliff stair -> the cloister (hub, waystone): a meditation garden
+    (sand garden, moss lawn, spore beds, koi pond, the mycelial font) in four arcaded walks -> branches: the south
+    range (gate hall, porter's lodge, infirmary), the spore distillery (pot stills with worm tubs, column stills,
+    vats, a drying gallery), the red tower (bell and drying loft in its cap), the west range (undercroft stair hall,
+    eight monk cells each furnished its own way, refectory, kitchen), the brown tower (the abbot's lodge), the
+    puffball library (two floors of curved shelves round a fungal globe), the narthex under the rose window ->
+    the undercroft stair -> the root catacombs (burial gallery with niches, the monks' crypt, the ossuary) -> the
+    glowing grotto (shroomlights, glow lichen, spore blossoms, a pool) -> the root heart under the temple (a rooted
+    dome round the root bundle) -> its stair up into the nave (pews, altar under a brass sunburst, the lift cage;
+    waystone) -> the helix ramps: chapter house, sporarium, the gill gallery (site of grace, waystone) and its ring
+    balcony -> the gill turret's spiral (compression) -> hatch house, mist -> the arena under the cap's gill-ribbed
+    dome (44 wide, glass oculus, six pore windows; gryphon knight placeholder). The spore reliquary sits in the cap's
+    core under the arena behind sealed bars. Side route: the distillery -> red tower -> rope bridge into the chapter
+    house (skipping the catacombs); the brown tower's and the library's bridges (loops). Shortcuts: the reliquary's
+    drop well down the light well into the pool of the lift cage (iron door, lever inside only), the cage's bubble-
+    column lift up to the gill gallery, the narthex's inner iron door (lever on the nave side only).
 
 ---
 

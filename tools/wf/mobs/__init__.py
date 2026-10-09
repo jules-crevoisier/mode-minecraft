@@ -69,6 +69,9 @@ from . import moon_warden
 from . import ringmaster
 from . import gilded_champion
 from . import tesla_archon
+from . import drowned_keeper
+from . import merchant_prince
+from . import mycelium_abbot
 # living oceans
 from . import glow_jellyfish
 from . import reef_fish
@@ -184,6 +187,9 @@ MODELS = [
     ringmaster.build,
     gilded_champion.build,
     tesla_archon.build,
+    drowned_keeper.build,
+    merchant_prince.build,
+    mycelium_abbot.build,
     glow_jellyfish.build,
     reef_fish.build,
     manta_ray.build,

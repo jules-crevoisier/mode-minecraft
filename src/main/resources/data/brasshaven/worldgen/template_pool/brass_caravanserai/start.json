@@ -1,0 +1,783 @@
+{
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "brasshaven:chunked_template",
+        "size": [
+          224,
+          104,
+          238
+        ],
+        "cells": [
+          {
+            "location": "brasshaven:brass_caravanserai/city/x0_z1",
+            "offset": [
+              11,
+              8,
+              32
+            ],
+            "size": [
+              20,
+              34,
+              28
+            ],
+            "blocks": 3128
+          },
+          {
+            "location": "brasshaven:brass_caravanserai/city/x0_z2",
+            "offset": [
+              3,
+              8,
+              60
+            ],
+            "size": [
+              28,
+              26,
+              29
+            ],
+            "blocks": 4441
+          },
+          {
+            "location": "brasshaven:brass_caravanserai/city/x0_z3",
+            "offset": [
+              0,
+              8,
+              89
+            ],
+            "size": [
+              31,
+              34,
+              30
+            ],
+            "blocks": 6584
+          },
+          {
+            "location": "brasshaven:brass_caravanserai/city/x0_z4",
+            "offset": [
+              1,
+              8,
+              119
+            ],
+            "size": [
+              30,
+              26,
+              30
+            ],
+            "blocks": 5495
+          },
+          {
+            "location": "brasshaven:brass_caravanserai/city/x0_z5",
+            "offset": [
+              2,
+              8,
+              149
+            ],
+            "size": [
+              29,
+              34,
+              28
+            ],
+            "blocks": 5680
+          },
+          {
+            "location": "brasshaven:brass_caravanserai/city/x0_z6",
+            "offset": [
+              5,
+              8,
+              177
+            ],
+            "size": [
+              26,
+              34,
+              31
+            ],
+            "blocks": 4027
+          },
+          {
+            "location": "brasshaven:brass_caravanserai/city/x0_z7",
+            "offset": [
+              5,
+              8,
+              208
+            ],
+            "size": [
+              26,
+              17,
+              30
+            ],
+            "blocks": 3926
+          },
+          {
+            "location": "brasshaven:brass_caravanserai/city/x1_z0",
+            "offset": [
+              33,
+              8,
+              9
+            ],
+            "size": [
+              31,
+              50,
+              21
+            ],
+            "blocks": 3978
+          },
+          {
+            "location": "brasshaven:brass_caravanserai/city/x1_z1",
+            "offset": [
+              31,
+              8,
+              30
+            ],
+            "size": [
+              33,
+              53,
+              30
+            ],
+            "blocks": 6351
+          },
+          {
+            "location": "brasshaven:brass_caravanserai/city/x1_z2",
+            "offset": [
+              31,
+              13,
+              60
+            ],
+            "size": [
+              33,
+              13,
+              29
+            ],
+            "blocks": 4090
+          },
+          {
+            "location": "brasshaven:brass_caravanserai/city/x1_z3",
+            "offset": [
+              31,
+              13,
+              89
+            ],
+            "size": [
+              33,
+              16,
+              30
+            ],
+            "blocks": 5028
+          },
+          {
+            "location": "brasshaven:brass_caravanserai/city/x1_z4",
+            "offset": [
+              31,
+              8,
+              119
+            ],
+            "size": [
+              33,
+              21,
+              30
+            ],
+            "blocks": 5273
+          },
+          {
+            "location": "brasshaven:brass_caravanserai/city/x1_z5",
+            "offset": [
+              31,
+              13,
+              149
+            ],
+            "size": [
+              33,
+              18,
+              28
+            ],
+            "blocks": 8055
+          },
+          {
+            "location": "brasshaven:brass_caravanserai/city/x1_z6",
+            "offset": [
+              31,
+              8,
+              177
+            ],
+            "size": [
+              33,
+              27,
+              31
+            ],
+            "blocks": 7111
+          },
+          {
+            "location": "brasshaven:brass_caravanserai/city/x1_z7",
+            "offset": [
+              31,
+              8,
+              208
+            ],
+            "size": [
+              33,
+              30,
+              30
+            ],
+            "blocks": 4328
+          },
+          {
+            "location": "brasshaven:brass_caravanserai/city/x2_z0",
+            "offset": [
+              64,
+              8,
+              3
+            ],
+            "size": [
+              32,
+              48,
+              27
+            ],
+            "blocks": 6742
+          },
+          {
+            "location": "brasshaven:brass_caravanserai/city/x2_z1",
+            "offset": [
+              64,
+              0,
+              30
+            ],
+            "size": [
+              32,
+              57,
+              30
+            ],
+            "blocks": 9839
+          },
+          {
+            "location": "brasshaven:brass_caravanserai/city/x2_z2",
+            "offset": [
+              64,
+              0,
+              60
+            ],
+            "size": [
+              32,
+              75,
+              29
+            ],
+            "blocks": 15613
+          },
+          {
+            "location": "brasshaven:brass_caravanserai/city/x2_z3",
+            "offset": [
+              64,
+              0,
+              89
+            ],
+            "size": [
+              32,
+              79,
+              30
+            ],
+            "blocks": 19294
+          },
+          {
+            "location": "brasshaven:brass_caravanserai/city/x2_z4",
+            "offset": [
+              64,
+              0,
+              119
+            ],
+            "size": [
+              32,
+              75,
+              30
+            ],
+            "blocks": 14351
+          },
+          {
+            "location": "brasshaven:brass_caravanserai/city/x2_z5",
+            "offset": [
+              64,
+              8,
+              149
+            ],
+            "size": [
+              32,
+              23,
+              28
+            ],
+            "blocks": 7484
+          },
+          {
+            "location": "brasshaven:brass_caravanserai/city/x2_z6",
+            "offset": [
+              64,
+              8,
+              177
+            ],
+            "size": [
+              32,
+              23,
+              31
+            ],
+            "blocks": 7610
+          },
+          {
+            "location": "brasshaven:brass_caravanserai/city/x2_z7",
+            "offset": [
+              64,
+              8,
+              208
+            ],
+            "size": [
+              32,
+              39,
+              30
+            ],
+            "blocks": 5401
+          },
+          {
+            "location": "brasshaven:brass_caravanserai/city/x3_z0",
+            "offset": [
+              96,
+              8,
+              0
+            ],
+            "size": [
+              32,
+              52,
+              30
+            ],
+            "blocks": 9344
+          },
+          {
+            "location": "brasshaven:brass_caravanserai/city/x3_z1",
+            "offset": [
+              96,
+              0,
+              30
+            ],
+            "size": [
+              32,
+              55,
+              30
+            ],
+            "blocks": 17008
+          },
+          {
+            "location": "brasshaven:brass_caravanserai/city/x3_z2",
+            "offset": [
+              96,
+              0,
+              60
+            ],
+            "size": [
+              32,
+              78,
+              29
+            ],
+            "blocks": 22542
+          },
+          {
+            "location": "brasshaven:brass_caravanserai/city/x3_z3",
+            "offset": [
+              96,
+              0,
+              89
+            ],
+            "size": [
+              32,
+              104,
+              30
+            ],
+            "blocks": 19756
+          },
+          {
+            "location": "brasshaven:brass_caravanserai/city/x3_z4",
+            "offset": [
+              96,
+              0,
+              119
+            ],
+            "size": [
+              32,
+              77,
+              30
+            ],
+            "blocks": 18849
+          },
+          {
+            "location": "brasshaven:brass_caravanserai/city/x3_z5",
+            "offset": [
+              96,
+              13,
+              149
+            ],
+            "size": [
+              32,
+              19,
+              28
+            ],
+            "blocks": 5298
+          },
+          {
+            "location": "brasshaven:brass_caravanserai/city/x3_z6",
+            "offset": [
+              96,
+              8,
+              177
+            ],
+            "size": [
+              32,
+              23,
+              31
+            ],
+            "blocks": 7939
+          },
+          {
+            "location": "brasshaven:brass_caravanserai/city/x3_z7",
+            "offset": [
+              96,
+              8,
+              208
+            ],
+            "size": [
+              32,
+              44,
+              30
+            ],
+            "blocks": 9812
+          },
+          {
+            "location": "brasshaven:brass_caravanserai/city/x4_z0",
+            "offset": [
+              128,
+              8,
+              4
+            ],
+            "size": [
+              32,
+              50,
+              26
+            ],
+            "blocks": 7278
+          },
+          {
+            "location": "brasshaven:brass_caravanserai/city/x4_z1",
+            "offset": [
+              128,
+              0,
+              30
+            ],
+            "size": [
+              32,
+              61,
+              30
+            ],
+            "blocks": 9115
+          },
+          {
+            "location": "brasshaven:brass_caravanserai/city/x4_z2",
+            "offset": [
+              128,
+              0,
+              60
+            ],
+            "size": [
+              32,
+              75,
+              29
+            ],
+            "blocks": 12902
+          },
+          {
+            "location": "brasshaven:brass_caravanserai/city/x4_z3",
+            "offset": [
+              128,
+              0,
+              89
+            ],
+            "size": [
+              32,
+              73,
+              30
+            ],
+            "blocks": 16917
+          },
+          {
+            "location": "brasshaven:brass_caravanserai/city/x4_z4",
+            "offset": [
+              128,
+              0,
+              119
+            ],
+            "size": [
+              32,
+              75,
+              30
+            ],
+            "blocks": 11363
+          },
+          {
+            "location": "brasshaven:brass_caravanserai/city/x4_z5",
+            "offset": [
+              128,
+              8,
+              149
+            ],
+            "size": [
+              32,
+              22,
+              28
+            ],
+            "blocks": 7163
+          },
+          {
+            "location": "brasshaven:brass_caravanserai/city/x4_z6",
+            "offset": [
+              128,
+              8,
+              177
+            ],
+            "size": [
+              32,
+              22,
+              31
+            ],
+            "blocks": 7131
+          },
+          {
+            "location": "brasshaven:brass_caravanserai/city/x4_z7",
+            "offset": [
+              128,
+              8,
+              208
+            ],
+            "size": [
+              32,
+              39,
+              30
+            ],
+            "blocks": 5772
+          },
+          {
+            "location": "brasshaven:brass_caravanserai/city/x5_z0",
+            "offset": [
+              160,
+              8,
+              10
+            ],
+            "size": [
+              26,
+              48,
+              20
+            ],
+            "blocks": 2713
+          },
+          {
+            "location": "brasshaven:brass_caravanserai/city/x5_z1",
+            "offset": [
+              160,
+              8,
+              30
+            ],
+            "size": [
+              31,
+              49,
+              30
+            ],
+            "blocks": 5809
+          },
+          {
+            "location": "brasshaven:brass_caravanserai/city/x5_z2",
+            "offset": [
+              160,
+              13,
+              60
+            ],
+            "size": [
+              31,
+              13,
+              29
+            ],
+            "blocks": 4158
+          },
+          {
+            "location": "brasshaven:brass_caravanserai/city/x5_z3",
+            "offset": [
+              160,
+              13,
+              89
+            ],
+            "size": [
+              31,
+              16,
+              30
+            ],
+            "blocks": 5862
+          },
+          {
+            "location": "brasshaven:brass_caravanserai/city/x5_z4",
+            "offset": [
+              160,
+              13,
+              119
+            ],
+            "size": [
+              31,
+              13,
+              30
+            ],
+            "blocks": 5730
+          },
+          {
+            "location": "brasshaven:brass_caravanserai/city/x5_z5",
+            "offset": [
+              160,
+              13,
+              149
+            ],
+            "size": [
+              31,
+              20,
+              28
+            ],
+            "blocks": 6298
+          },
+          {
+            "location": "brasshaven:brass_caravanserai/city/x5_z6",
+            "offset": [
+              160,
+              8,
+              177
+            ],
+            "size": [
+              31,
+              30,
+              31
+            ],
+            "blocks": 5739
+          },
+          {
+            "location": "brasshaven:brass_caravanserai/city/x5_z7",
+            "offset": [
+              160,
+              8,
+              208
+            ],
+            "size": [
+              31,
+              26,
+              30
+            ],
+            "blocks": 6891
+          },
+          {
+            "location": "brasshaven:brass_caravanserai/city/x6_z1",
+            "offset": [
+              191,
+              8,
+              35
+            ],
+            "size": [
+              17,
+              34,
+              25
+            ],
+            "blocks": 2609
+          },
+          {
+            "location": "brasshaven:brass_caravanserai/city/x6_z2",
+            "offset": [
+              191,
+              8,
+              60
+            ],
+            "size": [
+              25,
+              26,
+              29
+            ],
+            "blocks": 4181
+          },
+          {
+            "location": "brasshaven:brass_caravanserai/city/x6_z3",
+            "offset": [
+              191,
+              8,
+              89
+            ],
+            "size": [
+              28,
+              34,
+              30
+            ],
+            "blocks": 5126
+          },
+          {
+            "location": "brasshaven:brass_caravanserai/city/x6_z4",
+            "offset": [
+              191,
+              8,
+              119
+            ],
+            "size": [
+              27,
+              26,
+              30
+            ],
+            "blocks": 4705
+          },
+          {
+            "location": "brasshaven:brass_caravanserai/city/x6_z5",
+            "offset": [
+              191,
+              8,
+              149
+            ],
+            "size": [
+              26,
+              34,
+              28
+            ],
+            "blocks": 5665
+          },
+          {
+            "location": "brasshaven:brass_caravanserai/city/x6_z6",
+            "offset": [
+              191,
+              8,
+              177
+            ],
+            "size": [
+              33,
+              34,
+              31
+            ],
+            "blocks": 3239
+          },
+          {
+            "location": "brasshaven:brass_caravanserai/city/x6_z7",
+            "offset": [
+              191,
+              8,
+              208
+            ],
+            "size": [
+              33,
+              20,
+              30
+            ],
+            "blocks": 5060
+          }
+        ],
+        "projection": "rigid",
+        "processors": "brasshaven:none",
+        "ground_level_delta": 15,
+        "footprint": [
+          0,
+          0,
+          223,
+          237
+        ]
+      }
+    }
+  ]
+}

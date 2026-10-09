@@ -174,6 +174,15 @@ public final class BossGear {
     public static final RegistryObject<Item> REMEMBRANCE_TESLA_ARCHON = remembrance("remembrance_tesla_archon");
     public static final RegistryObject<Item> TESLA_COILSTAFF = weapon("tesla_coilstaff", p -> p.sword(ModMaterials.LITHITE, 8.0F, -2.8F).rarity(Rarity.EPIC),
             BossWeaponItem.Ability.TESLA, 10.0F, 14.0F, 80, () -> ParticleTypes.ELECTRIC_SPARK, BossWeaponItem.SLOW);
+    public static final RegistryObject<Item> REMEMBRANCE_DROWNED_KEEPER = remembrance("remembrance_drowned_keeper");
+    public static final RegistryObject<Item> LIGHTKEEPER_HARPOON = weapon("lightkeeper_harpoon", p -> p.sword(ModMaterials.LITHITE, 8.5F, -2.8F).rarity(Rarity.EPIC),
+            BossWeaponItem.Ability.LANTERN, 10.0F, 14.0F, 80, () -> ParticleTypes.END_ROD, BossWeaponItem.BLIND);
+    public static final RegistryObject<Item> REMEMBRANCE_MERCHANT_PRINCE = remembrance("remembrance_merchant_prince");
+    public static final RegistryObject<Item> PRINCE_SCIMITAR = weapon("prince_scimitar", p -> p.sword(ModMaterials.LITHITE, 8.5F, -2.4F).rarity(Rarity.EPIC),
+            BossWeaponItem.Ability.CRESCENT, 10.0F, 12.0F, 80, () -> ParticleTypes.WAX_ON, BossWeaponItem.WEAK);
+    public static final RegistryObject<Item> REMEMBRANCE_MYCELIUM_ABBOT = remembrance("remembrance_mycelium_abbot");
+    public static final RegistryObject<Item> ABBOT_CROZIER = weapon("abbot_crozier", p -> p.sword(ModMaterials.LITHITE, 8.0F, -2.8F).rarity(Rarity.EPIC),
+            BossWeaponItem.Ability.MYCELIUM, 9.0F, 9.0F, 80, () -> ParticleTypes.SPORE_BLOSSOM_AIR, BossWeaponItem.POISON);
 
     private BossGear() {}
 

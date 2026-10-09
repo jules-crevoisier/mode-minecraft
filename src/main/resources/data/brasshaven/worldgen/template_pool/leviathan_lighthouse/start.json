@@ -1,0 +1,867 @@
+{
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "brasshaven:chunked_template",
+        "size": [
+          201,
+          165,
+          182
+        ],
+        "cells": [
+          {
+            "location": "brasshaven:leviathan_lighthouse/lighthouse/x0_z0",
+            "offset": [
+              0,
+              0,
+              10
+            ],
+            "size": [
+              22,
+              30,
+              13
+            ],
+            "blocks": 1339
+          },
+          {
+            "location": "brasshaven:leviathan_lighthouse/lighthouse/x0_z1",
+            "offset": [
+              0,
+              11,
+              23
+            ],
+            "size": [
+              22,
+              43,
+              23
+            ],
+            "blocks": 3393
+          },
+          {
+            "location": "brasshaven:leviathan_lighthouse/lighthouse/x0_z2",
+            "offset": [
+              0,
+              0,
+              46
+            ],
+            "size": [
+              22,
+              42,
+              21
+            ],
+            "blocks": 2680
+          },
+          {
+            "location": "brasshaven:leviathan_lighthouse/lighthouse/x1_z0",
+            "offset": [
+              22,
+              0,
+              8
+            ],
+            "size": [
+              23,
+              36,
+              15
+            ],
+            "blocks": 1764
+          },
+          {
+            "location": "brasshaven:leviathan_lighthouse/lighthouse/x1_z1",
+            "offset": [
+              22,
+              27,
+              23
+            ],
+            "size": [
+              23,
+              49,
+              23
+            ],
+            "blocks": 2953
+          },
+          {
+            "location": "brasshaven:leviathan_lighthouse/lighthouse/x1_z2",
+            "offset": [
+              22,
+              0,
+              46
+            ],
+            "size": [
+              23,
+              54,
+              22
+            ],
+            "blocks": 2880
+          },
+          {
+            "location": "brasshaven:leviathan_lighthouse/lighthouse/x1_z3",
+            "offset": [
+              40,
+              0,
+              68
+            ],
+            "size": [
+              1,
+              2,
+              1
+            ],
+            "blocks": 2
+          },
+          {
+            "location": "brasshaven:leviathan_lighthouse/lighthouse/x2_z0",
+            "offset": [
+              45,
+              0,
+              0
+            ],
+            "size": [
+              22,
+              40,
+              23
+            ],
+            "blocks": 2513
+          },
+          {
+            "location": "brasshaven:leviathan_lighthouse/lighthouse/x2_z1",
+            "offset": [
+              45,
+              32,
+              23
+            ],
+            "size": [
+              22,
+              48,
+              23
+            ],
+            "blocks": 5605
+          },
+          {
+            "location": "brasshaven:leviathan_lighthouse/lighthouse/x2_z2",
+            "offset": [
+              45,
+              0,
+              46
+            ],
+            "size": [
+              22,
+              53,
+              22
+            ],
+            "blocks": 2942
+          },
+          {
+            "location": "brasshaven:leviathan_lighthouse/lighthouse/x2_z3",
+            "offset": [
+              45,
+              0,
+              68
+            ],
+            "size": [
+              22,
+              40,
+              23
+            ],
+            "blocks": 1622
+          },
+          {
+            "location": "brasshaven:leviathan_lighthouse/lighthouse/x2_z4",
+            "offset": [
+              54,
+              0,
+              91
+            ],
+            "size": [
+              13,
+              43,
+              23
+            ],
+            "blocks": 2066
+          },
+          {
+            "location": "brasshaven:leviathan_lighthouse/lighthouse/x2_z5",
+            "offset": [
+              55,
+              0,
+              114
+            ],
+            "size": [
+              12,
+              41,
+              22
+            ],
+            "blocks": 1842
+          },
+          {
+            "location": "brasshaven:leviathan_lighthouse/lighthouse/x2_z6",
+            "offset": [
+              56,
+              0,
+              136
+            ],
+            "size": [
+              11,
+              30,
+              22
+            ],
+            "blocks": 857
+          },
+          {
+            "location": "brasshaven:leviathan_lighthouse/lighthouse/x3_z0",
+            "offset": [
+              67,
+              0,
+              0
+            ],
+            "size": [
+              22,
+              41,
+              23
+            ],
+            "blocks": 3180
+          },
+          {
+            "location": "brasshaven:leviathan_lighthouse/lighthouse/x3_z1",
+            "offset": [
+              67,
+              36,
+              23
+            ],
+            "size": [
+              22,
+              18,
+              23
+            ],
+            "blocks": 2744
+          },
+          {
+            "location": "brasshaven:leviathan_lighthouse/lighthouse/x3_z2",
+            "offset": [
+              67,
+              7,
+              46
+            ],
+            "size": [
+              22,
+              47,
+              22
+            ],
+            "blocks": 2933
+          },
+          {
+            "location": "brasshaven:leviathan_lighthouse/lighthouse/x3_z3",
+            "offset": [
+              67,
+              14,
+              68
+            ],
+            "size": [
+              22,
+              47,
+              23
+            ],
+            "blocks": 2739
+          },
+          {
+            "location": "brasshaven:leviathan_lighthouse/lighthouse/x3_z4",
+            "offset": [
+              67,
+              12,
+              91
+            ],
+            "size": [
+              22,
+              139,
+              23
+            ],
+            "blocks": 6698
+          },
+          {
+            "location": "brasshaven:leviathan_lighthouse/lighthouse/x3_z5",
+            "offset": [
+              67,
+              12,
+              114
+            ],
+            "size": [
+              22,
+              140,
+              22
+            ],
+            "blocks": 11014
+          },
+          {
+            "location": "brasshaven:leviathan_lighthouse/lighthouse/x3_z6",
+            "offset": [
+              67,
+              0,
+              136
+            ],
+            "size": [
+              22,
+              42,
+              23
+            ],
+            "blocks": 2760
+          },
+          {
+            "location": "brasshaven:leviathan_lighthouse/lighthouse/x3_z7",
+            "offset": [
+              69,
+              0,
+              159
+            ],
+            "size": [
+              20,
+              11,
+              4
+            ],
+            "blocks": 264
+          },
+          {
+            "location": "brasshaven:leviathan_lighthouse/lighthouse/x4_z0",
+            "offset": [
+              89,
+              0,
+              8
+            ],
+            "size": [
+              23,
+              39,
+              15
+            ],
+            "blocks": 2323
+          },
+          {
+            "location": "brasshaven:leviathan_lighthouse/lighthouse/x4_z1",
+            "offset": [
+              89,
+              32,
+              23
+            ],
+            "size": [
+              23,
+              22,
+              23
+            ],
+            "blocks": 2944
+          },
+          {
+            "location": "brasshaven:leviathan_lighthouse/lighthouse/x4_z2",
+            "offset": [
+              89,
+              15,
+              46
+            ],
+            "size": [
+              23,
+              38,
+              22
+            ],
+            "blocks": 3142
+          },
+          {
+            "location": "brasshaven:leviathan_lighthouse/lighthouse/x4_z3",
+            "offset": [
+              89,
+              33,
+              68
+            ],
+            "size": [
+              23,
+              24,
+              23
+            ],
+            "blocks": 3169
+          },
+          {
+            "location": "brasshaven:leviathan_lighthouse/lighthouse/x4_z4",
+            "offset": [
+              89,
+              11,
+              91
+            ],
+            "size": [
+              23,
+              144,
+              23
+            ],
+            "blocks": 31351
+          },
+          {
+            "location": "brasshaven:leviathan_lighthouse/lighthouse/x4_z5",
+            "offset": [
+              89,
+              11,
+              114
+            ],
+            "size": [
+              23,
+              154,
+              22
+            ],
+            "blocks": 54862
+          },
+          {
+            "location": "brasshaven:leviathan_lighthouse/lighthouse/x4_z6",
+            "offset": [
+              89,
+              7,
+              136
+            ],
+            "size": [
+              23,
+              136,
+              23
+            ],
+            "blocks": 3656
+          },
+          {
+            "location": "brasshaven:leviathan_lighthouse/lighthouse/x4_z7",
+            "offset": [
+              89,
+              0,
+              159
+            ],
+            "size": [
+              23,
+              13,
+              5
+            ],
+            "blocks": 501
+          },
+          {
+            "location": "brasshaven:leviathan_lighthouse/lighthouse/x5_z0",
+            "offset": [
+              112,
+              0,
+              7
+            ],
+            "size": [
+              22,
+              43,
+              16
+            ],
+            "blocks": 2479
+          },
+          {
+            "location": "brasshaven:leviathan_lighthouse/lighthouse/x5_z1",
+            "offset": [
+              112,
+              12,
+              23
+            ],
+            "size": [
+              22,
+              43,
+              23
+            ],
+            "blocks": 3996
+          },
+          {
+            "location": "brasshaven:leviathan_lighthouse/lighthouse/x5_z2",
+            "offset": [
+              112,
+              10,
+              46
+            ],
+            "size": [
+              22,
+              45,
+              22
+            ],
+            "blocks": 3472
+          },
+          {
+            "location": "brasshaven:leviathan_lighthouse/lighthouse/x5_z3",
+            "offset": [
+              112,
+              14,
+              68
+            ],
+            "size": [
+              22,
+              36,
+              23
+            ],
+            "blocks": 5237
+          },
+          {
+            "location": "brasshaven:leviathan_lighthouse/lighthouse/x5_z4",
+            "offset": [
+              112,
+              12,
+              91
+            ],
+            "size": [
+              22,
+              139,
+              23
+            ],
+            "blocks": 6215
+          },
+          {
+            "location": "brasshaven:leviathan_lighthouse/lighthouse/x5_z5",
+            "offset": [
+              112,
+              12,
+              114
+            ],
+            "size": [
+              22,
+              140,
+              22
+            ],
+            "blocks": 10120
+          },
+          {
+            "location": "brasshaven:leviathan_lighthouse/lighthouse/x5_z6",
+            "offset": [
+              112,
+              0,
+              136
+            ],
+            "size": [
+              22,
+              41,
+              23
+            ],
+            "blocks": 2818
+          },
+          {
+            "location": "brasshaven:leviathan_lighthouse/lighthouse/x5_z7",
+            "offset": [
+              112,
+              0,
+              159
+            ],
+            "size": [
+              19,
+              11,
+              4
+            ],
+            "blocks": 300
+          },
+          {
+            "location": "brasshaven:leviathan_lighthouse/lighthouse/x6_z0",
+            "offset": [
+              134,
+              0,
+              7
+            ],
+            "size": [
+              22,
+              38,
+              16
+            ],
+            "blocks": 1690
+          },
+          {
+            "location": "brasshaven:leviathan_lighthouse/lighthouse/x6_z1",
+            "offset": [
+              134,
+              12,
+              23
+            ],
+            "size": [
+              22,
+              40,
+              23
+            ],
+            "blocks": 3933
+          },
+          {
+            "location": "brasshaven:leviathan_lighthouse/lighthouse/x6_z2",
+            "offset": [
+              134,
+              0,
+              46
+            ],
+            "size": [
+              22,
+              47,
+              22
+            ],
+            "blocks": 3865
+          },
+          {
+            "location": "brasshaven:leviathan_lighthouse/lighthouse/x6_z3",
+            "offset": [
+              134,
+              0,
+              68
+            ],
+            "size": [
+              22,
+              47,
+              23
+            ],
+            "blocks": 4783
+          },
+          {
+            "location": "brasshaven:leviathan_lighthouse/lighthouse/x6_z4",
+            "offset": [
+              134,
+              0,
+              91
+            ],
+            "size": [
+              22,
+              43,
+              23
+            ],
+            "blocks": 3796
+          },
+          {
+            "location": "brasshaven:leviathan_lighthouse/lighthouse/x6_z5",
+            "offset": [
+              134,
+              0,
+              114
+            ],
+            "size": [
+              22,
+              41,
+              22
+            ],
+            "blocks": 1926
+          },
+          {
+            "location": "brasshaven:leviathan_lighthouse/lighthouse/x6_z6",
+            "offset": [
+              134,
+              0,
+              136
+            ],
+            "size": [
+              12,
+              31,
+              21
+            ],
+            "blocks": 882
+          },
+          {
+            "location": "brasshaven:leviathan_lighthouse/lighthouse/x7_z0",
+            "offset": [
+              156,
+              0,
+              13
+            ],
+            "size": [
+              23,
+              19,
+              10
+            ],
+            "blocks": 800
+          },
+          {
+            "location": "brasshaven:leviathan_lighthouse/lighthouse/x7_z1",
+            "offset": [
+              156,
+              3,
+              23
+            ],
+            "size": [
+              23,
+              30,
+              23
+            ],
+            "blocks": 2635
+          },
+          {
+            "location": "brasshaven:leviathan_lighthouse/lighthouse/x7_z2",
+            "offset": [
+              156,
+              9,
+              46
+            ],
+            "size": [
+              23,
+              52,
+              22
+            ],
+            "blocks": 5539
+          },
+          {
+            "location": "brasshaven:leviathan_lighthouse/lighthouse/x7_z3",
+            "offset": [
+              156,
+              8,
+              68
+            ],
+            "size": [
+              23,
+              37,
+              23
+            ],
+            "blocks": 4318
+          },
+          {
+            "location": "brasshaven:leviathan_lighthouse/lighthouse/x7_z4",
+            "offset": [
+              156,
+              2,
+              91
+            ],
+            "size": [
+              23,
+              35,
+              23
+            ],
+            "blocks": 5089
+          },
+          {
+            "location": "brasshaven:leviathan_lighthouse/lighthouse/x7_z5",
+            "offset": [
+              156,
+              0,
+              114
+            ],
+            "size": [
+              23,
+              37,
+              22
+            ],
+            "blocks": 3960
+          },
+          {
+            "location": "brasshaven:leviathan_lighthouse/lighthouse/x7_z6",
+            "offset": [
+              156,
+              6,
+              136
+            ],
+            "size": [
+              23,
+              31,
+              23
+            ],
+            "blocks": 2422
+          },
+          {
+            "location": "brasshaven:leviathan_lighthouse/lighthouse/x7_z7",
+            "offset": [
+              161,
+              11,
+              159
+            ],
+            "size": [
+              15,
+              19,
+              23
+            ],
+            "blocks": 127
+          },
+          {
+            "location": "brasshaven:leviathan_lighthouse/lighthouse/x8_z0",
+            "offset": [
+              179,
+              0,
+              19
+            ],
+            "size": [
+              16,
+              7,
+              4
+            ],
+            "blocks": 172
+          },
+          {
+            "location": "brasshaven:leviathan_lighthouse/lighthouse/x8_z1",
+            "offset": [
+              179,
+              0,
+              23
+            ],
+            "size": [
+              22,
+              19,
+              23
+            ],
+            "blocks": 2377
+          },
+          {
+            "location": "brasshaven:leviathan_lighthouse/lighthouse/x8_z2",
+            "offset": [
+              179,
+              0,
+              46
+            ],
+            "size": [
+              22,
+              55,
+              22
+            ],
+            "blocks": 6764
+          },
+          {
+            "location": "brasshaven:leviathan_lighthouse/lighthouse/x8_z3",
+            "offset": [
+              179,
+              0,
+              68
+            ],
+            "size": [
+              21,
+              40,
+              23
+            ],
+            "blocks": 8262
+          },
+          {
+            "location": "brasshaven:leviathan_lighthouse/lighthouse/x8_z4",
+            "offset": [
+              179,
+              0,
+              91
+            ],
+            "size": [
+              21,
+              40,
+              23
+            ],
+            "blocks": 3076
+          },
+          {
+            "location": "brasshaven:leviathan_lighthouse/lighthouse/x8_z5",
+            "offset": [
+              179,
+              0,
+              114
+            ],
+            "size": [
+              11,
+              25,
+              20
+            ],
+            "blocks": 273
+          },
+          {
+            "location": "brasshaven:leviathan_lighthouse/lighthouse/x8_z6",
+            "offset": [
+              179,
+              6,
+              138
+            ],
+            "size": [
+              2,
+              19,
+              8
+            ],
+            "blocks": 70
+          }
+        ],
+        "projection": "rigid",
+        "processors": "brasshaven:none",
+        "ground_level_delta": 15,
+        "footprint": [
+          0,
+          0,
+          198,
+          174
+        ]
+      }
+    }
+  ]
+}
